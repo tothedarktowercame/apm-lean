@@ -22893,6 +22893,43 @@
    "Rank upper bounds and projected surjectivity now convert zero projected slice derivative into residual annihilation; concrete slice projected-derivative vanishing and hypothesis instantiation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled projected-chart slice projected-derivative theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism, exact equality of its first-coordinate function with a differentiable coordinate map, every chart-target point, every derivative of the coordinate map and fixed-first-coordinate inverse slice, vanishing of their composed derivative, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.lean"
+    "ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART SLICE PROJECTED DERIVATIVE ZERO",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardProjectedChartSliceProjectedDerivativeZeroProbe.lean",
+     :sha256
+     "1be791fc9853151ab26741d05236ca63d8265ee09fc78c555191c4b8b59fcc5e"},
+    :declarations ["projected_deriv_comp_sliceDeriv_eq_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the coordinate derivative as the derivative-range projection composed with Df at every localized rank-upper slice point, obtain the slice derivative, and discharge projected surjectivity and the rank upper bound."},
+   :representation
+   {:source
+    "A fixed-first-coordinate inverse-chart slice together with exact equality between the chart first coordinate and a differentiable projected coordinate map.",
+    :target
+    "Zero composition of the projected-coordinate derivative with the inverse-slice derivative at every point of the chart target."},
+   :id
+   :critical-value-sard-projected-chart-slice-projected-derivative-zero-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-rank-upper-residual-slice-annihilation-1
+    :critical-value-sard-eventually-constant-coordinate-slice-flatness-1
+    :critical-value-sard-projected-inverse-chart-slice-constancy-1
+    :critical-value-sard-projected-chart-target-coordinate-first-component-1],
+   :current-residual
+   "The fixed-first-coordinate chart identity now differentiates to zero projected slice derivative at arbitrary target points; concrete derivative identification, slice differentiability, rank bound, and projected surjectivity remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -22946,90 +22983,89 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "At every localized projected-chart slice point, prove that its derivative has zero projected component, and instantiate projected-derivative surjectivity and the ambient rank upper bound.",
+     "Instantiate the coordinate derivative as the derivative-range projection composed with Df at every localized rank-upper slice point, obtain the slice derivative, and discharge projected surjectivity and the rank upper bound.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"residual_annihilates_slice_of_rankUpper"
-      "7f1ee8d767e4285e0cd69f76a2aeafb0c0367a2707c4cd7a830c46db1c90955e"},
+     {"projected_deriv_comp_sliceDeriv_eq_zero"
+      "7164fd6d97cd3eef673047379710fa925fad02149a3bd6147307d3f27c7382f8"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled rank-upper residual slice-annihilation theorem cannot be promoted for arbitrary real finite-dimensional source modules and arbitrary target, projected-coordinate, slice, and residual modules, every ambient derivative and slice derivative, surjectivity of the projected derivative, the matching ambient rank upper bound, vanishing of the projected derivative along the slice, annihilation by every residual coordinate along every slice direction, or standard-axiom profile.",
+      "Stop only if the compiled projected-chart slice projected-derivative theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism, exact equality of its first-coordinate function with a differentiable coordinate map, every chart-target point, every derivative of the coordinate map and fixed-first-coordinate inverse slice, vanishing of their composed derivative, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean"
-       "ConstructionTargets/SardRankUpperResidualSliceAnnihilation.md"],
+      ["ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.lean"
+       "ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-UPPER RESIDUAL SLICE ANNIHILATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART SLICE PROJECTED DERIVATIVE ZERO",
       :acceptance
       {:fixture
-       {:path "/tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
+       {:path
+        "/tmp/SardProjectedChartSliceProjectedDerivativeZeroProbe.lean",
         :sha256
-        "fb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8"},
-       :declarations ["residual_annihilates_slice_of_rankUpper"],
+        "1be791fc9853151ab26741d05236ca63d8265ee09fc78c555191c4b8b59fcc5e"},
+       :declarations ["projected_deriv_comp_sliceDeriv_eq_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "At every localized projected-chart slice point, prove that its derivative has zero projected component, and instantiate projected-derivative surjectivity and the ambient rank upper bound."},
+       "Instantiate the coordinate derivative as the derivative-range projection composed with Df at every localized rank-upper slice point, obtain the slice derivative, and discharge projected surjectivity and the rank upper bound."},
       :representation
       {:source
-       "A slice derivative with zero projected component through an ambient derivative whose projected block is surjective and whose full rank does not exceed the projected target rank.",
+       "A fixed-first-coordinate inverse-chart slice together with exact equality between the chart first coordinate and a differentiable projected coordinate map.",
        :target
-       "Pointwise annihilation of every slice direction after the ambient derivative by every residual target coordinate."},
+       "Zero composition of the projected-coordinate derivative with the inverse-slice derivative at every point of the chart target."},
       :id
-      :critical-value-sard-rank-upper-residual-slice-annihilation-1,
+      :critical-value-sard-projected-chart-slice-projected-derivative-zero-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-residual-derivative-composition-eq-zero-1
-       :critical-value-sard-projected-kernel-flatness-1
-       :critical-value-sard-local-residual-derivative-flatness-1],
+      [:critical-value-sard-rank-upper-residual-slice-annihilation-1
+       :critical-value-sard-eventually-constant-coordinate-slice-flatness-1
+       :critical-value-sard-projected-inverse-chart-slice-constancy-1
+       :critical-value-sard-projected-chart-target-coordinate-first-component-1],
       :current-residual
-      "Rank upper bounds and projected surjectivity now convert zero projected slice derivative into residual annihilation; concrete slice projected-derivative vanishing and hypothesis instantiation remain.",
+      "The fixed-first-coordinate chart identity now differentiates to zero projected slice derivative at arbitrary target points; concrete derivative identification, slice differentiability, rank bound, and projected surjectivity remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture proves the rank-specific linear bridge: if the projected ambient derivative is surjective and the ambient derivative rank is no larger than the projected target rank, then every vector in the projected kernel is killed by the full derivative. Hence any slice derivative with zero projected component is annihilated by every residual target coordinate. The remaining concrete obligation is to differentiate the fixed-coordinate chart identity at each localized slice point and instantiate the rank and surjectivity hypotheses.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture uses openness of the chart target and the inverse identity to make the projected coordinate locally constant along every fixed-first-coordinate inverse slice. Differentiating that identity proves that the projected-coordinate derivative composed with the slice derivative is zero at every target point. This supplies the geometric input required by rank-upper residual annihilation; only concrete derivative identification, slice differentiability, projected surjectivity, and the localized rank bound remain.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "sed -n '1,180p' ConstructionTargets/SardLocalResidualDerivativeFlatness.lean; sed -n '1,180p' ConstructionTargets/SardEventuallyConstantCoordinateSliceFlatness.lean",
+       "lake build ConstructionTargets.SardRankUpperResidualSliceAnnihilation",
        :exit 0}
       {:cmd
-       "lake build ConstructionTargets.SardResidualDerivativeCompositionEqZero",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
+       "lake env lean /tmp/SardProjectedChartSliceProjectedDerivativeZeroProbe.lean",
        :exit 0,
        :output
-       "'SardRankUpperResidualSliceAnnihilationProbe.residual_annihilates_slice_of_rankUpper' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardProjectedChartSliceProjectedDerivativeZeroProbe.projected_deriv_comp_sliceDeriv_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
+       "sha256sum /tmp/SardProjectedChartSliceProjectedDerivativeZeroProbe.lean",
        :exit 0,
        :output
-       "fb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8  /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean"}
+       "1be791fc9853151ab26741d05236ca63d8265ee09fc78c555191c4b8b59fcc5e  /tmp/SardProjectedChartSliceProjectedDerivativeZeroProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedChartSliceProjectedDerivativeZeroProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '15,29p' /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean | sha256sum",
+       "sed -n '17,30p' /tmp/SardProjectedChartSliceProjectedDerivativeZeroProbe.lean | sha256sum",
        :exit 0,
        :output
-       "7f1ee8d767e4285e0cd69f76a2aeafb0c0367a2707c4cd7a830c46db1c90955e  -"}
+       "7164fd6d97cd3eef673047379710fa925fad02149a3bd6147307d3f27c7382f8  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 175 items OK; {:done 167, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 176 items OK; {:done 168, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean ConstructionTargets/SardProjectedKernelFlatness.lean ConstructionTargets/SardLocalResidualDerivativeFlatness.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean ConstructionTargets/SardEventuallyConstantCoordinateSliceFlatness.lean ConstructionTargets/SardProjectedInverseChartSliceConstancy.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n7a783a473d6f5e20f45dd45ff151cf37d2db4e477071b814513ea47124915fa7  ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean\n675c7f57c380cfdb5d225301f32d661339ab67e26a2627eb2e489b37393a1676  ConstructionTargets/SardProjectedKernelFlatness.lean\n1808503ec9076e003d6eda51c5991493cbfcec323b55e16f306f2f7f2c83ca2d  ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nfb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8  ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean\nfa1a986e82946b061e707c94d30bdf9d67c4d466a587b92411a89bf8b27ab15d  ConstructionTargets/SardEventuallyConstantCoordinateSliceFlatness.lean\n715bb62594db19afb534d5c5c502bac4b3c7bae5e7becf27ba7dd6d5560365ff  ConstructionTargets/SardProjectedInverseChartSliceConstancy.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -23040,12 +23076,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
+     {:path
+      "/tmp/SardProjectedChartSliceProjectedDerivativeZeroProbe.lean",
       :sha256
-      "fb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8"},
+      "1be791fc9853151ab26741d05236ca63d8265ee09fc78c555191c4b8b59fcc5e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -23169,7 +23206,8 @@
     :critical-value-sard-projected-chart-residual-slices-contdiff-on-1
     :critical-value-sard-projected-chart-residual-slice-derivative-zero-1
     :critical-value-sard-residual-derivative-composition-eq-zero-1
-    :critical-value-sard-rank-upper-residual-slice-annihilation-1],
+    :critical-value-sard-rank-upper-residual-slice-annihilation-1
+    :critical-value-sard-projected-chart-slice-projected-derivative-zero-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
