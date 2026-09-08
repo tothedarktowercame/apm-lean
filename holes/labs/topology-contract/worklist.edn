@@ -34374,6 +34374,43 @@
    "Installed positive-rank dimension and coordinate-measure data is compiled; the remaining theorem is the finite-order local witness composition.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if finite-order projected chart construction and a localized derivative-rank upper bound cannot jointly provide zero derivative on every orthogonal residual inverse-chart slice, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderPositiveRankProjectedChartSliceData.lean"
+    "ConstructionTargets/SardFiniteOrderPositiveRankProjectedChartSliceData.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POSITIVE-RANK PROJECTED CHART-SLICE DATA",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean",
+     :sha256
+     "91c8cbf1a1619737e996b4c563515640192b2f676ddddcc29ed174de04f375f0"},
+    :declarations
+    ["exists_finiteOrder_projectedChart_residualSliceZero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Combine this chart-and-slice certificate with the installed positive-rank pointwise data and invoke the local nullity witness."},
+   :representation
+   {:source
+    "A finite-order smooth map with strict derivative at a chosen point, exact base rank, and a localized derivative-rank upper bound.",
+    :target
+    "An existential projected local-rank chart containing the point, retaining finite-order inverse regularity and the range-coordinate formula, with zero derivative on every orthogonal residual inverse-chart slice."},
+   :id
+   :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-projected-smooth-chart-target-data-1
+    :critical-value-sard-finite-order-projected-chart-orthogonal-residual-slice-zero-1
+    :critical-value-sard-finite-order-positive-rank-installed-pointwise-data-1],
+   :current-residual
+   "Finite-order projected chart and residual-slice-zero data is compiled; assemble it with installed positive-rank dimension and measure data.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -34427,79 +34464,81 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Enter the installed positive-rank pointwise-data context, construct the finite-order projected chart and residual-slice-zero certificate, and invoke the local nullity witness.",
+     "Combine the finite-order projected chart-and-slice certificate with the installed positive-rank pointwise data and invoke the local nullity witness.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_positiveRank_installed_pointwise_data"
-      "c3d5091249669e51e4b223d9618b9c9280ce52c867a97e46f83eea79861aa6ff"},
+     {"exists_finiteOrder_projectedChart_residualSliceZero"
+      "35d9c8b6e50c459456e6af1e61688293bed39de1748b6d911677926bd6097179"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the installed inherited-coordinate Borel and additive-Haar context cannot be combined with the exact positive-rank bounds and strict projected-kernel dimension drop, or if the theorem requires nonstandard axioms.",
+      "Stop only if finite-order projected chart construction and a localized derivative-rank upper bound cannot jointly provide zero derivative on every orthogonal residual inverse-chart slice, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderPositiveRankInstalledPointwiseData.lean"
-       "ConstructionTargets/SardFiniteOrderPositiveRankInstalledPointwiseData.md"],
+      ["ConstructionTargets/SardFiniteOrderPositiveRankProjectedChartSliceData.lean"
+       "ConstructionTargets/SardFiniteOrderPositiveRankProjectedChartSliceData.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POSITIVE-RANK INSTALLED POINTWISE DATA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POSITIVE-RANK PROJECTED CHART-SLICE DATA",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderPositiveRankInstalledPointwiseDataProbe.lean",
+        "/tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean",
         :sha256
-        "7cd70f975c9376278134afab35830ffc0bbc405de5b55bb858b3f54908a58a07"},
-       :declarations ["exists_positiveRank_installed_pointwise_data"],
+        "91c8cbf1a1619737e996b4c563515640192b2f676ddddcc29ed174de04f375f0"},
+       :declarations
+       ["exists_finiteOrder_projectedChart_residualSliceZero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Combine the installed positive-rank pointwise data with the finite-order chart and residual-slice-zero certificate."},
+       "Combine this chart-and-slice certificate with the installed positive-rank pointwise data and invoke the local nullity witness."},
       :representation
       {:source
-       "Exact positive derivative-rank data and an inherited coordinate-measure package whose Borel instances are installed before its measures are exposed.",
+       "A finite-order smooth map with strict derivative at a chosen point, exact base rank, and a localized derivative-rank upper bound.",
        :target
-       "One installed pointwise context containing both ambient rank bounds, strict projected-kernel dimension drop, residual nontriviality, and compatible derivative-range and orthogonal-residual additive-Haar measures."},
+       "An existential projected local-rank chart containing the point, retaining finite-order inverse regularity and the range-coordinate formula, with zero derivative on every orthogonal residual inverse-chart slice."},
       :id
-      :critical-value-sard-finite-order-positive-rank-installed-pointwise-data-1,
+      :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-coordinate-installed-inherited-measure-data-1
-       :critical-value-sard-projected-positive-rank-dimension-data-1],
+      [:critical-value-sard-finite-order-projected-smooth-chart-target-data-1
+       :critical-value-sard-finite-order-projected-chart-orthogonal-residual-slice-zero-1
+       :critical-value-sard-finite-order-positive-rank-installed-pointwise-data-1],
       :current-residual
-      "Installed positive-rank dimension and coordinate-measure data is compiled; the remaining theorem is the finite-order local witness composition.",
+      "Finite-order projected chart and residual-slice-zero data is compiled; assemble it with installed positive-rank dimension and measure data.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines the installed inherited-coordinate Borel and additive-Haar context with the exact positive-rank bounds and strict projected-kernel dimension drop. This removes both the coordinate-instance and dimension-arithmetic seams from the next pointwise proof. The remaining bounded obligation is to combine this installed packet with the finite-order projected chart and residual-slice-zero certificate and invoke the reviewed pointwise nullity witness.",
+     "The rectangular theorem is not refuted. The installed positive-rank dimension and coordinate-measure context is banked, and a placeholder-free compiled fixture supplies its complementary analytic certificate: a finite-order projected local-rank chart containing the point, the range-coordinate formula, finite-order inverse regularity, and zero derivative on every orthogonal residual inverse-chart slice. The remaining work after this prerequisite is the direct local nullity-witness invocation and finite-rank aggregation.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderPositiveRankInstalledPointwiseDataProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderPositiveRankInstalledPointwiseDataProbe.exists_positiveRank_installed_pointwise_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.exists_finiteOrder_projectedChart_residualSliceZero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderPositiveRankInstalledPointwiseDataProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean",
        :exit 0,
        :output
-       "7cd70f975c9376278134afab35830ffc0bbc405de5b55bb858b3f54908a58a07  /tmp/SardFiniteOrderPositiveRankInstalledPointwiseDataProbe.lean"}
+       "91c8cbf1a1619737e996b4c563515640192b2f676ddddcc29ed174de04f375f0  /tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderPositiveRankInstalledPointwiseDataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '9,31p' /tmp/SardFiniteOrderPositiveRankInstalledPointwiseDataProbe.lean | sha256sum",
+       "sed -n '9,44p' /tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean | sha256sum",
        :exit 0,
        :output
-       "c3d5091249669e51e4b223d9618b9c9280ce52c867a97e46f83eea79861aa6ff  -"}
+       "35d9c8b6e50c459456e6af1e61688293bed39de1748b6d911677926bd6097179  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 261 items OK; {:done 253, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 262 items OK; {:done 254, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -34512,18 +34551,15 @@
        :exit 0,
        :output "/home/joe/code/apm-lean/.lake/packages"}
       {:cmd "git diff --check", :exit 0}
-      {:cmd "git status --porcelain=v1",
-       :exit 0,
-       :output "?? scripts/__pycache__/",
-       :note "Unrelated concurrent cache outside row scope."}],
+      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderPositiveRankInstalledPointwiseDataProbe.lean",
+      "/tmp/SardFiniteOrderPositiveRankProjectedChartSliceDataProbe.lean",
       :sha256
-      "7cd70f975c9376278134afab35830ffc0bbc405de5b55bb858b3f54908a58a07"},
+      "91c8cbf1a1619737e996b4c563515640192b2f676ddddcc29ed174de04f375f0"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -34733,7 +34769,8 @@
     :critical-value-sard-projected-coordinate-explicit-inherited-borel-data-1
     :critical-value-sard-projected-coordinate-explicit-inherited-measure-data-1
     :critical-value-sard-projected-coordinate-installed-inherited-measure-data-1
-    :critical-value-sard-finite-order-positive-rank-installed-pointwise-data-1],
+    :critical-value-sard-finite-order-positive-rank-installed-pointwise-data-1
+    :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
