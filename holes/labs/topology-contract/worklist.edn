@@ -17680,6 +17680,38 @@
    "Fixed-coordinate local subsets now map into the restricted inverse-chart kernel-slice image; projected rank-piece level-set identification and analytic slice instantiation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled product-nullity theorem cannot be promoted with arbitrary factor measures, measurable product set, pointwise zero measure of every vertical section, zero product-measure conclusion, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProductNullityOfNullFibers.lean"
+    "ConstructionTargets/SardProductNullityOfNullFibers.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PRODUCT NULLITY OF NULL FIBERS",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardProductNullityOfNullFibersProbe.lean",
+     :sha256
+     "b3976238b79465fbca985b122504d29dd0f16809bc5a9f0eed87b674246a63fc"},
+    :declarations ["measure_prod_zero_of_forall_fiber_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Represent each projected rank-chart image as a measurable product-coordinate set, identify every vertical section with a lower-dimensional null slice image, and transfer product nullity back through the target coordinate equivalence."},
+   :representation
+   {:source
+    "A measurable subset of a product measurable space whose vertical section over every first-coordinate point has zero measure.",
+    :target "Zero measure of the set under the product measure."},
+   :id :critical-value-sard-product-nullity-of-null-fibers-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-implicit-function-restricted-slice-image-containment-1
+    :critical-value-sard-lower-dimensional-projected-slice-image-nullity-1],
+   :current-residual
+   "Pointwise null vertical sections now imply product-measure nullity; measurable coordinate-image construction, section identification, and target-coordinate transfer remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -17733,78 +17765,75 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Identify each localized exact-rank piece with the projected left-coordinate level set, then instantiate slice smoothness, dimension drop, and zero projected derivative.",
+     "Construct the measurable projected chart-coordinate image, identify its vertical sections with lower-dimensional null slice images, and transfer product nullity to the target.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled restricted-slice image-containment theorem cannot be promoted with exact ImplicitFunctionData, a fixed left-coordinate level-set hypothesis, chart-source restriction, right-coordinate neighborhood restriction, inverse-chart kernel parameterization, image containment after an arbitrary target map, or standard-axiom profile.",
+      "Stop only if the compiled product-nullity theorem cannot be promoted with arbitrary factor measures, measurable product set, pointwise zero measure of every vertical section, zero product-measure conclusion, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.lean"
-       "ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.md"],
+      ["ConstructionTargets/SardProductNullityOfNullFibers.lean"
+       "ConstructionTargets/SardProductNullityOfNullFibers.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / IMPLICIT-FUNCTION RESTRICTED-SLICE IMAGE CONTAINMENT",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PRODUCT NULLITY OF NULL FIBERS",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardImplicitFunctionRestrictedSliceImageContainmentProbe.lean",
+       {:path "/tmp/SardProductNullityOfNullFibersProbe.lean",
         :sha256
-        "f8e813847c0df6458377fc982edf5d79a1f098a024e0fdc1017655216e048920"},
-       :declarations
-       ["ImplicitFunctionData.image_inter_sourceRestrict_subset_image_comp_kernelParameter"],
+        "b3976238b79465fbca985b122504d29dd0f16809bc5a9f0eed87b674246a63fc"},
+       :declarations ["measure_prod_zero_of_forall_fiber_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Identify each localized exact-rank piece with the projected left-coordinate level set, then supply slice smoothness, dimension drop, and zero projected derivative to obtain pointwise local image nullity."},
+       "Represent each projected rank-chart image as a measurable product-coordinate set, identify every vertical section with a lower-dimensional null slice image, and transfer product nullity back through the target coordinate equivalence."},
       :representation
       {:source
-       "A subset of the fixed left-coordinate level set of exact ImplicitFunctionData, localized to the chart source and an arbitrary right-coordinate neighborhood.",
-       :target
-       "Containment of its image under an arbitrary target map in the image of the corresponding restricted inverse-chart kernel slice."},
-      :id
-      :critical-value-sard-implicit-function-restricted-slice-image-containment-1,
+       "A measurable subset of a product measurable space whose vertical section over every first-coordinate point has zero measure.",
+       :target "Zero measure of the set under the product measure."},
+      :id :critical-value-sard-product-nullity-of-null-fibers-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-implicit-function-restricted-kernel-parameterization-1
-       :critical-value-sard-projected-slice-local-image-nullity-witness-1
-       :critical-value-sard-first-derivative-projected-chart-explicit-neighborhood-1],
+      [:critical-value-sard-implicit-function-restricted-slice-image-containment-1
+       :critical-value-sard-lower-dimensional-projected-slice-image-nullity-1],
       :current-residual
-      "Fixed-coordinate local subsets now map into the restricted inverse-chart kernel-slice image; projected rank-piece level-set identification and analytic slice instantiation remain.",
+      "Pointwise null vertical sections now imply product-measure nullity; measurable coordinate-image construction, section identification, and target-coordinate transfer remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The compiled local-nullity witness requires containment of the localized rank-piece image in a lower-dimensional projected slice image. A placeholder-free fixture now proves the exact containment supplied by ImplicitFunctionData: any subset of the fixed left-coordinate level set, restricted to the chart source and a right-coordinate neighborhood, is parameterized by the corresponding restricted inverse-chart kernel slice; the containment persists after applying the original target map. Projected rank-piece level-set identification and the analytic slice hypotheses remain downstream.",
+     "The rectangular theorem is not refuted. The projected rank-chart neighborhood is a family of fixed derivative-range-coordinate slices, so nullity cannot be obtained by an uncountable union of the individual null slice images. The valid assembly is product-measure nullity via Fubini. A placeholder-free fixture now compiles the exact foundation: a measurable subset of product coordinates has zero product measure when every vertical section has zero measure. Constructing the measurable chart-coordinate image, identifying its sections with the compiled projected slices, and transferring product nullity back to the target remain downstream.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardImplicitFunctionRestrictedSliceImageContainmentProbe.lean",
+       "rg -n \"measure_prod_null|prod.*measure.*zero|ae.*section|measure_prod_eq_zero|prod.*null\" .lake/packages/mathlib/Mathlib/MeasureTheory | head -160",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/SardProductNullityOfNullFibersProbe.lean",
        :exit 0,
        :output
-       "'SardImplicitFunctionRestrictedSliceImageContainmentProbe.ImplicitFunctionData.image_inter_sourceRestrict_subset_image_comp_kernelParameter' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/SardImplicitFunctionRestrictedSliceImageContainmentProbe.lean",
+       "'SardProductNullityOfNullFibersProbe.measure_prod_zero_of_forall_fiber_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/SardProductNullityOfNullFibersProbe.lean",
        :exit 0,
        :output
-       "f8e813847c0df6458377fc982edf5d79a1f098a024e0fdc1017655216e048920"}
+       "b3976238b79465fbca985b122504d29dd0f16809bc5a9f0eed87b674246a63fc"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardImplicitFunctionRestrictedSliceImageContainmentProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProductNullityOfNullFibersProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 138 items OK; {:done 130, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 139 items OK; {:done 131, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardImplicitFunctionRestrictedKernelParameterization.lean ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.lean ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean",
        :exit 0,
        :output
-       "Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; restricted parameterization f43584e65a5fd38ab5a6dd486406f87d55a213f95c9406e34f04c2dc8ce48575; local-nullity witness 7e2b8c45fb069c3901780130708857645311732ce2a4d4412877eac874963bac"}
+       "Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; restricted containment f8e813847c0df6458377fc982edf5d79a1f098a024e0fdc1017655216e048920; lower-dimensional slice nullity 86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -17815,13 +17844,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardImplicitFunctionRestrictedSliceImageContainmentProbe.lean",
+     {:path "/tmp/SardProductNullityOfNullFibersProbe.lean",
       :sha256
-      "f8e813847c0df6458377fc982edf5d79a1f098a024e0fdc1017655216e048920"},
+      "b3976238b79465fbca985b122504d29dd0f16809bc5a9f0eed87b674246a63fc"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -17908,7 +17936,8 @@
     :critical-value-sard-lower-dimensional-projected-slice-image-nullity-1
     :critical-value-sard-first-derivative-rank-piece-local-nullity-aggregation-1
     :critical-value-sard-projected-slice-local-image-nullity-witness-1
-    :critical-value-sard-implicit-function-restricted-slice-image-containment-1],
+    :critical-value-sard-implicit-function-restricted-slice-image-containment-1
+    :critical-value-sard-product-nullity-of-null-fibers-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
