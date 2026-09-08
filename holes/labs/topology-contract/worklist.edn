@@ -29627,14 +29627,17 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :codex-6,
     :commands
-    [{:cmd "sha256sum /tmp/SardVolumeNullityToAddHaarProbe.lean",
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardVolumeNullityToAddHaarProbe.lean ConstructionTargets/SardVolumeNullityToAddHaar.lean",
       :exit 0,
       :output
-      "b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928  /tmp/SardVolumeNullityToAddHaarProbe.lean"}
-     {:cmd "lake env lean /tmp/SardVolumeNullityToAddHaarProbe.lean",
-      :exit 0,
-      :output
-      "'SardVolumeNullityToAddHaarProbe.addHaar_eq_zero_of_volume_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      "b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928  /tmp/SardVolumeNullityToAddHaarProbe.lean\nb92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928  ConstructionTargets/SardVolumeNullityToAddHaar.lean"}
+     {:cmd
+      "cmp -s /tmp/SardVolumeNullityToAddHaarProbe.lean ConstructionTargets/SardVolumeNullityToAddHaar.lean",
+      :exit 0}
      {:cmd
       "lake env lean ConstructionTargets/SardVolumeNullityToAddHaar.lean",
       :exit 0,
@@ -29645,7 +29648,7 @@
       :exit 1,
       :expected-exit 1}
      {:cmd
-      "sed -n '10,17p' ConstructionTargets/SardVolumeNullityToAddHaar.lean | sha256sum",
+      "sed -n '8,15p' ConstructionTargets/SardVolumeNullityToAddHaar.lean | sha256sum",
       :exit 0,
       :output
       "05acfa42bf6eacdcce8b89555645f1fb3e17611222a721608b17bef39717d32a  -"}
@@ -29653,7 +29656,7 @@
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :output
-      "topology-worklist: 224 items OK; {:done 215, :open 1, :blocked 2, :superseded 6}"}
+      "topology-worklist: 224 items OK; {:done 215, :repair 1, :blocked 2, :superseded 6}"}
      {:cmd "sha256sum problems/t93A04/lean/Main.lean",
       :exit 0,
       :output
@@ -29667,23 +29670,19 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-    :review
-    {:outcome :fail,
-     :seat "codex-1",
-     :job "invoke-1788888040829-15316-e7664594",
-     :finding
-     "Deterministic fixture-identity defect: the recorded acceptance fixture /tmp/SardVolumeNullityToAddHaarProbe.lean has SHA-256 b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928, but the Lean file in recorded commit 17ccf2f461f3f701bd6be47ff79e6e2da5109442 has SHA-256 b761d84f35035813547f76c093a54855b7965d62c09f4b4eec244906847d1ea4 and cmp returns 1; the commit adds a two-line doc comment absent from the frozen fixture. The theorem statement hash, standard axioms, Lean/build, ledger, consumer, placeholder, and cleanliness gates pass, but exact fixture identity required by acceptance does not."},
-    :commit "17ccf2f461f3f701bd6be47ff79e6e2da5109442",
+    :commit "6acbc100f83653cc0446d268d184498a89f61929",
+    :commits
+    ["17ccf2f461f3f701bd6be47ff79e6e2da5109442"
+     "6acbc100f83653cc0446d268d184498a89f61929"],
     :changed-paths
-    ["ConstructionTargets/SardVolumeNullityToAddHaar.lean"
-     "ConstructionTargets/SardVolumeNullityToAddHaar.md"],
+    ["ConstructionTargets/SardVolumeNullityToAddHaar.lean"],
     :fixture
     {:path "/tmp/SardVolumeNullityToAddHaarProbe.lean",
      :sha256
      "b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928"},
     :commit-author "Joe Corneli"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardVolumeNullityToAddHaar.lean"
     "ConstructionTargets/SardVolumeNullityToAddHaar.md"],
