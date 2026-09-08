@@ -5,8 +5,6 @@ open MeasureTheory
 
 namespace SardVolumeNullityToAddHaarProbe
 
-/-- A volume-null subset of a finite-dimensional real inner-product space is
-null for every additive Haar measure on that space. -/
 theorem addHaar_eq_zero_of_volume_eq_zero
     {F : Type*}
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [FiniteDimensional ℝ F]
