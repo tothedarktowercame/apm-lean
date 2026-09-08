@@ -30795,6 +30795,42 @@
    "The order-one geometric dimension drop is discharged; instantiate the universal lower-dimensional theorem on the kernel and orthogonal target.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if one universal lower-source critical-image nullity hypothesis cannot be specialized simultaneously to the order-one projected kernel and every higher-jet smaller source, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardStrongLowerDimensionInductionSpecialization.lean"
+    "ConstructionTargets/SardStrongLowerDimensionInductionSpecialization.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / STRONG LOWER-DIMENSION INDUCTION SPECIALIZATION",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardStrongLowerDimensionInductionSpecializationProbe.lean",
+     :sha256
+     "f9aaebafbceaa75705c75fa522ff657c784068b9244b44da07f7c2a0bafa7dd0"},
+    :declarations
+    ["smooth_criticalImage_zero_of_strong_lower_dimension"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Close the universal lower-source critical-image nullity hypothesis by strong induction on source finrank."},
+   :representation
+   {:source
+    "One universal critical-image nullity hypothesis for every finite-dimensional source of strictly smaller finrank, arbitrary finite-dimensional target, additive Haar measure, and finite nonzero regularity order.",
+    :target
+    "The order-one projected-kernel and higher-order smaller-source induction interfaces required by complete smooth critical-image assembly."},
+   :id
+   :critical-value-sard-strong-lower-dimension-induction-specialization-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-order-one-kernel-induction-interface-1
+    :critical-value-sard-smooth-critical-image-induction-assembly-1],
+   :current-residual
+   "Both lower-dimensional interfaces are generated from one universal hypothesis; strong finrank induction closure remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -30848,78 +30884,80 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Specialize one strong lower-dimensional critical-image hypothesis to the order-one kernel/orthogonal target and the higher-order smaller source, then invoke smooth critical-image induction assembly.",
+     "Close the universal lower-source hypothesis by strong induction on source finrank, then expose the rectangular local theorem.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"orderOne_kernel_interface_of_lower_dimension"
-      "b76ad15358bf290d280dfb10e29aa66913f13dfd62143a99f75a33eaed927b13"},
+     {"smooth_criticalImage_zero_of_strong_lower_dimension"
+      "03f7900ac97c1825a24a155f01b67011fde79636ee20f429a564e2e7f776b586"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if order-one first-nonzero-jet membership cannot provide the strict kernel dimension drop needed to instantiate lower-dimensional critical-image induction, or if the theorem requires nonstandard axioms.",
+      "Stop only if one universal lower-source critical-image nullity hypothesis cannot be specialized simultaneously to the order-one projected kernel and every higher-jet smaller source, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardOrderOneKernelInductionInterface.lean"
-       "ConstructionTargets/SardOrderOneKernelInductionInterface.md"],
+      ["ConstructionTargets/SardStrongLowerDimensionInductionSpecialization.lean"
+       "ConstructionTargets/SardStrongLowerDimensionInductionSpecialization.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ORDER-ONE KERNEL INDUCTION INTERFACE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / STRONG LOWER-DIMENSION INDUCTION SPECIALIZATION",
       :acceptance
       {:fixture
-       {:path "/tmp/SardOrderOneKernelInductionInterfaceProbe.lean",
+       {:path
+        "/tmp/SardStrongLowerDimensionInductionSpecializationProbe.lean",
         :sha256
-        "5003434f96f0103a4fc59c64effbd297718819002b15bdece9e9fcbf268ba8f8"},
-       :declarations ["orderOne_kernel_interface_of_lower_dimension"],
+        "f9aaebafbceaa75705c75fa522ff657c784068b9244b44da07f7c2a0bafa7dd0"},
+       :declarations
+       ["smooth_criticalImage_zero_of_strong_lower_dimension"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Specialize strong lower-dimensional nullity to the kernel/orthogonal-target package and combine it with higher-order induction."},
+       "Close the universal lower-source critical-image nullity hypothesis by strong induction on source finrank."},
       :representation
       {:source
-       "Order-one first-nonzero-jet membership and a lower-dimensional critical-image theorem conditional on strict source-dimension decrease.",
+       "One universal critical-image nullity hypothesis for every finite-dimensional source of strictly smaller finrank, arbitrary finite-dimensional target, additive Haar measure, and finite nonzero regularity order.",
        :target
-       "The order-one projected-kernel critical-image nullity obligation required by smooth critical-image induction assembly."},
-      :id :critical-value-sard-order-one-kernel-induction-interface-1,
+       "The order-one projected-kernel and higher-order smaller-source induction interfaces required by complete smooth critical-image assembly."},
+      :id
+      :critical-value-sard-strong-lower-dimension-induction-specialization-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-nonzero-jet-one-fderiv-nonzero-1
-       :critical-value-sard-projected-range-kernel-dimension-drop-1
+      [:critical-value-sard-order-one-kernel-induction-interface-1
        :critical-value-sard-smooth-critical-image-induction-assembly-1],
       :current-residual
-      "The order-one geometric dimension drop is discharged; instantiate the universal lower-dimensional theorem on the kernel and orthogonal target.",
+      "Both lower-dimensional interfaces are generated from one universal hypothesis; strong finrank induction closure remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture discharges the geometric part of the order-one induction interface: membership in the first-nonzero-jet locus makes the derivative nonzero, and projection onto its range therefore has a strictly lower-dimensional kernel. The remaining task is to specialize the strong lower-dimensional critical-image hypothesis to this kernel and its orthogonal target, alongside the already direct higher-order specialization.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture specializes one universal lower-source critical-image nullity hypothesis to both induction consumers: the strictly lower-dimensional projected kernel at order one and every directly lower-dimensional higher-jet source. It then invokes the complete smooth critical-image assembly theorem. The remaining step is to close this universal hypothesis by strong induction on source finrank.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardOrderOneKernelInductionInterfaceProbe.lean",
+       "lake env lean /tmp/SardStrongLowerDimensionInductionSpecializationProbe.lean",
        :exit 0,
        :output
-       "'SardOrderOneKernelInductionInterfaceProbe.orderOne_kernel_interface_of_lower_dimension' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardStrongLowerDimensionInductionSpecializationProbe.smooth_criticalImage_zero_of_strong_lower_dimension' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardOrderOneKernelInductionInterfaceProbe.lean",
+       "sha256sum /tmp/SardStrongLowerDimensionInductionSpecializationProbe.lean",
        :exit 0,
        :output
-       "5003434f96f0103a4fc59c64effbd297718819002b15bdece9e9fcbf268ba8f8  /tmp/SardOrderOneKernelInductionInterfaceProbe.lean"}
+       "f9aaebafbceaa75705c75fa522ff657c784068b9244b44da07f7c2a0bafa7dd0  /tmp/SardStrongLowerDimensionInductionSpecializationProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardOrderOneKernelInductionInterfaceProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardStrongLowerDimensionInductionSpecializationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '8,36p' /tmp/SardOrderOneKernelInductionInterfaceProbe.lean | sha256sum",
+       "sed -n '10,51p' /tmp/SardStrongLowerDimensionInductionSpecializationProbe.lean | sha256sum",
        :exit 0,
        :output
-       "b76ad15358bf290d280dfb10e29aa66913f13dfd62143a99f75a33eaed927b13  -"}
+       "03f7900ac97c1825a24a155f01b67011fde79636ee20f429a564e2e7f776b586  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 232 items OK; {:done 224, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 233 items OK; {:done 225, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -30937,12 +30975,13 @@
        :output "?? scripts/__pycache__/",
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
-     {:path "/tmp/SardOrderOneKernelInductionInterfaceProbe.lean",
+     {:path
+      "/tmp/SardStrongLowerDimensionInductionSpecializationProbe.lean",
       :sha256
-      "5003434f96f0103a4fc59c64effbd297718819002b15bdece9e9fcbf268ba8f8"},
+      "f9aaebafbceaa75705c75fa522ff657c784068b9244b44da07f7c2a0bafa7dd0"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -31123,7 +31162,8 @@
     :critical-value-sard-compact-smooth-induction-nullity-1
     :critical-value-sard-smooth-critical-locus-compact-exhaustion-nullity-1
     :critical-value-sard-smooth-critical-image-induction-assembly-1
-    :critical-value-sard-order-one-kernel-induction-interface-1],
+    :critical-value-sard-order-one-kernel-induction-interface-1
+    :critical-value-sard-strong-lower-dimension-induction-specialization-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
