@@ -13647,6 +13647,69 @@
       "git add ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.lean ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.md && git commit -m 'Compile first-nonzero-jet pointwise witness instantiation'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788835268320-14427-b34623a2",
+     :commands
+     [{:cmd
+       "git diff-tree --no-commit-id --name-only -r cafc5b391f814b092d6ff5b4cd6d4f8499a5c140",
+       :exit 0}
+      {:cmd
+       "git show cafc5b391f814b092d6ff5b4cd6d4f8499a5c140:ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.lean | sha256sum",
+       :exit 0,
+       :output
+       "f52d935bf5fa89ef6288ab6fd5efb3ad7e13900a7db670c4c8497909238cfe59"}
+      {:cmd
+       "sha256sum /tmp/SardFirstNonzeroJetPointwiseWitnessInstantiationProbe.lean",
+       :exit 0,
+       :output
+       "f52d935bf5fa89ef6288ab6fd5efb3ad7e13900a7db670c4c8497909238cfe59"}
+      {:cmd
+       "cmp /tmp/SardFirstNonzeroJetPointwiseWitnessInstantiationProbe.lean <(git show cafc5b391f814b092d6ff5b4cd6d4f8499a5c140:ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.lean)",
+       :exit 0}
+      {:cmd
+       "sha256sum ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.md",
+       :exit 0,
+       :output
+       "b44ff518a5b4ab355b2124a8266b91529ee623b574e94916db777c6edbf376f3"}
+      {:cmd "readlink -f .lake/packages",
+       :exit 0,
+       :output "/home/joe/code/apm-lean/.lake/packages"}
+      {:cmd
+       "lake env lean /tmp/SardFirstNonzeroJetPointwiseWitnessInstantiationProbe.lean",
+       :exit 0,
+       :output
+       "'exists_open_local_image_null_of_firstNonzeroJet' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "lake build ConstructionTargets.SardFirstNonzeroJetPointwiseWitnessInstantiation",
+       :exit 0,
+       :output "Build completed successfully (8279 jobs)."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.lean ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git merge-base --is-ancestor 7951748831512fd4bb258ec2dff1d0cead06f9d9 cafc5b391f814b092d6ff5b4cd6d4f8499a5c140 && git merge-base --is-ancestor c2fa028df435f93593fc3dc7fcf7367aa031121d cafc5b391f814b092d6ff5b4cd6d4f8499a5c140",
+       :exit 0}
+      {:cmd
+       "sha256sum ConstructionTargets/SardFirstNonzeroJetOpenRegularityData.lean ConstructionTargets/SardFirstNonzeroJetPointwiseLocalNullityWitness.lean problems/t93A04/lean/Main.lean",
+       :exit 0,
+       :output
+       "40a965fe49fdf37e5ec8d7e0c9cfee9f8bfd997be3002515fea3849a06b54f9f; c8e8c80ed1b02c36459e714bca722cd05c5ac77b4ef1bd882d2fb5ab4a63ad3a; 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+      {:cmd
+       "rg -n '^theorem |\\bsorry\\b' problems/t93A04/lean/Main.lean",
+       :exit 0,
+       :output "one theorem and one sorry"}
+      {:cmd "bb holes/labs/topology-contract/worklist_check.bb",
+       :exit 0,
+       :output
+       "topology-worklist: 116 items OK; {:done 107, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd "git diff --check && git status --porcelain=v1",
+       :exit 0,
+       :output ""}],
+     :finding
+     "PASS. Commit cafc5b391f814b092d6ff5b4cd6d4f8499a5c140 changes exactly the two recorded scope paths. The fixture is byte-identical to the committed Lean source and both recorded source/document hashes reproduce. The dependency commits are ancestors and their frozen hashes reproduce. The theorem has the required existential orientation: at a point of the refined first-nonzero-jet locus it produces an open neighborhood containing that point whose refined-locus image is null. Its hypotheses use only the lower-dimensional local induction statement, while the open-regularity package supplies the scalarized chart, kernel dimension drop, parameter regularity, level-set containment, and criticality needed by the pointwise witness. No representation strengthening, reversed inclusion, or global-nullity assumption was found. Compilation is warning-free, the axiom audit is standard-only with zero sorryAx, placeholders remain 0 in both scoped files, and the frozen consumer remains one theorem with one sorry."},
     :commit "cafc5b391f814b092d6ff5b4cd6d4f8499a5c140",
     :changed-paths
     ["ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.lean"
@@ -13661,7 +13724,7 @@
     ["SardFirstNonzeroJetPointwiseWitnessInstantiationProbe.exists_open_local_image_null_of_firstNonzeroJet"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.lean"
     "ConstructionTargets/SardFirstNonzeroJetPointwiseWitnessInstantiation.md"],
@@ -13831,7 +13894,7 @@
       "f52d935bf5fa89ef6288ab6fd5efb3ad7e13900a7db670c4c8497909238cfe59"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
