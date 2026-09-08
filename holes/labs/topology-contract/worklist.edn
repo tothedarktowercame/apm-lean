@@ -17983,6 +17983,39 @@
    "Continuous images of compact localizations are now Borel measurable for Fubini; projected coordinate-image compact localization, fiber identification, and target transfer remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled compact product-image nullity theorem cannot be promoted with compact localization, continuity on the localization, second-countable Hausdorff Borel coordinate factors, pointwise nullity of every vertical section, zero product-measure conclusion, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCompactProductImageNullity.lean"
+    "ConstructionTargets/SardCompactProductImageNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT PRODUCT-IMAGE NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardCompactProductImageNullityProbe.lean",
+     :sha256
+     "d8b3e0974efab4b4cf067115e85b8cd2f81f4f682d48e8323d293c62a9b4d9d6"},
+    :declarations
+    ["measure_prod_image_zero_of_isCompact_continuousOn_of_fibers"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Identify each vertical section of the compact projected rank-chart coordinate image with a lower-dimensional null inverse-chart slice image, then transfer product nullity through the target coordinate equivalence."},
+   :representation
+   {:source
+    "A compact source localization mapped continuously into a product of second-countable Hausdorff Borel spaces, with every vertical section of its image null.",
+    :target "Zero product measure of the complete coordinate image."},
+   :id :critical-value-sard-compact-product-image-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-compact-image-measurable-1
+    :critical-value-sard-product-nullity-of-null-fibers-1],
+   :current-residual
+   "Compact continuous product-coordinate images with null vertical sections are now product-null; section identification and target-coordinate transfer remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -18036,71 +18069,74 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Compactly localize projected chart-coordinate images, identify their vertical sections with lower-dimensional null slice images, and transfer product nullity to the target.",
+     "Identify compact projected coordinate-image vertical sections with lower-dimensional null inverse-chart slice images, then transfer product nullity to the target.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled compact-image measurability theorem cannot be promoted with compact source localization, continuity on the localization, Hausdorff Borel target, measurable image conclusion, or standard-axiom profile.",
+      "Stop only if the compiled compact product-image nullity theorem cannot be promoted with compact localization, continuity on the localization, second-countable Hausdorff Borel coordinate factors, pointwise nullity of every vertical section, zero product-measure conclusion, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCompactImageMeasurable.lean"
-       "ConstructionTargets/SardCompactImageMeasurable.md"],
+      ["ConstructionTargets/SardCompactProductImageNullity.lean"
+       "ConstructionTargets/SardCompactProductImageNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT IMAGE MEASURABILITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT PRODUCT-IMAGE NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardCompactImageMeasurableProbe.lean",
+       {:path "/tmp/SardCompactProductImageNullityProbe.lean",
         :sha256
-        "daaf3056219e7f8429fc997a7533b40fe40afc7f2de0879fcd0da56f5795246f"},
-       :declarations ["measurableSet_image_of_isCompact_continuousOn"],
+        "d8b3e0974efab4b4cf067115e85b8cd2f81f4f682d48e8323d293c62a9b4d9d6"},
+       :declarations
+       ["measure_prod_image_zero_of_isCompact_continuousOn_of_fibers"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Compactly localize each projected rank-chart coordinate image, prove continuity of its coordinate representation, identify every vertical section with a lower-dimensional null slice image, and transfer product nullity back to the target."},
+       "Identify each vertical section of the compact projected rank-chart coordinate image with a lower-dimensional null inverse-chart slice image, then transfer product nullity through the target coordinate equivalence."},
       :representation
       {:source
-       "A compact source set and a map continuous on that set, with values in a Hausdorff space carrying its Borel measurable structure.",
-       :target "Borel measurability of the image of the compact set."},
-      :id :critical-value-sard-compact-image-measurable-1,
+       "A compact source localization mapped continuously into a product of second-countable Hausdorff Borel spaces, with every vertical section of its image null.",
+       :target
+       "Zero product measure of the complete coordinate image."},
+      :id :critical-value-sard-compact-product-image-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-product-nullity-of-null-fibers-1
-       :critical-value-sard-flat-through-compact-localization-1],
+      [:critical-value-sard-compact-image-measurable-1
+       :critical-value-sard-product-nullity-of-null-fibers-1],
       :current-residual
-      "Continuous images of compact localizations are now Borel measurable for Fubini; projected coordinate-image compact localization, fiber identification, and target transfer remain.",
+      "Compact continuous product-coordinate images with null vertical sections are now product-null; section identification and target-coordinate transfer remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. Product nullity from null fibers is compiled, but it requires a measurable product-coordinate image. An arbitrary continuous image need not be Borel, so the correct bounded route is compact localization. A placeholder-free fixture now proves that the continuous image of a compact set into a Hausdorff Borel target is measurable: the image is compact, hence closed, hence Borel. Applying this to compact projected rank-chart coordinate images and identifying their vertical sections remain downstream.",
+     "The rectangular theorem is not refuted. Compact-image measurability and product nullity from null fibers are both compiled. A placeholder-free fixture now combines them at the exact coordinate-image boundary: the continuous image of a compact localization in a second-countable Hausdorff Borel product target is measurable, and pointwise nullity of every vertical section then implies zero product measure of the complete coordinate image. Identifying those sections with lower-dimensional projected inverse-chart slice images and transferring nullity through target coordinates remain downstream.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
-      {:cmd "lake env lean /tmp/SardCompactImageMeasurableProbe.lean",
-       :exit 0,
-       :output
-       "'SardCompactImageMeasurableProbe.measurableSet_image_of_isCompact_continuousOn' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/SardCompactImageMeasurableProbe.lean",
-       :exit 0,
-       :output
-       "daaf3056219e7f8429fc997a7533b40fe40afc7f2de0879fcd0da56f5795246f"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactImageMeasurableProbe.lean",
+       "lake env lean /tmp/SardCompactProductImageNullityProbe.lean",
+       :exit 0,
+       :output
+       "'SardCompactProductImageNullityProbe.measure_prod_image_zero_of_isCompact_continuousOn_of_fibers' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/SardCompactProductImageNullityProbe.lean",
+       :exit 0,
+       :output
+       "d8b3e0974efab4b4cf067115e85b8cd2f81f4f682d48e8323d293c62a9b4d9d6"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactProductImageNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 140 items OK; {:done 132, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 141 items OK; {:done 133, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardProductNullityOfNullFibers.lean ConstructionTargets/SardFlatThroughCompactLocalization.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardCompactImageMeasurable.lean ConstructionTargets/SardProductNullityOfNullFibers.lean",
        :exit 0,
        :output
-       "Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; product null fibers b3976238b79465fbca985b122504d29dd0f16809bc5a9f0eed87b674246a63fc; compact localization e5ac023da2f8787934f84d6e923a7317bb3a7dd7588d8edd07fed3c61d77afea"}
+       "Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; compact-image measurability daaf3056219e7f8429fc997a7533b40fe40afc7f2de0879fcd0da56f5795246f; product null fibers b3976238b79465fbca985b122504d29dd0f16809bc5a9f0eed87b674246a63fc"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -18111,12 +18147,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardCompactImageMeasurableProbe.lean",
+     {:path "/tmp/SardCompactProductImageNullityProbe.lean",
       :sha256
-      "daaf3056219e7f8429fc997a7533b40fe40afc7f2de0879fcd0da56f5795246f"},
+      "d8b3e0974efab4b4cf067115e85b8cd2f81f4f682d48e8323d293c62a9b4d9d6"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -18205,7 +18241,8 @@
     :critical-value-sard-projected-slice-local-image-nullity-witness-1
     :critical-value-sard-implicit-function-restricted-slice-image-containment-1
     :critical-value-sard-product-nullity-of-null-fibers-1
-    :critical-value-sard-compact-image-measurable-1],
+    :critical-value-sard-compact-image-measurable-1
+    :critical-value-sard-compact-product-image-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
