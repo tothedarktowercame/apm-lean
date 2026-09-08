@@ -34510,6 +34510,8 @@
    "Finite-order projected chart and residual-slice-zero data is compiled; assemble it with installed positive-rank dimension and measure data.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :review-finding
+   "Deterministic representation defect: commit 42104ed9dd3be10a47dcc972d7c168e44d938f30 does not specialize the generic pointwise nullity witness. SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean:12-15 defines mC and mS as local lets equal to inferInstance rather than accepting them explicitly; line 16 only reuses the existing Borel-binding theorem. It supplies no measures or additive-Haar instances and never invokes exists_open_rankLocus_image_zero_of_finiteOrder_localRankChart, whose coordinate measurable spaces remain implicit at SardFiniteOrderPointwiseRankChartNullityWitness.lean:15-25. Repair with a wrapper taking both measurable spaces explicitly before their Borel proofs, measures, and additive-Haar instances, and returning the generic witness's nullity conclusion.",
    :stop-condition
    "Stop only if the finite-order pointwise rank-chart nullity theorem cannot be specialized with derivative-range and orthogonal-residual measurable spaces supplied as explicit inherited subtype parameters, or if the specialization requires nonstandard axioms.",
    :evidence
@@ -34569,6 +34571,12 @@
       :output "1"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :fail,
+     :seat "codex-10",
+     :job "invoke-1788911015835-15676-24df02d1",
+     :finding
+     "Deterministic representation defect: commit 42104ed9dd3be10a47dcc972d7c168e44d938f30 does not specialize the generic pointwise nullity witness. SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean:12-15 defines mC and mS as local lets equal to inferInstance rather than accepting them explicitly; line 16 only reuses the existing Borel-binding theorem. It supplies no measures or additive-Haar instances and never invokes exists_open_rankLocus_image_zero_of_finiteOrder_localRankChart, whose coordinate measurable spaces remain implicit at SardFiniteOrderPointwiseRankChartNullityWitness.lean:15-25. Repair with a wrapper taking both measurable spaces explicitly before their Borel proofs, measures, and additive-Haar instances, and returning the generic witness's nullity conclusion."},
     :commit "42104ed9dd3be10a47dcc972d7c168e44d938f30",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean"
@@ -34581,7 +34589,7 @@
     :declarations
     ["projectedCoordinates_explicit_measurableSpace_borel_bindings"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean"
     "ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.md"],
