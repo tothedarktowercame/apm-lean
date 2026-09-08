@@ -30083,6 +30083,41 @@
    "All finite-jet branches now assemble from explicit localized analytic and lower-dimensional induction inputs; only the rectangular public-hypothesis adapter remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the localized finite-jet induction theorem cannot be specialized from a single C-infinity hypothesis while internally discharging every finite smoothness order, Euclidean ball-volume coefficient bound, and contraction-factor hypothesis, or if the specialization requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.lean"
+    "ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED SMOOTH FINITE-JET INDUCTION NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardLocalizedSmoothFiniteJetInductionNullityProbe.lean",
+     :sha256
+     "025433b6e553a214f1083b292fa2e2dda6f759e864926ff5958634a7f39edd84"},
+    :declarations
+    ["localized_image_zero_of_smooth_finiteJet_induction"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Derive compact localization and exponent surplus from rectangular hypotheses and supply the two lower-dimensional induction interfaces."},
+   :representation
+   {:source
+    "A C-infinity map on a compact localized source, a positive Taylor exponent surplus, localized criticality, and order-one plus higher lower-dimensional induction.",
+    :target
+    "Zero additive-Haar measure of the complete localized source image, with Taylor constants and all finite regularity orders discharged internally."},
+   :id
+   :critical-value-sard-localized-smooth-finite-jet-induction-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-localized-finite-jet-induction-nullity-1],
+   :current-residual
+   "The finite-jet theorem now has a single smoothness hypothesis and no exposed Taylor constants; compact localization, exponent choice, and induction-interface discharge remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -30136,79 +30171,79 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Adapt the rectangular theorem's smoothness, dimension-surplus, compact localization, and source-induction hypotheses to the compiled localized finite-jet induction interface.",
+     "Derive compact localization and a positive exponent surplus from the rectangular source set and dimension inequality, then discharge the order-one and higher lower-dimensional induction interfaces.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"localized_image_zero_of_finiteJet_induction"
-      "7015b2e66178e22074fcd8fe3aaf65828ac99bb5deb41e7c45b11f8bc76cceb5"},
+     {"localized_image_zero_of_smooth_finiteJet_induction"
+      "8b4623848b93964fc6fe86c3e6e6215e841646fcd479ffb47c17195150d73acd"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled localized finite-jet induction theorem cannot be promoted for arbitrary finite-dimensional real inner-product source and target spaces, arbitrary additive Haar target measures, compact localized source sets, Taylor exponent surplus and volume constants, order-one derivative-range induction, higher-jet lower-dimensional induction, localized criticality, zero complete image measure, or standard-axiom profile.",
+      "Stop only if the localized finite-jet induction theorem cannot be specialized from a single C-infinity hypothesis while internally discharging every finite smoothness order, Euclidean ball-volume coefficient bound, and contraction-factor hypothesis, or if the specialization requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardLocalizedFiniteJetInductionNullity.lean"
-       "ConstructionTargets/SardLocalizedFiniteJetInductionNullity.md"],
+      ["ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.lean"
+       "ConstructionTargets/SardLocalizedSmoothFiniteJetInductionNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED FINITE-JET INDUCTION NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED SMOOTH FINITE-JET INDUCTION NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardLocalizedFiniteJetInductionNullityProbe.lean",
+       {:path
+        "/tmp/SardLocalizedSmoothFiniteJetInductionNullityProbe.lean",
         :sha256
-        "65a03d5083bdfc097b03602f4e0c83f953a7858e80a7f49003cdf56fb70699ff"},
-       :declarations ["localized_image_zero_of_finiteJet_induction"],
+        "025433b6e553a214f1083b292fa2e2dda6f759e864926ff5958634a7f39edd84"},
+       :declarations
+       ["localized_image_zero_of_smooth_finiteJet_induction"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Adapt the rectangular regularity and dimension hypotheses to this localized finite-jet induction theorem."},
+       "Derive compact localization and exponent surplus from rectangular hypotheses and supply the two lower-dimensional induction interfaces."},
       :representation
       {:source
-       "Compact localized Taylor data, order-one derivative-range induction, indexed higher-jet lower-dimensional induction, and nonsurjective derivatives throughout the localized source.",
+       "A C-infinity map on a compact localized source, a positive Taylor exponent surplus, localized criticality, and order-one plus higher lower-dimensional induction.",
        :target
-       "Zero additive-Haar measure of the image of the complete localized source set."},
+       "Zero additive-Haar measure of the complete localized source image, with Taylor constants and all finite regularity orders discharged internally."},
       :id
-      :critical-value-sard-localized-finite-jet-induction-nullity-1,
+      :critical-value-sard-localized-smooth-finite-jet-induction-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-localized-finite-jet-closed-open-assembly-1
-       :critical-value-sard-localized-flat-through-add-haar-nullity-1
-       :critical-value-sard-higher-first-nonzero-jet-loci-induction-1],
+      [:critical-value-sard-localized-finite-jet-induction-nullity-1],
       :current-residual
-      "All finite-jet branches now assemble from explicit localized analytic and lower-dimensional induction inputs; only the rectangular public-hypothesis adapter remains.",
+      "The finite-jet theorem now has a single smoothness hypothesis and no exposed Taylor constants; compact localization, exponent choice, and induction-interface discharge remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture threads the concrete localized Taylor hypotheses, the order-one derivative-range closed-open induction interface, and the indexed higher-jet lower-dimensional induction interface through finite-jet assembly, proving zero additive-Haar measure of the complete localized image. Only adaptation of the rectangular theorem's stated regularity and dimension package to this compiled interface remains.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled adapter replaces all proof-internal Taylor coefficient, contraction, and per-order regularity inputs with one C-infinity hypothesis: positivity proves the Euclidean ball-volume coefficient bounds, one-half supplies the contraction, and C-infinity supplies every finite derivative order. Compact localization, exponent selection, and the two lower-dimensional induction interfaces remain before the public rectangular theorem.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardLocalizedFiniteJetInductionNullityProbe.lean",
+       "lake env lean /tmp/SardLocalizedSmoothFiniteJetInductionNullityProbe.lean",
        :exit 0,
        :output
-       "'SardLocalizedFiniteJetInductionNullityProbe.localized_image_zero_of_finiteJet_induction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardLocalizedSmoothFiniteJetInductionNullityProbe.localized_image_zero_of_smooth_finiteJet_induction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardLocalizedFiniteJetInductionNullityProbe.lean",
+       "sha256sum /tmp/SardLocalizedSmoothFiniteJetInductionNullityProbe.lean",
        :exit 0,
        :output
-       "65a03d5083bdfc097b03602f4e0c83f953a7858e80a7f49003cdf56fb70699ff  /tmp/SardLocalizedFiniteJetInductionNullityProbe.lean"}
+       "025433b6e553a214f1083b292fa2e2dda6f759e864926ff5958634a7f39edd84  /tmp/SardLocalizedSmoothFiniteJetInductionNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalizedFiniteJetInductionNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalizedSmoothFiniteJetInductionNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '13,61p' /tmp/SardLocalizedFiniteJetInductionNullityProbe.lean | sha256sum",
+       "sed -n '11,60p' /tmp/SardLocalizedSmoothFiniteJetInductionNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "7015b2e66178e22074fcd8fe3aaf65828ac99bb5deb41e7c45b11f8bc76cceb5  -"}
+       "8b4623848b93964fc6fe86c3e6e6215e841646fcd479ffb47c17195150d73acd  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 226 items OK; {:done 218, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 227 items OK; {:done 219, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -30223,12 +30258,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardLocalizedFiniteJetInductionNullityProbe.lean",
+     {:path
+      "/tmp/SardLocalizedSmoothFiniteJetInductionNullityProbe.lean",
       :sha256
-      "65a03d5083bdfc097b03602f4e0c83f953a7858e80a7f49003cdf56fb70699ff"},
+      "025433b6e553a214f1083b292fa2e2dda6f759e864926ff5958634a7f39edd84"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -30403,7 +30439,8 @@
     :critical-value-sard-volume-nullity-to-add-haar-1
     :critical-value-sard-localized-flat-through-add-haar-nullity-1
     :critical-value-sard-higher-first-nonzero-jet-loci-induction-1
-    :critical-value-sard-localized-finite-jet-induction-nullity-1],
+    :critical-value-sard-localized-finite-jet-induction-nullity-1
+    :critical-value-sard-localized-smooth-finite-jet-induction-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
