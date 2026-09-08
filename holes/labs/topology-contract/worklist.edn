@@ -26845,6 +26845,26 @@
       :exit 0,
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788875914583-15086-865a3249",
+     :commands
+     ["git show --format='%H%n%an <%ae>%n%P' --no-renames --name-status 0ab8de8ec5e1b21395af72ee3ad4cc44b7a1631c"
+      "git show 0ab8de8ec5e1b21395af72ee3ad4cc44b7a1631c:ConstructionTargets/SardDerivativeRangeOrthogonalMeasurePackage.lean"
+      "cmp committed-lean /tmp/SardDerivativeRangeOrthogonalMeasurePackageProbe.lean"
+      "sha256sum committed-lean /tmp/SardDerivativeRangeOrthogonalMeasurePackageProbe.lean"
+      "sed -n '10,34p' committed-lean | sha256sum"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' committed-lean committed-md"
+      "lake env lean committed-lean"
+      "lake build ConstructionTargets.SardDerivativeRangeOrthogonalMeasurePackage"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check 0ab8de8e^ 0ab8de8e"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: recorded commit 0ab8de8ec5e1b21395af72ee3ad4cc44b7a1631c was authored by Joe Corneli and changes exactly the two declared scope files. The committed Lean file matches the fixture byte-for-byte at SHA-256 9398474e95892b58ede9064dec5d4767ce476c21e1b4fbcb2995d24180a0dfe8; the frozen statement hash recomputes to fdd0f0c286448cb87d8387aab5a4ca68bf31552dd0352326849f56246623d135; no placeholders, axioms, opaque declarations, unsafe declarations, or warnings were found. Orientation and representation boundaries are correct: a nonsurjective E →L[ℝ] F yields separately scoped Borel structures and additive-Haar measures for its range R and orthogonal residual Rᗮ, plus Nontrivial Rᗮ; the two coordinate measures and certificates remain distinct, and nonsurjectivity is used for residual nontriviality. Lean reports only propext, Classical.choice, and Quot.sound; the target build succeeds, canonical package authority is correct, the worklist validates 202 items, the consumer remains frozen at 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one placeholder, commit diff check passes, and the worktree is clean."},
     :commit "0ab8de8ec5e1b21395af72ee3ad4cc44b7a1631c",
     :changed-paths
     ["ConstructionTargets/SardDerivativeRangeOrthogonalMeasurePackage.lean"
@@ -26857,7 +26877,7 @@
     :declarations ["exists_range_orthogonal_borel_addHaarMeasure"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardDerivativeRangeOrthogonalMeasurePackage.lean"
     "ConstructionTargets/SardDerivativeRangeOrthogonalMeasurePackage.md"],
@@ -27043,7 +27063,7 @@
       "9398474e95892b58ede9064dec5d4767ce476c21e1b4fbcb2995d24180a0dfe8"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
