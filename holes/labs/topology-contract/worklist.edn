@@ -17580,6 +17580,50 @@
       :output "1"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788845980979-14587-cc4179fa",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 2f00a68c728a370545e41adee921d0e851b53819; git diff-tree --no-commit-id --name-only -r 2f00a68c728a370545e41adee921d0e851b53819",
+       :exit 0,
+       :output
+       "Author Joe Corneli; exact scope: ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.lean and ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.md."}
+      {:cmd
+       "git show 2f00a68c728a370545e41adee921d0e851b53819:ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.lean | sha256sum; sha256sum /tmp/SardImplicitFunctionRestrictedSliceImageContainmentProbe.lean; cmp <(git show 2f00a68c728a370545e41adee921d0e851b53819:ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.lean) /tmp/SardImplicitFunctionRestrictedSliceImageContainmentProbe.lean",
+       :exit 0,
+       :output
+       "Committed source and fixture are byte-identical at f8e813847c0df6458377fc982edf5d79a1f098a024e0fdc1017655216e048920."}
+      {:cmd
+       "readlink -f .lake/packages; lake env lean /tmp/SardImplicitFunctionRestrictedSliceImageContainmentProbe.lean; lake build ConstructionTargets.SardImplicitFunctionRestrictedSliceImageContainment",
+       :exit 0,
+       :output
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; declaration depends on [propext, Classical.choice, Quot.sound]; build completed successfully (8272 jobs), with no warning from the reviewed module."}
+      {:cmd
+       "git show 2f00a68c728a370545e41adee921d0e851b53819:ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 2f00a68c728a370545e41adee921d0e851b53819:ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 2f00a68c728a370545e41adee921d0e851b53819:ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.md | sha256sum; sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "Documentation hash 787362fb07bee501aed84c241d338b514f0c6952d47fc94e635e1a67773f8aa6; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; theorem count 1; sorry count 1."}
+      {:cmd
+       "git merge-base --is-ancestor b6105380c751d6ea2841663a62e7a255d8c63c9e 2f00a68c728a370545e41adee921d0e851b53819; git merge-base --is-ancestor 4ec4225cbe4581e3126d24c9cbe5a2e884ba3427 2f00a68c728a370545e41adee921d0e851b53819; git merge-base --is-ancestor 5467deda07b4d12d409bf01906f04f5ae2accc91 2f00a68c728a370545e41adee921d0e851b53819",
+       :exit 0,
+       :output "All three recorded dependencies are ancestors."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "topology-worklist: 139 items OK; {:done 130, :done-unreviewed 1, :blocked 2, :superseded 6}; diff clean; working tree clean."}],
+     :finding
+     "PASS. The containment is oriented correctly. A point in t restricted to the chart source and the preimage of univ ×ˢ V is placed in the fixed-left-coordinate level set via ht; the reviewed restricted kernel-parameterization equality then supplies a parameter z in the target-compatible right-coordinate set intersected with V. Applying the arbitrary target map f preserves the resulting inclusion. The theorem asserts containment, not equality, and V is actually allowed to be any set, which is at least as general as the recorded neighborhood representation; openness is left to the consumer. Exact scope and fixture hash reproduce, axioms are standard-only, placeholders are zero, and the frozen consumer retains one theorem and one sorry."},
     :commit "2f00a68c728a370545e41adee921d0e851b53819",
     :changed-paths
     ["ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.lean"
@@ -17602,7 +17646,7 @@
       "ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.md"]},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.lean"
     "ConstructionTargets/SardImplicitFunctionRestrictedSliceImageContainment.md"],
@@ -17777,7 +17821,7 @@
       "f8e813847c0df6458377fc982edf5d79a1f098a024e0fdc1017655216e048920"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
