@@ -16804,6 +16804,50 @@
       :output
       "[master b68631e5] Add annihilated projection nonsurjectivity; 2 files changed, 35 insertions(+)"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788843784056-14557-4f01886a",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat b68631e50acd58303ed6e1c951cd8d7d7f174f68; git diff-tree --no-commit-id --name-only -r b68631e50acd58303ed6e1c951cd8d7d7f174f68",
+       :exit 0,
+       :output
+       "Author Joe Corneli; exact scope: ConstructionTargets/SardAnnihilatedProjectionNonsurjective.lean and ConstructionTargets/SardAnnihilatedProjectionNonsurjective.md."}
+      {:cmd
+       "git show b68631e50acd58303ed6e1c951cd8d7d7f174f68:ConstructionTargets/SardAnnihilatedProjectionNonsurjective.lean | sha256sum; sha256sum /tmp/SardAnnihilatedProjectionNonsurjectiveProbe.lean; cmp <(git show b68631e50acd58303ed6e1c951cd8d7d7f174f68:ConstructionTargets/SardAnnihilatedProjectionNonsurjective.lean) /tmp/SardAnnihilatedProjectionNonsurjectiveProbe.lean",
+       :exit 0,
+       :output
+       "Committed source and fixture are byte-identical at 195a09f03f336798658a0aa7095d3ee914761c1542ecb545bb73c35e3dace3a4."}
+      {:cmd
+       "readlink -f .lake/packages; lake env lean /tmp/SardAnnihilatedProjectionNonsurjectiveProbe.lean; lake build ConstructionTargets.SardAnnihilatedProjectionNonsurjective",
+       :exit 0,
+       :output
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; declaration depends on [propext, Classical.choice, Quot.sound]; build completed successfully (8240 jobs), with no warning from the reviewed module."}
+      {:cmd
+       "git show b68631e50acd58303ed6e1c951cd8d7d7f174f68:ConstructionTargets/SardAnnihilatedProjectionNonsurjective.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show b68631e50acd58303ed6e1c951cd8d7d7f174f68:ConstructionTargets/SardAnnihilatedProjectionNonsurjective.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show b68631e50acd58303ed6e1c951cd8d7d7f174f68:ConstructionTargets/SardAnnihilatedProjectionNonsurjective.md | sha256sum; sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "Documentation hash 4dfbe930615a2782aaaaa3c4568c85a2b9a52ad69b0d649f846ae9bcfc636e79; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; theorem count 1; sorry count 1."}
+      {:cmd
+       "git merge-base --is-ancestor 2229cea1e27d33f2f3cce54eb9a2f053829a3af3 b68631e50acd58303ed6e1c951cd8d7d7f174f68; git merge-base --is-ancestor 563aebd8166dd750d154f4fc2a0866ed5366ce8a b68631e50acd58303ed6e1c951cd8d7d7f174f68",
+       :exit 0,
+       :output "Both recorded dependencies are ancestors."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "topology-worklist: 134 items OK; {:done 125, :done-unreviewed 1, :blocked 2, :superseded 6}; diff clean; working tree clean."}],
+     :finding
+     "PASS. The theorem is mathematically oriented exactly as recorded. If L were surjective, composing its surjectivity with surjective P would make P.comp L surjective; rewriting the composite to zero contradicts Nontrivial R by choosing a nonzero target element. The assumptions are neither weaker nor stronger than the stated representation: surjectivity of P, exact annihilation P.comp L = 0, and nontriviality of R suffice, with no finite-dimensional or topological hypotheses. The conclusion is only nonsurjectivity of L. Exact scope and fixture hash reproduce, axioms are standard-only, placeholders are zero, and the frozen consumer retains one theorem and one sorry."},
     :commit "b68631e50acd58303ed6e1c951cd8d7d7f174f68",
     :changed-paths
     ["ConstructionTargets/SardAnnihilatedProjectionNonsurjective.lean"
@@ -16820,7 +16864,7 @@
       "ConstructionTargets/SardAnnihilatedProjectionNonsurjective.md"]},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardAnnihilatedProjectionNonsurjective.lean"
     "ConstructionTargets/SardAnnihilatedProjectionNonsurjective.md"],
@@ -16986,7 +17030,7 @@
       "195a09f03f336798658a0aa7095d3ee914761c1542ecb545bb73c35e3dace3a4"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
