@@ -14281,6 +14281,37 @@
    "Taylor covering now applies directly to the exact flatThrough predicate; localized compactness/boundedness and the first-derivative rank locus remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled compact-localization theorem cannot be promoted with its exact flatThrough predicate, compact source set, inherited closed-ball bound, ContDiff derivative-zero closedness, compactness conclusion, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFlatThroughCompactLocalization.lean"
+    "ConstructionTargets/SardFlatThroughCompactLocalization.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FLAT-THROUGH COMPACT LOCALIZATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFlatThroughCompactLocalizationProbe.lean",
+     :sha256
+     "e5ac023da2f8787934f84d6e923a7317bb3a7dd7588d8edd07fed3c61d77afea"},
+    :declarations ["flatThrough_isCompact_and_bounded"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Feed compactness and boundedness into the compiled flatThrough Taylor-nullity theorem, then discharge the first-derivative/rank-normal-form locus."},
+   :representation
+   {:source
+    "A compact localized set K contained in a closed ball and a map ContDiff through order k.",
+    :target
+    "Compactness of the exact flatThrough f K k locus and inheritance of the same closed-ball bound."},
+   :id :critical-value-sard-flat-through-compact-localization-1,
+   :kind :reusable-theorem,
+   :depends-on [:critical-value-sard-flat-through-taylor-nullity-1],
+   :current-residual
+   "The exact flatThrough locus now inherits compactness and boundedness from the localized source; Taylor-nullity instantiation and the first-derivative rank locus remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -14338,70 +14369,66 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled flatThrough Taylor-nullity adapter cannot be promoted with its exact flatThrough predicate, compactness and closed-ball bound, positive exponent surplus, smoothness, geometric constants, zero-volume conclusion, or standard-axiom profile.",
+      "Stop only if the compiled compact-localization theorem cannot be promoted with its exact flatThrough predicate, compact source set, inherited closed-ball bound, ContDiff derivative-zero closedness, compactness conclusion, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFlatThroughTaylorNullity.lean"
-       "ConstructionTargets/SardFlatThroughTaylorNullity.md"],
+      ["ConstructionTargets/SardFlatThroughCompactLocalization.lean"
+       "ConstructionTargets/SardFlatThroughCompactLocalization.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FLAT-THROUGH TAYLOR NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FLAT-THROUGH COMPACT LOCALIZATION",
       :acceptance
       {:fixture
-       {:path "/tmp/SardFlatThroughTaylorNullityProbe.lean",
+       {:path "/tmp/SardFlatThroughCompactLocalizationProbe.lean",
         :sha256
-        "dfc5446bcfea6e07c6a445435b835e8f1bbb556b07cfd35896d155aa417d6812"},
-       :declarations ["flatThrough_image_volume_eq_zero"],
+        "e5ac023da2f8787934f84d6e923a7317bb3a7dd7588d8edd07fed3c61d77afea"},
+       :declarations ["flatThrough_isCompact_and_bounded"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Supply compactness and boundedness of flatThrough from the localized rectangular hypotheses, then discharge the first-derivative/rank-normal-form locus; higher loci and finite assembly are compiled."},
+       "Feed compactness and boundedness into the compiled flatThrough Taylor-nullity theorem, then discharge the first-derivative/rank-normal-form locus."},
       :representation
       {:source
-       "An exact flatThrough f K k locus with compactness, a containing closed ball, positive Morse-Sard exponent surplus, ContDiff order k+1, and the finite-dimensional ball-volume constants.",
+       "A compact localized set K contained in a closed ball and a map ContDiff through order k.",
        :target
-       "Zero volume of the image of the exact flatThrough locus."},
-      :id :critical-value-sard-flat-through-taylor-nullity-1,
+       "Compactness of the exact flatThrough f K k locus and inheritance of the same closed-ball bound."},
+      :id :critical-value-sard-flat-through-compact-localization-1,
       :kind :reusable-theorem,
-      :depends-on
-      [:critical-value-sard-first-nonzero-jet-finite-assembly-1],
+      :depends-on [:critical-value-sard-flat-through-taylor-nullity-1],
       :current-residual
-      "Taylor covering now applies directly to the exact flatThrough predicate; localized compactness/boundedness and the first-derivative rank locus remain.",
+      "The exact flatThrough locus now inherits compactness and boundedness from the localized source; Taylor-nullity instantiation and the first-derivative rank locus remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture instantiates the multivariable Taylor-covering theorem on the exact flatThrough locus: its defining predicate directly supplies vanishing of every iterated derivative from order one through k. The adapter yields zero target volume from compactness and boundedness of that locus, the positive exponent surplus, global ContDiff regularity, and the existing geometric volume constants. Establishing compactness/boundedness from the localized rectangular setup and handling the first-derivative rank locus remain downstream.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture proves the missing localization facts for the exact flatThrough locus. Under global ContDiff order k, each iterated-derivative zero set through order k is closed; their intersection with compact K is compact. Since flatThrough is a subset of K, it also inherits any closed-ball bound on K. This supplies the compactness and boundedness inputs of the compiled Taylor-nullity adapter. Combining them and discharging the first-derivative rank locus remain downstream.",
      :commands
      [{:cmd
-       "sed -n '1,220p' ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean; sed -n '1,130p' ConstructionTargets/SardHigherJetLocusDecomposition.lean; sed -n '1,120p' ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean; git status --porcelain=v1",
+       "rg -n \"isClosed.*iteratedFDeriv|continuous.*iteratedFDeriv|continuous_iteratedFDeriv|contDiff.*iteratedFDeriv\" ConstructionTargets .lake/packages/mathlib/Mathlib/Analysis/Calculus | head -80",
        :exit 0}
       {:cmd
-       "lake build ConstructionTargets.SardMultivariableTaylorCoveringNullity",
-       :exit 0,
-       :output "Build completed successfully (8270 jobs)."}
-      {:cmd
-       "lake env lean /tmp/SardFlatThroughTaylorNullityProbe.lean",
+       "lake env lean /tmp/SardFlatThroughCompactLocalizationProbe.lean",
        :exit 0,
        :output
-       "'SardFlatThroughTaylorNullityProbe.flatThrough_image_volume_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/SardFlatThroughTaylorNullityProbe.lean",
+       "'SardFlatThroughCompactLocalizationProbe.flatThrough_isCompact_and_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/SardFlatThroughCompactLocalizationProbe.lean",
        :exit 0,
        :output
-       "dfc5446bcfea6e07c6a445435b835e8f1bbb556b07cfd35896d155aa417d6812  /tmp/SardFlatThroughTaylorNullityProbe.lean"}
+       "e5ac023da2f8787934f84d6e923a7317bb3a7dd7588d8edd07fed3c61d77afea  /tmp/SardFlatThroughCompactLocalizationProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFlatThroughTaylorNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFlatThroughCompactLocalizationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 118 items OK; {:done 110, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 119 items OK; {:done 111, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean ConstructionTargets/SardHigherJetLocusDecomposition.lean ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardHigherJetLocusDecomposition.lean ConstructionTargets/SardFlatThroughTaylorNullity.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c  ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean\n1ae41fc90c43e105705cf75885ca2142ce291b0dcdde2eb301f6cbeaaac100f2  ConstructionTargets/SardHigherJetLocusDecomposition.lean\n9dbd155d467e917470f85844bb7c338eabd8587bdc3693f8c9eabb1324b2f340  ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n1ae41fc90c43e105705cf75885ca2142ce291b0dcdde2eb301f6cbeaaac100f2  ConstructionTargets/SardHigherJetLocusDecomposition.lean\ndfc5446bcfea6e07c6a445435b835e8f1bbb556b07cfd35896d155aa417d6812  ConstructionTargets/SardFlatThroughTaylorNullity.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -14412,12 +14439,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardFlatThroughTaylorNullityProbe.lean",
+     {:path "/tmp/SardFlatThroughCompactLocalizationProbe.lean",
       :sha256
-      "dfc5446bcfea6e07c6a445435b835e8f1bbb556b07cfd35896d155aa417d6812"},
+      "e5ac023da2f8787934f84d6e923a7317bb3a7dd7588d8edd07fed3c61d77afea"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -14484,7 +14511,8 @@
     :critical-value-sard-first-nonzero-jet-pointwise-witness-instantiation-1
     :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1
     :critical-value-sard-first-nonzero-jet-finite-assembly-1
-    :critical-value-sard-flat-through-taylor-nullity-1],
+    :critical-value-sard-flat-through-taylor-nullity-1
+    :critical-value-sard-flat-through-compact-localization-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
