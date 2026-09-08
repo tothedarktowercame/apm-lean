@@ -21707,6 +21707,45 @@
       :output
       "[master c4584b34] Add projected chart-source compact nullity aggregation\n2 files changed, 59 insertions(+)\ncreate mode 100644 ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean\ncreate mode 100644 ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788860993118-14817-2bf72dfa",
+     :commands
+     [{:cmd
+       "git show --stat --oneline --decorate=no c4584b34935c715798604d29a4a9aa83c3610ec5; git diff-tree --no-commit-id --name-only -r c4584b34935c715798604d29a4a9aa83c3610ec5; git show c4584b34935c715798604d29a4a9aa83c3610ec5:ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean; git show c4584b34935c715798604d29a4a9aa83c3610ec5:ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.md",
+       :exit 0}
+      {:cmd
+       "git show c4584b34935c715798604d29a4a9aa83c3610ec5:ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean > /tmp/sard-chart-compact-review.6lfeps/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean; git show c4584b34935c715798604d29a4a9aa83c3610ec5:ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.md > /tmp/sard-chart-compact-review.6lfeps/SardFirstDerivativeRankPieceChartSourceCompactNullity.md; sha256sum /tmp/sard-chart-compact-review.6lfeps/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean /tmp/sard-chart-compact-review.6lfeps/SardFirstDerivativeRankPieceChartSourceCompactNullity.md",
+       :exit 0,
+       :output
+       "3ade56b99e8322445cc1399bb62a07ddd97ce9de03db53dc9031a81d3a5fb406 Lean; b32a1131c71878c296de394d4351e6beb3d8eb086893e0783adf31794d8d11d0 MD"}
+      {:cmd
+       "lake env lean /tmp/sard-chart-compact-review.6lfeps/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean",
+       :exit 0,
+       :output
+       "rankPiece_image_null_of_chartSource_compact_null depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/sard-chart-compact-review.6lfeps/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean /tmp/sard-chart-compact-review.6lfeps/SardFirstDerivativeRankPieceChartSourceCompactNullity.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sed -n '11,44p' /tmp/sard-chart-compact-review.6lfeps/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean | sha256sum",
+       :exit 0,
+       :output
+       "1ae946344c3c08436383337b48e7b9ed2eb7fc361b7c590dd3099006a05105c7  -"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 168 items OK; {:done 159, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "git diff --check HEAD; git status --porcelain=v1; git show -s --format='%H%n%an <%ae>' c4584b34935c715798604d29a4a9aa83c3610ec5",
+       :exit 0,
+       :output
+       "c4584b34935c715798604d29a4a9aa83c3610ec5; Joe Corneli <holtzermann17@gmail.com>; worktree clean"}],
+     :finding
+     "PASS. The recorded commit changes exactly the two declared scope paths. The committed Lean blob reproduces the fixture hash, compilation succeeds with only standard axioms, the placeholder scan is empty, and the frozen theorem-statement hash reproduces. The implication has the required orientation: at each exact-rank point it selects the projected local-rank chart, refines the open rank neighborhood inside that chart source, applies the supplied compact rank-upper image-nullity certificate, and passes that local witness to the pointwise exact-rank aggregation theorem. The certificate premise is stronger by quantifying over every eligible chart and refinement, but introduces no representation weakening or hidden analytic claim; the remaining compact inverse-slice estimate is preserved explicitly."},
     :commit "c4584b34935c715798604d29a4a9aa83c3610ec5",
     :changed-paths
     ["ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean"
@@ -21719,7 +21758,7 @@
     :declarations ["rankPiece_image_null_of_chartSource_compact_null"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean"
     "ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.md"],
@@ -21906,7 +21945,7 @@
       "3ade56b99e8322445cc1399bb62a07ddd97ce9de03db53dc9031a81d3a5fb406"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
