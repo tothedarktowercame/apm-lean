@@ -33139,6 +33139,38 @@
    "Rank-reduced source and target dimension identities are compiled; assemble them with the finite-order projected chart and residual derivative-zero data at each critical point.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if an exact positive derivative rank cannot imply the source and target rank bounds together with strict dimension drop of the projected derivative kernel, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedPositiveRankDimensionData.lean"
+    "ConstructionTargets/SardProjectedPositiveRankDimensionData.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED POSITIVE-RANK DIMENSION DATA",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardProjectedPositiveRankDimensionDataProbe.lean",
+     :sha256
+     "eafc8bd8a5592ffd6d141144dbd95cb5be5bd047cff8ad15fea002bdec1019d0"},
+    :declarations ["projected_positiveRank_dimension_data"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use the positive-rank bounds and strict kernel drop in the finite-order pointwise local rank-chart nullity composition."},
+   :representation
+   {:source
+    "An exact derivative-range finrank identity together with positivity of that rank.",
+    :target
+    "The source and target ambient rank bounds plus strict source-dimension drop for the projected derivative kernel."},
+   :id :critical-value-sard-projected-positive-rank-dimension-data-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-rank-reduced-dimension-identities-1],
+   :current-residual
+   "Positive-rank dimension admissibility is compiled; assemble it with finite-order chart and residual-slice data into the pointwise positive-rank nullity witness.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -33192,79 +33224,77 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Use the rank-reduced dimension identities with finite-order projected chart target data and indexed residual-slice zero to construct the pointwise nullity witness at each exact critical-rank point.",
+     "Assemble the positive-rank dimension packet, finite-order projected chart target data, closed rank-upper localization, and indexed residual-slice zero into a pointwise positive-rank nullity theorem; retain rank zero for the flat/Taylor branch.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"projected_rank_reduced_finranks"
-      "6b98b4b79aaa3be06752f32c3c6a7a2901a526d34f21252c4515288671b71a9c"},
+     {"projected_positiveRank_dimension_data"
+      "b9c41ba91d905c4f3c631764f6b3431034c751d2d83b3364a76b14994d98c6f0"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if an exact derivative-rank identity cannot yield the source-kernel and target-orthogonal-complement finrank subtraction identities required by projected-slice induction, or if the theorem requires nonstandard axioms.",
+      "Stop only if an exact positive derivative rank cannot imply the source and target rank bounds together with strict dimension drop of the projected derivative kernel, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardProjectedRankReducedDimensionIdentities.lean"
-       "ConstructionTargets/SardProjectedRankReducedDimensionIdentities.md"],
+      ["ConstructionTargets/SardProjectedPositiveRankDimensionData.lean"
+       "ConstructionTargets/SardProjectedPositiveRankDimensionData.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED RANK-REDUCED DIMENSION IDENTITIES",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED POSITIVE-RANK DIMENSION DATA",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
+       {:path "/tmp/SardProjectedPositiveRankDimensionDataProbe.lean",
         :sha256
-        "6c3dd86f312e95f925433c7ed8b2ed7d7ac37234ded0fe101fd714005b48b44a"},
-       :declarations ["projected_rank_reduced_finranks"],
+        "eafc8bd8a5592ffd6d141144dbd95cb5be5bd047cff8ad15fea002bdec1019d0"},
+       :declarations ["projected_positiveRank_dimension_data"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Combine the dimension identities with finite-order chart data and zero residual-slice derivatives in the pointwise rank-chart packet."},
+       "Use the positive-rank bounds and strict kernel drop in the finite-order pointwise local rank-chart nullity composition."},
       :representation
       {:source
-       "A continuous linear derivative and an exact finrank value for its range.",
+       "An exact derivative-range finrank identity together with positivity of that rank.",
        :target
-       "The source-kernel dimension and target orthogonal-residual dimension expressed as ambient finranks minus the exact derivative rank."},
+       "The source and target ambient rank bounds plus strict source-dimension drop for the projected derivative kernel."},
       :id
-      :critical-value-sard-projected-rank-reduced-dimension-identities-1,
+      :critical-value-sard-projected-positive-rank-dimension-data-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-smooth-local-rank-chart-1
-       :critical-value-sard-rank-drop-regularity-admissibility-1],
+      [:critical-value-sard-projected-rank-reduced-dimension-identities-1],
       :current-residual
-      "Rank-reduced source and target dimension identities are compiled; assemble them with the finite-order projected chart and residual derivative-zero data at each critical point.",
+      "Positive-rank dimension admissibility is compiled; assemble it with finite-order chart and residual-slice data into the pointwise positive-rank nullity witness.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture proves both rank-reduced dimension identities required by the finite-order pointwise chart witness: the kernel of range projection composed with the derivative has source dimension minus rank, and the orthogonal complement of the derivative range has target dimension minus rank. The remaining work is to combine these identities with finite-order chart target data, closed rank-upper localization, and indexed residual-slice derivative zero at each exact critical-rank point.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture proves that an exact positive derivative rank supplies both ambient rank bounds and the strict projected-kernel source-dimension drop needed by lower-dimensional induction. This cleanly separates the positive-rank induction branch from the rank-zero flat/Taylor branch. The remaining work is to combine this arithmetic packet with finite-order projected chart data and indexed residual-slice derivative zero in the pointwise positive-rank nullity witness.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
+       "lake env lean /tmp/SardProjectedPositiveRankDimensionDataProbe.lean",
        :exit 0,
        :output
-       "'SardProjectedRankReducedDimensionIdentitiesProbe.projected_rank_reduced_finranks' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardProjectedPositiveRankDimensionDataProbe.projected_positiveRank_dimension_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
+       "sha256sum /tmp/SardProjectedPositiveRankDimensionDataProbe.lean",
        :exit 0,
        :output
-       "6c3dd86f312e95f925433c7ed8b2ed7d7ac37234ded0fe101fd714005b48b44a  /tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean"}
+       "eafc8bd8a5592ffd6d141144dbd95cb5be5bd047cff8ad15fea002bdec1019d0  /tmp/SardProjectedPositiveRankDimensionDataProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedPositiveRankDimensionDataProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '6,39p' /tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean | sha256sum",
+       "sed -n '6,27p' /tmp/SardProjectedPositiveRankDimensionDataProbe.lean | sha256sum",
        :exit 0,
        :output
-       "6b98b4b79aaa3be06752f32c3c6a7a2901a526d34f21252c4515288671b71a9c  -"}
+       "b9c41ba91d905c4f3c631764f6b3431034c751d2d83b3364a76b14994d98c6f0  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 251 items OK; {:done 243, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 252 items OK; {:done 244, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -33282,13 +33312,12 @@
        :output "?? scripts/__pycache__/",
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
-     {:path
-      "/tmp/SardProjectedRankReducedDimensionIdentitiesProbe.lean",
+     {:path "/tmp/SardProjectedPositiveRankDimensionDataProbe.lean",
       :sha256
-      "6c3dd86f312e95f925433c7ed8b2ed7d7ac37234ded0fe101fd714005b48b44a"},
+      "eafc8bd8a5592ffd6d141144dbd95cb5be5bd047cff8ad15fea002bdec1019d0"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -33488,7 +33517,8 @@
     :critical-value-sard-finite-order-critical-rank-loci-aggregation-1
     :critical-value-sard-finite-order-pointwise-rank-chart-nullity-witness-1
     :critical-value-sard-finite-order-projected-smooth-chart-target-data-1
-    :critical-value-sard-projected-rank-reduced-dimension-identities-1],
+    :critical-value-sard-projected-rank-reduced-dimension-identities-1
+    :critical-value-sard-projected-positive-rank-dimension-data-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
