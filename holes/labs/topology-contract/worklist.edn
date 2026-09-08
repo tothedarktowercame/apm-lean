@@ -33990,8 +33990,82 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if Borel proofs, measures, and additive-Haar instances for the derivative range and orthogonal residual cannot all be stated with their measurable-space parameters fixed to the inherited subtype instances, or if the theorem requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Destructure the fully explicit inherited Borel, measure, and additive-Haar packet in the finite-order positive-rank pointwise nullity adapter, then combine it with the chart, dimension, and residual-slice-zero data.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_projectedCoordinates_explicit_inherited_measureData"
+     "c4f32d21ab976bfb3ec4506cca847a85e7e76863f24373f88109eb9e62aa9fb0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardProjectedCoordinateExplicitInheritedMeasureDataProbe.lean",
+      :exit 0,
+      :output
+      "50b773a825b07dd80d4fbd84275ca7c123b5b688c26dcb023626b748d5b6aec6  /tmp/SardProjectedCoordinateExplicitInheritedMeasureDataProbe.lean"}
+     {:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "diff -u /tmp/SardProjectedCoordinateExplicitInheritedMeasureDataProbe.lean ConstructionTargets/SardProjectedCoordinateExplicitInheritedMeasureData.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedCoordinateExplicitInheritedMeasureData.lean",
+      :exit 0,
+      :output
+      "'SardProjectedCoordinateExplicitInheritedMeasureDataProbe.exists_projectedCoordinates_explicit_inherited_measureData' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedCoordinateExplicitInheritedMeasureData.lean ConstructionTargets/SardProjectedCoordinateExplicitInheritedMeasureData.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '8,26p' ConstructionTargets/SardProjectedCoordinateExplicitInheritedMeasureData.lean | sha256sum",
+      :exit 0,
+      :output
+      "c4f32d21ab976bfb3ec4506cca847a85e7e76863f24373f88109eb9e62aa9fb0  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 260 items OK; {:done 251, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output "?? scripts/__pycache__/",
+      :note "Unrelated concurrent cache outside row scope."}],
+    :commit "30062fac39e43d96b156bb62eaf1ec67ce78648b",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedCoordinateExplicitInheritedMeasureData.lean"
+     "ConstructionTargets/SardProjectedCoordinateExplicitInheritedMeasureData.md"],
+    :fixture
+    {:path
+     "/tmp/SardProjectedCoordinateExplicitInheritedMeasureDataProbe.lean",
+     :sha256
+     "50b773a825b07dd80d4fbd84275ca7c123b5b688c26dcb023626b748d5b6aec6"},
+    :declarations
+    ["exists_projectedCoordinates_explicit_inherited_measureData"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedCoordinateExplicitInheritedMeasureData.lean"
     "ConstructionTargets/SardProjectedCoordinateExplicitInheritedMeasureData.md"],
