@@ -18272,8 +18272,86 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled compact product-image fiber-nullity theorem cannot be promoted with compact localization, continuity, second-countable Hausdorff Borel coordinate factors, zero measure of every fixed-first-coordinate second-coordinate image, zero product-measure conclusion, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove fixed-range-coordinate residual-image nullity on each compact projected rank-chart fiber via lower-dimensional inverse-chart slices, then transfer product-coordinate nullity to the original target.",
+    :gates
+    {:fixture-hash :pass,
+     :lean :pass,
+     :lake-build :pass,
+     :placeholder-scan :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_prod_image_zero_of_fstFiber_snd_image_zero"
+     "f7f53b669c23726f470e2e22be96ca6bd1f64614cc26f7e33055024685b6ed78"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardCompactProductImageFiberNullityProbe.lean",
+      :exit 0,
+      :output
+      "f7f53b669c23726f470e2e22be96ca6bd1f64614cc26f7e33055024685b6ed78"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCompactProductImageFiberNullity.lean",
+      :exit 0,
+      :output
+      "'SardCompactProductImageFiberNullityProbe.measure_prod_image_zero_of_fstFiber_snd_image_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake build ConstructionTargets.SardCompactProductImageFiberNullity",
+      :exit 0,
+      :output "Build completed successfully (8244 jobs)."}
+     {:cmd
+      "sha256sum ConstructionTargets/SardCompactProductImageFiberNullity.lean ConstructionTargets/SardCompactProductImageFiberNullity.md /tmp/SardCompactProductImageFiberNullityProbe.lean",
+      :exit 0,
+      :output
+      "f7f53b669c23726f470e2e22be96ca6bd1f64614cc26f7e33055024685b6ed78 lean; 88e4c810524db253414429f167e190a16c94be571439df9957910e94d76935bb md; f7f53b669c23726f470e2e22be96ca6bd1f64614cc26f7e33055024685b6ed78 fixture"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardCompactProductImageFiberNullity.lean ConstructionTargets/SardCompactProductImageFiberNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 144 items OK; {:done 135, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "99f241eba8725e873ccdbdb099ff3e543115f9ed",
+    :changed-paths
+    ["ConstructionTargets/SardCompactProductImageFiberNullity.lean"
+     "ConstructionTargets/SardCompactProductImageFiberNullity.md"],
+    :file-hashes
+    {"ConstructionTargets/SardCompactProductImageFiberNullity.lean"
+     "f7f53b669c23726f470e2e22be96ca6bd1f64614cc26f7e33055024685b6ed78",
+     "ConstructionTargets/SardCompactProductImageFiberNullity.md"
+     "88e4c810524db253414429f167e190a16c94be571439df9957910e94d76935bb"},
+    :fixture
+    {:path "/tmp/SardCompactProductImageFiberNullityProbe.lean",
+     :sha256
+     "f7f53b669c23726f470e2e22be96ca6bd1f64614cc26f7e33055024685b6ed78"},
+    :declarations
+    ["measure_prod_image_zero_of_fstFiber_snd_image_zero"],
+    :implementation
+    {:scope
+     ["ConstructionTargets/SardCompactProductImageFiberNullity.lean"
+      "ConstructionTargets/SardCompactProductImageFiberNullity.md"]},
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCompactProductImageFiberNullity.lean"
     "ConstructionTargets/SardCompactProductImageFiberNullity.md"],
