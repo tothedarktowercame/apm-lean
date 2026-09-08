@@ -24314,6 +24314,42 @@
    "The differentiated chart identity and first-block theorem now give projected derivative surjectivity pointwise; concrete derivative instantiation, first-block identification, and the localized ambient rank bound remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled smooth projected-chart first-derivative surjectivity theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism continuously differentiable in both directions, every source point, every differentiable function exactly equal to the chart first coordinate, surjectivity of its Frechet derivative, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.lean"
+    "ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SMOOTH PROJECTED-CHART FIRST-DERIVATIVE SURJECTIVITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardSmoothProjectedChartFirstDerivativeSurjectiveProbe.lean",
+     :sha256
+     "c9a1859c51b59cb93d2bb42ab0e606d3d577f2d9d42f01316bf601ddb67501fb"},
+    :declarations ["range_eq_top_of_eq_fst_smooth_chart"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the smooth-chart theorem with the derivative-range projection coordinate at every localized rank-upper point, then discharge the localized ambient rank upper bound."},
+   :representation
+   {:source
+    "A product chart continuously differentiable in both directions together with a differentiable function exactly equal to its first coordinate.",
+    :target
+    "Surjectivity of that function's Frechet derivative at every chart-source point."},
+   :id
+   :critical-value-sard-smooth-projected-chart-first-derivative-surjective-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-chart-derivative-surjective-1
+    :critical-value-sard-projected-smooth-local-rank-chart-1
+    :critical-value-sard-range-projection-coordinate-derivative-1],
+   :current-residual
+   "Two-sided chart smoothness and the exact first-coordinate identity now imply pointwise projected-derivative surjectivity; concrete derivative-range coordinate instantiation and the localized ambient rank bound remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -24367,80 +24403,83 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "At every smooth projected-chart fiber point, instantiate forward and inverse derivatives, identify the projected first block with range projection composed with Df, and discharge the localized ambient rank upper bound.",
+     "Instantiate the smooth-chart theorem with the derivative-range projection coordinate at every localized rank-upper point, then discharge the localized ambient rank upper bound.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"fst_comp_range_eq_top_of_chart_derivatives"
-      "261c2a3bc4ecf14faddc0902b04870ff1bf52fa0220c0823d4d8dedb12e46738"},
+     {"range_eq_top_of_eq_fst_smooth_chart"
+      "953b0d5227997bdd5cfd31791c9e16a5c19e46f2dcede359e7a68e4ad62e4b48"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled projected-chart derivative surjectivity theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism and target point, Frechet derivatives of its forward and inverse maps at corresponding points, identification of a projected derivative with the first block of the forward derivative, surjectivity of that projected derivative, or standard-axiom profile.",
+      "Stop only if the compiled smooth projected-chart first-derivative surjectivity theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism continuously differentiable in both directions, every source point, every differentiable function exactly equal to the chart first coordinate, surjectivity of its Frechet derivative, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardProjectedChartDerivativeSurjective.lean"
-       "ConstructionTargets/SardProjectedChartDerivativeSurjective.md"],
+      ["ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.lean"
+       "ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART DERIVATIVE SURJECTIVITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SMOOTH PROJECTED-CHART FIRST-DERIVATIVE SURJECTIVITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardProjectedChartDerivativeSurjectiveProbe.lean",
+       {:path
+        "/tmp/SardSmoothProjectedChartFirstDerivativeSurjectiveProbe.lean",
         :sha256
-        "61e4d6ec547acaefd5052c8a7dfaa7efa290adcb87b92905ae1430a06b1c6902"},
-       :declarations ["fst_comp_range_eq_top_of_chart_derivatives"],
+        "c9a1859c51b59cb93d2bb42ab0e606d3d577f2d9d42f01316bf601ddb67501fb"},
+       :declarations ["range_eq_top_of_eq_fst_smooth_chart"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "At every smooth projected-chart fiber point, instantiate forward and inverse derivatives, identify the projected first block with range projection composed with Df, and discharge the localized ambient rank upper bound."},
+       "Instantiate the smooth-chart theorem with the derivative-range projection coordinate at every localized rank-upper point, then discharge the localized ambient rank upper bound."},
       :representation
       {:source
-       "Frechet derivatives of an open product chart and its inverse together with identification of a projected derivative as the first block of the chart derivative.",
+       "A product chart continuously differentiable in both directions together with a differentiable function exactly equal to its first coordinate.",
        :target
-       "Surjectivity of the projected first-coordinate derivative at the corresponding chart point."},
-      :id :critical-value-sard-projected-chart-derivative-surjective-1,
+       "Surjectivity of that function's Frechet derivative at every chart-source point."},
+      :id
+      :critical-value-sard-smooth-projected-chart-first-derivative-surjective-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-derivative-surjective-of-right-inverse-1
-       :critical-value-sard-open-partial-homeomorph-derivative-right-inverse-1],
+      [:critical-value-sard-projected-chart-derivative-surjective-1
+       :critical-value-sard-projected-smooth-local-rank-chart-1
+       :critical-value-sard-range-projection-coordinate-derivative-1],
       :current-residual
-      "The differentiated chart identity and first-block theorem now give projected derivative surjectivity pointwise; concrete derivative instantiation, first-block identification, and the localized ambient rank bound remain.",
+      "Two-sided chart smoothness and the exact first-coordinate identity now imply pointwise projected-derivative surjectivity; concrete derivative-range coordinate instantiation and the localized ambient rank bound remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines the differentiated open-chart right-inverse identity with first-block extraction, proving that the projected first-coordinate derivative is surjective at every point where the chart and inverse derivatives exist. Concrete derivative instantiation, first-block identification with range projection composed with Df, and the localized ambient rank bound remain.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture derives forward and inverse Frechet derivatives at every source point from two-sided ContDiffOn chart regularity, identifies the derivative of any function equal to the chart's first coordinate with the first block of the chart derivative, and proves that derivative surjective. The remaining concrete work is to instantiate this theorem with the derivative-range projection coordinate and discharge the localized ambient rank upper bound.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "rg -n -C 8 ':id :critical-value-sard-(projected-derivative-surjective-of-right-inverse-1|open-partial-homeomorph-derivative-right-inverse-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 8 ':id :critical-value-sard-(projected-chart-derivative-surjective-1|projected-smooth-local-rank-chart-1|range-projection-coordinate-derivative-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardProjectedChartDerivativeSurjectiveProbe.lean",
+       "lake env lean /tmp/SardSmoothProjectedChartFirstDerivativeSurjectiveProbe.lean",
        :exit 0,
        :output
-       "'SardProjectedChartDerivativeSurjectiveProbe.fst_comp_range_eq_top_of_chart_derivatives' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardSmoothProjectedChartFirstDerivativeSurjectiveProbe.range_eq_top_of_eq_fst_smooth_chart' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardProjectedChartDerivativeSurjectiveProbe.lean",
+       "sha256sum /tmp/SardSmoothProjectedChartFirstDerivativeSurjectiveProbe.lean",
        :exit 0,
        :output
-       "61e4d6ec547acaefd5052c8a7dfaa7efa290adcb87b92905ae1430a06b1c6902  /tmp/SardProjectedChartDerivativeSurjectiveProbe.lean"}
+       "c9a1859c51b59cb93d2bb42ab0e606d3d577f2d9d42f01316bf601ddb67501fb  /tmp/SardSmoothProjectedChartFirstDerivativeSurjectiveProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedChartDerivativeSurjectiveProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardSmoothProjectedChartFirstDerivativeSurjectiveProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '12,24p' /tmp/SardProjectedChartDerivativeSurjectiveProbe.lean | sha256sum",
+       "sed -n '12,36p' /tmp/SardSmoothProjectedChartFirstDerivativeSurjectiveProbe.lean | sha256sum",
        :exit 0,
        :output
-       "261c2a3bc4ecf14faddc0902b04870ff1bf52fa0220c0823d4d8dedb12e46738  -"}
+       "953b0d5227997bdd5cfd31791c9e16a5c19e46f2dcede359e7a68e4ad62e4b48  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 185 items OK; {:done 177, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 186 items OK; {:done 178, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -24455,12 +24494,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardProjectedChartDerivativeSurjectiveProbe.lean",
+     {:path
+      "/tmp/SardSmoothProjectedChartFirstDerivativeSurjectiveProbe.lean",
       :sha256
-      "61e4d6ec547acaefd5052c8a7dfaa7efa290adcb87b92905ae1430a06b1c6902"},
+      "c9a1859c51b59cb93d2bb42ab0e606d3d577f2d9d42f01316bf601ddb67501fb"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -24594,7 +24634,8 @@
     :critical-value-sard-projected-smooth-local-rank-chart-1
     :critical-value-sard-projected-derivative-surjective-of-right-inverse-1
     :critical-value-sard-open-partial-homeomorph-derivative-right-inverse-1
-    :critical-value-sard-projected-chart-derivative-surjective-1],
+    :critical-value-sard-projected-chart-derivative-surjective-1
+    :critical-value-sard-smooth-projected-chart-first-derivative-surjective-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
