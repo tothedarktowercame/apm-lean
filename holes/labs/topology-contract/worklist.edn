@@ -27117,6 +27117,26 @@
       :exit 0,
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788877185036-15114-e5bfc362",
+     :commands
+     ["git show --format='%H%n%an <%ae>%n%P' --no-renames --name-status 01081f884fe72b68ccd640fe4ea3d3df6cb708b1"
+      "git show 01081f884fe72b68ccd640fe4ea3d3df6cb708b1:ConstructionTargets/SardProjectedChartOrthogonalResidualSliceZero.lean"
+      "cmp committed-lean /tmp/SardProjectedChartOrthogonalResidualSliceZeroProbe.lean"
+      "sha256sum committed-lean /tmp/SardProjectedChartOrthogonalResidualSliceZeroProbe.lean"
+      "sed -n '15,46p' committed-lean | sha256sum"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' committed-lean committed-md"
+      "lake env lean committed-lean"
+      "lake build ConstructionTargets.SardProjectedChartOrthogonalResidualSliceZero"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check 01081f88^ 01081f88"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: recorded commit 01081f884fe72b68ccd640fe4ea3d3df6cb708b1 was authored by Joe Corneli and changes exactly the two declared scope files. The committed Lean file matches the fixture byte-for-byte at SHA-256 70c5e7a464cbbc353d0da19c1efe105d74825cdc42042cb6680c2b8ac1ead634; the frozen statement hash recomputes to eeca861e065e22fe06ead42b2a941ecc78e1fc8f2c7349faba9fa93dc514f19f; no placeholders, axioms, opaque declarations, unsafe declarations, or warnings were found. Orientation and representation boundaries are correct: p maps E into the derivative range R, the residual projection maps F into Rᗮ, and each fixed c : R inverse-chart slice varies over G and receives the zero derivative G →L[ℝ] Rᗮ. The derived range-projection derivative identity is supplied in the indexed theorem's expected direction without identifying G and Rᗮ. Lean reports only propext, Classical.choice, and Quot.sound; the target build succeeds, canonical package authority is correct, the worklist validates 204 items, the consumer remains frozen at 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one placeholder, commit diff check passes, and the worktree is clean."},
     :commit "01081f884fe72b68ccd640fe4ea3d3df6cb708b1",
     :changed-paths
     ["ConstructionTargets/SardProjectedChartOrthogonalResidualSliceZero.lean"
@@ -27130,7 +27150,7 @@
     ["forall_hasFDerivAt_zero_orthogonalResidual_inverseSlice"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedChartOrthogonalResidualSliceZero.lean"
     "ConstructionTargets/SardProjectedChartOrthogonalResidualSliceZero.md"],
@@ -27319,7 +27339,7 @@
       "70c5e7a464cbbc353d0da19c1efe105d74825cdc42042cb6680c2b8ac1ead634"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
