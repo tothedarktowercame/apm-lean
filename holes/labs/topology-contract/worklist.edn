@@ -20463,6 +20463,40 @@
    "Closed derivative rank-upper loci localized to open projected charts now admit ambient compact exhaustions; memberwise projected-slice nullity and exact-rank aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled localized image-nullity theorem cannot be promoted for arbitrary locally compact second-countable Hausdorff source spaces, arbitrary measured targets, every closed locus and open localization, nullity of every compact subset image, nullity of the complete localized image, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardClosedOpenImageNullity.lean"
+    "ConstructionTargets/SardClosedOpenImageNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CLOSED-IN-OPEN LOCAL IMAGE-NULLITY AGGREGATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardClosedOpenImageNullityProbe.lean",
+     :sha256
+     "5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59"},
+    :declarations ["measure_image_zero_of_closed_inter_open"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "For each projected rank chart, instantiate compact member nullity using the target-coordinate equivalence and inverse-slice containment, apply localized closed-open image nullity, then aggregate exact-rank pieces."},
+   :representation
+   {:source
+    "A closed source locus localized to an open chart, together with zero image measure for every compact subset of that intersection.",
+    :target
+    "Zero measure of the image of the complete closed-in-open localized locus."},
+   :id :critical-value-sard-closed-open-image-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-closed-open-compact-exhaustion-1
+    :critical-value-sard-countable-compact-image-nullity-1
+    :critical-value-sard-compact-target-fiber-projected-slice-image-nullity-1],
+   :current-residual
+   "Compact member nullity now aggregates over each closed derivative-rank locus localized to an open projected chart; exact rank-chart projected-slice instantiation and rank-piece aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -20516,87 +20550,84 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate the closed locus with the derivative rank-at-most set and the open locus with each projected chart neighborhood, prove every compact localized image null from target-coordinate fibers and inverse slices, then aggregate exact-rank pieces.",
+     "For each projected rank chart, instantiate compact member nullity using the target-coordinate equivalence and inverse-slice containment, apply localized closed-open image nullity, then aggregate exact-rank pieces.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_compact_cover_inter_of_isClosed_isOpen"
-      "57fd364ae4d2b6567df20484606d09a501f975d2f11832cd18cf1978f4afbf8f"},
+     {"measure_image_zero_of_closed_inter_open"
+      "a85a80801f85d4416521adbd758d947973c823211bd9731f74b800943eee2e17"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled closed-open compact-exhaustion theorem cannot be promoted for arbitrary locally compact second-countable Hausdorff spaces, every closed subset and open localization, an ambient natural-number-indexed compact family, exact union equality with their intersection, or standard-axiom profile.",
+      "Stop only if the compiled localized image-nullity theorem cannot be promoted for arbitrary locally compact second-countable Hausdorff source spaces, arbitrary measured targets, every closed locus and open localization, nullity of every compact subset image, nullity of the complete localized image, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardClosedOpenCompactExhaustion.lean"
-       "ConstructionTargets/SardClosedOpenCompactExhaustion.md"],
+      ["ConstructionTargets/SardClosedOpenImageNullity.lean"
+       "ConstructionTargets/SardClosedOpenImageNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CLOSED LOCUS IN OPEN CHART COMPACT EXHAUSTION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CLOSED-IN-OPEN LOCAL IMAGE-NULLITY AGGREGATION",
       :acceptance
       {:fixture
-       {:path "/tmp/SardClosedOpenCompactExhaustionProbe.lean",
+       {:path "/tmp/SardClosedOpenImageNullityProbe.lean",
         :sha256
-        "9e6b625c01d71fcbe5292cc8b70e1f877bce96e76b68990e692bb4e28d010064"},
-       :declarations ["exists_compact_cover_inter_of_isClosed_isOpen"],
+        "5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59"},
+       :declarations ["measure_image_zero_of_closed_inter_open"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate the closed locus with the derivative rank-at-most set and the open locus with each projected chart neighborhood, prove every compact localized image null from target-coordinate fibers and inverse slices, then aggregate exact-rank pieces."},
+       "For each projected rank chart, instantiate compact member nullity using the target-coordinate equivalence and inverse-slice containment, apply localized closed-open image nullity, then aggregate exact-rank pieces."},
       :representation
       {:source
-       "A closed subset localized to an open chart in a locally compact second-countable Hausdorff ambient space.",
+       "A closed source locus localized to an open chart, together with zero image measure for every compact subset of that intersection.",
        :target
-       "An explicit ambient natural-number-indexed family of compact subsets whose union is exactly the closed-set/open-chart intersection."},
-      :id :critical-value-sard-closed-open-compact-exhaustion-1,
+       "Zero measure of the image of the complete closed-in-open localized locus."},
+      :id :critical-value-sard-closed-open-image-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-derivative-rank-upper-compact-exhaustion-1
+      [:critical-value-sard-closed-open-compact-exhaustion-1
+       :critical-value-sard-countable-compact-image-nullity-1
        :critical-value-sard-compact-target-fiber-projected-slice-image-nullity-1],
       :current-residual
-      "Closed derivative rank-upper loci localized to open projected charts now admit ambient compact exhaustions; memberwise projected-slice nullity and exact-rank aggregation remain.",
+      "Compact member nullity now aggregates over each closed derivative-rank locus localized to an open projected chart; exact rank-chart projected-slice instantiation and rank-piece aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The global derivative rank-upper compact exhaustion is banked, but projected rank arguments require compact sets contained in an open chart neighborhood. A placeholder-free fixture supplies the missing localization theorem: in a locally compact second-countable Hausdorff space, the intersection of a closed locus with an open chart has an explicit ambient natural-number-indexed compact exhaustion. It uses the locally compact open subtype, exhausts the induced closed subset there, and transports its compact members through the subtype inclusion. Instantiation with the derivative rank-at-most locus, memberwise target-fiber projected-slice nullity, and exact-rank aggregation remain downstream.",
+     "The rectangular theorem is not refuted. The banked closed-open compact exhaustion and countable compact image-nullity aggregator compose into a placeholder-free localized image-nullity theorem: if every compact subset of a closed locus inside an open chart has null image, then the image of the entire localized locus is null. This isolates the exact aggregation interface needed after applying compact target-fiber projected-slice nullity memberwise. Instantiating those memberwise projected-slice hypotheses from exact derivative-range rank-chart data and aggregating exact-rank pieces remain downstream.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "rg -n \"IsOpen.*locallyCompact|locallyCompact.*IsOpen|LocallyCompactSpace.*Subtype|open.*SigmaCompact|IsOpen.*SigmaCompact\" .lake/packages/mathlib/Mathlib/Topology -g '*.lean' | head -160",
+       "sed -n '1,160p' ConstructionTargets/SardClosedOpenCompactExhaustion.lean; sed -n '1,160p' ConstructionTargets/SardCountableCompactImageNullity.lean; sed -n '1,220p' ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean",
        :exit 0}
-      {:cmd
-       "sed -n '218,232p' .lake/packages/mathlib/Mathlib/Topology/Compactness/LocallyCompact.lean; sed -n '1,80p' ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/SardClosedOpenCompactExhaustionProbe.lean",
+      {:cmd "lake env lean /tmp/SardClosedOpenImageNullityProbe.lean",
        :exit 0,
        :output
-       "'SardClosedOpenCompactExhaustionProbe.exists_compact_cover_inter_of_isClosed_isOpen' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/SardClosedOpenCompactExhaustionProbe.lean",
+       "'SardClosedOpenImageNullityProbe.measure_image_zero_of_closed_inter_open' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/SardClosedOpenImageNullityProbe.lean",
        :exit 0,
        :output
-       "9e6b625c01d71fcbe5292cc8b70e1f877bce96e76b68990e692bb4e28d010064  /tmp/SardClosedOpenCompactExhaustionProbe.lean"}
+       "5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59  /tmp/SardClosedOpenImageNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardClosedOpenCompactExhaustionProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardClosedOpenImageNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '8,26p' /tmp/SardClosedOpenCompactExhaustionProbe.lean | sha256sum",
+       "sed -n '8,26p' /tmp/SardClosedOpenImageNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "57fd364ae4d2b6567df20484606d09a501f975d2f11832cd18cf1978f4afbf8f  -"}
+       "a85a80801f85d4416521adbd758d947973c823211bd9731f74b800943eee2e17  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 158 items OK; {:done 150, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 159 items OK; {:done 151, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardClosedOpenCompactExhaustion.lean ConstructionTargets/SardCountableCompactImageNullity.lean ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\nc834e71bac73818407557631b4e0db01da85445e0c40856a869886e3dcd52f45  ConstructionTargets/SardDerivativeRankUpperCompactExhaustion.lean\nb29d2458450fa86ee50f3c088f76383be910845e32d9aa6c898d7456876eaed1  ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n9e6b625c01d71fcbe5292cc8b70e1f877bce96e76b68990e692bb4e28d010064  ConstructionTargets/SardClosedOpenCompactExhaustion.lean\n039a39a1f8e9923dd2e1f283d87be7b0941f28837f9e63e9680100cc05e9cee6  ConstructionTargets/SardCountableCompactImageNullity.lean\nb29d2458450fa86ee50f3c088f76383be910845e32d9aa6c898d7456876eaed1  ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -20607,12 +20638,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardClosedOpenCompactExhaustionProbe.lean",
+     {:path "/tmp/SardClosedOpenImageNullityProbe.lean",
       :sha256
-      "9e6b625c01d71fcbe5292cc8b70e1f877bce96e76b68990e692bb4e28d010064"},
+      "5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -20719,7 +20750,8 @@
     :critical-value-sard-closed-set-compact-exhaustion-1
     :critical-value-sard-derivative-rank-upper-locus-closed-1
     :critical-value-sard-derivative-rank-upper-compact-exhaustion-1
-    :critical-value-sard-closed-open-compact-exhaustion-1],
+    :critical-value-sard-closed-open-compact-exhaustion-1
+    :critical-value-sard-closed-open-image-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
