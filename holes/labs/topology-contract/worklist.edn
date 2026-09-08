@@ -27730,6 +27730,40 @@
    "Compatible Haar measures and orthogonal nontriviality are available directly on the concrete inherited coordinate structures; compact projected-chart nullity instantiation remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled inherited Borel-space theorem cannot be promoted for arbitrary real normed source spaces, finite-dimensional real inner-product targets with Borel measurable structures, every continuous real-linear derivative, the inherited measurable structures on its range and orthogonal complement, BorelSpace certificates for both coordinate subtypes, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardDerivativeRangeInheritedBorelSpace.lean"
+    "ConstructionTargets/SardDerivativeRangeInheritedBorelSpace.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE-RANGE INHERITED BOREL-SPACE CERTIFICATES",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardDerivativeRangeInheritedBorelSpaceProbe.lean",
+     :sha256
+     "4b9ea2b1f3ef85d30bf80b4d317f1aee4e8654644b356a6b8f76a7606b11b9ab"},
+    :declarations ["range_orthogonal_inherited_borelSpace"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Install the inherited Borel-space and Haar-measure packages locally and instantiate compact projected-chart nullity for each concrete exact-rank chart."},
+   :representation
+   {:source
+    "The derivative range and its orthogonal complement as closed subtypes of a finite-dimensional real inner-product target, carrying measurable structures inherited from the ambient Borel target.",
+    :target
+    "BorelSpace certificates for both inherited coordinate measurable structures."},
+   :id :critical-value-sard-derivative-range-inherited-borel-space-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-derivative-range-inherited-borel-add-haar-package-1
+    :critical-value-sard-target-orthogonal-coordinate-inverse-slice-nullity-data-1
+    :critical-value-sard-compact-projected-chart-nullity-of-bundled-data-1],
+   :current-residual
+   "The concrete inherited coordinate spaces now have compiled Borel-space certificates; local installation alongside their Haar measures and compact projected-chart nullity instantiation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -27783,85 +27817,82 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Use the inherited-coordinate Haar package and converted target-coordinate slice data to instantiate compact projected-chart nullity for each concrete exact-rank chart.",
+     "Install the inherited Borel-space certificates together with the inherited-coordinate Haar measures, then apply the compact projected-chart wrapper to each concrete exact-rank chart.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_inherited_range_orthogonal_addHaarMeasure"
-      "db7aebba7acfe577f45616302881100b87068b11a1c1d3cb979b2106642f82c8"},
+     {"range_orthogonal_inherited_borelSpace"
+      "648ebef6a10f0acf29af8de0f709699ec8ca4bb754fdf9049e338c65a24032da"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled inherited-measurable-coordinate package cannot be promoted for arbitrary real normed source spaces, finite-dimensional real inner-product targets carrying Borel measurable structures, every nonsurjective continuous real-linear derivative, nontriviality of the range orthogonal complement, existence of additive Haar measures on the derivative range and orthogonal complement using their inherited measurable structures, or standard-axiom profile.",
+      "Stop only if the compiled inherited Borel-space theorem cannot be promoted for arbitrary real normed source spaces, finite-dimensional real inner-product targets with Borel measurable structures, every continuous real-linear derivative, the inherited measurable structures on its range and orthogonal complement, BorelSpace certificates for both coordinate subtypes, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardDerivativeRangeInheritedBorelAddHaarPackage.lean"
-       "ConstructionTargets/SardDerivativeRangeInheritedBorelAddHaarPackage.md"],
+      ["ConstructionTargets/SardDerivativeRangeInheritedBorelSpace.lean"
+       "ConstructionTargets/SardDerivativeRangeInheritedBorelSpace.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE-RANGE INHERITED-BOREL ADDITIVE-HAAR PACKAGE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / DERIVATIVE-RANGE INHERITED BOREL-SPACE CERTIFICATES",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardDerivativeRangeInheritedBorelAddHaarPackageProbe.lean",
+       {:path "/tmp/SardDerivativeRangeInheritedBorelSpaceProbe.lean",
         :sha256
-        "adddfacfff928022fdf46dfd0aa4edd84120f97763ecbcab5c1ca4a778ae5b34"},
-       :declarations
-       ["exists_inherited_range_orthogonal_addHaarMeasure"],
+        "4b9ea2b1f3ef85d30bf80b4d317f1aee4e8654644b356a6b8f76a7606b11b9ab"},
+       :declarations ["range_orthogonal_inherited_borelSpace"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Use the inherited-coordinate Haar package and converted target-coordinate slice data to instantiate compact projected-chart nullity for each concrete exact-rank chart."},
+       "Install the inherited Borel-space and Haar-measure packages locally and instantiate compact projected-chart nullity for each concrete exact-rank chart."},
       :representation
       {:source
-       "A nonsurjective derivative into a finite-dimensional real inner-product target with its existing Borel measurable structure, inducing measurable structures on the derivative range and its orthogonal complement.",
+       "The derivative range and its orthogonal complement as closed subtypes of a finite-dimensional real inner-product target, carrying measurable structures inherited from the ambient Borel target.",
        :target
-       "A Nontrivial certificate for the orthogonal complement and additive Haar measures whose types use those inherited coordinate measurable structures."},
+       "BorelSpace certificates for both inherited coordinate measurable structures."},
       :id
-      :critical-value-sard-derivative-range-inherited-borel-add-haar-package-1,
+      :critical-value-sard-derivative-range-inherited-borel-space-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-dimensional-borel-add-haar-package-1
-       :critical-value-sard-nonsurjective-derivative-orthogonal-nontrivial-1
-       :critical-value-sard-derivative-range-orthogonal-measure-package-1
-       :critical-value-sard-target-orthogonal-coordinate-inverse-slice-nullity-data-1],
+      [:critical-value-sard-derivative-range-inherited-borel-add-haar-package-1
+       :critical-value-sard-target-orthogonal-coordinate-inverse-slice-nullity-data-1
+       :critical-value-sard-compact-projected-chart-nullity-of-bundled-data-1],
       :current-residual
-      "Compatible Haar measures and orthogonal nontriviality are available directly on the concrete inherited coordinate structures; compact projected-chart nullity instantiation remains.",
+      "The concrete inherited coordinate spaces now have compiled Borel-space certificates; local installation alongside their Haar measures and compact projected-chart nullity instantiation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The existing measure-package theorem installs fresh `borel` measurable structures, whereas concrete derivative-range chart coordinates already carry measurable structures inherited from the Borel target; those measure types are not definitionally interchangeable. A placeholder-free compiled fixture constructs additive Haar measures directly on the inherited range and orthogonal-complement measurable structures and derives orthogonal nontriviality from nonsurjectivity, removing this exact typeclass seam.",
+     "The rectangular theorem is not refuted. Combining the inherited-coordinate Haar package, target-coordinate slice conversion, and compact-nullity wrapper reaches one exact typeclass boundary: Mathlib does not automatically synthesize `BorelSpace` for the derivative-range subtype or its orthogonal complement under their inherited measurable structures. A placeholder-free compiled fixture supplies both instances from closedness, measurable subtype embeddings, and the inducing subtype topology.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "rg -n -C 6 ':id :critical-value-sard-(target-orthogonal-coordinate-inverse-slice-nullity-data-1|finite-dimensional-borel-add-haar-package-1|nonsurjective-derivative-orthogonal-nontrivial-1|derivative-range-orthogonal-measure-package-1|compact-projected-chart-nullity-of-bundled-data-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 6 ':id :critical-value-sard-(derivative-range-inherited-borel-add-haar-package-1|target-orthogonal-coordinate-inverse-slice-nullity-data-1|compact-projected-chart-nullity-of-bundled-data-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardDerivativeRangeInheritedBorelAddHaarPackageProbe.lean",
+       "lake env lean /tmp/SardDerivativeRangeInheritedBorelSpaceProbe.lean",
        :exit 0,
        :output
-       "'SardDerivativeRangeInheritedBorelAddHaarPackageProbe.exists_inherited_range_orthogonal_addHaarMeasure' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardDerivativeRangeInheritedBorelSpaceProbe.range_orthogonal_inherited_borelSpace' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardDerivativeRangeInheritedBorelAddHaarPackageProbe.lean",
+       "sha256sum /tmp/SardDerivativeRangeInheritedBorelSpaceProbe.lean",
        :exit 0,
        :output
-       "adddfacfff928022fdf46dfd0aa4edd84120f97763ecbcab5c1ca4a778ae5b34  /tmp/SardDerivativeRangeInheritedBorelAddHaarPackageProbe.lean"}
+       "4b9ea2b1f3ef85d30bf80b4d317f1aee4e8654644b356a6b8f76a7606b11b9ab  /tmp/SardDerivativeRangeInheritedBorelSpaceProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardDerivativeRangeInheritedBorelAddHaarPackageProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardDerivativeRangeInheritedBorelSpaceProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '11,25p' /tmp/SardDerivativeRangeInheritedBorelAddHaarPackageProbe.lean | sha256sum",
+       "sed -n '7,21p' /tmp/SardDerivativeRangeInheritedBorelSpaceProbe.lean | sha256sum",
        :exit 0,
        :output
-       "db7aebba7acfe577f45616302881100b87068b11a1c1d3cb979b2106642f82c8  -"}
+       "648ebef6a10f0acf29af8de0f709699ec8ca4bb754fdf9049e338c65a24032da  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 207 items OK; {:done 199, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 208 items OK; {:done 200, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -27876,13 +27907,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardDerivativeRangeInheritedBorelAddHaarPackageProbe.lean",
+     {:path "/tmp/SardDerivativeRangeInheritedBorelSpaceProbe.lean",
       :sha256
-      "adddfacfff928022fdf46dfd0aa4edd84120f97763ecbcab5c1ca4a778ae5b34"},
+      "4b9ea2b1f3ef85d30bf80b4d317f1aee4e8654644b356a6b8f76a7606b11b9ab"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -28038,7 +28068,8 @@
     :critical-value-sard-projected-chart-orthogonal-residual-nullity-data-1
     :critical-value-sard-compact-projected-chart-nullity-of-bundled-data-1
     :critical-value-sard-target-orthogonal-coordinate-inverse-slice-nullity-data-1
-    :critical-value-sard-derivative-range-inherited-borel-add-haar-package-1],
+    :critical-value-sard-derivative-range-inherited-borel-add-haar-package-1
+    :critical-value-sard-derivative-range-inherited-borel-space-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
