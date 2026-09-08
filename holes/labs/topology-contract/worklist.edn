@@ -29077,6 +29077,25 @@
      {:cmd "git commit -m 'Add exact-rank closed-open chart nullity'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788885868688-15278-db407c30",
+     :commands
+     ["git show 67c92c318537ff0393ec6aa58f208b179c11f14a"
+      "cmp fixture scoped-file"
+      "sha256sum fixture recorded-commit-file scoped-files"
+      "lake env lean ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.lean"
+      "lake build ConstructionTargets.SardExactRankClosedOpenProjectedChartNullity"
+      "sed -n '13,71p' recorded-commit-file | sha256sum"
+      "rg placeholder-and-unsafe-patterns"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o sorry problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer codex-1 differs from author codex-6; commit changes exactly the two declared scope files; fixture and recorded/scoped Lean hashes equal 2be61fa0e4f3e752da9e2ab5a8de9e399c84dcf6b4f012afe8a236d69f5e9007; frozen statement hash equals 2d2c9c1f52bb4d3c6d38dd0f75de922b49592c03d0f0fc342fb9afd9cfd096a0; placeholder count is zero; direct Lean and 8353-job Lake build pass with only propext, Classical.choice, and Quot.sound; ledger validates 219 items; consumer hash and one-placeholder count match; global smoothness supplies chart-source regularity, the rank bound stays restricted to A intersection U, coordinate rewrites correctly connect orthogonal projections with the bundled target equivalence, and nullity is concluded in the original target measure; worktree is clean."},
     :commit "67c92c318537ff0393ec6aa58f208b179c11f14a",
     :changed-paths
     ["ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.lean"
@@ -29090,7 +29109,7 @@
     ["measure_image_zero_of_exactRank_closedOpen_projectedChart"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.lean"
     "ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.md"],
@@ -29276,7 +29295,7 @@
       "2be61fa0e4f3e752da9e2ab5a8de9e399c84dcf6b4f012afe8a236d69f5e9007"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
