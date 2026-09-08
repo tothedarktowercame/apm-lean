@@ -14809,6 +14809,8 @@
    "The order-one locus is reduced to localized exact-rank nullity; rank-normal-form nullity for each rank piece is the remaining analytic input before rectangular finite assembly.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :review-finding
+   "Deterministic dependency defect: commit d7b6ffeba8d89e2627034fa76560d134b13c4efd compiles, changes exactly the two scoped files, and its fixture hash reproduces as 10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48 with standard-only axioms. However, the new module directly imports ConstructionTargets.SardExactRankLocalUpperLocus and its sole theorem directly applies exists_open_inter_rankStratum_eq_rankLE, while the row's :depends-on vector names only :critical-value-sard-first-derivative-locus-rank-aggregation-1 and :critical-value-sard-rank-strata-1. Neither declaration supplies that theorem. The row must add :critical-value-sard-exact-rank-local-upper-locus-1 as a dependency and re-enter review; otherwise its reviewed dependency boundary omits the prerequisite that proves the result.",
    :stop-condition
    "Stop only if the compiled localized rank-piece theorem cannot be promoted with its exact order-one firstNonzeroJetLocus predicate, exact derivative-rank membership, open neighborhood and base-point membership, equality with the localized rank-at-most locus, C1 hypothesis, or standard-axiom profile.",
    :evidence
@@ -14884,6 +14886,12 @@
       :output
       "[master d7b6ffeb] Add local upper locus for first derivative rank pieces\n 2 files changed, 46 insertions(+)"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :fail,
+     :seat "codex-1",
+     :job "invoke-1788838394764-14483-ed79e352",
+     :finding
+     "Deterministic dependency defect: commit d7b6ffeba8d89e2627034fa76560d134b13c4efd compiles, changes exactly the two scoped files, and its fixture hash reproduces as 10859c2786b797d2666cb5bea7c61e41f4628ae360cf3abd5222f25782208e48 with standard-only axioms. However, the new module directly imports ConstructionTargets.SardExactRankLocalUpperLocus and its sole theorem directly applies exists_open_inter_rankStratum_eq_rankLE, while the row's :depends-on vector names only :critical-value-sard-first-derivative-locus-rank-aggregation-1 and :critical-value-sard-rank-strata-1. Neither declaration supplies that theorem. The row must add :critical-value-sard-exact-rank-local-upper-locus-1 as a dependency and re-enter review; otherwise its reviewed dependency boundary omits the prerequisite that proves the result."},
     :commit "d7b6ffeba8d89e2627034fa76560d134b13c4efd",
     :changed-paths
     ["ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean"
@@ -14896,7 +14904,7 @@
     :declarations
     ["SardFirstDerivativeRankPieceLocalUpperLocusProbe.exists_open_inter_firstNonzeroJetLocus_one_rankStratum_eq_rankLE"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.lean"
     "ConstructionTargets/SardFirstDerivativeRankPieceLocalUpperLocus.md"],
