@@ -17366,8 +17366,85 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled projected-slice local image-nullity witness cannot be promoted with an open neighborhood, base-point membership, local image containment in a lower-dimensional slice image, source-dimension inequality, nonzero differentiability order, slice smoothness, surjective projection, zero projected derivative, null restricted-image conclusion, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate the local containment, smooth slice, dimension-drop, and zero projected-derivative hypotheses from each projected inverse rank chart, then aggregate the pointwise witnesses over every exact-rank piece.",
+    :gates
+    {:fixture-hash :pass,
+     :lean :pass,
+     :lake-build :pass,
+     :placeholder-scan :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"local_image_null_of_subset_projectedSlice"
+     "7e2b8c45fb069c3901780130708857645311732ce2a4d4412877eac874963bac"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardProjectedSliceLocalImageNullityWitnessProbe.lean",
+      :exit 0,
+      :output
+      "7e2b8c45fb069c3901780130708857645311732ce2a4d4412877eac874963bac"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean",
+      :exit 0,
+      :output
+      "'SardProjectedSliceLocalImageNullityWitnessProbe.local_image_null_of_subset_projectedSlice' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "lake build ConstructionTargets.SardProjectedSliceLocalImageNullityWitness",
+      :exit 0,
+      :output "Build completed successfully (8277 jobs)."}
+     {:cmd
+      "sha256sum ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.md /tmp/SardProjectedSliceLocalImageNullityWitnessProbe.lean",
+      :exit 0,
+      :output
+      "7e2b8c45fb069c3901780130708857645311732ce2a4d4412877eac874963bac lean; cc6b72ece41617f2f25d3f25cbad302f6232ffe7c77dacf5b027bc07bd9dfbe6 md; 7e2b8c45fb069c3901780130708857645311732ce2a4d4412877eac874963bac fixture"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 138 items OK; {:done 129, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "4ec4225cbe4581e3126d24c9cbe5a2e884ba3427",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean"
+     "ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.md"],
+    :file-hashes
+    {"ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean"
+     "7e2b8c45fb069c3901780130708857645311732ce2a4d4412877eac874963bac",
+     "ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.md"
+     "cc6b72ece41617f2f25d3f25cbad302f6232ffe7c77dacf5b027bc07bd9dfbe6"},
+    :fixture
+    {:path "/tmp/SardProjectedSliceLocalImageNullityWitnessProbe.lean",
+     :sha256
+     "7e2b8c45fb069c3901780130708857645311732ce2a4d4412877eac874963bac"},
+    :declarations ["local_image_null_of_subset_projectedSlice"],
+    :implementation
+    {:scope
+     ["ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean"
+      "ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.md"]},
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean"
     "ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.md"],
