@@ -17424,6 +17424,50 @@
       :output "1"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788845534617-14581-ea5e297d",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 4ec4225cbe4581e3126d24c9cbe5a2e884ba3427; git diff-tree --no-commit-id --name-only -r 4ec4225cbe4581e3126d24c9cbe5a2e884ba3427",
+       :exit 0,
+       :output
+       "Author Joe Corneli; exact scope: ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean and ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.md."}
+      {:cmd
+       "git show 4ec4225cbe4581e3126d24c9cbe5a2e884ba3427:ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean | sha256sum; sha256sum /tmp/SardProjectedSliceLocalImageNullityWitnessProbe.lean; cmp <(git show 4ec4225cbe4581e3126d24c9cbe5a2e884ba3427:ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean) /tmp/SardProjectedSliceLocalImageNullityWitnessProbe.lean",
+       :exit 0,
+       :output
+       "Committed source and fixture are byte-identical at 7e2b8c45fb069c3901780130708857645311732ce2a4d4412877eac874963bac."}
+      {:cmd
+       "readlink -f .lake/packages; lake env lean /tmp/SardProjectedSliceLocalImageNullityWitnessProbe.lean; lake build ConstructionTargets.SardProjectedSliceLocalImageNullityWitness",
+       :exit 0,
+       :output
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; declaration depends on [propext, Classical.choice, Quot.sound]; build completed successfully (8277 jobs), with no warning from the reviewed module."}
+      {:cmd
+       "git show 4ec4225cbe4581e3126d24c9cbe5a2e884ba3427:ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 4ec4225cbe4581e3126d24c9cbe5a2e884ba3427:ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 4ec4225cbe4581e3126d24c9cbe5a2e884ba3427:ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.md | sha256sum; sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "Documentation hash cc6b72ece41617f2f25d3f25cbad302f6232ffe7c77dacf5b027bc07bd9dfbe6; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; theorem count 1; sorry count 1."}
+      {:cmd
+       "git merge-base --is-ancestor a71aab02558f66f3b2213be85aeeab17ea59acc7 4ec4225cbe4581e3126d24c9cbe5a2e884ba3427; git merge-base --is-ancestor 4e98040dd2ee439292757789cd5fc4960f6c9472 4ec4225cbe4581e3126d24c9cbe5a2e884ba3427; git merge-base --is-ancestor 5467deda07b4d12d409bf01906f04f5ae2accc91 4ec4225cbe4581e3126d24c9cbe5a2e884ba3427",
+       :exit 0,
+       :output "All three recorded dependencies are ancestors."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "topology-worklist: 138 items OK; {:done 129, :done-unreviewed 1, :blocked 2, :superseded 6}; diff clean; working tree clean."}],
+     :finding
+     "PASS. The theorem packages exactly the local witness required downstream. It retains the supplied open neighborhood U and base-point membership, proves the entire containing slice image q '' s null via the reviewed lower-dimensional projected-slice theorem, and transfers nullity in the correct direction along f '' (t ∩ U) ⊆ q '' s using measure_mono_null. It does not identify the local piece image with the slice image or claim that projected-chart hypotheses have already been instantiated. The dimension inequality, nonzero differentiability order, pointwise slice smoothness, surjective projection, and zero projected derivative remain explicit. Exact scope and fixture hash reproduce, axioms are standard-only, placeholders are zero, and the frozen consumer retains one theorem and one sorry."},
     :commit "4ec4225cbe4581e3126d24c9cbe5a2e884ba3427",
     :changed-paths
     ["ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean"
@@ -17444,7 +17488,7 @@
       "ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.md"]},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.lean"
     "ConstructionTargets/SardProjectedSliceLocalImageNullityWitness.md"],
@@ -17616,7 +17660,7 @@
       "7e2b8c45fb069c3901780130708857645311732ce2a4d4412877eac874963bac"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
