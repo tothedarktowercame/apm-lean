@@ -29670,6 +29670,27 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788888262390-15320-2f80cf40",
+     :commands
+     ["git show 17ccf2f461f3f701bd6be47ff79e6e2da5109442"
+      "git show 6acbc100f83653cc0446d268d184498a89f61929"
+      "union recorded commit paths"
+      "cmp fixture repaired-commit-file"
+      "sha256sum fixture repaired-commit-file scoped-file"
+      "lake env lean ConstructionTargets/SardVolumeNullityToAddHaar.lean"
+      "lake build ConstructionTargets.SardVolumeNullityToAddHaar"
+      "sed -n '8,15p' repaired-commit-file | sha256sum"
+      "rg placeholder-and-unsafe-patterns"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o sorry problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS after repair: reviewer codex-1 differs from author codex-6; the union of recorded commits changes exactly the declared Lean and Markdown scope; repaired commit 6acbc100f83653cc0446d268d184498a89f61929 removes the extra doc comment, making the fixture, repaired commit file, and scoped Lean file byte-identical with SHA-256 b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928; frozen statement hash equals 05acfa42bf6eacdcce8b89555645f1fb3e17611222a721608b17bef39717d32a; placeholder count is zero; direct Lean and 2512-job Lake build pass with only propext, Classical.choice, and Quot.sound; ledger validates 224 items; consumer hash and one-placeholder count match; uniqueness rewrites the arbitrary additive Haar measure as a scalar multiple of volume and transfers nullity in the required direction on the same arbitrary set; worktree is clean."},
     :commit "6acbc100f83653cc0446d268d184498a89f61929",
     :commits
     ["17ccf2f461f3f701bd6be47ff79e6e2da5109442"
@@ -29682,7 +29703,7 @@
      "b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928"},
     :commit-author "Joe Corneli"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardVolumeNullityToAddHaar.lean"
     "ConstructionTargets/SardVolumeNullityToAddHaar.md"],
@@ -29856,7 +29877,7 @@
       "b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
