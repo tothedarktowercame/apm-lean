@@ -24166,6 +24166,39 @@
    "The local chart right-inverse identity now differentiates to an exact right inverse for the product-coordinate derivative; pointwise derivative instantiation, first-block identification, and the localized rank bound remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled projected-chart derivative surjectivity theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism and target point, Frechet derivatives of its forward and inverse maps at corresponding points, identification of a projected derivative with the first block of the forward derivative, surjectivity of that projected derivative, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedChartDerivativeSurjective.lean"
+    "ConstructionTargets/SardProjectedChartDerivativeSurjective.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART DERIVATIVE SURJECTIVITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardProjectedChartDerivativeSurjectiveProbe.lean",
+     :sha256
+     "61e4d6ec547acaefd5052c8a7dfaa7efa290adcb87b92905ae1430a06b1c6902"},
+    :declarations ["fst_comp_range_eq_top_of_chart_derivatives"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "At every smooth projected-chart fiber point, instantiate forward and inverse derivatives, identify the projected first block with range projection composed with Df, and discharge the localized ambient rank upper bound."},
+   :representation
+   {:source
+    "Frechet derivatives of an open product chart and its inverse together with identification of a projected derivative as the first block of the chart derivative.",
+    :target
+    "Surjectivity of the projected first-coordinate derivative at the corresponding chart point."},
+   :id :critical-value-sard-projected-chart-derivative-surjective-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-derivative-surjective-of-right-inverse-1
+    :critical-value-sard-open-partial-homeomorph-derivative-right-inverse-1],
+   :current-residual
+   "The differentiated chart identity and first-block theorem now give projected derivative surjectivity pointwise; concrete derivative instantiation, first-block identification, and the localized ambient rank bound remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -24219,82 +24252,80 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "At every smooth projected-chart fiber point, instantiate forward and inverse derivatives, identify the projected first block with range projection composed with Df, apply projected surjectivity, and discharge the localized ambient rank upper bound.",
+     "At every smooth projected-chart fiber point, instantiate forward and inverse derivatives, identify the projected first block with range projection composed with Df, and discharge the localized ambient rank upper bound.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"derivative_comp_inverseDerivative_eq_id"
-      "325863ff58e684d6eec49ed18c6a9719dae98b536a6e7700098669ccfbfce7dd"},
+     {"fst_comp_range_eq_top_of_chart_derivatives"
+      "261c2a3bc4ecf14faddc0902b04870ff1bf52fa0220c0823d4d8dedb12e46738"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled open-partial-homeomorph derivative right-inverse theorem cannot be promoted for arbitrary real normed source and target spaces, every open partial homeomorphism and target point, Frechet derivatives of the forward and inverse maps at corresponding points, differentiation of the local right-inverse identity, equality of the composed derivatives with the identity continuous-linear map, or standard-axiom profile.",
+      "Stop only if the compiled projected-chart derivative surjectivity theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism and target point, Frechet derivatives of its forward and inverse maps at corresponding points, identification of a projected derivative with the first block of the forward derivative, surjectivity of that projected derivative, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.lean"
-       "ConstructionTargets/SardOpenPartialHomeomorphDerivativeRightInverse.md"],
+      ["ConstructionTargets/SardProjectedChartDerivativeSurjective.lean"
+       "ConstructionTargets/SardProjectedChartDerivativeSurjective.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / OPEN-CHART DERIVATIVE RIGHT INVERSE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART DERIVATIVE SURJECTIVITY",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardOpenPartialHomeomorphDerivativeRightInverseProbe.lean",
+       {:path "/tmp/SardProjectedChartDerivativeSurjectiveProbe.lean",
         :sha256
-        "3dd0220d8df8640c4500b0e734c97beaea3ca46982124485dc5a6edf89d7e383"},
-       :declarations ["derivative_comp_inverseDerivative_eq_id"],
+        "61e4d6ec547acaefd5052c8a7dfaa7efa290adcb87b92905ae1430a06b1c6902"},
+       :declarations ["fst_comp_range_eq_top_of_chart_derivatives"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "At every smooth projected-chart fiber point, instantiate forward and inverse derivatives, identify the projected first block with range projection composed with Df, apply projected surjectivity, and discharge the localized ambient rank upper bound."},
+       "At every smooth projected-chart fiber point, instantiate forward and inverse derivatives, identify the projected first block with range projection composed with Df, and discharge the localized ambient rank upper bound."},
       :representation
       {:source
-       "Frechet derivatives of an open partial homeomorphism and its inverse at corresponding source and target points.",
+       "Frechet derivatives of an open product chart and its inverse together with identification of a projected derivative as the first block of the chart derivative.",
        :target
-       "Exact equality of the forward derivative composed with the inverse derivative to the identity continuous-linear map."},
-      :id
-      :critical-value-sard-open-partial-homeomorph-derivative-right-inverse-1,
+       "Surjectivity of the projected first-coordinate derivative at the corresponding chart point."},
+      :id :critical-value-sard-projected-chart-derivative-surjective-1,
       :kind :reusable-theorem,
       :depends-on
       [:critical-value-sard-projected-derivative-surjective-of-right-inverse-1
-       :critical-value-sard-projected-smooth-local-rank-chart-1],
+       :critical-value-sard-open-partial-homeomorph-derivative-right-inverse-1],
       :current-residual
-      "The local chart right-inverse identity now differentiates to an exact right inverse for the product-coordinate derivative; pointwise derivative instantiation, first-block identification, and the localized rank bound remain.",
+      "The differentiated chart identity and first-block theorem now give projected derivative surjectivity pointwise; concrete derivative instantiation, first-block identification, and the localized ambient rank bound remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free chain-rule fixture differentiates the open partial homeomorphism's local right-inverse identity and proves that the forward derivative composed with the inverse derivative is exactly the identity. This supplies the right-inverse hypothesis of the banked projected-surjectivity theorem. The remaining work is pointwise instantiation on the smooth projected chart plus the localized ambient rank bound.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines the differentiated open-chart right-inverse identity with first-block extraction, proving that the projected first-coordinate derivative is surjective at every point where the chart and inverse derivatives exist. Concrete derivative instantiation, first-block identification with range projection composed with Df, and the localized ambient rank bound remain.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "sed -n '120,155p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/FDeriv/Congr.lean; sed -n '35,52p' .lake/packages/mathlib/Mathlib/Topology/OpenPartialHomeomorph/Continuity.lean",
+       "rg -n -C 8 ':id :critical-value-sard-(projected-derivative-surjective-of-right-inverse-1|open-partial-homeomorph-derivative-right-inverse-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardOpenPartialHomeomorphDerivativeRightInverseProbe.lean",
+       "lake env lean /tmp/SardProjectedChartDerivativeSurjectiveProbe.lean",
        :exit 0,
        :output
-       "'SardOpenPartialHomeomorphDerivativeRightInverseProbe.derivative_comp_inverseDerivative_eq_id' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardProjectedChartDerivativeSurjectiveProbe.fst_comp_range_eq_top_of_chart_derivatives' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardOpenPartialHomeomorphDerivativeRightInverseProbe.lean",
+       "sha256sum /tmp/SardProjectedChartDerivativeSurjectiveProbe.lean",
        :exit 0,
        :output
-       "3dd0220d8df8640c4500b0e734c97beaea3ca46982124485dc5a6edf89d7e383  /tmp/SardOpenPartialHomeomorphDerivativeRightInverseProbe.lean"}
+       "61e4d6ec547acaefd5052c8a7dfaa7efa290adcb87b92905ae1430a06b1c6902  /tmp/SardProjectedChartDerivativeSurjectiveProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardOpenPartialHomeomorphDerivativeRightInverseProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedChartDerivativeSurjectiveProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '12,23p' /tmp/SardOpenPartialHomeomorphDerivativeRightInverseProbe.lean | sha256sum",
+       "sed -n '12,24p' /tmp/SardProjectedChartDerivativeSurjectiveProbe.lean | sha256sum",
        :exit 0,
        :output
-       "325863ff58e684d6eec49ed18c6a9719dae98b536a6e7700098669ccfbfce7dd  -"}
+       "261c2a3bc4ecf14faddc0902b04870ff1bf52fa0220c0823d4d8dedb12e46738  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 184 items OK; {:done 176, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 185 items OK; {:done 177, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -24309,13 +24340,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardOpenPartialHomeomorphDerivativeRightInverseProbe.lean",
+     {:path "/tmp/SardProjectedChartDerivativeSurjectiveProbe.lean",
       :sha256
-      "3dd0220d8df8640c4500b0e734c97beaea3ca46982124485dc5a6edf89d7e383"},
+      "61e4d6ec547acaefd5052c8a7dfaa7efa290adcb87b92905ae1430a06b1c6902"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -24448,7 +24478,8 @@
     :critical-value-sard-implicit-function-data-smooth-chart-1
     :critical-value-sard-projected-smooth-local-rank-chart-1
     :critical-value-sard-projected-derivative-surjective-of-right-inverse-1
-    :critical-value-sard-open-partial-homeomorph-derivative-right-inverse-1],
+    :critical-value-sard-open-partial-homeomorph-derivative-right-inverse-1
+    :critical-value-sard-projected-chart-derivative-surjective-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
