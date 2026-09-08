@@ -22347,8 +22347,69 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled indexed residual inverse-slice regularity theorem cannot be promoted for arbitrary real normed source, target, product-coordinate, and residual spaces, every open partial homeomorphism, every differentiability order, smoothness of the chart inverse on its target and ambient map on its source, every continuous-linear residual coordinate, smoothness of every fixed-first-coordinate residual inverse slice, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Expose ContDiffOn regularity of the concrete projected implicit chart inverse on its target and of the ambient map on its chart source, then prove zero residual projection derivative on every localized rank-upper slice.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"contDiffAt_residual_inverseSlices_of_contDiffOn"
+     "b029cffabb145e16e78ff8514f0fc25d31c46235669b9f15dd97933ccd748e73"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean",
+      :exit 0,
+      :output
+      "4aa48a8dcaa409732f2ae114c2add172a11b16a05253af7a176524edcdd188e2  /tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean /tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean",
+      :exit 0,
+      :output
+      "4aa48a8dcaa409732f2ae114c2add172a11b16a05253af7a176524edcdd188e2  ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean\n4aa48a8dcaa409732f2ae114c2add172a11b16a05253af7a176524edcdd188e2  /tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean",
+      :exit 0,
+      :output
+      "'SardProjectedChartResidualSlicesContDiffOnProbe.contDiffAt_residual_inverseSlices_of_contDiffOn' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '15,27p' ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean | sha256sum",
+      :exit 0,
+      :output
+      "b029cffabb145e16e78ff8514f0fc25d31c46235669b9f15dd97933ccd748e73  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 173 items OK; {:done 164, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add indexed projected chart slice regularity'",
+      :exit 0,
+      :output
+      "[master 2095528c] Add indexed projected chart slice regularity\n2 files changed, 39 insertions(+)\ncreate mode 100644 ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean\ncreate mode 100644 ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "2095528c",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean"
+     "ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.md"],
+    :fixture
+    {:path "/tmp/SardProjectedChartResidualSlicesContDiffOnProbe.lean",
+     :sha256
+     "4aa48a8dcaa409732f2ae114c2add172a11b16a05253af7a176524edcdd188e2"},
+    :declarations ["contDiffAt_residual_inverseSlices_of_contDiffOn"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.lean"
     "ConstructionTargets/SardProjectedChartResidualSlicesContDiffOn.md"],
