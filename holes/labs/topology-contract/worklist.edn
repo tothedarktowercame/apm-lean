@@ -27860,8 +27860,84 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled coordinate-topology package cannot be promoted for arbitrary real normed source spaces, finite-dimensional real inner-product target spaces, every continuous real-linear derivative, properness and second countability of both its range and orthogonal-complement coordinate spaces, the induced local compactness required by compact projected-chart nullity, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Install the coordinate topology, Borel, Haar, and nontriviality packages locally and instantiate compact projected-chart nullity for each concrete exact-rank chart.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"range_orthogonal_topology_package"
+     "8e8671efff587ac7e2ff5f3b307764dc542484ce9ff6743573c4d542cd16bbab"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "rg -n -C 6 ':id :critical-value-sard-(derivative-range-inherited-borel-space-1|derivative-range-inherited-borel-add-haar-package-1|compact-projected-chart-nullity-of-bundled-data-1|target-orthogonal-coordinate-inverse-slice-nullity-data-1|derivative-range-coordinate-topology-package-1)' holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/SardDerivativeRangeCoordinateTopologyPackageProbe.lean ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardDerivativeRangeCoordinateTopologyPackageProbe.lean ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.lean",
+      :exit 0,
+      :output
+      "0b48e77ace1f6164cf5aa2e3e7e8f96be5b9c71851f76531715ea55dd40bf0a9  /tmp/SardDerivativeRangeCoordinateTopologyPackageProbe.lean\n0b48e77ace1f6164cf5aa2e3e7e8f96be5b9c71851f76531715ea55dd40bf0a9  ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.lean",
+      :exit 0,
+      :output
+      "'SardDerivativeRangeCoordinateTopologyPackageProbe.range_orthogonal_topology_package' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.lean ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '6,20p' ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.lean | sha256sum",
+      :exit 0,
+      :output
+      "8e8671efff587ac7e2ff5f3b307764dc542484ce9ff6743573c4d542cd16bbab  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 210 items OK; {:done 201, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.lean ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.md && git commit -m \"Add derivative coordinate topology package\"",
+      :exit 0,
+      :output
+      "[master a8a8e078] Add derivative coordinate topology package\n 2 files changed, 33 insertions(+)\n create mode 100644 ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.lean\n create mode 100644 ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.md"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "a8a8e07866d8f85031e2fd7e8438e614497d65bd"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "a8a8e07866d8f85031e2fd7e8438e614497d65bd",
+    :changed-paths
+    ["ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.lean"
+     "ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.md"],
+    :fixture
+    {:path
+     "/tmp/SardDerivativeRangeCoordinateTopologyPackageProbe.lean",
+     :sha256
+     "0b48e77ace1f6164cf5aa2e3e7e8f96be5b9c71851f76531715ea55dd40bf0a9"},
+    :declarations ["range_orthogonal_topology_package"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.lean"
     "ConstructionTargets/SardDerivativeRangeCoordinateTopologyPackage.md"],
