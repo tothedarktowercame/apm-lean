@@ -19727,6 +19727,30 @@
       :output
       "[master 855d987b] add compact target fiber projected slice nullity\n 2 files changed, 62 insertions(+)\n create mode 100644 ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean\n create mode 100644 ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788853934066-14683-d66e49d9",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 855d987be04cb8ffe74853edb698c6bbbb3a7155; git diff-tree --no-commit-id --name-only -r 855d987be04cb8ffe74853edb698c6bbbb3a7155; git show 855d987be04cb8ffe74853edb698c6bbbb3a7155:ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean; git show 855d987be04cb8ffe74853edb698c6bbbb3a7155:ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.md",
+       :exit 0}
+      {:cmd
+       "readlink -f .lake/packages; sha256sum /tmp/SardCompactTargetFiberProjectedSliceImageNullityProbe.lean ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.md; sed -n '9,37p' ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean | sha256sum; lake env lean /tmp/SardCompactTargetFiberProjectedSliceImageNullityProbe.lean; lake env lean ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean; lake build ConstructionTargets.SardCompactTargetFiberProjectedSliceImageNullity",
+       :exit 0}
+      {:cmd
+       "git show 855d987be04cb8ffe74853edb698c6bbbb3a7155:ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 855d987be04cb8ffe74853edb698c6bbbb3a7155:ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; for d in ec5ea24d292d45bd0dbf055646157447ccc377d6 66b690cb60a33db021e58d60b3203519c7f771ca; do git merge-base --is-ancestor \"$d\" 855d987be04cb8ffe74853edb698c6bbbb3a7155 || exit 1; done; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check 855d987be04cb8ffe74853edb698c6bbbb3a7155^ 855d987be04cb8ffe74853edb698c6bbbb3a7155; git status --porcelain=v1",
+       :exit 0}],
+     :finding
+     "PASS. Commit 855d987be04cb8ffe74853edb698c6bbbb3a7155 by Joe Corneli changes exactly the recorded Lean and Markdown files. The fixture hash is 9a3797f0af74ef2be11eb9b660e45e5437ee77b3e546f8bf71eebc55138bb174; committed file hashes reproduce as b29d2458450fa86ee50f3c088f76383be910845e32d9aa6c898d7456876eaed1 and 6ad6ab7708f7b3a01f72035bf534cca31cb676fe45c7272c0b177fe6ab4a666d, and the frozen declaration-region hash is 795dba20759b620e81260370ea8b87032ae7b8ef78528e721a971df17b7346a3. Fixture, committed target, and Lake target compile against canonical packages with exactly [propext, Classical.choice, Quot.sound], without placeholders or forbidden declarations. The theorem accepts containment in the target-image fiber representation exactly as recorded: for each r, the second coordinate of f '' K intersected with the first-coordinate fiber is contained in q r '' s r. Its elementwise conversion produces precisely the source-fiber containment required by compact projected-slice nullity, using a = first coordinate of e ∘ f and b = second coordinate of e ∘ f; all compactness, continuity, Haar, indexed induction, dimension, smoothness, projection-surjectivity, and derivative-vanishing hypotheses retain their orientation. No injectivity of f or stronger fiber equality is assumed. Both dependency commits are ancestors. The frozen consumer hash is 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder. The worklist validates as 154 items with {:done 145, :done-unreviewed 1, :blocked 2, :superseded 6}; the committed diff and working tree are clean."},
     :commit "855d987be04cb8ffe74853edb698c6bbbb3a7155",
     :changed-paths
     ["ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean"
@@ -19739,7 +19763,7 @@
     :declarations
     ["measure_image_zero_of_compact_targetFiber_projectedSlices"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean"
     "ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.md"],
@@ -19920,7 +19944,7 @@
       "9a3797f0af74ef2be11eb9b660e45e5437ee77b3e546f8bf71eebc55138bb174"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
