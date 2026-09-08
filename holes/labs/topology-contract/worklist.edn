@@ -29263,6 +29263,42 @@
    "Every order-one exact-rank critical point now has an open neighborhood whose closed rank-upper locus image is null; pointwise aggregation and finite rank assembly remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled exact-rank closed-open aggregation theorem cannot be promoted for arbitrary finite-dimensional real inner-product source and Borel target spaces, additive Haar target measures, every global C1 map, every order-one exact derivative-rank critical piece, pointwise compatible lower-dimensional induction, zero image measure of the complete exact-rank piece after second-countable aggregation, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFirstDerivativeRankPieceClosedOpenAggregation.lean"
+    "ConstructionTargets/SardFirstDerivativeRankPieceClosedOpenAggregation.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EXACT-RANK CLOSED-OPEN AGGREGATION",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFirstDerivativeRankPieceClosedOpenAggregationProbe.lean",
+     :sha256
+     "fb3d219f168f354f7e633d11ce91c6ce12d11c024515147806559731f112a767"},
+    :declarations ["rankPiece_image_zero_of_pointwise_closedOpen"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the theorem for every critical rank and apply finite rank-strata aggregation."},
+   :representation
+   {:source
+    "Pointwise null-image neighborhoods of the closed derivative rank-upper locus at every point of one order-one exact-rank critical piece.",
+    :target
+    "Zero additive-Haar measure of the image of the complete order-one exact-rank piece."},
+   :id
+   :critical-value-sard-first-derivative-rank-piece-closed-open-aggregation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-derivative-rank-piece-pointwise-closed-open-nullity-1
+    :critical-value-sard-first-derivative-rank-piece-local-nullity-aggregation-1
+    :critical-value-sard-first-derivative-locus-rank-aggregation-1],
+   :current-residual
+   "Every order-one exact-rank critical piece is null under pointwise lower-dimensional induction; finite aggregation across critical ranks remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -29316,54 +29352,52 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Aggregate the pointwise null-image rank-upper neighborhoods over each order-one exact-rank piece, then combine the rank pieces.",
+     "Apply the exact-rank piece theorem for every critical rank and use finite rank-strata aggregation to close the order-one first-nonzero-jet locus.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_open_rankUpper_image_zero"
-      "ffb44c06d7f7ddd52ec0338d327a98b0c7f52800ae254d8df8087483d53a1d17"},
+     {"rankPiece_image_zero_of_pointwise_closedOpen"
+      "5267899302fc93a385d5c9b3d26d086f6e08c42d0bb58e7ee71a34c2510381eb"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled pointwise exact-rank closed-open nullity theorem cannot be promoted for arbitrary finite-dimensional real inner-product source and Borel target spaces, additive Haar target measures, every global C1 map, every order-one first-nonzero-jet exact-rank critical point, compatible lower-dimensional induction on the projected kernel coordinate, an open projected-chart neighborhood whose closed rank-upper locus has zero image measure, or standard-axiom profile.",
+      "Stop only if the compiled exact-rank closed-open aggregation theorem cannot be promoted for arbitrary finite-dimensional real inner-product source and Borel target spaces, additive Haar target measures, every global C1 map, every order-one exact derivative-rank critical piece, pointwise compatible lower-dimensional induction, zero image measure of the complete exact-rank piece after second-countable aggregation, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstDerivativeRankPiecePointwiseClosedOpenNullity.lean"
-       "ConstructionTargets/SardFirstDerivativeRankPiecePointwiseClosedOpenNullity.md"],
+      ["ConstructionTargets/SardFirstDerivativeRankPieceClosedOpenAggregation.lean"
+       "ConstructionTargets/SardFirstDerivativeRankPieceClosedOpenAggregation.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / POINTWISE EXACT-RANK CLOSED-OPEN NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EXACT-RANK CLOSED-OPEN AGGREGATION",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFirstDerivativeRankPiecePointwiseClosedOpenNullityProbe.lean",
+        "/tmp/SardFirstDerivativeRankPieceClosedOpenAggregationProbe.lean",
         :sha256
-        "ea3660a35af5885fe6fca979e44198ef0c7da04e4d12b22d0eecf1e00db690ec"},
-       :declarations ["exists_open_rankUpper_image_zero"],
+        "fb3d219f168f354f7e633d11ce91c6ce12d11c024515147806559731f112a767"},
+       :declarations ["rankPiece_image_zero_of_pointwise_closedOpen"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Aggregate the pointwise null neighborhoods over each exact-rank order-one piece."},
+       "Instantiate the theorem for every critical rank and apply finite rank-strata aggregation."},
       :representation
       {:source
-       "An order-one first-nonzero-jet point in an exact derivative-rank stratum, its nonsurjective derivative, global C1 regularity, and lower-dimensional induction on the projected kernel.",
+       "Pointwise null-image neighborhoods of the closed derivative rank-upper locus at every point of one order-one exact-rank critical piece.",
        :target
-       "An open neighborhood of the point on which the closed derivative rank-upper locus has zero target image measure."},
+       "Zero additive-Haar measure of the image of the complete order-one exact-rank piece."},
       :id
-      :critical-value-sard-first-derivative-rank-piece-pointwise-closed-open-nullity-1,
+      :critical-value-sard-first-derivative-rank-piece-closed-open-aggregation-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-exact-rank-closed-open-projected-chart-nullity-1
-       :critical-value-sard-projected-smooth-chart-target-data-1
-       :critical-value-sard-projected-range-kernel-dimension-drop-1
-       :critical-value-sard-first-nonzero-jet-one-fderiv-nonzero-1
-       :critical-value-sard-derivative-rank-upper-locus-closed-1],
+      [:critical-value-sard-first-derivative-rank-piece-pointwise-closed-open-nullity-1
+       :critical-value-sard-first-derivative-rank-piece-local-nullity-aggregation-1
+       :critical-value-sard-first-derivative-locus-rank-aggregation-1],
       :current-residual
-      "Every order-one exact-rank critical point now has an open neighborhood whose closed rank-upper locus image is null; pointwise aggregation and finite rank assembly remain.",
+      "Every order-one exact-rank critical piece is null under pointwise lower-dimensional induction; finite aggregation across critical ranks remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture now constructs the smooth derivative-range projected chart at every order-one exact-rank point, derives strict differentiability from global C1 regularity, obtains kernel dimension drop from order-one derivative nonvanishing, applies closedness of the rank-upper locus, and invokes exact-rank closed-in-open chart nullity. The remaining bounded work is aggregation of these pointwise null neighborhoods over each exact-rank piece.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture chooses the pointwise null neighborhoods supplied at every order-one exact-rank critical point, uses inclusion of the exact-rank piece in the closed rank-upper locus to transfer local nullity, and applies the banked second-countable local-nullity aggregator. Thus each exact-rank piece is null; finite rank aggregation remains.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
@@ -29372,27 +29406,27 @@
        "rg -n -C 6 dependency-receipts holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFirstDerivativeRankPiecePointwiseClosedOpenNullityProbe.lean",
+       "lake env lean /tmp/SardFirstDerivativeRankPieceClosedOpenAggregationProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/SardFirstDerivativeRankPiecePointwiseClosedOpenNullityProbe.lean",
+       "sha256sum /tmp/SardFirstDerivativeRankPieceClosedOpenAggregationProbe.lean",
        :exit 0,
        :output
-       "ea3660a35af5885fe6fca979e44198ef0c7da04e4d12b22d0eecf1e00db690ec"}
+       "fb3d219f168f354f7e633d11ce91c6ce12d11c024515147806559731f112a767"}
       {:cmd
-       "rg placeholder-and-unsafe-patterns /tmp/SardFirstDerivativeRankPiecePointwiseClosedOpenNullityProbe.lean",
+       "rg placeholder-and-unsafe-patterns /tmp/SardFirstDerivativeRankPieceClosedOpenAggregationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '13,63p' /tmp/SardFirstDerivativeRankPiecePointwiseClosedOpenNullityProbe.lean | sha256sum",
+       "sed -n '10,67p' /tmp/SardFirstDerivativeRankPieceClosedOpenAggregationProbe.lean | sha256sum",
        :exit 0,
        :output
-       "ffb44c06d7f7ddd52ec0338d327a98b0c7f52800ae254d8df8087483d53a1d17"}
+       "5267899302fc93a385d5c9b3d26d086f6e08c42d0bb58e7ee71a34c2510381eb"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 219 items OK; {:done 211, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 220 items OK; {:done 212, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -29407,12 +29441,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFirstDerivativeRankPiecePointwiseClosedOpenNullityProbe.lean",
+      "/tmp/SardFirstDerivativeRankPieceClosedOpenAggregationProbe.lean",
       :sha256
-      "ea3660a35af5885fe6fca979e44198ef0c7da04e4d12b22d0eecf1e00db690ec"},
+      "fb3d219f168f354f7e633d11ce91c6ce12d11c024515147806559731f112a767"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -29580,7 +29614,8 @@
     :critical-value-sard-derivative-range-orthogonal-closed-open-chart-nullity-1
     :critical-value-sard-projected-chart-localized-residual-slice-zero-1
     :critical-value-sard-exact-rank-closed-open-projected-chart-nullity-1
-    :critical-value-sard-first-derivative-rank-piece-pointwise-closed-open-nullity-1],
+    :critical-value-sard-first-derivative-rank-piece-pointwise-closed-open-nullity-1
+    :critical-value-sard-first-derivative-rank-piece-closed-open-aggregation-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
