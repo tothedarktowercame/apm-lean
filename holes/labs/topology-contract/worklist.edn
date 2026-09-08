@@ -18896,6 +18896,30 @@
       :output
       "ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean\nConstructionTargets/SardTargetOrthogonalCoordinateEquiv.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788849871528-14641-62db8572",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat 6c75005ec91ef6bff547385d46f1d1aa0096170b; git diff-tree --no-commit-id --name-only -r 6c75005ec91ef6bff547385d46f1d1aa0096170b; git show 6c75005ec91ef6bff547385d46f1d1aa0096170b:ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean; git show 6c75005ec91ef6bff547385d46f1d1aa0096170b:ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.md",
+       :exit 0}
+      {:cmd
+       "readlink -f .lake/packages; sha256sum /tmp/SardTargetOrthogonalCoordinateEquivProbe.lean ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.md; sed -n '14,23p' ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean | sha256sum; lake env lean /tmp/SardTargetOrthogonalCoordinateEquivProbe.lean; lake env lean ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean; lake build ConstructionTargets.SardTargetOrthogonalCoordinateEquiv",
+       :exit 0}
+      {:cmd
+       "git show 6c75005ec91ef6bff547385d46f1d1aa0096170b:ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show 6c75005ec91ef6bff547385d46f1d1aa0096170b:ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; git merge-base --is-ancestor 82b2fdcf181f2b633a6ee98a16fe26b44258c2b7 6c75005ec91ef6bff547385d46f1d1aa0096170b; git merge-base --is-ancestor 6c3ac60f9316bce360fbfb49ee2cf8ed1b46f13b 6c75005ec91ef6bff547385d46f1d1aa0096170b; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check 6c75005ec91ef6bff547385d46f1d1aa0096170b^ 6c75005ec91ef6bff547385d46f1d1aa0096170b; git status --porcelain=v1",
+       :exit 0}],
+     :finding
+     "PASS. Commit 6c75005ec91ef6bff547385d46f1d1aa0096170b by Joe Corneli changes exactly the recorded Lean and Markdown files. The fixture hash is 9224eb7acfd47e5a8fa22a4934fd9cd49ba2eb83e0efc392b004936412ae7c93; committed file hashes reproduce as 8a7b819b0b67ed173483692c2262e410b36a9e432b923f01a9faebabb556c3fc and d7e1cc5a283f7269b6f1977a7d039babf902c04893690be98013b97246b698fe, and the frozen declaration-region hash is a71b76ee460ce4e245587405b273e6679a94355282331b4df90f4f2cb0e8ba94. Fixture, committed target, and Lake target compile against canonical packages with exactly [propext, Classical.choice, Quot.sound], without placeholders or forbidden declarations. The construction and formula have the required orientation and representation boundary: orthogonal decomposition followed by the L2-product equivalence gives a continuous real-linear equivalence F ≃L[ℝ] R × Rᗮ, and its forward map is exactly the pair of orthogonal projections onto R and Rᗮ. The equivalence itself supplies the inverse; no unsupported inverse formula is asserted. Finite-dimensional real inner-product structure is precisely what supplies the orthogonal projections and decomposition. Both recorded dependency commits are ancestors. The frozen consumer hash is 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder. The worklist validates as 148 items with {:done 139, :done-unreviewed 1, :blocked 2, :superseded 6}; the committed diff and working tree are clean."},
     :commit "6c75005ec91ef6bff547385d46f1d1aa0096170b",
     :changed-paths
     ["ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean"
@@ -18913,7 +18937,7 @@
     ["SardTargetOrthogonalCoordinateEquivProbe.targetOrthogonalCoordinates"
      "SardTargetOrthogonalCoordinateEquivProbe.targetOrthogonalCoordinates_apply"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean"
     "ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.md"],
@@ -19094,7 +19118,7 @@
       "9224eb7acfd47e5a8fa22a4934fd9cd49ba2eb83e0efc392b004936412ae7c93"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
