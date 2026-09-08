@@ -31519,6 +31519,39 @@
    "The repaired induction predicate and closure compile; its analytic dimension step remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if classical Sard admissibility cannot be preserved after subtracting the same derivative rank from source and target dimensions, or if the arithmetic theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardRankDropRegularityAdmissibility.lean"
+    "ConstructionTargets/SardRankDropRegularityAdmissibility.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-DROP REGULARITY ADMISSIBILITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardRankDropRegularityAdmissibilityProbe.lean",
+     :sha256
+     "1fe91e5d166cfb3fe1b5ab4af402a308cddf13d90c2fed4281db8a1166643e84"},
+    :declarations ["sardOrderAdmissible_sub_rank"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Retain the admissible finite regularity order on projected kernel slices and invoke lower-dimensional critical nullity."},
+   :representation
+   {:source
+    "Classical Sard admissibility for source dimension n, target dimension m, and finite order k, together with a derivative rank r bounded by both dimensions.",
+    :target
+    "Classical Sard admissibility at the projected slice dimensions n-r and m-r for the same regularity order k."},
+   :id :critical-value-sard-rank-drop-regularity-admissibility-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-classical-regularity-admissibility-1
+    :critical-value-sard-classical-finite-order-critical-nullity-predicate-1],
+   :current-residual
+   "Dimension admissibility survives rank reduction; analytic slice regularity must now retain the original finite order rather than collapse to C1.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -31572,81 +31605,77 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Prove the classical-admissible finite-order critical-nullity dimension step from all strictly smaller source dimensions.",
+     "Promote projected rank-slice regularity from C1 to the original admissible finite order, then instantiate lower-dimensional critical nullity after the common rank drop.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"classicalCriticalNullity_all_dimensions"
-      "e4f1cea03d7bc6f1b35806ac13fe3d4d347c73f216f3e78066536dff0aac8222"},
+     {"sardOrderAdmissible_sub_rank"
+      "7ebfbf26aeef54bd5eeeb79afce1f0401592b4ff057eb5900e852da3843b7a04"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the complete finite-order critical-nullity induction predicate cannot be repaired to use classical Sard admissibility and closed by source-finrank strong induction from its dimension step, or if the theorem requires nonstandard axioms.",
+      "Stop only if classical Sard admissibility cannot be preserved after subtracting the same derivative rank from source and target dimensions, or if the arithmetic theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardClassicalFiniteOrderCriticalNullityPredicate.lean"
-       "ConstructionTargets/SardClassicalFiniteOrderCriticalNullityPredicate.md"],
+      ["ConstructionTargets/SardRankDropRegularityAdmissibility.lean"
+       "ConstructionTargets/SardRankDropRegularityAdmissibility.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [SPEC-DEFECT] / CLASSICAL FINITE-ORDER CRITICAL-NULLITY PREDICATE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-DROP REGULARITY ADMISSIBILITY",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean",
+       {:path "/tmp/SardRankDropRegularityAdmissibilityProbe.lean",
         :sha256
-        "8676226b6f7e6d6a682c47beef136e1facb0fa78762a5ea4a0e8784c4ae41d5a"},
-       :declarations
-       ["ClassicalCriticalNullityAtDimension"
-        "classicalCriticalNullity_all_dimensions"],
+        "1fe91e5d166cfb3fe1b5ab4af402a308cddf13d90c2fed4281db8a1166643e84"},
+       :declarations ["sardOrderAdmissible_sub_rank"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Prove the analytic dimension step using the reviewed flat, order-one, and higher-jet branches."},
+       "Retain the admissible finite regularity order on projected kernel slices and invoke lower-dimensional critical nullity."},
       :representation
       {:source
-       "Classical-Sard-admissible finite-order local critical-image nullity at every strictly smaller source finrank.",
+       "Classical Sard admissibility for source dimension n, target dimension m, and finite order k, together with a derivative rank r bounded by both dimensions.",
        :target
-       "The same classical finite-order critical-nullity property at every source dimension by strong induction."},
-      :id
-      :critical-value-sard-classical-finite-order-critical-nullity-predicate-1,
+       "Classical Sard admissibility at the projected slice dimensions n-r and m-r for the same regularity order k."},
+      :id :critical-value-sard-rank-drop-regularity-admissibility-1,
       :kind :reusable-theorem,
       :depends-on
       [:critical-value-sard-classical-regularity-admissibility-1
-       :critical-value-sard-finrank-strong-induction-closure-1],
+       :critical-value-sard-classical-finite-order-critical-nullity-predicate-1],
       :current-residual
-      "The repaired induction predicate and closure compile; its analytic dimension step remains.",
+      "Dimension admissibility survives rank reduction; analytic slice regularity must now retain the original finite order rather than collapse to C1.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :axioms ["propext" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture repairs the complete critical-nullity induction predicate by replacing the Taylor-flat covering inequality with the classical Sard threshold `sourceDim < targetDim + order`. The repaired property remains source-finrank indexed and closes by strong induction once its analytic dimension step is proved.",
+     "The rectangular theorem is not refuted. The analytic dimension step cannot use the banked order-one interface as currently typed: it exposes only ContDiffAt order 1 on the projected kernel slice, while classical Sard admissibility may require higher order when source dimension exceeds target dimension. The repair is to retain the original admissible regularity order through the rank-r slice. A placeholder-free compiled fixture proves the required dimension arithmetic: classical admissibility is preserved when the same derivative rank is subtracted from source and target dimensions.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean",
+       "lake env lean /tmp/SardRankDropRegularityAdmissibilityProbe.lean",
        :exit 0,
        :output
-       "'SardClassicalFiniteOrderCriticalNullityPredicateProbe.classicalCriticalNullity_all_dimensions' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardRankDropRegularityAdmissibilityProbe.sardOrderAdmissible_sub_rank' depends on axioms: [propext, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean",
+       "sha256sum /tmp/SardRankDropRegularityAdmissibilityProbe.lean",
        :exit 0,
        :output
-       "8676226b6f7e6d6a682c47beef136e1facb0fa78762a5ea4a0e8784c4ae41d5a  /tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean"}
+       "1fe91e5d166cfb3fe1b5ab4af402a308cddf13d90c2fed4281db8a1166643e84  /tmp/SardRankDropRegularityAdmissibilityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardRankDropRegularityAdmissibilityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '10,31p' /tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean | sha256sum",
+       "sed -n '6,15p' /tmp/SardRankDropRegularityAdmissibilityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "e4f1cea03d7bc6f1b35806ac13fe3d4d347c73f216f3e78066536dff0aac8222  -"}
+       "7ebfbf26aeef54bd5eeeb79afce1f0401592b4ff057eb5900e852da3843b7a04  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 238 items OK; {:done 230, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 239 items OK; {:done 231, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -31664,13 +31693,12 @@
        :output "?? scripts/__pycache__/",
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
-     {:path
-      "/tmp/SardClassicalFiniteOrderCriticalNullityPredicateProbe.lean",
+     {:path "/tmp/SardRankDropRegularityAdmissibilityProbe.lean",
       :sha256
-      "8676226b6f7e6d6a682c47beef136e1facb0fa78762a5ea4a0e8784c4ae41d5a"},
+      "1fe91e5d166cfb3fe1b5ab4af402a308cddf13d90c2fed4281db8a1166643e84"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -31857,7 +31885,8 @@
     :critical-value-sard-finite-regularity-dimension-admissibility-1
     :critical-value-sard-finite-order-critical-nullity-predicate-1
     :critical-value-sard-classical-regularity-admissibility-1
-    :critical-value-sard-classical-finite-order-critical-nullity-predicate-1],
+    :critical-value-sard-classical-finite-order-critical-nullity-predicate-1
+    :critical-value-sard-rank-drop-regularity-admissibility-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
