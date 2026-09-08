@@ -20465,8 +20465,99 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled localized image-nullity theorem cannot be promoted for arbitrary locally compact second-countable Hausdorff source spaces, arbitrary measured targets, every closed locus and open localization, nullity of every compact subset image, nullity of the complete localized image, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "For each projected rank chart, instantiate compact member nullity using the target-coordinate equivalence and inverse-slice containment, apply localized closed-open image nullity, then aggregate exact-rank pieces.",
+    :gates
+    {:statement-hash :pass,
+     :placeholders :pass,
+     :fixture-hash :pass,
+     :warnings :pass,
+     :scope :pass,
+     :axioms :standard-only,
+     :worklist :pass,
+     :consumer-fixture :unchanged,
+     :declaration :pass,
+     :diff-check :pass,
+     :worktree :clean,
+     :compile :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_image_zero_of_closed_inter_open"
+     "a85a80801f85d4416521adbd758d947973c823211bd9731f74b800943eee2e17"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardClosedOpenImageNullityProbe.lean",
+      :exit 0,
+      :output
+      "5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59  /tmp/SardClosedOpenImageNullityProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardClosedOpenImageNullity.lean",
+      :exit 0,
+      :output
+      "'SardClosedOpenImageNullityProbe.measure_image_zero_of_closed_inter_open' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardClosedOpenImageNullity.lean ConstructionTargets/SardClosedOpenImageNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '8,26p' ConstructionTargets/SardClosedOpenImageNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "a85a80801f85d4416521adbd758d947973c823211bd9731f74b800943eee2e17  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 160 items OK; {:done 151, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardClosedOpenImageNullity.lean ConstructionTargets/SardClosedOpenImageNullity.md && git commit -m 'Add closed-open image nullity aggregation'",
+      :exit 0,
+      :output
+      "[master 795b1d89] Add closed-open image nullity aggregation; 2 files changed, 40 insertions(+); create mode 100644 ConstructionTargets/SardClosedOpenImageNullity.lean; create mode 100644 ConstructionTargets/SardClosedOpenImageNullity.md"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "795b1d891624b5f0a240855ac74869aa62d70efe"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardClosedOpenImageNullity.lean ConstructionTargets/SardClosedOpenImageNullity.md",
+      :exit 0,
+      :output
+      "5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59  ConstructionTargets/SardClosedOpenImageNullity.lean\na3f593e663601e187615472ea346f4f8cd744eae23ab818aa3357d11abbfc43c  ConstructionTargets/SardClosedOpenImageNullity.md"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "795b1d891624b5f0a240855ac74869aa62d70efe",
+    :changed-paths
+    ["ConstructionTargets/SardClosedOpenImageNullity.lean"
+     "ConstructionTargets/SardClosedOpenImageNullity.md"],
+    :file-hashes
+    {"ConstructionTargets/SardClosedOpenImageNullity.lean"
+     "5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59",
+     "ConstructionTargets/SardClosedOpenImageNullity.md"
+     "a3f593e663601e187615472ea346f4f8cd744eae23ab818aa3357d11abbfc43c"},
+    :fixture
+    {:path "/tmp/SardClosedOpenImageNullityProbe.lean",
+     :sha256
+     "5a48a31b65384368448740b3917e323979db4c6bb84ef1a0b914ab038c8d5f59"},
+    :declarations ["measure_image_zero_of_closed_inter_open"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardClosedOpenImageNullity.lean"
     "ConstructionTargets/SardClosedOpenImageNullity.md"],
