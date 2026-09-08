@@ -25254,8 +25254,83 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled indexed projected-chart residual-slice zero-derivative theorem cannot be promoted for arbitrary finite-dimensional real normed source spaces and arbitrary real normed ambient, projected, slice, and residual spaces, every open product chart, exact equality of its first coordinate with a differentiable projected coordinate, two-sided localized regularity, exact base rank indexing, compatible projected dimension, pointwise localized rank bounds, projected derivative identification and surjectivity, zero residualized inverse-slice derivative at every chart-target fiber point, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:scope-before 0,
+     :scope-after 0,
+     :scope-delta 0,
+     :consumer-before 1,
+     :consumer-after 1,
+     :consumer-delta 0},
+    :residual
+    "Apply indexed zero residual-slice derivatives and banked residual-slice regularity to compact projected-chart nullity, then aggregate exact-rank pieces.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"forall_hasFDerivAt_zero_residual_inverseSlice"
+     "71c15f3a8bd9b4e942e1764204957ca57e0cded11dd6ae1dc5ff99447accc817"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "rg -n -C 8 ':id :critical-value-sard-(localized-residual-slice-derivative-zero-1|projected-chart-slice-projected-derivative-zero-1|projected-chart-inverse-slice-has-fderiv-at-1|projected-chart-indexed-residual-slice-zero-1)' holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardProjectedChartIndexedResidualSliceZeroProbe.lean ConstructionTargets/SardProjectedChartIndexedResidualSliceZero.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/SardProjectedChartIndexedResidualSliceZeroProbe.lean ConstructionTargets/SardProjectedChartIndexedResidualSliceZero.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedChartIndexedResidualSliceZero.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '16,47p' ConstructionTargets/SardProjectedChartIndexedResidualSliceZero.lean | sha256sum",
+      :exit 0,
+      :output
+      "71c15f3a8bd9b4e942e1764204957ca57e0cded11dd6ae1dc5ff99447accc817  -"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedChartIndexedResidualSliceZero.lean ConstructionTargets/SardProjectedChartIndexedResidualSliceZero.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "lake build ConstructionTargets.SardProjectedChartIndexedResidualSliceZero",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 193 items OK; {:done 184, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git -c user.name='Joe Corneli' -c user.email='holtzermann17@gmail.com' commit -m 'Add indexed projected chart slice zero derivative'",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "33ea737d896ee9096a420c5f0c981c7e5fad4e7f",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedChartIndexedResidualSliceZero.lean"
+     "ConstructionTargets/SardProjectedChartIndexedResidualSliceZero.md"],
+    :fixture
+    {:path "/tmp/SardProjectedChartIndexedResidualSliceZeroProbe.lean",
+     :sha256
+     "80d32197b96aac18f1194495047b02c4850fc9b53bc30e8563c3ac6d271d0b87"},
+    :declarations ["forall_hasFDerivAt_zero_residual_inverseSlice"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedChartIndexedResidualSliceZero.lean"
     "ConstructionTargets/SardProjectedChartIndexedResidualSliceZero.md"],
