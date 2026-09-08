@@ -34575,6 +34575,29 @@
       :output "1"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788911323997-15681-a6e950e4",
+     :commands
+     ["git show --stat --oneline 4dc8aa9dbf8ca0955e1211ce96b5a53a53af1b37"
+      "git diff-tree --no-commit-id --name-only -r 4dc8aa9dbf8ca0955e1211ce96b5a53a53af1b37"
+      "sha256sum /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean"
+      "cmp -s /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean <(git show 42104ed9dd3be10a47dcc972d7c168e44d938f30:ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean)"
+      "git show 4dc8aa9dbf8ca0955e1211ce96b5a53a53af1b37:ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean | sed -n '10,20p' | sha256sum"
+      "git show 4dc8aa9dbf8ca0955e1211ce96b5a53a53af1b37:ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean | sed -n '24,74p' | sha256sum"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.md"
+      "lake env lean /tmp/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpacesProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean"
+      "lake build ConstructionTargets.SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "readlink -f .lake/packages"
+      "git diff --check 4dc8aa9dbf8ca0955e1211ce96b5a53a53af1b37^ 4dc8aa9dbf8ca0955e1211ce96b5a53a53af1b37"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: repair commit has exact scope; fixture and both frozen statement hashes reproduce; the wrapper exposes both coordinate measurable spaces before Borel proofs, measures, and additive-Haar proofs, installs those exact instances, and invokes the generic pointwise nullity witness with the correct conclusion; compilation uses only standard axioms and no placeholders."},
     :commit "4dc8aa9dbf8ca0955e1211ce96b5a53a53af1b37",
     :commits
     ["42104ed9dd3be10a47dcc972d7c168e44d938f30"
@@ -34591,7 +34614,7 @@
     ["projectedCoordinates_explicit_measurableSpace_borel_bindings"
      "exists_open_rankLocus_image_zero_explicit_measurableSpaces"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.lean"
     "ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitMeasurableSpaces.md"],
@@ -34777,7 +34800,7 @@
       "5e424229d52db3e795dd9d3ace6f4710131622e497049a2edc1187cedfc923c3"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
