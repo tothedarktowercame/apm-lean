@@ -20607,8 +20607,102 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled closed-open target-fiber projected-slice theorem cannot be promoted with locally compact second-countable Hausdorff source, closed locus, open localization, global continuity, additive Haar measures, a continuous-linear product-coordinate equivalence, global target-fiber containment in indexed projected slices, lower-dimensional Sard induction, dimension inequality, nonzero differentiability order, pointwise slice smoothness, surjective residual projection, zero projected derivatives, complete localized image nullity, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Instantiate the closed locus, open chart, target-coordinate equivalence, and projected-slice containment from exact derivative-range rank-chart data, then aggregate the resulting localized exact-rank images.",
+    :gates
+    {:statement-hash :pass,
+     :placeholders :pass,
+     :fixture-hash :pass,
+     :warnings :pass,
+     :scope :pass,
+     :axioms :standard-only,
+     :worklist :pass,
+     :consumer-fixture :unchanged,
+     :declaration :pass,
+     :diff-check :pass,
+     :worktree :clean,
+     :compile :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_image_zero_of_closedOpen_targetFiber_projectedSlices"
+     "04a64b3d321adf745dfd0b341ffbf02f661f962a5b994dd67505854951fb07be"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardClosedOpenTargetFiberProjectedSliceImageNullityProbe.lean",
+      :exit 0,
+      :output
+      "998b0888022ca9e150191401fdabee69a70c9c5fe9e75189032259fd6154f57b  /tmp/SardClosedOpenTargetFiberProjectedSliceImageNullityProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.lean",
+      :exit 0,
+      :output
+      "'SardClosedOpenTargetFiberProjectedSliceImageNullityProbe.measure_image_zero_of_closedOpen_targetFiber_projectedSlices' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.lean ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '8,51p' ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "04a64b3d321adf745dfd0b341ffbf02f661f962a5b994dd67505854951fb07be  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 161 items OK; {:done 152, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.lean ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.md && git commit -m 'Add closed-open projected-slice nullity'",
+      :exit 0,
+      :output
+      "[master 6d2e7d33] Add closed-open projected-slice nullity; 2 files changed, 65 insertions(+); create mode 100644 ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.lean; create mode 100644 ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.md"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "6d2e7d331a4a30906e2211f2761ff7c30245cde3"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.lean ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.md",
+      :exit 0,
+      :output
+      "998b0888022ca9e150191401fdabee69a70c9c5fe9e75189032259fd6154f57b  ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.lean\n4e5d1bb55da08e7590eeadaf4de8f7106aa462c5f41744931842ba0e06723407  ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.md"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "6d2e7d331a4a30906e2211f2761ff7c30245cde3",
+    :changed-paths
+    ["ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.lean"
+     "ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.md"],
+    :file-hashes
+    {"ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.lean"
+     "998b0888022ca9e150191401fdabee69a70c9c5fe9e75189032259fd6154f57b",
+     "ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.md"
+     "4e5d1bb55da08e7590eeadaf4de8f7106aa462c5f41744931842ba0e06723407"},
+    :fixture
+    {:path
+     "/tmp/SardClosedOpenTargetFiberProjectedSliceImageNullityProbe.lean",
+     :sha256
+     "998b0888022ca9e150191401fdabee69a70c9c5fe9e75189032259fd6154f57b"},
+    :declarations
+    ["measure_image_zero_of_closedOpen_targetFiber_projectedSlices"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.lean"
     "ConstructionTargets/SardClosedOpenTargetFiberProjectedSliceImageNullity.md"],
