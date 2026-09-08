@@ -17834,8 +17834,83 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled compact-image measurability theorem cannot be promoted with compact source localization, continuity on the localization, Hausdorff Borel target, measurable image conclusion, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Compactly localize each projected rank-chart coordinate image, identify every vertical section with a lower-dimensional null slice image, and transfer product nullity back to the target.",
+    :gates
+    {:fixture-hash :pass,
+     :lean :pass,
+     :lake-build :pass,
+     :placeholder-scan :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :clean-worktree :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measurableSet_image_of_isCompact_continuousOn"
+     "daaf3056219e7f8429fc997a7533b40fe40afc7f2de0879fcd0da56f5795246f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardCompactImageMeasurableProbe.lean",
+      :exit 0,
+      :output
+      "daaf3056219e7f8429fc997a7533b40fe40afc7f2de0879fcd0da56f5795246f"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCompactImageMeasurable.lean",
+      :exit 0,
+      :output
+      "'SardCompactImageMeasurableProbe.measurableSet_image_of_isCompact_continuousOn' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd "lake build ConstructionTargets.SardCompactImageMeasurable",
+      :exit 0,
+      :output "Build completed successfully (1688 jobs)."}
+     {:cmd
+      "sha256sum ConstructionTargets/SardCompactImageMeasurable.lean ConstructionTargets/SardCompactImageMeasurable.md /tmp/SardCompactImageMeasurableProbe.lean",
+      :exit 0,
+      :output
+      "daaf3056219e7f8429fc997a7533b40fe40afc7f2de0879fcd0da56f5795246f lean; f0a223d5b2492b975fac2b63e375345401ecb95124221f1f5fd0e8f63bc0568f md; daaf3056219e7f8429fc997a7533b40fe40afc7f2de0879fcd0da56f5795246f fixture"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardCompactImageMeasurable.lean ConstructionTargets/SardCompactImageMeasurable.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 141 items OK; {:done 132, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "d8b923fa3989cfaa50a4f3cfa97fe14515c79d75",
+    :changed-paths
+    ["ConstructionTargets/SardCompactImageMeasurable.lean"
+     "ConstructionTargets/SardCompactImageMeasurable.md"],
+    :file-hashes
+    {"ConstructionTargets/SardCompactImageMeasurable.lean"
+     "daaf3056219e7f8429fc997a7533b40fe40afc7f2de0879fcd0da56f5795246f",
+     "ConstructionTargets/SardCompactImageMeasurable.md"
+     "f0a223d5b2492b975fac2b63e375345401ecb95124221f1f5fd0e8f63bc0568f"},
+    :fixture
+    {:path "/tmp/SardCompactImageMeasurableProbe.lean",
+     :sha256
+     "daaf3056219e7f8429fc997a7533b40fe40afc7f2de0879fcd0da56f5795246f"},
+    :declarations ["measurableSet_image_of_isCompact_continuousOn"],
+    :implementation
+    {:scope
+     ["ConstructionTargets/SardCompactImageMeasurable.lean"
+      "ConstructionTargets/SardCompactImageMeasurable.md"]},
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCompactImageMeasurable.lean"
     "ConstructionTargets/SardCompactImageMeasurable.md"],
