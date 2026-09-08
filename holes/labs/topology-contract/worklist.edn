@@ -24921,6 +24921,41 @@
    "The localized rank-at-most-index hypothesis now converts exactly to the base-range rank bound required by residual slice annihilation; only assembly of the banked chart and compact-nullity chain remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled localized projected-slice annihilation theorem cannot be promoted for arbitrary finite-dimensional real normed source spaces and arbitrary real normed ambient, projected, residual, and slice spaces, every ambient and base derivative, projected and residual coordinate, slice derivative, exact base rank index, compatible projected-coordinate dimension, localized ambient rank upper bound, projected derivative surjectivity, vanishing projected slice derivative, residual composition vanishing, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardLocalizedProjectedSliceAnnihilation.lean"
+    "ConstructionTargets/SardLocalizedProjectedSliceAnnihilation.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED PROJECTED-SLICE ANNIHILATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardLocalizedProjectedSliceAnnihilationProbe.lean",
+     :sha256
+     "f5b8f4feeb346d723d0123d5a4b8c930b79e20ea47226d06664b91cd0ec9178c"},
+    :declarations
+    ["residual_comp_slice_eq_zero_of_localized_rankUpper"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate localized projected-slice annihilation on the enriched smooth chart and assemble the banked compact fiber-nullity and exact-rank-piece aggregation chain."},
+   :representation
+   {:source
+    "Projected surjectivity and vanishing along a slice derivative together with an ambient rank-at-most-index hypothesis identified with the base derivative rank.",
+    :target
+    "Exact vanishing of every residual coordinate composed with the ambient derivative and slice derivative."},
+   :id :critical-value-sard-localized-projected-slice-annihilation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-localized-rank-upper-bound-1
+    :critical-value-sard-rank-upper-residual-slice-annihilation-1
+    :critical-value-sard-projected-smooth-local-rank-chart-surjectivity-1],
+   :current-residual
+   "Projected surjectivity and the localized ambient rank bound now yield exact residual derivative annihilation along every projected slice; only compact fiber-nullity and rank-piece aggregation assembly remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -24974,79 +25009,83 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Assemble the enriched projected chart, localized rank-upper conversion, residual slice annihilation, and banked compact-nullity chain into the rectangular local theorem.",
+     "Instantiate localized projected-slice annihilation on the enriched smooth chart and assemble the banked compact fiber-nullity and exact-rank-piece aggregation chain.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"finrank_range_le_baseRange_of_le_rankIndex"
-      "2a8767e120a62a6825536b0b6ea17ba10b943a7fd5145de68567dbf7348adaec"},
+     {"residual_comp_slice_eq_zero_of_localized_rankUpper"
+      "ea9fb89205351edbe6739de17b51271452d200ecae370e52f477ef0931fe4482"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled localized rank-upper conversion theorem cannot be promoted for arbitrary real modules, every ambient and base linear map, every natural rank index equal to the base derivative range dimension, every ambient rank-at-most-index hypothesis, conversion to an ambient rank bound by the base derivative range dimension, or standard-axiom profile.",
+      "Stop only if the compiled localized projected-slice annihilation theorem cannot be promoted for arbitrary finite-dimensional real normed source spaces and arbitrary real normed ambient, projected, residual, and slice spaces, every ambient and base derivative, projected and residual coordinate, slice derivative, exact base rank index, compatible projected-coordinate dimension, localized ambient rank upper bound, projected derivative surjectivity, vanishing projected slice derivative, residual composition vanishing, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardLocalizedRankUpperBound.lean"
-       "ConstructionTargets/SardLocalizedRankUpperBound.md"],
+      ["ConstructionTargets/SardLocalizedProjectedSliceAnnihilation.lean"
+       "ConstructionTargets/SardLocalizedProjectedSliceAnnihilation.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED RANK-UPPER BOUND CONVERSION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED PROJECTED-SLICE ANNIHILATION",
       :acceptance
       {:fixture
-       {:path "/tmp/SardLocalizedRankUpperBoundProbe.lean",
+       {:path "/tmp/SardLocalizedProjectedSliceAnnihilationProbe.lean",
         :sha256
-        "d4116728b7ba912ac6aa497f2408c07495939b949ef487652fcc83a4c13823e6"},
-       :declarations ["finrank_range_le_baseRange_of_le_rankIndex"],
+        "f5b8f4feeb346d723d0123d5a4b8c930b79e20ea47226d06664b91cd0ec9178c"},
+       :declarations
+       ["residual_comp_slice_eq_zero_of_localized_rankUpper"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Assemble the enriched projected chart, localized rank-upper conversion, residual slice annihilation, and banked compact-nullity chain into the rectangular local theorem."},
+       "Instantiate localized projected-slice annihilation on the enriched smooth chart and assemble the banked compact fiber-nullity and exact-rank-piece aggregation chain."},
       :representation
       {:source
-       "An ambient derivative rank bounded by a natural rank index together with exact identification of that index as the base derivative range dimension.",
+       "Projected surjectivity and vanishing along a slice derivative together with an ambient rank-at-most-index hypothesis identified with the base derivative rank.",
        :target
-       "The ambient derivative range dimension bounded directly by the base derivative range dimension."},
-      :id :critical-value-sard-localized-rank-upper-bound-1,
+       "Exact vanishing of every residual coordinate composed with the ambient derivative and slice derivative."},
+      :id
+      :critical-value-sard-localized-projected-slice-annihilation-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-derivative-rank-piece-local-upper-locus-1
-       :critical-value-sard-projected-smooth-local-rank-chart-surjectivity-1
-       :critical-value-sard-rank-upper-residual-slice-annihilation-1],
+      [:critical-value-sard-localized-rank-upper-bound-1
+       :critical-value-sard-rank-upper-residual-slice-annihilation-1
+       :critical-value-sard-projected-smooth-local-rank-chart-surjectivity-1],
       :current-residual
-      "The localized rank-at-most-index hypothesis now converts exactly to the base-range rank bound required by residual slice annihilation; only assembly of the banked chart and compact-nullity chain remains.",
+      "Projected surjectivity and the localized ambient rank bound now yield exact residual derivative annihilation along every projected slice; only compact fiber-nullity and rank-piece aggregation assembly remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The sole remaining pointwise obligation is converting membership in a localized rank-at-most-r locus into a bound by the base derivative's range dimension, using that the base derivative has exact rank r. A placeholder-free compiled fixture supplies exactly this equality rewrite. After promotion, the smooth projected chart, projected surjectivity, rank-upper residual annihilation, and downstream compact-nullity modules can be assembled.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines projected derivative surjectivity, the localized rank-index conversion, and rank-upper residual slice annihilation for continuous-linear derivatives. It concludes that every residual coordinate composed with the ambient derivative and projected slice derivative is exactly zero. The remaining work is the banked compact fiber-nullity and rank-piece aggregation assembly.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "rg -n -C 8 ':id :critical-value-sard-(projected-smooth-local-rank-chart-surjectivity-1|first-derivative-rank-piece-local-upper-locus-1|rank-upper-residual-slice-annihilation-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 8 ':id :critical-value-sard-(localized-rank-upper-bound-1|projected-smooth-local-rank-chart-surjectivity-1|rank-upper-residual-slice-annihilation-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
-      {:cmd "lake env lean /tmp/SardLocalizedRankUpperBoundProbe.lean",
-       :exit 0,
-       :output
-       "'SardLocalizedRankUpperBoundProbe.finrank_range_le_baseRange_of_le_rankIndex' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd "sha256sum /tmp/SardLocalizedRankUpperBoundProbe.lean",
-       :exit 0,
-       :output
-       "d4116728b7ba912ac6aa497f2408c07495939b949ef487652fcc83a4c13823e6  /tmp/SardLocalizedRankUpperBoundProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalizedRankUpperBoundProbe.lean",
+       "lake env lean /tmp/SardLocalizedProjectedSliceAnnihilationProbe.lean",
+       :exit 0,
+       :output
+       "'SardLocalizedProjectedSliceAnnihilationProbe.residual_comp_slice_eq_zero_of_localized_rankUpper' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "sha256sum /tmp/SardLocalizedProjectedSliceAnnihilationProbe.lean",
+       :exit 0,
+       :output
+       "f5b8f4feeb346d723d0123d5a4b8c930b79e20ea47226d06664b91cd0ec9178c  /tmp/SardLocalizedProjectedSliceAnnihilationProbe.lean"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalizedProjectedSliceAnnihilationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '10,17p' /tmp/SardLocalizedRankUpperBoundProbe.lean | sha256sum",
+       "sed -n '15,33p' /tmp/SardLocalizedProjectedSliceAnnihilationProbe.lean | sha256sum",
        :exit 0,
        :output
-       "2a8767e120a62a6825536b0b6ea17ba10b943a7fd5145de68567dbf7348adaec  -"}
+       "ea9fb89205351edbe6739de17b51271452d200ecae370e52f477ef0931fe4482  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 189 items OK; {:done 181, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 190 items OK; {:done 182, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -25061,12 +25100,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardLocalizedRankUpperBoundProbe.lean",
+     {:path "/tmp/SardLocalizedProjectedSliceAnnihilationProbe.lean",
       :sha256
-      "d4116728b7ba912ac6aa497f2408c07495939b949ef487652fcc83a4c13823e6"},
+      "f5b8f4feeb346d723d0123d5a4b8c930b79e20ea47226d06664b91cd0ec9178c"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -25204,7 +25243,8 @@
     :critical-value-sard-smooth-projected-chart-first-derivative-surjective-1
     :critical-value-sard-range-projection-derivative-surjective-on-smooth-chart-1
     :critical-value-sard-projected-smooth-local-rank-chart-surjectivity-1
-    :critical-value-sard-localized-rank-upper-bound-1],
+    :critical-value-sard-localized-rank-upper-bound-1
+    :critical-value-sard-localized-projected-slice-annihilation-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
