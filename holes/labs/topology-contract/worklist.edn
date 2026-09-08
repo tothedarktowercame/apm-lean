@@ -32283,6 +32283,43 @@
    "Indexed finite-order slice certificates imply compact projected-chart image nullity; instantiate them from local rank data and aggregate the compact chart cover.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the finite-order projected-slice certificates cannot be instantiated and combined with compact coordinate-fiber aggregation to prove nullity of a compact local rank-chart image, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderCompactLocalRankChartNullity.lean"
+    "ConstructionTargets/SardFiniteOrderCompactLocalRankChartNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER COMPACT LOCAL RANK-CHART NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderCompactLocalRankChartNullityProbe.lean",
+     :sha256
+     "22e4f876bcf9930392fe627306f14f6130136bb3763edb413cc968b38ff31184"},
+    :declarations
+    ["measure_image_zero_of_compact_finiteOrder_localRankChart"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use compact exhaustion and local chart aggregation to close the classical finite-order critical-nullity dimension step."},
+   :representation
+   {:source
+    "Finite-order projected local rank-chart data, lower-dimensional classical critical nullity, zero residual slice derivatives, a compact subset of the chart source, and compatible target product coordinates.",
+    :target
+    "Zero additive Haar measure of the compact local rank-chart image after composing slice induction with coordinate-fiber aggregation."},
+   :id
+   :critical-value-sard-finite-order-compact-local-rank-chart-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-projected-chart-slice-certificates-1
+    :critical-value-sard-finite-order-compact-projected-chart-nullity-1
+    :critical-value-sard-projected-chart-indexed-residual-slice-zero-1],
+   :current-residual
+   "Compact finite-order local rank-chart images are null; exhaust and aggregate the local rank pieces to prove the source-dimension step.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -32336,82 +32373,81 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate compact projected-chart nullity with the finite-order slice certificates, then aggregate the compact local rank-chart cover.",
+     "Exhaust each local rank piece by compact chart subsets, aggregate their null images, and close the classical finite-order source-dimension step.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"measure_image_zero_of_compact_projectedChart_of_sliceCertificates"
-      "ea40fa79bd18baf975c09ed18dd4d183695ea78627cd7cba904ce8f6e1d4bbe1"},
+     {"measure_image_zero_of_compact_finiteOrder_localRankChart"
+      "4de3f2c59ecdb55d820265d7681bcd668f0e478eb451769774372d04aa8ae422"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if nullity of every residual inverse-chart slice cannot be converted into nullity of a compact image contained in the projected chart source using the reviewed coordinate-fiber and product-measure theorems, or if the theorem requires nonstandard axioms.",
+      "Stop only if the finite-order projected-slice certificates cannot be instantiated and combined with compact coordinate-fiber aggregation to prove nullity of a compact local rank-chart image, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderCompactProjectedChartNullity.lean"
-       "ConstructionTargets/SardFiniteOrderCompactProjectedChartNullity.md"],
+      ["ConstructionTargets/SardFiniteOrderCompactLocalRankChartNullity.lean"
+       "ConstructionTargets/SardFiniteOrderCompactLocalRankChartNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER COMPACT PROJECTED-CHART NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER COMPACT LOCAL RANK-CHART NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderCompactProjectedChartNullityProbe.lean",
+        "/tmp/SardFiniteOrderCompactLocalRankChartNullityProbe.lean",
         :sha256
-        "5ccc279ffb5141af9f6cfd8dd46605a7fb4ccf2140b8ef42a0bfacb3408d58ab"},
+        "22e4f876bcf9930392fe627306f14f6130136bb3763edb413cc968b38ff31184"},
        :declarations
-       ["measure_image_zero_of_compact_projectedChart_of_sliceCertificates"],
+       ["measure_image_zero_of_compact_finiteOrder_localRankChart"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate the compact chart adapter with finite-order slice certificates and aggregate the local rank-chart cover."},
+       "Use compact exhaustion and local chart aggregation to close the classical finite-order critical-nullity dimension step."},
       :representation
       {:source
-       "A compact source set contained in a projected chart, a continuous target map, compatible target product coordinates, and zero residual-image measure for every fixed first-coordinate inverse-chart slice.",
+       "Finite-order projected local rank-chart data, lower-dimensional classical critical nullity, zero residual slice derivatives, a compact subset of the chart source, and compatible target product coordinates.",
        :target
-       "Zero additive Haar measure of the compact source set's image in the original target coordinates."},
+       "Zero additive Haar measure of the compact local rank-chart image after composing slice induction with coordinate-fiber aggregation."},
       :id
-      :critical-value-sard-finite-order-compact-projected-chart-nullity-1,
+      :critical-value-sard-finite-order-compact-local-rank-chart-nullity-1,
       :kind :reusable-theorem,
       :depends-on
       [:critical-value-sard-finite-order-projected-chart-slice-certificates-1
-       :critical-value-sard-compact-coordinate-fiber-image-nullity-1
-       :critical-value-sard-projected-chart-target-fiber-slice-containment-1
-       :critical-value-sard-continuous-linear-equiv-image-nullity-1],
+       :critical-value-sard-finite-order-compact-projected-chart-nullity-1
+       :critical-value-sard-projected-chart-indexed-residual-slice-zero-1],
       :current-residual
-      "Indexed finite-order slice certificates imply compact projected-chart image nullity; instantiate them from local rank data and aggregate the compact chart cover.",
+      "Compact finite-order local rank-chart images are null; exhaust and aggregate the local rank pieces to prove the source-dimension step.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines the indexed residual-slice nullity certificates with target-fiber containment, compact-image measurability, product-measure nullity, and continuous-linear coordinate transfer to prove nullity of one compact projected-chart image. The remaining task is to instantiate this adapter with the finite-order local rank-chart certificates and aggregate the compact chart cover.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture performs the complete compact local rank-chart composition: finite-order chart regularity and zero residual derivatives produce indexed lower-dimensional slice certificates, the residual coordinate identity aligns them with the target product coordinates, and compact coordinate-fiber aggregation proves nullity of the local image. The remaining work is compact exhaustion and aggregation across the local rank-chart cover in the analytic source-dimension step.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderCompactProjectedChartNullityProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderCompactLocalRankChartNullityProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderCompactProjectedChartNullityProbe.measure_image_zero_of_compact_projectedChart_of_sliceCertificates' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderCompactLocalRankChartNullityProbe.measure_image_zero_of_compact_finiteOrder_localRankChart' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderCompactProjectedChartNullityProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderCompactLocalRankChartNullityProbe.lean",
        :exit 0,
        :output
-       "5ccc279ffb5141af9f6cfd8dd46605a7fb4ccf2140b8ef42a0bfacb3408d58ab  /tmp/SardFiniteOrderCompactProjectedChartNullityProbe.lean"}
+       "22e4f876bcf9930392fe627306f14f6130136bb3763edb413cc968b38ff31184  /tmp/SardFiniteOrderCompactLocalRankChartNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderCompactProjectedChartNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderCompactLocalRankChartNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '9,38p' /tmp/SardFiniteOrderCompactProjectedChartNullityProbe.lean | sha256sum",
+       "sed -n '11,60p' /tmp/SardFiniteOrderCompactLocalRankChartNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "ea40fa79bd18baf975c09ed18dd4d183695ea78627cd7cba904ce8f6e1d4bbe1  -"}
+       "4de3f2c59ecdb55d820265d7681bcd668f0e478eb451769774372d04aa8ae422  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 244 items OK; {:done 236, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 245 items OK; {:done 237, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -32430,12 +32466,12 @@
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderCompactProjectedChartNullityProbe.lean",
+      "/tmp/SardFiniteOrderCompactLocalRankChartNullityProbe.lean",
       :sha256
-      "5ccc279ffb5141af9f6cfd8dd46605a7fb4ccf2140b8ef42a0bfacb3408d58ab"},
+      "22e4f876bcf9930392fe627306f14f6130136bb3763edb413cc968b38ff31184"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -32628,7 +32664,8 @@
     :critical-value-sard-finite-order-projected-slice-lower-dimension-nullity-1
     :critical-value-sard-finite-order-projected-slice-critical-nullity-1
     :critical-value-sard-finite-order-projected-chart-slice-certificates-1
-    :critical-value-sard-finite-order-compact-projected-chart-nullity-1],
+    :critical-value-sard-finite-order-compact-projected-chart-nullity-1
+    :critical-value-sard-finite-order-compact-local-rank-chart-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
