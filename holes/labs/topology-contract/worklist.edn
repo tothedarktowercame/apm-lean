@@ -21611,9 +21611,7 @@
       {:source
        "An open local neighborhood carrying an intersection equality, a product-valued open partial homeomorphism, and base-point membership in both the neighborhood and chart source.",
        :target
-       "An open refined neighborhood containing the base point, contained in the chart source, and preserving the local intersection equality.",
-       :direction
-       "intersect the open neighborhood with the chart source, preserving the base point and local intersection equality while obtaining containment in the chart source"},
+       "An open refined neighborhood containing the base point, contained in the chart source, and preserving the local intersection equality."},
       :id
       :critical-value-sard-open-chart-source-neighborhood-refinement-1,
       :kind :representation-comparison,
