@@ -53,8 +53,23 @@
              (not (:bounded-exception i)))
     (die (:id i) "reusable theorem lacks two consumers or bounded exception"))
   (when (= :representation-comparison (:kind i))
-    (doseq [k [:source-representation :target-representation :orientation]]
-      (when (str/blank? (str (get i k))) (die (:id i) "representation comparison lacks" k))))
+    ;; The row must name both representations and the orientation between
+    ;; them. This asked for them as :source-representation,
+    ;; :target-representation and :orientation -- names no row in this
+    ;; worklist has ever carried. All 158 rows with representation data write
+    ;; :representation {:source .. :target .. :direction ..}, so this branch
+    ;; never executed until 2026-09-08 07:24, when the campaign's first
+    ;; :representation-comparison row arrived correctly formed under the house
+    ;; convention and stopped the loop. Read the house form; the flat names
+    ;; still satisfy it, so a row written either way passes.
+    (doseq [[label paths]
+            [[:source-representation [[:representation :source]
+                                      [:source-representation]]]
+             [:target-representation [[:representation :target]
+                                      [:target-representation]]]
+             [:orientation [[:representation :direction] [:orientation]]]]]
+      (when-not (some #(not (str/blank? (str (get-in i %)))) paths)
+        (die (:id i) "representation comparison lacks" label))))
   (when (= :strategy-checkpoint (:kind i))
     (when-not (and (= :strategy (:phase i)) (map? (:checkpoint i)))
       (die (:id i) "strategy checkpoint lacks :phase :strategy or checkpoint policy")))
