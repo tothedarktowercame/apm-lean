@@ -26,16 +26,19 @@
 # and restarts. It is deliberately conservative: see REFUSALS below.
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT=/home/joe/code/apm-lean
+ROOT="${TOPOLOGY_ROOT:-/home/joe/code/apm-lean}"
 LEDGER="$HERE/worklist.edn"
 LOG="$HERE/runs/build-loop.log"
 SUPLOG="$HERE/runs/supervisor.log"
 AGENCY="${AGENCY_BASE:-http://127.0.0.1:7070}"
-SEND=/home/joe/code/futon3c/scripts/agency_send.py
+SEND="${TOPOLOGY_SEND:-/home/joe/code/futon3c/scripts/agency_send.py}"
 REPAIR_SEAT="${TOPOLOGY_REPAIR_SEAT:-}"
 MAX_REPAIRS="${TOPOLOGY_MAX_REPAIRS:-3}"
 REPAIR_TIMEOUT="${TOPOLOGY_REPAIR_TIMEOUT:-1800}"
 ESCALATE_TO="${TOPOLOGY_ESCALATE_TO:-claude-7}"
+MAX_ESCALATIONS="${TOPOLOGY_MAX_ESCALATIONS:-2}"
+ESCALATION_TIMEOUT="${TOPOLOGY_ESCALATION_TIMEOUT:-3600}"
+ESCALATION_POLL="${TOPOLOGY_ESCALATION_POLL:-60}"
 
 slog() { echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] supervisor: $*" | tee -a "$SUPLOG"; }
 
@@ -153,20 +156,38 @@ healthy() {
 }
 
 escalate() {
-  local reason="$1" note
+  local reason="$1" note out
   note="$(mktemp)"
-  { echo "topology-supervisor: GIVING UP after $MAX_REPAIRS repair attempts."
+  { echo "topology-supervisor: automated repair is exhausted after $MAX_REPAIRS attempts."
     echo "last stop: $reason"
-    echo "This needs a human or a more capable agent; automated repair did not"
-    echo "restore the loop. The loop is NOT running."
+    echo "This needs a human or a more capable agent. The loop is stopped."
+    echo
+    echo "You do NOT need to restart it. This supervisor waits up to"
+    echo "${ESCALATION_TIMEOUT}s and restarts the loop itself as soon as the ledger"
+    echo "validates and the worktree is clean. COMMIT your fix -- an uncommitted one"
+    echo "leaves the tree dirty, which is one of the two things being waited on."
     echo; echo "== validator =="; bb "$HERE/worklist_check.bb" "$LEDGER" 2>&1 | tail -10
     echo; echo "== last 40 log lines =="; tail -40 "$LOG"; } > "$note"
-  timeout 120 python3 "$SEND" --from topology-supervisor --to "$ESCALATE_TO" \
-    --kind whistle --type request < "$note" >> "$SUPLOG" 2>&1 || slog "escalation failed"
+  # A bell, not a whistle. A whistle blocks until the recipient ANSWERS, and
+  # this supervisor never reads the answer -- it judges recovery by healthy().
+  # On 2026-09-08 the escalation was dispatched at 07:24:48 and logged
+  # "escalation failed" at 07:26:49: 121 seconds, which is the timeout below,
+  # not a delivery failure. The request had arrived and was being worked on.
+  # Any escalation worth making takes longer to answer than a delivery timeout
+  # should ever wait, so ask for delivery and judge the repair by the world.
+  out="$(timeout 120 python3 "$SEND" --from topology-supervisor --to "$ESCALATE_TO" \
+           --kind bell --type request --mode work < "$note" 2>&1 | tail -1)"
   rm -f "$note"
+  printf '%s\n' "$out" >> "$SUPLOG"
+  case "$out" in
+    *'"accepted":true'*) slog "escalation delivered to $ESCALATE_TO"; return 0 ;;
+    *) slog "escalation NOT delivered to $ESCALATE_TO: $(printf '%s' "$out" | head -c 200)"
+       return 1 ;;
+  esac
 }
 
 repairs=0
+escalations=0
 while true; do
   slog "starting loop (repairs used $repairs/$MAX_REPAIRS)"
   env MAX_ITER="${MAX_ITER:-1000}" DIRTY_WAIT_SECONDS="${DIRTY_WAIT_SECONDS:-900}" \
@@ -183,9 +204,32 @@ while true; do
   fi
 
   if [ "$repairs" -ge "$MAX_REPAIRS" ]; then
-    slog "repair budget exhausted; escalating to $ESCALATE_TO"
-    escalate "$reason"
-    exit "$rc"
+    # Escalating used to exit here, so a correct repair still left the loop
+    # dead: on 2026-09-08 the ledger rule was diagnosed, fixed and committed by
+    # 07:33 and the loop was still down at 07:41, because the only thing that
+    # restarts it had already gone. The escalation asks for a repair; nothing
+    # was left to notice when the repair arrived.
+    if [ "$escalations" -ge "$MAX_ESCALATIONS" ]; then
+      slog "escalated $escalations time(s) and still stopping; leaving stopped for a human"
+      exit "$rc"
+    fi
+    escalations=$((escalations+1))
+    slog "repair budget exhausted; escalating to $ESCALATE_TO ($escalations/$MAX_ESCALATIONS)"
+    escalate "$reason" || true
+    slog "waiting up to ${ESCALATION_TIMEOUT}s for the escalated repair to land"
+    waited=0
+    while [ "$waited" -lt "$ESCALATION_TIMEOUT" ]; do
+      sleep "$ESCALATION_POLL"; waited=$((waited+ESCALATION_POLL))
+      if healthy; then slog "healthy after ${waited}s; restarting loop"; break; fi
+    done
+    if ! healthy; then
+      slog "still unhealthy after ${waited}s; leaving stopped for a human"
+      exit "$rc"
+    fi
+    # Repairs stay exhausted on purpose: a stop after a human has been called
+    # in belongs to them too, so the next one re-escalates instead of quietly
+    # spending another automated attempt.
+    continue
   fi
   repairs=$((repairs+1))
 
