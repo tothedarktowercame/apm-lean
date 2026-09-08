@@ -13933,8 +13933,86 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled finite assembly theorem cannot be promoted with its exact flatThrough predicate, order-one refined locus, Icc 2 k higher-locus family, arbitrary target measure, complete localized-image conclusion, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 1, :after 1, :delta 0},
+    :residual
+    "Supply Taylor-flat image nullity and the first-derivative/rank-normal-form locus nullity; higher refined loci are already discharged by source-dimension induction.",
+    :gates
+    {:lean :pass,
+     :fixture-byte-identical true,
+     :placeholder-scan :pass,
+     :worklist
+     "topology-worklist: 118 items OK; {:done 109, :open 1, :blocked 2, :superseded 6}",
+     :diff-check :pass,
+     :worktree-clean true,
+     :package-authority "/home/joe/code/apm-lean/.lake/packages"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean"
+     "9dbd155d467e917470f85844bb7c338eabd8587bdc3693f8c9eabb1324b2f340",
+     "ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.md"
+     "178b4c216c34a310290d2cefee4399e2f6be09b1beda180e12e8f4867dc54ad8",
+     "problems/t93A04/lean/Main.lean"
+     "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea",
+     "ConstructionTargets/SardFirstNonzeroJetInductiveLocusNullity.lean"
+     "1ed84dfe166967dc5ab096888e8ff022115490dd4504c19329f74c9d1d88ea5d",
+     "ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean"
+     "bd9a237bb40d4cf2fbedb737bc0bd36edf37fadf57592d696836bfdebdcf4dce"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFirstNonzeroJetFiniteAssemblyProbe.lean; git status --porcelain=v1",
+      :exit 0,
+      :output
+      "9dbd155d467e917470f85844bb7c338eabd8587bdc3693f8c9eabb1324b2f340  /tmp/SardFirstNonzeroJetFiniteAssemblyProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean",
+      :exit 0,
+      :output
+      "'SardFirstNonzeroJetFiniteAssemblyProbe.image_null_of_flat_first_and_higher_firstNonzeroJetLoci' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/SardFirstNonzeroJetFiniteAssemblyProbe.lean ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.md",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 118 items OK; {:done 109, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstNonzeroJetInductiveLocusNullity.lean ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean",
+      :exit 0}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "git add ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.md && git commit -m 'Compile first-nonzero-jet finite assembly'",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "9a73a2d81da123e084d595aec93a138f44f298fe",
+    :changed-paths
+    ["ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean"
+     "ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.md"],
+    :fixture
+    {:path "/tmp/SardFirstNonzeroJetFiniteAssemblyProbe.lean",
+     :sha256
+     "9dbd155d467e917470f85844bb7c338eabd8587bdc3693f8c9eabb1324b2f340",
+     :verified true},
+    :declarations
+    ["SardFirstNonzeroJetFiniteAssemblyProbe.image_null_of_flat_first_and_higher_firstNonzeroJetLoci"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean"
     "ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.md"],
