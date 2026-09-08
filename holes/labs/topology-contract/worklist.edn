@@ -14176,6 +14176,69 @@
       "git add ConstructionTargets/SardFlatThroughTaylorNullity.lean ConstructionTargets/SardFlatThroughTaylorNullity.md && git commit -m 'Compile flat-through Taylor nullity'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788836518829-14447-f36f58ff",
+     :commands
+     [{:cmd
+       "git diff-tree --no-commit-id --name-only -r 7330a1d59cf9eea5d2f134708bb3ce364e11e8d6",
+       :exit 0,
+       :output
+       "ConstructionTargets/SardFlatThroughTaylorNullity.lean; ConstructionTargets/SardFlatThroughTaylorNullity.md"}
+      {:cmd
+       "git show 7330a1d59cf9eea5d2f134708bb3ce364e11e8d6:ConstructionTargets/SardFlatThroughTaylorNullity.lean | sha256sum",
+       :exit 0,
+       :output
+       "dfc5446bcfea6e07c6a445435b835e8f1bbb556b07cfd35896d155aa417d6812"}
+      {:cmd
+       "git show 7330a1d59cf9eea5d2f134708bb3ce364e11e8d6:ConstructionTargets/SardFlatThroughTaylorNullity.md | sha256sum",
+       :exit 0,
+       :output
+       "7fd71aa65bcb397ed1bb4b8c935344c6740e7f581d98576a3a0a2b79f0e55900"}
+      {:cmd
+       "sha256sum /tmp/SardFlatThroughTaylorNullityProbe.lean && cmp /tmp/SardFlatThroughTaylorNullityProbe.lean <(git show 7330a1d59cf9eea5d2f134708bb3ce364e11e8d6:ConstructionTargets/SardFlatThroughTaylorNullity.lean)",
+       :exit 0,
+       :output
+       "dfc5446bcfea6e07c6a445435b835e8f1bbb556b07cfd35896d155aa417d6812"}
+      {:cmd "readlink -f .lake/packages",
+       :exit 0,
+       :output "/home/joe/code/apm-lean/.lake/packages"}
+      {:cmd
+       "lake env lean /tmp/SardFlatThroughTaylorNullityProbe.lean",
+       :exit 0,
+       :output
+       "'SardFlatThroughTaylorNullityProbe.flatThrough_image_volume_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd
+       "lake build ConstructionTargets.SardFlatThroughTaylorNullity",
+       :exit 0,
+       :output "Build completed successfully (8272 jobs)."}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFlatThroughTaylorNullity.lean ConstructionTargets/SardFlatThroughTaylorNullity.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git merge-base --is-ancestor c1fae85147d128b31f617c01cbc4e0785bb5f3d8 7330a1d59cf9eea5d2f134708bb3ce364e11e8d6 && git merge-base --is-ancestor 27fb3c66e9466a559ef1ea945db6bda9acfe097f 7330a1d59cf9eea5d2f134708bb3ce364e11e8d6 && git merge-base --is-ancestor 9a73a2d81da123e084d595aec93a138f44f298fe 7330a1d59cf9eea5d2f134708bb3ce364e11e8d6",
+       :exit 0}
+      {:cmd
+       "sha256sum ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean ConstructionTargets/SardHigherJetLocusDecomposition.lean ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean problems/t93A04/lean/Main.lean",
+       :exit 0,
+       :output
+       "75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c; 1ae41fc90c43e105705cf75885ca2142ce291b0dcdde2eb301f6cbeaaac100f2; 9dbd155d467e917470f85844bb7c338eabd8587bdc3693f8c9eabb1324b2f340; 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+      {:cmd
+       "rg -c '^theorem ' problems/t93A04/lean/Main.lean && rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output "1; 1"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 119 items OK; {:done 110, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd "git diff --check && git status --porcelain=v1",
+       :exit 0,
+       :output ""}],
+     :finding
+     "PASS. Commit 7330a1d59cf9eea5d2f134708bb3ce364e11e8d6 changes exactly the two recorded scope paths. The fixture is byte-identical to the committed Lean source; all frozen hashes reproduce and dependency commits are ancestors. The adapter preserves the quantitative theorem's exact compactness, closed-ball containment, ProperSpace, finite-dimensional, positive-surplus exponent, smoothness, geometric-constant, and scale hypotheses. Membership in flatThrough f K k is unpacked in the correct direction: ha.2 supplies iteratedFDeriv vanishing for every order i with 1 ≤ i ≤ k, exactly as smooth_flat_locus_image_volume_eq_zero requires. Its conclusion is precisely zero volume of the exact flatThrough image, with no claim that localized compactness or boundedness follows automatically. Compilation is warning-free, axioms are standard-only with zero sorryAx, scoped placeholder count is zero, and the frozen consumer remains one theorem with one sorry."},
     :commit "7330a1d59cf9eea5d2f134708bb3ce364e11e8d6",
     :changed-paths
     ["ConstructionTargets/SardFlatThroughTaylorNullity.lean"
@@ -14189,7 +14252,7 @@
     ["SardFlatThroughTaylorNullityProbe.flatThrough_image_volume_eq_zero"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFlatThroughTaylorNullity.lean"
     "ConstructionTargets/SardFlatThroughTaylorNullity.md"],
@@ -14354,7 +14417,7 @@
       "dfc5446bcfea6e07c6a445435b835e8f1bbb556b07cfd35896d155aa417d6812"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
