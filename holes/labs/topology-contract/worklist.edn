@@ -29314,6 +29314,25 @@
      {:cmd "git commit -m 'Add exact-rank closed-open aggregation'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788886751498-15293-61427f2f",
+     :commands
+     ["git show 1425dd5194a0b41d4b8c5165fd7ad3702790ef26"
+      "cmp fixture scoped-file"
+      "sha256sum fixture recorded-commit-file scoped-files"
+      "lake env lean ConstructionTargets/SardFirstDerivativeRankPieceClosedOpenAggregation.lean"
+      "lake build ConstructionTargets.SardFirstDerivativeRankPieceClosedOpenAggregation"
+      "sed -n '10,67p' recorded-commit-file | sha256sum"
+      "rg placeholder-and-unsafe-patterns"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o sorry problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer codex-1 differs from author codex-6; commit changes exactly the two declared scope files; fixture and recorded/scoped Lean hashes equal fb3d219f168f354f7e633d11ce91c6ce12d11c024515147806559731f112a767; frozen statement hash equals 5267899302fc93a385d5c9b3d26d086f6e08c42d0bb58e7ee71a34c2510381eb; placeholder count is zero; direct Lean and 8364-job Lake build pass with only propext, Classical.choice, and Quot.sound; ledger validates 221 items; consumer hash and one-placeholder count match; each exact-rank point receives a chosen open null neighborhood, exact rank is weakened only to the enclosing rank-upper predicate for measure_mono_null, and second countability aggregates over the original order-one exact-rank piece; worktree is clean."},
     :commit "1425dd5194a0b41d4b8c5165fd7ad3702790ef26",
     :changed-paths
     ["ConstructionTargets/SardFirstDerivativeRankPieceClosedOpenAggregation.lean"
@@ -29326,7 +29345,7 @@
     :declarations ["rankPiece_image_zero_of_pointwise_closedOpen"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFirstDerivativeRankPieceClosedOpenAggregation.lean"
     "ConstructionTargets/SardFirstDerivativeRankPieceClosedOpenAggregation.md"],
@@ -29506,7 +29525,7 @@
       "fb3d219f168f354f7e633d11ce91c6ce12d11c024515147806559731f112a767"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
