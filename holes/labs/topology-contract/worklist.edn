@@ -27258,6 +27258,26 @@
       :exit 0,
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788878081068-15130-47b83071",
+     :commands
+     ["git show --format='%H%n%an <%ae>%n%P' --no-renames --name-status 35835efcce91506b6ee95ec8d44dc0d9052d035f"
+      "git show 35835efcce91506b6ee95ec8d44dc0d9052d035f:ConstructionTargets/SardProjectedChartOrthogonalResidualNullityData.lean"
+      "cmp committed-lean /tmp/SardProjectedChartOrthogonalResidualNullityDataProbe.lean"
+      "sha256sum committed-lean /tmp/SardProjectedChartOrthogonalResidualNullityDataProbe.lean"
+      "sed -n '15,36p' committed-lean | sha256sum"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' committed-lean committed-md"
+      "lake env lean committed-lean"
+      "lake build ConstructionTargets.SardProjectedChartOrthogonalResidualNullityData"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check 35835efc^ 35835efc"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: recorded commit 35835efcce91506b6ee95ec8d44dc0d9052d035f was authored by Joe Corneli and changes exactly the two declared scope files. The committed Lean file matches the fixture byte-for-byte at SHA-256 001eb55583d3279429a9c9135f6312fe6fbeb61eb3bdf0c115a71fe4f971036f; the frozen statement hash recomputes to c8d2b25225f4f172c0f6b46b3b72a910e99b3c8eb0b6f0a683fe6826531264e1; no placeholders, axioms, opaque declarations, unsafe declarations, or warnings were found. Orientation and representation boundaries are correct: each inverse slice G → Rᗮ receives pointwise C1 regularity and a zero derivative after composition with the identity continuous linear map on the same Rᗮ; the theorem neither changes codomain nor substitutes an unrelated projection. The target-fiber membership condition is preserved in both conjuncts. Lean reports only propext, Classical.choice, and Quot.sound; the target build succeeds, canonical package authority is correct, the worklist validates 205 items, the consumer remains frozen at 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one placeholder, commit diff check passes, and the worktree is clean."},
     :commit "35835efcce91506b6ee95ec8d44dc0d9052d035f",
     :changed-paths
     ["ConstructionTargets/SardProjectedChartOrthogonalResidualNullityData.lean"
@@ -27270,7 +27290,7 @@
     :declarations ["orthogonalResidual_inverseSlice_nullity_data"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedChartOrthogonalResidualNullityData.lean"
     "ConstructionTargets/SardProjectedChartOrthogonalResidualNullityData.md"],
@@ -27455,7 +27475,7 @@
       "001eb55583d3279429a9c9135f6312fe6fbeb61eb3bdf0c115a71fe4f971036f"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
