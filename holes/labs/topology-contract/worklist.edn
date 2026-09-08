@@ -29906,6 +29906,25 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788889065318-15337-2efc9fe5",
+     :commands
+     ["git show 3baeadcec000a4427b17941d8beb24c4c785ecfd"
+      "cmp fixture recorded-commit-file"
+      "sha256sum fixture recorded-commit-file scoped-files"
+      "lake env lean ConstructionTargets/SardHigherFirstNonzeroJetLociInduction.lean"
+      "lake build ConstructionTargets.SardHigherFirstNonzeroJetLociInduction"
+      "sed -n '10,34p' recorded-commit-file | sha256sum"
+      "rg placeholder-and-unsafe-patterns"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o sorry problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: reviewer codex-1 differs from author codex-6; commit changes exactly the two declared scope files; fixture and recorded/scoped Lean hashes equal 8791f717ff86fbe7782f9c2f71170e21e30d67b7fb79f9336f0088581df4121e; frozen statement hash equals 0ab5fbcd94425ea2d95fa25ae1cbafac191a9a57b187bae2f2df726003f8c7a0; placeholder count is zero; direct Lean and 8281-job Lake build pass with only propext, Classical.choice, and Quot.sound; ledger validates 226 items; consumer hash and one-placeholder count match; each j in Icc 2 k is correctly represented as i+1, giving i at least one and the required upper smoothness bounds, while localized criticality and the smaller-source induction hypothesis pass unchanged to the single-locus theorem; worktree is clean."},
     :commit "3baeadcec000a4427b17941d8beb24c4c785ecfd",
     :changed-paths
     ["ConstructionTargets/SardHigherFirstNonzeroJetLociInduction.lean"
@@ -29916,7 +29935,7 @@
      "8791f717ff86fbe7782f9c2f71170e21e30d67b7fb79f9336f0088581df4121e"},
     :commit-author "Joe Corneli"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardHigherFirstNonzeroJetLociInduction.lean"
     "ConstructionTargets/SardHigherFirstNonzeroJetLociInduction.md"],
@@ -30095,7 +30114,7 @@
       "8791f717ff86fbe7782f9c2f71170e21e30d67b7fb79f9336f0088581df4121e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
