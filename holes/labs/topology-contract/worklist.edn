@@ -30920,8 +30920,73 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if a source-finrank-indexed critical-image property cannot be closed from proofs at every dimension assuming all strictly smaller dimensions, or if the induction principle requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate the predicate with finite-order local critical-image nullity and prove its dimension step.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"all_dimensions_of_strong_induction"
+     "81dc93f42507dde09a125cbfd17461fbc258fcc56911d83f8b1e4aefc7a3ae6d"},
+    :axioms [],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFinrankStrongInductionClosureProbe.lean ConstructionTargets/SardFinrankStrongInductionClosure.lean",
+      :exit 0,
+      :output
+      "bf082dbfe8cd75a6666addef349c2e7f0b3e60432371ed8e83ad7377152b5edb  /tmp/SardFinrankStrongInductionClosureProbe.lean\nbf082dbfe8cd75a6666addef349c2e7f0b3e60432371ed8e83ad7377152b5edb  ConstructionTargets/SardFinrankStrongInductionClosure.lean"}
+     {:cmd
+      "cmp -s /tmp/SardFinrankStrongInductionClosureProbe.lean ConstructionTargets/SardFinrankStrongInductionClosure.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFinrankStrongInductionClosure.lean",
+      :exit 0,
+      :output
+      "'SardFinrankStrongInductionClosureProbe.all_dimensions_of_strong_induction' does not depend on any axioms"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFinrankStrongInductionClosure.lean ConstructionTargets/SardFinrankStrongInductionClosure.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '5,12p' ConstructionTargets/SardFinrankStrongInductionClosure.lean | sha256sum",
+      :exit 0,
+      :output
+      "81dc93f42507dde09a125cbfd17461fbc258fcc56911d83f8b1e4aefc7a3ae6d  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 235 items OK; {:done 226, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output "?? scripts/__pycache__/",
+      :note
+      "Unrelated concurrent cache outside row scope; not included in commit."}],
+    :commit "d6a694f1674eea3387848b48bf9a7eecb21cf2c5",
+    :changed-paths
+    ["ConstructionTargets/SardFinrankStrongInductionClosure.lean"
+     "ConstructionTargets/SardFinrankStrongInductionClosure.md"],
+    :fixture
+    {:path "/tmp/SardFinrankStrongInductionClosureProbe.lean",
+     :sha256
+     "bf082dbfe8cd75a6666addef349c2e7f0b3e60432371ed8e83ad7377152b5edb"},
+    :commit-author "Joe Corneli"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFinrankStrongInductionClosure.lean"
     "ConstructionTargets/SardFinrankStrongInductionClosure.md"],
