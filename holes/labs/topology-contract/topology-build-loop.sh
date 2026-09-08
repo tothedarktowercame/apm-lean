@@ -136,7 +136,15 @@ dispatch_and_wait() {
 apply_job_result() {
   local row="$1" token="$2" receipt transition
   receipt="$HERE/runs/jobs/$LAST_JOB.receipt.edn"
-  "$HERE/extract-receipt.sh" "$LAST_RESULT" "$token" "$receipt" || die "job $LAST_JOB emitted no unique nonce-bound receipt"
+  if ! "$HERE/extract-receipt.sh" "$LAST_RESULT" "$token" "$receipt"; then
+    # A completed job result is immutable. Retaining its in-flight pointer
+    # makes every supervisor restart reclaim the same unusable result, so the
+    # open row can never be dispatched again. Keep the result file as evidence,
+    # clear only the pointer, and let the supervisor redispatch with a new nonce.
+    bb "$HERE/inflight.bb" clear "$INFLIGHT" \
+      || die "could not clear unusable in-flight job $LAST_JOB"
+    die "job $LAST_JOB emitted no unique nonce-bound receipt"
+  fi
   transition="$(bb "$HERE/build_step.bb" apply-result "$LEDGER" "$row" "$receipt" 2>&1)" || die "invalid receipt from $LAST_JOB: $transition"
   log "$transition"
   git -C "$ROOT" add "$LEDGER"

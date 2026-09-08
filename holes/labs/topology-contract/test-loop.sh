@@ -79,5 +79,8 @@ extracted="$(mktemp)"
 grep -q '^\{:outcome :revise' "$extracted"
 rm -f "$extracted"
 
+grep -A12 '^apply_job_result()' "$HERE/topology-build-loop.sh" \
+  | grep -q 'clear "$INFLIGHT"'
+
 grep -q 'queued|delivering|running|accepted' "$HERE/topology-build-loop.sh"
 echo "topology-loop tests: PASS"
