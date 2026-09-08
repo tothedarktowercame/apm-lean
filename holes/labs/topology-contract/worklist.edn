@@ -19396,8 +19396,82 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled compact projected-slice image-nullity theorem cannot be promoted with compact localization, continuity, additive Haar measures, a continuous-linear product-coordinate equivalence and exact coordinate identity, independently indexed projected-slice containment, lower-dimensional Sard induction, dimension inequality, nonzero differentiability order, pointwise slice smoothness, surjective residual projection, zero projected derivatives, zero original-target image measure, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Instantiate the coordinate identity and independently indexed projected-slice family from exact projected implicit-function/rank-chart data, then aggregate compact exhaustions over every exact-rank piece.",
+    :gates
+    {:fixture-hash :pass,
+     :compile :pass,
+     :placeholder-scan :pass,
+     :statement-hash :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :scope :pass,
+     :commit :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_image_zero_of_compact_projectedSlices"
+     "b4548cab13a7ffa63c5c0042e57f42cd80506231614e4a39c2446215c69f9934"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardCompactProjectedSliceImageNullityProbe.lean",
+      :exit 0,
+      :output
+      "acf94668012257c452b6ec2afe95131db27b70141a9d98b1aa931cadcad9f697  /tmp/SardCompactProjectedSliceImageNullityProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCompactProjectedSliceImageNullity.lean",
+      :exit 0,
+      :output
+      "'SardCompactProjectedSliceImageNullityProbe.measure_image_zero_of_compact_projectedSlices' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardCompactProjectedSliceImageNullity.lean ConstructionTargets/SardCompactProjectedSliceImageNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum ConstructionTargets/SardCompactProjectedSliceImageNullity.lean ConstructionTargets/SardCompactProjectedSliceImageNullity.md",
+      :exit 0,
+      :output
+      "8c580fdd3ce3e975c3cab016493c4567110961ffe1ee5b52ef523fd7113796be  ConstructionTargets/SardCompactProjectedSliceImageNullity.lean\n83b44e6532999a51b0341718f9c2e2f854a69958d8f55b62559d357077c52f7e  ConstructionTargets/SardCompactProjectedSliceImageNullity.md"}
+     {:cmd
+      "sed -n '11,46p' ConstructionTargets/SardCompactProjectedSliceImageNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "b4548cab13a7ffa63c5c0042e57f42cd80506231614e4a39c2446215c69f9934  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 152 items OK; {:done 143, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git commit -m 'add compact projected slice image nullity'",
+      :exit 0,
+      :output
+      "[master ec5ea24d] add compact projected slice image nullity\n 2 files changed, 61 insertions(+)\n create mode 100644 ConstructionTargets/SardCompactProjectedSliceImageNullity.lean\n create mode 100644 ConstructionTargets/SardCompactProjectedSliceImageNullity.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "ec5ea24d292d45bd0dbf055646157447ccc377d6",
+    :changed-paths
+    ["ConstructionTargets/SardCompactProjectedSliceImageNullity.lean"
+     "ConstructionTargets/SardCompactProjectedSliceImageNullity.md"],
+    :fixture
+    {:path "/tmp/SardCompactProjectedSliceImageNullityProbe.lean",
+     :sha256
+     "acf94668012257c452b6ec2afe95131db27b70141a9d98b1aa931cadcad9f697"},
+    :declarations ["measure_image_zero_of_compact_projectedSlices"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCompactProjectedSliceImageNullity.lean"
     "ConstructionTargets/SardCompactProjectedSliceImageNullity.md"],
