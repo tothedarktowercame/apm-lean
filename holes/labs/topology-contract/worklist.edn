@@ -19661,8 +19661,85 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled compact target-fiber projected-slice theorem cannot be promoted with compact localization, continuity, additive Haar measures, a continuous-linear product-coordinate equivalence, containment of every residual-coordinate target-image fiber in an indexed projected slice image, lower-dimensional Sard induction, dimension inequality, nonzero differentiability order, pointwise slice smoothness, surjective residual projection, zero projected derivatives, zero original-target image measure, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Instantiate the product-coordinate equivalence and target-fiber projected-slice containment from exact derivative-range rank-chart data, then aggregate compact exhaustions over each exact-rank piece.",
+    :gates
+    {:fixture-hash :pass,
+     :compile :pass,
+     :placeholder-scan :pass,
+     :statement-hash :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :scope :pass,
+     :commit :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_image_zero_of_compact_targetFiber_projectedSlices"
+     "795dba20759b620e81260370ea8b87032ae7b8ef78528e721a971df17b7346a3"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardCompactTargetFiberProjectedSliceImageNullityProbe.lean",
+      :exit 0,
+      :output
+      "9a3797f0af74ef2be11eb9b660e45e5437ee77b3e546f8bf71eebc55138bb174  /tmp/SardCompactTargetFiberProjectedSliceImageNullityProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean",
+      :exit 0,
+      :output
+      "'SardCompactTargetFiberProjectedSliceImageNullityProbe.measure_image_zero_of_compact_targetFiber_projectedSlices' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.md",
+      :exit 0,
+      :output
+      "b29d2458450fa86ee50f3c088f76383be910845e32d9aa6c898d7456876eaed1  ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean\n6ad6ab7708f7b3a01f72035bf534cca31cb676fe45c7272c0b177fe6ab4a666d  ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.md"}
+     {:cmd
+      "sed -n '9,37p' ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "795dba20759b620e81260370ea8b87032ae7b8ef78528e721a971df17b7346a3  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 154 items OK; {:done 145, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'add compact target fiber projected slice nullity'",
+      :exit 0,
+      :output
+      "[master 855d987b] add compact target fiber projected slice nullity\n 2 files changed, 62 insertions(+)\n create mode 100644 ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean\n create mode 100644 ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "855d987be04cb8ffe74853edb698c6bbbb3a7155",
+    :changed-paths
+    ["ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean"
+     "ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.md"],
+    :fixture
+    {:path
+     "/tmp/SardCompactTargetFiberProjectedSliceImageNullityProbe.lean",
+     :sha256
+     "9a3797f0af74ef2be11eb9b660e45e5437ee77b3e546f8bf71eebc55138bb174"},
+    :declarations
+    ["measure_image_zero_of_compact_targetFiber_projectedSlices"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.lean"
     "ConstructionTargets/SardCompactTargetFiberProjectedSliceImageNullity.md"],
