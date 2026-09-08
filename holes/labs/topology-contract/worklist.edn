@@ -18969,6 +18969,39 @@
    "Derivative-range and orthogonal-residual target coordinates now have an explicit continuous-linear equivalence; rank-chart instantiation, compact fiber nullity, target transfer, and compact aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled compact coordinate-fiber theorem cannot be promoted with compact localization, continuity of the target map, additive Haar measures on target and coordinate factors, a continuous-linear product coordinate equivalence, null second-coordinate images on every fixed-first-coordinate source fiber, zero original-target image measure, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCompactCoordinateFiberImageNullity.lean"
+    "ConstructionTargets/SardCompactCoordinateFiberImageNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT COORDINATE-FIBER IMAGE NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardCompactCoordinateFiberImageNullityProbe.lean",
+     :sha256
+     "6749b2717ae1ed4dd7cd0ba917d874af0ad4cc1bc5bdb9f421702b47d31e3658"},
+    :declarations ["measure_image_zero_of_compact_coordinate_fibers"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate the compact coordinate-fiber theorem with derivative-range orthogonal coordinates, prove each residual fiber image null using the projected inverse-chart slice theorem, and aggregate compact localizations over every exact-rank piece."},
+   :representation
+   {:source
+    "A compact source localization, a continuous map into a Haar-measured real normed target, a continuous-linear equivalence to product coordinates, and null second-coordinate images on all fixed-first-coordinate source fibers.",
+    :target "Zero target measure of the complete localized image."},
+   :id :critical-value-sard-compact-coordinate-fiber-image-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-target-orthogonal-coordinate-equiv-1
+    :critical-value-sard-compact-product-image-fiber-nullity-1
+    :critical-value-sard-continuous-linear-equiv-image-nullity-1],
+   :current-residual
+   "Compact localized images are now null from null residual images on every fixed range-coordinate fiber; projected derivative-range coordinate instantiation, inverse-slice fiber nullity, and compact aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -19022,87 +19055,84 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate orthogonal target coordinates at each derivative range, prove compact coordinate-image nullity from lower-dimensional residual fibers, transfer it to the original target, and aggregate compact localizations over every exact-rank piece.",
+     "Instantiate the compact coordinate-fiber theorem with derivative-range orthogonal coordinates, prove each residual fiber image null using the projected inverse-chart slice theorem, and aggregate compact localizations over every exact-rank piece.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"targetOrthogonalCoordinates_apply"
-      "9f202f1243e114c031cc36ae064585d647f72bf072e6c46c17934af5c772a7c9"},
+     {"measure_image_zero_of_compact_coordinate_fibers"
+      "397f427e4e7b33260efcf41169b18ff2ac663c7fc81ecf2eb7bce119611145bc"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled target-coordinate construction cannot be promoted with an arbitrary submodule of a finite-dimensional real inner-product space, continuous-linear equivalence to the submodule/orthogonal-complement product, the exact paired-projection evaluation formula, or standard-axiom profile.",
+      "Stop only if the compiled compact coordinate-fiber theorem cannot be promoted with compact localization, continuity of the target map, additive Haar measures on target and coordinate factors, a continuous-linear product coordinate equivalence, null second-coordinate images on every fixed-first-coordinate source fiber, zero original-target image measure, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean"
-       "ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.md"],
+      ["ConstructionTargets/SardCompactCoordinateFiberImageNullity.lean"
+       "ConstructionTargets/SardCompactCoordinateFiberImageNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / TARGET ORTHOGONAL COORDINATE EQUIVALENCE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT COORDINATE-FIBER IMAGE NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardTargetOrthogonalCoordinateEquivProbe.lean",
+       {:path "/tmp/SardCompactCoordinateFiberImageNullityProbe.lean",
         :sha256
-        "9224eb7acfd47e5a8fa22a4934fd9cd49ba2eb83e0efc392b004936412ae7c93"},
+        "6749b2717ae1ed4dd7cd0ba917d874af0ad4cc1bc5bdb9f421702b47d31e3658"},
        :declarations
-       ["targetOrthogonalCoordinates"
-        "targetOrthogonalCoordinates_apply"],
+       ["measure_image_zero_of_compact_coordinate_fibers"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate orthogonal target coordinates at each derivative range, prove compact coordinate-image nullity from lower-dimensional residual fibers, transfer it to the original target, and aggregate compact localizations over every exact-rank piece."},
+       "Instantiate the compact coordinate-fiber theorem with derivative-range orthogonal coordinates, prove each residual fiber image null using the projected inverse-chart slice theorem, and aggregate compact localizations over every exact-rank piece."},
       :representation
       {:source
-       "A submodule of a finite-dimensional real inner-product space.",
-       :target
-       "A continuous linear equivalence to the product of the submodule and its orthogonal complement, evaluating as the pair of orthogonal projections."},
-      :id :critical-value-sard-target-orthogonal-coordinate-equiv-1,
+       "A compact source localization, a continuous map into a Haar-measured real normed target, a continuous-linear equivalence to product coordinates, and null second-coordinate images on all fixed-first-coordinate source fibers.",
+       :target "Zero target measure of the complete localized image."},
+      :id
+      :critical-value-sard-compact-coordinate-fiber-image-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-continuous-linear-equiv-image-nullity-1
-       :critical-value-sard-first-derivative-rank-piece-projected-defining-data-1],
+      [:critical-value-sard-target-orthogonal-coordinate-equiv-1
+       :critical-value-sard-compact-product-image-fiber-nullity-1
+       :critical-value-sard-continuous-linear-equiv-image-nullity-1],
       :current-residual
-      "Derivative-range and orthogonal-residual target coordinates now have an explicit continuous-linear equivalence; rank-chart instantiation, compact fiber nullity, target transfer, and compact aggregation remain.",
+      "Compact localized images are now null from null residual images on every fixed range-coordinate fiber; projected derivative-range coordinate instantiation, inverse-slice fiber nullity, and compact aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The continuous-linear Haar nullity transfer is compiled, and the remaining target-coordinate map is now isolated as a genuine geometric construction. A placeholder-free fixture constructs a continuous linear equivalence from a finite-dimensional real inner-product space to the product of any submodule and its orthogonal complement. Its evaluation formula is exactly the pair of orthogonal projections needed for derivative-range/residual coordinates. Instantiating the submodule with the derivative range, applying compact product-image nullity, and aggregating compact localizations remain downstream.",
+     "The rectangular theorem is not refuted. The banked compact fiber-nullity and continuous-linear Haar transport theorems now assemble at a consumer-facing boundary. A placeholder-free fixture proves that the image of a compact localization under a continuous target map is null whenever, after any continuous-linear product coordinate equivalence, every fixed-first-coordinate source fiber has null second-coordinate image. This combines compact-image measurability, Fubini fiber aggregation, and transfer back to the original target. Instantiating the equivalence with derivative-range orthogonal coordinates and proving the fiber hypotheses from projected inverse-chart slices remain downstream.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "rg -n \"orthogonal.*Equiv|equiv.*orthogonal|prod.*orthogonal|orthogonal.*prod|IsCompl.*equiv|equivProd\" .lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace .lake/packages/mathlib/Mathlib/LinearAlgebra -g '*.lean' | head -180",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/SardTargetOrthogonalCoordinateEquivProbe.lean",
+       "lake env lean /tmp/SardCompactCoordinateFiberImageNullityProbe.lean",
        :exit 0,
        :output
-       "'SardTargetOrthogonalCoordinateEquivProbe.targetOrthogonalCoordinates_apply' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardCompactCoordinateFiberImageNullityProbe.measure_image_zero_of_compact_coordinate_fibers' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardTargetOrthogonalCoordinateEquivProbe.lean",
+       "sha256sum /tmp/SardCompactCoordinateFiberImageNullityProbe.lean",
        :exit 0,
        :output
-       "9224eb7acfd47e5a8fa22a4934fd9cd49ba2eb83e0efc392b004936412ae7c93"}
+       "6749b2717ae1ed4dd7cd0ba917d874af0ad4cc1bc5bdb9f421702b47d31e3658"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardTargetOrthogonalCoordinateEquivProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactCoordinateFiberImageNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '12,21p' /tmp/SardTargetOrthogonalCoordinateEquivProbe.lean | sha256sum",
+       "sed -n '15,31p' /tmp/SardCompactCoordinateFiberImageNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "9f202f1243e114c031cc36ae064585d647f72bf072e6c46c17934af5c772a7c9"}
+       "397f427e4e7b33260efcf41169b18ff2ac663c7fc81ecf2eb7bce119611145bc"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 147 items OK; {:done 139, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 148 items OK; {:done 140, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardContinuousLinearEquivImageNullity.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardTargetOrthogonalCoordinateEquiv.lean ConstructionTargets/SardCompactProductImageFiberNullity.lean ConstructionTargets/SardContinuousLinearEquivImageNullity.lean",
        :exit 0,
        :output
-       "Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; continuous-linear image nullity 4283516a67487f23b34172f6ef781e44d2b6c207912eaae8853fcb58775867b0"}
+       "Main 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; target orthogonal coordinates 8a7b819b0b67ed173483692c2262e410b36a9e432b923f01a9faebabb556c3fc; compact product fiber nullity f7f53b669c23726f470e2e22be96ca6bd1f64614cc26f7e33055024685b6ed78; continuous-linear image nullity 4283516a67487f23b34172f6ef781e44d2b6c207912eaae8853fcb58775867b0"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -19113,12 +19143,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardTargetOrthogonalCoordinateEquivProbe.lean",
+     {:path "/tmp/SardCompactCoordinateFiberImageNullityProbe.lean",
       :sha256
-      "9224eb7acfd47e5a8fa22a4934fd9cd49ba2eb83e0efc392b004936412ae7c93"},
+      "6749b2717ae1ed4dd7cd0ba917d874af0ad4cc1bc5bdb9f421702b47d31e3658"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -19214,7 +19244,8 @@
     :critical-value-sard-equivalence-image-nullity-transfer-1
     :critical-value-sard-continuous-add-equiv-quasi-measure-preserving-1
     :critical-value-sard-continuous-linear-equiv-image-nullity-1
-    :critical-value-sard-target-orthogonal-coordinate-equiv-1],
+    :critical-value-sard-target-orthogonal-coordinate-equiv-1
+    :critical-value-sard-compact-coordinate-fiber-image-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
