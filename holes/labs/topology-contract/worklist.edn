@@ -17110,6 +17110,50 @@
       :output "1"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788844718646-14569-6965acd1",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat a71aab02558f66f3b2213be85aeeab17ea59acc7; git diff-tree --no-commit-id --name-only -r a71aab02558f66f3b2213be85aeeab17ea59acc7",
+       :exit 0,
+       :output
+       "Author Joe Corneli; exact scope: ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean and ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.md."}
+      {:cmd
+       "git show a71aab02558f66f3b2213be85aeeab17ea59acc7:ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean | sha256sum; sha256sum /tmp/SardLowerDimensionalProjectedSliceImageNullityProbe.lean; cmp <(git show a71aab02558f66f3b2213be85aeeab17ea59acc7:ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean) /tmp/SardLowerDimensionalProjectedSliceImageNullityProbe.lean",
+       :exit 0,
+       :output
+       "Committed source and fixture are byte-identical at 86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31."}
+      {:cmd
+       "readlink -f .lake/packages; lake env lean /tmp/SardLowerDimensionalProjectedSliceImageNullityProbe.lean; lake build ConstructionTargets.SardLowerDimensionalProjectedSliceImageNullity",
+       :exit 0,
+       :output
+       "Canonical package authority /home/joe/code/apm-lean/.lake/packages; declaration depends on [propext, Classical.choice, Quot.sound]; build completed successfully (8276 jobs), with no warning from the reviewed module."}
+      {:cmd
+       "git show a71aab02558f66f3b2213be85aeeab17ea59acc7:ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show a71aab02558f66f3b2213be85aeeab17ea59acc7:ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show a71aab02558f66f3b2213be85aeeab17ea59acc7:ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.md | sha256sum; sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+       :exit 0,
+       :output
+       "Documentation hash fbd541ac87b330728c6a44c3c1dd60a92d46cba95cfdcb71af26779245b540a3; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; theorem count 1; sorry count 1."}
+      {:cmd
+       "git merge-base --is-ancestor 91d00f9bc515c287255c9ce57c1a09404b387088 a71aab02558f66f3b2213be85aeeab17ea59acc7; git merge-base --is-ancestor 563aebd8166dd750d154f4fc2a0866ed5366ce8a a71aab02558f66f3b2213be85aeeab17ea59acc7",
+       :exit 0,
+       :output "Both recorded dependencies are ancestors."}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check; git status --porcelain=v1",
+       :exit 0,
+       :output
+       "topology-worklist: 136 items OK; {:done 127, :done-unreviewed 1, :blocked 2, :superseded 6}; diff clean; working tree clean."}],
+     :finding
+     "PASS. The theorem matches the stated induction adapter. For every z in s, pointwise ContDiffAt at nonzero order supplies the exact fderiv witness for q; the zero derivative of P ∘ q and surjectivity of P then make fderiv q z nonsurjective through the reviewed projected-slice theorem. Extensionality therefore identifies s intersected with q's critical locus with all of s, and rewriting by that equality makes the supplied lower-source-dimension induction hypothesis yield measure zero for q '' s. The dimension inequality, nonzero smoothness order, pointwise regularity, nontrivial projected codomain, and whole-slice conclusion are all explicit; the theorem does not manufacture the induction hypothesis. Exact scope and fixture hash reproduce, axioms are standard-only, placeholders are zero, and the frozen consumer retains one theorem and one sorry."},
     :commit "a71aab02558f66f3b2213be85aeeab17ea59acc7",
     :changed-paths
     ["ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean"
@@ -17131,7 +17175,7 @@
       "ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.md"]},
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.lean"
     "ConstructionTargets/SardLowerDimensionalProjectedSliceImageNullity.md"],
@@ -17301,7 +17345,7 @@
       "86ebe5e68052257e03d75ab913533e85ed7185ef07182b391718ec1dd55fdd31"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
