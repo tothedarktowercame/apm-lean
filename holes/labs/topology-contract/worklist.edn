@@ -22072,8 +22072,70 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled projected-chart inverse-slice composition theorem cannot be promoted for arbitrary real normed source, target, slice, and residual spaces, every open product partial homeomorphism, every differentiability order, smoothness of the inverse slice and ambient map at the corresponding points, passage through every continuous-linear residual target coordinate, preservation of pointwise smoothness, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove the concrete projected chart inverse is sufficiently smooth at every point of each fixed-first-coordinate target slice, and prove the residual projection derivative vanishes on the localized rank-upper locus.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"contDiffAt_residual_comp_inverseChartSlice"
+     "193d8768954d2fafad1d2c2320b8ac86c46a1a7b4dcd3322a9ea03c577a1c54a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardProjectedChartInverseSliceCompositionContDiffProbe.lean",
+      :exit 0,
+      :output
+      "c93a550aa284982294aa0e3c460da9bd87de01af22ab1bb1220dc54b3a247a2a  /tmp/SardProjectedChartInverseSliceCompositionContDiffProbe.lean"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean /tmp/SardProjectedChartInverseSliceCompositionContDiffProbe.lean",
+      :exit 0,
+      :output
+      "c93a550aa284982294aa0e3c460da9bd87de01af22ab1bb1220dc54b3a247a2a  ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean\nc93a550aa284982294aa0e3c460da9bd87de01af22ab1bb1220dc54b3a247a2a  /tmp/SardProjectedChartInverseSliceCompositionContDiffProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean",
+      :exit 0,
+      :output
+      "'SardProjectedChartInverseSliceCompositionContDiffProbe.contDiffAt_residual_comp_inverseChartSlice' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '14,20p' ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean | sha256sum",
+      :exit 0,
+      :output
+      "193d8768954d2fafad1d2c2320b8ac86c46a1a7b4dcd3322a9ea03c577a1c54a  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 171 items OK; {:done 162, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add projected chart inverse slice regularity'",
+      :exit 0,
+      :output
+      "[master 3cb32d87] Add projected chart inverse slice regularity\n2 files changed, 33 insertions(+)\ncreate mode 100644 ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean\ncreate mode 100644 ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "3cb32d87",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean"
+     "ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.md"],
+    :fixture
+    {:path
+     "/tmp/SardProjectedChartInverseSliceCompositionContDiffProbe.lean",
+     :sha256
+     "c93a550aa284982294aa0e3c460da9bd87de01af22ab1bb1220dc54b3a247a2a"},
+    :declarations ["contDiffAt_residual_comp_inverseChartSlice"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.lean"
     "ConstructionTargets/SardProjectedChartInverseSliceCompositionContDiff.md"],
