@@ -33612,8 +33612,78 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the inherited measurable spaces on the derivative range and orthogonal residual cannot simultaneously support compatible BorelSpace instances, additive-Haar measures, and residual nontriviality, or if the theorem requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Destructure the compatible inherited-coordinate Borel and additive-Haar packet in the finite-order positive-rank pointwise nullity composition; rank zero remains assigned to the flat/Taylor branch.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_projected_inherited_borel_addHaar_data"
+     "6f5774c0ec2201c6e3193c1922c11a06796cee664752de1868fd1b94021b7024"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFiniteOrderProjectedInheritedMeasurePackageProbe.lean",
+      :exit 0,
+      :output
+      "242905748600bd90fe5581b976028bc1459c907f89ebc0d5944f9d5b776ae8f8  /tmp/SardFiniteOrderProjectedInheritedMeasurePackageProbe.lean"}
+     {:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "diff -u /tmp/SardFiniteOrderProjectedInheritedMeasurePackageProbe.lean ConstructionTargets/SardFiniteOrderProjectedInheritedMeasurePackage.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFiniteOrderProjectedInheritedMeasurePackage.lean",
+      :exit 0,
+      :output
+      "'SardFiniteOrderProjectedInheritedMeasurePackageProbe.exists_projected_inherited_borel_addHaar_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderProjectedInheritedMeasurePackage.lean ConstructionTargets/SardFiniteOrderProjectedInheritedMeasurePackage.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '10,28p' ConstructionTargets/SardFiniteOrderProjectedInheritedMeasurePackage.lean | sha256sum",
+      :exit 0,
+      :output
+      "6f5774c0ec2201c6e3193c1922c11a06796cee664752de1868fd1b94021b7024  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 257 items OK; {:done 248, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output "?? scripts/__pycache__/",
+      :note "Unrelated concurrent cache outside row scope."}],
+    :commit "b450060b194eedac5fd61412ce1834df63170009",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteOrderProjectedInheritedMeasurePackage.lean"
+     "ConstructionTargets/SardFiniteOrderProjectedInheritedMeasurePackage.md"],
+    :fixture
+    {:path
+     "/tmp/SardFiniteOrderProjectedInheritedMeasurePackageProbe.lean",
+     :sha256
+     "242905748600bd90fe5581b976028bc1459c907f89ebc0d5944f9d5b776ae8f8"},
+    :declarations ["exists_projected_inherited_borel_addHaar_data"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteOrderProjectedInheritedMeasurePackage.lean"
     "ConstructionTargets/SardFiniteOrderProjectedInheritedMeasurePackage.md"],
