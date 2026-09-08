@@ -20325,8 +20325,99 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled closed-open compact-exhaustion theorem cannot be promoted for arbitrary locally compact second-countable Hausdorff spaces, every closed subset and open localization, an ambient natural-number-indexed compact family, exact union equality with their intersection, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Instantiate the closed locus with the derivative rank-at-most set and the open locus with each projected chart neighborhood, prove every compact localized image null from target-coordinate fibers and inverse slices, then aggregate exact-rank pieces.",
+    :gates
+    {:statement-hash :pass,
+     :placeholders :pass,
+     :fixture-hash :pass,
+     :warnings :pass,
+     :scope :pass,
+     :axioms :standard-only,
+     :worklist :pass,
+     :consumer-fixture :unchanged,
+     :declaration :pass,
+     :diff-check :pass,
+     :worktree :clean,
+     :compile :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_compact_cover_inter_of_isClosed_isOpen"
+     "57fd364ae4d2b6567df20484606d09a501f975d2f11832cd18cf1978f4afbf8f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/SardClosedOpenCompactExhaustionProbe.lean",
+      :exit 0,
+      :output
+      "9e6b625c01d71fcbe5292cc8b70e1f877bce96e76b68990e692bb4e28d010064  /tmp/SardClosedOpenCompactExhaustionProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardClosedOpenCompactExhaustion.lean",
+      :exit 0,
+      :output
+      "'SardClosedOpenCompactExhaustionProbe.exists_compact_cover_inter_of_isClosed_isOpen' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardClosedOpenCompactExhaustion.lean ConstructionTargets/SardClosedOpenCompactExhaustion.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '8,26p' ConstructionTargets/SardClosedOpenCompactExhaustion.lean | sha256sum",
+      :exit 0,
+      :output
+      "57fd364ae4d2b6567df20484606d09a501f975d2f11832cd18cf1978f4afbf8f  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 159 items OK; {:done 150, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardClosedOpenCompactExhaustion.lean ConstructionTargets/SardClosedOpenCompactExhaustion.md && git commit -m 'Add closed-open compact exhaustion'",
+      :exit 0,
+      :output
+      "[master 34db0bc9] Add closed-open compact exhaustion; 2 files changed, 38 insertions(+); create mode 100644 ConstructionTargets/SardClosedOpenCompactExhaustion.lean; create mode 100644 ConstructionTargets/SardClosedOpenCompactExhaustion.md"}
+     {:cmd "git rev-parse HEAD",
+      :exit 0,
+      :output "34db0bc977a50b4b58b611d7391486c37aef5363"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardClosedOpenCompactExhaustion.lean ConstructionTargets/SardClosedOpenCompactExhaustion.md",
+      :exit 0,
+      :output
+      "9e6b625c01d71fcbe5292cc8b70e1f877bce96e76b68990e692bb4e28d010064  ConstructionTargets/SardClosedOpenCompactExhaustion.lean\ne57dd870671848aca1d5289ffb773db2d74c6146237a9872602eb20199534301  ConstructionTargets/SardClosedOpenCompactExhaustion.md"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "34db0bc977a50b4b58b611d7391486c37aef5363",
+    :changed-paths
+    ["ConstructionTargets/SardClosedOpenCompactExhaustion.lean"
+     "ConstructionTargets/SardClosedOpenCompactExhaustion.md"],
+    :file-hashes
+    {"ConstructionTargets/SardClosedOpenCompactExhaustion.lean"
+     "9e6b625c01d71fcbe5292cc8b70e1f877bce96e76b68990e692bb4e28d010064",
+     "ConstructionTargets/SardClosedOpenCompactExhaustion.md"
+     "e57dd870671848aca1d5289ffb773db2d74c6146237a9872602eb20199534301"},
+    :fixture
+    {:path "/tmp/SardClosedOpenCompactExhaustionProbe.lean",
+     :sha256
+     "9e6b625c01d71fcbe5292cc8b70e1f877bce96e76b68990e692bb4e28d010064"},
+    :declarations ["exists_compact_cover_inter_of_isClosed_isOpen"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardClosedOpenCompactExhaustion.lean"
     "ConstructionTargets/SardClosedOpenCompactExhaustion.md"],
