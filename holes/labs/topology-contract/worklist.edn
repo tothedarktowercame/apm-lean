@@ -24316,8 +24316,84 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled smooth projected-chart first-derivative surjectivity theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism continuously differentiable in both directions, every source point, every differentiable function exactly equal to the chart first coordinate, surjectivity of its Frechet derivative, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:scope-before 0,
+     :scope-after 0,
+     :scope-delta 0,
+     :consumer-before 1,
+     :consumer-after 1,
+     :consumer-delta 0},
+    :residual
+    "Instantiate the smooth-chart theorem with the derivative-range projection coordinate at every localized rank-upper point, then discharge the localized ambient rank upper bound.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"range_eq_top_of_eq_fst_smooth_chart"
+     "953b0d5227997bdd5cfd31791c9e16a5c19e46f2dcede359e7a68e4ad62e4b48"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "rg -n -C 8 ':id :critical-value-sard-(projected-chart-derivative-surjective-1|projected-smooth-local-rank-chart-1|range-projection-coordinate-derivative-1|smooth-projected-chart-first-derivative-surjective-1)' holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardSmoothProjectedChartFirstDerivativeSurjectiveProbe.lean ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/SardSmoothProjectedChartFirstDerivativeSurjectiveProbe.lean ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '12,36p' ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.lean | sha256sum",
+      :exit 0,
+      :output
+      "953b0d5227997bdd5cfd31791c9e16a5c19e46f2dcede359e7a68e4ad62e4b48  -"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.lean ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "lake build ConstructionTargets.SardSmoothProjectedChartFirstDerivativeSurjective",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 187 items OK; {:done 178, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git -c user.name='Joe Corneli' -c user.email='holtzermann17@gmail.com' commit -m 'Add smooth projected chart derivative surjectivity'",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "223735faa2da20acae54ac1914b3cfc26304ccf7",
+    :changed-paths
+    ["ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.lean"
+     "ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.md"],
+    :fixture
+    {:path
+     "/tmp/SardSmoothProjectedChartFirstDerivativeSurjectiveProbe.lean",
+     :sha256
+     "c9a1859c51b59cb93d2bb42ab0e606d3d577f2d9d42f01316bf601ddb67501fb"},
+    :declarations ["range_eq_top_of_eq_fst_smooth_chart"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.lean"
     "ConstructionTargets/SardSmoothProjectedChartFirstDerivativeSurjective.md"],
