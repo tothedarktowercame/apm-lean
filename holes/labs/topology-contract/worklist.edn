@@ -29611,6 +29611,8 @@
    "The finite-jet branches assemble to localized image nullity; concrete Taylor-flat and higher-locus induction instantiation from rectangular hypotheses remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :review-finding
+   "Deterministic fixture-identity defect: the recorded acceptance fixture /tmp/SardVolumeNullityToAddHaarProbe.lean has SHA-256 b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928, but the Lean file in recorded commit 17ccf2f461f3f701bd6be47ff79e6e2da5109442 has SHA-256 b761d84f35035813547f76c093a54855b7965d62c09f4b4eec244906847d1ea4 and cmp returns 1; the commit adds a two-line doc comment absent from the frozen fixture. The theorem statement hash, standard axioms, Lean/build, ledger, consumer, placeholder, and cleanliness gates pass, but exact fixture identity required by acceptance does not.",
    :stop-condition
    "Stop only if volume-nullity cannot be transferred to an arbitrary additive Haar measure for every finite-dimensional real inner-product Borel space and every subset, or if the resulting theorem requires nonstandard axioms.",
    :evidence
@@ -29665,6 +29667,12 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :fail,
+     :seat "codex-1",
+     :job "invoke-1788888040829-15316-e7664594",
+     :finding
+     "Deterministic fixture-identity defect: the recorded acceptance fixture /tmp/SardVolumeNullityToAddHaarProbe.lean has SHA-256 b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928, but the Lean file in recorded commit 17ccf2f461f3f701bd6be47ff79e6e2da5109442 has SHA-256 b761d84f35035813547f76c093a54855b7965d62c09f4b4eec244906847d1ea4 and cmp returns 1; the commit adds a two-line doc comment absent from the frozen fixture. The theorem statement hash, standard axioms, Lean/build, ledger, consumer, placeholder, and cleanliness gates pass, but exact fixture identity required by acceptance does not."},
     :commit "17ccf2f461f3f701bd6be47ff79e6e2da5109442",
     :changed-paths
     ["ConstructionTargets/SardVolumeNullityToAddHaar.lean"
@@ -29675,7 +29683,7 @@
      "b92e05dd5a64132d42afddab89942f88544c26eef6a621d00c6567ac547e6928"},
     :commit-author "Joe Corneli"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SardVolumeNullityToAddHaar.lean"
     "ConstructionTargets/SardVolumeNullityToAddHaar.md"],
