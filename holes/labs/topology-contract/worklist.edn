@@ -26336,6 +26336,40 @@
    "All locus branches and their final localized-image aggregation are compiled; only the concrete compact projected-chart certificate constructor remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled canonical measure package cannot be promoted for every finite-dimensional real normed space, its Borel measurable structure, existence of an additive Haar measure for that structure, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteDimensionalBorelAddHaarPackage.lean"
+    "ConstructionTargets/SardFiniteDimensionalBorelAddHaarPackage.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-DIMENSIONAL BOREL ADDITIVE-HAAR PACKAGE",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFiniteDimensionalBorelAddHaarPackageProbe.lean",
+     :sha256
+     "a54540f585d2d3111b6c5783ac0f1ba3aa932593d6cbcf0326b7df2339110dcf"},
+    :declarations ["exists_borel_addHaarMeasure"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Install the canonical Borel/additive-Haar packages on derivative-range and orthogonal-complement coordinates, then instantiate the concrete compact projected-chart certificate."},
+   :representation
+   {:source
+    "An arbitrary finite-dimensional real normed coordinate space, including derivative ranges, projected kernels, and orthogonal complements.",
+    :target
+    "Its Borel measurable structure together with a canonical additive Haar measure and the corresponding IsAddHaarMeasure certificate."},
+   :id
+   :critical-value-sard-finite-dimensional-borel-add-haar-package-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-compact-projected-chart-nullity-of-residual-data-1
+    :critical-value-sard-target-orthogonal-coordinate-equiv-1],
+   :current-residual
+   "Canonical Borel and additive-Haar data are available for every finite-dimensional coordinate space; local installation and concrete compact-chart nullity instantiation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -26389,85 +26423,82 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Construct indexed compact projected-chart certificates from localized derivative-range chart data; the flat, higher-jet, order-one, and final localized-image aggregations are compiled.",
+     "Install the canonical Borel/additive-Haar packages on derivative-range and orthogonal-complement coordinates, then instantiate the concrete compact projected-chart certificate.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"image_null_of_flat_higher_and_compactChart_certificates"
-      "9f77bf93c330a4fdc37c848952bba606f5a495c7165c3f07919ff504f77166f4"},
+     {"exists_borel_addHaarMeasure"
+      "70bea8b002b131b0194e9d048924a1212384c41a3c5aba0a54b6b89b3be52712"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled localized image-nullity assembly theorem cannot be promoted for arbitrary finite-dimensional complete real inner-product source spaces, finite-dimensional real inner-product target spaces, every localized source set and derivative order, Taylor-flat image nullity, higher first-nonzero-jet image nullity, critical containment of the order-one locus, indexed compact projected-chart nullity certificates for every exact derivative rank, nullity of the complete localized image, or standard-axiom profile.",
+      "Stop only if the compiled canonical measure package cannot be promoted for every finite-dimensional real normed space, its Borel measurable structure, existence of an additive Haar measure for that structure, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.lean"
-       "ConstructionTargets/SardLocalizedImageNullityOfCompactChartCertificates.md"],
+      ["ConstructionTargets/SardFiniteDimensionalBorelAddHaarPackage.lean"
+       "ConstructionTargets/SardFiniteDimensionalBorelAddHaarPackage.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED IMAGE NULLITY FROM COMPACT-CHART CERTIFICATES",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-DIMENSIONAL BOREL ADDITIVE-HAAR PACKAGE",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
+        "/tmp/SardFiniteDimensionalBorelAddHaarPackageProbe.lean",
         :sha256
-        "e6d4f7fe98524c32c2198aec2f1d5bf3028f8db73e44ddef84ab8e84481ca645"},
-       :declarations
-       ["image_null_of_flat_higher_and_compactChart_certificates"],
+        "a54540f585d2d3111b6c5783ac0f1ba3aa932593d6cbcf0326b7df2339110dcf"},
+       :declarations ["exists_borel_addHaarMeasure"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Construct indexed compact projected-chart certificates from localized derivative-range chart data; the flat, higher-jet, order-one, and final localized-image aggregations are compiled."},
+       "Install the canonical Borel/additive-Haar packages on derivative-range and orthogonal-complement coordinates, then instantiate the concrete compact projected-chart certificate."},
       :representation
       {:source
-       "Taylor-flat and higher first-nonzero-jet nullity together with indexed compact projected-chart certificates for every exact-rank component of the order-one locus.",
+       "An arbitrary finite-dimensional real normed coordinate space, including derivative ranges, projected kernels, and orthogonal complements.",
        :target
-       "Zero target measure of the complete localized source image."},
+       "Its Borel measurable structure together with a canonical additive Haar measure and the corresponding IsAddHaarMeasure certificate."},
       :id
-      :critical-value-sard-localized-image-nullity-of-compact-chart-certificates-1,
+      :critical-value-sard-finite-dimensional-borel-add-haar-package-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-derivative-locus-compact-projected-chart-aggregation-1
-       :critical-value-sard-first-nonzero-jet-finite-assembly-1
-       :critical-value-sard-localized-flat-through-taylor-nullity-1
-       :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1],
+      [:critical-value-sard-compact-projected-chart-nullity-of-residual-data-1
+       :critical-value-sard-target-orthogonal-coordinate-equiv-1],
       :current-residual
-      "All locus branches and their final localized-image aggregation are compiled; only the concrete compact projected-chart certificate constructor remains.",
+      "Canonical Borel and additive-Haar data are available for every finite-dimensional coordinate space; local installation and concrete compact-chart nullity instantiation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines the banked Taylor-flat branch, higher first-nonzero-jet branch, and the newly aggregated order-one compact-chart branch, proving nullity of the complete localized image. The remaining bounded analytic input is construction of the indexed compact projected-chart certificates from the concrete derivative-range charts.",
+     "The rectangular theorem is not refuted. Concrete specialization of compact projected-chart nullity requires Borel measurable structures and additive Haar measures on derivative-range and orthogonal-complement coordinate spaces. A placeholder-free compiled fixture supplies this canonical package for every finite-dimensional real normed space, so these structures can be installed locally without strengthening the rectangular theorem hypotheses.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "rg -n -C 7 ':id :critical-value-sard-(first-derivative-locus-compact-projected-chart-aggregation-1|first-nonzero-jet-finite-assembly-1|localized-flat-through-taylor-nullity-1|higher-jet-image-nullity-aggregation-1|rectangular-local-probe-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 7 ':id :critical-value-sard-(localized-image-nullity-of-compact-chart-certificates-1|compact-projected-chart-nullity-of-residual-data-1|target-orthogonal-coordinate-equiv-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
+       "lake env lean /tmp/SardFiniteDimensionalBorelAddHaarPackageProbe.lean",
        :exit 0,
        :output
-       "'SardLocalizedImageNullityOfCompactChartCertificatesProbe.image_null_of_flat_higher_and_compactChart_certificates' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteDimensionalBorelAddHaarPackageProbe.exists_borel_addHaarMeasure' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
+       "sha256sum /tmp/SardFiniteDimensionalBorelAddHaarPackageProbe.lean",
        :exit 0,
        :output
-       "e6d4f7fe98524c32c2198aec2f1d5bf3028f8db73e44ddef84ab8e84481ca645  /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean"}
+       "a54540f585d2d3111b6c5783ac0f1ba3aa932593d6cbcf0326b7df2339110dcf  /tmp/SardFiniteDimensionalBorelAddHaarPackageProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteDimensionalBorelAddHaarPackageProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '10,41p' /tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean | sha256sum",
+       "sed -n '9,16p' /tmp/SardFiniteDimensionalBorelAddHaarPackageProbe.lean | sha256sum",
        :exit 0,
        :output
-       "9f77bf93c330a4fdc37c848952bba606f5a495c7165c3f07919ff504f77166f4  -"}
+       "70bea8b002b131b0194e9d048924a1212384c41a3c5aba0a54b6b89b3be52712  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 197 items OK; {:done 189, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 198 items OK; {:done 190, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -26482,13 +26513,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardLocalizedImageNullityOfCompactChartCertificatesProbe.lean",
+     {:path "/tmp/SardFiniteDimensionalBorelAddHaarPackageProbe.lean",
       :sha256
-      "e6d4f7fe98524c32c2198aec2f1d5bf3028f8db73e44ddef84ab8e84481ca645"},
+      "a54540f585d2d3111b6c5783ac0f1ba3aa932593d6cbcf0326b7df2339110dcf"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -26634,7 +26664,8 @@
     :critical-value-sard-compact-projected-chart-nullity-of-residual-data-1
     :critical-value-sard-rank-piece-compact-projected-chart-aggregation-1
     :critical-value-sard-first-derivative-locus-compact-projected-chart-aggregation-1
-    :critical-value-sard-localized-image-nullity-of-compact-chart-certificates-1],
+    :critical-value-sard-localized-image-nullity-of-compact-chart-certificates-1
+    :critical-value-sard-finite-dimensional-borel-add-haar-package-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
