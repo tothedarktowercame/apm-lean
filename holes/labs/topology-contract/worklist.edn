@@ -22759,8 +22759,69 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled rank-upper residual slice-annihilation theorem cannot be promoted for arbitrary real finite-dimensional source modules and arbitrary target, projected-coordinate, slice, and residual modules, every ambient derivative and slice derivative, surjectivity of the projected derivative, the matching ambient rank upper bound, vanishing of the projected derivative along the slice, annihilation by every residual coordinate along every slice direction, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "At every localized projected-chart slice point, prove that its derivative has zero projected component, and instantiate projected-derivative surjectivity and the ambient rank upper bound.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"residual_annihilates_slice_of_rankUpper"
+     "7f1ee8d767e4285e0cd69f76a2aeafb0c0367a2707c4cd7a830c46db1c90955e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
+      :exit 0,
+      :output
+      "fb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8  /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean"}
+     {:cmd
+      "sha256sum ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
+      :exit 0,
+      :output
+      "fb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8  ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean\nfb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8  /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean",
+      :exit 0,
+      :output
+      "'SardRankUpperResidualSliceAnnihilationProbe.residual_annihilates_slice_of_rankUpper' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean ConstructionTargets/SardRankUpperResidualSliceAnnihilation.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '15,29p' ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean | sha256sum",
+      :exit 0,
+      :output
+      "7f1ee8d767e4285e0cd69f76a2aeafb0c0367a2707c4cd7a830c46db1c90955e  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 176 items OK; {:done 167, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add rank-upper residual slice annihilation'",
+      :exit 0,
+      :output
+      "[master db80d801] Add rank-upper residual slice annihilation\n2 files changed, 42 insertions(+)\ncreate mode 100644 ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean\ncreate mode 100644 ConstructionTargets/SardRankUpperResidualSliceAnnihilation.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "db80d801",
+    :changed-paths
+    ["ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean"
+     "ConstructionTargets/SardRankUpperResidualSliceAnnihilation.md"],
+    :fixture
+    {:path "/tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
+     :sha256
+     "fb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8"},
+    :declarations ["residual_annihilates_slice_of_rankUpper"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean"
     "ConstructionTargets/SardRankUpperResidualSliceAnnihilation.md"],
