@@ -5,9 +5,13 @@ import Mathlib
 
 ## Statement repairs
 
-The occurrences `F(X_*)`, `F(X)`, and `x_{x+1}` are editorial variable-name
-errors and are read as `F(x_*)`, `F(x)`, and `x_{k+1}` respectively. No
-mathematical repair is made.
+- Editorial variable-name errors: `F(X_*)`, `F(X)`, `x_{x+1}` are read as
+  `F(x_*)`, `F(x)`, `x_{k+1}` respectively.
+- Guide repair 1 (after solver refutation): added `[Nonempty X]` to the
+  contraction conjunct. Without it `X := Empty` vacuously satisfies every
+  hypothesis while the conclusion demands a fixed point in `Empty`, so the
+  statement was false as pinned. Mathlib's `ContractingWith` API requires
+  the same hypothesis.
 
 ## Encoding questions
 
@@ -33,28 +37,8 @@ def apm_m01J05_newtonIterate {n : ℕ}
 
 universe u
 
-/-- The first frozen conjunct is false without a `Nonempty X` hypothesis:
-the empty complete metric space satisfies every contraction hypothesis but
-has no candidate fixed point. -/
-theorem apm_m01J05_contraction_clause_false :
-    ¬ (∀ (X : Type u) [MetricSpace X] [CompleteSpace X]
-        (T : X → X) (q : ℝ),
-      0 ≤ q → q < 1 →
-      (∀ x y : X, dist (T x) (T y) ≤ q * dist x y) →
-        ∃ xStar : X,
-          T xStar = xStar ∧
-          (∀ y : X, T y = y → y = xStar) ∧
-          ∀ x₀ : X,
-            Tendsto (fun k ↦ (T^[k]) x₀) atTop (nhds xStar)) := by
-  intro h
-  let X := ULift.{u} Empty
-  let T : X → X := id
-  obtain ⟨xStar, -⟩ := h X T 0 (by norm_num) (by norm_num)
-    (fun x ↦ x.down.elim)
-  exact xStar.down.elim
-
 theorem apm_m01j05 :
-    (∀ (X : Type*) [MetricSpace X] [CompleteSpace X]
+    (∀ (X : Type u) [MetricSpace X] [CompleteSpace X] [Nonempty X]
         (T : X → X) (q : ℝ),
       0 ≤ q → q < 1 →
       (∀ x y : X, dist (T x) (T y) ≤ q * dist x y) →
@@ -76,14 +60,12 @@ theorem apm_m01j05 :
                 (fderiv ℝ F (apm_m01J05_newtonIterate F x₀ k))) ∧
             Tendsto (apm_m01J05_newtonIterate F x₀) atTop (nhds xStar)) := by
   /-
-  SKIPPED (frozen-statement defect). The contraction-mapping conjunct omits
-  `[Nonempty X]`. Take `X := Empty`: it has `MetricSpace` and `CompleteSpace`
-  instances, and the map and contraction hypotheses are vacuous for any
-  `q ∈ [0,1)`, but the conclusion requires `∃ xStar : Empty, ...`.
-
-  Mathlib's `ContractingWith.fixedPoint`, `fixedPoint_isFixedPt`, and
-  `tendsto_iterate_fixedPoint` likewise require `[Nonempty X]`, confirming
-  that this is a missing mathematical hypothesis rather than an API gap.
-  The statement is frozen, so no repair was made.
+  Statement repair (guide, attempt 1, 2026-08): the original frozen
+  contraction conjunct omitted `[Nonempty X]` and was refuted by the solver
+  via `X := Empty` (terminal receipt
+  4bfde3eda1076303649fb9e1d12e58fe6879ac84e4c8ad092b790281a245a75f,
+  invariant :statement-refuted-by-solver). Repair adds `[Nonempty X]`,
+  matching Mathlib's `ContractingWith` fixed-point API, which also requires
+  it. The counterexample theorem was removed. No other mathematical change.
   -/
   sorry
