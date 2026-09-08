@@ -33492,6 +33492,41 @@
    "Projected-coordinate measure data is compiled; use it without changing measurable-space instances in the pointwise positive-rank nullity composition.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the derivative range and orthogonal residual cannot carry BorelSpace instances compatible with their inherited subtype measurable spaces, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardProjectedCoordinateInheritedBorelBridge.lean"
+    "ConstructionTargets/SardProjectedCoordinateInheritedBorelBridge.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-COORDINATE INHERITED BOREL BRIDGE",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardProjectedCoordinateInheritedBorelBridgeProbe.lean",
+     :sha256
+     "fd304b358f93e2409b7b4ddc202c6423a834b040180856e0790fc28ac12ae4d0"},
+    :declarations ["projectedCoordinates_inherited_borelSpace"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use inherited Borel instances when choosing projected-coordinate additive-Haar measures in the positive-rank pointwise theorem."},
+   :representation
+   {:source
+    "Derivative range and orthogonal-residual subtypes with their inherited measurable-space instances from the ambient Borel target.",
+    :target
+    "BorelSpace instances definitionally compatible with those inherited subtype measurable spaces."},
+   :id
+   :critical-value-sard-projected-coordinate-inherited-borel-bridge-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-derivative-range-inherited-borel-space-1
+    :critical-value-sard-finite-order-projected-coordinate-measure-data-1],
+   :current-residual
+   "The inherited Borel bridge is compiled; install it before constructing coordinate measures and invoking the pointwise finite-order nullity witness.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -33545,80 +33580,79 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Use the compatible projected-coordinate Borel/additive-Haar package inside the finite-order positive-rank pointwise nullity composition, then aggregate the positive rank loci; rank zero remains assigned to the flat/Taylor branch.",
+     "Install inherited-subtype Borel instances for the projected coordinates, choose compatible additive-Haar measures under those instances, and complete the finite-order positive-rank pointwise nullity composition.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_projected_coordinate_measure_data"
-      "dbb3a590d4cf50412194e6d62167faf7ebf612f446daeb6f1e77be2c07fecea7"},
+     {"projectedCoordinates_inherited_borelSpace"
+      "a12cc888d202eb266ace5b9ece5091e2146d9aee53952db0fb2b97a90ea09e7f"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if a nonsurjective finite-dimensional derivative cannot supply compatible Borel measurable spaces and additive-Haar measures on its range and orthogonal residual together with residual nontriviality, or if the theorem requires nonstandard axioms.",
+      "Stop only if the derivative range and orthogonal residual cannot carry BorelSpace instances compatible with their inherited subtype measurable spaces, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.lean"
-       "ConstructionTargets/SardFiniteOrderProjectedCoordinateMeasureData.md"],
+      ["ConstructionTargets/SardProjectedCoordinateInheritedBorelBridge.lean"
+       "ConstructionTargets/SardProjectedCoordinateInheritedBorelBridge.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED-COORDINATE MEASURE DATA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-COORDINATE INHERITED BOREL BRIDGE",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
+        "/tmp/SardProjectedCoordinateInheritedBorelBridgeProbe.lean",
         :sha256
-        "e74e0ec51c2f0758b3e190167abd4b8ccd863ca8718b2b689f1ca07a1ae5dd72"},
-       :declarations ["exists_projected_coordinate_measure_data"],
+        "fd304b358f93e2409b7b4ddc202c6423a834b040180856e0790fc28ac12ae4d0"},
+       :declarations ["projectedCoordinates_inherited_borelSpace"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Destructure the compatible coordinate-measure package in the finite-order positive-rank pointwise nullity theorem."},
+       "Use inherited Borel instances when choosing projected-coordinate additive-Haar measures in the positive-rank pointwise theorem."},
       :representation
       {:source
-       "A nonsurjective continuous linear derivative between finite-dimensional real spaces.",
+       "Derivative range and orthogonal-residual subtypes with their inherited measurable-space instances from the ambient Borel target.",
        :target
-       "Compatible Borel measurable structures, additive-Haar measures on the derivative range and orthogonal residual, and nontriviality of the residual coordinate."},
+       "BorelSpace instances definitionally compatible with those inherited subtype measurable spaces."},
       :id
-      :critical-value-sard-finite-order-projected-coordinate-measure-data-1,
+      :critical-value-sard-projected-coordinate-inherited-borel-bridge-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-derivative-range-orthogonal-measure-package-1
-       :critical-value-sard-finite-dimensional-borel-add-haar-package-1
-       :critical-value-sard-nonsurjective-derivative-orthogonal-nontrivial-1],
+      [:critical-value-sard-derivative-range-inherited-borel-space-1
+       :critical-value-sard-finite-order-projected-coordinate-measure-data-1],
       :current-residual
-      "Projected-coordinate measure data is compiled; use it without changing measurable-space instances in the pointwise positive-rank nullity composition.",
+      "The inherited Borel bridge is compiled; install it before constructing coordinate measures and invoking the pointwise finite-order nullity witness.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The attempted full positive-rank composition exposed a representation-level instance seam: the pointwise nullity theorem requires Borel and additive-Haar structures on the derivative range and its orthogonal complement under the same measurable-space choices used by its measure arguments. A placeholder-free compiled fixture packages exactly those compatible coordinate measure structures, including residual nontriviality from nonsurjectivity. The remaining work is to destructure this package within the pointwise positive-rank composition before invoking the nullity witness.",
+     "The rectangular theorem is not refuted. The pointwise composition audit refined the representation seam: replacing the subtype-inherited measurable spaces by freshly declared borel structures makes the chart coordinate and measure arguments definitionally incompatible. A placeholder-free compiled fixture supplies BorelSpace instances for the derivative range and orthogonal residual while retaining their inherited subtype measurable spaces. The positive-rank composition must use this inherited-space bridge before choosing additive-Haar measures.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
+       "lake env lean /tmp/SardProjectedCoordinateInheritedBorelBridgeProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderProjectedCoordinateMeasureDataProbe.exists_projected_coordinate_measure_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardProjectedCoordinateInheritedBorelBridgeProbe.projectedCoordinates_inherited_borelSpace' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
+       "sha256sum /tmp/SardProjectedCoordinateInheritedBorelBridgeProbe.lean",
        :exit 0,
        :output
-       "e74e0ec51c2f0758b3e190167abd4b8ccd863ca8718b2b689f1ca07a1ae5dd72  /tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean"}
+       "fd304b358f93e2409b7b4ddc202c6423a834b040180856e0790fc28ac12ae4d0  /tmp/SardProjectedCoordinateInheritedBorelBridgeProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedCoordinateInheritedBorelBridgeProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '6,20p' /tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean | sha256sum",
+       "sed -n '5,13p' /tmp/SardProjectedCoordinateInheritedBorelBridgeProbe.lean | sha256sum",
        :exit 0,
        :output
-       "dbb3a590d4cf50412194e6d62167faf7ebf612f446daeb6f1e77be2c07fecea7  -"}
+       "a12cc888d202eb266ace5b9ece5091e2146d9aee53952db0fb2b97a90ea09e7f  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 254 items OK; {:done 246, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 255 items OK; {:done 247, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -33637,12 +33671,12 @@
        :note "Unrelated concurrent cache outside row scope."}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderProjectedCoordinateMeasureDataProbe.lean",
+      "/tmp/SardProjectedCoordinateInheritedBorelBridgeProbe.lean",
       :sha256
-      "e74e0ec51c2f0758b3e190167abd4b8ccd863ca8718b2b689f1ca07a1ae5dd72"},
+      "fd304b358f93e2409b7b4ddc202c6423a834b040180856e0790fc28ac12ae4d0"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -33845,7 +33879,8 @@
     :critical-value-sard-projected-rank-reduced-dimension-identities-1
     :critical-value-sard-projected-positive-rank-dimension-data-1
     :critical-value-sard-finite-order-projected-chart-orthogonal-residual-slice-zero-1
-    :critical-value-sard-finite-order-projected-coordinate-measure-data-1],
+    :critical-value-sard-finite-order-projected-coordinate-measure-data-1
+    :critical-value-sard-projected-coordinate-inherited-borel-bridge-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
