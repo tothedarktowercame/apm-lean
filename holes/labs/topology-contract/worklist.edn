@@ -22757,6 +22757,40 @@
    "Pointwise residual annihilation now yields the exact zero continuous-linear composition required by the slice chain rule; rank-upper annihilation for the concrete inverse-slice derivative remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled rank-upper residual slice-annihilation theorem cannot be promoted for arbitrary real finite-dimensional source modules and arbitrary target, projected-coordinate, slice, and residual modules, every ambient derivative and slice derivative, surjectivity of the projected derivative, the matching ambient rank upper bound, vanishing of the projected derivative along the slice, annihilation by every residual coordinate along every slice direction, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean"
+    "ConstructionTargets/SardRankUpperResidualSliceAnnihilation.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-UPPER RESIDUAL SLICE ANNIHILATION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
+     :sha256
+     "fb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8"},
+    :declarations ["residual_annihilates_slice_of_rankUpper"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "At every localized projected-chart slice point, prove that its derivative has zero projected component, and instantiate projected-derivative surjectivity and the ambient rank upper bound."},
+   :representation
+   {:source
+    "A slice derivative with zero projected component through an ambient derivative whose projected block is surjective and whose full rank does not exceed the projected target rank.",
+    :target
+    "Pointwise annihilation of every slice direction after the ambient derivative by every residual target coordinate."},
+   :id :critical-value-sard-rank-upper-residual-slice-annihilation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-residual-derivative-composition-eq-zero-1
+    :critical-value-sard-projected-kernel-flatness-1
+    :critical-value-sard-local-residual-derivative-flatness-1],
+   :current-residual
+   "Rank upper bounds and projected surjectivity now convert zero projected slice derivative into residual annihilation; concrete slice projected-derivative vanishing and hypothesis instantiation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -22810,87 +22844,90 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "For every concrete projected inverse-slice derivative J at a localized rank-upper point, prove pointwise annihilation Q (Df (J v)) = 0 using the derivative-range rank bound and fixed-coordinate identity.",
+     "At every localized projected-chart slice point, prove that its derivative has zero projected component, and instantiate projected-derivative surjectivity and the ambient rank upper bound.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"residual_comp_deriv_comp_eq_zero"
-      "58c736c03461a02b05aaba62de42bb4adeb144f92dd37b480e5a92fc5f77255e"},
+     {"residual_annihilates_slice_of_rankUpper"
+      "7f1ee8d767e4285e0cd69f76a2aeafb0c0367a2707c4cd7a830c46db1c90955e"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled residual derivative composition equality theorem cannot be promoted for arbitrary real normed source, target, slice, and residual spaces, every three composable continuous-linear maps, pointwise annihilation of every slice direction, equality of the complete composed continuous-linear map with zero, or standard-axiom profile.",
+      "Stop only if the compiled rank-upper residual slice-annihilation theorem cannot be promoted for arbitrary real finite-dimensional source modules and arbitrary target, projected-coordinate, slice, and residual modules, every ambient derivative and slice derivative, surjectivity of the projected derivative, the matching ambient rank upper bound, vanishing of the projected derivative along the slice, annihilation by every residual coordinate along every slice direction, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean"
-       "ConstructionTargets/SardResidualDerivativeCompositionEqZero.md"],
+      ["ConstructionTargets/SardRankUpperResidualSliceAnnihilation.lean"
+       "ConstructionTargets/SardRankUpperResidualSliceAnnihilation.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RESIDUAL DERIVATIVE COMPOSITION EQUALS ZERO",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-UPPER RESIDUAL SLICE ANNIHILATION",
       :acceptance
       {:fixture
-       {:path "/tmp/SardResidualDerivativeCompositionEqZeroProbe.lean",
+       {:path "/tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
         :sha256
-        "7a783a473d6f5e20f45dd45ff151cf37d2db4e477071b814513ea47124915fa7"},
-       :declarations ["residual_comp_deriv_comp_eq_zero"],
+        "fb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8"},
+       :declarations ["residual_annihilates_slice_of_rankUpper"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "For every concrete projected inverse-slice derivative J at a localized rank-upper point, prove pointwise annihilation Q (Df (J v)) = 0 using the derivative-range rank bound and fixed-coordinate identity."},
+       "At every localized projected-chart slice point, prove that its derivative has zero projected component, and instantiate projected-derivative surjectivity and the ambient rank upper bound."},
       :representation
       {:source
-       "Pointwise annihilation of every slice direction by a residual coordinate after the ambient and slice derivatives.",
+       "A slice derivative with zero projected component through an ambient derivative whose projected block is surjective and whose full rank does not exceed the projected target rank.",
        :target
-       "Exact equality of the composed continuous-linear map Q.comp (D.comp J) with the zero map."},
+       "Pointwise annihilation of every slice direction after the ambient derivative by every residual target coordinate."},
       :id
-      :critical-value-sard-residual-derivative-composition-eq-zero-1,
+      :critical-value-sard-rank-upper-residual-slice-annihilation-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-chart-residual-slice-derivative-zero-1
-       :critical-value-sard-rank-upper-residual-slice-flatness-1
+      [:critical-value-sard-residual-derivative-composition-eq-zero-1
+       :critical-value-sard-projected-kernel-flatness-1
        :critical-value-sard-local-residual-derivative-flatness-1],
       :current-residual
-      "Pointwise residual annihilation now yields the exact zero continuous-linear composition required by the slice chain rule; rank-upper annihilation for the concrete inverse-slice derivative remains.",
+      "Rank upper bounds and projected surjectivity now convert zero projected slice derivative into residual annihilation; concrete slice projected-derivative vanishing and hypothesis instantiation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free extensionality fixture converts pointwise annihilation of all slice directions into the exact continuous-linear identity required by the residual-slice zero-derivative adapter. This aligns the banked rank-upper residual flatness output with the new chain-rule interface. The remaining analytic obligation is to derive the pointwise annihilation statement for the concrete inverse-slice derivative from the localized derivative-rank bound and fixed-coordinate chart identity.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture proves the rank-specific linear bridge: if the projected ambient derivative is surjective and the ambient derivative rank is no larger than the projected target rank, then every vector in the projected kernel is killed by the full derivative. Hence any slice derivative with zero projected component is annihilated by every residual target coordinate. The remaining concrete obligation is to differentiate the fixed-coordinate chart identity at each localized slice point and instantiate the rank and surjectivity hypotheses.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "lake build ConstructionTargets.SardProjectedChartResidualSliceDerivativeZero",
+       "sed -n '1,180p' ConstructionTargets/SardLocalResidualDerivativeFlatness.lean; sed -n '1,180p' ConstructionTargets/SardEventuallyConstantCoordinateSliceFlatness.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardResidualDerivativeCompositionEqZeroProbe.lean",
+       "lake build ConstructionTargets.SardResidualDerivativeCompositionEqZero",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
        :exit 0,
        :output
-       "'SardResidualDerivativeCompositionEqZeroProbe.residual_comp_deriv_comp_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardRankUpperResidualSliceAnnihilationProbe.residual_annihilates_slice_of_rankUpper' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardResidualDerivativeCompositionEqZeroProbe.lean",
+       "sha256sum /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
        :exit 0,
        :output
-       "7a783a473d6f5e20f45dd45ff151cf37d2db4e477071b814513ea47124915fa7  /tmp/SardResidualDerivativeCompositionEqZeroProbe.lean"}
+       "fb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8  /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardResidualDerivativeCompositionEqZeroProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '13,18p' /tmp/SardResidualDerivativeCompositionEqZeroProbe.lean | sha256sum",
+       "sed -n '15,29p' /tmp/SardRankUpperResidualSliceAnnihilationProbe.lean | sha256sum",
        :exit 0,
        :output
-       "58c736c03461a02b05aaba62de42bb4adeb144f92dd37b480e5a92fc5f77255e  -"}
+       "7f1ee8d767e4285e0cd69f76a2aeafb0c0367a2707c4cd7a830c46db1c90955e  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 174 items OK; {:done 166, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 175 items OK; {:done 167, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean ConstructionTargets/SardRankUpperResidualSliceFlatness.lean ConstructionTargets/SardLocalResidualDerivativeFlatness.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean ConstructionTargets/SardProjectedKernelFlatness.lean ConstructionTargets/SardLocalResidualDerivativeFlatness.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\na48034365bc3fefe304a7787b2f4263046ac23af6e5870340f2c59821bbe223e  ConstructionTargets/SardProjectedChartResidualSliceDerivativeZero.lean\n252c0698b064157d1ac3a7d84d26c421eee0469108d8d56010eef4f84399c9ab  ConstructionTargets/SardRankUpperResidualSliceFlatness.lean\n1808503ec9076e003d6eda51c5991493cbfcec323b55e16f306f2f7f2c83ca2d  ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n7a783a473d6f5e20f45dd45ff151cf37d2db4e477071b814513ea47124915fa7  ConstructionTargets/SardResidualDerivativeCompositionEqZero.lean\n675c7f57c380cfdb5d225301f32d661339ab67e26a2627eb2e489b37393a1676  ConstructionTargets/SardProjectedKernelFlatness.lean\n1808503ec9076e003d6eda51c5991493cbfcec323b55e16f306f2f7f2c83ca2d  ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -22901,12 +22938,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardResidualDerivativeCompositionEqZeroProbe.lean",
+     {:path "/tmp/SardRankUpperResidualSliceAnnihilationProbe.lean",
       :sha256
-      "7a783a473d6f5e20f45dd45ff151cf37d2db4e477071b814513ea47124915fa7"},
+      "fb8e888e79370db11a2602b49da67b6a696f7009067edbf50d0a96822cdb58f8"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -23029,7 +23066,8 @@
     :critical-value-sard-projected-chart-inverse-slice-contdiff-on-1
     :critical-value-sard-projected-chart-residual-slices-contdiff-on-1
     :critical-value-sard-projected-chart-residual-slice-derivative-zero-1
-    :critical-value-sard-residual-derivative-composition-eq-zero-1],
+    :critical-value-sard-residual-derivative-composition-eq-zero-1
+    :critical-value-sard-rank-upper-residual-slice-annihilation-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
