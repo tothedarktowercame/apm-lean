@@ -25601,6 +25601,41 @@
    "The indexed residual inverse slices now carry both first-order regularity and zero derivative after the final residual projection; compact projected-chart nullity application and exact-rank-piece aggregation remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled compact projected-chart nullity theorem from residual-slice data cannot be promoted for arbitrary finite-dimensional induction source and slice spaces, arbitrary normed chart source and target spaces, Haar measures on target-coordinate factors, every compact chart-source subset, target-coordinate first-component identity, two-sided localized regularity, every surjective final residual projection, indexed zero residual inverse-slice derivatives, the lower-dimensional induction hypothesis, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCompactProjectedChartNullityOfResidualData.lean"
+    "ConstructionTargets/SardCompactProjectedChartNullityOfResidualData.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT PROJECTED-CHART NULLITY FROM RESIDUAL-SLICE DATA",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean",
+     :sha256
+     "fe7a86548a3afffcf7f620430d4da426b6dd5362f1a049f1627bccd3e0057e12"},
+    :declarations ["measure_image_zero_of_residualSlice_data"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate compact projected-chart nullity on each localized exact-rank chart-source compact set, then aggregate the exact-rank pieces."},
+   :representation
+   {:source
+    "A compact subset of a projected chart together with the lower-dimensional induction hypothesis, two-sided chart regularity, and indexed zero derivatives of the residual inverse slices.",
+    :target
+    "Zero measure of the compact source image in the original target coordinates."},
+   :id
+   :critical-value-sard-compact-projected-chart-nullity-of-residual-data-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-chart-residual-slice-nullity-data-1
+    :critical-value-sard-compact-projected-chart-image-nullity-1],
+   :current-residual
+   "The bundled residual-slice data now closes compact projected-chart image nullity; localized chart instantiation and exact-rank-piece aggregation remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -25654,83 +25689,82 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Apply the bundled indexed fiber regularity and projected zero-derivative data to compact projected-chart nullity, then aggregate exact-rank pieces.",
+     "Instantiate compact projected-chart nullity on each localized exact-rank chart-source compact set, then aggregate the exact-rank pieces.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"residual_inverseSlice_nullity_data"
-      "49618b48361462b0e1c0c537ec6e9932a074e1589915ccff0f98ccf86440d28e"},
+     {"measure_image_zero_of_residualSlice_data"
+      "6e93f4ae51fa1492aeea0e5137f83e5429b5d5efafafad6983712c4449bd8d8a"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled projected-chart residual-slice nullity-data theorem cannot be promoted for arbitrary real normed source, ambient, chart-coordinate, residual, and final projection spaces, every open product chart with two-sided localized regularity, every residualized inverse slice with an indexed zero Frechet derivative, indexed ContDiffAt regularity of those slices, preservation of the zero derivative under a final continuous-linear projection, or standard-axiom profile.",
+      "Stop only if the compiled compact projected-chart nullity theorem from residual-slice data cannot be promoted for arbitrary finite-dimensional induction source and slice spaces, arbitrary normed chart source and target spaces, Haar measures on target-coordinate factors, every compact chart-source subset, target-coordinate first-component identity, two-sided localized regularity, every surjective final residual projection, indexed zero residual inverse-slice derivatives, the lower-dimensional induction hypothesis, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardProjectedChartResidualSliceNullityData.lean"
-       "ConstructionTargets/SardProjectedChartResidualSliceNullityData.md"],
+      ["ConstructionTargets/SardCompactProjectedChartNullityOfResidualData.lean"
+       "ConstructionTargets/SardCompactProjectedChartNullityOfResidualData.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED-CHART RESIDUAL-SLICE NULLITY DATA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT PROJECTED-CHART NULLITY FROM RESIDUAL-SLICE DATA",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardProjectedChartResidualSliceNullityDataProbe.lean",
+        "/tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean",
         :sha256
-        "0ce9d60a69883ffaaf6f504edbbc45a09e449e6dc0604e3119e581291f01411b"},
-       :declarations ["residual_inverseSlice_nullity_data"],
+        "fe7a86548a3afffcf7f620430d4da426b6dd5362f1a049f1627bccd3e0057e12"},
+       :declarations ["measure_image_zero_of_residualSlice_data"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Apply the bundled fiber regularity and zero-derivative data to compact projected-chart nullity, then aggregate exact-rank pieces."},
+       "Instantiate compact projected-chart nullity on each localized exact-rank chart-source compact set, then aggregate the exact-rank pieces."},
       :representation
       {:source
-       "Two-sided chart regularity together with indexed zero derivatives for residualized inverse slices and a final residual projection.",
+       "A compact subset of a projected chart together with the lower-dimensional induction hypothesis, two-sided chart regularity, and indexed zero derivatives of the residual inverse slices.",
        :target
-       "The paired indexed ContDiffAt and projected zero-derivative hypotheses consumed by compact projected-chart nullity."},
+       "Zero measure of the compact source image in the original target coordinates."},
       :id
-      :critical-value-sard-projected-chart-residual-slice-nullity-data-1,
+      :critical-value-sard-compact-projected-chart-nullity-of-residual-data-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-chart-indexed-residual-slice-zero-1
-       :critical-value-sard-projected-chart-residual-slices-contdiff-on-1
+      [:critical-value-sard-projected-chart-residual-slice-nullity-data-1
        :critical-value-sard-compact-projected-chart-image-nullity-1],
       :current-residual
-      "The indexed residual inverse slices now carry both first-order regularity and zero derivative after the final residual projection; compact projected-chart nullity application and exact-rank-piece aggregation remain.",
+      "The bundled residual-slice data now closes compact projected-chart image nullity; localized chart instantiation and exact-rank-piece aggregation remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free compiled fixture combines banked residual inverse-slice regularity with the indexed zero residual-slice derivative certificate and transports zero differentiation through the final continuous-linear residual projection. This supplies exactly the paired fiberwise regularity and projected-zero inputs consumed by compact projected-chart nullity; compact nullity application and exact-rank-piece aggregation remain.",
+     "The rectangular theorem is not refuted. A placeholder-free compiled fixture instantiates the bundled inverse-slice regularity and zero-derivative data with the second coordinate of the target equivalence, discharges both analytic fiber hypotheses of compact projected-chart nullity, and proves that the compact chart-source image has measure zero. Exact-rank-piece compact-nullity aggregation remains.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,240p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "rg -n -C 8 ':id :critical-value-sard-(projected-chart-indexed-residual-slice-zero-1|projected-chart-residual-slices-contdiff-on-1|compact-projected-chart-image-nullity-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+       "rg -n -C 8 ':id :critical-value-sard-(projected-chart-residual-slice-nullity-data-1|compact-projected-chart-image-nullity-1|first-derivative-rank-piece-chart-source-compact-nullity-1|first-derivative-rank-piece-local-nullity-aggregation-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardProjectedChartResidualSliceNullityDataProbe.lean",
+       "lake env lean /tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean",
        :exit 0,
        :output
-       "'SardProjectedChartResidualSliceNullityDataProbe.residual_inverseSlice_nullity_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardCompactProjectedChartNullityOfResidualDataProbe.measure_image_zero_of_residualSlice_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardProjectedChartResidualSliceNullityDataProbe.lean",
+       "sha256sum /tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean",
        :exit 0,
        :output
-       "0ce9d60a69883ffaaf6f504edbbc45a09e449e6dc0604e3119e581291f01411b  /tmp/SardProjectedChartResidualSliceNullityDataProbe.lean"}
+       "fe7a86548a3afffcf7f620430d4da426b6dd5362f1a049f1627bccd3e0057e12  /tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedChartResidualSliceNullityDataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '16,33p' /tmp/SardProjectedChartResidualSliceNullityDataProbe.lean | sha256sum",
+       "sed -n '10,47p' /tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean | sha256sum",
        :exit 0,
        :output
-       "49618b48361462b0e1c0c537ec6e9932a074e1589915ccff0f98ccf86440d28e  -"}
+       "6e93f4ae51fa1492aeea0e5137f83e5429b5d5efafafad6983712c4449bd8d8a  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 193 items OK; {:done 185, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 194 items OK; {:done 186, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -25746,12 +25780,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardProjectedChartResidualSliceNullityDataProbe.lean",
+      "/tmp/SardCompactProjectedChartNullityOfResidualDataProbe.lean",
       :sha256
-      "0ce9d60a69883ffaaf6f504edbbc45a09e449e6dc0604e3119e581291f01411b"},
+      "fe7a86548a3afffcf7f620430d4da426b6dd5362f1a049f1627bccd3e0057e12"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -25893,7 +25927,8 @@
     :critical-value-sard-localized-projected-slice-annihilation-1
     :critical-value-sard-localized-residual-slice-derivative-zero-1
     :critical-value-sard-projected-chart-indexed-residual-slice-zero-1
-    :critical-value-sard-projected-chart-residual-slice-nullity-data-1],
+    :critical-value-sard-projected-chart-residual-slice-nullity-data-1
+    :critical-value-sard-compact-projected-chart-nullity-of-residual-data-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
