@@ -22895,8 +22895,63 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled projected-chart slice projected-derivative theorem cannot be promoted for arbitrary real normed source and product-coordinate spaces, every open partial homeomorphism, exact equality of its first-coordinate function with a differentiable coordinate map, every chart-target point, every derivative of the coordinate map and fixed-first-coordinate inverse slice, vanishing of their composed derivative, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate the coordinate derivative as the derivative-range projection composed with Df at every localized rank-upper slice point, obtain the slice derivative, and discharge projected surjectivity and the rank upper bound.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"projected_deriv_comp_sliceDeriv_eq_zero"
+     "7164fd6d97cd3eef673047379710fa925fad02149a3bd6147307d3f27c7382f8"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author {:name "Joe Corneli", :email "holtzermann17@gmail.com"},
+    :commands
+    [{:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardProjectedChartSliceProjectedDerivativeZeroProbe.lean ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.lean",
+      :exit 0,
+      :output
+      "both 1be791fc9853151ab26741d05236ca63d8265ee09fc78c555191c4b8b59fcc5e"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.lean ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '17,30p' ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.lean | sha256sum",
+      :exit 0,
+      :output
+      "7164fd6d97cd3eef673047379710fa925fad02149a3bd6147307d3f27c7382f8  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 177 items OK; {:done 168, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardProjectedChartSliceProjectedDerivativeZero",
+      :exit 0}
+     {:cmd "git commit -m 'Add projected chart slice derivative zero'",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "4ae932a4dd458017451d10a2ed654a79bc3f7436",
+    :changed-paths
+    ["ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.lean"
+     "ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.md"],
+    :fixture
+    {:path
+     "/tmp/SardProjectedChartSliceProjectedDerivativeZeroProbe.lean",
+     :sha256
+     "1be791fc9853151ab26741d05236ca63d8265ee09fc78c555191c4b8b59fcc5e"},
+    :declarations ["projected_deriv_comp_sliceDeriv_eq_zero"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.lean"
     "ConstructionTargets/SardProjectedChartSliceProjectedDerivativeZero.md"],
