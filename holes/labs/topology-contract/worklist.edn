@@ -12666,7 +12666,7 @@
       :exit 0,
       :output
       "9c0332d0 Compile local inductive nullity for refined Sard loci\nConstructionTargets/SardFirstNonzeroJetLocalInductiveNullity.lean\nConstructionTargets/SardFirstNonzeroJetLocalInductiveNullity.md"}],
-    :commit "9c0332d0f9cf35261e8416ce16b61eccdcce9e8a",
+    :commit "9c0332d0c75033af37c367828fee71ef37f1a1cc",
     :changed-paths
     ["ConstructionTargets/SardFirstNonzeroJetLocalInductiveNullity.lean"
      "ConstructionTargets/SardFirstNonzeroJetLocalInductiveNullity.md"],
