@@ -13161,6 +13161,56 @@
       "git add ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.md && git commit -m 'Compile successor-jet scalar direction selection'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788833653364-14404-97901bfa",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat d8b890ff434e8cddfb6b38526394a03c7612fa15; git diff-tree --no-commit-id --name-only -r d8b890ff434e8cddfb6b38526394a03c7612fa15",
+       :exit 0,
+       :output "Joe Corneli; exactly the two scoped files"}
+      {:cmd
+       "sha256sum /tmp/SardNonzeroSuccessorJetScalarDirectionsProbe.lean; git show d8b890ff434e8cddfb6b38526394a03c7612fa15:ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean | sha256sum; git show d8b890ff434e8cddfb6b38526394a03c7612fa15:ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.md | sha256sum; cmp -s /tmp/SardNonzeroSuccessorJetScalarDirectionsProbe.lean ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean",
+       :exit 0,
+       :output
+       "fixture/source 8e783b86b825e633e70c6474b85b4a455b881c21d14c50ba89040a5238cb514e; note a1a5cd7f86033572a3f36a548e56865959ebd1029e3f58c2f96c2971246a80ed; byte-identical"}
+      {:cmd
+       "lake env lean /tmp/SardNonzeroSuccessorJetScalarDirectionsProbe.lean",
+       :exit 0,
+       :output
+       "exists_firstDirection_tail_scalar_apply_ne_zero depends only on propext, Classical.choice, Quot.sound"}
+      {:cmd
+       "lake build ConstructionTargets.SardNonzeroSuccessorJetScalarDirections",
+       :exit 0,
+       :output "Build completed successfully (8242 jobs)"}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.md",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git merge-base --is-ancestor 1bdfb0e2a7519d6916d49d9883bfcd51a0b9a470 d8b890ff434e8cddfb6b38526394a03c7612fa15; git merge-base --is-ancestor d5605d8c1436630f7805e1d69c05fb23ab8ab576 d8b890ff434e8cddfb6b38526394a03c7612fa15",
+       :exit 0}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean ConstructionTargets/SardNonzeroJetDirectionSelection.lean ConstructionTargets/SardNonzeroJetScalarSeparation.lean",
+       :exit 0,
+       :output
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea; 8e783b86b825e633e70c6474b85b4a455b881c21d14c50ba89040a5238cb514e; ebf6067567429466dc37077a266c4df43531198ac95c29b492f9631ef3eb1525; 868cab8ac1dc1b44289449a2fdf5f11e50b25704405b18b8829c70d93e21831f"}
+      {:cmd
+       "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; rg -c '^theorem ' problems/t93A04/lean/Main.lean",
+       :exit 0,
+       :output "1 placeholder; 1 theorem"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 113 items OK; {:done 104, :done-unreviewed 1, :blocked 2, :superseded 6}"}
+      {:cmd
+       "readlink -f .lake/packages; git diff --check; git diff --cached --check; git status --porcelain=v1",
+       :exit 0,
+       :output "/home/joe/code/apm-lean/.lake/packages; clean"}],
+     :finding
+     "PASS. Commit d8b890ff434e8cddfb6b38526394a03c7612fa15 has exact scope, reproduces all frozen file and fixture hashes, and contains both dependency commits. From the exact hypothesis iteratedFDeriv ℝ (i+1) f x ≠ 0, the theorem selects a tuple w with nonzero jet value, separates that value by a continuous linear scalar functional, and decomposes w as first direction w 0 and tail Fin.tail w. Fin.cons_self_tail reconstructs the exact tuple, so the conclusion has the required Fin.cons h v orientation for arbitrary successor order. The InnerProductSpace target assumption matches the compiled scalar-separation dependency. Placeholder delta is 0, axioms are standard-only, and frozen t93A04 remains unchanged with one theorem and one placeholder."},
     :commit "d8b890ff434e8cddfb6b38526394a03c7612fa15",
     :changed-paths
     ["ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean"
@@ -13174,7 +13224,7 @@
     ["SardNonzeroSuccessorJetScalarDirectionsProbe.exists_firstDirection_tail_scalar_apply_ne_zero"],
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean"
     "ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.md"],
@@ -13340,7 +13390,7 @@
       "8e783b86b825e633e70c6474b85b4a455b881c21d14c50ba89040a5238cb514e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
