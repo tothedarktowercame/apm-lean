@@ -13418,6 +13418,39 @@
    "Every nonzero successor jet now yields the exact implicit chart, smooth kernel parameter, and strict source-dimension drop consumed by pointwise local nullity; open-neighborhood regularity, witness aggregation, Taylor-flat nullity, and the first-derivative rank case remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled open-regularity package cannot be promoted with its exact selected scalar directions, ImplicitFunctionData defining fields and base point, strict kernel finrank decrease, finite nonzero order, open neighborhood membership, retained ContDiffAt order, pointwise DifferentiableAt conclusion, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFirstNonzeroJetOpenRegularityData.lean"
+    "ConstructionTargets/SardFirstNonzeroJetOpenRegularityData.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-NONZERO-JET OPEN REGULARITY DATA",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFirstNonzeroJetOpenRegularityDataProbe.lean",
+     :sha256
+     "40a965fe49fdf37e5ec8d7e0c9cfee9f8bfd997be3002515fea3849a06b54f9f"},
+    :declarations ["exists_scalarizedJet_openRegularityData"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use the exact open regularity package to invoke the pointwise refined-locus local-nullity witness, aggregate each refined locus, then combine with Taylor-flat nullity and the first-derivative rank case."},
+   :representation
+   {:source
+    "A nonzero successor jet, finite nonzero smoothness order n, global ContDiff hypotheses through i+1 and n+i, and the exact scalarized implicit-chart package.",
+    :target
+    "Selected scalar directions and exact ImplicitFunctionData with strict kernel finrank decrease, together with an open right-coordinate neighborhood containing the base coordinate on which the exact kernel parameter is ContDiffAt order n and DifferentiableAt at every point."},
+   :id :critical-value-sard-first-nonzero-jet-open-regularity-data-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-nonzero-jet-scalarized-chart-data-1
+    :critical-value-sard-implicit-function-kernel-parameter-local-regularity-1],
+   :current-residual
+   "Every nonzero successor jet now supplies an exact lower-dimensional implicit chart and an open parameter neighborhood with the regularity required by local critical-image induction; pointwise witness invocation, locus aggregation, Taylor-flat nullity, and the first-derivative rank case remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -13475,70 +13508,69 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled scalarized-chart package cannot be promoted with its exact selected directions and scalar, nonzero scalar successor jet, ImplicitFunctionData defining fields, base point, kernel-parameter ContDiffAt proof, strict kernel finrank decrease, or standard-axiom profile.",
+      "Stop only if the compiled open-regularity package cannot be promoted with its exact selected scalar directions, ImplicitFunctionData defining fields and base point, strict kernel finrank decrease, finite nonzero order, open neighborhood membership, retained ContDiffAt order, pointwise DifferentiableAt conclusion, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstNonzeroJetScalarizedChartData.lean"
-       "ConstructionTargets/SardFirstNonzeroJetScalarizedChartData.md"],
+      ["ConstructionTargets/SardFirstNonzeroJetOpenRegularityData.lean"
+       "ConstructionTargets/SardFirstNonzeroJetOpenRegularityData.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-NONZERO-JET SCALARIZED CHART DATA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-NONZERO-JET OPEN REGULARITY DATA",
       :acceptance
       {:fixture
-       {:path "/tmp/SardFirstNonzeroJetScalarizedChartDataProbe.lean",
+       {:path "/tmp/SardFirstNonzeroJetOpenRegularityDataProbe.lean",
         :sha256
-        "368d26c6e6aae16982893673fde4142bfe0f845e7ad8ca77728265fe94ec9306"},
-       :declarations ["exists_scalarizedJet_implicitFunctionData"],
+        "40a965fe49fdf37e5ec8d7e0c9cfee9f8bfd997be3002515fea3849a06b54f9f"},
+       :declarations ["exists_scalarizedJet_openRegularityData"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Promote base-point kernel regularity to an open right-coordinate neighborhood, invoke the exact pointwise refined-locus local-nullity witness, aggregate each refined locus, then combine with Taylor-flat nullity and the first-derivative rank case."},
+       "Use the exact open regularity package to invoke the pointwise refined-locus local-nullity witness, aggregate each refined locus, then combine with Taylor-flat nullity and the first-derivative rank case."},
       :representation
       {:source
-       "A nonzero successor-order iteratedFDeriv at x, ContDiff through order i+1 and remaining order n+i, and n nonzero.",
+       "A nonzero successor jet, finite nonzero smoothness order n, global ContDiff hypotheses through i+1 and n+i, and the exact scalarized implicit-chart package.",
        :target
-       "Selected h, v, and ℓ with nonzero scalar successor jet, plus exact scalarized ImplicitFunctionData based at x whose kernel parameter is ContDiffAt order n and whose kernel has strictly smaller finrank."},
+       "Selected scalar directions and exact ImplicitFunctionData with strict kernel finrank decrease, together with an open right-coordinate neighborhood containing the base coordinate on which the exact kernel parameter is ContDiffAt order n and DifferentiableAt at every point."},
       :id
-      :critical-value-sard-first-nonzero-jet-scalarized-chart-data-1,
+      :critical-value-sard-first-nonzero-jet-open-regularity-data-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-nonzero-successor-jet-scalar-directions-1
-       :critical-value-sard-scalarized-jet-kernel-parameter-contdiff-1
-       :critical-value-sard-scalar-derivative-kernel-dimension-drop-1],
+      [:critical-value-sard-first-nonzero-jet-scalarized-chart-data-1
+       :critical-value-sard-implicit-function-kernel-parameter-local-regularity-1],
       :current-residual
-      "Every nonzero successor jet now yields the exact implicit chart, smooth kernel parameter, and strict source-dimension drop consumed by pointwise local nullity; open-neighborhood regularity, witness aggregation, Taylor-flat nullity, and the first-derivative rank case remain.",
+      "Every nonzero successor jet now supplies an exact lower-dimensional implicit chart and an open parameter neighborhood with the regularity required by local critical-image induction; pointwise witness invocation, locus aggregation, Taylor-flat nullity, and the first-derivative rank case remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The compiled successor-jet selection theorem provides h, v, and ℓ, but the pointwise nullity witness consumes the resulting exact scalarized ImplicitFunctionData, its kernel-parameter ContDiffAt proof, and strict kernel finrank decrease together. A placeholder-free fixture now packages precisely those outputs from the selected nonzero successor jet. Constructing an open regularity neighborhood from this package, invoking the pointwise local-nullity witness, refined-locus aggregation, Taylor-flat nullity, and the first-derivative rank case remain downstream.",
+     "The rectangular theorem is not refuted. The scalarized-chart package retains kernel-parameter ContDiffAt only at the base coordinate, while the pointwise local-nullity witness requires an open right-coordinate set on which that exact parameterization is ContDiffAt and DifferentiableAt pointwise. A placeholder-free fixture combines the compiled chart package with the local-regularity theorem and produces that open neighborhood, preserving the selected scalar directions, defining fields, base point, and strict finrank decrease. Instantiation of the pointwise witness, refined-locus aggregation, Taylor-flat nullity, and the first-derivative rank case remain downstream.",
      :commands
      [{:cmd
-       "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,220p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md; sed -n '1,220p' ConstructionTargets/SardScalarizedJetImplicitFunctionData.lean; sed -n '1,200p' ConstructionTargets/SardImplicitFunctionKernelParameterLocalRegularity.lean; sed -n '1,200p' ConstructionTargets/SardFirstNonzeroJetPointwiseLocalNullityWitness.lean; git status --porcelain=v1",
+       "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,220p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFirstNonzeroJetScalarizedChartDataProbe.lean",
+       "lake env lean /tmp/SardFirstNonzeroJetOpenRegularityDataProbe.lean",
        :exit 0,
        :output
-       "'SardFirstNonzeroJetScalarizedChartDataProbe.exists_scalarizedJet_implicitFunctionData' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFirstNonzeroJetOpenRegularityDataProbe.exists_scalarizedJet_openRegularityData' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFirstNonzeroJetScalarizedChartDataProbe.lean",
+       "sha256sum /tmp/SardFirstNonzeroJetOpenRegularityDataProbe.lean",
        :exit 0,
        :output
-       "368d26c6e6aae16982893673fde4142bfe0f845e7ad8ca77728265fe94ec9306  /tmp/SardFirstNonzeroJetScalarizedChartDataProbe.lean"}
+       "40a965fe49fdf37e5ec8d7e0c9cfee9f8bfd997be3002515fea3849a06b54f9f  /tmp/SardFirstNonzeroJetOpenRegularityDataProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstNonzeroJetScalarizedChartDataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstNonzeroJetOpenRegularityDataProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 113 items OK; {:done 105, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 114 items OK; {:done 106, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstNonzeroJetScalarizedChartData.lean ConstructionTargets/SardImplicitFunctionKernelParameterLocalRegularity.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n8e783b86b825e633e70c6474b85b4a455b881c21d14c50ba89040a5238cb514e  ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean\n8afd06f19157531c347cbe3bd5248043a5fce35a8c1e36a13ce73305c5fcecc8  ConstructionTargets/SardScalarizedJetKernelParameterContDiff.lean\nce700272ab78fe6347d1f755ea381e802318ea099700deb03e2505f16812930f  ConstructionTargets/SardScalarDerivativeKernelDimensionDrop.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n368d26c6e6aae16982893673fde4142bfe0f845e7ad8ca77728265fe94ec9306  ConstructionTargets/SardFirstNonzeroJetScalarizedChartData.lean\nbd0041874c06b6f2153ca43d29152f8b3e6b131088628cc3944365ff2fc83dc1  ConstructionTargets/SardImplicitFunctionKernelParameterLocalRegularity.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -13549,12 +13581,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardFirstNonzeroJetScalarizedChartDataProbe.lean",
+     {:path "/tmp/SardFirstNonzeroJetOpenRegularityDataProbe.lean",
       :sha256
-      "368d26c6e6aae16982893673fde4142bfe0f845e7ad8ca77728265fe94ec9306"},
+      "40a965fe49fdf37e5ec8d7e0c9cfee9f8bfd997be3002515fea3849a06b54f9f"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -13616,7 +13648,8 @@
     :critical-value-sard-first-nonzero-jet-locus-local-aggregation-1
     :critical-value-sard-first-nonzero-jet-pointwise-local-nullity-witness-1
     :critical-value-sard-nonzero-successor-jet-scalar-directions-1
-    :critical-value-sard-first-nonzero-jet-scalarized-chart-data-1],
+    :critical-value-sard-first-nonzero-jet-scalarized-chart-data-1
+    :critical-value-sard-first-nonzero-jet-open-regularity-data-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
