@@ -15888,6 +15888,44 @@
    "The projected inverse identities now hold pointwise on an explicit neighborhood; slice differentiation, residual flatness, and local rank-piece nullity remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled eventual-constant-coordinate slice theorem cannot be promoted with eventual coordinate constancy at the base point, the exact coordinate and slice derivatives, kernel tangency, residual derivative flatness, zero derivative of the residual slice, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardEventuallyConstantCoordinateSliceFlatness.lean"
+    "ConstructionTargets/SardEventuallyConstantCoordinateSliceFlatness.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EVENTUALLY CONSTANT-COORDINATE SLICE FLATNESS",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardEventuallyConstantCoordinateSliceFlatnessProbe.lean",
+     :sha256
+     "fa1a986e82946b061e707c94d30bdf9d67c4d466a587b92411a89bf8b27ab15d"},
+    :declarations
+    ["derivative_comp_eq_zero_of_coordinate_eventually_constant"
+     "hasFDerivAt_zero_on_eventuallyConstantCoordinateSlice"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Specialize eventual coordinate constancy to fixed derivative-range slices of the explicit projected inverse-chart neighborhood, combine it with rank-at-most residual flatness, and derive pointwise local image nullity for each order-one exact-rank piece."},
+   :representation
+   {:source
+    "Differentiable coordinate and slice maps whose composite is eventually constant at the slice base point, together with a residual derivative vanishing on the coordinate kernel.",
+    :target
+    "Kernel tangency of the slice derivative and zero Frechet derivative of the residual map restricted to that locally constant-coordinate slice."},
+   :id
+   :critical-value-sard-eventually-constant-coordinate-slice-flatness-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-derivative-projected-chart-explicit-neighborhood-1
+    :critical-value-sard-constant-coordinate-slice-flatness-1
+    :critical-value-sard-local-residual-derivative-flatness-1],
+   :current-residual
+   "Local coordinate identities now imply slice kernel tangency and residual derivative zero; projected-chart specialization and local rank-piece image nullity remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -15941,79 +15979,86 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Differentiate constant projected-coordinate slices on the explicit neighborhood, combine their kernel tangency with rank-at-most residual derivative flatness, and derive pointwise local image nullity for each order-one exact-rank piece.",
+     "Specialize eventual coordinate constancy to fixed derivative-range slices of the explicit projected inverse-chart neighborhood, combine it with rank-at-most residual flatness, and derive pointwise local image nullity for each order-one exact-rank piece.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled explicit inverse-neighborhood theorem cannot be promoted with its exact derivative-range and projected-kernel coordinates, base-point chart-source membership, forward chart equality, neighborhood membership at the projected base coordinate, both inverse-coordinate identities throughout that neighborhood, strict derivative hypothesis, or standard-axiom profile.",
+      "Stop only if the compiled eventual-constant-coordinate slice theorem cannot be promoted with eventual coordinate constancy at the base point, the exact coordinate and slice derivatives, kernel tangency, residual derivative flatness, zero derivative of the residual slice, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.lean"
-       "ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.md"],
+      ["ConstructionTargets/SardEventuallyConstantCoordinateSliceFlatness.lean"
+       "ConstructionTargets/SardEventuallyConstantCoordinateSliceFlatness.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-DERIVATIVE PROJECTED CHART EXPLICIT NEIGHBORHOOD",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EVENTUALLY CONSTANT-COORDINATE SLICE FLATNESS",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFirstDerivativeProjectedChartExplicitNeighborhoodProbe.lean",
+        "/tmp/SardEventuallyConstantCoordinateSliceFlatnessProbe.lean",
         :sha256
-        "1fa2af053cb90d8a876026af8d974bcb0a1acee6c467fa4f292c43cb42d60f5f"},
+        "fa1a986e82946b061e707c94d30bdf9d67c4d466a587b92411a89bf8b27ab15d"},
        :declarations
-       ["exists_projected_localRankNormalForm_with_explicit_inverse_neighborhood"],
+       ["derivative_comp_eq_zero_of_coordinate_eventually_constant"
+        "hasFDerivAt_zero_on_eventuallyConstantCoordinateSlice"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Differentiate constant projected-coordinate slices on the explicit neighborhood, combine their kernel tangency with the compiled rank-at-most residual derivative flatness, and derive pointwise local image nullity for each order-one exact-rank piece."},
+       "Specialize eventual coordinate constancy to fixed derivative-range slices of the explicit projected inverse-chart neighborhood, combine it with rank-at-most residual flatness, and derive pointwise local image nullity for each order-one exact-rank piece."},
       :representation
       {:source
-       "A strict derivative L of f at x together with the compiled projected local-rank chart and its eventual inverse-coordinate identities.",
+       "Differentiable coordinate and slice maps whose composite is eventually constant at the slice base point, together with a residual derivative vanishing on the coordinate kernel.",
        :target
-       "The same projected chart plus one explicit neighborhood of the projected base coordinate on which both inverse-coordinate identities hold pointwise."},
+       "Kernel tangency of the slice derivative and zero Frechet derivative of the residual map restricted to that locally constant-coordinate slice."},
       :id
-      :critical-value-sard-first-derivative-projected-chart-explicit-neighborhood-1,
+      :critical-value-sard-eventually-constant-coordinate-slice-flatness-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-derivative-projected-chart-inverse-formula-1],
+      [:critical-value-sard-first-derivative-projected-chart-explicit-neighborhood-1
+       :critical-value-sard-constant-coordinate-slice-flatness-1
+       :critical-value-sard-local-residual-derivative-flatness-1],
       :current-residual
-      "The projected inverse identities now hold pointwise on an explicit neighborhood; slice differentiation, residual flatness, and local rank-piece nullity remain.",
+      "Local coordinate identities now imply slice kernel tangency and residual derivative zero; projected-chart specialization and local rank-piece image nullity remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture extracts one explicit neighborhood from the compiled eventual inverse identities while retaining the projected chart, base-point membership, exact forward formula, and both inverse-coordinate equations. This supplies the neighborhood-restricted form needed by the compiled constant-coordinate slice lemmas. Differentiating those slices, applying residual kernel flatness, and deriving local rank-piece image nullity remain downstream.",
+     "The rectangular theorem is not refuted. The explicit projected-chart neighborhood supplies coordinate identities only locally, while the banked constant-coordinate slice theorem requires a global equality. A placeholder-free fixture closes exactly this seam: eventual coordinate constancy at the slice base point forces the slice derivative into the coordinate kernel and transports residual derivative flatness to a zero derivative on the slice. Specializing this bridge to the projected inverse chart and deriving local rank-piece image nullity remain downstream.",
      :commands
      [{:cmd
-       "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
+       "rg -n \"HasFDerivAt.*congr|congr_of_eventuallyEq|EventuallyEq.*HasFDeriv\" .lake/packages/mathlib/Mathlib/Analysis/Calculus | head -100",
        :exit 0}
       {:cmd
-       "sed -n '1,180p' ConstructionTargets/SardConstantCoordinateSliceFlatness.lean; sed -n '1,180p' ConstructionTargets/SardLocalResidualDerivativeFlatness.lean; sed -n '1,180p' ConstructionTargets/SardFirstDerivativeProjectedChartInverseFormula.lean",
+       "sed -n '1,120p' ConstructionTargets/SardConstantCoordinateSliceFlatness.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFirstDerivativeProjectedChartExplicitNeighborhoodProbe.lean",
+       "lake build ConstructionTargets.SardConstantCoordinateSliceFlatness",
+       :exit 0,
+       :output "Build completed successfully (8240 jobs)."}
+      {:cmd
+       "lake env lean /tmp/SardEventuallyConstantCoordinateSliceFlatnessProbe.lean",
        :exit 0,
        :output
-       "'SardFirstDerivativeProjectedChartExplicitNeighborhoodProbe.exists_projected_localRankNormalForm_with_explicit_inverse_neighborhood' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardEventuallyConstantCoordinateSliceFlatnessProbe.derivative_comp_eq_zero_of_coordinate_eventually_constant' depends on axioms: [propext, Classical.choice, Quot.sound]; 'SardEventuallyConstantCoordinateSliceFlatnessProbe.hasFDerivAt_zero_on_eventuallyConstantCoordinateSlice' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFirstDerivativeProjectedChartExplicitNeighborhoodProbe.lean",
+       "sha256sum /tmp/SardEventuallyConstantCoordinateSliceFlatnessProbe.lean",
        :exit 0,
        :output
-       "1fa2af053cb90d8a876026af8d974bcb0a1acee6c467fa4f292c43cb42d60f5f  /tmp/SardFirstDerivativeProjectedChartExplicitNeighborhoodProbe.lean"}
+       "fa1a986e82946b061e707c94d30bdf9d67c4d466a587b92411a89bf8b27ab15d  /tmp/SardEventuallyConstantCoordinateSliceFlatnessProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstDerivativeProjectedChartExplicitNeighborhoodProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardEventuallyConstantCoordinateSliceFlatnessProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 127 items OK; {:done 119, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 128 items OK; {:done 120, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstDerivativeProjectedChartInverseFormula.lean ConstructionTargets/SardConstantCoordinateSliceFlatness.lean ConstructionTargets/SardLocalResidualDerivativeFlatness.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.lean ConstructionTargets/SardConstantCoordinateSliceFlatness.lean ConstructionTargets/SardLocalResidualDerivativeFlatness.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean; df1dcee7c817134e68d47193cdf4ca0b9f19281048caa73d9abd2ef2fa80d446  ConstructionTargets/SardFirstDerivativeProjectedChartInverseFormula.lean; cb809cc9f8f7b1e88b1b3188a193e72d8d377a4b07974c99c89475b3abb77756  ConstructionTargets/SardConstantCoordinateSliceFlatness.lean; 1808503ec9076e003d6eda51c5991493cbfcec323b55e16f306f2f7f2c83ca2d  ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean; 1fa2af053cb90d8a876026af8d974bcb0a1acee6c467fa4f292c43cb42d60f5f  ConstructionTargets/SardFirstDerivativeProjectedChartExplicitNeighborhood.lean; cb809cc9f8f7b1e88b1b3188a193e72d8d377a4b07974c99c89475b3abb77756  ConstructionTargets/SardConstantCoordinateSliceFlatness.lean; 1808503ec9076e003d6eda51c5991493cbfcec323b55e16f306f2f7f2c83ca2d  ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -16025,12 +16070,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFirstDerivativeProjectedChartExplicitNeighborhoodProbe.lean",
+      "/tmp/SardEventuallyConstantCoordinateSliceFlatnessProbe.lean",
       :sha256
-      "1fa2af053cb90d8a876026af8d974bcb0a1acee6c467fa4f292c43cb42d60f5f"},
+      "fa1a986e82946b061e707c94d30bdf9d67c4d466a587b92411a89bf8b27ab15d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -16106,7 +16151,8 @@
     :critical-value-sard-first-derivative-rank-piece-projected-defining-data-1
     :critical-value-sard-first-derivative-projected-chart-formula-1
     :critical-value-sard-first-derivative-projected-chart-inverse-formula-1
-    :critical-value-sard-first-derivative-projected-chart-explicit-neighborhood-1],
+    :critical-value-sard-first-derivative-projected-chart-explicit-neighborhood-1
+    :critical-value-sard-eventually-constant-coordinate-slice-flatness-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
