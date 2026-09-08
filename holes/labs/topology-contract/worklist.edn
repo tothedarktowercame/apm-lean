@@ -19179,6 +19179,30 @@
       :output
       "ConstructionTargets/SardProjectedSliceFiberImageNullity.lean\nConstructionTargets/SardProjectedSliceFiberImageNullity.md"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788850830876-14653-7588b07e",
+     :commands
+     [{:cmd
+       "git show --format=fuller --stat e9c27f19645fadecf358c528b2e555a473e71a39; git diff-tree --no-commit-id --name-only -r e9c27f19645fadecf358c528b2e555a473e71a39; git show e9c27f19645fadecf358c528b2e555a473e71a39:ConstructionTargets/SardProjectedSliceFiberImageNullity.lean; git show e9c27f19645fadecf358c528b2e555a473e71a39:ConstructionTargets/SardProjectedSliceFiberImageNullity.md",
+       :exit 0}
+      {:cmd
+       "readlink -f .lake/packages; sha256sum /tmp/SardProjectedSliceFiberImageNullityProbe.lean ConstructionTargets/SardProjectedSliceFiberImageNullity.lean ConstructionTargets/SardProjectedSliceFiberImageNullity.md; sed -n '9,32p' ConstructionTargets/SardProjectedSliceFiberImageNullity.lean | sha256sum; lake env lean /tmp/SardProjectedSliceFiberImageNullityProbe.lean; lake env lean ConstructionTargets/SardProjectedSliceFiberImageNullity.lean; lake build ConstructionTargets.SardProjectedSliceFiberImageNullity",
+       :exit 0}
+      {:cmd
+       "git show e9c27f19645fadecf358c528b2e555a473e71a39:ConstructionTargets/SardProjectedSliceFiberImageNullity.lean | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git show e9c27f19645fadecf358c528b2e555a473e71a39:ConstructionTargets/SardProjectedSliceFiberImageNullity.md | rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "sha256sum problems/t93A04/lean/Main.lean; rg -c '^theorem ' problems/t93A04/lean/Main.lean; rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l; for d in a71aab02558f66f3b2213be85aeeab17ea59acc7 2f00a68c728a370545e41adee921d0e851b53819 5c96ce605045cd6cec9d8217cc42590bfefe6ab5; do git merge-base --is-ancestor \"$d\" e9c27f19645fadecf358c528b2e555a473e71a39 || exit 1; done; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; git diff --check e9c27f19645fadecf358c528b2e555a473e71a39^ e9c27f19645fadecf358c528b2e555a473e71a39; git status --porcelain=v1",
+       :exit 0}],
+     :finding
+     "PASS. Commit e9c27f19645fadecf358c528b2e555a473e71a39 by Joe Corneli changes exactly the recorded Lean and Markdown files. The fixture hash is 7da3003abf0aeb2a1659e83619b479baf07ccee4556560db4ca9fc1163f038a9; committed file hashes reproduce as c0b7c2895d152ce79b7a7df48d89d37229e2f2914e1903268a7158e0774a4c81 and 0a1f0a02c73c2ceed360ab4df1db8ab21964f8447465a26711343436c9bf5bfe, and the frozen declaration-region hash is 3d3de8dbc670d7e9428787377d4f954733ed33760f8ebf32dac91d63d20596c7. Fixture, committed target, and Lake target compile against canonical packages with exactly [propext, Classical.choice, Quot.sound], without placeholders or forbidden declarations. The theorem proves the exact per-coordinate conclusion required downstream: for every r, the residual fiber image b '' (K ∩ {x | a x = r}) is contained in q r '' s r; the lower-dimensional projected-slice theorem makes that containing image null from the stated induction, dimension-drop, nonzero-order, smoothness, surjective-projection, and zero-projected-derivative hypotheses; measure_mono_null then gives nullity of the original fiber image. The quantifiers and set orientation are correct, and no equality or global parameterization stronger than containment is assumed. All three recorded dependency commits are ancestors. The frozen consumer hash is 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder. The worklist validates as 150 items with {:done 141, :done-unreviewed 1, :blocked 2, :superseded 6}; the committed diff and working tree are clean."},
     :commit "e9c27f19645fadecf358c528b2e555a473e71a39",
     :changed-paths
     ["ConstructionTargets/SardProjectedSliceFiberImageNullity.lean"
@@ -19195,7 +19219,7 @@
     :declarations
     ["SardProjectedSliceFiberImageNullityProbe.forall_fiber_image_null_of_subset_projectedSlices"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedSliceFiberImageNullity.lean"
     "ConstructionTargets/SardProjectedSliceFiberImageNullity.md"],
@@ -19376,7 +19400,7 @@
       "7da3003abf0aeb2a1659e83619b479baf07ccee4556560db4ca9fc1163f038a9"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
