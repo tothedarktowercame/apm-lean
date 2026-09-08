@@ -27347,15 +27347,18 @@
       "rg -n -C 6 ':id :critical-value-sard-(projected-chart-orthogonal-residual-nullity-data-1|compact-projected-chart-image-nullity-1|compact-projected-chart-nullity-of-residual-data-1|derivative-range-orthogonal-measure-package-1|compact-projected-chart-nullity-of-bundled-data-1)' holes/labs/topology-contract/worklist.edn",
       :exit 0}
      {:cmd
-      "sha256sum /tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean",
+      "sha256sum /tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean",
       :exit 0,
       :output
-      "2427e91ef293a60afc2b157f844805d315517f35b65a626b5d1355b0264951b7  /tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean"}
+      "2427e91ef293a60afc2b157f844805d315517f35b65a626b5d1355b0264951b7  /tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean\n2427e91ef293a60afc2b157f844805d315517f35b65a626b5d1355b0264951b7  ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean"}
+     {:cmd
+      "cmp /tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean",
+      :exit 0}
      {:cmd
       "lake env lean ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean",
       :exit 0,
       :output
-      "'SardCompactProjectedChartNullityOfBundledData.measure_image_zero_of_bundled_inverseSlice_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      "'SardCompactProjectedChartNullityOfBundledDataProbe.measure_image_zero_of_bundled_inverseSlice_data' depends on axioms: [propext, Classical.choice, Quot.sound]"}
      {:cmd
       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.md",
       :exit 1,
@@ -27369,7 +27372,7 @@
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :output
-      "topology-worklist: 206 items OK; {:done 197, :open 1, :blocked 2, :superseded 6}"}
+      "topology-worklist: 206 items OK; {:done 197, :repair 1, :blocked 2, :superseded 6}"}
      {:cmd "sha256sum problems/t93A04/lean/Main.lean",
       :exit 0,
       :output
@@ -27383,24 +27386,20 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check", :exit 0}
      {:cmd
-      "git add ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.md && git commit -m \"Add bundled compact projected-chart nullity theorem\"",
+      "git add ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean && git commit -m \"Match bundled chart nullity fixture namespace\"",
       :exit 0,
       :output
-      "[master 2952a087] Add bundled compact projected-chart nullity theorem\n 2 files changed, 55 insertions(+)\n create mode 100644 ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean\n create mode 100644 ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.md"}
+      "[master 5edf45f5] Match bundled chart nullity fixture namespace\n 1 file changed, 2 insertions(+), 2 deletions(-)"}
      {:cmd "git rev-parse HEAD",
       :exit 0,
-      :output "2952a0878037551f5e9bf5b6c6ef65d1b3285b27"}
+      :output "5edf45f58016da52895140f15c270e2f0cd9afad"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-    :review
-    {:outcome :fail,
-     :seat "codex-1",
-     :job "invoke-1788878647794-15140-ebe42899",
-     :finding
-     "Deterministic fixture-match defect: commit 2952a0878037551f5e9bf5b6c6ef65d1b3285b27 records namespace SardCompactProjectedChartNullityOfBundledData and hashes to 1098cdc5f744730fc63056a060183c10d0f0f5489eb02a3a49a8064af3a5b2b5, while the required fixture uses namespace SardCompactProjectedChartNullityOfBundledDataProbe and hashes to 2427e91ef293a60afc2b157f844805d315517f35b65a626b5d1355b0264951b7; cmp exits 1. The opening and closing namespace lines are the only diff. Scope, statement hash 816f9793b9ae50cfa9d7cc4ed203c6ee185d06f7bb6fe06f999b9c6627ea8a18, compilation, standard axioms, placeholder scan, consumer freeze, worklist validation, diff check, and clean-worktree gates otherwise reproduce."},
-    :commit "2952a0878037551f5e9bf5b6c6ef65d1b3285b27",
+    :commit "5edf45f58016da52895140f15c270e2f0cd9afad",
+    :commits
+    ["2952a0878037551f5e9bf5b6c6ef65d1b3285b27"
+     "5edf45f58016da52895140f15c270e2f0cd9afad"],
     :changed-paths
-    ["ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean"
-     "ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.md"],
+    ["ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean"],
     :fixture
     {:path
      "/tmp/SardCompactProjectedChartNullityOfBundledDataProbe.lean",
@@ -27408,7 +27407,7 @@
      "2427e91ef293a60afc2b157f844805d315517f35b65a626b5d1355b0264951b7"},
     :declarations ["measure_image_zero_of_bundled_inverseSlice_data"]},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.lean"
     "ConstructionTargets/SardCompactProjectedChartNullityOfBundledData.md"],
