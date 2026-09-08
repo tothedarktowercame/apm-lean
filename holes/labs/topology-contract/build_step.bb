@@ -83,6 +83,17 @@
          (nil? (:residual receipt))
          (some? (:next-consumer-residual receipt)))
     (assoc :residual (:next-consumer-residual receipt))))
+(defn validate-inserted-row! [row]
+  (when (= :representation-comparison (:kind row))
+    (doseq [[label paths]
+            [[:source-representation [[:representation :source]
+                                      [:source-representation]]]
+             [:target-representation [[:representation :target]
+                                      [:target-representation]]]
+             [:orientation [[:representation :direction] [:orientation]]]]]
+      (when-not (some #(not (str/blank? (str (get-in row %)))) paths)
+        (throw (ex-info "representation comparison row lacks required field"
+                        {:id (:id row) :field label}))))))
 (defn apply-result! []
   (let [id (keyword (nth *command-line-args* 2 ""))
         receipt-path (nth *command-line-args* 3 "")
@@ -127,6 +138,11 @@
               (when-not (get receipt k)
                 (throw (ex-info "FAIL receipt lacks field" {:field k}))))
       (throw (ex-info "unknown receipt outcome" {:outcome outcome})))
+    (case outcome
+      :revise (validate-inserted-row! (:prerequisite receipt))
+      :replan (doseq [row (:replacement-items receipt)]
+                (validate-inserted-row! row))
+      nil)
     (let [new-items
           (case outcome
             ;; A row's :id is the ledger's referential integrity: other rows

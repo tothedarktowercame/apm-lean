@@ -21365,7 +21365,9 @@
    {:source
     "A source subset contained in a product-chart source, together with equality between the chart first coordinate and the first coordinate of the target map.",
     :target
-    "For every fixed first-coordinate value, containment of the residual-coordinate target-image fiber in the corresponding fixed-coordinate inverse-chart slice image."},
+    "For every fixed first-coordinate value, containment of the residual-coordinate target-image fiber in the corresponding fixed-coordinate inverse-chart slice image.",
+    :direction
+    "source chart-coordinate equality implies target-fiber containment in the corresponding fixed-coordinate inverse-chart slice image"},
    :id
    :critical-value-sard-projected-chart-target-fiber-slice-containment-1,
    :kind :representation-comparison,
