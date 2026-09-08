@@ -13097,8 +13097,84 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled successor-jet direction/scalar selection theorem cannot be promoted with its exact nonzero iteratedFDeriv hypothesis, Fin.cons first/tail representation, continuous-linear scalar separation, arbitrary successor order, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 1, :after 1, :delta 0},
+    :residual
+    "Use the selected h, v, and ℓ to instantiate the compiled scalarized-jet ImplicitFunctionData, strict kernel finrank drop, and open kernel-parameter regularity neighborhood at every refined-locus point; invoke and aggregate pointwise local-nullity witnesses, then combine with Taylor-flat nullity and the first-derivative rank case.",
+    :gates
+    {:lean :pass,
+     :fixture-byte-identical true,
+     :placeholder-scan :pass,
+     :worklist
+     "topology-worklist: 113 items OK; {:done 104, :open 1, :blocked 2, :superseded 6}",
+     :diff-check :pass,
+     :worktree-clean true,
+     :package-authority "/home/joe/code/apm-lean/.lake/packages"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean"
+     "8e783b86b825e633e70c6474b85b4a455b881c21d14c50ba89040a5238cb514e",
+     "ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.md"
+     "a1a5cd7f86033572a3f36a548e56865959ebd1029e3f58c2f96c2971246a80ed",
+     "problems/t93A04/lean/Main.lean"
+     "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea",
+     "ConstructionTargets/SardNonzeroJetDirectionSelection.lean"
+     "ebf6067567429466dc37077a266c4df43531198ac95c29b492f9631ef3eb1525",
+     "ConstructionTargets/SardNonzeroJetScalarSeparation.lean"
+     "868cab8ac1dc1b44289449a2fdf5f11e50b25704405b18b8829c70d93e21831f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardNonzeroSuccessorJetScalarDirectionsProbe.lean; git status --porcelain=v1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean",
+      :exit 0,
+      :output
+      "'SardNonzeroSuccessorJetScalarDirectionsProbe.exists_firstDirection_tail_scalar_apply_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "sha256sum /tmp/SardNonzeroSuccessorJetScalarDirectionsProbe.lean ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.md",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 113 items OK; {:done 104, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardNonzeroJetDirectionSelection.lean ConstructionTargets/SardNonzeroJetScalarSeparation.lean",
+      :exit 0}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd
+      "git add ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.md && git commit -m 'Compile successor-jet scalar direction selection'",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "d8b890ff434e8cddfb6b38526394a03c7612fa15",
+    :changed-paths
+    ["ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean"
+     "ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.md"],
+    :fixture
+    {:path "/tmp/SardNonzeroSuccessorJetScalarDirectionsProbe.lean",
+     :sha256
+     "8e783b86b825e633e70c6474b85b4a455b881c21d14c50ba89040a5238cb514e",
+     :verified true},
+    :declarations
+    ["SardNonzeroSuccessorJetScalarDirectionsProbe.exists_firstDirection_tail_scalar_apply_ne_zero"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.lean"
     "ConstructionTargets/SardNonzeroSuccessorJetScalarDirections.md"],
