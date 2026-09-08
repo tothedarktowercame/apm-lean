@@ -21654,6 +21654,43 @@
    "Projected rank neighborhoods can now be refined inside their chart sources without losing the local rank-set equality; inverse-slice analytic hypotheses and compact nullity remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled projected chart-source compact-local nullity theorem cannot be promoted for C¹ maps between arbitrary finite-dimensional real inner-product spaces with second-countable source, every exact derivative-rank point, automatic projected-chart selection, open neighborhood refinement inside the chart source, nullity of every compact subset image of the localized rank-at-most locus, nullity of the complete exact-rank piece image, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean"
+    "ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED CHART-SOURCE COMPACT-LOCAL NULLITY AGGREGATION",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean",
+     :sha256
+     "3ade56b99e8322445cc1399bb62a07ddd97ce9de03db53dc9031a81d3a5fb406"},
+    :declarations ["rankPiece_image_null_of_chartSource_compact_null"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "For each refined projected chart, prove compact rank-upper image nullity using target-coordinate fiber containment in inverse slices, lower-dimensional slice Sard hypotheses, and compact target-fiber image nullity."},
+   :representation
+   {:source
+    "At every exact-rank point, compact image-nullity certificates on an open refinement contained in the automatically selected projected chart source.",
+    :target
+    "Zero measure of the image of the complete exact-rank piece, with projected-chart selection and chart-source refinement performed internally."},
+   :id
+   :critical-value-sard-first-derivative-rank-piece-chart-source-compact-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-open-chart-source-neighborhood-refinement-1
+    :critical-value-sard-first-derivative-rank-piece-pointwise-compact-nullity-1
+    :critical-value-sard-first-derivative-rank-piece-projected-chart-1
+    :critical-value-sard-projected-chart-target-fiber-slice-containment-1],
+   :current-residual
+   "Projected-chart selection and refinement inside its source now aggregate compact rank-upper estimates over the complete exact-rank piece; the compact inverse-slice analytic estimate remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -21707,87 +21744,90 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Refine each projected rank neighborhood into its chart source, instantiate every target-coordinate fiber by an inverse slice, prove the slice Sard hypotheses, and apply compact image nullity.",
+     "For each refined projected chart, prove compact rank-upper image nullity using target-coordinate fiber containment in inverse slices, lower-dimensional slice Sard hypotheses, and compact target-fiber image nullity.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_open_subset_chartSource_with_inter_eq"
-      "aed3982949432d5e3d3e8cb4ae269174291e9beed5563f21296fdf0c35b1923b"},
+     {"rankPiece_image_null_of_chartSource_compact_null"
+      "1ae946344c3c08436383337b48e7b9ed2eb7fc361b7c590dd3099006a05105c7"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled open chart-source refinement theorem cannot be promoted for arbitrary open partial homeomorphisms, an open neighborhood containing the base point, base-point membership in the chart source, a local intersection equality, an open refined neighborhood contained in the chart source, preservation of the base point and intersection equality, or standard-axiom profile.",
+      "Stop only if the compiled projected chart-source compact-local nullity theorem cannot be promoted for C¹ maps between arbitrary finite-dimensional real inner-product spaces with second-countable source, every exact derivative-rank point, automatic projected-chart selection, open neighborhood refinement inside the chart source, nullity of every compact subset image of the localized rank-at-most locus, nullity of the complete exact-rank piece image, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean"
-       "ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.md"],
+      ["ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.lean"
+       "ConstructionTargets/SardFirstDerivativeRankPieceChartSourceCompactNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / OPEN CHART-SOURCE NEIGHBORHOOD REFINEMENT",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / PROJECTED CHART-SOURCE COMPACT-LOCAL NULLITY AGGREGATION",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardOpenChartSourceNeighborhoodRefinementProbe.lean",
+        "/tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean",
         :sha256
-        "992880de14feabca5ad329f848da94d6a89fb2743620f79e8d89c6b05099d0b0"},
-       :declarations ["exists_open_subset_chartSource_with_inter_eq"],
+        "3ade56b99e8322445cc1399bb62a07ddd97ce9de03db53dc9031a81d3a5fb406"},
+       :declarations
+       ["rankPiece_image_null_of_chartSource_compact_null"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Refine each projected rank neighborhood into its chart source, instantiate every target-coordinate fiber by an inverse slice, prove the slice Sard hypotheses, and apply compact image nullity."},
+       "For each refined projected chart, prove compact rank-upper image nullity using target-coordinate fiber containment in inverse slices, lower-dimensional slice Sard hypotheses, and compact target-fiber image nullity."},
       :representation
       {:source
-       "An open local neighborhood carrying an intersection equality, a product-valued open partial homeomorphism, and base-point membership in both the neighborhood and chart source.",
+       "At every exact-rank point, compact image-nullity certificates on an open refinement contained in the automatically selected projected chart source.",
        :target
-       "An open refined neighborhood containing the base point, contained in the chart source, and preserving the local intersection equality."},
+       "Zero measure of the image of the complete exact-rank piece, with projected-chart selection and chart-source refinement performed internally."},
       :id
-      :critical-value-sard-open-chart-source-neighborhood-refinement-1,
-      :kind :representation-comparison,
+      :critical-value-sard-first-derivative-rank-piece-chart-source-compact-nullity-1,
+      :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-chart-target-fiber-slice-containment-1
-       :critical-value-sard-first-derivative-rank-piece-projected-chart-nullity-witness-1],
+      [:critical-value-sard-open-chart-source-neighborhood-refinement-1
+       :critical-value-sard-first-derivative-rank-piece-pointwise-compact-nullity-1
+       :critical-value-sard-first-derivative-rank-piece-projected-chart-1
+       :critical-value-sard-projected-chart-target-fiber-slice-containment-1],
       :current-residual
-      "Projected rank neighborhoods can now be refined inside their chart sources without losing the local rank-set equality; inverse-slice analytic hypotheses and compact nullity remain.",
+      "Projected-chart selection and refinement inside its source now aggregate compact rank-upper estimates over the complete exact-rank piece; the compact inverse-slice analytic estimate remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
-     :axioms ["propext" "Quot.sound"],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The projected-chart fiber-containment theorem requires the localized source set to lie inside the chart source, whereas the combined rank theorem supplies an open rank neighborhood and only base-point membership in the chart source. A placeholder-free fixture closes this representation seam: intersect the rank neighborhood with the open chart source. The refined set is open, contains the base point, lies in the chart source, and preserves the local exact-rank/rank-upper intersection equality. Compact subsets of this refined neighborhood can therefore be fed honestly into the every-fiber inverse-slice containment theorem.",
+     "The rectangular theorem is not refuted. The placeholder-free fixture selects the reviewed projected local-rank chart at every exact-rank point, refines its open rank neighborhood inside the chart source while retaining the local rank-set equality, and supplies that refined neighborhood to the pointwise compact-nullity aggregator. The sole remaining pointwise obligation is nullity of compact rank-upper images in the refined chart, to be obtained from target-coordinate fibers and lower-dimensional inverse slices.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,220p' docs/TN-topology-build-loop-design.md",
        :exit 0}
       {:cmd
-       "sed -n '1,180p' ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean; sed -n '1,180p' ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean",
+       "lake build ConstructionTargets.SardOpenChartSourceNeighborhoodRefinement",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardOpenChartSourceNeighborhoodRefinementProbe.lean",
+       "lake env lean /tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean",
        :exit 0,
        :output
-       "'SardOpenChartSourceNeighborhoodRefinementProbe.exists_open_subset_chartSource_with_inter_eq' depends on axioms: [propext, Quot.sound]"}
+       "'SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.rankPiece_image_null_of_chartSource_compact_null' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardOpenChartSourceNeighborhoodRefinementProbe.lean",
+       "sha256sum /tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean",
        :exit 0,
        :output
-       "992880de14feabca5ad329f848da94d6a89fb2743620f79e8d89c6b05099d0b0  /tmp/SardOpenChartSourceNeighborhoodRefinementProbe.lean"}
+       "3ade56b99e8322445cc1399bb62a07ddd97ce9de03db53dc9031a81d3a5fb406  /tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardOpenChartSourceNeighborhoodRefinementProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '8,22p' /tmp/SardOpenChartSourceNeighborhoodRefinementProbe.lean | sha256sum",
+       "sed -n '11,44p' /tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "aed3982949432d5e3d3e8cb4ae269174291e9beed5563f21296fdf0c35b1923b  -"}
+       "1ae946344c3c08436383337b48e7b9ed2eb7fc361b7c590dd3099006a05105c7  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 166 items OK; {:done 158, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 167 items OK; {:done 159, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.lean ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n0697840cb71eeb74b1cd57f0c4a42a06fe330243d9c1a209cc867828ad934e6b  ConstructionTargets/SardProjectedChartTargetFiberSliceContainment.lean\n72eb2f427fc4025e86c99692b09dcd34654d7ff0b2a9e7813fb2c461c9193405  ConstructionTargets/SardFirstDerivativeRankPieceProjectedChartNullityWitness.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n992880de14feabca5ad329f848da94d6a89fb2743620f79e8d89c6b05099d0b0  ConstructionTargets/SardOpenChartSourceNeighborhoodRefinement.lean\n5344eab0de7e84415d37b48b8444272377d931f828c343f346b8b6417eab73aa  ConstructionTargets/SardFirstDerivativeRankPiecePointwiseCompactNullity.lean\n132f013859ec4f53f152939d72f1e9eea83785c6fad30b9423d94ea640cefdc3  ConstructionTargets/SardFirstDerivativeRankPieceProjectedChart.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -21798,12 +21838,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardOpenChartSourceNeighborhoodRefinementProbe.lean",
+     {:path
+      "/tmp/SardFirstDerivativeRankPieceChartSourceCompactNullityProbe.lean",
       :sha256
-      "992880de14feabca5ad329f848da94d6a89fb2743620f79e8d89c6b05099d0b0"},
+      "3ade56b99e8322445cc1399bb62a07ddd97ce9de03db53dc9031a81d3a5fb406"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -21918,7 +21959,8 @@
     :critical-value-sard-first-derivative-rank-piece-pointwise-compact-nullity-1
     :critical-value-sard-first-derivative-rank-piece-projected-chart-nullity-witness-1
     :critical-value-sard-projected-chart-target-fiber-slice-containment-1
-    :critical-value-sard-open-chart-source-neighborhood-refinement-1],
+    :critical-value-sard-open-chart-source-neighborhood-refinement-1
+    :critical-value-sard-first-derivative-rank-piece-chart-source-compact-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
