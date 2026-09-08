@@ -28598,6 +28598,25 @@
       :exit 0,
       :output "fe56be96a6275470b1552a20d2b3783adb1c22c9"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-1",
+     :job "invoke-1788883717354-15233-1bdfa560",
+     :commands
+     ["git show --stat --oneline fe56be96a6275470b1552a20d2b3783adb1c22c9"
+      "git diff-tree --no-commit-id --name-only -r fe56be96a6275470b1552a20d2b3783adb1c22c9"
+      "cmp /tmp/SardProjectedChartOpenRestrictionDataProbe.lean ConstructionTargets/SardProjectedChartOpenRestrictionData.lean"
+      "sha256sum /tmp/SardProjectedChartOpenRestrictionDataProbe.lean ConstructionTargets/SardProjectedChartOpenRestrictionData.lean"
+      "git show fe56be96a6275470b1552a20d2b3783adb1c22c9:ConstructionTargets/SardProjectedChartOpenRestrictionData.lean | sed -n '10,37p' | sha256sum"
+      "lake env lean ConstructionTargets/SardProjectedChartOpenRestrictionData.lean"
+      "lake build ConstructionTargets.SardProjectedChartOpenRestrictionData"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "git diff --check"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: recorded commit fe56be96a6275470b1552a20d2b3783adb1c22c9 changes exactly the two scoped files. Its committed Lean blob equals the fixture at SHA-256 02b53db84600a0691a1274039939131e62ce96bd9fec75f55fccf65a151b4ce5; frozen statement hash 747dfe5dc308b2ff87fc919b858b6ca6d80a05275c5ed8b84b53ecc3817e7003 reproduces. The theorem correctly restricts the chart source to chart.source ∩ V, preserves the unchanged forward-coordinate formula and sourcewise property, and obtains inverse C1 regularity by restricting the target; the exact source identity also exposes neighborhood membership for localized rank bounds. Direct Lean and Lake builds pass with only propext, Classical.choice, and Quot.sound; scoped placeholder scan is empty. Worklist validates with 215 items OK; frozen consumer hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea and one placeholder reproduce; canonical package authority and clean worktree verified."},
     :commit "fe56be96a6275470b1552a20d2b3783adb1c22c9",
     :changed-paths
     ["ConstructionTargets/SardProjectedChartOpenRestrictionData.lean"
@@ -28608,7 +28627,7 @@
      "02b53db84600a0691a1274039939131e62ce96bd9fec75f55fccf65a151b4ce5"},
     :declarations ["openRestriction_data"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardProjectedChartOpenRestrictionData.lean"
     "ConstructionTargets/SardProjectedChartOpenRestrictionData.md"],
@@ -28789,7 +28808,7 @@
       "02b53db84600a0691a1274039939131e62ce96bd9fec75f55fccf65a151b4ce5"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
