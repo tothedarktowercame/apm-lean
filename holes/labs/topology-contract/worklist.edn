@@ -19527,8 +19527,83 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled fiber-image identity cannot be promoted for an arbitrary map and source subset in a finite-dimensional real inner-product target, an arbitrary target submodule, every fixed submodule coordinate, exact equality of the two orthogonal-residual fiber-image representations, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Use the equality to transport restricted inverse-chart projected-slice containment into the compact orthogonal-coordinate fiber hypothesis, then instantiate projected rank-chart data and aggregate compact exact-rank localizations.",
+    :gates
+    {:fixture-hash :pass,
+     :compile :pass,
+     :placeholder-scan :pass,
+     :statement-hash :pass,
+     :worklist :pass,
+     :diff-check :pass,
+     :scope :pass,
+     :commit :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"orthogonalProjection_image_fiber_eq"
+     "4bee46b9d4988538f2cb0cc72303c767421cbcbdfaba3a3ea51aeb670e8cbdb7"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardOrthogonalCoordinateFiberImageProbe.lean",
+      :exit 0,
+      :output
+      "fe8185e28845050b28fb0a82d317bb5d864e826d6c373666bba0a38126b3f81a  /tmp/SardOrthogonalCoordinateFiberImageProbe.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/SardOrthogonalCoordinateFiberImage.lean",
+      :exit 0,
+      :output
+      "'SardOrthogonalCoordinateFiberImageProbe.orthogonalProjection_image_fiber_eq' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardOrthogonalCoordinateFiberImage.lean ConstructionTargets/SardOrthogonalCoordinateFiberImage.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum ConstructionTargets/SardOrthogonalCoordinateFiberImage.lean ConstructionTargets/SardOrthogonalCoordinateFiberImage.md",
+      :exit 0,
+      :output
+      "f7bc5fb11b5e00a877eb71c7527178ebc376cd2a0ec796331869004f64e45ef5  ConstructionTargets/SardOrthogonalCoordinateFiberImage.lean\ne7ab5929b32d600c22126564d5f8ea91a80411dd0ce28514278195ca39edc66a  ConstructionTargets/SardOrthogonalCoordinateFiberImage.md"}
+     {:cmd
+      "sed -n '9,19p' ConstructionTargets/SardOrthogonalCoordinateFiberImage.lean | sha256sum",
+      :exit 0,
+      :output
+      "4bee46b9d4988538f2cb0cc72303c767421cbcbdfaba3a3ea51aeb670e8cbdb7  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 153 items OK; {:done 144, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'add orthogonal coordinate fiber image identity'",
+      :exit 0,
+      :output
+      "[master 66b690cb] add orthogonal coordinate fiber image identity\n 2 files changed, 34 insertions(+)\n create mode 100644 ConstructionTargets/SardOrthogonalCoordinateFiberImage.lean\n create mode 100644 ConstructionTargets/SardOrthogonalCoordinateFiberImage.md"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "66b690cb60a33db021e58d60b3203519c7f771ca",
+    :changed-paths
+    ["ConstructionTargets/SardOrthogonalCoordinateFiberImage.lean"
+     "ConstructionTargets/SardOrthogonalCoordinateFiberImage.md"],
+    :fixture
+    {:path "/tmp/SardOrthogonalCoordinateFiberImageProbe.lean",
+     :sha256
+     "fe8185e28845050b28fb0a82d317bb5d864e826d6c373666bba0a38126b3f81a"},
+    :declarations ["orthogonalProjection_image_fiber_eq"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardOrthogonalCoordinateFiberImage.lean"
     "ConstructionTargets/SardOrthogonalCoordinateFiberImage.md"],
