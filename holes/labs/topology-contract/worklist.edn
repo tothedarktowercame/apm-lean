@@ -29028,8 +29028,69 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the compiled exact-rank closed-in-open projected-chart nullity theorem cannot be promoted for arbitrary finite-dimensional real inner-product source and Borel target spaces, finite-dimensional slice spaces, additive Haar target measures, every nonsurjective base derivative, global C1 maps, smooth projected charts with canonical first-coordinate identity and projected-derivative surjectivity, closed loci inside open chart sources, locus-restricted rank bounds, strict slice dimension drop, compatible lower-dimensional induction, zero image measure, or standard-axiom profile.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Instantiate the theorem from pointwise smooth projected-chart constructors and aggregate exact-rank pieces.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_image_zero_of_exactRank_closedOpen_projectedChart"
+     "2d2c9c1f52bb4d3c6d38dd0f75de922b49592c03d0f0fc342fb9afd9cfd096a0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "cmp -s /tmp/SardExactRankClosedOpenProjectedChartNullityProbe.lean ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardExactRankClosedOpenProjectedChartNullityProbe.lean ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.lean ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.md",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.lean",
+      :exit 0}
+     {:cmd
+      "rg placeholder-and-unsafe-patterns ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.lean ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '13,71p' ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "2d2c9c1f52bb4d3c6d38dd0f75de922b49592c03d0f0fc342fb9afd9cfd096a0"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 219 items OK; {:done 210, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd "rg -o sorry problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git commit -m 'Add exact-rank closed-open chart nullity'",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "67c92c318537ff0393ec6aa58f208b179c11f14a",
+    :changed-paths
+    ["ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.lean"
+     "ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.md"],
+    :fixture
+    {:path
+     "/tmp/SardExactRankClosedOpenProjectedChartNullityProbe.lean",
+     :sha256
+     "2be61fa0e4f3e752da9e2ab5a8de9e399c84dcf6b4f012afe8a236d69f5e9007"},
+    :declarations
+    ["measure_image_zero_of_exactRank_closedOpen_projectedChart"],
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.lean"
     "ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.md"],
