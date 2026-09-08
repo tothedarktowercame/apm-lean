@@ -14106,6 +14106,38 @@
    "Finite aggregation now reduces localized image nullity exactly to Taylor-flat nullity, first-derivative locus nullity, and the already compiled higher-locus induction result.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled flatThrough Taylor-nullity adapter cannot be promoted with its exact flatThrough predicate, compactness and closed-ball bound, positive exponent surplus, smoothness, geometric constants, zero-volume conclusion, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFlatThroughTaylorNullity.lean"
+    "ConstructionTargets/SardFlatThroughTaylorNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FLAT-THROUGH TAYLOR NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFlatThroughTaylorNullityProbe.lean",
+     :sha256
+     "dfc5446bcfea6e07c6a445435b835e8f1bbb556b07cfd35896d155aa417d6812"},
+    :declarations ["flatThrough_image_volume_eq_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Supply compactness and boundedness of flatThrough from the localized rectangular hypotheses, then discharge the first-derivative/rank-normal-form locus; higher loci and finite assembly are compiled."},
+   :representation
+   {:source
+    "An exact flatThrough f K k locus with compactness, a containing closed ball, positive Morse-Sard exponent surplus, ContDiff order k+1, and the finite-dimensional ball-volume constants.",
+    :target
+    "Zero volume of the image of the exact flatThrough locus."},
+   :id :critical-value-sard-flat-through-taylor-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-nonzero-jet-finite-assembly-1],
+   :current-residual
+   "Taylor covering now applies directly to the exact flatThrough predicate; localized compactness/boundedness and the first-derivative rank locus remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -14163,69 +14195,70 @@
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled finite assembly theorem cannot be promoted with its exact flatThrough predicate, order-one refined locus, Icc 2 k higher-locus family, arbitrary target measure, complete localized-image conclusion, or standard-axiom profile.",
+      "Stop only if the compiled flatThrough Taylor-nullity adapter cannot be promoted with its exact flatThrough predicate, compactness and closed-ball bound, positive exponent surplus, smoothness, geometric constants, zero-volume conclusion, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean"
-       "ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.md"],
+      ["ConstructionTargets/SardFlatThroughTaylorNullity.lean"
+       "ConstructionTargets/SardFlatThroughTaylorNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST-NONZERO-JET FINITE ASSEMBLY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FLAT-THROUGH TAYLOR NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardFirstNonzeroJetFiniteAssemblyProbe.lean",
+       {:path "/tmp/SardFlatThroughTaylorNullityProbe.lean",
         :sha256
-        "9dbd155d467e917470f85844bb7c338eabd8587bdc3693f8c9eabb1324b2f340"},
-       :declarations
-       ["image_null_of_flat_first_and_higher_firstNonzeroJetLoci"],
+        "dfc5446bcfea6e07c6a445435b835e8f1bbb556b07cfd35896d155aa417d6812"},
+       :declarations ["flatThrough_image_volume_eq_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Supply Taylor-flat image nullity and the first-derivative/rank-normal-form locus nullity; higher refined loci are already discharged by source-dimension induction."},
+       "Supply compactness and boundedness of flatThrough from the localized rectangular hypotheses, then discharge the first-derivative/rank-normal-form locus; higher loci and finite assembly are compiled."},
       :representation
       {:source
-       "Null images for flatThrough f K k, firstNonzeroJetLocus f K 1, and every firstNonzeroJetLocus f K i indexed by Icc 2 k.",
+       "An exact flatThrough f K k locus with compactness, a containing closed ball, positive Morse-Sard exponent surplus, ContDiff order k+1, and the finite-dimensional ball-volume constants.",
        :target
-       "Zero measure of the complete localized image f '' K under an arbitrary target measure."},
-      :id :critical-value-sard-first-nonzero-jet-finite-assembly-1,
+       "Zero volume of the image of the exact flatThrough locus."},
+      :id :critical-value-sard-flat-through-taylor-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1
-       :critical-value-sard-first-nonzero-jet-locus-decomposition-1],
+      [:critical-value-sard-first-nonzero-jet-finite-assembly-1],
       :current-residual
-      "Finite aggregation now reduces localized image nullity exactly to Taylor-flat nullity, first-derivative locus nullity, and the already compiled higher-locus induction result.",
+      "Taylor covering now applies directly to the exact flatThrough predicate; localized compactness/boundedness and the first-derivative rank locus remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture now supplies the exact finite assembly boundary: nullity of the Taylor-flat locus, the first-derivative first-nonzero locus, and every higher first-nonzero locus implies nullity of the complete localized image. It splits the finite Icc 1 k family at order one and delegates the union aggregation to the compiled refined decomposition theorem. The higher loci are supplied by source-dimension induction; Taylor-flat nullity and the first-derivative rank case remain the two downstream analytic inputs.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture instantiates the multivariable Taylor-covering theorem on the exact flatThrough locus: its defining predicate directly supplies vanishing of every iterated derivative from order one through k. The adapter yields zero target volume from compactness and boundedness of that locus, the positive exponent surplus, global ContDiff regularity, and the existing geometric volume constants. Establishing compactness/boundedness from the localized rectangular setup and handling the first-derivative rank locus remain downstream.",
      :commands
      [{:cmd
-       "sed -n '1,180p' ConstructionTargets/SardFirstNonzeroJetInductiveLocusNullity.lean; sed -n '1,180p' ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean; sed -n '1,150p' ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean",
+       "sed -n '1,220p' ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean; sed -n '1,130p' ConstructionTargets/SardHigherJetLocusDecomposition.lean; sed -n '1,120p' ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean; git status --porcelain=v1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFirstNonzeroJetFiniteAssemblyProbe.lean",
+       "lake build ConstructionTargets.SardMultivariableTaylorCoveringNullity",
+       :exit 0,
+       :output "Build completed successfully (8270 jobs)."}
+      {:cmd
+       "lake env lean /tmp/SardFlatThroughTaylorNullityProbe.lean",
        :exit 0,
        :output
-       "'SardFirstNonzeroJetFiniteAssemblyProbe.image_null_of_flat_first_and_higher_firstNonzeroJetLoci' depends on axioms: [propext, Classical.choice, Quot.sound]"}
-      {:cmd
-       "sha256sum /tmp/SardFirstNonzeroJetFiniteAssemblyProbe.lean",
+       "'SardFlatThroughTaylorNullityProbe.flatThrough_image_volume_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+      {:cmd "sha256sum /tmp/SardFlatThroughTaylorNullityProbe.lean",
        :exit 0,
        :output
-       "9dbd155d467e917470f85844bb7c338eabd8587bdc3693f8c9eabb1324b2f340  /tmp/SardFirstNonzeroJetFiniteAssemblyProbe.lean"}
+       "dfc5446bcfea6e07c6a445435b835e8f1bbb556b07cfd35896d155aa417d6812  /tmp/SardFlatThroughTaylorNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstNonzeroJetFiniteAssemblyProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFlatThroughTaylorNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 117 items OK; {:done 109, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 118 items OK; {:done 110, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardFirstNonzeroJetInductiveLocusNullity.lean ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean ConstructionTargets/SardHigherJetLocusDecomposition.lean ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n1ed84dfe166967dc5ab096888e8ff022115490dd4504c19329f74c9d1d88ea5d  ConstructionTargets/SardFirstNonzeroJetInductiveLocusNullity.lean\nbd9a237bb40d4cf2fbedb737bc0bd36edf37fadf57592d696836bfdebdcf4dce  ConstructionTargets/SardFirstNonzeroJetLocusDecomposition.lean\n75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c  ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean\n75f5710d953a8a10571a451a387f64003668ddb31622c5fcbe1d08892fb0711c  ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean\n1ae41fc90c43e105705cf75885ca2142ce291b0dcdde2eb301f6cbeaaac100f2  ConstructionTargets/SardHigherJetLocusDecomposition.lean\n9dbd155d467e917470f85844bb7c338eabd8587bdc3693f8c9eabb1324b2f340  ConstructionTargets/SardFirstNonzeroJetFiniteAssembly.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -14236,12 +14269,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardFirstNonzeroJetFiniteAssemblyProbe.lean",
+     {:path "/tmp/SardFlatThroughTaylorNullityProbe.lean",
       :sha256
-      "9dbd155d467e917470f85844bb7c338eabd8587bdc3693f8c9eabb1324b2f340"},
+      "dfc5446bcfea6e07c6a445435b835e8f1bbb556b07cfd35896d155aa417d6812"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -14307,7 +14340,8 @@
     :critical-value-sard-first-nonzero-jet-open-regularity-data-1
     :critical-value-sard-first-nonzero-jet-pointwise-witness-instantiation-1
     :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1
-    :critical-value-sard-first-nonzero-jet-finite-assembly-1],
+    :critical-value-sard-first-nonzero-jet-finite-assembly-1
+    :critical-value-sard-flat-through-taylor-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
