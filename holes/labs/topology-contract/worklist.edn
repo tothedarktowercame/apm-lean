@@ -16563,6 +16563,41 @@
    "Residual derivative flatness now transports through the exact inverse-chart slice; projected rank-at-most instantiation and local rank-piece image nullity remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the compiled rank-upper residual-slice flatness theorem cannot be promoted with exact ImplicitFunctionData, projected derivative and residual blocks, neighborhood membership, projected-block surjectivity, the full derivative rank bound, left-kernel identification, C1 defining coordinates, zero residual-slice derivative conclusion, or standard-axiom profile.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardRankUpperResidualSliceFlatness.lean"
+    "ConstructionTargets/SardRankUpperResidualSliceFlatness.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-UPPER RESIDUAL-SLICE FLATNESS",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardRankUpperResidualSliceFlatnessProbe.lean",
+     :sha256
+     "252c0698b064157d1ac3a7d84d26c421eee0469108d8d56010eef4f84399c9ab"},
+    :declarations
+    ["ImplicitFunctionData.hasFDerivAt_zero_residual_kernelParameter_of_rankUpper"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Construct the projected ImplicitFunctionData at every point of each localized order-one exact-rank piece, instantiate the rank-upper residual-slice theorem, and derive local image nullity for second-countable aggregation."},
+   :representation
+   {:source
+    "Exact ImplicitFunctionData whose left derivative is a projected block of a derivative field, on a locus where that block is surjective and the full derivative rank is bounded by the projected target dimension.",
+    :target
+    "Zero Frechet derivative of the complementary residual map after restriction to the fixed-left-coordinate inverse-chart slice."},
+   :id :critical-value-sard-rank-upper-residual-slice-flatness-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-implicit-function-residual-slice-flatness-1
+    :critical-value-sard-local-residual-derivative-flatness-1
+    :critical-value-sard-first-derivative-rank-piece-projected-defining-data-1],
+   :current-residual
+   "Rank-at-most hypotheses now imply zero residual derivative on inverse-coordinate slices; pointwise projected instantiation and local image nullity remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -16616,82 +16651,80 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate residual-slice flatness with the projected derivative-range coordinates on each local rank-at-most neighborhood, then derive pointwise local image nullity and aggregate each order-one exact-rank piece.",
+     "Construct the projected ImplicitFunctionData at every point of each localized order-one exact-rank piece, instantiate the rank-upper residual-slice theorem, and derive local image nullity for second-countable aggregation.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the compiled implicit-function residual-slice flatness theorem cannot be promoted with exact ImplicitFunctionData, C1 defining coordinates, the fixed-left-coordinate inverse slice, base-point identification, residual Frechet derivative, vanishing on the left-coordinate kernel, zero slice derivative conclusion, or standard-axiom profile.",
+      "Stop only if the compiled rank-upper residual-slice flatness theorem cannot be promoted with exact ImplicitFunctionData, projected derivative and residual blocks, neighborhood membership, projected-block surjectivity, the full derivative rank bound, left-kernel identification, C1 defining coordinates, zero residual-slice derivative conclusion, or standard-axiom profile.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardImplicitFunctionResidualSliceFlatness.lean"
-       "ConstructionTargets/SardImplicitFunctionResidualSliceFlatness.md"],
+      ["ConstructionTargets/SardRankUpperResidualSliceFlatness.lean"
+       "ConstructionTargets/SardRankUpperResidualSliceFlatness.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / IMPLICIT-FUNCTION RESIDUAL-SLICE FLATNESS",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-UPPER RESIDUAL-SLICE FLATNESS",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardImplicitFunctionResidualSliceFlatnessProbe.lean",
+       {:path "/tmp/SardRankUpperResidualSliceFlatnessProbe.lean",
         :sha256
-        "d67e2777dbbad8f324e5d9597ec026d71065c029f838380d33acb519fe1b1371"},
+        "252c0698b064157d1ac3a7d84d26c421eee0469108d8d56010eef4f84399c9ab"},
        :declarations
-       ["ImplicitFunctionData.hasFDerivAt_zero_residual_kernelParameter"],
+       ["ImplicitFunctionData.hasFDerivAt_zero_residual_kernelParameter_of_rankUpper"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate residual-slice flatness with the projected derivative-range coordinates on each local rank-at-most neighborhood, then derive pointwise local image nullity and aggregate each order-one exact-rank piece."},
+       "Construct the projected ImplicitFunctionData at every point of each localized order-one exact-rank piece, instantiate the rank-upper residual-slice theorem, and derive local image nullity for second-countable aggregation."},
       :representation
       {:source
-       "Exact C1 ImplicitFunctionData and a residual map whose derivative at the base point vanishes on the kernel of the left-coordinate derivative.",
+       "Exact ImplicitFunctionData whose left derivative is a projected block of a derivative field, on a locus where that block is surjective and the full derivative rank is bounded by the projected target dimension.",
        :target
-       "Zero Frechet derivative at the kernel base coordinate for the residual map composed with the fixed-left-coordinate inverse-chart slice."},
-      :id
-      :critical-value-sard-implicit-function-residual-slice-flatness-1,
+       "Zero Frechet derivative of the complementary residual map after restriction to the fixed-left-coordinate inverse-chart slice."},
+      :id :critical-value-sard-rank-upper-residual-slice-flatness-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-projected-inverse-chart-slice-contdiff-1
-       :critical-value-sard-projected-inverse-chart-slice-constancy-1
-       :critical-value-sard-eventually-constant-coordinate-slice-flatness-1
-       :critical-value-sard-local-residual-derivative-flatness-1],
+      [:critical-value-sard-implicit-function-residual-slice-flatness-1
+       :critical-value-sard-local-residual-derivative-flatness-1
+       :critical-value-sard-first-derivative-rank-piece-projected-defining-data-1],
       :current-residual
-      "Residual derivative flatness now transports through the exact inverse-chart slice; projected rank-at-most instantiation and local rank-piece image nullity remain.",
+      "Rank-at-most hypotheses now imply zero residual derivative on inverse-coordinate slices; pointwise projected instantiation and local image nullity remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture now performs the substantive slice synthesis for exact ImplicitFunctionData: it extracts the inverse-slice derivative, proves the slice returns to the implicit-function base point, pulls back the eventual left-coordinate identity, and combines kernel tangency with a residual derivative vanishing on the left-coordinate kernel. The residual restricted to the inverse-chart slice consequently has zero Frechet derivative. Projected rank-at-most instantiation and local image nullity remain.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture now instantiates residual-slice flatness on a rank-at-most locus: projected-block surjectivity and the full derivative rank bound imply that the residual derivative vanishes on the projected kernel, which is identified with the implicit-function left-coordinate kernel. The residual map restricted to the fixed-coordinate inverse slice therefore has zero Frechet derivative. Projected coordinate construction at each exact-rank point and local image-nullity induction remain.",
      :commands
      [{:cmd
-       "rg -n \"symm.*HasFDeriv|HasFDeriv.*symm|ContDiff.*symm|kernelParameter.*HasFDeriv\" ConstructionTargets .lake/packages/mathlib/Mathlib/Analysis/Calculus/InverseFunctionTheorem | head -220",
+       "sed -n '1,180p' ConstructionTargets/SardImplicitFunctionResidualSliceFlatness.lean; sed -n '1,180p' ConstructionTargets/SardLocalResidualDerivativeFlatness.lean",
        :exit 0}
       {:cmd
-       "sed -n '1,180p' ConstructionTargets/SardImplicitFunctionKernelParameterContDiff.lean; sed -n '170,215p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/Implicit.lean",
-       :exit 0}
+       "lake build ConstructionTargets.SardLocalResidualDerivativeFlatness",
+       :exit 0,
+       :output "Build completed successfully (8241 jobs)."}
       {:cmd
-       "lake env lean /tmp/SardImplicitFunctionResidualSliceFlatnessProbe.lean",
+       "lake env lean /tmp/SardRankUpperResidualSliceFlatnessProbe.lean",
        :exit 0,
        :output
-       "'SardImplicitFunctionResidualSliceFlatnessProbe.ImplicitFunctionData.hasFDerivAt_zero_residual_kernelParameter' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardRankUpperResidualSliceFlatnessProbe.ImplicitFunctionData.hasFDerivAt_zero_residual_kernelParameter_of_rankUpper' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardImplicitFunctionResidualSliceFlatnessProbe.lean",
+       "sha256sum /tmp/SardRankUpperResidualSliceFlatnessProbe.lean",
        :exit 0,
        :output
-       "d67e2777dbbad8f324e5d9597ec026d71065c029f838380d33acb519fe1b1371  /tmp/SardImplicitFunctionResidualSliceFlatnessProbe.lean"}
+       "252c0698b064157d1ac3a7d84d26c421eee0469108d8d56010eef4f84399c9ab  /tmp/SardRankUpperResidualSliceFlatnessProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardImplicitFunctionResidualSliceFlatnessProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardRankUpperResidualSliceFlatnessProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 131 items OK; {:done 123, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 132 items OK; {:done 124, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
-       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardProjectedInverseChartSliceContDiff.lean ConstructionTargets/SardProjectedInverseChartSliceConstancy.lean ConstructionTargets/SardEventuallyConstantCoordinateSliceFlatness.lean",
+       "sha256sum problems/t93A04/lean/Main.lean ConstructionTargets/SardImplicitFunctionResidualSliceFlatness.lean ConstructionTargets/SardLocalResidualDerivativeFlatness.lean",
        :exit 0,
        :output
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean; bae487195281788e880e8e9d8fcac8c8e2dac8a6b7e23d98d29b53dbdf71a64b  ConstructionTargets/SardProjectedInverseChartSliceContDiff.lean; 715bb62594db19afb534d5c5c502bac4b3c7bae5e7becf27ba7dd6d5560365ff  ConstructionTargets/SardProjectedInverseChartSliceConstancy.lean; fa1a986e82946b061e707c94d30bdf9d67c4d466a587b92411a89bf8b27ab15d  ConstructionTargets/SardEventuallyConstantCoordinateSliceFlatness.lean"}
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean; d67e2777dbbad8f324e5d9597ec026d71065c029f838380d33acb519fe1b1371  ConstructionTargets/SardImplicitFunctionResidualSliceFlatness.lean; 1808503ec9076e003d6eda51c5991493cbfcec323b55e16f306f2f7f2c83ca2d  ConstructionTargets/SardLocalResidualDerivativeFlatness.lean"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -16702,12 +16735,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardImplicitFunctionResidualSliceFlatnessProbe.lean",
+     {:path "/tmp/SardRankUpperResidualSliceFlatnessProbe.lean",
       :sha256
-      "d67e2777dbbad8f324e5d9597ec026d71065c029f838380d33acb519fe1b1371"},
+      "252c0698b064157d1ac3a7d84d26c421eee0469108d8d56010eef4f84399c9ab"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -16787,7 +16820,8 @@
     :critical-value-sard-eventually-constant-coordinate-slice-flatness-1
     :critical-value-sard-projected-inverse-chart-slice-constancy-1
     :critical-value-sard-projected-inverse-chart-slice-contdiff-1
-    :critical-value-sard-implicit-function-residual-slice-flatness-1],
+    :critical-value-sard-implicit-function-residual-slice-flatness-1
+    :critical-value-sard-rank-upper-residual-slice-flatness-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
