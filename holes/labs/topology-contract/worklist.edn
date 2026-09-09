@@ -38421,6 +38421,24 @@
       "git add ConstructionTargets/SardLocalEndpointCompactCoverData.lean ConstructionTargets/SardLocalEndpointCompactCoverData.md && git commit -m 'topology: construct compact local endpoint cover data'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788924954275-15923-c2dc8afe",
+     :commands
+     ["git show 823b8268f2761bb07cddd5a797b24b522b00cc2d --format=fuller --stat"
+      "sha256sum /tmp/SardLocalEndpointCompactCoverDataProbe.lean"
+      "cmp fixture recorded-source"
+      "git show commit:ConstructionTargets/SardLocalEndpointCompactCoverData.lean | sed -n '7,37p' | sha256sum"
+      "lake env lean /tmp/SardLocalEndpointCompactCoverDataProbe.lean"
+      "lake env lean ConstructionTargets/SardLocalEndpointCompactCoverData.lean"
+      "lake build ConstructionTargets.SardLocalEndpointCompactCoverData"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check commit^ commit"
+      "git diff --exit-code commit -- ConstructionTargets"
+      "consumer hash and placeholder checks"],
+     :finding
+     "Commit 823b8268 has exact declared scope; fixture and frozen hashes reproduce. Positive scale min(1,delta/2), centers contained in K, and closed-ball distance imply the strict local remainder premise correctly. Packing bounds and coercions match the data predicate. Standard axioms only, zero scoped placeholders, all gates passed."},
     :commit "823b8268f2761bb07cddd5a797b24b522b00cc2d",
     :changed-paths
     ["ConstructionTargets/SardLocalEndpointCompactCoverData.lean"
@@ -38430,7 +38448,7 @@
      :sha256
      "2a32e00dde823cd0cfe6b9680fd9a2babf835ce1308518f1044e9f2d4be853be"}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardLocalEndpointCompactCoverData.lean"
     "ConstructionTargets/SardLocalEndpointCompactCoverData.md"],
@@ -38609,7 +38627,7 @@
       "2a32e00dde823cd0cfe6b9680fd9a2babf835ce1308518f1044e9f2d4be853be"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
