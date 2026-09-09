@@ -34905,8 +34905,76 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if exact positive derivative rank, a localized derivative-rank upper bound, finite-order regularity, and the inherited coordinate topology-and-measure packets cannot jointly yield an open neighborhood whose closed localized source image has zero target measure, or if the theorem requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Aggregate the banked pointwise positive-rank neighborhoods over each finite rank stratum and combine them with the rank-zero finite-order branch.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_openCoordSpace_addHocus_image_zero_of_finiteOrder_positiveRank"
+     "2049b1b189481678372cc5770b4d386de7f11bdee13439fd1c6489142e7e9157"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean",
+      :exit 0,
+      :output
+      "050b41683ddf8b96214b90217d449fb08f27babd70a2fee8d4e44dc6f657f101  /tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean"}
+     {:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "diff -u /tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.lean",
+      :exit 0,
+      :output
+      "'exists_open_image_zero_of_finiteOrder_positiveRank' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.lean ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '20,97p' ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "2049b1b189481678372cc5770b4d386de7f11bdee13439fd1c6489142e7e9157  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 267 items OK; {:done 258, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "9b2bff9f05d21a33a5572ef1c94f16ec107ca41f",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.lean"
+     "ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.md"],
+    :fixture
+    {:path
+     "/tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean",
+     :sha256
+     "050b41683ddf8b96214b90217d449fb08f27babd70a2fee8d4e44dc6f657f101"},
+    :declarations
+    ["exists_open_image_zero_of_finiteOrder_positiveRank"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.lean"
     "ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.md"],
