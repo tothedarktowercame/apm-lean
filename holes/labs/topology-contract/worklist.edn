@@ -52661,9 +52661,70 @@
   {:consumer "t93A04",
    :stop-condition
    "GO requires a compiled actual-chart slice result with the weaker open-domain induction premise and demonstrated localization compatibility. REVISE requires exactly one compiled prerequisite. Never derive neighborhood infinity from one-point eventual regularity.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Propagate the open-domain contract through compact/open/stratum/global assembly; repair the analogous first-nonzero-jet rank-zero contract; discharge induction and manifold transport. No unconditional Sard or frozen consumer closure.",
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {"exists_positive_rank_slice_image_null"
+      "959413545e26c3d98f8d8a1aa908484c55ed836fa9f5a352c16d92aa6af9c88e",
+      "open_induction_of_global"
+      "8cc7668951be123f8d8b8598a81deaea011a67c99c549600f699d818cd851590",
+      "exists_positive_rank_slice_image_null_of_global_induction"
+      "2eaf6db0af20c041dd9379270105f9ee0281782c864731f670f1b4320de788b7"},
+     :consumer-placeholder-delta 0,
+     :acceptance
+     {:declarations
+      ["SardPositiveRankSliceOpenInductionContractProbe.exists_positive_rank_slice_image_null"
+       "SardPositiveRankSliceOpenInductionContractProbe.open_induction_of_global"
+       "SardPositiveRankSliceOpenInductionContractProbe.exists_positive_rank_slice_image_null_of_global_induction"],
+      :gates
+      ["Compile promoted module and reproduce all three axiom audits."
+       "Run lake build ConstructionTargets.SardPositiveRankSliceOpenInductionContract."
+       "Verify fixture hashes, zero executable placeholders and preservation of existing APIs."],
+      :axioms :standard-only},
+     :axioms [propext Classical.choice Quot.sound],
+     :documentation
+     {:path "/tmp/SardPositiveRankSliceOpenInductionContract.md",
+      :sha256
+      "638f3eef77d1955b9d2a2a2c9678e5618fa0def6e1cf7d89bae4a6b5e6dee71a"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/SardPositiveRankSliceOpenInductionContract.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/sard-open-slice-audit.py", :exit 0}
+      {:cmd "bb /tmp/t95j06-review.bb", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/SardPositiveRankSliceOpenInductionContract.lean",
+       :exit 1,
+       :correction
+       "Derived the complementary target Borel instance using the existing derivative-range producer; removed unused section assumptions."}
+      {:cmd
+       "lake env lean /tmp/SardPositiveRankSliceOpenInductionContract.lean",
+       :exit 1,
+       :correction
+       "Passed the derived Borel witness explicitly to the localization compatibility theorem; final compilation passed."}],
+     :changed-paths [],
+     :fixture-placeholders 0,
+     :fixture
+     {:path "/tmp/SardPositiveRankSliceOpenInductionContract.lean",
+      :sha256
+      "beb949179f25ab87d228f281df141b404e0b680de5411f3f5707027a925f64b7"},
+     :finding
+     "Compiled actual-chart residual-slice nullity using only open-domain smooth induction over strictly smaller complete finite-dimensional real inner-product sources, including dimension zero. Derived kernel dimension drop, complementary-target nontriviality, openness of the actual target slice, genuine-infinity ContDiffOn regularity, and criticality on its rank-bounded subset. Compiled both the localization-to-open-induction implication and its composition with the actual slice theorem.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardPositiveRankSliceOpenInductionContract.lean"
+       "ConstructionTargets/SardPositiveRankSliceOpenInductionContract.md"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/SardPositiveRankSliceOpenInductionContract.lean"
+    "ConstructionTargets/SardPositiveRankSliceOpenInductionContract.md"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / compatible open-domain slice induction",
    :acceptance
