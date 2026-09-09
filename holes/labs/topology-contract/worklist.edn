@@ -43322,6 +43322,23 @@
       "git add ConstructionTargets/SardBorelPositiveRankPointwiseClosedOpenNullity.lean ConstructionTargets/SardBorelPositiveRankPointwiseClosedOpenNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: construct Borel positive-rank local nullity' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788956140896-16254-fd1fcf8c",
+     :commands
+     ["git show a466c7ae --stat --oneline"
+      "sha256sum /tmp/SardBorelPositiveRankPointwiseClosedOpenNullityProbe.lean"
+      "cmp /tmp/SardBorelPositiveRankPointwiseClosedOpenNullityProbe.lean <(git show a466c7ae2a5f6b471ddf17c1b31bb0bcbfb92fea:ConstructionTargets/SardBorelPositiveRankPointwiseClosedOpenNullity.lean)"
+      "git show a466c7ae2a5f6b471ddf17c1b31bb0bcbfb92fea:ConstructionTargets/SardBorelPositiveRankPointwiseClosedOpenNullity.lean | sed -n '16,31p' | sha256sum"
+      "git diff --exit-code a466c7ae2a5f6b471ddf17c1b31bb0bcbfb92fea -- ConstructionTargets"
+      "lake env lean /tmp/SardBorelPositiveRankPointwiseClosedOpenNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardBorelPositiveRankPointwiseClosedOpenNullity.lean"
+      "lake build ConstructionTargets.SardBorelPositiveRankPointwiseClosedOpenNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit a466c7ae2a5f6b471ddf17c1b31bb0bcbfb92fea passes. Fixture SHA 533951c88e745dab8e7d87e7455b86e1de6adeed5c99e110800919eb6d5a8cc5 and statement SHA b287555fdee23c4ae76c3e39d05e2572e9e03d17ed24a37e064a9d59af18c0cb reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8373-job build successful. Lines 32–70 correctly construct chart and residual certificates, preserve localized derivative-zero scope, and instantiate Borel chart nullity with strict dimension drop. Ledger untouched."},
     :commit "a466c7ae2a5f6b471ddf17c1b31bb0bcbfb92fea",
     :changed-paths
     ["ConstructionTargets/SardBorelPositiveRankPointwiseClosedOpenNullity.lean"
@@ -43334,7 +43351,7 @@
     :declarations
     ["SardBorelPositiveRankPointwiseClosedOpenNullityProbe.exists_open_rankUpper_image_zero_finiteOrder"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardBorelPositiveRankPointwiseClosedOpenNullity.lean"
     "ConstructionTargets/SardBorelPositiveRankPointwiseClosedOpenNullity.md"],
@@ -43522,7 +43539,7 @@
       "533951c88e745dab8e7d87e7455b86e1de6adeed5c99e110800919eb6d5a8cc5"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
