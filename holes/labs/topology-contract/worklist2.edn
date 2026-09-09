@@ -7336,7 +7336,8 @@
    "No repeated unresolved STOP, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
    {:outcome :replan,
-    :seat "codex-13",
+    :disposition :replan,
+    :author "codex-13",
     :commands
     [{:cmd
       "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md and docs/TN-topology-closure-experiments.md",
@@ -7351,43 +7352,20 @@
      {:cmd "sha256sum problems/t00J01/lean/Main.lean", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :finding
-    {:baseline "6a188c8ff7f7494c150ace09d3595e49d100510c",
-     :preserved-boundaries
-     "Preserve t01A05's reviewed disconnected zero-dimensional counterexample, t96J07's precedence defect, the historical t94J08 refutation and positive-dimensional repair, the regular-fiber atlas STOP, and unresolved integration, surface, gluing and degree STOPs.",
-     :head "62f03db4f09b7f585fd9a6d30c2fd4b5e72c9570",
-     :infrastructure-packets
-     {:modules-before 632,
-      :modules-after 635,
-      :portfolio 1,
-      :concurrent 2,
-      :portfolio-commit "17c8321a",
-      :concurrent-modules
-      ["SardPositiveRankSliceOpenInductionContract"
-       "SardPositiveRankStratumOpenContractAssembly"]},
-     :ranking
-     "Exactly one near-closure adapter first: t00J01 has one placeholder and no full-closure probe in either campaign ledger. Its DAG uptake description is stale relative to the actual mixed Klein-product, rational Lefschetz and circle-fold statement; the probe must test all three. Among reusable work, quotient-action transport reaches four covering consumers and has a bounded existing quotient-map substrate. Sard is concurrently owned; orientation, Kunneth, Stokes and generic gluing require larger independent constructions. No stopped full consumer is retried.",
-     :typed-residual-change
-     "Literal pullback covering construction and exact fiber transport are now banked. The actual graph-cover existence and total-space separation obligations remain unchanged. No frozen problem file changed.",
-     :concurrency-exclusion
-     "Exclude sard-positive-rank-stratum-open-contract-assembly-probe-refill24 and the other campaign's successor strategy.",
-     :review-outcomes
-     {:portfolio-pass 2,
-      :infrastructure-stop 1,
-      :implemented-packet 1,
-      :frozen-closures 0},
-     :census
-     {:path "/tmp/Checkpoint10Census.json",
-      :existing 58,
-      :zero-placeholder 19,
-      :placeholder-delta 0,
-      :placeholders-before 71,
-      :placeholders-after 71,
-      :sha256
-      "b55da10e2fd9326aa6346450a8c7f3b6e92a936f0db46a887ff1e2a2edde212e",
-      :named 59,
-      :missing [:t93A05]}},
-    :changed-paths [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788990742061-17150-1e8009ca",
+     :commands
+     ["git show 60d5cc01:holes/labs/topology-contract/worklist2.edn"
+      "git show 60d5cc01:problems/t00J01/lean/Main.lean"
+      "python3 inline independent pinned census, census SHA256, frozen hash, changed-path attribution and scope audit"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 60d5cc01:holes/labs/topology-contract/worklist2.edn)"
+      "bb inline proposed-tail equality, successor-policy and historical concurrency audit"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Independent strategy review passes. Census hash and all 59 consumer counts reproduce: placeholders 71 -> 71, modules 632 -> 635 with one portfolio and two concurrent additions. Frozen t00J01 hash and one placeholder match. Exactly one consumer probe precedes quotient-action infrastructure; representation direction, actual descent obligations and successor policy are explicit. No active-work duplication or frozen closure claimed. Ledger untouched."},
     :replacement-items
     [{:consumer :t00J01,
       :stop-condition
@@ -7480,10 +7458,46 @@
        :oriented-checkpoint10-graph-and-base-change-refill],
       :current-residual
       "Measure exact t00J01 uptake separately from quotient-action infrastructure; preserve all unresolved consumer and atlas boundaries."}],
-    :author "codex-13",
-    :disposition :replan},
+    :changed-paths [],
+    :finding
+    {:baseline "6a188c8ff7f7494c150ace09d3595e49d100510c",
+     :preserved-boundaries
+     "Preserve t01A05's reviewed disconnected zero-dimensional counterexample, t96J07's precedence defect, the historical t94J08 refutation and positive-dimensional repair, the regular-fiber atlas STOP, and unresolved integration, surface, gluing and degree STOPs.",
+     :head "62f03db4f09b7f585fd9a6d30c2fd4b5e72c9570",
+     :infrastructure-packets
+     {:modules-before 632,
+      :modules-after 635,
+      :portfolio 1,
+      :concurrent 2,
+      :portfolio-commit "17c8321a",
+      :concurrent-modules
+      ["SardPositiveRankSliceOpenInductionContract"
+       "SardPositiveRankStratumOpenContractAssembly"]},
+     :ranking
+     "Exactly one near-closure adapter first: t00J01 has one placeholder and no full-closure probe in either campaign ledger. Its DAG uptake description is stale relative to the actual mixed Klein-product, rational Lefschetz and circle-fold statement; the probe must test all three. Among reusable work, quotient-action transport reaches four covering consumers and has a bounded existing quotient-map substrate. Sard is concurrently owned; orientation, Kunneth, Stokes and generic gluing require larger independent constructions. No stopped full consumer is retried.",
+     :typed-residual-change
+     "Literal pullback covering construction and exact fiber transport are now banked. The actual graph-cover existence and total-space separation obligations remain unchanged. No frozen problem file changed.",
+     :concurrency-exclusion
+     "Exclude sard-positive-rank-stratum-open-contract-assembly-probe-refill24 and the other campaign's successor strategy.",
+     :review-outcomes
+     {:portfolio-pass 2,
+      :infrastructure-stop 1,
+      :implemented-packet 1,
+      :frozen-closures 0},
+     :census
+     {:path "/tmp/Checkpoint10Census.json",
+      :existing 58,
+      :zero-placeholder 19,
+      :placeholder-delta 0,
+      :placeholders-before 71,
+      :placeholders-after 71,
+      :sha256
+      "b55da10e2fd9326aa6346450a8c7f3b6e92a936f0db46a887ff1e2a2edde212e",
+      :named 59,
+      :missing [:t93A05]}},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: graph-cover uptake and full-DAG continuation",
@@ -7505,7 +7519,7 @@
    :stop-condition
    "Preserve every frozen quotient, homology functor, induced trace and regularity quantifier. No assumed Klein manifold, product homology or root classification.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue A and surface invariants: exact three-counterexample consumer",
@@ -7537,7 +7551,7 @@
    :stop-condition
    "No supplied quotient homeomorphism or target covering. Do not claim graph gluing, deck classification, surface Euler multiplicativity or frozen closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "COVERING-BASIC: action equivalence and literal orbit-quotient transport",
