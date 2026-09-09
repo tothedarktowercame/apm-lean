@@ -9664,9 +9664,91 @@
   {:consumer :t00J01-rational-sphere-homology,
    :stop-condition
    "Use actual singularHomologyFunctor with coefficient object ModuleCat.of R R. No assumed H0 table, coefficient-change isomorphism, path-component classification or higher-sphere homology.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "The explicit-coefficient positive-sphere H0 endpoint is complete and ready for implementation. Higher sphere homology and the frozen consumer remain open.",
+     :axiom-audits 9,
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture, preserving coefficient-generic generators, path-boundary relations, augmentation descent, naturality and constructed inverse. Retain the exact rational sphere witness.",
+      :namespace "ConstructionTargets.CoefficientH0",
+      :hypotheses
+      "R : Type with CommRing R; X,Y : Type with topologies. Augmentation and naturality require no connectedness. The inverse requires PathConnectedSpace X and an explicit point p : X. Sphere specialization requires NeZero n. Ring and spaces are universe zero.",
+      :declarations
+      ["singularGenerator"
+       "singularGenerator_boundary"
+       "singularEdgeOfPath_boundary"
+       "singularVertexH0Class"
+       "singularVertexH0Class_eq_of_path"
+       "zeroChainH0Class"
+       "zeroChainAugmentation"
+       "zeroChainH0Class_eq_augmentation_comp_vertex"
+       "h0Augmentation"
+       "zeroChainH0Class_comp_h0Augmentation"
+       "h0Augmentation_naturality"
+       "singularVertexH0Class_comp_h0Augmentation"
+       "augmentation_comp_vertex"
+       "h0Iso"
+       "sphereH0"
+       "rationalS2H0"
+       "integralS2H0"
+       "identity_induced"],
+      :consumer-equation
+      "For nonempty path-connected X, the canonical augmentation from actual H0(X;R) to R is an isomorphism, natural under continuous maps. In particular actual H0 of the literal Euclidean S2 with coefficient object ModuleCat.of Q Q is isomorphic to ModuleCat.of Q Q.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target."
+       "Run lake build ConstructionTargets.CoefficientH0 ConstructionTargets.SingularH0Augmentation ConstructionTargets.SphereHomology."
+       "Reproduce all nine standard-only axiom audits."
+       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."],
+      :consumer-residual
+      "Rational H1 vanishing and H2 identification, coefficient-general sphere suspension and endpoints, product homology and full t00J01 closure remain downstream. Ordinary S0 retains its separate two-coordinate H0 answer."},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "bb dependency-review query for oriented-checkpoint14-regular-line-and-pair-naturality-refill",
+       :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientH0.lean", :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientH0.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientH0.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "First two lake env lean /tmp/CoefficientH0.lean attempts",
+       :exit 1,
+       :attempts 2,
+       :correction
+       "Corrected coefficient arguments in unfolding lists and supplied the homology projection epimorphism explicitly from its cokernel universal property, resolving instance search without changing resource limits."}
+      {:cmd "Initial identity-induced-map audit compilation",
+       :exit 1,
+       :correction
+       "Qualified CategoryTheory.Functor.map_id to distinguish it from the ordinary functional Functor theorem."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientH0.lean",
+      :sha256
+      "3accdb80581f1167e758706b4a7e80503c413f835cf53f09d47b50dcc5cbb932"},
+     :finding
+     "The complete coefficient-general H0 packet compiles. Actual singular generators satisfy the alternating boundary formula over ModuleCat R. Singular path boundaries identify endpoint classes. Coefficient summation descends to the canonical augmentation on actual H0, naturally under continuous maps. Zero-simplex generation proves that a chosen point class is its inverse on a path-connected space, with both inverse equations. Positive-dimensional literal sphere specializations include the exact rational S2 H0 comparison type and its integer specialization. Identity-induced map compatibility is proved. No integral isomorphism is treated as a rational one.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientH0.lean"
+       "ConstructionTargets/CoefficientH0.md"]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientH0.lean"
+    "ConstructionTargets/CoefficientH0.md"],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS: coefficient-general H0 augmentation and positive-sphere endpoint",
    :acceptance
