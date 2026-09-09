@@ -43459,6 +43459,23 @@
       "git add ConstructionTargets/SardBorelPositiveRankStratumNullity.lean ConstructionTargets/SardBorelPositiveRankStratumNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: aggregate Borel positive-rank stratum nullity' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788956497934-16260-0cf6d024",
+     :commands
+     ["git show 6666fece --stat --oneline"
+      "sha256sum /tmp/SardBorelPositiveRankStratumNullityProbe.lean"
+      "cmp /tmp/SardBorelPositiveRankStratumNullityProbe.lean <(git show 6666fecef97e611f47dba305b448f1a208ea9d62:ConstructionTargets/SardBorelPositiveRankStratumNullity.lean)"
+      "git show 6666fecef97e611f47dba305b448f1a208ea9d62:ConstructionTargets/SardBorelPositiveRankStratumNullity.lean | sed -n '9,24p' | sha256sum"
+      "git diff --exit-code 6666fecef97e611f47dba305b448f1a208ea9d62 -- ConstructionTargets"
+      "lake env lean /tmp/SardBorelPositiveRankStratumNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardBorelPositiveRankStratumNullity.lean"
+      "lake build ConstructionTargets.SardBorelPositiveRankStratumNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit 6666fecef97e611f47dba305b448f1a208ea9d62 passes. Fixture SHA b4adcb681a4c39338280c39060d08c3e50a759fae2d14dd7bf8f5f72665534fc and statement SHA 0b601236af0bbb96817a743f743cc4178e5dc2bb0e31beb862cecddc9d265e0d reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8382-job build successful. Lines 25–32 correctly orient exact-rank containment and local aggregation while retaining criticality and Borel induction premises. Ledger untouched."},
     :commit "6666fecef97e611f47dba305b448f1a208ea9d62",
     :changed-paths
     ["ConstructionTargets/SardBorelPositiveRankStratumNullity.lean"
@@ -43470,7 +43487,7 @@
     :declarations
     ["SardBorelPositiveRankStratumNullityProbe.measure_image_zero_of_positive_rankStratum_finiteOrder"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardBorelPositiveRankStratumNullity.lean"
     "ConstructionTargets/SardBorelPositiveRankStratumNullity.md"],
@@ -43639,7 +43656,7 @@
       "b4adcb681a4c39338280c39060d08c3e50a759fae2d14dd7bf8f5f72665534fc"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
