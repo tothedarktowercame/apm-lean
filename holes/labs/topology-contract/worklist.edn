@@ -45980,6 +45980,42 @@
    "The derivative-loss jet branch now consumes positive-order induction directly; aggregation, rank-reduction migration, and complementary analytic cases remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if common rank subtraction fails to preserve admissibility under the stated rank bounds, positive-order induction fails to instantiate for the smaller-dimensional slice, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardBorelPositiveOrderReducedDimensionNullity.lean"
+    "ConstructionTargets/SardBorelPositiveOrderReducedDimensionNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL POSITIVE-ORDER REDUCED-DIMENSION NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean",
+     :sha256
+     "7cd3db8b4b0c6a07f51e370f3f4ae25d6f0281eda9bb444f9cb0fa888fb3624c"},
+    :declarations
+    ["reducedDimension_slice_nullity_of_borel_positive_order"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Integrate this interface into positive-rank chart nullity and the positive-order jet theorem into rank-zero aggregation; resolve complementary analytic cases before rectangular closure."},
+   :representation
+   {:source
+    "Positive-order Borel critical nullity below a source-dimension bound, finite-dimensional normed slice spaces with Borel target and additive Haar measure, common-rank dimension identities, rank bounds, and original admissibility at an explicitly positive finite order.",
+    :target
+    "Nullity of localized critical images of slice maps with pointwise ambient regularity at that same finite order."},
+   :id
+   :critical-value-sard-borel-positive-order-reduced-dimension-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-borel-positive-order-critical-nullity-1
+    :critical-value-sard-rank-drop-regularity-admissibility-1],
+   :current-residual
+   "Rank-reduced slice nullity consumes positive-order induction directly; chart integration, rank-zero aggregation, and complementary analytic cases remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -46033,77 +46069,79 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank the positive-order derivative-loss jet theorem, integrate aggregation and rank-reduction interfaces, and discharge complementary analytic cases. No full rectangular closure claimed; ledger and frozen consumer unchanged.",
+     "Bank positive-order rank-reduced slice nullity, integrate chart and rank-zero arguments, and discharge complementary analytic cases. Full rectangular closure remains open; ledger and frozen consumer unchanged.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"firstNonzeroJet_image_null_of_borel_positive_order_loss"
-      "426afd9489a9f37fe537d4b7c9a38ba58b3a3363ddc76f27fe7a2c8f220ebb06"},
+     {"reducedDimension_slice_nullity_of_borel_positive_order"
+      "2511d8a9e4d617a540b7657c740743803ea6eaa858b638ede9e7d71d86fcf8fe"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if i ≤ k fails to ensure positive remaining order, the dimension budget fails to imply lower-dimensional admissibility, reviewed first-nonzero-jet induction fails under these hypotheses, or nonstandard axioms are required.",
+      "Stop only if common rank subtraction fails to preserve admissibility under the stated rank bounds, positive-order induction fails to instantiate for the smaller-dimensional slice, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardJetBorelPositiveOrderLossNullity.lean"
-       "ConstructionTargets/SardJetBorelPositiveOrderLossNullity.md"],
+      ["ConstructionTargets/SardBorelPositiveOrderReducedDimensionNullity.lean"
+       "ConstructionTargets/SardBorelPositiveOrderReducedDimensionNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / JET BOREL POSITIVE-ORDER LOSS NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL POSITIVE-ORDER REDUCED-DIMENSION NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardJetBorelPositiveOrderLossNullityProbe.lean",
+       {:path
+        "/tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean",
         :sha256
-        "482f6c1d8c2130a00bac510bff9a68a1e40d4f40ddfef60f8de097abe021ab1f"},
+        "7cd3db8b4b0c6a07f51e370f3f4ae25d6f0281eda9bb444f9cb0fa888fb3624c"},
        :declarations
-       ["firstNonzeroJet_image_null_of_borel_positive_order_loss"],
+       ["reducedDimension_slice_nullity_of_borel_positive_order"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Integrate this positive-order jet result into rank-zero aggregation, migrate the rank-reduction induction interface, and resolve complementary analytic cases before rectangular closure."},
+       "Integrate this interface into positive-rank chart nullity and the positive-order jet theorem into rank-zero aggregation; resolve complementary analytic cases before rectangular closure."},
       :representation
       {:source
-       "Finite-dimensional real inner-product spaces, a Borel target with additive Haar measure, global C^(k+1) regularity, 1 ≤ i ≤ k, sourceDim+i ≤ targetDim+k+1, a critical source subset, and positive-order Borel critical nullity below the source dimension.",
+       "Positive-order Borel critical nullity below a source-dimension bound, finite-dimensional normed slice spaces with Borel target and additive Haar measure, common-rank dimension identities, rank bounds, and original admissibility at an explicitly positive finite order.",
        :target
-       "Nullity of the image of the first-nonzero-jet locus at order i+1, using the explicitly positive remaining order k+1-i."},
-      :id :critical-value-sard-jet-borel-positive-order-loss-nullity-1,
+       "Nullity of localized critical images of slice maps with pointwise ambient regularity at that same finite order."},
+      :id
+      :critical-value-sard-borel-positive-order-reduced-dimension-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1
-       :critical-value-sard-borel-positive-order-critical-nullity-1],
+      [:critical-value-sard-borel-positive-order-critical-nullity-1
+       :critical-value-sard-rank-drop-regularity-admissibility-1],
       :current-residual
-      "The derivative-loss jet branch now consumes positive-order induction directly; aggregation, rank-reduction migration, and complementary analytic cases remain.",
+      "Rank-reduced slice nullity consumes positive-order induction directly; chart integration, rank-zero aggregation, and complementary analytic cases remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite migrates the first-nonzero-jet derivative-loss argument to positive-order induction. The bound i ≤ k proves 1 ≤ k+1-i at the actual induction application; the dimension budget supplies admissibility. No conversion to the broader all-orders predicate is assumed.",
+     "One compiled prerequisite supplies rank-reduced slice nullity from positive-order Borel induction. Common rank subtraction preserves admissibility, while the unchanged finite order retains the explicit positivity premise. No all-orders predicate conversion is used.",
      :commands
      [{:cmd
-       "Read DAG certification rule, closure policy, reduced-dimension and jet-loss modules, first-nonzero-jet induction module, and relevant independent PASS findings",
+       "Read DAG certification rule, closure policy, reduced-dimension and rank-admissibility modules, and reviewed positive-order, rank-subtraction, and jet-loss findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardJetBorelPositiveOrderLossNullityProbe.lean",
+       "lake env lean /tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardJetBorelPositiveOrderLossNullityProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
-       "Fixture 482f6c1d8c2130a00bac510bff9a68a1e40d4f40ddfef60f8de097abe021ab1f; frozen consumer 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
+       "Fixture 7cd3db8b4b0c6a07f51e370f3f4ae25d6f0281eda9bb444f9cb0fa888fb3624c; frozen consumer 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '7,20p' /tmp/SardJetBorelPositiveOrderLossNullityProbe.lean | sha256sum",
+       "sed -n '7,19p' /tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "426afd9489a9f37fe537d4b7c9a38ba58b3a3363ddc76f27fe7a2c8f220ebb06"}
+       "2511d8a9e4d617a540b7657c740743803ea6eaa858b638ede9e7d71d86fcf8fe"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardJetBorelPositiveOrderLossNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 354 items OK; {:done 346, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 355 items OK; {:done 347, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -46114,16 +46152,19 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1",
        :exit 0,
-       :output "?? holes/labs/topology-contract/runs2/",
-       :note "Unrelated untracked directory; untouched."}],
+       :output
+       "A ConstructionTargets/RelativeSingularConnectingNaturality.lean; A ConstructionTargets/RelativeSingularConnectingNaturality.md; ?? holes/labs/topology-contract/runs2/",
+       :note
+       "Unrelated staged files and untracked directory preserved untouched."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardJetBorelPositiveOrderLossNullityProbe.lean",
+     {:path
+      "/tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean",
       :sha256
-      "482f6c1d8c2130a00bac510bff9a68a1e40d4f40ddfef60f8de097abe021ab1f"},
+      "7cd3db8b4b0c6a07f51e370f3f4ae25d6f0281eda9bb444f9cb0fa888fb3624c"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -46426,7 +46467,8 @@
     :critical-value-sard-order-one-critical-nullity-1
     :critical-value-sard-lower-dimension-critical-image-equality-1
     :critical-value-sard-borel-positive-order-critical-nullity-1
-    :critical-value-sard-jet-borel-positive-order-loss-nullity-1],
+    :critical-value-sard-jet-borel-positive-order-loss-nullity-1
+    :critical-value-sard-borel-positive-order-reduced-dimension-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
