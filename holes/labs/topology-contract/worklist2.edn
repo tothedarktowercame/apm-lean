@@ -7518,8 +7518,67 @@
   {:consumer :t00J01,
    :stop-condition
    "Preserve every frozen quotient, homology functor, induced trace and regularity quantifier. No assumed Klein manifold, product homology or root classification.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :statement-sha256
+    "8ce8ed2ee9eb415d3ef5567fb62dd6ffe01343194c5782b91b18d7b2a6621ae1",
+    :residual
+    "All three frozen branches remain unclosed. No implementation scope or partial closure GO proposed.",
+    :typed-boundaries
+    ["T00J01Boundary.MissingKlein"
+     "T00J01Boundary.MissingRationalSphere"
+     "T00J01Boundary.MissingFold"],
+    :axiom-audits 3,
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :boundary-status
+    "These definitions specify unproved obligations; none is assumed or asserted as a theorem. The diagnostic preserves the exact frozen prefix and proves that the actual identity-induced rational homology map is the identity in every degree.",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :placeholder-before 1,
+    :reason :multiple-independent-geometry-and-homology-boundaries,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read DAG Queue A, closure stop rules, frozen Main and reviewed checkpoint10 dependency receipt",
+      :exit 0}
+     {:cmd
+      "Inspect SphereHomology, ConstructionTargets searches, LEMMA-INDEX and historical t00J01 statements",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T00J01Boundary.lean", :exit 0}
+     {:cmd
+      "Python exact-prefix verification, comment-stripped placeholder census and frozen statement hash",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/T00J01Boundary.lean problems/t00J01/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T00J01Boundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial lake env lean /tmp/T00J01Boundary.lean",
+      :exit 1,
+      :correction
+      "Qualified CategoryTheory.Functor.map_id to avoid the unrelated root Functor theorem."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T00J01Boundary.lean",
+     :sha256
+     "94d5f3f65a33c35dccc88ce34d383a721a646b69627def6e6ea8a60852d80f98",
+     :role :boundary-diagnostic,
+     :complete-closure false},
+    :finding
+    "No bounded full closing adapter was found. The literal Klein quotient times Circle requires constructed compact connected manifold charts and actual integral H3 vanishing. The sphere clause requires rational singular-homology comparisons in degrees zero through two; current SphereHomology exports integral comparisons. The fold clause requires complete fiber classification modulo 2*pi and regularity at every preimage. Historical Lefschetz arithmetic computes 1-0+1 without the repaired induced-homology witnesses and cannot close the frozen clause. These are infrastructure gaps, not a proved refutation.",
+    :frozen-sha256
+    "03f9c56fbb9d5b417dc16298c6b81d10876a4463f9c7e5a8479615706584c217",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "Queue A and surface invariants: exact three-counterexample consumer",
