@@ -54650,6 +54650,18 @@
      {:cmd "git diff --cached --check and scoped git commit --only",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788994913464-17285-56217c4d",
+     :commands
+     ["git show 0c7da53d84d8ed513b9afc706d51957a17054082"
+      "Independent git-object and fixture SHA-256, frozen statement, placeholder, exact-extraction and scope audit"
+      "Verify recorded closure and extraction independent PASS receipts"
+      "git show --format= --check 0c7da53d"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact two-document scope verified. All cited source and fixture hashes match; frozen statement unchanged; closure placeholders 1-to-0 and extraction 0-to-0 reproduced. Documentation faithfully records transversality, standard axioms and inherited warning, preserves historical STOP evidence and downstream geometry boundaries, and does not double-count extraction. Whitespace clean; ledger checker passes 418 items. No files or ledger edited."},
     :commit "0c7da53d84d8ed513b9afc706d51957a17054082",
     :changed-paths
     ["TOPOLOGY-DEPENDENCY-DAG.md"
@@ -54661,7 +54673,7 @@
     :consumer-sha256
     "5baf0e7d27ecb11934c0862e5955cedca42e307deed38ab569d31a90eb8c2f83"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
@@ -54689,7 +54701,7 @@
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation. Local specification defects and missing infrastructure do not terminate the campaign.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
