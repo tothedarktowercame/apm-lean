@@ -46041,6 +46041,23 @@
       :exit 0,
       :output "?? holes/labs/topology-contract/runs2/",
       :note "Unrelated untracked directory untouched."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788965641034-16465-1497d25f",
+     :commands
+     ["git show --stat --oneline ca7eca4347cb1046822d636f806aed35fa8bed99"
+      "sha256sum /tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean"
+      "cmp /tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean <(git show ca7eca4347cb1046822d636f806aed35fa8bed99:ConstructionTargets/SardBorelPositiveOrderReducedDimensionNullity.lean)"
+      "git show ca7eca4347cb1046822d636f806aed35fa8bed99:ConstructionTargets/SardBorelPositiveOrderReducedDimensionNullity.lean | sed -n '7,19p' | sha256sum"
+      "git diff --exit-code ca7eca4347cb1046822d636f806aed35fa8bed99 -- ConstructionTargets"
+      "lake env lean /tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardBorelPositiveOrderReducedDimensionNullity.lean"
+      "lake build ConstructionTargets.SardBorelPositiveOrderReducedDimensionNullity"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Commit ca7eca4347cb1046822d636f806aed35fa8bed99 passes. Exact two-file scope; fixture SHA 7cd3db8b4b0c6a07f51e370f3f4ae25d6f0281eda9bb444f9cb0fa888fb3624c and statement SHA 2511d8a9e4d617a540b7657c740743803ea6eaa858b638ede9e7d71d86fcf8fe reproduced. Lines 20-23 correctly transport admissibility under bounded common-rank subtraction and instantiate positive-order induction at the strictly smaller source dimension. Order unchanged; explicit positivity retained; no all-orders conversion or induction closure claimed. Both compilations exit 0 with standard axioms only; build8278 succeeds. Zero new placeholders; frozen consumer unchanged with one existing placeholder. Worklist356 valid. Ledger and unrelated untracked runs2 directory untouched."},
     :commit "ca7eca4347cb1046822d636f806aed35fa8bed99",
     :changed-paths
     ["ConstructionTargets/SardBorelPositiveOrderReducedDimensionNullity.lean"
@@ -46053,7 +46070,7 @@
     :declarations
     ["reducedDimension_slice_nullity_of_borel_positive_order"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardBorelPositiveOrderReducedDimensionNullity.lean"
     "ConstructionTargets/SardBorelPositiveOrderReducedDimensionNullity.md"],
@@ -46234,7 +46251,7 @@
       "7cd3db8b4b0c6a07f51e370f3f4ae25d6f0281eda9bb444f9cb0fa888fb3624c"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
