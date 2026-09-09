@@ -49386,8 +49386,169 @@
      :review-outcomes]},
    :stop-condition
    "End only on all consumers closed or exact mathematical refutation; missing infrastructure and owner authorization do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill15-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill15-audit.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill15-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill15-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill15-measure.json /tmp/topology-refill15-tail.edn /tmp/topology-refill15-infrastructure.json /tmp/topology-refill15-reviewed-outcomes.edn",
+      :exit 0}],
+    :finding
+    {:baseline "feed9efbc192d31dd3012a6fc68cec7095305f6d",
+     :election-rationale
+     ["Rule 0 elects exactly one adapter first: t95J05 has one remaining sphere-moment calculation after proved descent and uniqueness. Its direct coordinate-symmetry route is simpler than t02A05's additional tangent-projection expansion and translated fourth moments. The Hausdorff normalization remains an explicit obligation, not an inference from recent disk calculations."
+      "Whole-DAG alternatives remain distinct: t03J04 needs rational torus homology and covering Euler multiplicativity; t95J06 needs free-action geometry and surface classification; t92J06 needs actual graph-cover realizations. Previously probed planar separation, sphere-degree and intrinsic Hausdorff adapters retain their identified boundaries."
+      "The five-consumer Sard foundation outranks the smaller remaining shared branches by downstream reach. Its next bounded composition uses the newly reviewed chart with existing derivative-surjectivity, slice-constancy and rank-upper annihilation producers. Concurrent circle-lift work is not duplicated."
+      "Rerank after two reviewed work rows, retaining separate accounting for concurrent changes. This election claims neither a compiled adapter nor unconditional Sard."],
+     :measured-head "f4bc5b1038ca55e5dc8bc86a0fb759154b2f18bc",
+     :placeholder-delta
+     {:open 39,
+      :closed 19,
+      :changed-consumers
+      [{:consumer "t96J08", :before 2, :after 0, :origin :portfolio}
+       {:consumer "t97A02", :before 2, :after 0, :origin :concurrent}],
+      :total-before 75,
+      :method
+      "Executable sorry tokens after stripping block and line comments, across all named DAG consumers at pinned revisions.",
+      :named-consumers 59,
+      :total-after 71,
+      :existing-files 58,
+      :delta -4,
+      :sha256
+      "6933364b896d3d8f654b5025ebdedab21b64b1d694cdf255948300516cd5eb18",
+      :artifact "/tmp/topology-refill15-measure.json",
+      :concurrent-delta -2,
+      :within-two 29,
+      :portfolio-delta -2,
+      :missing-files ["t93A05"]},
+     :scope
+     "Complete DAG reconsidered against current consumers and reviewed dependencies. No canonical source, DAG or ledger edits.",
+     :campaign-refutation false,
+     :infrastructure-packets
+     {:construction-modules-before 613,
+      :construction-modules-after 615,
+      :delta 2,
+      :portfolio-modules
+      ["ConstructionTargets/SardGenuineSmoothProjectedRankChart.lean"],
+      :concurrent-modules
+      ["ConstructionTargets/ComponentRealLiftAssembly.lean"],
+      :removed [],
+      :artifact "/tmp/topology-refill15-infrastructure.json",
+      :sha256
+      "69cd87c34b149969cdc80df0f6ac5cc8148933934bbd60b898815d01ee900090"},
+     :portfolio-artifact
+     {:path "/tmp/topology-refill15-tail.edn",
+      :sha256
+      "5ae0fcb06ff037e9bfc74adc6de5ce75e4b03959ba14883e65b54fe6d9f06bc9"},
+     :validation
+     "Fresh identities and checkpoint dependencies verified. Temporary combined ledger passes canonical validation: 380 items; 370 done, 1 open, 6 superseded, 3 blocked.",
+     :typed-residual-change
+     {:t96J08
+      "Reviewed complete closure preserves both statements and all definitions; actual radial integration, integrability and the frozen exactness obstruction prove every conjunct.",
+      :projected-chart
+      "Reviewed producer constructs the actual projected chart at genuine infinity, preserving forward coordinates, inverse agreement and residual-slice regularity. No nullity theorem follows yet; t93A04 retains one placeholder.",
+      :next-positive-rank-edge
+      "Compose projected derivative surjectivity and fixed-coordinate slice constancy with rank-upper annihilation at actual inverse-chart points.",
+      :t97A02
+      "Concurrent source change removes two executable placeholders; this closure is accounted separately from the two reviewed portfolio rows."},
+     :review-outcomes
+     {:portfolio-implementations 2,
+      :portfolio-pass 2,
+      :portfolio-stop 0,
+      :portfolio-consumer-closures 1,
+      :t96J08
+      {:commit "60711917a5e7876a99a6205778adade9028578a7",
+       :review "invoke-1788976961097-16739-ba61e5ef",
+       :outcome :pass},
+      :projected-chart
+      {:commit "febb6cbab02fbb8f65f7b4001bbe96cf3a2f1573",
+       :review "invoke-1788977403585-16752-508198af",
+       :outcome :pass},
+      :artifact "/tmp/topology-refill15-reviewed-outcomes.edn",
+      :sha256
+      "373e3ba876daf68f50df5c65b64b6b08c2f2d47d8d8d18e18d1381550ed96a28"}},
+    :replacement-items
+    [{:consumer "t95J05",
+      :stop-condition
+      "If full closure cannot be compiled, STOP naming the exact remaining Hausdorff normalization, moment or integrability theorem. Distinguish missing infrastructure from refutation; do not replace closure with a conditional final adapter.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "STOKES AND MOMENTS / Hausdorff sphere coordinate moment",
+      :acceptance
+      {:probe
+       "GO requires a complete placeholder-free compiled copy of problems/t95J05/lean/Main.lean preserving every frozen definition and statement. Prove the actual Hausdorff-three-measure square moment on the metric S3 subtype equals pi^2/2, with integrability of both the square and mixed cubic-linear summands. Construct the coordinate reflection and apply the existing Hausdorff odd-symmetry theorem; use the frozen pullback expansion and descent uniqueness to obtain the exact -pi^2 conclusion. Investigate the current radial and Hausdorff APIs, but do not identify Measure.toSphere with subtype Hausdorff measure without proof or transfer the recent disk normalization by analogy. No assumed sphere area, moment value, integrability or Stokes premise. A partial symmetry certificate is not GO.",
+       :frozen-file "problems/t95J05/lean/Main.lean",
+       :frozen-sha256
+       "bc69f32681ce9fa5abe5e22256661c1bec11c5a85d9433c166e89352596df698",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id
+      :t95j05-frozen-projective-sphere-moment-closure-probe-refill15,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart],
+      :current-residual
+      "One placeholder: evaluate the literal sphere-subtype Hausdorff integral after the already-proved descent and uniqueness clauses. Coordinate-square normalization and summand integrability remain."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO requires the complete compiled actual chart and derivative-zero composition. REVISE requires exactly one compiled prerequisite. Otherwise name the exact boundary; missing infrastructure is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / actual rank-upper residual derivative",
+      :acceptance
+      {:probe
+       "Compile the actual producer/consumer composition starting from global ContDiff real genuine infinity f and the chart supplied by SardGenuineSmoothProjectedRankChart, with L=fderiv f x, R=range L and G=ker(R.projection.comp L). For each (r,z) in the produced chart target whose inverse point y has derivative rank at most finrank R, prove HasFDerivAt of the actual complementary residual map w -> R-orthogonal.projection(f(e.symm(r,w))) equal to zero at z. Derive projected derivative surjectivity using the chart's first-coordinate identity and smooth inverse; derive projected slice derivative zero from fixed-coordinate constancy; invoke the existing rank-upper annihilation and residual derivative producers. Retain genuine infinity residual regularity and the actual chart source/target restrictions. Do not assume derivative annihilation, a chart, inverse regularity or nullity. C1 consequences of genuine smoothness may feed derivative lemmas, but no arbitrary-C1 induction is permitted. If this exact composition exists, reuse it and report its next consumer edge rather than duplicate it.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Rank-upper residual derivative-zero producer only. Smooth local-domain nullity induction, dimension/base-case handling, rank-stratum image assembly and manifold transport remain; no unconditional Sard or t93A04 closure."},
+      :id :sard-genuine-smooth-rank-upper-residual-zero-probe-refill15,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart],
+      :current-residual
+      "Actual projected charts and complementary residual slices are genuinely smooth. Existing first-coordinate derivative surjectivity, slice constancy and rank-upper annihilation must be composed for those charts.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Only all consumers closed or an exact mathematical refutation terminates the campaign; infrastructure absence and owner authorization do not.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG and reviewed receipts; recount executable consumer placeholders at pinned revisions. Separate portfolio and concurrent changes, record typed residuals and STOP/PASS outcomes, elect exactly one near-closure adapter before foundations ranked by reach and simplicity, and append a fresh dependent checkpoint to a nonempty portfolio."},
+      :id
+      :checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t95j05-frozen-projective-sphere-moment-closure-probe-refill15
+       :sard-genuine-smooth-rank-upper-residual-zero-probe-refill15],
+      :current-residual
+      "Await both reviewed outcomes, then rerank the full DAG with separate accounting for concurrent consumer closures and infrastructure."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -49402,6 +49563,78 @@
     :checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero],
    :current-residual
    "Await both reviewed rows, then rerank the full DAG and account separately for concurrent foundation work."}
+  {:consumer "t95J05",
+   :stop-condition
+   "If full closure cannot be compiled, STOP naming the exact remaining Hausdorff normalization, moment or integrability theorem. Distinguish missing infrastructure from refutation; do not replace closure with a conditional final adapter.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "STOKES AND MOMENTS / Hausdorff sphere coordinate moment",
+   :acceptance
+   {:probe
+    "GO requires a complete placeholder-free compiled copy of problems/t95J05/lean/Main.lean preserving every frozen definition and statement. Prove the actual Hausdorff-three-measure square moment on the metric S3 subtype equals pi^2/2, with integrability of both the square and mixed cubic-linear summands. Construct the coordinate reflection and apply the existing Hausdorff odd-symmetry theorem; use the frozen pullback expansion and descent uniqueness to obtain the exact -pi^2 conclusion. Investigate the current radial and Hausdorff APIs, but do not identify Measure.toSphere with subtype Hausdorff measure without proof or transfer the recent disk normalization by analogy. No assumed sphere area, moment value, integrability or Stokes premise. A partial symmetry certificate is not GO.",
+    :frozen-file "problems/t95J05/lean/Main.lean",
+    :frozen-sha256
+    "bc69f32681ce9fa5abe5e22256661c1bec11c5a85d9433c166e89352596df698",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t95j05-frozen-projective-sphere-moment-closure-probe-refill15,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart
+    :checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart],
+   :current-residual
+   "One placeholder: evaluate the literal sphere-subtype Hausdorff integral after the already-proved descent and uniqueness clauses. Coordinate-square normalization and summand integrability remain."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO requires the complete compiled actual chart and derivative-zero composition. REVISE requires exactly one compiled prerequisite. Otherwise name the exact boundary; missing infrastructure is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / actual rank-upper residual derivative",
+   :acceptance
+   {:probe
+    "Compile the actual producer/consumer composition starting from global ContDiff real genuine infinity f and the chart supplied by SardGenuineSmoothProjectedRankChart, with L=fderiv f x, R=range L and G=ker(R.projection.comp L). For each (r,z) in the produced chart target whose inverse point y has derivative rank at most finrank R, prove HasFDerivAt of the actual complementary residual map w -> R-orthogonal.projection(f(e.symm(r,w))) equal to zero at z. Derive projected derivative surjectivity using the chart's first-coordinate identity and smooth inverse; derive projected slice derivative zero from fixed-coordinate constancy; invoke the existing rank-upper annihilation and residual derivative producers. Retain genuine infinity residual regularity and the actual chart source/target restrictions. Do not assume derivative annihilation, a chart, inverse regularity or nullity. C1 consequences of genuine smoothness may feed derivative lemmas, but no arbitrary-C1 induction is permitted. If this exact composition exists, reuse it and report its next consumer edge rather than duplicate it.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Rank-upper residual derivative-zero producer only. Smooth local-domain nullity induction, dimension/base-case handling, rank-stratum image assembly and manifold transport remain; no unconditional Sard or t93A04 closure."},
+   :id :sard-genuine-smooth-rank-upper-residual-zero-probe-refill15,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart
+    :checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart],
+   :current-residual
+   "Actual projected charts and complementary residual slices are genuinely smooth. Existing first-coordinate derivative surjectivity, slice constancy and rank-upper annihilation must be composed for those charts.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Only all consumers closed or an exact mathematical refutation terminates the campaign; infrastructure absence and owner authorization do not.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG and reviewed receipts; recount executable consumer placeholders at pinned revisions. Separate portfolio and concurrent changes, record typed residuals and STOP/PASS outcomes, elect exactly one near-closure adapter before foundations ranked by reach and simplicity, and append a fresh dependent checkpoint to a nonempty portfolio."},
+   :id
+   :checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t95j05-frozen-projective-sphere-moment-closure-probe-refill15
+    :sard-genuine-smooth-rank-upper-residual-zero-probe-refill15
+    :checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart],
+   :current-residual
+   "Await both reviewed outcomes, then rerank the full DAG with separate accounting for concurrent consumer closures and infrastructure."}
   {:consumer :t93A04,
    :stop-condition
    "STOP only for a counterexample to the stated local rank-normal-form theorem or hypotheses insufficient to select and invert a nonzero rank minor; otherwise REVISE with exactly one compiled prerequisite.",
