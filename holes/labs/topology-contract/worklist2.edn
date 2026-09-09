@@ -6547,9 +6547,154 @@
    :other-consumers []}
   {:consumer :t97J05-regular-fiber-manifold,
    :stop-condition
-   "No supplied fiber atlas, overlap compatibility or smooth inclusion. No Sard nullity, regular-value existence, orientation or transverse homology comparison.",
-   :phase :probe,
+   "Bank only constructed smooth local coordinates and fiber slices. Do not claim fixed-model atlas compatibility, global manifold structure, orientation or frozen consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/SmoothRegularFiberCoordinates.lean",
+      :sha256
+      "ee204dbe9cfca2f6389bd8d5ea33b6157d8876327292de07a72f1aa4d2638176"},
+     :commands
+     [{:cmd "lake env lean /tmp/SmoothRegularFiberCoordinates.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/SmoothRegularFiberCoordinates.lean"
+    "ConstructionTargets/SmoothRegularFiberCoordinates.md"],
+   :dag-node
+   "REGULAR-PREIMAGE: smooth coordinate restriction and exact fiber slice",
+   :acceptance
+   {:implementation
+    "Promote the exact compiled fixture. Preserve the constructed splitting, reuse of smooth-neighborhood refinement, inverse agreement, exact slice image and derivative transport.",
+    :declarations
+    ["ConstructionTargets.SmoothRegularFiberCoordinates.exists_coordinates"
+     "ConstructionTargets.SmoothRegularFiberCoordinates.exists_smooth_fiber_slice"],
+    :hypotheses
+    "Finite-dimensional real normed E and F, CompleteSpace E, a smooth map f, strict derivative L at x and surjectivity of L. Smoothness may supply the strict derivative through the reviewed smooth_derivative theorem.",
+    :consumer-equation
+    "The constructed e satisfies e(x)=0 and fst(e(y))=f(y)-f(x). Its smooth inverse zero slice maps its open kernel domain exactly onto e.source intersect the literal fiber, with strict derivative L.ker.subtypeL at zero.",
+    :consumer-residual
+    "Transport varying kernels to a common Euclidean model, construct smooth overlaps and the fiber atlas, then prove smooth embedded inclusion and its tangent-image equation. Empty-fiber and global specialization obligations remain in the parent.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target."
+     "Run lake build ConstructionTargets.SmoothRegularFiberCoordinates ConstructionTargets.RegularFiberChart ConstructionTargets.SardSmoothNeighborhoodImplicitChart."
+     "Reproduce both standard-only axiom audits."
+     "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification and commit the scoped implementation."]},
+   :id :smooth-regular-fiber-coordinate-restriction-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint7-surjective-derivative-fiber-chart-1],
+   :current-residual
+   "Reviewed local fiber homeomorphisms lack a banked smooth restriction preserving their exact slice and derivative equations.",
+   :other-consumers [:t02A07 :t94A06 :t00J02]}
+  {:consumer :t97J05-regular-fiber-manifold,
+   :stop-condition
+   "No supplied fiber atlas, overlap compatibility or smooth inclusion. No Sard nullity, regular-value existence, orientation or transverse homology comparison.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "One compiled coordinate prerequisite supplied. Global atlas construction, common-model transport, overlap compatibility and tangent-image identification remain in the parent row.",
+     :axiom-audits 2,
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t97J05-regular-fiber-manifold,
+      :stop-condition
+      "Bank only constructed smooth local coordinates and fiber slices. Do not claim fixed-model atlas compatibility, global manifold structure, orientation or frozen consumer closure.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path "/tmp/SmoothRegularFiberCoordinates.lean",
+         :sha256
+         "ee204dbe9cfca2f6389bd8d5ea33b6157d8876327292de07a72f1aa4d2638176"},
+        :commands
+        [{:cmd "lake env lean /tmp/SmoothRegularFiberCoordinates.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/SmoothRegularFiberCoordinates.lean"
+       "ConstructionTargets/SmoothRegularFiberCoordinates.md"],
+      :dag-node
+      "REGULAR-PREIMAGE: smooth coordinate restriction and exact fiber slice",
+      :acceptance
+      {:implementation
+       "Promote the exact compiled fixture. Preserve the constructed splitting, reuse of smooth-neighborhood refinement, inverse agreement, exact slice image and derivative transport.",
+       :declarations
+       ["ConstructionTargets.SmoothRegularFiberCoordinates.exists_coordinates"
+        "ConstructionTargets.SmoothRegularFiberCoordinates.exists_smooth_fiber_slice"],
+       :hypotheses
+       "Finite-dimensional real normed E and F, CompleteSpace E, a smooth map f, strict derivative L at x and surjectivity of L. Smoothness may supply the strict derivative through the reviewed smooth_derivative theorem.",
+       :consumer-equation
+       "The constructed e satisfies e(x)=0 and fst(e(y))=f(y)-f(x). Its smooth inverse zero slice maps its open kernel domain exactly onto e.source intersect the literal fiber, with strict derivative L.ker.subtypeL at zero.",
+       :consumer-residual
+       "Transport varying kernels to a common Euclidean model, construct smooth overlaps and the fiber atlas, then prove smooth embedded inclusion and its tangent-image equation. Empty-fiber and global specialization obligations remain in the parent.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target."
+        "Run lake build ConstructionTargets.SmoothRegularFiberCoordinates ConstructionTargets.RegularFiberChart ConstructionTargets.SardSmoothNeighborhoodImplicitChart."
+        "Reproduce both standard-only axiom audits."
+        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification and commit the scoped implementation."]},
+      :id :smooth-regular-fiber-coordinate-restriction-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint7-surjective-derivative-fiber-chart-1],
+      :current-residual
+      "Reviewed local fiber homeomorphisms lack a banked smooth restriction preserving their exact slice and derivative equations.",
+      :other-consumers [:t02A07 :t94A06 :t00J02]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :author "codex-13",
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd "bb /tmp/Checkpoint8Reviews.clj", :exit 0}
+      {:cmd "lake env lean /tmp/SmoothRegularFiberCoordinates.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/SmoothRegularFiberCoordinates.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/SmoothRegularFiberCoordinates.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "Initial coordinate-fixture compilation and three intermediate revisions",
+       :exit 1,
+       :attempts 4,
+       :correction
+       "Made the smoothness premise explicit and constructed the splitting continuous linear equivalence through the finite-dimensional linear equivalence API, resolving product-completeness elaboration without changing global options."}
+      {:cmd "Initial zero-slice compilation",
+       :exit 1,
+       :correction
+       "Included the strict-derivative and surjectivity hypotheses explicitly."}
+      {:cmd "Zero-slice derivative compilation",
+       :exit 1,
+       :correction
+       "Reversed the eventual equality to match HasStrictFDerivAt.congr_of_eventuallyEq."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/SmoothRegularFiberCoordinates.lean",
+      :sha256
+      "ee204dbe9cfca2f6389bd8d5ea33b6157d8876327292de07a72f1aa4d2638176"},
+     :finding
+     "Exactly one coordinate prerequisite compiles. The constructed regular-fiber chart is restricted using the existing smooth-neighborhood inverse theorem. Both directions are smooth, its first coordinate remains f(y)-f(x), and its inverse agrees with the reviewed inverse on the restricted target. The zero slice is smooth on an open kernel neighborhood containing zero, has exactly the local literal fiber as its image, and retains kernel inclusion as its strict derivative at zero. No chart or ImplicitFunctionData is supplied as a premise. A common Euclidean model, smooth overlaps and the global fiber manifold remain unconstructed, so the parent is not GO.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: smooth atlas on the literal regular fiber",
@@ -6566,7 +6711,7 @@
    :depends-on
    [:oriented-checkpoint7-surjective-derivative-fiber-chart-1
     :oriented-checkpoint8-hopf-and-regular-fiber-refill
-    :oriented-checkpoint8-hopf-and-regular-fiber-refill],
+    :smooth-regular-fiber-coordinate-restriction-1],
    :current-residual
    "Reviewed RegularFiberChart gives actual local fiber homeomorphisms and inverse derivatives. Smooth chart restrictions, overlap compatibility and a common-model fiber manifold remain unassembled.",
    :other-consumers [:t02A07 :t94A06 :t00J02]}
