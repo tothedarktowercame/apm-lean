@@ -51699,8 +51699,142 @@
      :review-outcomes]},
    :stop-condition
    "Only all campaign consumers closed or exact campaign-level mathematical refutation ends the campaign. Preserve individual encoding counterexamples and repair/coverage accounting; infrastructure absence is not termination.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill21-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill21-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill21-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill21-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill21-measure.json /tmp/topology-refill21-reviews.edn /tmp/topology-refill21-infrastructure.json /tmp/topology-refill21-tail.edn",
+      :exit 0}],
+    :finding
+    {:baseline "ba3c1140ad42d5ac6c06edf6fc1dbcd4244f00b5",
+     :retained-coverage
+     "t94J08 still lacks the positive-dimensional antipodal induced action. Reduced S0 degree and one-dimensional local index remain outstanding. Preserve the old encoding counterexample; no campaign refutation is inferred.",
+     :evidence
+     [{:path "/tmp/topology-refill21-measure.json",
+       :sha256
+       "8c7aff633b3b3670f46155c3fa1babe0fc4e6593fa70edc68c7dbf9dfd757e49"}
+      {:path "/tmp/topology-refill21-reviews.edn",
+       :sha256
+       "1c40e7c3c3e05e00c87fc1db0af9ef4aa5ca3935f83d6691b8b51fbcff0b3c34"}
+      {:path "/tmp/topology-refill21-infrastructure.json",
+       :sha256
+       "238b60859062f41ea08e5aa5f7009074d648f8ec5417125cbe1b346b4887884d"}
+      {:path "/tmp/topology-refill21-tail.edn",
+       :sha256
+       "ecde80e6ea28b8d391d4390eec8ef0edbd6fd75cfb348baaac1ad9edca74bbff"}],
+     :head "09624874f87cfdf97bff7701a480addbf75809f6",
+     :ranking
+     "Elect the one-placeholder t98A01 frozen adapter first: actual quotient/product-cover infrastructure and existing arithmetic provide a concrete entry, while the probe must resolve or precisely stop at Euler-cover and polygon-genus invariance. Do not repeat the just-stopped mass adapters without numerical normalization. Other near-closure branches retain antipodal signed action, planar separation, graph realization or manifold foundations. Next elect the five-consumer Sard critical-set composition, combining banked rank-zero and positive-rank producers rather than adding another isolated chart wrapper.",
+     :validation
+     "396-item temporary ledger validates; exactly one adapter first, fresh IDs, and final checkpoint depends on both work rows. No canonical files edited.",
+     :typed-residual-change
+     "t02A05 projection expansion and translated Hausdorff transport now compose with fourth moments; exact closure is equivalent to intrinsic mass2=4*pi, with neither equality nor negation proved. Sard advances from open-chart rank-upper nullity to global positive deficient-rank stratum nullity under explicit smaller-source local smooth induction. Concurrent RegularFiberChart constructs local fiber geometry but leaves global atlas compatibility and assembly outstanding.",
+     :review-outcomes
+     {:t02a05
+      "STOP independently reviewed PASS invoke-1788985683064-16993-53b5a244.",
+      :sard
+      "Implementation 9a1984881088e759d021aaada9be8e817b8c92e5 independently reviewed PASS invoke-1788986217946-17009-c5565a14; both Lean checks and 8369-job build passed.",
+      :checkpoint20 "PASS invoke-1788985318252-16982-c719b2ad."},
+     :infrastructure
+     {:before 626,
+      :after 628,
+      :portfolio
+      ["ConstructionTargets/SardGenuineSmoothPositiveRankStratumNullity.lean"],
+      :concurrent ["ConstructionTargets/RegularFiberChart.lean"]},
+     :census
+     {:open 39,
+      :closed 19,
+      :existing 58,
+      :placeholder-after 71,
+      :placeholder-delta 0,
+      :consumer-closures 0,
+      :placeholder-before 71,
+      :named 59,
+      :missing ["t93A05"],
+      :within-two 29}},
+    :replacement-items
+    [{:consumer "t98A01",
+      :stop-condition
+      "GO needs the complete frozen consumer. Otherwise STOP naming the exact absent covering, Euler multiplicativity or polygon-classification theorem; partial torus closure is not GO and missing infrastructure is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "COVERINGS / fivefold torus and surface classification",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free copy of frozen Main preserving every definition and conjunct. Reuse the actual AddCircle quotient cover, product-cover constructor and kernel/fiber results to prove every torus fiber has five points and actual deck homeomorphisms act transitively. For the literal Surface true g quotients prove Euler characteristic multiplication for the supplied five-sheet cover and genus equality from the supplied homeomorphism, then use the frozen arithmetic. Do not assume classification injectivity, Euler-cover multiplicativity, fiber cardinality or a conditional final bridge. Inspect all banked covering and surface results before declaring the boundary.",
+       :frozen-file "problems/t98A01/lean/Main.lean",
+       :frozen-sha256
+       "a607069bdb7416a01a1e6846cb6dd8e3e8bf87b0f2b122ef4c1fb828d5167f25",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t98a01-frozen-fivefold-surface-closure-probe-refill21,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-21-after-flux-and-rank-stratum],
+      :current-residual
+      "One placeholder packages the actual fivefold regular torus cover and Euler/genus rigidity for homeomorphic orientable polygon surfaces; printed connected-sum arithmetic is proved."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO requires full compiled critical-image composition. REVISE needs exactly one compiled prerequisite. Do not assume rank-zero nullity, compact coverage or global critical nullity; missing infrastructure is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / global smooth critical induction step",
+      :acceptance
+      {:probe
+       "For globally ContDiff real genuine infinity f between finite-dimensional real inner-product spaces, prove Haar-null image of the actual nonsurjective-derivative critical set under one local genuine-smooth critical-image induction hypothesis for every strictly smaller complete finite-dimensional real normed source and finite-dimensional inner-product target with Borel Haar measure. Include zero-dimensional sources in the hypothesis. Derive closedness of the derivative-zero locus, an actual countable compact exhaustion, and rank-zero image nullity using SardSmoothCompactRankZeroInduction. Use SardGenuineSmoothPositiveRankStratumNullity for each positive deficient rank and prove the critical set is covered by these and rank zero. Handle zero-dimensional source and target cases explicitly; derive required Borel, properness, second countability and measure facts rather than assuming them. Reuse existing exhaustion, rank and countable-nullity producers. No arbitrary-C1 induction, analytic omega, assumed stratum nullity or unconditional Sard. If the exact composition already exists reuse it and identify the remaining local-domain edge.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Conditional global smooth critical-image induction step only. Local-domain globalization compatible with this induction, induction discharge and manifold transport remain before unconditional Sard or frozen closure."},
+      :id
+      :sard-genuine-smooth-global-critical-induction-step-probe-refill21,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-21-after-flux-and-rank-stratum],
+      :current-residual
+      "Positive deficient-rank strata are null under local smooth induction. Compact rank-zero nullity must be exhausted and combined with the rank strata to cover the actual critical set.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation. Preserve local specification counterexamples and outstanding coverage; infrastructure absence does not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped consumer placeholders, compare typed residuals and reviewed outcomes, and distinguish portfolio from concurrent infrastructure and closures. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity; append a fresh dependent checkpoint to a nonempty portfolio. Retain the missing t94J08 antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t98a01-frozen-fivefold-surface-closure-probe-refill21
+       :sard-genuine-smooth-global-critical-induction-step-probe-refill21],
+      :current-residual
+      "Await both reviewed outcomes, then rerank the complete DAG and concurrent developments."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -51713,7 +51847,80 @@
     :sard-genuine-smooth-positive-rank-stratum-nullity-probe-refill20
     :checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank],
    :current-residual
-   "Await both reviewed outcomes and rerank the full DAG, including unrelated consumers and concurrent infrastructure."}],
+   "Await both reviewed outcomes and rerank the full DAG, including unrelated consumers and concurrent infrastructure."}
+  {:consumer "t98A01",
+   :stop-condition
+   "GO needs the complete frozen consumer. Otherwise STOP naming the exact absent covering, Euler multiplicativity or polygon-classification theorem; partial torus closure is not GO and missing infrastructure is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "COVERINGS / fivefold torus and surface classification",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free copy of frozen Main preserving every definition and conjunct. Reuse the actual AddCircle quotient cover, product-cover constructor and kernel/fiber results to prove every torus fiber has five points and actual deck homeomorphisms act transitively. For the literal Surface true g quotients prove Euler characteristic multiplication for the supplied five-sheet cover and genus equality from the supplied homeomorphism, then use the frozen arithmetic. Do not assume classification injectivity, Euler-cover multiplicativity, fiber cardinality or a conditional final bridge. Inspect all banked covering and surface results before declaring the boundary.",
+    :frozen-file "problems/t98A01/lean/Main.lean",
+    :frozen-sha256
+    "a607069bdb7416a01a1e6846cb6dd8e3e8bf87b0f2b122ef4c1fb828d5167f25",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t98a01-frozen-fivefold-surface-closure-probe-refill21,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-21-after-flux-and-rank-stratum
+    :checkpoint-full-dag-refill-21-after-flux-and-rank-stratum],
+   :current-residual
+   "One placeholder packages the actual fivefold regular torus cover and Euler/genus rigidity for homeomorphic orientable polygon surfaces; printed connected-sum arithmetic is proved."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO requires full compiled critical-image composition. REVISE needs exactly one compiled prerequisite. Do not assume rank-zero nullity, compact coverage or global critical nullity; missing infrastructure is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / global smooth critical induction step",
+   :acceptance
+   {:probe
+    "For globally ContDiff real genuine infinity f between finite-dimensional real inner-product spaces, prove Haar-null image of the actual nonsurjective-derivative critical set under one local genuine-smooth critical-image induction hypothesis for every strictly smaller complete finite-dimensional real normed source and finite-dimensional inner-product target with Borel Haar measure. Include zero-dimensional sources in the hypothesis. Derive closedness of the derivative-zero locus, an actual countable compact exhaustion, and rank-zero image nullity using SardSmoothCompactRankZeroInduction. Use SardGenuineSmoothPositiveRankStratumNullity for each positive deficient rank and prove the critical set is covered by these and rank zero. Handle zero-dimensional source and target cases explicitly; derive required Borel, properness, second countability and measure facts rather than assuming them. Reuse existing exhaustion, rank and countable-nullity producers. No arbitrary-C1 induction, analytic omega, assumed stratum nullity or unconditional Sard. If the exact composition already exists reuse it and identify the remaining local-domain edge.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Conditional global smooth critical-image induction step only. Local-domain globalization compatible with this induction, induction discharge and manifold transport remain before unconditional Sard or frozen closure."},
+   :id
+   :sard-genuine-smooth-global-critical-induction-step-probe-refill21,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-21-after-flux-and-rank-stratum
+    :checkpoint-full-dag-refill-21-after-flux-and-rank-stratum],
+   :current-residual
+   "Positive deficient-rank strata are null under local smooth induction. Compact rank-zero nullity must be exhausted and combined with the rank strata to cover the actual critical set.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation. Preserve local specification counterexamples and outstanding coverage; infrastructure absence does not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped consumer placeholders, compare typed residuals and reviewed outcomes, and distinguish portfolio from concurrent infrastructure and closures. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity; append a fresh dependent checkpoint to a nonempty portfolio. Retain the missing t94J08 antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t98a01-frozen-fivefold-surface-closure-probe-refill21
+    :sard-genuine-smooth-global-critical-induction-step-probe-refill21
+    :checkpoint-full-dag-refill-21-after-flux-and-rank-stratum],
+   :current-residual
+   "Await both reviewed outcomes, then rerank the complete DAG and concurrent developments."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
