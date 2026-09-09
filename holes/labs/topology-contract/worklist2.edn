@@ -541,6 +541,29 @@
      "Canonical double-complement pair-homeomorphism map followed by production relativeExcisionMap for deletedPoint x and U complement.",
      :direction
      "Exact equality from the actual neighborhood-inclusion chain map to the canonical identification followed by production excision; both induce the same forward integral local H1 map into X."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788967616833-16511-ed8e0652",
+     :commands
+     ["cd /home/joe/code/apm-lean"
+      "realpath .lake/packages"
+      "git show 3dc832fc:ConstructionTargets/LocalHomologyNeighborhoodExcision.lean"
+      "git show 3dc832fc:ConstructionTargets/LocalHomologyNeighborhoodExcision.md"
+      "git diff-tree --no-commit-id --name-status -r 3dc832fc"
+      "sha256sum /tmp/LocalHomologyNeighborhoodExcisionProbe.lean"
+      "git show 3dc832fc:ConstructionTargets/LocalHomologyNeighborhoodExcision.lean | sha256sum"
+      "cmp /tmp/LocalHomologyNeighborhoodExcisionProbe.lean ConstructionTargets/LocalHomologyNeighborhoodExcision.lean"
+      "lake env lean /tmp/LocalHomologyNeighborhoodExcisionProbe.lean"
+      "lake env lean ConstructionTargets/LocalHomologyNeighborhoodExcision.lean"
+      "set -o pipefail; lake build ConstructionTargets.LocalHomologyNeighborhoodExcision ConstructionTargets.OneDiskLocalOrientation ConstructionTargets.ChartPairRelativeHomologyTransport 2>&1 | rg '^warning:|^error:|Build completed|LocalHomologyNeighborhoodExcision'"
+      "git show 3dc832fc:ConstructionTargets/LocalHomologyNeighborhoodExcision.lean | python3 -c 'import sys,re,hashlib; s=sys.stdin.buffer.read(); names={\"neighborhoodInclusion_chain_eq\",\"neighborhoodInclusion_H1_isIso\",\"neighborhoodInclusion_sends_generator\",\"lineNeighborhoodInclusion_H1_isIso\",\"circleNeighborhoodInclusion_H1_isIso\"}; print(\"\\n\".join(n.decode()+\" \"+hashlib.sha256(b\"theorem \"+n+t).hexdigest() for n,t in re.findall(rb\"theorem (\\w+)(.*?)(?= :=)\",s,re.S) if n.decode() in names)); print(\"forbidden_count\",len(re.findall(rb\"\\b(?:sorry|admit|sorryAx|axiom|opaque|unsafe)\\b\",s))); print(\"axiom_audit_count\",s.count(b\"#print axioms\"))'"
+      "git diff --exit-code 3dc832fc -- '*.lean' lakefile.toml lakefile.lean lake-manifest.json lean-toolchain"
+      "git show --format= --check 3dc832fc"
+      "git diff --check"
+      "git status --porcelain --untracked-files=no"],
+     :finding
+     "Independent review of codex-14 commit 3dc832fc33991b0a7b387743e7c1ab784f255d51: exactly the two permitted files added. Fixture SHA-256 a9f4488775de93310f82273d66df283cd9ab9cfd362bc149abc7d1766d3c57e3 and all five recorded statement hashes reproduced. Tested Lean sources and build configuration match the recorded commit. Fixture and target compile; focused build passes with 17 replayed dependency warnings and none in the target. Five printed axiom audits use only propext, Classical.choice, Quot.sound. Zero placeholders or forbidden declarations; placeholder delta zero; frozen problems unchanged. Double-complement homeomorphism identifies the correct deleted-point pair, and the chain-map equation identifies actual subtype inclusion with canonical identification followed by production excision in the forward direction. T1, openness, and point membership establish the required excision hypotheses. Generator preservation uses the inverse of that actual induced isomorphism. Line and Circle specializations establish neighborhood excision only; neither chart construction nor global orientation or localization monicity is claimed. Ledger untouched."},
     :commit "3dc832fc33991b0a7b387743e7c1ab784f255d51",
     :changed-paths
     ["ConstructionTargets/LocalHomologyNeighborhoodExcision.lean"
@@ -556,7 +579,7 @@
     "SHA-256 of UTF-8 theorem declaration bytes beginning with theorem and ending immediately before the space preceding :=; names below are in ConstructionTargets.LocalHomologyNeighborhoodExcision.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/LocalHomologyNeighborhoodExcision.lean"
     "ConstructionTargets/LocalHomologyNeighborhoodExcision.md"],
@@ -694,7 +717,7 @@
      "Compiled one neighborhood-excision prerequisite. For a T1 space and an open neighborhood U containing x, the actual inclusion of pairs (U,U minus x) into (X,X minus x) agrees at chain level with production excision after the canonical double-complement subtype identification. Its integral relative H1 map is an isomorphism and sends generators to generators. Real-line and Circle neighborhood inclusions compile. Restricted model-to-neighborhood charts have not been constructed, so the parent packet is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue D #2: milestone 3, including the unbanked geometric remainder of milestone 2",
