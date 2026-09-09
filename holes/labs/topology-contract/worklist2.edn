@@ -245,6 +245,29 @@
      {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
     :repository-note
     "Read dependency codex-11 PASS for 9f4e9d3ea394d9e4ae0093367fc3ca68d3c52c91. Existing untracked supervisor runs2 files left untouched. Ledger and DAG unchanged.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788965973287-16475-0550d31a",
+     :commands
+     ["cd /home/joe/code/apm-lean"
+      "realpath .lake/packages"
+      "git show 5c9b65aa:ConstructionTargets/OneDiskIncreasingOrientation.lean"
+      "git show 5c9b65aa:ConstructionTargets/OneDiskIncreasingOrientation.md"
+      "git diff-tree --no-commit-id --name-status -r 5c9b65aa"
+      "sha256sum /tmp/OneDiskIncreasingOrientationProbe.lean"
+      "git show 5c9b65aa:ConstructionTargets/OneDiskIncreasingOrientation.lean | sha256sum"
+      "cmp /tmp/OneDiskIncreasingOrientationProbe.lean ConstructionTargets/OneDiskIncreasingOrientation.lean"
+      "lake env lean /tmp/OneDiskIncreasingOrientationProbe.lean"
+      "lake env lean ConstructionTargets/OneDiskIncreasingOrientation.lean"
+      "set -o pipefail; lake build ConstructionTargets.OneDiskIncreasingOrientation ConstructionTargets.RelativeSingularConnectingNaturality ConstructionTargets.ChartPairRelativeHomologyTransport 2>&1 | rg '^warning:|^error:|Build completed|OneDiskIncreasingOrientation|depends on axioms:|Classical.choice|Quot.sound'"
+      "git show 5c9b65aa:ConstructionTargets/OneDiskIncreasingOrientation.lean | python3 -c 'import sys,re,hashlib; s=sys.stdin.buffer.read(); print(\"\\n\".join(n.decode()+\" \"+hashlib.sha256(b\"theorem \"+n+t).hexdigest() for n,t in re.findall(rb\"theorem (\\w+)(.*?)(?= :=)\",s,re.S))); print(\"forbidden_count\",len(re.findall(rb\"\\b(?:sorry|admit|sorryAx|axiom|opaque|unsafe)\\b\",s)))'"
+      "git diff --exit-code 5c9b65aa -- '*.lean' ':!ConstructionTargets/SardBorelPositiveOrderOrthogonalChartNullity.lean' lakefile.toml lakefile.lean lake-manifest.json lean-toolchain"
+      "git show --format= --check 5c9b65aa"
+      "git diff --check"
+      "git status --porcelain --untracked-files=no"],
+     :finding
+     "Reviewed codex-14 commit 5c9b65aa3740a6e5837fcafbb9149dbafda8cc0a independently. Exactly two permitted files added; fixture SHA-256 413f68890cd96998d353ad10a2dd2ca3223ecf7ee43c2f669e37b664ee6c0a28 and all eight statement hashes match. Build inputs match recorded commit except an unrelated subsequently added Sard module outside the import chain. Fixture and target compile; focused build passes with 17 replayed dependency warnings and no new target warnings. Six printed declarations depend only on propext, Classical.choice, Quot.sound. Placeholder count and delta zero; no frozen problem changed. Positive scalar normalization identifies radial endpoints; reversed precomposition followed by radial deformation gives the restricted-map-to-identity homotopy inside the puncture. Cylinder endpoints and production integral homology representation agree. Strict increase and origin fixation derive geometric sign and MapsTo, then boundary injectivity proves generator preservation without an assumed induced-map sign. Identity specialization is correct; reflection, decreasing maps, and higher-dimensional claims remain excluded. Ledger untouched."},
     :commit "5c9b65aa3740a6e5837fcafbb9149dbafda8cc0a",
     :changed-paths
     ["ConstructionTargets/OneDiskIncreasingOrientation.lean"
@@ -260,7 +283,7 @@
     "SHA-256 of UTF-8 bytes from theorem through its statement, excluding the space before :=; all statements byte-identical to fixture.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/OneDiskIncreasingOrientation.lean"
     "ConstructionTargets/OneDiskIncreasingOrientation.md"],
@@ -381,7 +404,7 @@
      "Verified dependency 9f4e9d3ea394d9e4ae0093367fc3ca68d3c52c91 and codex-11 PASS. Compiled a geometric same-sign puncture homotopy and used it with the banked connecting-map naturality to prove that every pointed increasing coordinate map preserves the actual local H1 generator. Identity is instantiated. Reflection, decreasing maps, and characterization of all generators remain unproved; no complete model-sign GO is claimed.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue D #2: oriented-manifold fundamental classes and localization; milestone 3, model case",
