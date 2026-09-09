@@ -53986,9 +53986,45 @@
   {:consumer "t93A04",
    :stop-condition
    "GO requires the complete frozen consumer. Otherwise name the exact manifold chart-criticality, countable nullity or regular-value transport boundary; Euclidean nullity alone is not closure.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta -1,
+     :residual
+     "No mathematical consumer residual in the compiled fixture; scoped implementation and independent review remain. The scheduled manifold-vector-target row should reuse or extract T93A04ManifoldWork.null_critical from this fixture rather than reconstruct its chart proof.",
+     :outcome :go,
+     :warnings
+     ["One inherited unnecessarySimpa warning in the unchanged lineDirection_ne_zero proof."],
+     :acceptance
+     {:frozen-sha256
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea",
+      :statement-sha256
+      "854fea2e1c0bd60b27caee326f218fa4dd639f9dcc3791fe9975dbe9990e7e11",
+      :all-frozen-definitions-and-statements-preserved true,
+      :placeholder-before 1,
+      :placeholder-after 0,
+      :axioms :standard-only},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/T93A04Closed.lean", :exit 0}
+      {:cmd "python3 /tmp/t93a04-closure-audit.py", :exit 0}
+      {:cmd "bb /tmp/t93a04-review.bb", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/T93A04Closed.lean",
+       :exit 1,
+       :finding
+       "Initial fixture had two unresolved projection-coordinate goals and an unqualified measure lemma. Corrected coordinate equalities explicitly and used the nonzero Haar measure instance; complete rerun passed."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/T93A04Closed.lean",
+      :sha256
+      "ca834f20b42db9742d8b4c90b6ab7fb8364ee8dcf617a59df97d02c623437bbd"},
+     :finding
+     "Complete frozen consumer compiles without placeholders. Actual inverse charts supply open-domain smooth representatives; mfderiv composition transports criticality, and second-countable pointwise-open aggregation proves manifold critical-image nullity using unconditional Euclidean Sard. Nonzero target Haar measure supplies a regular projection value. The explicit projection kernel equals the frozen direction span, and the frozen linear-algebra bridge establishes the exact IsSmoothLinePreimage predicate. No nonempty or positive-dimensional source hypothesis was added.",
+     :implementation {:scope ["problems/t93A04/lean/Main.lean"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["problems/t93A04/lean/Main.lean"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / frozen transverse affine line",
    :acceptance
