@@ -6007,8 +6007,61 @@
   {:consumer :t95J06,
    :stop-condition
    "Preserve frozen hypotheses and the actual surface subtype. Do not assume smooth embedded inclusion, a smooth restricted action, a principal bundle, Euler vanishing or surface classification.",
+   :evidence
+   {:placeholder-after 2,
+    :placeholder-delta 0,
+    :residual
+    "Supply the continuous-action orbit-space/bundle and surface-classification comparison under the exact frozen hypotheses before retrying t95J06 closure.",
+    :axiom-audits 6,
+    :outcome :stop,
+    :warnings [],
+    :statement-hashes
+    {"apm_t95J06_bridge_1"
+     "d5b4954406297ae5855b36e0d0ed4fb5c2618138ee21c0ec6e66105b016cc16f",
+     "apm_t95j06"
+     "fa33da045f78cf32731444339b4e77c47dd3955f88ef4e143ab9d1b9d29b1d21"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :proved
+    ["Constructed the actual scalar Circle action on the sphere and its restriction to every invariant F."
+     "Proved agreement with the frozen real Hopf flow through Circle.exp_arg."
+     "Proved joint continuity, identity and multiplication laws on the actual subtype F."
+     "Proved freeness using nonzero sphere vectors and injectivity of scalar multiplication."
+     "Proved the empty-surface conclusion."],
+    :author "codex-13",
+    :placeholder-before 2,
+    :reason :missing-continuous-action-surface-classification,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sed -n '1,155p' problems/t95J06/lean/Main.lean", :exit 0}
+     {:cmd "bb: inspect dependency checkpoint PASS receipt", :exit 0}
+     {:cmd "lake env lean /tmp/T95J06ActionDiagnostic.lean", :exit 0}
+     {:cmd "sha256sum /tmp/T95J06ActionDiagnostic.lean", :exit 0}
+     {:cmd "sha256sum problems/t95J06/lean/Main.lean", :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T95J06ActionDiagnostic.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python final compilation-log audit: six standard-only audits and no warnings or errors",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T95J06ActionDiagnostic.lean",
+     :sha256
+     "42fc911e4eedf1ecdceb209c016c32f4aa380e5cc05d8c66c32b059a4f23a566",
+     :role :boundary-diagnostic},
+    :finding
+    "Rule-0 infrastructure STOP, not a mathematical refutation. The actual continuous free Circle action is constructed without any surface-chart assumptions. The frozen existential ChartedSpace/IsManifold data supplies no compatibility asserting smoothness of the inclusion or restricted action, so a smooth principal-bundle theorem cannot simply be applied. A topological route remains possible but needs an unproved theorem constructing the orbit-space/local-trivialization data and deriving actual component homeomorphisms with Circle x Circle, or an equivalent classification theorem for these continuous free actions. Component H2 isomorphisms alone do not supply those homeomorphisms. T95J06Diagnostic.ComponentTorusClassification records the remaining proposition without assuming or proving it. No full frozen fixture or implementation scope is claimed.",
+    :statement-hash-method
+    "SHA256 of each original theorem declaration through the text immediately preceding := by.",
+    :frozen-sha256
+    "482fc0478fe2b5c3252076b3a3e91f28ea9d9d81f7e5d3d3ada78ed5167a0d06",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "Surface classification: exact invariant Hopf-surface consumer",
