@@ -44197,6 +44197,23 @@
      "Coordinate-composite critical image restricted to the preimage of s under the continuous linear source equivalence.",
      :direction
      "Exact equality from the target coordinate-composite critical-image representation to the source original-map critical-image representation, as subsets of the unchanged target F."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788958729691-16310-6eb864be",
+     :commands
+     ["git show d45c4209 --stat --oneline"
+      "sha256sum /tmp/SardSourceEquivCriticalImageProbe.lean"
+      "cmp /tmp/SardSourceEquivCriticalImageProbe.lean <(git show d45c4209677c00ad2ea3d6c1385841681a50f662:ConstructionTargets/SardSourceEquivCriticalImage.lean)"
+      "git show d45c4209677c00ad2ea3d6c1385841681a50f662:ConstructionTargets/SardSourceEquivCriticalImage.lean | sed -n '5,13p' | sha256sum"
+      "git diff --exit-code d45c4209677c00ad2ea3d6c1385841681a50f662 -- ConstructionTargets"
+      "lake env lean /tmp/SardSourceEquivCriticalImageProbe.lean"
+      "lake env lean ConstructionTargets/SardSourceEquivCriticalImage.lean"
+      "lake build ConstructionTargets.SardSourceEquivCriticalImage"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit d45c4209677c00ad2ea3d6c1385841681a50f662 passes. Fixture SHA 732285f5cec6582ac1fd7d74784474cf041bcedfb0e00ce4680c25d39122db8c and statement SHA a986fcda545db6887221027e6d073f24428b909d107bde27c424b8437d571cf8 reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8263-job build successful. Lines 14–35 correctly orient derivative composition, surjectivity witnesses, and both image inclusions under the explicit differentiability premise. Ledger untouched."},
     :commit "d45c4209677c00ad2ea3d6c1385841681a50f662",
     :changed-paths
     ["ConstructionTargets/SardSourceEquivCriticalImage.lean"
@@ -44208,7 +44225,7 @@
     :declarations
     ["criticalImage_eq_of_source_continuousLinearEquiv"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardSourceEquivCriticalImage.lean"
     "ConstructionTargets/SardSourceEquivCriticalImage.md"],
@@ -44378,7 +44395,7 @@
       "732285f5cec6582ac1fd7d74784474cf041bcedfb0e00ce4680c25d39122db8c"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
