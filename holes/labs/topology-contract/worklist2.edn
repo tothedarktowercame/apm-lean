@@ -4767,6 +4767,20 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788980781662-16858-773e4338",
+     :commands
+     ["Inspect recorded result at deabc1bc and /tmp/T98A02GluingDiagnostic.lean"
+      "realpath .lake/packages"
+      "sha256sum /tmp/T98A02GluingDiagnostic.lean"
+      "lake env lean /tmp/T98A02GluingDiagnostic.lean"
+      "Python audit: frozen source hash, preserved prefix, statement hash, placeholder and forbidden-token counts, 29-file recorded import closure"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show deabc1bc:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check deabc1bc; git diff --exit-code"],
+     :finding
+     "Independent of author codex-13. PASS validates the infrastructure STOP only. Fixture SHA256 2eaf8d4621dd06cfd7a57d756e582aed424f3e315c53e8b3d46a188146ddf4a1 matches. Compilation passes with four standard-only axiom audits and two recorded unnecessarySimpa warnings. Frozen source and statement hashes match; original prefix preserved, frozen placeholders 1 and diagnostic placeholders 0. Boundary and deleted-center maps are actual continuous inclusions. SummandLocalization, PieceComparison and AboveDimensionVanishing remain explicitly unproved. Imported chart comparison is relative-to-relative, sphere localization is sphere-specific, and production Mayer-Vietoris requires an actual open cover and arrow compatibility. No collar assumption, replacement quotient or mathematical refutation is introduced. Recorded ledger validates: 38 items OK. Empty implementation scope; ledger untouched."},
     :changed-paths [],
     :fixture
     {:path "/tmp/T98A02GluingDiagnostic.lean",
@@ -4781,7 +4795,7 @@
     "c711febdaded1c3790e4a572a2fc191442244836dabb8d350fadbde2484a93ed",
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "Queue D: exact embedded-four-ball connected-sum homology consumer",
