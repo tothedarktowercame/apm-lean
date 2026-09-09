@@ -2204,78 +2204,98 @@
    :stop-condition
    "Circle only; no assumed global class, assumed rotation action, general compact-manifold theorem, or t98A02 closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Canonical promotion and independent review of the complete Circle packet. No frozen consumer closure, arbitrary-dimensional model calculation, or general compact-manifold fundamental-class theorem is claimed.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {"coherent_circle_fundamental_class"
-      "b58820796fcebd3ada571920d59e5cd20ca560e598b0938d1901c5bf2ebb9258",
-      "geometric_overlap"
-      "84311d72377ffaaf32685b857115bd78c96e86c4a15ef001c1852473d8eae006",
-      "rotated_transition_increasing"
-      "16f24ab58dfebed6ab6b1dd34330fffb406d4f9e35dc442da2b1aade22c61d0b"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :author "codex-13",
-     :head "0f4fbc9ee514af79bf78b6c302948592408773fe",
-     :commands
-     [{:cmd "realpath .lake/packages", :exit 0}
-      {:cmd
-       "lake env lean /tmp/CircleCoherentFundamentalClassProbe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CircleCoherentFundamentalClassProbe.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CircleCoherentFundamentalClassProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :repository-note
-     "Read-only probe; repository files unchanged. Verified canonical package authority and independent PASS for the angle-transition dependency.",
-     :changed-paths [],
-     :dependency-commit "620b0c7eca46117fe33bafc0e47cded2aac5074f",
-     :fixture
-     {:path "/tmp/CircleCoherentFundamentalClassProbe.lean",
-      :sha256
-      "14f0994e503cbda135c612f29db6d24da5cad47eceda7ff84a16a047637dd3c6"},
-     :finding
-     "Complete circle fixture compiles. Lift the actual fixed chart to continuous real angles through the exponential covering. Injectivity proves the lift strictly monotone or strictly antitone. The actual rotation comparison and banked angle-order equivalence prove increasing coordinate transitions in either case. At every overlap point, construct a common recentered chart and prove both transitions increasing. Combine this geometric compatibility with the banked constructed-chart localization equations to prove existence and uniqueness of one absolute integral H1 generator. No geometric compatibility is inferred from homology equality.",
-     :statement-hash-method
-     "SHA-256 of declaration bytes beginning with lemma or theorem and ending immediately before the space preceding :=.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CircleCoherentFundamentalClass.lean"
-       "ConstructionTargets/CircleCoherentFundamentalClass.md"],
-      :acceptance
-      {:implementation
-       "Promote the exact compiled fixture and document its Circle-only scope, actual transition maps, covering lift, monotone-or-antitone argument, common restriction construction, and dependence on banked localization naturality.",
-       :declarations
-       ["ConstructionTargets.CircleCoherentFundamentalClass.exists_angle"
-        "ConstructionTargets.CircleCoherentFundamentalClass.coordinateTransition"
-        "ConstructionTargets.CircleCoherentFundamentalClass.transition_ambient"
-        "ConstructionTargets.CircleCoherentFundamentalClass.rotated_transition_increasing"
-        "ConstructionTargets.CircleCoherentFundamentalClass.recentered_transition_increasing"
-        "ConstructionTargets.CircleCoherentFundamentalClass.geometric_overlap"
-        "ConstructionTargets.CircleCoherentFundamentalClass.coherent_circle_fundamental_class"],
-       :consumer-equation
-       "The constructed rotated charts have increasing transitions from a constructed common chart at every overlap point. There exists a unique absolute integral H1 generator z such that localization x z = (rotatedChart x).localClass for every x : Circle.",
-       :map-equations
-       ["d.ambient (coordinateTransition c d h u) = c.ambient u"
-        "The constructed rotated chart relative chain map equals the fixed chart map followed by the actual relative rotation map."
-        "localization 1 followed by localRotation x equals localization x."],
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA-256 before implementation."
-        "Compile fixture and canonical target."
-        "Run lake build ConstructionTargets.CircleCoherentFundamentalClass ConstructionTargets.CircleAngleTransition ConstructionTargets.RotatedCircleChartTransport."
-        "Reproduce all nine printed axiom audits; allow only propext, Classical.choice, Quot.sound."
-        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."]}},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "The complete Circle packet is implemented and awaits independent review. No frozen consumer closure, arbitrary-dimensional model computation, general compact-manifold fundamental-class theorem, or t98A02 closure is claimed.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :three-recorded-statement-hashes :pass,
+     :fixture-compilation :pass,
+     :all-nine-printed-axiom-audits :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 30,
+      :log "/tmp/codex-14-coherent-build.log",
+      :paths
+      {"ConstructionTargets/CircleUniversalCover.lean" 1,
+       "ConstructionTargets/TopologicalSumSingularHomology.lean" 1,
+       "ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/T02A06SphereShift.lean" 3,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/SolidTorusGluingOpenCover.lean" 5,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/BoundaryTorusOpenCover.lean" 4,
+       "ConstructionTargets/PuncturedNormedSpaceRadialEquivalence.lean"
+       2,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/SingularSubdivision.lean" 2}}],
+    :statement-hashes
+    {"coherent_circle_fundamental_class"
+     "b58820796fcebd3ada571920d59e5cd20ca560e598b0938d1901c5bf2ebb9258",
+     "geometric_overlap"
+     "84311d72377ffaaf32685b857115bd78c96e86c4a15ef001c1852473d8eae006",
+     "rotated_transition_increasing"
+     "16f24ab58dfebed6ab6b1dd34330fffb406d4f9e35dc442da2b1aade22c61d0b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CircleCoherentFundamentalClassProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CircleCoherentFundamentalClassProbe.lean > /tmp/codex-14-coherent-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CircleCoherentFundamentalClass.lean > /tmp/codex-14-coherent-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CircleCoherentFundamentalClass ConstructionTargets.CircleAngleTransition ConstructionTargets.RotatedCircleChartTransport > /tmp/codex-14-coherent-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CircleCoherentFundamentalClass.lean /tmp/CircleCoherentFundamentalClassProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Complete geometric Circle chart coherence and fundamental class\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Checked codex-11 dependency PASS. Unrelated untracked Sard files and supervisor files left untouched. Ledger, DAG, and frozen problems unchanged.",
+    :representation
+    {:source
+     "One absolute integral H1 class normalized at Circle point 1.",
+     :target
+     "Geometrically compatible rotated chart-local generators at every Circle point.",
+     :direction
+     "Actual localization at every point sends the same global class to the constructed chart-local generator through proved pair-map naturality."},
+    :commit "d778061146371af281667b9737299f21abc47058",
+    :changed-paths
+    ["ConstructionTargets/CircleCoherentFundamentalClass.lean"
+     "ConstructionTargets/CircleCoherentFundamentalClass.md"],
+    :dependency-commit "620b0c7eca46117fe33bafc0e47cded2aac5074f",
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/CircleCoherentFundamentalClassProbe.lean",
+     :sha256
+     "14f0994e503cbda135c612f29db6d24da5cad47eceda7ff84a16a047637dd3c6"},
+    :finding
+    "Promoted the complete fixture unchanged. The actual fixed chart lifts through the Circle exponential covering; injectivity gives a strictly monotone or strictly antitone angle lift. In either case the actual rotation equation and angle-order equivalence prove increasing coordinate transitions. A common recentered chart is constructed at each overlap point with both transitions increasing. This geometric compatibility combines with banked actual localization equations to prove a unique absolute integral H1 generator satisfying every constructed rotated-chart equation.",
+    :statement-hash-method
+    "SHA-256 of declaration bytes beginning with lemma or theorem and ending immediately before the space preceding :=; names below are in ConstructionTargets.CircleCoherentFundamentalClass.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CircleCoherentFundamentalClass.lean"
     "ConstructionTargets/CircleCoherentFundamentalClass.md"],
