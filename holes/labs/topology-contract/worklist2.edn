@@ -5177,6 +5177,23 @@
       :exit 0}],
     :repository-note
     "Read DAG, closure experiments and dependency reviews. Only the authorized two files changed; frozen consumers, DAG, ledgers and untracked supervisor files untouched. Tracked checkout clean.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788982660382-16900-cbc1a72d",
+     :commands
+     ["git show fc27383aa4c07f6f5b59760acab43af57c531375"
+      "realpath .lake/packages"
+      "sha256sum /tmp/IntrinsicSphereFiniteProbe.lean /tmp/IntrinsicSphereConsumerAudit.lean"
+      "lake env lean /tmp/IntrinsicSphereFiniteProbe.lean"
+      "lake env lean ConstructionTargets/IntrinsicSphereFinite.lean"
+      "lake env lean /tmp/IntrinsicSphereConsumerAudit.lean"
+      "lake build ConstructionTargets.IntrinsicSphereFinite ConstructionTargets.SphereCapFiniteMeasure ConstructionTargets.SphereCapGraph"
+      "Python independent audit: exact promotion, ten statement hashes, dependency sources, preserved consumer diagnostic bodies, forbidden tokens and frozen placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 6b6cb4b0:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --name-only fc27383a; git show --format= --check fc27383a"],
+     :finding
+     "Independent of author codex-14. Exact two-file scope. Primary fixture SHA256 f8ed178719b52dfe6b8d67310b3084f0f1bc809b7fc9887fbc89a9c06dd61f8b and consumer audit SHA256 8c3ec6cabc306ae8cf2ec22a5924b9209aad97d05991df8c6172ed050ab6f828 match; ten statement hashes verified. Primary compilations and build pass without warnings (8242 jobs), with ten standard-only audits per compilation. Consumer audit passes with three recorded unnecessarySimpa warnings and preserves both reviewed diagnostic bodies. Actual signed-coordinate cap images cover the sphere for d<=3; finite image bounds establish intrinsic Hausdorff finiteness. Exact polynomial integrability justifies addition/subtraction, without assumed normalization or radial identification. Numerical moments and consumer closure remain unclaimed. Frozen tree unchanged, placeholders 322 to 322; no forbidden tokens. Recorded ledger validates: 40 items OK. Ledger untouched."},
     :primary-warning-count 0,
     :commit "fc27383aa4c07f6f5b59760acab43af57c531375",
     :changed-paths
@@ -5192,7 +5209,7 @@
     "SHA-256 of declaration bytes beginning with theorem or lemma and ending immediately before the space preceding :=; namespace ConstructionTargets.IntrinsicSphereFinite.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/IntrinsicSphereFinite.lean"
     "ConstructionTargets/IntrinsicSphereFinite.md"],
@@ -5227,7 +5244,7 @@
    :stop-condition
    "No unresolved STOP retries, inferred orientation coherence, unproved normalization or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact gluing uptake and intrinsic measure continuation",
