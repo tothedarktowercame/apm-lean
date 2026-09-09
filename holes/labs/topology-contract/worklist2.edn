@@ -386,6 +386,29 @@
      {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
     :repository-note
     "Dependency PASS reviews checked. Existing untracked supervisor runs2 files left untouched. Ledger, DAG, and frozen statements unchanged.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788967020931-16497-882d80a9",
+     :commands
+     ["cd /home/joe/code/apm-lean"
+      "realpath .lake/packages"
+      "git show 1333150c:ConstructionTargets/OneDiskLocalOrientation.lean"
+      "git show 1333150c:ConstructionTargets/OneDiskLocalOrientation.md"
+      "git diff-tree --no-commit-id --name-status -r 1333150c"
+      "sha256sum /tmp/OneDiskLocalOrientationProbe.lean"
+      "git show 1333150c:ConstructionTargets/OneDiskLocalOrientation.lean | sha256sum"
+      "cmp /tmp/OneDiskLocalOrientationProbe.lean ConstructionTargets/OneDiskLocalOrientation.lean"
+      "lake env lean /tmp/OneDiskLocalOrientationProbe.lean"
+      "lake env lean ConstructionTargets/OneDiskLocalOrientation.lean"
+      "set -o pipefail; lake build ConstructionTargets.OneDiskLocalOrientation ConstructionTargets.OneDiskIncreasingOrientation ConstructionTargets.RelativeSingularConnectingNaturality ConstructionTargets.ChartPairRelativeHomologyTransport 2>&1 | rg '^warning:|^error:|Build completed|OneDiskLocalOrientation'"
+      "git show 1333150c:ConstructionTargets/OneDiskLocalOrientation.lean | python3 -c 'import sys,re,hashlib; s=sys.stdin.buffer.read(); names={\"model_generators_exactly_two\",\"chosen_generator_ne_negative\",\"identity_H1_eq_id\",\"reflection_H1_eq_neg_id\",\"increasing_homeomorph_generator\",\"decreasing_homeomorph_generator\"}; print(\"\\n\".join(n.decode()+\" \"+hashlib.sha256(b\"theorem \"+n+t).hexdigest() for n,t in re.findall(rb\"theorem (\\w+)(.*?)(?= :=)\",s,re.S) if n.decode() in names)); print(\"forbidden_count\",len(re.findall(rb\"\\b(?:sorry|admit|sorryAx|axiom|opaque|unsafe)\\b\",s))); print(\"axiom_audit_count\",s.count(b\"#print axioms\"))'"
+      "git diff --exit-code 1333150c -- '*.lean' ':!ConstructionTargets/SardBorelPositiveOrderRankAggregation.lean' lakefile.toml lakefile.lean lake-manifest.json lean-toolchain"
+      "git show --format= --check 1333150c"
+      "git diff --check"
+      "git status --porcelain --untracked-files=no"],
+     :finding
+     "Independent PASS for codex-14 commit 1333150cc6443e151e5df62e24d4d3ddf1417cab. Exact permitted two-file addition; fixture SHA-256 53f08685ff3c6b5b8545c53ddc65c4873045f749796f6f513b6748bc299c38ad and six statement hashes reproduced. Fixture and canonical target compile; focused build passes with 17 replayed dependency warnings, none in the target. All fifteen printed audits use only propext, Classical.choice, Quot.sound. Zero placeholders and forbidden declarations; placeholder delta zero; frozen problems unchanged. Generator predicate expresses generation of the entire integral group and yields exactly the chosen class and its distinct negative. Actual endpoint swap negates boundary coordinates; connecting naturality and injectivity prove interval reflection equals negative identity. Commuting affine and radial pair maps transfer that endomorphism to the open model. Decreasing maps reduce geometrically via reflection; chart-pair witnesses are constructed and transport uses production relative singular maps. Composition directions and identity/reflection specializations are correct. Build inputs match the recorded commit; the only later Lean addition is unrelated Sard rank aggregation outside the import chain. No manifold, higher-dimensional, or global orientation conclusion is claimed. Ledger untouched."},
     :commit "1333150cc6443e151e5df62e24d4d3ddf1417cab",
     :changed-paths
     ["ConstructionTargets/OneDiskLocalOrientation.lean"
@@ -404,7 +427,7 @@
     "SHA-256 of UTF-8 theorem declaration bytes beginning with theorem and ending immediately before the space preceding :=; names below are in ConstructionTargets.OneDiskLocalOrientation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/OneDiskLocalOrientation.lean"
     "ConstructionTargets/OneDiskLocalOrientation.md"],
@@ -445,7 +468,7 @@
    :stop-condition
    "No global fundamental class or localization injectivity may be assumed to construct the local class.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue D #2: milestone 3, including the unbanked geometric remainder of milestone 2",
