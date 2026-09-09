@@ -41181,6 +41181,40 @@
    "Compact exhaustion and transfer of uncovered jet hypotheses to compact members are discharged; uncovered analytic nullity remains explicit.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if classical admissibility fails to survive one derivative of regularity loss at strictly lower source dimension, the reviewed jet induction fails under the stated hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardSecondJetClassicalInductionNullity.lean"
+    "ConstructionTargets/SardSecondJetClassicalInductionNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SECOND JET CLASSICAL INDUCTION NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardSecondJetClassicalInductionNullityProbe.lean",
+     :sha256
+     "ad8e9c1983b84f95318cdcf687f871c3539f8c77876c8eaa0e566689b4246e11"},
+    :declarations
+    ["secondJet_image_null_of_classical_lowerDimension_induction"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Integrate second-jet nullity into uncovered-jet assembly; discharge remaining uncovered orders j >= 3, close full lower-dimensional induction, and remove global regularity through rectangular localization."},
+   :representation
+   {:source
+    "Global C^(k+2) regularity, classical Sard admissibility at order k+2, a critical source subset K, and full classical critical-image nullity at every strictly lower source dimension, under the stated finite-dimensional real inner-product, completeness, second-countability, and target add-Haar hypotheses.",
+    :target
+    "Zero target measure of the first-nonzero-second-jet locus image on K, without supplied chart data, Taylor surplus, or an additional remaining-order nullity premise."},
+   :id :critical-value-sard-second-jet-classical-induction-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1
+    :critical-value-sard-classical-finite-order-critical-nullity-predicate-1],
+   :current-residual
+   "The second-jet remaining-order induction interface is discharged from classical admissibility; full lower-dimensional nullity and higher uncovered jets remain explicit obligations.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -41234,74 +41268,74 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank open-localized rank-zero assembly for uncovered jets; discharge those analytic hypotheses and complete lower-dimensional induction and rectangular localization.",
+     "Bank second-jet classical induction nullity; integrate it into uncovered-jet assembly and repair higher uncovered orders before closing rectangular induction.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"rankZero_inter_open_image_zero_of_uncovered_higherJets"
-      "083d4501b716142fda21c54f5b8491244f0ef0377f727ae0acb5350811913d52"},
+     {"secondJet_image_null_of_classical_lowerDimension_induction"
+      "9c08eb2f1e6ba333e3d8c0d9b01c9f04c48386229ab4abde70371ae5c09d8011"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if rank-zero closedness, compact exhaustion, or jet-locus containment fails to imply the stated localized nullity under these hypotheses, or nonstandard axioms are required.",
+      "Stop only if classical admissibility fails to survive one derivative of regularity loss at strictly lower source dimension, the reviewed jet induction fails under the stated hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardRankZeroOpenUncoveredJetNullity.lean"
-       "ConstructionTargets/SardRankZeroOpenUncoveredJetNullity.md"],
+      ["ConstructionTargets/SardSecondJetClassicalInductionNullity.lean"
+       "ConstructionTargets/SardSecondJetClassicalInductionNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-ZERO OPEN UNCOVERED JET NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SECOND JET CLASSICAL INDUCTION NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardRankZeroOpenUncoveredJetNullityProbe.lean",
+       {:path "/tmp/SardSecondJetClassicalInductionNullityProbe.lean",
         :sha256
-        "dfd5d0b5530304a0d52648971e948aad757fe24c2b3bd18f0c249175a6a93c06"},
+        "ad8e9c1983b84f95318cdcf687f871c3539f8c77876c8eaa0e566689b4246e11"},
        :declarations
-       ["rankZero_inter_open_image_zero_of_uncovered_higherJets"],
+       ["secondJet_image_null_of_classical_lowerDimension_induction"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Prove the uncovered higher-jet nullity hypotheses, close full lower-dimensional induction, and remove global regularity through rectangular localization."},
+       "Integrate second-jet nullity into uncovered-jet assembly; discharge remaining uncovered orders j >= 3, close full lower-dimensional induction, and remove global regularity through rectangular localization."},
       :representation
       {:source
-       "Global C^(k+1) regularity, classical Sard admissibility, an open source set U, and nullity of first-nonzero-jet images on U for orders 2 <= j <= k+1 satisfying j*targetDim <= sourceDim-1, under the stated nontrivial finite-dimensional inner-product Borel and proper-source hypotheses.",
+       "Global C^(k+2) regularity, classical Sard admissibility at order k+2, a critical source subset K, and full classical critical-image nullity at every strictly lower source dimension, under the stated finite-dimensional real inner-product, completeness, second-countability, and target add-Haar hypotheses.",
        :target
-       "Zero target add-Haar measure of the rank-zero locus image localized to U, without compactness or a small-source dimension restriction."},
-      :id :critical-value-sard-rank-zero-open-uncovered-jet-nullity-1,
+       "Zero target measure of the first-nonzero-second-jet locus image on K, without supplied chart data, Taylor surplus, or an additional remaining-order nullity premise."},
+      :id
+      :critical-value-sard-second-jet-classical-induction-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-compact-rank-zero-uncovered-jet-assembly-1
-       :critical-value-sard-closed-open-image-nullity-1
-       :critical-value-sard-derivative-rank-upper-locus-closed-1],
+      [:critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1
+       :critical-value-sard-classical-finite-order-critical-nullity-predicate-1],
       :current-residual
-      "Compact exhaustion and transfer of uncovered jet hypotheses to compact members are discharged; uncovered analytic nullity remains explicit.",
+      "The second-jet remaining-order induction interface is discharged from classical admissibility; full lower-dimensional nullity and higher uncovered jets remain explicit obligations.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite extends compact uncovered-jet assembly to an open-localized rank-zero locus in arbitrary source dimensions. Closedness supplies compact exhaustion, and jet-locus containment transfers the uncovered nullity hypotheses to each compact member. Uncovered jet nullity remains explicit; rectangular Morse-Sard remains incomplete, not refuted.",
+     "One compiled prerequisite discharges second-jet image nullity from classical lower-dimensional induction. Classical admissibility survives loss of one derivative at every strictly lower source dimension, supplying the reviewed scalarized-chart induction interface. Higher uncovered jet orders remain unresolved; rectangular Morse-Sard is incomplete, not refuted.",
      :commands
      [{:cmd
-       "Read DAG, closure policy, build-loop design, compact assembly and exhaustion modules, and reviewed dependency findings",
+       "Read DAG, closure policy, induction and admissibility modules, and reviewed dependency findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardRankZeroOpenUncoveredJetNullityProbe.lean",
+       "lake env lean /tmp/SardSecondJetClassicalInductionNullityProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardRankZeroOpenUncoveredJetNullityProbe.lean",
+       "sha256sum /tmp/SardSecondJetClassicalInductionNullityProbe.lean",
        :exit 0}
       {:cmd
-       "sed -n '7,22p' /tmp/SardRankZeroOpenUncoveredJetNullityProbe.lean | sha256sum",
+       "sed -n '7,19p' /tmp/SardSecondJetClassicalInductionNullityProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardRankZeroOpenUncoveredJetNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardSecondJetClassicalInductionNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 315 items OK; {:done 307, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 316 items OK; {:done 308, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -41317,12 +41351,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardRankZeroOpenUncoveredJetNullityProbe.lean",
+     {:path "/tmp/SardSecondJetClassicalInductionNullityProbe.lean",
       :sha256
-      "dfd5d0b5530304a0d52648971e948aad757fe24c2b3bd18f0c249175a6a93c06"},
+      "ad8e9c1983b84f95318cdcf687f871c3539f8c77876c8eaa0e566689b4246e11"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -41586,7 +41620,8 @@
     :critical-value-sard-compact-rank-zero-small-source-nullity-1
     :critical-value-sard-rank-zero-small-source-nullity-1
     :critical-value-sard-small-source-critical-image-induction-1
-    :critical-value-sard-rank-zero-open-uncovered-jet-nullity-1],
+    :critical-value-sard-rank-zero-open-uncovered-jet-nullity-1
+    :critical-value-sard-second-jet-classical-induction-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
