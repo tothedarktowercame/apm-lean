@@ -12,9 +12,13 @@ set -uo pipefail
 LEAN=/home/joe/code/apm-lean
 LAB="$LEAN/holes/labs/topology-contract"
 OUT="${TOPOLOGY_RUNS:-$LAB/runs}/progress-baseline.json"
+# The ledger has to move with the run directory. Parameterizing only OUT would
+# write a runs2 baseline holding the FIRST campaign's row counts, which is a
+# progress report about the wrong campaign.
+LEDGER="${TOPOLOGY_LEDGER:-$LAB/worklist.edn}"
 
 snapshot() {
-python3 - "$LEAN" <<'PY'
+python3 - "$LEAN" "$LEDGER" <<'PY'
 import json, os, glob, subprocess, sys, datetime
 root=sys.argv[1]; os.chdir(root)
 stems=[os.path.splitext(os.path.basename(f))[0] for f in glob.glob('apm/*.tex')]
@@ -55,7 +59,8 @@ def sh(*a):
     except Exception: return ''
 wl={}
 try:
-    txt=sh('bb','-e','(let [w (read-string (slurp "%s/holes/labs/topology-contract/worklist.edn"))] (prn {:items (count (:items w)) :states (frequencies (map :state (:items w)))}))'%root)
+    ledger=sys.argv[2] if len(sys.argv)>2 else root+'/holes/labs/topology-contract/worklist.edn'
+    txt=sh('bb','-e','(let [w (read-string (slurp "%s"))] (prn {:items (count (:items w)) :states (frequencies (map :state (:items w)))}))'%ledger)
     wl=txt
 except Exception: pass
 print(json.dumps({
@@ -75,6 +80,16 @@ PY
 
 case "${1:-report}" in
   baseline)
+    # "(once)" was a comment, not a guard, and this silently overwrote a
+    # baseline taken on 2026-09-06 when it was run to test an unrelated change
+    # on 2026-09-09. A baseline's whole value is being older than the thing it
+    # measures, and runs/ is gitignored, so an overwrite is unrecoverable.
+    if [ -f "$OUT" ] && [ "${2:-}" != --force ]; then
+      echo "baseline already exists: $OUT" >&2
+      echo "taken $(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["at"])' "$OUT" 2>/dev/null || echo unknown)" >&2
+      echo "re-run with: $0 baseline --force   (this discards the older reference point)" >&2
+      exit 1
+    fi
     snapshot > "$OUT"; echo "baseline written: $OUT"; cat "$OUT" ;;
   report)
     [ -f "$OUT" ] || { echo "no baseline; run: $0 baseline"; exit 1; }
