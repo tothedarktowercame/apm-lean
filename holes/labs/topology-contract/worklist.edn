@@ -41121,6 +41121,23 @@
       "git add ConstructionTargets/SardRankZeroOpenUncoveredJetNullity.lean ConstructionTargets/SardRankZeroOpenUncoveredJetNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: exhaust open rank-zero loci from uncovered jet nullity' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788933830324-16112-d4894f48",
+     :commands
+     ["git show 6cecf17cc2c44313a6e885a04a28626ba3da1d7e --stat --oneline"
+      "sha256sum /tmp/SardRankZeroOpenUncoveredJetNullityProbe.lean"
+      "cmp /tmp/SardRankZeroOpenUncoveredJetNullityProbe.lean <(git show 6cecf17cc2c44313a6e885a04a28626ba3da1d7e:ConstructionTargets/SardRankZeroOpenUncoveredJetNullity.lean)"
+      "git show 6cecf17cc2c44313a6e885a04a28626ba3da1d7e:ConstructionTargets/SardRankZeroOpenUncoveredJetNullity.lean | sed -n '7,22p' | sha256sum"
+      "git diff --exit-code 6cecf17cc2c44313a6e885a04a28626ba3da1d7e -- ConstructionTargets"
+      "lake env lean /tmp/SardRankZeroOpenUncoveredJetNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardRankZeroOpenUncoveredJetNullity.lean"
+      "lake build ConstructionTargets.SardRankZeroOpenUncoveredJetNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit 6cecf17cc2c44313a6e885a04a28626ba3da1d7e passes. Fixture SHA dfd5d0b5530304a0d52648971e948aad757fe24c2b3bd18f0c249175a6a93c06 and statement SHA 083d4501b716142fda21c54f5b8491244f0ef0377f727ae0acb5350811913d52 reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8422-job build successful. Lines 23–35 correctly orient compact containment and image monotonicity without changing derivative representation or concealing remaining premises. Ledger untouched."},
     :commit "6cecf17cc2c44313a6e885a04a28626ba3da1d7e",
     :changed-paths
     ["ConstructionTargets/SardRankZeroOpenUncoveredJetNullity.lean"
@@ -41132,7 +41149,7 @@
     :declarations
     ["rankZero_inter_open_image_zero_of_uncovered_higherJets"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardRankZeroOpenUncoveredJetNullity.lean"
     "ConstructionTargets/SardRankZeroOpenUncoveredJetNullity.md"],
@@ -41305,7 +41322,7 @@
       "dfd5d0b5530304a0d52648971e948aad757fe24c2b3bd18f0c249175a6a93c06"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
