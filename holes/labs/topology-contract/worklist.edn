@@ -51486,8 +51486,59 @@
   {:consumer "t02A05",
    :stop-condition
    "If complete closure cannot compile, name the exact remaining projection, measure transport or normalization theorem. No assumed area or partial moment certificate counts as GO; classify a proved false encoding locally.",
+   :evidence
+   {:residual
+    "Determine the numerical intrinsic two-sphere mass with proof. If it contradicts 4*pi, preserve an exact local specification counterexample. The mass-relative diagnostic is not consumer closure.",
+    :dependency-review
+    "Checkpoint20 PASS by codex-10, invoke-1788985318252-16982-c719b2ad.",
+    :outcome :stop,
+    :warnings
+    ["Two inherited unnecessarySimpa warnings; successful diagnostic has no sorryAx."],
+    :statement-hashes
+    {:actual_flux
+     "127ecf3d58ac742d79660c38597e0fc3147db81954e8dce968e44b88b13b85f7",
+     :bridge_iff_mass
+     "baf93f1fb55a26fe9b4832a8c629c8be44947e5a7ca1264013b58cefb7fa295b",
+     :frozen_conclusion_iff_mass
+     "bf015d350c7360b181065b00bbe7c105b37b92df38131897d90b32204c039bdf"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-12,
+    :reason
+    "The remaining theorem is numerical normalization of the literal sphere-subtype Hausdorff measure: IntrinsicSphereSecondMoments.mass 2 = 4*pi. The compiled diagnostic proves the frozen bridge and complete frozen optimization conclusion equivalent to this identity for every omega satisfying the original isOmega predicate. Neither the identity nor its negation is established; this is missing infrastructure, not a mathematical refutation.",
+    :commands
+    [{:cmd "lake env lean /tmp/T02A05IntrinsicMassBoundary.lean",
+      :exit 0,
+      :provenance
+      "Successful compilation in the immediately preceding invocation; unchanged fixture reused."}
+     {:cmd
+      "sha256sum /tmp/T02A05IntrinsicMassBoundary.lean problems/t02A05/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "git diff 15b1a0ca829c676a273d699692abec2f6339ec77 -- TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md ConstructionTargets/IntrinsicSphereFinite.lean ConstructionTargets/IntrinsicSphereSecondMoments.lean ConstructionTargets/IntrinsicSphereFourthMoments.lean",
+      :exit 0,
+      :finding "No changes."}
+     {:cmd "cat /tmp/T02A05IntrinsicMassAudit.json", :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T02A05IntrinsicMassBoundary.lean",
+     :sha256
+     "b9500e16a9f452af10481d834a994565905b0af94aa417479173f13b991d43bb",
+     :role :boundary-diagnostic,
+     :placeholder-count 0,
+     :full-consumer-closure false},
+    :finding
+    "The exact tangent-projection expansion and translated sphere isometry already compile. Their Hausdorff integral transport, composed with the banked fourth moments and integrability results, proves outwardSphereIntegral omega c = M2*(11/15+(c0-1)^2+(c1-2)^2) without an assumed integral value. No projection or translation boundary remains in this diagnostic. A raw Hausdorff-to-radial-measure normalization cannot be inferred from HaarToSphere.",
+    :frozen
+    {:path "problems/t02A05/lean/Main.lean",
+     :sha256
+     "fb006cf7fd68026fa20f517e58e4f6b3bbf1c34fce2f3ee42064f5e7b3cc89d5",
+     :placeholder-before 2,
+     :placeholder-after 2,
+     :placeholder-delta 0},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "STOKES AND MOMENTS / frozen outward flux",
    :acceptance
