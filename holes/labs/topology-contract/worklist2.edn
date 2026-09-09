@@ -795,21 +795,91 @@
    :stop-condition
    "Bank only the nested-chart comparison and its common-chart consequence. The common chart is an input to that consequence, not yet a constructed overlap restriction. Do not claim the parent overlap/punctured-circle packet is complete or infer a global fundamental class or localization monicity.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/NestedOrientedChartCompatibilityProbe.lean",
-      :sha256
-      "d6a320fc64a7b85cee13c6346bf165425a619d9dba2e6a7d74d633cd0ede7fbb"},
-     :commands
-     [{:cmd
-       "cd /home/joe/code/apm-lean && lake env lean /tmp/NestedOrientedChartCompatibilityProbe.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct a common restricted pointed chart for overlapping oriented charts, verify both increasing transitions, and instantiate distinct overlapping Circle charts. The parent probe also retains the punctured-circle-to-line homeomorphism, positive-degree integral homology vanishing, and local-generator comparison. The common chart remains an input here; no parent-packet completion, global fundamental class, or localization monicity is claimed.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :all-seven-printed-axiom-audits :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :fixture-compilation :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 17,
+      :log "/tmp/codex-14-nested-build.log",
+      :paths
+      {"ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/SingularSubdivision.lean" 2,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/T02A06SphereShift.lean" 3}}],
+    :statement-hashes
+    {"ConstructionTargets.NestedOrientedChartCompatibility.PointedModelChart.transition"
+     "d65c5ea7b292c6a242045ed32775fe7ba31cfe3a3f434db5b8d234b46a884637",
+     "ConstructionTargets.NestedOrientedChartCompatibility.PointedModelChart.ambient_transition"
+     "e77a2e82ddf29df4c2f22a175a55305fa73fc27d617dccb5deb291e0209704f2",
+     "ConstructionTargets.NestedOrientedChartCompatibility.PointedModelChart.transition_homology_square"
+     "d44f64525dcec46f34f3523ca4d5e0c7254bae80597f4720eca621f735760772",
+     "ConstructionTargets.NestedOrientedChartCompatibility.PointedModelChart.compatible_localClass_eq"
+     "c2ff426c12397c4d193a8f20dbb5ccfefad252159aeb0f7265bb174705063e36",
+     "ConstructionTargets.NestedOrientedChartCompatibility.PointedModelChart.localClass_generates"
+     "53dc710cf683effa45050301e0ec13910983869ae4fe283042b77b59d21e4259",
+     "ConstructionTargets.NestedOrientedChartCompatibility.constructedChart_localClass"
+     "785eb05c1bcfeb7c03b429fa96c8211f5eb4633cf88891b15c7a91725343c5d2",
+     "ConstructionTargets.NestedOrientedChartCompatibility.localClass_eq_of_common_nested_chart"
+     "367dcb77407255d50b2f926dd02a3e6e789a0c90de7a8899f6f3dd09b2ede0c6"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/NestedOrientedChartCompatibilityProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/NestedOrientedChartCompatibilityProbe.lean > /tmp/codex-14-nested-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/NestedOrientedChartCompatibility.lean > /tmp/codex-14-nested-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.NestedOrientedChartCompatibility ConstructionTargets.OneDimensionalChartLocalGenerator ConstructionTargets.OneDiskLocalOrientation > /tmp/codex-14-nested-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/NestedOrientedChartCompatibility.lean /tmp/NestedOrientedChartCompatibilityProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Compare local orientation classes through nested chart transitions\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Dependency PASS reviews checked, including codex-11 review of 80e84e8694036cf750564b74a1496b83e71a5c04. Existing untracked supervisor runs2 files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :commit "77786b3c35ec70eb3e6674b385dca0ef0af706dd",
+    :changed-paths
+    ["ConstructionTargets/NestedOrientedChartCompatibility.lean"
+     "ConstructionTargets/NestedOrientedChartCompatibility.md"],
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/NestedOrientedChartCompatibilityProbe.lean",
+     :sha256
+     "d6a320fc64a7b85cee13c6346bf165425a619d9dba2e6a7d74d633cd0ede7fbb"},
+    :finding
+    "Promoted the exact fixture. PointedModelChart contains only geometric data; compatibility is strict increase of the constructed nested coordinate transition. The ambient map equality and production relative-H1 composition square prove equal local classes using the geometric increasing-map theorem. Excision proves integer generation. The supplied-common-chart consequence follows from two nested comparisons.",
+    :statement-hash-method
+    "SHA-256 of UTF-8 declaration bytes beginning with theorem or def and ending immediately before the space preceding :=; declarations byte-identical to fixture.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/NestedOrientedChartCompatibility.lean"
     "ConstructionTargets/NestedOrientedChartCompatibility.md"],
