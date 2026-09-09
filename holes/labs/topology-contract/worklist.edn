@@ -54080,9 +54080,72 @@
   {:consumer "t93A04",
    :stop-condition
    "GO requires compiled unconditional manifold-to-vector-target critical-image nullity. REVISE requires exactly one compiled prerequisite. Reuse an exact producer from the preceding adapter if available rather than duplicate it.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Extraction and reuse only, not a new mathematical advance or second consumer closure. t93A04 is already reviewed closed. Next edges are general target-manifold chartwise critical-value transport and separate regular-value/transversality uptake for the remaining consumers.",
+     :outcome :go,
+     :warnings
+     ["Reusable module: none. Consumer: one inherited unnecessarySimpa warning."],
+     :acceptance
+     {:exact-producer-extraction true,
+      :preserve-declaration "T93A04ManifoldWork.null_critical",
+      :consumer-tail-byte-identical true,
+      :consumer-sha256-before
+      "ca834f20b42db9742d8b4c90b6ab7fb8364ee8dcf617a59df97d02c623437bbd",
+      :placeholder-before 0,
+      :placeholder-after 0,
+      :axioms :standard-only},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :documentation
+     {:path "/tmp/SardGenuineSmoothManifoldVector.md",
+      :sha256
+      "8622fc5078ddab8d9c021967ebb878f9b793a0abb8fa0fd4f66e6ced5f156f05"},
+     :commands
+     [{:cmd "bb /tmp/manifold-vector-review.bb", :exit 0}
+      {:cmd
+       "lake env lean -R /tmp/topology-manifold -o /tmp/topology-manifold/ConstructionTargets/SardGenuineSmoothManifoldVector.olean /tmp/topology-manifold/ConstructionTargets/SardGenuineSmoothManifoldVector.lean",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'export LEAN_PATH=\"/tmp/topology-manifold:$LEAN_PATH\"; lean /tmp/T93A04ManifoldReuse.lean'",
+       :exit 0}
+      {:cmd "python3 /tmp/manifold-vector-audit.py", :exit 0}
+      {:cmd "git status --porcelain=v1", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean -o /tmp/topology-manifold/ConstructionTargets/SardGenuineSmoothManifoldVector.olean /tmp/SardGenuineSmoothManifoldVector.lean",
+       :exit 1,
+       :finding
+       "Output generation required the input under an explicit module root; corrected with a temporary module tree and -R."}
+      {:cmd
+       "lake env bash -c 'export LEAN_PATH=\"/tmp/topology-manifold:$LEAN_PATH\"; lean /tmp/T93A04ManifoldReuse.lean'",
+       :exit 1,
+       :finding
+       "Temporary ConstructionTargets root shadowed canonical dependency objects. Added temporary symlinks to canonical built objects; successful rerun recorded above. No canonical files changed."}],
+     :consumer-fixture
+     {:path "/tmp/T93A04ManifoldReuse.lean",
+      :sha256
+      "5baf0e7d27ecb11934c0862e5955cedca42e307deed38ab569d31a90eb8c2f83"},
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/SardGenuineSmoothManifoldVector.lean",
+      :sha256
+      "ff63bdc1e857973e9b2cecc345e9e2fab37aefd81973718267a1ee50fe7dd951"},
+     :finding
+     "The exact requested theorem already exists in reviewed consumer commit a49c84764968d8286ff05d87e5d218018505f50c. Extracted its unchanged proof and compiled the complete consumer importing it. Actual open inverse-chart representatives supply genuine-infinity regularity; the derivative chain rule transports criticality; unconditional Euclidean Sard and existing second-countable countable-subcover aggregation give nullity in the original target Haar measure. No nonempty, positive-dimensional or additional source Hausdorff hypothesis is needed.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardGenuineSmoothManifoldVector.lean"
+       "ConstructionTargets/SardGenuineSmoothManifoldVector.md"
+       "problems/t93A04/lean/Main.lean"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/SardGenuineSmoothManifoldVector.lean"
+    "ConstructionTargets/SardGenuineSmoothManifoldVector.md"
+    "problems/t93A04/lean/Main.lean"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / manifold source and vector target",
    :acceptance
