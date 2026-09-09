@@ -5425,8 +5425,70 @@
   {:consumer :t97A01,
    :stop-condition
    "Preserve both literal quotients and all frozen invariant statements. No assumed collar, cellular comparison, quotient homeomorphism or group presentation.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "Construct polygon-specific excisive geometry and actual attaching-map homology/group comparisons before retrying full t97A01 closure.",
+    :typed-boundaries
+    ["T97A01Diagnostic.StandardHomologyCalculation: standard genus-three polygon singular homology remains unproved."
+     "T97A01Diagnostic.SecondPolygonHomologyCalculation: the second literal quotient's singular homology remains unproved."
+     "T97A01Diagnostic.ActualFundamentalGroupCalculation: the actual based fundamental group has not been identified with the displayed presented group."],
+    :axiom-audits 3,
+    :outcome :stop,
+    :warnings [],
+    :statement-hashes
+    {"apm_t97a01"
+     "4a811c1f48bd6ee366124d7e3e5df05eacb600519cbe2376d0bf754ec6cbd0a7"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :proved
+    ["Constructed standardHomeomorph from the first literal quotient to Surface false 3."
+     "Proved its equation on the actual disk quotient map."
+     "Constructed homologyComparison in every degree through the actual singular-homology functor."],
+    :author "codex-13",
+    :placeholder-before 1,
+    :reason :missing-polygon-invariant-comparisons,
+    :commands
+    [{:cmd "cat problems/t97A01/lean/Main.lean", :exit 0}
+     {:cmd "cat ConstructionTargets/Surfaces.lean", :exit 0}
+     {:cmd
+      "head -100 ConstructionTargets/GenericTargetNaturalSourceReconstruction.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '610,642p' ConstructionTargets/ProductionOpenCoverMayerVietoris.lean",
+      :exit 0}
+     {:cmd
+      "bb: inspect independently PASS-reviewed dependency checkpoint receipt",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/T97A01PolygonDiagnostic.lean", :exit 0}
+     {:cmd "sha256sum problems/t97A01/lean/Main.lean", :exit 0}
+     {:cmd "sha256sum /tmp/T97A01PolygonDiagnostic.lean", :exit 0}
+     {:cmd
+      "Python audit: preserved frozen prefix, statement hash, comment-stripped placeholders and compilation log",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T97A01PolygonDiagnostic.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T97A01PolygonDiagnostic.lean",
+     :sha256
+     "a4555d92badc8d32406a296eedd6e83bb15931e29ca59bd12fc3f513dddc0986",
+     :role :boundary-diagnostic},
+    :finding
+    "Rule-0 infrastructure STOP, not a mathematical refutation. The first quotient's topological transport is now compiled, so that historical gap is removed. Generic production Mayer-Vietoris and target-natural source reconstruction exist; the frozen commentary claiming their absence is stale. Their application still requires actual polygon open-cover geometry, homotopy models and attaching-map comparisons. Surfaces supplies quotient presentations and classification arithmetic, not the required singular-homology calculation. Source reconstruction requires a target-natural mapping-category equivalence, which has not been constructed for the second polygon and its relator. The diagnostic states the remaining propositions without assuming or proving them. No complete frozen fixture or implementation scope is claimed.",
+    :statement-hash-method
+    "SHA256 of original declaration text beginning theorem apm_t97a01 and ending immediately before := by.",
+    :frozen-sha256
+    "63ea50fe8435ba22b20b6db4d53e553ad0c27e9a31de96b8a1212019cc1c9402",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "Closed gluing and surface invariants: literal polygon quotient consumer",
