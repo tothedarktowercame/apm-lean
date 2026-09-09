@@ -44880,6 +44880,40 @@
    "Inner-product representation and supplied-model assumptions are discharged; Borel-compatible induction, overlap, and remaining regularity restrictions persist.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the order and overlap case split is not exhaustive, strong induction cannot instantiate the reviewed overlap theorem under these hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardBorelOverlapInductionClosure.lean"
+    "ConstructionTargets/SardBorelOverlapInductionClosure.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL OVERLAP INDUCTION CLOSURE",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardBorelOverlapInductionClosureProbe.lean",
+     :sha256
+     "7e2f02676632f92731536ed6292d426a30de86f22c8c05c982a4a271db7ee59c"},
+    :declarations
+    ["borelClassicalCriticalNullity_of_overlap_complement"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Prove the explicit low-order and complementary-overlap inductive premise; then specialize the resulting Borel finite-order theorem to the remaining rectangular and manifold interfaces."},
+   :representation
+   {:source
+    "An inductive nullity theorem for admissible finite orders restricted to order < 2 or targetDim+order+1 < sourceDim+(sourceDim-1)/targetDim, assuming Borel-compatible critical nullity at strictly smaller source dimensions.",
+    :target
+    "BorelClassicalCriticalNullityAtDimension at every source dimension, for finite-dimensional real normed spaces, Borel targets with additive Haar measures, arbitrary source sets and pointwise ambient finite-order regularity."},
+   :id :critical-value-sard-borel-overlap-induction-closure-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-borel-overlap-normed-spaces-1
+    :critical-value-sard-borel-classical-critical-nullity-predicate-1],
+   :current-residual
+   "Dimension induction is assembled conditionally; the low-order and complementary-overlap analytic premise remains unproved.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -44933,74 +44967,75 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank normed-space overlap nullity; close dimension induction and resolve complementary analytic and regularity obligations before rectangular closure.",
+     "Bank conditional overlap induction closure; discharge its explicit low-order and complementary-range premise before claiming full rectangular closure.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"localSet_criticalImage_zero_of_borel_overlap_normed_spaces"
-      "36b8c23a9eb991bbe51e7b5ef36a62d9fb8ac3486d1f4326dbd03c8b350e7a9a"},
+     {"borelClassicalCriticalNullity_of_overlap_complement"
+      "632fa802b1b56a922079ebd2584a1f46ac5a4c6cbb4219879f64b2d9af10102e"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the same-universe Euclidean target model lacks the required dimension or Haar structures, finite-dimensional linear equivalence fails to be continuous, reviewed target transfer fails under these hypotheses, or nonstandard axioms are required.",
+      "Stop only if the order and overlap case split is not exhaustive, strong induction cannot instantiate the reviewed overlap theorem under these hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardBorelOverlapNormedSpaces.lean"
-       "ConstructionTargets/SardBorelOverlapNormedSpaces.md"],
+      ["ConstructionTargets/SardBorelOverlapInductionClosure.lean"
+       "ConstructionTargets/SardBorelOverlapInductionClosure.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL OVERLAP NORMED SPACES",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL OVERLAP INDUCTION CLOSURE",
       :acceptance
       {:fixture
-       {:path "/tmp/SardBorelOverlapNormedSpacesProbe.lean",
+       {:path "/tmp/SardBorelOverlapInductionClosureProbe.lean",
         :sha256
-        "1db860f024e11b5ed3e4132edd2ca085b4a5166f7ee3a6ec9d688b9aa9e8527f"},
+        "7e2f02676632f92731536ed6292d426a30de86f22c8c05c982a4a271db7ee59c"},
        :declarations
-       ["localSet_criticalImage_zero_of_borel_overlap_normed_spaces"],
+       ["borelClassicalCriticalNullity_of_overlap_complement"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Close Borel-compatible dimension induction and resolve complementary analytic and remaining regularity cases before full rectangular closure."},
+       "Prove the explicit low-order and complementary-overlap inductive premise; then specialize the resulting Borel finite-order theorem to the remaining rectangular and manifold interfaces."},
       :representation
       {:source
-       "Finite-dimensional real normed source and target, Borel target with additive Haar measure, pointwise ambient C^(k+2) regularity on an arbitrary source set, classical admissibility, Borel-compatible induction below source finrank, and the natural-number overlap inequality.",
+       "An inductive nullity theorem for admissible finite orders restricted to order < 2 or targetDim+order+1 < sourceDim+(sourceDim-1)/targetDim, assuming Borel-compatible critical nullity at strictly smaller source dimensions.",
        :target
-       "Nullity of the localized critical image without inner-product assumptions or supplied source or target models, equivalences, or model measures."},
-      :id :critical-value-sard-borel-overlap-normed-spaces-1,
+       "BorelClassicalCriticalNullityAtDimension at every source dimension, for finite-dimensional real normed spaces, Borel targets with additive Haar measures, arbitrary source sets and pointwise ambient finite-order regularity."},
+      :id :critical-value-sard-borel-overlap-induction-closure-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-borel-overlap-target-equiv-transfer-1],
+      [:critical-value-sard-borel-overlap-normed-spaces-1
+       :critical-value-sard-borel-classical-critical-nullity-predicate-1],
       :current-residual
-      "Inner-product representation and supplied-model assumptions are discharged; Borel-compatible induction, overlap, and remaining regularity restrictions persist.",
+      "Dimension induction is assembled conditionally; the low-order and complementary-overlap analytic premise remains unproved.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite constructs a same-universe Euclidean target model, its continuous linear equivalence, and its volume Haar measure internally. Reviewed target-equivalence transfer then proves overlap nullity between finite-dimensional normed spaces. Induction and overlap remain explicit premises; rectangular Morse-Sard is unresolved, not refuted.",
+     "One compiled prerequisite closes strong source-dimension induction conditionally on exactly the low-order and complementary-overlap cases. The reviewed normed-space theorem supplies every order-at-least-two overlap case. The remaining analytic premise is explicit and unproved; this is not unconditional rectangular Morse-Sard closure or a refutation.",
      :commands
      [{:cmd
-       "Read DAG certification rule, closure policy, target-transfer module and reviewed dependency receipt",
+       "Read DAG certification rule, closure policy, normed-space overlap module, Borel induction predicate, and reviewed normed-space dependency receipt",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardBorelOverlapNormedSpacesProbe.lean",
+       "lake env lean /tmp/SardBorelOverlapInductionClosureProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardBorelOverlapNormedSpacesProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardBorelOverlapInductionClosureProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
        "Frozen consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '6,20p' /tmp/SardBorelOverlapNormedSpacesProbe.lean | sha256sum",
+       "sed -n '7,23p' /tmp/SardBorelOverlapInductionClosureProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelOverlapNormedSpacesProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelOverlapInductionClosureProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 345 items OK; {:done 337, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 346 items OK; {:done 338, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -45012,12 +45047,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardBorelOverlapNormedSpacesProbe.lean",
+     {:path "/tmp/SardBorelOverlapInductionClosureProbe.lean",
       :sha256
-      "1db860f024e11b5ed3e4132edd2ca085b4a5166f7ee3a6ec9d688b9aa9e8527f"},
+      "7e2f02676632f92731536ed6292d426a30de86f22c8c05c982a4a271db7ee59c"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -45311,7 +45346,8 @@
     :critical-value-sard-borel-overlap-normed-source-1
     :critical-value-sard-target-equiv-critical-image-1
     :critical-value-sard-borel-overlap-target-equiv-transfer-1
-    :critical-value-sard-borel-overlap-normed-spaces-1],
+    :critical-value-sard-borel-overlap-normed-spaces-1
+    :critical-value-sard-borel-overlap-induction-closure-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
