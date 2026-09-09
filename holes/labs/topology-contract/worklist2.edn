@@ -175,21 +175,92 @@
    :stop-condition
    "Bank exactly this geometric puncture-homotopy prerequisite and its increasing/identity consumer equations. Do not assume any induced-map sign, claim reflection or decreasing compatibility, or extend the result beyond the one-dimensional model.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/OneDiskIncreasingOrientationProbe.lean",
-      :sha256
-      "413f68890cd96998d353ad10a2dd2ca3223ecf7ee43c2f669e37b664ee6c0a28"},
-     :commands
-     [{:cmd
-       "cd /home/joe/code/apm-lean && lake env lean /tmp/OneDiskIncreasingOrientationProbe.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "The increasing and identity branches are proved geometrically. The parent probe must still characterize all integral local generators, compute reflection's negative sign, and geometrically reduce decreasing maps to reflection. No reflection, decreasing compatibility, arbitrary-dimensional result, or frozen problem closure claimed.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :focused-build :pass,
+     :all-six-printed-axiom-audits :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :fixture-compilation :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 17,
+      :log "/tmp/codex-14-increasing-build.log",
+      :paths
+      {"ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/SingularSubdivision.lean" 2,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/T02A06SphereShift.lean" 3}}],
+    :statement-hashes
+    {"ConstructionTargets.OneDiskIncreasingOrientation.normalize_eq_of_same_sign"
+     "919987319234f758685ae7b1ec27b6b68f303a4d438772fda6a9b364701bdfbe",
+     "ConstructionTargets.OneDiskIncreasingOrientation.puncture_homotopic_id_of_same_sign"
+     "4f404feb4889ba359d13638ba1775f2d14bf41484d9cb80736205e0c72cbc8f9",
+     "ConstructionTargets.OneDiskIncreasingOrientation.punctureH0Map_eq_id_of_same_sign"
+     "d3eac269e3ded581bae26e2e731ca22e2238ccdf33654d3ebe51d3eef4a1abd5",
+     "ConstructionTargets.OneDiskIncreasingOrientation.modelGenerator_map_of_same_sign"
+     "3fce58dcf4f93ebfbe6f5b12e7b14f54cc572d07d8a67e4baed4b5fd63077d55",
+     "ConstructionTargets.OneDiskIncreasingOrientation.same_sign_of_increasing"
+     "16c9270bc13e29a4c879659f1e04138ddb77a20d16685ebc5f220721ecc08c50",
+     "ConstructionTargets.OneDiskIncreasingOrientation.increasing_mapsTo"
+     "9659a4065fd4fd88ae300dc4a6920db866773e32bed6cca3595811aa8a69fa83",
+     "ConstructionTargets.OneDiskIncreasingOrientation.modelGenerator_map_of_increasing"
+     "289b9b0c34aff6035d4b84c9eccd4c7b59c57bbb10546b5e0a8969a396e69054",
+     "ConstructionTargets.OneDiskIncreasingOrientation.modelGenerator_map_identity"
+     "21fb7540fb71b6f8b207d3d980dd8f8788af152425f1ef0ef744c49def0bf3a7"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/OneDiskIncreasingOrientationProbe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/OneDiskIncreasingOrientationProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/OneDiskIncreasingOrientation.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.OneDiskIncreasingOrientation ConstructionTargets.RelativeSingularConnectingNaturality ConstructionTargets.ChartPairRelativeHomologyTransport > /tmp/codex-14-increasing-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/OneDiskIncreasingOrientation.lean /tmp/OneDiskIncreasingOrientationProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Prove increasing one-disk maps preserve the local generator\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Read dependency codex-11 PASS for 9f4e9d3ea394d9e4ae0093367fc3ca68d3c52c91. Existing untracked supervisor runs2 files left untouched. Ledger and DAG unchanged.",
+    :commit "5c9b65aa3740a6e5837fcafbb9149dbafda8cc0a",
+    :changed-paths
+    ["ConstructionTargets/OneDiskIncreasingOrientation.lean"
+     "ConstructionTargets/OneDiskIncreasingOrientation.md"],
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/OneDiskIncreasingOrientationProbe.lean",
+     :sha256
+     "413f68890cd96998d353ad10a2dd2ca3223ecf7ee43c2f669e37b664ee6c0a28"},
+    :finding
+    "Promoted the exact geometric puncture-homotopy fixture. Same-sign radial normalization gives a homotopy of the actual restricted map to identity; homotopy invariance and connecting-map injectivity prove generator preservation. Strict coordinate increase and fixing the origin supply the geometric sign condition and MapsTo witness; identity is instantiated.",
+    :statement-hash-method
+    "SHA-256 of UTF-8 bytes from theorem through its statement, excluding the space before :=; all statements byte-identical to fixture.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/OneDiskIncreasingOrientation.lean"
     "ConstructionTargets/OneDiskIncreasingOrientation.md"],
