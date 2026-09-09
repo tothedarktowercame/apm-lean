@@ -8645,8 +8645,79 @@
   {:consumer :t99J03,
    :stop-condition
    "Preserve the literal relations, genus-zero case and all manifold hypotheses. No supplied classification, Euler invariance or silent boundary collapse.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "The full exact surface-classification consumer remains open. No bounded closing adapter or complete refutation was constructed; no implementation scope is proposed.",
+    :frozen-file "problems/t99J03/lean/Main.lean",
+    :dependency-review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788993058448-17222-17abe163"},
+    :typed-boundary
+    {:declaration "T99J03Boundary.MissingClassification",
+     :statement
+     "For every X : Type with TopologicalSpace, T2Space, CompactSpace, ConnectedSpace, ChartedSpace apm_t99J03_E2 X and IsManifold (𝓘(ℝ, apm_t99J03_E2)) ⊤ X, prove (∃! g : ℕ, Nonempty (X ≃ₜ apm_t99J03_Surface true g)) ∨ (∃! k : ℕ, 0 < k ∧ Nonempty (X ≃ₜ apm_t99J03_Surface false k)).",
+     :missing
+     ["Existence of actual homeomorphisms from arbitrary frozen compact connected smooth surfaces to these exact polygon quotients, including a justified treatment of the genus-zero disk."
+      "Topological invariants or another actual quotient-comparison theorem establishing uniqueness of genus or crosscap number. Arithmetic injectivity of the defined Euler expressions alone does not supply this."],
+     :refutation-status
+     "No compiled admissible counterexample contradicting the entire classification conclusion."},
+    :axiom-audits 5,
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :placeholder-before 1,
+    :reason :missing-infrastructure,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "bb corrected dependency-review query for oriented-checkpoint12-transversality-and-coefficients-refill",
+      :exit 0}
+     {:cmd
+      "rg -n 't99J03|classif.*[Ss]urface|[Ss]urface.*classif|triangulat' ConstructionTargets --glob '*.lean'",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T99J03Boundary.lean", :exit 0}
+     {:cmd
+      "sha256sum /tmp/T99J03Boundary.lean problems/t99J03/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T99J03Boundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial dependency-review bb query",
+      :exit 1,
+      :correction
+      "Removed an extra closing parenthesis; the corrected query returned the independent PASS receipt."}
+     {:cmd "readlink -f .lake/packages; rg --files -g AGENTS.md",
+      :exit 1,
+      :explanation
+      "Package authority resolved successfully; the trailing local AGENTS.md search had no matches."}
+     {:cmd
+      "Combined documentation reads and quotient-homeomorphism API search",
+      :exit 1,
+      :explanation
+      "Documentation reads succeeded; the final search had no matches. Subsequent inspection located Continuous.quotient_lift, used successfully in the compiled homeomorphism."}],
+    :changed-paths [],
+    :frozen-file-unchanged true,
+    :fixture
+    {:path "/tmp/T99J03Boundary.lean",
+     :sha256
+     "4ec7eb7bbb41882691059cb564ec87fd2c164c103a64bfee3aad98bb03910fdb",
+     :role :boundary-diagnostic},
+    :finding
+    "The compiled diagnostic constructs an actual homeomorphism from each genus-zero literal quotient to the closed disk. Its representative equation is identity; the generating relation is empty and its equivalence closure is equality. The frozen Euler formula does not establish a topological invariant. A compiled equivalence identifies the complete frozen conclusion with MissingClassification under exactly its original hypotheses. Neither that classification nor a counterexample excluding every family member has been proved. This is an infrastructure STOP with a demonstrated genus-zero representation concern, not a specification refutation.",
+    :frozen-sha256
+    "7ae7fd891041611e289a84b18eeec7c22e2464255e3e909f31ced868b41bc2f6",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "Surface classification: exact literal polygon-family consumer",
