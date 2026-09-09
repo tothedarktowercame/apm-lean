@@ -45119,6 +45119,39 @@
    "Same-space low-order critical nullity is established; distinct-space transport, other low-order cases, and complementary analytic cases remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if equal finrank fails to provide a continuous linear equivalence, differentiability fails to transport through it, reviewed source critical-image equality or same-space nullity fails under these hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean"
+    "ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EQUAL-DIMENSION AMBIENT CRITICAL NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean",
+     :sha256
+     "dbb3ca05674292fa6426ee6bd697c0816f63629f4f7164e8b3648e58767b09ca"},
+    :declarations ["equalDimension_ambient_criticalImage_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Handle lower-source-dimensional low-order cases and discharge the complementary-overlap analytic premise before rectangular closure."},
+   :representation
+   {:source
+    "Finite-dimensional real normed source and target of equal finrank, a Borel target with additive Haar measure, an arbitrary source subset, and ambient differentiability at every point of that subset.",
+    :target
+    "Nullity of the localized nonsurjective ambient derivative image without same-space identification, supplied equivalence, source measurable structure, source Haar measure, or derivative-continuity assumptions."},
+   :id :critical-value-sard-equal-dimension-ambient-critical-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-same-space-ambient-critical-nullity-1
+    :critical-value-sard-source-equiv-critical-image-1],
+   :current-residual
+   "Equal-dimensional ambient critical nullity is established; unequal-dimensional low-order and complementary analytic cases remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -45172,73 +45205,76 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank same-space ambient critical nullity; extend the low-order result across dimensions and discharge complementary analytic cases before rectangular closure.",
+     "Bank equal-dimensional ambient critical nullity; resolve remaining low-order and complementary analytic cases. Full rectangular Morse-Sard is not yet proved or refuted.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"sameSpace_ambient_criticalImage_zero"
-      "fb23bf2fdddd4118356f2bab3b274288cd7c546c7c702c9fd2c8128d54a82532"},
+     {"equalDimension_ambient_criticalImage_zero"
+      "73acde7ba18f1dab9c9f8430278c8f771377a9c5f7613c40bca27e66e55f650c"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if ambient derivative witnesses fail to restrict to the critical set, nonsurjectivity fails to force zero determinant in finite dimension, the Jacobian nullity theorem fails under these hypotheses, or nonstandard axioms are required.",
+      "Stop only if equal finrank fails to provide a continuous linear equivalence, differentiability fails to transport through it, reviewed source critical-image equality or same-space nullity fails under these hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardSameSpaceAmbientCriticalNullity.lean"
-       "ConstructionTargets/SardSameSpaceAmbientCriticalNullity.md"],
+      ["ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean"
+       "ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SAME-SPACE AMBIENT CRITICAL NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / EQUAL-DIMENSION AMBIENT CRITICAL NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
+       {:path
+        "/tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean",
         :sha256
-        "22f27c56f476e685a4f4408982b088dd5073890131502aa4df91cc70e559b126"},
-       :declarations ["sameSpace_ambient_criticalImage_zero"],
+        "dbb3ca05674292fa6426ee6bd697c0816f63629f4f7164e8b3648e58767b09ca"},
+       :declarations ["equalDimension_ambient_criticalImage_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Transport the same-space result to equal-dimensional distinct spaces, handle lower-source-dimensional low-order cases, and discharge the complementary-overlap analytic premise."},
+       "Handle lower-source-dimensional low-order cases and discharge the complementary-overlap analytic premise before rectangular closure."},
       :representation
       {:source
-       "A finite-dimensional real normed Borel space with additive Haar measure, a self-map, an arbitrary source subset, and ambient differentiability at every point of that subset.",
+       "Finite-dimensional real normed source and target of equal finrank, a Borel target with additive Haar measure, an arbitrary source subset, and ambient differentiability at every point of that subset.",
        :target
-       "Nullity of the image of the subset's entire nonsurjective ambient derivative locus, without rank-zero, set measurability, openness, unique differentiability, or derivative-continuity assumptions."},
-      :id :critical-value-sard-same-space-ambient-critical-nullity-1,
+       "Nullity of the localized nonsurjective ambient derivative image without same-space identification, supplied equivalence, source measurable structure, source Haar measure, or derivative-continuity assumptions."},
+      :id
+      :critical-value-sard-equal-dimension-ambient-critical-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-rank-zero-same-space-endpoint-nullity-1],
+      [:critical-value-sard-same-space-ambient-critical-nullity-1
+       :critical-value-sard-source-equiv-critical-image-1],
       :current-residual
-      "Same-space low-order critical nullity is established; distinct-space transport, other low-order cases, and complementary analytic cases remain.",
+      "Equal-dimensional ambient critical nullity is established; unequal-dimensional low-order and complementary analytic cases remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite proves same-space critical-image nullity from pointwise ambient differentiability on an arbitrary set. Ambient derivatives provide within-derivative witnesses on the critical set; nonsurjectivity forces zero determinant, enabling the Jacobian nullity theorem. This removes rank-zero and unique-differentiability restrictions for this same-space case, but does not close rectangular Morse-Sard.",
+     "One compiled prerequisite proves ambient critical-image nullity between equal-dimensional normed spaces. It constructs a continuous linear source equivalence from the target space, applies same-space nullity, and rewrites by reviewed source-coordinate critical-image equality. No source measurable structure or source Haar measure is required. Unequal-dimensional and complementary analytic cases remain unresolved.",
      :commands
      [{:cmd
-       "Read DAG, closure policy, endpoint modules, Jacobian theorem, determinant equivalence interface, and reviewed endpoint and induction-closure findings",
+       "Read DAG certification rule, closure policy, source-equivalence and same-space modules, and both reviewed dependency findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
+       "lake env lean /tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
        "Frozen consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '5,11p' /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean | sha256sum",
+       "sed -n '6,15p' /tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 347 items OK; {:done 339, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 348 items OK; {:done 340, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -45248,35 +45284,14 @@
        :output "/home/joe/code/apm-lean/.lake/packages"}
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-     :diagnostic-history
-     [{:cmd
-       "rg search including nonexistent Analysis/Calculus/*Sard* path",
-       :exit 2,
-       :output
-       "Missing path; Jacobian source located and inspected separately."}
-      {:cmd
-       "rg -n 'det.*(surjective|bijective)|surjective.*det' .lake/packages/mathlib/Mathlib/LinearAlgebra",
-       :exit 1,
-       :output
-       "No matches; inspected determinant equivalence construction instead."}
-      {:cmd
-       "lake env lean /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
-       :exit 1,
-       :output
-       "Initial draft passed an implicit linear-map argument positionally."}
-      {:cmd
-       "lake env lean /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
-       :exit 1,
-       :output
-       "Second draft required pointwise equivalence application simplification. Fixed before final compile."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
+     {:path "/tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean",
       :sha256
-      "22f27c56f476e685a4f4408982b088dd5073890131502aa4df91cc70e559b126"},
+      "dbb3ca05674292fa6426ee6bd697c0816f63629f4f7164e8b3648e58767b09ca"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -45572,7 +45587,8 @@
     :critical-value-sard-borel-overlap-target-equiv-transfer-1
     :critical-value-sard-borel-overlap-normed-spaces-1
     :critical-value-sard-borel-overlap-induction-closure-1
-    :critical-value-sard-same-space-ambient-critical-nullity-1],
+    :critical-value-sard-same-space-ambient-critical-nullity-1
+    :critical-value-sard-equal-dimension-ambient-critical-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
