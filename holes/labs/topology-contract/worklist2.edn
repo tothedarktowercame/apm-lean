@@ -8111,8 +8111,77 @@
   {:consumer :t94A06,
    :stop-condition
    "Preserve all model-space hypotheses and the actual manifold derivative and volume quantifier. Do not assume finite-dimensionality, Sard or a regular-value theorem.",
+   :evidence
+   {:typed-evidence
+    {:proved
+     "T94A06Boundary.transverse_iff: frozen transversality at parameter s iff s is outside badParameters I f, under the actual smoothness premise.",
+     :missing
+     "T94A06Boundary.MissingNullity: volume (badParameters I f) = 0.",
+     :bad-parameters
+     "Parameters s admitting x with f(x)0+s0=0, f(x)1+s1=0, and range(mfderiv f x) joined with span(e2) unequal to top.",
+     :status
+     "MissingNullity is an unproved proposition definition, not an assumption or theorem.",
+     :inspected-api
+     "ConstructionTargets.SardGenuineSmoothGlobalCriticalInductionStep.critical_image_null_of_local_smooth_induction"},
+    :placeholder-after 1,
+    :placeholder-delta 0,
+    :statement-sha256
+    "db07947cbd1eee49f80d46f241bf5a5ba6facc162e8c59b15c425ef660bc3816",
+    :residual
+    "Exact bad-parameter nullity under the unrestricted frozen model hypotheses remains unproved. No dimension restriction, Sard development, implementation scope or partial closure proposed.",
+    :axiom-audits 3,
+    :outcome :stop,
+    :warnings
+    ["One unused-section-variable warning for SecondCountableTopology X in the pointwise diagnostic equivalence."],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :placeholder-before 1,
+    :reason :unrestricted-model-critical-value-nullity-boundary,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read frozen Main, DAG, closure stop rules and reviewed checkpoint11 dependency receipt",
+      :exit 0}
+     {:cmd
+      "Inspect finite-dimensional and induction hypotheses of current Sard construction targets",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T94A06Boundary.lean", :exit 0}
+     {:cmd
+      "Python exact-prefix verification, comment-stripped placeholder count and statement hash",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/T94A06Boundary.lean problems/t94A06/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T94A06Boundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial lake env lean /tmp/T94A06Boundary.lean",
+      :exit 1,
+      :correction
+      "Closed the identical residual propositions with rfl after rewriting."}
+     {:cmd "Search guessed Mathlib/Analysis/Calculus/Sard.lean path",
+      :exit 2,
+      :correction
+      "The guessed file does not exist; evidence instead comes from inspected canonical Sard construction declarations."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T94A06Boundary.lean",
+     :sha256
+     "78d9fb759853616e962bbab86e02d1f18a3912102105ad27375352154535ee20",
+     :role :boundary-diagnostic,
+     :complete-closure false},
+    :finding
+    "The frozen theorem permits arbitrary real normed model spaces. The inspected critical-image theorem requires finite-dimensional inner-product source and target spaces, source completeness and a smaller-dimensional nullity induction hypothesis. These are not supplied by the frozen hypotheses. No admissible counterexample was compiled, so this is a hypothesis/API boundary, not a mathematical refutation.",
+    :frozen-sha256
+    "1e98306fb2201eb5c390bebab3f74348cb03b3306cd2e44b0df13d8f2d01f8b2",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: exact normal-translation transversality consumer",
