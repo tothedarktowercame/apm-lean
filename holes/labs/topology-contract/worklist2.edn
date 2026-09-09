@@ -3324,9 +3324,63 @@
   {:consumer :t97A02,
    :stop-condition
    "No assumed component lifts, finite fundamental group, global path connectivity, stronger local-contractibility hypothesis, or changed frozen statements.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:dependency-head "072ced05769dc11238641dbf479166a0dd022506",
+     :placeholder-after 0,
+     :placeholder-delta 0,
+     :residual
+     "No mathematical obligation remains in the compiled frozen-facing fixture. Canonical implementation, full closure gates, independent review, and subsequent DAG documentation remain.",
+     :fixture-placeholder-delta -2,
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {"apm_t97A02_bridge_1"
+      "cb69e0ef2456c1b3eeda3b8f8703607aa7eaf7bb9a28b472761ba7567eaa8287",
+      "apm_t97a02"
+      "dbfb1b91127bafb5b06421aa4b22c8376aaf66ceaea1ea1aba18ea906412be90",
+      "apm_t97A02_homotopic_const_of_projection_homotopies"
+      "a9d372acabd1c4536784f2700981f30b3f71c885273c2f5f44840418b4a88a4b"},
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture into the frozen Main. Preserve all original declarations and hypotheses, the constructed component lifts, and both completed proofs.",
+      :declarations ["apm_t97A02_bridge_1" "apm_t97a02"],
+      :placeholder-before 2,
+      :placeholder-after 0,
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA-256 and frozen baseline SHA-256 before implementation."
+       "Compile the fixture and changed frozen Main."
+       "Run focused dependency build for ConstructionTargets.CircleHurewiczIsomorphism ConstructionTargets.IntegralSingularHomologyComparison ConstructionTargets.ComponentRealLiftAssembly, then full lake build."
+       "Reproduce both printed axiom audits; permit only propext, Classical.choice, Quot.sound."
+       "Reproduce unchanged statement hashes and comment-stripped placeholder counts of two to zero; scan executable code for forbidden declarations."
+       "Run git diff --check, verify exact one-file scope, commit the closure, and verify post-commit cleanliness."]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :author "codex-13",
+     :placeholder-before 2,
+     :commands
+     [{:cmd "realpath .lake/packages", :exit 0}
+      {:cmd "lake env lean /tmp/T97A02FullClosureProbe.lean", :exit 0}
+      {:cmd "python3 /tmp/T97A02ClosureAudit.py", :exit 0}
+      {:cmd "sha256sum /tmp/T97A02FullClosureProbe.lean", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/T97A02FullClosureProbe.lean",
+      :sha256
+      "d106724ee64373ea92f0ac9cb64d7816c9ef76b3b1e08443b90f4eb2c312b6bc"},
+     :finding
+     "Complete frozen-facing fixture compiles without warnings or executable placeholders. Canonical coefficient comparison transfers finite H1; Circle Hurewicz injectivity and naturality prove trivial induced loops for each normalized map. Actual component inclusion naturality supplies the covering criterion. Adding the chosen basepoint angle undoes normalization, constructing component real lifts. ComponentRealLiftAssembly constructs the global null-homotopy, including empty domains. Existing coordinate recombination proves the exact frozen torus theorem. Neither frozen statement is changed.",
+     :statement-hash-method
+     "SHA-256 of declaration bytes beginning with theorem or lemma and ending immediately before the space preceding :=; all original declaration signatures compared byte-for-byte.",
+     :frozen-sha256
+     "d5f4eeead7566421b8446530469637df8a192e3f68617d5201b9a3841e4a90a4",
+     :implementation {:scope ["problems/t97A02/lean/Main.lean"]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["problems/t97A02/lean/Main.lean"],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS: finite-H1 Circle lifting and exact torus consumer uptake",
    :acceptance
