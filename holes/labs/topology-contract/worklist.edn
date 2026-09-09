@@ -40515,6 +40515,24 @@
      {:cmd
       "git add ConstructionTargets/SardFirstNonzeroJetAllSourceTaylorNullity.lean ConstructionTargets/SardFirstNonzeroJetAllSourceTaylorNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: extend jet Taylor nullity to all source dimensions' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788931846730-16078-4ab11f63",
+     :commands
+     ["git show 5a78a48f86a523b9124cb94a031b1d63fba7e806 --stat --oneline"
+      "sha256sum /tmp/SardFirstNonzeroJetAllSourceTaylorNullityProbe.lean"
+      "cmp fixture recorded-source"
+      "git show commit:ConstructionTargets/SardFirstNonzeroJetAllSourceTaylorNullity.lean | sed -n '5,13p' | sha256sum"
+      "lake env lean /tmp/SardFirstNonzeroJetAllSourceTaylorNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardFirstNonzeroJetAllSourceTaylorNullity.lean"
+      "set -o pipefail; lake build ConstructionTargets.SardFirstNonzeroJetAllSourceTaylorNullity 2>&1 | awk '/warning:|error:|Build completed/ {print}'"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check commit^ commit"
+      "git diff --exit-code commit -- ConstructionTargets"
+      "consumer hash and placeholder checks"],
+     :finding
+     "Commit 5a78a48f has exact scope and matching fixture/frozen hashes. Low-dimensional kernel arithmetic, subsingleton witness equality, localized image nullity via target atomlessness and local aggregation are correct. Higher dimensions use the reviewed strict-surplus theorem. Standard axioms only, zero scoped placeholders, all gates passed."},
     :commit "5a78a48f86a523b9124cb94a031b1d63fba7e806",
     :changed-paths
     ["ConstructionTargets/SardFirstNonzeroJetAllSourceTaylorNullity.lean"
@@ -40526,7 +40544,7 @@
     :declarations
     ["firstNonzeroJetLocus_image_null_of_taylor_surplus_all_source_dimensions"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFirstNonzeroJetAllSourceTaylorNullity.lean"
     "ConstructionTargets/SardFirstNonzeroJetAllSourceTaylorNullity.md"],
@@ -40711,7 +40729,7 @@
       "c53a45fa2ef38247079c3633bf9417cede8c78a50b2dab6a5ee4f69dcafe41d9"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
