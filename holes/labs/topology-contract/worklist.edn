@@ -48679,20 +48679,113 @@
   {:consumer "t03J06",
    :stop-condition
    "If full closure cannot be compiled, STOP naming the exact remaining calculus, integral or representation theorem. Distinguish missing infrastructure from refutation; no conditional final adapter counts as GO.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta
+     {:consumer "t03J06",
+      :canonical-before 1,
+      :canonical-after 1,
+      :compiled-fixture-after 0,
+      :prospective-delta -1},
+     :residual
+     "No mathematical conjunct remains in the compiled full fixture. Exact packet promotion, separate-module compilation, focused build and independent implementation review remain before canonical consumer closure.",
+     :historical-audit
+     {:revision "8c0ea03bf42e418f43b62bc68d1ae6afb0b8def6",
+      :module-pairs 6,
+      :corrections
+      "Only UnitDiskOddInverseSqrtIntegrals.lean differs: separate adjacent closing brackets in two proofs and restrict their final linarith calls to hchange. All historical statements and declarations preserved. Final axiom audit is standard-only, including both corrected auxiliary cancellation lemmas."},
+     :outcome :go,
+     :warnings
+     ["One inherited unnecessarySeqFocus warning at fixture line 105 in CappedCylinderSurfaceIntegral; no new warnings."],
+     :statement-hashes
+     {"apm_t03j06"
+      "0a4564e7ed7c06fc2c2d3bf3d6dddb83af4dac83262382eb887c079a92475003"},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :documentation
+     {:path "/tmp/T03J06FullClosure.md",
+      :sha256
+      "085621fa634c17f4663252562a79b7dc321fdff39c02354f04ef59f2c15de40d"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/T03J06FullClosure.lean > /tmp/T03J06FullClosure.log 2>&1",
+       :exit 0}
+      {:cmd "python3 /tmp/check-t03j06-full-closure.py", :exit 0}
+      {:cmd
+       "git diff --exit-code -- ConstructionTargets problems/t03J06/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+       :exit 0}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/T03J06FullClosure.lean",
+      :sha256
+      "5ab0570421543013b28505f93a289a8c515650ca462786b037ff29f0210f175f",
+      :full-consumer-fixture true,
+      :placeholder-count 0},
+     :finding
+     "Complete unchanged frozen conjunction compiles. Historical scalar integral results match the literal cylinder and hemisphere pullbacks and prove 7*pi. The coefficient specification expresses omega using three constant alternating forms, proving genuine smoothness. Coordinate-line derivatives give the exterior-derivative value 3; existing frozen lemmas discharge nonzero derivative and nonexactness. No assumed Stokes bridge, integrability, integral value or derivative computation.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CappedCylinderSurfaceIntegral.lean"
+       "ConstructionTargets/CappedCylinderSurfaceIntegral.md"
+       "ConstructionTargets/HemisphereInverseSqrtDiskIntegral.lean"
+       "ConstructionTargets/HemisphereInverseSqrtDiskIntegral.md"
+       "ConstructionTargets/UnitDiskInverseSqrtIntegrability.lean"
+       "ConstructionTargets/UnitDiskInverseSqrtIntegrability.md"
+       "ConstructionTargets/UnitDiskOddInverseSqrtIntegrals.lean"
+       "ConstructionTargets/UnitDiskOddInverseSqrtIntegrals.md"
+       "ConstructionTargets/CappedCylinderHemisphereIntegral.lean"
+       "ConstructionTargets/CappedCylinderHemisphereIntegral.md"
+       "ConstructionTargets/T03J06FinalAdapter.lean"
+       "ConstructionTargets/T03J06FinalAdapter.md"
+       "problems/t03J06/lean/Main.lean"],
+      :acceptance
+      {:placeholder-after 0,
+       :preserve-frozen-statement true,
+       :source
+       "Promote exactly the staged manifest files; never merge the historical branch wholesale.",
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :build "lake build ConstructionTargets.T03J06FinalAdapter",
+       :frozen-sha256-before
+       "e1c06a2dddd2b73bd565c0eba0cd2c6026b2c1fdf90e70251c6e1c18e06ee285",
+       :preserve-frozen-definitions true,
+       :compile
+       "Compile all six promoted modules separately, then lake env lean problems/t03J06/lean/Main.lean."}},
+     :packet
+     {:directory "/tmp/t03j06-promotion",
+      :manifest "/tmp/T03J06FullClosure-manifest.json",
+      :sha256
+      "40b1cfcd082933d5f8c217e46ca3a4ed3ae385b85450263f7d151b7eb382eeb4"},
+     :seat :codex-12}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CappedCylinderSurfaceIntegral.lean"
+    "ConstructionTargets/CappedCylinderSurfaceIntegral.md"
+    "ConstructionTargets/HemisphereInverseSqrtDiskIntegral.lean"
+    "ConstructionTargets/HemisphereInverseSqrtDiskIntegral.md"
+    "ConstructionTargets/UnitDiskInverseSqrtIntegrability.lean"
+    "ConstructionTargets/UnitDiskInverseSqrtIntegrability.md"
+    "ConstructionTargets/UnitDiskOddInverseSqrtIntegrals.lean"
+    "ConstructionTargets/UnitDiskOddInverseSqrtIntegrals.md"
+    "ConstructionTargets/CappedCylinderHemisphereIntegral.lean"
+    "ConstructionTargets/CappedCylinderHemisphereIntegral.md"
+    "ConstructionTargets/T03J06FinalAdapter.lean"
+    "ConstructionTargets/T03J06FinalAdapter.md"
+    "problems/t03J06/lean/Main.lean"],
    :dag-node "STOKES AND MOMENTS / capped-cylinder explicit form",
    :acceptance
-   {:probe
-    "GO requires a complete placeholder-free compiled copy of problems/t03J06/lean/Main.lean preserving every frozen definition and conjunct. Audit the historical CappedCylinderSurfaceIntegral, CappedCylinderHemisphereIntegral and T03J06FinalAdapter dependency packet on qualification/library-loop-t00J02-solver at its pinned revision, and compare its literal parametrizations with the current frozen bulletIntegral. Prove genuine smoothness of the specified alternating form and its coordinate exterior derivative equal to 3, using coefficient uniqueness and explicit calculus; reuse the frozen consequences for nonzero derivative and nonexactness. Reconcile all exact types and compile the full 7*pi conclusion. Do not assume a Stokes bridge, derivative computation, integrability or integral value, or promote a partial historical packet as closure. Historical sources may be staged in temporary probe space with pinned hashes, never merged wholesale.",
-    :frozen-file "problems/t03J06/lean/Main.lean",
-    :frozen-sha256
-    "e1c06a2dddd2b73bd565c0eba0cd2c6026b2c1fdf90e70251c6e1c18e06ee285",
-    :historical-revision "8c0ea03bf42e418f43b62bc68d1ae6afb0b8def6",
+   {:placeholder-after 0,
+    :preserve-frozen-statement true,
+    :source
+    "Promote exactly the staged manifest files; never merge the historical branch wholesale.",
+    :axioms :standard-only,
     :placeholder-before 1,
-    :placeholder-after 0,
-    :axioms :standard-only},
+    :build "lake build ConstructionTargets.T03J06FinalAdapter",
+    :frozen-sha256-before
+    "e1c06a2dddd2b73bd565c0eba0cd2c6026b2c1fdf90e70251c6e1c18e06ee285",
+    :preserve-frozen-definitions true,
+    :compile
+    "Compile all six promoted modules separately, then lake env lean problems/t03J06/lean/Main.lean."},
    :id :t03j06-frozen-capped-cylinder-closure-probe-refill13,
    :kind :final-adapter,
    :depends-on
