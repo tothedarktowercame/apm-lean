@@ -2207,94 +2207,104 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Exactly one compiled geometric prerequisite supplied. Actual stereographic-chart angle comparisons and their use in overlap order preservation remain unproved; the unique global-generator localization equations are already banked.",
-     :outcome :revise,
+     "Canonical promotion and independent review of the complete Circle packet. No frozen consumer closure, arbitrary-dimensional model calculation, or general compact-manifold fundamental-class theorem is claimed.",
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :oriented-circle-chart-naturality,
-      :stop-condition
-      "Bank angle-transition rigidity only. The exponential comparison is a geometric input that must be proved for actual chart coordinates; it is not an assumed homology sign or completed chart-overlap theorem.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/CircleAngleTransitionProbe.lean",
-         :sha256
-         "0f461a5a44fd86284801255225d5c018c44ef7925c72cbca848bf73e77c496e1"},
-        :commands
-        [{:cmd "lake env lean /tmp/CircleAngleTransitionProbe.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CircleAngleTransition.lean"
-       "ConstructionTargets/CircleAngleTransition.md"],
-      :dag-node
-      "Queue D #2: geometric order preservation through exponential-cover angle coordinates",
-      :acceptance
-      {:implementation
-       "Promote the exact fixture. Preserve the proof through the actual Circle exponential covering, preconnectedness, and the explicit positive-affine specialization. Document the angle-coordinate hypotheses and the outstanding application to the banked charts.",
-       :declarations
-       ["ConstructionTargets.CircleAngleTransition.angle_difference_constant"
-        "ConstructionTargets.CircleAngleTransition.angle_increment_eq"
-        "ConstructionTargets.CircleAngleTransition.angle_order_iff"
-        "ConstructionTargets.CircleAngleTransition.recentered_angle_transition_increasing"],
-       :consumer-equation
-       "If exp(f(u))=x*exp(g(u)) on a preconnected domain, then f(v)-f(u)=g(v)-g(u). In particular exp(coord(T u))=x*exp(a*coord(u)+b), with a>0, implies Increasing T.",
-       :consumer-residual
-       "Construct continuous angle coordinates for the actual rotated stereographic charts on common restrictions, prove their comparison equations and coordinate-order relation, then apply this geometric rigidity theorem. Do not assume that stereographic coordinates themselves are affine exponential angles.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA-256 before implementation."
-        "Compile the fixture and canonical target."
-        "Run lake build ConstructionTargets.CircleAngleTransition ConstructionTargets.PointedChartRecentering ConstructionTargets.CircleUniversalCover."
-        "Reproduce all four printed axiom audits; permit only propext, Classical.choice, Quot.sound."
-        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."]},
-      :id :oriented-circle-angle-transition-rigidity-1,
-      :kind :reusable-theorem,
-      :depends-on [:oriented-circle-overlap-chart-recentering-1],
-      :current-residual
-      "A public geometric comparison is needed to turn a proved rotation equation between continuous real angle coordinates into equality of increments and coordinate-order preservation.",
-      :other-consumers
-      [:circle-fundamental-class :circle-degree-localization]},
+     :statement-hashes
+     {"coherent_circle_fundamental_class"
+      "b58820796fcebd3ada571920d59e5cd20ca560e598b0938d1901c5bf2ebb9258",
+      "geometric_overlap"
+      "84311d72377ffaaf32685b857115bd78c96e86c4a15ef001c1852473d8eae006",
+      "rotated_transition_increasing"
+      "16f24ab58dfebed6ab6b1dd34330fffb406d4f9e35dc442da2b1aade22c61d0b"},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :author "codex-13",
+     :head "0f4fbc9ee514af79bf78b6c302948592408773fe",
      :commands
      [{:cmd "realpath .lake/packages", :exit 0}
-      {:cmd "lake env lean /tmp/CircleAngleTransitionProbe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CircleAngleTransitionProbe.lean", :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CircleAngleTransitionProbe.lean",
+       "lake env lean /tmp/CircleCoherentFundamentalClassProbe.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/CircleCoherentFundamentalClassProbe.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CircleCoherentFundamentalClassProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
+     :repository-note
+     "Read-only probe; repository files unchanged. Verified canonical package authority and independent PASS for the angle-transition dependency.",
      :changed-paths [],
-     :dependency-commit "360f5d1fa7e270318dd9346cd9bf346c2a3ef49f",
+     :dependency-commit "620b0c7eca46117fe33bafc0e47cded2aac5074f",
      :fixture
-     {:path "/tmp/CircleAngleTransitionProbe.lean",
+     {:path "/tmp/CircleCoherentFundamentalClassProbe.lean",
       :sha256
-      "0f461a5a44fd86284801255225d5c018c44ef7925c72cbca848bf73e77c496e1"},
+      "14f0994e503cbda135c612f29db6d24da5cad47eceda7ff84a16a047637dd3c6"},
      :finding
-     "Compiled one geometric angle-transition prerequisite. On a preconnected domain, continuous real angle functions satisfying exp(f)=x*exp(g) have constant difference: the actual exponential covering has discrete fibers. Their increments and strict-order comparisons therefore agree. For a continuous model-disk transition T satisfying exp(coord(T u))=x*exp(a*coord(u)+b), positive a implies Increasing T. No homology-sign hypothesis is used. The actual banked stereographic chart transitions have not yet been supplied with the required continuous-angle coordinate comparisons, so the parent is not GO.",
+     "Complete circle fixture compiles. Lift the actual fixed chart to continuous real angles through the exponential covering. Injectivity proves the lift strictly monotone or strictly antitone. The actual rotation comparison and banked angle-order equivalence prove increasing coordinate transitions in either case. At every overlap point, construct a common recentered chart and prove both transitions increasing. Combine this geometric compatibility with the banked constructed-chart localization equations to prove existence and uniqueness of one absolute integral H1 generator. No geometric compatibility is inferred from homology equality.",
+     :statement-hash-method
+     "SHA-256 of declaration bytes beginning with lemma or theorem and ending immediately before the space preceding :=.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CircleCoherentFundamentalClass.lean"
+       "ConstructionTargets/CircleCoherentFundamentalClass.md"],
+      :acceptance
+      {:implementation
+       "Promote the exact compiled fixture and document its Circle-only scope, actual transition maps, covering lift, monotone-or-antitone argument, common restriction construction, and dependence on banked localization naturality.",
+       :declarations
+       ["ConstructionTargets.CircleCoherentFundamentalClass.exists_angle"
+        "ConstructionTargets.CircleCoherentFundamentalClass.coordinateTransition"
+        "ConstructionTargets.CircleCoherentFundamentalClass.transition_ambient"
+        "ConstructionTargets.CircleCoherentFundamentalClass.rotated_transition_increasing"
+        "ConstructionTargets.CircleCoherentFundamentalClass.recentered_transition_increasing"
+        "ConstructionTargets.CircleCoherentFundamentalClass.geometric_overlap"
+        "ConstructionTargets.CircleCoherentFundamentalClass.coherent_circle_fundamental_class"],
+       :consumer-equation
+       "The constructed rotated charts have increasing transitions from a constructed common chart at every overlap point. There exists a unique absolute integral H1 generator z such that localization x z = (rotatedChart x).localClass for every x : Circle.",
+       :map-equations
+       ["d.ambient (coordinateTransition c d h u) = c.ambient u"
+        "The constructed rotated chart relative chain map equals the fixed chart map followed by the actual relative rotation map."
+        "localization 1 followed by localRotation x equals localization x."],
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA-256 before implementation."
+        "Compile fixture and canonical target."
+        "Run lake build ConstructionTargets.CircleCoherentFundamentalClass ConstructionTargets.CircleAngleTransition ConstructionTargets.RotatedCircleChartTransport."
+        "Reproduce all nine printed axiom audits; allow only propext, Classical.choice, Quot.sound."
+        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."]}},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CircleCoherentFundamentalClass.lean"
+    "ConstructionTargets/CircleCoherentFundamentalClass.md"],
    :dag-node
    "Queue D #2: compact connected Circle, milestones 4 and 5",
    :acceptance
-   {:probe
-    "Rotate one fixed pointed chart at 1 to construct charts at every point. Prove geometric orientation compatibility on common restrictions. Construct the global class by inverse localization at 1. Use actual rotations, their homotopies to identity, and pair-map naturality to prove every localization equation. Prove generation and uniqueness; exhibit actual comparison maps and audit axioms.",
+   {:implementation
+    "Promote the exact compiled fixture and document its Circle-only scope, actual transition maps, covering lift, monotone-or-antitone argument, common restriction construction, and dependence on banked localization naturality.",
+    :declarations
+    ["ConstructionTargets.CircleCoherentFundamentalClass.exists_angle"
+     "ConstructionTargets.CircleCoherentFundamentalClass.coordinateTransition"
+     "ConstructionTargets.CircleCoherentFundamentalClass.transition_ambient"
+     "ConstructionTargets.CircleCoherentFundamentalClass.rotated_transition_increasing"
+     "ConstructionTargets.CircleCoherentFundamentalClass.recentered_transition_increasing"
+     "ConstructionTargets.CircleCoherentFundamentalClass.geometric_overlap"
+     "ConstructionTargets.CircleCoherentFundamentalClass.coherent_circle_fundamental_class"],
     :consumer-equation
-    "There exists a unique absolute class omega generating integral H1(Circle) whose localization at every x equals the local class of the constructed rotation-oriented chart at x.",
+    "The constructed rotated charts have increasing transitions from a constructed common chart at every overlap point. There exists a unique absolute integral H1 generator z such that localization x z = (rotatedChart x).localClass for every x : Circle.",
+    :map-equations
+    ["d.ambient (coordinateTransition c d h u) = c.ambient u"
+     "The constructed rotated chart relative chain map equals the fixed chart map followed by the actual relative rotation map."
+     "localization 1 followed by localRotation x equals localization x."],
     :axioms :standard-only,
-    :stop-condition
-    "GO requires the constructed orientation family, geometric compatibility, and all localization equations. REVISE only to one compiled geometric or naturality prerequisite. Arbitrary chartAt choices are not assumed sign-consistent."},
+    :gates
+    ["Verify fixture SHA-256 before implementation."
+     "Compile fixture and canonical target."
+     "Run lake build ConstructionTargets.CircleCoherentFundamentalClass ConstructionTargets.CircleAngleTransition ConstructionTargets.RotatedCircleChartTransport."
+     "Reproduce all nine printed axiom audits; allow only propext, Classical.choice, Quot.sound."
+     "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."]},
    :representation
    {:source
     "One absolute integral H1 class normalized at Circle point 1",
