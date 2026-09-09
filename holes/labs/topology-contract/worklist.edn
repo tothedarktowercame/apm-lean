@@ -42179,6 +42179,23 @@
       "git add ConstructionTargets/SardLocalSetCriticalImageJetRangeOverlap.lean ConstructionTargets/SardLocalSetCriticalImageJetRangeOverlap.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: localize overlap critical-image nullity to arbitrary source sets' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788937359417-16183-ead11f86",
+     :commands
+     ["git show c294fcad --stat --oneline"
+      "sha256sum /tmp/SardLocalSetCriticalImageJetRangeOverlapProbe.lean"
+      "cmp /tmp/SardLocalSetCriticalImageJetRangeOverlapProbe.lean <(git show c294fcad15833d94dbfb6dc50bcaa0529206391d:ConstructionTargets/SardLocalSetCriticalImageJetRangeOverlap.lean)"
+      "git show c294fcad15833d94dbfb6dc50bcaa0529206391d:ConstructionTargets/SardLocalSetCriticalImageJetRangeOverlap.lean | sed -n '7,23p' | sha256sum"
+      "git diff --exit-code c294fcad15833d94dbfb6dc50bcaa0529206391d -- ConstructionTargets"
+      "lake env lean /tmp/SardLocalSetCriticalImageJetRangeOverlapProbe.lean"
+      "lake env lean ConstructionTargets/SardLocalSetCriticalImageJetRangeOverlap.lean"
+      "lake build ConstructionTargets.SardLocalSetCriticalImageJetRangeOverlap"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit c294fcad15833d94dbfb6dc50bcaa0529206391d passes. Fixture SHA 7e59e1db58f0c1a0b9dc2dc937c3d1119222d7b11f54ce7d4374be9ef8cd3ed0 and statement SHA 6b06ddfd5c94ab1c80740152091f8bc07c6fcc188ba71c531b5d2e89cb7b99c7 reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8460-job build successful. Lines 30–43 correctly preserve ambient finite-order regularity and orient image containment and aggregation; overlap and induction premises remain explicit. Ledger untouched."},
     :commit "c294fcad15833d94dbfb6dc50bcaa0529206391d",
     :changed-paths
     ["ConstructionTargets/SardLocalSetCriticalImageJetRangeOverlap.lean"
@@ -42190,7 +42207,7 @@
     :declarations
     ["localSet_criticalImage_zero_of_jet_range_overlap_induction"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardLocalSetCriticalImageJetRangeOverlap.lean"
     "ConstructionTargets/SardLocalSetCriticalImageJetRangeOverlap.md"],
@@ -42374,7 +42391,7 @@
       "7e59e1db58f0c1a0b9dc2dc937c3d1119222d7b11f54ce7d4374be9ef8cd3ed0"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
