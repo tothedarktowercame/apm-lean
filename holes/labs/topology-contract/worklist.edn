@@ -40329,8 +40329,79 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the scalarized chart construction, codimension-one identity, or local aggregation fails to imply the stated strict-surplus nullity, or nonstandard axioms are required.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Apply this result to jet orders satisfying strict Taylor surplus; handle source dimensions at most one and repair remaining jet cases outside the surplus range before rectangular induction and exhaustion.",
+    :gates
+    {:direct-compilations-passed true,
+     :frozen-consumer-unchanged true,
+     :placeholder-free true,
+     :focused-build-passed true,
+     :worktree-clean true,
+     :exact-scope true,
+     :fixture-byte-identical-to-module true,
+     :worklist-valid true,
+     :fixture-hash-verified true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"firstNonzeroJetLocus_image_null_of_taylor_surplus"
+     "bc220b8c4865c94ee8c930281a7187a7d2dc522afa3e1dd0d2ddaad9d826d283"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.lean && lake env lean ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.lean && lake env lean /tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean",
+      :exit 0,
+      :output "Both compilations passed with standard axioms only."}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.SardFirstNonzeroJetTaylorSurplusNullity 2>&1 | awk '/warning:|error:|Build completed/ {print}'",
+      :exit 0,
+      :output "Build completed successfully (8339 jobs)."}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.lean ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '7,16p' ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 310 items OK; {:done 301, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.lean ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: prove whole jet locus Taylor surplus nullity' && git rev-parse HEAD && git status --porcelain=v1",
+      :exit 0}],
+    :commit "6f1b73d01e0f7161a82769792acb1501673f6ce4",
+    :changed-paths
+    ["ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.lean"
+     "ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.md"],
+    :fixture
+    {:path "/tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean",
+     :sha256
+     "010bdca420d4465e0049ab2bdc06f7ecc9c313cdd7e93bcdd94d22493b2f53b6"},
+    :declarations
+    ["firstNonzeroJetLocus_image_null_of_taylor_surplus"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.lean"
     "ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.md"],
