@@ -10527,19 +10527,88 @@
    :stop-condition
    "Bank finite small-path chains and their included boundary equations only. Do not claim the H0 isomorphism, positive-degree comparison, excision or frozen closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientSmallPath.lean",
-      :sha256
-      "e498fec550ad3143da251193e524cdc126de5a5babdeb15dc6a562768ef742d7"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientSmallPath.lean", :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Assemble the induced H0 inverse and prove both inverse equations. Positive-degree comparison, relative excision and rational sphere H1/H2 remain downstream; no H0 isomorphism or frozen closure claimed.",
+    :gates
+    {:five-axiom-audits :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :interval-examples :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 5,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 20 dependency warnings: SimplyConnectedOpenCover (3), SingularHomologyConcrete (1), SingularSubdivision (2), T02A06HemisphereCoordinates (6), T02A06HemisphereExcision (2), T02A06DiskRadialComparison (3), T02A06SphereShift (3). Fixture and canonical compilations were warning-free."],
+    :statement-hashes
+    {"coverSmallGenerator_comp_ι"
+     "bec1a193bb72b673cc70a8ec1517f940a2a1e6473c995624d81891b167c8fff5",
+     "exists_small_path_edges"
+     "fa1fa975651ff1f555a16ea386a41131419dce9645af1b36262b082e7b67c563",
+     "exists_small_path_chain"
+     "71188b0b10f8251b2e2793cfca51c812b8a9bb57273560888ae3acd5d54e0329",
+     "rational_interval"
+     "663e4a48f1a38b27cc744d0f71c536cf581d147fd0eb48ad9d202a9615542bde",
+     "integral_interval"
+     "9b5dc53f7ff594db6076d396371efccb3d789a4d5ba44e3619fc36d16772fa47"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientSmallPath.lean", :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientSmallPath.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientSmallPath.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientSmallPath ConstructionTargets.CoefficientH0",
+      :exit 0}
+     {:cmd
+      "Python audit: exact promotion, fixture SHA256, five standard-only audits per compilation including both interval examples, warnings, placeholders and declaration hashes",
+      :exit 0}
+     {:cmd
+      "Python explicit Unicode declaration-name hash verification",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientSmallPath.lean /tmp/CoefficientSmallPath.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope verification and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct finite coefficient-general small-path boundary lifts\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope and clean checkout verification",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and reviewed dependency evidence. Only the authorized two files changed; ledger and frozen consumers untouched. Checkout clean.",
+    :diagnostic-history [],
+    :commit "62e51680b760c8abde4fd8ae9b0064b198fdbee9",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSmallPath.lean"
+     "ConstructionTargets/CoefficientSmallPath.md"],
+    :dependency-commit "ba316dfcadbdcb6f7c2e5cff5b5ff54e95eba308",
+    :fixture
+    {:path "/tmp/CoefficientSmallPath.lean",
+     :sha256
+     "e498fec550ad3143da251193e524cdc126de5a5babdeb15dc6a562768ef742d7"},
+    :finding
+    "Exact fixture promoted, preserving the actual small-chain functor and inclusion, subordinate generators, arbitrary-open-cover path subdivision and finite telescoping sum. Both interval examples, both compilations and the 8257-job build passed.",
+    :statement-hash-method
+    "SHA256 of declaration bytes beginning with theorem and ending immediately before the space preceding :=.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSmallPath.lean"
     "ConstructionTargets/CoefficientSmallPath.md"],
