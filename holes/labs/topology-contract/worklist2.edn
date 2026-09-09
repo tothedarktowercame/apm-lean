@@ -1613,20 +1613,96 @@
    :stop-condition
    "Bank only the geometric rotation/localization comparison and its normalization consequences. Do not identify transported classes with geometric chart classes without proof, assume overlap compatibility, or claim the full parent packet or higher-dimensional results.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CircleRotationLocalizationProbe.lean",
-      :sha256
-      "260700a9986271f889287480a941de5891198fead0f82808b0a895bff2ebd1f2"},
-     :commands
-     [{:cmd "lake env lean /tmp/CircleRotationLocalizationProbe.lean",
-       :exit 0}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :warnings []}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct rotated pointed charts, identify their actual ambient relative maps and local classes with rotation transport, and prove geometric orientation compatibility on common restrictions. Then combine those identifications with localization, generation, and uniqueness. No unproved chart-class identification, overlap compatibility, parent-packet completion, or higher-dimensional result is claimed.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :focused-build :pass,
+     :all-six-printed-axiom-audits :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :fixture-compilation :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 30,
+      :log "/tmp/codex-14-rotation-build.log",
+      :paths
+      {"ConstructionTargets/CircleUniversalCover.lean" 1,
+       "ConstructionTargets/TopologicalSumSingularHomology.lean" 1,
+       "ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/T02A06SphereShift.lean" 3,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/SolidTorusGluingOpenCover.lean" 5,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/BoundaryTorusOpenCover.lean" 4,
+       "ConstructionTargets/PuncturedNormedSpaceRadialEquivalence.lean"
+       2,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/SingularSubdivision.lean" 2}}],
+    :statement-hashes
+    {"rotationHomotopy"
+     "98ba05427301cb13dd4e19c5afa07113cf978878c3182c8b12a570119c1f302b",
+     "rotation_H1_eq_id"
+     "d888ed987690e350cc11774d45ef973b5675e1d7a546c84ef1260512612bb5fa",
+     "localization_rotation_square"
+     "c753942ccbe20d8dd8c10d1233878a6b4447c37156690f37a6ae1bac76af70c3",
+     "globalClass_localizes"
+     "fbaac0ecdfa53a74aca43113cff962f907776de7baef58264801d9b0cb15830b",
+     "globalClass_generates"
+     "093fe2bd0e2200cd551f27e04bf3dba0fb7a1de022206c02ed745494e3b899d9",
+     "globalClass_unique"
+     "ad4c6c233336aa4681f67f129266a4d53202b59e34469f91e1f69667877bb05d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CircleRotationLocalizationProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CircleRotationLocalizationProbe.lean > /tmp/codex-14-rotation-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CircleRotationLocalization.lean > /tmp/codex-14-rotation-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CircleRotationLocalization ConstructionTargets.CircleActualLocalization ConstructionTargets.OrientedOverlapPuncturedCircle > /tmp/codex-14-rotation-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CircleRotationLocalization.lean /tmp/CircleRotationLocalizationProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Compare Circle localization through geometric rotations\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Checked codex-11 dependency PASS. Existing untracked supervisor files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :commit "b349ae35bc82e42b0ead8623710e2375abd29275",
+    :changed-paths
+    ["ConstructionTargets/CircleRotationLocalization.lean"
+     "ConstructionTargets/CircleRotationLocalization.md"],
+    :dependency-commit "a172e498cff17b894d371aa260f783534d5ee706",
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/CircleRotationLocalizationProbe.lean",
+     :sha256
+     "260700a9986271f889287480a941de5891198fead0f82808b0a895bff2ebd1f2"},
+    :finding
+    "Promoted the exact fixture. The explicit fixed-rotation homotopy proves identity action on absolute H1. Production projection naturality yields localization 1 followed by localRotation x equals localization x. The class normalized at 1 localizes to rotation-transported relative classes everywhere, generates absolute integral H1, and is unique under its normalization at 1.",
+    :statement-hash-method
+    "SHA-256 of UTF-8 declaration bytes beginning with theorem or def and ending immediately before the space preceding := or where; names below are in ConstructionTargets.CircleRotationLocalization.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CircleRotationLocalization.lean"
     "ConstructionTargets/CircleRotationLocalization.md"],
