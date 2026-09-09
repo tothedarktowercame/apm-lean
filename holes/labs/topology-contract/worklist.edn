@@ -47113,8 +47113,53 @@
   {:consumer "t95J04",
    :stop-condition
    "If the whole frozen adapter cannot be built from existing material, return STOP naming the exact missing theorem or representation and explicitly distinguish missing infrastructure from refutation; do not replace closure with another conditional interface.",
+   :evidence
+   {:diagnostic
+    {:path "/tmp/T95J04HausdorffBoundary.lean",
+     :sha256
+     "0f6f66807eeffd31fafeca081e786bc24f164a3efc23258b8f85735a041bff2f",
+     :placeholder-count 0,
+     :full-consumer-fixture false,
+     :proved
+     ["Nonsurjectivity and null-homotopy under the exact arbitrary k<n manifold/sphere hypotheses, using the existing fixed-chart nullity chain and stereographic helper."
+      "For globally C1 maps between Euclidean spaces with source dimension k<n, the n-dimensional Hausdorff measure of the range is zero."],
+     :axioms [propext Classical.choice Quot.sound],
+     :warnings []},
+    :placeholder-delta
+    {:consumer "t95J04",
+     :before 1,
+     :after 1,
+     :delta 0,
+     :frozen-sha256
+     "8321b881ae48f14a9d5e711534aa208eabd66dcdc16055f5ce22e9b66ce4fc15"},
+    :residual
+    "Prove the intrinsic sphere range Hausdorff bound from actual local smooth coordinate representatives and countable metric-compatible transport; then combine it with the compiled nonsurjectivity/null-homotopy clauses and existing six remaining conjuncts. No full consumer closure or compiled prerequisite implementation is claimed.",
+    :stop-rule
+    "The elected near-closure row explicitly requires STOP naming missing infrastructure when the whole frozen adapter cannot be supplied; no conditional replacement or owner authorization is requested.",
+    :outcome :stop,
+    :boundary
+    "The exact remaining result is dimH (Set.range f) <= k, or directly n-dimensional Hausdorff nullity, for the frozen arbitrary smooth k-manifold map into the metric n-sphere with k<n. The banked fixed-chart theorem establishes target-coordinate Haar nullity, not this metric Hausdorff conclusion. The local Lipschitz chart-cover and metric transport assembly has not been constructed.",
+    :disposition :stop,
+    :author :codex-12,
+    :reason :missing-infrastructure,
+    :commands
+    [{:cmd "sha256sum problems/t95J04/lean/Main.lean", :exit 0}
+     {:cmd "lake env lean /tmp/T95J04HausdorffBoundary.lean", :exit 0}
+     {:cmd
+      "git diff --exit-code -- problems/t95J04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}],
+    :campaign-termination false,
+    :changed-paths [],
+    :finding
+    "DAG, relevant closure experiments and the reviewed checkpoint receipt were consulted. Mathlib supplies ContDiff.dimH_range_le, local Lipschitz image bounds, countable unions, smooth sphere inclusion and inverse stereographic formulas. Their hypotheses do not directly match the frozen manifold-domain map: the domain is not a normed vector space, and coordinate patches are not declared convex. A metric-compatible local refinement and range transport proof is still required. The diagnostic does not declare apm_t95j04 or assume the missing nullity premise. Earlier diagnostic elaboration failures were repaired; the final file compiles without sorryAx.",
+    :mathematical-refutation false,
+    :boundary-artifact
+    {:path "/tmp/T95J04HausdorffBoundary.md",
+     :sha256
+     "acf44fd8f8e717bfca21968c0f470d0b6fac20b7f6b047a831073b4ac9403dc0"},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SARD THEOREM / strict-dimension sphere consumer",
    :acceptance
