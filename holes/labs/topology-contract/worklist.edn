@@ -46935,6 +46935,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Recorded checkpoint transition 2f4dfe38 has incorrect :evidence :finding :placeholder-delta census counts: :named-consumers 58, :existing-files 57, :open 41. Recomputing from measured commit 874608e3685037614fc194d17d24332a9a35f7d4 and the matching SHA256-verified /tmp/topology-refill9-measure.json gives 59 named consumers, 58 existing files, 42 open consumers; a97J08 is included and t93A05 is missing. Correct these three summary fields. Total 76, delta 0, closed 16, within-two 32 and artifact hashes reproduce. No ledger or source edits.",
    :stop-condition
    "Stop only on a genuine mathematical refutation, naming it; never stop for missing infrastructure or owner authorization.",
    :evidence
@@ -47076,9 +47078,15 @@
       :current-residual
       "Await reviewed exact t95J04 closure attempt and unconditional smooth rectangular Sard probe, then elect again from the complete DAG."}],
     :author :codex-12,
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-10",
+     :job "invoke-1788968193055-16522-8c0351cb",
+     :finding
+     "Recorded checkpoint transition 2f4dfe38 has incorrect :evidence :finding :placeholder-delta census counts: :named-consumers 58, :existing-files 57, :open 41. Recomputing from measured commit 874608e3685037614fc194d17d24332a9a35f7d4 and the matching SHA256-verified /tmp/topology-refill9-measure.json gives 59 named consumers, 58 existing files, 42 open consumers; a97J08 is included and t93A05 is missing. Correct these three summary fields. Total 76, delta 0, closed 16, within-two 32 and artifact hashes reproduce. No ledger or source edits."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -47098,7 +47106,7 @@
    :stop-condition
    "If the whole frozen adapter cannot be built from existing material, return STOP naming the exact missing theorem or representation and explicitly distinguish missing infrastructure from refutation; do not replace closure with another conditional interface.",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "SARD THEOREM / strict-dimension sphere consumer",
    :acceptance
@@ -47120,7 +47128,7 @@
    :stop-condition
    "Name an exact mathematical, hypothesis, or representation boundary if the probe fails. Missing infrastructure is not a refutation. REVISE requires exactly one compiled prerequisite under the probe protocol; no owner-authorization gate.",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "SARD THEOREM",
    :acceptance
@@ -47148,7 +47156,7 @@
    :stop-condition
    "End the campaign only when every consumer closes or a genuine mathematical refutation is identified; missing infrastructure and owner authorization do not end the campaign.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
