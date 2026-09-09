@@ -5474,6 +5474,20 @@
       :expected-exit 1}
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788983303038-16923-7623d6b2",
+     :commands
+     ["Inspect recorded result at d0155bf8 and /tmp/T97A01PolygonDiagnostic.lean"
+      "readlink -f .lake/packages"
+      "sha256sum /tmp/T97A01PolygonDiagnostic.lean"
+      "lake env lean /tmp/T97A01PolygonDiagnostic.lean"
+      "Python independent audit: frozen hash, exact prefix, statement hash, placeholder and forbidden-token counts, 95-file recorded import closure"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show d0155bf8:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check d0155bf8; git diff --exit-code; git diff --check"],
+     :finding
+     "Independent of author codex-13. PASS validates the infrastructure STOP only. Fixture SHA256 a4555d92badc8d32406a296eedd6e83bb15931e29ca59bd12fc3f513dddc0986 matches; compilation passes without warnings with three standard-only axiom audits. Frozen source and statement hashes match, exact prefix preserved, frozen placeholders 1 and diagnostic placeholders 0. The first literal quotient is genuinely homeomorphic to Surface false 3 via coinduced-topology continuity, with the actual quotient-map equation and forward integral homology comparison. Both polygon homology calculations and the actual based fundamental-group presentation remain unproved propositions. Existing Mayer-Vietoris and source reconstruction require polygon-specific geometry and target-natural comparisons; no assumed invariant calculation or mathematical refutation is introduced. Recorded ledger validates: 43 items OK. Empty implementation scope; ledger untouched."},
     :changed-paths [],
     :fixture
     {:path "/tmp/T97A01PolygonDiagnostic.lean",
@@ -5488,7 +5502,7 @@
     "63ea50fe8435ba22b20b6db4d53e553ad0c27e9a31de96b8a1212019cc1c9402",
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "Closed gluing and surface invariants: literal polygon quotient consumer",
