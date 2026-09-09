@@ -1,3 +1,4 @@
+import ConstructionTargets.T03J06FinalAdapter
 import Mathlib
 import Mathlib.Analysis.Calculus.DifferentialForm.Basic
 
@@ -146,6 +147,105 @@ lemma apm_t03J06_not_exact_of_extDeriv_eval_three
   rw [← hetaomega, hzero] at h
   norm_num at h
 
+lemma diagnostic_frozen_bulletIntegral (omega : apm_t03J06_Form2)
+    (homega : apm_t03J06_isOmega omega) :
+    apm_t03J06_bulletIntegral omega = 7 * Real.pi := by
+  apply ConstructionTargets.T03J06FinalAdapter.bulletIntegral_eq_seven_pi
+  · intro theta z
+    rw [apm_t03J06_cylinder_integrand omega homega]
+    rfl
+  · intro p
+    rw [apm_t03J06_hemisphere_integrand omega homega]
+    simp [ConstructionTargets.CappedCylinderHemisphereIntegral.hemisphereIntegrand,
+      ConstructionTargets.CappedCylinderHemisphereIntegral.capHeight,
+      ConstructionTargets.HemisphereInverseSqrtDiskIntegral.xInverseSqrt,
+      ConstructionTargets.HemisphereInverseSqrtDiskIntegral.yInverseSqrt,
+      ConstructionTargets.HemisphereInverseSqrtDiskIntegral.inverseSqrtKernel,
+      div_eq_mul_inv, apm_t03J06_hemispherePoint]
+
+#print axioms diagnostic_frozen_bulletIntegral
+
+lemma diagnostic_smooth (omega : apm_t03J06_Form2)
+    (homega : apm_t03J06_isOmega omega) :
+    ContDiff ℝ (⊤ : ℕ∞) omega := by
+  have heq : omega = fun x =>
+      x 2 • omega (apm_t03J06_vec3 0 0 1) +
+      (x 2 ^ 2 * Real.exp (x 0 * x 2) * Real.log (x 0 ^ 2 + 1) - x 1) •
+        omega (apm_t03J06_vec3 0 (-1) 0) +
+      (x 0 + x 1 ^ 2 * x 2 ^ 3 * Real.cos (x 1 ^ 2 + x 2 ^ 2)) •
+        omega (apm_t03J06_vec3 1 0 0) := by
+    funext x
+    ext v
+    simp only [ContinuousAlternatingMap.add_apply, ContinuousAlternatingMap.smul_apply,
+      smul_eq_mul]
+    rw [homega, homega, homega, homega]
+    simp
+  rw [heq]
+  have hp : ∀ x : apm_t03J06_E3, x 0 ^ 2 + 1 ≠ 0 := by
+    intro x; exact ne_of_gt (add_pos_of_nonneg_of_pos (sq_nonneg _) zero_lt_one)
+  clear heq homega
+  fun_prop (disch := aesop)
+
+#print axioms diagnostic_smooth
+
+
+lemma diagnostic_direction (a : apm_t03J06_E3 → ℝ) (x w : apm_t03J06_E3)
+    (c : ℝ) (ha : DifferentiableAt ℝ a x)
+    (hline : ∀ t : ℝ, a (x + t • w) = a x + c * t) :
+    fderiv ℝ a x w = c := by
+  have hpath : HasDerivAt (fun t : ℝ => x + t • w) w 0 := by
+    simpa only [Pi.add_apply, id_eq, zero_add, one_smul] using (hasDerivAt_const (0 : ℝ) x).add ((hasDerivAt_id (0 : ℝ)).smul_const w)
+  have ha' : HasFDerivAt a (fderiv ℝ a x) (x + (0 : ℝ) • w) := by
+    simpa using ha.hasFDerivAt
+  have hd := ha'.comp_hasDerivAt 0 hpath
+  have he : (fun t : ℝ => a (x + t • w)) = fun t => a x + c * t := funext hline
+  change HasDerivAt (fun t : ℝ => a (x + t • w)) (fderiv ℝ a x w) 0 at hd
+  rw [he] at hd
+  have hc : HasDerivAt (fun t : ℝ => a x + c * t) c 0 := by
+    simpa only [Pi.add_apply, id_eq, zero_add, mul_one] using (hasDerivAt_const (0 : ℝ) (a x)).add ((hasDerivAt_id (0 : ℝ)).const_mul c)
+  exact hd.unique hc
+
+lemma diagnostic_extDeriv (omega : apm_t03J06_Form2)
+    (homega : apm_t03J06_isOmega omega) (x : apm_t03J06_E3) :
+    extDeriv omega x (fun i => EuclideanSpace.single i (1 : ℝ)) = 3 := by
+  rw [extDeriv_apply ((diagnostic_smooth omega homega).differentiable (by simp) x)]
+  change (∑ j : Fin 3, (-1 : ℤ) ^ (j : ℕ) •
+    fderiv ℝ (fun y => omega y (j.removeNth (fun i => EuclideanSpace.single i (1 : ℝ)))) x
+      (EuclideanSpace.single j 1)) = 3
+  rw [Fin.sum_univ_three]
+  simp_rw [show ∀ v, (fun y => omega y v) = fun y =>
+    y 2 * (v 0 0 * v 1 1 - v 0 1 * v 1 0) +
+    (y 2 ^ 2 * Real.exp (y 0 * y 2) * Real.log (y 0 ^ 2 + 1) - y 1) *
+      (v 0 0 * v 1 2 - v 0 2 * v 1 0) +
+    (y 0 + y 1 ^ 2 * y 2 ^ 3 * Real.cos (y 1 ^ 2 + y 2 ^ 2)) *
+      (v 0 1 * v 1 2 - v 0 2 * v 1 1) from fun v => funext (fun y => homega y v)]
+  simp only [Fin.removeNth]
+  have hs : Fin.succAbove (2 : Fin 3) (1 : Fin 2) = 1 := rfl
+  simp [hs]
+  have h0 : fderiv ℝ (fun y : apm_t03J06_E3 =>
+      y 0 + y 1 ^ 2 * y 2 ^ 3 * Real.cos (y 1 ^ 2 + y 2 ^ 2)) x
+      (EuclideanSpace.single 0 1) = 1 := by
+    apply diagnostic_direction
+    · fun_prop
+    · intro t; simp; ring
+  have h1 : fderiv ℝ (fun y : apm_t03J06_E3 =>
+      y 2 ^ 2 * Real.exp (y 0 * y 2) * Real.log (y 0 ^ 2 + 1) - y 1) x
+      (EuclideanSpace.single 1 1) = -1 := by
+    apply diagnostic_direction
+    · have hp : x 0 ^ 2 + 1 ≠ 0 := ne_of_gt (add_pos_of_nonneg_of_pos (sq_nonneg _) zero_lt_one)
+      fun_prop (disch := assumption)
+    · intro t; simp; ring
+  have h2 : fderiv ℝ (fun y : apm_t03J06_E3 => y 2) x
+      (EuclideanSpace.single 2 1) = 1 := by
+    apply diagnostic_direction
+    · fun_prop
+    · intro t; simp
+  rw [h0, h1, h2]
+  norm_num
+
+#print axioms diagnostic_direction
+#print axioms diagnostic_extDeriv
+
 theorem apm_t03j06 (omega : apm_t03J06_Form2)
     (homega : apm_t03J06_isOmega omega) :
     ContDiff ℝ (⊤ : ℕ∞) omega ∧
@@ -155,66 +255,10 @@ theorem apm_t03j06 (omega : apm_t03J06_Form2)
     ¬(∃ eta : apm_t03J06_Form1,
       ContDiff ℝ (⊤ : ℕ∞) eta ∧ extDeriv eta = omega) ∧
     apm_t03J06_bulletIntegral omega = 7 * Real.pi := by
-  /-
-  Boundary (closer hop 3): hop 2 went beyond the initial API search by
-  compiling the pointwise algebra on both surface pieces.
-  `apm_t03J06_isOmega_unique` proves that the coefficient predicate leaves no
-  freedom in `omega`. `apm_t03J06_vec3_apply` exposes its three coordinates,
-  and `apm_t03J06_cylinder_integrand` and
-  `apm_t03J06_hemisphere_integrand` substitute both parametrizations and their
-  oriented tangent pairs into the frozen form. Thus the remaining integral is
-  now a concrete scalar integral, including the hemisphere's explicit
-  `pᵢ / sqrt (1-p₀²-p₁²)` boundary factors.
+  have hs := diagnostic_smooth omega homega
+  have hd := diagnostic_extDeriv omega homega
+  exact ⟨hs, hd, apm_t03J06_extDeriv_ne_zero_of_eval_three omega hd,
+    apm_t03J06_not_exact_of_extDeriv_eval_three omega hd,
+    diagnostic_frozen_bulletIntegral omega homega⟩
 
-  Going beyond that boundary, hop 3 proves
-  `apm_t03J06_extDeriv_ne_zero_of_eval_three`: the displayed coordinate value
-  `3` immediately makes `extDeriv omega` nonzero. It also proves
-  `apm_t03J06_not_exact_of_extDeriv_eval_three`, applying Mathlib's
-  `extDeriv_extDeriv` to rule out every smooth primitive. Consequently the
-  theorem's second conjunct now implies both its third and fourth conjuncts;
-  no integration or additional smoothness computation is needed for them.
-
-  The intended short route still needs a Stokes/divergence theorem identifying
-  the sum of these parametrized surface integrals with the integral of
-  `extDeriv omega` over the solid cylinder-plus-hemisphere. Mathlib's
-  `MeasureTheory.Integral.DivergenceTheorem` is for rectangular boxes and its
-  differential-form API has `extDeriv_extDeriv`, but no integration/Stokes
-  bridge for this surface encoding. Direct integration instead requires
-  two-dimensional disk symmetry/change-of-variables results and domination
-  for the displayed boundary quotients.
-
-  Renewed searches of `LEMMA-INDEX.md`, all `ConstructionTargets/`, Mathlib's
-  differential-form, divergence, disk/radial-integration, and parametrized-
-  integral sources, git history, and siblings `t01J06`, `t02A05`, `t94A10`,
-  `t96J08`, and `m96J03` found no packaged bridge. In particular `t96J08`
-  contains essentially the same hemisphere parametrization but its theorem
-  remains unproved. The frozen statement is unchanged.
-
-  HOP 4 GAP AUDIT (outcomes A and B both failed).
-
-  The deeper search did locate
-  `Real.integral_comp_polarCoord_symm` and the repository helper
-  `integral_closedBall_zero_eq_polar` in solved sibling `a01A07`. They provide
-  a change of variables for a full planar disk after identifying `ℝ × ℝ`
-  with `ℂ`. They do not supply the required integrability of the boundary
-  quotients, the odd/swap cancellations of the nonradial coefficient terms,
-  or a Stokes theorem relating the two frozen parametrized integrals to the
-  solid bullet. The box-only divergence theorem likewise cannot be applied to
-  the curved cap.
-
-  The precise local lemma still needed is:
-
-      lemma apm_t03J06_bulletIntegral_eq_seven_pi
-          (omega : apm_t03J06_Form2)
-          (homega : apm_t03J06_isOmega omega) :
-          apm_t03J06_bulletIntegral omega = 7 * Real.pi
-
-  A proof may either establish this directly from the two compiled integrand
-  formulas (including AE boundary handling and polar/symmetry reductions), or
-  prove a Stokes theorem specialized to the solid capped cylinder. No existing
-  declaration found in Mathlib, `ConstructionTargets`, the indexed corpus, or
-  git history has this statement or the required curved-surface interface.
-  The sorry is therefore retained honestly; no axiom, opaque declaration, or
-  native evaluation was introduced.
-  -/
-  sorry
+#print axioms apm_t03j06
