@@ -45592,8 +45592,84 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if a linear map from strictly smaller finite dimension can be surjective, the localized image equality fails under these hypotheses, or nonstandard axioms are required.",
+   :evidence
+   {:scoped-placeholder-delta {:before 0, :after 0, :delta 0},
+    :placeholder-delta {:before 1, :after 1, :delta 0},
+    :residual
+    "The lower-dimensional critical image is identified exactly with the entire image. Audit the order-zero induction specification and resolve complementary higher-order analytic cases; this comparison proves neither nullity nor a counterexample. Ledger and smooth frozen consumer unchanged.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"criticalImage_eq_image_of_lower_dimension"
+     "17e27e6df88e70a602d2c5b99d070bcc653ff33877d27681fcb5ee01b54a51e7"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rule, closure policy, and complete reviewed lower-dimensional ambient-image dependency receipt",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardLowerDimensionCriticalImageEqualityProbe.lean problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "Fixture matches acceptance; frozen consumer SHA 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
+     {:cmd
+      "lake env lean /tmp/SardLowerDimensionCriticalImageEqualityProbe.lean && lake env lean ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean",
+      :exit 0,
+      :output "Both compile without warnings; standard axioms only."}
+     {:cmd
+      "cmp /tmp/SardLowerDimensionCriticalImageEqualityProbe.lean ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean && sha256sum ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output "Module matches fixture; frozen consumer unchanged."}
+     {:cmd
+      "sed -n '5,11p' ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean | sha256sum",
+      :exit 0,
+      :output
+      "17e27e6df88e70a602d2c5b99d070bcc653ff33877d27681fcb5ee01b54a51e7"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 353 items OK; {:done 344, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.SardLowerDimensionCriticalImageEquality 2>&1 | awk '/warning:|error:|Build completed/ {print}'",
+      :exit 0,
+      :output "Build completed successfully (8245 jobs)."}
+     {:cmd
+      "git add ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean ConstructionTargets/SardLowerDimensionCriticalImageEquality.md && git diff --cached --check && git diff --cached --name-only && git commit -m \"Bank lower-dimensional critical-image equality\" && git rev-parse HEAD && git status --porcelain=v1",
+      :exit 0,
+      :output
+      "Committed exactly two scoped files; final worktree clean."}],
+    :representation
+    {:source
+     "The localized nonsurjective ambient fderiv image in strictly smaller source dimension.",
+     :target
+     "The entire image of the same source subset, without regularity or measure assumptions.",
+     :direction
+     "Exact equality from the localized critical-image representation to the entire subset-image representation."},
+    :commit "dba363b176a6771008007301e97203b3c189586b",
+    :changed-paths
+    ["ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean"
+     "ConstructionTargets/SardLowerDimensionCriticalImageEquality.md"],
+    :fixture
+    {:path "/tmp/SardLowerDimensionCriticalImageEqualityProbe.lean",
+     :sha256
+     "16fe2a309f9654f2469b526d68ed6c102e3088d91b646611a1cd7eed631fd620"},
+    :declarations ["criticalImage_eq_image_of_lower_dimension"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean"
     "ConstructionTargets/SardLowerDimensionCriticalImageEquality.md"],
