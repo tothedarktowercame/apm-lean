@@ -48090,8 +48090,153 @@
      :review-outcomes]},
    :stop-condition
    "Only all consumers closed or an exact mathematical refutation terminates the campaign; missing infrastructure and owner authorization do not.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill12-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill12-audit.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill12-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill12-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "git diff --exit-code -- TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md holes/labs/topology-contract/worklist.edn ConstructionTargets problems/a97J08/lean/Main.lean",
+      :exit 0}],
+    :finding
+    {:baseline "768b9305df7067eb184b5f8128a059cc2869086b",
+     :election-rationale
+     ["Rule 0 elects exactly one near-closure adapter first. a97J08 has one specific planar obstruction remaining; its analytic conclusion and deductions from that obstruction are already assembled. This is a closure attempt, not an assertion that its missing planar theorem is available."
+      "Compared unrelated near-closure candidates: t92J06 requires actual graph covers and their separation; t97A01 requires polygon invariant computations; t03J04 requires torus homology and covering Euler transfer; t00J01 combines independent quotient, homology and fold computations. t03J06's historical integral packet still lacks its separate smoothness/exterior-derivative calculation. Previously reviewed t95J04, t00A01 and t02A08 boundaries have not been removed by this portfolio."
+      "Among shared foundations, the five-consumer Sard branch offers a bounded connection from the newly reviewed actual smooth chart to existing containment, kernel dimension and local induction APIs. Its downstream reach is dependency reach, not immediate closure. Concurrent localization is accounted separately and not duplicated."
+      "Refill after these two work rows and rerank the complete DAG; do not infer consumer progress from infrastructure counts."],
+     :measured-head "364d094e2ca9e538099ce1567c1172de2aec23c9",
+     :placeholder-delta
+     {:open 42,
+      :closed 16,
+      :changed-consumers [],
+      :total-before 76,
+      :method
+      "Executable sorry tokens after stripping block and line comments, measured from pinned Git source for all consumer identifiers named in the DAG.",
+      :named-consumers 59,
+      :total-after 76,
+      :existing-files 58,
+      :delta 0,
+      :sha256
+      "fb48b831ea63f4896af625fac88890bf204cc05c9b9ec5096a4a7dc7efa3c348",
+      :artifact "/tmp/topology-refill12-measure.json",
+      :within-two 32,
+      :missing-files ["t93A05"]},
+     :campaign-refutation false,
+     :infrastructure-packets
+     {:construction-module-delta 5,
+      :concurrent-module-additions 4,
+      :portfolio-reviewed-implementations 1,
+      :construction-modules-after 601,
+      :portfolio-module-additions 1,
+      :construction-modules-before 596,
+      :sha256
+      "09eac374936b8950501755da3d14e19741aa57e29c1aa44e9c40e2f0d3a78ee2",
+      :artifact "/tmp/topology-refill12-infrastructure.json",
+      :concurrent-modules
+      ["CircleActualLocalization"
+       "CircleRotationLocalization"
+       "PointedChartRecentering"
+       "RotatedCircleChartTransport"]},
+     :portfolio-artifact
+     {:path "/tmp/topology-refill12-tail.edn",
+      :sha256
+      "762d2becad1070be8d76efe65027c95627cf7eabc276e65bb0b4e74959917167"},
+     :validation
+     "Temporary combined ledger passes: 371 items, including three new blocked rows. Fresh identities and checkpoint dependencies verified. No canonical ledger, DAG or source edits.",
+     :typed-residual-change
+     {:t02A08
+      "Exact integral sphere H2 orientation and literal degree-one action now witnessed; arbitrary-integer continuous sphere maps and induced-H2 computation remain absent. Reviewed STOP is missing infrastructure, not refutation.",
+      :scalarized-jet
+      "Reviewed cb0a1015cb16a3288f75ed015b29c7b1814c17f9 supplies actual scalarized-jet defining fields, derives genuine smooth neighborhood regularity, constructs the restricted chart and exercises inverse slices. Zero-level containment and dimension drop exist separately; their connection to the restricted chart and compatible local smooth induction remains."},
+     :review-outcomes
+     {:pass 2,
+      :reviewed-implementation 1,
+      :reviewed-stop 1,
+      :consumer-closures 0,
+      :artifact "/tmp/topology-refill12-reviewed-outcomes.edn",
+      :sha256
+      "244ee149afa787958ba14b9ef021db990ed9a5aff522823fad00a654474de5ac"}},
+    :replacement-items
+    [{:consumer "a97J08",
+      :stop-condition
+      "If the complete frozen proof cannot be built, STOP naming the exact missing planar separation or winding theorem and distinguish missing infrastructure from mathematical refutation. Do not report a partial circle certificate as GO.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "PLANAR SEPARATION / bounded complement component",
+      :acceptance
+      {:probe
+       "GO requires a complete placeholder-free compiled copy of problems/a97J08/lean/Main.lean preserving all frozen statements and definitions. Prove apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component from its actual open-set and bounded-component hypotheses, then compile the whole frozen consumer. Inspect the existing compact-component and radial-map helpers and banked circle noncontractibility/winding results; an actual continuous circle into D with non-nullhomotopy is required. Do not assume Jordan separation, positive distance from an entire complementary remainder, isolation of the component, or a radial degree certificate. If using polygonal neighborhoods, prove their required separation and winding properties. No narrowed domain, replacement interior, or conditional interface counts as closure.",
+       :frozen-file "problems/a97J08/lean/Main.lean",
+       :frozen-sha256
+       "d32684e6584ec0043c688bca0a740e0ffc412588ed1429025c56ef2a42b370af",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :a97j08-frozen-planar-obstruction-closure-probe-refill12,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-12-after-degree-and-jet-chart],
+      :current-residual
+      "One executable placeholder: an open planar set with a bounded complementary component contains a non-nullhomotopic circle. The frozen analytic zero-count conclusion and its deductions from this obstruction are already assembled."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO needs the full compiled local producer/consumer composition. REVISE requires exactly one compiled prerequisite. Otherwise name the exact hypothesis or representation boundary; missing infrastructure is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / smooth higher-jet local induction step",
+      :acceptance
+      {:probe
+       "Compile one complete local induction step for globally ContDiff real genuine infinity f on a finite-dimensional real inner-product source, a critical set K, i>=1, x in firstNonzeroJetLocus f K (i+1), and fixed scalarization/directions witnessing the nonzero next jet at x. Use SardScalarizedJetSmoothNeighborhood to produce the exact restricted chart e and show the first-nonzero locus intersected with e.source lies in its zero-coordinate inverse slice. Derive the strict kernel dimension drop using the existing scalar-derivative theorem. Feed the smooth inverse slice into SardLowerDimensionalLocalCriticalImageInduction at genuine infinity and conclude Haar-null image of that local locus. The sole nullity input may be an explicitly stated local smooth critical-image induction hypothesis for strictly smaller source dimension; it must apply to the actual reduced map on its slice domain. No assumed chart, neighborhood field regularity, local-piece nullity, arbitrary-C1 induction, analytic omega substitution, or higher-jet flatness from vanishing first derivative. Reuse existing containment, dimension and induction producers. If this exact composition already exists, identify and reuse it rather than minting a duplicate wrapper.",
+       :axioms :standard-only,
+       :consumer-residual
+       "This is a conditional source-dimension induction step, not unconditional Sard. Discharging the induction via base cases, other critical-rank strata and flat-locus coverage, countable/local-domain assembly and actual manifold transport remain. Frozen t93A04 stays open until these are proved."},
+      :id
+      :sard-smooth-first-nonzero-jet-local-induction-probe-refill12,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-12-after-degree-and-jet-chart],
+      :current-residual
+      "Actual scalarized-jet smooth restricted charts are banked. Existing zero-level containment and kernel dimension-drop results must connect to those restricted charts and a genuinely smooth local lower-dimensional induction hypothesis.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all consumers closed or an exact mathematical refutation. Missing infrastructure and owner authorization do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount comment-stripped consumer placeholders from pinned source; compare typed residuals, actual portfolio infrastructure versus concurrent additions, and reviewed STOP/PASS outcomes. Elect exactly one near-closure adapter first, then shared foundations by downstream reach and simplicity. Return a nonempty newly elected portfolio with a final checkpoint depending on every work row."},
+      :id
+      :checkpoint-full-dag-refill-13-after-planar-and-local-induction,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:a97j08-frozen-planar-obstruction-closure-probe-refill12
+       :sard-smooth-first-nonzero-jet-local-induction-probe-refill12],
+      :current-residual
+      "Await both reviewed outcomes, then rerank the complete DAG including unrelated near-closure consumers and concurrent localization progress."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -48105,6 +48250,77 @@
     :checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart],
    :current-residual
    "Await both reviewed rows and rerank the complete DAG, including prior stopped adapters and unrelated consumer branches."}
+  {:consumer "a97J08",
+   :stop-condition
+   "If the complete frozen proof cannot be built, STOP naming the exact missing planar separation or winding theorem and distinguish missing infrastructure from mathematical refutation. Do not report a partial circle certificate as GO.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "PLANAR SEPARATION / bounded complement component",
+   :acceptance
+   {:probe
+    "GO requires a complete placeholder-free compiled copy of problems/a97J08/lean/Main.lean preserving all frozen statements and definitions. Prove apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component from its actual open-set and bounded-component hypotheses, then compile the whole frozen consumer. Inspect the existing compact-component and radial-map helpers and banked circle noncontractibility/winding results; an actual continuous circle into D with non-nullhomotopy is required. Do not assume Jordan separation, positive distance from an entire complementary remainder, isolation of the component, or a radial degree certificate. If using polygonal neighborhoods, prove their required separation and winding properties. No narrowed domain, replacement interior, or conditional interface counts as closure.",
+    :frozen-file "problems/a97J08/lean/Main.lean",
+    :frozen-sha256
+    "d32684e6584ec0043c688bca0a740e0ffc412588ed1429025c56ef2a42b370af",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :a97j08-frozen-planar-obstruction-closure-probe-refill12,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-12-after-degree-and-jet-chart
+    :checkpoint-full-dag-refill-12-after-degree-and-jet-chart],
+   :current-residual
+   "One executable placeholder: an open planar set with a bounded complementary component contains a non-nullhomotopic circle. The frozen analytic zero-count conclusion and its deductions from this obstruction are already assembled."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO needs the full compiled local producer/consumer composition. REVISE requires exactly one compiled prerequisite. Otherwise name the exact hypothesis or representation boundary; missing infrastructure is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / smooth higher-jet local induction step",
+   :acceptance
+   {:probe
+    "Compile one complete local induction step for globally ContDiff real genuine infinity f on a finite-dimensional real inner-product source, a critical set K, i>=1, x in firstNonzeroJetLocus f K (i+1), and fixed scalarization/directions witnessing the nonzero next jet at x. Use SardScalarizedJetSmoothNeighborhood to produce the exact restricted chart e and show the first-nonzero locus intersected with e.source lies in its zero-coordinate inverse slice. Derive the strict kernel dimension drop using the existing scalar-derivative theorem. Feed the smooth inverse slice into SardLowerDimensionalLocalCriticalImageInduction at genuine infinity and conclude Haar-null image of that local locus. The sole nullity input may be an explicitly stated local smooth critical-image induction hypothesis for strictly smaller source dimension; it must apply to the actual reduced map on its slice domain. No assumed chart, neighborhood field regularity, local-piece nullity, arbitrary-C1 induction, analytic omega substitution, or higher-jet flatness from vanishing first derivative. Reuse existing containment, dimension and induction producers. If this exact composition already exists, identify and reuse it rather than minting a duplicate wrapper.",
+    :axioms :standard-only,
+    :consumer-residual
+    "This is a conditional source-dimension induction step, not unconditional Sard. Discharging the induction via base cases, other critical-rank strata and flat-locus coverage, countable/local-domain assembly and actual manifold transport remain. Frozen t93A04 stays open until these are proved."},
+   :id :sard-smooth-first-nonzero-jet-local-induction-probe-refill12,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-12-after-degree-and-jet-chart
+    :checkpoint-full-dag-refill-12-after-degree-and-jet-chart],
+   :current-residual
+   "Actual scalarized-jet smooth restricted charts are banked. Existing zero-level containment and kernel dimension-drop results must connect to those restricted charts and a genuinely smooth local lower-dimensional induction hypothesis.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all consumers closed or an exact mathematical refutation. Missing infrastructure and owner authorization do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount comment-stripped consumer placeholders from pinned source; compare typed residuals, actual portfolio infrastructure versus concurrent additions, and reviewed STOP/PASS outcomes. Elect exactly one near-closure adapter first, then shared foundations by downstream reach and simplicity. Return a nonempty newly elected portfolio with a final checkpoint depending on every work row."},
+   :id :checkpoint-full-dag-refill-13-after-planar-and-local-induction,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:a97j08-frozen-planar-obstruction-closure-probe-refill12
+    :sard-smooth-first-nonzero-jet-local-induction-probe-refill12
+    :checkpoint-full-dag-refill-12-after-degree-and-jet-chart],
+   :current-residual
+   "Await both reviewed outcomes, then rerank the complete DAG including unrelated near-closure consumers and concurrent localization progress."}
   {:consumer :t93A04,
    :stop-condition
    "STOP only for a counterexample to the stated local rank-normal-form theorem or hypotheses insufficient to select and invert a nonzero rank minor; otherwise REVISE with exactly one compiled prerequisite.",
