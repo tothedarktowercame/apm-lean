@@ -6104,19 +6104,72 @@
   {:consumer :t02A07-regular-fiber-geometry,
    :stop-condition
    "Local Euclidean fiber geometry only. No assumed fiber chart, global regular value, Sard induction, manifold orientation, transverse intersection comparison or t00J02 closure. Do not duplicate the other campaign's nullity work.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:hypotheses
+     "Real normed spaces; complete source E; finite-dimensional target F; strict derivative L at x and surjectivity of L. The smooth specialization derives strict differentiability from ContDiff at smooth order and uses L=fderiv Real f x. This covers finite-dimensional real source and target spaces.",
+     :placeholder-delta 0,
+     :residual
+     "Local regular-fiber geometry is ready for implementation. Global manifold assembly, smooth atlas compatibility, orientation and transverse-intersection comparisons remain downstream; no frozen consumer closure is claimed.",
+     :axiom-audits 18,
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd "lake env lean /tmp/RegularFiberChartProbe.lean", :exit 0}
+      {:cmd "sha256sum /tmp/RegularFiberChartProbe.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/RegularFiberChartProbe.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :repository-note
+     "Repository files unchanged; an existing untracked topology runs directory was observed and left untouched.",
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/RegularFiberChartProbe.lean",
+      :sha256
+      "565d6e660df9ef1b1b4b167768409f7be33d1d8b073cb51bbb93dd40d871a653"},
+     :finding
+     "Complete placeholder-free fixture compiles. Surjectivity constructs a kernel projection and complementary kernel. The production implicit-function theorem constructs centered coordinates Phi with snd(Phi y)=f(y)-f(x), Phi(x)=0 and x in its source. The zero slice has exactly the local fiber as its image. An explicit homeomorphism identifies an open neighborhood in the literal fiber subtype with an open kernel neighborhood containing zero. Its inverse agrees with the constructed parameterization, whose strict derivative at zero is kernel inclusion. A genuine smooth-map specialization and a concrete codimension-two projection instance compile. No chart or ImplicitFunctionData is supplied as a premise.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/RegularFiberChart.lean"
+       "ConstructionTargets/RegularFiberChart.md"],
+      :acceptance
+      {:implementation
+       "Promote the exact compiled fixture and document its hypotheses, equations and downstream limits.",
+       :consumer-equation
+       "snd(Phi y)=f(y)-f(x); the inverse zero slice parameterizes exactly the local literal fiber, and its derivative at zero is kernel inclusion.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256."
+        "Compile fixture and canonical target."
+        "Run lake build ConstructionTargets.RegularFiberChart ConstructionTargets.SardImplicitFunctionLevelSetKernelParameterization."
+        "Reproduce all eighteen printed standard-only axiom audits."
+        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]}},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/RegularFiberChart.lean"
+    "ConstructionTargets/RegularFiberChart.md"],
    :dag-node
    "REGULAR-PREIMAGE: finite-dimensional regular-fiber chart with arbitrary target dimension",
    :acceptance
-   {:axioms :standard-only,
-    :probe
-    "For finite-dimensional real normed spaces E and F and a genuinely smooth map f:E->F with surjective derivative at x, construct the kernel/complement splitting and an actual local coordinate homeomorphism near x with model ker(Df x) x F. Use the pinned implicit/inverse-function API, reusing banked parameterization results when applicable. Prove the coordinate projection equation for f-f(x), then restrict to the literal fiber f inverse {f(x)} and construct its local homeomorphism with an open kernel neighborhood. Prove the derivative of the inverse fiber parameterization at the origin is kernel inclusion. Include arbitrary target dimension and a concrete codimension-two instance; state all smoothness and completeness hypotheses explicitly.",
+   {:implementation
+    "Promote the exact compiled fixture and document its hypotheses, equations and downstream limits.",
     :consumer-equation
-    "In the constructed coordinates Phi, snd(Phi y)=f(y)-f(x); the actual zero slice parameterizes exactly the local fiber, and its inverse derivative at zero is the kernel inclusion.",
-    :stop-condition
-    "GO requires constructed chart data and exact fiber/derivative equations, not supplied ImplicitFunctionData or an assumed chart. REVISE only to one compiled missing splitting or coordinate prerequisite. Global manifold assembly and orientation remain downstream."},
+    "snd(Phi y)=f(y)-f(x); the inverse zero slice parameterizes exactly the local literal fiber, and its derivative at zero is kernel inclusion.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256."
+     "Compile fixture and canonical target."
+     "Run lake build ConstructionTargets.RegularFiberChart ConstructionTargets.SardImplicitFunctionLevelSetKernelParameterization."
+     "Reproduce all eighteen printed standard-only axiom audits."
+     "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
    :id :oriented-checkpoint7-surjective-derivative-fiber-chart-1,
    :kind :reusable-theorem,
    :depends-on [:oriented-checkpoint7-polygon-and-moment-refill],
