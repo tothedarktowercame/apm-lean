@@ -1107,8 +1107,182 @@
      :review-outcomes]},
    :stop-condition
    "Stop only on a genuine mathematical refutation, naming it; never stop for want of owner authorization.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "cat TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-foundational-programs.md docs/TN-topology-closure-experiments.md holes/labs/topology-contract/work-prompt.md",
+      :exit 0}
+     {:cmd
+      "rg -n -A2 ':finding' holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "cat problems/t98A02/lean/Main.lean", :exit 0}
+     {:cmd "cat /tmp/OrientedPortfolioCensus.json", :exit 0}
+     {:cmd
+      "git diff --stat b39251d254da436388ea34d476157d0c8225a674 -- problems",
+      :exit 0}
+     {:cmd "sha256sum /tmp/OrientedPortfolioCensus.json", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :replacement-items
+    [{:consumer :t00A01,
+      :stop-condition
+      "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Queue C: canonical theorem uptake; t00A01 remaining van Kampen bridge and final assembly",
+      :acceptance
+      {:probe
+       "Read the exact frozen statements and compile a temporary full Main with both placeholders removed. Test the existing two-open pseudopushout, ConnectedGroupoidSingleObjEquivalence, generic span transport, target-natural point-span free-product representations, and GenericTargetNaturalSourceReconstruction against the supplied homotopy-equivalent cover. Construct all needed connector and inclusion comparison data. Preserve both statements and reuse the banked homology bridge.",
+       :consumer-equation
+       "The supplied standard cover yields the frozen forward fundamental-group equivalence; together with apm_t00A01_bridge_connectedSum_isHomology3Sphere it proves the exact final conjunction, reducing placeholders from 2 to 0.",
+       :gates
+       ["GO only with a complete frozen-facing zero-placeholder fixture, exact statement hashes, fixture hash, and standard-only axiom audits."
+        "Propose implementation scope only after the full fixture compiles."],
+       :stop-condition
+       "If canonical APIs cannot close this consumer with a bounded adapter, STOP under portfolio rule 0 and name the exact missing theorem or incompatible hypothesis with typed evidence. Distinguish an API gap from mathematical refutation. Do not substitute another infrastructure chain or assume compatible connectors."},
+      :representation
+      {:source
+       "Fundamental group of the literal frozen connected-sum quotient at its specified basepoint",
+       :target
+       "Monoid.Coprod of the two supplied original fundamental groups",
+       :direction
+       "Forward multiplicative equivalence from the quotient fundamental group to the free product, using the actual supplied open cover and proved basepoint transports."},
+      :id :oriented-portfolio-t00a01-consumer-closure-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "Two executable placeholders remain: apm_t00A01_bridge_fundamentalGroup_coprod and apm_t00a01. The homology bridge is already proved.",
+      :other-consumers []}
+     {:consumer :circle-global-local-homology,
+      :stop-condition
+      "No abstract H1 isomorphism in place of the actual localization map; no arbitrary-dimensional or arbitrary-manifold localization claim.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Queue D #2: circle case of milestone 5, actual absolute-to-local map",
+      :acceptance
+      {:probe
+       "For every x : Circle, prove that homologyMap (relativeSingularProjection (deletedPoint x)) 1 is an isomorphism. Use the banked geometric punctured-circle vanishing, the production pair exact sequence, and the actual H0 inclusion map. Prove the needed H0 map is an isomorphism through augmentation/naturality. Exhibit both inverse identities and show that the inverse image of a chart-local generator generates absolute H1. Compile and audit actual coefficient comparisons where needed.",
+       :consumer-equation
+       "For localization Lx and chart-local generator gx, Lx(Lx inverse(gx)) = gx, and Lx inverse(gx) generates integral H1(Circle).",
+       :stop-condition
+       "GO requires the actual projection-map theorem and generator equation. REVISE only to one compiled missing exactness or coefficient-comparison prerequisite. This does not yet prove that independently normalized classes at different points coincide.",
+       :axioms :standard-only},
+      :representation
+      {:source "Integral absolute singular H1 of Circle",
+       :target
+       "Integral relative singular H1 of Circle modulo the complement of a specified point",
+       :direction
+       "Forward localization induced by relativeSingularProjection of the deleted-point subset; prove this actual map is an isomorphism."},
+      :id :oriented-circle-actual-localization-isomorphism-1,
+      :kind :reusable-theorem,
+      :depends-on [:oriented-manifold-overlap-punctured-circle-1],
+      :current-residual
+      "Punctured-circle positive-degree vanishing and local generators are banked, but the actual absolute-to-relative H1 projection has not been proved invertible.",
+      :other-consumers
+      [:circle-fundamental-class :circle-degree-localization]}
+     {:consumer :circle-fundamental-class,
+      :stop-condition
+      "Circle only. No assumed global class, assumed rotation action on homology, general compact-manifold theorem, or t98A02 closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Queue D #2: compact connected Circle, milestones 4 and 5",
+      :acceptance
+      {:probe
+       "Construct charts at every point by rotating one fixed pointed chart at 1. Prove geometric orientation compatibility on common restrictions, rather than assume equality of local classes. Construct the global class using inverse localization at 1. Use actual Circle rotations, their homotopies to identity, and pair-map naturality to prove its localization equals the rotated chart generator at every point. Prove generation and uniqueness. Exhibit the actual chain/homology squares and audit all axioms.",
+       :consumer-equation
+       "There exists a unique class omega generating integral H1(Circle) such that for every x, homologyMap(relativeSingularProjection(deletedPoint x),1)(omega) equals the local class of the constructed rotation-oriented chart at x.",
+       :stop-condition
+       "GO only with the constructed orientation family, geometric compatibility, and one class satisfying every localization equation. REVISE to exactly one compiled geometric or naturality prerequisite if needed. Do not claim arbitrary chartAt choices already have consistent signs.",
+       :axioms :standard-only},
+      :representation
+      {:source
+       "One integral absolute H1 class normalized at the Circle point 1",
+       :target
+       "Chart-local integral relative H1 generators at every Circle point",
+       :direction
+       "Actual localization at each point sends the same global class to the generator of a geometrically rotation-oriented chart; prove the commuting induced-map equations."},
+      :id :oriented-circle-coherent-fundamental-class-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-circle-actual-localization-isomorphism-1
+       :oriented-manifold-overlap-punctured-circle-1],
+      :current-residual
+      "Pointwise inverse localization gives a class for each chosen local sign, but no proof yet identifies a single class across different points or constructs a coherent geometric orientation family.",
+      :other-consumers
+      [:circle-degree-localization :oriented-circle-chart-naturality]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No credit for infrastructure as frozen closure; no automatic higher-dimensional extrapolation; preserve all demonstrated STOP boundaries.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: consumer certification and oriented-manifold next dimension",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, current standing policy, and all reviewed portfolio results. Recount every named consumer with comments stripped. Elect exactly one nearest closure adapter first when applicable, followed by the simplest highest-reuse work from the full DAG. Assess the remaining theory for t98A02 explicitly; do not infer dimension four from Circle. Return a nonempty portfolio of 1 to 5 new work rows and a fresh successor checkpoint carrying the same checkpoint keys. Do not duplicate the running Morse-Sard campaign or begin with t00J02.",
+       :stop-condition
+       "Respect rule 0: a blocked nearest-consumer adapter requires a precise reported missing theorem, distinguished from refutation. Never stop for lack of owner authorization."},
+      :id :oriented-manifold-checkpoint-refill-2,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-portfolio-t00a01-consumer-closure-1
+       :oriented-circle-actual-localization-isomorphism-1
+       :oriented-circle-coherent-fundamental-class-1],
+      :current-residual
+      "Consumer uptake must be measured separately from Circle foundations. Higher-dimensional models, global orientation/localization, and the t98A02 embedded-ball quotient comparison remain unelected."}],
+    :changed-paths [],
+    :measures
+    {:baseline "b39251d254da436388ea34d476157d0c8225a674",
+     :head "994d1443ae988fdd08b31f3f8a866b0fc7ea25f2",
+     :placeholder-delta 0,
+     :dag-consumer-placeholders
+     {:before 76,
+      :after 76,
+      :method
+      "Count executable sorry tokens after stripping block and line comments in every existing Main.lean named by the DAG.",
+      :missing-paths ["problems/t93A05/lean/Main.lean"]},
+     :infrastructure-packets
+     {:seed-completed 7,
+      :seed-modules-added 7,
+      :all-modules-before 584,
+      :all-modules-after 595,
+      :other-campaign-modules-added 4},
+     :review-outcomes {:pass 7, :stop 0},
+     :typed-residual-change
+     {:before
+      "Model H1 isomorphism and abstract pair-homeomorphism transport; geometric signs, restricted charts, overlap equality, and punctured-circle calculation absent.",
+      :after
+      "Geometric model signs, constructed chart-pair transport through excision, constructed common restrictions, overlap equality, and punctured-circle positive-degree vanishing are reviewed. Actual absolute-to-local circle isomorphisms and a globally coherent circle generator remain."},
+     :unrelated-change
+     "Across the same commit interval m02A06 decreased from one placeholder to zero; this is not topology-campaign uptake."},
+    :finding
+    "Reread the complete DAG, foundational-program note, closure policy, work prompt, and seven reviewed seed results. Elect one consumer-first closure probe outside the oriented-manifold descendants, followed by two bounded circle milestones. The earlier t00A01 stop predates the now-banked connected-groupoid equivalence, point-span free-product equivalence with target naturality, and generic source reconstruction; this justifies a fresh exact-consumer probe, not a claim that closure already compiles. Milestone 3 supports testing the actual circle localization isomorphism using punctured-circle vanishing and pair exactness. A coherent global circle class additionally needs geometric transport between different points; independently chosen local generators do not establish that coherence.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/OrientedPortfolioCensus.json",
+     :sha256
+     "ec9ad59d9114f68f23d44ce61812a2b8322d49001341a458fd8b46f9d7a7a08c"},
+    :t98A02-assessment
+    "The sole frozen placeholder is not a bounded consequence of the one-dimensional seed. Its actual embedded-four-ball quotient still requires four-dimensional model/localization calculations, punctured-summand homology and boundary-map control, an excisive gluing comparison for the supplied embeddings, and homology vanishing above dimension four. The supplied abstract H4 isomorphisms do not identify localization maps. No closure or four-dimensional orientation compatibility is claimed."},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: oriented-manifold fundamental classes and localization",
@@ -1124,4 +1298,129 @@
     :oriented-manifold-chart-local-generator-1
     :oriented-manifold-overlap-punctured-circle-1],
    :current-residual
-   "Milestones 4 and 5 are not elected by this seed: arbitrary-dimensional model homology, global fundamental-class existence, and localization monicity are not consequences of the two banked one-dimensional/pair-transport packets."}]}
+   "Milestones 4 and 5 are not elected by this seed: arbitrary-dimensional model homology, global fundamental-class existence, and localization monicity are not consequences of the two banked one-dimensional/pair-transport packets."}
+  {:consumer :t00A01,
+   :stop-condition
+   "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Queue C: canonical theorem uptake; t00A01 remaining van Kampen bridge and final assembly",
+   :acceptance
+   {:probe
+    "Read the exact frozen statements and compile a temporary full Main with both placeholders removed. Test the existing two-open pseudopushout, ConnectedGroupoidSingleObjEquivalence, generic span transport, target-natural point-span free-product representations, and GenericTargetNaturalSourceReconstruction against the supplied homotopy-equivalent cover. Construct all needed connector and inclusion comparison data. Preserve both statements and reuse the banked homology bridge.",
+    :consumer-equation
+    "The supplied standard cover yields the frozen forward fundamental-group equivalence; together with apm_t00A01_bridge_connectedSum_isHomology3Sphere it proves the exact final conjunction, reducing placeholders from 2 to 0.",
+    :gates
+    ["GO only with a complete frozen-facing zero-placeholder fixture, exact statement hashes, fixture hash, and standard-only axiom audits."
+     "Propose implementation scope only after the full fixture compiles."],
+    :stop-condition
+    "If canonical APIs cannot close this consumer with a bounded adapter, STOP under portfolio rule 0 and name the exact missing theorem or incompatible hypothesis with typed evidence. Distinguish an API gap from mathematical refutation. Do not substitute another infrastructure chain or assume compatible connectors."},
+   :representation
+   {:source
+    "Fundamental group of the literal frozen connected-sum quotient at its specified basepoint",
+    :target
+    "Monoid.Coprod of the two supplied original fundamental groups",
+    :direction
+    "Forward multiplicative equivalence from the quotient fundamental group to the free product, using the actual supplied open cover and proved basepoint transports."},
+   :id :oriented-portfolio-t00a01-consumer-closure-1,
+   :kind :final-adapter,
+   :depends-on [:oriented-manifold-checkpoint-refill-1],
+   :current-residual
+   "Two executable placeholders remain: apm_t00A01_bridge_fundamentalGroup_coprod and apm_t00a01. The homology bridge is already proved.",
+   :other-consumers []}
+  {:consumer :circle-global-local-homology,
+   :stop-condition
+   "No abstract H1 isomorphism in place of the actual localization map; no arbitrary-dimensional or arbitrary-manifold localization claim.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Queue D #2: circle case of milestone 5, actual absolute-to-local map",
+   :acceptance
+   {:probe
+    "For every x : Circle, prove that homologyMap (relativeSingularProjection (deletedPoint x)) 1 is an isomorphism. Use the banked geometric punctured-circle vanishing, the production pair exact sequence, and the actual H0 inclusion map. Prove the needed H0 map is an isomorphism through augmentation/naturality. Exhibit both inverse identities and show that the inverse image of a chart-local generator generates absolute H1. Compile and audit actual coefficient comparisons where needed.",
+    :consumer-equation
+    "For localization Lx and chart-local generator gx, Lx(Lx inverse(gx)) = gx, and Lx inverse(gx) generates integral H1(Circle).",
+    :stop-condition
+    "GO requires the actual projection-map theorem and generator equation. REVISE only to one compiled missing exactness or coefficient-comparison prerequisite. This does not yet prove that independently normalized classes at different points coincide.",
+    :axioms :standard-only},
+   :representation
+   {:source "Integral absolute singular H1 of Circle",
+    :target
+    "Integral relative singular H1 of Circle modulo the complement of a specified point",
+    :direction
+    "Forward localization induced by relativeSingularProjection of the deleted-point subset; prove this actual map is an isomorphism."},
+   :id :oriented-circle-actual-localization-isomorphism-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-manifold-overlap-punctured-circle-1
+    :oriented-manifold-checkpoint-refill-1],
+   :current-residual
+   "Punctured-circle positive-degree vanishing and local generators are banked, but the actual absolute-to-relative H1 projection has not been proved invertible.",
+   :other-consumers
+   [:circle-fundamental-class :circle-degree-localization]}
+  {:consumer :circle-fundamental-class,
+   :stop-condition
+   "Circle only. No assumed global class, assumed rotation action on homology, general compact-manifold theorem, or t98A02 closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Queue D #2: compact connected Circle, milestones 4 and 5",
+   :acceptance
+   {:probe
+    "Construct charts at every point by rotating one fixed pointed chart at 1. Prove geometric orientation compatibility on common restrictions, rather than assume equality of local classes. Construct the global class using inverse localization at 1. Use actual Circle rotations, their homotopies to identity, and pair-map naturality to prove its localization equals the rotated chart generator at every point. Prove generation and uniqueness. Exhibit the actual chain/homology squares and audit all axioms.",
+    :consumer-equation
+    "There exists a unique class omega generating integral H1(Circle) such that for every x, homologyMap(relativeSingularProjection(deletedPoint x),1)(omega) equals the local class of the constructed rotation-oriented chart at x.",
+    :stop-condition
+    "GO only with the constructed orientation family, geometric compatibility, and one class satisfying every localization equation. REVISE to exactly one compiled geometric or naturality prerequisite if needed. Do not claim arbitrary chartAt choices already have consistent signs.",
+    :axioms :standard-only},
+   :representation
+   {:source
+    "One integral absolute H1 class normalized at the Circle point 1",
+    :target
+    "Chart-local integral relative H1 generators at every Circle point",
+    :direction
+    "Actual localization at each point sends the same global class to the generator of a geometrically rotation-oriented chart; prove the commuting induced-map equations."},
+   :id :oriented-circle-coherent-fundamental-class-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-circle-actual-localization-isomorphism-1
+    :oriented-manifold-overlap-punctured-circle-1
+    :oriented-manifold-checkpoint-refill-1],
+   :current-residual
+   "Pointwise inverse localization gives a class for each chosen local sign, but no proof yet identifies a single class across different points or constructs a coherent geometric orientation family.",
+   :other-consumers
+   [:circle-degree-localization :oriented-circle-chart-naturality]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No credit for infrastructure as frozen closure; no automatic higher-dimensional extrapolation; preserve all demonstrated STOP boundaries.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: consumer certification and oriented-manifold next dimension",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, current standing policy, and all reviewed portfolio results. Recount every named consumer with comments stripped. Elect exactly one nearest closure adapter first when applicable, followed by the simplest highest-reuse work from the full DAG. Assess the remaining theory for t98A02 explicitly; do not infer dimension four from Circle. Return a nonempty portfolio of 1 to 5 new work rows and a fresh successor checkpoint carrying the same checkpoint keys. Do not duplicate the running Morse-Sard campaign or begin with t00J02.",
+    :stop-condition
+    "Respect rule 0: a blocked nearest-consumer adapter requires a precise reported missing theorem, distinguished from refutation. Never stop for lack of owner authorization."},
+   :id :oriented-manifold-checkpoint-refill-2,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-portfolio-t00a01-consumer-closure-1
+    :oriented-circle-actual-localization-isomorphism-1
+    :oriented-circle-coherent-fundamental-class-1
+    :oriented-manifold-checkpoint-refill-1],
+   :current-residual
+   "Consumer uptake must be measured separately from Circle foundations. Higher-dimensional models, global orientation/localization, and the t98A02 embedded-ball quotient comparison remain unelected."}]}
