@@ -8299,6 +8299,24 @@
       :exit 1,
       :correction
       "The assertion requiring no build warnings encountered 17 replayed dependency warnings. Inspected their locations and reran the audit recording them; fixture and canonical compilations remained warning-free."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788992574942-17210-e2d6cf73",
+     :commands
+     ["git show e616a59b:holes/labs/topology-contract/worklist2.edn"
+      "git show b98a8bdc:ConstructionTargets/SphereZeroCoefficients.lean"
+      "git show b98a8bdc:ConstructionTargets/SphereZeroCoefficients.md"
+      "lake env lean /tmp/SphereZeroCoefficients.lean"
+      "lake env lean ConstructionTargets/SphereZeroCoefficients.lean"
+      "lake build ConstructionTargets.SphereZeroCoefficients"
+      "python3 inline audit: fixture equality and SHA256, eight declaration hashes, scope, forbidden tokens, 14-file import closure and frozen placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show e616a59b:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check b98a8bdc"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Exact two-file promotion verified. Both compilations pass warning-free with five standard-only audits; 8253-job build passes with exactly the 17 recorded dependency warnings. Literal S0 endpoints and Bool reindexing correctly compute ordinary H0 with two coefficient coordinates for arbitrary commutative rings, plus positive-degree vanishing. No reduced-H0 substitution, positive-sphere or consumer closure claim. Frozen placeholders unchanged at 322; ledger untouched."},
     :commit "b98a8bdc6af44323b275bd33e824df93f2f55fc9",
     :changed-paths
     ["ConstructionTargets/SphereZeroCoefficients.lean"
@@ -8313,7 +8331,7 @@
     "SHA256 of declaration bytes beginning with abbrev, def or theorem and ending immediately before the space preceding := or where.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereZeroCoefficients.lean"
     "ConstructionTargets/SphereZeroCoefficients.md"],
@@ -8440,7 +8458,7 @@
      "Exactly one coefficient prerequisite compiles: the literal Euclidean zero-sphere is identified with Bool using its explicit positive and negative points. Actual singular H0 with coefficients ModuleCat R is isomorphic to R-valued functions on Bool, and every positive degree vanishes, for any commutative ring R. Integer and rational specializations compile. Positive-dimensional coefficient-general suspension and degree-one calculations remain; no rational S2 table or full parent GO is claimed.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS: literal sphere homology with explicit coefficients",
