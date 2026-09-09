@@ -6102,6 +6102,8 @@
    "Two frozen placeholders: each actual compact invariant surface component must be homeomorphic to Circle x Circle. Periodicity, action laws and explicit torus invariance are proved.",
    :other-consumers []}
   {:consumer :t02A07-regular-fiber-geometry,
+   :review-finding
+   "Deterministic evidence defect in recorded transition a5a3b473 for implementation ecfe1d8f0ed29aa70e419e23f153fadd30ffc938: :statement-hashes records kernelOpen_isOpen as e0491f350f4e801299b73b1b1..., which is not a SHA256 digest. Recomputed using the stated declaration-byte method, the exact hash is e0491f350f4e801299b73b1b1746d084c9d3a5ffe8c2e31bb7cc609be5e62d65. Repair the receipt with the complete digest. Fixture hash and exact two-file scope match; both Lean compilations and focused build pass without warnings (8255 jobs), all 18 audits per compilation use standard axioms, and frozen placeholders remain 322. No proof defect found in coordinate order, literal-fiber homeomorphism, kernel-inclusion derivative or genuine-smooth specialization. Ledger untouched.",
    :stop-condition
    "Local Euclidean fiber geometry only. No assumed fiber chart, global regular value, Sard induction, manifold orientation, transverse intersection comparison or t00J02 closure. Do not duplicate the other campaign's nullity work.",
    :evidence
@@ -6170,6 +6172,12 @@
     :repository-note
     "Read DAG, closure experiments and checkpoint PASS. Only the authorized two files changed; frozen consumers, DAG, ledgers and untracked supervisor files untouched. Tracked checkout clean.",
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1788985802719-16996-a7d8fd54",
+     :finding
+     "Deterministic evidence defect in recorded transition a5a3b473 for implementation ecfe1d8f0ed29aa70e419e23f153fadd30ffc938: :statement-hashes records kernelOpen_isOpen as e0491f350f4e801299b73b1b1..., which is not a SHA256 digest. Recomputed using the stated declaration-byte method, the exact hash is e0491f350f4e801299b73b1b1746d084c9d3a5ffe8c2e31bb7cc609be5e62d65. Repair the receipt with the complete digest. Fixture hash and exact two-file scope match; both Lean compilations and focused build pass without warnings (8255 jobs), all 18 audits per compilation use standard axioms, and frozen placeholders remain 322. No proof defect found in coordinate order, literal-fiber homeomorphism, kernel-inclusion derivative or genuine-smooth specialization. Ledger untouched."},
     :commit "ecfe1d8f0ed29aa70e419e23f153fadd30ffc938",
     :changed-paths
     ["ConstructionTargets/RegularFiberChart.lean"
@@ -6184,7 +6192,7 @@
     "SHA-256 of declaration bytes beginning with def or lemma and ending immediately before the space preceding := or where; namespace ConstructionTargets.RegularFiberChart.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/RegularFiberChart.lean"
     "ConstructionTargets/RegularFiberChart.md"],
