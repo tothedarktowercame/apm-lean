@@ -47540,17 +47540,77 @@
   {:consumer "t93A04",
    :stop-condition
    "REVISE only with exactly one compiled prerequisite and demonstrated producer/consumer connection. Otherwise name the exact mathematical, hypothesis or representation boundary; missing infrastructure is not refutation and needs no owner authorization.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta
+     {:consumer "t93A04",
+      :before 1,
+      :after 1,
+      :delta 0,
+      :frozen-sha256
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
+     :residual
+     "Produce the smooth-on-neighborhood hypotheses for the actual scalarized jet maps and thread the resulting charts through a compatible local induction interface. Arbitrary-C1 hindOne, local nullity, induction base cases and manifold transport remain separate. This GO closes the requested chart-producer packet, not unconditional Sard or t93A04.",
+     :outcome :go,
+     :warnings [],
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/SardSmoothNeighborhoodImplicitChart.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/check-sard-neighborhood-fixture.py", :exit 0}
+      {:cmd
+       "git diff --exit-code -- ConstructionTargets problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+       :exit 0}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/SardSmoothNeighborhoodImplicitChart.lean",
+      :sha256
+      "11bf7a26761c25f6f1b94b4a4b65e3977cd36e9656006423188dbe0b4d5f7e39"},
+     :finding
+     "The complete requested neighborhood theorem and actual residual-slice consumer compile. Continuity of the first derivative and openness of the continuous-linear-equivalence locus supply a smaller open neighborhood of invertible derivatives. Restricting the original chart preserves its forward function and inverse agreement. The existing inverse regularity theorem supplies genuine C-infinity on the restricted target. ImplicitFunctionData supplies the basepoint derivative equivalence; smooth left/right fields on U supply forward smoothness. The resulting inverse smoothness feeds SardProjectedChartResidualSlicesContDiffOn at infinity. No analytic outer-top premise, nullity assumption, or deletion of ContDiffAt.eventually's exclusion is used.",
+     :declarations
+     ["SardSmoothNeighborhoodImplicitChartProbe.exists_smooth_neighborhood_restriction"
+      "SardSmoothNeighborhoodImplicitChartProbe.exists_smooth_implicit_chart"
+      "SardSmoothNeighborhoodImplicitChartProbe.exists_smooth_chart_with_residual_slices"],
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardSmoothNeighborhoodImplicitChart.lean"
+       "ConstructionTargets/SardSmoothNeighborhoodImplicitChart.md"],
+      :acceptance
+      {:fixture
+       "Promote the complete SHA-pinned Lean fixture, preserving its hypotheses, restriction properties and exercised residual-slice consumer.",
+       :documentation-source
+       "/tmp/SardSmoothNeighborhoodImplicitChart.md",
+       :documentation-sha256
+       "e6a36b447622090802cf865a0f707fccc51f28e44f126d5278c43d4d45ba0954",
+       :compile
+       "lake env lean ConstructionTargets/SardSmoothNeighborhoodImplicitChart.lean",
+       :axioms :standard-only,
+       :placeholders 0,
+       :scope
+       "Only the two declared new files; no frozen consumer, DAG or ledger edits."}},
+     :seat :codex-12}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/SardSmoothNeighborhoodImplicitChart.lean"
+    "ConstructionTargets/SardSmoothNeighborhoodImplicitChart.md"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / smooth implicit neighborhood",
    :acceptance
-   {:probe
-    "Compile one placeholder-free theorem for real finite-dimensional complete normed spaces and actual ImplicitFunctionData phi: given an open U containing phi.pt, contained in the existing chart source, with ContDiffOn real infinity phi.leftFun U and ContDiffOn real infinity phi.rightFun U, produce a basepoint-preserving restriction e of phi.toOpenPartialHomeomorph, source contained in U, with the original forward map and inverse agreement on e.target, and ContDiffOn real infinity in both directions on e.source/e.target. Use genuine inner infinity, not analytic outer top. Derive inverse regularity from the derivative isomorphism and neighborhood data, never by deleting the exclusion from ContDiffAt.eventually. Demonstrate its actual consumer by feeding the resulting inverse-chart regularity to SardProjectedChartResidualSlicesContDiffOn at infinity. No nullity hypothesis or Sard conclusion is permitted as an input. If the theorem already exists, reuse it and identify the remaining consumer edge rather than mint a duplicate wrapper.",
+   {:fixture
+    "Promote the complete SHA-pinned Lean fixture, preserving its hypotheses, restriction properties and exercised residual-slice consumer.",
+    :documentation-source
+    "/tmp/SardSmoothNeighborhoodImplicitChart.md",
+    :documentation-sha256
+    "e6a36b447622090802cf865a0f707fccc51f28e44f126d5278c43d4d45ba0954",
+    :compile
+    "lake env lean ConstructionTargets/SardSmoothNeighborhoodImplicitChart.lean",
     :axioms :standard-only,
-    :consumer-residual
-    "This supplies a smooth chart producer only. Proving these neighborhood hypotheses for the scalarized jet maps, replacing arbitrary-C1 hindOne with a compatible induction interface, base cases and local-domain nullity remain; no unconditional Sard or consumer closure is inferred."},
+    :placeholders 0,
+    :scope
+    "Only the two declared new files; no frozen consumer, DAG or ledger edits."},
    :id :sard-smooth-neighborhood-implicit-chart-probe-refill10,
    :kind :reusable-theorem,
    :depends-on
