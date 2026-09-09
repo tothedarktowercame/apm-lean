@@ -7929,8 +7929,154 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read DAG program clusters and corrections, foundational-program note and closure stop rules",
+      :exit 0}
+     {:cmd
+      "Read both ledgers and reviewed checkpoint10 dependency receipts",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint11Census.py", :exit 0}
+     {:cmd "Corrected bb query of concurrent campaign tail", :exit 0}
+     {:cmd
+      "Inspect frozen t94A06 and coefficient-specific SphereHomology/SingularHomologyConcrete APIs",
+      :exit 0}
+     {:cmd "sha256sum problems/t94A06/lean/Main.lean", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial concurrent-tail bb query",
+      :exit 1,
+      :correction
+      "Removed an extra closing parenthesis and reran successfully."}],
+    :replacement-items
+    [{:consumer :t94A06,
+      :stop-condition
+      "Preserve all model-space hypotheses and the actual manifold derivative and volume quantifier. Do not assume finite-dimensionality, Sard or a regular-value theorem.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE: exact normal-translation transversality consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t94A06/lean/Main.lean",
+       :stop-condition
+       "If no full adapter exists, STOP with the precise typed hypothesis or nullity boundary. No conditional or partial GO, silent dimension restriction or unproved refutation.",
+       :gates
+       ["GO requires complete zero-placeholder frozen fixture, unchanged statement hash, fixture SHA256 and standard-only audits."
+        "A refutation requires a compiled counterexample satisfying every frozen hypothesis."
+        "Propose implementation scope only after complete closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Audit the exact arbitrary real normed model spaces, second countability and model-with-corners hypotheses before attempting closure. Determine whether the required normal-projection critical-value theorem applies without finite-dimensionality. Reuse existing derivative and family lemmas and currently reviewed nullity results only where their hypotheses are proved. Compile a complete temporary exact Main if closure is available. If the frozen scope is false, compile an admissible counterexample; do not infer refutation merely from a missing dimension hypothesis. Do not develop or duplicate the other campaign's Sard induction.",
+       :consumer-equation
+       "Almost every normal translation has derivative image complementary to the z-axis at every inverse-image point, under exactly the frozen hypotheses.",
+       :frozen-sha256
+       "1e98306fb2201eb5c390bebab3f74348cb03b3306cd2e44b0df13d8f2d01f8b2"},
+      :id :oriented-checkpoint11-t94a06-exact-transversality-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint11-counterexamples-and-action-refill],
+      :current-residual
+      "One placeholder remains in almost-everywhere transversality for the explicit normal-plane translation family. The frozen model spaces have no finite-dimensional assumptions.",
+      :other-consumers []}
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "No assumed change-of-coefficients theorem, homology table, finiteness, Kunneth or numerical trace. Preserve the actual singularHomologyFunctor and literal sphere subtype.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "CIRCLE/SPHERE INVARIANTS: literal sphere homology with explicit coefficients",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Construct the singular homology table of literal Euclidean spheres with coefficients ModuleCat R and coefficient object R for an explicitly stated commutative ring R. Reuse actual sphere covers, pair exactness and coefficient-generic chain APIs; generalize coefficient-specific arguments rather than treating integral isomorphisms as rational ones. Handle ordinary H0 of S0 correctly. Compile specializations for R=Integers and R=Rationals, including the exact H0,H1,H2 witnesses of t00J01's S2. Show compatibility with actual identity-induced maps. State precisely which naturality is proved; do not assume arbitrary-degree map formulas.",
+       :consumer-equation
+       "For positive-dimensional Sn, actual H0 and Hn with coefficient R are isomorphic to R and other degrees vanish; for S0 ordinary H0 has two copies. The rational S2 specializations supply the three exact frozen comparison types.",
+       :stop-condition
+       "GO requires the actual coefficient-specific table and exact rational consumer witnesses. REVISE only to exactly one compiled coefficient or exactness prerequisite. Product homology, sphere-degree normalization and full t00J01 closure remain downstream."},
+      :id :oriented-checkpoint11-sphere-explicit-coefficients-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint11-counterexamples-and-action-refill],
+      :current-residual
+      "Banked sphere tables export integral coefficients. The exact rational sphere identifications needed by t00J01 are absent; existing geometry and coefficient-generic chains should be reused.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: exact transversality scope and coefficient uptake",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+      :id
+      :oriented-checkpoint12-transversality-and-coefficients-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint11-t94a06-exact-transversality-1
+       :oriented-checkpoint11-sphere-explicit-coefficients-1
+       :oriented-checkpoint11-counterexamples-and-action-refill],
+      :current-residual
+      "Measure frozen transversality outcome separately from sphere coefficient infrastructure; preserve unresolved consumer boundaries."}],
+    :changed-paths [],
+    :finding
+    {:baseline "62f03db4f09b7f585fd9a6d30c2fd4b5e72c9570",
+     :concurrency
+     "Exclude the other campaign's reserved t92J06 probe, Euclidean Sard induction-discharge probe and successor checkpoint. The t94A06 probe must not duplicate Sard construction.",
+     :preserved-boundaries
+     "Preserve t01A05 and t96J07 specification defects, historical t94J08 refutation and repair, regular-fiber atlas STOP, and unresolved graph, surface, integration and gluing STOPs. t94A06 is not presently declared refuted.",
+     :head "ee0dfbcebf47cee6705df8ca12fe4dd1eb356210",
+     :infrastructure-packets
+     {:modules-before 635,
+      :modules-after 638,
+      :portfolio 2,
+      :concurrent 1,
+      :portfolio-modules
+      ["EquivariantOrbitQuotient" "EquivariantCoverTransport"],
+      :concurrent-modules ["SardCompactRankZeroOpenContract"]},
+     :ranking
+     "Elect exactly one previously unprobed one-placeholder adapter, t94A06, with an explicit audit of its unrestricted model dimensions. Then elect coefficient-general sphere homology: it serves four named consumers through sphere or circle computations and reuses existing sphere geometry and coefficient-generic singular chains. This is smaller than full Kunneth, Stokes, surface classification or arbitrary-manifold orientation. Do not extend covering transport after its two packets without consumer uptake.",
+     :typed-residual-change
+     "Literal quotient descent, fiber comparison and equivariant quotient-covering transport are proved, including a translated finite circle action. No frozen file changed. t00J01 retains independent Klein-product, rational sphere and full fold-fiber obligations.",
+     :review-outcomes
+     {:consumer-stop-pass 1,
+      :implementation-pass 2,
+      :frozen-closures 0},
+     :census
+     {:path "/tmp/Checkpoint11Census.json",
+      :existing 58,
+      :zero-placeholder 19,
+      :placeholder-delta 0,
+      :after 71,
+      :sha256
+      "12e01060989f128bcff3e3f10cf46a1b3a2b582514b2b091d6ebcc6779a910df",
+      :named 59,
+      :missing [:t93A05],
+      :before 71}},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact counterexample uptake and action transport",
@@ -7948,6 +8094,93 @@
     :oriented-checkpoint10-graph-and-base-change-refill],
    :current-residual
    "Measure exact t00J01 uptake separately from quotient-action infrastructure; preserve all unresolved consumer and atlas boundaries."}
+  {:consumer :t94A06,
+   :stop-condition
+   "Preserve all model-space hypotheses and the actual manifold derivative and volume quantifier. Do not assume finite-dimensionality, Sard or a regular-value theorem.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE: exact normal-translation transversality consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t94A06/lean/Main.lean",
+    :stop-condition
+    "If no full adapter exists, STOP with the precise typed hypothesis or nullity boundary. No conditional or partial GO, silent dimension restriction or unproved refutation.",
+    :gates
+    ["GO requires complete zero-placeholder frozen fixture, unchanged statement hash, fixture SHA256 and standard-only audits."
+     "A refutation requires a compiled counterexample satisfying every frozen hypothesis."
+     "Propose implementation scope only after complete closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Audit the exact arbitrary real normed model spaces, second countability and model-with-corners hypotheses before attempting closure. Determine whether the required normal-projection critical-value theorem applies without finite-dimensionality. Reuse existing derivative and family lemmas and currently reviewed nullity results only where their hypotheses are proved. Compile a complete temporary exact Main if closure is available. If the frozen scope is false, compile an admissible counterexample; do not infer refutation merely from a missing dimension hypothesis. Do not develop or duplicate the other campaign's Sard induction.",
+    :consumer-equation
+    "Almost every normal translation has derivative image complementary to the z-axis at every inverse-image point, under exactly the frozen hypotheses.",
+    :frozen-sha256
+    "1e98306fb2201eb5c390bebab3f74348cb03b3306cd2e44b0df13d8f2d01f8b2"},
+   :id :oriented-checkpoint11-t94a06-exact-transversality-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint11-counterexamples-and-action-refill
+    :oriented-checkpoint11-counterexamples-and-action-refill],
+   :current-residual
+   "One placeholder remains in almost-everywhere transversality for the explicit normal-plane translation family. The frozen model spaces have no finite-dimensional assumptions.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No assumed change-of-coefficients theorem, homology table, finiteness, Kunneth or numerical trace. Preserve the actual singularHomologyFunctor and literal sphere subtype.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CIRCLE/SPHERE INVARIANTS: literal sphere homology with explicit coefficients",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Construct the singular homology table of literal Euclidean spheres with coefficients ModuleCat R and coefficient object R for an explicitly stated commutative ring R. Reuse actual sphere covers, pair exactness and coefficient-generic chain APIs; generalize coefficient-specific arguments rather than treating integral isomorphisms as rational ones. Handle ordinary H0 of S0 correctly. Compile specializations for R=Integers and R=Rationals, including the exact H0,H1,H2 witnesses of t00J01's S2. Show compatibility with actual identity-induced maps. State precisely which naturality is proved; do not assume arbitrary-degree map formulas.",
+    :consumer-equation
+    "For positive-dimensional Sn, actual H0 and Hn with coefficient R are isomorphic to R and other degrees vanish; for S0 ordinary H0 has two copies. The rational S2 specializations supply the three exact frozen comparison types.",
+    :stop-condition
+    "GO requires the actual coefficient-specific table and exact rational consumer witnesses. REVISE only to exactly one compiled coefficient or exactness prerequisite. Product homology, sphere-degree normalization and full t00J01 closure remain downstream."},
+   :id :oriented-checkpoint11-sphere-explicit-coefficients-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint11-counterexamples-and-action-refill
+    :oriented-checkpoint11-counterexamples-and-action-refill],
+   :current-residual
+   "Banked sphere tables export integral coefficients. The exact rational sphere identifications needed by t00J01 are absent; existing geometry and coefficient-generic chains should be reused.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: exact transversality scope and coefficient uptake",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+   :id :oriented-checkpoint12-transversality-and-coefficients-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint11-t94a06-exact-transversality-1
+    :oriented-checkpoint11-sphere-explicit-coefficients-1
+    :oriented-checkpoint11-counterexamples-and-action-refill
+    :oriented-checkpoint11-counterexamples-and-action-refill],
+   :current-residual
+   "Measure frozen transversality outcome separately from sphere coefficient infrastructure; preserve unresolved consumer boundaries."}
   {:consumer :t00A01,
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
