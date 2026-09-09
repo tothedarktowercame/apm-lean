@@ -49196,6 +49196,20 @@
       :exit 0,
       :output
       "Only unrelated untracked holes/labs/topology-contract/runs2/ remains; untouched."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788976961097-16739-ba61e5ef",
+     :commands
+     ["Detached review of commit 60711917a5e7876a99a6205778adade9028578a7"
+      "Independent Python assertions: exact one-file scope, fixture SHA256 and byte equality, frozen definition prefix, both statement hashes, dependency pins, placeholders 2 to 0"
+      "lake build ConstructionTargets.UnitDiskInverseSqrtIntegrability"
+      "lake env lean problems/t96J08/lean/Main.lean"
+      "lake env lean /tmp/T96J08Probe.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 60711917"],
+     :finding
+     "Independent of author codex-6. All gates pass; both theorem statement hashes match and frozen definitions remain unchanged. Actual Euclidean Haar radial integration yields 2*pi/3; proved singular-term integrability justifies splitting to obtain 5*pi/3. Outward parametrization and derivative signs checked. Nonexactness uses the original custom predicate through etaForm and extDeriv_extDeriv, not a replacement definition. Both compiled conclusions use only propext, Classical.choice and Quot.sound. No consumer warnings; inherited dependency linter warning only. Ledger untouched."},
     :commit "60711917a5e7876a99a6205778adade9028578a7",
     :changed-paths ["problems/t96J08/lean/Main.lean"],
     :frozen-sha256-before
@@ -49208,7 +49222,7 @@
     :consumer-sha256
     "237cacc38a0a1040a9668ae2ef5cdf8686af7f8647cd665a96fa3c93d34e673d"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t96J08/lean/Main.lean"],
    :dag-node
    "STOKES AND MOMENTS / hemisphere radial integral and exactness",
