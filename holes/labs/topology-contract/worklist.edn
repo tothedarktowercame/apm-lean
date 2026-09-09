@@ -53129,8 +53129,140 @@
      :review-outcomes]},
    :stop-condition
    "Only all campaign consumers closed or exact campaign-level refutation ends the campaign; preserve local specification evidence and uncovered cases.",
+   :evidence
+   {:evidence
+    {:census
+     {:path "/tmp/topology-refill25-measure.json",
+      :sha256
+      "b43a5a04a41e91b4ed19371190d57ab2e23b751984d958bb6aca27242e932ef5"},
+     :reviews
+     {:path "/tmp/topology-refill25-reviews.edn",
+      :sha256
+      "6f45f3a917f8c60b8f156755424a5b98b19031e48d01cc8c8999936eb2231a66"},
+     :tail
+     {:path "/tmp/topology-refill25-tail.edn",
+      :sha256
+      "f7ea89377a00b7f64ccc833c47d3a89f06fbc44d8b4544b0b57e1d568be1c075"}},
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill25-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill25-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill25-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill25-proposed-worklist.edn",
+      :exit 0}],
+    :replacement-items
+    [{:consumer "t00A01",
+      :stop-condition
+      "GO requires the complete frozen consumer. Otherwise name the exact missing van Kampen group comparison or basepoint transport; partial groupoid descent is not closure.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "TWO-OPEN VAN KAMPEN / connected-sum free product",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free copy of frozen Main preserving every definition and statement. Use the supplied standard open cover, its homotopy equivalences to A and B and overlap S2, and the banked two-open van Kampen/descent and source-reconstruction APIs to compute the actual fundamental group as Monoid.Coprod. Derive overlap simple connectivity and transport component/basepoint choices explicitly through the given puncture-group equivalences. Reuse the proved homology-sphere bridge for the final conjunction. Do not assume a free-product comparison, stronger collar or gluing hypotheses, or naturality not supplied by a compiled producer. No conditional final bridge counts as GO.",
+       :frozen-file "problems/t00A01/lean/Main.lean",
+       :frozen-sha256
+       "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id
+      :t00a01-frozen-connected-sum-free-product-closure-probe-refill25,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum],
+      :current-residual
+      "Two placeholders: fundamental group free-product comparison and final conjunction. The literal connected-sum homology-sphere bridge is already proved from the supplied standard open cover."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO requires the complete compiled compact rank-zero result with open-domain induction and localization compatibility. REVISE requires exactly one compiled prerequisite. Never infer a common smooth neighborhood from one-point infinity.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / compatible compact rank-zero induction",
+      :acceptance
+      {:probe
+       "For globally genuine-infinity smooth f between finite-dimensional real inner-product spaces and compact K with fderiv f zero on K, prove Haar-null f image K under only lower-source-dimensional critical-image induction on explicitly open genuine-smooth domains, including zero-dimensional sources. Repair the actual first-nonzero-jet local step using its constructed scalarized smooth chart: derive the open zero-coordinate slice, ContDiffOn infinity of the parameterization and composition, kernel dimension drop, and criticality on the parameter subset corresponding to the jet locus. Apply the open-domain premise there and transport image nullity. Feed that result through existing jet-locus aggregation, scalar-direction and compact admissible-Taylor assembly. Derive needed topology/Borel/measure facts and handle or state precise nontrivial ambient hypotheses without excluding zero-dimensional lower sources. Exhibit localization supplying the exact premise from smaller-dimensional global smooth nullity. Preserve existing APIs; no assumed chart, jet-locus nullity, compact rank-zero nullity, arbitrary-C1 induction or analytic omega.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Compatible conditional compact rank-zero nullity only. Rank-zero exhaustion, global critical-set assembly with the repaired positive-rank theorem, compatible induction discharge and manifold transport remain."},
+      :id :sard-compact-rank-zero-open-contract-probe-refill25,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum],
+      :current-residual
+      "Positive-rank assembly now consumes open-domain induction. Compact rank-zero nullity still invokes first-nonzero-jet local induction with arbitrary-set pointwise infinity.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; retain local specification evidence and uncovered cases.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped placeholders, compare reviewed outcomes and typed residuals, and separate portfolio from concurrent infrastructure and closures. Elect exactly one near-closure adapter before foundations ranked by reach and simplicity; append a fresh dependent checkpoint to a nonempty portfolio. Retain missing antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t00a01-frozen-connected-sum-free-product-closure-probe-refill25
+       :sard-compact-rank-zero-open-contract-probe-refill25],
+      :current-residual
+      "Await reviewed adapter and rank-zero contract outcomes, then rerank all DAG consumers and concurrent developments."}],
+    :changed-paths [],
+    :finding
+    {:baseline "b9120cb9a9d0d46ae0a247d16febc47bb216cfbc",
+     :head "f772579ab8a0c8cdfcaf90ab090c412c6f6c2b62",
+     :campaign-refutation false,
+     :reviews
+     {:sphere-degree :stop-reviewed-pass,
+      :open-stratum :implementation-reviewed-pass,
+      :previous-checkpoint :pass},
+     :ranking
+     "Exactly one near-closure adapter first: t00A01 has two placeholders, its homology conjunct proved, and an explicit standard open cover for the remaining free-product comparison. Shared Sard serves five named consumers; compact rank-zero contract repair is its next coherent composition. Regular-preimage and fundamental-class programs each serve four representative consumers; product homology serves two. Recent unchanged sphere-action, normalization and surface-classification boundaries remain recorded.",
+     :typed-residual-change
+     "Literal S2 H2 orientation and degree-one intersection compile; arbitrary-integer induced action remains absent. Positive-rank compact/open/stratum assembly now accepts compatible open-domain induction, with localization compatibility. Rank-zero still requires its corresponding contract repair. Concurrent literal pullback coverings supply base change and fiber cardinality transport, not frozen covering closure.",
+     :infrastructure
+     {:before 633,
+      :after 635,
+      :portfolio-added
+      ["SardPositiveRankStratumOpenContractAssembly.lean"],
+      :concurrent-added ["LiteralPullbackCover.lean"],
+      :consumer-changes []},
+     :outstanding
+     ["Signed positive-dimensional antipodal action"
+      "Reduced-S0 degree"
+      "One-dimensional local-index coverage"
+      "Compatible rank-zero induction and induction discharge"
+      "Manifold transport"],
+     :census
+     {:open 39,
+      :closed 19,
+      :existing 58,
+      :within-two-placeholders 29,
+      :placeholders-before 71,
+      :placeholders-after 71,
+      :delta 0,
+      :named 59,
+      :missing ["t93A05"]}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -53144,7 +53276,80 @@
     :sard-positive-rank-stratum-open-contract-assembly-probe-refill24
     :checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract],
    :current-residual
-   "Await both reviewed outcomes and rerank the complete DAG, separating consumer closures from contract propagation and concurrent work."}],
+   "Await both reviewed outcomes and rerank the complete DAG, separating consumer closures from contract propagation and concurrent work."}
+  {:consumer "t00A01",
+   :stop-condition
+   "GO requires the complete frozen consumer. Otherwise name the exact missing van Kampen group comparison or basepoint transport; partial groupoid descent is not closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TWO-OPEN VAN KAMPEN / connected-sum free product",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free copy of frozen Main preserving every definition and statement. Use the supplied standard open cover, its homotopy equivalences to A and B and overlap S2, and the banked two-open van Kampen/descent and source-reconstruction APIs to compute the actual fundamental group as Monoid.Coprod. Derive overlap simple connectivity and transport component/basepoint choices explicitly through the given puncture-group equivalences. Reuse the proved homology-sphere bridge for the final conjunction. Do not assume a free-product comparison, stronger collar or gluing hypotheses, or naturality not supplied by a compiled producer. No conditional final bridge counts as GO.",
+    :frozen-file "problems/t00A01/lean/Main.lean",
+    :frozen-sha256
+    "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id
+   :t00a01-frozen-connected-sum-free-product-closure-probe-refill25,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum
+    :checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum],
+   :current-residual
+   "Two placeholders: fundamental group free-product comparison and final conjunction. The literal connected-sum homology-sphere bridge is already proved from the supplied standard open cover."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO requires the complete compiled compact rank-zero result with open-domain induction and localization compatibility. REVISE requires exactly one compiled prerequisite. Never infer a common smooth neighborhood from one-point infinity.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / compatible compact rank-zero induction",
+   :acceptance
+   {:probe
+    "For globally genuine-infinity smooth f between finite-dimensional real inner-product spaces and compact K with fderiv f zero on K, prove Haar-null f image K under only lower-source-dimensional critical-image induction on explicitly open genuine-smooth domains, including zero-dimensional sources. Repair the actual first-nonzero-jet local step using its constructed scalarized smooth chart: derive the open zero-coordinate slice, ContDiffOn infinity of the parameterization and composition, kernel dimension drop, and criticality on the parameter subset corresponding to the jet locus. Apply the open-domain premise there and transport image nullity. Feed that result through existing jet-locus aggregation, scalar-direction and compact admissible-Taylor assembly. Derive needed topology/Borel/measure facts and handle or state precise nontrivial ambient hypotheses without excluding zero-dimensional lower sources. Exhibit localization supplying the exact premise from smaller-dimensional global smooth nullity. Preserve existing APIs; no assumed chart, jet-locus nullity, compact rank-zero nullity, arbitrary-C1 induction or analytic omega.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Compatible conditional compact rank-zero nullity only. Rank-zero exhaustion, global critical-set assembly with the repaired positive-rank theorem, compatible induction discharge and manifold transport remain."},
+   :id :sard-compact-rank-zero-open-contract-probe-refill25,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum
+    :checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum],
+   :current-residual
+   "Positive-rank assembly now consumes open-domain induction. Compact rank-zero nullity still invokes first-nonzero-jet local induction with arbitrary-set pointwise infinity.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; retain local specification evidence and uncovered cases.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped placeholders, compare reviewed outcomes and typed residuals, and separate portfolio from concurrent infrastructure and closures. Elect exactly one near-closure adapter before foundations ranked by reach and simplicity; append a fresh dependent checkpoint to a nonempty portfolio. Retain missing antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t00a01-frozen-connected-sum-free-product-closure-probe-refill25
+    :sard-compact-rank-zero-open-contract-probe-refill25
+    :checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum],
+   :current-residual
+   "Await reviewed adapter and rank-zero contract outcomes, then rerank all DAG consumers and concurrent developments."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
