@@ -5263,6 +5263,20 @@
       :exit 0}
      {:cmd "sha256sum /tmp/Checkpoint6Tail.edn", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788982992189-16915-96cded93",
+     :commands
+     ["git show 2371040f:holes/labs/topology-contract/worklist2.edn"
+      "Python independent census at 71c23ef9248c3849048f1391fd1b77adfdc2fb7c and 65e9444654f1966d500f62ec6ae946fe8a3c9fa3; verify frozen t97A01 hash"
+      "sha256sum /tmp/Checkpoint6Census.json /tmp/Checkpoint6Tail.edn"
+      "bb independent assertions: artifact equality, author, fresh ids, adapter-first order, checkpoint and successor dependencies"
+      "Inspect recorded t97A01 and both ledgers for prior elections and concurrent work"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 2371040f:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check 2371040f; git diff --exit-code; git diff --check"],
+     :finding
+     "Independent of author codex-13. Scheduling-only result with empty implementation scope. All 59 DAG consumers accounted for: 58 existing, 19 zero-placeholder, t93A05 missing. Placeholders remain 71; three intrinsic-measure modules explain 619 to 622 growth, with concurrent t94J08 specification repair separately attributed. Census and tail hashes match; artifact equals recorded replacement-items; frozen t97A01 hash matches. Exactly one fresh near-closure adapter leads. Moment formulas retain unknown intrinsic total mass and do not assume numerical normalization or retry the stopped cone comparison. Polygon geometry and actual invariant comparisons remain required. No prior t97A01 election found; concurrent antipodal and Sard work excluded. Successor checkpoint keys and dependencies match. Recorded ledger validates: 43 items OK. No new Lean compilation gate applies; ledger untouched."},
     :replacement-items
     [{:consumer :t97A01,
       :stop-condition
@@ -5391,7 +5405,7 @@
      :sha256
      "c408ef0aec787e2102cc77be34061c951062ff517773c855c6d6d028dbbe1c15"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact gluing uptake and intrinsic measure continuation",
@@ -5412,7 +5426,7 @@
    :stop-condition
    "Preserve both literal quotients and all frozen invariant statements. No assumed collar, cellular comparison, quotient homeomorphism or group presentation.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Closed gluing and surface invariants: literal polygon quotient consumer",
@@ -5443,7 +5457,7 @@
    :stop-condition
    "No assumed numerical sphere area, positive total mass, radial identification or moment value. This is a symmetry calculation, not a retry of the stopped Hausdorff-cone comparison or a full consumer closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: intrinsic polynomial moments relative to total mass",
