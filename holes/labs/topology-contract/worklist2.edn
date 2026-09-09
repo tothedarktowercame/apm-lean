@@ -6799,95 +6799,68 @@
    :stop-condition
    "No supplied fiber atlas, overlap compatibility or smooth inclusion. No Sard nullity, regular-value existence, orientation or transverse homology comparison.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "One compiled fixed-model prerequisite supplied. Global atlas construction, overlap compatibility and the smooth manifold inclusion remain in the parent row.",
-     :axiom-audits 3,
-     :outcome :revise,
-     :warnings [],
-     :prerequisite
-     {:consumer :t97J05-regular-fiber-manifold,
-      :stop-condition
-      "Bank fixed-model local parameterizations and their exact image and derivative-range equations only. Do not claim a global atlas, smooth overlaps, manifold inclusion, orientation or frozen closure.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/RegularFiberFixedModel.lean",
-         :sha256
-         "2af7339d912eec2ac12db480a5ba1841a3c39e3074f329eb8be67ebfb1a85e4f"},
-        :commands
-        [{:cmd "lake env lean /tmp/RegularFiberFixedModel.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/RegularFiberFixedModel.lean"
-       "ConstructionTargets/RegularFiberFixedModel.md"],
-      :dag-node
-      "REGULAR-PREIMAGE: fixed Euclidean model for smooth fiber coordinates",
-      :acceptance
-      {:implementation
-       "Promote the exact fixture. Preserve the rank-nullity proof, constructed kernel equivalence, smooth injective parameterization, exact fiber image and transported derivative.",
-       :declarations
-       ["ConstructionTargets.RegularFiberFixedModel.kernel_dimension"
-        "ConstructionTargets.RegularFiberFixedModel.kernelEquiv"
-        "ConstructionTargets.RegularFiberFixedModel.tangentInclusion"
-        "ConstructionTargets.RegularFiberFixedModel.tangent_range"
-        "ConstructionTargets.RegularFiberFixedModel.exists_parameterization"],
-       :consumer-equation
-       "For the fixed Euclidean model of dimension finrank E minus finrank F, constructed g and open U,V satisfy x in U, zero in V, g(0)=x, InjOn g V, ContDiffOn g V and g image V = U intersect {y | f(y)=f(x)}. Its strict derivative at zero is tangentInclusion, whose range equals ker L.",
-       :consumer-residual
-       "Construct actual fiber charts and their smooth overlaps, install the common-model ChartedSpace and IsManifold instances, and prove smooth embedded inclusion with the manifold tangent-image equation. Empty-fiber handling and concrete global instances remain in the parent.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target."
-        "Run lake build ConstructionTargets.RegularFiberFixedModel ConstructionTargets.SmoothRegularFiberCoordinates."
-        "Reproduce all three standard-only axiom audits."
-        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-      :id :regular-fiber-fixed-euclidean-model-1,
-      :kind :reusable-theorem,
-      :depends-on [:smooth-regular-fiber-coordinate-restriction-1],
-      :current-residual
-      "Smooth local slices use varying derivative kernels; their common dimension and transport to a fixed model are not yet banked.",
-      :other-consumers [:t02A07 :t94A06 :t00J02]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :author "codex-13",
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd "lake env lean /tmp/RegularFiberFixedModel.lean", :exit 0}
-      {:cmd "sha256sum /tmp/RegularFiberFixedModel.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/RegularFiberFixedModel.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial lake env lean /tmp/RegularFiberFixedModel.lean",
-       :exit 1,
-       :correction
-       "Included the surjectivity hypothesis explicitly in the kernel-dimension theorem."}
-      {:cmd "Second lake env lean /tmp/RegularFiberFixedModel.lean",
-       :exit 1,
-       :correction
-       "Used finrank_top and normalized the inverse equivalence at zero before composing strict derivatives."}],
-     :changed-paths [],
-     :dependency-commit "6221b784bbcedc0097be6575a72f8db45847284b",
-     :fixture
-     {:path "/tmp/RegularFiberFixedModel.lean",
-      :sha256
-      "2af7339d912eec2ac12db480a5ba1841a3c39e3074f329eb8be67ebfb1a85e4f"},
-     :finding
-     "Exactly one fixed-model coordinate prerequisite compiles. Rank-nullity proves the derivative kernel has dimension finrank E minus finrank F. A constructed continuous linear equivalence identifies it with that fixed Euclidean model. Transporting the reviewed smooth slice yields an injective smooth parameterization on an open neighborhood of zero whose image is exactly an ambient open neighborhood intersected with the literal fiber. Its strict derivative is the transported kernel inclusion, and that linear map's range is proved equal to the original kernel. The global atlas, smooth overlap compatibility and manifold inclusion theorem remain unconstructed; the parent is not GO.",
-     :seat "codex-13"}},
+   {:reviewed-prerequisites
+    [{:commit "6221b784bbcedc0097be6575a72f8db45847284b",
+      :review :pass}
+     {:commit "d6256e6d4d1cacfc925e780b8f4ceec63ade527e",
+      :review :pass}],
+    :consumer-audit
+    {:file "problems/t97J05/lean/Main.lean",
+     :before 5,
+     :after 5,
+     :sha256
+     "8957c4c8a316c5f2d67aac67a900428c2aff946d5e436884ef212d88ef4203a5",
+     :byte-identical-at
+     ["ecfe1d8f0ed29aa70e419e23f153fadd30ffc938"
+      "6221b784bbcedc0097be6575a72f8db45847284b"
+      "d6256e6d4d1cacfc925e780b8f4ceec63ade527e"
+      "HEAD"]},
+    :placeholder-delta 0,
+    :residual
+    "Return to the portfolio under the two-packet rule. Preserve the compiled local constructions. Actual fiber charts, smooth overlaps, atlas installation and the manifold inclusion derivative comparison remain unresolved; empty-fiber and concrete global-instance gates have not been discharged. No further prerequisite or implementation scope is proposed.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :reason :two-packet-boundary-missing-fiber-atlas,
+    :missing-theorem
+    "RegularFiberAtlasBoundary.MissingAtlasTheorem: for smooth f between finite-dimensional real normed spaces and c with surjective fderiv at every point of f inverse {c}, construct ChartedSpace on that literal subtype modeled on EuclideanSpace Real (Fin (finrank E - finrank F)), prove smooth IsManifold and smooth embedded subtype inclusion, and prove range(mfderiv inclusion x)=ker(fderiv f x.val). The diagnostic states this exact conclusion with all typeclass hypotheses but does not prove it.",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sed -n '94,113p' docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd "lake env lean /tmp/RegularFiberAtlasBoundary.lean",
+      :exit 0}
+     {:cmd
+      "Python historical audit of problems/t97J05/lean/Main.lean at ecfe1d8f, 6221b784, d6256e6d and HEAD",
+      :exit 0}
+     {:cmd "sha256sum /tmp/RegularFiberAtlasBoundary.lean", :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/RegularFiberAtlasBoundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -l 'ChartedSpace|IsManifold|mfderiv' ConstructionTargets/RegularFiber*.lean ConstructionTargets/SmoothRegularFiber*.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :audit-note
+    "Two imported parameterization theorems have standard-only audits. The diagnostic's MissingAtlasTheorem is a proposition definition, not a proof or assumed premise.",
+    :fixture
+    {:path "/tmp/RegularFiberAtlasBoundary.lean",
+     :sha256
+     "8eaf75d72a36b905498e87ba45f7b0b3fee710c7d523cfcf63dc26746d4720fd",
+     :role :typed-boundary-diagnostic,
+     :placeholder-count 0},
+    :finding
+    "Infrastructure STOP, not mathematical refutation. Two successive reviewed packets construct smooth local slices and fixed-model parameterizations while leaving the named frozen smooth-submanifold bridge unchanged. The recorded two-packet stop rule applies. These results do not yet construct an atlas or prove overlap compatibility, and their ambient derivative-range equation is not an mfderiv equation for a constructed manifold inclusion.",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: smooth atlas on the literal regular fiber",
