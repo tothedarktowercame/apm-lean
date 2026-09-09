@@ -52297,20 +52297,80 @@
     :checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step],
    :current-residual
    "One placeholder: literal rational singular-homology Euler characteristic of a positive-dimensional torus and its connected local-diffeomorphic target. Vector-field nonvanishing and surjectivity are proved."}
-  {:consumer "t93A04",
+  {:note-sha256
+   "b8b9ac9f8b88c44009c9248b1fd7223f82a59aa0cc0fbe4de2fec535d598b59d",
+   :consumer "t93A04",
    :stop-condition
    "GO requires compiled cutoff construction, derivative agreement and null-image aggregation. REVISE requires one compiled prerequisite. Never delete the infinity exclusion from eventual regularity or silently strengthen pointwise ContDiffAt infinity to neighborhood smoothness.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:consumer
+     {:id "t93A04",
+      :placeholder-count 1,
+      :sha256
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
+     :placeholder-delta 0,
+     :residual
+     "Open-domain localization only. The global induction theorem still requires pointwise genuine smoothness on arbitrary sets, a stronger contract than this open-domain conclusion. Repair or separately discharge that contract; source norm/inner-product transport, induction discharge and manifold transport remain. No unconditional Sard or frozen closure is inferred.",
+     :outcome :go,
+     :warnings
+     ["One unused-section-variables warning on the extension theorem."],
+     :statement-hashes
+     {:exists_smooth_extension_near
+      "f69a10d0aab439a9116e301e90e5445de3735c34fdb2829423e9d570f736d1ca",
+      :local_image_null_of_global
+      "c2398da7e2ccb8e26393e0e484a32dccbc20d83bc0785a11b075a7e8dba673f3",
+      :local_image_null_of_induction
+      "f06be5988957a4bcc327b3731f031d666683c48b06a0a0d241ea13add77a7ce2"},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/SardGenuineSmoothOpenDomainLocalization.lean",
+       :exit 0}
+      {:cmd "bb /tmp/t03j04-review.bb", :exit 0}
+      {:cmd
+       "Python placeholder and SHA-256 audit producing /tmp/SardGenuineSmoothOpenDomainLocalization.audit.json",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/SardGenuineSmoothOpenDomainLocalization.lean",
+       :exit 1,
+       :correction
+       "Unfolded ball membership to the distance inequality before proving the closed bump support lies inside the larger open ball."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/SardGenuineSmoothOpenDomainLocalization.lean",
+      :sha256
+      "dfb8bf2bd285c3aab14d5f75d5682360e9764263fa7735a6ba737cfd955e6f90",
+      :placeholder-count 0},
+     :finding
+     "Complete localization and consumer composition compile. A bump with closed support inside U constructs a globally genuinely smooth extension equal to f near each selected point. Outside U the extension is locally zero. Open neighborhoods of equality give actual fderiv agreement and inclusion of localized critical images into extension critical images. Derived second countability and the existing pointwise-open aggregation theorem prove nullity on every s contained in U. local_image_null_of_induction supplies the global-nullity input using SardGenuineSmoothGlobalCriticalInductionStep and its unchanged induction hypothesis.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardGenuineSmoothOpenDomainLocalization.lean"
+       "ConstructionTargets/SardGenuineSmoothOpenDomainLocalization.md"],
+      :source "/tmp/SardGenuineSmoothOpenDomainLocalization.lean",
+      :note "/tmp/SardGenuineSmoothOpenDomainLocalization.md",
+      :note-sha256
+      "b8b9ac9f8b88c44009c9248b1fd7223f82a59aa0cc0fbe4de2fec535d598b59d",
+      :acceptance
+      ["Promote the compiled fixture and note within the two-file scope."
+       "Compile the promoted source and run lake build ConstructionTargets.SardGenuineSmoothOpenDomainLocalization."
+       "Verify zero placeholders and standard-only axioms; preserve genuine infinity and the explicit open-domain hypothesis."]},
+     :seat :codex-12}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :source "/tmp/SardGenuineSmoothOpenDomainLocalization.lean",
+   :scope
+   ["ConstructionTargets/SardGenuineSmoothOpenDomainLocalization.lean"
+    "ConstructionTargets/SardGenuineSmoothOpenDomainLocalization.md"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / smooth open-domain localization",
    :acceptance
-   {:probe
-    "Compile a reusable implication from global genuine-infinity smooth critical-image nullity in a fixed finite-dimensional real source/target to nullity of f image (s intersect its nonsurjective-fderiv locus), for arbitrary s contained in an open U with ContDiffOn real genuine infinity f U and actual target Haar measure. Construct local globally smooth cutoff extensions equal to f near each point, prove derivative and critical-image agreement there, apply the explicitly stated global-nullity hypothesis to those actual extensions, and aggregate through derived second countability. Do not assume extensions, derivative agreement or localized nullity. Reuse bump, critical-image transport and aggregation APIs. Exhibit how SardGenuineSmoothGlobalCriticalInductionStep supplies the global-nullity input under its existing induction hypothesis. Explicitly record that its current pointwise-smooth-on-arbitrary-set induction contract is stronger than this open-domain conclusion and must be repaired or separately discharged; do not claim induction closure from this mismatch.",
-    :axioms :standard-only,
-    :consumer-residual
-    "Open-domain localization only. Compatibility of the existing pointwise local induction contract, source norm/inner-product transport, induction discharge and manifold transport remain; no unconditional Sard or frozen closure."},
+   ["Promote the compiled fixture and note within the two-file scope."
+    "Compile the promoted source and run lake build ConstructionTargets.SardGenuineSmoothOpenDomainLocalization."
+    "Verify zero placeholders and standard-only axioms; preserve genuine infinity and the explicit open-domain hypothesis."],
+   :note "/tmp/SardGenuineSmoothOpenDomainLocalization.md",
    :id :sard-genuine-smooth-open-domain-localization-probe-refill22,
    :kind :reusable-theorem,
    :depends-on
