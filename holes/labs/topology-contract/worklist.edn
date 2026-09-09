@@ -35353,6 +35353,29 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788914434683-15741-ff133570",
+     :commands
+     ["git show --stat --oneline 4ba23148f881cdc7aae63325e764b72835044926"
+      "git diff-tree --no-commit-id --name-only -r 4ba23148f881cdc7aae63325e764b72835044926"
+      "git show 4ba23148f881cdc7aae63325e764b72835044926:ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean"
+      "sha256sum /tmp/SardFiniteOrderExactRankClosedOpenProjectedChartNullityProbe.lean"
+      "cmp -s /tmp/SardFiniteOrderExactRankClosedOpenProjectedChartNullityProbe.lean <(git show 4ba23148f881cdc7aae63325e764b72835044926:ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean)"
+      "git show 4ba23148f881cdc7aae63325e764b72835044926:ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean | sed -n '10,73p' | sha256sum"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.md"
+      "lake env lean /tmp/SardFiniteOrderExactRankClosedOpenProjectedChartNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean"
+      "lake build ConstructionTargets.SardFiniteOrderExactRankClosedOpenProjectedChartNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "readlink -f .lake/packages"
+      "git diff --check 4ba23148f881cdc7aae63325e764b72835044926^ 4ba23148f881cdc7aae63325e764b72835044926"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: exact scope, fixture, and statement hash reproduce; the theorem preserves the rank bound and residual-slice hypotheses on the closed localized locus A intersect U, downgrades finite-order regularity only at first-order boundaries, and returns the correctly oriented closed-open image-nullity result; compilation uses only standard axioms and no placeholders."},
     :commit "4ba23148f881cdc7aae63325e764b72835044926",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean"
@@ -35365,7 +35388,7 @@
     :declarations
     ["measure_image_zero_of_exactRank_closedOpen_projectedChart_finiteOrder"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean"
     "ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.md"],
@@ -35554,7 +35577,7 @@
       "4d680195b6bb02f49554619f306703fd77c47cccb8e0934cda63b8a9ac64ffa0"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
