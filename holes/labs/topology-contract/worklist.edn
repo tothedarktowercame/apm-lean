@@ -46494,150 +46494,114 @@
    :stop-condition
    "STOP only for a genuine counterexample or incompatible hypotheses for rectangular local-set Morse--Sard; otherwise REVISE with exactly one compiled prerequisite.",
    :evidence
-   {:outcome :stop,
-    :seat :codex-17,
+   {:consumer :t93A04,
+    :placeholder-delta {:before 1, :after 1, :delta 0},
+    :residual
+    "No new prerequisite elected under rule 0. The consumer-closing manifold regular-value input remains unavailable from the inspected conditional dependency chain. Ledger and frozen consumer unchanged.",
+    :outcome :stop,
+    :boundary :missing-infrastructure,
+    :disposition :stop,
+    :policy
+    "Updated standing portfolio rule 0: report the missing closure input instead of electing another foundation.",
+    :author :codex-6,
     :reason
-    "The rectangular local assembly is blocked by its reviewed rank/source-induction dependency. The banked rank decomposition and finite/countable null aggregators only combine per-stratum nullity; they do not prove it. The induction dependency stopped at an incompatible derivative-order seam: pointwise zero first derivative on implicit-function slices does not supply the compact-locus vanishing of iteratedFDeriv for every 1 ≤ i ≤ k required by the Taylor-nullity theorem. Therefore the requested placeholder-free rectangular theorem cannot be assembled from the named dependencies, and no independent bounded prerequisite remains.",
+    "The in-scope consumer t93A04 has one executable placeholder after stripping comments. Its closing adapter needs a regular value for a smooth map from an arbitrary second-countable finite-dimensional manifold to R², followed by the already-proved projection-to-transversality lemma. The reviewed modules do not yet supply that unconditional manifold regular-value theorem. Positive-order critical-rank aggregation still requires both lower-dimensional induction and rank-zero image nullity. The older overlap induction closure retains an unproved remaining-case premise; the smooth assembly likewise retains induction interfaces. These conditional results cannot be passed to the consumer as unconditional Sard. This is a missing-infrastructure STOP under rule 0, not a counterexample or incompatibility of rectangular Morse-Sard.",
     :commands
     [{:cmd
-      "rg -n -C 30 ':id :critical-value-sard-(countable-aggregation-1|rank-strata-1|rank-strata-null-aggregation-1|rank-source-induction-probe-2|rectangular-local-probe-1|rectangular-local-probe-3)' holes/labs/topology-contract/worklist.edn",
+      "Read DAG certification rule, closure policy, frozen t93A04, overlap induction closure, and compact rank-zero overlap theorem",
       :exit 0}
      {:cmd
-      "sed -n '1,150p' ConstructionTargets/SardMultivariableTaylorCoveringNullity.lean",
-      :exit 0}
-     {:cmd
-      "sed -n '1,150p' ConstructionTargets/SardImplicitFunctionResidualFlatness.lean",
-      :exit 0}
-     {:cmd
-      "sed -n '1,140p' ConstructionTargets/SardCriticalRankStrataNull.lean",
-      :exit 0}
-     {:cmd
-      "sed -n '1,130p' ConstructionTargets/SardCriticalImageAggregation.lean",
-      :exit 0}
-     {:cmd "sed -n '1,220p' problems/t93A04/lean/Main.lean", :exit 0}
-     {:cmd
-      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      "python3: enumerate DAG problem identifiers, strip comments, and count executable sorry tokens in each existing Main.lean",
       :exit 0,
       :output
-      "topology-worklist: 74 items OK; {:done 66, :open 1, :blocked 1, :superseded 6}"}
+      "57 existing files counted; t93A04 has 1; t93A05 path absent."}
+     {:cmd
+      "Read complete reviewed receipts for positive-order rank aggregation and conditional overlap induction closure using clojure.edn",
+      :exit 0,
+      :output
+      "Both PASS receipts explicitly retain unproved induction or rank-zero/remaining-case premises."}
+     {:cmd
+      "rg -n 'theorem|hzero|hind' ConstructionTargets/SardBorelPositiveOrderRankAggregation.lean",
+      :exit 0,
+      :output
+      "Lines 51 and 55 retain positive-order induction and rank-zero nullity."}
+     {:cmd
+      "rg -n 'theorem|hind|hremaining' ConstructionTargets/SardSmoothCriticalImageInductionAssembly.lean ConstructionTargets/SardFinrankStrongInductionClosure.lean",
+      :exit 0,
+      :output
+      "Smooth assembly retains hindOne and hindHigher; dimension closure is an induction principle."}
      {:cmd "sha256sum problems/t93A04/lean/Main.lean",
       :exit 0,
       :output
       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
      {:cmd
-      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
-      :output "1"}
-     {:cmd "git diff --check; git status --porcelain=v1",
+      :output
+      "359 items OK; {:done 351, :open 1, :blocked 1, :superseded 6}"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --porcelain=v1",
       :exit 0,
-      :output "diff clean; worktree clean"}],
-    :author :codex-17,
-    :disposition :stop,
-    :review
-    {:outcome :fail,
-     :seat "codex-1",
-     :job "invoke-1788810477183-14050-933fd6bd",
-     :finding
-     "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder."},
-    :probe
-    {:placeholder-delta {:before 1, :after 1, :delta 0},
-     :residual
-     "Bank positive-order rank aggregation, discharge its rank-zero premise and complementary analytic cases, then close induction and localize. No all-orders conversion or full rectangular closure claimed; ledger and frozen consumer unchanged.",
-     :outcome :revise,
-     :warnings [],
-     :statement-hashes
-     {"SardBorelPositiveOrderRankAggregationProbe.measure_image_zero_of_positive_rankStratum_positiveOrder"
-      "0a09114f06777a642fe3b8ad80b5e40769eab65a34481c467195dd81c8f91518",
-      "SardBorelPositiveOrderRankAggregationProbe.measure_criticalImage_zero_of_rankZero_positiveOrder"
-      "e6cfc2921a2fdefb0ccf75eb4e20a7da0b00a6a4d0ea7adec861c718a8500326"},
-     :prerequisite
-     {:consumer :t93A04,
-      :stop-condition
-      "Stop only if exact-rank containment in the rank-upper locus, reviewed local null aggregation, bounded critical-rank decomposition, or positive-order pointwise nullity fails under the stated hypotheses, or nonstandard axioms are required.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/SardBorelPositiveOrderRankAggregation.lean"
-       "ConstructionTargets/SardBorelPositiveOrderRankAggregation.md"],
-      :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL POSITIVE-ORDER RANK AGGREGATION",
-      :acceptance
-      {:fixture
-       {:path "/tmp/SardBorelPositiveOrderRankAggregationProbe.lean",
-        :sha256
-        "2da77fc50e6060495cfb39452974c4664bf7c194c16ced4973df2ac0e1b48b78"},
-       :declarations
-       ["SardBorelPositiveOrderRankAggregationProbe.measure_image_zero_of_positive_rankStratum_positiveOrder"
-        "SardBorelPositiveOrderRankAggregationProbe.measure_criticalImage_zero_of_rankZero_positiveOrder"],
-       :axioms :standard-only,
-       :warnings [],
-       :consumer-residual
-       "Prove rank-zero nullity using positive-order jet aggregation, resolve complementary analytic cases, close induction, and localize before rectangular closure."},
-      :representation
-      {:source
-       "Finite-dimensional real inner-product spaces, a Borel target with additive Haar measure, global regularity at a nonzero admissible finite order, and positive-order critical nullity below the source dimension.",
-       :target
-       "Nullity of positive critical-rank stratum images and nullity of the full critical image conditional on rank-zero image nullity."},
-      :id :critical-value-sard-borel-positive-order-rank-aggregation-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:critical-value-sard-borel-positive-order-rank-pointwise-nullity-1
-       :critical-value-sard-borel-positive-rank-stratum-nullity-1
-       :critical-value-sard-borel-critical-image-of-rank-zero-nullity-1],
-      :current-residual
-      "Positive-rank aggregation is complete under positive-order induction; rank-zero nullity, complementary analytic cases, induction closure, and localization remain.",
-      :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :reason
-     "One compiled prerequisite completes positive-rank aggregation using positive-order induction: local rank-upper nullity yields exact-rank nullity, and bounded critical-rank aggregation reduces the critical image to the explicit rank-zero nullity premise. Neither rank-zero nullity nor induction closure is assumed proved.",
-     :commands
-     [{:cmd
-       "Read DAG certification rule, closure policy, aggregation sources, and complete reviewed pointwise and aggregation dependency receipts",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/SardBorelPositiveOrderRankAggregationProbe.lean",
-       :exit 0,
-       :output "Both declarations warning-free; standard axioms only."}
-      {:cmd
-       "sha256sum /tmp/SardBorelPositiveOrderRankAggregationProbe.lean problems/t93A04/lean/Main.lean",
-       :exit 0,
-       :output
-       "Fixture matches recorded hash; frozen consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
-      {:cmd
-       "sed -n '10,25p' /tmp/SardBorelPositiveOrderRankAggregationProbe.lean | sha256sum",
-       :exit 0}
-      {:cmd
-       "sed -n '43,56p' /tmp/SardBorelPositiveOrderRankAggregationProbe.lean | sha256sum",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelPositiveOrderRankAggregationProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0,
-       :output
-       "358 items OK; {:done 350, :open 1, :blocked 1, :superseded 6}"}
-      {:cmd
-       "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
-       :exit 0,
-       :output "1"}
-      {:cmd "readlink -f .lake/packages",
-       :exit 0,
-       :output "/home/joe/code/apm-lean/.lake/packages"}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git status --porcelain=v1",
-       :exit 0,
-       :output "?? holes/labs/topology-contract/runs2/",
-       :note "Unrelated directory untouched."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/SardBorelPositiveOrderRankAggregationProbe.lean",
-      :sha256
-      "2da77fc50e6060495cfb39452974c4664bf7c194c16ced4973df2ac0e1b48b78"},
-     :seat :codex-6}},
+      :output "?? holes/labs/topology-contract/runs2/",
+      :note "Unrelated directory untouched."}],
+    :diagnostic-history
+    [{:cmd
+      "rg -n 'Sard|sard|regular.*value' .lake/packages/mathlib/Mathlib/Analysis/Calculus/Sard.lean",
+      :exit 2,
+      :output
+      "Named path absent; no mathematical conclusion drawn from this failed search."}],
+    :measurement
+    {:method
+     "Enumerated problem identifiers named in TOPOLOGY-DEPENDENCY-DAG.md and counted sorry tokens after removing block and line comments using the supplied Python method.",
+     :files-counted 57,
+     :missing-paths ["problems/t93A05/lean/Main.lean"],
+     :consumer-placeholder-count 1,
+     :near-open-counts
+     {"t92J06" 1,
+      "t98A01" 1,
+      "t01J04" 1,
+      "t98A02" 1,
+      "t94J09" 1,
+      "t97A01" 1,
+      "t95J05" 1,
+      "t94J08" 2,
+      "t96J06" 2,
+      "t01A08" 1,
+      "t99J03" 1,
+      "t95J04" 1,
+      "t96J07" 1,
+      "t96J08" 2,
+      "t95J06" 2,
+      "t93A04" 1,
+      "t00J02" 1,
+      "t96J05" 1,
+      "t00A03" 2,
+      "t03J05" 1,
+      "t00J01" 1,
+      "t97A02" 2,
+      "t00A01" 2,
+      "t02A08" 1,
+      "t92J07" 2,
+      "t03J06" 1,
+      "t01A05" 1,
+      "t94A06" 1,
+      "t03J04" 1,
+      "t03J02" 2,
+      "t02A05" 2}},
+    :changed-paths [],
+    :missing
+    {:consumer-interface
+     "For every smooth map from the frozen second-countable manifold domain to R², existence of a value at whose preimages the manifold derivative is surjective.",
+     :local-input
+     "Unconditional smooth rectangular local critical-image nullity, with its rank-zero and lower-dimensional induction obligations discharged.",
+     :manifold-transfer
+     "Countable chart assembly with critical-image containment and compatibility of chart derivatives with mfderiv, enabling avoidance of the null critical-value image.",
+     :finite-order-route
+     "The banked general finite-order overlap route additionally retains complementary-overlap cases and the broader all-orders obligation; positive-order predicates cannot silently replace those premises."},
+    :mathematical-refutation false,
+    :seat :codex-6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
