@@ -9380,6 +9380,21 @@
      {:cmd "sha256sum problems/t96J05/lean/Main.lean", :exit 0}
      {:cmd "git log -2 --oneline -- problems/t92J07/lean/Main.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788994912321-17284-5172acfd",
+     :commands
+     ["git show 2bd2b1d6:holes/labs/topology-contract/worklist2.edn"
+      "git show 440c5fe0:problems/t96J05/lean/Main.lean"
+      "git show 440c5fe0:ConstructionTargets/RegularFiberFixedModelOverlaps.md"
+      "python3 inline audit: census SHA256, all 59 consumer counts, module counts, changed paths, frozen t96J05 SHA256 and ledger-only scope"
+      "bb inline audit: exact replacement tail, successor policy, dependencies and pinned active rows in both ledgers"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 2bd2b1d6:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Independent review of codex-13 strategy receipt at 2bd2b1d6. Census hash matches; placeholders 70->68 solely t92J07, modules 642->644. Frozen t96J05 hash matches. Constant-radius obstruction requires a full compiled counterexample, not an inferred refutation. H0 packet requires actual coefficient-general augmentation and rational S2 witness; higher sphere computations remain downstream. No pinned active overlap; exact three-row tail and unchanged successor policy verified. Strategy-only packet has no Lean fixture or new theorem hashes. Ledger untouched."},
     :replacement-items
     [{:consumer :t96J05,
       :stop-condition
@@ -9520,7 +9535,7 @@
     "Elect one fresh near-closure adapter, t96J05, first. Newly reviewed Sard and fixed-model overlap infrastructure justify testing actual uptake, but the frozen hypotheses also permit constant-radius examples, which must be audited before applying regular-value reasoning. No refutation is inferred without a compiled admissible counterexample. Among remaining work, completed covering constructors need no duplicate work; arbitrary-model Sard, classification, orientation and numerical normalization retain their boundaries. Elect coefficient-general H0 augmentation next: it serves four proposed consumers and targets an actual missing rational sphere endpoint rather than extending the pair infrastructure with more aliases. It is simpler than coefficient-general excision, product homology or global orientation. Preserve the full positive-sphere STOP; this is an explicitly bounded endpoint prerequisite.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact regular-line uptake and relative-pair naturality",
@@ -9542,7 +9557,7 @@
    :stop-condition
    "Preserve all frozen hypotheses and the literal radial-level subtype. Do not assume radial variation, regularity of an attained value or a global fiber atlas.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: exact radial-level consumer and constant-radius audit",
@@ -9575,7 +9590,7 @@
    :stop-condition
    "Use actual singularHomologyFunctor with coefficient object ModuleCat.of R R. No assumed H0 table, coefficient-change isomorphism, path-component classification or higher-sphere homology.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS: coefficient-general H0 augmentation and positive-sphere endpoint",
