@@ -39953,6 +39953,39 @@
    "C1-to-Lipschitz localization and closed-open parameter exhaustion are assembled; jet-coordinate instantiation and cases outside the strict dimension range remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if derivative continuity fails to give the required closed ambient flat locus or continuity on the open chart fails to give its closed-open preimage representation, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardC1ParameterizedFlatLocusNullity.lean"
+    "ConstructionTargets/SardC1ParameterizedFlatLocusNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / C1 PARAMETERIZED FLAT LOCUS NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardC1ParameterizedFlatLocusNullityProbe.lean",
+     :sha256
+     "e338a616dfe4649b9586bffc44ca6f83daa890feab49c39752d4905844e0910b"},
+    :declarations
+    ["C1_parameterized_flat_locus_image_addHaar_eq_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Instantiate implicit-function kernel parametrizations and transfer applicable jet-locus images into this exact flat parameter locus; repair jet cases outside the strict dimension range before rectangular induction."},
+   :representation
+   {:source
+    "Global C^(k+1) ambient regularity, a parametrization C1 at every point of an open parameter set, and parameterDim < (k+1)*targetDim under the stated finite-dimensional Borel hypotheses.",
+    :target
+    "Zero target add-Haar measure of the composite image of the exact parameter subset where ambient derivatives of orders 1 through k vanish."},
+   :id :critical-value-sard-c1-parameterized-flat-locus-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-closed-open-c1-parameterized-flat-nullity-1],
+   :current-residual
+   "Exact flat-parameter locus nullity is proved without a supplied closed-locus certificate; implicit-chart containment and uncovered jet cases remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -40006,79 +40039,76 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank closed-open C1 parameterized nullity, instantiate jet-coordinate loci, and repair the remaining higher-jet cases outside its strict dimension range.",
+     "Bank exact flat-parameter locus nullity, instantiate kernel-chart containment, and repair higher-jet cases outside the strict dimension range.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"closed_inter_open_C1_parameterized_flat_image_addHaar_eq_zero"
-      "7620de5de4637bd5ff355d47517431ae2b994c56310d2e0db53159d01b3f1ec8"},
+     {"C1_parameterized_flat_locus_image_addHaar_eq_zero"
+      "5676eddd7baa596705bf40c41c0141470818dc2dc4208d2caefed054393684b3"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if pointwise C1 regularity fails to supply the required compact Lipschitz bounds, closed-open exhaustion fails to aggregate nullity under the stated hypotheses, or nonstandard axioms are required.",
+      "Stop only if derivative continuity fails to give the required closed ambient flat locus or continuity on the open chart fails to give its closed-open preimage representation, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardClosedOpenC1ParameterizedFlatNullity.lean"
-       "ConstructionTargets/SardClosedOpenC1ParameterizedFlatNullity.md"],
+      ["ConstructionTargets/SardC1ParameterizedFlatLocusNullity.lean"
+       "ConstructionTargets/SardC1ParameterizedFlatLocusNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / CLOSED-OPEN C1 PARAMETERIZED FLAT NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / C1 PARAMETERIZED FLAT LOCUS NULLITY",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardClosedOpenC1ParameterizedFlatNullityProbe.lean",
+       {:path "/tmp/SardC1ParameterizedFlatLocusNullityProbe.lean",
         :sha256
-        "4ad23802ce7059d72c23d76e98eb2a7090523e2225aafb1579dedc4f7f1438a2"},
+        "e338a616dfe4649b9586bffc44ca6f83daa890feab49c39752d4905844e0910b"},
        :declarations
-       ["closed_inter_open_C1_parameterized_flat_image_addHaar_eq_zero"],
+       ["C1_parameterized_flat_locus_image_addHaar_eq_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Represent the applicable jet loci in closed-open parameter coordinates and supply chart regularity and flatness; repair jet cases outside the strict dimension range before completing rectangular induction."},
+       "Instantiate implicit-function kernel parametrizations and transfer applicable jet-locus images into this exact flat parameter locus; repair jet cases outside the strict dimension range before rectangular induction."},
       :representation
       {:source
-       "A closed parameter locus localized to an open set, a parametrization C1 at every point of that open set, global C^(k+1) ambient regularity, flatness through order k on the localized image, and parameterDim < (k+1)*targetDim under the stated finite-dimensional Borel hypotheses.",
+       "Global C^(k+1) ambient regularity, a parametrization C1 at every point of an open parameter set, and parameterDim < (k+1)*targetDim under the stated finite-dimensional Borel hypotheses.",
        :target
-       "Zero target add-Haar measure of the localized composite image, without an explicit Lipschitz constant or compactness assumption on the localized locus."},
-      :id
-      :critical-value-sard-closed-open-c1-parameterized-flat-nullity-1,
+       "Zero target add-Haar measure of the composite image of the exact parameter subset where ambient derivatives of orders 1 through k vanish."},
+      :id :critical-value-sard-c1-parameterized-flat-locus-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-compact-lipschitz-parameterized-flat-nullity-1
-       :critical-value-sard-closed-open-image-nullity-1],
+      [:critical-value-sard-closed-open-c1-parameterized-flat-nullity-1],
       :current-residual
-      "C1-to-Lipschitz localization and closed-open parameter exhaustion are assembled; jet-coordinate instantiation and cases outside the strict dimension range remain.",
+      "Exact flat-parameter locus nullity is proved without a supplied closed-locus certificate; implicit-chart containment and uncovered jet cases remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite removes the explicit Lipschitz constant and compactness requirement from the parameterized flat-nullity interface. Pointwise C1 regularity gives local Lipschitz bounds, compact subsets admit a uniform Lipschitz bound, and closed-open compact exhaustion aggregates their image nullity. Rectangular Morse-Sard remains incomplete, not refuted.",
+     "One compiled prerequisite proves nullity of the exact parameter locus where ambient derivatives through order k vanish. It derives closedness of the ambient flat locus from derivative continuity and obtains a closed-open parameter representation from continuity on the open chart. No global continuity of the parametrization or separately supplied closed-locus certificate is assumed. Rectangular Morse-Sard remains incomplete, not refuted.",
      :commands
      [{:cmd "sed -n '1,80p' TOPOLOGY-DEPENDENCY-DAG.md", :exit 0}
       {:cmd "sed -n '1,110p' docs/TN-topology-closure-experiments.md",
        :exit 0}
       {:cmd
-       "rg -n 'theorem LocallyLipschitzOn.exists_lipschitzOnWith_of_compact|def LocallyLipschitzOn' .lake/packages/mathlib/Mathlib",
+       "sed -n '130,154p' .lake/packages/mathlib/Mathlib/Topology/ContinuousOn.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardClosedOpenC1ParameterizedFlatNullityProbe.lean",
+       "lake env lean /tmp/SardC1ParameterizedFlatLocusNullityProbe.lean",
        :exit 0,
        :output
        "Standard axioms: propext, Classical.choice, Quot.sound"}
       {:cmd
-       "sha256sum /tmp/SardClosedOpenC1ParameterizedFlatNullityProbe.lean",
+       "sha256sum /tmp/SardC1ParameterizedFlatLocusNullityProbe.lean",
        :exit 0}
       {:cmd
-       "sed -n '6,22p' /tmp/SardClosedOpenC1ParameterizedFlatNullityProbe.lean | sha256sum",
+       "sed -n '5,19p' /tmp/SardC1ParameterizedFlatLocusNullityProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardClosedOpenC1ParameterizedFlatNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardC1ParameterizedFlatLocusNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 305 items OK; {:done 297, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 306 items OK; {:done 298, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -40094,12 +40124,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardClosedOpenC1ParameterizedFlatNullityProbe.lean",
+     {:path "/tmp/SardC1ParameterizedFlatLocusNullityProbe.lean",
       :sha256
-      "4ad23802ce7059d72c23d76e98eb2a7090523e2225aafb1579dedc4f7f1438a2"},
+      "e338a616dfe4649b9586bffc44ca6f83daa890feab49c39752d4905844e0910b"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -40353,7 +40383,8 @@
     :critical-value-sard-remaining-order-admissibility-boundary-1
     :critical-value-sard-lipschitz-parameterized-flat-taylor-remainder-1
     :critical-value-sard-compact-lipschitz-parameterized-flat-nullity-1
-    :critical-value-sard-closed-open-c1-parameterized-flat-nullity-1],
+    :critical-value-sard-closed-open-c1-parameterized-flat-nullity-1
+    :critical-value-sard-c1-parameterized-flat-locus-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
