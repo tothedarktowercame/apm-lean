@@ -42420,6 +42420,23 @@
       "git add ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: add Borel-compatible classical nullity predicate and base' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788953571305-16200-9243f6ea",
+     :commands
+     ["git show 1862103d --stat --oneline"
+      "sha256sum /tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean"
+      "cmp /tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean <(git show 1862103d75b0c9963928059a36ff3245592b1d14:ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean)"
+      "git show 1862103d75b0c9963928059a36ff3245592b1d14:ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean | sed -n '9,21p' | sha256sum"
+      "git show 1862103d75b0c9963928059a36ff3245592b1d14:ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean | sed -n '23,24p' | sha256sum"
+      "git diff --exit-code 1862103d75b0c9963928059a36ff3245592b1d14 -- ConstructionTargets"
+      "lake env lean /tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean"
+      "lake env lean ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean"
+      "lake build ConstructionTargets.SardBorelClassicalCriticalNullityPredicate"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Commit 1862103d75b0c9963928059a36ff3245592b1d14 passes. Fixture SHA ab52aa42ad6df9f3fe87359b106ff68318782df89fdd1046ac1e8eb7401669c3 and both recorded hashes reproduced. Recorded ranges 9–21 and 23–24 omit declaration headers; the latter includes the introductory proof line. Complete declarations were inspected. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8244-job build successful. Borel compatibility is explicit; no substitution for the broader predicate is claimed. Ledger untouched."},
     :commit "1862103d75b0c9963928059a36ff3245592b1d14",
     :changed-paths
     ["ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean"
@@ -42432,7 +42449,7 @@
     ["SardBorelClassicalCriticalNullityPredicateProbe.BorelClassicalCriticalNullityAtDimension"
      "SardBorelClassicalCriticalNullityPredicateProbe.borelClassicalCriticalNullity_zero"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean"
     "ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.md"],
@@ -42612,7 +42629,7 @@
       "ab52aa42ad6df9f3fe87359b106ff68318782df89fdd1046ac1e8eb7401669c3"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
