@@ -7953,6 +7953,20 @@
       :exit 1,
       :correction
       "Removed an extra closing parenthesis and reran successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788991984591-17190-aba04c95",
+     :commands
+     ["git show 5f1b9937:holes/labs/topology-contract/worklist2.edn"
+      "git show 5f1b9937:problems/t94A06/lean/Main.lean"
+      "python3 inline independent census and SHA256, frozen hash, module attribution and scope audit"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 5f1b9937:holes/labs/topology-contract/worklist2.edn)"
+      "bb inline tail equality, successor-policy and concurrent-row audit"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Independent strategy review passes. Census hash and all 59 consumer counts reproduce: placeholders 71 -> 71; modules 635 -> 638 with two portfolio and one concurrent additions. Frozen t94A06 hash and one placeholder match. Two work rows and successor preserve policy, unrestricted transversality hypotheses and coefficient-specific sphere boundaries, including S0. Active wedge-cover and Sard work excluded. No frozen closure or unproved refutation claimed; ledger untouched."},
     :replacement-items
     [{:consumer :t94A06,
       :stop-condition
@@ -8076,7 +8090,7 @@
       :before 71}},
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact counterexample uptake and action transport",
@@ -8098,7 +8112,7 @@
    :stop-condition
    "Preserve all model-space hypotheses and the actual manifold derivative and volume quantifier. Do not assume finite-dimensionality, Sard or a regular-value theorem.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: exact normal-translation transversality consumer",
@@ -8131,7 +8145,7 @@
    :stop-condition
    "No assumed change-of-coefficients theorem, homology table, finiteness, Kunneth or numerical trace. Preserve the actual singularHomologyFunctor and literal sphere subtype.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS: literal sphere homology with explicit coefficients",
