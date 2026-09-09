@@ -10413,8 +10413,76 @@
   {:consumer :t03J05,
    :stop-condition
    "Preserve the literal Surface true 2 quotient, actual image cardinality and every ambient manifold quantifier. No assumed curve system, transverse intersection invariant or Hausdorff hypothesis.",
+   :evidence
+   {:typed-evidence
+    {:namespace "T03J05Boundary",
+     :declarations
+     ["FrozenClaim"
+      "MissingCurveAndAmbientConstruction"
+      "MissingCurveGeometry"
+      "exact_residual"
+      "geometry_necessary"],
+     :meaning
+     "FrozenClaim retains the exact full conclusion. exact_residual removes only the already-proved Euler conjunct; geometry_necessary extracts the required curve geometry. Both missing-construction propositions remain unproved. The existing odd product-intersection calculation is reproduced and audited."},
+    :placeholder-delta 0,
+    :residual
+    "Construct the literal punctured-surface curve system and establish ambient nonhomotopy under exactly the frozen quantifiers. No full closure, new reusable prerequisite or admissible refutation is claimed.",
+    :dependency-review "invoke-1788996653832-17335-a8396115",
+    :axiom-audits 3,
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :reason :missing-curve-geometry-and-ambient-homotopy-invariant,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read frozen theorem, DAG intersection dependencies, closure stop rules and reviewed checkpoint16 receipt",
+      :exit 0}
+     {:cmd
+      "Inspect Surfaces, Intersection and SingularCapLowDegree; search ConstructionTargets for literal genus-two curves and ambient homotopy invariants",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T03J05Boundary.lean", :exit 0}
+     {:cmd
+      "sha256sum /tmp/T03J05Boundary.lean problems/t03J05/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "Python complete declaration SHA256 and comment-stripped placeholder audit",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T03J05Boundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial statement-hash extraction",
+      :exit 0,
+      :correction
+      "Initial extraction stopped at an internal let assignment. Recomputed the full declaration using the final := by delimiter; only the corrected hash is reported."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T03J05Boundary.lean",
+     :sha256
+     "a8eb97dd78a193c0fc6b40d7cb074c4de385e37c4be85a3736aa0a5ed98ab585",
+     :role :boundary-diagnostic},
+    :finding
+    "Two independent constructions remain: four embedded curves on the punctured literal Surface true 2 quotient with the required odd image intersection, and an invariant proving the three product maps pairwise nonhomotopic after every frozen ambient open embedding. Surfaces supplies the quotient and Euler arithmetic; Intersection supplies algebraic tangent-sign formulas from supplied data, not the required geometric homotopy invariant. The ambient quantifier lacks Hausdorff, orientation and transversality hypotheses; these were not added. Their absence is not asserted to refute the theorem.",
+    :frozen
+    {:path "problems/t03J05/lean/Main.lean",
+     :sha256
+     "db4071c33fa3b5fb6af0d5d7955bf431400fe7d2c4f8dbc759941f4bf6611af4",
+     :statement-sha256
+     "af1115986760c4814125e9de0934ade514e3a3acb343253828d44533240325d8",
+     :statement-hash-convention
+     "Declaration bytes from theorem through the character preceding the space before final := by.",
+     :unchanged true,
+     :placeholder-before 1,
+     :placeholder-after 1},
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "INTERSECTION: exact punctured genus-two product-torus consumer",
