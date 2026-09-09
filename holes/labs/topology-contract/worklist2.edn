@@ -8226,9 +8226,149 @@
    :other-consumers []}
   {:consumer :t00J01-rational-sphere-homology,
    :stop-condition
-   "No assumed change-of-coefficients theorem, homology table, finiteness, Kunneth or numerical trace. Preserve the actual singularHomologyFunctor and literal sphere subtype.",
-   :phase :probe,
+   "Bank only the zero-sphere calculation. Do not claim positive-dimensional sphere homology, coefficient-general suspension, arbitrary-map naturality or frozen closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/SphereZeroCoefficients.lean",
+      :sha256
+      "bbd49dd15fcdee1825971c924948c636ac4d21796c7229c2a568e2d26e2f54dd"},
+     :commands
+     [{:cmd "lake env lean /tmp/SphereZeroCoefficients.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/SphereZeroCoefficients.lean"
+    "ConstructionTargets/SphereZeroCoefficients.md"],
+   :dag-node
+   "CIRCLE/SPHERE INVARIANTS: zero-sphere endpoint with explicit ring coefficients",
+   :acceptance
+   {:implementation
+    "Promote the exact compiled fixture. Preserve the literal sphere subtype, explicit endpoints, Bool equivalence and coefficient-generic singular-chain comparison.",
+    :namespace "ConstructionTargets.SphereZeroCoefficients",
+    :declarations
+    ["H"
+     "positivePoint"
+     "negativePoint"
+     "coordinates"
+     "h0Coordinates"
+     "positive_vanishing"
+     "rationalH0"
+     "integralH0"],
+    :consumer-equation
+    "For every commutative ring R, actual ordinary H0(S0;R) is isomorphic to ModuleCat.of R (Bool → R), and Hk(S0;R) vanishes for k>0.",
+    :consumer-residual
+    "Generalize the actual sphere suspension and degree-one endpoint to explicit coefficients, then supply positive-dimensional tables and the exact rational S2 witnesses and identity-map equations.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.SphereZeroCoefficients."
+     "Reproduce all five standard-only axiom audits."
+     "Run forbidden-token scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+   :id :sphere-zero-explicit-ring-coefficients-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "The coefficient-general sphere calculation needs its ordinary zero-sphere base case with two independent H0 coordinates.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No assumed change-of-coefficients theorem, homology table, finiteness, Kunneth or numerical trace. Preserve the actual singularHomologyFunctor and literal sphere subtype.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "One compiled zero-sphere coefficient prerequisite supplied. The positive-dimensional table and exact rational consumer witnesses remain in the parent probe.",
+     :axiom-audits 5,
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Bank only the zero-sphere calculation. Do not claim positive-dimensional sphere homology, coefficient-general suspension, arbitrary-map naturality or frozen closure.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path "/tmp/SphereZeroCoefficients.lean",
+         :sha256
+         "bbd49dd15fcdee1825971c924948c636ac4d21796c7229c2a568e2d26e2f54dd"},
+        :commands
+        [{:cmd "lake env lean /tmp/SphereZeroCoefficients.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/SphereZeroCoefficients.lean"
+       "ConstructionTargets/SphereZeroCoefficients.md"],
+      :dag-node
+      "CIRCLE/SPHERE INVARIANTS: zero-sphere endpoint with explicit ring coefficients",
+      :acceptance
+      {:implementation
+       "Promote the exact compiled fixture. Preserve the literal sphere subtype, explicit endpoints, Bool equivalence and coefficient-generic singular-chain comparison.",
+       :namespace "ConstructionTargets.SphereZeroCoefficients",
+       :declarations
+       ["H"
+        "positivePoint"
+        "negativePoint"
+        "coordinates"
+        "h0Coordinates"
+        "positive_vanishing"
+        "rationalH0"
+        "integralH0"],
+       :consumer-equation
+       "For every commutative ring R, actual ordinary H0(S0;R) is isomorphic to ModuleCat.of R (Bool → R), and Hk(S0;R) vanishes for k>0.",
+       :consumer-residual
+       "Generalize the actual sphere suspension and degree-one endpoint to explicit coefficients, then supply positive-dimensional tables and the exact rational S2 witnesses and identity-map equations.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.SphereZeroCoefficients."
+        "Reproduce all five standard-only axiom audits."
+        "Run forbidden-token scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+      :id :sphere-zero-explicit-ring-coefficients-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "The coefficient-general sphere calculation needs its ordinary zero-sphere base case with two independent H0 coordinates.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG, closure stop rules, reviewed checkpoint11 dependency and sphere coefficient/shift APIs",
+       :exit 0}
+      {:cmd "lake env lean /tmp/SphereZeroCoefficients.lean", :exit 0}
+      {:cmd "sha256sum /tmp/SphereZeroCoefficients.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/SphereZeroCoefficients.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial lake env lean /tmp/SphereZeroCoefficients.lean",
+       :exit 1,
+       :correction
+       "Unfolded the sphere abbreviation, normalized real endpoint arithmetic and reversed the function-coordinate equivalence to match the required direction."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/SphereZeroCoefficients.lean",
+      :sha256
+      "bbd49dd15fcdee1825971c924948c636ac4d21796c7229c2a568e2d26e2f54dd"},
+     :finding
+     "Exactly one coefficient prerequisite compiles: the literal Euclidean zero-sphere is identified with Bool using its explicit positive and negative points. Actual singular H0 with coefficients ModuleCat R is isomorphic to R-valued functions on Bool, and every positive degree vanishes, for any commutative ring R. Integer and rational specializations compile. Positive-dimensional coefficient-general suspension and degree-one calculations remain; no rational S2 table or full parent GO is claimed.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS: literal sphere homology with explicit coefficients",
@@ -8244,7 +8384,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:oriented-checkpoint11-counterexamples-and-action-refill
-    :oriented-checkpoint11-counterexamples-and-action-refill],
+    :sphere-zero-explicit-ring-coefficients-1],
    :current-residual
    "Banked sphere tables export integral coefficients. The exact rational sphere identifications needed by t00J01 are absent; existing geometry and coefficient-generic chains should be reused.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
