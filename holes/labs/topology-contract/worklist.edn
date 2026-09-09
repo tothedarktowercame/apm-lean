@@ -51636,6 +51636,21 @@
       :exit 0,
       :output
       "Only unrelated untracked holes/labs/topology-contract/runs2/ remains; untouched."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788986217946-17009-c5565a14",
+     :commands
+     ["git show 9a198488"
+      "git show --format= --check 9a198488"
+      "Independent scope, exact-promotion, hash and placeholder audit"
+      "Recompute both recorded and probe statement-hash conventions"
+      "lake env lean /tmp/SardGenuineSmoothPositiveRankStratumNullity.lean"
+      "lake env lean ConstructionTargets/SardGenuineSmoothPositiveRankStratumNullity.lean"
+      "lake build ConstructionTargets.SardGenuineSmoothPositiveRankStratumNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Independent review of codex-6 commit 9a198488 passes. Exact two-file scope and fixture/note/consumer pins verified. Both statement hashes reproduce under their respective extraction conventions; no statement drift. Both Lean checks and 8369-job build pass with standard axioms only. Coordinate Haar measures and inherited Borel instances are derived; exact-stratum containment and pointwise-open aggregation are correctly oriented. Explicit smaller-source local smooth induction remains; no finite-order Sard invoked. Producer zero placeholders; frozen t93A04 unchanged with one. Ledger untouched."},
     :commit "9a1984881088e759d021aaada9be8e817b8c92e5",
     :changed-paths
     ["ConstructionTargets/SardGenuineSmoothPositiveRankStratumNullity.lean"
@@ -51652,7 +51667,7 @@
     :consumer-sha256
     "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :source "/tmp/SardGenuineSmoothPositiveRankStratumNullity.lean",
    :scope
    ["ConstructionTargets/SardGenuineSmoothPositiveRankStratumNullity.lean"
@@ -51685,7 +51700,7 @@
    :stop-condition
    "Only all campaign consumers closed or exact campaign-level mathematical refutation ends the campaign. Preserve individual encoding counterexamples and repair/coverage accounting; infrastructure absence is not termination.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
