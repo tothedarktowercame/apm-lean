@@ -16,6 +16,16 @@ uniform bound `C` for `f`.
 
 The solution is a genuine twice continuously differentiable function on the
 closed half-line, and `u(∞) = 0` is encoded as convergence along `atTop`.
+
+Repair 2 (statement-refuted-by-solver, attempt 1): the previous conclusion used
+`∃! u : ℝ → ℝ`, but no hypothesis constrains `u` on `(-∞, 0)` — regularity,
+the ODE, the boundary value, the decay, and the ball bound all live on
+`Ici 0` / `Ioi 0` / `atTop`.  Two total functions agreeing on the half-line but
+differing on the negative side are distinct witnesses, so the bare `∃!` was
+refutable.  The conclusion now asserts existence in the frozen ball and
+uniqueness *as agreement on `Ici 0`*, which carries the full mathematical
+content of the contraction argument.  The problem id and theorem name are
+unchanged.
 -/
 
 open Filter Set
@@ -127,9 +137,13 @@ theorem apm_m02a06
     (hf_compact : HasCompactSupport f) (hf_support : Function.support f ⊆ Ioi 0)
     (C : ℝ) (hC : 0 ≤ C) (hf_bound : ∀ x ∈ Ici (0 : ℝ), |f x| ≤ C)
     (ε : ℝ) (hε : 0 < ε) (hε_small : ε < 1 / (4 * (1 + C))) :
-    ∃! u : ℝ → ℝ,
+    ∃ u : ℝ → ℝ,
       apm_m02a06_IsSolution ε f u ∧
-      ∀ x ∈ Ici (0 : ℝ), |u x| ≤ 2 * (1 + C) := by
+      (∀ x ∈ Ici (0 : ℝ), |u x| ≤ 2 * (1 + C)) ∧
+      ∀ v : ℝ → ℝ,
+        apm_m02a06_IsSolution ε f v →
+        (∀ x ∈ Ici (0 : ℝ), |v x| ≤ 2 * (1 + C)) →
+        ∀ x ∈ Ici (0 : ℝ), v x = u x := by
   /-
   Boundary (closer hop 1): the informal contraction argument requires
   constructing the Dirichlet Green operator for `-deriv (deriv ·) + id` on
