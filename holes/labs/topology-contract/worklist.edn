@@ -35092,6 +35092,29 @@
       :output "1"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788913506593-15723-e5d6f217",
+     :commands
+     ["git show --stat --oneline 0d094ce3977c694a6d28955b19bf649b67ec6525"
+      "git diff-tree --no-commit-id --name-only -r 0d094ce3977c694a6d28955b19bf649b67ec6525"
+      "git show 0d094ce3977c694a6d28955b19bf649b67ec6525:ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean"
+      "sha256sum /tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean"
+      "cmp -s /tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean <(git show 0d094ce3977c694a6d28955b19bf649b67ec6525:ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean)"
+      "git show 0d094ce3977c694a6d28955b19bf649b67ec6525:ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean | sed -n '8,27p' | sha256sum"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.md"
+      "lake env lean /tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean"
+      "lake build ConstructionTargets.SardPositiveRankUpperLocusToRankStratumLocalNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "readlink -f .lake/packages"
+      "git diff --check 0d094ce3977c694a6d28955b19bf649b67ec6525^ 0d094ce3977c694a6d28955b19bf649b67ec6525"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: exact commit scope, fixture, and frozen statement hash reproduce; intersecting the two open neighborhoods and rewriting U intersect rankStratum to U intersect rankUpper gives the correctly oriented image containment, so nullity transfers to the exact-rank stratum; compilation uses only standard axioms and no placeholders."},
     :commit "0d094ce3977c694a6d28955b19bf649b67ec6525",
     :changed-paths
     ["ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean"
@@ -35103,7 +35126,7 @@
      "3cb95feeb10d9818d69ae1174d24526c2517e8fda5a11acaec7b4d2b2c6b0337"},
     :declarations ["exists_open_rankStratum_image_zero_of_rankUpper"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean"
     "ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.md"],
@@ -35282,7 +35305,7 @@
       "3cb95feeb10d9818d69ae1174d24526c2517e8fda5a11acaec7b4d2b2c6b0337"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
