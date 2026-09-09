@@ -55359,8 +55359,46 @@
   {:consumer "t96J05",
    :stop-condition
    "GO requires complete frozen closure. Otherwise identify the exact attained-value or fiber-transport boundary, or prove and preserve a local encoding counterexample.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "Preserve this compiled local counterexample for specification review. The frozen consumer cannot close unchanged. Continue the campaign; regular-fiber inclusion and tangent-image work for other consumers remains valid and outstanding.",
+    :outcome :stop,
+    :warnings [],
+    :statement-hashes
+    {:counterexample
+     "5772e4b8c8f590455008304a309e662a6b9571d070454e990384afe30d1a5863"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :classification :spec-defect,
+    :author "codex-12",
+    :placeholder-before 1,
+    :reason
+    "Local SPEC-DEFECT: the centered unit circle satisfies every frozen hypothesis with m=1 and n=2, but no nonempty radial level admits the required zero-dimensional chart structure.",
+    :commands
+    [{:cmd "bb /tmp/t96j05-review.bb", :exit 0}
+     {:cmd "lake env lean /tmp/T96J05Counterexample.lean", :exit 0}
+     {:cmd
+      "Python audit: verify frozen SHA, byte-identical definition prefix, consumer placeholder count and absence of fixture sorry/admit/axiom declarations",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/T96J05Counterexample.lean",
+      :exit 1,
+      :correction
+      "Supplied the sphere dimension Fact, converted rank to finrank, installed ConnectedSpace explicitly, and supplied both ChartedSpace.discreteTopology parameters. Removed redundant simp arguments; successful rerun is recorded in commands."}],
+    :campaign-refutation false,
+    :commit nil,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T96J05Counterexample.lean",
+     :sha256
+     "5b874708cbb48d5809086f47de315a08d98c5d89e55f66d3f40582dedd47bcf8"},
+    :finding
+    "Compiled existential counterexample preserves all frozen definitions and the original smooth-order expression. Every circle point has norm 1, so any inhabited radial level has radius 1. An explicit homeomorphism identifies that level with the circle. The requested dimension-zero ChartedSpace would make the level, hence the circle, discrete. Connectedness would then identify the distinct points single 0 1 and single 0 (-1), a contradiction. Sard cannot supply an attained regular radius here.",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / frozen nonempty radial level",
