@@ -36079,8 +36079,78 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if nullity of a localized derivative-rank-upper image cannot transfer by inclusion to the corresponding localized exact-rank stratum, or if the adapter requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Invoke second-countable local aggregation on every positive exact-rank stratum, combine the finite positive-rank family, and add the rank-zero finite-order branch.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_open_rankStratum_image_zero_finiteOrder"
+     "3df0201f22ebfc2013e4229310d4ea845ed5609f5378f5a472711d2920729341"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.lean",
+      :exit 0,
+      :output
+      "61d9f482866bbf896a2d9fa640410a77bc25b21e586cf02cee6cb73e1485b987  /tmp/SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.lean"}
+     {:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "diff -u /tmp/SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.lean ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.lean",
+      :exit 0,
+      :output
+      "'SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.exists_open_rankStratum_image_zero_finiteOrder' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.lean ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '7,28p' ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "3df0201f22ebfc2013e4229310d4ea845ed5609f5378f5a472711d2920729341  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 276 items OK; {:done 267, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "61230124b6776d2fec84e205b18b5ebdc562e4fe",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.lean"
+     "ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.md"],
+    :fixture
+    {:path
+     "/tmp/SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.lean",
+     :sha256
+     "61d9f482866bbf896a2d9fa640410a77bc25b21e586cf02cee6cb73e1485b987"},
+    :declarations ["exists_open_rankStratum_image_zero_finiteOrder"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.lean"
     "ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.md"],
