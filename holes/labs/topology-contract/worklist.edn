@@ -50309,17 +50309,20 @@
       :artifact "/tmp/topology-refill17-reviews.edn",
       :implementation-results 1}},
     :seat :codex-12},
-   :owner-resolution
-   {:date "2026-09-09"
-    :owner-request "claude-5 invoke-1788982090497-16885-dd3cb200"
-    :disposition :consumer-local-spec-defect
-    :historical-evidence-preserved true
-    :superseded-claim :campaign-refutation
-    :reason "The literal stop reading is retained in evidence, but the canonical DAG SPEC-DEFECT rule requires statement/paper-trail repair; the refutation only negates t94J08 at n=0. The source mathematics and other portfolio consumers are not refuted."
-    :repair-record "holes/labs/topology-contract/evidence/t94j08-zero-sphere/REPAIR.md"
-    :continuation :checkpoint-full-dag-refill-18-after-t94j08-spec-repair}
    :phase :strategy,
    :state :needs-owner,
+   :owner-resolution
+   {:date "2026-09-09",
+    :owner-request "claude-5 invoke-1788982090497-16885-dd3cb200",
+    :disposition :consumer-local-spec-defect,
+    :historical-evidence-preserved true,
+    :superseded-claim :campaign-refutation,
+    :reason
+    "The literal stop reading is retained in evidence, but the canonical DAG SPEC-DEFECT rule requires statement/paper-trail repair; the refutation only negates t94J08 at n=0. The source mathematics and other portfolio consumers are not refuted.",
+    :repair-record
+    "holes/labs/topology-contract/evidence/t94j08-zero-sphere/REPAIR.md",
+    :continuation
+    :checkpoint-full-dag-refill-18-after-t94j08-spec-repair},
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -50496,23 +50499,263 @@
    :current-residual
    "await the reviewed rectangular local Morse--Sard foundation probe, then refill from the complete DAG"}
   {:consumer :portfolio,
-   :id :checkpoint-full-dag-refill-18-after-t94j08-spec-repair,
-   :kind :strategy-checkpoint,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when all campaign consumers close or an exact refutation of the campaign-level mathematical claim is established. A false individual encoding is SPEC-DEFECT: preserve its counterexample, repair/re-freeze with owner authority, account for uncovered cases, and return to the remaining portfolio. Missing infrastructure and owner authorization do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill18-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill18-reviews.bb", :exit 0}
+     {:cmd "lake env lean problems/t94J08/lean/Main.lean", :exit 0}
+     {:cmd
+      "lake env lean holes/labs/topology-contract/evidence/t94j08-zero-sphere/T94J08ZeroSphereRefutation.lean",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill18-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill18-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill18-measure.json /tmp/topology-refill18-infrastructure.json /tmp/topology-refill18-reviews.edn /tmp/topology-refill18-tail.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :finding
+    {:baseline "0c11b8ea5c2f8a38ed38efc1283abe65874d7a08",
+     :election-rationale
+     ["Exactly one near-closure adapter first: repaired t94J08 has two concentrated placeholders and existing final composition; its previously fatal lowest-dimensional case is now explicitly excluded and retained as outstanding coverage."
+      "Other near-closure consumers still require independent geometric producers: planar separation, generic van Kampen, surface classification, or arbitrary degree maps. Concurrent sphere-cap finiteness does not establish the exact Hausdorff moment normalization."
+      "Sard has five named downstream consumers. Compact product/fiber assembly is a bounded continuation of its reviewed actual slice-nullity theorem; localization and other full-DAG foundations retain separate geometric obligations."],
+     :measured-head "5bbfd5c1dcd9bf250b023ab699f0e895b45b0f06",
+     :placeholder-delta
+     {:open 39,
+      :closed 19,
+      :changed-consumers [],
+      :total-before 71,
+      :named-consumers 59,
+      :total-after 71,
+      :existing-files 58,
+      :delta 0,
+      :sha256
+      "60cafa8cc0d39542b56c0c4916e149c15a26f6ef192e2d7ab8c6d916f09c5cb5",
+      :artifact "/tmp/topology-refill18-measure.json",
+      :within-two 29,
+      :missing-files ["t93A05"]},
+     :warnings
+     "Repaired Main retains three lints, two sorry declarations and sorryAx; it is not proved. Preserved refutation retains six lints and only standard axioms.",
+     :scope
+     "No canonical source, DAG, ledger, track-2 or shared-script edits.",
+     :spec-repair
+     "Verified owner resolution and repaired hash cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee. Ordinary sphere homology now requires n>=1; local index requires m>=1. Both placeholders remain. Preserved old refutation hash b336d0daf658fe45acb4f63ded0203e92747e02359867eb953770d1747a57948 recompiles with standard axioms. Reduced S0 and one-dimensional local-index coverage remain outstanding.",
+     :campaign-refutation false,
+     :infrastructure-packets
+     {:before 619,
+      :after 621,
+      :portfolio-modules [],
+      :concurrent-modules
+      ["ConstructionTargets/SphereCapFiniteMeasure.lean"
+       "ConstructionTargets/SphereCapGraph.lean"],
+      :artifact "/tmp/topology-refill18-infrastructure.json",
+      :sha256
+      "39710aafa9fdeee5874cbad39b0e17a0d2fa6c895f940edff354417b1e102764"},
+     :portfolio-artifact
+     {:path "/tmp/topology-refill18-tail.edn",
+      :sha256
+      "a0370508b78b3f6285e8e375b3d0ebb64682a5930685e70044cb223e8b7abc66"},
+     :validation
+     "Temporary combined ledger passes: 387 items, including three fresh blocked rows; exactly one final adapter first and checkpoint dependencies equal all elected work IDs.",
+     :typed-residual-change
+     "The owner-authorized local specification repair removes the impossible ordinary-H0 case without proving antipodal naturality. Reviewed Sard slice nullity remains conditional; compact fiber assembly is its next bounded edge.",
+     :review-outcomes
+     {:dependency-review :pass,
+      :job "invoke-1788980274475-16845-85960495",
+      :owner-resolution :consumer-local-spec-defect,
+      :new-consumer-closures 0,
+      :artifact "/tmp/topology-refill18-reviews.edn",
+      :sha256
+      "cc135d6d0dc8f37ad97391714640ade6d0c7e8b4e57265be5943a588a84ff170"}},
+    :replacement-items
+    [{:consumer "t94J08",
+      :stop-condition
+      "If full closure cannot compile, name the exact missing induced-map or representation theorem. Preserve the old refutation and distinguish a local specification defect from campaign refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "SPHERE ORIENTATION / repaired positive-dimensional antipodal action",
+      :acceptance
+      {:probe
+       "GO requires a complete placeholder-free compiled copy of the corrected Main with every definition and repaired statement preserved. Construct the actual ModuleCat integral sphere orientation for n>=1 and compute the literal antipodal induced map with sign (-1)^(n+1); then close both placeholders and the local-index clause for m>=1. Use banked SphereHomology and SphereAntipodalHomology where their exact representations apply. Do not assume antipodal naturality or infer it from a group isomorphism. Audit n=1 explicitly. No old universal n=0 target and no partial orientation counts as GO.",
+       :frozen-file "problems/t94J08/lean/Main.lean",
+       :frozen-sha256
+       "cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :outstanding-coverage
+       "Reduced S0 degree and one-dimensional local index remain outstanding outside this repaired branch; closure here does not restore them."},
+      :id
+      :t94j08-repaired-positive-dimension-antipodal-closure-probe-refill18,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-18-after-t94j08-spec-repair],
+      :current-residual
+      "Two placeholders in the repaired ordinary-homology branch. Actual positive-dimensional antipodal induced-map computation remains; degree composition and local-index assembly are already proved."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO requires the complete compiled producer/consumer composition. REVISE requires exactly one compiled prerequisite. Name remaining hypotheses or representation boundaries without assuming fiber nullity or measurability.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / compact positive-rank chart image nullity",
+      :acceptance
+      {:probe
+       "From global genuine-infinity ContDiff f and basepoint derivative rank positive and below target dimension, invoke SardGenuineSmoothPositiveRankSliceNullity to produce the actual chart. For every compact K contained in its source with derivative rank at each point at most the basepoint rank, prove actual target Haar measure of f image K is zero. The sole nullity premise is local genuine-smooth critical-image induction for every strictly smaller source including zero-dimensional sources. Derive containment of fixed-first-coordinate source fibers in the produced target-slice subsets; derive fiber nullity from the existing conclusion, apply compact product-image/Fubini assembly, and transport through the actual orthogonal target linear equivalence. Prove compactness/measurability and needed continuity; do not assume chart, fiber nullity, product nullity or Haar normalization. Existing whole-target-slice derivative-zero APIs are too strong when the rank bound holds only on K: retain the rank-bounded subsets. No arbitrary-C1 induction or analytic omega. Reuse existing fiber and coordinate comparison producers; if this composition already exists, identify its next consumer edge.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Conditional compact positive-rank chart nullity only. Local/rank-stratum coverage, compatible induction discharge and base cases, and actual manifold transport remain before unconditional Sard or t93A04 closure."},
+      :id
+      :sard-genuine-smooth-compact-positive-rank-image-nullity-probe-refill18,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-18-after-t94j08-spec-repair],
+      :current-residual
+      "Actual complementary rank-upper slice images are null under local smooth induction. Transport source fibers into those subsets, assemble compact product images, and transport nullity through actual target orthogonal coordinates.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when all campaign consumers close or a campaign-level mathematical claim is exactly refuted. Treat false individual encodings as local SPEC-DEFECT with preserved counterexamples and explicit repair/coverage accounting; missing infrastructure does not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Reread complete DAG and reviewed receipts; recount executable placeholders at pinned revisions, separate portfolio and concurrent infrastructure and consumer changes. Elect exactly one bounded near-closure adapter first, then shared foundations by reach and simplicity, and append a fresh dependent checkpoint to a nonempty portfolio. Preserve reduced S0 and one-dimensional local-index coverage as outstanding even if the repaired t94J08 branch closes. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t94j08-repaired-positive-dimension-antipodal-closure-probe-refill18
+       :sard-genuine-smooth-compact-positive-rank-image-nullity-probe-refill18],
+      :current-residual
+      "Await both reviewed outcomes, then rerank all DAG consumers and account for concurrent sphere-measure and localization developments."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY / OWNER-AUTHORIZED SPEC-DEFECT REPAIR",
-   :depends-on [:checkpoint-full-dag-refill-17-after-antipodal-and-slice-nullity],
-   :stop-condition "End only when all campaign consumers close or an exact refutation of the campaign-level mathematical claim is established. A false individual encoding is SPEC-DEFECT: preserve its counterexample, repair/re-freeze with owner authority, account for uncovered cases, and return to the remaining portfolio. Missing infrastructure and owner authorization do not terminate the campaign.",
-   :acceptance {:strategy "Independently check the owner-authorized t94J08 specification repair and retained exact old-statement refutation in evidence/t94j08-zero-sphere/REPAIR.md. Reread the complete DAG and reviewed receipts, recount consumers/placeholders at current pins, and elect exactly one bounded near-closure adapter before foundations with a fresh dependent checkpoint and nonempty portfolio. Re-freeze any new t94J08 row to the corrected Main hash; never reuse the old universal n=0 target. Explicitly retain reduced S0 and one-dimensional local-index coverage as outstanding. Do not edit track-2 worklist2.edn, runs2/, shared loop scripts, or use codex-8/11/13/14."},
-   :checkpoint {:after-problems 1 :may-supersede-future true
-                :required-measures [:placeholder-delta :typed-residual-change :infrastructure-packets :review-outcomes]},
-   :current-residual "Refill17 is retained as historical needs-owner evidence with a local-spec-defect owner resolution. The corrected ordinary-homology t94J08 branch has n>=1 and local-index ambient dimension>=2; two placeholders remain. No antipodal or Sard theorem was refuted.",
-   :spec-repair {:consumer :t94J08
-                 :path "problems/t94J08/lean/Main.lean"
-                 :prior-sha256 "f75c03843555aca28c4abd3c772c5cee3216e912c2c1d52255de75db719a2c3e"
-                 :sha256 "cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee"
-                 :placeholder-count 2}}],
+   :spec-repair
+   {:consumer :t94J08,
+    :path "problems/t94J08/lean/Main.lean",
+    :prior-sha256
+    "f75c03843555aca28c4abd3c772c5cee3216e912c2c1d52255de75db719a2c3e",
+    :sha256
+    "cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee",
+    :placeholder-count 2},
+   :acceptance
+   {:strategy
+    "Independently check the owner-authorized t94J08 specification repair and retained exact old-statement refutation in evidence/t94j08-zero-sphere/REPAIR.md. Reread the complete DAG and reviewed receipts, recount consumers/placeholders at current pins, and elect exactly one bounded near-closure adapter before foundations with a fresh dependent checkpoint and nonempty portfolio. Re-freeze any new t94J08 row to the corrected Main hash; never reuse the old universal n=0 target. Explicitly retain reduced S0 and one-dimensional local-index coverage as outstanding. Do not edit track-2 worklist2.edn, runs2/, shared loop scripts, or use codex-8/11/13/14."},
+   :id :checkpoint-full-dag-refill-18-after-t94j08-spec-repair,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:checkpoint-full-dag-refill-17-after-antipodal-and-slice-nullity],
+   :current-residual
+   "Refill17 is retained as historical needs-owner evidence with a local-spec-defect owner resolution. The corrected ordinary-homology t94J08 branch has n>=1 and local-index ambient dimension>=2; two placeholders remain. No antipodal or Sard theorem was refuted."}
+  {:consumer "t94J08",
+   :stop-condition
+   "If full closure cannot compile, name the exact missing induced-map or representation theorem. Preserve the old refutation and distinguish a local specification defect from campaign refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SPHERE ORIENTATION / repaired positive-dimensional antipodal action",
+   :acceptance
+   {:probe
+    "GO requires a complete placeholder-free compiled copy of the corrected Main with every definition and repaired statement preserved. Construct the actual ModuleCat integral sphere orientation for n>=1 and compute the literal antipodal induced map with sign (-1)^(n+1); then close both placeholders and the local-index clause for m>=1. Use banked SphereHomology and SphereAntipodalHomology where their exact representations apply. Do not assume antipodal naturality or infer it from a group isomorphism. Audit n=1 explicitly. No old universal n=0 target and no partial orientation counts as GO.",
+    :frozen-file "problems/t94J08/lean/Main.lean",
+    :frozen-sha256
+    "cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :outstanding-coverage
+    "Reduced S0 degree and one-dimensional local index remain outstanding outside this repaired branch; closure here does not restore them."},
+   :id
+   :t94j08-repaired-positive-dimension-antipodal-closure-probe-refill18,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-18-after-t94j08-spec-repair
+    :checkpoint-full-dag-refill-18-after-t94j08-spec-repair],
+   :current-residual
+   "Two placeholders in the repaired ordinary-homology branch. Actual positive-dimensional antipodal induced-map computation remains; degree composition and local-index assembly are already proved."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO requires the complete compiled producer/consumer composition. REVISE requires exactly one compiled prerequisite. Name remaining hypotheses or representation boundaries without assuming fiber nullity or measurability.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / compact positive-rank chart image nullity",
+   :acceptance
+   {:probe
+    "From global genuine-infinity ContDiff f and basepoint derivative rank positive and below target dimension, invoke SardGenuineSmoothPositiveRankSliceNullity to produce the actual chart. For every compact K contained in its source with derivative rank at each point at most the basepoint rank, prove actual target Haar measure of f image K is zero. The sole nullity premise is local genuine-smooth critical-image induction for every strictly smaller source including zero-dimensional sources. Derive containment of fixed-first-coordinate source fibers in the produced target-slice subsets; derive fiber nullity from the existing conclusion, apply compact product-image/Fubini assembly, and transport through the actual orthogonal target linear equivalence. Prove compactness/measurability and needed continuity; do not assume chart, fiber nullity, product nullity or Haar normalization. Existing whole-target-slice derivative-zero APIs are too strong when the rank bound holds only on K: retain the rank-bounded subsets. No arbitrary-C1 induction or analytic omega. Reuse existing fiber and coordinate comparison producers; if this composition already exists, identify its next consumer edge.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Conditional compact positive-rank chart nullity only. Local/rank-stratum coverage, compatible induction discharge and base cases, and actual manifold transport remain before unconditional Sard or t93A04 closure."},
+   :id
+   :sard-genuine-smooth-compact-positive-rank-image-nullity-probe-refill18,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-18-after-t94j08-spec-repair
+    :checkpoint-full-dag-refill-18-after-t94j08-spec-repair],
+   :current-residual
+   "Actual complementary rank-upper slice images are null under local smooth induction. Transport source fibers into those subsets, assemble compact product images, and transport nullity through actual target orthogonal coordinates.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when all campaign consumers close or a campaign-level mathematical claim is exactly refuted. Treat false individual encodings as local SPEC-DEFECT with preserved counterexamples and explicit repair/coverage accounting; missing infrastructure does not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Reread complete DAG and reviewed receipts; recount executable placeholders at pinned revisions, separate portfolio and concurrent infrastructure and consumer changes. Elect exactly one bounded near-closure adapter first, then shared foundations by reach and simplicity, and append a fresh dependent checkpoint to a nonempty portfolio. Preserve reduced S0 and one-dimensional local-index coverage as outstanding even if the repaired t94J08 branch closes. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t94j08-repaired-positive-dimension-antipodal-closure-probe-refill18
+    :sard-genuine-smooth-compact-positive-rank-image-nullity-probe-refill18
+    :checkpoint-full-dag-refill-18-after-t94j08-spec-repair],
+   :current-residual
+   "Await both reviewed outcomes, then rerank all DAG consumers and account for concurrent sphere-measure and localization developments."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
