@@ -3796,8 +3796,55 @@
   {:consumer :t02A05,
    :stop-condition
    "No assumed Stokes theorem, sphere area, moment value, integrability or identification of radial sphere measure with subtype Hausdorff measure; preserve both frozen statements.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Resolve the unit-sphere Hausdorff moment boundary before retrying full t02A05 closure. The projection and translation steps are compiled; the frozen file remains unchanged with two placeholders.",
+    :frozen-placeholders 2,
+    :typed-boundary
+    {:declaration "T02A05Diagnostic.UnitFluxMoment",
+     :statement
+     "For every c : EuclideanSpace Real (Fin 3), the integral over u : Metric.sphere 0 1 under hausdorffMeasure 2 of u0*(u0+c0-1)^3 + u1*(u1+c1-2)^3 + u2*(u2+c2-3) equals 44*pi/15 + 4*pi*((c0-1)^2+(c1-2)^2).",
+     :proved-reduction
+     "T02A05Diagnostic.flux_eq_unitIntegral identifies this integral with the exact frozen outwardSphereIntegral.",
+     :missing
+     "Prove the literal Hausdorff normalization and required coordinate moments, with integrability before splitting polynomial summands. No proved comparison with Haar-derived radial sphere measure was found.",
+     :conditional-diagnostic
+     "exact_flux_of_moment proves only the implication from the explicitly unproved moment proposition; it is not a closure theorem."},
+    :outcome :stop,
+    :warnings
+    [{:line 115, :kind :inherited-unnecessarySimpa}
+     {:line 147, :kind :diagnostic-unnecessarySimpa}],
+    :statement-hashes
+    {"apm_t02A05_bridge_1"
+     "66f9c44e23ff9092b890b249ea2ec296395ffeed703eb9d2b9d2e23cfa017014",
+     "apm_t02a05"
+     "61230bf058174d4cf77e7b090f2f5b882ac4ff9e6fc100529287f8ce0c81a650"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :reason :hausdorff-sphere-moment-boundary,
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/T02A05FluxDiagnostic.lean", :exit 0}
+     {:cmd "sha256sum problems/t02A05/lean/Main.lean", :exit 0}
+     {:cmd
+      "Python audit of frozen-prefix preservation, comment-stripped placeholders, forbidden tokens and statement hashes",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :campaign-refutation false,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T02A05FluxDiagnostic.lean",
+     :sha256
+     "984f2e8d9b989540dc2dbd90ae89b284754ef4a877241d97279001561fa89405"},
+    :finding
+    "Compiled the actual tangent-projection formula and polynomial flux coefficient. Constructed the translation isometry between sphere subtypes and used Hausdorff measure preservation to prove the exact reduction to a unit-sphere polynomial integral. All five audited declarations use standard axioms only. Full closure remains blocked by the normalized moment under literal sphere-subtype Hausdorff measure. Recent disk-volume calculations and Haar-derived toSphere measure do not supply this comparison. No numerical normalization discrepancy or mathematical refutation is established.",
+    :diagnostic-placeholders 0,
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "STOKES AND MOMENTS: exact outward sphere flux and minimizing centers",
