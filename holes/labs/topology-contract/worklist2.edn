@@ -7089,8 +7089,70 @@
   {:consumer :t92J06,
    :stop-condition
    "Preserve the literal wedge quotient and nonhomeomorphism of total spaces, which is stronger than inequivalence over the base. No assumed graph realization, universal cover or cover classification.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :statement-sha256
+    "176a3379ab50b3d3e0849d0bf3d434ddab28badfa97a28f32dfbf85fef16a222",
+    :residual
+    "Both frozen conjuncts remain: a simply-connected actual cover and four three-sheeted covers with pairwise nonhomeomorphic total spaces. No implementation scope proposed.",
+    :typed-boundaries
+    ["T92J06GraphCoverBoundary.MissingSimplyConnectedCover"
+     "T92J06GraphCoverBoundary.MissingSeparatedThreeCovers"],
+    :axiom-audits 3,
+    :outcome :stop,
+    :warnings
+    ["Two unused-variable warnings in repeated_cover_not_separated."],
+    :disposition :stop,
+    :boundary-status
+    "These two definitions specify unproved obligations; neither is asserted as a theorem.",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :placeholder-before 1,
+    :reason
+    :missing-graph-cover-realization-and-total-space-separation,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read DAG covering-constructor row, closure stop rules, build-loop design and reviewed checkpoint9 dependency receipt",
+      :exit 0}
+     {:cmd
+      "Inspect frozen Main, ProductEvenlyCoveredTrivialization and pinned Covering.Basic/AddCircle APIs",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T92J06GraphCoverBoundary.lean", :exit 0}
+     {:cmd
+      "Python frozen hash, comment-stripped placeholder count and exact diagnostic-prefix comparison",
+      :exit 0}
+     {:cmd "sha256sum /tmp/T92J06GraphCoverBoundary.lean", :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T92J06GraphCoverBoundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial bb dependency-receipt query",
+      :exit 1,
+      :correction
+      "Removed an extra closing parenthesis; corrected query retrieved independent PASS."}
+     {:cmd "Initial lake env lean /tmp/T92J06GraphCoverBoundary.lean",
+      :exit 1,
+      :correction
+      "Passed the covering structure's stored topology explicitly to Homeomorph.refl."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T92J06GraphCoverBoundary.lean",
+     :sha256
+     "3569eb17a48b1abc2b7bac663fa84c20d77ca17e6bb041f42c7028b94b22e00c",
+     :role :boundary-diagnostic,
+     :complete-closure false},
+    :finding
+    "The exact quotient prefix is preserved in a compiled diagnostic. Constructed an actual product covering with three-point fibers over the literal wedge, and proved that repeating this cover fails pairwise nonhomeomorphism. Full closure requires source-side labeled-graph realization with evenly covered vertex neighborhoods, a simply-connected covering total space, and topological invariants separating four three-sheeted total spaces. Existing quotient maps-out and product-cover APIs do not supply these constructions. This is missing infrastructure, not a mathematical refutation.",
+    :frozen-sha256
+    "85f64495f251de4b505d8981f77b947a8775ab71b685dd580dbc98e13abd82fa",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "COVERING-BASIC: literal wedge graph-cover consumer",
    :acceptance
