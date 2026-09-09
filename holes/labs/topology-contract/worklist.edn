@@ -41473,6 +41473,23 @@
       "git add ConstructionTargets/SardJetClassicalAdmissibleLossNullity.lean ConstructionTargets/SardJetClassicalAdmissibleLossNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: instantiate jet induction under admissible regularity loss' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788934958550-16133-18b6efcc",
+     :commands
+     ["git show 7ddf325408264c4293e603c4d93e68763df592e6 --stat --oneline"
+      "sha256sum /tmp/SardJetClassicalAdmissibleLossNullityProbe.lean"
+      "cmp /tmp/SardJetClassicalAdmissibleLossNullityProbe.lean <(git show 7ddf325408264c4293e603c4d93e68763df592e6:ConstructionTargets/SardJetClassicalAdmissibleLossNullity.lean)"
+      "git show 7ddf325408264c4293e603c4d93e68763df592e6:ConstructionTargets/SardJetClassicalAdmissibleLossNullity.lean | sed -n '7,20p' | sha256sum"
+      "git diff --exit-code 7ddf325408264c4293e603c4d93e68763df592e6 -- ConstructionTargets"
+      "lake env lean /tmp/SardJetClassicalAdmissibleLossNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardJetClassicalAdmissibleLossNullity.lean"
+      "lake build ConstructionTargets.SardJetClassicalAdmissibleLossNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit 7ddf325408264c4293e603c4d93e68763df592e6 passes. Fixture SHA adf57a8bce66d21904f6bf2ed0c74e65732acf931f359c28008bb6319b40ed6c and statement SHA 6b26d61356a9e22f23f97e713e5bad7e2adf3c129606bc6e4097d3eee530d4c2 reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8284-job build successful. Lines 21–35 correctly handle natural subtraction, finite-order casts, and admissibility after derivative loss; no representation-boundary defect found. Ledger untouched."},
     :commit "7ddf325408264c4293e603c4d93e68763df592e6",
     :changed-paths
     ["ConstructionTargets/SardJetClassicalAdmissibleLossNullity.lean"
@@ -41484,7 +41501,7 @@
     :declarations
     ["firstNonzeroJet_image_null_of_classical_admissible_loss"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardJetClassicalAdmissibleLossNullity.lean"
     "ConstructionTargets/SardJetClassicalAdmissibleLossNullity.md"],
@@ -41655,7 +41672,7 @@
       "adf57a8bce66d21904f6bf2ed0c74e65732acf931f359c28008bb6319b40ed6c"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
