@@ -42676,6 +42676,23 @@
       "git add ConstructionTargets/SardCompactRankZeroBorelDoubleUncoveredAssembly.lean ConstructionTargets/SardCompactRankZeroBorelDoubleUncoveredAssembly.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: assemble compact rank-zero nullity with Borel induction' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788954410321-16219-1de0b640",
+     :commands
+     ["git show 571a4ce2 --stat --oneline"
+      "sha256sum /tmp/SardCompactRankZeroBorelDoubleUncoveredAssemblyProbe.lean"
+      "cmp /tmp/SardCompactRankZeroBorelDoubleUncoveredAssemblyProbe.lean <(git show 571a4ce20996b6b5104060fe97b9282c16d97347:ConstructionTargets/SardCompactRankZeroBorelDoubleUncoveredAssembly.lean)"
+      "git show 571a4ce20996b6b5104060fe97b9282c16d97347:ConstructionTargets/SardCompactRankZeroBorelDoubleUncoveredAssembly.lean | sed -n '7,26p' | sha256sum"
+      "git diff --exit-code 571a4ce20996b6b5104060fe97b9282c16d97347 -- ConstructionTargets"
+      "lake env lean /tmp/SardCompactRankZeroBorelDoubleUncoveredAssemblyProbe.lean"
+      "lake env lean ConstructionTargets/SardCompactRankZeroBorelDoubleUncoveredAssembly.lean"
+      "lake build ConstructionTargets.SardCompactRankZeroBorelDoubleUncoveredAssembly"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit 571a4ce20996b6b5104060fe97b9282c16d97347 passes. Fixture SHA 0a859fa12611cb556ef08410806fe5017acc82e32cf04347bd7ab9699458b5ae and statement SHA c72e1d2d2bb2c34ad7ef9a8a923e3e1ab2aeda7742e0d0e7937b3074d92207f6 reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8431-job build successful. Lines 27–46 correctly handle rank-zero criticality, jet predecessor arithmetic, and exclusion of order two from the uncovered branch; Borel induction and residual nullity remain explicit. Ledger untouched."},
     :commit "571a4ce20996b6b5104060fe97b9282c16d97347",
     :changed-paths
     ["ConstructionTargets/SardCompactRankZeroBorelDoubleUncoveredAssembly.lean"
@@ -42688,7 +42705,7 @@
     :declarations
     ["compact_rankZero_image_zero_of_borel_double_uncovered_jets"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactRankZeroBorelDoubleUncoveredAssembly.lean"
     "ConstructionTargets/SardCompactRankZeroBorelDoubleUncoveredAssembly.md"],
@@ -42862,7 +42879,7 @@
       "0a859fa12611cb556ef08410806fe5017acc82e32cf04347bd7ab9699458b5ae"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
