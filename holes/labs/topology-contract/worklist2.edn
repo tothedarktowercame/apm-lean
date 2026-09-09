@@ -1,0 +1,99 @@
+{:schema :topology/worklist-v1
+ :campaign :oriented-manifold-fundamental-classes-2026-09-09
+ :canonical-root "/home/joe/code/apm-lean"
+ :canonical-packages "/home/joe/code/apm-lean/.lake/packages"
+ :statuses
+ #{:open
+   :implementing
+   :done
+   :done-unreviewed
+   :probing
+   :repair
+   :needs-owner
+   :superseded
+   :probe-reviewed
+   :blocked}
+ :edge-kinds
+ #{:representation-comparison
+   :strategy-checkpoint
+   :consumer-closure
+   :uptake
+   :documentation
+   :reusable-theorem
+   :final-adapter}
+ :baseline
+ {:git-sha "872281cbe9299c1427c8c396f9675dfc9f1b54ee"
+  :scope "Independent foundation campaign; no frozen problem closure or placeholder reduction claimed at seed time. Initial consumers are the Euclidean one-dimensional model pair, circle charts, and then a punctured circle."
+  :banked-commits
+  {"3c96f98e5a06dd09fe466916257f1ae153335f18"
+   "ModelPairLocalHomologyOne: integral H1 of the punctured open one-disk pair, chosen generator, and radial comparison. This is not an arbitrary-dimensional model calculation."
+   "707efa058ea2457ecd5063752b667f297490645d"
+   "ChartPairRelativeHomologyTransport: transport through a supplied homeomorphism of pairs. Construction of the restricted manifold chart pair and its deleted-point equivalence remains to be done."}}
+ :items
+ [{:id :oriented-manifold-model-generator-sign-1
+   :kind :reusable-theorem
+   :phase :probe
+   :state :open
+   :depends-on []
+   :consumer :euclidean-one-disk-local-orientation
+   :other-consumers [:circle-oriented-chart-transition]
+   :scope []
+   :dag-node "Queue D #2: oriented-manifold fundamental classes and localization; milestone 3, model case"
+   :current-residual "The banked integral H1 isomorphism chooses a nonzero element but does not yet characterize all generators or compute the sign of geometric coordinate changes."
+   :acceptance
+   {:probe "Use ConstructionTargets.ModelPairLocalHomologyOne and ChartPairRelativeHomologyTransport. Compile a fixture defining a local orientation generator as a generator of the integral local homology group, proving that the model generators are exactly the chosen class and its negative. Compute the induced map for identity and reflection of the pointed one-disk pair, and establish the sign rule for increasing versus decreasing pointed coordinate homeomorphisms. The sign must follow from the geometric map, not a hypothesis that its homology map already preserves the chosen generator. Audit the fixture axioms and name the exact public theorem and canonical file scope before GO."
+    :stop-condition "GO only with the complete axiom-clean model/sign fixture. If sign computation needs a missing homotopy or naturality lemma, REVISE to exactly one compiled prerequisite with its consumer equation; do not count an abstract group isomorphism or nonzero element as geometric orientation compatibility. STOP only for a demonstrated false statement or incompatible hypotheses/representation, naming the obstruction."}
+   :stop-condition "No all-dimensional claim from the one-dimensional banked computation; no assumed induced-map sign or new orientation axiom."}
+  {:id :oriented-manifold-chart-local-generator-1
+   :kind :representation-comparison
+   :phase :probe
+   :state :blocked
+   :depends-on [:oriented-manifold-model-generator-sign-1]
+   :consumer :circle-chart-local-orientation
+   :other-consumers [:euclidean-line-local-orientation]
+   :scope []
+   :dag-node "Queue D #2: milestone 3, including the unbanked geometric remainder of milestone 2"
+   :representation
+   {:source "Integral relative singular H1 of the pointed open one-disk model pair"
+    :target "Integral relative singular H1 of a boundaryless one-manifold and its complement of a point"
+    :direction "Model to manifold: restricted chart-pair homeomorphism followed by neighborhood inclusion/excision; prove equality with the induced relative singular homology map, not merely existence of an isomorphic group."}
+   :current-residual "Pair-homeomorphism transport is banked; an actual restricted chart pair, deleted-point equivalence, and its comparison with ambient local homology are not."
+   :acceptance
+   {:probe "Construct a restricted boundaryless one-dimensional chart around a specified point and its deleted-point pair equivalence. Use the banked pair transport and SingularExcision to send the model generator to ambient local H1 and prove it remains a generator. Compile concrete Euclidean-line and circle chart instances. State the topological and coefficient hypotheses explicitly; use the canonical integral relative singular chain representation and existing coefficient comparisons. Record exact map equalities, fixture hash, axiom audit, and proposed canonical scope before GO."
+    :stop-condition "GO requires constructed chart-pair data and a proved excision comparison in the two concrete instances. REVISE to exactly one compiled missing chart restriction or excision prerequisite if necessary. Do not accept supplied chart-pair data as construction, assume the local homology isomorphism, or introduce a duplicate homology representation. STOP on a genuine hypothesis or representation obstruction with the failing statement."}
+   :stop-condition "No global fundamental class or localization injectivity may be assumed to construct the local class."}
+  {:id :oriented-manifold-overlap-punctured-circle-1
+   :kind :reusable-theorem
+   :phase :probe
+   :state :blocked
+   :depends-on [:oriented-manifold-model-generator-sign-1
+                :oriented-manifold-chart-local-generator-1]
+   :consumer :circle-local-orientation-overlap
+   :other-consumers [:punctured-circle-local-homology]
+   :scope []
+   :dag-node "Queue D #2: milestone 3, overlap compatibility and first punctured-manifold consumer"
+   :current-residual "Chart-local generators must agree in the same ambient local homology group under orientation-preserving transition maps; separate chart isomorphisms do not prove this equality."
+   :acceptance
+   {:probe "Define compatible local orientation data for boundaryless one-manifolds using the geometric sign of coordinate transitions. Prove that two compatible charts at a point give equal ambient local H1 generators by restriction to a common neighborhood, naturality, and excision. Instantiate with overlapping oriented circle charts. Then compile a punctured-circle calculation: identify the complement of a point with a line, compute its positive-degree integral homology vanishing, and identify the generator of H1(circle, circle minus that point) using the chart comparison. Exhibit the actual comparison maps and audit all fixture axioms before GO. These are foundation fixtures, not a claim to close t00J02 or any frozen problem."
+    :stop-condition "GO requires an overlap equality and the concrete punctured-circle calculation with actual maps. REVISE to exactly one compiled missing prerequisite if either cannot yet be built. A record assuming overlap equality, an arbitrary choice of isomorphisms, or a global-class hypothesis is not a proof. STOP only on a demonstrated mathematical or representation obstruction, stating the residual needed by the consumer."}
+   :stop-condition "Do not elect t00J02 or infer general top-homology localization monicity from this one-dimensional local result."}
+  {:id :oriented-manifold-checkpoint-refill-1
+   :kind :strategy-checkpoint
+   :phase :strategy
+   :state :blocked
+   :depends-on [:oriented-manifold-model-generator-sign-1
+                :oriented-manifold-chart-local-generator-1
+                :oriented-manifold-overlap-punctured-circle-1]
+   :consumer :portfolio
+   :scope []
+   :dag-node "PORTFOLIO POLICY: oriented-manifold fundamental classes and localization"
+   :checkpoint
+   {:after-problems 1
+    :may-supersede-future true
+    :required-measures
+    [:placeholder-delta :typed-residual-change :infrastructure-packets :review-outcomes]}
+   :current-residual "Milestones 4 and 5 are not elected by this seed: arbitrary-dimensional model homology, global fundamental-class existence, and localization monicity are not consequences of the two banked one-dimensional/pair-transport packets."
+   :acceptance
+   {:strategy "Reread the complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, the standing portfolio policy in work-prompt.md, and every reviewed seed result. Refill this independent oriented-manifold campaign with a nonempty portfolio of 1 to 5 work rows and a successor checkpoint. Keep the same checkpoint policy keys. Assess whether milestone 3 now supports a compact connected oriented circle fundamental class and its localization, or whether a precise model/excision prerequisite is next. General dimensions require their own proved model calculation. Rank by concrete consumers then the simplest coherent theorem; name remaining theory to reach a named frozen branch, with t98A02 a candidate to inspect, not a claimed closure. Do not begin with t00J02, duplicate the running Morse-Sard campaign, or accumulate adapters without a consumer equation. Record actual placeholder delta separately from infrastructure progress."
+    :stop-condition "Elect the next coherent portfolio under standing authorization; stop only for a genuine mathematical refutation or explicit hypothesis/representation conflict and state it precisely."}
+   :stop-condition "Stop only on a genuine mathematical refutation, naming it; never stop for want of owner authorization."}]}
