@@ -53293,8 +53293,40 @@
   {:consumer "t00A01",
    :stop-condition
    "GO requires the complete frozen consumer. Otherwise name the exact missing van Kampen group comparison or basepoint transport; partial groupoid descent is not closure.",
+   :evidence
+   {:placeholder-after 2,
+    :placeholder-delta 0,
+    :residual
+    "Construct the actual fundamental-group equivalence to Monoid.Coprod for the supplied standard open cover, including naturality and basepoint transport; then assemble the frozen conjunction with the proved homology bridge.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms [propext Classical.choice Quot.sound],
+    :author "codex-12",
+    :placeholder-before 2,
+    :reason
+    "The general two-open span-to-free-product comparison has not been compiled for the frozen cover. Required: a target-natural reduction of its simply connected overlap and connected vertex groupoids to the point span, source reconstruction, and extraction at the frozen basepoint followed by the supplied puncture-group equivalences. This is a missing composition/representation theorem, not mathematical refutation.",
+    :commands
+    [{:cmd "lake env lean /tmp/T00A01FreeProductBoundary.lean",
+      :exit 0}
+     {:cmd "python3 /tmp/t00a01-boundary-audit.py", :exit 0}
+     {:cmd "bb /tmp/t00a01-review.bb", :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T00A01FreeProductBoundary.lean",
+     :sha256
+     "8b22e304230156f1e3dc93bc86b45360ac0b4dd797b816aa1618bbe666a54b30",
+     :role :partial-diagnostic},
+    :finding
+    "Compiled simple connectivity of the actual standard-cover overlap using its supplied homotopy equivalence to S2. Inspected generic two-open pseudopushout, compatible connectors, point-span free-product representations and target-natural source reconstruction. Their torus-wedge and twice-spiral specializations do not directly establish the frozen general cover comparison. No full closure fixture was obtained; the already-proved homology-sphere bridge remains intact.",
+    :frozen
+    {:path "problems/t00A01/lean/Main.lean",
+     :sha256
+     "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+     :verified true},
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TWO-OPEN VAN KAMPEN / connected-sum free product",
    :acceptance
