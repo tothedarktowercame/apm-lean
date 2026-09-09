@@ -37073,6 +37073,41 @@
    "The equality endpoint is compiled as confined to first-order or one-dimensional-target cases; the corresponding endpoint Taylor-nullity theorem remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if a differentiable self-map on a nontrivial finite-dimensional real normed space does not map an exact derivative-rank-zero locus to an additive-Haar null set, or if the adapter requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.lean"
+    "ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER RANK-ZERO SAME-SPACE ENDPOINT NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderRankZeroSameSpaceEndpointNullityProbe.lean",
+     :sha256
+     "39452d6e3ce053ae16959b770277871e1c4e5cac2ab6e9e25a3ed075d3953a9c"},
+    :declarations ["measure_image_zero_of_rankZero_sameSpace"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Transport the equal-dimensional endpoint between source and target coordinate spaces by a continuous linear equivalence, and handle the one-dimensional-target endpoint."},
+   :representation
+   {:source
+    "A differentiable self-map of a nontrivial finite-dimensional real normed space restricted to an exact derivative-rank-zero locus, with additive Haar measure.",
+    :target
+    "Zero measure of the locus image via the fixed-dimensional determinant Sard lemma."},
+   :id
+   :critical-value-sard-finite-order-rank-zero-same-space-endpoint-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-taylor-endpoint-classification-1
+    :critical-value-sard-rank-strata-1],
+   :current-residual
+   "The first-order equal-source/target endpoint is compiled in one coordinate space; equal-dimensional coordinate transport and the one-dimensional-target endpoint remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -37125,79 +37160,81 @@
      "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder."},
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
-     :residual
-     "Provide the exact-endpoint Taylor image-nullity theorem for the first-order or one-dimensional-target cases, then specialize the higher-jet budget and complete compact exhaustion.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"endpoint_order_eq_one_or_targetDim_eq_one"
-      "2e3530979e55df43db2b0a4c564ebcd82f63de82b7cb0751376849eed07363c1"},
+     {"measure_image_zero_of_rankZero_sameSpace"
+      "eb28aecfc2206715cf94880621f71c419fd753597498cb6ccd847f8c90a974f3"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the exact equality endpoint under positive target dimension, nonzero order, and classical Sard admissibility does not force either first-order regularity or one-dimensional target, or if the classification requires nonstandard axioms.",
+      "Stop only if a differentiable self-map on a nontrivial finite-dimensional real normed space does not map an exact derivative-rank-zero locus to an additive-Haar null set, or if the adapter requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderTaylorEndpointClassification.lean"
-       "ConstructionTargets/SardFiniteOrderTaylorEndpointClassification.md"],
+      ["ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.lean"
+       "ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER TAYLOR ENDPOINT CLASSIFICATION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER RANK-ZERO SAME-SPACE ENDPOINT NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderTaylorEndpointClassificationProbe.lean",
+        "/tmp/SardFiniteOrderRankZeroSameSpaceEndpointNullityProbe.lean",
         :sha256
-        "5ea6d30d9f1115ca0943b8c6782ae16cbeb4652888ab6d83edfd79ff2ffe6fee"},
-       :declarations ["endpoint_order_eq_one_or_targetDim_eq_one"],
+        "39452d6e3ce053ae16959b770277871e1c4e5cac2ab6e9e25a3ed075d3953a9c"},
+       :declarations ["measure_image_zero_of_rankZero_sameSpace"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Prove Taylor image nullity at the classified first-order or one-dimensional-target endpoint, then finish higher-jet specialization."},
+       "Transport the equal-dimensional endpoint between source and target coordinate spaces by a continuous linear equivalence, and handle the one-dimensional-target endpoint."},
       :representation
       {:source
-       "The exact budget equality order * targetDim = sourceDim under classical finite-order Sard admissibility with positive target dimension and nonzero order.",
+       "A differentiable self-map of a nontrivial finite-dimensional real normed space restricted to an exact derivative-rank-zero locus, with additive Haar measure.",
        :target
-       "The sharp endpoint classification order = 1 or targetDim = 1."},
+       "Zero measure of the locus image via the fixed-dimensional determinant Sard lemma."},
       :id
-      :critical-value-sard-finite-order-taylor-endpoint-classification-1,
+      :critical-value-sard-finite-order-rank-zero-same-space-endpoint-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-taylor-budget-endpoint-1],
+      [:critical-value-sard-finite-order-taylor-endpoint-classification-1
+       :critical-value-sard-rank-strata-1],
       :current-residual
-      "The equality endpoint is compiled as confined to first-order or one-dimensional-target cases; the corresponding endpoint Taylor-nullity theorem remains.",
+      "The first-order equal-source/target endpoint is compiled in one coordinate space; equal-dimensional coordinate transport and the one-dimensional-target endpoint remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free arithmetic fixture classifies the exact Taylor-budget endpoint left by the previous split: under positive target dimension, nonzero order, and classical Sard admissibility, equality order * targetDim = sourceDim forces either order = 1 or targetDim = 1. Thus the missing endpoint analysis is confined to these sharp edge cases rather than arbitrary rectangular dimensions.",
+     "The rectangular theorem is not refuted. Mathlib's fixed-dimensional Sard lemma proves that a differentiable self-map whose derivative determinant vanishes has null image. The placeholder-free fixture converts exact derivative rank zero into a zero continuous derivative, hence zero determinant, and applies that theorem. This discharges the analytic first-order endpoint in a common coordinate space; only equal-dimensional coordinate-equivalence transport and the classified one-dimensional-target endpoint remain.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderTaylorEndpointClassificationProbe.lean",
+       "rg -n -i \"sard|critical.*measure|measure.*critical|flat.*locus|little.?o.*measure|image.*measure.*zero\" .lake/packages/mathlib/Mathlib | head -200",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/SardFiniteOrderRankZeroSameSpaceEndpointNullityProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderTaylorEndpointClassificationProbe.endpoint_order_eq_one_or_targetDim_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderRankZeroSameSpaceEndpointNullityProbe.measure_image_zero_of_rankZero_sameSpace' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderTaylorEndpointClassificationProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderRankZeroSameSpaceEndpointNullityProbe.lean",
        :exit 0,
        :output
-       "5ea6d30d9f1115ca0943b8c6782ae16cbeb4652888ab6d83edfd79ff2ffe6fee  /tmp/SardFiniteOrderTaylorEndpointClassificationProbe.lean"}
+       "39452d6e3ce053ae16959b770277871e1c4e5cac2ab6e9e25a3ed075d3953a9c  /tmp/SardFiniteOrderRankZeroSameSpaceEndpointNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderTaylorEndpointClassificationProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderRankZeroSameSpaceEndpointNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '5,17p' /tmp/SardFiniteOrderTaylorEndpointClassificationProbe.lean | sha256sum",
+       "sed -n '10,36p' /tmp/SardFiniteOrderRankZeroSameSpaceEndpointNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "2e3530979e55df43db2b0a4c564ebcd82f63de82b7cb0751376849eed07363c1  -"}
+       "eb28aecfc2206715cf94880621f71c419fd753597498cb6ccd847f8c90a974f3  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 282 items OK; {:done 274, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 283 items OK; {:done 275, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -37213,12 +37250,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderTaylorEndpointClassificationProbe.lean",
+      "/tmp/SardFiniteOrderRankZeroSameSpaceEndpointNullityProbe.lean",
       :sha256
-      "5ea6d30d9f1115ca0943b8c6782ae16cbeb4652888ab6d83edfd79ff2ffe6fee"},
+      "39452d6e3ce053ae16959b770277871e1c4e5cac2ab6e9e25a3ed075d3953a9c"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -37449,7 +37486,8 @@
     :critical-value-sard-finite-order-rank-zero-first-jet-empty-1
     :critical-value-sard-finite-order-compact-rank-zero-higher-jet-nullity-1
     :critical-value-sard-finite-order-taylor-budget-endpoint-1
-    :critical-value-sard-finite-order-taylor-endpoint-classification-1],
+    :critical-value-sard-finite-order-taylor-endpoint-classification-1
+    :critical-value-sard-finite-order-rank-zero-same-space-endpoint-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
