@@ -49578,8 +49578,65 @@
   {:consumer "t95J05",
    :stop-condition
    "If full closure cannot be compiled, STOP naming the exact remaining Hausdorff normalization, moment or integrability theorem. Distinguish missing infrastructure from refutation; do not replace closure with a conditional final adapter.",
+   :evidence
+   {:diagnostic
+    {:path "/tmp/T95J05SphereMomentBoundary.lean",
+     :sha256
+     "c27e886797a2cc905eeff3d4cfdcfb7491f70fdec033b39907de953c017e8a7e",
+     :complete-consumer-fixture false,
+     :placeholders 0,
+     :axioms [propext Classical.choice Quot.sound]},
+    :placeholder-delta
+    {:consumer "t95J05",
+     :before 1,
+     :after 1,
+     :delta 0,
+     :frozen-sha256
+     "bc69f32681ce9fa5abe5e22256661c1bec11c5a85d9433c166e89352596df698"},
+    :residual
+    "Frozen consumer unchanged. Exact measure normalization and integrability remain unresolved; no conditional final adapter, replacement measure, source edit or ledger edit was made.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1788977807645-16761-5b6bb848"},
+    :outcome :stop,
+    :warnings
+    ["Inherited unnecessarySimpa warning at fixture line 28."],
+    :boundary
+    {:required-moment
+     "Integral of x0^2 over t95J05SphereThree against Measure.hausdorffMeasure 3 equals pi^2/2.",
+     :required-integrability
+     ["Mixed summand x1^3*x0 under the same measure."
+      "Square summand x0^2 under the same measure."],
+     :normalization
+     "Establish the exact Hausdorff normalization before asserting the required moment; investigate a specification discrepancy if that comparison contradicts the frozen value.",
+     :compiled-result
+     "Integral of x1^3*x0 under the literal sphere-subtype Hausdorff measure equals zero.",
+     :limitation
+     "Cancellation of the total Bochner integral does not establish integrability or license integral_sub."},
+    :disposition :stop,
+    :author :codex-12,
+    :reason :hausdorff-normalization-and-integrability-boundary,
+    :commands
+    [{:cmd "lake env lean /tmp/T95J05SphereMomentBoundary.lean",
+      :exit 0}
+     {:cmd "sha256sum problems/t95J05/lean/Main.lean", :exit 0}
+     {:cmd "git diff --exit-code -- problems/t95J05/lean/Main.lean",
+      :exit 0}],
+    :campaign-refutation false,
+    :changed-paths [],
+    :finding
+    "Constructed a coordinate reflection on the actual metric sphere subtype and compiled the mixed-moment cancellation using the frozen Hausdorff odd-symmetry theorem. Full closure remains blocked by the literal Hausdorff-three-measure square moment and summand integrability. Mathlib defines Hausdorff measure through diameter powers; its Haar-derived toSphere measure uses radial cones. No comparison establishing the required Euclidean surface normalization was found. Therefore the claimed square moment pi^2/2 cannot be imported from ordinary surface area or recent disk integrals. No numerical conversion factor or mathematical refutation has been established.",
+    :artifacts
+    {:report
+     {:path "/tmp/T95J05SphereMomentBoundary.md",
+      :sha256
+      "e5ec9d3fb373dc9689b9bc2741ceaa94880b2b8c2d22fca9f675649b4bd64472"},
+     :audit
+     {:path "/tmp/T95J05SphereMomentBoundary-audit.json",
+      :sha256
+      "3ef7160a886ef9fd31477c0b97e6bc6bd553fbff01ee77a452428c7723a941f1"}},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "STOKES AND MOMENTS / Hausdorff sphere coordinate moment",
    :acceptance
