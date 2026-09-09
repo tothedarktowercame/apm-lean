@@ -55480,6 +55480,18 @@
      {:cmd "git diff --check and git diff --cached --check", :exit 0}
      {:cmd "Scoped git add and git commit --only", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788997288706-17351-baa1853a",
+     :commands
+     ["git show 2793ca55797f40df4deca2b90986186b66dca67b"
+      "Independent exact-promotion, fixture hash, statement hashes, scope and placeholder audit"
+      "lake env lean ConstructionTargets/RegularFiberSmoothInclusion.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 2793ca55"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact single-file promotion and hashes verified. Genuine-infinity smoothness concerns literal subtype inclusion under exactly RegularFiberGlobalAtlas.chartedSpace and inherited topology. Coordinate representatives agree with selected backward parameterizations on chart targets; no replacement atlas or extra hypotheses. Compilation passes warning-free with standard axioms and zero placeholders. Frozen t96J05 unchanged at one; derivative injectivity, kernel-range equality and its local specification defect are not discharged. Ledger passes 426 items; whitespace clean. No edits."},
     :commit "2793ca55797f40df4deca2b90986186b66dca67b",
     :changed-paths
     ["ConstructionTargets/RegularFiberSmoothInclusion.lean"],
@@ -55491,7 +55503,7 @@
     :consumer-sha256
     "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RegularFiberSmoothInclusion.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / chosen-atlas smooth inclusion",
@@ -55578,7 +55590,7 @@
      "Compiled genuine-infinity smoothness of subtype inclusion for exactly RegularFiberGlobalAtlas.chartedSpace. The proof identifies each actual coordinate representative with the selected chart's backward parameterization on its target and reuses backward_smooth. No replacement atlas, topology, nonemptiness or positive kernel dimension is assumed. Actual mfderiv injectivity and kernel-range equality are not proved by this fixture.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / smooth inclusion and tangent image",
