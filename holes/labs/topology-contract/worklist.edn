@@ -54495,67 +54495,83 @@
    :stop-condition
    "GO requires compiled actual fiber charts and smooth overlaps. REVISE requires exactly one compiled prerequisite; missing geometry is not refutation.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Global ChartedSpace/IsManifold assembly, smooth embedded inclusion and tangent-image comparison, manifold-source transport and frozen consumer uptake remain. This packet supplies local charts and their smooth compatibility, not a global atlas instance or consumer closure.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {"exists_chart"
-      "f3ae15af96fd57b46fde7a3554409aab1d8920676b160d83ad687a448b04fae6",
-      "overlap_smooth"
-      "2f86fe700f032fdd0eafc262804f469f1711444ed4709116d3db1ed8938a9e51",
-      "backward_image"
-      "7e9f9b7c2b0f4cac94430459d12f46382736aed999722454e10f3ffd0bfff96c",
-      "overlap_formula"
-      "a35163c3f7bb686b0dc40d822a12fa8d426691bf5e99c13423ad6d336d88e22f",
-      "exists_cover"
-      "cdcd9b15929808ebbb49ab45479b91a274c8350afb55f2a74915b8ee2a258ac3"},
-     :acceptance
-     {:placeholder-after 0,
-      :axioms :standard-only,
-      :actual-open-partial-homeomorphs true,
-      :fixed-euclidean-model true,
-      :derived-source-coverage true,
-      :actual-overlap-smoothness true,
-      :preserve-existing-apis true},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :documentation
-     {:path "/tmp/RegularFiberFixedModelOverlaps.md",
-      :sha256
-      "098c6ae7db0998f8811bd99b4409edd148d91e8a278968cc82799768463dc878"},
-     :commands
-     [{:cmd "bb /tmp/t92j07-review.bb", :exit 0}
-      {:cmd "lake env lean /tmp/RegularFiberFixedModelOverlaps.lean",
-       :exit 0}
-      {:cmd
-       "Python comment-stripped forbidden-token audit and SHA-256 calculation of fixture, documentation and five theorem statements",
-       :exit 0}
-      {:cmd "git status --porcelain=v1", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/RegularFiberFixedModelOverlaps.lean",
-       :exit 1,
-       :finding
-       "First exploratory compile found an unavailable subtype-continuity helper and insufficient overlap-domain type annotations. Added an explicit overlap set and typed composition."}
-      {:cmd "lake env lean /tmp/RegularFiberFixedModelOverlaps.lean",
-       :exit 1,
-       :finding
-       "Second exploratory compile found the replacement continuity helper also unavailable. Used the existing Topology.IsInducing.subtypeVal.continuousOn_iff API and removed unused section variables. Final complete compile passed."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/RegularFiberFixedModelOverlaps.lean",
-      :sha256
-      "8e2a960687bb77516b25420a2d959f520067767f519114b190659102dfe0eccf"},
-     :finding
-     "Constructed actual charts on the literal fiber using the banked smooth implicit coordinates and kernelEquiv. Forward coordinates are A((e y).snd); inverse coordinates on the actual target are e.symm(0,A.symm z). Proved both inverse laws, open domains, exact parameterization image, source coverage, transition formula and genuine-infinity smoothness on each actual overlap. Empty fibers and zero-dimensional kernels require no additional hypotheses. No supplied charts, overlap smoothness, constant-rank neighborhood or nullity assumptions.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/RegularFiberFixedModelOverlaps.lean"
-       "ConstructionTargets/RegularFiberFixedModelOverlaps.md"]},
-     :seat "codex-12"}},
+   {:placeholder-delta
+    {:consumer "t96J05", :before 1, :after 1, :delta 0, :fixture 0},
+    :residual
+    "Actual fixed-model fiber charts, source coverage, parameterization image and smooth overlap compatibility compiled. Global ChartedSpace/IsManifold assembly, smooth embedded inclusion and tangent-image comparison, manifold-source transport and frozen consumer uptake remain. No global atlas or consumer closure claimed; independent review remains.",
+    :gates
+    {:exact-promotion :pass,
+     :compile :pass,
+     :build :pass,
+     :standard-only-axioms :pass,
+     :actual-charts-and-overlaps :pass,
+     :existing-apis-preserved true,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_chart"
+     "f3ae15af96fd57b46fde7a3554409aab1d8920676b160d83ad687a448b04fae6",
+     "overlap_smooth"
+     "2f86fe700f032fdd0eafc262804f469f1711444ed4709116d3db1ed8938a9e51",
+     "backward_image"
+     "7e9f9b7c2b0f4cac94430459d12f46382736aed999722454e10f3ffd0bfff96c",
+     "overlap_formula"
+     "a35163c3f7bb686b0dc40d822a12fa8d426691bf5e99c13423ad6d336d88e22f",
+     "exists_cover"
+     "cdcd9b15929808ebbb49ab45479b91a274c8350afb55f2a74915b8ee2a258ac3"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :documentation
+    {:path "/tmp/RegularFiberFixedModelOverlaps.md",
+     :sha256
+     "098c6ae7db0998f8811bd99b4409edd148d91e8a278968cc82799768463dc878"},
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, dependency review receipt, complete fixture and documentation",
+      :exit 0}
+     {:cmd
+      "Python SHA-256, five statement hashes and comment-stripped forbidden-token audit",
+      :exit 0}
+     {:cmd
+      "cmp both promoted files against pinned fixture and documentation",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RegularFiberFixedModelOverlaps.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.RegularFiberFixedModelOverlaps",
+      :exit 0,
+      :output "Build completed successfully (8317 jobs)."}
+     {:cmd "Python t96J05 hash and comment-stripped placeholder audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 418 items OK; {:done 408, :needs-owner 1, :superseded 6, :open 2, :blocked 1}"}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check and git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output
+      "Unrelated untracked ConstructionTargets/RelativePairNaturality.lean and .md appeared during work; untouched and excluded from commit."}],
+    :commit "316e0c9cd061eb219dce962482b11f16cb0f6b0d",
+    :changed-paths
+    ["ConstructionTargets/RegularFiberFixedModelOverlaps.lean"
+     "ConstructionTargets/RegularFiberFixedModelOverlaps.md"],
+    :fixture
+    {:path "/tmp/RegularFiberFixedModelOverlaps.lean",
+     :sha256
+     "8e2a960687bb77516b25420a2d959f520067767f519114b190659102dfe0eccf",
+     :placeholder-count 0},
+    :consumer-sha256
+    "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/RegularFiberFixedModelOverlaps.lean"
     "ConstructionTargets/RegularFiberFixedModelOverlaps.md"],
