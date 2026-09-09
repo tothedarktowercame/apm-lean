@@ -1839,6 +1839,23 @@
      "Fixed chart relative chain map followed by the relative map induced by Circle rotation.",
      :direction
      "Exact equality from the constructed chart map to the fixed-chart-then-rotation composite; its local class consequently equals rotation transport of the fixed local class."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788972105766-16627-392f928f",
+     :commands
+     ["git show 8554a6d0:ConstructionTargets/RotatedCircleChartTransport.lean"
+      "git show 8554a6d0:ConstructionTargets/RotatedCircleChartTransport.md"
+      "cmp recorded-commit-source /tmp/RotatedCircleChartTransportProbe.lean"
+      "sha256sum /tmp/RotatedCircleChartTransportProbe.lean"
+      "lake env lean /tmp/RotatedCircleChartTransportProbe.lean"
+      "lake env lean ConstructionTargets/RotatedCircleChartTransport.lean"
+      "lake build ConstructionTargets.RotatedCircleChartTransport ConstructionTargets.CircleRotationLocalization ConstructionTargets.CircleActualLocalization"
+      "python3: verify six statement hashes, 42-module recorded import closure, forbidden scan and frozen placeholder counts"
+      "git show --format= --name-only 8554a6d0"
+      "git show --format= --check 8554a6d0"],
+     :finding
+     "Independent PASS: exact two-file scope and byte-identical fixture; both compilations and focused build succeed with 30 replayed dependency warnings and no target warnings. Six statement hashes and standard-only axiom audits reproduced. Rotation-image neighborhoods and restricted homeomorphisms construct genuine pointed charts; actual chart chain maps equal fixed-chart maps followed by rotation, with correct composition direction. Localization and unique-generator consequences follow in production integral singular homology. Geometric coordinate-order overlap compatibility remains explicitly downstream, not inferred from homology equality. Frozen problems unchanged, placeholders 327 to 327, zero target placeholders. No edits."},
     :commit "8554a6d05a1ed35d31532395c45e837818c1dbcf",
     :changed-paths
     ["ConstructionTargets/RotatedCircleChartTransport.lean"
@@ -1855,7 +1872,7 @@
     "SHA-256 of UTF-8 declaration bytes beginning with theorem or def and ending immediately before the space preceding := or where; names below are in ConstructionTargets.RotatedCircleChartTransport.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/RotatedCircleChartTransport.lean"
     "ConstructionTargets/RotatedCircleChartTransport.md"],
@@ -1996,7 +2013,7 @@
      "Compiled one geometric chart-transport prerequisite. Rotating the fixed chart at 1 constructs an open pointed model chart at every Circle point. Its actual ambient map is rotation composed with the fixed chart map, and its production relative chain map equals the corresponding composite. Its local class therefore equals the banked rotation-transported class. The fixture proves existence and uniqueness of one absolute integral generator satisfying every constructed-chart localization equation. Geometric coordinate-order compatibility between charts on common restrictions remains unproved, so the full parent is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue D #2: compact connected Circle, milestones 4 and 5",
