@@ -53363,9 +53363,60 @@
   {:consumer "t93A04",
    :stop-condition
    "GO requires the complete compiled compact rank-zero result with open-domain induction and localization compatibility. REVISE requires exactly one compiled prerequisite. Never infer a common smooth neighborhood from one-point infinity.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Rank-zero exhaustion, global critical-set assembly with repaired positive-rank nullity, compatible induction discharge, ambient degenerate cases and manifold transport remain. No unconditional Sard or frozen consumer closure.",
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {"exists_local_firstNonzeroJet_image_null"
+      "56e3058a76c313425c0e70ac066525d3f7d71038a45e9551e397e5bd990d581e",
+      "compact_rankZero_image_null_of_smooth_local_induction"
+      "a7913dadea52f9f5693505e0d94b3fe15f87684fca0bd83ca0dea54aa37ba04f",
+      "compact_rankZero_image_null_of_global_induction"
+      "d410194de017ca0409075836a294ccefb6e1043c2c03b76932aeab73dce38eda"},
+     :consumer-placeholder-delta 0,
+     :acceptance
+     {:declarations
+      ["SardOpenContractFirstJetProbe.exists_local_firstNonzeroJet_image_null"
+       "SardCompactRankZeroOpenContractProbe.compact_rankZero_image_null_of_smooth_local_induction"
+       "SardCompactRankZeroOpenContractProbe.compact_rankZero_image_null_of_global_induction"],
+      :gates
+      ["Verify fixture and documentation hashes before promotion."
+       "Compile promoted module and reproduce all three standard-only axiom audits."
+       "Run lake build ConstructionTargets.SardCompactRankZeroOpenContract."
+       "Verify zero executable placeholders and preservation of existing APIs and frozen consumers."],
+      :axioms :standard-only},
+     :axioms [propext Classical.choice Quot.sound],
+     :documentation
+     {:path "/tmp/SardCompactRankZeroOpenContract.md",
+      :sha256
+      "61c724c449e4b7b0df9327ea6aacab69ff0651dbd300d8d176ec8fbcec5c7bd4"},
+     :commands
+     [{:cmd "lake env lean /tmp/SardCompactRankZeroOpenContract.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/sard-open-rankzero-audit.py", :exit 0}
+      {:cmd "bb /tmp/t00a01-review.bb", :exit 0}],
+     :diagnostic-history [],
+     :changed-paths [],
+     :fixture-placeholders 0,
+     :fixture
+     {:path "/tmp/SardCompactRankZeroOpenContract.lean",
+      :sha256
+      "ced4c3b8a1b8578359cf3ba6f38eac2cf9f32e1d04db07d9ae3c5b51b217346e"},
+     :finding
+     "Compiled the repaired actual first-nonzero-jet local step, compact rank-zero nullity, and localization compatibility. The constructed chart supplies an open zero-coordinate slice, genuine-infinity regularity and strict kernel dimension drop. Existing parameterized critical-image transport, scalar-direction extraction, jet-locus aggregation and compact Taylor assembly complete the proof. Source Borel structure and properness are derived locally. Public compact theorems explicitly require nontrivial ambient source and target; their induction premises include zero-dimensional smaller inner-product sources.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardCompactRankZeroOpenContract.lean"
+       "ConstructionTargets/SardCompactRankZeroOpenContract.md"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/SardCompactRankZeroOpenContract.lean"
+    "ConstructionTargets/SardCompactRankZeroOpenContract.md"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / compatible compact rank-zero induction",
    :acceptance
