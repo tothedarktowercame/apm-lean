@@ -49137,22 +49137,96 @@
   {:consumer "t96J08",
    :stop-condition
    "If full closure cannot be compiled, STOP naming the exact remaining calculus, integrability or measure-transport theorem. Distinguish infrastructure absence from mathematical refutation.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta
+     {:canonical-before 2,
+      :canonical-after 2,
+      :fixture-after 0,
+      :proposed-delta -2},
+     :residual
+     "No mathematical conjunct remains in the compiled fixture. Canonical t96J08 remains unchanged pending scoped implementation and independent review.",
+     :dependency-review
+     {:checkpoint
+      :checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero,
+      :outcome :pass,
+      :job "invoke-1788976393749-16725-e857cbcb"},
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {:apm_t96J08_bridge_radialDiskIntegral
+      "f67f1a51d30a26bb613a91070a0f9d5098af0842aa82b5da2a3476b2ab2b21c4",
+      :apm_t96j08
+      "26f7ad47303011a24363e5bb878bfae7da192eea145bd7f73b404328976d5169"},
+     :axioms [propext Classical.choice Quot.sound],
+     :commands
+     [{:cmd "lake env lean /tmp/T96J08Probe.lean", :exit 0}
+      {:cmd "python3 /tmp/check-t96j08-closure.py", :exit 0}
+      {:cmd "git diff --exit-code -- problems/t96J08/lean/Main.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/T96J08Probe.lean /tmp/T96J08Closure.md /tmp/T96J08Closure-manifest.json /tmp/check-t96j08-closure.py",
+       :exit 0}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/T96J08Probe.lean",
+      :sha256
+      "237cacc38a0a1040a9668ae2ef5cdf8686af7f8647cd665a96fa3c93d34e673d"},
+     :finding
+     "Complete frozen consumer compiles without placeholders or warnings. Both theorem statements and every original definition and proved lemma are preserved. Genuine Euclidean Haar radial integration and substitution evaluate the square-root disk integral as 2*pi/3. The exactness obstruction uses the frozen etaForm/extDeriv bridge, a proved smooth coordinate expansion, explicit derivatives and extDeriv_extDeriv. Integrability of every summand is established before splitting the integral; the banked Euclidean inverse-square-root kernel supplies the singular term. Frozen swap cancellation and actual disk area yield 5*pi/3. No Stokes, derivative, integrability or integral-value assumption is introduced.",
+     :implementation
+     {:scope ["problems/t96J08/lean/Main.lean"],
+      :action
+      "Verify the frozen and fixture hashes, then promote the complete fixture as the scoped Main.lean. Commit only this file; no DAG or ledger edits.",
+      :acceptance
+      {:frozen-sha256
+       "eaafd946f3385e1d5ca8964c64a003aacf4562151ebac5e19b12f6a328e1f3d9",
+       :fixture-sha256
+       "237cacc38a0a1040a9668ae2ef5cdf8686af7f8647cd665a96fa3c93d34e673d",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :gates
+       ["Compile promoted problems/t96J08/lean/Main.lean and /tmp/T96J08Probe.lean."
+        "Run lake build ConstructionTargets.UnitDiskInverseSqrtIntegrability."
+        "Verify frozen definitions and both statement hashes against the pre-implementation revision; count executable placeholders with comments stripped."
+        "Verify standard-only axioms, exact one-file scope and git diff --check."]}},
+     :artifacts
+     {:report
+      {:path "/tmp/T96J08Closure.md",
+       :sha256
+       "c48a96f9b272d708b034eb04e31179239739701a7f309b90fc2c1277779f9c20"},
+      :manifest
+      {:path "/tmp/T96J08Closure-manifest.json",
+       :sha256
+       "1436d6d996a16ca66adaf1f2d0df6f3754d9462cbcc2316175d2e4324255e3da"},
+      :audit
+      {:path "/tmp/check-t96j08-closure.py",
+       :sha256
+       "c97ca06db39ce8ae4f5b5de423ebde326a6ab7a00e3c697f4f325d56375ebc9e"}},
+     :seat :codex-12}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["problems/t96J08/lean/Main.lean"],
    :dag-node
    "STOKES AND MOMENTS / hemisphere radial integral and exactness",
    :acceptance
-   {:probe
-    "GO requires a complete placeholder-free compiled copy of problems/t96J08/lean/Main.lean preserving every frozen definition and statement. Reuse newly banked HemisphereInverseSqrtDiskIntegral/UnitDiskInverseSqrtIntegrability and the t03J06 form-calculus method to evaluate the literal EuclideanSpace two-dimensional closed-disk square-root integral as 2*pi/3 and prove the exactness obstruction through the existing etaForm/extDeriv bridge. Transport measures explicitly between disk representations; establish required integrability before splitting integrals. Prove the full 5*pi/3 hemisphere value and every conjunct. Do not assume Stokes, radial normalization, integral value or a derivative identity; do not replace the frozen custom exactness predicate. No partial bridge counts as full closure.",
-    :frozen-file "problems/t96J08/lean/Main.lean",
-    :frozen-sha256
+   {:frozen-sha256
     "eaafd946f3385e1d5ca8964c64a003aacf4562151ebac5e19b12f6a328e1f3d9",
+    :fixture-sha256
+    "237cacc38a0a1040a9668ae2ef5cdf8686af7f8647cd665a96fa3c93d34e673d",
     :placeholder-before 2,
     :placeholder-after 0,
-    :axioms :standard-only},
+    :axioms :standard-only,
+    :gates
+    ["Compile promoted problems/t96J08/lean/Main.lean and /tmp/T96J08Probe.lean."
+     "Run lake build ConstructionTargets.UnitDiskInverseSqrtIntegrability."
+     "Verify frozen definitions and both statement hashes against the pre-implementation revision; count executable placeholders with comments stripped."
+     "Verify standard-only axioms, exact one-file scope and git diff --check."]},
    :id :t96j08-frozen-hemisphere-closure-probe-refill14,
    :kind :final-adapter,
+   :action
+   "Verify the frozen and fixture hashes, then promote the complete fixture as the scoped Main.lean. Commit only this file; no DAG or ledger edits.",
    :depends-on
    [:checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero
     :checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero],
