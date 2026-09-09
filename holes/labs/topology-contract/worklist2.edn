@@ -6253,8 +6253,169 @@
      :review-outcomes]},
    :stop-condition
    "Preserve reviewed STOPs and refutations; no duplicate concurrent work, unproved normalization or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint8Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint8Reviews.clj", :exit 0}
+     {:cmd
+      "cat docs/TN-topology-foundational-programs.md holes/labs/topology-contract/work-prompt.md",
+      :exit 0}
+     {:cmd "sha256sum problems/t01A05/lean/Main.lean", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/Checkpoint8Combined.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/Checkpoint8Tail.edn /tmp/Checkpoint8Census.json",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial inline bb dependency-review query",
+      :exit 1,
+      :correction
+      "Removed an unmatched closing parenthesis; corrected query passes as /tmp/Checkpoint8Reviews.clj."}
+     {:cmd "Initial temporary combined-ledger validation",
+      :exit 1,
+      :correction
+      "The prospective checkpoint was marked done without its future independent review. Corrected preview preserves the current open checkpoint and marks inserted rows blocked pending that review; validation passes without fabricating a PASS."}],
+    :replacement-items
+    [{:consumer :t01A05,
+      :stop-condition
+      "Preserve dimension zero, disconnected total spaces and the literal top-homology orientation encoding. No assumed orientation compatibility, degree formula or top-homology cyclicity.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "COVER-DEGREE: exact finite-cover fundamental-class consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t01A05/lean/Main.lean",
+       :stop-condition
+       "If no full closing adapter exists, STOP with the exact typed missing theorem or compiled refutation. No conditional producer or partial GO; no silent hypothesis repair.",
+       :gates
+       ["GO requires the full zero-placeholder frozen fixture, unchanged statement hash, fixture SHA256 and standard-only axiom audits."
+        "A refutation requires a compiled counterexample satisfying all frozen hypotheses; conjectured missing connectedness is insufficient."
+        "Propose implementation scope only after full closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Read the exact frozen theorem and test all its hypotheses before attempting closure. In particular instantiate the universal clause at dimension zero with a point base and a two-point covering total space; construct the charts, manifold instances, covering and fiber cardinality, and compute the actual ModuleCat integral H0 via canonical coefficient comparison. If this yields a contradiction to the demanded total-space orientation, compile the exact counterexample and STOP as a specification refutation without editing the statement. Otherwise compile a complete temporary exact Main closing both torus and general-cover clauses using actual induced maps.",
+       :consumer-equation
+       "The actual induced top-homology map sends a constructed total-space generator to k times the base generator under every frozen hypothesis; alternatively an exact admissible instance disproves the demanded orientation existence.",
+       :frozen-sha256
+       "51f5c94da12b4d5e1eb1f7ada0fd397cbbfccdfb223a6ae6287978da86605750"},
+      :id :oriented-checkpoint8-t01a05-exact-cover-class-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint8-hopf-and-regular-fiber-refill],
+      :current-residual
+      "One frozen placeholder. The theorem requires a top-homology orientation on every compact covering total space without connectedness or positive-dimension hypotheses.",
+      :other-consumers []}
+     {:consumer :t97J05-regular-fiber-manifold,
+      :stop-condition
+      "No supplied fiber atlas, overlap compatibility or smooth inclusion. No Sard nullity, regular-value existence, orientation or transverse homology comparison.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE: smooth atlas on the literal regular fiber",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a smooth map between finite-dimensional real normed spaces and a value whose entire literal fiber has surjective derivative, construct a ChartedSpace and smooth IsManifold instance on that fiber using RegularFiberChart. Reuse existing smooth neighborhood inverse-chart refinements, including SardSmoothNeighborhoodImplicitChart, rather than duplicating them. Transport varying derivative kernels to a fixed Euclidean model of the proved dimension difference. Construct smooth overlaps from actual ambient chart composites, prove smoothness and topological embeddedness of subtype inclusion, and identify its tangent image with the derivative kernel. Handle empty fibers and zero target dimension explicitly; compile a codimension-two example.",
+       :consumer-equation
+       "The actual subtype f inverse {c} admits the constructed smooth manifold structure with smooth embedded inclusion, whose derivative image at each fiber point equals ker(fderiv Real f x).",
+       :stop-condition
+       "GO requires the constructed atlas, smooth overlaps, inclusion and tangent-image equations. REVISE only to exactly one compiled missing coordinate or atlas prerequisite. Global orientation and frozen t97J05 assembly remain downstream."},
+      :id :oriented-checkpoint8-smooth-regular-fiber-atlas-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint7-surjective-derivative-fiber-chart-1
+       :oriented-checkpoint8-hopf-and-regular-fiber-refill],
+      :current-residual
+      "Reviewed RegularFiberChart gives actual local fiber homeomorphisms and inverse derivatives. Smooth chart restrictions, overlap compatibility and a common-model fiber manifold remain unassembled.",
+      :other-consumers [:t02A07 :t94A06 :t00J02]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: finite-cover specification and regular-fiber uptake",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount all named consumers with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude the other campaign's active work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish compiled refutation from missing infrastructure and infrastructure from frozen closure."},
+      :id :oriented-checkpoint9-cover-and-fiber-atlas-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint8-t01a05-exact-cover-class-1
+       :oriented-checkpoint8-smooth-regular-fiber-atlas-1
+       :oriented-checkpoint8-hopf-and-regular-fiber-refill],
+      :current-residual
+      "Measure exact covering-consumer outcome separately from smooth fiber infrastructure; retain numerical normalization, orientation and surface-classification boundaries."}],
+    :changed-paths [],
+    :measures
+    {:baseline "012ff0c78ec69b1db57365522757eed7a3cae18b",
+     :head "55168acddf8f86f82b1edfebfccca97b60ab2796",
+     :placeholder-delta 0,
+     :consumer-placeholders
+     {:before 71,
+      :after 71,
+      :named-consumers 59,
+      :existing-files 58,
+      :zero-placeholder-files 19,
+      :missing-paths ["problems/t93A05/lean/Main.lean"],
+      :method
+      "Executable sorry tokens after stripping block and line comments."},
+     :infrastructure-packets
+     {:this-portfolio 1,
+      :concurrent-sard 2,
+      :modules-before 625,
+      :modules-after 628,
+      :consumer-closures 0},
+     :review-outcomes
+     {:t95J06-infrastructure-stop :pass,
+      :regular-fiber-chart :pass,
+      :concurrent-t02A05-normalization-stop :pass,
+      :concurrent-positive-rank-stratum :awaiting-review},
+     :typed-residual-change
+     {:t95J06
+      "Actual continuous free Circle action and empty-domain handling compile; component torus classification remains missing.",
+      :regular-fiber
+      "Reviewed ecfe1d8f constructs centered arbitrary-target local fiber homeomorphisms and kernel-inclusion inverse derivatives. Smooth overlaps and global fiber atlas remain.",
+      :concurrent-integration
+      "The complete t02A05 conclusion is equivalent to intrinsic mass 2 = 4*pi. Neither normalization nor its negation is proved.",
+      :concurrent-sard
+      "Two new nullity modules do not establish unconditional manifold Sard; retain the other campaign's ownership."}},
+    :portfolio-artifact
+    {:path "/tmp/Checkpoint8Tail.edn",
+     :sha256
+     "bde7fc7eef63ad1e51cdb8789af9092f1c81cb8b3bc3b2f340184644260f6366",
+     :validation
+     "50-item combined ledger validates with inserted rows blocked pending current checkpoint review."},
+    :finding
+    "Elect exactly one fresh near-closure consumer first: t01A05 has one placeholder and no prior full-consumer probe in either ledger. Its unrestricted dimension and disconnected covering total spaces require exact hypothesis testing before invoking orientation theory; no refutation is claimed without compilation. Next elect smooth regular-fiber atlas assembly, serving four proposed consumers and reusing reviewed local charts plus existing smooth inverse refinements. Across the full DAG, arbitrary-manifold orientation, product homology, generic closed gluing and surface classification require broader constructions; numerical sphere normalization remains unresolved. Exclude concurrent Sard work and preserve all unresolved STOPs and the original t94J08 refutation. No frozen closure occurred in this interval.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint8Census.json",
+     :sha256
+     "157a1665f2e92a0262141078e1593adcf22a70fb2ec577225fcdd1c067b08d53"}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact surface uptake and regular-preimage continuation",
@@ -6271,6 +6432,94 @@
     :oriented-checkpoint7-polygon-and-moment-refill],
    :current-residual
    "Measure exact Hopf-surface uptake separately from local regular-fiber geometry. Numerical Hausdorff normalization, polygon invariants and general manifold orientation remain independent."}
+  {:consumer :t01A05,
+   :stop-condition
+   "Preserve dimension zero, disconnected total spaces and the literal top-homology orientation encoding. No assumed orientation compatibility, degree formula or top-homology cyclicity.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "COVER-DEGREE: exact finite-cover fundamental-class consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t01A05/lean/Main.lean",
+    :stop-condition
+    "If no full closing adapter exists, STOP with the exact typed missing theorem or compiled refutation. No conditional producer or partial GO; no silent hypothesis repair.",
+    :gates
+    ["GO requires the full zero-placeholder frozen fixture, unchanged statement hash, fixture SHA256 and standard-only axiom audits."
+     "A refutation requires a compiled counterexample satisfying all frozen hypotheses; conjectured missing connectedness is insufficient."
+     "Propose implementation scope only after full closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Read the exact frozen theorem and test all its hypotheses before attempting closure. In particular instantiate the universal clause at dimension zero with a point base and a two-point covering total space; construct the charts, manifold instances, covering and fiber cardinality, and compute the actual ModuleCat integral H0 via canonical coefficient comparison. If this yields a contradiction to the demanded total-space orientation, compile the exact counterexample and STOP as a specification refutation without editing the statement. Otherwise compile a complete temporary exact Main closing both torus and general-cover clauses using actual induced maps.",
+    :consumer-equation
+    "The actual induced top-homology map sends a constructed total-space generator to k times the base generator under every frozen hypothesis; alternatively an exact admissible instance disproves the demanded orientation existence.",
+    :frozen-sha256
+    "51f5c94da12b4d5e1eb1f7ada0fd397cbbfccdfb223a6ae6287978da86605750"},
+   :id :oriented-checkpoint8-t01a05-exact-cover-class-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint8-hopf-and-regular-fiber-refill
+    :oriented-checkpoint8-hopf-and-regular-fiber-refill],
+   :current-residual
+   "One frozen placeholder. The theorem requires a top-homology orientation on every compact covering total space without connectedness or positive-dimension hypotheses.",
+   :other-consumers []}
+  {:consumer :t97J05-regular-fiber-manifold,
+   :stop-condition
+   "No supplied fiber atlas, overlap compatibility or smooth inclusion. No Sard nullity, regular-value existence, orientation or transverse homology comparison.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE: smooth atlas on the literal regular fiber",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a smooth map between finite-dimensional real normed spaces and a value whose entire literal fiber has surjective derivative, construct a ChartedSpace and smooth IsManifold instance on that fiber using RegularFiberChart. Reuse existing smooth neighborhood inverse-chart refinements, including SardSmoothNeighborhoodImplicitChart, rather than duplicating them. Transport varying derivative kernels to a fixed Euclidean model of the proved dimension difference. Construct smooth overlaps from actual ambient chart composites, prove smoothness and topological embeddedness of subtype inclusion, and identify its tangent image with the derivative kernel. Handle empty fibers and zero target dimension explicitly; compile a codimension-two example.",
+    :consumer-equation
+    "The actual subtype f inverse {c} admits the constructed smooth manifold structure with smooth embedded inclusion, whose derivative image at each fiber point equals ker(fderiv Real f x).",
+    :stop-condition
+    "GO requires the constructed atlas, smooth overlaps, inclusion and tangent-image equations. REVISE only to exactly one compiled missing coordinate or atlas prerequisite. Global orientation and frozen t97J05 assembly remain downstream."},
+   :id :oriented-checkpoint8-smooth-regular-fiber-atlas-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint7-surjective-derivative-fiber-chart-1
+    :oriented-checkpoint8-hopf-and-regular-fiber-refill
+    :oriented-checkpoint8-hopf-and-regular-fiber-refill],
+   :current-residual
+   "Reviewed RegularFiberChart gives actual local fiber homeomorphisms and inverse derivatives. Smooth chart restrictions, overlap compatibility and a common-model fiber manifold remain unassembled.",
+   :other-consumers [:t02A07 :t94A06 :t00J02]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: finite-cover specification and regular-fiber uptake",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount all named consumers with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude the other campaign's active work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish compiled refutation from missing infrastructure and infrastructure from frozen closure."},
+   :id :oriented-checkpoint9-cover-and-fiber-atlas-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint8-t01a05-exact-cover-class-1
+    :oriented-checkpoint8-smooth-regular-fiber-atlas-1
+    :oriented-checkpoint8-hopf-and-regular-fiber-refill
+    :oriented-checkpoint8-hopf-and-regular-fiber-refill],
+   :current-residual
+   "Measure exact covering-consumer outcome separately from smooth fiber infrastructure; retain numerical normalization, orientation and surface-classification boundaries."}
   {:consumer :t00A01,
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
