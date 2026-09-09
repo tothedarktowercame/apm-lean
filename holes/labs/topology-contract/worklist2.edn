@@ -10037,6 +10037,20 @@
       :exit 1,
       :explanation
       "Concurrent documentation edits appeared in the DAG and closure-experiments note. Restricted frozen-file verification subsequently passed; these edits were left untouched."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788996220282-17321-be8c925f",
+     :commands
+     ["git show c56ef351:holes/labs/topology-contract/worklist2.edn"
+      "lake env lean /tmp/T01J04Boundary.lean"
+      "python3 inline audit: fixture/frozen SHA256, exact copied definitions, frozen statement hash, placeholder counts, forbidden tokens and ledger-only scope"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show c56ef351:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --exit-code -- problems/t01J04/lean/Main.lean"
+      "git diff --check"
+      "git status --short"],
+     :finding
+     "Independent review of codex-13 STOP. Fixture compiles warning-free with two standard-only audits. Closed-neighborhood shrinking has correct containment orientation; zero-dimensional literal preimages receive actual discrete charted and manifold structures. Missing second countability obstructs the cited Sard route, not necessarily the theorem; positive-dimensional half-space atlas construction remains unresolved. Fixture/frozen hashes match; frozen statement SHA256 ae3dea716c52d3e8dcb1f67b4ca2c95cea545736799d1e2811935c5f78305627 unchanged; placeholders 1->1. No full closure or refutation claimed. Ledger untouched."},
     :changed-paths [],
     :concurrent-changed-paths
     ["TOPOLOGY-DEPENDENCY-DAG.md"
@@ -10057,7 +10071,7 @@
      :placeholder-after 1},
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: exact closed-neighborhood manifold-with-boundary consumer",
