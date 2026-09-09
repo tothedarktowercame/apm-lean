@@ -37621,6 +37621,42 @@
    "The one-dimensional endpoint limit and finite-cover aggregation compile; deriving the certificates from little-o Taylor control remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the finite Taylor target-cover estimate and finite-dimensional packing bound cannot cancel the source scale exactly at zero exponent surplus, leaving an image-volume bound proportional to the Taylor remainder coefficient, or if the estimate requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderEndpointTaylorCoefficientBound.lean"
+    "ConstructionTargets/SardFiniteOrderEndpointTaylorCoefficientBound.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER ENDPOINT TAYLOR COEFFICIENT BOUND",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderEndpointTaylorCoefficientBoundProbe.lean",
+     :sha256
+     "7770ca8b1ec83096802f8060b85dba9fa94882c4dd907b49e24631e7e4619708"},
+    :declarations ["endpoint_taylor_image_measure_le_coefficient"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Obtain arbitrarily small uniform endpoint Taylor coefficients on compact flat loci, choose a separated finite source cover at the corresponding scale, and instantiate one-dimensional endpoint cover certificates."},
+   :representation
+   {:source
+    "A finite radius cover with the standard finite-dimensional packing-cardinality bound and an order-(k+1) Taylor remainder estimate at exact exponent equality.",
+    :target
+    "An image-volume bound independent of the cover scale and proportional to the Taylor remainder coefficient raised to the target dimension."},
+   :id
+   :critical-value-sard-finite-order-endpoint-taylor-coefficient-bound-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-one-dim-endpoint-cover-nullity-1
+    :critical-value-sard-taylor-finite-target-cover-measure-1
+    :critical-value-sard-taylor-packing-exponent-normalization-1],
+   :current-residual
+   "The zero-surplus packing cancellation compiles; compact uniform little-o control must now make the Taylor coefficient arbitrarily small and supply the corresponding finite covers.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -37676,81 +37712,79 @@
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"OneDimEndpointBallCover_and_volume_image_eq_zero_of_oneDim_endpointBallCovers"
-      "af463b8ea17f32ed6a235ef8bfe56eaf0d55e5bacbcd9d69e6a471479fb32f12"},
+     {"endpoint_taylor_image_measure_le_coefficient"
+      "8c628a6a60dee6f3c8d9c4c34871e0eb2775fc28721061d54579180a5ed16015"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if arbitrarily small finite target-ball covers of a one-dimensional endpoint image cannot imply zero target volume by finite-cover measure aggregation, or if the interface requires nonstandard axioms.",
+      "Stop only if the finite Taylor target-cover estimate and finite-dimensional packing bound cannot cancel the source scale exactly at zero exponent surplus, leaving an image-volume bound proportional to the Taylor remainder coefficient, or if the estimate requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderOneDimEndpointCoverNullity.lean"
-       "ConstructionTargets/SardFiniteOrderOneDimEndpointCoverNullity.md"],
+      ["ConstructionTargets/SardFiniteOrderEndpointTaylorCoefficientBound.lean"
+       "ConstructionTargets/SardFiniteOrderEndpointTaylorCoefficientBound.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER ONE-DIMENSIONAL ENDPOINT COVER NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER ENDPOINT TAYLOR COEFFICIENT BOUND",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean",
+        "/tmp/SardFiniteOrderEndpointTaylorCoefficientBoundProbe.lean",
         :sha256
-        "a7113f78fd1dc382e768c199f1eb442c54ba00568e7fbae6934b994c8705ad5f"},
-       :declarations
-       ["OneDimEndpointBallCover"
-        "volume_image_eq_zero_of_oneDim_endpointBallCovers"],
+        "7770ca8b1ec83096802f8060b85dba9fa94882c4dd907b49e24631e7e4619708"},
+       :declarations ["endpoint_taylor_image_measure_le_coefficient"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Construct arbitrarily small one-dimensional endpoint ball-cover certificates from the uniform little-o Taylor remainder, then specialize higher-jet induction and compact exhaustion."},
+       "Obtain arbitrarily small uniform endpoint Taylor coefficients on compact flat loci, choose a separated finite source cover at the corresponding scale, and instantiate one-dimensional endpoint cover certificates."},
       :representation
       {:source
-       "For every positive tolerance, a finite family of target balls covering the image in a one-dimensional target, with total ball volume below that tolerance.",
+       "A finite radius cover with the standard finite-dimensional packing-cardinality bound and an order-(k+1) Taylor remainder estimate at exact exponent equality.",
        :target
-       "Zero target volume of the endpoint image by finite-cover aggregation and the arbitrarily-small-measure limit."},
+       "An image-volume bound independent of the cover scale and proportional to the Taylor remainder coefficient raised to the target dimension."},
       :id
-      :critical-value-sard-finite-order-one-dim-endpoint-cover-nullity-1,
+      :critical-value-sard-finite-order-endpoint-taylor-coefficient-bound-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-rank-zero-order-one-endpoint-nullity-1
-       :critical-value-sard-finite-cover-measure-1
-       :critical-value-sard-arbitrarily-small-limit-1],
+      [:critical-value-sard-finite-order-one-dim-endpoint-cover-nullity-1
+       :critical-value-sard-taylor-finite-target-cover-measure-1
+       :critical-value-sard-taylor-packing-exponent-normalization-1],
       :current-residual
-      "The one-dimensional endpoint limit and finite-cover aggregation compile; deriving the certificates from little-o Taylor control remains.",
+      "The zero-surplus packing cancellation compiles; compact uniform little-o control must now make the Taylor coefficient arbitrarily small and supply the corresponding finite covers.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. At the equality endpoint the fixed Taylor remainder constant no longer gains a positive scale exponent, so the remaining analytic input must provide arbitrarily small coefficients. A placeholder-free fixture defines the exact one-dimensional finite-ball-cover certificate and proves that certificates at every positive tolerance force image nullity using the reviewed finite-cover measure bound and inverse-natural limit. This isolates the missing mathematics to constructing those certificates from uniform little-o Taylor remainders.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture reuses the finite Taylor target-cover estimate and the reviewed packing-product normalization with surplus d = 0. At exact exponent equality, the source-cover cardinality factor cancels the Taylor radius power exactly, so the resulting image-volume bound is independent of scale and proportional to the Taylor remainder coefficient. This isolates the endpoint analysis to compact uniform little-o control that makes that coefficient arbitrarily small.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "sed -n '1,280p' ConstructionTargets/SardQuantitativeTaylorCoverMeasure.lean; sed -n '1,260p' ConstructionTargets/SardUniformFlatTaylorRemainder.lean; sed -n '1,180p' ConstructionTargets/SardArbitrarilySmallMeasureLimit.lean; sed -n '1,160p' ConstructionTargets/SardFiniteCoverMeasureBound.lean",
+       "sed -n '1,280p' ConstructionTargets/SardQuantitativeTaylorCoverMeasure.lean; sed -n '1,260p' ConstructionTargets/SardUniformFlatTaylorRemainder.lean; sed -n '1,180p' ConstructionTargets/SardTaylorFiniteTargetCoverMeasure.lean; sed -n '1,220p' ConstructionTargets/SardTaylorPackingExponentNormalization.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderEndpointTaylorCoefficientBoundProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderOneDimEndpointCoverNullityProbe.volume_image_eq_zero_of_oneDim_endpointBallCovers' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderEndpointTaylorCoefficientBoundProbe.endpoint_taylor_image_measure_le_coefficient' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderEndpointTaylorCoefficientBoundProbe.lean",
        :exit 0,
        :output
-       "a7113f78fd1dc382e768c199f1eb442c54ba00568e7fbae6934b994c8705ad5f  /tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean"}
+       "7770ca8b1ec83096802f8060b85dba9fa94882c4dd907b49e24631e7e4619708  /tmp/SardFiniteOrderEndpointTaylorCoefficientBoundProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderEndpointTaylorCoefficientBoundProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '10,35p' /tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean | sha256sum",
+       "sed -n '11,53p' /tmp/SardFiniteOrderEndpointTaylorCoefficientBoundProbe.lean | sha256sum",
        :exit 0,
        :output
-       "af463b8ea17f32ed6a235ef8bfe56eaf0d55e5bacbcd9d69e6a471479fb32f12  -"}
+       "8c628a6a60dee6f3c8d9c4c34871e0eb2775fc28721061d54579180a5ed16015  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 286 items OK; {:done 278, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 287 items OK; {:done 279, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -37765,12 +37799,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean",
+     {:path
+      "/tmp/SardFiniteOrderEndpointTaylorCoefficientBoundProbe.lean",
       :sha256
-      "a7113f78fd1dc382e768c199f1eb442c54ba00568e7fbae6934b994c8705ad5f"},
+      "7770ca8b1ec83096802f8060b85dba9fa94882c4dd907b49e24631e7e4619708"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -38005,7 +38040,8 @@
     :critical-value-sard-finite-order-rank-zero-same-space-endpoint-nullity-1
     :critical-value-sard-finite-order-rank-zero-equal-dimension-endpoint-nullity-1
     :critical-value-sard-finite-order-rank-zero-order-one-endpoint-nullity-1
-    :critical-value-sard-finite-order-one-dim-endpoint-cover-nullity-1],
+    :critical-value-sard-finite-order-one-dim-endpoint-cover-nullity-1
+    :critical-value-sard-finite-order-endpoint-taylor-coefficient-bound-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
