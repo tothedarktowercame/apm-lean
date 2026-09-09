@@ -8460,8 +8460,157 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["All reviewed refutations, including t01A05 and t96J07, remain recorded; the historical t94J08 refutation remains distinct from its repaired statement."
+     "No retry of unresolved regular-fiber atlas, polygon invariants, graph-cover gluing, Hopf-surface classification, intrinsic numerical normalization or arbitrary-manifold orientation STOPs."
+     "The t94A06 hypothesis boundary and positive-dimensional explicit-coefficient sphere boundary remain unresolved."],
+    :disposition :replan,
+    :excluded-concurrent
+    [:t93a04-frozen-transverse-line-closure-probe-refill27
+     :sard-genuine-smooth-manifold-vector-target-probe-refill27],
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint12Census.py", :exit 0}
+     {:cmd "cat /tmp/Checkpoint12Census.json", :exit 0}
+     {:cmd "sha256sum problems/t99J03/lean/Main.lean", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :replacement-items
+    [{:consumer :t99J03,
+      :stop-condition
+      "Preserve the literal relations, genus-zero case and all manifold hypotheses. No supplied classification, Euler invariance or silent boundary collapse.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Surface classification: exact literal polygon-family consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t99J03/lean/Main.lean",
+       :stop-condition
+       "No partial or conditional GO, silent genus-zero repair or unproved refutation.",
+       :gates
+       ["GO requires a complete zero-placeholder frozen fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+        "A specification refutation requires a compiled counterexample satisfying every frozen hypothesis and contradicting the complete conclusion."
+        "Propose implementation scope only after complete closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Audit the exact quotient family, especially genus zero where no edge generators exist. Determine the actual topology of that quotient without replacing it by a sphere. Attempt a complete temporary exact Main proving both classification alternatives and uniqueness from actual topology. If the statement is false, compile an admissible closed connected surface counterexample excluding every demanded family member; identifying the genus-zero quotient alone is insufficient. Otherwise STOP with the exact missing classification or quotient-invariant theorem.",
+       :consumer-equation
+       "Every frozen compact connected smooth surface has exactly one of the asserted literal polygon-family classifications, with the specified uniqueness and Euler clauses.",
+       :frozen-sha256
+       "7ae7fd891041611e289a84b18eeec7c22e2464255e3e909f31ced868b41bc2f6"},
+      :id :oriented-checkpoint12-t99j03-exact-surface-classification-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint12-transversality-and-coefficients-refill],
+      :current-residual
+      "One frozen placeholder asserts existence and uniqueness of a homeomorphism class in the literal orientable or nonorientable polygon families. Arithmetic Euler identities do not establish classification.",
+      :other-consumers []}
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Construct the actual chain maps and quotient complex. No assumed monomorphism, short exact sequence, coefficient comparison, excision, sphere table or frozen closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Relative homology: actual singular-chain short exact sequence with explicit ring coefficients",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For an explicitly stated commutative ring R and a subspace A of a topological space X, construct singular chains with coefficient object ModuleCat.of R R, the inclusion-induced chain map, and its actual relative quotient chain complex. Prove degreewise injectivity using the actual simplex inclusion and coefficient-generic chain API. Construct the quotient projection and prove the resulting sequence is short exact as chain complexes. Reuse generic machinery underlying SingularHomologyConcrete rather than importing integer conclusions as R-linear facts. Compile integer and rational specializations for an actual disk-boundary pair. State universes and categorical hypotheses explicitly.",
+       :consumer-equation
+       "The actual sequence C_*(A;R) -> C_*(X;R) -> C_*(X,A;R) is short exact, with the first arrow induced by subtype inclusion and the second the constructed quotient projection.",
+       :consumer-residual
+       "Connecting morphisms, pair long-exactness, coefficient-general excision and sphere suspension/endpoints remain downstream, followed by the exact rational S2 comparisons.",
+       :gates
+       ["GO requires a complete placeholder-free compiled fixture constructing the actual relative complex and proving short exactness, with integer and rational examples."
+        "Record fixture SHA256 and standard-only axiom audits."
+        "REVISE only to exactly one compiled missing coefficient or chain-map prerequisite."],
+       :stop-condition
+       "Do not retry or claim the full positive-dimensional sphere table; report the precise remaining categorical or chain-level boundary if this prerequisite cannot be constructed."},
+      :id
+      :oriented-checkpoint12-relative-singular-explicit-coefficients-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint12-transversality-and-coefficients-refill],
+      :current-residual
+      "The reviewed sphere coefficient STOP identifies integral-only relative-chain and pair-exactness exports. Generic zero-sphere coefficients are banked, but the relative singular-chain sequence needed for coefficient-specific sphere calculations is not.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: literal surface classification and relative coefficient uptake",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+      :id
+      :oriented-checkpoint13-surface-and-relative-coefficients-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint12-t99j03-exact-surface-classification-1
+       :oriented-checkpoint12-relative-singular-explicit-coefficients-1],
+      :current-residual
+      "Measure frozen surface-classification uptake separately from relative-chain infrastructure; preserve the arbitrary-model transversality and positive-sphere coefficient boundaries.",
+      :other-consumers []}],
+    :changed-paths [],
+    :measures
+    {:baseline "ee0dfbcebf47cee6705df8ca12fe4dd1eb356210",
+     :placeholder-after 71,
+     :placeholder-delta 0,
+     :changed-consumer-files [],
+     :placeholder-before 71,
+     :head "4c37af07e3585db8300f69a55869dc6687ef0020",
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:portfolio 1,
+      :concurrent 1,
+      :modules-before 638,
+      :modules-after 640,
+      :portfolio-modules ["SphereZeroCoefficients"],
+      :concurrent-modules ["SardGenuineSmoothEuclidean"]},
+     :typed-residual-change
+     ["Actual ordinary H0(S0;R) now has two coefficient coordinates and positive degrees vanish, including integer and rational specializations."
+      "Positive-dimensional coefficient-general suspension and degree-one endpoints remain missing; rational S2 witnesses remain unavailable."
+      "The exact t94A06 bad-parameter reduction does not prove nullity for its arbitrary normed model spaces. Concurrent finite-dimensional Euclidean Sard does not discharge those frozen hypotheses."],
+     :review-outcomes
+     {:stop-pass 2,
+      :implementation-pass 1,
+      :stopped-rows
+      [:oriented-checkpoint11-t94a06-exact-transversality-1
+       :oriented-checkpoint11-sphere-explicit-coefficients-1],
+      :implemented-row :sphere-zero-explicit-ring-coefficients-1},
+     :census
+     {:path "/tmp/Checkpoint12Census.json",
+      :sha256
+      "d68177a6df185e0f42b45b631ca0339766baf00d55d3360e64fdcd5daf52869c",
+      :named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :zero-placeholder 19,
+      :open 39}},
+    :finding
+    "Reviewed the complete DAG, foundational-program note, closure rules, standing policy, both ledgers and dependency receipts. Elect exactly one fresh near-closure adapter, t99J03, before a reusable relative-chain coefficient prerequisite. Its genus-zero relation needs explicit scrutiny: the empty list of edge identifications does not collapse the disk boundary. This observation alone is not a compiled refutation of the classification theorem. Among remaining work, finite-dimensional Sard and its manifold uptake are reserved by the other campaign; general orientation, quotient classification, product homology and numerical sphere normalization require substantially broader constructions. Explicit-coefficient relative-chain exactness is a bounded shared prerequisite for four named consumers. It addresses one precise missing edge without retrying the stopped full sphere table.",
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact transversality scope and coefficient uptake",
@@ -8479,6 +8628,100 @@
     :oriented-checkpoint11-counterexamples-and-action-refill],
    :current-residual
    "Measure frozen transversality outcome separately from sphere coefficient infrastructure; preserve unresolved consumer boundaries."}
+  {:consumer :t99J03,
+   :stop-condition
+   "Preserve the literal relations, genus-zero case and all manifold hypotheses. No supplied classification, Euler invariance or silent boundary collapse.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Surface classification: exact literal polygon-family consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t99J03/lean/Main.lean",
+    :stop-condition
+    "No partial or conditional GO, silent genus-zero repair or unproved refutation.",
+    :gates
+    ["GO requires a complete zero-placeholder frozen fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+     "A specification refutation requires a compiled counterexample satisfying every frozen hypothesis and contradicting the complete conclusion."
+     "Propose implementation scope only after complete closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Audit the exact quotient family, especially genus zero where no edge generators exist. Determine the actual topology of that quotient without replacing it by a sphere. Attempt a complete temporary exact Main proving both classification alternatives and uniqueness from actual topology. If the statement is false, compile an admissible closed connected surface counterexample excluding every demanded family member; identifying the genus-zero quotient alone is insufficient. Otherwise STOP with the exact missing classification or quotient-invariant theorem.",
+    :consumer-equation
+    "Every frozen compact connected smooth surface has exactly one of the asserted literal polygon-family classifications, with the specified uniqueness and Euler clauses.",
+    :frozen-sha256
+    "7ae7fd891041611e289a84b18eeec7c22e2464255e3e909f31ced868b41bc2f6"},
+   :id :oriented-checkpoint12-t99j03-exact-surface-classification-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint12-transversality-and-coefficients-refill
+    :oriented-checkpoint12-transversality-and-coefficients-refill],
+   :current-residual
+   "One frozen placeholder asserts existence and uniqueness of a homeomorphism class in the literal orientable or nonorientable polygon families. Arithmetic Euler identities do not establish classification.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "Construct the actual chain maps and quotient complex. No assumed monomorphism, short exact sequence, coefficient comparison, excision, sphere table or frozen closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Relative homology: actual singular-chain short exact sequence with explicit ring coefficients",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For an explicitly stated commutative ring R and a subspace A of a topological space X, construct singular chains with coefficient object ModuleCat.of R R, the inclusion-induced chain map, and its actual relative quotient chain complex. Prove degreewise injectivity using the actual simplex inclusion and coefficient-generic chain API. Construct the quotient projection and prove the resulting sequence is short exact as chain complexes. Reuse generic machinery underlying SingularHomologyConcrete rather than importing integer conclusions as R-linear facts. Compile integer and rational specializations for an actual disk-boundary pair. State universes and categorical hypotheses explicitly.",
+    :consumer-equation
+    "The actual sequence C_*(A;R) -> C_*(X;R) -> C_*(X,A;R) is short exact, with the first arrow induced by subtype inclusion and the second the constructed quotient projection.",
+    :consumer-residual
+    "Connecting morphisms, pair long-exactness, coefficient-general excision and sphere suspension/endpoints remain downstream, followed by the exact rational S2 comparisons.",
+    :gates
+    ["GO requires a complete placeholder-free compiled fixture constructing the actual relative complex and proving short exactness, with integer and rational examples."
+     "Record fixture SHA256 and standard-only axiom audits."
+     "REVISE only to exactly one compiled missing coefficient or chain-map prerequisite."],
+    :stop-condition
+    "Do not retry or claim the full positive-dimensional sphere table; report the precise remaining categorical or chain-level boundary if this prerequisite cannot be constructed."},
+   :id
+   :oriented-checkpoint12-relative-singular-explicit-coefficients-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint12-transversality-and-coefficients-refill
+    :oriented-checkpoint12-transversality-and-coefficients-refill],
+   :current-residual
+   "The reviewed sphere coefficient STOP identifies integral-only relative-chain and pair-exactness exports. Generic zero-sphere coefficients are banked, but the relative singular-chain sequence needed for coefficient-specific sphere calculations is not.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: literal surface classification and relative coefficient uptake",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+   :id :oriented-checkpoint13-surface-and-relative-coefficients-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint12-t99j03-exact-surface-classification-1
+    :oriented-checkpoint12-relative-singular-explicit-coefficients-1
+    :oriented-checkpoint12-transversality-and-coefficients-refill],
+   :current-residual
+   "Measure frozen surface-classification uptake separately from relative-chain infrastructure; preserve the arbitrary-model transversality and positive-sphere coefficient boundaries.",
+   :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
