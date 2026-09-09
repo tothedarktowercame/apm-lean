@@ -50214,8 +50214,89 @@
      :review-outcomes]},
    :stop-condition
    "End only when all consumers close or an exact mathematical refutation is established; missing infrastructure and owner authorization do not terminate the campaign.",
+   :evidence
+   {:residual
+    "Structural specification repair must address reduced H0 or dimension restrictions and the associated local-index clause before the frozen t94J08 theorem can be proved. No repair or canonical edits performed. The classical antipodal-degree theorem and Sard are not refuted.",
+    :outcome :stop,
+    :warnings
+    ["Three inherited prefix lints and three unused binders in the copied negated proposition."],
+    :disposition :stop,
+    :axioms [propext Classical.choice Quot.sound],
+    :author :codex-12,
+    :reason :mathematical-refutation,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill17-measure.py", :exit 0}
+     {:cmd "python3 /tmp/topology-refill17-verify.py", :exit 0}
+     {:cmd "lake env lean /tmp/T94J08ZeroSphereRefutation.lean",
+      :exit 0}
+     {:cmd
+      "git diff --exit-code -- TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn problems/t94J08/lean/Main.lean problems/t93A04/lean/Main.lean",
+      :exit 0}],
+    :campaign-refutation true,
+    :refutation
+    "The literal frozen t94J08 proposition is false: n=0 requests an ordinary integral H0(S0) isomorphism to Z, whereas the two-point sphere has H0 of rank two. diagnostic_refutes_frozen_theorem proves its exact negation.",
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T94J08ZeroSphereRefutation.lean",
+     :sha256
+     "b336d0daf658fe45acb4f63ded0203e92747e02359867eb953770d1747a57948",
+     :purpose :refutation,
+     :placeholders 0},
+    :finding
+    {:baseline "108bb4a0389452613e863e7e3a59486ca399fed6",
+     :measured-head "0c11b8ea5c2f8a38ed38efc1283abe65874d7a08",
+     :decision
+     "The explicit mathematical-refutation termination condition applies. This is not an ordinary replan; no replacement portfolio or refill checkpoint is elected.",
+     :dag-correction
+     "The DAG claim that Sphere (n+1) avoids the S0 ordinary-H0 defect is incorrect: its parameter is ambient dimension.",
+     :placeholder-delta
+     {:open 39,
+      :closed 19,
+      :changed-consumers [],
+      :total-before 71,
+      :method
+      "Comment-stripped executable sorry tokens at pinned revisions.",
+      :named-consumers 59,
+      :total-after 71,
+      :existing-files 58,
+      :delta 0,
+      :sha256
+      "a11ece7a7cd66ce0205396f6caa516a7552da0ab612d09eae27feb1fee189b35",
+      :artifact "/tmp/topology-refill17-measure.json",
+      :within-two 29,
+      :missing-files ["t93A05"]},
+     :infrastructure-packets
+     {:construction-modules-before 617,
+      :construction-modules-after 619,
+      :portfolio-modules
+      ["ConstructionTargets/SardGenuineSmoothPositiveRankSliceNullity.lean"],
+      :concurrent-modules
+      ["ConstructionTargets/HigherSphereLocalization.lean"],
+      :removed [],
+      :artifact "/tmp/topology-refill17-infrastructure.json",
+      :sha256
+      "ffac16d2cc6f6c973ece05c288fd0f4307f51ee1ba272a13410bc1fb3661c8c9"},
+     :typed-residual-change
+     {:t94J08
+      "Previously treated as missing antipodal computation; now the complete frozen proposition is formally refuted at n=0. Two placeholders remain unchanged.",
+      :sard
+      "Reviewed conditional complementary slice-image nullity now derives dimension drop and residual criticality from the actual chart. Product/fiber assembly, rank coverage, induction discharge and manifold transport remain; t93A04 retains one placeholder."},
+     :review-outcomes
+     {:antipodal-review "invoke-1788979339715-16809-2a13af37",
+      :slice-review "invoke-1788979996303-16833-56351592",
+      :checkpoint-dependency-review
+      "invoke-1788978797839-16791-8ac340f8",
+      :mathematical-refutation-results 1,
+      :consumer-closures 0,
+      :slice-commit "097b18ac508f47090799460be28666a8571aabc1",
+      :work-row-pass 2,
+      :sha256
+      "fbad0cc2651d507a6e7a89c09ad189b9d02904601ba080d0cbdc4f4daddebba8",
+      :artifact "/tmp/topology-refill17-reviews.edn",
+      :implementation-results 1}},
+    :seat :codex-12},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
