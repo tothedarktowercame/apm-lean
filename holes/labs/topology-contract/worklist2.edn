@@ -5088,75 +5088,111 @@
    :stop-condition
    "No assumed finite intrinsic measure, area formula, radial identification, normalization constant or numerical moment. Do not retry the stopped full comparison.",
    :evidence
-   {:probe
-    {:consumer-audit
-     {:path "/tmp/IntrinsicSphereConsumerAudit.lean",
-      :sha256
-      "8c3ec6cabc306ae8cf2ec22a5924b9209aad97d05991df8c6172ed050ab6f828",
-      :finding
-      "Compiled against both original diagnostic definitions, including integrability of T02A05Diagnostic.unitFlux and t95J05InclusionPullback.",
-      :warnings
-      ["Three unnecessarySimpa warnings inherited from diagnostic proofs."]},
-     :placeholder-delta 0,
-     :residual
-     "Intrinsic polynomial integrability is established for the required spheres. Numerical Hausdorff normalization, radial-measure comparison and moment evaluation remain downstream; neither frozen integration consumer is claimed closed.",
-     :axiom-audits 10,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact primary fixture and document the cap reconstruction, finite cover, intrinsic measure finiteness and consumer integral splits.",
-      :declarations
-      ["ConstructionTargets.IntrinsicSphereFinite.in_cap"
-       "ConstructionTargets.IntrinsicSphereFinite.caps_cover"
-       "ConstructionTargets.IntrinsicSphereFinite.sphere_measure_finite"
-       "ConstructionTargets.IntrinsicSphereFinite.sphere_isFiniteMeasure"
-       "ConstructionTargets.IntrinsicSphereFinite.continuous_integrable"
-       "ConstructionTargets.IntrinsicSphereFinite.unitFlux_integrable"
-       "ConstructionTargets.IntrinsicSphereFinite.unitFlux_split"
-       "ConstructionTargets.IntrinsicSphereFinite.mixed_integrable"
-       "ConstructionTargets.IntrinsicSphereFinite.square_integrable"
-       "ConstructionTargets.IntrinsicSphereFinite.projective_density_split"],
-      :axioms :standard-only,
-      :gates
-      ["Verify primary fixture SHA256 before implementation."
-       "Compile fixture and canonical target."
-       "Run lake build ConstructionTargets.IntrinsicSphereFinite ConstructionTargets.SphereCapFiniteMeasure ConstructionTargets.SphereCapGraph."
-       "Reproduce all ten printed standard-only axiom audits."
-       "Run forbidden-token scans, git diff --check, exact two-file scope verification and commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :author "codex-13",
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd "lake env lean /tmp/IntrinsicSphereFiniteProbe.lean",
-       :exit 0}
-      {:cmd "lake env lean /tmp/IntrinsicSphereConsumerAudit.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/IntrinsicSphereFiniteProbe.lean", :exit 0}
-      {:cmd "sha256sum /tmp/IntrinsicSphereConsumerAudit.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/IntrinsicSphereFiniteProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --check", :exit 0}],
-     :repository-note
-     "Read-only probe; only temporary fixtures written. Existing concurrent repository changes were left untouched.",
-     :changed-paths [],
-     :dependency-commit "c57f09381088e06fc9b385b83354f2e9decf7567",
-     :fixture
-     {:path "/tmp/IntrinsicSphereFiniteProbe.lean",
-      :sha256
-      "f8ed178719b52dfe6b8d67310b3084f0f1bc809b7fc9887fbc89a9c06dd61f8b"},
-     :finding
-     "Constructed finitely many signed coordinate cap images covering the literal Euclidean sphere for d<=3. Every sphere point has a coordinate of absolute value at least one half; explicit orthogonal projection reconstructs it through the banked radius-9/10 cap map. Finite cap-image bounds prove intrinsic Hausdorff measure finite. Compactness then proves continuous polynomial integrability, including the exact flux, mixed and square summands. Both flux integral addition and projective density subtraction compile.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/IntrinsicSphereFinite.lean"
-       "ConstructionTargets/IntrinsicSphereFinite.md"]},
-     :seat "codex-13"}},
+   {:consumer-audit
+    {:path "/tmp/IntrinsicSphereConsumerAudit.lean",
+     :sha256
+     "8c3ec6cabc306ae8cf2ec22a5924b9209aad97d05991df8c6172ed050ab6f828",
+     :exit 0},
+    :placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Numerical Hausdorff normalization, radial-measure comparison and moment evaluation remain downstream. Neither frozen integration consumer is claimed closed.",
+    :build-warning-count 0,
+    :gates
+    {:consumer-audit :pass,
+     :post-commit-cleanliness :pass,
+     :required-build :pass,
+     :forbidden-token-scans :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :exact-fixture-promotion :pass,
+     :fixture-compilation :pass,
+     :ten-axiom-audits :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :existing-diagnostic-warnings,
+      :count 3,
+      :path "/tmp/IntrinsicSphereConsumerAudit.lean",
+      :lines [268 300 372],
+      :message "unnecessarySimpa"}],
+    :statement-hashes
+    {"caps_cover"
+     "80220788a882e25d70e8ca1f3da838509dc83fc41261a71a91590aeb8a4e60c7",
+     "unitFlux_split"
+     "b36dedc8c7404c3b7b6cadcede165882b401dc17b68fed99fac6179f2a86ff29",
+     "unitFlux_integrable"
+     "a716ce882d47675e04343aa159c6d4827d1f27cda19b05f704f48f26acdc4230",
+     "continuous_integrable"
+     "b2c4da1d96ea7992b86a84d86581f19256c03ec6f5cfa35858b1395ff4838805",
+     "square_integrable"
+     "671f50fbffde224be0263ef68be328f1a199f602babeaeb130ef80697eab527e",
+     "sphere_isFiniteMeasure"
+     "a1c092db0838ea6fb1d7430f78d88ea48c6bebf6d183ee639870be851a18440c",
+     "mixed_integrable"
+     "84376a4b22d0e84e5f075d37776d9d3ae75d1cce67c74bbd815e628413776e11",
+     "in_cap"
+     "5139f72689c6c2d4ae655f76570cebc80d92a57e037fb6dadbdc832374eec1ef",
+     "projective_density_split"
+     "cbfa4de25e2d7591b482a928d390dad8fe4a597c7b09a168d0d4e0ea4d7c8cf2",
+     "sphere_measure_finite"
+     "9d30bb892817a32fad8f386cb8058461e0a293e47336943c357ba35fa7bc6b24"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/IntrinsicSphereFiniteProbe.lean /tmp/IntrinsicSphereConsumerAudit.lean",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/IntrinsicSphereFiniteProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/IntrinsicSphereFinite.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/IntrinsicSphereConsumerAudit.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.IntrinsicSphereFinite ConstructionTargets.SphereCapFiniteMeasure ConstructionTargets.SphereCapGraph",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/IntrinsicSphereFinite.lean /tmp/IntrinsicSphereFiniteProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "python3 inline audit: exact promotion, fixture SHA, ten standard-only axiom audits in both compilations, declaration hashes and consumer warnings",
+      :exit 0}
+     {:cmd "rg -n 'warning:|error:' /tmp/codex-14-intrinsic-build.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "python3 inline audit: exact staged scope and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Prove intrinsic sphere finiteness and polynomial integral splits\"",
+      :exit 0}
+     {:cmd
+      "python3 inline audit: exact committed scope and clean tracked checkout",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and dependency reviews. Only the authorized two files changed; frozen consumers, DAG, ledgers and untracked supervisor files untouched. Tracked checkout clean.",
+    :primary-warning-count 0,
+    :commit "fc27383aa4c07f6f5b59760acab43af57c531375",
+    :changed-paths
+    ["ConstructionTargets/IntrinsicSphereFinite.lean"
+     "ConstructionTargets/IntrinsicSphereFinite.md"],
+    :fixture
+    {:path "/tmp/IntrinsicSphereFiniteProbe.lean",
+     :sha256
+     "f8ed178719b52dfe6b8d67310b3084f0f1bc809b7fc9887fbc89a9c06dd61f8b"},
+    :finding
+    "Promoted the exact finite signed-coordinate cap cover, intrinsic sphere measure finiteness for d<=3, continuous polynomial integrability and consumer integral splits. Primary compilations and build passed without warnings; diagnostic consumer applications compiled.",
+    :statement-hash-method
+    "SHA-256 of declaration bytes beginning with theorem or lemma and ending immediately before the space preceding :=; namespace ConstructionTargets.IntrinsicSphereFinite.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/IntrinsicSphereFinite.lean"
     "ConstructionTargets/IntrinsicSphereFinite.md"],
