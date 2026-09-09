@@ -4537,8 +4537,150 @@
      :review-outcomes]},
    :stop-condition
    "Neither measure comparisons, documentation nor pointwise local generators count as frozen closure or coherent global orientation.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read complete DAG, foundational-program note, closure-experiment policy, standing work prompt and dependency receipts",
+      :exit 0}
+     {:cmd
+      "bb: inspect outcomes, reviews and active rows in both topology ledgers",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint5Census.py", :exit 0}
+     {:cmd "sha256sum problems/t98A02/lean/Main.lean", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/Checkpoint5Combined.edn",
+      :exit 0}
+     {:cmd "sha256sum /tmp/Checkpoint5Tail.edn", :exit 0}
+     {:cmd "git diff --exit-code; git diff --check", :exit 0}],
+    :replacement-items
+    [{:consumer :t98A02,
+      :stop-condition
+      "No assumed collar, manifold orientation compatibility, punctured-summand vanishing, dimension bound or replacement quotient.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Queue D: exact embedded-four-ball connected-sum homology consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t98A02/lean/Main.lean",
+       :stop-condition
+       "If no bounded closing adapter exists, STOP with the precise typed missing localization, embedding/gluing or dimension-vanishing theorem; distinguish infrastructure gaps from refutation. No conditional producer or partial closure GO.",
+       :gates
+       ["GO requires complete zero-placeholder frozen fixture, unchanged statement hash, fixture SHA256 and standard-only axiom audit."
+        "Propose implementation scope only after full closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Test the exact frozen theorem against HigherModelLocalHomology, HigherChartLocalGenerator, HigherSphereLocalization and production Mayer-Vietoris. Construct the actual cover/comparison for the supplied embedded closed four-balls; check all hypotheses for punctured-summand homology, connecting maps, H0 and vanishing above four. Compile an exact temporary Main with its sole placeholder removed. Existing model calculations are not proofs for arbitrary compact summands.",
+       :consumer-equation
+       "The literal connected-sum quotient has the exact frozen H0, degree-one-through-three product homology, H4 isomorphism and above-four vanishing.",
+       :frozen-sha256
+       "c711febdaded1c3790e4a572a2fc191442244836dabb8d350fadbde2484a93ed"},
+      :id :oriented-checkpoint5-t98a02-exact-gluing-probe-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "One frozen placeholder; model H4, restricted-chart local generators and sphere localization are banked, but arbitrary summand localization and actual embedded-ball gluing are unverified.",
+      :other-consumers []}
+     {:consumer :t02A05-polynomial-integrability,
+      :stop-condition
+      "No assumed finite intrinsic measure, area formula, radial identification, normalization constant or numerical moment. Do not retry the stopped full comparison.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD INTEGRATION: finite intrinsic Hausdorff sphere measure through Lipschitz caps",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Construct a finite cover of the Euclidean unit sphere by coordinate caps, each represented as a Lipschitz graph over a compact bounded subset of Euclidean d-space with denominator bounded away from zero. Use the actual Lipschitz Hausdorff image estimate and top-dimensional Haar local finiteness to prove IsFiniteMeasure for hausdorffMeasure d on the metric sphere subtype, at least for d=2 and d=3. Deduce integrability of the exact unitFlux polynomial from T02A05FluxDiagnostic and both mixed and square summands from T95J05SphereMomentBoundary. Exhibit map/image identities for the actual subtype.",
+       :consumer-equation
+       "The literal intrinsic Hausdorff integrals have integrable polynomial summands, so integral_add and integral_sub legitimately split the frozen flux and projective-sphere densities.",
+       :stop-condition
+       "GO requires constructed finite Lipschitz cap geometry, finite intrinsic measure and exact consumer integrability instances. REVISE only to one compiled geometric or measure prerequisite. Numerical normalization and moment evaluation remain downstream."},
+      :id :oriented-checkpoint5-intrinsic-sphere-finite-measure-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Radial measure is finite, but this does not establish finiteness or polynomial integrability for literal sphere-subtype Hausdorff measure.",
+      :other-consumers [:t95J05 :t94A10 :t01J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, inferred orientation coherence, unproved normalization or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: exact gluing uptake and intrinsic measure continuation",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount all DAG consumers with comments stripped. Elect exactly one eligible near-closure adapter first, then rank all remaining work by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude concurrent campaign work. Return one to five fresh work rows plus a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "Attribute frozen uptake separately from infrastructure. No empty ordinary refill; name genuine refutations precisely."},
+      :id :oriented-checkpoint6-gluing-and-intrinsic-measure-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint5-t98a02-exact-gluing-probe-1
+       :oriented-checkpoint5-intrinsic-sphere-finite-measure-1],
+      :current-residual
+      "Assess t98A02 at its actual frozen hypotheses and measure intrinsic integrability separately from normalization and moments."}],
+    :changed-paths [],
+    :measures
+    {:baseline "9028714aa92de38d6152c223b4d2be1f1aa9ce2e",
+     :head "71c23ef9248c3849048f1391fd1b77adfdc2fb7c",
+     :placeholder-delta 0,
+     :consumer-placeholders
+     {:before 71,
+      :after 71,
+      :named-consumers 59,
+      :existing-files 58,
+      :missing-paths ["problems/t93A05/lean/Main.lean"],
+      :method
+      "Executable sorry tokens after stripping block and line comments."},
+     :infrastructure-packets
+     {:this-portfolio 0,
+      :documentation-packets 1,
+      :concurrent-sard-packets 1,
+      :modules-before 618,
+      :modules-after 619},
+     :review-outcomes
+     {:this-portfolio
+      {:stop-pass 2, :documentation-pass 1, :consumer-closures 0},
+      :concurrent
+      {:antipodal-refutation :pass, :sard-slice-nullity :pass}},
+     :typed-residual-change
+     {:t03J04
+      "Actual finite covering and finite fibers compile; rational torus Euler vanishing and finite-cover Euler multiplicativity remain.",
+      :sphere-measure
+      "The comparison is equivalent to a normalized intrinsic Hausdorff cone identity. Radial polynomial integrability compiles; intrinsic finiteness, normalization and moments remain.",
+      :t97A02
+      "Reviewed closure now documented at e33f21db998c2e3b66a335cbd400ebb041367612; no additional placeholder reduction."}},
+    :portfolio-artifact
+    {:path "/tmp/Checkpoint5Tail.edn",
+     :sha256
+     "8fe18f512ea11b6d972aeae986f83d64e033185e238c9b92c237c4b9383b1283",
+     :validation "Temporary combined ledger: 38 items OK."},
+    :finding
+    "Elect one fresh near-closure consumer probe first: t98A02 has one placeholder and no prior full-consumer STOP in either ledger. Its higher-dimensional model, chart and sphere-localization inputs are reviewed, warranting an exact test without claiming they establish arbitrary-summand localization or embedded-ball gluing. Preserve the reviewed t00A01, t03J04, t02A05, t95J05 and other unresolved boundaries. Next elect finite intrinsic sphere Hausdorff measure through constructed Lipschitz caps: this addresses polynomial integrability for several integration consumers without repeating the stopped normalization comparison. General orientation, gluing, Kunneth and surface classification require broader constructions. Exclude the other campaign's Sard continuation. Its reviewed t94J08 refutation concerns ordinary H0 of the two-point sphere; the contrary DAG sentence is stale. No Hausdorff normalization discrepancy has been proved, and no refuted frozen statement is re-elected.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint5Census.json",
+     :sha256
+     "2a42f331d666fe8511aa5c600d7e50f264db503cec39f85a4a089cf7ba2f4d0e"}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: consumer uptake, normalization and manifold continuation",
@@ -4556,6 +4698,87 @@
     :oriented-checkpoint4-flux-and-sphere-refill],
    :current-residual
    "Measure exact consumer uptake separately from normalization infrastructure and closure documentation. Sphere pointwise localization still does not prove geometric orientation coherence or manifold gluing."}
+  {:consumer :t98A02,
+   :stop-condition
+   "No assumed collar, manifold orientation compatibility, punctured-summand vanishing, dimension bound or replacement quotient.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Queue D: exact embedded-four-ball connected-sum homology consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t98A02/lean/Main.lean",
+    :stop-condition
+    "If no bounded closing adapter exists, STOP with the precise typed missing localization, embedding/gluing or dimension-vanishing theorem; distinguish infrastructure gaps from refutation. No conditional producer or partial closure GO.",
+    :gates
+    ["GO requires complete zero-placeholder frozen fixture, unchanged statement hash, fixture SHA256 and standard-only axiom audit."
+     "Propose implementation scope only after full closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Test the exact frozen theorem against HigherModelLocalHomology, HigherChartLocalGenerator, HigherSphereLocalization and production Mayer-Vietoris. Construct the actual cover/comparison for the supplied embedded closed four-balls; check all hypotheses for punctured-summand homology, connecting maps, H0 and vanishing above four. Compile an exact temporary Main with its sole placeholder removed. Existing model calculations are not proofs for arbitrary compact summands.",
+    :consumer-equation
+    "The literal connected-sum quotient has the exact frozen H0, degree-one-through-three product homology, H4 isomorphism and above-four vanishing.",
+    :frozen-sha256
+    "c711febdaded1c3790e4a572a2fc191442244836dabb8d350fadbde2484a93ed"},
+   :id :oriented-checkpoint5-t98a02-exact-gluing-probe-1,
+   :kind :final-adapter,
+   :depends-on [:oriented-checkpoint5-euler-measure-refill],
+   :current-residual
+   "One frozen placeholder; model H4, restricted-chart local generators and sphere localization are banked, but arbitrary summand localization and actual embedded-ball gluing are unverified.",
+   :other-consumers []}
+  {:consumer :t02A05-polynomial-integrability,
+   :stop-condition
+   "No assumed finite intrinsic measure, area formula, radial identification, normalization constant or numerical moment. Do not retry the stopped full comparison.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD INTEGRATION: finite intrinsic Hausdorff sphere measure through Lipschitz caps",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Construct a finite cover of the Euclidean unit sphere by coordinate caps, each represented as a Lipschitz graph over a compact bounded subset of Euclidean d-space with denominator bounded away from zero. Use the actual Lipschitz Hausdorff image estimate and top-dimensional Haar local finiteness to prove IsFiniteMeasure for hausdorffMeasure d on the metric sphere subtype, at least for d=2 and d=3. Deduce integrability of the exact unitFlux polynomial from T02A05FluxDiagnostic and both mixed and square summands from T95J05SphereMomentBoundary. Exhibit map/image identities for the actual subtype.",
+    :consumer-equation
+    "The literal intrinsic Hausdorff integrals have integrable polynomial summands, so integral_add and integral_sub legitimately split the frozen flux and projective-sphere densities.",
+    :stop-condition
+    "GO requires constructed finite Lipschitz cap geometry, finite intrinsic measure and exact consumer integrability instances. REVISE only to one compiled geometric or measure prerequisite. Numerical normalization and moment evaluation remain downstream."},
+   :id :oriented-checkpoint5-intrinsic-sphere-finite-measure-1,
+   :kind :reusable-theorem,
+   :depends-on [:oriented-checkpoint5-euler-measure-refill],
+   :current-residual
+   "Radial measure is finite, but this does not establish finiteness or polynomial integrability for literal sphere-subtype Hausdorff measure.",
+   :other-consumers [:t95J05 :t94A10 :t01J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, inferred orientation coherence, unproved normalization or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: exact gluing uptake and intrinsic measure continuation",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount all DAG consumers with comments stripped. Elect exactly one eligible near-closure adapter first, then rank all remaining work by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude concurrent campaign work. Return one to five fresh work rows plus a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "Attribute frozen uptake separately from infrastructure. No empty ordinary refill; name genuine refutations precisely."},
+   :id :oriented-checkpoint6-gluing-and-intrinsic-measure-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint5-t98a02-exact-gluing-probe-1
+    :oriented-checkpoint5-intrinsic-sphere-finite-measure-1
+    :oriented-checkpoint5-euler-measure-refill],
+   :current-residual
+   "Assess t98A02 at its actual frozen hypotheses and measure intrinsic integrability separately from normalization and moments."}
   {:consumer :t00A01,
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
