@@ -4286,6 +4286,21 @@
       :exit 0}
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788979549213-16819-ff4b4181",
+     :commands
+     ["Inspect recorded row at 8bb5698c and /tmp/T03J04EulerDiagnostic.lean"
+      "realpath .lake/packages"
+      "sha256sum /tmp/T03J04EulerDiagnostic.lean"
+      "lake env lean /tmp/T03J04EulerDiagnostic.lean"
+      "Python audit: frozen source hash, exact definition prefix, statement hash, placeholder and forbidden-token counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 8bb5698c:holes/labs/topology-contract/worklist2.edn)"
+      "Inspect canonical Euler-characteristic and product-homology declarations"
+      "git show --format= --check 8bb5698c; git diff --exit-code; git diff --check"],
+     :finding
+     "Independent of author codex-13. PASS validates the missing-infrastructure STOP only. Fixture SHA256 0ba77e7694d3fa4528e6580b4285ae707f2cf1bf1c83cca9238511cc4c3fc118 matches. Compilation passes; actual_finite_cover uses only propext, Classical.choice and Quot.sound, with the recorded unused hphi warning. Frozen source and statement hashes match; definition prefix unchanged; frozen placeholders 1, diagnostic placeholders and forbidden tokens 0. Covering geometry, surjectivity and finite fibers concern the actual map and are proved. TorusEulerVanishing and CoverEulerRelation remain unproved propositions about the exact rational singular-homology finrank sum; no abstract Euler replacement or homology-finiteness assumption is used to claim closure. Recorded ledger validates: 35 items OK. Empty implementation scope; no source or ledger edits."},
     :campaign-refutation false,
     :changed-paths [],
     :fixture
@@ -4299,7 +4314,7 @@
     :diagnostic-placeholders 0,
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "COVERING-BASIC and PRODUCT HOMOLOGY: torus local-diffeomorphism Euler consumer",
