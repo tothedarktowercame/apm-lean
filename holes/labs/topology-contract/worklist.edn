@@ -38961,6 +38961,41 @@
    "Compactness supplies the enclosing ball and positivity discharges source volume normalization; finite-order jet specialization and local induction remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the exact flatThrough locus is not compact under the stated regularity, or endpoint volume nullity cannot transfer to target add-Haar measure, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardLocalizedFlatThroughEndpointNullity.lean"
+    "ConstructionTargets/SardLocalizedFlatThroughEndpointNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED FLAT-THROUGH ENDPOINT NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardLocalizedFlatThroughEndpointNullityProbe.lean",
+     :sha256
+     "b06f275526d83039374157d077ad4e937286e9083c60514441853a9537fe2fb9"},
+    :declarations
+    ["localized_flatThrough_endpoint_image_addHaar_eq_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Combine the endpoint flat-through branch with the remaining finite-order jet branches, then complete local induction and compact exhaustion."},
+   :representation
+   {:source
+    "A globally C^(k+1) map, compact source set, exact Taylor dimension equality, and the subset flatThrough f K (k+1), in nontrivial finite-dimensional real inner-product spaces with Borel structures.",
+    :target
+    "Zero image measure of that exact flat-through locus for any target add-Haar measure."},
+   :id :critical-value-sard-localized-flat-through-endpoint-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-compact-flat-endpoint-normalized-nullity-1
+    :critical-value-sard-flat-through-compact-localization-1
+    :critical-value-sard-volume-nullity-to-add-haar-1],
+   :current-residual
+   "The compact flatThrough endpoint branch is proved for arbitrary target add-Haar measure; finite-order branch aggregation and local induction remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -39014,72 +39049,73 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Implement normalized compact endpoint nullity, then complete finite-order jet specialization, localization, induction, and compact exhaustion.",
+     "Implement the exact flat-through endpoint add-Haar branch, then complete finite-order branch aggregation, local induction, and compact exhaustion.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"compact_flat_endpoint_volume_eq_zero_normalized"
-      "4d9d47d9b36e2ad5ce4c4d200d332e7995bdc16c827d2d8aaed35b084b6516f2"},
+     {"localized_flatThrough_endpoint_image_addHaar_eq_zero"
+      "e1f9417155df4cb1e7a07928c51b181443f6fe25553cc8da3b69e79486c080b4"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if compactness fails to supply an enclosing source ball or the stated source unit-ball constant fails to be positive, or if the resulting endpoint theorem requires nonstandard axioms.",
+      "Stop only if the exact flatThrough locus is not compact under the stated regularity, or endpoint volume nullity cannot transfer to target add-Haar measure, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCompactFlatEndpointNormalizedNullity.lean"
-       "ConstructionTargets/SardCompactFlatEndpointNormalizedNullity.md"],
+      ["ConstructionTargets/SardLocalizedFlatThroughEndpointNullity.lean"
+       "ConstructionTargets/SardLocalizedFlatThroughEndpointNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT FLAT ENDPOINT NORMALIZED NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCALIZED FLAT-THROUGH ENDPOINT NULLITY",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardCompactFlatEndpointNormalizedNullityProbe.lean",
+       {:path "/tmp/SardLocalizedFlatThroughEndpointNullityProbe.lean",
         :sha256
-        "75f7ecfd92907ea27aec2208544487f769d6cb566b8a98840cbcfb28c4df7a26"},
+        "b06f275526d83039374157d077ad4e937286e9083c60514441853a9537fe2fb9"},
        :declarations
-       ["compact_flat_endpoint_volume_eq_zero_normalized"],
+       ["localized_flatThrough_endpoint_image_addHaar_eq_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Specialize normalized compact endpoint nullity to the finite-order jet decomposition and complete localization, induction, and compact exhaustion."},
+       "Combine the endpoint flat-through branch with the remaining finite-order jet branches, then complete local induction and compact exhaustion."},
       :representation
       {:source
-       "A globally C^(k+1) map between nontrivial finite-dimensional real inner-product spaces with Borel structures, a compact source locus flat through order k+1, and exact Taylor dimension equality.",
+       "A globally C^(k+1) map, compact source set, exact Taylor dimension equality, and the subset flatThrough f K (k+1), in nontrivial finite-dimensional real inner-product spaces with Borel structures.",
        :target
-       "Zero image volume without separately supplied bounding-ball data or source unit-ball volume normalization."},
+       "Zero image measure of that exact flat-through locus for any target add-Haar measure."},
       :id
-      :critical-value-sard-compact-flat-endpoint-normalized-nullity-1,
+      :critical-value-sard-localized-flat-through-endpoint-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-compact-flat-endpoint-nullity-1],
+      [:critical-value-sard-compact-flat-endpoint-normalized-nullity-1
+       :critical-value-sard-flat-through-compact-localization-1
+       :critical-value-sard-volume-nullity-to-add-haar-1],
       :current-residual
-      "Compactness supplies the enclosing ball and positivity discharges source volume normalization; finite-order jet specialization and local induction remain.",
+      "The compact flatThrough endpoint branch is proved for arbitrary target add-Haar measure; finite-order branch aggregation and local induction remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "Rectangular local Morse-Sard remains incomplete, not refuted. The compiled prerequisite discharges the endpoint theorem's explicit source-volume normalization using positivity of pi and Gamma, and constructs the enclosing source ball from compactness. Finite-order jet specialization and local induction remain.",
+     "The rectangular theorem is not refuted. A compiled prerequisite specializes endpoint nullity to the exact flatThrough locus of order k+1 and transfers volume nullity to arbitrary target add-Haar measure. It derives compactness of that locus from continuity of the iterated derivatives. Finite-order induction and localization remain.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardCompactFlatEndpointNormalizedNullityProbe.lean",
+       "lake env lean /tmp/SardLocalizedFlatThroughEndpointNullityProbe.lean",
        :exit 0,
        :output
        "Standard axioms: propext, Classical.choice, Quot.sound"}
       {:cmd
-       "sha256sum /tmp/SardCompactFlatEndpointNormalizedNullityProbe.lean",
+       "sha256sum /tmp/SardLocalizedFlatThroughEndpointNullityProbe.lean",
        :exit 0}
       {:cmd
-       "sed -n '6,25p' /tmp/SardCompactFlatEndpointNormalizedNullityProbe.lean | sha256sum",
+       "sed -n '8,27p' /tmp/SardLocalizedFlatThroughEndpointNullityProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactFlatEndpointNormalizedNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalizedFlatThroughEndpointNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 297 items OK; {:done 289, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 298 items OK; {:done 290, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -39088,18 +39124,18 @@
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
        :output "1"}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git status --porcelain=v1", :exit 0, :output ""}
       {:cmd "readlink -f .lake/packages",
        :exit 0,
-       :output "/home/joe/code/apm-lean/.lake/packages"}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+       :output "/home/joe/code/apm-lean/.lake/packages"}],
      :fixture
-     {:path "/tmp/SardCompactFlatEndpointNormalizedNullityProbe.lean",
+     {:path "/tmp/SardLocalizedFlatThroughEndpointNullityProbe.lean",
       :sha256
-      "75f7ecfd92907ea27aec2208544487f769d6cb566b8a98840cbcfb28c4df7a26"},
+      "b06f275526d83039374157d077ad4e937286e9083c60514441853a9537fe2fb9"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -39345,7 +39381,8 @@
     :critical-value-sard-compact-flat-highest-derivative-small-1
     :critical-value-sard-compact-uniform-small-taylor-remainder-1
     :critical-value-sard-compact-flat-endpoint-nullity-1
-    :critical-value-sard-compact-flat-endpoint-normalized-nullity-1],
+    :critical-value-sard-compact-flat-endpoint-normalized-nullity-1
+    :critical-value-sard-localized-flat-through-endpoint-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
