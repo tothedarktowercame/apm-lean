@@ -4374,6 +4374,20 @@
       :expected-exit 1}
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788979941860-16831-54c8a98d",
+     :commands
+     ["Inspect recorded result at 187aab18 and pinned Hausdorff/HaarToSphere definitions"
+      "realpath .lake/packages"
+      "sha256sum /tmp/SphereHausdorffRadialBoundary.lean /tmp/T02A05FluxDiagnostic.lean /tmp/T95J05SphereMomentBoundary.lean"
+      "lake env lean /tmp/SphereHausdorffRadialBoundary.lean"
+      "Python audit: fixture hash, forbidden tokens, exact unitFlux body, unchanged frozen consumer hashes, statement hashes and placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 187aab18:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check 187aab18; git diff --exit-code; git diff --check"],
+     :finding
+     "Independent of author codex-13. PASS validates the missing-comparison STOP only. Fixture SHA256 34e4ed4b11a1df9180edd3f0b513eea7867decb1b3f9f85ecdec7464b03bc70c matches; compilation passes without warnings and six standard-only axiom audits. Comparison is correctly oriented as intrinsic Hausdorff measure equal to a scalar multiple of radial measure. Its equivalence with ConeLaw is proved, but neither ConeLaw nor a finite positive normalization constant is supplied. Radial finiteness and integrability do not claim intrinsic finiteness; integral conversions remain explicitly conditional. Consumer integrands match. No numerical discrepancy or refutation is claimed. Frozen t02A05 and t95J05 sources and statement hashes are unchanged, with 2 and 1 placeholders respectively. Recorded ledger validates: 35 items OK. Empty implementation scope; ledger untouched."},
     :infrastructure-packets 0,
     :changed-paths [],
     :fixture
@@ -4385,7 +4399,7 @@
     "Compiled the exact equivalence between the requested measure equality and ConeLaw: for every measurable sphere subset A, intrinsic d A = c * ((d+1) * volume (Ioo 0 1 • Subtype.val '' A)). Neither ConeLaw nor its normalization constant is proved. The diagnostic proves radial-measure finiteness, its total-mass formula, and radial integrability of the flux and coordinate-square polynomials. Integral conversions compile only conditional on the missing comparison; these are diagnostic consequences, not an implementation prerequisite or GO packet. The pinned Hausdorff definition uses diameter powers; ambient Haar uniqueness and radial polar coordinates do not supply the intrinsic sphere comparison. No numerical discrepancy with either frozen consumer has been proved.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: literal sphere Hausdorff measure versus radial-cone measure",
