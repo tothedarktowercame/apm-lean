@@ -1130,6 +1130,22 @@
       "sha256sum problems/t97A02/lean/Main.lean /tmp/OrientedPortfolioCensus.json",
       :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788970381339-16582-f021a159",
+     :commands
+     ["git show 0c2793dd:holes/labs/topology-contract/worklist2.edn"
+      "git show dd05a502:problems/t97A02/lean/Main.lean"
+      "git show dd05a502:ConstructionTargets/CircleHurewiczIsomorphism.md"
+      "git show dd05a502:ConstructionTargets/DegreeOneHurewiczMap.lean"
+      "python3: verify census SHA256, frozen t97A02 SHA256 and statement hashes, comment-stripped consumer counts, module counts, and prior ledger occurrences"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "bb: assert three replacement work rows, t97A02 first, identical checkpoint policy and complete successor dependencies"
+      "git diff --exit-code 0c2793dd -- holes/labs/topology-contract/worklist2.edn"
+      "git show --format= --check 0c2793dd"],
+     :finding
+     "Repair resolves prior finding: withdraws unsupported t00A01 retry and preserves its reviewed actual-cover boundary. Elects fresh t97A02 full-consumer probe before two Circle foundation probes, without assuming generic Hurewicz injectivity, finite fundamental group, connectivity, or compiled closure. Actual localization directions, coefficient comparison obligations and global orientation coherence are explicit; no higher-dimensional extrapolation. Census and frozen hash verified; placeholders 76 to 76, modules 584 to 596. Three work rows and successor satisfy schema and preserve checkpoint policy. Strategy-only supervisor ledger commit; no source changes or review edits."},
     :replacement-items
     [{:consumer :t97A02,
       :stop-condition
@@ -1296,7 +1312,7 @@
     :t98A02-assessment
     "Still not a bounded adapter: four-dimensional model/localization calculations, punctured-summand boundary-map control, excisive gluing geometry for the supplied embeddings, and vanishing above dimension four remain. Abstract supplied H4 isomorphisms do not identify localization maps. Circle results neither close this frozen placeholder nor establish higher-dimensional orientation compatibility."},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: oriented-manifold fundamental classes and localization",
@@ -1317,7 +1333,7 @@
    :stop-condition
    "No assumed Hurewicz isomorphism for arbitrary spaces, finite fundamental-group inference, strengthened connectivity hypothesis, or partial closure presented as GO.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS: homological circle-lifting criterion; t97A02",
@@ -1354,7 +1370,7 @@
    :stop-condition
    "No abstract isomorphism substituted for the actual map; no arbitrary-manifold or higher-dimensional claim.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "Queue D #2: Circle actual absolute-to-local map",
    :acceptance
