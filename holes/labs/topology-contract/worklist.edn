@@ -48305,6 +48305,19 @@
      {:cmd
       "git diff --exit-code -- ConstructionTargets problems/a97J08/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788973270326-16653-5ebb6ace",
+     :commands
+     ["git show --stat 2ffa12fa"
+      "sha256sum /tmp/A97J08PlanarBoundary.lean /tmp/A97J08PlanarBoundary.md /tmp/A97J08PlanarBoundary-sources.json"
+      "Reexecuted check-a97j08-planar-boundary.py with recorded head and artifact write replaced by equality assertion; checked source hashes against git objects at 2ffa12fa"
+      "lake env lean /tmp/A97J08PlanarBoundary.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 2ffa12fa"],
+     :finding
+     "Independent of author codex-12. PASS validates the explicitly limited STOP. Pins and exact frozen prefix match; diagnostic compilation exits 0 with propext, Classical.choice, Quot.sound only. Radial map composed with the constructed circle equals identity in the correct direction. Whole-complement boundedness is not substituted for boundedness of one component. Missing component-to-essential-circle construction remains at Main.lean:1796; consumer has one placeholder at line 1806, unchanged frozen hash. No closure, refutation, or campaign termination claimed. Ledger gate passes; reviewer made no edits."},
     :campaign-termination false,
     :changed-paths [],
     :finding
@@ -48316,7 +48329,7 @@
      "b92f1aeb148e8b5084fc179c41872210200b5007b75caa935c28b679e5e3fa45"},
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PLANAR SEPARATION / bounded complement component",
    :acceptance
