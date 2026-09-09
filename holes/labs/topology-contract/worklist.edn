@@ -36263,6 +36263,28 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788917403207-15794-d0897504",
+     :commands
+     ["git show --stat --oneline 58958fff4ae5e3adec3527b8cdfe3ae2dfac2a8a"
+      "git diff-tree --no-commit-id --name-only -r 58958fff4ae5e3adec3527b8cdfe3ae2dfac2a8a"
+      "sha256sum /tmp/SardFiniteOrderPositiveRankStratumNullityProbe.lean"
+      "cmp -s /tmp/SardFiniteOrderPositiveRankStratumNullityProbe.lean ConstructionTargets/SardFiniteOrderPositiveRankStratumNullity.lean"
+      "sed -n '9,28p' <(git show 58958fff4ae5e3adec3527b8cdfe3ae2dfac2a8a:ConstructionTargets/SardFiniteOrderPositiveRankStratumNullity.lean) | sha256sum"
+      "lake env lean /tmp/SardFiniteOrderPositiveRankStratumNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderPositiveRankStratumNullity.lean"
+      "lake build"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "rg -o '\\b(sorry|admit)\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderPositiveRankStratumNullity.lean"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "rg -c '^theorem ' problems/t93A04/lean/Main.lean"
+      "readlink -f .lake/packages"
+      "git diff --check 58958fff4ae5e3adec3527b8cdfe3ae2dfac2a8a^ 58958fff4ae5e3adec3527b8cdfe3ae2dfac2a8a"],
+     :finding
+     "PASS: exact scope and fixture, frozen statement hash, correctly oriented second-countable stratum aggregation, preserved finite-order data, standard-only axioms, zero source placeholders, frozen consumer, full build, and worklist gate all reproduced."},
     :commit "58958fff4ae5e3adec3527b8cdfe3ae2dfac2a8a",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderPositiveRankStratumNullity.lean"
@@ -36274,7 +36296,7 @@
     :declarations
     ["measure_image_zero_of_positive_rankStratum_finiteOrder"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderPositiveRankStratumNullity.lean"
     "ConstructionTargets/SardFiniteOrderPositiveRankStratumNullity.md"],
@@ -36455,7 +36477,7 @@
       "1873808f40dbe603b8e907ab9b9451510203a123369ce778901fd05f208c0a8c"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
