@@ -6187,6 +6187,21 @@
     :repository-note
     "No repository files or ledger entries changed. Existing implementation commit and exact two-file scope verified; tracked checkout clean.",
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788985997625-17002-8454b337",
+     :commands
+     ["git show dcf5770e:holes/labs/topology-contract/worklist2.edn"
+      "lake env lean /tmp/RegularFiberChartProbe.lean"
+      "lake env lean ConstructionTargets/RegularFiberChart.lean"
+      "lake build ConstructionTargets.RegularFiberChart ConstructionTargets.SardImplicitFunctionLevelSetKernelParameterization"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show dcf5770e:holes/labs/topology-contract/worklist2.edn)"
+      "python3 inline audit: committed fixture equality, SHA256, 18 declaration hashes, exact scope, 16-file import closure, forbidden tokens, frozen tree and placeholder counts"
+      "git show --format= --check ecfe1d8f"
+      "git diff --exit-code"],
+     :finding
+     "Receipt-only repair verified: all 18 complete hashes match unchanged implementation ecfe1d8f. Fixture SHA256 565d6e660df9ef1b1b4b167768409f7be33d1d8b073cb51bbb93dd40d871a653 matches. Both compilations and 8255-job build pass without warnings; audits standard-only. Theorem directions and representation boundaries correct. Frozen placeholders 322 -> 322. Ledger unchanged."},
     :commit "ecfe1d8f0ed29aa70e419e23f153fadd30ffc938",
     :changed-paths [],
     :fixture
@@ -6203,7 +6218,7 @@
      "ConstructionTargets/RegularFiberChart.md"],
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/RegularFiberChart.lean"
     "ConstructionTargets/RegularFiberChart.md"],
@@ -6239,7 +6254,7 @@
    :stop-condition
    "Preserve reviewed STOPs and refutations; no duplicate concurrent work, unproved normalization or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact surface uptake and regular-preimage continuation",
