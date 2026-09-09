@@ -9596,6 +9596,19 @@
       :exit 1,
       :correction
       "Constructed the zero-dimensional model's Subsingleton instance explicitly, then obtained its discrete topology. Removed unused simp arguments."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788995165323-17291-201cc79c",
+     :commands
+     ["git show 270bc9bc:holes/labs/topology-contract/worklist2.edn"
+      "lake env lean /tmp/T96J05Refutation.lean"
+      "python3 inline audit: fixture and frozen SHA256, exact copied definitions, FrozenClaim equivalence to universally quantified frozen statement, placeholder counts, forbidden tokens and ledger-only scope"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 270bc9bc:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Independent review of codex-13 refutation: full admissible unit-circle counterexample compiles with five standard-only audits and exactly the recorded six warnings. Every inhabited radial level forces radius one; the level homeomorphism transports discreteness from any zero-dimensional charted structure to the connected nontrivial circle, a contradiction. FrozenClaim exactly matches the complete frozen universal statement. Fixture hash matches; frozen declaration hash 4394da1c84c6e143f3b8e244912c2e0372f01d3893d5e0a019ad2cdc20f30760 unchanged; placeholders 1->1. No statement repair or implementation performed; ledger untouched."},
     :refutation
     {:declaration "T96J05Refutation.refutes_frozen",
      :type "¬ T96J05Refutation.FrozenClaim",
@@ -9619,7 +9632,7 @@
     "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48",
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: exact radial-level consumer and constant-radius audit",
