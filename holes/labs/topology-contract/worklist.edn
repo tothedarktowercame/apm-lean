@@ -35293,8 +35293,79 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if nonzero finite-order regularity and a derivative-rank bound restricted to a closed locus inside an open chart localization cannot yield zero measure for that localized exact-rank image, or if the theorem requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Aggregate the finite-order exact-rank closed-open nullity neighborhoods over every positive-rank stratum and combine them with the rank-zero finite-order branch.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_image_zero_of_exactRank_closedOpen_projectedChart_finiteOrder"
+     "7d6137b56383eecfa2070641c5c1c94ac376b101cbf2ca6353197a13be9dd258"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFiniteOrderExactRankClosedOpenProjectedChartNullityProbe.lean",
+      :exit 0,
+      :output
+      "4d680195b6bb02f49554619f306703fd77c47cccb8e0934cda63b8a9ac64ffa0  /tmp/SardFiniteOrderExactRankClosedOpenProjectedChartNullityProbe.lean"}
+     {:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "diff -u /tmp/SardFiniteOrderExactRankClosedOpenProjectedChartNullityProbe.lean ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean",
+      :exit 0,
+      :output
+      "'SardFiniteOrderExactRankClosedOpenProjectedChartNullityProbe.measure_image_zero_of_exactRank_closedOpen_projectedChart_finiteOrder' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '10,73p' ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "7d6137b56383eecfa2070641c5c1c94ac376b101cbf2ca6353197a13be9dd258  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 270 items OK; {:done 261, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "4ba23148f881cdc7aae63325e764b72835044926",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean"
+     "ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.md"],
+    :fixture
+    {:path
+     "/tmp/SardFiniteOrderExactRankClosedOpenProjectedChartNullityProbe.lean",
+     :sha256
+     "4d680195b6bb02f49554619f306703fd77c47cccb8e0934cda63b8a9ac64ffa0"},
+    :declarations
+    ["measure_image_zero_of_exactRank_closedOpen_projectedChart_finiteOrder"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.lean"
     "ConstructionTargets/SardFiniteOrderExactRankClosedOpenProjectedChartNullity.md"],
