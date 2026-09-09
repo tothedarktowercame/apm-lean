@@ -36952,8 +36952,75 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the exact equality endpoint under positive target dimension, nonzero order, and classical Sard admissibility does not force either first-order regularity or one-dimensional target, or if the classification requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Provide the exact-endpoint Taylor image-nullity theorem for the first-order or one-dimensional-target cases, then finish higher-jet specialization and compact exhaustion.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"endpoint_order_eq_one_or_targetDim_eq_one"
+     "2e3530979e55df43db2b0a4c564ebcd82f63de82b7cb0751376849eed07363c1"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFiniteOrderTaylorEndpointClassificationProbe.lean",
+      :exit 0,
+      :output
+      "5ea6d30d9f1115ca0943b8c6782ae16cbeb4652888ab6d83edfd79ff2ffe6fee  /tmp/SardFiniteOrderTaylorEndpointClassificationProbe.lean"}
+     {:cmd
+      "lake build ConstructionTargets.SardFiniteOrderTaylorEndpointClassification",
+      :exit 0,
+      :output "Build completed successfully (8242 jobs)."}
+     {:cmd
+      "lake env lean /tmp/SardFiniteOrderTaylorEndpointClassificationProbe.lean",
+      :exit 0,
+      :output
+      "'SardFiniteOrderTaylorEndpointClassificationProbe.endpoint_order_eq_one_or_targetDim_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "cmp -s /tmp/SardFiniteOrderTaylorEndpointClassificationProbe.lean ConstructionTargets/SardFiniteOrderTaylorEndpointClassification.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderTaylorEndpointClassification.lean ConstructionTargets/SardFiniteOrderTaylorEndpointClassification.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '5,17p' ConstructionTargets/SardFiniteOrderTaylorEndpointClassification.lean | sha256sum",
+      :exit 0,
+      :output
+      "2e3530979e55df43db2b0a4c564ebcd82f63de82b7cb0751376849eed07363c1  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 283 items OK; {:done 274, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check HEAD^", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "e1f49694294bfb02af875ddbcdc1ae212454dbbc",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteOrderTaylorEndpointClassification.lean"
+     "ConstructionTargets/SardFiniteOrderTaylorEndpointClassification.md"],
+    :fixture
+    {:path
+     "/tmp/SardFiniteOrderTaylorEndpointClassificationProbe.lean",
+     :sha256
+     "5ea6d30d9f1115ca0943b8c6782ae16cbeb4652888ab6d83edfd79ff2ffe6fee"},
+    :declarations ["endpoint_order_eq_one_or_targetDim_eq_one"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteOrderTaylorEndpointClassification.lean"
     "ConstructionTargets/SardFiniteOrderTaylorEndpointClassification.md"],
