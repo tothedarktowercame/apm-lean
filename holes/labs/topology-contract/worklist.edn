@@ -35486,6 +35486,29 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788914826759-15750-551e5eb8",
+     :commands
+     ["git show --stat --oneline 2a758e4b94ad00ea65e5860ab865b71b77e1a7da"
+      "git diff-tree --no-commit-id --name-only -r 2a758e4b94ad00ea65e5860ab865b71b77e1a7da"
+      "git show 2a758e4b94ad00ea65e5860ab865b71b77e1a7da:ConstructionTargets/SardFiniteOrderClosedOpenProjectedChartImageNullity.lean"
+      "sha256sum /tmp/SardFiniteOrderClosedOpenProjectedChartImageNullityProbe.lean"
+      "cmp -s /tmp/SardFiniteOrderClosedOpenProjectedChartImageNullityProbe.lean <(git show 2a758e4b94ad00ea65e5860ab865b71b77e1a7da:ConstructionTargets/SardFiniteOrderClosedOpenProjectedChartImageNullity.lean)"
+      "git show 2a758e4b94ad00ea65e5860ab865b71b77e1a7da:ConstructionTargets/SardFiniteOrderClosedOpenProjectedChartImageNullity.lean | sed -n '5,42p' | sha256sum"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderClosedOpenProjectedChartImageNullity.lean ConstructionTargets/SardFiniteOrderClosedOpenProjectedChartImageNullity.md"
+      "lake env lean /tmp/SardFiniteOrderClosedOpenProjectedChartImageNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderClosedOpenProjectedChartImageNullity.lean"
+      "lake build ConstructionTargets.SardFiniteOrderClosedOpenProjectedChartImageNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "readlink -f .lake/packages"
+      "git diff --check 2a758e4b94ad00ea65e5860ab865b71b77e1a7da^ 2a758e4b94ad00ea65e5860ab865b71b77e1a7da"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: exact scope, fixture, and frozen statement hash reproduce; the natural finite order is correctly embedded into the generic WithTop interface, retained unchanged in both lower-dimensional induction and slice regularity, and the slice hypotheses remain localized to A intersect U with the correctly oriented image-nullity conclusion; compilation uses only standard axioms and no placeholders."},
     :commit "2a758e4b94ad00ea65e5860ab865b71b77e1a7da",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderClosedOpenProjectedChartImageNullity.lean"
@@ -35498,7 +35521,7 @@
     :declarations
     ["measure_image_zero_of_closedOpen_projectedChart_finiteOrder"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderClosedOpenProjectedChartImageNullity.lean"
     "ConstructionTargets/SardFiniteOrderClosedOpenProjectedChartImageNullity.md"],
@@ -35681,7 +35704,7 @@
       "c1b99288fdbf440bbb18a90125830ed4a8238f6d4fe4d5a7674b9d939c8acf9d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
