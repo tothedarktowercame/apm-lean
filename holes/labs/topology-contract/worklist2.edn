@@ -5243,8 +5243,155 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, inferred orientation coherence, unproved normalization or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "cat TOPOLOGY-DEPENDENCY-DAG.md", :exit 0}
+     {:cmd "cat docs/TN-topology-foundational-programs.md", :exit 0}
+     {:cmd "cat holes/labs/topology-contract/work-prompt.md", :exit 0}
+     {:cmd "sed -n '65,150p' docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd
+      "bb: inspect both ledgers, active rows and reviewed dependency receipts",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint6Census.py", :exit 0}
+     {:cmd "sha256sum problems/t97A01/lean/Main.lean", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/Checkpoint6Combined.edn",
+      :exit 0}
+     {:cmd "sha256sum /tmp/Checkpoint6Tail.edn", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :replacement-items
+    [{:consumer :t97A01,
+      :stop-condition
+      "Preserve both literal quotients and all frozen invariant statements. No assumed collar, cellular comparison, quotient homeomorphism or group presentation.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Closed gluing and surface invariants: literal polygon quotient consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t97A01/lean/Main.lean",
+       :stop-condition
+       "If no bounded closing adapter exists, STOP under rule 0 with the precise typed missing quotient/open-cover, homology or actual-arrow van Kampen theorem. Distinguish infrastructure from refutation; no partial closure GO.",
+       :gates
+       ["GO only with full zero-placeholder frozen fixture, unchanged statement hash, fixture SHA256 and standard-only audits."
+        "Propose implementation scope only after complete closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Read exact frozen Main and test the newer production Mayer-Vietoris and target-natural van Kampen source-reconstruction APIs against its actual polygon inclusions. Construct every needed open cover, homotopy model and arrow comparison. Upgrade the proved relation equivalence to the actual topological comparison where needed. Compile a complete temporary exact Main with its sole placeholder removed, including all homology degrees and the specified fundamental-group presentation.",
+       :consumer-equation
+       "Both literal polygon quotients have H0=Z, H1=Z x Z x ZMod 2 and zero higher homology, and the second has the frozen presented fundamental group.",
+       :frozen-sha256
+       "63ea50fe8435ba22b20b6db4d53e553ad0c27e9a31de96b8a1212019cc1c9402"},
+      :id :oriented-checkpoint6-t97a01-exact-polygon-invariants-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "One frozen placeholder: actual singular homology of two polygon quotients and the actual fundamental group presentation remain. The first relation has a banked set-level standard-surface comparison.",
+      :other-consumers []}
+     {:consumer :t02A05-moment-reduction,
+      :stop-condition
+      "No assumed numerical sphere area, positive total mass, radial identification or moment value. This is a symmetry calculation, not a retry of the stopped Hausdorff-cone comparison or a full consumer closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD INTEGRATION: intrinsic polynomial moments relative to total mass",
+      :acceptance
+      {:probe
+       "Use IntrinsicSphereFinite for actual Hausdorff sphere measures in dimensions two and three. Construct coordinate reflections, permutations and the needed plane rotation as isometries of the literal sphere subtype, and prove their integral transport. Derive vanishing odd moments, equal second moments by the norm-one sum, and fourth/mixed-fourth moments through rotation and polynomial expansion. Prove all integrability needed to split expressions. Express the exact T02A05Diagnostic.unitFlux integral and t95J05InclusionPullback integral in terms of the real total intrinsic measure; prove their formulas without a numerical normalization premise.",
+       :consumer-equation
+       "Writing M_d=(hausdorffMeasure d univ).toReal on the literal sphere, integral unitFlux c = M_2*(11/15+(c0-1)^2+(c1-2)^2); integral x0^2 on S3 = M_3/4, and integral t95J05InclusionPullback = -M_3.",
+       :axioms :standard-only,
+       :stop-condition
+       "GO requires actual isometries, invariant integral equations and both exact consumer reductions. REVISE only to one compiled symmetry or moment prerequisite. Numerical identification of M_2 or M_3 stays explicitly downstream."},
+      :id
+      :oriented-checkpoint6-intrinsic-sphere-mass-relative-moments-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint5-intrinsic-sphere-finite-measure-1],
+      :current-residual
+      "Intrinsic sphere polynomial integrability is reviewed. Coordinate moments and the exact remaining scalar normalization are not yet computed.",
+      :other-consumers [:t95J05 :t94A10 :t01J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Preserve unresolved STOPs and refutations; no unproved numerical normalization, duplicate concurrent work or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: exact polygon uptake and intrinsic normalization boundary",
+      :acceptance
+      {:strategy
+       "Reread complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Retry a reviewed STOP only with evidence resolving its precise boundary. Return one to five fresh work rows plus a successor with identical checkpoint keys. Exclude active work of the other campaign and do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish missing infrastructure from proved refutation and infrastructure from frozen closure."},
+      :id :oriented-checkpoint7-polygon-and-moment-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint6-t97a01-exact-polygon-invariants-1
+       :oriented-checkpoint6-intrinsic-sphere-mass-relative-moments-1],
+      :current-residual
+      "Measure frozen polygon uptake separately from intrinsic moment reductions. Total sphere mass, arbitrary-manifold orientation and embedded-ball gluing remain independent."}],
+    :changed-paths [],
+    :measures
+    {:baseline "71c23ef9248c3849048f1391fd1b77adfdc2fb7c",
+     :head "65e9444654f1966d500f62ec6ae946fe8a3c9fa3",
+     :placeholder-delta 0,
+     :consumer-placeholders
+     {:before 71,
+      :after 71,
+      :named-consumers 59,
+      :existing-files 58,
+      :zero-placeholder-files 19,
+      :missing-paths ["problems/t93A05/lean/Main.lean"],
+      :method
+      "Executable sorry tokens after stripping block and line comments."},
+     :infrastructure-packets
+     {:this-portfolio 3,
+      :modules-before 619,
+      :modules-after 622,
+      :consumer-closures 0,
+      :concurrent-specification-repairs 1},
+     :review-outcomes
+     {:intrinsic-cap-graph :pass,
+      :intrinsic-cap-finiteness :pass,
+      :intrinsic-sphere-finiteness :pass,
+      :t98A02-infrastructure-stop :pass},
+     :typed-residual-change
+     {:intrinsic-measure
+      "Finite signed-coordinate caps now cover the actual spheres. Intrinsic Hausdorff finiteness and exact polynomial integrability/splitting are reviewed at fc27383aa4c07f6f5b59760acab43af57c531375. Numerical normalization and moments remain.",
+      :t98A02
+      "Reviewed diagnostic isolates arbitrary-summand localization, actual excisive quotient-piece comparison and above-dimension vanishing. No refutation or closure.",
+      :concurrent-t94J08
+      "Other campaign repaired ordinary-homology scope to positive dimensions at 5bbfd5c1; two placeholders remain. Original S0 refutation and outstanding reduced-homology coverage remain preserved."}},
+    :portfolio-artifact
+    {:path "/tmp/Checkpoint6Tail.edn",
+     :sha256
+     "3137b8b273be6bf91dd698326dee499aba56abd48cd1fd7daadcd92263301747",
+     :validation "Temporary combined ledger: 43 items OK."},
+    :finding
+    "Elect exactly one fresh near-closure probe first: t97A01 has one placeholder and no reviewed full-consumer STOP in either ledger. Its literal polygon invariants warrant testing newer production Mayer-Vietoris and target-natural van Kampen APIs without assuming their geometric inputs. Next elect intrinsic sphere moments relative to total mass: reviewed finiteness now licenses the symmetry and integral-splitting arguments for several integration consumers. This is narrower than the stopped Hausdorff-cone normalization comparison and does not retry either integration consumer. Across the complete DAG, broader orientation/gluing, product homology, regular-preimage and surface-classification programs require more construction; Sard and repaired antipodal work belong to the other campaign and are excluded. Preserve unresolved consumer STOPs, including t98A02, t03J04, t02A05, t95J05, t00A01 and t02A08. No new numerical normalization discrepancy is proved.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint6Census.json",
+     :sha256
+     "c408ef0aec787e2102cc77be34061c951062ff517773c855c6d6d028dbbe1c15"}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact gluing uptake and intrinsic measure continuation",
@@ -5261,6 +5408,90 @@
     :oriented-checkpoint5-euler-measure-refill],
    :current-residual
    "Assess t98A02 at its actual frozen hypotheses and measure intrinsic integrability separately from normalization and moments."}
+  {:consumer :t97A01,
+   :stop-condition
+   "Preserve both literal quotients and all frozen invariant statements. No assumed collar, cellular comparison, quotient homeomorphism or group presentation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Closed gluing and surface invariants: literal polygon quotient consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t97A01/lean/Main.lean",
+    :stop-condition
+    "If no bounded closing adapter exists, STOP under rule 0 with the precise typed missing quotient/open-cover, homology or actual-arrow van Kampen theorem. Distinguish infrastructure from refutation; no partial closure GO.",
+    :gates
+    ["GO only with full zero-placeholder frozen fixture, unchanged statement hash, fixture SHA256 and standard-only audits."
+     "Propose implementation scope only after complete closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Read exact frozen Main and test the newer production Mayer-Vietoris and target-natural van Kampen source-reconstruction APIs against its actual polygon inclusions. Construct every needed open cover, homotopy model and arrow comparison. Upgrade the proved relation equivalence to the actual topological comparison where needed. Compile a complete temporary exact Main with its sole placeholder removed, including all homology degrees and the specified fundamental-group presentation.",
+    :consumer-equation
+    "Both literal polygon quotients have H0=Z, H1=Z x Z x ZMod 2 and zero higher homology, and the second has the frozen presented fundamental group.",
+    :frozen-sha256
+    "63ea50fe8435ba22b20b6db4d53e553ad0c27e9a31de96b8a1212019cc1c9402"},
+   :id :oriented-checkpoint6-t97a01-exact-polygon-invariants-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint6-gluing-and-intrinsic-measure-refill],
+   :current-residual
+   "One frozen placeholder: actual singular homology of two polygon quotients and the actual fundamental group presentation remain. The first relation has a banked set-level standard-surface comparison.",
+   :other-consumers []}
+  {:consumer :t02A05-moment-reduction,
+   :stop-condition
+   "No assumed numerical sphere area, positive total mass, radial identification or moment value. This is a symmetry calculation, not a retry of the stopped Hausdorff-cone comparison or a full consumer closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD INTEGRATION: intrinsic polynomial moments relative to total mass",
+   :acceptance
+   {:probe
+    "Use IntrinsicSphereFinite for actual Hausdorff sphere measures in dimensions two and three. Construct coordinate reflections, permutations and the needed plane rotation as isometries of the literal sphere subtype, and prove their integral transport. Derive vanishing odd moments, equal second moments by the norm-one sum, and fourth/mixed-fourth moments through rotation and polynomial expansion. Prove all integrability needed to split expressions. Express the exact T02A05Diagnostic.unitFlux integral and t95J05InclusionPullback integral in terms of the real total intrinsic measure; prove their formulas without a numerical normalization premise.",
+    :consumer-equation
+    "Writing M_d=(hausdorffMeasure d univ).toReal on the literal sphere, integral unitFlux c = M_2*(11/15+(c0-1)^2+(c1-2)^2); integral x0^2 on S3 = M_3/4, and integral t95J05InclusionPullback = -M_3.",
+    :axioms :standard-only,
+    :stop-condition
+    "GO requires actual isometries, invariant integral equations and both exact consumer reductions. REVISE only to one compiled symmetry or moment prerequisite. Numerical identification of M_2 or M_3 stays explicitly downstream."},
+   :id :oriented-checkpoint6-intrinsic-sphere-mass-relative-moments-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint5-intrinsic-sphere-finite-measure-1
+    :oriented-checkpoint6-gluing-and-intrinsic-measure-refill],
+   :current-residual
+   "Intrinsic sphere polynomial integrability is reviewed. Coordinate moments and the exact remaining scalar normalization are not yet computed.",
+   :other-consumers [:t95J05 :t94A10 :t01J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Preserve unresolved STOPs and refutations; no unproved numerical normalization, duplicate concurrent work or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: exact polygon uptake and intrinsic normalization boundary",
+   :acceptance
+   {:strategy
+    "Reread complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Retry a reviewed STOP only with evidence resolving its precise boundary. Return one to five fresh work rows plus a successor with identical checkpoint keys. Exclude active work of the other campaign and do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish missing infrastructure from proved refutation and infrastructure from frozen closure."},
+   :id :oriented-checkpoint7-polygon-and-moment-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint6-t97a01-exact-polygon-invariants-1
+    :oriented-checkpoint6-intrinsic-sphere-mass-relative-moments-1
+    :oriented-checkpoint6-gluing-and-intrinsic-measure-refill],
+   :current-residual
+   "Measure frozen polygon uptake separately from intrinsic moment reductions. Total sphere mass, arbitrary-manifold orientation and embedded-ball gluing remain independent."}
   {:consumer :t00A01,
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
