@@ -54399,9 +54399,46 @@
   {:consumer "t92J07",
    :stop-condition
    "GO requires the full frozen consumer; otherwise name the exact predicate or derivative transport boundary. Do not replace the frozen fiber predicate.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta -2,
+     :residual
+     "No mathematical consumer residual remains in the compiled fixture; scoped implementation and independent review remain.",
+     :outcome :go,
+     :warnings
+     ["Unused variable hm in the preserved bridge signature: the imported manifold Sard theorem also covers zero-dimensional targets."],
+     :statement-hashes
+     {"apm_t92J07_bridge_1"
+      "5da05c37abf248a169fd810c3e66d794b7e173e9771594077b1e8fc8481bacee",
+      "apm_t92j07"
+      "50d85b6512de9021ccacdab5476c51f9f0bfe299945caf00faa130994202b977"},
+     :acceptance
+     {:frozen-sha256
+      "413b97f2d2b2075305818c6c25d5db79744aa95aa5b5c04762c146033d2740fe",
+      :all-frozen-definitions-and-statements-preserved true,
+      :placeholder-before 2,
+      :placeholder-after 0,
+      :axioms :standard-only},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "bb /tmp/t92j07-review.bb", :exit 0}
+      {:cmd "lake env lean /tmp/T92J07FullClosure.lean", :exit 0}
+      {:cmd "python3 /tmp/t92j07-closure-audit.py", :exit 0}
+      {:cmd "git status --porcelain=v1", :exit 0}
+      {:cmd "sha256sum problems/t92J07/lean/Main.lean", :exit 0}],
+     :diagnostic-history [],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/T92J07FullClosure.lean",
+      :sha256
+      "0e7bf95466e914d03b456449f5605abd35a49df231aa4c6fef4d0edbedc943e3"},
+     :finding
+     "Complete frozen consumer compiles. The bridge proves exact equality between frozen criticalValues and the image of the actual nonsurjective-mfderiv locus, then applies T93A04ManifoldWork.null_critical. The positive-target branch uses the existing countable common-regular-value theorem and the frozen regular-fiber equivalence. The existing zero-target branch remains unchanged. Empty and zero-dimensional sources require no additional hypotheses. Audit confirms only the added import, two placeholder proofs and axiom-print commands differ.",
+     :implementation {:scope ["problems/t92J07/lean/Main.lean"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["problems/t92J07/lean/Main.lean"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / countable common regular value",
    :acceptance
