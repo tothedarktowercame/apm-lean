@@ -1992,6 +1992,24 @@
      {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
     :repository-note
     "Checked codex-11 dependency PASS. Existing untracked supervisor files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788972619068-16634-d87b9143",
+     :commands
+     ["git show 360f5d1f:ConstructionTargets/PointedChartRecentering.lean"
+      "git show 360f5d1f:ConstructionTargets/PointedChartRecentering.md"
+      "sha256sum /tmp/PointedChartRecenteringProbe.lean"
+      "cmp recorded-commit-source /tmp/PointedChartRecenteringProbe.lean"
+      "lake env lean /tmp/PointedChartRecenteringProbe.lean"
+      "lake env lean ConstructionTargets/PointedChartRecentering.lean"
+      "lake build ConstructionTargets.PointedChartRecentering ConstructionTargets.RotatedCircleChartTransport ConstructionTargets.OrientedOverlapPuncturedCircle"
+      "Inspect OpenPartialHomeomorph.unitBallBall definition"
+      "python3: verify six statement hashes, 43-module recorded import closure, forbidden scan and frozen placeholder counts"
+      "git show --format= --name-only 360f5d1f"
+      "git show --format= --check 360f5d1f"],
+     :finding
+     "Independent PASS: exact two-file scope and byte-identical fixture; both compilations and focused build succeed with 30 replayed dependency warnings and no target warnings. Six statement hashes and standard-only axiom audits reproduced. Euclidean/subtype ball identification and positive affine coordinates construct a genuine chart at the overlap point; openness supplies a positive radius inside both required neighborhoods. Coordinate increase into the first chart is proved, while transition positivity into the second remains explicitly downstream. Frozen problems unchanged, placeholders 327 to 327, zero new placeholders. No edits."},
     :commit "360f5d1fa7e270318dd9346cd9bf346c2a3ef49f",
     :changed-paths
     ["ConstructionTargets/PointedChartRecentering.lean"
@@ -2008,7 +2026,7 @@
     "SHA-256 of UTF-8 declaration bytes beginning with theorem or def and ending immediately before the space preceding := or where; names below are in ConstructionTargets.PointedChartRecentering.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PointedChartRecentering.lean"
     "ConstructionTargets/PointedChartRecentering.md"],
@@ -2132,7 +2150,7 @@
      "Compiled one geometric recentering prerequisite. Given a pointed chart, any coordinate point v, and an ambient open neighborhood containing its image, construct a positive coordinate radius and a pointed chart centered at that image inside both neighborhoods. The actual coordinate map is positive scaling followed by translation, with a proved strict-increase equation. A concrete specialization constructs a common restriction at any point of overlap of two rotated Circle charts. This supplies recentering at arbitrary overlap points; it does not yet prove that the transition into the second rotated chart preserves order.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue D #2: compact connected Circle, milestones 4 and 5",
