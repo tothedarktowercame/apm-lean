@@ -53987,43 +53987,64 @@
    :stop-condition
    "GO requires the complete frozen consumer. Otherwise name the exact manifold chart-criticality, countable nullity or regular-value transport boundary; Euclidean nullity alone is not closure.",
    :evidence
-   {:probe
-    {:placeholder-delta -1,
-     :residual
-     "No mathematical consumer residual in the compiled fixture; scoped implementation and independent review remain. The scheduled manifold-vector-target row should reuse or extract T93A04ManifoldWork.null_critical from this fixture rather than reconstruct its chart proof.",
-     :outcome :go,
-     :warnings
-     ["One inherited unnecessarySimpa warning in the unchanged lineDirection_ne_zero proof."],
-     :acceptance
-     {:frozen-sha256
-      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea",
-      :statement-sha256
-      "854fea2e1c0bd60b27caee326f218fa4dd639f9dcc3791fe9975dbe9990e7e11",
-      :all-frozen-definitions-and-statements-preserved true,
-      :placeholder-before 1,
-      :placeholder-after 0,
-      :axioms :standard-only},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "lake env lean /tmp/T93A04Closed.lean", :exit 0}
-      {:cmd "python3 /tmp/t93a04-closure-audit.py", :exit 0}
-      {:cmd "bb /tmp/t93a04-review.bb", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/T93A04Closed.lean",
-       :exit 1,
-       :finding
-       "Initial fixture had two unresolved projection-coordinate goals and an unqualified measure lemma. Corrected coordinate equalities explicitly and used the nonzero Haar measure instance; complete rerun passed."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/T93A04Closed.lean",
-      :sha256
-      "ca834f20b42db9742d8b4c90b6ab7fb8364ee8dcf617a59df97d02c623437bbd"},
-     :finding
-     "Complete frozen consumer compiles without placeholders. Actual inverse charts supply open-domain smooth representatives; mfderiv composition transports criticality, and second-countable pointwise-open aggregation proves manifold critical-image nullity using unconditional Euclidean Sard. Nonzero target Haar measure supplies a regular projection value. The explicit projection kernel equals the frozen direction span, and the frozen linear-algebra bridge establishes the exact IsSmoothLinePreimage predicate. No nonempty or positive-dimensional source hypothesis was added.",
-     :implementation {:scope ["problems/t93A04/lean/Main.lean"]},
-     :seat "codex-12"}},
+   {:placeholder-delta
+    {:consumer "t93A04", :before 1, :after 0, :delta -1},
+    :residual
+    "No mathematical t93A04 consumer residual remains; the unchanged frozen conclusion compiles without placeholders. Independent review remains. The scheduled manifold-vector-target row can reuse or extract T93A04ManifoldWork.null_critical rather than reconstructing its chart proof.",
+    :gates
+    {:exact-fixture-promotion :pass,
+     :consumer-compile :pass,
+     :fixture-compile :pass,
+     :frozen-definitions-and-statement-preserved :pass,
+     :standard-only-axioms :pass,
+     :zero-placeholders :pass,
+     :one-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Inherited unnecessarySimpa warning in unchanged lineDirection_ne_zero proof at line 117; no new warnings."],
+    :statement-hashes
+    {"apm_t93a04"
+     "854fea2e1c0bd60b27caee326f218fa4dd639f9dcc3791fe9975dbe9990e7e11"},
+    :consumer-sha256-before
+    "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, dependency review receipts and complete fixture",
+      :exit 0}
+     {:cmd "python3 /tmp/t93a04-closure-audit.py before promotion",
+      :exit 0}
+     {:cmd "cmp /tmp/T93A04Closed.lean problems/t93A04/lean/Main.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t93A04/lean/Main.lean", :exit 0}
+     {:cmd "lake env lean /tmp/T93A04Closed.lean", :exit 0}
+     {:cmd
+      "Post-promotion Python audit against HEAD frozen source: prior declarations, statement hash, prohibited placeholders and 1-to-0 placeholder count",
+      :exit 0}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 414 items OK; {:done 404, :needs-owner 1, :superseded 6, :open 2, :blocked 1}"}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check and git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "a49c84764968d8286ff05d87e5d218018505f50c",
+    :changed-paths ["problems/t93A04/lean/Main.lean"],
+    :fixture
+    {:path "/tmp/T93A04Closed.lean",
+     :sha256
+     "ca834f20b42db9742d8b4c90b6ab7fb8364ee8dcf617a59df97d02c623437bbd",
+     :placeholder-count 0},
+    :consumer-sha256-after
+    "ca834f20b42db9742d8b4c90b6ab7fb8364ee8dcf617a59df97d02c623437bbd"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t93A04/lean/Main.lean"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / frozen transverse affine line",
