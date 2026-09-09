@@ -102,6 +102,29 @@
      {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
     :repository-note
     "Existing untracked supervisor runs2 files left untouched; the running loop explicitly checks tracked cleanliness. Ledger and DAG unchanged.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788965276076-16455-2c1eba13",
+     :commands
+     ["cd /home/joe/code/apm-lean"
+      "realpath .lake/packages"
+      "git show 9f4e9d3e:ConstructionTargets/RelativeSingularConnectingNaturality.lean"
+      "git show 9f4e9d3e:ConstructionTargets/RelativeSingularConnectingNaturality.md"
+      "git diff-tree --no-commit-id --name-status -r 9f4e9d3e"
+      "sha256sum /tmp/RelativeSingularConnectingNaturalityProbe.lean"
+      "git show 9f4e9d3e:ConstructionTargets/RelativeSingularConnectingNaturality.lean | sha256sum"
+      "cmp /tmp/RelativeSingularConnectingNaturalityProbe.lean ConstructionTargets/RelativeSingularConnectingNaturality.lean"
+      "lake env lean /tmp/RelativeSingularConnectingNaturalityProbe.lean"
+      "lake env lean ConstructionTargets/RelativeSingularConnectingNaturality.lean"
+      "lake build ConstructionTargets.RelativeSingularConnectingNaturality ConstructionTargets.ChartPairRelativeHomologyTransport"
+      "git show 9f4e9d3e:ConstructionTargets/RelativeSingularConnectingNaturality.lean | python3 -c 'import sys,re,hashlib; s=sys.stdin.buffer.read(); print(\"\\n\".join(n.decode()+\" \"+hashlib.sha256(b\"theorem \"+n+t).hexdigest() for n,t in re.findall(rb\"theorem (\\w+)(.*?)(?= := by)\",s,re.S))); print(\"forbidden_count\",len(re.findall(rb\"\\b(?:sorry|admit|sorryAx|axiom|opaque|unsafe)\\b\",s)))'"
+      "git diff --exit-code 9f4e9d3e -- '*.lean' lakefile.toml lakefile.lean lake-manifest.json lean-toolchain"
+      "git show --format= --check 9f4e9d3e"
+      "git diff --check"
+      "git status --porcelain --untracked-files=no"],
+     :finding
+     "Independent review of codex-14 commit 9f4e9d3ea394d9e4ae0093367fc3ca68d3c52c91: exact permitted two-file scope; fixture hash and all four recorded statement hashes reproduced; compiled source/build inputs match recorded commit. Fixture and target compile; focused build passes with replayed dependency warnings. Four axiom audits report only propext, Classical.choice, Quot.sound. Zero placeholders or forbidden declarations; placeholder delta zero; no frozen problem changed. Connecting-map square has correct composition direction through actual production pair maps; contractibility and exactness justify boundary injectivity and the stated equivalence. No sign hypothesis or unsupported geometric or higher-dimensional conclusion. Ledger untouched."},
     :commit "9f4e9d3ea394d9e4ae0093367fc3ca68d3c52c91",
     :changed-paths
     ["ConstructionTargets/RelativeSingularConnectingNaturality.lean"
@@ -117,7 +140,7 @@
     "SHA-256 of UTF-8 theorem declaration bytes, starting at theorem and excluding the space before := by; statements identical to fixture.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/RelativeSingularConnectingNaturality.lean"
     "ConstructionTargets/RelativeSingularConnectingNaturality.md"],
@@ -237,7 +260,7 @@
      "The production pair API lacks connecting-map naturality for continuous maps of pairs. Compiled that naturality square, proved injectivity of the one-disk connecting map from contractibility and exactness, and obtained an exact consumer equivalence reducing the geometric generator computation to puncture H0. This does not establish reflection or monotonicity signs.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue D #2: oriented-manifold fundamental classes and localization; milestone 3, model case",
