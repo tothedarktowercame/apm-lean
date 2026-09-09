@@ -9103,8 +9103,67 @@
   {:consumer :t01A08,
    :stop-condition
    "Preserve the arbitrary model with corners, finite-dimensional normed source model and second-countability hypotheses. No assumed boundarylessness, self-model atlas, critical-value nullity or regular value.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "One frozen placeholder remains. Exact projection smoothness and regular-value interpretation are verified; arbitrary-model critical-value nullity remains unresolved. No implementation scope is proposed.",
+    :frozen-file "problems/t01A08/lean/Main.lean",
+    :dependency-review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788993918496-17255-7be36238"},
+    :typed-boundary
+    {:declaration "T01A08Boundary.MissingNullity",
+     :statement
+     "volume ((fun z => apm_t01a08_projection (f z)) '' {x | ¬ Function.Surjective (mfderiv I apm_t01a08_I2 (fun z => apm_t01a08_projection (f z)) x)}) = 0",
+     :required-hypotheses
+     "Exactly the frozen finite-dimensional real normed E, arbitrary ModelWithCorners I, second-countable ChartedSpace H X, IsManifold I top X and ContMDiff I apm_t01a08_I3 top f.",
+     :missing
+     "A critical-value nullity theorem for this arbitrary model, or a constructed local extension/model transport carrying the actual within-model manifold derivative into the reviewed open-domain Sard theorem. Openness of self-model chart targets cannot be assumed for the extended model range.",
+     :refutation false},
+    :axiom-audits 3,
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :excluded-concurrent
+    [:t92j07-frozen-common-regular-value-closure-probe-refill28
+     :regular-fiber-fixed-model-chart-overlap-probe-refill28
+     :t93a04-reviewed-closure-documentation-refill28],
+    :author "codex-13",
+    :placeholder-before 1,
+    :reason :missing-model-with-corners-nullity,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "bb active-row and dependency-review queries across both topology ledgers",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T01A08Boundary.lean", :exit 0}
+     {:cmd
+      "sha256sum /tmp/T01A08Boundary.lean problems/t01A08/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T01A08Boundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :frozen-file-unchanged true,
+    :fixture
+    {:path "/tmp/T01A08Boundary.lean",
+     :sha256
+     "b895756b229abcdd643baa39b31195e30384e85d05f83d0b5b14df74ef676e8a",
+     :role :boundary-diagnostic},
+    :finding
+    "The diagnostic compiles under the frozen setup: the literal projection composed with f is smooth, the exact regular-value predicate is equivalent to exclusion from its actual manifold critical-value image, and the empty-source case is proved. The reviewed manifold-vector Sard theorem requires self-model charts. The frozen arbitrary ModelWithCorners instead supplies differentiability within its model range; no open-domain extension with the required derivative comparison was constructed. No complete closing fixture or admissible refutation is claimed.",
+    :frozen-sha256
+    "e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD: exact affine-line regular-value consumer",
