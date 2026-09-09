@@ -39337,6 +39337,41 @@
    "Admissibility, flat nullity, and first-jet elimination are assembled; higher-jet nullity remains explicit and must be supplied by induction.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the positive natural remaining order and its sum with i fail to recover k+1 on the stated index range, or the banked single-locus induction cannot aggregate with these hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderHigherJetVariableInduction.lean"
+    "ConstructionTargets/SardFiniteOrderHigherJetVariableInduction.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER HIGHER-JET VARIABLE INDUCTION",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
+     :sha256
+     "c887d2994533c0117d2c4fc57e3e11a1cbf501f97c246f1e5af16fd380ee5a00"},
+    :declarations
+    ["higher_firstNonzeroJetLoci_null_of_remainingOrder_induction"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Determine how to supply the remaining-order lower-dimensional nullity hypotheses under classical admissibility, then instantiate compact rank-zero assembly and localization."},
+   :representation
+   {:source
+    "Global C^(k+1) regularity, criticality on K, and for each 1<=i<=k a lower-dimensional critical-image nullity hypothesis at natural remaining order k+1-i.",
+    :target
+    "Nullity of every first-nonzero-jet locus image of orders 2 through k+1."},
+   :id
+   :critical-value-sard-finite-order-higher-jet-variable-induction-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-higher-first-nonzero-jet-loci-induction-1
+    :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1],
+   :current-residual
+   "Variable remaining-order smoothness and higher-jet aggregation compile; the lower-dimensional nullity hypotheses remain explicit and are not justified by this theorem.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -39390,80 +39425,78 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Implement compact admissible rank-zero jet assembly, then supply its higher-jet nullity hypotheses through finite-order induction.",
+     "Implement variable-order higher-jet induction; the mathematical task of supplying its remaining-order nullity hypotheses still remains.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"compact_rankZero_image_zero_of_admissible_higherJets"
-      "f7fd8ee8d2cdf6586bb4fb6c71a8432a7c6980daf84ab29d417bd839c0e1f4cc"},
+     {"higher_firstNonzeroJetLoci_null_of_remainingOrder_induction"
+      "81eb14a99ea705009f2f07938b7927175ef3176a2c1494090d606f16ef6c2f91"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if classical admissibility fails to imply the Taylor budget, rank zero fails to eliminate the first jet, or the finite null branches fail to cover the compact locus, or nonstandard axioms are required.",
+      "Stop only if the positive natural remaining order and its sum with i fail to recover k+1 on the stated index range, or the banked single-locus induction cannot aggregate with these hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCompactRankZeroAdmissibleJetAssembly.lean"
-       "ConstructionTargets/SardCompactRankZeroAdmissibleJetAssembly.md"],
+      ["ConstructionTargets/SardFiniteOrderHigherJetVariableInduction.lean"
+       "ConstructionTargets/SardFiniteOrderHigherJetVariableInduction.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT RANK-ZERO ADMISSIBLE JET ASSEMBLY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER HIGHER-JET VARIABLE INDUCTION",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardCompactRankZeroAdmissibleJetAssemblyProbe.lean",
+        "/tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
         :sha256
-        "4852d51636100f521d4f9ea12cad61460f612a21f8889977d866a23c013f8589"},
+        "c887d2994533c0117d2c4fc57e3e11a1cbf501f97c246f1e5af16fd380ee5a00"},
        :declarations
-       ["compact_rankZero_image_zero_of_admissible_higherJets"],
+       ["higher_firstNonzeroJetLoci_null_of_remainingOrder_induction"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Derive the higher first-nonzero-jet nullity hypotheses from finite-order lower-dimensional induction, then complete localization and exhaustion."},
+       "Determine how to supply the remaining-order lower-dimensional nullity hypotheses under classical admissibility, then instantiate compact rank-zero assembly and localization."},
       :representation
       {:source
-       "A compact rank-zero locus, globally C^(k+1) map satisfying classical order admissibility, and image nullity of first-nonzero-jet loci of orders 2 through k+1.",
+       "Global C^(k+1) regularity, criticality on K, and for each 1<=i<=k a lower-dimensional critical-image nullity hypothesis at natural remaining order k+1-i.",
        :target
-       "Zero image measure of the compact rank-zero locus for arbitrary target add-Haar measure."},
+       "Nullity of every first-nonzero-jet locus image of orders 2 through k+1."},
       :id
-      :critical-value-sard-compact-rank-zero-admissible-jet-assembly-1,
+      :critical-value-sard-finite-order-higher-jet-variable-induction-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-compact-flat-nonnegative-budget-nullity-1
-       :critical-value-sard-finite-order-taylor-budget-endpoint-1
-       :critical-value-sard-finite-order-rank-zero-first-jet-empty-1
-       :critical-value-sard-first-nonzero-jet-finite-assembly-1],
+      [:critical-value-sard-higher-first-nonzero-jet-loci-induction-1
+       :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1],
       :current-residual
-      "Admissibility, flat nullity, and first-jet elimination are assembled; higher-jet nullity remains explicit and must be supplied by induction.",
+      "Variable remaining-order smoothness and higher-jet aggregation compile; the lower-dimensional nullity hypotheses remain explicit and are not justified by this theorem.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem remains incomplete, not refuted. One compiled prerequisite derives the flat-branch dimension bound from classical admissibility, eliminates the first-jet branch using rank zero, and assembles compact image nullity from explicit higher-jet nullity hypotheses. Those higher-jet hypotheses still require induction.",
+     "The rectangular theorem remains incomplete, not refuted. A compiled prerequisite indexes the lower-dimensional induction hypothesis by remaining differentiability order k+1-i, deriving the required smoothness from global C^(k+1). It does not prove that classical admissibility supplies these lower-dimensional nullity hypotheses.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardCompactRankZeroAdmissibleJetAssemblyProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
        :exit 1,
        :output
-       "Initial elaboration failed because inferred successor syntax prevented omega normalization; corrected by explicitly specifying order := k + 1."}
+       "Initial fixture failed on interval unpacking and natural-order coercions; corrected before final compilation."}
       {:cmd
-       "lake env lean /tmp/SardCompactRankZeroAdmissibleJetAssemblyProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
        :exit 0,
        :output
-       "Final fixture: standard axioms propext, Classical.choice, Quot.sound"}
+       "Final fixture uses only propext, Classical.choice, Quot.sound"}
       {:cmd
-       "sha256sum /tmp/SardCompactRankZeroAdmissibleJetAssemblyProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
        :exit 0}
       {:cmd
-       "sed -n '9,35p' /tmp/SardCompactRankZeroAdmissibleJetAssemblyProbe.lean | sha256sum",
+       "sed -n '6,38p' /tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactRankZeroAdmissibleJetAssemblyProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 300 items OK; {:done 292, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 301 items OK; {:done 293, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -39478,12 +39511,12 @@
        :exit 0,
        :output "/home/joe/code/apm-lean/.lake/packages"}],
      :fixture
-     {:path "/tmp/SardCompactRankZeroAdmissibleJetAssemblyProbe.lean",
+     {:path "/tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
       :sha256
-      "4852d51636100f521d4f9ea12cad61460f612a21f8889977d866a23c013f8589"},
+      "c887d2994533c0117d2c4fc57e3e11a1cbf501f97c246f1e5af16fd380ee5a00"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -39732,7 +39765,8 @@
     :critical-value-sard-compact-flat-endpoint-normalized-nullity-1
     :critical-value-sard-localized-flat-through-endpoint-nullity-1
     :critical-value-sard-compact-flat-nonnegative-budget-nullity-1
-    :critical-value-sard-compact-rank-zero-admissible-jet-assembly-1],
+    :critical-value-sard-compact-rank-zero-admissible-jet-assembly-1
+    :critical-value-sard-finite-order-higher-jet-variable-induction-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
