@@ -52067,8 +52067,134 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation. Preserve local specification counterexamples and outstanding coverage; infrastructure absence does not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill22-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill22-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill22-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill22-proposed-worklist.edn",
+      :exit 0}],
+    :finding
+    {:baseline "09624874f87cfdf97bff7701a480addbf75809f6",
+     :retained-coverage
+     "Missing positive-dimensional antipodal action, reduced-S0 degree and one-dimensional local index remain outstanding. No individual encoding defect is treated as campaign refutation.",
+     :evidence
+     [{:path "/tmp/topology-refill22-measure.json",
+       :sha256
+       "4567210b02a6569d4483b5b86ae109357fc3784338b2a49cd56e2bdb84116cd7"}
+      {:path "/tmp/topology-refill22-reviews.edn",
+       :sha256
+       "5ffe2dad11e95388fba87a8c45fc3b03b9d97d81012561d680832aae19026970"}
+      {:path "/tmp/topology-refill22-tail.edn",
+       :sha256
+       "63ca9adf84ee34cf50d6487eaa298c040c3678e434da193d960ba486987492bf"}],
+     :head "60e35ec5c1e18b08849758bdc3291c0e8a1efd97",
+     :ranking
+     "Elect one-placeholder t03J04 first for a bounded audit of its literal rational Euler characteristic and covering connection. Its singular-homology representation differs from the just-stopped polygon arithmetic branch. Mass-normalization, antipodal-action, planar-separation and classification boundaries remain unresolved elsewhere. Then elect open-domain localization for the five-consumer Sard branch, preserving the induction-contract mismatch explicitly.",
+     :validation
+     "Temporary 399-item ledger validates: fresh IDs, exactly one adapter first, and final checkpoint depending on both work rows. No canonical edits.",
+     :typed-residual-change
+     "Sard now proves global critical-image nullity conditionally, including rank-zero exhaustion, positive-rank assembly and degenerate dimensional cases. Its induction premise remains local pointwise genuine-smooth nullity on arbitrary sets. Open-domain cutoff localization does not by itself discharge that stronger contract.",
+     :review-outcomes
+     {:t98a01
+      "STOP reviewed PASS invoke-1788986700498-17023-3c507b14: actual covering and deck transitivity compile; exact fiber cardinality and polygon genus/Euler-cover connections remain.",
+      :sard
+      "Commit 519bd0aa041df5e22f2bfdc25057fb52a4a93ca7 reviewed PASS invoke-1788987111672-17035-9322d6b0; both Lean checks and 8437-job build pass.",
+      :checkpoint21 "PASS invoke-1788986489535-17017-eb99fbb9."},
+     :infrastructure
+     {:before 628,
+      :after 629,
+      :portfolio
+      ["ConstructionTargets/SardGenuineSmoothGlobalCriticalInductionStep.lean"],
+      :concurrent []},
+     :census
+     {:open 39,
+      :closed 19,
+      :existing 58,
+      :placeholder-after 71,
+      :placeholder-delta 0,
+      :consumer-closures 0,
+      :placeholder-before 71,
+      :named 59,
+      :missing ["t93A05"],
+      :within-two 29}},
+    :replacement-items
+    [{:consumer "t03J04",
+      :stop-condition
+      "GO requires every frozen conjunct. Otherwise name the exact torus homology or finite-cover Euler theorem missing; partial covering data is not closure.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "COVERINGS / rational torus Euler characteristic",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free copy of frozen Main preserving all definitions and repaired hypotheses. Compute the actual rational ModuleCat singular-homology alternating rank sum of Fin n to Circle for n>=1. From the supplied local diffeomorphism construct a genuine finite-sheet covering and prove the literal target Euler characteristic vanishes. Reuse frozen surjectivity and vector-field results. Do not assume finite-cover multiplicativity, finite-dimensional homology, torus homology ranks or a Poincare-Hopf bridge. Inspect current covering and singular-homology producers; no abstract Euler declaration or conditional final adapter counts as GO.",
+       :frozen-file "problems/t03J04/lean/Main.lean",
+       :frozen-sha256
+       "b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t03j04-frozen-torus-euler-closure-probe-refill22,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step],
+      :current-residual
+      "One placeholder: literal rational singular-homology Euler characteristic of a positive-dimensional torus and its connected local-diffeomorphic target. Vector-field nonvanishing and surjectivity are proved."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO requires compiled cutoff construction, derivative agreement and null-image aggregation. REVISE requires one compiled prerequisite. Never delete the infinity exclusion from eventual regularity or silently strengthen pointwise ContDiffAt infinity to neighborhood smoothness.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / smooth open-domain localization",
+      :acceptance
+      {:probe
+       "Compile a reusable implication from global genuine-infinity smooth critical-image nullity in a fixed finite-dimensional real source/target to nullity of f image (s intersect its nonsurjective-fderiv locus), for arbitrary s contained in an open U with ContDiffOn real genuine infinity f U and actual target Haar measure. Construct local globally smooth cutoff extensions equal to f near each point, prove derivative and critical-image agreement there, apply the explicitly stated global-nullity hypothesis to those actual extensions, and aggregate through derived second countability. Do not assume extensions, derivative agreement or localized nullity. Reuse bump, critical-image transport and aggregation APIs. Exhibit how SardGenuineSmoothGlobalCriticalInductionStep supplies the global-nullity input under its existing induction hypothesis. Explicitly record that its current pointwise-smooth-on-arbitrary-set induction contract is stronger than this open-domain conclusion and must be repaired or separately discharged; do not claim induction closure from this mismatch.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Open-domain localization only. Compatibility of the existing pointwise local induction contract, source norm/inner-product transport, induction discharge and manifold transport remain; no unconditional Sard or frozen closure."},
+      :id :sard-genuine-smooth-open-domain-localization-probe-refill22,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step],
+      :current-residual
+      "Global smooth critical-image nullity is available conditionally. An actual open-domain localization theorem is needed to connect global induction to smooth chart domains; pointwise infinity alone cannot justify one smooth neighborhood.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Only all campaign consumers closed or exact campaign refutation ends the campaign; preserve local specification counterexamples and outstanding coverage.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped placeholders and compare typed residuals, portfolio/concurrent changes and reviewed STOP/PASS outcomes. Elect exactly one near-closure adapter first and shared foundations by reach and simplicity; append a fresh dependent checkpoint to a nonempty portfolio. Retain missing antipodal action, reduced-S0 and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-23-after-torus-euler-and-localization,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t03j04-frozen-torus-euler-closure-probe-refill22
+       :sard-genuine-smooth-open-domain-localization-probe-refill22],
+      :current-residual
+      "Await both reviewed outcomes and rerank the complete DAG, accounting for the precise local smooth induction contract."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -52082,7 +52208,79 @@
     :sard-genuine-smooth-global-critical-induction-step-probe-refill21
     :checkpoint-full-dag-refill-21-after-flux-and-rank-stratum],
    :current-residual
-   "Await both reviewed outcomes, then rerank the complete DAG and concurrent developments."}],
+   "Await both reviewed outcomes, then rerank the complete DAG and concurrent developments."}
+  {:consumer "t03J04",
+   :stop-condition
+   "GO requires every frozen conjunct. Otherwise name the exact torus homology or finite-cover Euler theorem missing; partial covering data is not closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "COVERINGS / rational torus Euler characteristic",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free copy of frozen Main preserving all definitions and repaired hypotheses. Compute the actual rational ModuleCat singular-homology alternating rank sum of Fin n to Circle for n>=1. From the supplied local diffeomorphism construct a genuine finite-sheet covering and prove the literal target Euler characteristic vanishes. Reuse frozen surjectivity and vector-field results. Do not assume finite-cover multiplicativity, finite-dimensional homology, torus homology ranks or a Poincare-Hopf bridge. Inspect current covering and singular-homology producers; no abstract Euler declaration or conditional final adapter counts as GO.",
+    :frozen-file "problems/t03J04/lean/Main.lean",
+    :frozen-sha256
+    "b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t03j04-frozen-torus-euler-closure-probe-refill22,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step
+    :checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step],
+   :current-residual
+   "One placeholder: literal rational singular-homology Euler characteristic of a positive-dimensional torus and its connected local-diffeomorphic target. Vector-field nonvanishing and surjectivity are proved."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO requires compiled cutoff construction, derivative agreement and null-image aggregation. REVISE requires one compiled prerequisite. Never delete the infinity exclusion from eventual regularity or silently strengthen pointwise ContDiffAt infinity to neighborhood smoothness.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / smooth open-domain localization",
+   :acceptance
+   {:probe
+    "Compile a reusable implication from global genuine-infinity smooth critical-image nullity in a fixed finite-dimensional real source/target to nullity of f image (s intersect its nonsurjective-fderiv locus), for arbitrary s contained in an open U with ContDiffOn real genuine infinity f U and actual target Haar measure. Construct local globally smooth cutoff extensions equal to f near each point, prove derivative and critical-image agreement there, apply the explicitly stated global-nullity hypothesis to those actual extensions, and aggregate through derived second countability. Do not assume extensions, derivative agreement or localized nullity. Reuse bump, critical-image transport and aggregation APIs. Exhibit how SardGenuineSmoothGlobalCriticalInductionStep supplies the global-nullity input under its existing induction hypothesis. Explicitly record that its current pointwise-smooth-on-arbitrary-set induction contract is stronger than this open-domain conclusion and must be repaired or separately discharged; do not claim induction closure from this mismatch.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Open-domain localization only. Compatibility of the existing pointwise local induction contract, source norm/inner-product transport, induction discharge and manifold transport remain; no unconditional Sard or frozen closure."},
+   :id :sard-genuine-smooth-open-domain-localization-probe-refill22,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step
+    :checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step],
+   :current-residual
+   "Global smooth critical-image nullity is available conditionally. An actual open-domain localization theorem is needed to connect global induction to smooth chart domains; pointwise infinity alone cannot justify one smooth neighborhood.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Only all campaign consumers closed or exact campaign refutation ends the campaign; preserve local specification counterexamples and outstanding coverage.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped placeholders and compare typed residuals, portfolio/concurrent changes and reviewed STOP/PASS outcomes. Elect exactly one near-closure adapter first and shared foundations by reach and simplicity; append a fresh dependent checkpoint to a nonempty portfolio. Retain missing antipodal action, reduced-S0 and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-23-after-torus-euler-and-localization,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t03j04-frozen-torus-euler-closure-probe-refill22
+    :sard-genuine-smooth-open-domain-localization-probe-refill22
+    :checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step],
+   :current-residual
+   "Await both reviewed outcomes and rerank the complete DAG, accounting for the precise local smooth induction contract."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
