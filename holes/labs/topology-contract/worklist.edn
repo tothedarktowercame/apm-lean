@@ -54901,8 +54901,47 @@
   {:consumer "t01A08",
    :stop-condition
    "GO needs the complete frozen consumer. Otherwise name the exact general-model smooth extension or derivative/measure representation boundary. A self-model special case is not closure.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "General-model critical-image nullity remains before regular-value selection and frozen closure. The diagnostic is not a complete consumer or a proof of a false encoding; no boundarylessness, analytic regularity or altered norm was assumed.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :classification :infrastructure-boundary,
+    :required-theorem
+    "For actual extended-chart representatives of globally genuine-infinity ContMDiff maps with arbitrary ModelWithCorners, prove target Haar-nullity of the image of the nonsurjective fderivWithin-on-model-range locus, including boundary points; alternatively construct genuine-infinity ambient extensions on covering neighborhoods, agreeing on the model range and prove their ambient derivatives agree with the within derivatives before applying banked Sard.",
+    :author "codex-12",
+    :placeholder-before 1,
+    :reason
+    "Missing general-model within-set Sard or a compatible genuine-infinity extension theorem. Frozen ContMDiff yields ContDiffWithinAt infinity of the projected representative on range I, and mfderiv uses fderivWithin on that range. The banked Sard theorem requires ambient fderiv on explicitly open smooth domains. No compiled producer supplies the required extension and derivative agreement across the model boundary.",
+    :commands
+    [{:cmd "bb /tmp/t01a08-review.bb", :exit 0}
+     {:cmd "lake env lean /tmp/T01A08GeneralModelBoundary.lean",
+      :exit 0}
+     {:cmd
+      "Inspect ContMDiff chart-source equivalences, ContDiffWithinAt neighborhood restrictions, MFDeriv definitions and banked open-domain localization",
+      :exit 0}
+     {:cmd
+      "Python frozen SHA-256 and comment-stripped placeholder audit",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :campaign-refutation false,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T01A08GeneralModelBoundary.lean",
+     :sha256
+     "0252e1af525ecbea24df86b81ee620545123fa1507e38b35e1d3fd467019dcbf",
+     :role :diagnostic-only},
+    :finding
+    "Compiled the literal projection as a continuous linear map and derived its exact chart representative's ContDiffWithinAt infinity statement on range I under all frozen hypotheses. The available ContDiffWithinAt.contDiffOn API requires m = infinity to imply n = omega; the neighborhood equivalence explicitly excludes infinity. Neither supplies the needed genuine-infinity ambient neighborhood. ModelWithCorners supplies a convex range with nonempty interior, not an open range. Existing cutoff localization already assumes an open ContDiffOn domain and cannot discharge this boundary.",
+    :frozen-sha256
+    "e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / general-model projected regular value",
