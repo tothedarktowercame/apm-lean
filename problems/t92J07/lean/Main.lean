@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.SardGenuineSmoothManifoldVector
 
 /-!
 # APM t92J07
@@ -127,7 +128,21 @@ theorem apm_t92J07_bridge_1
       (modelWithCornersSelf ℝ (apm_t92J07_E n))
       (modelWithCornersSelf ℝ (apm_t92J07_E m)) ∞ f) :
     volume (apm_t92J07_criticalValues (n := n) (m := m) f) = 0 := by
-  sorry
+  have hset : apm_t92J07_criticalValues (n := n) (m := m) f =
+      f '' {p | ¬ Function.Surjective (mfderiv
+        (modelWithCornersSelf ℝ (apm_t92J07_E n))
+        (modelWithCornersSelf ℝ (apm_t92J07_E m)) f p)} := by
+    ext y
+    simp only [apm_t92J07_criticalValues, apm_t92J07_IsRegularValue,
+      Set.mem_setOf_eq, Set.mem_image]
+    push_neg
+    constructor
+    · rintro ⟨p, hp, hc⟩
+      exact ⟨p, hc, hp⟩
+    · rintro ⟨p, hc, hp⟩
+      exact ⟨p, hp, hc⟩
+  rw [hset]
+  exact T93A04ManifoldWork.null_critical volume f hf
 
 theorem apm_t92j07
     (m : ℕ) (d : PNat → ℕ) (M : PNat → Type*)
@@ -220,4 +235,10 @@ theorem apm_t92j07
       exact (apm_t92J07_isSmoothRegularFiber_preimage_iff
         (f := f i) 0).2 (apm_t92J07_isRegularValue_fin_zero (f i) 0)
   | succ m =>
-      sorry
+      obtain ⟨x, hx⟩ := apm_t92J07_exists_common_regularValue_of_null
+        (m + 1) d M f (fun i => apm_t92J07_bridge_1 (Nat.succ_pos m) (f i) (hf i))
+      exact ⟨x, fun i => (apm_t92J07_isSmoothRegularFiber_preimage_iff
+        (f := f i) x).2 (hx i)⟩
+
+#print axioms apm_t92J07_bridge_1
+#print axioms apm_t92j07
