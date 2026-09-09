@@ -39703,6 +39703,44 @@
    "The parameterized remainder estimate compiles with coefficient D*L^(k+1); chart localization, parameter-space covering, and unresolved higher-jet cases remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the retained Taylor estimate and strict parameter-space dimension surplus fail to imply compact image nullity under the stated hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCompactLipschitzParameterizedFlatNullity.lean"
+    "ConstructionTargets/SardCompactLipschitzParameterizedFlatNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT LIPSCHITZ PARAMETERIZED FLAT NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardCompactLipschitzParameterizedFlatNullityProbe.lean",
+     :sha256
+     "0fd0e7e5d0f3295c664b9bdd97961b6b7471796e95829ce08eb6bfb493c1e9b2"},
+    :declarations
+    ["compact_lipschitz_parameterized_flat_image_addHaar_eq_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Construct localized Lipschitz chart restrictions and compact parameter subsets for the applicable jet loci; repair higher-jet cases outside the strict parameter-space dimension bound, then complete induction and exhaustion."},
+   :representation
+   {:source
+    "A globally C^(k+1) ambient map flat through order k on the image of a Lipschitz parametrization of a compact parameter set, with (k+1)*targetDim greater than parameterDim and the stated nontrivial finite-dimensional inner-product Borel parameter and target spaces.",
+    :target
+    "Zero target add-Haar measure of the composite image, without differentiability assumptions on the parametrization or separately supplied bounding balls and volume normalization."},
+   :id
+   :critical-value-sard-compact-lipschitz-parameterized-flat-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-lipschitz-parameterized-flat-taylor-remainder-1
+    :critical-value-sard-quantitative-taylor-cover-measure-1
+    :critical-value-sard-arbitrarily-small-measure-limit-1
+    :critical-value-sard-volume-nullity-to-add-haar-1],
+   :current-residual
+   "Compact parameter-space covering and add-Haar nullity are assembled; chart localization and higher-jet cases outside the strict dimension range remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -39756,83 +39794,84 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank the Lipschitz pullback estimate, construct local parameter-space covers, and repair the remaining higher-jet cases without assuming automatic admissibility inheritance.",
+     "Bank compact parameterized flat nullity, instantiate local chart restrictions, and repair remaining higher-jet cases without assuming automatic remaining-order admissibility.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_lipschitz_parameterized_flat_taylor_remainder"
-      "d19aecc739e77b0328649992a8ee7fc49911a95a91158b2bb7f4f27d62ed3a24"},
+     {"compact_lipschitz_parameterized_flat_image_addHaar_eq_zero"
+      "146653f8c718b15ef92c1b77d63eec88cccb911c81348070e3faed1826a9ba11"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if ambient flat Taylor bounds fail to retain their exponent under the stated Lipschitz distance bound, or nonstandard axioms are required.",
+      "Stop only if the retained Taylor estimate and strict parameter-space dimension surplus fail to imply compact image nullity under the stated hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardLipschitzParameterizedFlatTaylorRemainder.lean"
-       "ConstructionTargets/SardLipschitzParameterizedFlatTaylorRemainder.md"],
+      ["ConstructionTargets/SardCompactLipschitzParameterizedFlatNullity.lean"
+       "ConstructionTargets/SardCompactLipschitzParameterizedFlatNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LIPSCHITZ PARAMETERIZED FLAT TAYLOR REMAINDER",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT LIPSCHITZ PARAMETERIZED FLAT NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardLipschitzParameterizedFlatTaylorRemainderProbe.lean",
+        "/tmp/SardCompactLipschitzParameterizedFlatNullityProbe.lean",
         :sha256
-        "ffb02082a64216d8bd3301c6c49f7576cfdcdcc17e6a73111edc32295d925e28"},
+        "0fd0e7e5d0f3295c664b9bdd97961b6b7471796e95829ce08eb6bfb493c1e9b2"},
        :declarations
-       ["exists_lipschitz_parameterized_flat_taylor_remainder"],
+       ["compact_lipschitz_parameterized_flat_image_addHaar_eq_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Construct localized Lipschitz chart restrictions and apply parameter-space covering nullity where the retained Taylor exponent exceeds parameter dimension; remaining uncovered jets still require analytic repair before induction and exhaustion."},
+       "Construct localized Lipschitz chart restrictions and compact parameter subsets for the applicable jet loci; repair higher-jet cases outside the strict parameter-space dimension bound, then complete induction and exhaustion."},
       :representation
       {:source
-       "A globally C^(k+1) ambient map flat through order k on the bounded image of a Lipschitz parametrization of a source subset.",
+       "A globally C^(k+1) ambient map flat through order k on the image of a Lipschitz parametrization of a compact parameter set, with (k+1)*targetDim greater than parameterDim and the stated nontrivial finite-dimensional inner-product Borel parameter and target spaces.",
        :target
-       "A uniform order-(k+1) pairwise remainder bound for the composite on the parameter subset, without differentiability hypotheses on the parametrization."},
+       "Zero target add-Haar measure of the composite image, without differentiability assumptions on the parametrization or separately supplied bounding balls and volume normalization."},
       :id
-      :critical-value-sard-lipschitz-parameterized-flat-taylor-remainder-1,
+      :critical-value-sard-compact-lipschitz-parameterized-flat-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-uniform-flat-taylor-remainder-1],
+      [:critical-value-sard-lipschitz-parameterized-flat-taylor-remainder-1
+       :critical-value-sard-quantitative-taylor-cover-measure-1
+       :critical-value-sard-arbitrarily-small-measure-limit-1
+       :critical-value-sard-volume-nullity-to-add-haar-1],
       :current-residual
-      "The parameterized remainder estimate compiles with coefficient D*L^(k+1); chart localization, parameter-space covering, and unresolved higher-jet cases remain.",
+      "Compact parameter-space covering and add-Haar nullity are assembled; chart localization and higher-jet cases outside the strict dimension range remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "Rectangular Morse-Sard remains incomplete, not refuted. One compiled analytic prerequisite pulls ambient flat Taylor estimates through a merely Lipschitz parametrization, retaining the Taylor exponent without assuming remaining-order admissibility or higher differentiability of the parametrization. This supplies parameter-space remainder estimates, not nullity of all uncovered jet cases.",
+     "One placeholder-free prerequisite now proves compact Lipschitz-parameterized flat image nullity for arbitrary target add-Haar measure when (k+1)*targetDim exceeds parameterDim. Compactness supplies both bounding balls, positivity supplies source-volume normalization, and the retained Taylor estimate supplies arbitrarily small covering bounds. Rectangular Morse-Sard remains incomplete, not refuted; chart localization and higher-jet cases outside this dimension range remain unresolved.",
      :commands
      [{:cmd
-       "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md && sed -n '1,240p' docs/TN-topology-closure-experiments.md",
-       :exit 0}
-      {:cmd
-       "sed -n '6000,6125p' holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/SardLipschitzParameterizedFlatTaylorRemainderProbe.lean",
+       "Read DAG and closure policy, then extract dependency receipt with bb",
        :exit 1,
        :output
-       "Initial elaboration lacked the NNReal notation scope; corrected before final compilation."}
+       "Documents read; initial receipt extraction had an unmatched delimiter."}
       {:cmd
-       "lake env lean /tmp/SardLipschitzParameterizedFlatTaylorRemainderProbe.lean",
+       "Corrected bb extraction of reviewed Lipschitz remainder, quantitative covering, measure-limit, and add-Haar transfer receipts",
+       :exit 0,
+       :output "All four dependencies are done with PASS reviews."}
+      {:cmd
+       "lake env lean /tmp/SardCompactLipschitzParameterizedFlatNullityProbe.lean",
        :exit 0,
        :output
        "Standard axioms: propext, Classical.choice, Quot.sound"}
       {:cmd
-       "sha256sum /tmp/SardLipschitzParameterizedFlatTaylorRemainderProbe.lean",
+       "sha256sum /tmp/SardCompactLipschitzParameterizedFlatNullityProbe.lean",
        :exit 0}
       {:cmd
-       "sed -n '8,20p' /tmp/SardLipschitzParameterizedFlatTaylorRemainderProbe.lean | sha256sum",
+       "sed -n '9,24p' /tmp/SardCompactLipschitzParameterizedFlatNullityProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLipschitzParameterizedFlatTaylorRemainderProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactLipschitzParameterizedFlatNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 303 items OK; {:done 295, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 304 items OK; {:done 296, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -39841,20 +39880,20 @@
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
        :output "1"}
-      {:cmd
-       "git diff --check && git status --porcelain=v1 && readlink -f .lake/packages",
+      {:cmd "readlink -f .lake/packages",
        :exit 0,
-       :output
-       "Clean worktree; canonical packages /home/joe/code/apm-lean/.lake/packages"}],
+       :output "/home/joe/code/apm-lean/.lake/packages"}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/SardLipschitzParameterizedFlatTaylorRemainderProbe.lean",
+      "/tmp/SardCompactLipschitzParameterizedFlatNullityProbe.lean",
       :sha256
-      "ffb02082a64216d8bd3301c6c49f7576cfdcdcc17e6a73111edc32295d925e28"},
+      "0fd0e7e5d0f3295c664b9bdd97961b6b7471796e95829ce08eb6bfb493c1e9b2"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -40106,7 +40145,8 @@
     :critical-value-sard-compact-rank-zero-admissible-jet-assembly-1
     :critical-value-sard-finite-order-higher-jet-variable-induction-1
     :critical-value-sard-remaining-order-admissibility-boundary-1
-    :critical-value-sard-lipschitz-parameterized-flat-taylor-remainder-1],
+    :critical-value-sard-lipschitz-parameterized-flat-taylor-remainder-1
+    :critical-value-sard-compact-lipschitz-parameterized-flat-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
