@@ -54700,8 +54700,176 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation. Local specification defects and missing infrastructure do not terminate the campaign.",
+   :evidence
+   {:evidence
+    {:census
+     {:path "/tmp/topology-refill29-measure.json",
+      :sha256
+      "c95ac3d00b075c03f0314dd7d60e6948ebd16e3351419db300d6704d7f7b897d"},
+     :reviews
+     {:path "/tmp/topology-refill29-reviews.edn",
+      :sha256
+      "858540da16992dd29ee2cd4cbf0998e8fd20273a7717c0a5ba74aeda2824c52f"},
+     :tail
+     {:path "/tmp/topology-refill29-tail.edn",
+      :sha256
+      "a2ec93e3ad6f58256ffdbb85a3a6cc07dc52e1f16ea23a6156f9d4620885c99c"}},
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill29-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill29-reviews.bb", :exit 0}
+     {:cmd
+      "git diff --name-status 90c2e8fca4bd823c7e55ef7abbd42e79cce7d7ec 270bc9bc14293d61697e58f48b0f3de08e790a9c -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "Pinned comment-stripped placeholder comparison for concurrent problems/m02J04/lean/Main.lean",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill29-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill29-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill29-measure.json /tmp/topology-refill29-reviews.edn /tmp/topology-refill29-tail.edn",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer "t01A08",
+      :stop-condition
+      "GO needs the complete frozen consumer. Otherwise name the exact general-model smooth extension or derivative/measure representation boundary. A self-model special case is not closure.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / general-model projected regular value",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free frozen Main preserving all definitions and hypotheses. Reuse unconditional genuine-smooth Euclidean/manifold Sard and explicit coordinate equivalences to the literal Fin 2 to real target. Derive actual model-chart regularity and mfderiv criticality transport for the supplied arbitrary ModelWithCorners; account for model range and any boundary instead of assuming boundarylessness, an open model range or an inner-product structure on the frozen norm. Construct an actual regular projection value and close the literal affine-line predicate. Preserve the frozen smooth-order expression, second countability and empty/zero-dimensional cases. No assumed chart nullity, extension, regular value or strengthened model hypothesis. If an extension or representation theorem is absent, state it exactly.",
+       :frozen-file "problems/t01A08/lean/Main.lean",
+       :frozen-sha256
+       "e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id
+      :t01a08-frozen-projected-regular-value-closure-probe-refill29,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
+      :current-residual
+      "One placeholder: a regular value of the literal first-two-coordinate projection. Banked manifold Sard uses self-model inner-product spaces; the frozen source uses arbitrary ModelWithCorners and a finite-dimensional normed model."}
+     {:consumer "t96J05",
+      :stop-condition
+      "GO requires compiled actual global charted-space and genuine-smooth manifold structures. REVISE requires exactly one compiled prerequisite. Missing geometry is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE/SUBMERSION / global fixed-model fiber atlas",
+      :acceptance
+      {:probe
+       "For a globally genuine-infinity smooth map between finite-dimensional complete real normed spaces and a regular value, construct ChartedSpace and IsManifold genuine infinity on the literal fiber subtype with its inherited topology and fixed Euclidean dimension finrank E minus finrank F. Invoke RegularFiberFixedModelOverlaps.exists_cover and use its actual charts and proven smooth overlaps through Mathlib atlas/groupoid APIs. Prove the chosen chartAt and atlas membership specifications; do not assume an atlas, compatibility, covering or altered topology. Include empty fibers and zero-dimensional kernels. Preserve existing producers and avoid rebuilding the local implicit-function construction. If the exact atlas theorem exists reuse it and identify the next embedded-inclusion edge.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Global Euclidean-source regular-fiber manifold structure only. Smooth embedded inclusion and tangent-image comparison, manifold-source transport and frozen consumer uptake remain."},
+      :id :regular-fiber-global-atlas-assembly-probe-refill29,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
+      :current-residual
+      "RegularFiberFixedModelOverlaps constructs actual fixed-model fiber charts, source coverage and smooth transitions. Global ChartedSpace and IsManifold instances remain.",
+      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+     {:consumer "t92J07",
+      :stop-condition
+      "Stop on evidence or hash mismatch; do not count documentation as another closure.",
+      :phase :implementation,
+      :state :blocked,
+      :scope
+      ["TOPOLOGY-DEPENDENCY-DAG.md"
+       "docs/TN-topology-closure-experiments.md"],
+      :dag-node
+      "CONSUMER CERTIFICATION / reviewed common regular value",
+      :acceptance
+      {:documentation
+       "Record t92J07 closure commit and independent PASS invoke-1788994194142-17263-038c93a8, exact frozen and fixture hashes, both unchanged statement hashes, 2-to-0 placeholders, standard axioms and unused-hm warning. Record critical-value predicate equality, reused manifold Sard, countable common-value assembly and retained zero-target branch. Update current closure status while preserving historical STOP evidence. Distinguish this closure from t93A04 and infrastructure; retain general-model and regular-preimage residuals. Verify cited source and receipts, and modify only the two scoped documents."},
+      :id :t92j07-reviewed-closure-documentation-refill29,
+      :kind :documentation,
+      :depends-on
+      [:checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
+      :current-residual
+      "t92J07 is reviewed closed at b364803ac4e0c6b2d20d06d9c937f1f0a9892eb4; its current DAG disposition needs the closure record."}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation. Preserve local specification evidence and outstanding coverage; infrastructure absence is not termination.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned executable consumer placeholders and compare typed residuals, reviews and portfolio versus concurrent changes. Elect exactly one near-closure adapter before shared foundations by reach and simplicity, and append a fresh dependent checkpoint. Preserve signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t01a08-frozen-projected-regular-value-closure-probe-refill29
+       :regular-fiber-global-atlas-assembly-probe-refill29
+       :t92j07-reviewed-closure-documentation-refill29],
+      :current-residual
+      "Await reviewed general-model adapter, fiber atlas and closure documentation, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    {:baseline "90c2e8fca4bd823c7e55ef7abbd42e79cce7d7ec",
+     :head "270bc9bc14293d61697e58f48b0f3de08e790a9c",
+     :campaign-refutation false,
+     :reviews
+     {:common-regular-value :pass,
+      :fiber-overlaps :pass,
+      :t93a04-documentation :pass,
+      :previous-checkpoint :pass,
+      :portfolio-stop-count 0},
+     :ranking
+     "Exactly one near-closure adapter first: t01A08 has one placeholder and a projection regular-value conclusion supported by the new Sard chain, with general-model transport explicitly unresolved. Global regular-fiber atlas assembly then serves five proposed consumers and directly reuses reviewed charts and transitions. This bounded construction precedes the similarly broad but larger surface-classification program, four-consumer fundamental-class localization and two-consumer product homology. Other near-closure consumers retain sphere-map naturality, normalization, covering or classification boundaries. Closure documentation follows.",
+     :typed-residual-change
+     "t92J07 is reviewed closed at b364803ac4e0c6b2d20d06d9c937f1f0a9892eb4. RegularFiberFixedModelOverlaps at 316e0c9cd061eb219dce962482b11f16cb0f6b0d supplies actual charts, coverage, image formulas and smooth overlaps; global atlas and embedded geometry remain. Reviewed t93A04 documentation at 0c7da53d84d8ed513b9afc706d51957a17054082 adds no closure.",
+     :infrastructure
+     {:before 642,
+      :after 644,
+      :portfolio-added ["RegularFiberFixedModelOverlaps.lean"],
+      :concurrent-added ["RelativePairNaturality.lean"],
+      :portfolio-consumer-change {"t92J07" [2 0]},
+      :concurrent-consumer-change
+      {"m02J04" {:placeholders [1 1], :outside-dag-census true}}},
+     :outstanding
+     ["Signed positive-dimensional antipodal action"
+      "Reduced-S0 degree and one-dimensional local-index coverage"
+      "Preserved local specification counterexamples including the old t94J08 ordinary-H0 encoding"
+      "General ModelWithCorners smooth extension and criticality transport"
+      "Embedded regular-fiber inclusion and tangent comparison"],
+     :census
+     {:open 37,
+      :existing 58,
+      :within-two-placeholders 27,
+      :placeholders-before 70,
+      :placeholders-after 68,
+      :closed-after 21,
+      :delta -2,
+      :named 59,
+      :missing ["t93A05"],
+      :closed-before 20}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -54716,7 +54884,100 @@
     :t93a04-reviewed-closure-documentation-refill28
     :checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard],
    :current-residual
-   "Await the reviewed common-value adapter, fiber-overlap result and closure documentation, then rerank the complete DAG."}],
+   "Await the reviewed common-value adapter, fiber-overlap result and closure documentation, then rerank the complete DAG."}
+  {:consumer "t01A08",
+   :stop-condition
+   "GO needs the complete frozen consumer. Otherwise name the exact general-model smooth extension or derivative/measure representation boundary. A self-model special case is not closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / general-model projected regular value",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free frozen Main preserving all definitions and hypotheses. Reuse unconditional genuine-smooth Euclidean/manifold Sard and explicit coordinate equivalences to the literal Fin 2 to real target. Derive actual model-chart regularity and mfderiv criticality transport for the supplied arbitrary ModelWithCorners; account for model range and any boundary instead of assuming boundarylessness, an open model range or an inner-product structure on the frozen norm. Construct an actual regular projection value and close the literal affine-line predicate. Preserve the frozen smooth-order expression, second countability and empty/zero-dimensional cases. No assumed chart nullity, extension, regular value or strengthened model hypothesis. If an extension or representation theorem is absent, state it exactly.",
+    :frozen-file "problems/t01A08/lean/Main.lean",
+    :frozen-sha256
+    "e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t01a08-frozen-projected-regular-value-closure-probe-refill29,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps
+    :checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
+   :current-residual
+   "One placeholder: a regular value of the literal first-two-coordinate projection. Banked manifold Sard uses self-model inner-product spaces; the frozen source uses arbitrary ModelWithCorners and a finite-dimensional normed model."}
+  {:consumer "t96J05",
+   :stop-condition
+   "GO requires compiled actual global charted-space and genuine-smooth manifold structures. REVISE requires exactly one compiled prerequisite. Missing geometry is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / global fixed-model fiber atlas",
+   :acceptance
+   {:probe
+    "For a globally genuine-infinity smooth map between finite-dimensional complete real normed spaces and a regular value, construct ChartedSpace and IsManifold genuine infinity on the literal fiber subtype with its inherited topology and fixed Euclidean dimension finrank E minus finrank F. Invoke RegularFiberFixedModelOverlaps.exists_cover and use its actual charts and proven smooth overlaps through Mathlib atlas/groupoid APIs. Prove the chosen chartAt and atlas membership specifications; do not assume an atlas, compatibility, covering or altered topology. Include empty fibers and zero-dimensional kernels. Preserve existing producers and avoid rebuilding the local implicit-function construction. If the exact atlas theorem exists reuse it and identify the next embedded-inclusion edge.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Global Euclidean-source regular-fiber manifold structure only. Smooth embedded inclusion and tangent-image comparison, manifold-source transport and frozen consumer uptake remain."},
+   :id :regular-fiber-global-atlas-assembly-probe-refill29,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps
+    :checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
+   :current-residual
+   "RegularFiberFixedModelOverlaps constructs actual fixed-model fiber charts, source coverage and smooth transitions. Global ChartedSpace and IsManifold instances remain.",
+   :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+  {:consumer "t92J07",
+   :stop-condition
+   "Stop on evidence or hash mismatch; do not count documentation as another closure.",
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["TOPOLOGY-DEPENDENCY-DAG.md"
+    "docs/TN-topology-closure-experiments.md"],
+   :dag-node "CONSUMER CERTIFICATION / reviewed common regular value",
+   :acceptance
+   {:documentation
+    "Record t92J07 closure commit and independent PASS invoke-1788994194142-17263-038c93a8, exact frozen and fixture hashes, both unchanged statement hashes, 2-to-0 placeholders, standard axioms and unused-hm warning. Record critical-value predicate equality, reused manifold Sard, countable common-value assembly and retained zero-target branch. Update current closure status while preserving historical STOP evidence. Distinguish this closure from t93A04 and infrastructure; retain general-model and regular-preimage residuals. Verify cited source and receipts, and modify only the two scoped documents."},
+   :id :t92j07-reviewed-closure-documentation-refill29,
+   :kind :documentation,
+   :depends-on
+   [:checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps
+    :checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
+   :current-residual
+   "t92J07 is reviewed closed at b364803ac4e0c6b2d20d06d9c937f1f0a9892eb4; its current DAG disposition needs the closure record."}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation. Preserve local specification evidence and outstanding coverage; infrastructure absence is not termination.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned executable consumer placeholders and compare typed residuals, reviews and portfolio versus concurrent changes. Elect exactly one near-closure adapter before shared foundations by reach and simplicity, and append a fresh dependent checkpoint. Preserve signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t01a08-frozen-projected-regular-value-closure-probe-refill29
+    :regular-fiber-global-atlas-assembly-probe-refill29
+    :t92j07-reviewed-closure-documentation-refill29
+    :checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
+   :current-residual
+   "Await reviewed general-model adapter, fiber atlas and closure documentation, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
