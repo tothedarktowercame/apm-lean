@@ -1920,20 +1920,95 @@
    :stop-condition
    "Bank recentering and its positive coordinate embedding only. Do not claim positivity of the transition between different rotated charts, infer geometric compatibility from homology equality, or claim the parent packet is complete.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/PointedChartRecenteringProbe.lean",
-      :sha256
-      "28b272797d8fcd7d62ade1407ce6795e136bdcb85e85d26666bd9232844742c2"},
-     :commands
-     [{:cmd "lake env lean /tmp/PointedChartRecenteringProbe.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Prove geometric order preservation from this common restriction into the second rotated chart, including its recentering, then combine with the banked unique-global-generator localization equations. No further homological existence theorem is needed. Positivity between different rotated charts and full parent-packet completion are not claimed.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :focused-build :pass,
+     :all-six-printed-axiom-audits :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :fixture-compilation :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 30,
+      :log "/tmp/codex-14-recenter-build.log",
+      :paths
+      {"ConstructionTargets/CircleUniversalCover.lean" 1,
+       "ConstructionTargets/TopologicalSumSingularHomology.lean" 1,
+       "ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/T02A06SphereShift.lean" 3,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/SolidTorusGluingOpenCover.lean" 5,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/BoundaryTorusOpenCover.lean" 4,
+       "ConstructionTargets/PuncturedNormedSpaceRadialEquivalence.lean"
+       2,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/SingularSubdivision.lean" 2}}],
+    :statement-hashes
+    {"recenteredChart"
+     "addbac0ae332d1a3c52bc2f136ccf91983a4a1ab22a08f3e58c8ee830f4beba1",
+     "recentered_ambient_formula"
+     "7ad7767314c35dcc81c594aab470bff49a6346c982f07fb99c9aa52f6be2f534",
+     "recentered_coordinate_increasing"
+     "5fd3b19658f4b64a9bf4ceb2909cba7006842078e7d1c65b870ffbfa06b84ac3",
+     "exists_recenter_radius"
+     "d1383fb09001dcdfc1bbe5edbc1f149fe317216d87efa111034bb65552e39d4a",
+     "exists_recentered_chart"
+     "80f50445ed7f372a4f7715f9bdb230a4687f1172fe40b3598740ed5ef8fb0761",
+     "circle_overlap_recenter"
+     "bd6be70f6b043548d2795023de3322a60af4885d88672c980ad3f6dda3b45306"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/PointedChartRecenteringProbe.lean", :exit 0}
+     {:cmd
+      "lake env lean /tmp/PointedChartRecenteringProbe.lean > /tmp/codex-14-recenter-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/PointedChartRecentering.lean > /tmp/codex-14-recenter-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.PointedChartRecentering ConstructionTargets.RotatedCircleChartTransport ConstructionTargets.OrientedOverlapPuncturedCircle > /tmp/codex-14-recenter-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/PointedChartRecentering.lean /tmp/PointedChartRecenteringProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Construct positive affine recentering at chart overlap points\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Checked codex-11 dependency PASS. Existing untracked supervisor files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :commit "360f5d1fa7e270318dd9346cd9bf346c2a3ef49f",
+    :changed-paths
+    ["ConstructionTargets/PointedChartRecentering.lean"
+     "ConstructionTargets/PointedChartRecentering.md"],
+    :dependency-commit "8554a6d05a1ed35d31532395c45e837818c1dbcf",
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/PointedChartRecenteringProbe.lean",
+     :sha256
+     "28b272797d8fcd7d62ade1407ce6795e136bdcb85e85d26666bd9232844742c2"},
+    :finding
+    "Promoted the exact fixture. Explicit coordinate-ball identification and positive affine scaling construct a chart centered at an arbitrary coordinate point. Openness supplies a positive radius placing its neighborhood inside the requested open and original chart neighborhood. The ambient formula and strict coordinate increase are proved. The Circle specialization constructs a pointed chart at an actual overlap point inside both rotated neighborhoods.",
+    :statement-hash-method
+    "SHA-256 of UTF-8 declaration bytes beginning with theorem or def and ending immediately before the space preceding := or where; names below are in ConstructionTargets.PointedChartRecentering.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PointedChartRecentering.lean"
     "ConstructionTargets/PointedChartRecentering.md"],
