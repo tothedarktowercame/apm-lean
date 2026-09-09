@@ -48351,17 +48351,78 @@
   {:consumer "t93A04",
    :stop-condition
    "GO needs the full compiled local producer/consumer composition. REVISE requires exactly one compiled prerequisite. Otherwise name the exact hypothesis or representation boundary; missing infrastructure is not refutation.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:source-pins
+     {:path
+      "/tmp/SardSmoothFirstNonzeroJetLocalInduction-sources.json",
+      :sha256
+      "6cee24230e65b81a1dab642c9737d9aaa2b7cec303e833d0a5dde1c62f633c8d"},
+     :placeholder-delta
+     {:fixture 0, :consumer-before 1, :consumer-after 1, :delta 0},
+     :residual
+     "Conditional local first-nonzero-jet induction step established. Discharging induction through base cases, other critical-rank strata, flat-locus coverage, countable/local-domain assembly and manifold transport remains. No unconditional Sard or frozen consumer closure is claimed.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :documentation
+     {:path "/tmp/SardSmoothFirstNonzeroJetLocalInduction.md",
+      :sha256
+      "cc02a6dcdb3cc38602bc3c56db21154f5cb2965ddb54e81a794d6babe3b1416d"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/SardSmoothFirstNonzeroJetLocalInduction.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/check-sard-smooth-local-induction.py",
+       :exit 0}
+      {:cmd
+       "git diff --exit-code -- ConstructionTargets problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+       :exit 0}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/SardSmoothFirstNonzeroJetLocalInduction.lean",
+      :sha256
+      "4cf21fc2f359190823adeaa0fa67dde24691c6d45c019c40b383152c5a07440f"},
+     :finding
+     "Complete local producer/consumer composition compiles. The banked scalarized-jet producer constructs the restricted smooth chart. Existing lower-jet vanishing proves containment in its zero-coordinate inverse slice; the existing scalar-derivative theorem proves strict kernel dimension drop. The actual inverse slice supplies genuine-infinity regularity to SardLowerDimensionalLocalCriticalImageInduction. Its sole nullity input is explicitly restricted to local smooth maps on the lower-dimensional kernel. The resulting local-image nullity theorem works for any measure with that induction premise, including Haar measure.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean"
+       "ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.md"],
+      :acceptance
+      {:consumer-placeholder-count 1,
+       :preserve-explicit-lower-dimensional-induction true,
+       :axioms :standard-only,
+       :consumer-file "problems/t93A04/lean/Main.lean",
+       :preserve-genuine-infinity true,
+       :fixture-placeholders 0,
+       :declarations
+       ["SardSmoothFirstNonzeroJetLocalInductionProbe.exists_local_firstNonzeroJet_image_null"],
+       :compile
+       "lake env lean ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean",
+       :consumer-sha256
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}},
+     :seat :codex-12}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean"
+    "ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.md"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / smooth higher-jet local induction step",
    :acceptance
-   {:probe
-    "Compile one complete local induction step for globally ContDiff real genuine infinity f on a finite-dimensional real inner-product source, a critical set K, i>=1, x in firstNonzeroJetLocus f K (i+1), and fixed scalarization/directions witnessing the nonzero next jet at x. Use SardScalarizedJetSmoothNeighborhood to produce the exact restricted chart e and show the first-nonzero locus intersected with e.source lies in its zero-coordinate inverse slice. Derive the strict kernel dimension drop using the existing scalar-derivative theorem. Feed the smooth inverse slice into SardLowerDimensionalLocalCriticalImageInduction at genuine infinity and conclude Haar-null image of that local locus. The sole nullity input may be an explicitly stated local smooth critical-image induction hypothesis for strictly smaller source dimension; it must apply to the actual reduced map on its slice domain. No assumed chart, neighborhood field regularity, local-piece nullity, arbitrary-C1 induction, analytic omega substitution, or higher-jet flatness from vanishing first derivative. Reuse existing containment, dimension and induction producers. If this exact composition already exists, identify and reuse it rather than minting a duplicate wrapper.",
+   {:consumer-placeholder-count 1,
+    :preserve-explicit-lower-dimensional-induction true,
     :axioms :standard-only,
-    :consumer-residual
-    "This is a conditional source-dimension induction step, not unconditional Sard. Discharging the induction via base cases, other critical-rank strata and flat-locus coverage, countable/local-domain assembly and actual manifold transport remain. Frozen t93A04 stays open until these are proved."},
+    :consumer-file "problems/t93A04/lean/Main.lean",
+    :preserve-genuine-infinity true,
+    :fixture-placeholders 0,
+    :declarations
+    ["SardSmoothFirstNonzeroJetLocalInductionProbe.exists_local_firstNonzeroJet_image_null"],
+    :compile
+    "lake env lean ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean",
+    :consumer-sha256
+    "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
    :id :sard-smooth-first-nonzero-jet-local-induction-probe-refill12,
    :kind :reusable-theorem,
    :depends-on
