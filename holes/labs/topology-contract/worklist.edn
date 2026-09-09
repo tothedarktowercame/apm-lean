@@ -50697,8 +50697,59 @@
   {:consumer "t94J08",
    :stop-condition
    "If full closure cannot compile, name the exact missing induced-map or representation theorem. Preserve the old refutation and distinguish a local specification defect from campaign refutation.",
+   :evidence
+   {:placeholder-delta
+    {:consumer "t94J08",
+     :before 2,
+     :after 2,
+     :delta 0,
+     :frozen-sha256
+     "cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee"},
+    :residual
+    "Missing infrastructure, not mathematical refutation. Both repaired placeholders remain. Preserve the old-statement counterexample; reduced S0 degree and one-dimensional local-index coverage remain outstanding outside the repaired branch. No implementation elected; return to the portfolio.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1788982627020-16898-debf6d92"},
+    :outcome :stop,
+    :warnings ["Three inherited prefix lints."],
+    :boundary
+    "The actual antipodal induced-map scalar equation remains unproved. The banked projection, hemisphere-excision, disk-coordinate and radial naturality squares do not supply the signed north-versus-south suspension/excision comparison needed for the positive-dimensional induction. The production shift excludes degree-zero reduction, so the H1 action also requires its own base computation. Homology-object isomorphisms and involution alone cannot establish the requested action.",
+    :disposition :stop,
+    :axioms [propext Classical.choice Quot.sound],
+    :author :codex-12,
+    :reason :missing-induced-map-computation,
+    :commands
+    [{:cmd "lake env lean /tmp/T94J08PositiveDimensionBoundary.lean",
+      :exit 0}
+     {:cmd
+      "git diff --exit-code -- problems/t94J08/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/T94J08PositiveDimensionBoundary.lean /tmp/T94J08PositiveDimensionBoundary.md /tmp/T94J08PositiveDimensionBoundary-audit.json",
+      :exit 0}],
+    :lowest-dimension-audit
+    "At n=1 the literal orientation exists and the requested scalar is +1; the diagnostic does not prove that the antipodal induced H1 map is +identity. No partial orientation or involution certificate is reported as closure.",
+    :campaign-refutation false,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T94J08PositiveDimensionBoundary.lean",
+     :sha256
+     "e4a7a05b91c5bd2b1789e7e684fa5320b94ff45a74b1caccba3aaca964a8400c",
+     :purpose :boundary-diagnostic,
+     :placeholders 0},
+    :finding
+    "The literal ModuleCat orientation compiles for every n>=1 using sphereModuleTopHomologyIsoInt. The frozen antipodal map equals the banked sphereAntipodal map, and its actual induced map squares to identity by functoriality. These results do not determine its sign.",
+    :artifacts
+    {:report
+     {:path "/tmp/T94J08PositiveDimensionBoundary.md",
+      :sha256
+      "0bad317bef7f971b3ce2e718fb7bd97b8c71dcc868bc30e6a6a57445352f7a44"},
+     :audit
+     {:path "/tmp/T94J08PositiveDimensionBoundary-audit.json",
+      :sha256
+      "4bb42c37d7529fbcadbb21b1e1f06dac0294dcc59bacbedb613110a72decf40b"}},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "SPHERE ORIENTATION / repaired positive-dimensional antipodal action",
