@@ -51319,8 +51319,143 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level mathematical refutation. Individual encoding defects require preserved evidence and explicit repair/coverage accounting; infrastructure absence does not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill20-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill20-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill20-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill20-proposed-worklist.edn",
+      :exit 0}],
+    :finding
+    {:baseline "9cd2c7bf29d9cf6677c227f909aefb17933213ed",
+     :retained-coverage
+     "Repaired t94J08 still needs the positive-dimensional antipodal induced-map computation, including the H1 base case. Reduced S0 degree and one-dimensional local index remain outstanding. Preserve the old encoding refutation; no campaign-level refutation or unconditional Sard closure is inferred.",
+     :evidence
+     [{:path "/tmp/topology-refill20-measure.json",
+       :sha256
+       "afb9a1136a8badb97890ce2df41e43c74433dc9596138d8ed7f33c69621f01f5"}
+      {:path "/tmp/topology-refill20-infrastructure.json",
+       :sha256
+       "9e01b850c9d1a70ca24bb7af1804949364a47335fbd0053c71565868542dd33d"}
+      {:path "/tmp/topology-refill20-reviews.edn",
+       :sha256
+       "bd26d8667a2c8b9197cd2c2b1fd43edf02b4e2685cdbcfdb4f99b1bc0f128bfe"}
+      {:path "/tmp/topology-refill20-tail.edn",
+       :sha256
+       "914b78f724bf69feefe5e574da5496180da73d5dfa2f783fdc4d4a4e17e3ef92"}],
+     :head "ba3c1140ad42d5ac6c06edf6fc1dbcd4244f00b5",
+     :ranking
+     "Elect exactly one near-closure adapter, t02A05 with two placeholders, because concurrent fourth moments materially improve its available inputs. Avoid repeating t95J05 without a new numerical mass theorem. Other branches retain antipodal signed-action, graph realization, planar separation, Euler-cover or classification boundaries. Then elect the bounded Sard open-chart-to-rank-stratum composition for its five downstream consumers.",
+     :validation
+     "Temporary combined ledger validates 393 items; fresh IDs, exactly one adapter first, and final checkpoint depending on both elected work rows. No canonical files edited.",
+     :typed-residual-change
+     "Sard advanced from compact chart nullity to entire rank-upper locus intersected with the actual open chart source. t95J05 is equivalent to intrinsic mass3=2*pi^2; neither this equality nor its negation was established. Concurrent fourth moments now evaluate the t02A05 unit flux polynomial relative to intrinsic mass, without numerical normalization.",
+     :review-outcomes
+     {:work-reviews-pass 2,
+      :probe-stop 1,
+      :implemented 1,
+      :consumer-closures 0,
+      :t95j05
+      "PASS invoke-1788984476276-16960-d777da85: exact numerical intrinsic mass remains unresolved.",
+      :sard
+      "PASS invoke-1788984844460-16973-6c44d2ee: implementation 699245a3278b206155feeb60881e7ead1903dffd supplies actual open-chart rank-upper image nullity under smaller-source local smooth induction.",
+      :checkpoint19 "PASS invoke-1788984222711-16952-c1b80145"},
+     :infrastructure
+     {:before 624,
+      :after 626,
+      :portfolio
+      ["ConstructionTargets/SardGenuineSmoothOpenRankUpperImageNullity.lean"],
+      :concurrent
+      ["ConstructionTargets/IntrinsicSphereFourthMoments.lean"],
+      :removed []},
+     :census
+     {:open 39,
+      :closed 19,
+      :existing 58,
+      :changed-consumers [],
+      :placeholder-after 71,
+      :placeholder-delta 0,
+      :placeholder-before 71,
+      :named 59,
+      :missing ["t93A05"],
+      :within-two 29}},
+    :replacement-items
+    [{:consumer "t02A05",
+      :stop-condition
+      "If complete closure cannot compile, name the exact remaining projection, measure transport or normalization theorem. No assumed area or partial moment certificate counts as GO; classify a proved false encoding locally.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "STOKES AND MOMENTS / frozen outward flux",
+      :acceptance
+      {:probe
+       "GO requires a complete placeholder-free compiled copy of frozen Main with all definitions and statements preserved. Use IntrinsicSphereFinite, IntrinsicSphereSecondMoments and IntrinsicSphereFourthMoments to derive the literal outwardSphereIntegral from its actual alternating form and point-dependent tangent projections. Transport to the exact unit flux density and prove the required numerical intrinsic Hausdorff normalization with its constant, then close the bridge and final minimum/equality clauses. No assumed Stokes, sphere area, projection identity or radial-measure equality. A diagnostic flux polynomial alone is insufficient. If normalization contradicts the frozen formula, prove the exact contradiction instead of changing the statement.",
+       :frozen-file "problems/t02A05/lean/Main.lean",
+       :frozen-sha256
+       "fb006cf7fd68026fa20f517e58e4f6b3bbf1c34fce2f3ee42064f5e7b3cc89d5",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t02a05-intrinsic-flux-closure-probe-refill20,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank],
+      :current-residual
+      "Two placeholders: literal outward-sphere flux formula and final optimization. New intrinsic fourth moments evaluate the unit flux polynomial relative to sphere mass; exact frozen tangent-projection transport and numerical normalization remain."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO requires full compiled actual local-producer/global-consumer composition. REVISE requires one compiled prerequisite. Do not assume open-cover nullity or replace smooth local induction with arbitrary-C1 or finite-order Sard.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / global positive-rank stratum",
+      :acceptance
+      {:probe
+       "For globally genuine-infinity smooth f between finite-dimensional real inner-product spaces and 0<r<target dimension, prove Haar-null image of its actual derivative rank-equal-r stratum. State one local genuine-smooth critical-image induction hypothesis over all strictly smaller finite-dimensional complete sources, including zero dimensions, and the actual complementary targets/Haar measures needed at varying basepoints. At each stratum point invoke SardGenuineSmoothOpenRankUpperImageNullity, derive its rank bounds from stratum membership, and restrict the resulting rank-upper null set to the exact stratum. Use the existing pointwise-open rank-locus aggregation theorem and derived second countability to conclude global nullity. Choose legitimate coordinate Haar measures and derive required Borel/topology instances. No supplied charts, stratum nullity, arbitrary-C1 induction, analytic omega or unconditional finite-order Sard. Reuse existing aggregation; if the exact composition exists identify the next edge.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Conditional positive-rank stratum nullity only. Rank-zero coverage, compatible local-domain induction discharge and base cases, full critical-locus assembly and manifold transport remain before unconditional Sard or t93A04 closure."},
+      :id
+      :sard-genuine-smooth-positive-rank-stratum-nullity-probe-refill20,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank],
+      :current-residual
+      "Actual open-chart rank-upper image nullity is reviewed. Assemble the exact fixed positive deficient-rank stratum using those neighborhoods and second countability.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Only all campaign consumers closed or exact campaign-level mathematical refutation ends the campaign. Preserve individual encoding counterexamples and repair/coverage accounting; infrastructure absence is not termination.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped placeholders across all DAG consumers; compare typed residuals, portfolio versus concurrent infrastructure and reviewed outcomes. Elect exactly one near-closure adapter before shared foundations by reach and simplicity and append a fresh dependent checkpoint to a nonempty portfolio. Retain t94J08 reduced-S0 and one-dimensional-index coverage and missing signed action. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id :checkpoint-full-dag-refill-21-after-flux-and-rank-stratum,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t02a05-intrinsic-flux-closure-probe-refill20
+       :sard-genuine-smooth-positive-rank-stratum-nullity-probe-refill20],
+      :current-residual
+      "Await both reviewed outcomes and rerank the full DAG, including unrelated consumers and concurrent infrastructure."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -51334,7 +51469,79 @@
     :sard-genuine-smooth-open-rank-upper-image-nullity-probe-refill19
     :checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank],
    :current-residual
-   "Await both reviewed rows, then rerank the complete DAG including unrelated near-closure consumers and concurrent infrastructure."}],
+   "Await both reviewed rows, then rerank the complete DAG including unrelated near-closure consumers and concurrent infrastructure."}
+  {:consumer "t02A05",
+   :stop-condition
+   "If complete closure cannot compile, name the exact remaining projection, measure transport or normalization theorem. No assumed area or partial moment certificate counts as GO; classify a proved false encoding locally.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "STOKES AND MOMENTS / frozen outward flux",
+   :acceptance
+   {:probe
+    "GO requires a complete placeholder-free compiled copy of frozen Main with all definitions and statements preserved. Use IntrinsicSphereFinite, IntrinsicSphereSecondMoments and IntrinsicSphereFourthMoments to derive the literal outwardSphereIntegral from its actual alternating form and point-dependent tangent projections. Transport to the exact unit flux density and prove the required numerical intrinsic Hausdorff normalization with its constant, then close the bridge and final minimum/equality clauses. No assumed Stokes, sphere area, projection identity or radial-measure equality. A diagnostic flux polynomial alone is insufficient. If normalization contradicts the frozen formula, prove the exact contradiction instead of changing the statement.",
+    :frozen-file "problems/t02A05/lean/Main.lean",
+    :frozen-sha256
+    "fb006cf7fd68026fa20f517e58e4f6b3bbf1c34fce2f3ee42064f5e7b3cc89d5",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t02a05-intrinsic-flux-closure-probe-refill20,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank
+    :checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank],
+   :current-residual
+   "Two placeholders: literal outward-sphere flux formula and final optimization. New intrinsic fourth moments evaluate the unit flux polynomial relative to sphere mass; exact frozen tangent-projection transport and numerical normalization remain."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO requires full compiled actual local-producer/global-consumer composition. REVISE requires one compiled prerequisite. Do not assume open-cover nullity or replace smooth local induction with arbitrary-C1 or finite-order Sard.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / global positive-rank stratum",
+   :acceptance
+   {:probe
+    "For globally genuine-infinity smooth f between finite-dimensional real inner-product spaces and 0<r<target dimension, prove Haar-null image of its actual derivative rank-equal-r stratum. State one local genuine-smooth critical-image induction hypothesis over all strictly smaller finite-dimensional complete sources, including zero dimensions, and the actual complementary targets/Haar measures needed at varying basepoints. At each stratum point invoke SardGenuineSmoothOpenRankUpperImageNullity, derive its rank bounds from stratum membership, and restrict the resulting rank-upper null set to the exact stratum. Use the existing pointwise-open rank-locus aggregation theorem and derived second countability to conclude global nullity. Choose legitimate coordinate Haar measures and derive required Borel/topology instances. No supplied charts, stratum nullity, arbitrary-C1 induction, analytic omega or unconditional finite-order Sard. Reuse existing aggregation; if the exact composition exists identify the next edge.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Conditional positive-rank stratum nullity only. Rank-zero coverage, compatible local-domain induction discharge and base cases, full critical-locus assembly and manifold transport remain before unconditional Sard or t93A04 closure."},
+   :id
+   :sard-genuine-smooth-positive-rank-stratum-nullity-probe-refill20,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank
+    :checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank],
+   :current-residual
+   "Actual open-chart rank-upper image nullity is reviewed. Assemble the exact fixed positive deficient-rank stratum using those neighborhoods and second countability.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Only all campaign consumers closed or exact campaign-level mathematical refutation ends the campaign. Preserve individual encoding counterexamples and repair/coverage accounting; infrastructure absence is not termination.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped placeholders across all DAG consumers; compare typed residuals, portfolio versus concurrent infrastructure and reviewed outcomes. Elect exactly one near-closure adapter before shared foundations by reach and simplicity and append a fresh dependent checkpoint to a nonempty portfolio. Retain t94J08 reduced-S0 and one-dimensional-index coverage and missing signed action. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id :checkpoint-full-dag-refill-21-after-flux-and-rank-stratum,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t02a05-intrinsic-flux-closure-probe-refill20
+    :sard-genuine-smooth-positive-rank-stratum-nullity-probe-refill20
+    :checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank],
+   :current-residual
+   "Await both reviewed outcomes and rerank the full DAG, including unrelated consumers and concurrent infrastructure."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
