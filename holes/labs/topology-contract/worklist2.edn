@@ -5533,21 +5533,90 @@
    :stop-condition
    "Bank symmetry transport, second moments and projective-density reduction only. Do not claim fourth moments, the full flux formula, numerical normalization or frozen consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/IntrinsicSphereSecondMomentsProbe.lean",
-      :sha256
-      "243e91987507e34dd3d11e420e10630d70350d62afe4eab625cdda3e0c29b57a"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/IntrinsicSphereSecondMomentsProbe.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Construct the needed plane rotation and derive fourth and mixed-fourth moments, then expand the exact flux polynomial. Numerical sphere mass and frozen consumer closure remain separate.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :required-build :pass,
+     :forbidden-token-scans :pass,
+     :fixture-hash :pass,
+     :seven-axiom-audits :pass,
+     :canonical-compilation :pass,
+     :exact-fixture-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"sphereIsometry"
+     "4bc2524ef514f9b46da66cd986f689d9e6e40a2d0e490f4992d2c2f869167d38",
+     "integral_isometry"
+     "6e445eee78c0484dc65715abfcf0110824428ee0cc5f6e82780fe13a9890c488",
+     "odd_integral"
+     "19fd320109014bd6c859b0f9c8c3ab63524a736c65802a896873c58c2238bc14",
+     "square_eq"
+     "7c89f269447d05b5e9ab82dc202f5af317950b32a53dba858a1be7739035af6b",
+     "square_moment"
+     "8de75b35978d64fc6b8895aebaeff1bd60e83958e33bd9bcc184b35c179ed3d2",
+     "mixed_moment_zero"
+     "46bf17180dce040cbf26d78d2aa1f870994fb5b642101b6821c14725ad4eba03",
+     "projective_density_moment"
+     "4aad10de435122e664674443d4bf314392a32e05f56c13b7996369d4571cd03b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "sha256sum /tmp/IntrinsicSphereSecondMomentsProbe.lean",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/IntrinsicSphereSecondMomentsProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/IntrinsicSphereSecondMoments.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.IntrinsicSphereSecondMoments ConstructionTargets.IntrinsicSphereFinite",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/IntrinsicSphereSecondMoments.lean /tmp/IntrinsicSphereSecondMomentsProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "python3 inline audit: exact promotion, fixture SHA, seven standard-only axiom audits in both compilations and declaration hashes",
+      :exit 0}
+     {:cmd "rg -n 'warning:|error:' /tmp/codex-14-second-build.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "python3 inline audit: exact staged scope and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Prove intrinsic sphere symmetry and mass-relative second moments\"",
+      :exit 0}
+     {:cmd
+      "python3 inline audit: exact committed scope and clean tracked checkout",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and dependency PASS receipt. Only the authorized two files changed; frozen consumers, DAG, ledgers and untracked supervisor files untouched. Tracked checkout clean.",
+    :commit "99b196c3b27f65b150b595325a0fe3e9df4b5b37",
+    :changed-paths
+    ["ConstructionTargets/IntrinsicSphereSecondMoments.lean"
+     "ConstructionTargets/IntrinsicSphereSecondMoments.md"],
+    :dependency-commit "fc27383aa4c07f6f5b59760acab43af57c531375",
+    :fixture
+    {:path "/tmp/IntrinsicSphereSecondMomentsProbe.lean",
+     :sha256
+     "243e91987507e34dd3d11e420e10630d70350d62afe4eab625cdda3e0c29b57a"},
+    :finding
+    "Promoted exact sphere restrictions of linear isometries, coordinate reflections and permutations, Hausdorff integral transport, mass-relative second moments and projective-density reduction. Both compilations and required build passed without warnings.",
+    :statement-hash-method
+    "SHA-256 of declaration bytes beginning with def or theorem and ending immediately before the space preceding := or where; namespace ConstructionTargets.IntrinsicSphereSecondMoments.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/IntrinsicSphereSecondMoments.lean"
     "ConstructionTargets/IntrinsicSphereSecondMoments.md"],
