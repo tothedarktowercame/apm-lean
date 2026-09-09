@@ -4427,8 +4427,71 @@
   {:consumer :t97A02,
    :stop-condition
    "Record actual reviewed evidence only. Documentation adds no new placeholder reduction.",
+   :evidence
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Documentation awaits independent review. No mathematical residual remains for the reviewed t97A02 closure, and no additional consumer closure or placeholder reduction is claimed.",
+    :frozen-baseline-sha256
+    "d5f4eeead7566421b8446530469637df8a192e3f68617d5201b9a3841e4a90a4",
+    :gates
+    {:reviewed-closure-evidence :pass,
+     :fixture-and-baseline-hashes :pass,
+     :current-zero-placeholder-source :pass,
+     :statement-hashes :pass,
+     :validation-claims-against-receipts :pass,
+     :diff-check :pass,
+     :exact-documentation-only-scope :pass,
+     :post-commit-cleanliness :pass},
+    :axiom-provenance
+    "Reviewed closure audits; no Lean changes or new compilation in this documentation row.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"apm_t97A02_bridge_1"
+     "cb69e0ef2456c1b3eeda3b8f8703607aa7eaf7bb9a28b472761ba7567eaa8287",
+     "apm_t97a02"
+     "dbfb1b91127bafb5b06421aa4b22c8376aaf66ceaea1ea1aba18ea906412be90",
+     "apm_t97A02_homotopic_const_of_projection_homotopies"
+     "a9d372acabd1c4536784f2700981f30b3f71c885273c2f5f44840418b4a88a4b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :independent-pass "invoke-1788977263821-16745-f3b25cde",
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "python3 inline audit: closure commit scope, baseline and fixture hashes, current source byte equality, unchanged original signatures, historical placeholders two to zero",
+      :exit 0}
+     {:cmd
+      "python3 inline audit: documentation hashes against closure receipt, independent PASS, receipt links, exact documentation-only scope",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "python3 inline audit: exact staged documentation scope",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Document reviewed t97A02 closure and resolved lifting boundary\"",
+      :exit 0}
+     {:cmd
+      "python3 inline audit: exact committed scope and clean tracked checkout",
+      :exit 0}],
+    :repository-note
+    "Only the two authorized Markdown files changed. Lean files, frozen statements, ledgers and untracked supervisor files untouched.",
+    :commit "e33f21db998c2e3b66a335cbd400ebb041367612",
+    :changed-paths
+    ["TOPOLOGY-DEPENDENCY-DAG.md"
+     "docs/TN-topology-closure-experiments.md"],
+    :closure-commit "69fd2f354468e1409b979d75818a1d01cf727e6c",
+    :fixture
+    {:path "/tmp/T97A02FullClosureProbe.lean",
+     :sha256
+     "d106724ee64373ea92f0ac9cb64d7816c9ef76b3b1e08443b90f4eb2c312b6bc"},
+    :finding
+    "Marked t97A02 closed in the consumer cluster and documented reviewed coefficient comparison, finite-H1 loop triviality, constructed normalized component lifts, empty-domain assembly and exact torus recombination. Preserved the historical STOP and identified ClassicalLocalPathConnectivity and ComponentRealLiftAssembly as its resolving prerequisites.",
+    :historical-closure-placeholder-change
+    {:before 2, :after 0, :delta -2},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
