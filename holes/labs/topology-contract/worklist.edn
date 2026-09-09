@@ -48680,84 +48680,102 @@
    :stop-condition
    "If full closure cannot be compiled, STOP naming the exact remaining calculus, integral or representation theorem. Distinguish missing infrastructure from refutation; no conditional final adapter counts as GO.",
    :evidence
-   {:probe
-    {:placeholder-delta
-     {:consumer "t03J06",
-      :canonical-before 1,
-      :canonical-after 1,
-      :compiled-fixture-after 0,
-      :prospective-delta -1},
-     :residual
-     "No mathematical conjunct remains in the compiled full fixture. Exact packet promotion, separate-module compilation, focused build and independent implementation review remain before canonical consumer closure.",
-     :historical-audit
-     {:revision "8c0ea03bf42e418f43b62bc68d1ae6afb0b8def6",
-      :module-pairs 6,
-      :corrections
-      "Only UnitDiskOddInverseSqrtIntegrals.lean differs: separate adjacent closing brackets in two proofs and restrict their final linarith calls to hchange. All historical statements and declarations preserved. Final axiom audit is standard-only, including both corrected auxiliary cancellation lemmas."},
-     :outcome :go,
-     :warnings
-     ["One inherited unnecessarySeqFocus warning at fixture line 105 in CappedCylinderSurfaceIntegral; no new warnings."],
-     :statement-hashes
-     {"apm_t03j06"
-      "0a4564e7ed7c06fc2c2d3bf3d6dddb83af4dac83262382eb887c079a92475003"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :documentation
-     {:path "/tmp/T03J06FullClosure.md",
-      :sha256
-      "085621fa634c17f4663252562a79b7dc321fdff39c02354f04ef59f2c15de40d"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/T03J06FullClosure.lean > /tmp/T03J06FullClosure.log 2>&1",
-       :exit 0}
-      {:cmd "python3 /tmp/check-t03j06-full-closure.py", :exit 0}
-      {:cmd
-       "git diff --exit-code -- ConstructionTargets problems/t03J06/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
-       :exit 0}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/T03J06FullClosure.lean",
-      :sha256
-      "5ab0570421543013b28505f93a289a8c515650ca462786b037ff29f0210f175f",
-      :full-consumer-fixture true,
-      :placeholder-count 0},
-     :finding
-     "Complete unchanged frozen conjunction compiles. Historical scalar integral results match the literal cylinder and hemisphere pullbacks and prove 7*pi. The coefficient specification expresses omega using three constant alternating forms, proving genuine smoothness. Coordinate-line derivatives give the exterior-derivative value 3; existing frozen lemmas discharge nonzero derivative and nonexactness. No assumed Stokes bridge, integrability, integral value or derivative computation.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CappedCylinderSurfaceIntegral.lean"
-       "ConstructionTargets/CappedCylinderSurfaceIntegral.md"
-       "ConstructionTargets/HemisphereInverseSqrtDiskIntegral.lean"
-       "ConstructionTargets/HemisphereInverseSqrtDiskIntegral.md"
-       "ConstructionTargets/UnitDiskInverseSqrtIntegrability.lean"
-       "ConstructionTargets/UnitDiskInverseSqrtIntegrability.md"
-       "ConstructionTargets/UnitDiskOddInverseSqrtIntegrals.lean"
-       "ConstructionTargets/UnitDiskOddInverseSqrtIntegrals.md"
-       "ConstructionTargets/CappedCylinderHemisphereIntegral.lean"
-       "ConstructionTargets/CappedCylinderHemisphereIntegral.md"
-       "ConstructionTargets/T03J06FinalAdapter.lean"
-       "ConstructionTargets/T03J06FinalAdapter.md"
-       "problems/t03J06/lean/Main.lean"],
-      :acceptance
-      {:placeholder-after 0,
-       :preserve-frozen-statement true,
-       :source
-       "Promote exactly the staged manifest files; never merge the historical branch wholesale.",
-       :axioms :standard-only,
-       :placeholder-before 1,
-       :build "lake build ConstructionTargets.T03J06FinalAdapter",
-       :frozen-sha256-before
-       "e1c06a2dddd2b73bd565c0eba0cd2c6026b2c1fdf90e70251c6e1c18e06ee285",
-       :preserve-frozen-definitions true,
-       :compile
-       "Compile all six promoted modules separately, then lake env lean problems/t03J06/lean/Main.lean."}},
-     :packet
-     {:directory "/tmp/t03j06-promotion",
-      :manifest "/tmp/T03J06FullClosure-manifest.json",
-      :sha256
-      "40b1cfcd082933d5f8c217e46ca3a4ed3ae385b85450263f7d151b7eb382eeb4"},
-     :seat :codex-12}},
+   {:placeholder-delta
+    {:consumer "t03J06", :before 1, :after 0, :delta -1},
+    :residual
+    "No mathematical conjunct remains: canonical t03J06 compiles with zero placeholders and its frozen definitions and statement preserved. Independent implementation review and supervisor ledger transition remain.",
+    :gates
+    {:preserve-frozen-definitions true,
+     :preserve-frozen-statement true,
+     :manifest-hashes :pass,
+     :separate-module-compilation :pass,
+     :consumer-compilation :pass,
+     :focused-build :pass,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Inherited unnecessarySeqFocus warning at CappedCylinderSurfaceIntegral.lean:104:29; no new warnings."],
+    :statement-hashes
+    {"apm_t03j06"
+     "0a4564e7ed7c06fc2c2d3bf3d6dddb83af4dac83262382eb887c079a92475003"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd "python3 /tmp/check-t03j06-full-closure.py", :exit 0}
+     {:cmd
+      "Post-promotion Python integrity assertions: all 13 manifest hashes, frozen definition prefix, unchanged statement, executable placeholders 1 to 0",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T03J06FullClosure.lean", :exit 0}
+     {:cmd "lake build ConstructionTargets.T03J06FinalAdapter",
+      :exit 0,
+      :output "Build completed successfully (8245 jobs)."}
+     {:cmd
+      "lake env lean ConstructionTargets/CappedCylinderHemisphereIntegral.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CappedCylinderSurfaceIntegral.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/HemisphereInverseSqrtDiskIntegral.lean",
+      :exit 0}
+     {:cmd "lake env lean ConstructionTargets/T03J06FinalAdapter.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/UnitDiskInverseSqrtIntegrability.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/UnitDiskOddInverseSqrtIntegrals.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t03J06/lean/Main.lean",
+      :exit 0,
+      :output
+      "apm_t03j06 and all printed helper declarations use standard-only axioms."}
+     {:cmd
+      "rg placeholder and prohibited-declaration scan over all seven scoped Lean files",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output "374 items OK"}
+     {:cmd "git diff --check; git diff --cached --check", :exit 0}
+     {:cmd
+      "git diff --exit-code -- TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output
+      "Only unrelated untracked holes/labs/topology-contract/runs2/ remains; untouched."}],
+    :commit "7caeb0018c793cafaf9c6ea7700eb2fa9f306abf",
+    :changed-paths
+    ["ConstructionTargets/CappedCylinderSurfaceIntegral.lean"
+     "ConstructionTargets/CappedCylinderSurfaceIntegral.md"
+     "ConstructionTargets/HemisphereInverseSqrtDiskIntegral.lean"
+     "ConstructionTargets/HemisphereInverseSqrtDiskIntegral.md"
+     "ConstructionTargets/UnitDiskInverseSqrtIntegrability.lean"
+     "ConstructionTargets/UnitDiskInverseSqrtIntegrability.md"
+     "ConstructionTargets/UnitDiskOddInverseSqrtIntegrals.lean"
+     "ConstructionTargets/UnitDiskOddInverseSqrtIntegrals.md"
+     "ConstructionTargets/CappedCylinderHemisphereIntegral.lean"
+     "ConstructionTargets/CappedCylinderHemisphereIntegral.md"
+     "ConstructionTargets/T03J06FinalAdapter.lean"
+     "ConstructionTargets/T03J06FinalAdapter.md"
+     "problems/t03J06/lean/Main.lean"],
+    :fixture
+    {:path "/tmp/T03J06FullClosure.lean",
+     :sha256
+     "5ab0570421543013b28505f93a289a8c515650ca462786b037ff29f0210f175f",
+     :placeholder-count 0},
+    :consumer-sha256
+    "0cfb616d1d150b8f90c1c0a254523b4a2a31437c953e3ee79e82c975f024af3e",
+    :packet
+    {:manifest "/tmp/T03J06FullClosure-manifest.json",
+     :sha256
+     "40b1cfcd082933d5f8c217e46ca3a4ed3ae385b85450263f7d151b7eb382eeb4",
+     :exact-promotion true}},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CappedCylinderSurfaceIntegral.lean"
     "ConstructionTargets/CappedCylinderSurfaceIntegral.md"
