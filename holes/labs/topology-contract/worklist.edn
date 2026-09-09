@@ -47692,8 +47692,147 @@
      :review-outcomes]},
    :stop-condition
    "End only when all consumers close or an exact mathematical refutation is established; missing infrastructure and owner authorization do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill11-measure.py", :exit 0}
+     {:cmd
+      "git diff --exit-code 874608e3685037614fc194d17d24332a9a35f7d4 -- TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill11-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill11-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill11-measure.json /tmp/topology-refill11-tail.edn",
+      :exit 0}],
+    :finding
+    {:baseline "678e19ee84800f455a15423e315d98340a2308bf",
+     :election-rationale
+     ["The complete DAG and closure-experiments sources remain unchanged from the full survey; all named consumers were recounted. Exactly one near-closure adapter precedes the shared foundation."
+      "Elect t02A08's single remaining degree-map construction: its fiber-map intersection clause is proved, and sphere homology has advanced beyond its historical orientation gap. The literal induced H2 action for every integer must still be demonstrated; banked sphere groups alone do not establish it."
+      "Do not repeat t95J04 or t00A01 against unchanged verified boundaries. Other inspected one-placeholder consumers package broader work: t00J01 includes quotient orientation and exact fold-fiber classification; t03J05 needs embedded curves and ambient nonhomotopy; t99J03 needs surface classification; t98A02 needs puncture and orientation transport."
+      "Among shared foundations, the five-consumer Sard dependency now has a reviewed neighborhood-chart producer. Elect its actual scalarized-jet input producer as one bounded theorem, retaining the remaining induction obligations. Stokes, regular-preimage geometry and surface classification remain broader constructions; no concurrent localization work is duplicated."],
+     :measured-head "768b9305df7067eb184b5f8128a059cc2869086b",
+     :placeholder-delta
+     {:open 42,
+      :closed 16,
+      :total-before 76,
+      :method
+      "Comment-stripped executable sorry census over all consumer identifiers in the complete DAG.",
+      :named-consumers 59,
+      :total-after 76,
+      :existing-files 58,
+      :delta 0,
+      :sha256
+      "0fdb1386f394f8962e2a9749663d30bc2d256fe9c83ac59e98f86d08b7249537",
+      :artifact "/tmp/topology-refill11-measure.json",
+      :within-two 32,
+      :missing-files ["t93A05"]},
+     :campaign-refutation false,
+     :infrastructure-packets
+     {:portfolio-reviewed-implementations 1,
+      :construction-modules-before 595,
+      :construction-modules-after 596,
+      :construction-module-delta 1,
+      :portfolio-module
+      "ConstructionTargets/SardSmoothNeighborhoodImplicitChart.lean",
+      :concurrent-module-additions 0,
+      :commit "dd05a502352ba56876317a948707d9e25fcca97f"},
+     :portfolio-artifact
+     {:path "/tmp/topology-refill11-tail.edn",
+      :sha256
+      "981ca90de47f26ee66d5233afa85f9e5a3f700cb8d13360cab98e0c2acca3302"},
+     :validation
+     "Temporary combined ledger passes: 368 items, including three new blocked rows. No canonical DAG, ledger or source edits.",
+     :typed-residual-change
+     {:t00A01
+      "Component equivalences and generic source reconstruction exist, but the actual-cover inclusion comparisons and composite target naturality remain unconstructed. Two placeholders unchanged.",
+      :smooth-chart
+      "Reviewed implementation dd05a502352ba56876317a948707d9e25fcca97f constructs genuine smooth implicit-chart restrictions from neighborhood hypotheses and exercises the residual-slice consumer. The actual scalarized jets must still supply those hypotheses; unconditional Sard is not established."},
+     :review-outcomes
+     {:stop 1,
+      :implementation 1,
+      :pass 2,
+      :consumer-closures 0,
+      :reviews
+      ["invoke-1788969889037-16565-f247a585"
+       "invoke-1788970352625-16580-7fa32fad"]}},
+    :replacement-items
+    [{:consumer "t02A08",
+      :stop-condition
+      "If full closure cannot be built, STOP naming the exact missing geometric map or induced-homology computation; distinguish infrastructure from refutation and do not substitute a conditional interface.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "SPHERE ORIENTATION / concrete degree maps",
+      :acceptance
+      {:probe
+       "GO requires a complete placeholder-free compiled copy of problems/t02A08/lean/Main.lean, preserving its frozen repaired statement and all definitions. Resolve the exact ModuleCat integral sphere orientation with banked SphereHomology/comparison results, construct maps for all integers including zero and negative integers, and compute their induced H2 action in the literal HasDegree predicate. Reuse the proved fiber-map intersection conclusion. A circle degree, scalar degree declaration, identity-only example, assumed degree map or homeomorphic surrogate without transport is not closure.",
+       :frozen-file "problems/t02A08/lean/Main.lean",
+       :frozen-sha256
+       "5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t02a08-frozen-sphere-degree-closure-probe-refill11,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart],
+      :current-residual
+      "One placeholder: for every integer n construct a continuous self-map of the literal metric two-sphere whose actual integral H2 action is multiplication by n. The fiber-map intersection clause is already proved; sphere homology now exists beyond the frozen historical boundary."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO needs the full producer and consumer fixture. REVISE requires exactly one compiled prerequisite. Otherwise name the exact mathematical, hypothesis or representation boundary; no owner-authorization stop.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / actual scalarized-jet smooth chart",
+      :acceptance
+      {:probe
+       "Compile a complete theorem for globally genuinely smooth f on a finite-dimensional real inner-product source, finite jet order i, fixed directions v, scalar continuous linear functional ell, and a witnessed nonzero next derivative in direction h at x. Construct the existing scalarized-jet ImplicitFunctionData with leftFun g(y)=ell(iteratedFDeriv real i f y v), leftDeriv=fderiv real g x, rightFun the kernel orthogonal projection, and pt=x. Prove smoothness of these exact fields on an open neighborhood inside the original chart source from global ContDiff real infinity f. Invoke SardSmoothNeighborhoodImplicitChart.exists_smooth_implicit_chart and exhibit the basepoint-preserving restricted chart, original forward map, inverse agreement and genuine infinity smoothness in both directions. Exercise the resulting inverse in the existing residual-slice consumer. Do not accept open-neighborhood field smoothness as an extra assumption, use analytic omega, change the kernel representation, or assume nullity. Reuse existing defining-field and iterated-derivative producers rather than duplicate them.",
+       :axioms :standard-only,
+       :consumer-residual
+       "This closes the actual smooth chart producer for scalarized jets only. Zero-level containment, source-dimension drop and compatible local critical-nullity induction must be connected before higher-jet locus nullity; arbitrary-C1 hindOne and manifold transport remain open."},
+      :id
+      :sard-scalarized-jet-smooth-neighborhood-producer-probe-refill11,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart],
+      :current-residual
+      "Reviewed dd05a502 supplies smooth implicit charts from open-neighborhood field regularity. The actual scalarized-jet defining fields must now produce those inputs rather than assume them.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Only all consumers closed or an exact mathematical refutation terminates the campaign; missing infrastructure and owner authorization do not.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG and reviewed receipts; recompute executable consumer counts from pinned source, measure typed residual changes, distinguish portfolio infrastructure from concurrent additions, and report STOP/PASS outcomes. Apply exactly one near-closure adapter first, then shared-foundation reach and simplicity. Elect a new nonempty portfolio with a final dependent refill checkpoint."},
+      :id :checkpoint-full-dag-refill-12-after-degree-and-jet-chart,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t02a08-frozen-sphere-degree-closure-probe-refill11
+       :sard-scalarized-jet-smooth-neighborhood-producer-probe-refill11],
+      :current-residual
+      "Await both reviewed rows and rerank the complete DAG, including prior stopped adapters and unrelated consumer branches."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -47708,6 +47847,78 @@
     :checkpoint-full-dag-refill-10-after-closure-and-smooth],
    :current-residual
    "Await both reviewed rows, then rerank the complete DAG, including near-closure adapters outside these branches."}
+  {:consumer "t02A08",
+   :stop-condition
+   "If full closure cannot be built, STOP naming the exact missing geometric map or induced-homology computation; distinguish infrastructure from refutation and do not substitute a conditional interface.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SPHERE ORIENTATION / concrete degree maps",
+   :acceptance
+   {:probe
+    "GO requires a complete placeholder-free compiled copy of problems/t02A08/lean/Main.lean, preserving its frozen repaired statement and all definitions. Resolve the exact ModuleCat integral sphere orientation with banked SphereHomology/comparison results, construct maps for all integers including zero and negative integers, and compute their induced H2 action in the literal HasDegree predicate. Reuse the proved fiber-map intersection conclusion. A circle degree, scalar degree declaration, identity-only example, assumed degree map or homeomorphic surrogate without transport is not closure.",
+    :frozen-file "problems/t02A08/lean/Main.lean",
+    :frozen-sha256
+    "5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t02a08-frozen-sphere-degree-closure-probe-refill11,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart
+    :checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart],
+   :current-residual
+   "One placeholder: for every integer n construct a continuous self-map of the literal metric two-sphere whose actual integral H2 action is multiplication by n. The fiber-map intersection clause is already proved; sphere homology now exists beyond the frozen historical boundary."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO needs the full producer and consumer fixture. REVISE requires exactly one compiled prerequisite. Otherwise name the exact mathematical, hypothesis or representation boundary; no owner-authorization stop.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / actual scalarized-jet smooth chart",
+   :acceptance
+   {:probe
+    "Compile a complete theorem for globally genuinely smooth f on a finite-dimensional real inner-product source, finite jet order i, fixed directions v, scalar continuous linear functional ell, and a witnessed nonzero next derivative in direction h at x. Construct the existing scalarized-jet ImplicitFunctionData with leftFun g(y)=ell(iteratedFDeriv real i f y v), leftDeriv=fderiv real g x, rightFun the kernel orthogonal projection, and pt=x. Prove smoothness of these exact fields on an open neighborhood inside the original chart source from global ContDiff real infinity f. Invoke SardSmoothNeighborhoodImplicitChart.exists_smooth_implicit_chart and exhibit the basepoint-preserving restricted chart, original forward map, inverse agreement and genuine infinity smoothness in both directions. Exercise the resulting inverse in the existing residual-slice consumer. Do not accept open-neighborhood field smoothness as an extra assumption, use analytic omega, change the kernel representation, or assume nullity. Reuse existing defining-field and iterated-derivative producers rather than duplicate them.",
+    :axioms :standard-only,
+    :consumer-residual
+    "This closes the actual smooth chart producer for scalarized jets only. Zero-level containment, source-dimension drop and compatible local critical-nullity induction must be connected before higher-jet locus nullity; arbitrary-C1 hindOne and manifold transport remain open."},
+   :id
+   :sard-scalarized-jet-smooth-neighborhood-producer-probe-refill11,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart
+    :checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart],
+   :current-residual
+   "Reviewed dd05a502 supplies smooth implicit charts from open-neighborhood field regularity. The actual scalarized-jet defining fields must now produce those inputs rather than assume them.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Only all consumers closed or an exact mathematical refutation terminates the campaign; missing infrastructure and owner authorization do not.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG and reviewed receipts; recompute executable consumer counts from pinned source, measure typed residual changes, distinguish portfolio infrastructure from concurrent additions, and report STOP/PASS outcomes. Apply exactly one near-closure adapter first, then shared-foundation reach and simplicity. Elect a new nonempty portfolio with a final dependent refill checkpoint."},
+   :id :checkpoint-full-dag-refill-12-after-degree-and-jet-chart,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t02a08-frozen-sphere-degree-closure-probe-refill11
+    :sard-scalarized-jet-smooth-neighborhood-producer-probe-refill11
+    :checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart],
+   :current-residual
+   "Await both reviewed rows and rerank the complete DAG, including prior stopped adapters and unrelated consumer branches."}
   {:consumer :t93A04,
    :stop-condition
    "STOP only for a counterexample to the stated local rank-normal-form theorem or hypotheses insufficient to select and invert a nonzero rank minor; otherwise REVISE with exactly one compiled prerequisite.",
