@@ -45659,6 +45659,23 @@
      "The entire image of the same source subset, without regularity or measure assumptions.",
      :direction
      "Exact equality from the localized critical-image representation to the entire subset-image representation."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788964200038-16429-7b2fd538",
+     :commands
+     ["git show --stat --oneline dba363b176a6771008007301e97203b3c189586b"
+      "sha256sum /tmp/SardLowerDimensionCriticalImageEqualityProbe.lean"
+      "cmp /tmp/SardLowerDimensionCriticalImageEqualityProbe.lean <(git show dba363b176a6771008007301e97203b3c189586b:ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean)"
+      "git show dba363b176a6771008007301e97203b3c189586b:ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean | sed -n '5,11p' | sha256sum"
+      "git diff --exit-code dba363b176a6771008007301e97203b3c189586b -- ConstructionTargets"
+      "lake env lean /tmp/SardLowerDimensionCriticalImageEqualityProbe.lean"
+      "lake env lean ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean"
+      "lake build ConstructionTargets.SardLowerDimensionCriticalImageEquality"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Commit dba363b176a6771008007301e97203b3c189586b passes. Exact two-file scope; fixture SHA 16fe2a309f9654f2469b526d68ed6c102e3088d91b646611a1cd7eed631fd620 and statement SHA 17e27e6df88e70a602d2c5b99d070bcc653ff33877d27681fcb5ee01b54a51e7 reproduced. Lines 12-21 correctly exclude surjectivity for every continuous linear fderiv value and prove critical-image-to-entire-image equality without differentiability. No nullity or order-zero validity is asserted. Both compilations exit 0 with standard axioms only; build8245 succeeds. Zero new placeholders; frozen consumer unchanged with one existing placeholder. Worklist353 valid. Ledger untouched."},
     :commit "dba363b176a6771008007301e97203b3c189586b",
     :changed-paths
     ["ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean"
@@ -45669,7 +45686,7 @@
      "16fe2a309f9654f2469b526d68ed6c102e3088d91b646611a1cd7eed631fd620"},
     :declarations ["criticalImage_eq_image_of_lower_dimension"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean"
     "ConstructionTargets/SardLowerDimensionCriticalImageEquality.md"],
@@ -45853,7 +45870,7 @@
       "16fe2a309f9654f2469b526d68ed6c102e3088d91b646611a1cd7eed631fd620"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
