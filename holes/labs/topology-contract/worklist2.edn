@@ -8902,8 +8902,171 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["Preserve all reviewed refutations, including t01A05 and t96J07, and distinguish the historical t94J08 defect from its repaired statement."
+     "Preserve unresolved t99J03 classification, regular-fiber atlas, arbitrary-model t94A06 transversality, positive-sphere coefficient, polygon-invariant, graph-cover, Hopf-surface, numerical sphere-mass and general orientation STOPs."
+     "Neither elected row is a retry of a stopped full consumer without resolving its boundary."],
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint13Census.py", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md and docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd
+      "bb dependency evidence and active-row queries across both topology ledgers",
+      :exit 0}
+     {:cmd "sha256sum problems/t01A08/lean/Main.lean", :exit 0}
+     {:cmd "git log -3 --oneline -- problems/t93A04/lean/Main.lean",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :replacement-items
+    [{:consumer :t01A08,
+      :stop-condition
+      "Preserve the arbitrary model with corners, finite-dimensional normed source model and second-countability hypotheses. No assumed boundarylessness, self-model atlas, critical-value nullity or regular value.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD: exact affine-line regular-value consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t01A08/lean/Main.lean",
+       :stop-condition
+       "If model transport or local extension is unavailable, STOP with its exact typed boundary. No conditional or partial GO, silent boundaryless restriction or unproved refutation.",
+       :gates
+       ["GO requires a complete zero-placeholder frozen fixture, unchanged statement hash, fixture SHA256 and standard-only audits."
+        "Propose implementation scope only after complete closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Compile a complete temporary exact Main. Reuse T93A04ManifoldWork.null_critical where its hypotheses are actually established. Audit the arbitrary ModelWithCorners and ContMDiff top-order hypotheses against the self-model infinity-order producer. Construct any required local extensions or model transport, prove the exact derivative comparison for the frozen projection, and obtain a regular value using the actual nonzero target measure. Handle empty X. Do not duplicate an active Sard campaign row; recheck both ledgers before development.",
+       :consumer-equation
+       "There exists p : Fin 2 -> Real such that at every x whose image lies in the literal affine line over p, the frozen manifold derivative of projection composed with f is surjective.",
+       :frozen-sha256
+       "e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7"},
+      :id :oriented-checkpoint13-t01a08-exact-regular-line-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint13-surface-and-relative-coefficients-refill],
+      :current-residual
+      "One frozen placeholder requires a regular value of the actual normal-plane projection for a finite-dimensional smooth manifold with arbitrary model with corners. Reviewed manifold-vector Sard currently uses self-model charts.",
+      :other-consumers []}
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Construct maps on the actual relative quotients. No supplied short-complex morphism, assumed connecting-map naturality, excision, sphere table or change-of-coefficients theorem.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Relative homology: explicit-coefficient pair maps and natural connecting morphisms",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a commutative ring R and a continuous map of pairs (X,A)->(Y,B), construct the induced subspace and absolute singular-chain maps and descend to the actual image-quotient relative complexes from RelativeSingularCoefficients. Prove the inclusion and projection squares, identity and composition laws. Construct the resulting morphism of the reviewed short exact sequences. Define connecting homology maps, prove all three pair exactness positions and the correctly oriented naturality square for the connecting map using the actual induced maps. Compile integer and rational disk-boundary identity examples and a concrete nonidentity map of pairs. State universes explicitly. Reuse generic homological algebra; mere aliases for its exactness theorems are insufficient.",
+       :consumer-equation
+       "For every actual map of pairs, the induced relative homology map followed by the target connecting map equals the source connecting map followed by the induced subspace homology map; the actual coefficient-specific pair sequence is exact.",
+       :consumer-residual
+       "Coefficient-general excision, sphere suspension and degree-one endpoints remain downstream before the exact rational S2 witnesses. No frozen closure is claimed.",
+       :gates
+       ["GO requires a complete placeholder-free compiled fixture with constructed pair maps, functoriality, exactness and connecting-map naturality."
+        "Record fixture SHA256, integer and rational examples and standard-only axiom audits."
+        "REVISE only to exactly one compiled missing pair-map or categorical prerequisite."],
+       :stop-condition
+       "Do not retry the full sphere table or assume quotient-map compatibility. STOP at a precise independent boundary if the complete bounded packet is unavailable."},
+      :id :oriented-checkpoint13-relative-pair-homology-naturality-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint13-surface-and-relative-coefficients-refill
+       :oriented-checkpoint12-relative-singular-explicit-coefficients-1],
+      :current-residual
+      "Reviewed RelativeSingularCoefficients constructs the actual pair short exact sequence. Functorial maps of its image quotients, connecting-map naturality and explicit pair homology exactness remain unexported.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: exact regular-line uptake and relative-pair naturality",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+      :id
+      :oriented-checkpoint14-regular-line-and-pair-naturality-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint13-t01a08-exact-regular-line-1
+       :oriented-checkpoint13-relative-pair-homology-naturality-1],
+      :current-residual
+      "Measure frozen regular-line closure separately from pair-homology infrastructure, and attribute all concurrent closures and specification repairs.",
+      :other-consumers []}],
+    :changed-paths [],
+    :measures
+    {:other-concurrent-changes
+     ["m02J04 statement repair is outside the DAG consumer census and is not attributed to this portfolio."],
+     :concurrent-placeholder-delta -1,
+     :baseline "4c37af07e3585db8300f69a55869dc6687ef0020",
+     :placeholder-after 70,
+     :placeholder-delta -1,
+     :placeholder-before 71,
+     :head "813f85110b697164d4061eec7d1123c0af6e8dff",
+     :frozen-closures
+     {:portfolio [],
+      :concurrent
+      [{:consumer :t93A04,
+        :closing-commit "a49c8476",
+        :producer-extraction "337bdd48"}]},
+     :infrastructure-packets
+     {:portfolio 1,
+      :concurrent 1,
+      :modules-before 640,
+      :modules-after 642,
+      :portfolio-modules ["RelativeSingularCoefficients"],
+      :concurrent-modules ["SardGenuineSmoothManifoldVector"]},
+     :typed-residual-change
+     ["Actual coefficient-generic relative singular chains and their short exact sequence are now reviewed, including integer and rational disk-boundary instances. Pair maps, connecting-map naturality and the sphere coefficient computations remain downstream."
+      "t99J03 genus-zero quotient is proved homeomorphic to the closed disk; the complete classification obligation remains unresolved. This is not a compiled refutation."
+      "Concurrent manifold-vector Sard closed t93A04 and supplies a reusable self-model theorem; it does not automatically resolve arbitrary model-with-corners or infinite-dimensional hypotheses."],
+     :review-outcomes
+     {:stop-pass 1,
+      :implementation-pass 1,
+      :stop-review "invoke-1788993292808-17232-aa67f399",
+      :implementation-review "invoke-1788993661175-17246-e4236756",
+      :implementation-commit
+      "2b73ce416afd6b9aeab937a80839996c59ddf422"},
+     :portfolio-placeholder-delta 0,
+     :census
+     {:path "/tmp/Checkpoint13Census.json",
+      :sha256
+      "f604bf969557df2abf804a3300de16db4917e9cb61a6673316bf52fba2374c3a",
+      :named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :zero-placeholder-before 19,
+      :zero-placeholder-after 20,
+      :open-after 38}},
+    :concurrent-checkpoint
+    :checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard,
+    :finding
+    "Elect exactly one near-closure adapter first: t01A08, whose finite-dimensional regular-value conclusion can now be tested against the newly reviewed manifold-vector Sard producer. Its arbitrary model-with-corners hypotheses remain an explicit compatibility obligation; no self-model assumption may be inserted. Rank the remaining DAG with completed covering constructors removed and unresolved orientation, gluing, atlas and normalization STOPs preserved. The next explicit-coefficient pair packet serves four proposed consumers and uses the newly constructed short exact sequence. Require actual maps of pairs and connecting-map naturality, not aliases for abstract long-exactness. This is a smaller coherent construction than global orientation, surface classification or product homology. The other campaign currently has only its strategy checkpoint open; no overlapping active work row was observed at the final ledger check.",
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: literal surface classification and relative coefficient uptake",
@@ -8920,6 +9083,99 @@
     :oriented-checkpoint12-transversality-and-coefficients-refill],
    :current-residual
    "Measure frozen surface-classification uptake separately from relative-chain infrastructure; preserve the arbitrary-model transversality and positive-sphere coefficient boundaries.",
+   :other-consumers []}
+  {:consumer :t01A08,
+   :stop-condition
+   "Preserve the arbitrary model with corners, finite-dimensional normed source model and second-countability hypotheses. No assumed boundarylessness, self-model atlas, critical-value nullity or regular value.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD: exact affine-line regular-value consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t01A08/lean/Main.lean",
+    :stop-condition
+    "If model transport or local extension is unavailable, STOP with its exact typed boundary. No conditional or partial GO, silent boundaryless restriction or unproved refutation.",
+    :gates
+    ["GO requires a complete zero-placeholder frozen fixture, unchanged statement hash, fixture SHA256 and standard-only audits."
+     "Propose implementation scope only after complete closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Compile a complete temporary exact Main. Reuse T93A04ManifoldWork.null_critical where its hypotheses are actually established. Audit the arbitrary ModelWithCorners and ContMDiff top-order hypotheses against the self-model infinity-order producer. Construct any required local extensions or model transport, prove the exact derivative comparison for the frozen projection, and obtain a regular value using the actual nonzero target measure. Handle empty X. Do not duplicate an active Sard campaign row; recheck both ledgers before development.",
+    :consumer-equation
+    "There exists p : Fin 2 -> Real such that at every x whose image lies in the literal affine line over p, the frozen manifold derivative of projection composed with f is surjective.",
+    :frozen-sha256
+    "e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7"},
+   :id :oriented-checkpoint13-t01a08-exact-regular-line-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint13-surface-and-relative-coefficients-refill
+    :oriented-checkpoint13-surface-and-relative-coefficients-refill],
+   :current-residual
+   "One frozen placeholder requires a regular value of the actual normal-plane projection for a finite-dimensional smooth manifold with arbitrary model with corners. Reviewed manifold-vector Sard currently uses self-model charts.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "Construct maps on the actual relative quotients. No supplied short-complex morphism, assumed connecting-map naturality, excision, sphere table or change-of-coefficients theorem.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Relative homology: explicit-coefficient pair maps and natural connecting morphisms",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a commutative ring R and a continuous map of pairs (X,A)->(Y,B), construct the induced subspace and absolute singular-chain maps and descend to the actual image-quotient relative complexes from RelativeSingularCoefficients. Prove the inclusion and projection squares, identity and composition laws. Construct the resulting morphism of the reviewed short exact sequences. Define connecting homology maps, prove all three pair exactness positions and the correctly oriented naturality square for the connecting map using the actual induced maps. Compile integer and rational disk-boundary identity examples and a concrete nonidentity map of pairs. State universes explicitly. Reuse generic homological algebra; mere aliases for its exactness theorems are insufficient.",
+    :consumer-equation
+    "For every actual map of pairs, the induced relative homology map followed by the target connecting map equals the source connecting map followed by the induced subspace homology map; the actual coefficient-specific pair sequence is exact.",
+    :consumer-residual
+    "Coefficient-general excision, sphere suspension and degree-one endpoints remain downstream before the exact rational S2 witnesses. No frozen closure is claimed.",
+    :gates
+    ["GO requires a complete placeholder-free compiled fixture with constructed pair maps, functoriality, exactness and connecting-map naturality."
+     "Record fixture SHA256, integer and rational examples and standard-only axiom audits."
+     "REVISE only to exactly one compiled missing pair-map or categorical prerequisite."],
+    :stop-condition
+    "Do not retry the full sphere table or assume quotient-map compatibility. STOP at a precise independent boundary if the complete bounded packet is unavailable."},
+   :id :oriented-checkpoint13-relative-pair-homology-naturality-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint13-surface-and-relative-coefficients-refill
+    :oriented-checkpoint12-relative-singular-explicit-coefficients-1
+    :oriented-checkpoint13-surface-and-relative-coefficients-refill],
+   :current-residual
+   "Reviewed RelativeSingularCoefficients constructs the actual pair short exact sequence. Functorial maps of its image quotients, connecting-map naturality and explicit pair homology exactness remain unexported.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: exact regular-line uptake and relative-pair naturality",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+   :id :oriented-checkpoint14-regular-line-and-pair-naturality-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint13-t01a08-exact-regular-line-1
+    :oriented-checkpoint13-relative-pair-homology-naturality-1
+    :oriented-checkpoint13-surface-and-relative-coefficients-refill],
+   :current-residual
+   "Measure frozen regular-line closure separately from pair-homology infrastructure, and attribute all concurrent closures and specification repairs.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
