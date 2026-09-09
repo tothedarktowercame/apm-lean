@@ -43884,6 +43884,42 @@
    "Global regularity is replaced by open-set regularity in the Borel overlap regime; arbitrary-set localization, induction closure, and the complementary analytic range remain open.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if finite-order ambient regularity fails to provide open regularity neighborhoods, the reviewed open-set theorem or local aggregation fails under these hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardBorelLocalSetCriticalImageJetRangeOverlap.lean"
+    "ConstructionTargets/SardBorelLocalSetCriticalImageJetRangeOverlap.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL LOCAL-SET CRITICAL IMAGE JET-RANGE OVERLAP",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardBorelLocalSetCriticalImageJetRangeOverlapProbe.lean",
+     :sha256
+     "ab9591ef8aeb2e1076674615b2157f91683122f4030f98fa131a6392e9d908dd"},
+    :declarations
+    ["localSet_criticalImage_zero_of_borel_jet_range_overlap_induction"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Close Borel-compatible dimension induction and repair the complementary analytic range, including remaining regularity and dimension cases, before full rectangular closure."},
+   :representation
+   {:source
+    "Pointwise ambient C^(k+2) regularity at every point of an arbitrary source set s, classical admissibility, Borel-compatible classical critical nullity at every strictly lower source dimension, and sourceDim+floor((sourceDim-1)/targetDim) <= targetDim+k+3; nontrivial finite-dimensional real inner-product Borel source and target, proper source, and target add-Haar measure are explicit.",
+    :target
+    "Zero target measure of the critical image restricted to s, without openness or measurability of s, global regularity, or supplied local-nullity certificates."},
+   :id
+   :critical-value-sard-borel-local-set-critical-image-jet-range-overlap-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-borel-open-critical-image-jet-range-overlap-1
+    :critical-value-sard-local-nullity-second-countable-aggregation-1],
+   :current-residual
+   "Arbitrary-set localization is established in the Borel overlap regime; induction closure and removal of the remaining analytic and dimension restrictions remain open.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -43937,78 +43973,77 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank Borel-compatible open-set overlap nullity; extend to pointwise ambient regularity on arbitrary sets, close induction, and resolve the complementary analytic range.",
+     "Bank Borel-compatible arbitrary-set overlap nullity; close dimension induction and resolve the complementary analytic range and remaining cases before full rectangular closure.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"open_criticalImage_zero_of_borel_jet_range_overlap_induction"
-      "38a6dbb163a59f86d27ac882cfda894632ee294717772815c2cd55ca99db1da9"},
+     {"localSet_criticalImage_zero_of_borel_jet_range_overlap_induction"
+      "be6bd576dd245dce26f9bb9eda5b769a684559115ae7f234f3cc6c057e826b8e"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if global germ extension fails to preserve local critical-image containment, the reviewed Borel overlap theorem or second-countable aggregation fails under these hypotheses, or nonstandard axioms are required.",
+      "Stop only if finite-order ambient regularity fails to provide open regularity neighborhoods, the reviewed open-set theorem or local aggregation fails under these hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardBorelOpenCriticalImageJetRangeOverlap.lean"
-       "ConstructionTargets/SardBorelOpenCriticalImageJetRangeOverlap.md"],
+      ["ConstructionTargets/SardBorelLocalSetCriticalImageJetRangeOverlap.lean"
+       "ConstructionTargets/SardBorelLocalSetCriticalImageJetRangeOverlap.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL OPEN CRITICAL IMAGE JET-RANGE OVERLAP",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL LOCAL-SET CRITICAL IMAGE JET-RANGE OVERLAP",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardBorelOpenCriticalImageJetRangeOverlapProbe.lean",
+        "/tmp/SardBorelLocalSetCriticalImageJetRangeOverlapProbe.lean",
         :sha256
-        "8bf872b52721238aa790bb2c9dc9edf4544bc215ad868b27fdaa64593439e9bd"},
+        "ab9591ef8aeb2e1076674615b2157f91683122f4030f98fa131a6392e9d908dd"},
        :declarations
-       ["open_criticalImage_zero_of_borel_jet_range_overlap_induction"],
+       ["localSet_criticalImage_zero_of_borel_jet_range_overlap_induction"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Extend to arbitrary source sets with pointwise ambient regularity, close Borel-compatible induction, and repair the complementary analytic range before rectangular closure."},
+       "Close Borel-compatible dimension induction and repair the complementary analytic range, including remaining regularity and dimension cases, before full rectangular closure."},
       :representation
       {:source
-       "C^(k+2) regularity on an open source set U, classical admissibility, Borel-compatible classical critical nullity at every strictly lower source dimension, and sourceDim+floor((sourceDim-1)/targetDim) <= targetDim+k+3; nontrivial finite-dimensional real inner-product Borel source and target, proper source, and target add-Haar measure are explicit.",
+       "Pointwise ambient C^(k+2) regularity at every point of an arbitrary source set s, classical admissibility, Borel-compatible classical critical nullity at every strictly lower source dimension, and sourceDim+floor((sourceDim-1)/targetDim) <= targetDim+k+3; nontrivial finite-dimensional real inner-product Borel source and target, proper source, and target add-Haar measure are explicit.",
        :target
-       "Zero target measure of the image of the nonsurjective ambient derivative locus in U, without global regularity or supplied local-nullity certificates."},
+       "Zero target measure of the critical image restricted to s, without openness or measurability of s, global regularity, or supplied local-nullity certificates."},
       :id
-      :critical-value-sard-borel-open-critical-image-jet-range-overlap-1,
+      :critical-value-sard-borel-local-set-critical-image-jet-range-overlap-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-borel-critical-image-jet-range-overlap-1
-       :critical-value-sard-open-regularity-global-germ-extension-1
+      [:critical-value-sard-borel-open-critical-image-jet-range-overlap-1
        :critical-value-sard-local-nullity-second-countable-aggregation-1],
       :current-residual
-      "Global regularity is replaced by open-set regularity in the Borel overlap regime; arbitrary-set localization, induction closure, and the complementary analytic range remain open.",
+      "Arbitrary-set localization is established in the Borel overlap regime; induction closure and removal of the remaining analytic and dimension restrictions remain open.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite removes global regularity for open source sets. Global smooth germ extensions preserve function values and derivatives locally; the reviewed Borel overlap theorem supplies local nullity, and second-countable aggregation proves open-set critical-image nullity. Induction closure and the complementary analytic range remain unresolved; rectangular Morse-Sard is not refuted.",
+     "One compiled prerequisite extends Borel-compatible overlap nullity to arbitrary source sets with pointwise ambient finite-order regularity. Each regular point has an open regularity neighborhood; image containment transfers the reviewed open-set nullity, and second-countable aggregation completes localization. Lower-dimensional induction and the overlap bound remain premises, so full rectangular Morse-Sard remains unresolved, not refuted.",
      :commands
      [{:cmd
-       "Read DAG, closure policy, build-loop definitions, open localization and germ-extension proofs, aggregation module, and reviewed dependency findings",
+       "Read DAG, closure policy, build-loop definitions, local-set localization proof, and both reviewed dependency findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardBorelOpenCriticalImageJetRangeOverlapProbe.lean",
+       "lake env lean /tmp/SardBorelLocalSetCriticalImageJetRangeOverlapProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardBorelOpenCriticalImageJetRangeOverlapProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardBorelLocalSetCriticalImageJetRangeOverlapProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
        "Fixture hash recorded; frozen consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '9,25p' /tmp/SardBorelOpenCriticalImageJetRangeOverlapProbe.lean | sha256sum",
+       "sed -n '7,23p' /tmp/SardBorelLocalSetCriticalImageJetRangeOverlapProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelOpenCriticalImageJetRangeOverlapProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelLocalSetCriticalImageJetRangeOverlapProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 337 items OK; {:done 329, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 338 items OK; {:done 330, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -44020,12 +44055,13 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardBorelOpenCriticalImageJetRangeOverlapProbe.lean",
+     {:path
+      "/tmp/SardBorelLocalSetCriticalImageJetRangeOverlapProbe.lean",
       :sha256
-      "8bf872b52721238aa790bb2c9dc9edf4544bc215ad868b27fdaa64593439e9bd"},
+      "ab9591ef8aeb2e1076674615b2157f91683122f4030f98fa131a6392e9d908dd"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -44311,7 +44347,8 @@
     :critical-value-sard-borel-positive-rank-stratum-nullity-1
     :critical-value-sard-borel-critical-image-of-rank-zero-nullity-1
     :critical-value-sard-borel-critical-image-jet-range-overlap-1
-    :critical-value-sard-borel-open-critical-image-jet-range-overlap-1],
+    :critical-value-sard-borel-open-critical-image-jet-range-overlap-1
+    :critical-value-sard-borel-local-set-critical-image-jet-range-overlap-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
