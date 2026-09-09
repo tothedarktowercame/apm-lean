@@ -5531,9 +5531,160 @@
    :other-consumers []}
   {:consumer :t02A05-moment-reduction,
    :stop-condition
-   "No assumed numerical sphere area, positive total mass, radial identification or moment value. This is a symmetry calculation, not a retry of the stopped Hausdorff-cone comparison or a full consumer closure.",
-   :phase :probe,
+   "Bank symmetry transport, second moments and projective-density reduction only. Do not claim fourth moments, the full flux formula, numerical normalization or frozen consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/IntrinsicSphereSecondMomentsProbe.lean",
+      :sha256
+      "243e91987507e34dd3d11e420e10630d70350d62afe4eab625cdda3e0c29b57a"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/IntrinsicSphereSecondMomentsProbe.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/IntrinsicSphereSecondMoments.lean"
+    "ConstructionTargets/IntrinsicSphereSecondMoments.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: intrinsic isometry invariance and mass-relative second moments",
+   :acceptance
+   {:implementation
+    "Promote the exact primary fixture. Preserve constructed sphere restrictions of linear isometries, coordinate reflections/permutations, actual Hausdorff integral transport, finite-sum second-moment calculation and projective-density consequence.",
+    :declarations
+    ["ConstructionTargets.IntrinsicSphereSecondMoments.sphereIsometry"
+     "ConstructionTargets.IntrinsicSphereSecondMoments.integral_isometry"
+     "ConstructionTargets.IntrinsicSphereSecondMoments.odd_integral"
+     "ConstructionTargets.IntrinsicSphereSecondMoments.square_eq"
+     "ConstructionTargets.IntrinsicSphereSecondMoments.square_moment"
+     "ConstructionTargets.IntrinsicSphereSecondMoments.mixed_moment_zero"
+     "ConstructionTargets.IntrinsicSphereSecondMoments.projective_density_moment"],
+    :consumer-equation
+    "For d<=3, integral x_i^2 under literal sphere Hausdorff d-measure equals M_d/(d+1). On S3 the mixed moment vanishes and integral (x1^3*x0-4*x0^2)=-M_3.",
+    :consumer-residual
+    "Construct the needed plane rotation and derive fourth/mixed-fourth moments, then expand the exact flux polynomial. Numerical sphere mass remains separate.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target."
+     "Run lake build ConstructionTargets.IntrinsicSphereSecondMoments ConstructionTargets.IntrinsicSphereFinite."
+     "Reproduce all seven standard-only axiom audits."
+     "Run forbidden-token scans, git diff --check, exact two-file scope verification and commit the scoped implementation."]},
+   :id :intrinsic-sphere-symmetry-second-moments-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint5-intrinsic-sphere-finite-measure-1],
+   :current-residual
+   "Intrinsic integrability is banked, but actual symmetry transport and coordinate second moments have not been banked.",
+   :other-consumers [:t95J05 :t94A10 :t01J06]}
+  {:consumer :t02A05-moment-reduction,
+   :stop-condition
+   "No assumed numerical sphere area, positive total mass, radial identification or moment value. This is a symmetry calculation, not a retry of the stopped Hausdorff-cone comparison or a full consumer closure.",
+   :evidence
+   {:probe
+    {:consumer-audit
+     {:path "/tmp/IntrinsicSecondMomentConsumerAudit.lean",
+      :sha256
+      "b2a37c7e74dc4fbccb8121c4d68e0806343949fc869e8e52c48ec07c15f87271",
+      :exit 0,
+      :warnings ["One inherited unnecessarySimpa warning."],
+      :finding
+      "The exact t95J05InclusionPullback integral equals minus the real total intrinsic sphere measure."},
+     :placeholder-delta 0,
+     :residual
+     "Exactly one compiled prerequisite supplied. Fourth moments and the exact mass-relative flux formula remain in the parent probe; numerical normalization remains downstream.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t02A05-moment-reduction,
+      :stop-condition
+      "Bank symmetry transport, second moments and projective-density reduction only. Do not claim fourth moments, the full flux formula, numerical normalization or frozen consumer closure.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path "/tmp/IntrinsicSphereSecondMomentsProbe.lean",
+         :sha256
+         "243e91987507e34dd3d11e420e10630d70350d62afe4eab625cdda3e0c29b57a"},
+        :commands
+        [{:cmd
+          "lake env lean /tmp/IntrinsicSphereSecondMomentsProbe.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/IntrinsicSphereSecondMoments.lean"
+       "ConstructionTargets/IntrinsicSphereSecondMoments.md"],
+      :dag-node
+      "MANIFOLD INTEGRATION: intrinsic isometry invariance and mass-relative second moments",
+      :acceptance
+      {:implementation
+       "Promote the exact primary fixture. Preserve constructed sphere restrictions of linear isometries, coordinate reflections/permutations, actual Hausdorff integral transport, finite-sum second-moment calculation and projective-density consequence.",
+       :declarations
+       ["ConstructionTargets.IntrinsicSphereSecondMoments.sphereIsometry"
+        "ConstructionTargets.IntrinsicSphereSecondMoments.integral_isometry"
+        "ConstructionTargets.IntrinsicSphereSecondMoments.odd_integral"
+        "ConstructionTargets.IntrinsicSphereSecondMoments.square_eq"
+        "ConstructionTargets.IntrinsicSphereSecondMoments.square_moment"
+        "ConstructionTargets.IntrinsicSphereSecondMoments.mixed_moment_zero"
+        "ConstructionTargets.IntrinsicSphereSecondMoments.projective_density_moment"],
+       :consumer-equation
+       "For d<=3, integral x_i^2 under literal sphere Hausdorff d-measure equals M_d/(d+1). On S3 the mixed moment vanishes and integral (x1^3*x0-4*x0^2)=-M_3.",
+       :consumer-residual
+       "Construct the needed plane rotation and derive fourth/mixed-fourth moments, then expand the exact flux polynomial. Numerical sphere mass remains separate.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target."
+        "Run lake build ConstructionTargets.IntrinsicSphereSecondMoments ConstructionTargets.IntrinsicSphereFinite."
+        "Reproduce all seven standard-only axiom audits."
+        "Run forbidden-token scans, git diff --check, exact two-file scope verification and commit the scoped implementation."]},
+      :id :intrinsic-sphere-symmetry-second-moments-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint5-intrinsic-sphere-finite-measure-1],
+      :current-residual
+      "Intrinsic integrability is banked, but actual symmetry transport and coordinate second moments have not been banked.",
+      :other-consumers [:t95J05 :t94A10 :t01J06]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :author "codex-13",
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "lake env lean /tmp/IntrinsicSphereSecondMomentsProbe.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/IntrinsicSecondMomentConsumerAudit.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/IntrinsicSphereSecondMomentsProbe.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/IntrinsicSecondMomentConsumerAudit.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/IntrinsicSphereSecondMomentsProbe.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :changed-paths [],
+     :dependency-commit "fc27383aa4c07f6f5b59760acab43af57c531375",
+     :fixture
+     {:path "/tmp/IntrinsicSphereSecondMomentsProbe.lean",
+      :sha256
+      "243e91987507e34dd3d11e420e10630d70350d62afe4eab625cdda3e0c29b57a"},
+     :finding
+     "Compiled exactly one symmetry/second-moment prerequisite. Ambient linear isometries restrict to actual sphere isometries and preserve literal Hausdorff integrals. Constructed coordinate reflections and permutations prove odd cancellation and equal square moments. The norm-one identity and reviewed integrability yield square moment M_d/(d+1) for d<=3. The exact projective-sphere density integral is consequently -M_3. No numerical mass, positivity or radial identification is assumed. Plane-rotation fourth moments and the full flux reduction remain, so the parent is not GO.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: intrinsic polynomial moments relative to total mass",
@@ -5549,7 +5700,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:oriented-checkpoint5-intrinsic-sphere-finite-measure-1
-    :oriented-checkpoint6-gluing-and-intrinsic-measure-refill],
+    :oriented-checkpoint6-gluing-and-intrinsic-measure-refill
+    :intrinsic-sphere-symmetry-second-moments-1],
    :current-residual
    "Intrinsic sphere polynomial integrability is reviewed. Coordinate moments and the exact remaining scalar normalization are not yet computed.",
    :other-consumers [:t95J05 :t94A10 :t01J06]}
