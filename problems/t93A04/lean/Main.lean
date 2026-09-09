@@ -1,4 +1,40 @@
-import Mathlib
+import ConstructionTargets.SardGenuineSmoothEuclidean
+open Set MeasureTheory
+open scoped ContDiff Manifold
+noncomputable section
+namespace T93A04ManifoldWork
+variable {E F M : Type*}
+ [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [CompleteSpace E]
+ [NormedAddCommGroup F] [InnerProductSpace ℝ F] [FiniteDimensional ℝ F]
+ [MeasurableSpace F] [BorelSpace F]
+ [TopologicalSpace M] [ChartedSpace E M] [IsManifold 𝓘(ℝ,E) ∞ M]
+ [SecondCountableTopology M]
+theorem null_critical (μ : Measure F) [μ.IsAddHaarMeasure] (f : M → F)
+ (hf : ContMDiff 𝓘(ℝ,E) 𝓘(ℝ,F) ∞ f) :
+ μ (f '' {y | ¬ Function.Surjective (mfderiv 𝓘(ℝ,E) 𝓘(ℝ,F) f y)}) = 0 := by
+ apply SardFiniteOrderRankLocusLocalAggregationProbe.measure_image_zero_of_rankLocus_pointwise_open
+ intro x hx
+ let e := chartAt E x
+ have he : ContMDiffOn 𝓘(ℝ,E) 𝓘(ℝ,E) ∞ e.symm e.target := contMDiffOn_chart_symm
+ have hq : ContDiffOn ℝ ∞ (f ∘ e.symm) e.target :=
+   (hf.comp_contMDiffOn he).contDiffOn
+ have hn := SardGenuineSmoothEuclideanProbe.open_domain_critical_image_null
+   μ (f ∘ e.symm) e.target e.target e.open_target (Subset.refl _) hq
+ refine ⟨e.source,e.open_source,mem_chart_source E x,measure_mono_null ?_ hn⟩
+ rintro v ⟨y,⟨hy,hys⟩,rfl⟩
+ refine ⟨e y,⟨e.map_source hys,?_⟩,?_⟩
+ · intro hs
+   have hd := mfderiv_comp (e y) (hf.mdifferentiable (by simp) (e.symm (e y)))
+     ((he.contMDiffAt (e.open_target.mem_nhds (e.map_source hys))).mdifferentiableAt (by simp))
+   rw [mfderiv_eq_fderiv] at hd
+   rw [hd] at hs
+   apply hy
+   rw [e.left_inv hys] at hs
+   exact Function.Surjective.of_comp hs
+ · exact congrArg f (e.left_inv hys)
+
+end T93A04ManifoldWork
+
 
 /-! # APM t93A04: a line with smooth inverse image
 
@@ -80,6 +116,35 @@ lemma apm_t93a04_lineDirection_ne_zero : apm_t93a04_lineDirection ≠ 0 := by
   have h0 := congrFun (congrArg WithLp.ofLp h) 0
   simpa [apm_t93a04_lineDirection] using h0
 
+
+namespace T93A04Closure
+abbrev P2 := EuclideanSpace ℝ (Fin 2)
+def proj : apm_t93a04_Point →L[ℝ] P2 :=
+ (EuclideanSpace.equiv (Fin 2) ℝ).symm.toContinuousLinearMap.comp
+   (ContinuousLinearMap.pi (fun i : Fin 2 => EuclideanSpace.proj i.succ))
+@[simp] theorem proj_apply (x : apm_t93a04_Point) (i : Fin 2) : proj x i = x i.succ := rfl
+ theorem proj_surjective : Function.Surjective proj := by
+ intro b
+ refine ⟨WithLp.toLp 2 ![0,b 0,b 1],?_⟩
+ ext i
+ fin_cases i <;> rfl
+ theorem proj_ker : LinearMap.ker proj.toLinearMap =
+    Submodule.span ℝ ({apm_t93a04_lineDirection} : Set apm_t93a04_Point) := by
+ ext x
+ rw [LinearMap.mem_ker, Submodule.mem_span_singleton]
+ constructor
+ · intro hx
+   have h1 := congrArg (fun b : P2 => b 0) hx
+   have h2 := congrArg (fun b : P2 => b 1) hx
+   change x 1 = 0 at h1
+   change x 2 = 0 at h2
+   refine ⟨x 0,?_⟩
+   ext i
+   fin_cases i <;> simp_all [apm_t93a04_lineDirection]
+ · rintro ⟨c,rfl⟩
+   ext i
+   fin_cases i <;> simp [apm_t93a04_lineDirection]
+end T93A04Closure
 theorem apm_t93a04 :
     ∀ (n : ℕ) (M : Type)
       [TopologicalSpace M] [T2Space M] [SecondCountableTopology M]
@@ -89,64 +154,40 @@ theorem apm_t93a04 :
       ContMDiff (apm_t93a04_Model n) (𝓘(ℝ, apm_t93a04_Point)) ∞ f →
       ∃ ℓ : Set apm_t93a04_Point,
         apm_t93a04_IsSmoothLinePreimage (n := n) f ℓ (f ⁻¹' ℓ) := by
-  /-
-  Boundary (closer hop 1): the helper
-  `apm_t93a04_isSmoothLinePreimage_preimage_iff` removes the redundant
-  set-equality packaging, leaving exactly existence of an affine line
-  transverse to `f`.  The intended proof fixes a nonzero direction, composes
-  `f` with a linear projection onto `ℝ²`, applies manifold Sard to choose a
-  regular value, and translates surjectivity of the projected derivative into
-  the displayed range-plus-span equality.
-
-  Searches of `LEMMA-INDEX.md`, all `ConstructionTargets/` modules, closed
-  Sard/transversality siblings (especially `t92J07` and `t01A08`), git
-  history, and Mathlib's Sard, Hausdorff-dimension, Jacobian, manifold-chart,
-  `mfderiv`, and regular-value APIs found Sard theorems only for maps between
-  finite-dimensional normed vector spaces.  No theorem covers an arbitrary
-  second-countable manifold domain.  A local proof must pass to a countable
-  chart cover, apply vector-space Sard chartwise, prove compatibility of
-  criticality with chart derivatives, and combine the null critical-value
-  sets.  That chartwise manifold-Sard bridge remains open.
-
-  CLOSER HOP 2: the projection-to-transversality step is now compiled as
-  `apm_t93a04_range_sup_span_eq_top_of_projection_surjective`.  It proves in
-  full generality that when a linear projection has kernel `span {v}` and its
-  composite with the derivative is surjective, the derivative range joined
-  with `span {v}` is top. Thus no bespoke finite-dimensional coordinate
-  calculation is needed after obtaining a regular value.
-
-  The new `t92J07` closer artifact was also inspected. It now packages the
-  countable avoidance of null critical-value sets, but deliberately assumes
-  the same missing manifold-Sard nullity input and is local to that problem.
-  Mathlib's `writtenInExtChartAt` lemmas relate `mfderiv` to a chart
-  representative only locally/within the model range; the available Sard
-  lemmas expect whole-space differentiability. Hence extending chart maps and
-  proving the required critical-image inclusion remains the sole substantive
-  bridge. The frozen statement is unchanged.
-
-  CLOSER HOP 3 closes the previously hidden empty-domain branch. The concrete
-  nonzero vector `apm_t93a04_lineDirection` supplies an affine line, and when
-  `M` is empty the range-plus-span obligation is vacuous. Thus the main proof
-  below dispatches every empty manifold without Sard and confines the
-  remaining gap to nonempty domains.
-
-  For nonempty `M`, renewed searches of the Hausdorff-dimension and Jacobian
-  Sard lemmas, `writtenInExtChartAt`, smooth bump/partition-of-unity extension
-  machinery, countable chart-cover APIs, the newly advanced `t92J07`,
-  `LEMMA-INDEX.md`, every `ConstructionTargets/` module, related Sard
-  artifacts, and git history still found no whole-space extension preserving
-  critical-image inclusion and no manifold-domain Sard theorem. The frozen
-  statement is unchanged; no placeholder declaration was introduced.
-  -/
-  intro n M _ _ _ _ _ f hf
-  cases isEmpty_or_nonempty M with
-  | inl hM =>
-      letI : IsEmpty M := hM
-      refine ⟨apm_t93a04_line 0 apm_t93a04_lineDirection, ?_⟩
-      apply (apm_t93a04_isSmoothLinePreimage_preimage_iff f _).2
-      refine ⟨0, apm_t93a04_lineDirection,
-        apm_t93a04_lineDirection_ne_zero, rfl, ?_⟩
-      intro x hx
-      exact isEmptyElim x
-  | inr hM =>
-      sorry
+  intro n M hT hT2 hSC hCh hMan f hf
+  let q := T93A04Closure.proj
+  have hq : ContMDiff (𝓘(ℝ,apm_t93a04_Point)) (𝓘(ℝ,T93A04Closure.P2)) ∞ q :=
+    q.contDiff.contMDiff
+  have hg := hq.comp hf
+  have hn := T93A04ManifoldWork.null_critical (volume : Measure T93A04Closure.P2) (q ∘ f) hg
+  obtain ⟨b,hb⟩ : ∃ b : T93A04Closure.P2, b ∉
+      (q ∘ f) '' {y | ¬ Function.Surjective
+        (mfderiv (apm_t93a04_Model n) (𝓘(ℝ,T93A04Closure.P2)) (q ∘ f) y)} := by
+    by_contra h
+    have he : (q ∘ f) '' {y | ¬ Function.Surjective
+        (mfderiv (apm_t93a04_Model n) (𝓘(ℝ,T93A04Closure.P2)) (q ∘ f) y)} = univ := by
+      apply Set.eq_univ_of_forall
+      simpa using h
+    rw [he] at hn
+    exact (NeZero.ne ((volume : Measure T93A04Closure.P2) univ)) hn
+  obtain ⟨p,hp⟩ := T93A04Closure.proj_surjective b
+  refine ⟨apm_t93a04_line p apm_t93a04_lineDirection, rfl,
+    p,apm_t93a04_lineDirection,apm_t93a04_lineDirection_ne_zero,rfl,?_⟩
+  intro x hx
+  obtain ⟨t,ht⟩ := hx
+  have hv : q apm_t93a04_lineDirection = 0 := by
+    change apm_t93a04_lineDirection ∈ LinearMap.ker T93A04Closure.proj.toLinearMap
+    rw [T93A04Closure.proj_ker]
+    exact Submodule.subset_span (by simp)
+  have hxb : q (f x) = b := by rw [ht,map_add,map_smul,hv,smul_zero,add_zero]; exact hp
+  have hs : Function.Surjective
+      (mfderiv (apm_t93a04_Model n) (𝓘(ℝ,T93A04Closure.P2)) (q ∘ f) x) := by
+    by_contra hh
+    exact hb ⟨x,hh,hxb⟩
+  have hd := mfderiv_comp x (hq.mdifferentiable (by simp) (f x)) (hf.mdifferentiable (by simp) x)
+  rw [mfderiv_eq_fderiv, q.fderiv] at hd
+  rw [hd] at hs
+  exact apm_t93a04_range_sup_span_eq_top_of_projection_surjective
+    (mfderiv (apm_t93a04_Model n) (𝓘(ℝ,apm_t93a04_Point)) f x).toLinearMap
+    q.toLinearMap apm_t93a04_lineDirection T93A04Closure.proj_ker hs
+#print axioms apm_t93a04
