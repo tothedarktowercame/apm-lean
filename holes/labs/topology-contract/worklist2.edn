@@ -2134,6 +2134,24 @@
      {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
     :repository-note
     "Checked codex-11 dependency PASS. Existing untracked supervisor files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788973115413-16649-d274c7c8",
+     :commands
+     ["git show 620b0c7e:ConstructionTargets/CircleAngleTransition.lean"
+      "git show 620b0c7e:ConstructionTargets/CircleAngleTransition.md"
+      "sha256sum /tmp/CircleAngleTransitionProbe.lean"
+      "cmp recorded-commit-source /tmp/CircleAngleTransitionProbe.lean"
+      "lake env lean /tmp/CircleAngleTransitionProbe.lean"
+      "lake env lean ConstructionTargets/CircleAngleTransition.lean"
+      "lake build ConstructionTargets.CircleAngleTransition ConstructionTargets.PointedChartRecentering ConstructionTargets.CircleUniversalCover"
+      "Inspect covering-map const_of_comp hypotheses"
+      "python3: verify four statement hashes, 44-module recorded import closure, forbidden scan and frozen placeholder counts"
+      "git show --format= --name-only 620b0c7e"
+      "git show --format= --check 620b0c7e"],
+     :finding
+     "Independent PASS: exact two-file scope and byte-identical fixture; both compilations and focused build succeed with 30 replayed dependency warnings and no target warnings. Four statement hashes and standard-only axiom audits reproduced. Preconnectedness and continuity correctly force constant angle difference through the actual exponential covering; increment equality and order equivalence have correct directions. Positive-affine specialization explicitly assumes its geometric exponential equation. Actual stereographic angle comparisons remain unproved and are not replaced by assumed affine coordinates or homology signs. Frozen problems unchanged, placeholders 327 to 327, zero new placeholders. No edits."},
     :commit "620b0c7eca46117fe33bafc0e47cded2aac5074f",
     :changed-paths
     ["ConstructionTargets/CircleAngleTransition.lean"
@@ -2150,7 +2168,7 @@
     "SHA-256 of UTF-8 theorem declaration bytes beginning with theorem and ending immediately before the space preceding :=; names below are in ConstructionTargets.CircleAngleTransition.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CircleAngleTransition.lean"
     "ConstructionTargets/CircleAngleTransition.md"],
@@ -2265,7 +2283,7 @@
      "Compiled one geometric angle-transition prerequisite. On a preconnected domain, continuous real angle functions satisfying exp(f)=x*exp(g) have constant difference: the actual exponential covering has discrete fibers. Their increments and strict-order comparisons therefore agree. For a continuous model-disk transition T satisfying exp(coord(T u))=x*exp(a*coord(u)+b), positive a implies Increasing T. No homology-sign hypothesis is used. The actual banked stereographic chart transitions have not yet been supplied with the required continuous-angle coordinate comparisons, so the parent is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue D #2: compact connected Circle, milestones 4 and 5",
