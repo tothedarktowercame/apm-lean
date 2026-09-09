@@ -36639,6 +36639,29 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788918764070-15814-74ecb729",
+     :commands
+     ["git show --stat --oneline 0c7d8351f0904b965620e8a6f0391a52cd9fba8b"
+      "git diff-tree --no-commit-id --name-only -r 0c7d8351f0904b965620e8a6f0391a52cd9fba8b"
+      "sha256sum /tmp/SardFiniteOrderRankZeroFirstJetEmptyProbe.lean"
+      "cmp -s /tmp/SardFiniteOrderRankZeroFirstJetEmptyProbe.lean ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.lean"
+      "sed -n '8,27p' <(git show 0c7d8351f0904b965620e8a6f0391a52cd9fba8b:ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.lean) | sha256sum"
+      "lake env lean /tmp/SardFiniteOrderRankZeroFirstJetEmptyProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.lean"
+      "lake build"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "rg -o '\\b(sorry|admit)\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.lean"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "rg -c '^theorem ' problems/t93A04/lean/Main.lean"
+      "readlink -f .lake/packages"
+      "git diff --check 0c7d8351f0904b965620e8a6f0391a52cd9fba8b^ 0c7d8351f0904b965620e8a6f0391a52cd9fba8b"
+      "git diff --exit-code 0c7d8351f0904b965620e8a6f0391a52cd9fba8b -- ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.lean ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.md"],
+     :finding
+     "PASS: exact scope and fixture, frozen statement hash, valid rank-zero linear-range-to-zero-derivative bridge, correctly oriented first-jet emptiness, standard-only axioms, zero source placeholders, frozen consumer, full build, and worklist gate all reproduced."},
     :commit "0c7d8351f0904b965620e8a6f0391a52cd9fba8b",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.lean"
@@ -36649,7 +36672,7 @@
      "200621dc73ded82ebd5861c5ae6ba82f62c8dd59cb0c117084fcd442b015f1d9"},
     :declarations ["firstNonzeroJetLocus_one_eq_empty_of_rankZero"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.lean"
     "ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.md"],
@@ -36825,7 +36848,7 @@
       "200621dc73ded82ebd5861c5ae6ba82f62c8dd59cb0c117084fcd442b015f1d9"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
