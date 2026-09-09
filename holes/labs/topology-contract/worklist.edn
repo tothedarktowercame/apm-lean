@@ -55186,8 +55186,148 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation. Preserve local specification evidence and outstanding coverage; infrastructure absence is not termination.",
+   :evidence
+   {:evidence
+    {:census
+     {:path "/tmp/topology-refill30-measure.json",
+      :sha256
+      "058ef5e489450e4d24391b0f874550e0bcb2f8cbdeba7648944ac7f9d1f6b524"},
+     :reviews
+     {:path "/tmp/topology-refill30-reviews.edn",
+      :sha256
+      "da18100b2670e104edf60ebc5cbe9131ac4a5f1ec64fb9c0ba88f353c9bc50da"},
+     :tail
+     {:path "/tmp/topology-refill30-tail.edn",
+      :sha256
+      "1b02b25dc5bd224b8d01d7151a7bdd2c78a692c7004f33f4d0e2f1e2f9b73bb6"}},
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill30-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill30-reviews.bb", :exit 0}
+     {:cmd
+      "git diff --name-status 270bc9bc14293d61697e58f48b0f3de08e790a9c f9a3ec36da04b61e2ed60e6e729ac129cbcdec46 -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill30-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill30-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill30-measure.json /tmp/topology-refill30-reviews.edn /tmp/topology-refill30-tail.edn",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer "t96J05",
+      :stop-condition
+      "GO requires complete frozen closure. Otherwise identify the exact attained-value or fiber-transport boundary, or prove and preserve a local encoding counterexample.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE/SUBMERSION / frozen nonempty radial level",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free frozen Main preserving all definitions and hypotheses. Inspect the actual radialLevel and IsEmbeddedSmoothSubmanifold encodings and test constant-radius examples such as a centered circle before asserting an attained regular value. If viable, derive a positive attained regular radius using genuine smooth manifold Sard and construct the exact fiber atlas by reusing RegularFiberGlobalAtlas and source-chart transport. Do not assume radial nonconstancy, immersion, an attained regular value or a manifold-source fiber theorem. Preserve the frozen smooth-order expression and all nonemptiness clauses. If a centered-sphere example contradicts the frozen codimension-one conclusion, compile the exact counterexample and classify it as local SPEC-DEFECT; do not silently repair the statement or treat it as campaign refutation.",
+       :frozen-file "problems/t96J05/lean/Main.lean",
+       :frozen-sha256
+       "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t96j05-frozen-nonempty-radial-level-closure-probe-refill30,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
+      :current-residual
+      "One placeholder: the literal nonempty radial level must carry the specified codimension-one manifold structure. Manifold Sard and Euclidean-source global fiber atlases are banked; attained regular-radius selection and manifold-source transport need audit."}
+     {:consumer "t96J05",
+      :stop-condition
+      "GO requires compiled smooth inclusion and both actual derivative injectivity and kernel-range equality. REVISE requires exactly one compiled prerequisite; no conditional embeddedness certificate.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE/SUBMERSION / smooth inclusion and tangent image",
+      :acceptance
+      {:probe
+       "For a globally genuine-infinity smooth map between finite-dimensional complete real normed spaces and a regular value, use exactly RegularFiberGlobalAtlas.chartedSpace on the literal fiber. Prove genuine-infinity ContMDiff of subtype inclusion, injectivity of its mfderiv at every fiber point, and equality of its derivative range with the kernel of the actual ambient fderiv of the defining map. Reuse selected charts, backward parameterizations, overlap formulas, implicit derivatives and rank-nullity; retain the chosen global atlas rather than constructing another one. Derive coordinate derivative transport and any dimension facts, with no assumed smooth inclusion, immersion, kernel-range identity or new topology. Include empty fibers and zero-dimensional kernels. Preserve all existing APIs; if exact results exist reuse them and identify the manifold-source edge.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Embedded Euclidean-source regular-fiber geometry only. Manifold-source transport and independent frozen attained-value/transversality obligations remain."},
+      :id :regular-fiber-smooth-inclusion-tangent-image-probe-refill30,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
+      :current-residual
+      "RegularFiberGlobalAtlas supplies actual fixed-model ChartedSpace and IsManifold structures on Euclidean-source fibers. Smoothness of subtype inclusion and its actual manifold derivative range remain.",
+      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation. Local encoding counterexamples require repair and coverage accounting, not campaign termination.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned executable consumer placeholders, compare typed residuals and reviewed outcomes, and distinguish portfolio from concurrent changes. Elect exactly one near-closure adapter before foundations by reach and simplicity, with a fresh dependent checkpoint. Account explicitly for any local radial-level specification defect. Preserve signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t96j05-frozen-nonempty-radial-level-closure-probe-refill30
+       :regular-fiber-smooth-inclusion-tangent-image-probe-refill30],
+      :current-residual
+      "Await reviewed radial-level and inclusion outcomes; preserve any constant-radius counterexample and rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    {:baseline "270bc9bc14293d61697e58f48b0f3de08e790a9c",
+     :head "f9a3ec36da04b61e2ed60e6e729ac129cbcdec46",
+     :campaign-refutation false,
+     :reviews
+     {:general-model-adapter :stop-reviewed-pass,
+      :fiber-atlas :implementation-reviewed-pass,
+      :t92j07-documentation :pass,
+      :previous-checkpoint :pass},
+     :ranking
+     "Exactly one near-closure adapter first: t96J05 has one placeholder and newly banked Sard and fiber atlases, but attained-radius selection needs explicit constant-radius counterexample testing. Smooth fiber inclusion and tangent-image equality then support five proposed consumers and directly reuse the reviewed atlas. This bounded geometry step precedes the similarly broad but larger surface-classification program, four-consumer fundamental-class localization and two-consumer product homology. Other near-closure consumers retain audited normalization, concrete sphere-map action, covering or general-model boundaries.",
+     :typed-residual-change
+     "t01A08 remains at the reviewed within-model-range smoothness and fderivWithin boundary. RegularFiberGlobalAtlas at 06f9b2d5aafed08eb26c774e6b9f663f2d1410a7 constructs global fixed-model fiber ChartedSpace and IsManifold structures; embedded inclusion and manifold-source transport remain. t92J07 closure documentation at ef33c30c67c3a58d2e805e7368f7c51c6fee762f adds no closure.",
+     :infrastructure
+     {:before 644,
+      :after 646,
+      :portfolio-added ["RegularFiberGlobalAtlas.lean"],
+      :concurrent-added ["CoefficientH0.lean"],
+      :consumer-changes []},
+     :outstanding
+     ["Signed positive-dimensional antipodal action"
+      "Reduced-S0 degree and one-dimensional local-index coverage"
+      "Preserved local specification counterexamples"
+      "General-model within-set Sard or compatible extension"
+      "Attained regular-radius selection is not implied by Sard alone"],
+     :census
+     {:open 37,
+      :closed 21,
+      :existing 58,
+      :within-two-placeholders 27,
+      :placeholders-before 68,
+      :placeholders-after 68,
+      :delta 0,
+      :named 59,
+      :missing ["t93A05"]}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -55202,7 +55342,80 @@
     :t92j07-reviewed-closure-documentation-refill29
     :checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
    :current-residual
-   "Await reviewed general-model adapter, fiber atlas and closure documentation, then rerank the complete DAG."}],
+   "Await reviewed general-model adapter, fiber atlas and closure documentation, then rerank the complete DAG."}
+  {:consumer "t96J05",
+   :stop-condition
+   "GO requires complete frozen closure. Otherwise identify the exact attained-value or fiber-transport boundary, or prove and preserve a local encoding counterexample.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / frozen nonempty radial level",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free frozen Main preserving all definitions and hypotheses. Inspect the actual radialLevel and IsEmbeddedSmoothSubmanifold encodings and test constant-radius examples such as a centered circle before asserting an attained regular value. If viable, derive a positive attained regular radius using genuine smooth manifold Sard and construct the exact fiber atlas by reusing RegularFiberGlobalAtlas and source-chart transport. Do not assume radial nonconstancy, immersion, an attained regular value or a manifold-source fiber theorem. Preserve the frozen smooth-order expression and all nonemptiness clauses. If a centered-sphere example contradicts the frozen codimension-one conclusion, compile the exact counterexample and classify it as local SPEC-DEFECT; do not silently repair the statement or treat it as campaign refutation.",
+    :frozen-file "problems/t96J05/lean/Main.lean",
+    :frozen-sha256
+    "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t96j05-frozen-nonempty-radial-level-closure-probe-refill30,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas
+    :checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
+   :current-residual
+   "One placeholder: the literal nonempty radial level must carry the specified codimension-one manifold structure. Manifold Sard and Euclidean-source global fiber atlases are banked; attained regular-radius selection and manifold-source transport need audit."}
+  {:consumer "t96J05",
+   :stop-condition
+   "GO requires compiled smooth inclusion and both actual derivative injectivity and kernel-range equality. REVISE requires exactly one compiled prerequisite; no conditional embeddedness certificate.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / smooth inclusion and tangent image",
+   :acceptance
+   {:probe
+    "For a globally genuine-infinity smooth map between finite-dimensional complete real normed spaces and a regular value, use exactly RegularFiberGlobalAtlas.chartedSpace on the literal fiber. Prove genuine-infinity ContMDiff of subtype inclusion, injectivity of its mfderiv at every fiber point, and equality of its derivative range with the kernel of the actual ambient fderiv of the defining map. Reuse selected charts, backward parameterizations, overlap formulas, implicit derivatives and rank-nullity; retain the chosen global atlas rather than constructing another one. Derive coordinate derivative transport and any dimension facts, with no assumed smooth inclusion, immersion, kernel-range identity or new topology. Include empty fibers and zero-dimensional kernels. Preserve all existing APIs; if exact results exist reuse them and identify the manifold-source edge.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Embedded Euclidean-source regular-fiber geometry only. Manifold-source transport and independent frozen attained-value/transversality obligations remain."},
+   :id :regular-fiber-smooth-inclusion-tangent-image-probe-refill30,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas
+    :checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
+   :current-residual
+   "RegularFiberGlobalAtlas supplies actual fixed-model ChartedSpace and IsManifold structures on Euclidean-source fibers. Smoothness of subtype inclusion and its actual manifold derivative range remain.",
+   :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation. Local encoding counterexamples require repair and coverage accounting, not campaign termination.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned executable consumer placeholders, compare typed residuals and reviewed outcomes, and distinguish portfolio from concurrent changes. Elect exactly one near-closure adapter before foundations by reach and simplicity, with a fresh dependent checkpoint. Account explicitly for any local radial-level specification defect. Preserve signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t96j05-frozen-nonempty-radial-level-closure-probe-refill30
+    :regular-fiber-smooth-inclusion-tangent-image-probe-refill30
+    :checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
+   :current-residual
+   "Await reviewed radial-level and inclusion outcomes; preserve any constant-radius counterexample and rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
