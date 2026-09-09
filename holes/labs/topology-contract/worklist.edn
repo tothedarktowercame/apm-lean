@@ -35035,8 +35035,75 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if local equality of an exact derivative-rank stratum with a closed rank-upper locus cannot transfer a null localized image from the rank-upper locus to an open neighborhood on the exact stratum, or if the theorem requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta
+    {:before 0,
+     :after 0,
+     :delta 0,
+     :consumer-before 1,
+     :consumer-after 1},
+    :residual
+    "Compose the exact-stratum adapter pointwise with positive-rank nullity, aggregate every nonzero rank stratum, then supply the rank-zero branch.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_open_rankStratum_image_zero_of_rankUpper"
+     "e9efca4c2d291507ab8a8db6be795db65a67555870ab3a99fea3fbedda6d9d42"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean",
+      :exit 0,
+      :output
+      "3cb95feeb10d9818d69ae1174d24526c2517e8fda5a11acaec7b4d2b2c6b0337  /tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean"}
+     {:cmd
+      "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
+      :exit 0}
+     {:cmd
+      "diff -u /tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean",
+      :exit 0,
+      :output
+      "'exists_open_rankStratum_image_zero_of_rankUpper' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '8,27p' ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "e9efca4c2d291507ab8a8db6be795db65a67555870ab3a99fea3fbed\n6d9d42  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 268 items OK; {:done 259, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "git diff --check HEAD^ HEAD", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "0d094ce3977c694a6d28955b19bf649b67ec6525",
+    :changed-paths
+    ["ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean"
+     "ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.md"],
+    :fixture
+    {:path
+     "/tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean",
+     :sha256
+     "3cb95feeb10d9818d69ae1174d24526c2517e8fda5a11acaec7b4d2b2c6b0337"},
+    :declarations ["exists_open_rankStratum_image_zero_of_rankUpper"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean"
     "ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.md"],
