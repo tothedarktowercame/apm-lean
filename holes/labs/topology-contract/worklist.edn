@@ -47864,8 +47864,57 @@
   {:consumer "t02A08",
    :stop-condition
    "If full closure cannot be built, STOP naming the exact missing geometric map or induced-homology computation; distinguish infrastructure from refutation and do not substitute a conditional interface.",
+   :evidence
+   {:source-pins
+    {:path "/tmp/T02A08DegreeBoundary-sources.json",
+     :sha256
+     "c1cd04c055fcd8d1ea1f7a0cda0cee9e6776078f9e9cd4bdb02c75f60a3ed9d6"},
+    :diagnostic
+    {:path "/tmp/T02A08DegreeBoundary.lean",
+     :sha256
+     "00454b69320de2d5b54eb2273e2b37f710788336f75bc3416fa205e0eee36760",
+     :placeholder-count 0,
+     :full-consumer-fixture false,
+     :proved
+     ["SphereHomology.sphereModuleTopHomologyIsoInt 2 supplies the exact frozen ModuleCat integral H2 orientation definitionally."
+      "The identity satisfies the literal frozen HasDegree predicate at degree one without an assumed orientation."
+      "The degree-one fiber map satisfies the frozen oriented-intersection conclusion."],
+     :axioms [propext Classical.choice Quot.sound],
+     :warnings
+     ["One unnecessarySimpa warning at line 126, inherited from the unchanged copied frozen composition lemma; no warning in the new declarations."]},
+    :placeholder-delta
+    {:consumer "t02A08",
+     :before 1,
+     :after 1,
+     :delta 0,
+     :frozen-sha256
+     "5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1"},
+    :residual
+    "Construct the integer-indexed metric-sphere maps and compute their actual integral H2 action, for example through a proved suspension naturality and sphere-transport argument. Then reuse the existing fiber-map intersection lemma. STOP follows the explicit full-closure condition; no conditional replacement, complete GO fixture or compiled REVISE prerequisite is claimed.",
+    :outcome :stop,
+    :boundary
+    "The exact sphere H2 orientation is now available, but the arbitrary-integer degree realization remains unconstructed: for every integer n, supply a continuous self-map g of the literal metric S2 and prove orientation.hom (apm_t02a08_H2Map g a) = n * orientation.hom a for every a. The compiled degree-one case does not satisfy this quantifier.",
+    :disposition :stop,
+    :author :codex-12,
+    :reason :missing-induced-homology-computation,
+    :commands
+    [{:cmd "lake env lean /tmp/T02A08DegreeBoundary.lean", :exit 0}
+     {:cmd "python3 /tmp/check-t02a08-degree-boundary.py", :exit 0}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets problems/t02A08/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}],
+    :campaign-termination false,
+    :changed-paths [],
+    :finding
+    "Reviewed the checkpoint PASS receipt, DAG, closure experiments, frozen degree predicate and available sphere/degree sources. The historical missing-orientation claim is superseded by the compiled diagnostic. The production suspension shift computes homology groups but does not itself compute the induced H2 action of suspended circle-power maps. Circle winding and composition of established degrees cannot replace that missing computation. No zero, negative or arbitrary-positive degree construction is established by this probe.",
+    :mathematical-refutation false,
+    :boundary-artifact
+    {:path "/tmp/T02A08DegreeBoundary.md",
+     :sha256
+     "cf8274d84ac694b38ab0fb2bf9321d5dac51d2fa0d51f99cf955d3f624654212"},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SPHERE ORIENTATION / concrete degree maps",
    :acceptance
