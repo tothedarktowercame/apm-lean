@@ -41590,6 +41590,23 @@
       "git add ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: combine covered jet ranges in compact rank-zero assembly' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788935319584-16141-bb72b22b",
+     :commands
+     ["git show 6dce85df --stat --oneline"
+      "sha256sum /tmp/SardCompactRankZeroDoubleUncoveredAssemblyProbe.lean"
+      "cmp /tmp/SardCompactRankZeroDoubleUncoveredAssemblyProbe.lean <(git show 6dce85df00e381b351ed0c0d64bcffcf4877a8d0:ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean)"
+      "git show 6dce85df00e381b351ed0c0d64bcffcf4877a8d0:ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean | sed -n '7,26p' | sha256sum"
+      "git diff --exit-code 6dce85df00e381b351ed0c0d64bcffcf4877a8d0 -- ConstructionTargets"
+      "lake env lean /tmp/SardCompactRankZeroDoubleUncoveredAssemblyProbe.lean"
+      "lake env lean ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean"
+      "lake build ConstructionTargets.SardCompactRankZeroDoubleUncoveredAssembly"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit 6dce85df00e381b351ed0c0d64bcffcf4877a8d0 passes. Fixture SHA 355011ff7ff2726855000e7eda509977d72d5cd67a0d353b81331fedc88c55a5 and statement SHA 82d832dca518f7e101ecbd53acccb4f823595475224e3ead025657752c26f574 reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8431-job build successful. Lines 27–42 correctly separate covered ranges and preserve the remaining analytic and induction premises; no representation-boundary defect found. Ledger untouched."},
     :commit "6dce85df00e381b351ed0c0d64bcffcf4877a8d0",
     :changed-paths
     ["ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean"
@@ -41601,7 +41618,7 @@
     :declarations
     ["compact_rankZero_image_zero_of_double_uncovered_jets"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean"
     "ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.md"],
@@ -41776,7 +41793,7 @@
       "355011ff7ff2726855000e7eda509977d72d5cd67a0d353b81331fedc88c55a5"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
