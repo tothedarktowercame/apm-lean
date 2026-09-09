@@ -4046,8 +4046,176 @@
      :review-outcomes]},
    :stop-condition
    "Local generators and pointwise inverse localization do not establish coherent global orientation or general manifold gluing.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read current DAG, foundational-program note, closure-experiment policy and standing work prompt",
+      :exit 0}
+     {:cmd
+      "bb: inspect STOP outcomes and active rows in both topology ledgers",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped DAG-consumer census at f627f75fe90e41eabfb150001dec9ee163324fc5 and 9028714aa92de38d6152c223b4d2be1f1aa9ce2e",
+      :exit 0}
+     {:cmd
+      "rg -n 't97A02|69fd2f|t96J08' TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd "sha256sum problems/t03J04/lean/Main.lean", :exit 0}
+     {:cmd
+      "bb: check both ledgers for prior t03J04, Hausdorff-normalization and t97A02-documentation elections",
+      :exit 0}],
+    :replacement-items
+    [{:consumer :t03J04,
+      :stop-condition
+      "Preserve the actual rational homology finrank definition. Do not assume Kunneth, finite-dimensional homology, Euler multiplicativity, or descent of the displayed vector field.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "COVERING-BASIC and PRODUCT HOMOLOGY: torus local-diffeomorphism Euler consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t03J04/lean/Main.lean",
+       :stop-condition
+       "If current APIs cannot supply a bounded closing adapter, STOP under rule 0 naming the exact missing rational homology, finite-cover, finiteness or Euler-multiplicativity theorem with typed evidence. No conditional or partial closure GO.",
+       :gates
+       ["GO only with full zero-placeholder fixture, unchanged statement hashes, fixture SHA-256 and standard-only axiom audits."
+        "Propose implementation scope only after complete closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Compile a complete temporary frozen Main preserving every definition, hypothesis and statement. Inspect canonical product homology and covering APIs against the actual finite sum of rational singular-homology finranks. Prove the torus Euler characteristic vanishes and that every target in the frozen local-diffeomorphism clause has zero Euler characteristic. Construct any finite covering and finiteness data needed; reuse the proved field and surjectivity lemmas. No abstract Euler invariant may replace the frozen definition.",
+       :consumer-equation
+       "The frozen rational singular Euler characteristic is zero for the positive-dimensional torus and for every connected boundaryless target of the specified local diffeomorphism, completing apm_t03j04.",
+       :frozen-sha256
+       "b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41"},
+      :id :oriented-checkpoint4-t03j04-exact-euler-closure-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "One frozen placeholder. The displayed vector field is proved nowhere zero and compact local-diffeomorphism surjectivity is proved; rational singular Euler characteristic of the torus and its local-diffeomorphic targets remain.",
+      :other-consumers []}
+     {:consumer :t02A05-sphere-measure-normalization,
+      :stop-condition
+      "No assumed Hausdorff normalization, radial-measure identification, moment value or area formula. This comparison does not itself close either frozen integration consumer.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD INTEGRATION: literal sphere Hausdorff measure versus radial-cone measure",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Read both reviewed measure-boundary diagnostics and pinned Hausdorff/HaarToSphere definitions. Construct and prove the measure comparison, including the normalization constant, for sphere dimensions two and three or a single general theorem covering both. Establish the finite-measure consequences needed for continuous polynomial integrability. Exhibit the induced integral conversion for the exact unitFlux integrand in /tmp/T02A05FluxDiagnostic.lean and the coordinate-square integrand in the t95J05 diagnostic. Do not assume an area formula or numerical sphere measure.",
+       :consumer-equation
+       "A proved measure equality converts each literal Hausdorff polynomial integral into the corresponding radial-sphere integral with its explicitly established scalar factor, licensing subsequent moment calculations.",
+       :stop-condition
+       "GO requires the actual measure equality and explicit consumer integral conversions. REVISE only to exactly one compiled missing measure or geometric prerequisite. If normalization contradicts a frozen value, report the proved discrepancy precisely; do not silently renormalize a consumer."},
+      :representation
+      {:source
+       "Mathlib hausdorffMeasure d on the metric unit-sphere subtype in EuclideanSpace Real (Fin (d+1))",
+       :target
+       "The sphere measure obtained from Euclidean volume by Measure.toSphere",
+       :direction
+       "Explicit equality expressing the literal subtype Hausdorff measure as a proved normalization constant times the Haar-derived radial sphere measure; determine the constant from the pinned definitions rather than assuming it equals one."},
+      :id :oriented-checkpoint4-sphere-hausdorff-radial-comparison-1,
+      :kind :representation-comparison,
+      :depends-on [],
+      :current-residual
+      "Compiled t02A05 and t95J05 diagnostics isolate literal sphere-subtype Hausdorff normalization. Haar-derived radial sphere measure and disk volume cannot be substituted without a proved comparison.",
+      :other-consumers [:t95J05 :t94A10 :t01J06]}
+     {:consumer :t97A02,
+      :stop-condition
+      "Record actual reviewed evidence only. Documentation adds no new placeholder reduction.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["TOPOLOGY-DEPENDENCY-DAG.md"
+       "docs/TN-topology-closure-experiments.md"],
+      :dag-node
+      "Consumer certification: reviewed t97A02 closure documentation",
+      :acceptance
+      {:implementation
+       "Document the reviewed closure at 69fd2f354468e1409b979d75818a1d01cf727e6c and its independent PASS receipt. Mark t97A02 closed in the consumer cluster and record coefficient comparison, finite-H1 loop triviality, component normalization/lifts, empty-domain assembly and exact torus recombination. Include fixture and frozen statement hashes, two-to-zero placeholder change, validation and standard axioms. Preserve the historical STOP as resolved by the named component prerequisites.",
+       :gates
+       ["Verify the recorded closure commit, independent PASS, fixture SHA-256 and current zero-placeholder frozen source."
+        "Check all recorded hashes and validation claims against the reviewed receipt."
+        "Run git diff --check, verify exact documentation-only scope, and commit."],
+       :stop-condition
+       "Documentation only; do not change frozen statements, Lean files, ledgers or mathematical scope, and do not claim any additional consumer closure."},
+      :id :oriented-checkpoint4-t97a02-closure-documentation-1,
+      :kind :documentation,
+      :depends-on [:oriented-checkpoint2-t97a02-exact-closure-1],
+      :current-residual
+      "The reviewed zero-placeholder t97A02 implementation is absent from the DAG closure inventory and process account.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Neither measure comparisons, documentation nor pointwise local generators count as frozen closure or coherent global orientation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: consumer uptake, normalization and manifold continuation",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, policy and both ledgers. Recount all named consumers with comments stripped and attribute concurrent changes. Preserve unresolved STOPs; assess any proved normalization discrepancy before retrying integration consumers. Elect exactly one eligible near-closure adapter first, followed by the simplest highest-reuse work from the complete DAG, and append a fresh checkpoint with identical policy keys. Exclude active work owned by the other campaign and do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill, owner-authorization stop or repeated unresolved full-closure probe. Distinguish infrastructure gaps from mathematical refutations."},
+      :id :oriented-checkpoint5-euler-measure-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint4-t03j04-exact-euler-closure-1
+       :oriented-checkpoint4-sphere-hausdorff-radial-comparison-1
+       :oriented-checkpoint4-t97a02-closure-documentation-1],
+      :current-residual
+      "Measure exact consumer uptake separately from normalization infrastructure and closure documentation. Sphere pointwise localization still does not prove geometric orientation coherence or manifold gluing."}],
+    :changed-paths [],
+    :measures
+    {:baseline "f627f75fe90e41eabfb150001dec9ee163324fc5",
+     :head "9028714aa92de38d6152c223b4d2be1f1aa9ce2e",
+     :placeholder-delta 0,
+     :dag-consumer-placeholders
+     {:before 71,
+      :after 71,
+      :missing-paths ["problems/t93A05/lean/Main.lean"],
+      :method
+      "Strip block and line comments before counting executable sorry tokens in every existing DAG-named Main.lean."},
+     :infrastructure-packets
+     {:portfolio 1,
+      :modules-before 616,
+      :modules-after 618,
+      :portfolio-module "HigherSphereLocalization",
+      :other-campaign-module "SardGenuineSmoothRankUpperResidualZero"},
+     :review-outcomes
+     {:implementation-pass 1, :stop-pass 1, :consumer-closures 0},
+     :typed-residual-change
+     {:t02A05
+      "Projection coefficient and exact translation reduction compile; literal unit-sphere Hausdorff moments and normalization remain a reviewed boundary.",
+      :higher-sphere
+      "Stereographic puncture geometry and pair exactness prove the actual localization isomorphism, inverse identities and pointwise generator equations in every dimension at least two."},
+     :documentation
+     "t97A02 is reviewed closed at 69fd2f354468e1409b979d75818a1d01cf727e6c, but the DAG still lists it as open; closure documentation remains."},
+    :finding
+    "Elect one fresh near-closure probe first: t03J04 has one placeholder, no prior election in either ledger, and proved nonzero-field and local-diffeomorphism-surjectivity clauses. Test the exact remaining rational Euler-characteristic claims without assuming covering multiplicativity or product homology. Preserve reviewed STOPs, including t02A05 and t95J05, and exclude the other campaign's active t94J08 antipodal and Sard rows. Among shared foundations, elect the explicit sphere-measure comparison now identified by two compiled consumer diagnostics; it serves several integration consumers and precedes further moments or Stokes adapters. General orientation, gluing, Kunneth and surface classification remain broader obligations. Finally record the already-reviewed t97A02 closure without counting documentation as new mathematical uptake.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/OrientedCheckpoint4Census.json",
+     :sha256
+     "ad3586f04bf7756bd1387a3f14c732b67c308da67ff1a5052f3f78327c5e9119"}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: frozen uptake and sphere-to-manifold continuation",
@@ -4064,6 +4232,122 @@
     :oriented-checkpoint3-consumer-and-localization],
    :current-residual
    "Measure flux-consumer uptake separately from sphere localization infrastructure. Global orientation compatibility and manifold gluing remain distinct; reviewed consumer closures also require DAG documentation."}
+  {:consumer :t03J04,
+   :stop-condition
+   "Preserve the actual rational homology finrank definition. Do not assume Kunneth, finite-dimensional homology, Euler multiplicativity, or descent of the displayed vector field.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "COVERING-BASIC and PRODUCT HOMOLOGY: torus local-diffeomorphism Euler consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t03J04/lean/Main.lean",
+    :stop-condition
+    "If current APIs cannot supply a bounded closing adapter, STOP under rule 0 naming the exact missing rational homology, finite-cover, finiteness or Euler-multiplicativity theorem with typed evidence. No conditional or partial closure GO.",
+    :gates
+    ["GO only with full zero-placeholder fixture, unchanged statement hashes, fixture SHA-256 and standard-only axiom audits."
+     "Propose implementation scope only after complete closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Compile a complete temporary frozen Main preserving every definition, hypothesis and statement. Inspect canonical product homology and covering APIs against the actual finite sum of rational singular-homology finranks. Prove the torus Euler characteristic vanishes and that every target in the frozen local-diffeomorphism clause has zero Euler characteristic. Construct any finite covering and finiteness data needed; reuse the proved field and surjectivity lemmas. No abstract Euler invariant may replace the frozen definition.",
+    :consumer-equation
+    "The frozen rational singular Euler characteristic is zero for the positive-dimensional torus and for every connected boundaryless target of the specified local diffeomorphism, completing apm_t03j04.",
+    :frozen-sha256
+    "b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41"},
+   :id :oriented-checkpoint4-t03j04-exact-euler-closure-1,
+   :kind :final-adapter,
+   :depends-on [:oriented-checkpoint4-flux-and-sphere-refill],
+   :current-residual
+   "One frozen placeholder. The displayed vector field is proved nowhere zero and compact local-diffeomorphism surjectivity is proved; rational singular Euler characteristic of the torus and its local-diffeomorphic targets remain.",
+   :other-consumers []}
+  {:consumer :t02A05-sphere-measure-normalization,
+   :stop-condition
+   "No assumed Hausdorff normalization, radial-measure identification, moment value or area formula. This comparison does not itself close either frozen integration consumer.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD INTEGRATION: literal sphere Hausdorff measure versus radial-cone measure",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Read both reviewed measure-boundary diagnostics and pinned Hausdorff/HaarToSphere definitions. Construct and prove the measure comparison, including the normalization constant, for sphere dimensions two and three or a single general theorem covering both. Establish the finite-measure consequences needed for continuous polynomial integrability. Exhibit the induced integral conversion for the exact unitFlux integrand in /tmp/T02A05FluxDiagnostic.lean and the coordinate-square integrand in the t95J05 diagnostic. Do not assume an area formula or numerical sphere measure.",
+    :consumer-equation
+    "A proved measure equality converts each literal Hausdorff polynomial integral into the corresponding radial-sphere integral with its explicitly established scalar factor, licensing subsequent moment calculations.",
+    :stop-condition
+    "GO requires the actual measure equality and explicit consumer integral conversions. REVISE only to exactly one compiled missing measure or geometric prerequisite. If normalization contradicts a frozen value, report the proved discrepancy precisely; do not silently renormalize a consumer."},
+   :representation
+   {:source
+    "Mathlib hausdorffMeasure d on the metric unit-sphere subtype in EuclideanSpace Real (Fin (d+1))",
+    :target
+    "The sphere measure obtained from Euclidean volume by Measure.toSphere",
+    :direction
+    "Explicit equality expressing the literal subtype Hausdorff measure as a proved normalization constant times the Haar-derived radial sphere measure; determine the constant from the pinned definitions rather than assuming it equals one."},
+   :id :oriented-checkpoint4-sphere-hausdorff-radial-comparison-1,
+   :kind :representation-comparison,
+   :depends-on [:oriented-checkpoint4-flux-and-sphere-refill],
+   :current-residual
+   "Compiled t02A05 and t95J05 diagnostics isolate literal sphere-subtype Hausdorff normalization. Haar-derived radial sphere measure and disk volume cannot be substituted without a proved comparison.",
+   :other-consumers [:t95J05 :t94A10 :t01J06]}
+  {:consumer :t97A02,
+   :stop-condition
+   "Record actual reviewed evidence only. Documentation adds no new placeholder reduction.",
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["TOPOLOGY-DEPENDENCY-DAG.md"
+    "docs/TN-topology-closure-experiments.md"],
+   :dag-node
+   "Consumer certification: reviewed t97A02 closure documentation",
+   :acceptance
+   {:implementation
+    "Document the reviewed closure at 69fd2f354468e1409b979d75818a1d01cf727e6c and its independent PASS receipt. Mark t97A02 closed in the consumer cluster and record coefficient comparison, finite-H1 loop triviality, component normalization/lifts, empty-domain assembly and exact torus recombination. Include fixture and frozen statement hashes, two-to-zero placeholder change, validation and standard axioms. Preserve the historical STOP as resolved by the named component prerequisites.",
+    :gates
+    ["Verify the recorded closure commit, independent PASS, fixture SHA-256 and current zero-placeholder frozen source."
+     "Check all recorded hashes and validation claims against the reviewed receipt."
+     "Run git diff --check, verify exact documentation-only scope, and commit."],
+    :stop-condition
+    "Documentation only; do not change frozen statements, Lean files, ledgers or mathematical scope, and do not claim any additional consumer closure."},
+   :id :oriented-checkpoint4-t97a02-closure-documentation-1,
+   :kind :documentation,
+   :depends-on
+   [:oriented-checkpoint2-t97a02-exact-closure-1
+    :oriented-checkpoint4-flux-and-sphere-refill],
+   :current-residual
+   "The reviewed zero-placeholder t97A02 implementation is absent from the DAG closure inventory and process account.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Neither measure comparisons, documentation nor pointwise local generators count as frozen closure or coherent global orientation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: consumer uptake, normalization and manifold continuation",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, policy and both ledgers. Recount all named consumers with comments stripped and attribute concurrent changes. Preserve unresolved STOPs; assess any proved normalization discrepancy before retrying integration consumers. Elect exactly one eligible near-closure adapter first, followed by the simplest highest-reuse work from the complete DAG, and append a fresh checkpoint with identical policy keys. Exclude active work owned by the other campaign and do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill, owner-authorization stop or repeated unresolved full-closure probe. Distinguish infrastructure gaps from mathematical refutations."},
+   :id :oriented-checkpoint5-euler-measure-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint4-t03j04-exact-euler-closure-1
+    :oriented-checkpoint4-sphere-hausdorff-radial-comparison-1
+    :oriented-checkpoint4-t97a02-closure-documentation-1
+    :oriented-checkpoint4-flux-and-sphere-refill],
+   :current-residual
+   "Measure exact consumer uptake separately from normalization infrastructure and closure documentation. Sphere pointwise localization still does not prove geometric orientation coherence or manifold gluing."}
   {:consumer :t00A01,
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
