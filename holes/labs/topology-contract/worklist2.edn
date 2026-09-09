@@ -7695,6 +7695,24 @@
      :target "Quotient (MulAction.orbitRel H F)",
      :direction
      "Constructed homeomorphism from source to target sending [x] to [h(x)], with inverse induced by h.symm and corresponding fiber homeomorphism sending x to h(x)."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788991274421-17169-c64f5e9a",
+     :commands
+     ["git show 8d1c094e:holes/labs/topology-contract/worklist2.edn"
+      "git show ae29dbf4:ConstructionTargets/EquivariantOrbitQuotient.lean"
+      "git show ae29dbf4:ConstructionTargets/EquivariantOrbitQuotient.md"
+      "lake env lean /tmp/EquivariantOrbitQuotient.lean"
+      "lake env lean ConstructionTargets/EquivariantOrbitQuotient.lean"
+      "lake build ConstructionTargets.EquivariantOrbitQuotient"
+      "python3 inline audit: fixture equality and SHA256, eight declaration hashes, exact scope, forbidden tokens and frozen placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 8d1c094e:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check ae29dbf4"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Exact two-file promotion verified. Both compilations and 8240-job build pass warning-free with eight standard-only audits. Arbitrary group-isomorphism equivariance correctly yields both literal quotient descents, inverse identities and corresponding fiber homeomorphism sending x to h(x). Covering neighborhoods and concrete action example remain downstream; no consumer closure claimed. Frozen placeholders unchanged at 322. Ledger untouched."},
     :commit "ae29dbf4336057f43e95c7aed1a9e03f9b75858f",
     :changed-paths
     ["ConstructionTargets/EquivariantOrbitQuotient.lean"
@@ -7709,7 +7727,7 @@
     "SHA256 of declaration bytes beginning with def or theorem and ending immediately before the space preceding := or where.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/EquivariantOrbitQuotient.lean"
     "ConstructionTargets/EquivariantOrbitQuotient.md"],
@@ -7847,7 +7865,7 @@
      "Exactly one compiled prerequisite constructs the actual orbit-quotient homeomorphism from a group isomorphism and equivariant source homeomorphism. Both quotient directions descend continuously, inverse identities are proved, representative equations commute with the quotient projections, and the induced fiber homeomorphism has the specified evaluation and cardinality equations. Transport of covering-action neighborhoods and the concrete circle-cover example remain; the parent is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "COVERING-BASIC: action equivalence and literal orbit-quotient transport",
