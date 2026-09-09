@@ -42241,8 +42241,75 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if zero source dimension fails to reduce the image to a singleton, target subsingletonness fails to imply derivative surjectivity, Borel-compatible target Haar singleton nullity fails under the stated hypotheses, or nonstandard axioms are required.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Resolve the Borel-compatibility mismatch in the full induction interface, close positive-dimensional induction, and repair the complementary regularity range before rectangular closure. The broader existing induction predicate is neither discharged nor changed; no consumer closure is claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"criticalImage_zero_of_source_finrank_zero_borel"
+     "f4ef454b1ec5b1210c5c647e4ad0d6be5fcd9a543a60cda7f36875ca8e5c5327"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG, closure policy, fixture, and reviewed induction-predicate dependency receipt",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardZeroDimensionalBorelCriticalImageProbe.lean",
+      :exit 0,
+      :output
+      "f0ff7b56bc36f9eb2f23cb1491e5b04dde2872d5716aa02f8ecb18f0d1a5007e"}
+     {:cmd
+      "cmp /tmp/SardZeroDimensionalBorelCriticalImageProbe.lean ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean && lake env lean ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean && lake env lean /tmp/SardZeroDimensionalBorelCriticalImageProbe.lean",
+      :exit 0,
+      :output
+      "Byte-identical; both compilations report standard axioms only."}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.SardZeroDimensionalBorelCriticalImage 2>&1 | awk '/warning:|error:|Build completed/ {print}'",
+      :exit 0,
+      :output "Build completed successfully (8243 jobs)."}
+     {:cmd
+      "sed -n '5,12p' ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean ConstructionTargets/SardZeroDimensionalBorelCriticalImage.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 326 items OK; {:done 317, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean ConstructionTargets/SardZeroDimensionalBorelCriticalImage.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: prove zero-dimensional Borel critical-image nullity' && git rev-parse HEAD && git status --porcelain=v1",
+      :exit 0,
+      :output "Committed exactly two scoped files; worktree clean."}],
+    :commit "fbfdf14abd724e266f89e4c77c9bb7a8cae6d081",
+    :changed-paths
+    ["ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean"
+     "ConstructionTargets/SardZeroDimensionalBorelCriticalImage.md"],
+    :fixture
+    {:path "/tmp/SardZeroDimensionalBorelCriticalImageProbe.lean",
+     :sha256
+     "f0ff7b56bc36f9eb2f23cb1491e5b04dde2872d5716aa02f8ecb18f0d1a5007e"},
+    :declarations ["criticalImage_zero_of_source_finrank_zero_borel"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean"
     "ConstructionTargets/SardZeroDimensionalBorelCriticalImage.md"],
