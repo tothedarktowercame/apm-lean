@@ -7334,8 +7334,156 @@
      :review-outcomes]},
    :stop-condition
    "No repeated unresolved STOP, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md and docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd
+      "Read both ledgers, reviewed checkpoint9 dependencies and active concurrent rows",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint10Census.py", :exit 0}
+     {:cmd
+      "Inspect frozen t00J01 and t98A01, DAG specification corrections and pinned Covering.Quotient APIs",
+      :exit 0}
+     {:cmd "sha256sum problems/t00J01/lean/Main.lean", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :finding
+    {:baseline "6a188c8ff7f7494c150ace09d3595e49d100510c",
+     :preserved-boundaries
+     "Preserve t01A05's reviewed disconnected zero-dimensional counterexample, t96J07's precedence defect, the historical t94J08 refutation and positive-dimensional repair, the regular-fiber atlas STOP, and unresolved integration, surface, gluing and degree STOPs.",
+     :head "62f03db4f09b7f585fd9a6d30c2fd4b5e72c9570",
+     :infrastructure-packets
+     {:modules-before 632,
+      :modules-after 635,
+      :portfolio 1,
+      :concurrent 2,
+      :portfolio-commit "17c8321a",
+      :concurrent-modules
+      ["SardPositiveRankSliceOpenInductionContract"
+       "SardPositiveRankStratumOpenContractAssembly"]},
+     :ranking
+     "Exactly one near-closure adapter first: t00J01 has one placeholder and no full-closure probe in either campaign ledger. Its DAG uptake description is stale relative to the actual mixed Klein-product, rational Lefschetz and circle-fold statement; the probe must test all three. Among reusable work, quotient-action transport reaches four covering consumers and has a bounded existing quotient-map substrate. Sard is concurrently owned; orientation, Kunneth, Stokes and generic gluing require larger independent constructions. No stopped full consumer is retried.",
+     :typed-residual-change
+     "Literal pullback covering construction and exact fiber transport are now banked. The actual graph-cover existence and total-space separation obligations remain unchanged. No frozen problem file changed.",
+     :concurrency-exclusion
+     "Exclude sard-positive-rank-stratum-open-contract-assembly-probe-refill24 and the other campaign's successor strategy.",
+     :review-outcomes
+     {:portfolio-pass 2,
+      :infrastructure-stop 1,
+      :implemented-packet 1,
+      :frozen-closures 0},
+     :census
+     {:path "/tmp/Checkpoint10Census.json",
+      :existing 58,
+      :zero-placeholder 19,
+      :placeholder-delta 0,
+      :placeholders-before 71,
+      :placeholders-after 71,
+      :sha256
+      "b55da10e2fd9326aa6346450a8c7f3b6e92a936f0db46a887ff1e2a2edde212e",
+      :named 59,
+      :missing [:t93A05]}},
+    :changed-paths [],
+    :replacement-items
+    [{:consumer :t00J01,
+      :stop-condition
+      "Preserve every frozen quotient, homology functor, induced trace and regularity quantifier. No assumed Klein manifold, product homology or root classification.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Queue A and surface invariants: exact three-counterexample consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t00J01/lean/Main.lean",
+       :stop-condition
+       "If no bounded full adapter exists, STOP with precise typed missing quotient geometry, homology or fiber-classification obligations. No partial GO or silent statement repair; a refutation requires a compiled admissible counterexample.",
+       :gates
+       ["GO requires a complete zero-placeholder frozen fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+        "Propose implementation scope only after complete closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Read the exact frozen theorem rather than the stale Queue A summary. Compile a complete temporary exact Main closing all three conjuncts. Construct the literal Klein quotient's manifold geometry and required integral H3 vanishing; compute the actual rational sphere homology and identity-induced traces through canonical coefficient APIs; classify the circle fold's fibers at 1 and exp(pi), proving regularity at every preimage and exact cardinalities one and three. Inspect historical uptake only for statements matching the current frozen definitions.",
+       :consumer-equation
+       "The actual Klein product is a compact connected three-manifold with zero H3; the sphere identity has rational Lefschetz number two and not one; the specified regular circle fibers have cardinalities three and one.",
+       :frozen-sha256
+       "03f9c56fbb9d5b417dc16298c6b81d10876a4463f9c7e5a8479615706584c217"},
+      :id :oriented-checkpoint10-t00j01-exact-counterexamples-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint10-graph-and-base-change-refill],
+      :current-residual
+      "One placeholder bundles the literal Klein-bottle-times-circle manifold and H3 calculation, actual rational S2 Lefschetz traces, and exact regular circle-fold fibers.",
+      :other-consumers []}
+     {:consumer :t01A04-quotient-cover-transport,
+      :stop-condition
+      "No supplied quotient homeomorphism or target covering. Do not claim graph gluing, deck classification, surface Euler multiplicativity or frozen closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "COVERING-BASIC: action equivalence and literal orbit-quotient transport",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Inspect pinned IsQuotientCoveringMap and MulAction orbit-quotient APIs. Given a group isomorphism and an equivariant homeomorphism of action spaces, construct the homeomorphism of literal orbit quotients by descending both directions. Prove representative and quotient-map commuting equations. Transport continuity, fiber-orbit equivalence and disjoint-translate neighborhoods from actual source quotient-covering data to the target action, deriving its IsCoveringMap. Construct the induced fiber homeomorphisms and cardinality transport. Compile a concrete translated or conjugated circle action example. Reuse existing base-homeomorphism transport rather than adding aliases for it.",
+       :consumer-equation
+       "The constructed quotient homeomorphism sends the orbit of e to the orbit of h(e); its square with quotient projections commutes, and the target quotient projection is a covering with corresponding fibers homeomorphic.",
+       :stop-condition
+       "GO requires actual quotient descent, inverse identities, transported action neighborhoods and a concrete example. REVISE only to exactly one compiled missing prerequisite. A wrapper around existing base-homeomorphism transport is insufficient."},
+      :representation
+      {:source
+       "Literal orbit quotient of a topological G-space carrying quotient-covering data",
+       :target
+       "Literal orbit quotient of a topological H-space related by a group isomorphism and an equivariant homeomorphism",
+       :direction
+       "Construct the forward quotient homeomorphism induced by the equivariant source homeomorphism, prove its representative equation, and transport quotient-covering data to the target action."},
+      :id
+      :oriented-checkpoint10-equivariant-quotient-cover-transport-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint10-graph-and-base-change-refill],
+      :current-residual
+      "Product and literal pullback coverings are banked. The DAG's action-equivalence transport milestone still needs the actual quotient homeomorphism and action-data comparison.",
+      :other-consumers [:t01A02 :t98A01 :t92J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: exact counterexample uptake and action transport",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+      :id :oriented-checkpoint11-counterexamples-and-action-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint10-t00j01-exact-counterexamples-1
+       :oriented-checkpoint10-equivariant-quotient-cover-transport-1
+       :oriented-checkpoint10-graph-and-base-change-refill],
+      :current-residual
+      "Measure exact t00J01 uptake separately from quotient-action infrastructure; preserve all unresolved consumer and atlas boundaries."}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: graph-cover uptake and full-DAG continuation",
@@ -7353,6 +7501,99 @@
     :oriented-checkpoint9-cover-and-fiber-atlas-refill],
    :current-residual
    "Measure actual graph-cover closure separately from pullback infrastructure; retain the t01A05 refutation and regular-fiber atlas STOP."}
+  {:consumer :t00J01,
+   :stop-condition
+   "Preserve every frozen quotient, homology functor, induced trace and regularity quantifier. No assumed Klein manifold, product homology or root classification.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Queue A and surface invariants: exact three-counterexample consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t00J01/lean/Main.lean",
+    :stop-condition
+    "If no bounded full adapter exists, STOP with precise typed missing quotient geometry, homology or fiber-classification obligations. No partial GO or silent statement repair; a refutation requires a compiled admissible counterexample.",
+    :gates
+    ["GO requires a complete zero-placeholder frozen fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+     "Propose implementation scope only after complete closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Read the exact frozen theorem rather than the stale Queue A summary. Compile a complete temporary exact Main closing all three conjuncts. Construct the literal Klein quotient's manifold geometry and required integral H3 vanishing; compute the actual rational sphere homology and identity-induced traces through canonical coefficient APIs; classify the circle fold's fibers at 1 and exp(pi), proving regularity at every preimage and exact cardinalities one and three. Inspect historical uptake only for statements matching the current frozen definitions.",
+    :consumer-equation
+    "The actual Klein product is a compact connected three-manifold with zero H3; the sphere identity has rational Lefschetz number two and not one; the specified regular circle fibers have cardinalities three and one.",
+    :frozen-sha256
+    "03f9c56fbb9d5b417dc16298c6b81d10876a4463f9c7e5a8479615706584c217"},
+   :id :oriented-checkpoint10-t00j01-exact-counterexamples-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint10-graph-and-base-change-refill
+    :oriented-checkpoint10-graph-and-base-change-refill],
+   :current-residual
+   "One placeholder bundles the literal Klein-bottle-times-circle manifold and H3 calculation, actual rational S2 Lefschetz traces, and exact regular circle-fold fibers.",
+   :other-consumers []}
+  {:consumer :t01A04-quotient-cover-transport,
+   :stop-condition
+   "No supplied quotient homeomorphism or target covering. Do not claim graph gluing, deck classification, surface Euler multiplicativity or frozen closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "COVERING-BASIC: action equivalence and literal orbit-quotient transport",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Inspect pinned IsQuotientCoveringMap and MulAction orbit-quotient APIs. Given a group isomorphism and an equivariant homeomorphism of action spaces, construct the homeomorphism of literal orbit quotients by descending both directions. Prove representative and quotient-map commuting equations. Transport continuity, fiber-orbit equivalence and disjoint-translate neighborhoods from actual source quotient-covering data to the target action, deriving its IsCoveringMap. Construct the induced fiber homeomorphisms and cardinality transport. Compile a concrete translated or conjugated circle action example. Reuse existing base-homeomorphism transport rather than adding aliases for it.",
+    :consumer-equation
+    "The constructed quotient homeomorphism sends the orbit of e to the orbit of h(e); its square with quotient projections commutes, and the target quotient projection is a covering with corresponding fibers homeomorphic.",
+    :stop-condition
+    "GO requires actual quotient descent, inverse identities, transported action neighborhoods and a concrete example. REVISE only to exactly one compiled missing prerequisite. A wrapper around existing base-homeomorphism transport is insufficient."},
+   :representation
+   {:source
+    "Literal orbit quotient of a topological G-space carrying quotient-covering data",
+    :target
+    "Literal orbit quotient of a topological H-space related by a group isomorphism and an equivariant homeomorphism",
+    :direction
+    "Construct the forward quotient homeomorphism induced by the equivariant source homeomorphism, prove its representative equation, and transport quotient-covering data to the target action."},
+   :id :oriented-checkpoint10-equivariant-quotient-cover-transport-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint10-graph-and-base-change-refill
+    :oriented-checkpoint10-graph-and-base-change-refill],
+   :current-residual
+   "Product and literal pullback coverings are banked. The DAG's action-equivalence transport milestone still needs the actual quotient homeomorphism and action-data comparison.",
+   :other-consumers [:t01A02 :t98A01 :t92J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: exact counterexample uptake and action transport",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+   :id :oriented-checkpoint11-counterexamples-and-action-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint10-t00j01-exact-counterexamples-1
+    :oriented-checkpoint10-equivariant-quotient-cover-transport-1
+    :oriented-checkpoint10-graph-and-base-change-refill
+    :oriented-checkpoint10-graph-and-base-change-refill],
+   :current-residual
+   "Measure exact t00J01 uptake separately from quotient-action infrastructure; preserve all unresolved consumer and atlas boundaries."}
   {:consumer :t00A01,
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
