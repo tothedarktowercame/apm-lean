@@ -3163,6 +3163,21 @@
      {:cmd "sha256sum problems/t97A02/lean/Main.lean", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788976697852-16732-f1e96711",
+     :commands
+     ["Inspect recorded 4e72d0d3 checkpoint and reviewed dependency results"
+      "python3: verify OrientedCheckpoint2Census.json SHA256, recount pinned consumer placeholders and module counts, recompute frozen t97A02 file and statement hashes"
+      "bb: validate two work rows, t97A02 first, identical checkpoint policy and complete successor dependencies"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git diff --name-only 0cdd316e 35eda607 -- problems"
+      "git show --format= --name-only 7caeb0018c793cafaf9c6ea7700eb2fa9f306abf"
+      "git show --format= --name-only 4e72d0d3"
+      "git show --format= --check 4e72d0d3"],
+     :finding
+     "Independent PASS of codex-13 strategy refill. t97A02 retry cites specific reviewed implementations resolving classical local-connectivity and global component-assembly boundaries, while requiring construction of normalized component lifts and exact frozen closure. Higher-dimensional chart transport requires constructed data and actual pair/excision maps, without assuming signs or global localization. Census hash verified: placeholders 76 to 75, solely t03J06 closure correctly attributed to another campaign; this portfolio delta remains zero. Modules 604 to 614; frozen t97A02 file and statement hashes unchanged. Two work rows and successor preserve policy and dependencies; schema and whitespace checks pass. Strategy-only, no review edits."},
     :replacement-items
     [{:consumer :t97A02,
       :stop-condition
@@ -3288,7 +3303,7 @@
      :sha256
      "91e01aefb6ec348841dea9cde5e4915f5ef0be2af346b5568841ce2daa5fb63f"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: frozen uptake and manifold/covering continuation",
@@ -3310,7 +3325,7 @@
    :stop-condition
    "No assumed component lifts, finite fundamental group, global path connectivity, stronger local-contractibility hypothesis, or changed frozen statements.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS: finite-H1 Circle lifting and exact torus consumer uptake",
@@ -3343,7 +3358,7 @@
    :stop-condition
    "Local calculation only. Do not claim coordinate-change signs, coherent global orientation, fundamental classes, localization monicity, or t98A02 gluing.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue D #2: higher-dimensional restricted charts and actual local-homology transport",
