@@ -7197,80 +7197,93 @@
    :stop-condition
    "Construct local trivializations on the literal pullback. No assumed covering on the pullback, constant fiber cardinality, quotient gluing, deck classification or frozen closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Literal covering base change and fiber transport are proved. Frozen consumer assembly, wedge-point gluing, universal-cover construction and classification of total spaces remain separate.",
-     :axiom-audits 9,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture and document its hypotheses and remaining consumer obligations.",
-      :declarations
-      ["Pullback"
-       "projection"
-       "fiberHomeomorph"
-       "fiberHomeomorph_apply"
-       "fiber_card"
-       "evenlyCovered"
-       "isCoveringMap"
-       "sheet_card"
-       "circle_pullback"
-       "empty_disconnected_pullback"
-       "empty_fiber_card"],
-      :namespace "ConstructionTargets.LiteralPullbackCover",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile the fixture and canonical target; run lake build ConstructionTargets.LiteralPullbackCover."
-       "Reproduce all nine standard-only axiom audits."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure stop rules, build-loop result definitions and reviewed checkpoint9 dependency receipt",
-       :exit 0}
-      {:cmd "lake env lean /tmp/LiteralPullbackCover.lean", :exit 0}
-      {:cmd "sha256sum /tmp/LiteralPullbackCover.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/LiteralPullbackCover.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial fixture compilation",
-       :exit 1,
-       :correction
-       "Unfolded preimage membership before rewriting and imported Mathlib for the real-circle example."}
-      {:cmd "Second fixture compilation",
-       :exit 1,
-       :correction
-       "Separated the two product-equality goals to resolve elaboration."}
-      {:cmd "Third fixture compilation",
-       :exit 1,
-       :correction
-       "Explicitly reduced subtype projections and supplied the product-coordinate equalities."}
-      {:cmd "Initial empty-fiber example compilation",
-       :exit 1,
-       :correction
-       "Supplied the discrete covering function argument and used simp for empty-subtype cardinality."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/LiteralPullbackCover.lean",
-      :sha256
-      "c4bcc90c9abaaaf871835c9f6eb6b2dcf4feffe7215d96b4d8d50e695015772e"},
-     :finding
-     "Complete placeholder-free fixture constructs the covering on the literal pullback subtype. Each original evenly covered neighborhood supplies an explicit homeomorphism over its continuous preimage, with proved inverse identities and projection equation. The fiber homeomorphism evaluates to the E coordinate and transports exact cardinalities. No uniform fiber type or nonemptiness is assumed. Compiled examples cover the real-to-AddCircle covering pulled back along doubling, and an empty covering pulled back to the disconnected Bool base with zero-cardinality fibers.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/LiteralPullbackCover.lean"
-       "ConstructionTargets/LiteralPullbackCover.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review and frozen consumer assembly remain. Wedge-point gluing, universal-cover construction, deck classification and classification of total spaces are separate obligations; no frozen closure claimed.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :axiom-audits :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 9,
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"empty_disconnected_pullback"
+     "36b37c3f6100db5f3571792e64ec1f49b05342e8990fe2e528951645bac9716b",
+     "Pullback"
+     "c157e7d62b3dfd6515588d797bf4aee36d16ec21cce6731e53ad9df1cc9f76a3",
+     "sheet_card"
+     "edee5af0436a57b5d0cfa984368f1581aed102458feecaa6504c577268cc4999",
+     "circle_pullback"
+     "ab7ab76138ed0cf733417f1f44fb5c20f78ec2e82725ee7ad354d84cd57ecb1a",
+     "fiberHomeomorph_apply"
+     "f80097718ba4a95d396c65a500d222ebd9f9e9ba9c958fcb4a22b7b7c60c66dc",
+     "fiber_card"
+     "40b0a568b826310019a769a81235cb5f10b28bcad4e8f585bae1eba6c3fb5517",
+     "fiberHomeomorph"
+     "6ec8b2f0df951b29a6f4d44244f55028be8ce01c8bc56e7198f831a8a10658a4",
+     "empty_fiber_card"
+     "e203137b5bed09e2502c208475b98504cef9f4a0ff27ea997322614ef4c0e231",
+     "projection"
+     "422bfe2fcbec01cf3460fc7db8e8ca2ed84902c85050a780c078772cf6089696",
+     "evenlyCovered"
+     "7e05b168bcaabcd06f9d678d40e821a786a55cdffc8460b8d1b81ef432a70f67",
+     "isCoveringMap"
+     "30462ece1650d71f6fff8ecce0318ccc668067b089aeac995ba8806e241fa5db"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/LiteralPullbackCover.lean", :exit 0}
+     {:cmd "lake env lean /tmp/LiteralPullbackCover.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/LiteralPullbackCover.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.LiteralPullbackCover",
+      :exit 0}
+     {:cmd
+      "Python audit: fixture SHA256, exact promotion, nine standard-only audits per compilation, warning scans, comment-stripped placeholders and declaration hashes",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/LiteralPullbackCover.lean /tmp/LiteralPullbackCover.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope verification and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct literal pullback coverings and fiber transport\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed two-file scope and clean checkout verification",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and checkpoint dependency evidence. Only the authorized two files changed; ledger and frozen consumers untouched. Checkout clean.",
+    :diagnostic-history [],
+    :commit "17c8321a52f2f6a9c6cc6ee7b035f85ea34370f2",
+    :changed-paths
+    ["ConstructionTargets/LiteralPullbackCover.lean"
+     "ConstructionTargets/LiteralPullbackCover.md"],
+    :fixture
+    {:path "/tmp/LiteralPullbackCover.lean",
+     :sha256
+     "c4bcc90c9abaaaf871835c9f6eb6b2dcf4feffe7215d96b4d8d50e695015772e"},
+    :finding
+    "Promoted the exact fixture constructing literal pullback local trivializations, fiber homeomorphisms and cardinality transport, including circle and empty-disconnected examples. Both compilations and the 8240-job build passed without warnings.",
+    :statement-hash-method
+    "SHA256 of declaration bytes beginning with def or theorem and ending immediately before the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/LiteralPullbackCover.lean"
     "ConstructionTargets/LiteralPullbackCover.md"],
