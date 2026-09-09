@@ -4951,20 +4951,89 @@
    :stop-condition
    "Bank cap-domain and cap-image finiteness only. Do not claim finite coverage, whole-sphere finiteness, global integrability, normalization or numerical moments.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/SphereCapFiniteMeasureProbe.lean",
-      :sha256
-      "fc88ca53846907636b0525ae218b65c62687c72542caacf1d8af6c1275d822a3"},
-     :commands
-     [{:cmd "lake env lean /tmp/SphereCapFiniteMeasureProbe.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Construct finite signed-coordinate cap covers of the entire spheres in dimensions two and three, sum their measure bounds, and derive the exact polynomial integrability instances. Whole-sphere finiteness, global integrability, normalization and numerical moments are not claimed.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :required-build :pass,
+     :fixture-hash :pass,
+     :seven-axiom-audits :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :exact-fixture-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"domainBallIsometry"
+     "c685b7e7764f3029a1505fa368d2db4a0735618c5ed73db4a5bab4f43f9a759d",
+     "domain_measure_eq"
+     "3663a381b606fe88ca78134d1a7b4349cd9f6918714cd5393f88cb6e037b7c60",
+     "domain_measure_finite"
+     "65dfc26e7ee3a679a6d91274ea7b3dde97798ef254c40b69bf4af2ceb228982b",
+     "cap_measure_finite"
+     "249ebe13730e18d7a9ee3f84739d6d1ae5ffe7a4786655d757bfe241df651a2e",
+     "euclidean_cap_measure_finite"
+     "e92dfa7157b8304312fd8d39389312f3cea9004173c45baaffee12b816e17858",
+     "dimension_two"
+     "af54eba67ff4e129e31e59c1f76046a8e0058e9017434b5832aa33d775ee6210",
+     "dimension_three"
+     "dadd6838bb32f5db1330d9ba28137d26449a3cfd1d3b7ea37a6de0fa8850fcfc"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "sha256sum /tmp/SphereCapFiniteMeasureProbe.lean", :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/SphereCapFiniteMeasureProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SphereCapFiniteMeasure.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SphereCapFiniteMeasure ConstructionTargets.SphereCapGraph",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/SphereCapFiniteMeasure.lean /tmp/SphereCapFiniteMeasureProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "python3 inline audit: exact fixture bytes and SHA, seven standard-only axiom audits in both compilations, declaration hashes",
+      :exit 0}
+     {:cmd "rg -n 'warning:|error:' /tmp/codex-14-capfinite-build.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "python3 inline audit: exact staged scope and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Prove finite intrinsic measure of sphere cap domains and images\"",
+      :exit 0}
+     {:cmd
+      "python3 inline audit: exact committed scope and clean tracked checkout",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and dependency PASS receipt. Only the authorized two files changed; frozen consumers, DAG, ledger and untracked supervisor files untouched. Tracked checkout clean.",
+    :commit "c57f09381088e06fc9b385b83354f2e9decf7567",
+    :changed-paths
+    ["ConstructionTargets/SphereCapFiniteMeasure.lean"
+     "ConstructionTargets/SphereCapFiniteMeasure.md"],
+    :dependency-commit "3d5d18e79f87b0d9cd0716183976b59529f7ab14",
+    :fixture
+    {:path "/tmp/SphereCapFiniteMeasureProbe.lean",
+     :sha256
+     "fc88ca53846907636b0525ae218b65c62687c72542caacf1d8af6c1275d822a3"},
+    :finding
+    "Promoted the exact domain-to-hyperplane-ball isometry, measure equality, orthonormal-coordinate finiteness proof and finite cap-image estimate, including dimensions two and three. Both compilations and the required build passed without warnings.",
+    :statement-hash-method
+    "SHA-256 of declaration bytes beginning with def or lemma and ending immediately before the space preceding := or where; namespace ConstructionTargets.SphereCapFiniteMeasure.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereCapFiniteMeasure.lean"
     "ConstructionTargets/SphereCapFiniteMeasure.md"],
