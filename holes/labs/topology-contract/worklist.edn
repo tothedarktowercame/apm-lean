@@ -47453,8 +47453,59 @@
   {:consumer "t00A01",
    :stop-condition
    "If full closure cannot be built, STOP with the exact remaining categorical or topological theorem and distinguish missing infrastructure from mathematical refutation; do not grow a conditional interface in place of the adapter.",
+   :evidence
+   {:source-pins
+    {:path "/tmp/T00A01ActualCoverBoundary-sources.json",
+     :sha256
+     "b9dcf660ff727713ea5840535ef90a04bc41ea0fdfa2f54d05cc02e2bb4b6eef"},
+    :diagnostic
+    {:path "/tmp/T00A01ActualCoverBoundary.lean",
+     :sha256
+     "0f5f0800c5bc36bb405fc4ecf2bbca76a4c208a37deaf2592c31ac9d5e77e9ef",
+     :placeholder-count 0,
+     :full-consumer-fixture false,
+     :proved
+     ["The exact frozen standard-cover hypothesis supplies a simply connected overlap."
+      "Any simply connected overlap with a chosen point has a fundamental-groupoid equivalence to SingleObj PUnit."
+      "The existing point-span/free-product and representation/single-object equivalences compose to the expected functor-category equivalence for arbitrary group factors."],
+     :axioms [propext Classical.choice Quot.sound],
+     :warnings []},
+    :placeholder-delta
+    {:consumer "t00A01",
+     :before 2,
+     :after 2,
+     :delta 0,
+     :frozen-sha256
+     "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f"},
+    :residual
+    "Construct the target-natural equivalence from functors out of the actual covered space's fundamental groupoid to functors out of SingleObj of the two vertex groups' free product. Feed it to existing source reconstruction, extract and transport the chosen basepoint group, apply the given puncture-group identifications, and finish with the banked homology bridge. STOP follows the row's full-closure condition; no full fixture, conditional replacement, REVISE prerequisite or owner-authorization request is claimed.",
+    :outcome :stop,
+    :boundary
+    "The actual two-open-cover inclusion span has not been identified with the vertex-group point span through a target-natural mapping-category equivalence. Required are both actual inclusion comparison cells, the arbitrary-cover pseudococone/span translation, and the composite target-postcomposition comparison. The completed torus-circle mapping equivalence is specialized to GenericWedge and does not instantiate at the frozen quotient.",
+    :disposition :stop,
+    :author :codex-12,
+    :reason :missing-categorical-assembly,
+    :commands
+    [{:cmd "sha256sum problems/t00A01/lean/Main.lean", :exit 0}
+     {:cmd "lake env lean /tmp/T00A01ActualCoverBoundary.lean",
+      :exit 0}
+     {:cmd "python3 /tmp/check-t00a01-actual-cover-boundary.py",
+      :exit 0}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets problems/t00A01/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}],
+    :campaign-termination false,
+    :changed-paths [],
+    :finding
+    "Reviewed the dependency checkpoint PASS receipt, DAG and historical closure experiments. The historical STOP is partly superseded: connected-groupoid reduction, point-span free products and generic target-natural source reconstruction now exist. The missing step is their application to the actual inclusion span with the required comparison cells and naturality. Generic source reconstruction itself is no longer an absent foundation. The diagnostic proves narrower components without declaring the frozen bridge or assuming its desired conclusion. Initial diagnostic elaboration errors were repaired; the final file compiles without placeholders or sorryAx.",
+    :mathematical-refutation false,
+    :boundary-artifact
+    {:path "/tmp/T00A01ActualCoverBoundary.md",
+     :sha256
+     "4dc9083f137e9aa188261ec6ffd6053074be575c6738a0bd2f5d5a5bdc3817cd"},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "VAN KAMPEN / generic quotient and gluing PI1",
    :acceptance
