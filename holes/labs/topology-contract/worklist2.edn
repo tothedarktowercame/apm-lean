@@ -4248,8 +4248,58 @@
   {:consumer :t03J04,
    :stop-condition
    "Preserve the actual rational homology finrank definition. Do not assume Kunneth, finite-dimensional homology, Euler multiplicativity, or descent of the displayed vector field.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Resolve the two homological obligations before retrying full t03J04 closure. Actual covering construction, surjectivity and finite fibers are compiled; the frozen source remains unchanged with one placeholder. No mathematical refutation is claimed.",
+    :frozen-placeholders 1,
+    :typed-boundary
+    {:torus
+     {:declaration "T03J04Diagnostic.TorusEulerVanishing",
+      :statement
+      "For every positive n, apm_t03J04_eulerCharacteristic n (Fin n → Circle) = 0."},
+     :cover
+     {:declaration "T03J04Diagnostic.CoverEulerRelation",
+      :statement
+      "Under the frozen manifold and local-diffeomorphism hypotheses, for every x in X, the torus rational homology Euler sum equals Nat.card(phi inverse-image {x}) times the corresponding rational homology Euler sum of X."},
+     :missing
+     "A rational singular torus homology/Euler computation and a finite-cover Euler comparison with its required homology finiteness justification. These are unproved typed propositions, not assumptions used to claim the frozen conclusion."},
+    :outcome :stop,
+    :warnings
+    [{:line 141,
+      :kind :unused-variable,
+      :name "hphi",
+      :context
+      "Explicit hypothesis retained in the typed residual definition."}],
+    :statement-hashes
+    {"apm_t03j04"
+     "d54a4f01e00927c780b2473d45cd7617e4df1c2f81201ef5f6524dc725e20701"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :reason :rational-euler-homology-boundary,
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/T03J04EulerDiagnostic.lean", :exit 0}
+     {:cmd
+      "Python audit of frozen-prefix preservation, hashes and comment-stripped forbidden-token counts",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :campaign-refutation false,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T03J04EulerDiagnostic.lean",
+     :sha256
+     "0ba77e7694d3fa4528e6580b4285ae707f2cf1bf1c83cca9238511cc4c3fc118"},
+    :finding
+    "Compiled actual_finite_cover under the frozen local-diffeomorphism hypotheses: the actual map is a covering, is surjective, and every fiber is finite. Compactness, local homeomorphism charts and discrete fibers supply this geometry without an assumed covering. The remaining boundary is rational singular homology: no canonical theorem found computes the positive-dimensional torus Euler sum or proves the required finite-cover relation for that exact sum. Abstract surface Euler arithmetic and integral sphere/localization calculations do not supply these claims. The diagnostic is not full closure.",
+    :frozen-sha256
+    "b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41",
+    :diagnostic-placeholders 0,
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "COVERING-BASIC and PRODUCT HOMOLOGY: torus local-diffeomorphism Euler consumer",
