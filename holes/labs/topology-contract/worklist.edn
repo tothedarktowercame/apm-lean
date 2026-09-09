@@ -47948,17 +47948,69 @@
   {:consumer "t93A04",
    :stop-condition
    "GO needs the full producer and consumer fixture. REVISE requires exactly one compiled prerequisite. Otherwise name the exact mathematical, hypothesis or representation boundary; no owner-authorization stop.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta
+     {:fixture 0, :consumer-before 1, :consumer-after 1, :delta 0},
+     :residual
+     "Scalarized-jet smooth chart producer established. Zero-level containment, source-dimension drop, compatible local critical-nullity induction, base cases and manifold transport remain. Arbitrary-C1 hindOne is not discharged; no unconditional Sard or consumer closure claimed.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :documentation
+     {:path "/tmp/SardScalarizedJetSmoothNeighborhood.md",
+      :sha256
+      "0d77417dd05d0e4540336d3fdf3496911303c9930071ac8133ea7c715d8be1e2"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/SardScalarizedJetSmoothNeighborhood.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/check-sard-scalarized-neighborhood.py",
+       :exit 0}
+      {:cmd
+       "git diff --exit-code -- ConstructionTargets problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+       :exit 0}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/SardScalarizedJetSmoothNeighborhood.lean",
+      :sha256
+      "1ddfb9ad9b43537ad8513253aab40828bc32f3a12db071f922c2883286449629"},
+     :finding
+     "Complete producer and consumer theorem compiles. Existing defining-field producers construct the exact scalarized jet, derivative and kernel orthogonal projection at x. Global genuine infinity smoothness supplies field regularity on the original open chart source. The reviewed neighborhood theorem supplies a restricted chart preserving the basepoint, original forward map and inverse agreement, smooth in both directions. Its inverse feeds the existing residual-slice consumer at genuine infinity. No neighborhood smoothness or nullity assumptions added.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean"
+       "ConstructionTargets/SardScalarizedJetSmoothNeighborhood.md"],
+      :acceptance
+      {:compile
+       "lake env lean ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean",
+       :fixture-placeholders 0,
+       :axioms :standard-only,
+       :preserve-defining-fields true,
+       :preserve-genuine-infinity true,
+       :consumer-file "problems/t93A04/lean/Main.lean",
+       :consumer-sha256
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea",
+       :consumer-placeholder-count 1}},
+     :seat :codex-12}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean"
+    "ConstructionTargets/SardScalarizedJetSmoothNeighborhood.md"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / actual scalarized-jet smooth chart",
    :acceptance
-   {:probe
-    "Compile a complete theorem for globally genuinely smooth f on a finite-dimensional real inner-product source, finite jet order i, fixed directions v, scalar continuous linear functional ell, and a witnessed nonzero next derivative in direction h at x. Construct the existing scalarized-jet ImplicitFunctionData with leftFun g(y)=ell(iteratedFDeriv real i f y v), leftDeriv=fderiv real g x, rightFun the kernel orthogonal projection, and pt=x. Prove smoothness of these exact fields on an open neighborhood inside the original chart source from global ContDiff real infinity f. Invoke SardSmoothNeighborhoodImplicitChart.exists_smooth_implicit_chart and exhibit the basepoint-preserving restricted chart, original forward map, inverse agreement and genuine infinity smoothness in both directions. Exercise the resulting inverse in the existing residual-slice consumer. Do not accept open-neighborhood field smoothness as an extra assumption, use analytic omega, change the kernel representation, or assume nullity. Reuse existing defining-field and iterated-derivative producers rather than duplicate them.",
+   {:compile
+    "lake env lean ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean",
+    :fixture-placeholders 0,
     :axioms :standard-only,
-    :consumer-residual
-    "This closes the actual smooth chart producer for scalarized jets only. Zero-level containment, source-dimension drop and compatible local critical-nullity induction must be connected before higher-jet locus nullity; arbitrary-C1 hindOne and manifold transport remain open."},
+    :preserve-defining-fields true,
+    :preserve-genuine-infinity true,
+    :consumer-file "problems/t93A04/lean/Main.lean",
+    :consumer-sha256
+    "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea",
+    :consumer-placeholder-count 1},
    :id
    :sard-scalarized-jet-smooth-neighborhood-producer-probe-refill11,
    :kind :reusable-theorem,
