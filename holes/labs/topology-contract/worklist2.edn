@@ -864,6 +864,29 @@
      {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
     :repository-note
     "Dependency PASS reviews checked, including codex-11 review of 80e84e8694036cf750564b74a1496b83e71a5c04. Existing untracked supervisor runs2 files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788968788804-16538-2ea5c13a",
+     :commands
+     ["cd /home/joe/code/apm-lean"
+      "realpath .lake/packages"
+      "git show 77786b3c:ConstructionTargets/NestedOrientedChartCompatibility.lean"
+      "git show 77786b3c:ConstructionTargets/NestedOrientedChartCompatibility.md"
+      "git diff-tree --no-commit-id --name-status -r 77786b3c"
+      "sha256sum /tmp/NestedOrientedChartCompatibilityProbe.lean"
+      "git show 77786b3c:ConstructionTargets/NestedOrientedChartCompatibility.lean | sha256sum"
+      "cmp /tmp/NestedOrientedChartCompatibilityProbe.lean ConstructionTargets/NestedOrientedChartCompatibility.lean"
+      "lake env lean /tmp/NestedOrientedChartCompatibilityProbe.lean"
+      "lake env lean ConstructionTargets/NestedOrientedChartCompatibility.lean"
+      "set -o pipefail; lake build ConstructionTargets.NestedOrientedChartCompatibility ConstructionTargets.OneDimensionalChartLocalGenerator ConstructionTargets.OneDiskLocalOrientation 2>&1 | rg '^warning:|^error:|Build completed|NestedOrientedChartCompatibility'"
+      "git show 77786b3c:ConstructionTargets/NestedOrientedChartCompatibility.lean | python3 -c 'import sys,re,hashlib; s=sys.stdin.buffer.read(); names={\"transition\",\"ambient_transition\",\"transition_homology_square\",\"compatible_localClass_eq\",\"localClass_generates\",\"constructedChart_localClass\",\"localClass_eq_of_common_nested_chart\"}; print(\"\\n\".join(n.decode()+\" \"+hashlib.sha256(k+b\" \"+n+t).hexdigest() for k,n,t in re.findall(rb\"\\b(theorem|def) (\\w+)(.*?)(?= :=)\",s,re.S) if n.decode() in names)); print(\"forbidden_count\",len(re.findall(rb\"\\b(?:sorry|admit|sorryAx|axiom|opaque|unsafe)\\b\",s))); print(\"axiom_audit_count\",s.count(b\"#print axioms\"))'"
+      "git diff --exit-code 77786b3c -- '*.lean' lakefile.toml lakefile.lean lake-manifest.json lean-toolchain"
+      "git show --format= --check 77786b3c"
+      "git diff --check"
+      "git status --porcelain --untracked-files=no"],
+     :finding
+     "Independent review of codex-14 commit 77786b3c35ec70eb3e6674b385dca0ef0af706dd. Exactly two permitted files added; fixture SHA-256 d6a320fc64a7b85cee13c6346bf165425a619d9dba2e6a7d74d633cd0ede7fbb and all seven declaration hashes reproduced. Tested Lean sources and build configuration match recorded commit. Fixture and target compile; focused build passes with 17 replayed dependency warnings and none in target. Seven axiom audits use only propext, Classical.choice, Quot.sound. Zero placeholders or forbidden declarations; placeholder delta zero; frozen problems unchanged. PointedModelChart contains only geometric data. Transition is inverse target coordinates composed with actual subtype inclusion and source coordinates; it fixes origin and its ambient composition equals the source map. Compatibility is strict coordinate increase, not an assumed class equality or homology sign. Production relative-H1 composition and the geometric increasing-map theorem establish equality in the same ambient local group without assuming transition surjectivity. T1 is used for generator preservation through excision. Constructed-chart identification and the conditional common-chart consequence are correct. Construction of a common restriction, distinct Circle overlap instances, and punctured-circle comparison remain explicitly downstream. Ledger untouched."},
     :commit "77786b3c35ec70eb3e6674b385dca0ef0af706dd",
     :changed-paths
     ["ConstructionTargets/NestedOrientedChartCompatibility.lean"
@@ -879,7 +902,7 @@
     "SHA-256 of UTF-8 declaration bytes beginning with theorem or def and ending immediately before the space preceding :=; declarations byte-identical to fixture.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/NestedOrientedChartCompatibility.lean"
     "ConstructionTargets/NestedOrientedChartCompatibility.md"],
@@ -1012,7 +1035,7 @@
      "Compiled one nested-chart compatibility prerequisite. PointedModelChart contains only geometric neighborhood/homeomorphism data. For nested neighborhoods, the coordinate transition is constructed from the two homeomorphisms and subtype inclusion. Compatibility means that this actual transition is increasing. Relative-map composition and the banked increasing-map computation prove equality of the two ambient local classes. Excision proves these classes generate local H1 in T1 spaces. A common nested chart then implies overlap equality, but construction of that common restriction and the punctured-circle comparison remain unfinished.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue D #2: milestone 3, overlap compatibility and first punctured-manifold consumer",
