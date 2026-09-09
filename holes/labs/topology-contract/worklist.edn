@@ -37481,6 +37481,43 @@
    "The order-one endpoint specialization compiles without an externally supplied equivalence; only the one-dimensional-target endpoint and higher-jet finite-order specialization remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if arbitrarily small finite target-ball covers of a one-dimensional endpoint image cannot imply zero target volume by finite-cover measure aggregation, or if the interface requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderOneDimEndpointCoverNullity.lean"
+    "ConstructionTargets/SardFiniteOrderOneDimEndpointCoverNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER ONE-DIMENSIONAL ENDPOINT COVER NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean",
+     :sha256
+     "a7113f78fd1dc382e768c199f1eb442c54ba00568e7fbae6934b994c8705ad5f"},
+    :declarations
+    ["OneDimEndpointBallCover"
+     "volume_image_eq_zero_of_oneDim_endpointBallCovers"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Construct arbitrarily small one-dimensional endpoint ball-cover certificates from the uniform little-o Taylor remainder, then specialize higher-jet induction and compact exhaustion."},
+   :representation
+   {:source
+    "For every positive tolerance, a finite family of target balls covering the image in a one-dimensional target, with total ball volume below that tolerance.",
+    :target
+    "Zero target volume of the endpoint image by finite-cover aggregation and the arbitrarily-small-measure limit."},
+   :id
+   :critical-value-sard-finite-order-one-dim-endpoint-cover-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-rank-zero-order-one-endpoint-nullity-1
+    :critical-value-sard-finite-cover-measure-1
+    :critical-value-sard-arbitrarily-small-limit-1],
+   :current-residual
+   "The one-dimensional endpoint limit and finite-cover aggregation compile; deriving the certificates from little-o Taylor control remains.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -37536,79 +37573,81 @@
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"measure_image_zero_of_rankZero_orderOne_endpoint"
-      "27735a71410388618bed3590773dd5c080c7bc5f6f85ab38d9afcdd1bb734291"},
+     {"OneDimEndpointBallCover_and_volume_image_eq_zero_of_oneDim_endpointBallCovers"
+      "af463b8ea17f32ed6a235ef8bfe56eaf0d55e5bacbcd9d69e6a471479fb32f12"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the order-one exact Taylor-budget equality cannot construct a continuous real-linear equivalence between target and source and invoke equal-dimensional rank-zero endpoint nullity, or if the specialization requires nonstandard axioms.",
+      "Stop only if arbitrarily small finite target-ball covers of a one-dimensional endpoint image cannot imply zero target volume by finite-cover measure aggregation, or if the interface requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderRankZeroOrderOneEndpointNullity.lean"
-       "ConstructionTargets/SardFiniteOrderRankZeroOrderOneEndpointNullity.md"],
+      ["ConstructionTargets/SardFiniteOrderOneDimEndpointCoverNullity.lean"
+       "ConstructionTargets/SardFiniteOrderOneDimEndpointCoverNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER RANK-ZERO ORDER-ONE ENDPOINT NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER ONE-DIMENSIONAL ENDPOINT COVER NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderRankZeroOrderOneEndpointNullityProbe.lean",
+        "/tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean",
         :sha256
-        "8edeea3358e32c3041a40ce2e04812f93d4186da1e034c6b128e8087c0c56182"},
+        "a7113f78fd1dc382e768c199f1eb442c54ba00568e7fbae6934b994c8705ad5f"},
        :declarations
-       ["measure_image_zero_of_rankZero_orderOne_endpoint"],
+       ["OneDimEndpointBallCover"
+        "volume_image_eq_zero_of_oneDim_endpointBallCovers"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Prove the genuinely one-dimensional-target Taylor endpoint, then specialize the higher-jet finite-order induction budget and compact exhaustion."},
+       "Construct arbitrarily small one-dimensional endpoint ball-cover certificates from the uniform little-o Taylor remainder, then specialize higher-jet induction and compact exhaustion."},
       :representation
       {:source
-       "Exact Taylor-budget equality at order one, a differentiable rank-zero locus on a unique-differentiability set, and additive Haar measures on finite-dimensional source and target spaces.",
+       "For every positive tolerance, a finite family of target balls covering the image in a one-dimensional target, with total ball volume below that tolerance.",
        :target
-       "Zero target measure of the rank-zero image after constructing the target-to-source continuous linear equivalence from the induced finrank equality."},
+       "Zero target volume of the endpoint image by finite-cover aggregation and the arbitrarily-small-measure limit."},
       :id
-      :critical-value-sard-finite-order-rank-zero-order-one-endpoint-nullity-1,
+      :critical-value-sard-finite-order-one-dim-endpoint-cover-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-rank-zero-equal-dimension-endpoint-nullity-1
-       :critical-value-sard-finite-order-taylor-endpoint-classification-1],
+      [:critical-value-sard-finite-order-rank-zero-order-one-endpoint-nullity-1
+       :critical-value-sard-finite-cover-measure-1
+       :critical-value-sard-arbitrarily-small-limit-1],
       :current-residual
-      "The order-one endpoint specialization compiles without an externally supplied equivalence; only the one-dimensional-target endpoint and higher-jet finite-order specialization remain.",
+      "The one-dimensional endpoint limit and finite-cover aggregation compile; deriving the certificates from little-o Taylor control remains.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. At order one, exact Taylor-budget equality reduces definitionally to equality of target and source finranks. A placeholder-free fixture constructs the resulting continuous linear equivalence with ContinuousLinearEquiv.ofFinrankEq and invokes the banked equal-dimensional rank-zero endpoint theorem. Thus the first branch of the endpoint classification is complete, isolating the genuinely one-dimensional-target branch.",
+     "The rectangular theorem is not refuted. At the equality endpoint the fixed Taylor remainder constant no longer gains a positive scale exponent, so the remaining analytic input must provide arbitrarily small coefficients. A placeholder-free fixture defines the exact one-dimensional finite-ball-cover certificate and proves that certificates at every positive tolerance force image nullity using the reviewed finite-cover measure bound and inverse-natural limit. This isolates the missing mathematics to constructing those certificates from uniform little-o Taylor remainders.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "rg -n \"ofFinrankEq|finrank.*ContinuousLinearEquiv|exists.*ContinuousLinearEquiv|toContinuousLinearEquiv\" .lake/packages/mathlib/Mathlib ConstructionTargets | head -140",
+       "sed -n '1,280p' ConstructionTargets/SardQuantitativeTaylorCoverMeasure.lean; sed -n '1,260p' ConstructionTargets/SardUniformFlatTaylorRemainder.lean; sed -n '1,180p' ConstructionTargets/SardArbitrarilySmallMeasureLimit.lean; sed -n '1,160p' ConstructionTargets/SardFiniteCoverMeasureBound.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderRankZeroOrderOneEndpointNullityProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderRankZeroOrderOneEndpointNullityProbe.measure_image_zero_of_rankZero_orderOne_endpoint' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderOneDimEndpointCoverNullityProbe.volume_image_eq_zero_of_oneDim_endpointBallCovers' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderRankZeroOrderOneEndpointNullityProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean",
        :exit 0,
        :output
-       "8edeea3358e32c3041a40ce2e04812f93d4186da1e034c6b128e8087c0c56182  /tmp/SardFiniteOrderRankZeroOrderOneEndpointNullityProbe.lean"}
+       "a7113f78fd1dc382e768c199f1eb442c54ba00568e7fbae6934b994c8705ad5f  /tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderRankZeroOrderOneEndpointNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '9,30p' /tmp/SardFiniteOrderRankZeroOrderOneEndpointNullityProbe.lean | sha256sum",
+       "sed -n '10,35p' /tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "27735a71410388618bed3590773dd5c080c7bc5f6f85ab38d9afcdd1bb734291  -"}
+       "af463b8ea17f32ed6a235ef8bfe56eaf0d55e5bacbcd9d69e6a471479fb32f12  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 285 items OK; {:done 277, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 286 items OK; {:done 278, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -37623,13 +37662,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardFiniteOrderRankZeroOrderOneEndpointNullityProbe.lean",
+     {:path "/tmp/SardFiniteOrderOneDimEndpointCoverNullityProbe.lean",
       :sha256
-      "8edeea3358e32c3041a40ce2e04812f93d4186da1e034c6b128e8087c0c56182"},
+      "a7113f78fd1dc382e768c199f1eb442c54ba00568e7fbae6934b994c8705ad5f"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -37863,7 +37901,8 @@
     :critical-value-sard-finite-order-taylor-endpoint-classification-1
     :critical-value-sard-finite-order-rank-zero-same-space-endpoint-nullity-1
     :critical-value-sard-finite-order-rank-zero-equal-dimension-endpoint-nullity-1
-    :critical-value-sard-finite-order-rank-zero-order-one-endpoint-nullity-1],
+    :critical-value-sard-finite-order-rank-zero-order-one-endpoint-nullity-1
+    :critical-value-sard-finite-order-one-dim-endpoint-cover-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
