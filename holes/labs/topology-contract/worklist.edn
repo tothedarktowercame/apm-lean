@@ -39516,6 +39516,24 @@
      {:cmd
       "git add ConstructionTargets/SardRemainingOrderAdmissibilityBoundary.lean ConstructionTargets/SardRemainingOrderAdmissibilityBoundary.md && git diff --cached --check && git commit -m 'topology: classify remaining-order admissibility boundary' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788928572784-16017-46e21c54",
+     :commands
+     ["git show a16b101a5f41892dbfc51d6d2c29277ea8883d83 --stat --oneline"
+      "sha256sum /tmp/SardRemainingOrderAdmissibilityBoundaryProbe.lean"
+      "cmp fixture recorded-source"
+      "git show commit:ConstructionTargets/SardRemainingOrderAdmissibilityBoundary.lean | sed -n '5,24p' | sha256sum"
+      "lake env lean /tmp/SardRemainingOrderAdmissibilityBoundaryProbe.lean"
+      "lake env lean ConstructionTargets/SardRemainingOrderAdmissibilityBoundary.lean"
+      "lake build ConstructionTargets.SardRemainingOrderAdmissibilityBoundary"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check commit^ commit"
+      "git diff --exit-code commit -- ConstructionTargets"
+      "consumer hash and placeholder checks"],
+     :finding
+     "Commit a16b101a has exact scope and matching fixture/frozen hashes. Both admissibility equivalences correctly control natural subtraction; the numerical witness disproves automatic inheritance only. Documentation does not claim a Morse-Sard refutation. All three declarations have standard axioms, zero scoped placeholders, all gates passed."},
     :commit "a16b101a5f41892dbfc51d6d2c29277ea8883d83",
     :changed-paths
     ["ConstructionTargets/SardRemainingOrderAdmissibilityBoundary.lean"
@@ -39531,7 +39549,7 @@
      "codimensionOne_remainingOrder_admissible_iff"
      "classical_admissibility_does_not_cover_all_jet_losses"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardRemainingOrderAdmissibilityBoundary.lean"
     "ConstructionTargets/SardRemainingOrderAdmissibilityBoundary.md"],
@@ -39704,7 +39722,7 @@
       "f07f1562bd70e452475f1986ccc0514d491dcb14d7a5a6e8efdfc4d903572ace"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
