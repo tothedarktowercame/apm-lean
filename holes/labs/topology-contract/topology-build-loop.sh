@@ -137,7 +137,7 @@ job_json() {
   return 1
 }
 wait_job() {
-  local job="$1" label="$2" state elapsed=0 body
+  local job="$1" label="$2" state elapsed=0 body term_reason
   while :; do
     printf '{:job %q :checked-at %q}\n' "$job" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" > "$HEARTBEAT"
     body="$(job_json "$job")" || die "$label status reads exhausted; in-flight job retained"
@@ -148,7 +148,25 @@ wait_job() {
         LAST_RESULT="$RUNS/jobs/$job.result.txt"
         jq -r '.job.result // ""' <<<"$body" > "$LAST_RESULT"
         log "$label done job=$job result=$LAST_RESULT"; return 0 ;;
-      failed|error|cancelled) die "$label terminal state=$state job=$job" ;;
+      failed|error|cancelled)
+        # A terminal job is IMMUTABLE -- it will never become `done`. Retaining
+        # its in-flight pointer makes every supervisor restart reclaim the same
+        # dead job and die on it again: three identical reclaim stops inside 90
+        # seconds on 2026-09-09, when codex-14's job failed because the Codex
+        # account had hit 100% of its weekly quota. The row could never be
+        # redispatched. This is the same reasoning the unusable-receipt path
+        # already applies; the failed-job branch never got it.
+        #
+        # Clear the pointer so the row can be dispatched afresh. The job record
+        # itself is untouched and remains the evidence.
+        bb "$HERE/inflight.bb" clear "$INFLIGHT" \
+          || log "could not clear in-flight pointer for terminal job $job"
+        # Carry the agent's own last words into the stop reason. A bare
+        # "terminal state=failed" sent a human to the job API to discover the
+        # cause was a quota limit; the escalation packet should say so itself.
+        term_reason="$(jq -r '[.job.events[]? | select(.type=="text") | .text] | last // ""' \
+                        <<<"$body" 2>/dev/null | tr '\n' ' ' | cut -c1-200)"
+        die "$label terminal state=$state job=$job${term_reason:+ :: $term_reason}" ;;
       queued|delivering|running|accepted|"") ;;
       *) die "$label unknown state=$state job=$job" ;;
     esac
