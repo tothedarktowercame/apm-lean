@@ -105,6 +105,14 @@
         item (by-id id)
         outcome (:outcome receipt)]
     (when-not item (throw (ex-info "unknown result row" {:id id})))
+    ;; Completed evidence must satisfy the same gate rule as worklist_check.
+    ;; Reject before writing; a failed exploratory command is not a passing
+    ;; gate merely because a later command succeeded.
+    (when (#{:done-unreviewed :stop :replan :pass} outcome)
+      (when-let [failed (seq (filter #(not= (get % :expected-exit 0) (:exit %))
+                                    (:commands receipt)))]
+        (throw (ex-info "receipt records an unexpected gate exit"
+                        {:id id :commands failed}))))
     (case outcome
       :go (when-not (and (get-in receipt [:fixture :path])
                          (get-in receipt [:fixture :sha256])

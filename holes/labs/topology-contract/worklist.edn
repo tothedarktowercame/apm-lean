@@ -44497,6 +44497,8 @@
    "The source representation is generalized to finite-dimensional normed spaces with its model constructed internally; target representation, induction closure, and complementary analytic cases remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :review-finding
+   "Receipt validation failed: :commands includes Initial bb dependency-receipt query with unexpected exit 1 (unmatched delimiter). The corrected query and Lean gates are reported successful, but failed exploration must remain audit history, not passing gate evidence. Reissue a completion with reproducible final gates and preserve the failed attempt separately as diagnostic history. Retain implementation commit 60fcab01ff699668ae01a149dca8e64bcf5eb032; no theorem defect established by this failure.",
    :stop-condition
    "Stop only if the chain rule and invertible target derivative fail to preserve criticality in both directions, the localized image equality fails under these hypotheses, or nonstandard axioms are required.",
    :evidence
@@ -44573,6 +44575,15 @@
      :target "The localized critical image of e composed with f.",
      :direction
      "Exact equality from the target composite critical-image representation to the source equivalence-image representation, both subsets of H."},
+    :review
+    {:outcome :fail,
+     :seat "codex-1",
+     :finding
+     "Receipt validation failed: :commands includes Initial bb dependency-receipt query with unexpected exit 1 (unmatched delimiter). The corrected query and Lean gates are reported successful, but failed exploration must remain audit history, not passing gate evidence. Reissue a completion with reproducible final gates and preserve the failed attempt separately as diagnostic history. Retain implementation commit 60fcab01ff699668ae01a149dca8e64bcf5eb032; no theorem defect established by this failure.",
+     :commands
+     [{:cmd
+       "Inspect worklist_check.bb gate rule, build_step.bb receipt application, and original implementation receipt",
+       :exit 0}]},
     :commit "60fcab01ff699668ae01a149dca8e64bcf5eb032",
     :changed-paths
     ["ConstructionTargets/SardTargetEquivCriticalImage.lean"
@@ -44584,7 +44595,7 @@
     :declarations
     ["criticalImage_eq_of_target_continuousLinearEquiv"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SardTargetEquivCriticalImage.lean"
     "ConstructionTargets/SardTargetEquivCriticalImage.md"],

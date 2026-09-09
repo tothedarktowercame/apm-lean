@@ -1,0 +1,4 @@
+{:outcome :fail
+ :seat "codex-1"
+ :finding "Receipt validation failed: :commands includes Initial bb dependency-receipt query with unexpected exit 1 (unmatched delimiter). The corrected query and Lean gates are reported successful, but failed exploration must remain audit history, not passing gate evidence. Reissue a completion with reproducible final gates and preserve the failed attempt separately as diagnostic history. Retain implementation commit 60fcab01ff699668ae01a149dca8e64bcf5eb032; no theorem defect established by this failure."
+ :commands [{:cmd "Inspect worklist_check.bb gate rule, build_step.bb receipt application, and original implementation receipt" :exit 0}]}
