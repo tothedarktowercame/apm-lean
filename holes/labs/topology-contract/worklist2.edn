@@ -4883,6 +4883,23 @@
       :exit 0}],
     :repository-note
     "Read DAG and closure experiments; this row has no dependency receipts. Only the authorized two files changed. Frozen consumers, DAG, ledger and untracked supervisor files untouched; tracked checkout clean.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788981320545-16869-e255c50f",
+     :commands
+     ["git show 3d5d18e79f87b0d9cd0716183976b59529f7ab14"
+      "realpath .lake/packages"
+      "sha256sum /tmp/SphereCapGraphProbe.lean"
+      "lake env lean /tmp/SphereCapGraphProbe.lean"
+      "lake env lean ConstructionTargets/SphereCapGraph.lean"
+      "lake build ConstructionTargets.SphereCapGraph"
+      "Python independent audit: exact fixture promotion, six statement hashes, forbidden tokens, frozen problem tree and placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 09e453da:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --name-only 3d5d18e7; git show --format= --check 3d5d18e7"
+      "git diff --exit-code 3d5d18e7 -- lake-manifest.json lakefile.lean lean-toolchain"],
+     :finding
+     "Independent of author codex-14. Exact two-file scope; fixture SHA256 e39cf758629bb44251562af80de0641daa47d9f6b6f61db26e991f2e9a5df7af and six statement hashes match. Both compilations and focused build pass without warnings (8240 jobs); six audits per compilation use only standard axioms. Positive height bound justifies division by a, graph norm uses orthogonality, and the explicit Lipschitz constant is 1+r/a. Hausdorff inequality correctly maps the actual orthogonal-disk subtype into the literal sphere subtype; its right side may be infinite. Finite coverage, domain measure, sphere finiteness and normalization remain explicitly downstream. Frozen problem tree unchanged, placeholders 322 to 322; no forbidden tokens. Recorded ledger validates: 39 items OK. Ledger untouched."},
     :commit "3d5d18e79f87b0d9cd0716183976b59529f7ab14",
     :changed-paths
     ["ConstructionTargets/SphereCapGraph.lean"
@@ -4897,7 +4914,7 @@
     "SHA-256 of declaration bytes beginning with def or lemma and ending immediately before the space preceding :=; namespace ConstructionTargets.SphereCapGraph.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereCapGraph.lean"
     "ConstructionTargets/SphereCapGraph.md"],
@@ -5012,7 +5029,7 @@
      "Compiled one geometric prerequisite: for 0<=r<1, a>0 and a^2<=1-r^2, the actual height sqrt(1-norm(u)^2) is Lipschitz with constant r/a on the radius-r ball. For a unit vector e, its graph u+height(u)*e lands on the literal unit sphere when u is orthogonal to e. The constructed subtype cap map is Lipschitz with constant 1+r/a and satisfies the actual Hausdorff image bound. Finite coordinate-cap coverage, finite intrinsic measure of the hyperplane domains and consumer integrability remain; the parent is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: finite intrinsic Hausdorff sphere measure through Lipschitz caps",
