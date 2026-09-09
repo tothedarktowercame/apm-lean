@@ -942,72 +942,103 @@
    :stop-condition
    "Do not elect t00J02 or infer general top-homology localization monicity from this one-dimensional local result.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Promote and independently review the complete fixture. Global fundamental classes and general localization injectivity remain outside this row.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :author "codex-13",
-     :commands
-     [{:cmd
-       "cd /home/joe/code/apm-lean && lake env lean /tmp/OrientedOverlapPuncturedCircleProbe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/OrientedOverlapPuncturedCircleProbe.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/OrientedOverlapPuncturedCircleProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "cd /home/joe/code/apm-lean && git diff --exit-code",
-       :exit 0}
-      {:cmd "cd /home/joe/code/apm-lean && git diff --check",
-       :exit 0}],
-     :repository-note
-     "Read-only probe; only the temporary fixture was written. Existing untracked supervisor files were untouched.",
-     :changed-paths [],
-     :dependency-commit "77786b3c35ec70eb3e6674b385dca0ef0af706dd",
-     :fixture
-     {:path "/tmp/OrientedOverlapPuncturedCircleProbe.lean",
-      :sha256
-      "48cfa5e5c5b2552c6b7109e43def8f77f0ad7d6824954246da357d353b7dedee"},
-     :finding
-     "Compiled the complete overlap and punctured-circle fixture. Positive coordinate scaling constructs a restricted pointed chart. Openness constructs a positive radius placing that chart inside both neighborhoods. Compatibility is strict increase of the actual transition into the second chart; the transition into the first is proved increasing. The banked relative-map square proves equality of ambient local generators. Concrete Circle charts consist of the constructed chart and its half-radius restriction, whose neighborhoods are proved distinct. Restricted stereographic projection gives a homeomorphism from Circle minus any specified point to the real line, with its actual induced homology comparison and positive-degree integral homology vanishing. The relative local generator is identified exactly with chart-pair transport followed by neighborhood inclusion/excision.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/OrientedOverlapPuncturedCircle.lean"
-       "ConstructionTargets/OrientedOverlapPuncturedCircle.md"],
-      :acceptance
-      {:implementation
-       "Promote the exact compiled fixture and document its geometric constructions, hypotheses, comparison maps, and one-dimensional boundary.",
-       :declarations
-       ["ConstructionTargets.OrientedOverlapPuncturedCircle.shrinkCoordinates"
-        "ConstructionTargets.OrientedOverlapPuncturedCircle.exists_common_radius"
-        "ConstructionTargets.OrientedOverlapPuncturedCircle.common_ambient_maps"
-        "ConstructionTargets.OrientedOverlapPuncturedCircle.OrientedCompatible"
-        "ConstructionTargets.OrientedOverlapPuncturedCircle.oriented_overlap_localClass_eq"
-        "ConstructionTargets.OrientedOverlapPuncturedCircle.half_neighborhood_ne"
-        "ConstructionTargets.OrientedOverlapPuncturedCircle.circle_half_chart_overlap"
-        "ConstructionTargets.OrientedOverlapPuncturedCircle.puncturedCircleLine"
-        "ConstructionTargets.OrientedOverlapPuncturedCircle.puncturedCircleHomologyIsoLine_hom"
-        "ConstructionTargets.OrientedOverlapPuncturedCircle.puncturedCircle_positive_homology"
-        "ConstructionTargets.OrientedOverlapPuncturedCircle.circle_relative_generator"
-        "ConstructionTargets.OrientedOverlapPuncturedCircle.circle_relative_generator_comparison"],
-       :hypotheses
-       "Overlap equality uses a topological space and two geometric pointed open one-disk charts. Compatibility means strict coordinate increase on the constructed common restriction. Generator preservation uses the banked T1 excision result; Circle satisfies these hypotheses. Coefficients are integers in the canonical relative singular-chain representation.",
-       :gates
-       ["Verify fixture SHA-256 before implementation."
-        "Compile the fixture and canonical target."
-        "Run lake build ConstructionTargets.OrientedOverlapPuncturedCircle ConstructionTargets.NestedOrientedChartCompatibility ConstructionTargets.OneDimensionalChartLocalGenerator."
-        "Reproduce all eleven printed axiom audits; permit only propext, Classical.choice, Quot.sound."
-        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."],
-       :axioms :standard-only,
-       :stop-condition
-       "Do not infer a global fundamental class, general localization monicity, or closure of t00J02 from these local one-dimensional results."}},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "This local overlap and punctured-circle packet is implemented and awaits independent review. Global fundamental classes, general top-homology localization monicity, and closure of t00J02 remain outside this row.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :focused-build :pass,
+     :all-eleven-printed-axiom-audits :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :fixture-compilation :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 18,
+      :log "/tmp/codex-14-overlap-build.log",
+      :paths
+      {"ConstructionTargets/CircleUniversalCover.lean" 1,
+       "ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/SingularSubdivision.lean" 2,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/T02A06SphereShift.lean" 3}}],
+    :statement-hashes
+    {"puncturedCircleLine"
+     "9d65064bf8f19110964d92e1a4337f42b7b8b59ffc254cd66a86d168dccc6b01",
+     "circle_relative_generator_comparison"
+     "5b786f323fefa9483df6b449ad0475f6dea58083880d98556734a851de1f4e22",
+     "common_ambient_maps"
+     "d9c6b8c37dc233b54fac2edd3041fe9c7b4b05165f33a987378d6a72dcc1ae7c",
+     "puncturedCircleHomologyIsoLine_hom"
+     "e93dc2ca8a1056b4ad7e62bf3133860265ab98f48b5a23a8502af82b25d7f016",
+     "half_neighborhood_ne"
+     "ad35b87815c382bcce1ba142eb6deeb253da7aa0b2179acbf6ce38e48bdef340",
+     "circle_half_chart_overlap"
+     "e53ad1314f5a4131eb0c1bf7a8153f4d5d280b2f8d5bdd71c0753c53e724f803",
+     "OrientedCompatible"
+     "677c3d73ccc387f2837cf7d7937ffd79f8da67015fa3fe86f5031f812cc0e993",
+     "exists_common_radius"
+     "328b63c31b2958ccbbc1c4b63a6c9e79b38b1aeb995e10c5e63f483440dfde14",
+     "oriented_overlap_localClass_eq"
+     "45f066201dc798c858a88274a6064381bfc2bf411fef1ad5ba6b94f5702a8e9d",
+     "shrinkCoordinates"
+     "e46c1977789b60fa2c08377e15cb2a1bf7a37ef4197291ac77ccffff520db71d",
+     "puncturedCircle_positive_homology"
+     "dc57f8fa0b375dc099071e1834888b0e7eadb5ade9243daca9371d4c836a36f2",
+     "circle_relative_generator"
+     "09d1983ac5bba0aa5fe20b24014a8da1cb7fb019c2a8dc1723ec9ff8c068768c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/OrientedOverlapPuncturedCircleProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/OrientedOverlapPuncturedCircleProbe.lean > /tmp/codex-14-overlap-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/OrientedOverlapPuncturedCircle.lean > /tmp/codex-14-overlap-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.OrientedOverlapPuncturedCircle ConstructionTargets.NestedOrientedChartCompatibility ConstructionTargets.OneDimensionalChartLocalGenerator > /tmp/codex-14-overlap-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/OrientedOverlapPuncturedCircle.lean /tmp/OrientedOverlapPuncturedCircleProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Construct oriented chart overlap and punctured-circle homology comparison\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Checked codex-11 dependency PASS. Existing untracked supervisor runs2 files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :commit "487f1de0315ae18a93ffa518c74e49e2aa52c9ac",
+    :changed-paths
+    ["ConstructionTargets/OrientedOverlapPuncturedCircle.lean"
+     "ConstructionTargets/OrientedOverlapPuncturedCircle.md"],
+    :dependency-commit "77786b3c35ec70eb3e6674b385dca0ef0af706dd",
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/OrientedOverlapPuncturedCircleProbe.lean",
+     :sha256
+     "48cfa5e5c5b2552c6b7109e43def8f77f0ad7d6824954246da357d353b7dedee"},
+    :finding
+    "Promoted the complete fixture unchanged. Positive scaling and openness construct a common pointed chart restriction. Geometric strict increase of its transition into the second chart yields equality of ambient local classes. Constructed Circle charts and their half-radius restrictions have distinct neighborhoods and equal classes. Restricted stereographic projection supplies the actual punctured-circle-to-line homeomorphism, induced homology comparison, and positive-degree integral homology vanishing. The relative generator equals chart-pair transport followed by actual neighborhood inclusion/excision.",
+    :statement-hash-method
+    "SHA-256 of UTF-8 declaration bytes beginning with theorem or def and ending immediately before the space preceding := or where; names below are in ConstructionTargets.OrientedOverlapPuncturedCircle.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/OrientedOverlapPuncturedCircle.lean"
     "ConstructionTargets/OrientedOverlapPuncturedCircle.md"],
