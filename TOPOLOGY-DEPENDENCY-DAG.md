@@ -473,7 +473,7 @@ compiles independently of every final problem.
 | Product homology/Kunneth | `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and integral Kunneth do not.  `t95J04` no longer consumes this missing foundation: `54fe6115` handles the two `S⁶` comparisons by retracts, and `e24d442b`--`10cfb866` handle `S² × S⁴ ≄ S³ × S³` through one concrete production Mayer--Vietoris segment |
 | Simply-connected spheres/products | partial `t95J04`; duplicated sphere proof in `t02A06` | `BANKED` at `45304f7d`: generic products preserve `SimplyConnectedSpace`, and concrete Euclidean `Sⁿ` is simply connected for `2 ≤ n`; all three `t95J04` simple-connectivity conjuncts compile |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | the generic product cover was already banked; reviewed `c5ada212` now closes the concrete `(ZMod 2)²` covering-group branch of `t01A02`; fivefold AddCircle kernel cardinality/deck packaging is next for `t98A01`; pullback and gluing remain separate |
-| Circle degree/lifting | closed `t91A08`, closed `t94J06`, closed `t97J06`, `t97A02`, closed `t97J08` | `t91A08` closed through the power-five winding obstruction and exact additive-circle transport at `02b4e476`; `t94J06` closed through path lifting/winding and the degree-four disk obstruction; `t97J06` closed via singular-homology noncontractibility; `t97J08` closes the smooth-lift/angle-integral chain at `0ad32428`; further consumers require separate review |
+| Circle degree/lifting | closed `t91A08`, closed `t94J06`, closed `t97J06`, closed `t97A02`, closed `t97J08` | `t91A08` closed through the power-five winding obstruction and exact additive-circle transport at `02b4e476`; `t94J06` closed through path lifting/winding and the degree-four disk obstruction; `t97J06` closed via singular-homology noncontractibility; `t97J08` closes the smooth-lift/angle-integral chain at `0ad32428`; `t97A02` closed at `69fd2f35` through finite-H1 loop triviality, constructed component lifts and exact torus recombination (independent PASS `invoke-1788977263821-16745-f3b25cde`, placeholders `2 → 0`); further consumers require separate review |
 | Smooth circle lifts | closed `t97J08`; reusable smooth circle maps with continuous real lifts | generic local-inverse regularity `48eab2d3`, explicit `Circle.exp` specialization `12fd086d`, and normalized-loop specialization `55da22d8` are `BANKED`; frozen consumer closed at `0ad32428` |
 | Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
@@ -528,6 +528,30 @@ surveyed experimental tracks with no frozen theorem closure and with its
 generic orientation/localization producers still absent.  This comparison
 supports continuing consumer-certified shared scaffolds; it does not show
 that the MV route solves t00J02 or replace its missing geometry.
+
+## Reviewed t97A02 closure
+
+`t97A02` is **CLOSED** at `69fd2f354468e1409b979d75818a1d01cf727e6c`.
+Independent review `invoke-1788977263821-16745-f3b25cde` returned `PASS`.
+Canonical integral coefficient comparison and Circle Hurewicz naturality
+turn finite H1 into trivial induced loops. Component normalization, actual
+inclusion naturality and covering lifts construct real lifts; open-component
+assembly includes empty domains, and the existing product homotopy theorem
+recombines the coordinates into the exact frozen torus conclusion.
+
+The historical STOP `invoke-1788970466031-16587-aad35f58`, independently
+validated by `invoke-1788970813855-16596-55365337`, was an API/construction
+boundary, not a refutation. `ClassicalLocalPathConnectivity` at `f8d3d381`
+and `ComponentRealLiftAssembly` at `0322d72b` resolved that boundary before
+the final adapter constructed its component lifts. No stronger local
+contractibility or global path connectivity was assumed.
+
+The closing commit reduced executable placeholders **2 → 0** with original
+signatures unchanged. Fixture and frozen statement hashes, reviewed build
+results, and standard-axiom audits are recorded in the
+[t97A02 process account](docs/TN-topology-closure-experiments.md#t97a02-reviewed-closure).
+This documentation update contributes zero additional placeholder reduction
+and certifies no other consumer.
 
 ## Banked consolidation increments
 

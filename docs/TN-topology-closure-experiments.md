@@ -866,6 +866,64 @@ problem emits zero warnings, the full build passes, and both theorems use only
 `propext`, `Classical.choice`, and `Quot.sound`.  The final decision is
 **CLOSED** for `t02A03`.
 
+## t97A02 reviewed closure
+
+The final decision is **CLOSED** for `t97A02`. Implementation
+`invoke-1788977115221-16743-6d59ab76` committed the exact one-file closure at
+`69fd2f354468e1409b979d75818a1d01cf727e6c`. Independent reviewer `codex-11`
+returned `PASS` in
+[receipt invoke-1788977263821-16745-f3b25cde](../holes/labs/topology-contract/runs2/jobs/invoke-1788977263821-16745-f3b25cde.receipt.edn),
+with no review edits. The implementation receipt is
+[invoke-1788977115221-16743-6d59ab76](../holes/labs/topology-contract/runs2/jobs/invoke-1788977115221-16743-6d59ab76.receipt.edn).
+
+The earlier STOP `invoke-1788970466031-16587-aad35f58`, independently
+validated by `invoke-1788970813855-16596-55365337`, remains valid historical
+evidence: the finite-H1 diagnostic compiled, but the exact classical
+local-contractibility hypothesis did not supply the covering criterion's
+local path connectivity, and disconnected/empty-domain assembly was absent.
+This was a missing construction, not mathematical refutation. The reviewed
+prerequisites `ClassicalLocalPathConnectivity` at
+`f8d3d38156369e16f70d38f9991ffaf88b957263` and `ComponentRealLiftAssembly` at
+`0322d72bca8a8ffba43c353bd689ba014f2e9946` resolved those specific obligations.
+
+The final adapter transfers finite H1 through the canonical integral
+coefficient comparison. Circle Hurewicz injectivity and naturality prove
+trivial induced loops for each normalized Circle map. Actual component
+inclusion naturality supplies the covering criterion on each component.
+Adding a chosen basepoint angle to the covering lift undoes normalization.
+The assembled real lift gives an explicit null-homotopy, including empty
+domains; the existing coordinate homotopy recombination proves the exact
+torus theorem. No component lifts, finite fundamental group, global path
+connectivity, or stronger local-contractibility hypothesis are assumed.
+
+The promoted fixture is `/tmp/T97A02FullClosureProbe.lean`, SHA-256
+`d106724ee64373ea92f0ac9cb64d7816c9ef76b3b1e08443b90f4eb2c312b6bc`.
+The frozen source before closure has SHA-256
+`d5f4eeead7566421b8446530469637df8a192e3f68617d5201b9a3841e4a90a4`.
+The current source matches the committed fixture byte-for-byte. Original
+signatures and definitions were preserved; declaration hashes are:
+
+| Declaration | SHA-256 |
+|---|---|
+| `apm_t97A02_bridge_1` | `cb69e0ef2456c1b3eeda3b8f8703607aa7eaf7bb9a28b472761ba7567eaa8287` |
+| `apm_t97a02` | `dbfb1b91127bafb5b06421aa4b22c8376aaf66ceaea1ea1aba18ea906412be90` |
+| `apm_t97A02_homotopic_const_of_projection_homotopies` | `a9d372acabd1c4536784f2700981f30b3f71c885273c2f5f44840418b4a88a4b` |
+
+Hashes cover declaration bytes from `theorem` or `lemma` up to, but not
+including, the space preceding `:=`. Comment-stripped executable placeholder
+counts fell **2 → 0** in the closing commit. Both fixture and frozen Main
+compiled, the focused build of `CircleHurewiczIsomorphism`,
+`IntegralSingularHomologyComparison`, and `ComponentRealLiftAssembly` passed,
+and full `lake build` passed. Both final axiom audits use only `propext`,
+`Classical.choice`, and `Quot.sound`. There were no new warnings; the author
+recorded 32 replayed dependency warnings in the focused build and five
+replayed canary warnings in the full build. Independent review reproduced
+the compilation/build results, hashes, scope and forbidden-code checks.
+
+This documentation records that reviewed closure; it changes no Lean source
+and adds **zero** placeholder reduction. It makes no additional consumer
+closure claim.
+
 ## Updating the DAG
 
 For an elected experiment, the DAG records:
