@@ -38661,6 +38661,24 @@
       "git add ConstructionTargets/SardCompactUniformSmallTaylorRemainder.lean ConstructionTargets/SardCompactUniformSmallTaylorRemainder.md && git commit -m 'topology: prove compact uniform small Taylor remainder'",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788925691783-15943-af12bbea",
+     :commands
+     ["git show 95f25c3fa98e21871505e839c62f3a656d57a45e --stat --oneline"
+      "sha256sum /tmp/SardCompactUniformSmallTaylorRemainderProbe.lean"
+      "cmp fixture recorded-source"
+      "git show commit:ConstructionTargets/SardCompactUniformSmallTaylorRemainder.lean | sed -n '7,34p' | sha256sum"
+      "lake env lean /tmp/SardCompactUniformSmallTaylorRemainderProbe.lean"
+      "lake env lean ConstructionTargets/SardCompactUniformSmallTaylorRemainder.lean"
+      "lake build ConstructionTargets.SardCompactUniformSmallTaylorRemainder"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check commit^ commit"
+      "git diff --exit-code commit -- ConstructionTargets"
+      "consumer hash and placeholder checks"],
+     :finding
+     "Commit 95f25c3f has exact scope and matching fixture/frozen hashes. Uniform highest-derivative bound applies throughout each convex source ball; affine-line derivative order, lower-jet vanishing, k-factorial denominator and cancellation are correct. Standard axioms only, zero scoped placeholders, all gates passed."},
     :commit "95f25c3fa98e21871505e839c62f3a656d57a45e",
     :changed-paths
     ["ConstructionTargets/SardCompactUniformSmallTaylorRemainder.lean"
@@ -38670,7 +38688,7 @@
      :sha256
      "f35dbd42c128177131917cb4d0c0a165ef8fe5e5e8a7bb3c3221a8d2133a9330"}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactUniformSmallTaylorRemainder.lean"
     "ConstructionTargets/SardCompactUniformSmallTaylorRemainder.md"],
@@ -38851,7 +38869,7 @@
       "f35dbd42c128177131917cb4d0c0a165ef8fe5e5e8a7bb3c3221a8d2133a9330"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
