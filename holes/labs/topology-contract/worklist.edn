@@ -48829,61 +48829,87 @@
    :stop-condition
    "GO needs the complete compiled producer and compact rank-zero conclusion. REVISE requires exactly one compiled prerequisite. Otherwise identify the exact boundary; infrastructure absence is not refutation.",
    :evidence
-   {:probe
-    {:source-pins
-     {:path "/tmp/SardSmoothCompactRankZeroInduction-sources.json",
-      :sha256
-      "81824a7a343a17021df3df5a204e62453266427a0fd0cfd1cc751fbc43214c1d"},
-     :placeholder-delta
-     {:fixture 0, :consumer-before 1, :consumer-after 1, :delta 0},
-     :residual
-     "Conditional compact rank-zero induction step established. Positive-rank reduction with preserved smoothness, compatible local-domain induction, base cases, full critical-set coverage and manifold transport remain. No unconditional Sard or frozen t93A04 closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :documentation
-     {:path "/tmp/SardSmoothCompactRankZeroInduction.md",
-      :sha256
-      "3ff6705b4c48b90ed32eae76a40c8917b2a46c0454a9a6ef771f3134f3acd148"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/SardSmoothCompactRankZeroInduction.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/check-sard-smooth-compact-rank-zero.py",
-       :exit 0}
-      {:cmd
-       "git diff --exit-code -- ConstructionTargets problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
-       :exit 0}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/SardSmoothCompactRankZeroInduction.lean",
-      :sha256
-      "b253ed6a67b8d0fc2d8d7bcc6866e05daacd6168050e4a4193c99e5902a2d236",
-      :placeholder-count 0},
-     :finding
-     "Complete conditional compact rank-zero image-nullity theorem compiles for actual target Haar measure. Nonzero jets supply scalar directions through the existing producer; the reviewed smooth local-induction theorem supplies null open pieces, and second-countable aggregation derives higher-jet locus nullity. Choosing k=finrank(E) supplies admissible finite order k+1 from genuine infinity smoothness. The existing compact rank-zero assembly then proves the conclusion. The sole nullity input is local genuinely smooth critical-image induction over strictly smaller sources, explicitly including zero-dimensional sources.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/SardSmoothCompactRankZeroInduction.lean"
-       "ConstructionTargets/SardSmoothCompactRankZeroInduction.md"],
-      :acceptance
-      {:consumer-placeholder-count 1,
-       :preserve-zero-dimensional-induction-sources true,
-       :axioms :standard-only,
-       :consumer-file "problems/t93A04/lean/Main.lean",
-       :build
-       "lake build ConstructionTargets.SardSmoothCompactRankZeroInduction",
-       :preserve-genuine-infinity true,
-       :fixture-placeholders 0,
-       :declarations
-       ["SardSmoothCompactRankZeroInductionProbe.compact_rankZero_image_null_of_smooth_local_induction"],
-       :compile
-       "lake env lean ConstructionTargets/SardSmoothCompactRankZeroInduction.lean",
-       :consumer-sha256
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}},
-     :seat :codex-12}},
+   {:source-pins
+    {:path "/tmp/SardSmoothCompactRankZeroInduction-sources.json",
+     :sha256
+     "81824a7a343a17021df3df5a204e62453266427a0fd0cfd1cc751fbc43214c1d",
+     :verified true},
+    :placeholder-delta
+    {:consumer "t93A04", :before 1, :after 1, :delta 0, :fixture 0},
+    :residual
+    "Conditional compact rank-zero induction step compiled. Positive-rank smooth reduction, compatible local-domain induction, base cases, full critical-set coverage and manifold transport remain. No unconditional Sard or t93A04 closure claimed; independent review remains.",
+    :gates
+    {:exact-fixture-promotion :pass,
+     :compile :pass,
+     :build :pass,
+     :preserve-genuine-infinity true,
+     :preserve-zero-dimensional-induction-sources true,
+     :frozen-consumer-unchanged true,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"SardSmoothCompactRankZeroInductionProbe.compact_rankZero_image_null_of_smooth_local_induction"
+     "5e31685184a5563e0124be1cdfcef5e835e62237fd4057acb163986758be95bc"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :documentation
+    {:path "/tmp/SardSmoothCompactRankZeroInduction.md",
+     :sha256
+     "3ff6705b4c48b90ed32eae76a40c8917b2a46c0454a9a6ef771f3134f3acd148"},
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, dependency review receipts and assembly sources",
+      :exit 0}
+     {:cmd
+      "Read-only Python verification of every pinned source hash and comment-stripped consumer placeholder count",
+      :exit 0}
+     {:cmd
+      "cmp pinned fixture and documentation against both promoted files",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardSmoothCompactRankZeroInduction.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardSmoothCompactRankZeroInduction.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardSmoothCompactRankZeroInduction",
+      :exit 0,
+      :output "Build completed successfully (8415 jobs)."}
+     {:cmd
+      "sed -n '12,27p' ConstructionTargets/SardSmoothCompactRankZeroInduction.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "rg placeholder and prohibited-declaration scan over promoted Lean file",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output "374 items OK"}
+     {:cmd
+      "git diff --exit-code -- problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check; git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output
+      "Only unrelated untracked holes/labs/topology-contract/runs2/ remains; untouched."}],
+    :commit "5d84d2edd1225b54fbdfcfedcba515c1533fef01",
+    :changed-paths
+    ["ConstructionTargets/SardSmoothCompactRankZeroInduction.lean"
+     "ConstructionTargets/SardSmoothCompactRankZeroInduction.md"],
+    :fixture
+    {:path "/tmp/SardSmoothCompactRankZeroInduction.lean",
+     :sha256
+     "b253ed6a67b8d0fc2d8d7bcc6866e05daacd6168050e4a4193c99e5902a2d236",
+     :placeholder-count 0},
+    :consumer-sha256
+    "4431ba028376d7a85867d9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardSmoothCompactRankZeroInduction.lean"
     "ConstructionTargets/SardSmoothCompactRankZeroInduction.md"],
