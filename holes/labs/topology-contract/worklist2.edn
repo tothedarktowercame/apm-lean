@@ -10461,6 +10461,19 @@
       :exit 0,
       :correction
       "Initial extraction stopped at an internal let assignment. Recomputed the full declaration using the final := by delimiter; only the corrected hash is reported."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788996866773-17339-75ea2a66",
+     :commands
+     ["git show d579b0fc:holes/labs/topology-contract/worklist2.edn"
+      "lake env lean /tmp/T03J05Boundary.lean"
+      "python3 inline audit: fixture/frozen SHA256, complete statement hash including internal lets, exact FrozenClaim and copied setup, placeholder counts, forbidden tokens and ledger-only scope"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show d579b0fc:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Independent review of codex-13 STOP. Diagnostic compiles warning-free with three standard-only audits. FrozenClaim exactly preserves the literal quotient, image cardinality and all ambient quantifiers; exact_residual removes only the proved Euler conjunct. Missing curve geometry and ambient nonhomotopy remain unproved, with no added separation or orientation hypotheses and no inferred refutation. Fixture and full frozen statement hashes match; placeholders 1->1. No closure or new reusable prerequisite claimed. Ledger untouched."},
     :changed-paths [],
     :fixture
     {:path "/tmp/T03J05Boundary.lean",
@@ -10482,7 +10495,7 @@
      :placeholder-after 1},
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "INTERSECTION: exact punctured genus-two product-torus consumer",
