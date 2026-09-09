@@ -36077,6 +36077,41 @@
    "The positive-rank pointwise closed-open nullity theorem compiles; restrict to exact rank and aggregate the finite positive-rank family.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if nullity of a localized derivative-rank-upper image cannot transfer by inclusion to the corresponding localized exact-rank stratum, or if the adapter requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.lean"
+    "ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POSITIVE-RANK EXACT-STRATUM POINTWISE NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.lean",
+     :sha256
+     "61d9f482866bbf896a2d9fa640410a77bc25b21e586cf02cee6cb73e1485b987"},
+    :declarations ["exists_open_rankStratum_image_zero_finiteOrder"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Invoke second-countable local aggregation for each positive exact-rank stratum and combine the finite rank family with rank zero."},
+   :representation
+   {:source
+    "An open neighborhood with null image of the derivative-rank-at-most-r locus at a positive exact-rank point.",
+    :target
+    "The same open neighborhood with null image of the exact derivative-rank-r stratum, obtained by set and image inclusion."},
+   :id
+   :critical-value-sard-finite-order-positive-rank-exact-stratum-pointwise-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-positive-rank-pointwise-closed-open-nullity-1
+    :critical-value-sard-finite-order-rank-locus-local-aggregation-1],
+   :current-residual
+   "The positive exact-rank pointwise nullity witness compiles; aggregate it over each positive stratum and then across the finite rank index.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -36130,88 +36165,83 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Restrict each positive-rank upper-locus neighborhood to its exact rank stratum, aggregate all positive ranks, and combine with the rank-zero finite-order branch.",
+     "Aggregate the pointwise null neighborhoods for every positive exact-rank stratum, then combine their finite union with the rank-zero finite-order branch.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_open_rankUpper_image_zero_finiteOrder"
-      "5137343eadfedabdf23572b70f76069a4edb9aae8124008daeaebdf1f8216a4b"},
+     {"exists_open_rankStratum_image_zero_finiteOrder"
+      "3df0201f22ebfc2013e4229310d4ea845ed5609f5378f5a472711d2920729341"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if a positive exact-rank point, finite-order regularity, reduced-dimension induction, and the localized derivative-rank-upper locus cannot yield an open neighborhood with null localized image, or if the theorem requires nonstandard axioms.",
+      "Stop only if nullity of a localized derivative-rank-upper image cannot transfer by inclusion to the corresponding localized exact-rank stratum, or if the adapter requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderPositiveRankPointwiseClosedOpenNullity.lean"
-       "ConstructionTargets/SardFiniteOrderPositiveRankPointwiseClosedOpenNullity.md"],
+      ["ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.lean"
+       "ConstructionTargets/SardFiniteOrderPositiveRankExactStratumPointwiseNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POSITIVE-RANK POINTWISE CLOSED-OPEN NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POSITIVE-RANK EXACT-STRATUM POINTWISE NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderPositiveRankPointwiseClosedOpenNullityProbe.lean",
+        "/tmp/SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.lean",
         :sha256
-        "6d4a528b374d9b58ed764f8fc318a4654d30b81e2eb2fa9b83f99db733bb56da"},
-       :declarations ["exists_open_rankUpper_image_zero_finiteOrder"],
+        "61d9f482866bbf896a2d9fa640410a77bc25b21e586cf02cee6cb73e1485b987"},
+       :declarations
+       ["exists_open_rankStratum_image_zero_finiteOrder"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Transfer the rank-upper null neighborhood to the positive exact-rank stratum and invoke finite-rank local aggregation."},
+       "Invoke second-countable local aggregation for each positive exact-rank stratum and combine the finite rank family with rank zero."},
       :representation
       {:source
-       "A finite-order smooth map at a positive exact derivative-rank critical point, with classical lower-dimensional induction and admissible regularity.",
+       "An open neighborhood with null image of the derivative-rank-at-most-r locus at a positive exact-rank point.",
        :target
-       "An open neighborhood of the point on which the image of the closed derivative-rank-upper locus has zero target measure."},
+       "The same open neighborhood with null image of the exact derivative-rank-r stratum, obtained by set and image inclusion."},
       :id
-      :critical-value-sard-finite-order-positive-rank-pointwise-closed-open-nullity-1,
+      :critical-value-sard-finite-order-positive-rank-exact-stratum-pointwise-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-derivative-range-orthogonal-closed-open-chart-nullity-1
-       :critical-value-sard-finite-order-projected-smooth-chart-target-data-1
-       :critical-value-sard-finite-order-projected-chart-localized-residual-slice-zero-1
-       :critical-value-sard-projected-chart-residual-slices-contdiff-on-1
-       :critical-value-sard-range-projection-coordinate-derivative-1
-       :critical-value-sard-projected-rank-reduced-dimension-identities-1
-       :critical-value-sard-projected-positive-rank-dimension-data-1
-       :critical-value-sard-derivative-rank-upper-locus-closed-1],
+      [:critical-value-sard-finite-order-positive-rank-pointwise-closed-open-nullity-1
+       :critical-value-sard-finite-order-rank-locus-local-aggregation-1],
       :current-residual
-      "The positive-rank pointwise closed-open nullity theorem compiles; restrict to exact rank and aggregate the finite positive-rank family.",
+      "The positive exact-rank pointwise nullity witness compiles; aggregate it over each positive stratum and then across the finite rank index.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture now constructs the finite-order projected chart at every positive exact-rank point, takes the closed derivative-rank-upper locus as the localized set, supplies finite-order residual-slice regularity and locus-restricted zero derivative, and invokes the banked derivative-range closed-open theorem. It returns an open neighborhood with null image of the localized rank-upper locus. Banking this pointwise theorem leaves exact-stratum restriction and finite-rank aggregation with the rank-zero branch.",
+     "The rectangular theorem is not refuted. The banked positive-rank pointwise theorem supplies a null neighborhood for the closed rank-upper locus. A placeholder-free fixture transfers this conclusion to the exact rank stratum by image inclusion, preserving the same open neighborhood and all finite-order hypotheses. Banking this bounded adapter leaves only aggregation of the positive exact-rank strata and combination with the rank-zero finite-order branch.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake build ConstructionTargets.SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullity >/dev/null",
+       "lake build ConstructionTargets.SardFiniteOrderPositiveRankPointwiseClosedOpenNullity >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderPositiveRankPointwiseClosedOpenNullityProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderPositiveRankPointwiseClosedOpenNullityProbe.exists_open_rankUpper_image_zero_finiteOrder' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.exists_open_rankStratum_image_zero_finiteOrder' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderPositiveRankPointwiseClosedOpenNullityProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.lean",
        :exit 0,
        :output
-       "6d4a528b374d9b58ed764f8fc318a4654d30b81e2eb2fa9b83f99db733bb56da  /tmp/SardFiniteOrderPositiveRankPointwiseClosedOpenNullityProbe.lean"}
+       "61d9f482866bbf896a2d9fa640410a77bc25b21e586cf02cee6cb73e1485b987  /tmp/SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderPositiveRankPointwiseClosedOpenNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '14,69p' /tmp/SardFiniteOrderPositiveRankPointwiseClosedOpenNullityProbe.lean | sha256sum",
+       "sed -n '7,28p' /tmp/SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "5137343eadfedabdf23572b70f76069a4edb9aae8124008daeaebdf1f8216a4b  -"}
+       "3df0201f22ebfc2013e4229310d4ea845ed5609f5378f5a472711d2920729341  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 274 items OK; {:done 266, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 275 items OK; {:done 267, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -36223,12 +36253,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderPositiveRankPointwiseClosedOpenNullityProbe.lean",
+      "/tmp/SardFiniteOrderPositiveRankExactStratumPointwiseNullityProbe.lean",
       :sha256
-      "6d4a528b374d9b58ed764f8fc318a4654d30b81e2eb2fa9b83f99db733bb56da"},
+      "61d9f482866bbf896a2d9fa640410a77bc25b21e586cf02cee6cb73e1485b987"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -36451,7 +36481,8 @@
     :critical-value-sard-finite-order-reduced-dimension-induction-nullity-1
     :critical-value-sard-finite-order-closed-open-explicit-topology-measure-spaces-1
     :critical-value-sard-finite-order-derivative-range-orthogonal-closed-open-chart-nullity-1
-    :critical-value-sard-finite-order-positive-rank-pointwise-closed-open-nullity-1],
+    :critical-value-sard-finite-order-positive-rank-pointwise-closed-open-nullity-1
+    :critical-value-sard-finite-order-positive-rank-exact-stratum-pointwise-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
