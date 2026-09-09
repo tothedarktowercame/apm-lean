@@ -145,7 +145,23 @@ apply_job_result() {
       || die "could not clear unusable in-flight job $LAST_JOB"
     die "job $LAST_JOB emitted no unique nonce-bound receipt"
   fi
-  transition="$(bb "$HERE/build_step.bb" apply-result "$LEDGER" "$row" "$receipt" 2>&1)" || die "invalid receipt from $LAST_JOB: $transition"
+  if ! transition="$(bb "$HERE/build_step.bb" apply-result "$LEDGER" "$row" "$receipt" 2>&1)"; then
+    # Clear the pointer for the same reason the nonce-extraction failure above
+    # does, and with the same consequence when it does not: a completed job
+    # result is immutable, so a retained pointer makes every restart reclaim
+    # the same rejected receipt.
+    #
+    # 2026-09-09: build_step began rejecting receipts that record an unexpected
+    # gate exit (64301a10). This line still died with the pointer intact, so
+    # the loop stopped, restarted, reclaimed the same receipt and stopped
+    # again -- 13:28:40 and 13:29:12, thirty-two seconds apart -- spending two
+    # of the supervisor's three repairs on a row that could never advance.
+    # Keep the receipt file as evidence, clear only the pointer, and let the
+    # supervisor redispatch the row with a new nonce.
+    bb "$HERE/inflight.bb" clear "$INFLIGHT" \
+      || die "could not clear rejected in-flight job $LAST_JOB"
+    die "invalid receipt from $LAST_JOB: $transition"
+  fi
   log "$transition"
   git -C "$ROOT" add "$LEDGER"
   # Applying a receipt is IDEMPOTENT, and the reclaim path re-applies a
