@@ -52943,8 +52943,41 @@
   {:consumer "t02A08",
    :stop-condition
    "GO requires the complete frozen consumer. Otherwise name the exact missing sphere-map construction or induced-map naturality theorem; an orientation or identity case alone is not closure.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "Prove for every integer n the existence of a continuous self-map of the literal metric S2 whose actual ModuleCat singular H2 map acts by n under an orientation isomorphism. Degree zero and negative integers must be covered explicitly; the compiled degree-one case is only diagnostic.",
+    :outcome :stop,
+    :warnings
+    ["One inherited unnecessarySimpa warning in the preserved frozen prefix."],
+    :disposition :stop,
+    :axioms [propext Classical.choice Quot.sound],
+    :author "codex-12",
+    :placeholder-before 1,
+    :reason
+    "Missing actual arbitrary-integer sphere-map realization with its induced integral H2 computation. SphereHomology supplies the literal ModuleCat orientation, but neither it nor compactification homeomorphisms computes the action of a degree-n map. A suspension-of-circle-power naturality theorem with explicit metric-sphere transport, or an equivalent direct computation, remains required. This is missing infrastructure, not mathematical refutation.",
+    :commands
+    [{:cmd "lake env lean /tmp/T02A08SphereDegreeBoundary.lean",
+      :exit 0}
+     {:cmd "python3 /tmp/t02a08-boundary-audit.py", :exit 0}
+     {:cmd "bb /tmp/t02a08-review.bb", :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T02A08SphereDegreeBoundary.lean",
+     :sha256
+     "c02a702990b9f97ba613cc08ee718c382a4e794b6e3ab49f5365027aea50a472",
+     :role :partial-diagnostic},
+    :finding
+    "Compiled the actual H2 orientation via sphereModuleTopHomologyIsoInt 2, the frozen degree-one predicate, and its fiber-intersection conclusion. Preserved the exact proved frozen prefix. Inspected sphere and integral-coefficient comparisons, antipodal naturality, circle powers, sphere shifts and one-point compactification APIs. The positive-dimensional antipodal sign remains unfinished; general positive and negative integer actions are not supplied. No full closure fixture was obtained.",
+    :frozen
+    {:path "problems/t02A08/lean/Main.lean",
+     :sha256
+     "5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1",
+     :verified true},
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SPHERE ORIENTATION / arbitrary integer induced degree",
    :acceptance
