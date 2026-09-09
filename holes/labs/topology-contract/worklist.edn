@@ -54978,9 +54978,55 @@
   {:consumer "t96J05",
    :stop-condition
    "GO requires compiled actual global charted-space and genuine-smooth manifold structures. REVISE requires exactly one compiled prerequisite. Missing geometry is not refutation.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Global Euclidean-source regular-fiber manifold structure is compiled. Smooth embedded inclusion, tangent-image comparison, manifold-source transport and frozen consumer uptake remain; no consumer closure is claimed.",
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:placeholder-after 0,
+      :axioms :standard-only,
+      :inherited-subtype-topology true,
+      :actual-charted-space true,
+      :genuine-infinity-isManifold true,
+      :chosen-chart-and-atlas-specifications true,
+      :preserve-existing-apis true},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :documentation
+     {:path "/tmp/RegularFiberGlobalAtlas.md",
+      :sha256
+      "ca0a1811fd59ec8ff9f182c7d9796c53545935a906db550054c64b30e6bc39ff"},
+     :commands
+     [{:cmd "bb /tmp/t01a08-review.bb", :exit 0}
+      {:cmd "lake env lean /tmp/RegularFiberGlobalAtlas.lean", :exit 0}
+      {:cmd
+       "Python comment-stripped forbidden-token audit and fixture/documentation SHA-256 calculation",
+       :exit 0}
+      {:cmd "git status --porcelain=v1", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/RegularFiberGlobalAtlas.lean",
+       :exit 1,
+       :finding
+       "The existential theorem needed explicit inclusion of section hypotheses hsm and hreg; added include. Marked the class-valued chartedSpace definition reducible as requested by the linter. Final compile passed without warnings."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/RegularFiberGlobalAtlas.lean",
+      :sha256
+      "72bcc1839ef8135589a4abee0985e6d57de4b69c154beb1cb0053e3b4def6cab"},
+     :finding
+     "Constructed the chart family using RegularFiberFixedModelOverlaps.exists_cover, defined the atlas as its range and chartAt as the selected chart, and proved center membership, chartAt equality, atlas equality and selected-chart membership. Mathlib isManifold_of_contDiffOn consumes the banked actual overlap smoothness to establish IsManifold at genuine infinity. The literal fiber retains its inherited topology. Empty fibers and zero-dimensional kernels require no extra hypotheses or separate chart assumptions.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/RegularFiberGlobalAtlas.lean"
+       "ConstructionTargets/RegularFiberGlobalAtlas.md"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/RegularFiberGlobalAtlas.lean"
+    "ConstructionTargets/RegularFiberGlobalAtlas.md"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / global fixed-model fiber atlas",
    :acceptance
