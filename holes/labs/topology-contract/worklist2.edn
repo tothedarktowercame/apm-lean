@@ -466,9 +466,161 @@
    :other-consumers [:circle-oriented-chart-transition]}
   {:consumer :circle-chart-local-orientation,
    :stop-condition
-   "No global fundamental class or localization injectivity may be assumed to construct the local class.",
-   :phase :probe,
+   "Bank only the exact neighborhood-excision comparison and generator preservation. Do not claim that supplied chart data constructs a chart, that ball-neighborhood specializations are model chart instances, or that a global fundamental class or localization monicity has been proved.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
+      :sha256
+      "a9f4488775de93310f82273d66df283cd9ab9cfd362bc149abc7d1766d3c57e3"},
+     :commands
+     [{:cmd
+       "cd /home/joe/code/apm-lean && lake env lean /tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/LocalHomologyNeighborhoodExcision.lean"
+    "ConstructionTargets/LocalHomologyNeighborhoodExcision.md"],
+   :dag-node
+   "Queue D #2: restricted chart local generator; neighborhood-to-ambient excision comparison",
+   :acceptance
+   {:declarations
+    ["ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion_chain_eq"
+     "ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion_H1_isIso"
+     "ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion_sends_generator"
+     "ConstructionTargets.LocalHomologyNeighborhoodExcision.lineNeighborhoodInclusion_H1_isIso"
+     "ConstructionTargets.LocalHomologyNeighborhoodExcision.circleNeighborhoodInclusion_H1_isIso"],
+    :implementation
+    "Promote the exact compiled fixture and document its limits. Construct the double-complement pair homeomorphism and prove the chain-map equality using production relative-map composition. Derive excision hypotheses from T1, openness of U, and x membership. Prove generator preservation using the inverse of the actual inclusion-induced isomorphism.",
+    :consumer-equation
+    "relativeSingularMap(neighborhoodDeletedPoint U x,deletedPoint x,neighborhoodInclusion U) equals the relative chain map of neighborhoodExcisionHomeomorph U followed by relativeExcisionMap(deletedPoint x,U complement). Consequently, for every ambient local class z and neighborhood generator g, there exists an integer n with n times inclusion_*(g)=z.",
+    :consumer-residual
+    "Construct the restricted pointed model-to-neighborhood chart and deleted-point pair equivalence on the line and Circle, transport the banked model generator through that chart, then apply the compiled inclusion generator theorem. The fixture's ball-neighborhood specializations establish excision only, not chart construction.",
+    :axioms :standard-only,
+    :gates
+    ["Verify the fixture SHA-256 before implementation."
+     "Compile the fixture and canonical target."
+     "Run lake build ConstructionTargets.LocalHomologyNeighborhoodExcision ConstructionTargets.OneDiskLocalOrientation ConstructionTargets.ChartPairRelativeHomologyTransport."
+     "Reproduce all five printed axiom audits; permit only propext, Classical.choice, Quot.sound."
+     "Run placeholder and forbidden-declaration scans, git diff --check, exact-scope audit, and commit the two-file implementation."]},
+   :representation
+   {:source
+    "The relative singular-chain map induced by actual subtype inclusion U into X, for the pair (U,U minus x)",
+    :target
+    "The production relativeExcisionMap for A=X minus x and Z=U complement, preceded by the canonical pair homeomorphism from U to its double complement",
+    :direction
+    "Exact equality from the actual neighborhood-inclusion chain map to the composite of canonical subtype identification and production excision; both induce the same forward integral local H1 map into the ambient space."},
+   :id :oriented-manifold-neighborhood-excision-comparison-1,
+   :kind :representation-comparison,
+   :depends-on [:oriented-manifold-model-generator-sign-1],
+   :current-residual
+   "Production excision uses the complement-of-excised-set subtype; its isomorphism theorem has not been identified canonically with the actual chart-neighborhood inclusion map and generator transport.",
+   :other-consumers [:euclidean-line-local-orientation]}
+  {:consumer :circle-chart-local-orientation,
+   :stop-condition
+   "No global fundamental class or localization injectivity may be assumed to construct the local class.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Exactly one compiled excision prerequisite supplied. The parent still requires constructed restricted charts and deleted-point equivalences for the Euclidean line and Circle, followed by composition with this actual ambient inclusion map.",
+     :outcome :revise,
+     :warnings [],
+     :statement-hashes {},
+     :prerequisite
+     {:consumer :circle-chart-local-orientation,
+      :stop-condition
+      "Bank only the exact neighborhood-excision comparison and generator preservation. Do not claim that supplied chart data constructs a chart, that ball-neighborhood specializations are model chart instances, or that a global fundamental class or localization monicity has been proved.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path "/tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
+         :sha256
+         "a9f4488775de93310f82273d66df283cd9ab9cfd362bc149abc7d1766d3c57e3"},
+        :commands
+        [{:cmd
+          "cd /home/joe/code/apm-lean && lake env lean /tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/LocalHomologyNeighborhoodExcision.lean"
+       "ConstructionTargets/LocalHomologyNeighborhoodExcision.md"],
+      :dag-node
+      "Queue D #2: restricted chart local generator; neighborhood-to-ambient excision comparison",
+      :acceptance
+      {:declarations
+       ["ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion_chain_eq"
+        "ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion_H1_isIso"
+        "ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion_sends_generator"
+        "ConstructionTargets.LocalHomologyNeighborhoodExcision.lineNeighborhoodInclusion_H1_isIso"
+        "ConstructionTargets.LocalHomologyNeighborhoodExcision.circleNeighborhoodInclusion_H1_isIso"],
+       :implementation
+       "Promote the exact compiled fixture and document its limits. Construct the double-complement pair homeomorphism and prove the chain-map equality using production relative-map composition. Derive excision hypotheses from T1, openness of U, and x membership. Prove generator preservation using the inverse of the actual inclusion-induced isomorphism.",
+       :consumer-equation
+       "relativeSingularMap(neighborhoodDeletedPoint U x,deletedPoint x,neighborhoodInclusion U) equals the relative chain map of neighborhoodExcisionHomeomorph U followed by relativeExcisionMap(deletedPoint x,U complement). Consequently, for every ambient local class z and neighborhood generator g, there exists an integer n with n times inclusion_*(g)=z.",
+       :consumer-residual
+       "Construct the restricted pointed model-to-neighborhood chart and deleted-point pair equivalence on the line and Circle, transport the banked model generator through that chart, then apply the compiled inclusion generator theorem. The fixture's ball-neighborhood specializations establish excision only, not chart construction.",
+       :axioms :standard-only,
+       :gates
+       ["Verify the fixture SHA-256 before implementation."
+        "Compile the fixture and canonical target."
+        "Run lake build ConstructionTargets.LocalHomologyNeighborhoodExcision ConstructionTargets.OneDiskLocalOrientation ConstructionTargets.ChartPairRelativeHomologyTransport."
+        "Reproduce all five printed axiom audits; permit only propext, Classical.choice, Quot.sound."
+        "Run placeholder and forbidden-declaration scans, git diff --check, exact-scope audit, and commit the two-file implementation."]},
+      :representation
+      {:source
+       "The relative singular-chain map induced by actual subtype inclusion U into X, for the pair (U,U minus x)",
+       :target
+       "The production relativeExcisionMap for A=X minus x and Z=U complement, preceded by the canonical pair homeomorphism from U to its double complement",
+       :direction
+       "Exact equality from the actual neighborhood-inclusion chain map to the composite of canonical subtype identification and production excision; both induce the same forward integral local H1 map into the ambient space."},
+      :id :oriented-manifold-neighborhood-excision-comparison-1,
+      :kind :representation-comparison,
+      :depends-on [:oriented-manifold-model-generator-sign-1],
+      :current-residual
+      "Production excision uses the complement-of-excised-set subtype; its isomorphism theorem has not been identified canonically with the actual chart-neighborhood inclusion map and generator transport.",
+      :other-consumers [:euclidean-line-local-orientation]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :author "codex-13",
+     :commands
+     [{:cmd "cd /home/joe/code/apm-lean && realpath .lake/packages",
+       :exit 0}
+      {:cmd
+       "cd /home/joe/code/apm-lean && lake env lean /tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "cd /home/joe/code/apm-lean && git diff --exit-code -- '*.lean' lakefile.toml lakefile.lean lake-manifest.json lean-toolchain",
+       :exit 0}],
+     :repository-note
+     "Read-only probe; no repository files modified. Existing supervisor files were left untouched. Canonical package authority verified.",
+     :changed-paths [],
+     :dependency-commit "1333150cc6443e151e5df62e24d4d3ddf1417cab",
+     :fixture
+     {:path "/tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
+      :sha256
+      "a9f4488775de93310f82273d66df283cd9ab9cfd362bc149abc7d1766d3c57e3"},
+     :finding
+     "Compiled one neighborhood-excision prerequisite. For a T1 space and an open neighborhood U containing x, the actual inclusion of pairs (U,U minus x) into (X,X minus x) agrees at chain level with production excision after the canonical double-complement subtype identification. Its integral relative H1 map is an isomorphism and sends generators to generators. Real-line and Circle neighborhood inclusions compile. Restricted model-to-neighborhood charts have not been constructed, so the parent packet is not GO.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "Queue D #2: milestone 3, including the unbanked geometric remainder of milestone 2",
@@ -486,7 +638,9 @@
     "Model to manifold: restricted chart-pair homeomorphism followed by neighborhood inclusion/excision; prove equality with the induced relative singular homology map, not merely existence of an isomorphic group."},
    :id :oriented-manifold-chart-local-generator-1,
    :kind :representation-comparison,
-   :depends-on [:oriented-manifold-model-generator-sign-1],
+   :depends-on
+   [:oriented-manifold-model-generator-sign-1
+    :oriented-manifold-neighborhood-excision-comparison-1],
    :current-residual
    "Pair-homeomorphism transport is banked; an actual restricted chart pair, deleted-point equivalence, and its comparison with ambient local homology are not.",
    :other-consumers [:euclidean-line-local-orientation]}
