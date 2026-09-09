@@ -9358,8 +9358,169 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["Preserve all reviewed refutations, including t01A05 and t96J07, and distinguish historical t94J08 defects from its repaired statement."
+     "Preserve t01A08 and t94A06 model-scope STOPs, t99J03 classification, polygon and graph invariants, Hopf classification and intrinsic numerical normalization boundaries."
+     "The new overlap theorem reduces part of the fiber-atlas boundary but does not establish the entire stopped atlas packet."],
+    :disposition :replan,
+    :excluded-concurrent
+    [:t93a04-reviewed-closure-documentation-refill28
+     :checkpoint-full-dag-refill-29-after-common-value-and-fiber-overlaps],
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint14Census.py", :exit 0}
+     {:cmd
+      "bb dependency-review, historical-row and active-row queries across both ledgers",
+      :exit 0}
+     {:cmd
+      "Read DAG, foundational-program note, closure policy, frozen t96J05 and RegularFiberFixedModelOverlaps documentation",
+      :exit 0}
+     {:cmd "sha256sum problems/t96J05/lean/Main.lean", :exit 0}
+     {:cmd "git log -2 --oneline -- problems/t92J07/lean/Main.lean",
+      :exit 0}],
+    :replacement-items
+    [{:consumer :t96J05,
+      :stop-condition
+      "Preserve all frozen hypotheses and the literal radial-level subtype. Do not assume radial variation, regularity of an attained value or a global fiber atlas.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE: exact radial-level consumer and constant-radius audit",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t96J05/lean/Main.lean",
+       :stop-condition
+       "No partial GO, assumed radial variation, silent hypothesis repair or unproved refutation. STOP with the exact remaining topology or atlas boundary if neither closure nor refutation compiles.",
+       :gates
+       ["GO requires a complete zero-placeholder exact frozen fixture, unchanged statement hash, fixture SHA256 and standard-only audits."
+        "A refutation requires a compiled counterexample satisfying every frozen hypothesis and contradicting the entire existential conclusion."
+        "Propose implementation scope only after complete closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Audit the complete frozen statement before attempting closure. Test m=1,n=2 with the literal unit circle as X: construct its frozen manifold and smooth-inclusion hypotheses, connectedness and nonemptiness, then classify all inhabited radial levels. If this contradicts the demanded zero-dimensional charted manifold, compile the complete admissible counterexample, including the topological obstruction. Otherwise attempt full exact closure using reviewed Sard and fixed-model overlaps, constructing every required global chart and manifold-source comparison. Do not retain an arbitrary attained radius when regularity requires choosing another.",
+       :consumer-equation
+       "Under every frozen hypothesis there exists a positive inhabited literal radial level carrying the specified dimension m-1 smooth manifold structure, or a compiled admissible instance contradicts that existence.",
+       :frozen-sha256
+       "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48"},
+      :id :oriented-checkpoint14-t96j05-exact-radial-level-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint14-regular-line-and-pair-naturality-refill],
+      :current-residual
+      "One frozen placeholder requires a positive inhabited radial level with an actual manifold structure of dimension m-1. Sard and local overlap infrastructure have advanced, but a constant-radius source may obstruct the stated conclusion.",
+      :other-consumers []}
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Use actual singularHomologyFunctor with coefficient object ModuleCat.of R R. No assumed H0 table, coefficient-change isomorphism, path-component classification or higher-sphere homology.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "CIRCLE/SPHERE INVARIANTS: coefficient-general H0 augmentation and positive-sphere endpoint",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For an explicitly stated commutative ring R, construct the canonical augmentation from actual H0(X;R) to R and prove its naturality for continuous maps. For nonempty path-connected X, construct its inverse using a point class and prove both inverse equations using actual singular path boundaries and chain generation. Reuse the geometry and coefficient-generic machinery behind SingularH0Augmentation. Specialize to literal positive-dimensional Euclidean spheres, including the exact rational H0 comparison type of t00J01 and the integer specialization. Show identity-induced map compatibility. Keep ordinary S0 separate with its reviewed two-coordinate answer.",
+       :consumer-equation
+       "For nonempty path-connected X, the canonical augmentation H0(X;R)->R is an isomorphism, natural under continuous maps; in particular actual H0(S2;Q) is Q with the frozen coefficient object and sphere subtype.",
+       :consumer-residual
+       "Rational H1 vanishing and H2 identification, coefficient-general sphere suspension and endpoints, product homology and full t00J01 closure remain downstream.",
+       :gates
+       ["GO requires a complete placeholder-free compiled fixture with actual augmentation, inverse equations, naturality and exact rational S2 witness."
+        "Record fixture SHA256 and standard-only axiom audits."
+        "REVISE only to exactly one compiled missing augmentation or path-boundary prerequisite."],
+       :stop-condition
+       "Do not retry the entire stopped sphere table or export integer isomorphisms as rational ones. A wrapper without the constructed coefficient-general inverse and consumer witness is insufficient."},
+      :id
+      :oriented-checkpoint14-explicit-coefficient-h0-augmentation-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint14-regular-line-and-pair-naturality-refill],
+      :current-residual
+      "Integral augmentation and coefficient-general discrete H0 are banked. The positive-dimensional rational sphere H0 comparison remains absent from the stopped coefficient table.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: radial-level scope and explicit H0 uptake",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+      :id :oriented-checkpoint15-radial-level-and-h0-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint14-t96j05-exact-radial-level-1
+       :oriented-checkpoint14-explicit-coefficient-h0-augmentation-1],
+      :current-residual
+      "Measure exact radial-level outcome separately from the coefficient-general H0 endpoint; attribute concurrent changes and retain all unresolved boundaries.",
+      :other-consumers []}],
+    :changed-paths [],
+    :measures
+    {:concurrent-placeholder-delta -2,
+     :baseline "813f85110b697164d4061eec7d1123c0af6e8dff",
+     :placeholder-after 68,
+     :placeholder-delta -2,
+     :placeholder-before 70,
+     :head "440c5fe000b5f864164bb109e44e0af4d5796a10",
+     :frozen-closures
+     {:portfolio [],
+      :concurrent
+      [{:consumer :t92J07,
+        :commit "b364803a",
+        :placeholder-before 2,
+        :placeholder-after 0}]},
+     :infrastructure-packets
+     {:portfolio 1,
+      :concurrent 1,
+      :modules-before 642,
+      :modules-after 644,
+      :portfolio-modules ["RelativePairNaturality"],
+      :concurrent-modules ["RegularFiberFixedModelOverlaps"]},
+     :typed-residual-change
+     ["Explicit-coefficient maps of actual relative quotients, functoriality, three exactness positions and connecting-map naturality are reviewed."
+      "The exact t01A08 projection and regular-value interpretation compile; arbitrary-model critical-value nullity remains unproved."
+      "Concurrent fixed-model fiber charts now have actual smooth overlaps; global manifold instances, inclusion and manifold-source transport remain downstream."],
+     :review-outcomes
+     {:stop-pass 1,
+      :implementation-pass 1,
+      :stop-review "invoke-1788994254112-17265-9ca9df12",
+      :implementation-review "invoke-1788994698176-17277-e5f9d14e",
+      :implementation-commit
+      "60d0daca2b7f4fdcb342580e60bf7218c67f28a5"},
+     :portfolio-placeholder-delta 0,
+     :census
+     {:path "/tmp/Checkpoint14Census.json",
+      :sha256
+      "e6048fb657401e69a0893659f570b233dc7a59c3d11a88752991fe3502fe8037",
+      :named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :zero-placeholder-before 20,
+      :zero-placeholder-after 21,
+      :open-after 37}},
+    :finding
+    "Elect one fresh near-closure adapter, t96J05, first. Newly reviewed Sard and fixed-model overlap infrastructure justify testing actual uptake, but the frozen hypotheses also permit constant-radius examples, which must be audited before applying regular-value reasoning. No refutation is inferred without a compiled admissible counterexample. Among remaining work, completed covering constructors need no duplicate work; arbitrary-model Sard, classification, orientation and numerical normalization retain their boundaries. Elect coefficient-general H0 augmentation next: it serves four proposed consumers and targets an actual missing rational sphere endpoint rather than extending the pair infrastructure with more aliases. It is simpler than coefficient-general excision, product homology or global orientation. Preserve the full positive-sphere STOP; this is an explicitly bounded endpoint prerequisite.",
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact regular-line uptake and relative-pair naturality",
@@ -9376,6 +9537,99 @@
     :oriented-checkpoint13-surface-and-relative-coefficients-refill],
    :current-residual
    "Measure frozen regular-line closure separately from pair-homology infrastructure, and attribute all concurrent closures and specification repairs.",
+   :other-consumers []}
+  {:consumer :t96J05,
+   :stop-condition
+   "Preserve all frozen hypotheses and the literal radial-level subtype. Do not assume radial variation, regularity of an attained value or a global fiber atlas.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE: exact radial-level consumer and constant-radius audit",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t96J05/lean/Main.lean",
+    :stop-condition
+    "No partial GO, assumed radial variation, silent hypothesis repair or unproved refutation. STOP with the exact remaining topology or atlas boundary if neither closure nor refutation compiles.",
+    :gates
+    ["GO requires a complete zero-placeholder exact frozen fixture, unchanged statement hash, fixture SHA256 and standard-only audits."
+     "A refutation requires a compiled counterexample satisfying every frozen hypothesis and contradicting the entire existential conclusion."
+     "Propose implementation scope only after complete closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Audit the complete frozen statement before attempting closure. Test m=1,n=2 with the literal unit circle as X: construct its frozen manifold and smooth-inclusion hypotheses, connectedness and nonemptiness, then classify all inhabited radial levels. If this contradicts the demanded zero-dimensional charted manifold, compile the complete admissible counterexample, including the topological obstruction. Otherwise attempt full exact closure using reviewed Sard and fixed-model overlaps, constructing every required global chart and manifold-source comparison. Do not retain an arbitrary attained radius when regularity requires choosing another.",
+    :consumer-equation
+    "Under every frozen hypothesis there exists a positive inhabited literal radial level carrying the specified dimension m-1 smooth manifold structure, or a compiled admissible instance contradicts that existence.",
+    :frozen-sha256
+    "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48"},
+   :id :oriented-checkpoint14-t96j05-exact-radial-level-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint14-regular-line-and-pair-naturality-refill
+    :oriented-checkpoint14-regular-line-and-pair-naturality-refill],
+   :current-residual
+   "One frozen placeholder requires a positive inhabited radial level with an actual manifold structure of dimension m-1. Sard and local overlap infrastructure have advanced, but a constant-radius source may obstruct the stated conclusion.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "Use actual singularHomologyFunctor with coefficient object ModuleCat.of R R. No assumed H0 table, coefficient-change isomorphism, path-component classification or higher-sphere homology.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CIRCLE/SPHERE INVARIANTS: coefficient-general H0 augmentation and positive-sphere endpoint",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For an explicitly stated commutative ring R, construct the canonical augmentation from actual H0(X;R) to R and prove its naturality for continuous maps. For nonempty path-connected X, construct its inverse using a point class and prove both inverse equations using actual singular path boundaries and chain generation. Reuse the geometry and coefficient-generic machinery behind SingularH0Augmentation. Specialize to literal positive-dimensional Euclidean spheres, including the exact rational H0 comparison type of t00J01 and the integer specialization. Show identity-induced map compatibility. Keep ordinary S0 separate with its reviewed two-coordinate answer.",
+    :consumer-equation
+    "For nonempty path-connected X, the canonical augmentation H0(X;R)->R is an isomorphism, natural under continuous maps; in particular actual H0(S2;Q) is Q with the frozen coefficient object and sphere subtype.",
+    :consumer-residual
+    "Rational H1 vanishing and H2 identification, coefficient-general sphere suspension and endpoints, product homology and full t00J01 closure remain downstream.",
+    :gates
+    ["GO requires a complete placeholder-free compiled fixture with actual augmentation, inverse equations, naturality and exact rational S2 witness."
+     "Record fixture SHA256 and standard-only axiom audits."
+     "REVISE only to exactly one compiled missing augmentation or path-boundary prerequisite."],
+    :stop-condition
+    "Do not retry the entire stopped sphere table or export integer isomorphisms as rational ones. A wrapper without the constructed coefficient-general inverse and consumer witness is insufficient."},
+   :id :oriented-checkpoint14-explicit-coefficient-h0-augmentation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint14-regular-line-and-pair-naturality-refill
+    :oriented-checkpoint14-regular-line-and-pair-naturality-refill],
+   :current-residual
+   "Integral augmentation and coefficient-general discrete H0 are banked. The positive-dimensional rational sphere H0 comparison remains absent from the stopped coefficient table.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: radial-level scope and explicit H0 uptake",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+   :id :oriented-checkpoint15-radial-level-and-h0-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint14-t96j05-exact-radial-level-1
+    :oriented-checkpoint14-explicit-coefficient-h0-augmentation-1
+    :oriented-checkpoint14-regular-line-and-pair-naturality-refill],
+   :current-residual
+   "Measure exact radial-level outcome separately from the coefficient-general H0 endpoint; attribute concurrent changes and retain all unresolved boundaries.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
