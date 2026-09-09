@@ -7269,6 +7269,24 @@
     :repository-note
     "Read DAG, closure experiments and checkpoint dependency evidence. Only the authorized two files changed; ledger and frozen consumers untouched. Checkout clean.",
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788990508150-17142-b408f5d1",
+     :commands
+     ["git show 0d9d7958:holes/labs/topology-contract/worklist2.edn"
+      "git show 17c8321a:ConstructionTargets/LiteralPullbackCover.lean"
+      "git show 17c8321a:ConstructionTargets/LiteralPullbackCover.md"
+      "lake env lean /tmp/LiteralPullbackCover.lean"
+      "lake env lean ConstructionTargets/LiteralPullbackCover.lean"
+      "lake build ConstructionTargets.LiteralPullbackCover"
+      "python3 inline audit: fixture equality and SHA256, 11 declaration hashes, exact scope, forbidden tokens and frozen placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 0d9d7958:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check 17c8321a"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Exact promotion and two-file scope verified. Both compilations and 8240-job build pass warning-free with nine standard-only audits. Literal pullback trivializations and fiber homeomorphism are correctly oriented; cardinality transport, circle example and empty fibers over disconnected Bool are proved without global uniform-sheet assumptions. Frozen placeholders unchanged at 322. No classification or consumer closure claimed; ledger untouched."},
     :commit "17c8321a52f2f6a9c6cc6ee7b035f85ea34370f2",
     :changed-paths
     ["ConstructionTargets/LiteralPullbackCover.lean"
@@ -7283,7 +7301,7 @@
     "SHA256 of declaration bytes beginning with def or theorem and ending immediately before the space preceding := or where.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/LiteralPullbackCover.lean"
     "ConstructionTargets/LiteralPullbackCover.md"],
@@ -7317,7 +7335,7 @@
    :stop-condition
    "No repeated unresolved STOP, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: graph-cover uptake and full-DAG continuation",
