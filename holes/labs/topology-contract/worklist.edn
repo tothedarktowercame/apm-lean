@@ -54236,6 +54236,19 @@
       :exit 2,
       :finding
       "No module with this name exists; inspected the actual RegularFiberChart, SmoothRegularFiberCoordinates and RegularFiberFixedModel producers instead."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788993908194-17253-6723e8b6",
+     :commands
+     ["git show 20f5e3b6"
+      "Independent pinned git-object census and infrastructure comparison"
+      "SHA-256 verification of refill28 evidence and frozen consumers"
+      "Independent EDN review-record, author and replacement-tail validation"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill28-proposed-worklist.edn"
+      "git show --format= --check 20f5e3b6"],
+     :finding
+     "Independent review of codex-12 checkpoint passes. Reproduced 59 named consumers, 58 existing, 38 open, 20 closed, 28 within two placeholders; total decreases 71 to 70 solely through t93A04. Modules increase 639 to 642: one extracted portfolio theorem and two concurrent coefficient modules. Evidence hashes and prior reviews match; extraction is not double-counted as closure. Proposed ledger validates 418 items; four fresh rows preserve one adapter first and a checkpoint dependent on all three work rows. Regular-fiber geometry, target-manifold transport and antipodal/reduced-S0/local-index boundaries remain explicit. Ledger untouched."},
     :replacement-items
     [{:consumer "t92J07",
       :stop-condition
@@ -54368,7 +54381,7 @@
       :closed-before 19}},
     :seat "codex-12"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -54387,7 +54400,7 @@
    :stop-condition
    "GO requires the full frozen consumer; otherwise name the exact predicate or derivative transport boundary. Do not replace the frozen fiber predicate.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / countable common regular value",
@@ -54411,7 +54424,7 @@
    :stop-condition
    "GO requires compiled actual fiber charts and smooth overlaps. REVISE requires exactly one compiled prerequisite; missing geometry is not refutation.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / common-model fiber chart overlaps",
@@ -54433,7 +54446,7 @@
    :stop-condition
    "Stop on any mismatch of reviewed source, statement hash or review evidence; do not claim a second closure or erase historical evidence.",
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
