@@ -83,11 +83,12 @@ Except under rule 0, a `FOUNDATION` that unblocks several consumers outranks
 an adapter that unblocks one. `STOP :needs-owner` is NO LONGER a valid
 strategy outcome and must not be returned: if the only remaining rows are
 foundations, specification repairs or deferred representations, ELECT THE
-BEST ONE under the ranking above and proceed. The prior gate inverted this policy -- it stopped the campaign
-precisely when the remaining work was the work that matters -- and it is
-withdrawn. Only two conditions end the campaign: every consumer problem closed,
-or a row whose mathematics is genuinely refuted, which is reported as a STOP
-naming the refutation, not as an election request.
+BEST ONE under the ranking above and proceed. The prior gate inverted this
+policy -- it stopped the campaign precisely when the remaining work was the
+work that matters -- and it is withdrawn. Only two conditions end the
+campaign: every consumer problem closed, or a row whose mathematics is
+genuinely refuted, which is reported as a STOP naming the refutation, not as
+an election request.
 
 For implementation or repair, modify only `:scope`, verify the recorded fixture
 hash, run every acceptance gate, and commit the scoped change. Report author,
