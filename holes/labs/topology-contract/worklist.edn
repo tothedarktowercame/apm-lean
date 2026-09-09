@@ -47494,6 +47494,19 @@
      {:cmd
       "git diff --exit-code -- ConstructionTargets problems/t00A01/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788969889037-16565-f247a585",
+     :commands
+     ["git show c717ffa8 recorded row and frozen consumer"
+      "lake env lean /tmp/T00A01ActualCoverBoundary.lean"
+      "python3 verification of three artifact hashes, seven recorded source pins, frozen SHA256 and comment-stripped placeholder counts"
+      "Inspect GenericTargetNaturalSourceReconstruction.sourceEquivalence and GenericWedge-specialized mapping equivalences"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check c717ffa8"],
+     :finding
+     "Independent review of codex-12 STOP at c717ffa8. All artifact hashes and seven source pins match. Diagnostic exits 0 with standard axioms only, no warnings or placeholders. Frozen t00A01 SHA34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f and two placeholders reproduced. Component equivalences have the reported orientations but do not supply actual-cover inclusion comparisons and composite target naturality; generic source reconstruction exists and is correctly distinguished from its missing input. Explicit STOP condition satisfied, not mathematical refutation or consumer closure. Validator 365 items and whitespace check exit 0; no edits."},
     :campaign-termination false,
     :changed-paths [],
     :finding
@@ -47505,7 +47518,7 @@
      "4dc9083f137e9aa188261ec6ffd6053074be575c6738a0bd2f5d5a5bdc3817cd"},
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "VAN KAMPEN / generic quotient and gluing PI1",
    :acceptance
