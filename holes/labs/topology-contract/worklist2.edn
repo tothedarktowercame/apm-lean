@@ -6678,20 +6678,74 @@
    :stop-condition
    "Bank fixed-model local parameterizations and their exact image and derivative-range equations only. Do not claim a global atlas, smooth overlaps, manifold inclusion, orientation or frozen closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/RegularFiberFixedModel.lean",
-      :sha256
-      "2af7339d912eec2ac12db480a5ba1841a3c39e3074f329eb8be67ebfb1a85e4f"},
-     :commands
-     [{:cmd "lake env lean /tmp/RegularFiberFixedModel.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Construct actual fiber charts, smooth overlaps, common-model ChartedSpace and IsManifold instances, and smooth embedded inclusion with its manifold tangent-image equation. Empty-fiber handling and concrete global instances remain downstream. No frozen consumer closure claimed.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :required-build :pass,
+     :forbidden-token-scans :pass,
+     :fixture-hash :pass,
+     :three-axiom-audits :pass,
+     :canonical-compilation :pass,
+     :exact-fixture-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-committed-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"kernel_dimension"
+     "0a9d384055f1921d159936e69e4a2422872eab39fb25162748c58ab075f55b4e",
+     "kernelEquiv"
+     "77e4c2cd6c71dcb1d494366f870f63b960282303d696284844f2e60dc5a9b74f",
+     "tangentInclusion"
+     "e5ea4134b70e92a2cd300af43e6e43cedf94370fd007e29829e793f72aa2f09a",
+     "tangent_range"
+     "53fd05821e483cd6e39946fa058980eed7b8d7ff45aa4e5fd5b7a4cb29d0a525",
+     "exists_parameterization"
+     "551dfdc1a8b330432160048c64944d895f2faee725a897b0f8296be1cec7ba2d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "lake env lean /tmp/RegularFiberFixedModel.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RegularFiberFixedModel.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.RegularFiberFixedModel ConstructionTargets.SmoothRegularFiberCoordinates",
+      :exit 0}
+     {:cmd
+      "Python verification of fixture SHA256, exact promotion, three standard-only audits per compilation, declaration hashes, exact committed scope and clean tracked checkout; followed by rg forbidden-token scan of fixture and canonical source",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git status --short; git log -3 --oneline; git log -1 --format=fuller -- ConstructionTargets/RegularFiberFixedModel.lean",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and dependency PASS. During interruption the implementation was committed externally at the reported commit. Verified its exact two-file scope and equality with current files; no duplicate commit created. Tracked checkout clean; ledger untouched by this work.",
+    :diagnostic-history
+    [{:tool "write_stdin",
+      :session-id 59516,
+      :error "Unknown process id 59516",
+      :correction "Reran the required build and obtained exit zero."}],
+    :commit "d6256e6d4d1cacfc925e780b8f4ceec63ade527e",
+    :changed-paths
+    ["ConstructionTargets/RegularFiberFixedModel.lean"
+     "ConstructionTargets/RegularFiberFixedModel.md"],
+    :fixture
+    {:path "/tmp/RegularFiberFixedModel.lean",
+     :sha256
+     "2af7339d912eec2ac12db480a5ba1841a3c39e3074f329eb8be67ebfb1a85e4f"},
+    :finding
+    "Exact fixture promotion preserves rank-nullity, the constructed kernel equivalence, smooth injective parameterization, exact fiber image and derivative range. Required build passed without warnings in 8316 jobs.",
+    :statement-hash-method
+    "SHA256 of declaration bytes beginning with def, lemma or theorem and ending immediately before the space preceding :=.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/RegularFiberFixedModel.lean"
     "ConstructionTargets/RegularFiberFixedModel.md"],
