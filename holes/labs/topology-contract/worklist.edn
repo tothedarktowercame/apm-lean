@@ -49138,75 +49138,77 @@
    :stop-condition
    "If full closure cannot be compiled, STOP naming the exact remaining calculus, integrability or measure-transport theorem. Distinguish infrastructure absence from mathematical refutation.",
    :evidence
-   {:probe
-    {:placeholder-delta
-     {:canonical-before 2,
-      :canonical-after 2,
-      :fixture-after 0,
-      :proposed-delta -2},
-     :residual
-     "No mathematical conjunct remains in the compiled fixture. Canonical t96J08 remains unchanged pending scoped implementation and independent review.",
-     :dependency-review
-     {:checkpoint
-      :checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero,
-      :outcome :pass,
-      :job "invoke-1788976393749-16725-e857cbcb"},
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:apm_t96J08_bridge_radialDiskIntegral
-      "f67f1a51d30a26bb613a91070a0f9d5098af0842aa82b5da2a3476b2ab2b21c4",
-      :apm_t96j08
-      "26f7ad47303011a24363e5bb878bfae7da192eea145bd7f73b404328976d5169"},
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd "lake env lean /tmp/T96J08Probe.lean", :exit 0}
-      {:cmd "python3 /tmp/check-t96j08-closure.py", :exit 0}
-      {:cmd "git diff --exit-code -- problems/t96J08/lean/Main.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/T96J08Probe.lean /tmp/T96J08Closure.md /tmp/T96J08Closure-manifest.json /tmp/check-t96j08-closure.py",
-       :exit 0}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/T96J08Probe.lean",
-      :sha256
-      "237cacc38a0a1040a9668ae2ef5cdf8686af7f8647cd665a96fa3c93d34e673d"},
-     :finding
-     "Complete frozen consumer compiles without placeholders or warnings. Both theorem statements and every original definition and proved lemma are preserved. Genuine Euclidean Haar radial integration and substitution evaluate the square-root disk integral as 2*pi/3. The exactness obstruction uses the frozen etaForm/extDeriv bridge, a proved smooth coordinate expansion, explicit derivatives and extDeriv_extDeriv. Integrability of every summand is established before splitting the integral; the banked Euclidean inverse-square-root kernel supplies the singular term. Frozen swap cancellation and actual disk area yield 5*pi/3. No Stokes, derivative, integrability or integral-value assumption is introduced.",
-     :implementation
-     {:scope ["problems/t96J08/lean/Main.lean"],
-      :action
-      "Verify the frozen and fixture hashes, then promote the complete fixture as the scoped Main.lean. Commit only this file; no DAG or ledger edits.",
-      :acceptance
-      {:frozen-sha256
-       "eaafd946f3385e1d5ca8964c64a003aacf4562151ebac5e19b12f6a328e1f3d9",
-       :fixture-sha256
-       "237cacc38a0a1040a9668ae2ef5cdf8686af7f8647cd665a96fa3c93d34e673d",
-       :placeholder-before 2,
-       :placeholder-after 0,
-       :axioms :standard-only,
-       :gates
-       ["Compile promoted problems/t96J08/lean/Main.lean and /tmp/T96J08Probe.lean."
-        "Run lake build ConstructionTargets.UnitDiskInverseSqrtIntegrability."
-        "Verify frozen definitions and both statement hashes against the pre-implementation revision; count executable placeholders with comments stripped."
-        "Verify standard-only axioms, exact one-file scope and git diff --check."]}},
-     :artifacts
-     {:report
-      {:path "/tmp/T96J08Closure.md",
-       :sha256
-       "c48a96f9b272d708b034eb04e31179239739701a7f309b90fc2c1277779f9c20"},
-      :manifest
-      {:path "/tmp/T96J08Closure-manifest.json",
-       :sha256
-       "1436d6d996a16ca66adaf1f2d0df6f3754d9462cbcc2316175d2e4324255e3da"},
-      :audit
-      {:path "/tmp/check-t96j08-closure.py",
-       :sha256
-       "c97ca06db39ce8ae4f5b5de423ebde326a6ab7a00e3c697f4f325d56375ebc9e"}},
-     :seat :codex-12}},
+   {:placeholder-delta
+    {:consumer "t96J08", :before 2, :after 0, :delta -2},
+    :residual
+    "No mathematical conjunct remains: canonical t96J08 compiles with zero placeholders, preserving its frozen definitions and both theorem statements. Independent implementation review and supervisor ledger transition remain.",
+    :gates
+    {:exact-fixture-promotion :pass,
+     :preserve-frozen-definitions :pass,
+     :preserve-both-statements :pass,
+     :source-pins :pass,
+     :consumer-compile :pass,
+     :fixture-compile :pass,
+     :dependency-build :pass,
+     :one-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["No warnings from either consumer compilation. Dependency build replayed the pre-existing unnecessarySeqFocus warning at CappedCylinderSurfaceIntegral.lean:104:29."],
+    :statement-hashes
+    {:apm_t96J08_bridge_radialDiskIntegral
+     "f67f1a51d30a26bb613a91070a0f9d5098af0842aa82b5da2a3476b2ab2b21c4",
+     :apm_t96j08
+     "26f7ad47303011a24363e5bb878bfae7da192eea145bd7f73b404328976d5169"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum frozen consumer, fixture, report, manifest and audit script",
+      :exit 0,
+      :output "All recorded pins match."}
+     {:cmd
+      "Read-only Python verification of source pins, original definition/lemma prefix, both statement hashes and comment-stripped placeholder counts",
+      :exit 0}
+     {:cmd "cmp /tmp/T96J08Probe.lean problems/t96J08/lean/Main.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t96J08/lean/Main.lean", :exit 0}
+     {:cmd "lake env lean /tmp/T96J08Probe.lean", :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.UnitDiskInverseSqrtIntegrability",
+      :exit 0,
+      :output "Build completed successfully (8242 jobs)."}
+     {:cmd
+      "rg placeholder and prohibited-declaration scan over problems/t96J08/lean/Main.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output "377 items OK"}
+     {:cmd "git diff --check; git diff --cached --check", :exit 0}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "Scoped git add and git commit --only problems/t96J08/lean/Main.lean",
+      :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output
+      "Only unrelated untracked holes/labs/topology-contract/runs2/ remains; untouched."}],
+    :commit "60711917a5e7876a99a6205778adade9028578a7",
+    :changed-paths ["problems/t96J08/lean/Main.lean"],
+    :frozen-sha256-before
+    "eaafd946f3385e1d5ca8964c64a003aacf4562151ebac5e19b12f6a328e1f3d9",
+    :fixture
+    {:path "/tmp/T96J08Probe.lean",
+     :sha256
+     "237cacc38a0a1040a9668ae2ef5cdf8686af7f8647cd665a96fa3c93d34e673d",
+     :placeholder-count 0},
+    :consumer-sha256
+    "237cacc38a0a1040a9668ae2ef5cdf8686af7f8647cd665a96fa3c93d34e673d"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t96J08/lean/Main.lean"],
    :dag-node
    "STOKES AND MOMENTS / hemisphere radial integral and exactness",
