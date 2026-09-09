@@ -10216,8 +10216,168 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:concurrent
+    {:commit "06f9b2d5aafed08eb26c774e6b9f663f2d1410a7",
+     :review "invoke-1788995981520-17315-25444582",
+     :excluded-rows
+     [:t96j05-frozen-nonempty-radial-level-closure-probe-refill30
+      :regular-fiber-smooth-inclusion-tangent-image-probe-refill30],
+     :note
+     "The other campaign's queued radial-level probe does not supersede this campaign's reviewed constant-radius refutation."},
+    :measurements
+    {:baseline "ad871b858cbd5c8993cfe7321b7fe2e351526e15",
+     :concurrent-infrastructure-packets 1,
+     :placeholder-after 68,
+     :portfolio-infrastructure-packets 0,
+     :infrastructure-modules-after 646,
+     :placeholder-delta 0,
+     :infrastructure-modules-before 645,
+     :consumer-closures 0,
+     :placeholder-before 68,
+     :head "a012bfbf642ea23a9d9fc31d4a699076db839464",
+     :typed-residual-change
+     ["t01J04: neighborhood shrinking and the zero-source-dimensional conclusion compile; simultaneous boundary selection under the frozen hypotheses and positive-dimensional half-space atlas remain."
+      "Explicit-coefficient excision: actual pair inclusion and projection square compile; coefficient-general small-chain comparison, relative degree zero and potentially nonclosed excision remain."
+      "Concurrent RegularFiberGlobalAtlas supplies the global fixed-model fiber atlas; smooth inclusion and tangent image remain reserved by the other campaign."],
+     :review-outcomes {:portfolio-stop 2, :portfolio-pass 2}},
+    :outcome :replan,
+    :warnings [],
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read complete DAG, foundational-program note, closure-experiments policy and both ledgers",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint16Census.py", :exit 0}
+     {:cmd
+      "Audit dependency reviews and active or reserved rows in both EDN ledgers",
+      :exit 0}
+     {:cmd
+      "Inspect exact candidate consumers t03J05, t94J09, t00A03, t03J02, t96J06, t98A01 and t02A08",
+      :exit 0}
+     {:cmd
+      "Inspect SingularSubdivision.coverSmall_homologyMap_isIso_zero and CoefficientH0 path-boundary machinery",
+      :exit 0}
+     {:cmd "sha256sum problems/t03J05/lean/Main.lean", :exit 0}
+     {:cmd
+      "git log --format='%h %s' ad871b858cbd5c8993cfe7321b7fe2e351526e15..HEAD -- ConstructionTargets",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Preserve the literal Surface true 2 quotient, actual image cardinality and every ambient manifold quantifier. No assumed curve system, transverse intersection invariant or Hausdorff hypothesis.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "INTERSECTION: exact punctured genus-two product-torus consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t03J05/lean/Main.lean",
+       :stop-condition
+       "No partial GO, assumed intersection invariance, silent separation repair or unproved refutation.",
+       :gates
+       ["GO requires a complete zero-placeholder exact frozen fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+        "Propose implementation scope only after full closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Audit the exact frozen ambient hypotheses and quotient before using intersection theory. Construct the four embedded curves in the punctured literal genus-two surface and establish the odd image-intersection cardinality. Prove all three demanded nonhomotopies under every frozen open embedding, reusing the existing product-intersection equations. Compile a complete temporary exact Main. If a required ambient hypothesis or invariant is unavailable, STOP with precise typed evidence; a refutation requires a compiled admissible counterexample to the full existential statement.",
+       :consumer-equation
+       "The actual punctured genus-two product contains the specified embedded product tori, with odd intersection and pairwise nonhomotopy preserved under every frozen ambient open embedding.",
+       :frozen-sha256
+       "db4071c33fa3b5fb6af0d5d7955bf431400fe7d2c4f8dbc759941f4bf6611af4"},
+      :id :oriented-checkpoint16-t03j05-exact-product-tori-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint16-neighborhood-and-excision-refill],
+      :current-residual
+      "One placeholder requires four actual embedded punctured-surface curves, odd image intersection, and pairwise nonhomotopy of three product tori after every permitted ambient open embedding.",
+      :other-consumers []}
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "No assumed small-chain homology isomorphism, subdivision operator or path-component classification. Do not claim positive-degree comparison, relative excision or sphere-table closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SINGULAR-SUBDIVISION: coefficient-general small-chain comparison in degree zero",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For an explicitly stated commutative ring R and an arbitrary open cover of X, form ModuleCat R chains on the existing coefficient-independent coverSmallSSet and its actual inclusion into singular chains with coefficient object R. Prove that the induced H0 map is an isomorphism by constructing preimages of point classes and showing that path-boundary relations lift through finitely many cover-small edges. Reuse existing compact interval subdivision geometry and CoefficientH0 generation and path-boundary proofs; do not assume X is path connected. Handle empty spaces and arbitrary cover index types. Compile integer and rational examples for an overlapping two-open interval cover, and prove the comparison uses the actual inclusion map. State universes explicitly.",
+       :consumer-equation
+       "The actual cover-small inclusion induces an isomorphism on H0 with coefficients ModuleCat.of R R for every open cover, including disconnected and empty spaces.",
+       :consumer-residual
+       "Positive-degree small-chain comparison, relative excision including degree zero and nonclosed excision, then sphere suspension and rational S2 H1/H2 remain downstream.",
+       :gates
+       ["GO requires a complete placeholder-free compiled fixture proving the actual H0 inclusion isomorphism with integer and rational examples."
+        "Record fixture SHA256 and standard-only audits."
+        "REVISE only to exactly one compiled missing coefficient-general path-subdivision prerequisite."],
+       :stop-condition
+       "If multiple independent constructions remain, STOP with typed boundaries. Do not retry full excision or substitute integral conclusions for R-linear proofs."},
+      :id :oriented-checkpoint16-coefficient-small-chain-h0-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint16-neighborhood-and-excision-refill
+       :oriented-checkpoint14-explicit-coefficient-h0-augmentation-1],
+      :current-residual
+      "CoefficientH0 constructs actual coefficient-general point classes and path boundaries. The inclusion of cover-small chains has only an integral H0 isomorphism export.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: exact product-torus uptake and small-chain H0",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+      :id :oriented-checkpoint17-product-tori-and-small-h0-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint16-t03j05-exact-product-tori-1
+       :oriented-checkpoint16-coefficient-small-chain-h0-1],
+      :current-residual
+      "Measure frozen product-torus outcome separately from small-chain H0 infrastructure; attribute concurrent changes and preserve reviewed boundaries.",
+      :other-consumers []}],
+    :changed-paths [],
+    :ranking
+    {:first
+     "t03J05 has one executable placeholder and no exact-consumer STOP row found in either ledger; require full closure or a precise boundary, not another conditional intersection wrapper.",
+     :foundation
+     "Small-chain H0 comparison has four named downstream coefficient consumers and reuses reviewed coefficient-general point classes and path boundaries. It is narrower than all-degree subdivision, excision, product homology, orientation localization, surface classification or covering gluing.",
+     :excluded
+     "Do not retry stopped neighborhood, full excision, sphere degree/table, surface classification, graph-cover or arbitrary-model Sard consumers without resolving their recorded boundaries. Do not duplicate concurrent fiber inclusion."},
+    :finding
+    "Recounted all 59 DAG-named consumers: 58 files exist, t93A05 is missing, 21 have zero placeholders, 37 remain open and 27 have one or two placeholders. The completed portfolio produced two independently reviewed infrastructure STOPs, no refutation, no frozen closure and no banked module. Concurrent work banked RegularFiberGlobalAtlas and documented the earlier t92J07 closure; neither reduced placeholders during this interval. Elect one fresh exact consumer probe first, t03J05, followed by the coefficient-general small-chain H0 comparison. The latter isolates one bounded part of the excision boundary rather than retrying full excision. Preserve all unresolved STOPs and reviewed refutations.",
+    :dependency-reviews
+    ["invoke-1788996220282-17321-be8c925f"
+     "invoke-1788996417005-17327-a629d144"
+     "invoke-1788995845903-17309-7430fc75"],
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint16Census.json",
+     :sha256
+     "11180462c74192f131d7cded6edbd88652f75918b4899eadc79420f1dff781a2"}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact neighborhood-preimage scope and coefficient excision",
@@ -10234,6 +10394,99 @@
     :oriented-checkpoint15-radial-level-and-h0-refill],
    :current-residual
    "Measure frozen neighborhood-preimage outcome separately from coefficient excision; retain all reviewed refutations and higher-sphere boundaries.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Preserve the literal Surface true 2 quotient, actual image cardinality and every ambient manifold quantifier. No assumed curve system, transverse intersection invariant or Hausdorff hypothesis.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "INTERSECTION: exact punctured genus-two product-torus consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t03J05/lean/Main.lean",
+    :stop-condition
+    "No partial GO, assumed intersection invariance, silent separation repair or unproved refutation.",
+    :gates
+    ["GO requires a complete zero-placeholder exact frozen fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+     "Propose implementation scope only after full closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Audit the exact frozen ambient hypotheses and quotient before using intersection theory. Construct the four embedded curves in the punctured literal genus-two surface and establish the odd image-intersection cardinality. Prove all three demanded nonhomotopies under every frozen open embedding, reusing the existing product-intersection equations. Compile a complete temporary exact Main. If a required ambient hypothesis or invariant is unavailable, STOP with precise typed evidence; a refutation requires a compiled admissible counterexample to the full existential statement.",
+    :consumer-equation
+    "The actual punctured genus-two product contains the specified embedded product tori, with odd intersection and pairwise nonhomotopy preserved under every frozen ambient open embedding.",
+    :frozen-sha256
+    "db4071c33fa3b5fb6af0d5d7955bf431400fe7d2c4f8dbc759941f4bf6611af4"},
+   :id :oriented-checkpoint16-t03j05-exact-product-tori-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint16-neighborhood-and-excision-refill
+    :oriented-checkpoint16-neighborhood-and-excision-refill],
+   :current-residual
+   "One placeholder requires four actual embedded punctured-surface curves, odd image intersection, and pairwise nonhomotopy of three product tori after every permitted ambient open embedding.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No assumed small-chain homology isomorphism, subdivision operator or path-component classification. Do not claim positive-degree comparison, relative excision or sphere-table closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SINGULAR-SUBDIVISION: coefficient-general small-chain comparison in degree zero",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For an explicitly stated commutative ring R and an arbitrary open cover of X, form ModuleCat R chains on the existing coefficient-independent coverSmallSSet and its actual inclusion into singular chains with coefficient object R. Prove that the induced H0 map is an isomorphism by constructing preimages of point classes and showing that path-boundary relations lift through finitely many cover-small edges. Reuse existing compact interval subdivision geometry and CoefficientH0 generation and path-boundary proofs; do not assume X is path connected. Handle empty spaces and arbitrary cover index types. Compile integer and rational examples for an overlapping two-open interval cover, and prove the comparison uses the actual inclusion map. State universes explicitly.",
+    :consumer-equation
+    "The actual cover-small inclusion induces an isomorphism on H0 with coefficients ModuleCat.of R R for every open cover, including disconnected and empty spaces.",
+    :consumer-residual
+    "Positive-degree small-chain comparison, relative excision including degree zero and nonclosed excision, then sphere suspension and rational S2 H1/H2 remain downstream.",
+    :gates
+    ["GO requires a complete placeholder-free compiled fixture proving the actual H0 inclusion isomorphism with integer and rational examples."
+     "Record fixture SHA256 and standard-only audits."
+     "REVISE only to exactly one compiled missing coefficient-general path-subdivision prerequisite."],
+    :stop-condition
+    "If multiple independent constructions remain, STOP with typed boundaries. Do not retry full excision or substitute integral conclusions for R-linear proofs."},
+   :id :oriented-checkpoint16-coefficient-small-chain-h0-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint16-neighborhood-and-excision-refill
+    :oriented-checkpoint14-explicit-coefficient-h0-augmentation-1
+    :oriented-checkpoint16-neighborhood-and-excision-refill],
+   :current-residual
+   "CoefficientH0 constructs actual coefficient-general point classes and path boundaries. The inclusion of cover-small chains has only an integral H0 isomorphism export.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: exact product-torus uptake and small-chain H0",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+   :id :oriented-checkpoint17-product-tori-and-small-h0-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint16-t03j05-exact-product-tori-1
+    :oriented-checkpoint16-coefficient-small-chain-h0-1
+    :oriented-checkpoint16-neighborhood-and-excision-refill],
+   :current-residual
+   "Measure frozen product-torus outcome separately from small-chain H0 infrastructure; attribute concurrent changes and preserve reviewed boundaries.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
