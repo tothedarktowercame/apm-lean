@@ -55387,6 +55387,19 @@
       :exit 1,
       :correction
       "Supplied the sphere dimension Fact, converted rank to finrank, installed ConnectedSpace explicitly, and supplied both ChartedSpace.discreteTopology parameters. Removed redundant simp arguments; successful rerun is recorded in commands."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788996921425-17341-4294c07a",
+     :commands
+     ["git show 976e71f0"
+      "Independent fixture/frozen hashes, proposition-body hash, exact definition-prefix and placeholder audit"
+      "lake env lean /tmp/T96J05Counterexample.lean"
+      "bb /tmp/t96j05-review.bb"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 976e71f0"],
+     :finding
+     "Independent review of codex-12 local SPEC-DEFECT passes. All hashes reproduce; frozen definitions and smooth-order expression preserved. The centered unit circle satisfies every frozen hypothesis. Any inhabited radial level equals radius one and is homeomorphic to the circle; the required zero-dimensional chart structure would make this connected nonsingleton space discrete, a contradiction. Fixture compiles warning-free with standard axioms and zero placeholders. Frozen consumer remains unchanged at one placeholder. This refutes the exact local encoding, not the campaign; no repair or closure claimed. Ledger passes 425 items; no edits."},
     :campaign-refutation false,
     :commit nil,
     :changed-paths [],
@@ -55398,7 +55411,7 @@
     "Compiled existential counterexample preserves all frozen definitions and the original smooth-order expression. Every circle point has norm 1, so any inhabited radial level has radius 1. An explicit homeomorphism identifies that level with the circle. The requested dimension-zero ChartedSpace would make the level, hence the circle, discrete. Connectedness would then identify the distinct points single 0 1 and single 0 (-1), a contradiction. Sard cannot supply an attained regular radius here.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / frozen nonempty radial level",
