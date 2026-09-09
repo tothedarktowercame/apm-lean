@@ -55137,6 +55137,18 @@
      {:cmd "git diff --cached --check and scoped git commit --only",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788996215516-17319-d49fae29",
+     :commands
+     ["git show ef33c30c67c3a58d2e805e7368f7c51c6fee762f"
+      "Independent committed-source scope, frozen/fixture hashes, both statement hashes and placeholder audit"
+      "Verify recorded t92J07 independent PASS receipt and closure proof"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check ef33c30c"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact two-document scope verified. Frozen and fixture hashes and both statement hashes reproduce; closure changes placeholders 2-to-0, documentation adds no delta. Predicate equality, manifold Sard reuse, countable common-value assembly and retained zero-target branch accurately documented. Standard axioms and unused-hm warning match the review. Historical STOP evidence and separate general-model/regular-preimage obligations remain; no double-counting or stronger fiber claim. Ledger passes 422 items; whitespace clean. No edits."},
     :commit "ef33c30c67c3a58d2e805e7368f7c51c6fee762f",
     :changed-paths
     ["TOPOLOGY-DEPENDENCY-DAG.md"
@@ -55148,7 +55160,7 @@
     :consumer-sha256
     "0e7bf95466e914d03b456449f5605abd35a49df231aa4c6fef4d0edbedc943e3"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
@@ -55175,7 +55187,7 @@
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation. Preserve local specification evidence and outstanding coverage; infrastructure absence is not termination.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
