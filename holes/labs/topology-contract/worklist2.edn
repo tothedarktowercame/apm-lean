@@ -5846,6 +5846,20 @@
       :exit 0}
      {:cmd "sha256sum /tmp/Checkpoint7Tail.edn", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788984700901-16966-39c44beb",
+     :commands
+     ["git show a295ea97:holes/labs/topology-contract/worklist2.edn"
+      "Python independent census at 65e9444654f1966d500f62ec6ae946fe8a3c9fa3 and 012ff0c78ec69b1db57365522757eed7a3cae18b; verify frozen t95J06 hash"
+      "sha256sum /tmp/Checkpoint7Census.json /tmp/Checkpoint7Tail.edn"
+      "bb independent assertions: artifact equality, author, fresh ids, adapter-first order, checkpoint and successor dependencies"
+      "Inspect recorded t95J06 hypotheses and both ledgers for prior elections and concurrent work"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show a295ea97:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check a295ea97; git diff --exit-code; git diff --check"],
+     :finding
+     "Independent of author codex-13. Scheduling-only result with empty implementation scope. All 59 DAG consumers accounted for, including missing t93A05; placeholders remain 71 and zero-placeholder files 19. Module growth 622 to 625 correctly separates two moment modules from concurrent Sard work. Census and tail hashes match; artifact equals recorded replacement-items; frozen t95J06 hash matches. Exactly one fresh near-closure adapter leads and explicitly preserves existential chart and component-homology hypotheses without assuming embedded smoothness. The regular-fiber row requires constructed coordinates, exact projection and inverse-derivative equations for arbitrary target dimension; global assembly remains downstream. No prior t95J06 election found. Concurrent normalization review and Sard work excluded. Successor checkpoint and dependencies match. Recorded ledger validates: 47 items OK. No new Lean compilation gate applies; ledger untouched."},
     :replacement-items
     [{:consumer :t95J06,
       :stop-condition
@@ -5973,7 +5987,7 @@
      :sha256
      "be98dbc4e0a560d3cbf9f79644b42704d08b7288aae55ad6c3b3e5148b4d6c16"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact polygon uptake and intrinsic normalization boundary",
@@ -5994,7 +6008,7 @@
    :stop-condition
    "Preserve frozen hypotheses and the actual surface subtype. Do not assume smooth embedded inclusion, a smooth restricted action, a principal bundle, Euler vanishing or surface classification.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Surface classification: exact invariant Hopf-surface consumer",
@@ -6024,7 +6038,7 @@
    :stop-condition
    "Local Euclidean fiber geometry only. No assumed fiber chart, global regular value, Sard induction, manifold orientation, transverse intersection comparison or t00J02 closure. Do not duplicate the other campaign's nullity work.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: finite-dimensional regular-fiber chart with arbitrary target dimension",
