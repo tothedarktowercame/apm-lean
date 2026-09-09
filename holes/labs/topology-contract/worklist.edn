@@ -41534,8 +41534,74 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if admissible-loss nullity fails to discharge its covered orders in the reviewed compact assembly, rank-zero criticality fails under the stated target assumptions, or nonstandard axioms are required.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Prove jet nullity in the intersection of the two uncovered ranges, close full lower-dimensional induction, and complete exhaustion and rectangular localization.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"compact_rankZero_image_zero_of_double_uncovered_jets"
+     "82d832dca518f7e101ecbd53acccb4f823595475224e3ead025657752c26f574"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG, closure policy, fixture, and reviewed dependency findings",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardCompactRankZeroDoubleUncoveredAssemblyProbe.lean",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/SardCompactRankZeroDoubleUncoveredAssemblyProbe.lean ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean && lake env lean ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean && lake env lean /tmp/SardCompactRankZeroDoubleUncoveredAssemblyProbe.lean",
+      :exit 0,
+      :output
+      "Byte-identical promotion; both compilations passed with standard axioms only."}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.SardCompactRankZeroDoubleUncoveredAssembly 2>&1 | awk '/warning:|error:|Build completed/ {print}'",
+      :exit 0,
+      :output "Build completed successfully (8431 jobs)."}
+     {:cmd
+      "sed -n '7,26p' ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 320 items OK; {:done 311, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: combine covered jet ranges in compact rank-zero assembly' && git rev-parse HEAD && git status --porcelain=v1",
+      :exit 0,
+      :output "Committed exactly two scoped files; worktree clean."}],
+    :commit "6dce85df00e381b351ed0c0d64bcffcf4877a8d0",
+    :changed-paths
+    ["ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean"
+     "ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.md"],
+    :fixture
+    {:path "/tmp/SardCompactRankZeroDoubleUncoveredAssemblyProbe.lean",
+     :sha256
+     "355011ff7ff2726855000e7eda509977d72d5cd67a0d353b81331fedc88c55a5"},
+    :declarations
+    ["compact_rankZero_image_zero_of_double_uncovered_jets"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.lean"
     "ConstructionTargets/SardCompactRankZeroDoubleUncoveredAssembly.md"],
