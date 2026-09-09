@@ -50786,17 +50786,86 @@
   {:consumer "t93A04",
    :stop-condition
    "GO requires the complete compiled producer/consumer composition. REVISE requires exactly one compiled prerequisite. Name remaining hypotheses or representation boundaries without assuming fiber nullity or measurability.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta
+     {:consumer "t93A04", :before 1, :after 1, :delta 0, :fixture 0},
+     :residual
+     "Conditional compact positive-rank chart image nullity only. Local/rank-stratum coverage, compatible induction discharge and base cases, and actual manifold transport remain before unconditional Sard or t93A04 closure.",
+     :dependency-review
+     {:outcome :pass, :job "invoke-1788982627020-16898-debf6d92"},
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {:exists_compact_positive_rank_image_null
+      "22ce0c18ece6d9c3feb78f2c9452de0721fad5da955e1a67876bbc1a1c2130d8"},
+     :axioms [propext Classical.choice Quot.sound],
+     :note
+     {:path "/tmp/SardGenuineSmoothCompactPositiveRankImageNullity.md",
+      :sha256
+      "121dd5e62ca49b30a954cf1bd14e1f2a0c1d89f966be1a8dbe5a65bf71db37a3"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/SardGenuineSmoothCompactPositiveRankImageNullity.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/audit-compact-positive-rank.py", :exit 0}
+      {:cmd
+       "git diff --exit-code -- problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :audit
+     {:path
+      "/tmp/SardGenuineSmoothCompactPositiveRankImageNullity-audit.json",
+      :sha256
+      "73c8b6e65c943ad4ba12dd6e6f2444d5c9b8bd5f4a6d63e5ae825af3794bf521"},
+     :changed-paths [],
+     :fixture
+     {:path
+      "/tmp/SardGenuineSmoothCompactPositiveRankImageNullity.lean",
+      :sha256
+      "f2eac1a88f3c6a80511be8bb048c43eaa136c6d1d3fc4892f62f62663c41679b"},
+     :finding
+     "Compiled the complete actual chart-to-compact-image composition. The second chart coordinate witnesses containment of each source fiber in the rank-bounded target slice. Existing slice nullity then supplies fiber nullity by monotonicity. The banked compact coordinate-fiber theorem performs product/Fubini assembly and continuous-linear-equivalence transport to the original target Haar measure. Coordinate Borel structures and topology are derived, not assumed. The sole nullity premise remains local genuine-infinity smooth induction over every strictly smaller source, including dimension zero.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.lean"
+       "ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.md"],
+      :acceptance
+      {:source-pins
+       "Verify fixture, note and all producer hashes against the audit.",
+       :compile
+       ["lake env lean /tmp/SardGenuineSmoothCompactPositiveRankImageNullity.lean"
+        "lake env lean ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.lean"
+        "lake build ConstructionTargets.SardGenuineSmoothCompactPositiveRankImageNullity"],
+       :statement "Preserve audited theorem statement.",
+       :axioms :standard-only,
+       :placeholders 0,
+       :consumer
+       "Preserve t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea and its one placeholder.",
+       :scope
+       "Commit only the two scoped files after git diff --check; no DAG, ledger, existing producer or track-2 edits."}},
+     :seat :codex-12}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.lean"
+    "ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.md"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / compact positive-rank chart image nullity",
    :acceptance
-   {:probe
-    "From global genuine-infinity ContDiff f and basepoint derivative rank positive and below target dimension, invoke SardGenuineSmoothPositiveRankSliceNullity to produce the actual chart. For every compact K contained in its source with derivative rank at each point at most the basepoint rank, prove actual target Haar measure of f image K is zero. The sole nullity premise is local genuine-smooth critical-image induction for every strictly smaller source including zero-dimensional sources. Derive containment of fixed-first-coordinate source fibers in the produced target-slice subsets; derive fiber nullity from the existing conclusion, apply compact product-image/Fubini assembly, and transport through the actual orthogonal target linear equivalence. Prove compactness/measurability and needed continuity; do not assume chart, fiber nullity, product nullity or Haar normalization. Existing whole-target-slice derivative-zero APIs are too strong when the rank bound holds only on K: retain the rank-bounded subsets. No arbitrary-C1 induction or analytic omega. Reuse existing fiber and coordinate comparison producers; if this composition already exists, identify its next consumer edge.",
+   {:source-pins
+    "Verify fixture, note and all producer hashes against the audit.",
+    :compile
+    ["lake env lean /tmp/SardGenuineSmoothCompactPositiveRankImageNullity.lean"
+     "lake env lean ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.lean"
+     "lake build ConstructionTargets.SardGenuineSmoothCompactPositiveRankImageNullity"],
+    :statement "Preserve audited theorem statement.",
     :axioms :standard-only,
-    :consumer-residual
-    "Conditional compact positive-rank chart nullity only. Local/rank-stratum coverage, compatible induction discharge and base cases, and actual manifold transport remain before unconditional Sard or t93A04 closure."},
+    :placeholders 0,
+    :consumer
+    "Preserve t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea and its one placeholder.",
+    :scope
+    "Commit only the two scoped files after git diff --check; no DAG, ledger, existing producer or track-2 edits."},
    :id
    :sard-genuine-smooth-compact-positive-rank-image-nullity-probe-refill18,
    :kind :reusable-theorem,
