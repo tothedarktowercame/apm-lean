@@ -49252,71 +49252,90 @@
    :stop-condition
    "GO needs the complete compiled actual chart producer and residual-slice consumer. REVISE requires exactly one compiled prerequisite. Otherwise identify the exact representation or hypothesis boundary; missing infrastructure is not refutation.",
    :evidence
-   {:probe
-    {:placeholder-delta
-     {:consumer "t93A04",
-      :before 1,
-      :after 1,
-      :delta 0,
-      :fixture-after 0},
-     :residual
-     "Projected smooth chart producer only. Positive-rank residual criticality and nullity, compatible local smooth induction and base cases, full critical-set coverage and manifold transport remain. No unconditional Sard or t93A04 closure is claimed.",
-     :dependency-review
-     {:checkpoint
-      :checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero,
-      :outcome :pass,
-      :job "invoke-1788976393749-16725-e857cbcb"},
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:exists_genuine_smooth_projected_rank_chart
-      "0475f0f2e5d987de2efd682fa400da2ec6fc3da484b91554bd2dc4c0a2bcde43"},
-     :axioms [propext Classical.choice Quot.sound],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/SardGenuineSmoothProjectedRankChart.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/check-sard-genuine-projected.py", :exit 0}
-      {:cmd
-       "sha256sum /tmp/SardGenuineSmoothProjectedRankChart.lean /tmp/SardGenuineSmoothProjectedRankChart.md /tmp/SardGenuineSmoothProjectedRankChart-pins.json",
-       :exit 0}
-      {:cmd "git diff --exit-code -- problems/t93A04/lean/Main.lean",
-       :exit 0}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/SardGenuineSmoothProjectedRankChart.lean",
-      :sha256
-      "6035d04e39ff3e8124f18a20c830b01b593ccf83c9fce5a116a2f00cbe4e5fa6"},
-     :finding
-     "Complete actual projected chart producer and residual-slice consumer compile at genuine infinity. L is fderiv f x; R is its range; G is the kernel of the range projection composed with L. Existing complemented strict-derivative data constructs ImplicitFunctionData, with all defining fields returned explicitly. Global smoothness supplies both fields' smoothness on the original chart source. The neighborhood theorem produces the basepoint-preserving restriction, source inclusion, original forward map, inverse agreement and smoothness in both directions. The first-coordinate identity is explicit, and the actual residual-slice consumer is invoked with the orthogonal-complement target projection. No chart, inverse-regularity, nullity or arbitrary-C1 induction premise is introduced. Target finite dimensionality is unnecessary for this producer because the derivative range is finite-dimensional; the requested finite-dimensional target case is included.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/SardGenuineSmoothProjectedRankChart.lean"
-       "ConstructionTargets/SardGenuineSmoothProjectedRankChart.md"],
-      :action
-      "Verify pinned hashes and promote the fixture and documentation to the two scoped paths. Preserve existing chart APIs, consumer, DAG and ledger.",
-      :acceptance
-      {:axioms :standard-only,
-       :fixture-placeholders 0,
-       :consumer-sha256
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea",
-       :gates
-       ["Compile fixture and promoted module separately."
-        "Run lake build ConstructionTargets.SardGenuineSmoothProjectedRankChart."
-        "Verify statement hash, zero executable placeholders, standard-only axioms and unchanged consumer."
-        "Run git diff --check and commit exactly the two scoped files."]}},
-     :artifacts
-     {:documentation
-      {:path "/tmp/SardGenuineSmoothProjectedRankChart.md",
-       :sha256
-       "86b99c86d6ae0858ac258685d9ba5d24d2400f02ffdf2ea857ce463842237ac8"},
-      :source-pins
-      {:path "/tmp/SardGenuineSmoothProjectedRankChart-pins.json",
-       :sha256
-       "c4758dbc197c19293e71175d4a424be4c67d525ea31c8c23f22e5f5639923cc8"}},
-     :seat :codex-12}},
+   {:source-pins
+    {:path "/tmp/SardGenuineSmoothProjectedRankChart-pins.json",
+     :sha256
+     "c4758dbc197c19293e71175d4a424be4c67d525ea31c8c23f22e5f5639923cc8",
+     :verified true},
+    :placeholder-delta
+    {:consumer "t93A04",
+     :before 1,
+     :after 1,
+     :delta 0,
+     :fixture-after 0},
+    :residual
+    "Actual projected chart producer and residual-slice regularity compiled at genuine infinity. Positive-rank residual criticality and nullity, compatible local smooth induction and base cases, critical-set coverage and manifold transport remain. No unconditional Sard or t93A04 closure claimed; independent review remains.",
+    :gates
+    {:exact-promotion :pass,
+     :source-pins :pass,
+     :statement-hash :pass,
+     :compile :pass,
+     :build :pass,
+     :consumer-unchanged :pass,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:exists_genuine_smooth_projected_rank_chart
+     "0475f0f2e5d987de2efd682fa400da2ec6fc3da484b91554bd2dc4c0a2bcde43"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :documentation
+    {:path "/tmp/SardGenuineSmoothProjectedRankChart.md",
+     :sha256
+     "86b99c86d6ae0858ac258685d9ba5d24d2400f02ffdf2ea857ce463842237ac8"},
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, checkpoint PASS receipt, fixture and documentation",
+      :exit 0}
+     {:cmd "sha256sum fixture, documentation and source-pins manifest",
+      :exit 0}
+     {:cmd
+      "Read-only Python verification of source pins, statement hash and comment-stripped placeholder counts",
+      :exit 0}
+     {:cmd
+      "cmp pinned fixture and documentation against both promoted files",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardGenuineSmoothProjectedRankChart.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardGenuineSmoothProjectedRankChart.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardGenuineSmoothProjectedRankChart",
+      :exit 0,
+      :output "Build completed successfully (8314 jobs)."}
+     {:cmd
+      "rg placeholder and prohibited-declaration scan over promoted Lean file",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output "377 items OK"}
+     {:cmd
+      "git diff --exit-code -- problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check; git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output
+      "Only unrelated untracked holes/labs/topology-contract/runs2/ remains; untouched."}],
+    :commit "febb6cbab02fbb8f65f7b4001bbe96cf3a2f1573",
+    :changed-paths
+    ["ConstructionTargets/SardGenuineSmoothProjectedRankChart.lean"
+     "ConstructionTargets/SardGenuineSmoothProjectedRankChart.md"],
+    :fixture
+    {:path "/tmp/SardGenuineSmoothProjectedRankChart.lean",
+     :sha256
+     "6035d04e39ff3e8124f18a20c830b01b593ccf83c9fce5a116a2f00cbe4e5fa6",
+     :placeholder-count 0},
+    :consumer-sha256
+    "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardGenuineSmoothProjectedRankChart.lean"
     "ConstructionTargets/SardGenuineSmoothProjectedRankChart.md"],
