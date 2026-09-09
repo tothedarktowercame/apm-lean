@@ -1105,6 +1105,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Checkpoint 015740d3 elects :oriented-portfolio-t00a01-consumer-closure-1 on the stale claim that the earlier STOP predates banked connected-groupoid/free-product/source-reconstruction equivalences. Its own pinned head 994d1443 already records an independently PASS-reviewed STOP for :t00a01-frozen-free-product-closure-probe-refill10 using those equivalences: actual-cover inclusion comparison cells, arbitrary-cover span translation, and composite target naturality remain missing. The new row repeats that full-closure probe without new evidence resolving the reviewed boundary. Repair the election rationale to account for this STOP and choose another near-closure consumer or provide new boundary-resolving evidence before re-electing t00A01. Census hash, 76-to-76 placeholder counts, 584-to-595 module counts, schema and whitespace checks reproduced; no edits.",
    :stop-condition
    "Stop only on a genuine mathematical refutation, naming it; never stop for want of owner authorization.",
    :evidence
@@ -1125,6 +1127,12 @@
       :exit 0}
      {:cmd "sha256sum /tmp/OrientedPortfolioCensus.json", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1788970131628-16572-f530ea67",
+     :finding
+     "Checkpoint 015740d3 elects :oriented-portfolio-t00a01-consumer-closure-1 on the stale claim that the earlier STOP predates banked connected-groupoid/free-product/source-reconstruction equivalences. Its own pinned head 994d1443 already records an independently PASS-reviewed STOP for :t00a01-frozen-free-product-closure-probe-refill10 using those equivalences: actual-cover inclusion comparison cells, arbitrary-cover span translation, and composite target naturality remain missing. The new row repeats that full-closure probe without new evidence resolving the reviewed boundary. Repair the election rationale to account for this STOP and choose another near-closure consumer or provide new boundary-resolving evidence before re-electing t00A01. Census hash, 76-to-76 placeholder counts, 584-to-595 module counts, schema and whitespace checks reproduced; no edits."},
     :replacement-items
     [{:consumer :t00A01,
       :stop-condition
@@ -1282,7 +1290,7 @@
     :t98A02-assessment
     "The sole frozen placeholder is not a bounded consequence of the one-dimensional seed. Its actual embedded-four-ball quotient still requires four-dimensional model/localization calculations, punctured-summand homology and boundary-map control, an excisive gluing comparison for the supplied embeddings, and homology vanishing above dimension four. The supplied abstract H4 isomorphisms do not identify localization maps. No closure or four-dimensional orientation compatibility is claimed."},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: oriented-manifold fundamental classes and localization",
@@ -1303,7 +1311,7 @@
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "Queue C: canonical theorem uptake; t00A01 remaining van Kampen bridge and final assembly",
@@ -1334,7 +1342,7 @@
    :stop-condition
    "No abstract H1 isomorphism in place of the actual localization map; no arbitrary-dimensional or arbitrary-manifold localization claim.",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "Queue D #2: circle case of milestone 5, actual absolute-to-local map",
@@ -1365,7 +1373,7 @@
    :stop-condition
    "Circle only. No assumed global class, assumed rotation action on homology, general compact-manifold theorem, or t98A02 closure.",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "Queue D #2: compact connected Circle, milestones 4 and 5",
@@ -1406,7 +1414,7 @@
    :stop-condition
    "No credit for infrastructure as frozen closure; no automatic higher-dimensional extrapolation; preserve all demonstrated STOP boundaries.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: consumer certification and oriented-manifold next dimension",
