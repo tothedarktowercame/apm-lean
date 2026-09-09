@@ -48826,6 +48826,8 @@
    :current-residual
    "One placeholder packages smoothness, exterior derivative equal to 3, nonexactness and the 7*pi integral. Historical capped-cylinder modules address the integral; the finite coefficient/exterior-derivative calculation remains."}
   {:consumer "t93A04",
+   :review-finding
+   "Deterministic evidence-hash defect: this row's :evidence :consumer-sha256 is 4431ba028376d7a85867d9ec81e3ac94a64d891661c7ee149701461a56d3fea, missing b after 85867. Replace it with 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea, independently recomputed from commit 5d84d2edd1225b54fbdfcfedcba515c1533fef01:problems/t93A04/lean/Main.lean and matching the acceptance hash and source manifest. No Lean repair needed: exact scope, fixture/source hashes, statement hash, unchanged consumer placeholder count, focused build and both compilations pass; theorem preserves genuine infinity and zero-dimensional induction sources. Ledger untouched.",
    :stop-condition
    "GO needs the complete compiled producer and compact rank-zero conclusion. REVISE requires exactly one compiled prerequisite. Otherwise identify the exact boundary; infrastructure absence is not refutation.",
    :evidence
@@ -48897,6 +48899,12 @@
       :exit 0,
       :output
       "Only unrelated untracked holes/labs/topology-contract/runs2/ remains; untouched."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-10",
+     :job "invoke-1788975751876-16708-489a02ab",
+     :finding
+     "Deterministic evidence-hash defect: this row's :evidence :consumer-sha256 is 4431ba028376d7a85867d9ec81e3ac94a64d891661c7ee149701461a56d3fea, missing b after 85867. Replace it with 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea, independently recomputed from commit 5d84d2edd1225b54fbdfcfedcba515c1533fef01:problems/t93A04/lean/Main.lean and matching the acceptance hash and source manifest. No Lean repair needed: exact scope, fixture/source hashes, statement hash, unchanged consumer placeholder count, focused build and both compilations pass; theorem preserves genuine infinity and zero-dimensional induction sources. Ledger untouched."},
     :commit "5d84d2edd1225b54fbdfcfedcba515c1533fef01",
     :changed-paths
     ["ConstructionTargets/SardSmoothCompactRankZeroInduction.lean"
@@ -48909,7 +48917,7 @@
     :consumer-sha256
     "4431ba028376d7a85867d9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/SardSmoothCompactRankZeroInduction.lean"
     "ConstructionTargets/SardSmoothCompactRankZeroInduction.md"],
