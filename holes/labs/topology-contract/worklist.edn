@@ -36829,6 +36829,39 @@
    "The compact rank-zero wrapper without an order-one induction packet compiles; higher-jet finite-order bookkeeping and compact exhaustion remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if classical finite-order Sard admissibility with positive target dimension and nonzero order does not imply either a positive Taylor exponent surplus at the available order or the exact equality endpoint, or if the arithmetic lemma requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderTaylorBudgetEndpoint.lean"
+    "ConstructionTargets/SardFiniteOrderTaylorBudgetEndpoint.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER TAYLOR BUDGET ENDPOINT",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFiniteOrderTaylorBudgetEndpointProbe.lean",
+     :sha256
+     "b5e4b743d5036eb3705f357c321dd78fc95ca55783b6d256746fe7367278d2df"},
+    :declarations ["taylorBudget_strict_or_endpoint"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Apply the strict-surplus branch to the existing Taylor theorem and add the exact-endpoint Taylor-nullity interface needed by the equality branch."},
+   :representation
+   {:source
+    "Classical finite-order Sard admissibility sourceDim < targetDim + order with positive target dimension and nonzero finite order.",
+    :target
+    "An exhaustive arithmetic split between positive surplus order * targetDim = sourceDim + d for d > 0 and the exact endpoint order * targetDim = sourceDim."},
+   :id :critical-value-sard-finite-order-taylor-budget-endpoint-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-classical-regularity-admissibility-1
+    :critical-value-sard-finite-order-compact-rank-zero-higher-jet-nullity-1],
+   :current-residual
+   "The available Taylor budget is compiled as a strict-surplus-or-endpoint split; the equality endpoint and higher-jet regularity specialization remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -36882,80 +36915,77 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Specialize the Taylor exponent and genuinely higher-jet regularity/induction budget from classical finite-order admissibility, then exhaust the closed rank-zero locus by compact sets.",
+     "Use the positive-surplus branch with Taylor order one below the differentiability order, and supply a finite-order Taylor image-nullity interface for the exact endpoint before completing higher-jet induction and compact exhaustion.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"compact_rankZero_image_zero_of_higherJet_induction"
-      "0c5a1632d3cef55c154d39d8428047c316a100a4acc8fb44929033223ef14e69"},
+     {"taylorBudget_strict_or_endpoint"
+      "c8f6031134701dcbfa2109fff398f21615dad943580fcef80efffe9f5a7cc229"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if emptiness of the rank-zero order-one first-nonzero-jet locus cannot eliminate the order-one induction input from compact finite-jet nullity, or if the wrapper requires nonstandard axioms.",
+      "Stop only if classical finite-order Sard admissibility with positive target dimension and nonzero order does not imply either a positive Taylor exponent surplus at the available order or the exact equality endpoint, or if the arithmetic lemma requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.lean"
-       "ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.md"],
+      ["ConstructionTargets/SardFiniteOrderTaylorBudgetEndpoint.lean"
+       "ConstructionTargets/SardFiniteOrderTaylorBudgetEndpoint.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER COMPACT RANK-ZERO HIGHER-JET NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER TAYLOR BUDGET ENDPOINT",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean",
+       {:path "/tmp/SardFiniteOrderTaylorBudgetEndpointProbe.lean",
         :sha256
-        "c6a38e81c8da37ed5514fdb80af57888e827d42708725743e166e780c1c2bad0"},
-       :declarations
-       ["compact_rankZero_image_zero_of_higherJet_induction"],
+        "b5e4b743d5036eb3705f357c321dd78fc95ca55783b6d256746fe7367278d2df"},
+       :declarations ["taylorBudget_strict_or_endpoint"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Instantiate the remaining Taylor and higher-jet finite-order induction inputs, then apply countable compact exhaustion to rank zero."},
+       "Apply the strict-surplus branch to the existing Taylor theorem and add the exact-endpoint Taylor-nullity interface needed by the equality branch."},
       :representation
       {:source
-       "Compact rank-zero finite-jet nullity with an order-one induction input whose indexing locus is empty.",
+       "Classical finite-order Sard admissibility sourceDim < targetDim + order with positive target dimension and nonzero finite order.",
        :target
-       "Compact rank-zero image nullity requiring only the Taylor data and genuinely higher-jet lower-dimensional induction input."},
-      :id
-      :critical-value-sard-finite-order-compact-rank-zero-higher-jet-nullity-1,
+       "An exhaustive arithmetic split between positive surplus order * targetDim = sourceDim + d for d > 0 and the exact endpoint order * targetDim = sourceDim."},
+      :id :critical-value-sard-finite-order-taylor-budget-endpoint-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-compact-rank-zero-induction-nullity-1
-       :critical-value-sard-finite-order-rank-zero-first-jet-empty-1],
+      [:critical-value-sard-classical-regularity-admissibility-1
+       :critical-value-sard-finite-order-compact-rank-zero-higher-jet-nullity-1],
       :current-residual
-      "The compact rank-zero wrapper without an order-one induction packet compiles; higher-jet finite-order bookkeeping and compact exhaustion remain.",
+      "The available Taylor budget is compiled as a strict-surplus-or-endpoint split; the equality endpoint and higher-jet regularity specialization remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The banked rank-zero first-jet emptiness theorem discharges the order-one induction argument of compact finite-jet nullity by contradiction. A placeholder-free fixture packages this simplification and exposes only the Taylor exponent, finite regularity, and genuinely higher-jet lower-dimensional induction inputs. Banking it leaves the higher-jet finite-order budget specialization and countable compact exhaustion.",
+     "The rectangular theorem is not refuted. Classical finite-order admissibility implies that the available differentiability order times the target dimension is at least the source dimension. A placeholder-free arithmetic fixture sharpens this into an exhaustive split: either there is the positive exponent surplus consumed by the current Taylor theorem, or the dimensions lie at the exact equality endpoint. Thus the existing strict-surplus theorem can handle one branch, while a Taylor-nullity endpoint interface is still required for the equality branch.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderTaylorBudgetEndpointProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderCompactRankZeroHigherJetNullityProbe.compact_rankZero_image_zero_of_higherJet_induction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderTaylorBudgetEndpointProbe.taylorBudget_strict_or_endpoint' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderTaylorBudgetEndpointProbe.lean",
        :exit 0,
        :output
-       "c6a38e81c8da37ed5514fdb80af57888e827d42708725743e166e780c1c2bad0  /tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean"}
+       "b5e4b743d5036eb3705f357c321dd78fc95ca55783b6d256746fe7367278d2df  /tmp/SardFiniteOrderTaylorBudgetEndpointProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderTaylorBudgetEndpointProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '9,47p' /tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean | sha256sum",
+       "sed -n '5,20p' /tmp/SardFiniteOrderTaylorBudgetEndpointProbe.lean | sha256sum",
        :exit 0,
        :output
-       "0c5a1632d3cef55c154d39d8428047c316a100a4acc8fb44929033223ef14e69  -"}
+       "c8f6031134701dcbfa2109fff398f21615dad943580fcef80efffe9f5a7cc229  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 280 items OK; {:done 272, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 281 items OK; {:done 273, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -36970,13 +37000,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean",
+     {:path "/tmp/SardFiniteOrderTaylorBudgetEndpointProbe.lean",
       :sha256
-      "c6a38e81c8da37ed5514fdb80af57888e827d42708725743e166e780c1c2bad0"},
+      "b5e4b743d5036eb3705f357c321dd78fc95ca55783b6d256746fe7367278d2df"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -37205,7 +37234,8 @@
     :critical-value-sard-finite-order-critical-image-of-rank-zero-nullity-1
     :critical-value-sard-finite-order-compact-rank-zero-induction-nullity-1
     :critical-value-sard-finite-order-rank-zero-first-jet-empty-1
-    :critical-value-sard-finite-order-compact-rank-zero-higher-jet-nullity-1],
+    :critical-value-sard-finite-order-compact-rank-zero-higher-jet-nullity-1
+    :critical-value-sard-finite-order-taylor-budget-endpoint-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
