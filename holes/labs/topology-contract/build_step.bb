@@ -109,7 +109,12 @@
     ;; Reject before writing; a failed exploratory command is not a passing
     ;; gate merely because a later command succeeded.
     (when (#{:done-unreviewed :stop :replan :pass} outcome)
-      (when-let [failed (seq (filter #(not= (get % :expected-exit 0) (:exit %))
+      ;; Review receipts also use command-description strings: their PASS
+      ;; finding attests reproduction, unlike implementation gate records.
+      ;; Preserve those descriptions without inventing exit codes. Structured
+      ;; review gate records still must match their expected exits.
+      (when-let [failed (seq (filter #(and (not (and (= :pass outcome) (string? %)))
+                                          (not= (get % :expected-exit 0) (:exit %)))
                                     (:commands receipt)))]
         (throw (ex-info "receipt records an unexpected gate exit"
                         {:id id :commands failed}))))

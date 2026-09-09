@@ -36,5 +36,25 @@
                                 (str ledger) "edge" (str receipt)))))
         (finally (.delete ledger) (.delete receipt))))))
 
+(deftest review-command-descriptions-are-not-exit-records
+  (doseq [outcome [:pass :done-unreviewed :stop :replan]]
+    (let [ledger (java.io.File/createTempFile "gate-ledger" ".edn")
+          receipt (java.io.File/createTempFile "gate-receipt" ".edn")
+          original (slurp (io/file here "fixtures/transition-ledger.edn"))
+          fixture (if (= outcome :done-unreviewed) "done" (name outcome))
+          base (edn/read-string (slurp (io/file here "fixtures" (str fixture "-receipt.edn"))))]
+      (try
+        (spit ledger original)
+        (spit receipt (pr-str (assoc base :commands ["lake env lean /tmp/Fixture.lean"])))
+        (let [result (sh/sh "bb" (str here "/build_step.bb") "apply-result"
+                            (str ledger) "edge" (str receipt))]
+          (is (= (if (= outcome :pass) 0 1) (:exit result)))
+          (if (= outcome :pass)
+            (is (= ["lake env lean /tmp/Fixture.lean"]
+                   (get-in (edn/read-string (slurp ledger))
+                           [:items 0 :evidence :review :commands])))
+            (is (= original (slurp ledger)))))
+        (finally (.delete ledger) (.delete receipt))))))
+
 (let [{:keys [fail error]} (run-tests)]
   (System/exit (if (zero? (+ fail error)) 0 1)))
