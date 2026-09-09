@@ -55638,8 +55638,153 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation. Local encoding counterexamples require repair and coverage accounting, not campaign termination.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill31-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill31-reviews.bb", :exit 0}
+     {:cmd
+      "git diff --name-status f9a3ec36da04b61e2ed60e6e729ac129cbcdec46 8cd019d7432b87fe01625f927e7d1f0e4ed60f21 -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill31-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill31-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill31-measure.json /tmp/topology-refill31-reviews.edn /tmp/topology-refill31-tail.edn",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "Inline bb edge-kinds reader",
+      :exit 1,
+      :correction
+      "An extra closing parenthesis caused a reader error. The subsequent file-based validator reads the ledger and validates every proposed kind and dependency successfully."}],
+    :replacement-items
+    [{:consumer "t94J08",
+      :stop-condition
+      "GO requires complete repaired frozen closure; otherwise identify the exact missing signed induced-map naturality theorem. Ordinary H0 evidence or an orientation alone is not closure.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "SPHERE ORIENTATION / signed antipodal action",
+      :acceptance
+      {:probe
+       "Compile the complete frozen Main, preserving the repaired n>=1 and m>=1 hypotheses and all literal induced-map definitions. Reuse SphereHomology, integral comparisons and existing degree composition and normalized-link negation. Prove the actual antipodal map acts by (-1)^(n+1), with an actual orientation, through explicit map naturality. Inspect current sphere, relative-pair and coefficient producers. No inferred sign from an abstract group isomorphism, assumed suspension naturality or conditional degree bridge. Retain the old S0 refutation and outstanding reduced-S0/one-dimensional local-index coverage; these are not closed by the repaired branch.",
+       :frozen-file "problems/t94J08/lean/Main.lean",
+       :frozen-sha256
+       "cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t94j08-frozen-signed-antipodal-closure-probe-refill31,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
+      :current-residual
+      "Two placeholders in the repaired positive-dimensional branch: actual integral top-homology antipodal action and final local-index assembly."}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires compiled actual fiber charts, coverage and smooth overlaps. REVISE requires one compiled prerequisite; do not strengthen the original local regularity into global regularity of an extension.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE/SUBMERSION / manifold-source fiber charts",
+      :acceptance
+      {:probe
+       "For a genuine-infinity smooth manifold with self-model finite-dimensional real inner-product space E and a ContMDiff infinity map to a finite-dimensional real inner-product space F, at a regular value construct actual OpenPartialHomeomorph charts on the inherited-topology literal fiber into Euclidean dimension finrank E minus finrank F. Derive source-chart representative smoothness on its actual open domain and surjectivity at the center from mfderiv transport. Reuse existing cutoff-extension and RegularFiberFixedModelOverlaps.exists_chart producers, or their exact local forms; do not assume a globally regular extension. Transport local fiber charts back through the source chart and prove coverage and genuine-infinity overlap smoothness on actual overlap domains. Reuse existing implicit-function geometry rather than rebuilding it. No assumed chart, extension agreement, derivative transport or atlas compatibility. Include empty fibers and zero-dimensional kernels. State the exact applicability limits for the named consumers.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Manifold-source local fixed-model fiber charts and overlaps only. Global atlas, smooth inclusion/tangent transport, general-model or target-manifold cases and consumer-specific orientation/boundary/transversality obligations remain."},
+      :id :regular-fiber-manifold-source-local-charts-probe-refill31,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
+      :current-residual
+      "Euclidean-source fiber atlases and inclusion tangent comparison are banked. Actual local charts and smooth overlaps on fibers of a manifold-to-vector map remain.",
+      :other-consumers ["t02A07" "t94A06" "t01J04"]}
+     {:consumer "t96J05",
+      :stop-condition
+      "Require exact fixture preservation, standard-only compilation and an unchanged frozen Main. Documentation is neither consumer closure nor a specification repair.",
+      :phase :implementation,
+      :state :blocked,
+      :scope
+      ["holes/labs/topology-contract/evidence/t96j05-radial-level/Counterexample.lean"
+       "holes/labs/topology-contract/evidence/t96j05-radial-level/BOUNDARY.md"
+       "TOPOLOGY-DEPENDENCY-DAG.md"
+       "docs/TN-topology-closure-experiments.md"],
+      :dag-node "SPEC-DEFECT / nonempty radial level",
+      :acceptance
+      {:fixture "/tmp/T96J05Counterexample.lean",
+       :fixture-sha256
+       "5b874708cbb48d5809086f47de315a08d98c5d89e55f66d3f40582dedd47bcf8",
+       :implementation
+       "Preserve the exact compiled counterexample in the scoped evidence file and document its reviewed proof, frozen hash and unchanged placeholder. Update DAG and closure experiments to classify t96J05 as local SPEC-DEFECT: every inhabited radial level of the centered circle is the circle and cannot have the required zero-dimensional atlas. Separate this from banked Euclidean fiber geometry and from campaign termination. Record that a corrected statement requires an explicit specification decision about attained regular levels or permitted empty levels; do not silently choose a repair or modify Main. Retain all older local counterexamples and uncovered cases.",
+       :commands
+       ["lake env lean holes/labs/topology-contract/evidence/t96j05-radial-level/Counterexample.lean"],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :placeholder-after 1},
+      :id :t96j05-local-radial-counterexample-preservation-refill31,
+      :kind :documentation,
+      :depends-on
+      [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
+      :current-residual
+      "Reviewed exact centered-circle counterexample exists in /tmp; preserve it canonically and correct the recorded residual without changing frozen Main."}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local specification defects require repair and coverage accounting, not termination.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped consumer placeholders and compare typed residuals, reviews, portfolio and concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve t96J05 local specification defect, signed antipodal residual, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t94j08-frozen-signed-antipodal-closure-probe-refill31
+       :regular-fiber-manifold-source-local-charts-probe-refill31
+       :t96j05-local-radial-counterexample-preservation-refill31],
+      :current-residual
+      "Await reviewed signed-antipodal adapter, manifold-source chart result and radial counterexample preservation; rerank the complete DAG."}],
+    :changed-paths [],
+    :measures
+    {:placeholder-delta 0,
+     :consumer-closures 0,
+     :portfolio-infrastructure-packets 2,
+     :concurrent-infrastructure-packets 1,
+     :review-outcomes
+     {:local-spec-defect-stop-pass 1, :infrastructure-pass 2}},
+    :finding
+    "Pinned HEAD 8cd019d7432b87fe01625f927e7d1f0e4ed60f21 against f9a3ec36da04b61e2ed60e6e729ac129cbcdec46: 59 DAG-named consumers, 58 existing, missing t93A05; 21 zero-placeholder consumers, 37 open, 27 within two, 68 placeholders before and after. No consumer file changed or closed. ConstructionTargets grew 646 to 649: portfolio RegularFiberSmoothInclusion and RegularFiberTangentImage, concurrent CoefficientSmallPath. Reviews PASS for the radial STOP, smooth-inclusion prerequisite and completed tangent comparison. The radial residual is now an exact local specification defect, not missing Sard infrastructure. Euclidean-source smooth inclusion, derivative injectivity and kernel-range equality are banked; manifold-source transport remains. Concurrent small-path chains do not establish an H0 inverse, positive-degree comparison or sphere homology action. Full-DAG reranking retains general-model Sard, van Kampen, covering realization, measure normalization, orientation/localization, surface classification and specification branches. Elect exactly one two-placeholder adapter, the repaired t94J08 signed-action branch; then the bounded manifold-source chart construction with four proposed downstream consumers, ahead of more extensive classification and intersection programs; finally preserve the reviewed radial counterexample. No claim that these proposed edges already close consumers. Preserve the old t94J08 refutation, missing signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Temporary proposed ledger validates at 430 items; its one historical needs-owner state is not a new election gate.",
+    :artifacts
+    {:measure
+     {:path "/tmp/topology-refill31-measure.json",
+      :sha256
+      "7050460338fe2d2f40a030662aef970e221a0b8aadfe06c6ca38e782871f5e27"},
+     :reviews
+     {:path "/tmp/topology-refill31-reviews.edn",
+      :sha256
+      "7fa5c2e8cb0ca0a2da6c414bab31b01ace81a63f79cd564e4b5eba8cac3a83ee"},
+     :tail
+     {:path "/tmp/topology-refill31-tail.edn",
+      :sha256
+      "86f2728644aa73e1b5223e9b313e9aec9793493b7a2413b3dd01be80aa97b743"}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -55653,7 +55798,109 @@
     :regular-fiber-smooth-inclusion-tangent-image-probe-refill30
     :checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
    :current-residual
-   "Await reviewed radial-level and inclusion outcomes; preserve any constant-radius counterexample and rerank the complete DAG."}],
+   "Await reviewed radial-level and inclusion outcomes; preserve any constant-radius counterexample and rerank the complete DAG."}
+  {:consumer "t94J08",
+   :stop-condition
+   "GO requires complete repaired frozen closure; otherwise identify the exact missing signed induced-map naturality theorem. Ordinary H0 evidence or an orientation alone is not closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SPHERE ORIENTATION / signed antipodal action",
+   :acceptance
+   {:probe
+    "Compile the complete frozen Main, preserving the repaired n>=1 and m>=1 hypotheses and all literal induced-map definitions. Reuse SphereHomology, integral comparisons and existing degree composition and normalized-link negation. Prove the actual antipodal map acts by (-1)^(n+1), with an actual orientation, through explicit map naturality. Inspect current sphere, relative-pair and coefficient producers. No inferred sign from an abstract group isomorphism, assumed suspension naturality or conditional degree bridge. Retain the old S0 refutation and outstanding reduced-S0/one-dimensional local-index coverage; these are not closed by the repaired branch.",
+    :frozen-file "problems/t94J08/lean/Main.lean",
+    :frozen-sha256
+    "cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t94j08-frozen-signed-antipodal-closure-probe-refill31,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion
+    :checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
+   :current-residual
+   "Two placeholders in the repaired positive-dimensional branch: actual integral top-homology antipodal action and final local-index assembly."}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires compiled actual fiber charts, coverage and smooth overlaps. REVISE requires one compiled prerequisite; do not strengthen the original local regularity into global regularity of an extension.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / manifold-source fiber charts",
+   :acceptance
+   {:probe
+    "For a genuine-infinity smooth manifold with self-model finite-dimensional real inner-product space E and a ContMDiff infinity map to a finite-dimensional real inner-product space F, at a regular value construct actual OpenPartialHomeomorph charts on the inherited-topology literal fiber into Euclidean dimension finrank E minus finrank F. Derive source-chart representative smoothness on its actual open domain and surjectivity at the center from mfderiv transport. Reuse existing cutoff-extension and RegularFiberFixedModelOverlaps.exists_chart producers, or their exact local forms; do not assume a globally regular extension. Transport local fiber charts back through the source chart and prove coverage and genuine-infinity overlap smoothness on actual overlap domains. Reuse existing implicit-function geometry rather than rebuilding it. No assumed chart, extension agreement, derivative transport or atlas compatibility. Include empty fibers and zero-dimensional kernels. State the exact applicability limits for the named consumers.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Manifold-source local fixed-model fiber charts and overlaps only. Global atlas, smooth inclusion/tangent transport, general-model or target-manifold cases and consumer-specific orientation/boundary/transversality obligations remain."},
+   :id :regular-fiber-manifold-source-local-charts-probe-refill31,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion
+    :checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
+   :current-residual
+   "Euclidean-source fiber atlases and inclusion tangent comparison are banked. Actual local charts and smooth overlaps on fibers of a manifold-to-vector map remain.",
+   :other-consumers ["t02A07" "t94A06" "t01J04"]}
+  {:consumer "t96J05",
+   :stop-condition
+   "Require exact fixture preservation, standard-only compilation and an unchanged frozen Main. Documentation is neither consumer closure nor a specification repair.",
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["holes/labs/topology-contract/evidence/t96j05-radial-level/Counterexample.lean"
+    "holes/labs/topology-contract/evidence/t96j05-radial-level/BOUNDARY.md"
+    "TOPOLOGY-DEPENDENCY-DAG.md"
+    "docs/TN-topology-closure-experiments.md"],
+   :dag-node "SPEC-DEFECT / nonempty radial level",
+   :acceptance
+   {:fixture "/tmp/T96J05Counterexample.lean",
+    :fixture-sha256
+    "5b874708cbb48d5809086f47de315a08d98c5d89e55f66d3f40582dedd47bcf8",
+    :implementation
+    "Preserve the exact compiled counterexample in the scoped evidence file and document its reviewed proof, frozen hash and unchanged placeholder. Update DAG and closure experiments to classify t96J05 as local SPEC-DEFECT: every inhabited radial level of the centered circle is the circle and cannot have the required zero-dimensional atlas. Separate this from banked Euclidean fiber geometry and from campaign termination. Record that a corrected statement requires an explicit specification decision about attained regular levels or permitted empty levels; do not silently choose a repair or modify Main. Retain all older local counterexamples and uncovered cases.",
+    :commands
+    ["lake env lean holes/labs/topology-contract/evidence/t96j05-radial-level/Counterexample.lean"],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :placeholder-after 1},
+   :id :t96j05-local-radial-counterexample-preservation-refill31,
+   :kind :documentation,
+   :depends-on
+   [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion
+    :checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
+   :current-residual
+   "Reviewed exact centered-circle counterexample exists in /tmp; preserve it canonically and correct the recorded residual without changing frozen Main."}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local specification defects require repair and coverage accounting, not termination.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped consumer placeholders and compare typed residuals, reviews, portfolio and concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve t96J05 local specification defect, signed antipodal residual, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t94j08-frozen-signed-antipodal-closure-probe-refill31
+    :regular-fiber-manifold-source-local-charts-probe-refill31
+    :t96j05-local-radial-counterexample-preservation-refill31
+    :checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
+   :current-residual
+   "Await reviewed signed-antipodal adapter, manifold-source chart result and radial counterexample preservation; rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
