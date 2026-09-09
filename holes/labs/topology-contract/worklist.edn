@@ -50018,6 +50018,19 @@
       :exit 0}
      {:cmd "git diff --exit-code -- problems/t94J08/lean/Main.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788979339715-16809-2a13af37",
+     :commands
+     ["git show 8e69f015:holes/labs/topology-contract/worklist.edn"
+      "lake env lean /tmp/T94J08ZeroSphereRefutation.lean"
+      "sha256sum /tmp/T94J08ZeroSphereRefutation.lean /tmp/T94J08ZeroSphereRefutation.md /tmp/T94J08ZeroSphereRefutation-audit.json"
+      "Independent frozen-file/proposition hash, exact-negation, preserved-prefix and placeholder assertions"
+      "git diff --exit-code 8e69f015 -- problems/t94J08/lean/Main.lean ConstructionTargets"
+      "git show --format= --check 8e69f015"],
+     :finding
+     "Independent of codex-12. PASS validates the mathematical-refutation STOP, not closure. Fixture compiles with standard axioms only and proves the exact frozen proposition's negation: n=0 requests an impossible ordinary integral H0(S0) isomorphism to Z. Actual ModuleCat discrete-H0/direct-sum coordinates and finrank distinguish the two-point sphere from rank one; no antipodal naturality is assumed. All artifact and frozen-statement hashes match; fixture has zero placeholders, unchanged consumer retains two. Repair requires an explicit specification decision concerning reduced H0 or dimension restrictions. Classical antipodal degree and Sard are not refuted. Ledger untouched."},
     :campaign-refutation true,
     :refutation
     "The frozen theorem includes n=0. T94J08Sphere (n+1) uses ambient dimension, so this case is the two-point sphere S0. Ordinary integral H0 of that sphere cannot be isomorphic to Z. The fixture proves the literal negation of the complete frozen apm_t94j08 proposition by extracting its impossible n=0 orientation.",
@@ -50043,7 +50056,7 @@
       "f3333bcced046c07422c4c8ac1fc54a9f7fabecde11cbe6a33f655bce42c0c65"}},
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "SPHERE ORIENTATION / antipodal homology action",
    :acceptance
