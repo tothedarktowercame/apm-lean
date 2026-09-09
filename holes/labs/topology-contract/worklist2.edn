@@ -2375,8 +2375,176 @@
      :review-outcomes]},
    :stop-condition
    "Infrastructure is not frozen closure; inspect both ledgers before every re-election and preserve demonstrated boundaries.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "cat TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-foundational-programs.md docs/TN-topology-closure-experiments.md holes/labs/topology-contract/work-prompt.md",
+      :exit 0}
+     {:cmd
+      "bb: read both worklist.edn and worklist2.edn and export /tmp/PortfolioLedgers.json",
+      :exit 0}
+     {:cmd
+      "python3: inspect both ledgers and count comment-stripped placeholders for every DAG-named consumer; write /tmp/OrientedSuccessorCensus.json",
+      :exit 0}
+     {:cmd
+      "python3: compare ConstructionTargets module counts and added paths between dd05a502 and HEAD",
+      :exit 0}
+     {:cmd
+      "sha256sum problems/t96J08/lean/Main.lean /tmp/OrientedSuccessorCensus.json",
+      :exit 0}
+     {:cmd "git diff --stat dd05a502 -- problems", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :replacement-items
+    [{:consumer :t96J08,
+      :stop-condition
+      "Preserve both frozen statements and the actual volume/integrand. No assumed Stokes theorem, integral value, or exactness obstruction.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Stokes and moments; explicit differential-form and radial-integral consumer t96J08",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t96J08/lean/Main.lean",
+       :stop-condition
+       "If a bounded closing adapter is unavailable, STOP under rule 0 with the exact missing integration or exterior-derivative theorem and typed evidence. Distinguish infrastructure gaps from refutation; no partial closure GO.",
+       :gates
+       ["GO only with a complete zero-placeholder frozen-facing fixture, unchanged statement hashes, fixture SHA-256, and standard-only axiom audits."
+        "Propose implementation scope only after full closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 2,
+       :probe
+       "Compile an exact temporary copy with both placeholders removed. Evaluate the radial square-root integral in the actual Euclidean disk volume representation. Complete the concrete alternating two-form/exterior-derivative comparison and use extDeriv_extDeriv to prove nonexactness. Reuse the proved coordinate pullback and odd-term cancellation to obtain the exact hemisphere value. Inspect the banked t98A05 calculations and pinned integration APIs without changing either frozen statement.",
+       :consumer-equation
+       "The radial integral equals 2*pi/3; together with disk area and the proved odd-term cancellation, hemisphereIntegral equals 5*pi/3. The actual exterior derivative obstructs exactness, completing the frozen conjunction.",
+       :frozen-sha256
+       "eaafd946f3385e1d5ca8964c64a003aacf4562151ebac5e19b12f6a328e1f3d9"},
+      :id :oriented-successor-t96j08-full-closure-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "Two placeholders remain: apm_t96J08_bridge_radialDiskIntegral and apm_t96j08. Odd-integral cancellation, nonclosedness, and the one-form exterior-derivative comparison are proved.",
+      :other-consumers []}
+     {:consumer :euclidean-higher-model-local-homology,
+      :stop-condition
+      "This is a model calculation only: no arbitrary-manifold fundamental class, localization monicity, coordinate-change sign, or t98A02 closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Queue D #2: higher-dimensional model-pair calculation before manifold localization",
+      :acceptance
+      {:probe
+       "For n at least two, use the actual production pair sequence, contractibility of the open disk, PuncturedNormedSpaceRadialEquivalence, and SphereHomology to construct the integral relative Hn isomorphism with integers. Define its generator and prove generation and normalization. Record the connecting-map/radial comparison equation and compile concrete n=2 and n=4 instances. Use the canonical coefficient comparison if ModuleCat results are needed.",
+       :consumer-equation
+       "The actual connecting map sends the chosen relative Hn class to the puncture class whose geometric radial image is the normalized sphere H(n-1) generator; every relative Hn class is an integer multiple of the chosen class.",
+       :axioms :standard-only,
+       :stop-condition
+       "GO only with the actual model calculation and comparison maps. REVISE to exactly one compiled missing pair, radial, or coefficient comparison. Do not assume orientation compatibility or extrapolate the Circle result."},
+      :representation
+      {:source
+       "Integral relative singular homology of the open n-disk modulo its deleted origin, n at least two",
+       :target
+       "Integral sphere homology in degree n-1, followed by its banked integer normalization",
+       :direction
+       "Forward identification through the actual pair connecting map and geometric puncture-to-sphere radial equivalence; explicitly identify the composite used to normalize the local class."},
+      :id :oriented-successor-higher-model-local-homology-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "The one-dimensional model is banked; no general higher-dimensional punctured-open-disk local generator calculation has been established by this campaign.",
+      :other-consumers [:t98A02 :t01A02 :t01A05]}
+     {:consumer :t97A02-component-lifting,
+      :stop-condition
+      "Address the recorded topological prerequisite directly; do not assume path connectivity of the whole space, finite fundamental group, or the desired Circle null-homotopy.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "CIRCLE/SPHERE INVARIANTS and COVERING-BASIC: local connectivity and componentwise lift assembly",
+      :acceptance
+      {:probe
+       "Read the reviewed t97A02 STOP and its compiled diagnostics. Under precisely the frozen local hypotheses, derive LocPathConnectedSpace from the actual classical local-contractibility definition. Construct the open connected-component decomposition and prove that continuous real lifts on those components assemble to a continuous global lift of the actual Circle map. Include empty-domain handling. Prove the component inclusion naturality equation needed to restrict the already established ambient loop-triviality result.",
+       :consumer-equation
+       "If each component restriction of f has a continuous real lift Fc, the constructed F satisfies Circle.exp(F x)=f x for every x. Its explicit real contraction gives a null-homotopy of f; component loop triviality is obtained through the actual inclusion map.",
+       :axioms :standard-only,
+       :stop-condition
+       "GO requires the local-connectivity conversion and actual component assembly, without supplied global lift or strengthened connectivity. REVISE only to one compiled prerequisite with an exact consumer equation. Do not re-elect or claim full t97A02 closure until this reviewed boundary is resolved."},
+      :id :oriented-successor-local-contractibility-component-lifts-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "The reviewed t97A02 STOP leaves the conversion from its actual classical LocallyContractibleSpace hypothesis to LocPathConnectedSpace and continuous assembly of connected-component lifts, including the empty domain.",
+      :other-consumers
+      [:circle-valued-map-lifting :covering-lift-component-assembly]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Infrastructure does not count as frozen closure. Model homology does not imply geometric orientation compatibility or arbitrary-manifold localization.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: frozen uptake and manifold/covering continuation",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy, and reviewed results in both ledgers. Recount all named consumers with comments stripped. Elect exactly one eligible near-closure consumer first, then rank the full DAG by downstream consumers and simplicity. Return one to five fresh work rows and a successor with identical checkpoint keys. Preserve reviewed STOP boundaries without new resolving evidence; do not duplicate Morse-Sard or begin with t00J02.",
+       :stop-condition
+       "Report a blocked nearest adapter with its precise missing theorem, distinguished from refutation. No owner-authorization stop and no empty ordinary refill."},
+      :id :oriented-successor-checkpoint-2,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-successor-t96j08-full-closure-1
+       :oriented-successor-higher-model-local-homology-1
+       :oriented-successor-local-contractibility-component-lifts-1],
+      :current-residual
+      "Measure t96J08 closure separately from model and component-lifting infrastructure. Reconsider t97A02 only if its precise reviewed boundary has been resolved; higher-dimensional geometric orientation and manifold gluing remain separate."}],
+    :changed-paths [],
+    :measures
+    {:baseline "dd05a502352ba56876317a948707d9e25fcca97f",
+     :head "0cdd316e375edcedd466f4e3cf1aef27524b6b08",
+     :placeholder-delta 0,
+     :dag-consumer-placeholders
+     {:before 76,
+      :after 76,
+      :missing-paths ["problems/t93A05/lean/Main.lean"],
+      :method
+      "Count sorry tokens after stripping block and line comments in existing Main.lean files named by the DAG."},
+     :t97A02 {:before 2, :after 2, :outcome :stop, :review :pass},
+     :infrastructure-packets
+     {:portfolio-completed 6,
+      :portfolio-modules-added 6,
+      :all-modules-before 596,
+      :all-modules-after 604,
+      :other-campaign-modules-added 2},
+     :review-outcomes {:implementation-pass 6, :stop-pass 1},
+     :typed-residual-change
+     {:before
+      "Circle local generators and puncture vanishing were available; actual localization invertibility and coherent global normalization remained.",
+      :after
+      "Actual Circle localization is invertible. Constructed rotated charts have geometrically increasing transitions on constructed common restrictions. One unique absolute integral generator satisfies every chart-localization equation. The t97A02 diagnostic proves homological loop triviality but leaves classical-local-contractibility conversion and componentwise lift assembly."}},
+    :finding
+    "Elect fresh t96J08 full-consumer probe first: two placeholders remain, its coordinate one-form comparison and odd-integral cancellation already compile, and neither ledger records a prior closure STOP for it. Its remaining radial integral and explicit exterior-derivative calculation warrant a bounded exact-consumer test, not a closure claim. Preserve reviewed boundaries for t00A01, t97A02, t02A08, a97J08 and the other stopped consumers; the completed Circle packet does not resolve them automatically. After the consumer probe, elect higher-dimensional Euclidean model local homology because it serves several manifold consumers, then a bounded local-connectivity/component-lift construction that directly addresses the t97A02 STOP. Neither foundation repeats a stopped full-consumer probe. The running Morse-Sard campaign remains separate.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/OrientedSuccessorCensus.json",
+     :sha256
+     "d82d90118ad73721285823b5c550b129d4b3690d0f83ed053010f6906f9a04e1"},
+    :t98A02-assessment
+    "Circle completion supplies no four-dimensional theorem. The frozen embedded-four-ball quotient still needs model local H4, geometric orientation/localization compatibility, punctured-summand and boundary-map control, an excisive comparison for the actual gluing, and vanishing above dimension four. The elected model calculation supplies only the first of these obligations."},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: consumer certification and oriented-manifold continuation",
@@ -2394,6 +2562,121 @@
     :oriented-manifold-checkpoint-refill-1],
    :current-residual
    "Measure actual t97A02 uptake separately from Circle foundations; higher-dimensional models and the t98A02 gluing/localization obligations remain unelected."}
+  {:consumer :t96J08,
+   :stop-condition
+   "Preserve both frozen statements and the actual volume/integrand. No assumed Stokes theorem, integral value, or exactness obstruction.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Stokes and moments; explicit differential-form and radial-integral consumer t96J08",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t96J08/lean/Main.lean",
+    :stop-condition
+    "If a bounded closing adapter is unavailable, STOP under rule 0 with the exact missing integration or exterior-derivative theorem and typed evidence. Distinguish infrastructure gaps from refutation; no partial closure GO.",
+    :gates
+    ["GO only with a complete zero-placeholder frozen-facing fixture, unchanged statement hashes, fixture SHA-256, and standard-only axiom audits."
+     "Propose implementation scope only after full closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 2,
+    :probe
+    "Compile an exact temporary copy with both placeholders removed. Evaluate the radial square-root integral in the actual Euclidean disk volume representation. Complete the concrete alternating two-form/exterior-derivative comparison and use extDeriv_extDeriv to prove nonexactness. Reuse the proved coordinate pullback and odd-term cancellation to obtain the exact hemisphere value. Inspect the banked t98A05 calculations and pinned integration APIs without changing either frozen statement.",
+    :consumer-equation
+    "The radial integral equals 2*pi/3; together with disk area and the proved odd-term cancellation, hemisphereIntegral equals 5*pi/3. The actual exterior derivative obstructs exactness, completing the frozen conjunction.",
+    :frozen-sha256
+    "eaafd946f3385e1d5ca8964c64a003aacf4562151ebac5e19b12f6a328e1f3d9"},
+   :id :oriented-successor-t96j08-full-closure-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-manifold-checkpoint-refill-repair1-successor],
+   :current-residual
+   "Two placeholders remain: apm_t96J08_bridge_radialDiskIntegral and apm_t96j08. Odd-integral cancellation, nonclosedness, and the one-form exterior-derivative comparison are proved.",
+   :other-consumers []}
+  {:consumer :euclidean-higher-model-local-homology,
+   :stop-condition
+   "This is a model calculation only: no arbitrary-manifold fundamental class, localization monicity, coordinate-change sign, or t98A02 closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Queue D #2: higher-dimensional model-pair calculation before manifold localization",
+   :acceptance
+   {:probe
+    "For n at least two, use the actual production pair sequence, contractibility of the open disk, PuncturedNormedSpaceRadialEquivalence, and SphereHomology to construct the integral relative Hn isomorphism with integers. Define its generator and prove generation and normalization. Record the connecting-map/radial comparison equation and compile concrete n=2 and n=4 instances. Use the canonical coefficient comparison if ModuleCat results are needed.",
+    :consumer-equation
+    "The actual connecting map sends the chosen relative Hn class to the puncture class whose geometric radial image is the normalized sphere H(n-1) generator; every relative Hn class is an integer multiple of the chosen class.",
+    :axioms :standard-only,
+    :stop-condition
+    "GO only with the actual model calculation and comparison maps. REVISE to exactly one compiled missing pair, radial, or coefficient comparison. Do not assume orientation compatibility or extrapolate the Circle result."},
+   :representation
+   {:source
+    "Integral relative singular homology of the open n-disk modulo its deleted origin, n at least two",
+    :target
+    "Integral sphere homology in degree n-1, followed by its banked integer normalization",
+    :direction
+    "Forward identification through the actual pair connecting map and geometric puncture-to-sphere radial equivalence; explicitly identify the composite used to normalize the local class."},
+   :id :oriented-successor-higher-model-local-homology-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-manifold-checkpoint-refill-repair1-successor],
+   :current-residual
+   "The one-dimensional model is banked; no general higher-dimensional punctured-open-disk local generator calculation has been established by this campaign.",
+   :other-consumers [:t98A02 :t01A02 :t01A05]}
+  {:consumer :t97A02-component-lifting,
+   :stop-condition
+   "Address the recorded topological prerequisite directly; do not assume path connectivity of the whole space, finite fundamental group, or the desired Circle null-homotopy.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CIRCLE/SPHERE INVARIANTS and COVERING-BASIC: local connectivity and componentwise lift assembly",
+   :acceptance
+   {:probe
+    "Read the reviewed t97A02 STOP and its compiled diagnostics. Under precisely the frozen local hypotheses, derive LocPathConnectedSpace from the actual classical local-contractibility definition. Construct the open connected-component decomposition and prove that continuous real lifts on those components assemble to a continuous global lift of the actual Circle map. Include empty-domain handling. Prove the component inclusion naturality equation needed to restrict the already established ambient loop-triviality result.",
+    :consumer-equation
+    "If each component restriction of f has a continuous real lift Fc, the constructed F satisfies Circle.exp(F x)=f x for every x. Its explicit real contraction gives a null-homotopy of f; component loop triviality is obtained through the actual inclusion map.",
+    :axioms :standard-only,
+    :stop-condition
+    "GO requires the local-connectivity conversion and actual component assembly, without supplied global lift or strengthened connectivity. REVISE only to one compiled prerequisite with an exact consumer equation. Do not re-elect or claim full t97A02 closure until this reviewed boundary is resolved."},
+   :id :oriented-successor-local-contractibility-component-lifts-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-manifold-checkpoint-refill-repair1-successor],
+   :current-residual
+   "The reviewed t97A02 STOP leaves the conversion from its actual classical LocallyContractibleSpace hypothesis to LocPathConnectedSpace and continuous assembly of connected-component lifts, including the empty domain.",
+   :other-consumers
+   [:circle-valued-map-lifting :covering-lift-component-assembly]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Infrastructure does not count as frozen closure. Model homology does not imply geometric orientation compatibility or arbitrary-manifold localization.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: frozen uptake and manifold/covering continuation",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy, and reviewed results in both ledgers. Recount all named consumers with comments stripped. Elect exactly one eligible near-closure consumer first, then rank the full DAG by downstream consumers and simplicity. Return one to five fresh work rows and a successor with identical checkpoint keys. Preserve reviewed STOP boundaries without new resolving evidence; do not duplicate Morse-Sard or begin with t00J02.",
+    :stop-condition
+    "Report a blocked nearest adapter with its precise missing theorem, distinguished from refutation. No owner-authorization stop and no empty ordinary refill."},
+   :id :oriented-successor-checkpoint-2,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-successor-t96j08-full-closure-1
+    :oriented-successor-higher-model-local-homology-1
+    :oriented-successor-local-contractibility-component-lifts-1
+    :oriented-manifold-checkpoint-refill-repair1-successor],
+   :current-residual
+   "Measure t96J08 closure separately from model and component-lifting infrastructure. Reconsider t97A02 only if its precise reviewed boundary has been resolved; higher-dimensional geometric orientation and manifold gluing remain separate."}
   {:consumer :t00A01,
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
