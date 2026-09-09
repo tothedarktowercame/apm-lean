@@ -40642,6 +40642,24 @@
      {:cmd
       "git add ConstructionTargets/SardCompactRankZeroUncoveredJetAssembly.lean ConstructionTargets/SardCompactRankZeroUncoveredJetAssembly.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: restrict compact rank-zero obligations to uncovered jets' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788932204371-16085-794eb7ef",
+     :commands
+     ["git show ad6484ae28c20378d23926ee5cefd13846f7ff4c --stat --oneline"
+      "sha256sum /tmp/SardCompactRankZeroUncoveredJetAssemblyProbe.lean"
+      "cmp fixture recorded-source"
+      "git show commit:ConstructionTargets/SardCompactRankZeroUncoveredJetAssembly.lean | sed -n '6,22p' | sha256sum"
+      "lake env lean /tmp/SardCompactRankZeroUncoveredJetAssemblyProbe.lean"
+      "lake env lean ConstructionTargets/SardCompactRankZeroUncoveredJetAssembly.lean"
+      "set -o pipefail; lake build ConstructionTargets.SardCompactRankZeroUncoveredJetAssembly 2>&1 | awk '/warning:|error:|Build completed/ {print}'"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check commit^ commit"
+      "git diff --exit-code commit -- ConstructionTargets"
+      "consumer hash and placeholder checks"],
+     :finding
+     "Commit ad6484ae has exact scope and matching fixture/frozen hashes. Strict-surplus split, natural predecessor identity and regularity restriction are correct; the complementary inequality matches the explicit uncovered-jet premise. Image sets, measure and finite jet range are preserved. Standard axioms only, zero scoped placeholders, all gates passed."},
     :commit "ad6484ae28c20378d23926ee5cefd13846f7ff4c",
     :changed-paths
     ["ConstructionTargets/SardCompactRankZeroUncoveredJetAssembly.lean"
@@ -40653,7 +40671,7 @@
     :declarations
     ["compact_rankZero_image_zero_of_uncovered_higherJets"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactRankZeroUncoveredJetAssembly.lean"
     "ConstructionTargets/SardCompactRankZeroUncoveredJetAssembly.md"],
@@ -40830,7 +40848,7 @@
       "1d98a23b2a3b47f93f7b785b41f45474e7d4fbbf86aa18f9a2fab16d80d47885"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
