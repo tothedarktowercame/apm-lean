@@ -9208,9 +9208,98 @@
   {:consumer :t00J01-rational-sphere-homology,
    :stop-condition
    "Construct maps on the actual relative quotients. No supplied short-complex morphism, assumed connecting-map naturality, excision, sphere table or change-of-coefficients theorem.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Constructed coefficient-specific pair maps, functoriality, exactness and connecting-map naturality are ready for implementation. Excision and sphere computations remain separate.",
+     :axiom-audits 11,
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture. Preserve the actual image-quotient descent, commuting squares, relative-map functoriality and orientation of the connecting equation.",
+      :namespace "ConstructionTargets.RelativePairNaturality",
+      :hypotheses
+      "R : Type with CommRing R; X,Y,Z : Type with their topologies; arbitrary subsets A,B,D; continuous maps with explicit MapsTo proofs. All spaces and the coefficient ring are universe zero. No exactness or short-complex morphism is supplied as a hypothesis.",
+      :declarations
+      ["submap"
+       "inclusion_square"
+       "arrowMap"
+       "relativeMap"
+       "projection_square"
+       "pairMap"
+       "relativeMap_id"
+       "relativeMap_comp"
+       "connecting"
+       "connecting_naturality"
+       "singularPairHomology_exact_subspace"
+       "singularPairHomology_exact_absolute"
+       "singularPairHomology_exact_relative"
+       "integral_disk_identity"
+       "rational_disk_identity"
+       "diskNeg"
+       "diskNeg_boundary"
+       "diskNeg_ne_id"
+       "rational_disk_neg_naturality"],
+      :consumer-equation
+      "H(relativeMap f) followed by the target connecting map equals the source connecting map followed by H(submap f). The actual coefficient-specific pair sequence is exact at subspace, absolute and relative homology.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target."
+       "Run lake build ConstructionTargets.RelativePairNaturality ConstructionTargets.RelativeSingularCoefficients."
+       "Reproduce all eleven standard-only axiom audits."
+       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."],
+      :consumer-residual
+      "Coefficient-general excision, sphere suspension and degree-one endpoints remain downstream before the exact rational S2 witnesses. No arbitrary coefficient-change naturality or frozen closure is claimed."},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd "bb dependency-review query for both prerequisites",
+       :exit 0}
+      {:cmd "lake env lean /tmp/RelativePairNaturality.lean", :exit 0}
+      {:cmd "sha256sum /tmp/RelativePairNaturality.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/RelativePairNaturality.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "Initial and two subsequent lake env lean /tmp/RelativePairNaturality.lean attempts",
+       :exit 1,
+       :attempts 3,
+       :correction
+       "Exposed the constructed arrow-map components in image.map_ι and reduced the arrow definition before reassociating the cokernel equation."}
+      {:cmd
+       "Fourth lake env lean /tmp/RelativePairNaturality.lean attempt",
+       :exit 1,
+       :correction
+       "Corrected generated exactness declaration names, supplied disk-negation continuity, and made projection epimorphism obligations explicit."}
+      {:cmd
+       "Fifth lake env lean /tmp/RelativePairNaturality.lean attempt",
+       :exit 1,
+       :correction
+       "Obtained projection epimorphisms from the proved pair short exactness instead of relying on typeclass unfolding through the quotient definitions."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/RelativePairNaturality.lean",
+      :sha256
+      "75186dfb83701db491a8e971decd2fd69b7be5231418101506f7a50188c96daf"},
+     :finding
+     "The complete packet compiles. A continuous map preserving the subspaces induces actual subspace and absolute chain maps. Their inclusion square constructs an image map, which descends through the reviewed relative cokernel quotient. The projection square, relative identity and composition laws, and morphism of pair short complexes are proved. All three homology exactness positions and connecting-map naturality follow for these constructed maps. Integer and rational disk-boundary identity examples compile. Disk negation preserves the boundary, is proved nonidentity, and satisfies the rational connecting naturality equation.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/RelativePairNaturality.lean"
+       "ConstructionTargets/RelativePairNaturality.md"]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/RelativePairNaturality.lean"
+    "ConstructionTargets/RelativePairNaturality.md"],
    :dag-node
    "Relative homology: explicit-coefficient pair maps and natural connecting morphisms",
    :acceptance
