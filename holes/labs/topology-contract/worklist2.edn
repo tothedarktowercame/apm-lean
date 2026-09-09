@@ -3888,9 +3888,84 @@
   {:consumer :higher-sphere-global-local-homology,
    :stop-condition
    "Sphere calculation only. No arbitrary-manifold localization monicity, coordinate-change sign, global orientation coherence or t98A02 gluing conclusion.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "The requested sphere localization calculation is complete in the fixture; banking and independent review remain. Pointwise chart normalization does not identify classes across different points. Coordinate-change signs, coherent global orientation, arbitrary-manifold localization and t98A02 gluing remain separate.",
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {"dimension_four"
+      "bf548ca64f1c19063918da809e0934be0a355fcf3572bd0372fb008d275a719d",
+      "localization_hom_inv"
+      "01dc835ae6358648c49cff206310fc76ed691261ae9038260b8eab770264a9be",
+      "puncturedSphereEuclidean"
+      "95b5c5fd0ffeb733377cc4d577791e00c18eed25670502e4d033bbf475e3b599",
+      "normalizedClass_generates"
+      "fcc4341a71c5c256d0d5052a52b37cfcbe3823772da070fa79ad7429b85edc61",
+      "localization_isIso"
+      "1c5e0c3b49313de0edb87733e4befe985b022ea3e161662c4b65d925b80d3171",
+      "localization_inv_hom"
+      "345acdfebe4885b17c8ffda20d354aacdcc250a79520ee3797a6db353ee226f0",
+      "puncture_positive_homology"
+      "93ff05bfad5fc793dfd1a6f9dc55fe9b9c9b594f8a5f0c641fb2b506169492a7",
+      "dimension_two"
+      "e268598889808c11c342bd5cfc1ab849b13537f3e8e076985b8069d3c32d0210",
+      "normalizedClass_localizes"
+      "884ca2840d2799a2ff7457ea20d3021df478c8c2dfb59d9a495002392ccc132d",
+      "punctureHomologyIso_hom"
+      "ef6533474047268a04cc582c294288849c66d399aa957bb42c87bf85d1396efe"},
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture. Document stereographic source/target restrictions, the actual projection-map proof, and the pointwise normalization boundary.",
+      :consumer-equation
+      "For every k and sphere point x, localization x (normalizedClass x) equals HigherChartLocalGenerator.ambientLocalGenerator x, and normalizedClass x generates absolute integral H(k+2).",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA-256 before implementation."
+       "Compile fixture and canonical target."
+       "Run lake build ConstructionTargets.HigherSphereLocalization ConstructionTargets.HigherChartLocalGenerator ConstructionTargets.HigherModelLocalHomology."
+       "Reproduce all ten printed axiom audits and statement hashes."
+       "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :author "codex-13",
+     :commands
+     [{:cmd "realpath .lake/packages", :exit 0}
+      {:cmd "lake env lean /tmp/HigherSphereLocalizationProbe.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/HigherSphereLocalizationProbe.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :representation
+     {:source
+      "Integral absolute H(k+2) of the unit sphere in EuclideanSpace Real (Fin (k+3)).",
+      :target
+      "Integral relative H(k+2) of that sphere modulo its complement of a specified point.",
+      :direction
+      "Forward localization induced by relativeSingularProjection; the inverse is obtained from proved invertibility of this actual map, with both inverse identities exhibited."},
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/HigherSphereLocalizationProbe.lean",
+      :sha256
+      "99f41f8ce9bea78f25b5738c4d28d42536fc7e9f7d44d7b65cb078d51b9b5ed6"},
+     :finding
+     "Complete fixture compiles without warnings or placeholders. Stereographic projection at the specified point constructs the punctured-sphere homeomorphism with EuclideanSpace Real (Fin (k+2)); its homology comparison is explicitly the induced map. Contractibility proves positive-degree puncture homology vanishes. Production pair exactness then makes the actual localization map mono and epi. Its inverse image of the constructed chart-local generator generates absolute homology and satisfies the localization equation. Dimensions two and four and all ten standard-only axiom audits compile.",
+     :statement-hash-method
+     "SHA-256 of declaration bytes beginning with def, lemma, theorem or instance and ending immediately before the space preceding :=; namespace ConstructionTargets.HigherSphereLocalization.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/HigherSphereLocalization.lean"
+       "ConstructionTargets/HigherSphereLocalization.md"]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/HigherSphereLocalization.lean"
+    "ConstructionTargets/HigherSphereLocalization.md"],
    :dag-node
    "Queue D #2: higher-sphere puncture geometry and actual absolute-to-local projection",
    :acceptance
