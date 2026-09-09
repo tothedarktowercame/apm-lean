@@ -50079,61 +50079,87 @@
    :stop-condition
    "GO needs the complete compiled actual producer/consumer composition. REVISE requires exactly one compiled prerequisite. Otherwise identify the exact boundary; infrastructure absence is not refutation.",
    :evidence
-   {:probe
-    {:placeholder-delta
-     {:consumer "t93A04", :before 1, :after 1, :delta 0, :fixture 0},
-     :residual
-     "Conditional complementary slice-image nullity only. Product/fiber measure assembly, full rank-stratum coverage, compatible induction discharge and manifold transport remain; no unconditional Sard or consumer closure.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:exists_positive_rank_slice_image_null
-      "1e0e351a918e3aa8c52bdd892ce98bf67a938438cdc040305942200abbb53397"},
-     :axioms [propext Classical.choice Quot.sound],
-     :note
-     {:path "/tmp/SardGenuineSmoothPositiveRankSliceNullity.md",
-      :sha256
-      "3b9bce9f0515c2705ea62324e4cdf7a29880eced48f11b0fd0cfb3d03b3c6702"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/SardGenuineSmoothPositiveRankSliceNullity.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/verify-positive-rank-slice-nullity.py",
-       :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :audit
-     {:path
-      "/tmp/SardGenuineSmoothPositiveRankSliceNullity-audit.json",
-      :sha256
-      "5b8f3e1dffcde510ffb9862af1edb41e757eea1f5bf0c2da07a549cdacba7f78"},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/SardGenuineSmoothPositiveRankSliceNullity.lean",
-      :sha256
-      "a9e9bf8528a28fc2add8668ca88b48f5a34fd910ba84be0abb7988aecd1f212b"},
-     :finding
-     "Compiled actual chart construction, strict kernel dimension drop, complementary-target nontriviality, residual criticality from zero derivative, and application of local genuine-infinity smooth induction to the actual rank-upper slice subset. The sole nullity premise includes all strictly smaller source dimensions, including zero-dimensional sources.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/SardGenuineSmoothPositiveRankSliceNullity.lean"
-       "ConstructionTargets/SardGenuineSmoothPositiveRankSliceNullity.md"],
-      :acceptance
-      {:source-pins
-       "Verify fixture, note and producer hashes against the audit.",
-       :compile
-       ["lake env lean /tmp/SardGenuineSmoothPositiveRankSliceNullity.lean"
-        "lake env lean ConstructionTargets/SardGenuineSmoothPositiveRankSliceNullity.lean"
-        "lake build ConstructionTargets.SardGenuineSmoothPositiveRankSliceNullity"],
-       :axioms :standard-only,
-       :placeholders 0,
-       :statement "Preserve the audited theorem statement.",
-       :consumer
-       "Preserve t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea and its one placeholder.",
-       :diff
-       "Run git diff --check; commit only the two scoped files."}},
-     :seat :codex-12}},
+   {:placeholder-delta
+    {:consumer "t93A04", :before 1, :after 1, :delta 0, :fixture 0},
+    :residual
+    "Conditional complementary slice-image nullity compiled, retaining genuine-infinity local induction over all strictly smaller sources, including zero-dimensional sources. Product/fiber measure assembly, full rank-stratum coverage, induction discharge and manifold transport remain. No unconditional Sard or consumer closure claimed; independent review remains.",
+    :gates
+    {:exact-promotion :pass,
+     :producer-hashes :pass,
+     :statement-preserved :pass,
+     :compile :pass,
+     :build :pass,
+     :consumer-unchanged :pass,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:exists_positive_rank_slice_image_null
+     "1e0e351a918e3aa8c52bdd892ce98bf67a938438cdc040305942200abbb53397"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :note
+    {:path "/tmp/SardGenuineSmoothPositiveRankSliceNullity.md",
+     :sha256
+     "3b9bce9f0515c2705ea62324e4cdf7a29880eced48f11b0fd0cfb3d03b3c6702"},
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, dependency PASS receipt, fixture and note",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardGenuineSmoothPositiveRankSliceNullity-audit.json",
+      :exit 0}
+     {:cmd "python3 /tmp/verify-positive-rank-slice-nullity.py",
+      :exit 0,
+      :output
+      "PASS: fixture, note, source hashes, statement hash, and placeholder counts"}
+     {:cmd "cmp pinned fixture and note against promoted files",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardGenuineSmoothPositiveRankSliceNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardGenuineSmoothPositiveRankSliceNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardGenuineSmoothPositiveRankSliceNullity",
+      :exit 0,
+      :output "Build completed successfully (8337 jobs)."}
+     {:cmd
+      "rg placeholder and prohibited-declaration scan over promoted Lean file",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output "383 items OK"}
+     {:cmd
+      "git diff --exit-code -- problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check; git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output
+      "Only unrelated untracked holes/labs/topology-contract/runs2/ remains; untouched."}],
+    :audit
+    {:path "/tmp/SardGenuineSmoothPositiveRankSliceNullity-audit.json",
+     :sha256
+     "5b8f3e1dffcde510ffb9862af1edb41e757eea1f5bf0c2da07a549cdacba7f78",
+     :verified true},
+    :commit "097b18ac508f47090799460be28666a8571aabc1",
+    :changed-paths
+    ["ConstructionTargets/SardGenuineSmoothPositiveRankSliceNullity.lean"
+     "ConstructionTargets/SardGenuineSmoothPositiveRankSliceNullity.md"],
+    :fixture
+    {:path "/tmp/SardGenuineSmoothPositiveRankSliceNullity.lean",
+     :sha256
+     "a9e9bf8528a28fc2add8668ca88b48f5a34fd910ba84be0abb7988aecd1f212b",
+     :placeholder-count 0},
+    :consumer-sha256
+    "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardGenuineSmoothPositiveRankSliceNullity.lean"
     "ConstructionTargets/SardGenuineSmoothPositiveRankSliceNullity.md"],
