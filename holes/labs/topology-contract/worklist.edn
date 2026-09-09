@@ -43391,6 +43391,40 @@
    "Positive-rank pointwise nullity now consumes Borel-compatible induction with chart certificates constructed internally; rank aggregation and induction closure remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if exact-rank containment fails to transfer rank-upper local nullity, second-countable aggregation fails under these hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardBorelPositiveRankStratumNullity.lean"
+    "ConstructionTargets/SardBorelPositiveRankStratumNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL POSITIVE-RANK STRATUM NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardBorelPositiveRankStratumNullityProbe.lean",
+     :sha256
+     "b4adcb681a4c39338280c39060d08c3e50a759fae2d14dd7bf8f5f72665534fc"},
+    :declarations
+    ["SardBorelPositiveRankStratumNullityProbe.measure_image_zero_of_positive_rankStratum_finiteOrder"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Combine positive-rank strata with rank-zero nullity, close Borel-compatible induction, and repair the complementary analytic range before rectangular localization."},
+   :representation
+   {:source
+    "Global positive finite-order regularity, classical admissibility, Borel-compatible induction below the exact source dimension, positive rank r, and nonsurjective derivative at every point of the exact rank-r stratum; finite-dimensional real inner-product source and target, complete second-countable source, and target Borel add-Haar measure are explicit.",
+    :target
+    "Zero target measure of the image of the entire exact rank-r stratum, without supplied local-neighborhood or chart certificates."},
+   :id :critical-value-sard-borel-positive-rank-stratum-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-borel-positive-rank-pointwise-closed-open-nullity-1
+    :critical-value-sard-finite-order-rank-locus-local-aggregation-1],
+   :current-residual
+   "Positive-rank stratum nullity now consumes Borel-compatible induction; critical-rank assembly, rank-zero combination, and induction closure remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -43444,84 +43478,75 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank Borel-compatible positive-rank pointwise nullity; aggregate strata, combine rank-zero nullity, close induction, and resolve the complementary analytic range.",
+     "Bank Borel-compatible positive-rank stratum nullity; combine critical ranks and rank-zero nullity, close induction, and resolve the complementary analytic range.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"SardBorelPositiveRankPointwiseClosedOpenNullityProbe.exists_open_rankUpper_image_zero_finiteOrder"
-      "b287555fdee23c4ae76c3e39d05e2572e9e03d17ed24a37e064a9d59af18c0cb"},
+     {"SardBorelPositiveRankStratumNullityProbe.measure_image_zero_of_positive_rankStratum_finiteOrder"
+      "0b601236af0bbb96817a743f743cc4178e5dc2bb0e31beb862cecddc9d265e0d"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the reviewed projected chart construction, dimension identities, residual certificates, or Borel chart aggregator fail under these hypotheses, or nonstandard axioms are required.",
+      "Stop only if exact-rank containment fails to transfer rank-upper local nullity, second-countable aggregation fails under these hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardBorelPositiveRankPointwiseClosedOpenNullity.lean"
-       "ConstructionTargets/SardBorelPositiveRankPointwiseClosedOpenNullity.md"],
+      ["ConstructionTargets/SardBorelPositiveRankStratumNullity.lean"
+       "ConstructionTargets/SardBorelPositiveRankStratumNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL POSITIVE-RANK POINTWISE CLOSED-OPEN NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL POSITIVE-RANK STRATUM NULLITY",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardBorelPositiveRankPointwiseClosedOpenNullityProbe.lean",
+       {:path "/tmp/SardBorelPositiveRankStratumNullityProbe.lean",
         :sha256
-        "533951c88e745dab8e7d87e7455b86e1de6adeed5c99e110800919eb6d5a8cc5"},
+        "b4adcb681a4c39338280c39060d08c3e50a759fae2d14dd7bf8f5f72665534fc"},
        :declarations
-       ["SardBorelPositiveRankPointwiseClosedOpenNullityProbe.exists_open_rankUpper_image_zero_finiteOrder"],
+       ["SardBorelPositiveRankStratumNullityProbe.measure_image_zero_of_positive_rankStratum_finiteOrder"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Aggregate positive-rank strata with Borel-compatible induction, combine rank-zero nullity, close induction, and repair the complementary analytic range before rectangular localization."},
+       "Combine positive-rank strata with rank-zero nullity, close Borel-compatible induction, and repair the complementary analytic range before rectangular localization."},
       :representation
       {:source
-       "A globally C^order map between finite-dimensional real inner-product spaces, positive finite order, a critical point of exact positive derivative rank r, classical admissibility, and Borel-compatible induction below the exact source dimension; source completeness and second countability and target Borel add-Haar measure are explicit.",
+       "Global positive finite-order regularity, classical admissibility, Borel-compatible induction below the exact source dimension, positive rank r, and nonsurjective derivative at every point of the exact rank-r stratum; finite-dimensional real inner-product source and target, complete second-countable source, and target Borel add-Haar measure are explicit.",
        :target
-       "An open neighborhood U of the point such that the image of the derivative-rank-at-most-r locus intersected with U has zero target measure, without supplied chart or residual-slice certificates."},
-      :id
-      :critical-value-sard-borel-positive-rank-pointwise-closed-open-nullity-1,
+       "Zero target measure of the image of the entire exact rank-r stratum, without supplied local-neighborhood or chart certificates."},
+      :id :critical-value-sard-borel-positive-rank-stratum-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-borel-derivative-range-orthogonal-closed-open-chart-nullity-1
-       :critical-value-sard-finite-order-projected-smooth-chart-target-data-1
-       :critical-value-sard-finite-order-projected-chart-localized-residual-slice-zero-1
-       :critical-value-sard-projected-chart-residual-slices-contdiff-on-1
-       :critical-value-sard-range-projection-coordinate-derivative-1
-       :critical-value-sard-projected-rank-reduced-dimension-identities-1
-       :critical-value-sard-projected-range-kernel-dimension-drop-1
-       :critical-value-sard-projected-positive-rank-dimension-data-1
-       :critical-value-sard-derivative-rank-upper-locus-closed-1],
+      [:critical-value-sard-borel-positive-rank-pointwise-closed-open-nullity-1
+       :critical-value-sard-finite-order-rank-locus-local-aggregation-1],
       :current-residual
-      "Positive-rank pointwise nullity now consumes Borel-compatible induction with chart certificates constructed internally; rank aggregation and induction closure remain.",
+      "Positive-rank stratum nullity now consumes Borel-compatible induction; critical-rank assembly, rank-zero combination, and induction closure remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite constructs a null-image neighborhood of the rank-upper locus at each positive-rank critical point using Borel-compatible induction. The proof constructs the projected chart, derives reduced dimensions, supplies residual regularity and derivative-zero certificates, and invokes the reviewed Borel chart aggregator. Rank aggregation and full induction remain unresolved; rectangular Morse-Sard is not refuted.",
+     "One compiled prerequisite aggregates Borel-compatible local nullity over an entire positive-rank stratum whose points are critical. Image monotonicity restricts rank-upper neighborhoods to the exact stratum, and second-countable aggregation proves stratum nullity. Rank-zero combination and full induction remain unresolved; rectangular Morse-Sard is not refuted.",
      :commands
      [{:cmd
-       "Read DAG, closure policy, build-loop definitions, positive-rank pointwise proof, and nine reviewed dependency findings",
+       "Read DAG, closure policy, build-loop definitions, exact-rank restriction and aggregation proofs, and both reviewed dependency findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardBorelPositiveRankPointwiseClosedOpenNullityProbe.lean",
+       "lake env lean /tmp/SardBorelPositiveRankStratumNullityProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardBorelPositiveRankPointwiseClosedOpenNullityProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardBorelPositiveRankStratumNullityProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
        "Fixture hash recorded; frozen consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '16,31p' /tmp/SardBorelPositiveRankPointwiseClosedOpenNullityProbe.lean | sha256sum",
+       "sed -n '9,24p' /tmp/SardBorelPositiveRankStratumNullityProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelPositiveRankPointwiseClosedOpenNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelPositiveRankStratumNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 333 items OK; {:done 325, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 334 items OK; {:done 326, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -43533,13 +43558,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
-     {:path
-      "/tmp/SardBorelPositiveRankPointwiseClosedOpenNullityProbe.lean",
+     {:path "/tmp/SardBorelPositiveRankStratumNullityProbe.lean",
       :sha256
-      "533951c88e745dab8e7d87e7455b86e1de6adeed5c99e110800919eb6d5a8cc5"},
+      "b4adcb681a4c39338280c39060d08c3e50a759fae2d14dd7bf8f5f72665534fc"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -43821,7 +43845,8 @@
     :critical-value-sard-rank-zero-borel-jet-range-overlap-1
     :critical-value-sard-borel-reduced-dimension-induction-nullity-1
     :critical-value-sard-borel-derivative-range-orthogonal-closed-open-chart-nullity-1
-    :critical-value-sard-borel-positive-rank-pointwise-closed-open-nullity-1],
+    :critical-value-sard-borel-positive-rank-pointwise-closed-open-nullity-1
+    :critical-value-sard-borel-positive-rank-stratum-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
