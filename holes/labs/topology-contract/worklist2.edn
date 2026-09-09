@@ -1022,6 +1022,22 @@
      {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
     :repository-note
     "Checked codex-11 dependency PASS. Existing untracked supervisor runs2 files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788969590260-16560-15b330e9",
+     :commands
+     ["git show 487f1de0315ae18a93ffa518c74e49e2aa52c9ac (source, documentation, scope)"
+      "git diff --exit-code 487f1de0315ae18a93ffa518c74e49e2aa52c9ac -- ConstructionTargets lakefile.toml lakefile.lean lake-manifest.json lean-toolchain"
+      "sha256sum /tmp/OrientedOverlapPuncturedCircleProbe.lean"
+      "cmp recorded-commit-source /tmp/OrientedOverlapPuncturedCircleProbe.lean"
+      "lake env lean /tmp/OrientedOverlapPuncturedCircleProbe.lean"
+      "lake env lean ConstructionTargets/OrientedOverlapPuncturedCircle.lean"
+      "lake build ConstructionTargets.OrientedOverlapPuncturedCircle ConstructionTargets.NestedOrientedChartCompatibility ConstructionTargets.OneDimensionalChartLocalGenerator"
+      "python3: recompute twelve statement hashes, frozen problem digest and placeholder counts, forbidden declaration scan"
+      "git show --format= --check 487f1de0315ae18a93ffa518c74e49e2aa52c9ac"],
+     :finding
+     "Independent review passed: exact two-file scope; fixture byte-identical with recorded SHA-256; both compilations and focused build successful; eleven standard-only axiom audits; twelve statement hashes matched; frozen problems unchanged with 377 placeholders before/after and zero added. Geometric positive transitions imply correctly oriented ambient class equality; punctured-circle homeomorphism induces the stated integral homology comparison. One-dimensional and local boundaries respected."},
     :commit "487f1de0315ae18a93ffa518c74e49e2aa52c9ac",
     :changed-paths
     ["ConstructionTargets/OrientedOverlapPuncturedCircle.lean"
@@ -1038,7 +1054,7 @@
     "SHA-256 of UTF-8 declaration bytes beginning with theorem or def and ending immediately before the space preceding := or where; names below are in ConstructionTargets.OrientedOverlapPuncturedCircle.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/OrientedOverlapPuncturedCircle.lean"
     "ConstructionTargets/OrientedOverlapPuncturedCircle.md"],
@@ -1092,7 +1108,7 @@
    :stop-condition
    "Stop only on a genuine mathematical refutation, naming it; never stop for want of owner authorization.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: oriented-manifold fundamental classes and localization",
