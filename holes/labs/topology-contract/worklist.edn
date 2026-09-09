@@ -47079,9 +47079,22 @@
       :current-residual
       "Await reviewed exact t95J04 closure attempt and unconditional smooth rectangular Sard probe, then elect again from the complete DAG."}],
     :author :codex-12,
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788968622001-16533-c80b1150",
+     :commands
+     ["git show --format= --stat 52fb9459"
+      "sha256sum /tmp/topology-refill9-measure.json /tmp/topology-refill9-ledger-measure.json /tmp/topology-refill9-tail.edn"
+      "python3 read-only census recheck against recorded measured commit and baseline"
+      "git show 52fb9459:holes/labs/topology-contract/worklist.edn | bb recorded portfolio equality and dependency assertions"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill9-proposed-worklist.edn"
+      "git show --format= --check 52fb9459"],
+     :finding
+     "Author codex-12; independent reviewer codex-10. Repair 52fb9459 corrects census to 59 named, 58 existing, 42 open; every recorded consumer hash and placeholder count reproduced. Total 76, delta 0, closed 16, within-two 32; t93A05 absent. Three artifact hashes match; recorded portfolio matches hashed tail, elects one closing adapter first and a successor depending on both work rows. Validation 362 items and whitespace checks exit 0. Strategy-only acceptance, no compiled closure claimed; source scope empty; no edits."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -47101,7 +47114,7 @@
    :stop-condition
    "If the whole frozen adapter cannot be built from existing material, return STOP naming the exact missing theorem or representation and explicitly distinguish missing infrastructure from refutation; do not replace closure with another conditional interface.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "SARD THEOREM / strict-dimension sphere consumer",
    :acceptance
@@ -47123,7 +47136,7 @@
    :stop-condition
    "Name an exact mathematical, hypothesis, or representation boundary if the probe fails. Missing infrastructure is not a refutation. REVISE requires exactly one compiled prerequisite under the probe protocol; no owner-authorization gate.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "SARD THEOREM",
    :acceptance
