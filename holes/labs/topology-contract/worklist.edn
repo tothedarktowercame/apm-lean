@@ -55433,9 +55433,96 @@
    "One placeholder: the literal nonempty radial level must carry the specified codimension-one manifold structure. Manifold Sard and Euclidean-source global fiber atlases are banked; attained regular-radius selection and manifold-source transport need audit."}
   {:consumer "t96J05",
    :stop-condition
-   "GO requires compiled smooth inclusion and both actual derivative injectivity and kernel-range equality. REVISE requires exactly one compiled prerequisite; no conditional embeddedness certificate.",
-   :phase :probe,
+   "Require the exact chosen-atlas smooth-inclusion theorem to compile without placeholders or nonstandard axioms; preserve existing APIs.",
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/RegularFiberSmoothInclusion.lean"],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / chosen-atlas smooth inclusion",
+   :acceptance
+   {:fixture "/tmp/RegularFiberSmoothInclusion.lean",
+    :fixture-sha256
+    "a39cf89f3354ff39c0978dfcdc3651bed1a5cbc4c8ae8a433c6ce76ba107f4ed",
+    :implementation
+    "Install the compiled smooth_inclusion theorem using exactly RegularFiberGlobalAtlas.chartedSpace and its selected backward parameterizations. Preserve genuine infinity, inherited subtype topology and all hypotheses. Compile the module, verify no placeholders and print theorem axioms. Do not claim derivative injectivity, kernel-range equality or frozen consumer closure.",
+    :commands
+    ["lake env lean ConstructionTargets/RegularFiberSmoothInclusion.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :regular-fiber-chosen-atlas-smooth-inclusion-implementation-refill30,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
+   :current-residual
+   "A complete smooth-inclusion fixture is compiled; bank it before completing the actual derivative comparison.",
+   :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+  {:consumer "t96J05",
+   :stop-condition
+   "GO requires compiled smooth inclusion and both actual derivative injectivity and kernel-range equality. REVISE requires exactly one compiled prerequisite; no conditional embeddedness certificate.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Complete the coordinate derivative comparison for the chosen atlas: prove inclusion mfderiv injectivity and range equal to the ambient fderiv kernel. Manifold-source transport remains subsequent. Preserve the independently compiled local t96J05 constant-radius specification counterexample; this prerequisite does not repair that consumer.",
+     :outcome :revise,
+     :warnings [],
+     :statement-hashes
+     {:smooth-inclusion
+      "368c54614f01a072c8f36dd40ec2a7d7bcb18eb03c2e98431aaf97e7ab5a1ddf"},
+     :prerequisite
+     {:consumer "t96J05",
+      :stop-condition
+      "Require the exact chosen-atlas smooth-inclusion theorem to compile without placeholders or nonstandard axioms; preserve existing APIs.",
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/RegularFiberSmoothInclusion.lean"],
+      :dag-node
+      "REGULAR-PREIMAGE/SUBMERSION / chosen-atlas smooth inclusion",
+      :acceptance
+      {:fixture "/tmp/RegularFiberSmoothInclusion.lean",
+       :fixture-sha256
+       "a39cf89f3354ff39c0978dfcdc3651bed1a5cbc4c8ae8a433c6ce76ba107f4ed",
+       :implementation
+       "Install the compiled smooth_inclusion theorem using exactly RegularFiberGlobalAtlas.chartedSpace and its selected backward parameterizations. Preserve genuine infinity, inherited subtype topology and all hypotheses. Compile the module, verify no placeholders and print theorem axioms. Do not claim derivative injectivity, kernel-range equality or frozen consumer closure.",
+       :commands
+       ["lake env lean ConstructionTargets/RegularFiberSmoothInclusion.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :id
+      :regular-fiber-chosen-atlas-smooth-inclusion-implementation-refill30,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
+      :current-residual
+      "A complete smooth-inclusion fixture is compiled; bank it before completing the actual derivative comparison.",
+      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "bb /tmp/t96j05-review.bb", :exit 0}
+      {:cmd "lake env lean /tmp/RegularFiberSmoothInclusion.lean",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/RegularFiberSmoothInclusion.lean",
+       :exit 1,
+       :correction
+       "Replaced local instances with explicit letI bindings in the theorem statement and proof so hsm and hreg determine the exact chosen atlas."}
+      {:cmd "lake env lean /tmp/RegularFiberSmoothInclusion.lean",
+       :exit 1,
+       :correction
+       "Installed RegularFiberGlobalAtlas.isManifold for the chosen atlas before applying contMDiff_iff; the final rerun succeeds."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/RegularFiberSmoothInclusion.lean",
+      :sha256
+      "a39cf89f3354ff39c0978dfcdc3651bed1a5cbc4c8ae8a433c6ce76ba107f4ed"},
+     :finding
+     "Compiled genuine-infinity smoothness of subtype inclusion for exactly RegularFiberGlobalAtlas.chartedSpace. The proof identifies each actual coordinate representative with the selected chart's backward parameterization on its target and reuses backward_smooth. No replacement atlas, topology, nonemptiness or positive kernel dimension is assumed. Actual mfderiv injectivity and kernel-range equality are not proved by this fixture.",
+     :seat "codex-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / smooth inclusion and tangent image",
@@ -55449,7 +55536,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas
-    :checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
+    :regular-fiber-chosen-atlas-smooth-inclusion-implementation-refill30],
    :current-residual
    "RegularFiberGlobalAtlas supplies actual fixed-model ChartedSpace and IsManifold structures on Euclidean-source fibers. Smoothness of subtype inclusion and its actual manifold derivative range remain.",
    :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
