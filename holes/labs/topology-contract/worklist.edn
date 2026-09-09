@@ -44506,6 +44506,8 @@
     :placeholder-delta {:before 1, :after 1, :delta 0},
     :residual
     "Target-coordinate critical-image equality is established. Combine it with nullity transport and target-model construction; Borel-compatible dimension induction, complementary analytic ranges, and remaining regularity cases remain open. Ledger and frozen consumer unchanged.",
+    :repair
+    "Receipt-only correction; retained implementation commit, reran final gates, and separated failed exploration from gate evidence. No files changed during repair.",
     :outcome :done-unreviewed,
     :warnings [],
     :statement-hashes
@@ -44514,35 +44516,36 @@
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author :codex-6,
     :commands
-    [{:cmd "Read DAG certification rule and closure experiment policy",
+    [{:cmd "sed -n '30,70p' TOPOLOGY-DEPENDENCY-DAG.md", :exit 0}
+     {:cmd "sed -n '45,85p' docs/TN-topology-closure-experiments.md",
       :exit 0}
-     {:cmd "Initial bb dependency-receipt query",
-      :exit 1,
-      :output
-      "Unmatched delimiter; corrected query subsequently succeeded."}
      {:cmd
-      "Corrected bb dependency-receipt query for critical-value-sard-source-equiv-critical-image-1",
+      "bb -e '(require (quote [clojure.edn :as edn])) (doseq [r (:items (edn/read-string (slurp \"holes/labs/topology-contract/worklist.edn\"))) :when (= :critical-value-sard-source-equiv-critical-image-1 (:id r))] (prn (get-in r [:evidence :review])))'",
       :exit 0,
-      :output "Read complete receipt and independent PASS finding."}
+      :output "Dependency review PASS."}
      {:cmd
-      "sha256sum /tmp/SardTargetEquivCriticalImageProbe.lean problems/t93A04/lean/Main.lean",
+      "sha256sum /tmp/SardTargetEquivCriticalImageProbe.lean ConstructionTargets/SardTargetEquivCriticalImage.lean problems/t93A04/lean/Main.lean",
       :exit 0,
       :output
-      "Fixture matches acceptance; frozen consumer SHA 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
-     {:cmd "lake env lean /tmp/SardTargetEquivCriticalImageProbe.lean",
+      "Fixture and module match acceptance SHA; frozen consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
+     {:cmd
+      "git show --format=fuller --stat 60fcab01ff699668ae01a149dca8e64bcf5eb032",
+      :exit 0,
+      :output
+      "Retained implementation commit contains exactly two scoped files."}
+     {:cmd
+      "git diff --exit-code 60fcab01ff699668ae01a149dca8e64bcf5eb032 -- ConstructionTargets/SardTargetEquivCriticalImage.lean ConstructionTargets/SardTargetEquivCriticalImage.md",
       :exit 0}
      {:cmd
-      "lake env lean ConstructionTargets/SardTargetEquivCriticalImage.lean",
-      :exit 0}
+      "lake env lean /tmp/SardTargetEquivCriticalImageProbe.lean && lake env lean ConstructionTargets/SardTargetEquivCriticalImage.lean",
+      :exit 0,
+      :output "Both compile without warnings; standard axioms only."}
      {:cmd
       "set -o pipefail; lake build ConstructionTargets.SardTargetEquivCriticalImage 2>&1 | awk '/warning:|error:|Build completed/ {print}'",
       :exit 0,
       :output "Build completed successfully (8264 jobs)."}
      {:cmd
       "cmp /tmp/SardTargetEquivCriticalImageProbe.lean ConstructionTargets/SardTargetEquivCriticalImage.lean",
-      :exit 0}
-     {:cmd
-      "sha256sum ConstructionTargets/SardTargetEquivCriticalImage.lean problems/t93A04/lean/Main.lean",
       :exit 0}
      {:cmd
       "sed -n '5,13p' ConstructionTargets/SardTargetEquivCriticalImage.lean | sha256sum",
@@ -44555,7 +44558,7 @@
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :output
-      "topology-worklist: 344 items OK; {:done 335, :open 1, :blocked 2, :superseded 6}"}
+      "topology-worklist: 344 items OK; {:done 335, :repair 1, :blocked 2, :superseded 6}"}
      {:cmd
       "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
       :exit 0,
@@ -44564,26 +44567,19 @@
       :exit 0,
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check", :exit 0}
-     {:cmd
-      "git add ConstructionTargets/SardTargetEquivCriticalImage.lean ConstructionTargets/SardTargetEquivCriticalImage.md && git diff --cached --check && git diff --cached --name-only && git commit -m \"Bank target-coordinate critical-image equality\" && git rev-parse HEAD && git status --porcelain=v1",
-      :exit 0,
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "bb -e '(require (quote [clojure.edn :as edn])) (doseq [r (:items (edn/read-string (slurp \"holes/labs/topology-contract/worklist.edn\")))) :when (= :critical-value-sard-source-equiv-critical-image-1 (:id r))] (prn r))'",
+      :exit 1,
       :output
-      "Committed exactly two scoped files; final worktree clean."}],
+      "Prior invocation: unmatched delimiter in exploratory receipt query. Corrected query succeeded; this failed attempt is not acceptance-gate evidence."}],
     :representation
     {:source
      "The equivalence-image under e of the original localized critical image.",
      :target "The localized critical image of e composed with f.",
      :direction
      "Exact equality from the target composite critical-image representation to the source equivalence-image representation, both subsets of H."},
-    :review
-    {:outcome :fail,
-     :seat "codex-1",
-     :finding
-     "Receipt validation failed: :commands includes Initial bb dependency-receipt query with unexpected exit 1 (unmatched delimiter). The corrected query and Lean gates are reported successful, but failed exploration must remain audit history, not passing gate evidence. Reissue a completion with reproducible final gates and preserve the failed attempt separately as diagnostic history. Retain implementation commit 60fcab01ff699668ae01a149dca8e64bcf5eb032; no theorem defect established by this failure.",
-     :commands
-     [{:cmd
-       "Inspect worklist_check.bb gate rule, build_step.bb receipt application, and original implementation receipt",
-       :exit 0}]},
     :commit "60fcab01ff699668ae01a149dca8e64bcf5eb032",
     :changed-paths
     ["ConstructionTargets/SardTargetEquivCriticalImage.lean"
@@ -44595,7 +44591,7 @@
     :declarations
     ["criticalImage_eq_of_target_continuousLinearEquiv"]},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardTargetEquivCriticalImage.lean"
     "ConstructionTargets/SardTargetEquivCriticalImage.md"],
