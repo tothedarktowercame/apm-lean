@@ -1757,94 +1757,163 @@
    [:circle-degree-localization :oriented-circle-chart-naturality]}
   {:consumer :circle-fundamental-class,
    :stop-condition
+   "Bank constructed charts, actual map comparisons, and localization consequences only. Geometric overlap compatibility remains downstream; do not claim the full parent orientation packet, higher-dimensional results, or t98A02 closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/RotatedCircleChartTransportProbe.lean",
+      :sha256
+      "80fb4ce21a5c498bbac7644e31a6f575edd67b0f1910b6e2e111bf77ba183622"},
+     :commands
+     [{:cmd "lake env lean /tmp/RotatedCircleChartTransportProbe.lean",
+       :exit 0}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :warnings []}},
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/RotatedCircleChartTransport.lean"
+    "ConstructionTargets/RotatedCircleChartTransport.md"],
+   :dag-node
+   "Queue D #2: constructed rotated Circle charts and actual relative-map comparison",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Construct neighborhoods as rotation images and coordinate homeomorphisms by restriction of the actual rotation homeomorphism. Preserve the origin equation, ambient-map equality, relative chain-map equality, and constructed-chart localization consequences.",
+    :declarations
+    ["ConstructionTargets.RotatedCircleChartTransport.rotatedChart"
+     "ConstructionTargets.RotatedCircleChartTransport.rotatedChart_ambient"
+     "ConstructionTargets.RotatedCircleChartTransport.rotatedChart_chain_map"
+     "ConstructionTargets.RotatedCircleChartTransport.rotatedChart_localClass"
+     "ConstructionTargets.RotatedCircleChartTransport.globalClass_localizes_chart"
+     "ConstructionTargets.RotatedCircleChartTransport.unique_global_chart_class"],
+    :consumer-equation
+    "For every x, localization x globalClass = (rotatedChart x).localClass. There exists a unique absolute integral H1 generator satisfying all these constructed-chart equations.",
+    :consumer-residual
+    "Prove geometric coordinate-order compatibility of the rotated charts on constructed common restrictions, with the required recentering when comparing charts around different centers. Do not infer that geometric condition merely from the established homology equations.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA-256 before implementation."
+     "Compile the fixture and canonical target."
+     "Run lake build ConstructionTargets.RotatedCircleChartTransport ConstructionTargets.CircleRotationLocalization ConstructionTargets.CircleActualLocalization."
+     "Reproduce all six printed axiom audits; permit only propext, Classical.choice, Quot.sound."
+     "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."]},
+   :representation
+   {:source
+    "The actual model-to-Circle relative singular chain map of the constructed rotated pointed chart",
+    :target
+    "The fixed chart relative chain map followed by the relative map induced by Circle rotation",
+    :direction
+    "Exact equality from the constructed chart map to the fixed-chart-then-rotation composite; consequently its local class equals rotation transport of the fixed local class."},
+   :id :oriented-circle-rotated-chart-transport-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-circle-rotation-localization-naturality-1
+    :oriented-circle-actual-localization-isomorphism-repair1
+    :oriented-manifold-overlap-punctured-circle-1],
+   :current-residual
+   "Banked rotation transport gives relative classes but has not yet been identified with the actual maps and classes of constructed rotated charts.",
+   :other-consumers
+   [:circle-degree-localization :oriented-circle-chart-naturality]}
+  {:consumer :circle-fundamental-class,
+   :stop-condition
    "Circle only; no assumed global class, assumed rotation action, general compact-manifold theorem, or t98A02 closure.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Exactly one compiled prerequisite supplied. Constructed rotated charts, their class-identification equations, and geometric overlap compatibility remain in the parent probe.",
+     "Exactly one compiled prerequisite supplied. The parent now has constructed rotated charts and the complete unique-generator localization equation; geometric transition compatibility remains.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :circle-fundamental-class,
       :stop-condition
-      "Bank only the geometric rotation/localization comparison and its normalization consequences. Do not identify transported classes with geometric chart classes without proof, assume overlap compatibility, or claim the full parent packet or higher-dimensional results.",
+      "Bank constructed charts, actual map comparisons, and localization consequences only. Geometric overlap compatibility remains downstream; do not claim the full parent orientation packet, higher-dimensional results, or t98A02 closure.",
       :evidence
       {:probe
        {:outcome :go,
         :seat "codex-13",
         :fixture
-        {:path "/tmp/CircleRotationLocalizationProbe.lean",
+        {:path "/tmp/RotatedCircleChartTransportProbe.lean",
          :sha256
-         "260700a9986271f889287480a941de5891198fead0f82808b0a895bff2ebd1f2"},
+         "80fb4ce21a5c498bbac7644e31a6f575edd67b0f1910b6e2e111bf77ba183622"},
         :commands
         [{:cmd
-          "lake env lean /tmp/CircleRotationLocalizationProbe.lean",
+          "lake env lean /tmp/RotatedCircleChartTransportProbe.lean",
           :exit 0}],
         :axioms ["propext" "Classical.choice" "Quot.sound"],
         :warnings []}},
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CircleRotationLocalization.lean"
-       "ConstructionTargets/CircleRotationLocalization.md"],
+      ["ConstructionTargets/RotatedCircleChartTransport.lean"
+       "ConstructionTargets/RotatedCircleChartTransport.md"],
       :dag-node
-      "Queue D #2: Circle fundamental class; geometric rotation and localization naturality",
+      "Queue D #2: constructed rotated Circle charts and actual relative-map comparison",
       :acceptance
       {:implementation
-       "Promote the exact compiled fixture. Preserve the explicit rotation homotopy and actual production relative-map square. Document that rotatedLocalClass is rotation transport in relative homology, not yet the local class of a constructed rotated chart.",
+       "Promote the exact fixture. Construct neighborhoods as rotation images and coordinate homeomorphisms by restriction of the actual rotation homeomorphism. Preserve the origin equation, ambient-map equality, relative chain-map equality, and constructed-chart localization consequences.",
        :declarations
-       ["ConstructionTargets.CircleRotationLocalization.rotationHomotopy"
-        "ConstructionTargets.CircleRotationLocalization.rotation_H1_eq_id"
-        "ConstructionTargets.CircleRotationLocalization.localization_rotation_square"
-        "ConstructionTargets.CircleRotationLocalization.globalClass_localizes"
-        "ConstructionTargets.CircleRotationLocalization.globalClass_generates"
-        "ConstructionTargets.CircleRotationLocalization.globalClass_unique"],
+       ["ConstructionTargets.RotatedCircleChartTransport.rotatedChart"
+        "ConstructionTargets.RotatedCircleChartTransport.rotatedChart_ambient"
+        "ConstructionTargets.RotatedCircleChartTransport.rotatedChart_chain_map"
+        "ConstructionTargets.RotatedCircleChartTransport.rotatedChart_localClass"
+        "ConstructionTargets.RotatedCircleChartTransport.globalClass_localizes_chart"
+        "ConstructionTargets.RotatedCircleChartTransport.unique_global_chart_class"],
        :consumer-equation
-       "Let Rx be the relative H1 map induced by z ↦ x·z from the pair deleted at 1 to the pair deleted at x. Then L1 ≫ Rx = Lx, and Lx(normalizedClass 1) = Rx((constructedChart 1).localClass).",
+       "For every x, localization x globalClass = (rotatedChart x).localClass. There exists a unique absolute integral H1 generator satisfying all these constructed-chart equations.",
        :consumer-residual
-       "Construct rotated pointed charts, identify their actual ambient relative maps and local classes with rotation transport, and prove geometric orientation compatibility on common restrictions. Then combine those identifications with the compiled localization equations, generation, and uniqueness.",
+       "Prove geometric coordinate-order compatibility of the rotated charts on constructed common restrictions, with the required recentering when comparing charts around different centers. Do not infer that geometric condition merely from the established homology equations.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA-256 before implementation."
         "Compile the fixture and canonical target."
-        "Run lake build ConstructionTargets.CircleRotationLocalization ConstructionTargets.CircleActualLocalization ConstructionTargets.OrientedOverlapPuncturedCircle."
+        "Run lake build ConstructionTargets.RotatedCircleChartTransport ConstructionTargets.CircleRotationLocalization ConstructionTargets.CircleActualLocalization."
         "Reproduce all six printed axiom audits; permit only propext, Classical.choice, Quot.sound."
         "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."]},
-      :id :oriented-circle-rotation-localization-naturality-1,
-      :kind :reusable-theorem,
+      :representation
+      {:source
+       "The actual model-to-Circle relative singular chain map of the constructed rotated pointed chart",
+       :target
+       "The fixed chart relative chain map followed by the relative map induced by Circle rotation",
+       :direction
+       "Exact equality from the constructed chart map to the fixed-chart-then-rotation composite; consequently its local class equals rotation transport of the fixed local class."},
+      :id :oriented-circle-rotated-chart-transport-1,
+      :kind :representation-comparison,
       :depends-on
-      [:oriented-circle-actual-localization-isomorphism-repair1
+      [:oriented-circle-rotation-localization-naturality-1
+       :oriented-circle-actual-localization-isomorphism-repair1
        :oriented-manifold-overlap-punctured-circle-1],
       :current-residual
-      "The actual localization maps at different points have not been compared canonically through geometric rotations and their homotopies to identity.",
+      "Banked rotation transport gives relative classes but has not yet been identified with the actual maps and classes of constructed rotated charts.",
       :other-consumers
       [:circle-degree-localization :oriented-circle-chart-naturality]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :author "codex-13",
      :commands
      [{:cmd "realpath .lake/packages", :exit 0}
-      {:cmd "lake env lean /tmp/CircleRotationLocalizationProbe.lean",
+      {:cmd "lake env lean /tmp/RotatedCircleChartTransportProbe.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/CircleRotationLocalizationProbe.lean",
+      {:cmd "sha256sum /tmp/RotatedCircleChartTransportProbe.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CircleRotationLocalizationProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/RotatedCircleChartTransportProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :changed-paths [],
-     :dependency-commit "a172e498cff17b894d371aa260f783534d5ee706",
+     :dependency-commit "b349ae35bc82e42b0ead8623710e2375abd29275",
      :fixture
-     {:path "/tmp/CircleRotationLocalizationProbe.lean",
+     {:path "/tmp/RotatedCircleChartTransportProbe.lean",
       :sha256
-      "260700a9986271f889287480a941de5891198fead0f82808b0a895bff2ebd1f2"},
+      "80fb4ce21a5c498bbac7644e31a6f575edd67b0f1910b6e2e111bf77ba183622"},
      :finding
-     "Compiled one geometric rotation/localization prerequisite. The explicit homotopy t,z ↦ exp(t arg(x))·z proves actual Circle rotation acts identically on absolute H1. Production projection naturality gives L1 followed by the relative rotation map equals Lx. Consequently the class normalized at 1 localizes at every x to the rotation-transported local class, generates absolute H1, and is uniquely determined by its normalization at 1. The transported local class has not yet been identified with a constructed rotated chart, and geometric overlap compatibility remains unproved; the parent is not GO.",
+     "Compiled one geometric chart-transport prerequisite. Rotating the fixed chart at 1 constructs an open pointed model chart at every Circle point. Its actual ambient map is rotation composed with the fixed chart map, and its production relative chain map equals the corresponding composite. Its local class therefore equals the banked rotation-transported class. The fixture proves existence and uniqueness of one absolute integral generator satisfying every constructed-chart localization equation. Geometric coordinate-order compatibility between charts on common restrictions remains unproved, so the full parent is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "Queue D #2: compact connected Circle, milestones 4 and 5",
@@ -1869,7 +1938,8 @@
    [:oriented-circle-actual-localization-isomorphism-repair1
     :oriented-manifold-overlap-punctured-circle-1
     :oriented-manifold-checkpoint-refill-1
-    :oriented-circle-rotation-localization-naturality-1],
+    :oriented-circle-rotation-localization-naturality-1
+    :oriented-circle-rotated-chart-transport-1],
    :current-residual
    "Independent pointwise normalizations do not yet give one class or a coherent geometric orientation family.",
    :other-consumers
