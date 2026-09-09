@@ -53478,8 +53478,138 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; retain local specification evidence and uncovered cases.",
+   :evidence
+   {:evidence
+    {:census
+     {:path "/tmp/topology-refill26-measure.json",
+      :sha256
+      "3b1b88946e70bf6a9b719f19779e13702b63fc01d816b18cf056dd6a9b0e3b02"},
+     :reviews
+     {:path "/tmp/topology-refill26-reviews.edn",
+      :sha256
+      "2d766750a4ffbe7d65c55e2b6d320fe5e216c5e1ebecedb0dabd4c0f15ff525e"},
+     :tail
+     {:path "/tmp/topology-refill26-tail.edn",
+      :sha256
+      "a13007ec90434b6373b04fa1030e752cca9c55e4b9b151f73b807fa51cdf753a"}},
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill26-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill26-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill26-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill26-proposed-worklist.edn",
+      :exit 0}],
+    :replacement-items
+    [{:consumer "t92J06",
+      :stop-condition
+      "GO requires both frozen conjuncts. Otherwise name exact missing graph realization, vertex trivialization or total-space separation theorem; permutation data alone is not closure.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "COVERINGS / literal wedge graph realization",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free copy of frozen Main preserving every definition and statement. Construct an actual simply connected covering of the quotient wedge and four actual three-sheet coverings whose total spaces are pairwise nonhomeomorphic. Inspect banked covering constructors, LiteralPullbackCover and EquivariantOrbitQuotient for their exact applicability. Prove evenly covered neighborhoods at wedge vertices as well as edge interiors, actual fiber cardinalities, universal-cover simple connectivity and homeomorphism obstructions for the four total spaces. Do not assume graph realization, covering classification, fiber counts or identify inequivalent covers with nonhomeomorphic total spaces. No partial finite-cover or permutation certificate counts as GO.",
+       :frozen-file "problems/t92J06/lean/Main.lean",
+       :frozen-sha256
+       "85f64495f251de4b505d8981f77b947a8775ab71b685dd580dbc98e13abd82fa",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t92j06-frozen-wedge-coverings-closure-probe-refill26,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero],
+      :current-residual
+      "One placeholder packages a simply connected cover of the literal two-circle wedge and four three-sheet covers with pairwise nonhomeomorphic total spaces. Target quotient gluing is proved."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO requires compiled unconditional global and open-domain genuine-smooth critical-image nullity. REVISE requires exactly one compiled prerequisite. No residual nullity or induction premise may remain in the unconditional theorem.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / Euclidean smooth induction discharge",
+      :acceptance
+      {:probe
+       "Prove unconditional Haar-null image of the nonsurjective-fderiv critical set for globally ContDiff real genuine infinity maps between finite-dimensional complete real inner-product sources and finite-dimensional real inner-product targets with Borel Haar measure. Use strong induction on source finrank with all smaller sources and targets quantified coherently. Handle zero-dimensional source and target explicitly. In the step, derive rank-zero closedness and countable compact exhaustion, apply SardCompactRankZeroOpenContract with smaller-dimensional global induction through its localization compatibility, apply SardPositiveRankStratumOpenContractAssembly to positive deficient ranks, and cover the entire actual critical locus. Derive needed Borel, properness, second countability and measure facts. Then invoke SardGenuineSmoothOpenDomainLocalization to obtain nullity for arbitrary subsets of explicitly open ContDiffOn infinity domains. No arbitrary-set pointwise smooth induction, arbitrary-C1, analytic omega, assumed stratum nullity or assumed unconditional Sard. Preserve existing APIs; reuse all chart and measure producers. Do not claim manifold transport or frozen t93A04 closure.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Unconditional Euclidean inner-product-space genuine-smooth Sard only. Any needed normed-source comparison and actual manifold chart, criticality and measure transport remain before frozen consumer closure."},
+      :id
+      :sard-genuine-smooth-euclidean-induction-discharge-probe-refill26,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero],
+      :current-residual
+      "Both compact rank-zero and positive-rank strata now consume compatible open-domain induction and derive it from smaller-dimensional global smooth nullity. Exhaustion, full critical-set assembly and source-dimension induction remain.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Only all campaign consumers closed or exact campaign-level refutation ends the campaign; preserve local specification evidence and outstanding coverage.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned executable placeholders, compare typed residuals and reviewed STOP/PASS outcomes, and separate portfolio from concurrent changes. Elect exactly one near-closure adapter before shared foundations ranked by reach and simplicity; append a fresh dependent checkpoint to a nonempty portfolio. Retain missing signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t92j06-frozen-wedge-coverings-closure-probe-refill26
+       :sard-genuine-smooth-euclidean-induction-discharge-probe-refill26],
+      :current-residual
+      "Await reviewed covering and Euclidean induction outcomes, then rerank all consumers and measure actual closure progress separately from infrastructure."}],
+    :changed-paths [],
+    :finding
+    {:baseline "f772579ab8a0c8cdfcaf90ab090c412c6f6c2b62",
+     :head "1c4a8e789094d67b19abef3cba30a8b6c4d1a92b",
+     :campaign-refutation false,
+     :reviews
+     {:connected-sum :stop-reviewed-pass,
+      :compact-rank-zero :implementation-reviewed-pass,
+      :previous-checkpoint :pass},
+     :ranking
+     "Exactly one near-closure adapter first: t92J06 has one placeholder and new covering-related APIs to audit against its literal wedge. Sard then serves five named consumers and has compatible rank-zero and positive-rank premises ready for induction discharge. Regular-preimage and fundamental-class programs each serve four representative consumers; product homology serves two. Recent unchanged adapter boundaries remain recorded.",
+     :typed-residual-change
+     "The connected-sum overlap is proved simply connected, but its general span-to-free-product comparison remains uncompiled. Compact rank-zero nullity now accepts compatible open-domain induction and derives that premise from smaller-dimensional global nullity. Together with repaired positive-rank assembly, this makes dimension-induction discharge the next shared step. Concurrent orbit-quotient descent does not establish covering neighborhoods or graph realization.",
+     :infrastructure
+     {:before 635,
+      :after 637,
+      :portfolio-added ["SardCompactRankZeroOpenContract.lean"],
+      :concurrent-added ["EquivariantOrbitQuotient.lean"],
+      :consumer-changes []},
+     :outstanding
+     ["Signed positive-dimensional antipodal action"
+      "Reduced-S0 degree"
+      "One-dimensional local-index coverage"
+      "Euclidean induction discharge and manifold transport"],
+     :census
+     {:open 39,
+      :closed 19,
+      :existing 58,
+      :within-two-placeholders 29,
+      :placeholders-before 71,
+      :placeholders-after 71,
+      :delta 0,
+      :named 59,
+      :missing ["t93A05"]}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -53493,7 +53623,80 @@
     :sard-compact-rank-zero-open-contract-probe-refill25
     :checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum],
    :current-residual
-   "Await reviewed adapter and rank-zero contract outcomes, then rerank all DAG consumers and concurrent developments."}],
+   "Await reviewed adapter and rank-zero contract outcomes, then rerank all DAG consumers and concurrent developments."}
+  {:consumer "t92J06",
+   :stop-condition
+   "GO requires both frozen conjuncts. Otherwise name exact missing graph realization, vertex trivialization or total-space separation theorem; permutation data alone is not closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "COVERINGS / literal wedge graph realization",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free copy of frozen Main preserving every definition and statement. Construct an actual simply connected covering of the quotient wedge and four actual three-sheet coverings whose total spaces are pairwise nonhomeomorphic. Inspect banked covering constructors, LiteralPullbackCover and EquivariantOrbitQuotient for their exact applicability. Prove evenly covered neighborhoods at wedge vertices as well as edge interiors, actual fiber cardinalities, universal-cover simple connectivity and homeomorphism obstructions for the four total spaces. Do not assume graph realization, covering classification, fiber counts or identify inequivalent covers with nonhomeomorphic total spaces. No partial finite-cover or permutation certificate counts as GO.",
+    :frozen-file "problems/t92J06/lean/Main.lean",
+    :frozen-sha256
+    "85f64495f251de4b505d8981f77b947a8775ab71b685dd580dbc98e13abd82fa",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t92j06-frozen-wedge-coverings-closure-probe-refill26,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero
+    :checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero],
+   :current-residual
+   "One placeholder packages a simply connected cover of the literal two-circle wedge and four three-sheet covers with pairwise nonhomeomorphic total spaces. Target quotient gluing is proved."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO requires compiled unconditional global and open-domain genuine-smooth critical-image nullity. REVISE requires exactly one compiled prerequisite. No residual nullity or induction premise may remain in the unconditional theorem.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / Euclidean smooth induction discharge",
+   :acceptance
+   {:probe
+    "Prove unconditional Haar-null image of the nonsurjective-fderiv critical set for globally ContDiff real genuine infinity maps between finite-dimensional complete real inner-product sources and finite-dimensional real inner-product targets with Borel Haar measure. Use strong induction on source finrank with all smaller sources and targets quantified coherently. Handle zero-dimensional source and target explicitly. In the step, derive rank-zero closedness and countable compact exhaustion, apply SardCompactRankZeroOpenContract with smaller-dimensional global induction through its localization compatibility, apply SardPositiveRankStratumOpenContractAssembly to positive deficient ranks, and cover the entire actual critical locus. Derive needed Borel, properness, second countability and measure facts. Then invoke SardGenuineSmoothOpenDomainLocalization to obtain nullity for arbitrary subsets of explicitly open ContDiffOn infinity domains. No arbitrary-set pointwise smooth induction, arbitrary-C1, analytic omega, assumed stratum nullity or assumed unconditional Sard. Preserve existing APIs; reuse all chart and measure producers. Do not claim manifold transport or frozen t93A04 closure.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Unconditional Euclidean inner-product-space genuine-smooth Sard only. Any needed normed-source comparison and actual manifold chart, criticality and measure transport remain before frozen consumer closure."},
+   :id
+   :sard-genuine-smooth-euclidean-induction-discharge-probe-refill26,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero
+    :checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero],
+   :current-residual
+   "Both compact rank-zero and positive-rank strata now consume compatible open-domain induction and derive it from smaller-dimensional global smooth nullity. Exhaustion, full critical-set assembly and source-dimension induction remain.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Only all campaign consumers closed or exact campaign-level refutation ends the campaign; preserve local specification evidence and outstanding coverage.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned executable placeholders, compare typed residuals and reviewed STOP/PASS outcomes, and separate portfolio from concurrent changes. Elect exactly one near-closure adapter before shared foundations ranked by reach and simplicity; append a fresh dependent checkpoint to a nonempty portfolio. Retain missing signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t92j06-frozen-wedge-coverings-closure-probe-refill26
+    :sard-genuine-smooth-euclidean-induction-discharge-probe-refill26
+    :checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero],
+   :current-residual
+   "Await reviewed covering and Euclidean induction outcomes, then rerank all consumers and measure actual closure progress separately from infrastructure."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
