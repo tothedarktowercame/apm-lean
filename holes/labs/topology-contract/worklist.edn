@@ -54979,51 +54979,84 @@
    :stop-condition
    "GO requires compiled actual global charted-space and genuine-smooth manifold structures. REVISE requires exactly one compiled prerequisite. Missing geometry is not refutation.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Global Euclidean-source regular-fiber manifold structure is compiled. Smooth embedded inclusion, tangent-image comparison, manifold-source transport and frozen consumer uptake remain; no consumer closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:placeholder-after 0,
-      :axioms :standard-only,
-      :inherited-subtype-topology true,
-      :actual-charted-space true,
-      :genuine-infinity-isManifold true,
-      :chosen-chart-and-atlas-specifications true,
-      :preserve-existing-apis true},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :documentation
-     {:path "/tmp/RegularFiberGlobalAtlas.md",
-      :sha256
-      "ca0a1811fd59ec8ff9f182c7d9796c53545935a906db550054c64b30e6bc39ff"},
-     :commands
-     [{:cmd "bb /tmp/t01a08-review.bb", :exit 0}
-      {:cmd "lake env lean /tmp/RegularFiberGlobalAtlas.lean", :exit 0}
-      {:cmd
-       "Python comment-stripped forbidden-token audit and fixture/documentation SHA-256 calculation",
-       :exit 0}
-      {:cmd "git status --porcelain=v1", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/RegularFiberGlobalAtlas.lean",
-       :exit 1,
-       :finding
-       "The existential theorem needed explicit inclusion of section hypotheses hsm and hreg; added include. Marked the class-valued chartedSpace definition reducible as requested by the linter. Final compile passed without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/RegularFiberGlobalAtlas.lean",
-      :sha256
-      "72bcc1839ef8135589a4abee0985e6d57de4b69c154beb1cb0053e3b4def6cab"},
-     :finding
-     "Constructed the chart family using RegularFiberFixedModelOverlaps.exists_cover, defined the atlas as its range and chartAt as the selected chart, and proved center membership, chartAt equality, atlas equality and selected-chart membership. Mathlib isManifold_of_contDiffOn consumes the banked actual overlap smoothness to establish IsManifold at genuine infinity. The literal fiber retains its inherited topology. Empty fibers and zero-dimensional kernels require no extra hypotheses or separate chart assumptions.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/RegularFiberGlobalAtlas.lean"
-       "ConstructionTargets/RegularFiberGlobalAtlas.md"]},
-     :seat "codex-12"}},
+   {:placeholder-delta
+    {:consumer "t96J05", :before 1, :after 1, :delta 0, :fixture 0},
+    :residual
+    "Global fixed-model Euclidean-source regular-fiber ChartedSpace and genuine-smooth IsManifold structures compiled on the inherited subtype topology. Smooth embedded inclusion, tangent-image comparison, manifold-source transport and frozen consumer uptake remain. No consumer closure claimed; independent review remains.",
+    :gates
+    {:chosen-chart-and-atlas-specifications true,
+     :actual-charted-space true,
+     :standard-only-axioms :pass,
+     :scope :pass,
+     :build :pass,
+     :exact-promotion :pass,
+     :genuine-infinity-isManifold true,
+     :inherited-subtype-topology true,
+     :existing-apis-preserved true,
+     :compile :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"selected_center"
+     "c0858ac35776f874eb754de1f76e35ceabdf55b0a1d71e0c8b7271bd153e693d",
+     "chartAt_eq"
+     "c58bb0b34bfdc4aabf88738028bb3bca4fa04a86e4c18112f3bbd08bc824ead7",
+     "atlas_eq"
+     "3cc52d97543cadba293302ccbfe8d351326d7a762f70ef30ae76b54d37da4ed4",
+     "selected_mem_atlas"
+     "f22b4f76d0e749c8c3a22984a9d97dbec1a2aa02e071499d485bfc17270c5862",
+     "isManifold"
+     "46ce516df414d7438c10453b9367c4e74137a05f36dd8817725bf6a8964de156",
+     "exists_manifold"
+     "fc93c0047862cc9195d73a343034d1e8e76d28dfdf0f9e2852cc3af6500e83cb"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :documentation
+    {:path "/tmp/RegularFiberGlobalAtlas.md",
+     :sha256
+     "ca0a1811fd59ec8ff9f182c7d9796c53545935a906db550054c64b30e6bc39ff"},
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, dependency review receipts, complete fixture and documentation",
+      :exit 0}
+     {:cmd
+      "SHA-256 fixture/documentation verification and Python forbidden-token and six statement-hash audit",
+      :exit 0}
+     {:cmd
+      "cmp both promoted files against pinned fixture and documentation",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RegularFiberGlobalAtlas.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.RegularFiberGlobalAtlas",
+      :exit 0,
+      :output "Build completed successfully (8318 jobs)."}
+     {:cmd "Python t96J05 hash and comment-stripped placeholder audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 422 items OK; {:done 412, :needs-owner 1, :superseded 6, :open 2, :blocked 1}"}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check and git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "06f9b2d5aafed08eb26c774e6b9f663f2d1410a7",
+    :changed-paths
+    ["ConstructionTargets/RegularFiberGlobalAtlas.lean"
+     "ConstructionTargets/RegularFiberGlobalAtlas.md"],
+    :fixture
+    {:path "/tmp/RegularFiberGlobalAtlas.lean",
+     :sha256
+     "72bcc1839ef8135589a4abee0985e6d57de4b69c154beb1cb0053e3b4def6cab",
+     :placeholder-count 0},
+    :consumer-sha256
+    "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/RegularFiberGlobalAtlas.lean"
     "ConstructionTargets/RegularFiberGlobalAtlas.md"],
