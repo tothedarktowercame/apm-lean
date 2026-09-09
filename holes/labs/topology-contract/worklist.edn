@@ -55533,73 +55533,81 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Complete the coordinate derivative comparison for the chosen atlas: prove inclusion mfderiv injectivity and range equal to the ambient fderiv kernel. Manifold-source transport remains subsequent. Preserve the independently compiled local t96J05 constant-radius specification counterexample; this prerequisite does not repair that consumer.",
-     :outcome :revise,
+     "Euclidean-source regular-fiber smooth inclusion, actual derivative injectivity and kernel-range comparison are complete. Manifold-source transport and individual consumer uptake remain. Preserve the local t96J05 centered-circle specification counterexample; this geometry does not repair its false attained radial-level conclusion.",
+     :outcome :go,
      :warnings [],
      :statement-hashes
-     {:smooth-inclusion
-      "368c54614f01a072c8f36dd40ec2a7d7bcb18eb03c2e98431aaf97e7ab5a1ddf"},
-     :prerequisite
-     {:consumer "t96J05",
-      :stop-condition
-      "Require the exact chosen-atlas smooth-inclusion theorem to compile without placeholders or nonstandard axioms; preserve existing APIs.",
-      :phase :implementation,
-      :state :open,
-      :scope ["ConstructionTargets/RegularFiberSmoothInclusion.lean"],
-      :dag-node
-      "REGULAR-PREIMAGE/SUBMERSION / chosen-atlas smooth inclusion",
-      :acceptance
-      {:fixture "/tmp/RegularFiberSmoothInclusion.lean",
-       :fixture-sha256
-       "a39cf89f3354ff39c0978dfcdc3651bed1a5cbc4c8ae8a433c6ce76ba107f4ed",
-       :implementation
-       "Install the compiled smooth_inclusion theorem using exactly RegularFiberGlobalAtlas.chartedSpace and its selected backward parameterizations. Preserve genuine infinity, inherited subtype topology and all hypotheses. Compile the module, verify no placeholders and print theorem axioms. Do not claim derivative injectivity, kernel-range equality or frozen consumer closure.",
-       :commands
-       ["lake env lean ConstructionTargets/RegularFiberSmoothInclusion.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :id
-      :regular-fiber-chosen-atlas-smooth-inclusion-implementation-refill30,
-      :kind :reusable-theorem,
-      :depends-on
-      [:checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
-      :current-residual
-      "A complete smooth-inclusion fixture is compiled; bank it before completing the actual derivative comparison.",
-      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]},
+     {:backward-injective
+      "1a778964f47888552b1dded8d6b275787025bf33797228f3332c3e25989346c2",
+      :derivative-eq
+      "f08172e644110cae8e5325bf22f61617ecf8003b16a259b4b4a6b2295fc18cc8",
+      :inclusion-injective
+      "a2ce657cb2ee1e59ff59f34d78b2ae684cea16c9b637bb8132dde1ef74116500",
+      :inclusion-range
+      "dc63a0a7113f4e1658aee980e5cb4db1ba2a2c01ad81f39e1b35b184623c67c4"},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "bb /tmp/t96j05-review.bb", :exit 0}
-      {:cmd "lake env lean /tmp/RegularFiberSmoothInclusion.lean",
-       :exit 0}],
+     [{:cmd "bb /tmp/fiber-inclusion-review.bb", :exit 0}
+      {:cmd
+       "lake env lean -o /tmp/fiber-tangent-build/ConstructionTargets/RegularFiberSmoothInclusion.olean ConstructionTargets/RegularFiberSmoothInclusion.lean",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'export LEAN_PATH=/tmp/fiber-tangent-build:$LEAN_PATH; lean /tmp/RegularFiberTangentImage.lean'",
+       :exit 0}
+      {:cmd "python3 /tmp/fiber-tangent-audit.py", :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/RegularFiberSmoothInclusion.lean",
+     [{:cmd "Initial inline bb dependency-receipt reader",
        :exit 1,
        :correction
-       "Replaced local instances with explicit letI bindings in the theorem statement and proof so hsm and hreg determine the exact chosen atlas."}
-      {:cmd "lake env lean /tmp/RegularFiberSmoothInclusion.lean",
+       "Corrected unmatched parenthesis and reran as /tmp/fiber-inclusion-review.bb."}
+      {:cmd "lake env lean /tmp/RegularFiberTangentImage.lean",
        :exit 1,
        :correction
-       "Installed RegularFiberGlobalAtlas.isManifold for the chosen atlas before applying contMDiff_iff; the final rerun succeeds."}],
+       "Newly banked inclusion source lacked an olean. Initially checked with its exact source prefix; final fixture imports the separately compiled producer."}
+      {:cmd "lake env lean /tmp/RegularFiberTangentImage.lean",
+       :exit 1,
+       :correction
+       "Simplified continuous-linear-map applications before rewriting derivative equality; used mfld_simps for the actual extended charts."}
+      {:cmd "lake env lean /tmp/RegularFiberTangentImage.lean",
+       :exit 1,
+       :correction
+       "Corrected hasFDerivAt_const argument order; subsequent complete proof compiled."}
+      {:cmd
+       "lake env bash -c 'export LEAN_PATH=/tmp/fiber-tangent-build:$LEAN_PATH; lean /tmp/RegularFiberTangentImage.lean'",
+       :exit 1,
+       :correction
+       "The temporary ConstructionTargets namespace shadowed canonical dependency objects. Added temporary symlinks to existing canonical build entries, preserving the freshly compiled inclusion object; final import-based compilation succeeds."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/RegularFiberSmoothInclusion.lean",
+     {:path "/tmp/RegularFiberTangentImage.lean",
       :sha256
-      "a39cf89f3354ff39c0978dfcdc3651bed1a5cbc4c8ae8a433c6ce76ba107f4ed"},
+      "731804d0090ebddb2db324ae81fa6d4e3eb99bb8e78462dba49eb34c34ae0109"},
      :finding
-     "Compiled genuine-infinity smoothness of subtype inclusion for exactly RegularFiberGlobalAtlas.chartedSpace. The proof identifies each actual coordinate representative with the selected chart's backward parameterization on its target and reuses backward_smooth. No replacement atlas, topology, nonemptiness or positive kernel dimension is assumed. Actual mfderiv injectivity and kernel-range equality are not proved by this fixture.",
+     "Complete packet compiles. Reuses banked genuine-infinity smooth inclusion under exactly RegularFiberGlobalAtlas.chartedSpace. Differentiating the forward/backward identity on the actual open chart target proves backward derivative injectivity, using forward regularity only within its ambient subset. derivative_eq identifies the actual inclusion mfderiv with this backward fderiv. Differentiating the locally constant defining-map composition gives kernel containment; injectivity and the existing surjective rank-nullity theorem give exact kernel-range equality. No replacement atlas, topology, assumed tangent identity, nonempty fiber or positive kernel dimension.",
+     :implementation
+     {:scope ["ConstructionTargets/RegularFiberTangentImage.lean"],
+      :acceptance
+      {:implementation
+       "Promote the exact fixture, retaining its import of RegularFiberSmoothInclusion and the chosen RegularFiberGlobalAtlas.chartedSpace. Compile the module and audit all four exported theorem axioms and absence of placeholders. Preserve existing producers.",
+       :commands
+       ["lake env lean ConstructionTargets/RegularFiberTangentImage.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0}},
      :seat "codex-12"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RegularFiberTangentImage.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / smooth inclusion and tangent image",
    :acceptance
-   {:probe
-    "For a globally genuine-infinity smooth map between finite-dimensional complete real normed spaces and a regular value, use exactly RegularFiberGlobalAtlas.chartedSpace on the literal fiber. Prove genuine-infinity ContMDiff of subtype inclusion, injectivity of its mfderiv at every fiber point, and equality of its derivative range with the kernel of the actual ambient fderiv of the defining map. Reuse selected charts, backward parameterizations, overlap formulas, implicit derivatives and rank-nullity; retain the chosen global atlas rather than constructing another one. Derive coordinate derivative transport and any dimension facts, with no assumed smooth inclusion, immersion, kernel-range identity or new topology. Include empty fibers and zero-dimensional kernels. Preserve all existing APIs; if exact results exist reuse them and identify the manifold-source edge.",
+   {:implementation
+    "Promote the exact fixture, retaining its import of RegularFiberSmoothInclusion and the chosen RegularFiberGlobalAtlas.chartedSpace. Compile the module and audit all four exported theorem axioms and absence of placeholders. Preserve existing producers.",
+    :commands
+    ["lake env lean ConstructionTargets/RegularFiberTangentImage.lean"],
     :axioms :standard-only,
-    :consumer-residual
-    "Embedded Euclidean-source regular-fiber geometry only. Manifold-source transport and independent frozen attained-value/transversality obligations remain."},
+    :placeholder-before 0,
+    :placeholder-after 0},
    :id :regular-fiber-smooth-inclusion-tangent-image-probe-refill30,
    :kind :reusable-theorem,
    :depends-on
