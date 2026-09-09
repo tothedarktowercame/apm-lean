@@ -51519,6 +51519,18 @@
       :exit 0,
       :finding "No changes."}
      {:cmd "cat /tmp/T02A05IntrinsicMassAudit.json", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788985683064-16993-53b5a244",
+     :commands
+     ["git show 84c05db1"
+      "git show --format= --check 84c05db1"
+      "Independent frozen/fixture hash, exact-prefix, producer-revision and placeholder audit"
+      "Recompute three signature hashes using bytes after theorem name up to :="
+      "lake env lean /tmp/T02A05IntrinsicMassBoundary.lean"],
+     :finding
+     "Independent review of codex-12's bounded STOP passes. Frozen and fixture hashes and all three statement hashes reproduce; exact proved prefix preserved. Diagnostic compiles with standard axioms and two inherited lints. Tangent projection, outward coefficient and translated-sphere Hausdorff transport correctly yield the mass-relative flux. Bridge and complete optimization conclusion are equivalent to mass 2 = 4*pi under the original isOmega hypothesis. Neither numerical normalization nor its negation is proved. Consumer remains unchanged with two placeholders; diagnostic zero. No closure or refutation claimed; ledger untouched."},
     :changed-paths [],
     :fixture
     {:path "/tmp/T02A05IntrinsicMassBoundary.lean",
@@ -51538,7 +51550,7 @@
      :placeholder-delta 0},
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "STOKES AND MOMENTS / frozen outward flux",
    :acceptance
