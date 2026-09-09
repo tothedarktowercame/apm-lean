@@ -42357,8 +42357,82 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the reviewed zero-dimensional Borel theorem fails to instantiate the explicit predicate, its quantifiers fail to preserve the stated localized classical conclusion, or nonstandard axioms are required.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Reprove the required analytic induction interfaces with the Borel-compatible predicate, close positive-dimensional induction, and repair the complementary regularity range before rectangular closure. The existing broader predicate and its consumers remain unchanged; no equivalence or consumer closure is claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"BorelClassicalCriticalNullityAtDimension"
+     "f4ab73c47dc481730adefda5f9b4097dd3e994d4ef37713372af5d91c32f2af4",
+     "borelClassicalCriticalNullity_zero"
+     "5269d1aaf3164c4b5e6d8b8efb5d630420b5c1e88dc827376f6f948eb6302d86"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG, closure policy, fixture, and both reviewed dependency findings",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean",
+      :exit 0,
+      :output
+      "ab52aa42ad6df9f3fe87359b106ff68318782df89fdd1046ac1e8eb7401669c3"}
+     {:cmd
+      "cmp /tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean && lake env lean ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean && lake env lean /tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean",
+      :exit 0,
+      :output
+      "Byte-identical; both compilations report standard axioms only."}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.SardBorelClassicalCriticalNullityPredicate 2>&1 | awk '/warning:|error:|Build completed/ {print}'",
+      :exit 0,
+      :output "Build completed successfully (8244 jobs)."}
+     {:cmd
+      "sed -n '9,21p' ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "sed -n '23,24p' ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 327 items OK; {:done 318, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: add Borel-compatible classical nullity predicate and base' && git rev-parse HEAD && git status --porcelain=v1",
+      :exit 0,
+      :output "Committed exactly two scoped files; worktree clean."}],
+    :commit "1862103d75b0c9963928059a36ff3245592b1d14",
+    :changed-paths
+    ["ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean"
+     "ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.md"],
+    :fixture
+    {:path "/tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean",
+     :sha256
+     "ab52aa42ad6df9f3fe87359b106ff68318782df89fdd1046ac1e8eb7401669c3"},
+    :declarations
+    ["SardBorelClassicalCriticalNullityPredicateProbe.BorelClassicalCriticalNullityAtDimension"
+     "SardBorelClassicalCriticalNullityPredicateProbe.borelClassicalCriticalNullity_zero"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean"
     "ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.md"],
