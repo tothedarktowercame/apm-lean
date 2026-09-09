@@ -5,7 +5,14 @@ import Mathlib
 
 ## Statement repairs
 
-None.
+2026 repair (guide, attempt 1, obligation
+d6fd972b4c8b2dd896da1fde27e5ddb5536d78914a38729d0de77935beacb6e6,
+frame f203): the first conjunct originally concluded the global function
+equalities `x = apm_m02a05_extremal` and `y = apm_m02a05_extremal`, which is
+refuted by adding a smooth bump supported outside `[0, π/2]`. The conclusion
+is now `Set.EqOn` on `Icc 0 (π/2)`, the interval on which the boundary
+conditions, the ODE, and the functional constrain the pair. The second and
+third conjuncts are unchanged. No logical problem-id change.
 -/
 
 open Set MeasureTheory
@@ -25,28 +32,18 @@ theorem apm_m02a05 :
     (∀ x y : ℝ → ℝ, apm_m02a05_admissible x y →
       ((∀ t ∈ Ioo 0 (Real.pi / 2),
           deriv (deriv x) t = y t ∧ deriv (deriv y) t = x t) ↔
-        x = apm_m02a05_extremal ∧ y = apm_m02a05_extremal)) ∧
+        (Set.EqOn x apm_m02a05_extremal (Icc 0 (Real.pi / 2)) ∧
+         Set.EqOn y apm_m02a05_extremal (Icc 0 (Real.pi / 2))))) ∧
     (∀ x y : ℝ → ℝ, apm_m02a05_admissible x y →
       apm_m02a05_J apm_m02a05_extremal apm_m02a05_extremal ≤
         apm_m02a05_J x y) ∧
     (∀ B : ℝ, ∃ x y : ℝ → ℝ,
       apm_m02a05_admissible x y ∧ B < apm_m02a05_J x y) := by
   /-
-  SKIPPED (frozen-statement defect). The first conjunct concludes the global
-  function equalities `x = apm_m02a05_extremal` and
-  `y = apm_m02a05_extremal`, but all boundary conditions, ODE hypotheses, and
-  the functional constrain the functions only on `[0, π/2]`.
-
-  Concretely, start with the displayed extremal and add to `x` any nonzero
-  smooth bump supported in `(π, π + 1)`, leaving `y` unchanged. The modified
-  pair is globally `ContDiff`, has the same endpoint values, and agrees with
-  the extremal on a neighborhood of `[0, π/2]`; hence it satisfies
-  `x'' = y` and `y'' = x` throughout the required `Ioo`, but `x` is not
-  globally equal to `apm_m02a05_extremal`. Thus the forward implication in
-  the asserted equivalence is false.
-
-  The intended conclusion must use `Set.EqOn` on `Icc 0 (π/2)` (or quantify
-  functions on the interval subtype). The statement is frozen, so no repair
-  was made.
+  Repaired statement; proof deferred to the solver. The original defect: the
+  forward implication required global equality `x = apm_m02a05_extremal`, but
+  all hypotheses constrain the pair only on `[0, π/2]`; adding a nonzero
+  smooth bump to `x` supported in `(π, π + 1)` refuted it. The repaired
+  conclusion is `Set.EqOn` on `Icc 0 (π/2)`.
   -/
   sorry
