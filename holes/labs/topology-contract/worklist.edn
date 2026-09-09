@@ -52777,8 +52777,142 @@
      :review-outcomes]},
    :stop-condition
    "Only all campaign consumers closed or exact campaign-level refutation ends the campaign; preserve local specification evidence and uncovered cases.",
+   :evidence
+   {:evidence
+    {:census
+     {:path "/tmp/topology-refill24-measure.json",
+      :sha256
+      "de57b39c454ef2ada29dbe4c9c56516c630273f29cc957d4729b1eac1967e79b"},
+     :reviews
+     {:path "/tmp/topology-refill24-reviews.edn",
+      :sha256
+      "53b7b3c065e70a70949b7bbb0311f6616f6243151ee8de2cb6f57827bfeaa102"},
+     :tail
+     {:path "/tmp/topology-refill24-tail.edn",
+      :sha256
+      "90b9e7fc2fdd69966ac3fb2dca873ceebd9235216a2fe514d6c91a149b880581"}},
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill24-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill24-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill24-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill24-proposed-worklist.edn",
+      :exit 0}],
+    :replacement-items
+    [{:consumer "t02A08",
+      :stop-condition
+      "GO requires the complete frozen consumer. Otherwise name the exact missing sphere-map construction or induced-map naturality theorem; an orientation or identity case alone is not closure.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "SPHERE ORIENTATION / arbitrary integer induced degree",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free copy of frozen Main preserving every definition and repaired statement. Use actual SphereHomology and integral coefficient comparisons to construct the literal H2 orientation; construct for every integer n a continuous self-map of the concrete metric S2 and prove its actual singular-homology map acts by n. Inspect suspension, circle power, compactification and sphere-map APIs and transport actual maps explicitly. Reuse the frozen fiber-intersection assembly. Do not assume suspension naturality, arbitrary degree realization or infer map action from an abstract group isomorphism. Cover zero and negative integers; no conditional bridge or partial base case counts as GO.",
+       :frozen-file "problems/t02A08/lean/Main.lean",
+       :frozen-sha256
+       "5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id
+      :t02a08-frozen-all-integer-sphere-degree-closure-probe-refill24,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract],
+      :current-residual
+      "One placeholder: construct an actual continuous metric S2 self-map for every integer with the specified integral ModuleCat H2 action. Fiber intersection assembly and degree multiplication are proved."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO requires compiled positive-rank stratum nullity with only the compatible open-domain induction premise. REVISE requires exactly one compiled prerequisite. No conversion from open-domain induction to arbitrary-set pointwise infinity is permitted.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / compatible positive-rank stratum assembly",
+      :acceptance
+      {:probe
+       "For global genuine-infinity smooth f and 0<r<target dimension, prove Haar-null image of its actual derivative-rank-equal-r stratum using only lower-source-dimensional critical-image induction on explicitly open genuine-smooth domains, including zero-dimensional inner-product sources. Invoke SardPositiveRankSliceOpenInductionContract for the actual charts. Propagate its conclusion through existing compact coordinate-fiber/Fubini nullity, orthogonal target transport, closed/open compact exhaustion, and pointwise-open rank-stratum aggregation. Derive coordinate Borel/Haar/topology facts and rank-upper closedness. Preserve rank bounds only on the relevant subsets, not the entire chart. No assumed chart, compact exhaustion, fiber/stratum nullity, arbitrary-C1 or analytic omega. Preserve existing APIs; do not duplicate chart or generic measure infrastructure. Exhibit the exact open-domain premise supplied by localization from smaller-dimensional global smooth nullity.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Compatible positive-rank stratum assembly only. Rank-zero first-nonzero-jet contract repair, compatible global/local induction discharge, base cases and manifold transport remain; no unconditional Sard or consumer closure."},
+      :id
+      :sard-positive-rank-stratum-open-contract-assembly-probe-refill24,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract],
+      :current-residual
+      "Actual residual slices now have null images under open-domain smooth induction. The existing compact/open/stratum chain still requests stronger arbitrary-set pointwise induction.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Only all campaign consumers closed or exact campaign-level refutation ends the campaign; preserve local specification evidence and uncovered cases.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned executable consumer placeholders; compare typed residuals, reviewed outcomes, and portfolio versus concurrent changes. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity, with a fresh dependent checkpoint. Retain missing signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t02a08-frozen-all-integer-sphere-degree-closure-probe-refill24
+       :sard-positive-rank-stratum-open-contract-assembly-probe-refill24],
+      :current-residual
+      "Await both reviewed outcomes and rerank the complete DAG, separating consumer closures from contract propagation and concurrent work."}],
+    :changed-paths [],
+    :finding
+    {:baseline "51a5be84b35e0123d97176e1d3bfc0b40f75649f",
+     :head "b9120cb9a9d0d46ae0a247d16febc47bb216cfbc",
+     :campaign-refutation false,
+     :reviews
+     {:hopf :stop-reviewed-pass,
+      :open-slice-contract :implementation-reviewed-pass,
+      :previous-checkpoint :pass},
+     :ranking
+     "Exactly one near-closure adapter first: t02A08 has one placeholder and a concrete sphere-homology representation to audit. Among shared foundations, Sard serves five named consumers; propagating its reviewed contract through existing positive-rank assembly is a bounded next theorem. Regular-preimage and fundamental-class programs each serve four representative consumers; product homology serves two. Recent adapter STOP results are retained without repeating unchanged probes.",
+     :typed-residual-change
+     "Hopf flow continuity is compiled, but the exact surface quotient/classification and smooth-compatibility boundary remains. Positive-rank slice nullity now accepts open-domain genuine-smooth induction, with compiled localization compatibility. Existing downstream assembly and rank-zero contracts still need repair.",
+     :infrastructure
+     {:before 632,
+      :after 633,
+      :portfolio-added
+      ["SardPositiveRankSliceOpenInductionContract.lean"],
+      :concurrent-added [],
+      :consumer-changes []},
+     :outstanding
+     ["Positive-dimensional signed antipodal action"
+      "Reduced-S0 degree"
+      "One-dimensional local-index coverage"
+      "Rank-zero induction-contract repair and induction discharge"
+      "Manifold transport"],
+     :census
+     {:open 39,
+      :closed 19,
+      :existing 58,
+      :within-two-placeholders 29,
+      :placeholders-before 71,
+      :placeholders-after 71,
+      :delta 0,
+      :named 59,
+      :missing ["t93A05"]}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -52792,7 +52926,80 @@
     :sard-positive-rank-slice-open-induction-contract-probe-refill23
     :checkpoint-full-dag-refill-23-after-torus-euler-and-localization],
    :current-residual
-   "Await both reviewed outcomes and rerank the complete DAG with explicit induction-contract accounting."}],
+   "Await both reviewed outcomes and rerank the complete DAG with explicit induction-contract accounting."}
+  {:consumer "t02A08",
+   :stop-condition
+   "GO requires the complete frozen consumer. Otherwise name the exact missing sphere-map construction or induced-map naturality theorem; an orientation or identity case alone is not closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SPHERE ORIENTATION / arbitrary integer induced degree",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free copy of frozen Main preserving every definition and repaired statement. Use actual SphereHomology and integral coefficient comparisons to construct the literal H2 orientation; construct for every integer n a continuous self-map of the concrete metric S2 and prove its actual singular-homology map acts by n. Inspect suspension, circle power, compactification and sphere-map APIs and transport actual maps explicitly. Reuse the frozen fiber-intersection assembly. Do not assume suspension naturality, arbitrary degree realization or infer map action from an abstract group isomorphism. Cover zero and negative integers; no conditional bridge or partial base case counts as GO.",
+    :frozen-file "problems/t02A08/lean/Main.lean",
+    :frozen-sha256
+    "5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t02a08-frozen-all-integer-sphere-degree-closure-probe-refill24,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract
+    :checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract],
+   :current-residual
+   "One placeholder: construct an actual continuous metric S2 self-map for every integer with the specified integral ModuleCat H2 action. Fiber intersection assembly and degree multiplication are proved."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO requires compiled positive-rank stratum nullity with only the compatible open-domain induction premise. REVISE requires exactly one compiled prerequisite. No conversion from open-domain induction to arbitrary-set pointwise infinity is permitted.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / compatible positive-rank stratum assembly",
+   :acceptance
+   {:probe
+    "For global genuine-infinity smooth f and 0<r<target dimension, prove Haar-null image of its actual derivative-rank-equal-r stratum using only lower-source-dimensional critical-image induction on explicitly open genuine-smooth domains, including zero-dimensional inner-product sources. Invoke SardPositiveRankSliceOpenInductionContract for the actual charts. Propagate its conclusion through existing compact coordinate-fiber/Fubini nullity, orthogonal target transport, closed/open compact exhaustion, and pointwise-open rank-stratum aggregation. Derive coordinate Borel/Haar/topology facts and rank-upper closedness. Preserve rank bounds only on the relevant subsets, not the entire chart. No assumed chart, compact exhaustion, fiber/stratum nullity, arbitrary-C1 or analytic omega. Preserve existing APIs; do not duplicate chart or generic measure infrastructure. Exhibit the exact open-domain premise supplied by localization from smaller-dimensional global smooth nullity.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Compatible positive-rank stratum assembly only. Rank-zero first-nonzero-jet contract repair, compatible global/local induction discharge, base cases and manifold transport remain; no unconditional Sard or consumer closure."},
+   :id
+   :sard-positive-rank-stratum-open-contract-assembly-probe-refill24,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract
+    :checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract],
+   :current-residual
+   "Actual residual slices now have null images under open-domain smooth induction. The existing compact/open/stratum chain still requests stronger arbitrary-set pointwise induction.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Only all campaign consumers closed or exact campaign-level refutation ends the campaign; preserve local specification evidence and uncovered cases.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned executable consumer placeholders; compare typed residuals, reviewed outcomes, and portfolio versus concurrent changes. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity, with a fresh dependent checkpoint. Retain missing signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-25-after-sphere-degree-and-open-stratum,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t02a08-frozen-all-integer-sphere-degree-closure-probe-refill24
+    :sard-positive-rank-stratum-open-contract-assembly-probe-refill24
+    :checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract],
+   :current-residual
+   "Await both reviewed outcomes and rerank the complete DAG, separating consumer closures from contract propagation and concurrent work."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
