@@ -6609,6 +6609,24 @@
     :repository-note
     "Read DAG, closure experiments and dependency evidence. Only the authorized two files changed; frozen consumers, DAG, ledgers and untracked supervisor files untouched. Tracked checkout clean.",
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788987309975-17042-b85bf172",
+     :commands
+     ["git show e55a3bda:holes/labs/topology-contract/worklist2.edn"
+      "git show 6221b784:ConstructionTargets/SmoothRegularFiberCoordinates.lean"
+      "git show 6221b784:ConstructionTargets/SmoothRegularFiberCoordinates.md"
+      "lake env lean /tmp/SmoothRegularFiberCoordinates.lean"
+      "lake env lean ConstructionTargets/SmoothRegularFiberCoordinates.lean"
+      "lake build ConstructionTargets.SmoothRegularFiberCoordinates ConstructionTargets.RegularFiberChart ConstructionTargets.SardSmoothNeighborhoodImplicitChart"
+      "python3 inline audit: fixture equality and SHA256, both statement hashes, exact scope, forbidden tokens, 76-file import closure and frozen placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show e55a3bda:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check 6221b784"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Exact promotion and two-file scope verified. Both compilations and 8315-job build pass without warnings; both declarations use standard axioms only. Constructed splitting, smooth neighborhood restriction, exact fiber-slice image and kernel-inclusion derivative are correctly oriented. No supplied chart or global atlas claim. Frozen sources unchanged, placeholders 322 -> 322. Ledger untouched."},
     :commit "6221b784bbcedc0097be6575a72f8db45847284b",
     :changed-paths
     ["ConstructionTargets/SmoothRegularFiberCoordinates.lean"
@@ -6624,7 +6642,7 @@
     "SHA-256 of declaration bytes beginning with theorem and ending immediately before the space preceding :=; namespace ConstructionTargets.SmoothRegularFiberCoordinates.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SmoothRegularFiberCoordinates.lean"
     "ConstructionTargets/SmoothRegularFiberCoordinates.md"],
@@ -6756,7 +6774,7 @@
      "Exactly one coordinate prerequisite compiles. The constructed regular-fiber chart is restricted using the existing smooth-neighborhood inverse theorem. Both directions are smooth, its first coordinate remains f(y)-f(x), and its inverse agrees with the reviewed inverse on the restricted target. The zero slice is smooth on an open kernel neighborhood containing zero, has exactly the local literal fiber as its image, and retains kernel inclusion as its strict derivative at zero. No chart or ImplicitFunctionData is supplied as a premise. A common Euclidean model, smooth overlaps and the global fiber manifold remain unconstructed, so the parent is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: smooth atlas on the literal regular fiber",
