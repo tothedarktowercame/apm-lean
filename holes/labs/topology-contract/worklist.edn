@@ -42542,6 +42542,23 @@
       "git add ConstructionTargets/SardJetBorelClassicalAdmissibleLossNullity.lean ConstructionTargets/SardJetBorelClassicalAdmissibleLossNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: prove admissible-loss jet nullity with Borel induction' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788953911646-16207-ffd3b62f",
+     :commands
+     ["git show 4d81c6c1 --stat --oneline"
+      "sha256sum /tmp/SardJetBorelClassicalAdmissibleLossNullityProbe.lean"
+      "cmp /tmp/SardJetBorelClassicalAdmissibleLossNullityProbe.lean <(git show 4d81c6c172feaad8c9613095418d27907edef88d:ConstructionTargets/SardJetBorelClassicalAdmissibleLossNullity.lean)"
+      "git show 4d81c6c172feaad8c9613095418d27907edef88d:ConstructionTargets/SardJetBorelClassicalAdmissibleLossNullity.lean | sed -n '7,20p' | sha256sum"
+      "git diff --exit-code 4d81c6c172feaad8c9613095418d27907edef88d -- ConstructionTargets"
+      "lake env lean /tmp/SardJetBorelClassicalAdmissibleLossNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardJetBorelClassicalAdmissibleLossNullity.lean"
+      "lake build ConstructionTargets.SardJetBorelClassicalAdmissibleLossNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit 4d81c6c172feaad8c9613095418d27907edef88d passes. Fixture SHA 0021f9d76d8aba2d586fa7a15b960197e9b5ab840052a438db025c4f41edbe69 and statement SHA b28529f5e7f75ff68d9cc457647954dfb48d221961892467feca4d2d8c53624b reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8286-job build successful. Lines 21–35 preserve derivative-loss arithmetic and directly instantiate Borel-compatible induction for the fixed target; no representation-boundary defect found. Ledger untouched."},
     :commit "4d81c6c172feaad8c9613095418d27907edef88d",
     :changed-paths
     ["ConstructionTargets/SardJetBorelClassicalAdmissibleLossNullity.lean"
@@ -42553,7 +42570,7 @@
     :declarations
     ["firstNonzeroJet_image_null_of_borel_classical_admissible_loss"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardJetBorelClassicalAdmissibleLossNullity.lean"
     "ConstructionTargets/SardJetBorelClassicalAdmissibleLossNullity.md"],
@@ -42726,7 +42743,7 @@
       "0021f9d76d8aba2d586fa7a15b960197e9b5ab840052a438db025c4f41edbe69"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
