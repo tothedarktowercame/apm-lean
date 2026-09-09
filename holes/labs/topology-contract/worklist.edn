@@ -45470,6 +45470,40 @@
    "Lower-dimensional ambient image nullity no longer requires a supplied linear map; low-order assembly and complementary analytic cases remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if order-one admissibility fails to imply source dimension at most target dimension, C1 regularity fails to provide ambient differentiability, either reviewed dimensional nullity theorem fails under these hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardOrderOneCriticalNullity.lean"
+    "ConstructionTargets/SardOrderOneCriticalNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ORDER-ONE CRITICAL NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardOrderOneCriticalNullityProbe.lean",
+     :sha256
+     "e200f66aaf9163af4b74ae794f07c3b06c15aef313c5d902e2ff155441c93b45"},
+    :declarations ["orderOne_criticalImage_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Integrate the order-one case into the induction interface; resolve its order-zero obligation and complementary higher-order analytic cases before rectangular closure."},
+   :representation
+   {:source
+    "Finite-dimensional real normed spaces, a Borel target with additive Haar measure, classical admissibility at order one, and pointwise ambient C1 regularity on an arbitrary source subset.",
+    :target
+    "Nullity of the localized nonsurjective ambient derivative image without induction hypotheses, coordinate models, or source measure assumptions."},
+   :id :critical-value-sard-order-one-critical-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-equal-dimension-ambient-critical-nullity-1
+    :critical-value-sard-lower-dimension-ambient-image-nullity-1
+    :critical-value-sard-classical-regularity-admissibility-1],
+   :current-residual
+   "Admissible order-one critical nullity is established without induction; order-zero and complementary higher-order obligations remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -45523,75 +45557,76 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank lower-dimensional ambient image nullity with internally constructed surjection; complete low-order assembly and complementary analytic cases. Frozen consumer and ledger unchanged.",
+     "Bank admissible order-one critical nullity; resolve order-zero and complementary higher-order obligations. Full rectangular closure remains unproved; ledger and frozen consumer unchanged.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"lowerDimension_ambient_image_zero"
-      "b1cf1d1b7e16b5654a313d668a55c3dd5ce334b59edc64c345bac71b3be215d9"},
+     {"orderOne_criticalImage_zero"
+      "36a54bdad6fed44c93d5cb3fefcc424ebbb2e0e6658410fd534cf49a78c953f7"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if finite-basis coordinate restriction fails to provide a surjective linear map under the dimension inequality, finite-dimensional continuity fails, reviewed surjective-lift nullity fails under these hypotheses, or nonstandard axioms are required.",
+      "Stop only if order-one admissibility fails to imply source dimension at most target dimension, C1 regularity fails to provide ambient differentiability, either reviewed dimensional nullity theorem fails under these hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardLowerDimensionAmbientImageNullity.lean"
-       "ConstructionTargets/SardLowerDimensionAmbientImageNullity.md"],
+      ["ConstructionTargets/SardOrderOneCriticalNullity.lean"
+       "ConstructionTargets/SardOrderOneCriticalNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOWER-DIMENSION AMBIENT IMAGE NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / ORDER-ONE CRITICAL NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardLowerDimensionAmbientImageNullityProbe.lean",
+       {:path "/tmp/SardOrderOneCriticalNullityProbe.lean",
         :sha256
-        "aa20804c0056b546893ab395e11ec125840ca5281a0e4b113869f2c60480331c"},
-       :declarations ["lowerDimension_ambient_image_zero"],
+        "e200f66aaf9163af4b74ae794f07c3b06c15aef313c5d902e2ff155441c93b45"},
+       :declarations ["orderOne_criticalImage_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Assemble the remaining low-order cases and discharge the complementary-overlap analytic premise before rectangular closure."},
+       "Integrate the order-one case into the induction interface; resolve its order-zero obligation and complementary higher-order analytic cases before rectangular closure."},
       :representation
       {:source
-       "Finite-dimensional real normed spaces with source finrank strictly below target finrank, a Borel target with additive Haar measure, and ambient differentiability on an arbitrary source subset.",
+       "Finite-dimensional real normed spaces, a Borel target with additive Haar measure, classical admissibility at order one, and pointwise ambient C1 regularity on an arbitrary source subset.",
        :target
-       "Nullity of the entire subset image without a supplied surjective linear map, source measurable structure, source measure, or derivative-continuity assumption."},
-      :id :critical-value-sard-lower-dimension-ambient-image-nullity-1,
+       "Nullity of the localized nonsurjective ambient derivative image without induction hypotheses, coordinate models, or source measure assumptions."},
+      :id :critical-value-sard-order-one-critical-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-lower-dimension-surjective-lift-nullity-1],
+      [:critical-value-sard-equal-dimension-ambient-critical-nullity-1
+       :critical-value-sard-lower-dimension-ambient-image-nullity-1
+       :critical-value-sard-classical-regularity-admissibility-1],
       :current-residual
-      "Lower-dimensional ambient image nullity no longer requires a supplied linear map; low-order assembly and complementary analytic cases remain.",
+      "Admissible order-one critical nullity is established without induction; order-zero and complementary higher-order obligations remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite constructs a surjective continuous linear map internally using finite-basis coordinates and coordinate extension, then applies reviewed surjective-lift nullity. It proves entire-image nullity in strictly lower source dimension without supplied maps. Low-order assembly and complementary analytic cases remain; rectangular Morse-Sard is not refuted.",
+     "One compiled prerequisite closes the admissible order-one case. Admissibility implies source dimension at most target dimension; the strict case uses entire-image nullity and the equality case uses critical-image nullity. This does not discharge order zero or complementary higher-order cases.",
      :commands
      [{:cmd
-       "Read DAG certification rule, closure policy, build-loop definitions, finite-dimensional coordinate interfaces, and complete reviewed surjective-lift dependency receipt",
+       "Read DAG certification rule, closure policy, admissibility and induction-closure modules, and complete reviewed equal- and lower-dimensional nullity receipts",
        :exit 0}
-      {:cmd
-       "lake env lean /tmp/SardLowerDimensionAmbientImageNullityProbe.lean",
+      {:cmd "lake env lean /tmp/SardOrderOneCriticalNullityProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardLowerDimensionAmbientImageNullityProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardOrderOneCriticalNullityProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
-       "Fixture aa20804c0056b546893ab395e11ec125840ca5281a0e4b113869f2c60480331c; frozen consumer 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
+       "Fixture e200f66aaf9163af4b74ae794f07c3b06c15aef313c5d902e2ff155441c93b45; frozen consumer 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '5,14p' /tmp/SardLowerDimensionAmbientImageNullityProbe.lean | sha256sum",
+       "sed -n '8,17p' /tmp/SardOrderOneCriticalNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "b1cf1d1b7e16b5654a313d668a55c3dd5ce334b59edc64c345bac71b3be215d9"}
+       "36a54bdad6fed44c93d5cb3fefcc424ebbb2e0e6658410fd534cf49a78c953f7"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLowerDimensionAmbientImageNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardOrderOneCriticalNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 350 items OK; {:done 342, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 351 items OK; {:done 343, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -45603,12 +45638,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardLowerDimensionAmbientImageNullityProbe.lean",
+     {:path "/tmp/SardOrderOneCriticalNullityProbe.lean",
       :sha256
-      "aa20804c0056b546893ab395e11ec125840ca5281a0e4b113869f2c60480331c"},
+      "e200f66aaf9163af4b74ae794f07c3b06c15aef313c5d902e2ff155441c93b45"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -45907,7 +45942,8 @@
     :critical-value-sard-same-space-ambient-critical-nullity-1
     :critical-value-sard-equal-dimension-ambient-critical-nullity-1
     :critical-value-sard-lower-dimension-surjective-lift-nullity-1
-    :critical-value-sard-lower-dimension-ambient-image-nullity-1],
+    :critical-value-sard-lower-dimension-ambient-image-nullity-1
+    :critical-value-sard-order-one-critical-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
