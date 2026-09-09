@@ -1759,20 +1759,103 @@
    :stop-condition
    "Bank constructed charts, actual map comparisons, and localization consequences only. Geometric overlap compatibility remains downstream; do not claim the full parent orientation packet, higher-dimensional results, or t98A02 closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/RotatedCircleChartTransportProbe.lean",
-      :sha256
-      "80fb4ce21a5c498bbac7644e31a6f575edd67b0f1910b6e2e111bf77ba183622"},
-     :commands
-     [{:cmd "lake env lean /tmp/RotatedCircleChartTransportProbe.lean",
-       :exit 0}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :warnings []}},
+   {:placeholder-delta 0,
+    :residual
+    "Prove geometric coordinate-order compatibility on constructed common restrictions, including recentering for charts with different centers. The homology equations do not establish that condition. No full parent orientation packet, higher-dimensional result, or t98A02 closure is claimed.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :focused-build :pass,
+     :all-six-printed-axiom-audits :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :fixture-compilation :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 30,
+      :log "/tmp/codex-14-rotated-chart-build.log",
+      :paths
+      {"ConstructionTargets/CircleUniversalCover.lean" 1,
+       "ConstructionTargets/TopologicalSumSingularHomology.lean" 1,
+       "ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/T02A06SphereShift.lean" 3,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/SolidTorusGluingOpenCover.lean" 5,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/BoundaryTorusOpenCover.lean" 4,
+       "ConstructionTargets/PuncturedNormedSpaceRadialEquivalence.lean"
+       2,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/SingularSubdivision.lean" 2}}],
+    :statement-hashes
+    {"rotatedChart"
+     "267cfc9d85782a026d27758533f7027fd24a83507daeb9665bf10b3c8f7d36be",
+     "rotatedChart_ambient"
+     "797b39e738e5d4ebc75498321ea8cee35e806d6a8140fe3b241a9ed139c2e498",
+     "rotatedChart_chain_map"
+     "33b8b2b234b490a0dbcabcbcb1494328329343c628182a70730f783a6d398e8f",
+     "rotatedChart_localClass"
+     "a2cf5e64694f5e11a3a4ece0be397db7e9a6ae35e046705804e31f5fea359431",
+     "globalClass_localizes_chart"
+     "12726698710e2296e350b104d3ba9b7ccfbb75556c00d38bf5dca35b6250f3b7",
+     "unique_global_chart_class"
+     "6e072f6d76c3c4c4bc7fc6e9929eca242b1ea323633b2d7dc8958d13262e2f01"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/RotatedCircleChartTransportProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/RotatedCircleChartTransportProbe.lean > /tmp/codex-14-rotated-chart-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RotatedCircleChartTransport.lean > /tmp/codex-14-rotated-chart-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.RotatedCircleChartTransport ConstructionTargets.CircleRotationLocalization ConstructionTargets.CircleActualLocalization > /tmp/codex-14-rotated-chart-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/RotatedCircleChartTransport.lean /tmp/RotatedCircleChartTransportProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Identify constructed rotated Circle charts with rotation transport\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Checked codex-11 dependency PASS. Existing untracked supervisor files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :representation
+    {:source
+     "Actual model-to-Circle relative singular chain map of the constructed rotated pointed chart.",
+     :target
+     "Fixed chart relative chain map followed by the relative map induced by Circle rotation.",
+     :direction
+     "Exact equality from the constructed chart map to the fixed-chart-then-rotation composite; its local class consequently equals rotation transport of the fixed local class."},
+    :commit "8554a6d05a1ed35d31532395c45e837818c1dbcf",
+    :changed-paths
+    ["ConstructionTargets/RotatedCircleChartTransport.lean"
+     "ConstructionTargets/RotatedCircleChartTransport.md"],
+    :dependency-commit "b349ae35bc82e42b0ead8623710e2375abd29275",
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/RotatedCircleChartTransportProbe.lean",
+     :sha256
+     "80fb4ce21a5c498bbac7644e31a6f575edd67b0f1910b6e2e111bf77ba183622"},
+    :finding
+    "Promoted the exact fixture. Rotation images and restricted rotation homeomorphisms construct pointed charts. Their actual ambient maps, relative chain maps, and local classes equal fixed-chart transport followed by rotation. The normalized absolute generator satisfies every constructed-chart localization equation, and the class satisfying all those equations and generating absolute H1 is unique.",
+    :statement-hash-method
+    "SHA-256 of UTF-8 declaration bytes beginning with theorem or def and ending immediately before the space preceding := or where; names below are in ConstructionTargets.RotatedCircleChartTransport.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/RotatedCircleChartTransport.lean"
     "ConstructionTargets/RotatedCircleChartTransport.md"],
