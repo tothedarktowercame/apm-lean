@@ -8228,20 +8228,92 @@
    :stop-condition
    "Bank only the zero-sphere calculation. Do not claim positive-dimensional sphere homology, coefficient-general suspension, arbitrary-map naturality or frozen closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/SphereZeroCoefficients.lean",
-      :sha256
-      "bbd49dd15fcdee1825971c924948c636ac4d21796c7229c2a568e2d26e2f54dd"},
-     :commands
-     [{:cmd "lake env lean /tmp/SphereZeroCoefficients.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Generalize sphere suspension and the degree-one endpoint to explicit coefficients, then construct positive-dimensional tables and exact rational S2 witnesses and identity-map equations. No positive-dimensional calculation, arbitrary-map naturality or frozen closure claimed.",
+    :gates
+    {:five-axiom-audits :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :forbidden-token-scans :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 5,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 17 existing dependency warnings: SingularHomologyConcrete (1), SingularSubdivision (2), T02A06HemisphereCoordinates (6), T02A06HemisphereExcision (2), T02A06DiskRadialComparison (3), T02A06SphereShift (3). No fixture or canonical-source warnings."],
+    :statement-hashes
+    {"H"
+     "39dd4e60bb4badb73604a14414855c32d16d39e979e1ea7f0145a5c48871719c",
+     "positivePoint"
+     "55050fc39fc11bf23018f17fb325b6b4414a333dc32e416f517de3775ca8305a",
+     "negativePoint"
+     "6a808f676cdd74e9b1099900031510e00d03a8e676cbd989ddaf95680b703d9f",
+     "coordinates"
+     "96ff3c8627642fac4e91c532c59a5fc9889ff62ceeb1840cacf882ec9eb9685c",
+     "h0Coordinates"
+     "24e360751d8a20d593d5478f71c5440bdb7632c31a78a926b04293243ca1d21b",
+     "positive_vanishing"
+     "9f9b69131823c16286172fd6cc1823a371608e36fb0b4849fc7026fa842da97e",
+     "rationalH0"
+     "ff59e4d32d833642a12547128db7fb0488af0399989bb122fb0facad9250008e",
+     "integralH0"
+     "b6de5a961045a1b8c5e5d3c105e1bfd76e3d986351cb348067719314ea9b0490"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/SphereZeroCoefficients.lean", :exit 0}
+     {:cmd "lake env lean /tmp/SphereZeroCoefficients.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SphereZeroCoefficients.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SphereZeroCoefficients",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/SphereZeroCoefficients.lean /tmp/SphereZeroCoefficients.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python audit: exact promotion, fixture SHA256, five standard-only audits per compilation, dependency warnings, placeholders and statement hashes",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope verification and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Compute zero-sphere homology with explicit ring coefficients\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope and clean checkout verification",
+      :exit 0}],
+    :repository-note
+    "Read DAG and closure experiments; this row has no dependencies. Only the authorized two files changed. Ledger and frozen consumers untouched; checkout clean.",
+    :diagnostic-history
+    [{:cmd "Initial Python compilation-log audit",
+      :exit 1,
+      :correction
+      "The assertion requiring no build warnings encountered 17 replayed dependency warnings. Inspected their locations and reran the audit recording them; fixture and canonical compilations remained warning-free."}],
+    :commit "b98a8bdc6af44323b275bd33e824df93f2f55fc9",
+    :changed-paths
+    ["ConstructionTargets/SphereZeroCoefficients.lean"
+     "ConstructionTargets/SphereZeroCoefficients.md"],
+    :fixture
+    {:path "/tmp/SphereZeroCoefficients.lean",
+     :sha256
+     "bbd49dd15fcdee1825971c924948c636ac4d21796c7229c2a568e2d26e2f54dd"},
+    :finding
+    "Promoted the exact fixture preserving the literal zero-sphere, explicit endpoints, Bool equivalence, coefficient-generic ordinary H0 comparison and positive-degree vanishing. Both compilations and the 8253-job focused build passed.",
+    :statement-hash-method
+    "SHA256 of declaration bytes beginning with abbrev, def or theorem and ending immediately before the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereZeroCoefficients.lean"
     "ConstructionTargets/SphereZeroCoefficients.md"],
