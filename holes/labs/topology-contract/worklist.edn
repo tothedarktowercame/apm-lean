@@ -50922,8 +50922,154 @@
      :review-outcomes]},
    :stop-condition
    "End only when all campaign consumers close or a campaign-level mathematical claim is exactly refuted. Treat false individual encodings as local SPEC-DEFECT with preserved counterexamples and explicit repair/coverage accounting; missing infrastructure does not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill19-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill19-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill19-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill19-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill19-measure.json /tmp/topology-refill19-infrastructure.json /tmp/topology-refill19-reviews.edn /tmp/topology-refill19-tail.edn",
+      :exit 0}],
+    :finding
+    {:baseline "5bbfd5c1dcd9bf250b023ab699f0e895b45b0f06",
+     :election-rationale
+     ["Exactly one near-closure adapter first: t95J05 retains one placeholder, and new intrinsic finiteness and second-moment producers materially reduce its previous boundary to numerical normalization and frozen transport."
+      "Other DAG consumers remain less bounded: t92J06 needs actual graph-cover realization and universal-cover construction; t95J06 needs free-action quotient and surface classification; t03J04 needs actual Euler-characteristic computations. Recently stopped planar, generic van Kampen and antipodal adapters retain their named boundaries."
+      "The five-consumer Sard foundation ranks ahead of smaller shared branches by reach. Its next bounded theorem assembles reviewed compact nullity over the actual open chart; induction discharge and manifold transport remain separate."],
+     :measured-head "9cd2c7bf29d9cf6677c227f909aefb17933213ed",
+     :placeholder-delta
+     {:open 39,
+      :closed 19,
+      :changed-consumers [],
+      :total-before 71,
+      :named-consumers 59,
+      :total-after 71,
+      :existing-files 58,
+      :delta 0,
+      :sha256
+      "9a4ec616bdaefa2e38f3990033f72c5427bbd846878281bc53780e15635a21d0",
+      :artifact "/tmp/topology-refill19-measure.json",
+      :within-two 29,
+      :missing-files ["t93A05"]},
+     :scope
+     "No canonical source, DAG, ledger, track-2 or shared-script edits.",
+     :campaign-refutation false,
+     :infrastructure-packets
+     {:before 621,
+      :after 624,
+      :portfolio-modules
+      ["ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.lean"],
+      :concurrent-modules
+      ["ConstructionTargets/IntrinsicSphereFinite.lean"
+       "ConstructionTargets/IntrinsicSphereSecondMoments.lean"],
+      :removed [],
+      :artifact "/tmp/topology-refill19-infrastructure.json",
+      :sha256
+      "00766005acf3793148f20f07806fad2c6df403810b95a751ec2928cbe5b93e04"},
+     :portfolio-artifact
+     {:path "/tmp/topology-refill19-tail.edn",
+      :sha256
+      "ae24e67d91b75ce5cd4035c6cdc2c06fc91d12e9300250631877d703dbcfa73d"},
+     :validation
+     "390-item temporary ledger passes; three fresh blocked rows, exactly one final adapter first, final checkpoint depending on both work rows.",
+     :typed-residual-change
+     {:t94J08
+      "Reviewed STOP: positive-dimensional orientation and induced involution compile, but signed suspension/excision comparison and H1 action base remain. Reduced S0 and one-dimensional local-index coverage remain outstanding.",
+      :sard
+      "Reviewed compact positive-rank chart image nullity now follows from actual slice containment and Haar transport under explicit smaller-source smooth induction. Open-chart compact exhaustion and countable assembly remain.",
+      :sphere-moments
+      "Concurrent intrinsic finiteness and second moments resolve integrability and compute density relative to intrinsic mass; numerical normalization remains unproved."},
+     :review-outcomes
+     {:antipodal-review "invoke-1788982902425-16912-511882f6",
+      :sard-review "invoke-1788983909249-16945-b05dfe9f",
+      :stop-results 1,
+      :consumer-closures 0,
+      :work-row-pass 2,
+      :sard-commit "79032f69e921c4292bd14486f30c8b2d1d7cbcd3",
+      :sha256
+      "71041c68a3b7b454b316527adc382a2930efa700b6c6197fb8ae0e17e9141740",
+      :artifact "/tmp/topology-refill19-reviews.edn",
+      :implementation-results 1}},
+    :replacement-items
+    [{:consumer "t95J05",
+      :stop-condition
+      "If complete closure cannot compile, name the exact remaining measure normalization or representation theorem. Preserve any counterexample and classify a false frozen encoding as local SPEC-DEFECT, not campaign refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "STOKES AND MOMENTS / intrinsic sphere normalization",
+      :acceptance
+      {:probe
+       "GO requires a complete placeholder-free compiled copy of frozen Main, preserving all definitions and statements. Reuse IntrinsicSphereFinite and IntrinsicSphereSecondMoments for the literal sphere-subtype Hausdorff measure. Transport the actual density and descent convention, determine the numerical intrinsic mass with a proof, and derive the exact frozen -pi^2 conclusion. Audit all normalization factors; raw diameter-based Hausdorff measure cannot be identified with radial Haar-to-sphere measure or conventional surface area without proof. A relative-to-mass moment, finiteness certificate or assumed numerical mass is not closure. If normalization contradicts the frozen value, prove the exact contradiction rather than changing the measure or statement.",
+       :frozen-file "problems/t95J05/lean/Main.lean",
+       :frozen-sha256
+       "bc69f32681ce9fa5abe5e22256661c1bec11c5a85d9433c166e89352596df698",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t95j05-intrinsic-mass-normalization-closure-probe-refill19,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank],
+      :current-residual
+      "One placeholder. IntrinsicSphereFinite and IntrinsicSphereSecondMoments now supply actual summand integrability and density integral in terms of intrinsic mass; numerical normalization and frozen transport remain."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO needs the full compiled actual-chart composition. REVISE requires exactly one compiled prerequisite. Identify missing hypotheses without assuming compact coverage, local nullity, arbitrary-C1 induction or measurability.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / open chart rank-upper image nullity",
+      :acceptance
+      {:probe
+       "From global genuine-infinity smooth f between finite-dimensional real inner-product spaces, and a positive deficient-rank basepoint, construct the actual chart through SardGenuineSmoothCompactPositiveRankImageNullity. Prove Haar-null image of the entire derivative-rank-at-most-basepoint-rank locus intersected with its source. Derive rank-upper closedness from smoothness, derive source topology and an actual countable compact exhaustion of the closed/open intersection using SardClosedOpenCompactExhaustion, show every compact lies inside the source and satisfies the rank bound, then apply the compact producer and countable union measure-zero assembly. The sole nullity premise remains local genuine-smooth critical-image induction over all strictly smaller sources including zero-dimensional sources. Preserve actual chart and original target Haar measure. Do not assume the exhaustion or local nullity, or require the rank bound on the whole chart. Reuse existing producers; identify the next edge if this exact composition already exists.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Conditional open-chart rank-upper nullity only. Global rank-stratum coverage, compatible local-domain induction discharge and base cases, and manifold transport remain before unconditional Sard or t93A04 closure."},
+      :id
+      :sard-genuine-smooth-open-rank-upper-image-nullity-probe-refill19,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank],
+      :current-residual
+      "Actual compact positive-rank chart image nullity is reviewed under local smooth induction. The rank-upper locus intersected with the actual open chart source needs compact exhaustion and countable image-null assembly.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level mathematical refutation. Individual encoding defects require preserved evidence and explicit repair/coverage accounting; infrastructure absence does not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Reread complete DAG and reviewed receipts; recount pinned executable placeholders and distinguish portfolio from concurrent infrastructure and consumer changes. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity, and append a fresh dependent checkpoint to a nonempty portfolio. Retain repaired t94J08's missing antipodal computation and outstanding reduced-S0/one-dimensional-local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t95j05-intrinsic-mass-normalization-closure-probe-refill19
+       :sard-genuine-smooth-open-rank-upper-image-nullity-probe-refill19],
+      :current-residual
+      "Await both reviewed rows, then rerank the complete DAG including unrelated near-closure consumers and concurrent infrastructure."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -50937,7 +51083,80 @@
     :sard-genuine-smooth-compact-positive-rank-image-nullity-probe-refill18
     :checkpoint-full-dag-refill-18-after-t94j08-spec-repair],
    :current-residual
-   "Await both reviewed outcomes, then rerank all DAG consumers and account for concurrent sphere-measure and localization developments."}],
+   "Await both reviewed outcomes, then rerank all DAG consumers and account for concurrent sphere-measure and localization developments."}
+  {:consumer "t95J05",
+   :stop-condition
+   "If complete closure cannot compile, name the exact remaining measure normalization or representation theorem. Preserve any counterexample and classify a false frozen encoding as local SPEC-DEFECT, not campaign refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "STOKES AND MOMENTS / intrinsic sphere normalization",
+   :acceptance
+   {:probe
+    "GO requires a complete placeholder-free compiled copy of frozen Main, preserving all definitions and statements. Reuse IntrinsicSphereFinite and IntrinsicSphereSecondMoments for the literal sphere-subtype Hausdorff measure. Transport the actual density and descent convention, determine the numerical intrinsic mass with a proof, and derive the exact frozen -pi^2 conclusion. Audit all normalization factors; raw diameter-based Hausdorff measure cannot be identified with radial Haar-to-sphere measure or conventional surface area without proof. A relative-to-mass moment, finiteness certificate or assumed numerical mass is not closure. If normalization contradicts the frozen value, prove the exact contradiction rather than changing the measure or statement.",
+    :frozen-file "problems/t95J05/lean/Main.lean",
+    :frozen-sha256
+    "bc69f32681ce9fa5abe5e22256661c1bec11c5a85d9433c166e89352596df698",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t95j05-intrinsic-mass-normalization-closure-probe-refill19,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank
+    :checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank],
+   :current-residual
+   "One placeholder. IntrinsicSphereFinite and IntrinsicSphereSecondMoments now supply actual summand integrability and density integral in terms of intrinsic mass; numerical normalization and frozen transport remain."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO needs the full compiled actual-chart composition. REVISE requires exactly one compiled prerequisite. Identify missing hypotheses without assuming compact coverage, local nullity, arbitrary-C1 induction or measurability.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / open chart rank-upper image nullity",
+   :acceptance
+   {:probe
+    "From global genuine-infinity smooth f between finite-dimensional real inner-product spaces, and a positive deficient-rank basepoint, construct the actual chart through SardGenuineSmoothCompactPositiveRankImageNullity. Prove Haar-null image of the entire derivative-rank-at-most-basepoint-rank locus intersected with its source. Derive rank-upper closedness from smoothness, derive source topology and an actual countable compact exhaustion of the closed/open intersection using SardClosedOpenCompactExhaustion, show every compact lies inside the source and satisfies the rank bound, then apply the compact producer and countable union measure-zero assembly. The sole nullity premise remains local genuine-smooth critical-image induction over all strictly smaller sources including zero-dimensional sources. Preserve actual chart and original target Haar measure. Do not assume the exhaustion or local nullity, or require the rank bound on the whole chart. Reuse existing producers; identify the next edge if this exact composition already exists.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Conditional open-chart rank-upper nullity only. Global rank-stratum coverage, compatible local-domain induction discharge and base cases, and manifold transport remain before unconditional Sard or t93A04 closure."},
+   :id
+   :sard-genuine-smooth-open-rank-upper-image-nullity-probe-refill19,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank
+    :checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank],
+   :current-residual
+   "Actual compact positive-rank chart image nullity is reviewed under local smooth induction. The rank-upper locus intersected with the actual open chart source needs compact exhaustion and countable image-null assembly.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level mathematical refutation. Individual encoding defects require preserved evidence and explicit repair/coverage accounting; infrastructure absence does not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Reread complete DAG and reviewed receipts; recount pinned executable placeholders and distinguish portfolio from concurrent infrastructure and consumer changes. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity, and append a fresh dependent checkpoint to a nonempty portfolio. Retain repaired t94J08's missing antipodal computation and outstanding reduced-S0/one-dimensional-local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-20-after-intrinsic-mass-and-open-rank,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t95j05-intrinsic-mass-normalization-closure-probe-refill19
+    :sard-genuine-smooth-open-rank-upper-image-nullity-probe-refill19
+    :checkpoint-full-dag-refill-19-after-repaired-antipodal-and-compact-rank],
+   :current-residual
+   "Await both reviewed rows, then rerank the complete DAG including unrelated near-closure consumers and concurrent infrastructure."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
