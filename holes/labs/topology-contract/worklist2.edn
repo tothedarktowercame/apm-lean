@@ -468,21 +468,95 @@
    :stop-condition
    "Bank only the exact neighborhood-excision comparison and generator preservation. Do not claim that supplied chart data constructs a chart, that ball-neighborhood specializations are model chart instances, or that a global fundamental class or localization monicity has been proved.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
-      :sha256
-      "a9f4488775de93310f82273d66df283cd9ab9cfd362bc149abc7d1766d3c57e3"},
-     :commands
-     [{:cmd
-       "cd /home/joe/code/apm-lean && lake env lean /tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct restricted pointed model-to-neighborhood charts and deleted-point pair equivalences on the line and Circle, transport the model generator through those charts, then apply inclusion generator preservation. Chart construction, overlap compatibility, global fundamental classes, and localization monicity are not established by this packet.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :fixture-compilation :pass,
+     :all-five-printed-axiom-audits :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 17,
+      :log "/tmp/codex-14-neighborhood-build.log",
+      :paths
+      {"ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/SingularSubdivision.lean" 2,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/T02A06SphereShift.lean" 3}}],
+    :statement-hashes
+    {"neighborhoodInclusion_chain_eq"
+     "6ff64d22700212464c4e20ab68350a8a9c47489df83a12e84d7aa812e5020ba3",
+     "neighborhoodInclusion_H1_isIso"
+     "bca47e6c1e97e990a2bbb448333eda99d0f7d741e4ae2ed92b7acbce5d6514b8",
+     "neighborhoodInclusion_sends_generator"
+     "195d55a49b421020917071180ec43b29de27a0ad5c0f4d8143d46737fba83362",
+     "lineNeighborhoodInclusion_H1_isIso"
+     "ea247c40c31ba52eebe1c70cf5a430b09a3bbeb3c061c697c2eae89e6325aa0b",
+     "circleNeighborhoodInclusion_H1_isIso"
+     "32b0f5b6f52d7ddfa85167e86e0e6cd3419a07a8653c5dccae91418899e2b56d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd
+      "sha256sum /tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/LocalHomologyNeighborhoodExcisionProbe.lean > /tmp/codex-14-neighborhood-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/LocalHomologyNeighborhoodExcision.lean > /tmp/codex-14-neighborhood-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.LocalHomologyNeighborhoodExcision ConstructionTargets.OneDiskLocalOrientation ConstructionTargets.ChartPairRelativeHomologyTransport > /tmp/codex-14-neighborhood-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/LocalHomologyNeighborhoodExcision.lean /tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Identify neighborhood local homology inclusion with production excision\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Checked codex-11 dependency PASS for 1333150cc6443e151e5df62e24d4d3ddf1417cab. Existing untracked supervisor runs2 files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :representation
+    {:source
+     "Actual subtype-inclusion relative singular-chain map from (U,U minus x) into (X,X minus x).",
+     :target
+     "Canonical double-complement pair-homeomorphism map followed by production relativeExcisionMap for deletedPoint x and U complement.",
+     :direction
+     "Exact equality from the actual neighborhood-inclusion chain map to the canonical identification followed by production excision; both induce the same forward integral local H1 map into X."},
+    :commit "3dc832fc33991b0a7b387743e7c1ab784f255d51",
+    :changed-paths
+    ["ConstructionTargets/LocalHomologyNeighborhoodExcision.lean"
+     "ConstructionTargets/LocalHomologyNeighborhoodExcision.md"],
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/LocalHomologyNeighborhoodExcisionProbe.lean",
+     :sha256
+     "a9f4488775de93310f82273d66df283cd9ab9cfd362bc149abc7d1766d3c57e3"},
+    :finding
+    "Promoted the exact fixture. Constructed the double-complement pair homeomorphism and chain-map equality. T1, openness, and point membership supply production excision hypotheses, proving the actual inclusion-induced H1 map is an isomorphism. Its inverse proves preservation of integer generation. Line and Circle ball specializations establish excision only.",
+    :statement-hash-method
+    "SHA-256 of UTF-8 theorem declaration bytes beginning with theorem and ending immediately before the space preceding :=; names below are in ConstructionTargets.LocalHomologyNeighborhoodExcision.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/LocalHomologyNeighborhoodExcision.lean"
     "ConstructionTargets/LocalHomologyNeighborhoodExcision.md"],
