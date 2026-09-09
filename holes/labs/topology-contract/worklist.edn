@@ -51864,8 +51864,48 @@
   {:consumer "t98A01",
    :stop-condition
    "GO needs the complete frozen consumer. Otherwise STOP naming the exact absent covering, Euler multiplicativity or polygon-classification theorem; partial torus closure is not GO and missing infrastructure is not refutation.",
+   :evidence
+   {:residual
+    "Prove exact torus fiber cardinality and the literal polygon-surface genus/Euler-cover connections. No complete frozen closure or single compiled prerequisite discharging all remaining obligations is available; the partial covering diagnostic is not GO.",
+    :dependency-review
+    "Checkpoint21 independently reviewed PASS invoke-1788986489535-17017-eb99fbb9.",
+    :outcome :stop,
+    :warnings
+    ["One unusedSimpArgs warning for nsmul_add in the deck-transitivity proof."],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-12,
+    :reason
+    "The general polygon-surface clause requires two unproved topological connections: genus invariance under homeomorphisms of the literal Surface true g quotients, and Euler multiplicativity for their supplied five-sheet regular covers. Surfaces.lean defines Euler characteristic arithmetically but supplies neither connection. These are missing infrastructure, not a refutation.",
+    :commands
+    [{:cmd "lake env lean /tmp/T98A01FrozenBoundary.lean", :exit 0}
+     {:cmd "bb /tmp/t98a01-review.bb", :exit 0}
+     {:cmd
+      "sha256sum /tmp/T98A01FrozenBoundary.lean problems/t98A01/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder count of fixture and frozen Main",
+      :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T98A01FrozenBoundary.lean",
+     :sha256
+     "98ed082f02cf70009d92173ae69ffe0385def33e75f9eacd4351836a8711e4f4",
+     :role :boundary-diagnostic,
+     :placeholder-count 0,
+     :full-consumer-closure false},
+    :finding
+    "The diagnostic preserves the proved frozen prefix and compiles actual_cover for the literal torus map using the banked product-cover constructor. actual_deck_transitivity constructs Homeomorph.addLeft (y-x), proves that it preserves the covering map, and sends x to y. Exact five-point fiber cardinality is not yet proved in this fixture. Independently, the general surface clause cannot follow from these torus results or the existing classification arithmetic. PolygonGenusInvariant and FiveSheetEulerLaw are recorded only as unresolved propositions, not assumed theorems.",
+    :frozen
+    {:path "problems/t98A01/lean/Main.lean",
+     :sha256
+     "a607069bdb7416a01a1e6846cb6dd8e3e8bf87b0f2b122ef4c1fb828d5167f25",
+     :placeholder-before 1,
+     :placeholder-after 1,
+     :placeholder-delta 0},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "COVERINGS / fivefold torus and surface classification",
    :acceptance
