@@ -53364,56 +53364,77 @@
    :stop-condition
    "GO requires the complete compiled compact rank-zero result with open-domain induction and localization compatibility. REVISE requires exactly one compiled prerequisite. Never infer a common smooth neighborhood from one-point infinity.",
    :evidence
-   {:probe
-    {:residual
-     "Rank-zero exhaustion, global critical-set assembly with repaired positive-rank nullity, compatible induction discharge, ambient degenerate cases and manifold transport remain. No unconditional Sard or frozen consumer closure.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {"exists_local_firstNonzeroJet_image_null"
-      "56e3058a76c313425c0e70ac066525d3f7d71038a45e9551e397e5bd990d581e",
-      "compact_rankZero_image_null_of_smooth_local_induction"
-      "a7913dadea52f9f5693505e0d94b3fe15f87684fca0bd83ca0dea54aa37ba04f",
-      "compact_rankZero_image_null_of_global_induction"
-      "d410194de017ca0409075836a294ccefb6e1043c2c03b76932aeab73dce38eda"},
-     :consumer-placeholder-delta 0,
-     :acceptance
-     {:declarations
-      ["SardOpenContractFirstJetProbe.exists_local_firstNonzeroJet_image_null"
-       "SardCompactRankZeroOpenContractProbe.compact_rankZero_image_null_of_smooth_local_induction"
-       "SardCompactRankZeroOpenContractProbe.compact_rankZero_image_null_of_global_induction"],
-      :gates
-      ["Verify fixture and documentation hashes before promotion."
-       "Compile promoted module and reproduce all three standard-only axiom audits."
-       "Run lake build ConstructionTargets.SardCompactRankZeroOpenContract."
-       "Verify zero executable placeholders and preservation of existing APIs and frozen consumers."],
-      :axioms :standard-only},
-     :axioms [propext Classical.choice Quot.sound],
-     :documentation
-     {:path "/tmp/SardCompactRankZeroOpenContract.md",
-      :sha256
-      "61c724c449e4b7b0df9327ea6aacab69ff0651dbd300d8d176ec8fbcec5c7bd4"},
-     :commands
-     [{:cmd "lake env lean /tmp/SardCompactRankZeroOpenContract.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/sard-open-rankzero-audit.py", :exit 0}
-      {:cmd "bb /tmp/t00a01-review.bb", :exit 0}],
-     :diagnostic-history [],
-     :changed-paths [],
-     :fixture-placeholders 0,
-     :fixture
-     {:path "/tmp/SardCompactRankZeroOpenContract.lean",
-      :sha256
-      "ced4c3b8a1b8578359cf3ba6f38eac2cf9f32e1d04db07d9ae3c5b51b217346e"},
-     :finding
-     "Compiled the repaired actual first-nonzero-jet local step, compact rank-zero nullity, and localization compatibility. The constructed chart supplies an open zero-coordinate slice, genuine-infinity regularity and strict kernel dimension drop. Existing parameterized critical-image transport, scalar-direction extraction, jet-locus aggregation and compact Taylor assembly complete the proof. Source Borel structure and properness are derived locally. Public compact theorems explicitly require nontrivial ambient source and target; their induction premises include zero-dimensional smaller inner-product sources.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/SardCompactRankZeroOpenContract.lean"
-       "ConstructionTargets/SardCompactRankZeroOpenContract.md"]},
-     :seat "codex-12"}},
+   {:placeholder-delta
+    {:consumer "t93A04", :before 1, :after 1, :delta 0, :fixture 0},
+    :residual
+    "Conditional compact rank-zero nullity and localization compatibility compiled with explicit nontrivial ambient hypotheses and zero-dimensional smaller sources included. Rank-zero exhaustion, global critical-set assembly, compatible induction discharge, ambient degenerate cases and manifold transport remain. No unconditional Sard or frozen consumer closure claimed; independent review remains.",
+    :gates
+    {:standard-only-axioms :pass,
+     :nontrivial-ambient-hypotheses-preserved true,
+     :scope :pass,
+     :build :pass,
+     :exact-promotion :pass,
+     :zero-dimensional-induction-sources-preserved true,
+     :open-domain-induction-preserved true,
+     :existing-apis-preserved true,
+     :compile :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"exists_local_firstNonzeroJet_image_null"
+     "56e3058a76c313425c0e70ac066525d3f7d71038a45e9551e397e5bd990d581e",
+     "compact_rankZero_image_null_of_smooth_local_induction"
+     "a7913dadea52f9f5693505e0d94b3fe15f87684fca0bd83ca0dea54aa37ba04f",
+     "compact_rankZero_image_null_of_global_induction"
+     "d410194de017ca0409075836a294ccefb6e1043c2c03b76932aeab73dce38eda"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :documentation
+    {:path "/tmp/SardCompactRankZeroOpenContract.md",
+     :sha256
+     "61c724c449e4b7b0df9327ea6aacab69ff0651dbd300d8d176ec8fbcec5c7bd4"},
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, dependency review receipts, complete fixture and documentation",
+      :exit 0}
+     {:cmd "python3 /tmp/sard-open-rankzero-audit.py", :exit 0}
+     {:cmd
+      "cmp both promoted files against pinned fixture and documentation",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardCompactRankZeroOpenContract.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardCompactRankZeroOpenContract",
+      :exit 0,
+      :output "Build completed successfully (8440 jobs)."}
+     {:cmd
+      "sha256sum problems/t93A04/lean/Main.lean and comment-stripped consumer placeholder audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 408 items OK; {:done 399, :needs-owner 1, :superseded 6, :open 1, :blocked 1}"}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check and git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "182cede37656099ebec52c8d12466e30b17b962c",
+    :changed-paths
+    ["ConstructionTargets/SardCompactRankZeroOpenContract.lean"
+     "ConstructionTargets/SardCompactRankZeroOpenContract.md"],
+    :fixture
+    {:path "/tmp/SardCompactRankZeroOpenContract.lean",
+     :sha256
+     "ced4c3b8a1b8578359cf3ba6f38eac2cf9f32e1d04db07d9ae3c5b51b217346e",
+     :placeholder-count 0},
+    :consumer-sha256
+    "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCompactRankZeroOpenContract.lean"
     "ConstructionTargets/SardCompactRankZeroOpenContract.md"],
