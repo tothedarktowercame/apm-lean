@@ -35,21 +35,89 @@
    :stop-condition
    "Bank only this connecting-map naturality prerequisite and its concrete consumer reduction. Do not claim geometric orientation compatibility, assume an induced-map sign, or extend the one-dimensional model computation to arbitrary dimensions.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/RelativeSingularConnectingNaturalityProbe.lean",
-      :sha256
-      "64cf111d7cb682142264242e13436250be389e6f17c1bd891b61d089fceb9b61"},
-     :commands
-     [{:cmd
-       "cd /home/joe/code/apm-lean && lake env lean /tmp/RelativeSingularConnectingNaturalityProbe.lean",
-       :exit 0}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :warnings []}},
+   {:placeholder-delta 0,
+    :residual
+    "Compute the boundary class in puncture-component coordinates, then prove the actual H0 action fixes or exchanges those components under increasing or decreasing pointed coordinate homeomorphisms. Generator characterization and the full model sign theorem remain in the parent probe. No geometric orientation compatibility, arbitrary-dimensional model computation, or frozen consumer closure claimed.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :four-print-axioms :pass,
+     :fixture-compilation :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 17,
+      :log "/tmp/codex-14-connecting-naturality-build.log",
+      :paths
+      {"ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/SingularSubdivision.lean" 2,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/T02A06SphereShift.lean" 3}}],
+    :statement-hashes
+    {"ConstructionTargets.RelativeSingularConnectingNaturality.singularPairConnecting_naturality"
+     "02c774a3bddb09291d896e594fc897037e1872dad2ff4be7ccef510289852b27",
+     "ConstructionTargets.RelativeSingularConnectingNaturality.modelGenerator_boundary_map"
+     "15612014b5ba991829c93c24f944ad4613d986697edaaf432a1919387cb33576",
+     "ConstructionTargets.RelativeSingularConnectingNaturality.modelConnecting_injective"
+     "89d30bc46b3d93fd281b38f90c6515372f7a9754eea5d3ac5369f560a580f8ed",
+     "ConstructionTargets.RelativeSingularConnectingNaturality.modelGenerator_map_eq_iff_boundary"
+     "b4f20e0bab6e31b3edf83ec7a88e674ad41a29ebb7972773d6d13794a84b7810"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd
+      "sha256sum /tmp/RelativeSingularConnectingNaturalityProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/RelativeSingularConnectingNaturalityProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RelativeSingularConnectingNaturality.lean",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/RelativeSingularConnectingNaturalityProbe.lean ConstructionTargets/RelativeSingularConnectingNaturality.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.RelativeSingularConnectingNaturality ConstructionTargets.ChartPairRelativeHomologyTransport > /tmp/codex-14-connecting-naturality-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/RelativeSingularConnectingNaturality.lean /tmp/RelativeSingularConnectingNaturalityProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Prove relative singular connecting-map naturality and model reduction\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Existing untracked supervisor runs2 files left untouched; the running loop explicitly checks tracked cleanliness. Ledger and DAG unchanged.",
+    :commit "9f4e9d3ea394d9e4ae0093367fc3ca68d3c52c91",
+    :changed-paths
+    ["ConstructionTargets/RelativeSingularConnectingNaturality.lean"
+     "ConstructionTargets/RelativeSingularConnectingNaturality.md"],
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/RelativeSingularConnectingNaturalityProbe.lean",
+     :sha256
+     "64cf111d7cb682142264242e13436250be389e6f17c1bd891b61d089fceb9b61"},
+    :finding
+    "Promoted the exact fixture: constructed the production short-exact-pair morphism, proved connecting-map naturality, and reduced equality of the mapped one-disk generator with any local class to equality of their boundaries through injectivity.",
+    :statement-hash-method
+    "SHA-256 of UTF-8 theorem declaration bytes, starting at theorem and excluding the space before := by; statements identical to fixture.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/RelativeSingularConnectingNaturality.lean"
     "ConstructionTargets/RelativeSingularConnectingNaturality.md"],
