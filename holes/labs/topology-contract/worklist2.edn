@@ -6281,6 +6281,23 @@
       :exit 1,
       :correction
       "The prospective checkpoint was marked done without its future independent review. Corrected preview preserves the current open checkpoint and marks inserted rows blocked pending that review; validation passes without fabricating a PASS."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788986452705-17014-cf1f5da0",
+     :commands
+     ["git show 70bfcf58:holes/labs/topology-contract/worklist2.edn"
+      "sha256sum /tmp/Checkpoint8Tail.edn /tmp/Checkpoint8Census.json"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/Checkpoint8Combined.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 70bfcf58:holes/labs/topology-contract/worklist2.edn)"
+      "bb /tmp/Checkpoint8Reviews.clj"
+      "python3 inline independent pinned census, frozen t01A05 hash and scope audit"
+      "bb inline recorded-tail equality, successor policy and historical concurrency audit"
+      "git diff --exit-code"
+      "git diff --check"
+      "git show --format= --check 70bfcf58"],
+     :finding
+     "Independent strategy review passes. Both artifact hashes match; census reproduces 71 -> 71 placeholders and 625 -> 628 modules with correct attribution. Frozen t01A05 hash and one placeholder match. Two elected work rows and successor satisfy policy; literal representation boundaries and unresolved STOPs preserved. Both ledger validations pass. No closure or refutation claimed; ledger untouched."},
     :replacement-items
     [{:consumer :t01A05,
       :stop-condition
@@ -6415,7 +6432,7 @@
      :sha256
      "157a1665f2e92a0262141078e1593adcf22a70fb2ec577225fcdd1c067b08d53"}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact surface uptake and regular-preimage continuation",
@@ -6436,7 +6453,7 @@
    :stop-condition
    "Preserve dimension zero, disconnected total spaces and the literal top-homology orientation encoding. No assumed orientation compatibility, degree formula or top-homology cyclicity.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "COVER-DEGREE: exact finite-cover fundamental-class consumer",
@@ -6469,7 +6486,7 @@
    :stop-condition
    "No supplied fiber atlas, overlap compatibility or smooth inclusion. No Sard nullity, regular-value existence, orientation or transverse homology comparison.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: smooth atlas on the literal regular fiber",
