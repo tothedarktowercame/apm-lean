@@ -3391,6 +3391,23 @@
       :exit 0}],
     :repository-note
     "Read DAG, closure experiments, and dependency reviews. Only the authorized Main changed; ledger, DAG, and untracked supervisor files untouched. Tracked checkout clean after commit.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788977263821-16745-f3b25cde",
+     :commands
+     ["git show 69fd2f35:problems/t97A02/lean/Main.lean"
+      "sha256sum /tmp/T97A02FullClosureProbe.lean"
+      "cmp recorded-commit-source /tmp/T97A02FullClosureProbe.lean"
+      "lake env lean /tmp/T97A02FullClosureProbe.lean"
+      "lake env lean problems/t97A02/lean/Main.lean"
+      "lake build ConstructionTargets.CircleHurewiczIsomorphism ConstructionTargets.IntegralSingularHomologyComparison ConstructionTargets.ComponentRealLiftAssembly"
+      "lake build"
+      "python3: verify baseline hash, every original signature and definition, frozen statement hashes, placeholders 2 to 0, forbidden scan and 40-file recorded source/import closure"
+      "git show --format= --name-only 69fd2f35"
+      "git show --format= --check 69fd2f35"],
+     :finding
+     "Independent PASS of exact t97A02 closure. One-file scope and byte-identical fixture verified; all original statements and definitions preserved. Both compilations, focused build and full build pass; final theorem audits use only propext, Classical.choice and Quot.sound, with no new warnings. Canonical coefficient comparison transfers finite H1; Circle Hurewicz naturality yields ambient loop triviality. Component normalization, actual inclusion naturality and covering lifts construct component real lifts; adding the fixed angle undoes normalization. Open-component assembly handles empty domains without global path-connectivity assumptions, and existing product recombination proves the torus conclusion. Frozen placeholders decrease 2 to 0. No review edits."},
     :commit "69fd2f354468e1409b979d75818a1d01cf727e6c",
     :changed-paths ["problems/t97A02/lean/Main.lean"],
     :new-warning-count 0,
@@ -3406,7 +3423,7 @@
     "d5f4eeead7566421b8446530469637df8a192e3f68617d5201b9a3841e4a90a4",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t97A02/lean/Main.lean"],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS: finite-H1 Circle lifting and exact torus consumer uptake",
