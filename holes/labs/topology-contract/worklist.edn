@@ -45921,6 +45921,23 @@
       :exit 0,
       :output
       "Committed exactly two scoped files. Unrelated untracked holes/labs/topology-contract/runs2/ remains untouched."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788965027582-16448-26bb3afa",
+     :commands
+     ["git show --stat --oneline 1d7018a320d4282992584edc9c1ce733032a09c9"
+      "sha256sum /tmp/SardJetBorelPositiveOrderLossNullityProbe.lean"
+      "cmp /tmp/SardJetBorelPositiveOrderLossNullityProbe.lean <(git show 1d7018a320d4282992584edc9c1ce733032a09c9:ConstructionTargets/SardJetBorelPositiveOrderLossNullity.lean)"
+      "git show 1d7018a320d4282992584edc9c1ce733032a09c9:ConstructionTargets/SardJetBorelPositiveOrderLossNullity.lean | sed -n '7,20p' | sha256sum"
+      "git diff --exit-code 1d7018a320d4282992584edc9c1ce733032a09c9 -- ConstructionTargets"
+      "lake env lean /tmp/SardJetBorelPositiveOrderLossNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardJetBorelPositiveOrderLossNullity.lean"
+      "lake build ConstructionTargets.SardJetBorelPositiveOrderLossNullity"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Commit 1d7018a320d4282992584edc9c1ce733032a09c9 passes. Exact two-file scope; fixture SHA 482f6c1d8c2130a00bac510bff9a68a1e40d4f40ddfef60f8de097abe021ab1f and statement SHA 426afd9489a9f37fe537d4b7c9a38ba58b3a3363ddc76f27fe7a2c8f220ebb06 reproduced. Lines 21-36 explicitly prove positive remaining order, reconstruct regularity and establish admissibility using the budget and strict source-dimension drop. No all-orders predicate conversion; budget and induction premises remain. Both compilations exit 0 with standard axioms only; build8295 succeeds. Zero new placeholders; frozen consumer unchanged with one existing placeholder. Worklist355 valid. Ledger and unrelated untracked runs2 directory untouched."},
     :commit "1d7018a320d4282992584edc9c1ce733032a09c9",
     :changed-paths
     ["ConstructionTargets/SardJetBorelPositiveOrderLossNullity.lean"
@@ -45932,7 +45949,7 @@
     :declarations
     ["firstNonzeroJet_image_null_of_borel_positive_order_loss"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardJetBorelPositiveOrderLossNullity.lean"
     "ConstructionTargets/SardJetBorelPositiveOrderLossNullity.md"],
@@ -46106,7 +46123,7 @@
       "482f6c1d8c2130a00bac510bff9a68a1e40d4f40ddfef60f8de097abe021ab1f"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
