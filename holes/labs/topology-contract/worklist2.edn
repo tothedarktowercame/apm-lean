@@ -2066,20 +2066,91 @@
    :stop-condition
    "Bank angle-transition rigidity only. The exponential comparison is a geometric input that must be proved for actual chart coordinates; it is not an assumed homology sign or completed chart-overlap theorem.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CircleAngleTransitionProbe.lean",
-      :sha256
-      "0f461a5a44fd86284801255225d5c018c44ef7925c72cbca848bf73e77c496e1"},
-     :commands
-     [{:cmd "lake env lean /tmp/CircleAngleTransitionProbe.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct continuous angle coordinates for actual rotated stereographic charts on common restrictions, prove their exponential comparison equations and coordinate-order relation, then apply this rigidity theorem. Stereographic coordinates are not assumed to be affine exponential angles. No chart-overlap or parent-packet completion is claimed.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :all-four-printed-axiom-audits :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :fixture-compilation :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 30,
+      :log "/tmp/codex-14-angle-build.log",
+      :paths
+      {"ConstructionTargets/CircleUniversalCover.lean" 1,
+       "ConstructionTargets/TopologicalSumSingularHomology.lean" 1,
+       "ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/T02A06SphereShift.lean" 3,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/SolidTorusGluingOpenCover.lean" 5,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/BoundaryTorusOpenCover.lean" 4,
+       "ConstructionTargets/PuncturedNormedSpaceRadialEquivalence.lean"
+       2,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/SingularSubdivision.lean" 2}}],
+    :statement-hashes
+    {"angle_difference_constant"
+     "4fa98ed1470b8c17078bd52ea814b09c48039c2d771c53e68dd994c50127546a",
+     "angle_increment_eq"
+     "8153a6704d4bf4301f632b625d157b19f599aa233eed28169ff1ee573fcf64ff",
+     "angle_order_iff"
+     "7b2ae7f7dd113567eb71fecafa6cdf3e91a3c41f2e41d56b4fa57b9bcec2c412",
+     "recentered_angle_transition_increasing"
+     "37fc812a10dc6faf019df72d68086fe119aebeed924162e376b30fe8bc631f6a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CircleAngleTransitionProbe.lean", :exit 0}
+     {:cmd
+      "lake env lean /tmp/CircleAngleTransitionProbe.lean > /tmp/codex-14-angle-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CircleAngleTransition.lean > /tmp/codex-14-angle-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CircleAngleTransition ConstructionTargets.PointedChartRecentering ConstructionTargets.CircleUniversalCover > /tmp/codex-14-angle-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CircleAngleTransition.lean /tmp/CircleAngleTransitionProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Prove rigidity and order preservation of Circle angle comparisons\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Checked codex-11 dependency PASS. Existing untracked supervisor files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :commit "620b0c7eca46117fe33bafc0e47cded2aac5074f",
+    :changed-paths
+    ["ConstructionTargets/CircleAngleTransition.lean"
+     "ConstructionTargets/CircleAngleTransition.md"],
+    :dependency-commit "360f5d1fa7e270318dd9346cd9bf346c2a3ef49f",
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/CircleAngleTransitionProbe.lean",
+     :sha256
+     "0f461a5a44fd86284801255225d5c018c44ef7925c72cbca848bf73e77c496e1"},
+    :finding
+    "Promoted the exact fixture. The actual Circle exponential covering and preconnectedness force the continuous angle difference to be constant under a fixed rotation equation. Equality of increments and order equivalence follow. The positive-affine specialization proves Increasing T from its explicit geometric exponential comparison.",
+    :statement-hash-method
+    "SHA-256 of UTF-8 theorem declaration bytes beginning with theorem and ending immediately before the space preceding :=; names below are in ConstructionTargets.CircleAngleTransition.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CircleAngleTransition.lean"
     "ConstructionTargets/CircleAngleTransition.md"],
