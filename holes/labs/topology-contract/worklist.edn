@@ -42932,6 +42932,23 @@
       "git add ConstructionTargets/SardRankZeroBorelJetRangeOverlap.lean ConstructionTargets/SardRankZeroBorelJetRangeOverlap.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: exhaust Borel rank-zero overlap nullity' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788955065335-16234-289ab528",
+     :commands
+     ["git show 980573b5 --stat --oneline"
+      "sha256sum /tmp/SardRankZeroBorelJetRangeOverlapProbe.lean"
+      "cmp /tmp/SardRankZeroBorelJetRangeOverlapProbe.lean <(git show 980573b594bcdc06c13c661318ce06e7e8f89117:ConstructionTargets/SardRankZeroBorelJetRangeOverlap.lean)"
+      "git show 980573b594bcdc06c13c661318ce06e7e8f89117:ConstructionTargets/SardRankZeroBorelJetRangeOverlap.lean | sed -n '8,24p' | sha256sum"
+      "git diff --exit-code 980573b594bcdc06c13c661318ce06e7e8f89117 -- ConstructionTargets"
+      "lake env lean /tmp/SardRankZeroBorelJetRangeOverlapProbe.lean"
+      "lake env lean ConstructionTargets/SardRankZeroBorelJetRangeOverlap.lean"
+      "lake build ConstructionTargets.SardRankZeroBorelJetRangeOverlap"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit 980573b594bcdc06c13c661318ce06e7e8f89117 passes. Fixture SHA 0422ca8e6857e86f2fbe87d820c08991e26e6aab0cf12a407244a03c14f1d956 and statement SHA 60d054857393f23ed5920539c5ad102a1fa49069a61a2782909dbca1baaecc11 reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8433-job build successful. Lines 25–33 correctly orient closedness and compact exhaustion while preserving Borel induction and overlap premises. Ledger untouched."},
     :commit "980573b594bcdc06c13c661318ce06e7e8f89117",
     :changed-paths
     ["ConstructionTargets/SardRankZeroBorelJetRangeOverlap.lean"
@@ -42943,7 +42960,7 @@
     :declarations
     ["rankZero_image_zero_of_borel_jet_range_overlap_induction"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardRankZeroBorelJetRangeOverlap.lean"
     "ConstructionTargets/SardRankZeroBorelJetRangeOverlap.md"],
@@ -43114,7 +43131,7 @@
       "0422ca8e6857e86f2fbe87d820c08991e26e6aab0cf12a407244a03c14f1d956"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
