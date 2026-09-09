@@ -54448,6 +54448,19 @@
      {:cmd "git diff --check and git diff --cached --check", :exit 0}
      {:cmd "Scoped git add and git commit --only", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788994194142-17263-038c93a8",
+     :commands
+     ["git show b364803ac4e0c6b2d20d06d9c937f1f0a9892eb4"
+      "Independent committed-source scope, exact-promotion, frozen statements, SHA-256 and placeholder audit"
+      "lake env lean problems/t92J07/lean/Main.lean"
+      "lake env lean /tmp/T92J07FullClosure.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check b364803a"],
+     :finding
+     "Independent review of codex-6 closure passes. Exact one-file promotion; only the import and two proofs change, with frozen definitions and both statement hashes preserved. Recorded hashes reproduce; placeholders decrease 2 to 0. Both compilations pass with standard axioms and the recorded unused-hm warning; ledger validates 418 items. Frozen nonregular values equal the actual nonsurjective-mfderiv image, so manifold Sard supplies nullity and countable avoidance supplies one common regular value. The literal fiber certificates and zero-target branch are preserved without additional source hypotheses. Frozen t92J07 is closed; ledger untouched."},
     :commit "b364803ac4e0c6b2d20d06d9c937f1f0a9892eb4",
     :changed-paths ["problems/t92J07/lean/Main.lean"],
     :fixture
@@ -54458,7 +54471,7 @@
     :consumer-sha256-after
     "0e7bf95466e914d03b456449f5605abd35a49df231aa4c6fef4d0edbedc943e3"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t92J07/lean/Main.lean"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / countable common regular value",
