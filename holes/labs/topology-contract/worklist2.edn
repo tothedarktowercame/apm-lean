@@ -7774,99 +7774,92 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "One quotient-comparison prerequisite supplied. Covering-data transport and concrete circle specialization remain in the parent probe.",
-     :axiom-audits 8,
-     :outcome :revise,
+     "The requested equivariant orbit-quotient covering transport is proved. Frozen consumer assembly, graph gluing, deck classification and surface Euler multiplicativity remain separate.",
+     :axiom-audits 11,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t01A04-quotient-cover-transport,
-      :stop-condition
-      "Bank quotient descent and fiber comparison only. Do not claim transported covering neighborhoods, a circle-cover example, graph gluing, classification or frozen closure.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/EquivariantOrbitQuotient.lean",
-         :sha256
-         "13ba5e296dade5ed73cca6b7cdeaea31b567a11f7e778a88fc1e5beb96a01260"},
-        :commands
-        [{:cmd "lake env lean /tmp/EquivariantOrbitQuotient.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/EquivariantOrbitQuotient.lean"
-       "ConstructionTargets/EquivariantOrbitQuotient.md"],
-      :dag-node
-      "COVERING-BASIC: equivariant homeomorphism of literal orbit quotients",
-      :acceptance
-      {:implementation
-       "Promote the exact compiled fixture, preserving arbitrary group isomorphisms, both quotient descents, inverse identities and fiber evaluation.",
-       :namespace "ConstructionTargets.EquivariantOrbitQuotient",
-       :declarations
-       ["inverse_equivariant"
-        "orbit_forward"
-        "quotientHomeomorph"
-        "quotientHomeomorph_mk"
-        "quotientHomeomorph_symm_mk"
-        "fiberHomeomorph"
-        "fiber_card"
-        "fiberHomeomorph_apply"],
-       :consumer-equation
-       "The quotient homeomorphism sends [x] to [h(x)]; its fiber homeomorphism sends x to h(x), and corresponding fibers have equal Nat.card.",
-       :consumer-residual
-       "Transport continuous actions, fiber-orbit equivalence and disjoint-translate neighborhoods to derive target quotient-covering data; compile the required concrete circle example.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.EquivariantOrbitQuotient."
-        "Reproduce all eight standard-only axiom audits."
-        "Run forbidden-token scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-      :representation
-      {:source "Quotient (MulAction.orbitRel G E)",
-       :target "Quotient (MulAction.orbitRel H F)",
-       :direction
-       "Construct a homeomorphism from the source quotient to the target quotient sending the orbit of x to the orbit of h(x), using the supplied group isomorphism and equivariant source homeomorphism."},
-      :id :equivariant-literal-orbit-quotient-homeomorphism-1,
-      :kind :representation-comparison,
-      :depends-on [],
-      :current-residual
-      "The parent needs a constructed quotient comparison before transporting its quotient-covering action data.",
-      :other-consumers [:t01A02 :t98A01 :t92J06]},
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture, preserving explicit action continuity, disjoint-neighborhood transport and the finite sign-action circle example.",
+      :namespace "ConstructionTargets.EquivariantCoverTransport",
+      :declarations
+      ["transport"
+       "covering"
+       "minusOne"
+       "minusOne_mul"
+       "minusOne_inv"
+       "signSubgroup"
+       "sign_discrete"
+       "sign_quotient_cover"
+       "circleTranslation"
+       "circle_translation_equivariant"
+       "translated_circle_cover"
+       "translated_circle_quotient"
+       "translated_circle_quotient_mk"],
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target."
+       "Run lake build ConstructionTargets.EquivariantCoverTransport ConstructionTargets.EquivariantOrbitQuotient."
+       "Reproduce all eleven standard-only axiom audits, including the five imported quotient/fiber audits."
+       "Run forbidden-token scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure stop rules, reviewed checkpoint10 dependency and pinned quotient-action APIs",
+       "Read DAG, closure stop rules, reviewed prerequisite receipt and pinned quotient-covering APIs",
        :exit 0}
-      {:cmd "lake env lean /tmp/EquivariantOrbitQuotient.lean",
+      {:cmd "lake env lean /tmp/EquivariantCoverTransport.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/EquivariantOrbitQuotient.lean", :exit 0}
+      {:cmd "sha256sum /tmp/EquivariantCoverTransport.lean", :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/EquivariantOrbitQuotient.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/EquivariantCoverTransport.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial lake env lean /tmp/EquivariantOrbitQuotient.lean",
+     [{:cmd "Initial transport fixture compilation",
        :exit 1,
        :correction
-       "Explicitly included equivariance in the inverse theorem and used Continuous.quotient_lift for continuity of the descended maps."}],
+       "Normalized the homeomorphism inverse in neighborhood membership, used the explicit image equality, and included equivariance in the covering corollary."}
+      {:cmd "Initial circle example compilation",
+       :exit 1,
+       :correction
+       "Circle has no Neg instance; constructed its point with complex value -1 explicitly."}
+      {:cmd "First explicit circle-point compilation",
+       :exit 1,
+       :correction
+       "Investigated the unit-sphere membership definition after simp made no progress."}
+      {:cmd "Second explicit circle-point compilation",
+       :exit 1,
+       :correction
+       "Unfolded Submonoid.unitSphere instead of treating its membership as definitionally a norm equation."}],
+     :representation
+     {:source
+      "Literal orbit quotient of the source G-action with quotient-covering data",
+      :target
+      "Literal orbit quotient of the equivariantly homeomorphic H-action",
+      :direction
+      "Constructed forward quotient homeomorphism sends [x] to [h(x)]; corresponding fiber homeomorphisms send x to h(x), and covering data transports to the target projection."},
      :changed-paths [],
+     :dependency-commit "ae29dbf4336057f43e95c7aed1a9e03f9b75858f",
      :fixture
-     {:path "/tmp/EquivariantOrbitQuotient.lean",
+     {:path "/tmp/EquivariantCoverTransport.lean",
       :sha256
-      "13ba5e296dade5ed73cca6b7cdeaea31b567a11f7e778a88fc1e5beb96a01260"},
+      "adb54dee9d408d11af96f22a2c703886566fa40293cb709a035b223ee36ba266"},
      :finding
-     "Exactly one compiled prerequisite constructs the actual orbit-quotient homeomorphism from a group isomorphism and equivariant source homeomorphism. Both quotient directions descend continuously, inverse identities are proved, representative equations commute with the quotient projections, and the induced fiber homeomorphism has the specified evaluation and cardinality equations. Transport of covering-action neighborhoods and the concrete circle-cover example remain; the parent is not GO.",
+     "Complete fixture combines the reviewed literal quotient and fiber homeomorphisms with constructed quotient-covering transport. Target action continuity follows by conjugation; quotient equality gives the fiber-orbit equation; source disjoint-translate neighborhoods are transported through the source homeomorphism with the group isomorphism. The resulting target projection is an actual IsCoveringMap. A concrete finite sign subgroup acts on Circle by multiplication: its discreteness and source quotient covering are proved, and every circle translation induces the constructed quotient homeomorphism with representative equation [x] maps to [c*x] and transported covering data.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/EquivariantCoverTransport.lean"
+       "ConstructionTargets/EquivariantCoverTransport.md"]},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/EquivariantCoverTransport.lean"
+    "ConstructionTargets/EquivariantCoverTransport.md"],
    :dag-node
    "COVERING-BASIC: action equivalence and literal orbit-quotient transport",
    :acceptance
