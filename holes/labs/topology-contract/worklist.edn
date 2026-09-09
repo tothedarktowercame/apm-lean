@@ -38119,6 +38119,42 @@
    "Localized finite-cover aggregation compiles; compact uniform little-o control must choose the coefficient and scale and supply the finite source cover.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the localized finite Taylor target-cover estimate and finite-dimensional packing bound cannot cancel the source scale at exact exponent equality and yield an image-volume bound proportional to the localized Taylor coefficient, or if the estimate requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderLocalEndpointTaylorCoefficientBound.lean"
+    "ConstructionTargets/SardFiniteOrderLocalEndpointTaylorCoefficientBound.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER LOCAL ENDPOINT TAYLOR COEFFICIENT BOUND",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderLocalEndpointTaylorCoefficientBoundProbe.lean",
+     :sha256
+     "bb0dd548102464d26c61cf5fad3aa73919e9d8ca0fc0cfedd23222402483f14b"},
+    :declarations
+    ["endpoint_localTaylor_image_measure_le_coefficient"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Package localized endpoint remainder estimates with arbitrarily small coefficients and finite source covers obtained from compact uniform little-o Taylor control."},
+   :representation
+   {:source
+    "A finite source cover with packing-cardinality control and order-(k+1) Taylor remainder estimates restricted to each covering ball at exact exponent equality.",
+    :target
+    "A scale-independent image-volume bound proportional to the localized Taylor coefficient raised to the target dimension."},
+   :id
+   :critical-value-sard-finite-order-local-endpoint-taylor-coefficient-bound-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-local-taylor-finite-target-cover-measure-1
+    :critical-value-sard-taylor-packing-exponent-normalization-1],
+   :current-residual
+   "The localized zero-surplus coefficient estimate compiles; compact uniform little-o control must supply arbitrarily small coefficients, scales, and finite source covers.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -38172,85 +38208,83 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Implement localized finite-cover aggregation, then construct endpoint small-coefficient cover data from compact uniform little-o Taylor control.",
+     "Implement the localized endpoint coefficient estimate, then package compact uniform little-o estimates and finite covers into localized small-coefficient data.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"finiteCover_localTaylor_image_measure_le_card_mul_ballVolume"
-      "dacd8a6b82a788c1d1d9b0f5c57e16735508ca16e3350e79e42bdf50d484e069"},
+     {"endpoint_localTaylor_image_measure_le_coefficient"
+      "b2c22060357a3aae8db5eb0910d3dd619680798f0ec6e4470b2f69ac01a406ba"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if a finite source cover with Taylor remainder estimates localized to its individual source balls cannot yield the corresponding finite target-ball cover and cardinality-times-ball-volume measure estimate, or if the aggregation requires nonstandard axioms.",
+      "Stop only if the localized finite Taylor target-cover estimate and finite-dimensional packing bound cannot cancel the source scale at exact exponent equality and yield an image-volume bound proportional to the localized Taylor coefficient, or if the estimate requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderLocalTaylorFiniteTargetCoverMeasure.lean"
-       "ConstructionTargets/SardFiniteOrderLocalTaylorFiniteTargetCoverMeasure.md"],
+      ["ConstructionTargets/SardFiniteOrderLocalEndpointTaylorCoefficientBound.lean"
+       "ConstructionTargets/SardFiniteOrderLocalEndpointTaylorCoefficientBound.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER LOCAL TAYLOR FINITE TARGET-COVER MEASURE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER LOCAL ENDPOINT TAYLOR COEFFICIENT BOUND",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderLocalTaylorFiniteTargetCoverMeasureProbe.lean",
+        "/tmp/SardFiniteOrderLocalEndpointTaylorCoefficientBoundProbe.lean",
         :sha256
-        "df2d5e91590764805a75b74a581286bb0d1f324898c20d1395b41821b423116b"},
+        "bb0dd548102464d26c61cf5fad3aa73919e9d8ca0fc0cfedd23222402483f14b"},
        :declarations
-       ["finiteCover_localTaylor_image_measure_le_card_mul_ballVolume"],
+       ["endpoint_localTaylor_image_measure_le_coefficient"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Use compact uniform little-o Taylor control to choose arbitrarily small coefficients and scales, construct finite source covers, and instantiate endpoint small-coefficient cover data."},
+       "Package localized endpoint remainder estimates with arbitrarily small coefficients and finite source covers obtained from compact uniform little-o Taylor control."},
       :representation
       {:source
-       "A finite source-ball cover and an order-(k+1) Taylor remainder estimate restricted separately to the source locus inside each covering ball.",
+       "A finite source cover with packing-cardinality control and order-(k+1) Taylor remainder estimates restricted to each covering ball at exact exponent equality.",
        :target
-       "A finite target-ball cover of the image and its cardinality-times-ball-volume measure bound."},
+       "A scale-independent image-volume bound proportional to the localized Taylor coefficient raised to the target dimension."},
       :id
-      :critical-value-sard-finite-order-local-taylor-finite-target-cover-measure-1,
+      :critical-value-sard-finite-order-local-endpoint-taylor-coefficient-bound-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-local-flat-taylor-ball-image-1
-       :critical-value-sard-finite-cover-measure-bound-1
-       :critical-value-sard-finite-cover-cardinality-measure-1
-       :critical-value-sard-finite-dimensional-ball-volume-1],
+      [:critical-value-sard-finite-order-local-taylor-finite-target-cover-measure-1
+       :critical-value-sard-taylor-packing-exponent-normalization-1],
       :current-residual
-      "Localized finite-cover aggregation compiles; compact uniform little-o control must choose the coefficient and scale and supply the finite source cover.",
+      "The localized zero-surplus coefficient estimate compiles; compact uniform little-o control must supply arbitrarily small coefficients, scales, and finite source covers.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. A placeholder-free fixture compiles the finite target-ball cover and cardinality-times-ball-volume estimate using remainder bounds restricted to each covered source ball. This removes the global-remainder mismatch and leaves compact uniform little-o control to choose a sufficiently small scale and instantiate the localized premises.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture compiles the exact zero-surplus endpoint coefficient estimate using localized Taylor remainder bounds on individual covering balls. The finite-dimensional packing cancellation and target-volume bound are unchanged; the remaining analytic work is to package these localized estimates with arbitrarily small coefficients chosen from compact uniform little-o control.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "sed -n '1,240p' ConstructionTargets/SardTaylorFiniteTargetCoverMeasure.lean; sed -n '1,180p' ConstructionTargets/SardFiniteCoverMeasureBound.lean; sed -n '1,160p' ConstructionTargets/SardFiniteOrderLocalFlatTaylorBallImage.lean",
+       "sed -n '1,300p' ConstructionTargets/SardUniformFlatTaylorRemainder.lean; sed -n '1,260p' ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.lean; sed -n '1,180p' ConstructionTargets/SardFiniteOrderEndpointSmallCoefficientNullity.lean; sed -n '1,180p' ConstructionTargets/SardFiniteOrderEndpointTaylorCoefficientBound.lean; sed -n '1,240p' ConstructionTargets/SardTaylorPackingExponentNormalization.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderLocalTaylorFiniteTargetCoverMeasureProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderLocalEndpointTaylorCoefficientBoundProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderLocalTaylorFiniteTargetCoverMeasureProbe.finiteCover_localTaylor_image_measure_le_card_mul_ballVolume' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderLocalEndpointTaylorCoefficientBoundProbe.endpoint_localTaylor_image_measure_le_coefficient' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderLocalTaylorFiniteTargetCoverMeasureProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderLocalEndpointTaylorCoefficientBoundProbe.lean",
        :exit 0,
        :output
-       "df2d5e91590764805a75b74a581286bb0d1f324898c20d1395b41821b423116b  /tmp/SardFiniteOrderLocalTaylorFiniteTargetCoverMeasureProbe.lean"}
+       "bb0dd548102464d26c61cf5fad3aa73919e9d8ca0fc0cfedd23222402483f14b  /tmp/SardFiniteOrderLocalEndpointTaylorCoefficientBoundProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderLocalTaylorFiniteTargetCoverMeasureProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderLocalEndpointTaylorCoefficientBoundProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '14,48p' /tmp/SardFiniteOrderLocalTaylorFiniteTargetCoverMeasureProbe.lean | sha256sum",
+       "sed -n '11,53p' /tmp/SardFiniteOrderLocalEndpointTaylorCoefficientBoundProbe.lean | sha256sum",
        :exit 0,
        :output
-       "dacd8a6b82a788c1d1d9b0f5c57e16735508ca16e3350e79e42bdf50d484e069  -"}
+       "b2c22060357a3aae8db5eb0910d3dd619680798f0ec6e4470b2f69ac01a406ba  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 290 items OK; {:done 282, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 291 items OK; {:done 283, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -38266,12 +38300,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderLocalTaylorFiniteTargetCoverMeasureProbe.lean",
+      "/tmp/SardFiniteOrderLocalEndpointTaylorCoefficientBoundProbe.lean",
       :sha256
-      "df2d5e91590764805a75b74a581286bb0d1f324898c20d1395b41821b423116b"},
+      "bb0dd548102464d26c61cf5fad3aa73919e9d8ca0fc0cfedd23222402483f14b"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -38510,7 +38544,8 @@
     :critical-value-sard-finite-order-endpoint-taylor-coefficient-bound-1
     :critical-value-sard-finite-order-endpoint-small-coefficient-nullity-1
     :critical-value-sard-finite-order-local-flat-taylor-ball-image-1
-    :critical-value-sard-finite-order-local-taylor-finite-target-cover-measure-1],
+    :critical-value-sard-finite-order-local-taylor-finite-target-cover-measure-1
+    :critical-value-sard-finite-order-local-endpoint-taylor-coefficient-bound-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
