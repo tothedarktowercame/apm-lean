@@ -2685,19 +2685,111 @@
   {:consumer :euclidean-higher-model-local-homology,
    :stop-condition
    "This is a model calculation only: no arbitrary-manifold fundamental class, localization monicity, coordinate-change sign, or t98A02 closure.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Promote and independently review the model calculation. Higher-dimensional geometric sign compatibility, manifold chart transport, global localization, and t98A02 gluing remain separate obligations.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :author "codex-13",
+     :commands
+     [{:cmd "realpath .lake/packages", :exit 0}
+      {:cmd "lake env lean /tmp/HigherModelLocalHomologyProbe.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/HigherModelLocalHomologyProbe.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/HigherModelLocalHomologyProbe.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :repository-note
+     "Read-only probe; canonical package authority and checkpoint PASS verified. Repository files unchanged.",
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/HigherModelLocalHomologyProbe.lean",
+      :sha256
+      "b1ff5b97ed848a02ca923f385c8d4be2b4a39197567c0eddbb6c83b650ffd65b"},
+     :finding
+     "Complete model fixture compiles for dimension k+2, covering every dimension at least two. Contractibility and production pair exactness make the actual connecting map invertible. The geometric punctured-open-disk radial homotopy equivalence identifies its target with sphere homology. Composition with the banked sphere normalization defines the integer isomorphism and generator. The fixture proves generation, normalization, equality of the actual composite maps, and the boundary/radial generator equation. Dimension-two and dimension-four generation instances compile.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/HigherModelLocalHomology.lean"
+       "ConstructionTargets/HigherModelLocalHomology.md"],
+      :acceptance
+      {:implementation
+       "Promote the exact compiled fixture. Document dimension k+2, integral AddCommGrpCat coefficients, the actual connecting-map and radial-normalization directions, and the remaining geometric orientation obligations.",
+       :declarations
+       ["ConstructionTargets.HigherModelLocalHomology.connectingIso"
+        "ConstructionTargets.HigherModelLocalHomology.radialIso"
+        "ConstructionTargets.HigherModelLocalHomology.localIsoInt"
+        "ConstructionTargets.HigherModelLocalHomology.generator"
+        "ConstructionTargets.HigherModelLocalHomology.normalization"
+        "ConstructionTargets.HigherModelLocalHomology.generates"
+        "ConstructionTargets.HigherModelLocalHomology.comparison"
+        "ConstructionTargets.HigherModelLocalHomology.boundary_radial_generator"
+        "ConstructionTargets.HigherModelLocalHomology.dimension_two_generates"
+        "ConstructionTargets.HigherModelLocalHomology.dimension_four_generates"],
+       :consumer-equation
+       "For dimension k+2, radialNormalizeMap_* applied to singularPairConnecting(generator k) equals (sphereTopHomologyIsoInt (k+1)).inv 1. Every relative class is an integer multiple of generator k.",
+       :representation
+       {:source
+        "Integral relative H(k+2) of the open (k+2)-disk modulo its puncture",
+        :target
+        "Integral H(k+1) of the unit (k+1)-sphere, then integers",
+        :direction
+        "Forward composite of the actual pair connecting map, the homology map induced by radial normalization, and the banked sphere normalization."},
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA-256 before implementation."
+        "Compile fixture and canonical target."
+        "Run lake build ConstructionTargets.HigherModelLocalHomology ConstructionTargets.SphereHomology ConstructionTargets.T02A06DiskRadialComparison."
+        "Reproduce all nine printed axiom audits; permit only propext, Classical.choice, Quot.sound."
+        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."],
+       :stop-condition
+       "Model calculation only. No coordinate-change sign, arbitrary-manifold localization, global fundamental class, or frozen consumer closure."}},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/HigherModelLocalHomology.lean"
+    "ConstructionTargets/HigherModelLocalHomology.md"],
    :dag-node
    "Queue D #2: higher-dimensional model-pair calculation before manifold localization",
    :acceptance
-   {:probe
-    "For n at least two, use the actual production pair sequence, contractibility of the open disk, PuncturedNormedSpaceRadialEquivalence, and SphereHomology to construct the integral relative Hn isomorphism with integers. Define its generator and prove generation and normalization. Record the connecting-map/radial comparison equation and compile concrete n=2 and n=4 instances. Use the canonical coefficient comparison if ModuleCat results are needed.",
+   {:implementation
+    "Promote the exact compiled fixture. Document dimension k+2, integral AddCommGrpCat coefficients, the actual connecting-map and radial-normalization directions, and the remaining geometric orientation obligations.",
+    :declarations
+    ["ConstructionTargets.HigherModelLocalHomology.connectingIso"
+     "ConstructionTargets.HigherModelLocalHomology.radialIso"
+     "ConstructionTargets.HigherModelLocalHomology.localIsoInt"
+     "ConstructionTargets.HigherModelLocalHomology.generator"
+     "ConstructionTargets.HigherModelLocalHomology.normalization"
+     "ConstructionTargets.HigherModelLocalHomology.generates"
+     "ConstructionTargets.HigherModelLocalHomology.comparison"
+     "ConstructionTargets.HigherModelLocalHomology.boundary_radial_generator"
+     "ConstructionTargets.HigherModelLocalHomology.dimension_two_generates"
+     "ConstructionTargets.HigherModelLocalHomology.dimension_four_generates"],
     :consumer-equation
-    "The actual connecting map sends the chosen relative Hn class to the puncture class whose geometric radial image is the normalized sphere H(n-1) generator; every relative Hn class is an integer multiple of the chosen class.",
+    "For dimension k+2, radialNormalizeMap_* applied to singularPairConnecting(generator k) equals (sphereTopHomologyIsoInt (k+1)).inv 1. Every relative class is an integer multiple of generator k.",
+    :representation
+    {:source
+     "Integral relative H(k+2) of the open (k+2)-disk modulo its puncture",
+     :target "Integral H(k+1) of the unit (k+1)-sphere, then integers",
+     :direction
+     "Forward composite of the actual pair connecting map, the homology map induced by radial normalization, and the banked sphere normalization."},
     :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA-256 before implementation."
+     "Compile fixture and canonical target."
+     "Run lake build ConstructionTargets.HigherModelLocalHomology ConstructionTargets.SphereHomology ConstructionTargets.T02A06DiskRadialComparison."
+     "Reproduce all nine printed axiom audits; permit only propext, Classical.choice, Quot.sound."
+     "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."],
     :stop-condition
-    "GO only with the actual model calculation and comparison maps. REVISE to exactly one compiled missing pair, radial, or coefficient comparison. Do not assume orientation compatibility or extrapolate the Circle result."},
+    "Model calculation only. No coordinate-change sign, arbitrary-manifold localization, global fundamental class, or frozen consumer closure."},
    :representation
    {:source
     "Integral relative singular homology of the open n-disk modulo its deleted origin, n at least two",
