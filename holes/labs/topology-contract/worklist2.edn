@@ -2982,69 +2982,95 @@
    :stop-condition
    "Address the recorded topological prerequisite directly; do not assume path connectivity of the whole space, finite fundamental group, or the desired Circle null-homotopy.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Promote and independently review this complete topological prerequisite. Then combine the finite-H1 diagnostic with component normalization, inclusion naturality, covering lifts, and this assembly in an exact t97A02 closure fixture; no frozen closure is claimed here.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :author "codex-13",
-     :commands
-     [{:cmd "realpath .lake/packages", :exit 0}
-      {:cmd "lake env lean /tmp/ComponentRealLiftAssemblyProbe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/ComponentRealLiftAssemblyProbe.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/ComponentRealLiftAssemblyProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :repository-note
-     "Read-only probe; canonical package authority and dependency PASS verified. Repository files unchanged.",
-     :changed-paths [],
-     :dependency-commit "f8d3d38156369e16f70d38f9991ffaf88b957263",
-     :fixture
-     {:path "/tmp/ComponentRealLiftAssemblyProbe.lean",
-      :sha256
-      "c79a403303887e39689f2a787d278f478c93165772721545a4cc199fd9d6633d"},
-     :finding
-     "Complete prerequisite packet compiles. The connected-component quotient has open fibers; the canonical sigma-fiber equivalence is proved continuous and open, yielding an actual homeomorphism onto X. Continuous component lifts assemble through its inverse into a continuous global real lift, with the pointwise exponential equation proved. Its explicit real contraction gives a null-homotopy to 1. No nonempty-domain assumption is used, and an explicit empty-domain lift also compiles. Fibers are identified with connected components, whose path connectivity follows from the banked classical-local-contractibility conversion. Actual component-inclusion loop naturality transfers ambient loop triviality.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/ComponentRealLiftAssembly.lean"
-       "ConstructionTargets/ComponentRealLiftAssembly.md"],
-      :acceptance
-      {:implementation
-       "Promote the exact compiled fixture. Document the open-component decomposition, actual assembly formula, empty-domain coverage, and inclusion-map naturality. Preserve the distinction between component-lift assembly and the remaining finite-H1 consumer application.",
-       :declarations
-       ["ConstructionTargets.ComponentRealLiftAssembly.componentDecomposition"
-        "ConstructionTargets.ComponentRealLiftAssembly.assembledLift"
-        "ConstructionTargets.ComponentRealLiftAssembly.assembledLift_apply"
-        "ConstructionTargets.ComponentRealLiftAssembly.exists_global_lift"
-        "ConstructionTargets.ComponentRealLiftAssembly.nullhomotopic_of_component_lifts"
-        "ConstructionTargets.ComponentRealLiftAssembly.component_loop_naturality"
-        "ConstructionTargets.ComponentRealLiftAssembly.componentFiber_eq"
-        "ConstructionTargets.ComponentRealLiftAssembly.componentFiber_pathConnected"
-        "ConstructionTargets.ComponentRealLiftAssembly.component_loop_trivial"
-        "ConstructionTargets.ComponentRealLiftAssembly.classical_component_lifts_nullhomotopic"
-        "ConstructionTargets.ComponentRealLiftAssembly.empty_domain_lift"],
-       :consumer-equation
-       "assembledLift F x = F [x] (x,rfl), hence Circle.exp(assembledLift F x)=f x. The constructed homotopy is (t,x) ↦ Circle.exp((1-t)*assembledLift F x). For component inclusion i, pi1(f composed with i)(p)=pi1(f)(pi1(i)(p)), so ambient loop triviality implies component loop triviality.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA-256 before implementation."
-        "Compile fixture and canonical target."
-        "Run lake build ConstructionTargets.ComponentRealLiftAssembly ConstructionTargets.ClassicalLocalPathConnectivity ConstructionTargets.CircleUniversalCover."
-        "Reproduce all nine printed axiom audits; permit only propext, Classical.choice, Quot.sound."
-        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."],
-       :stop-condition
-       "Do not claim finite-H1 or frozen t97A02 closure from supplied component lifts alone. The consumer must construct those lifts using the homological diagnostic, normalization, and actual inclusion naturality."}},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Construct component lifts using the finite-H1 diagnostic, component normalization, covering lifts, and actual inclusion naturality, then apply this assembly in an exact t97A02 closure fixture. Supplied component lifts alone do not establish finite-H1 or frozen consumer closure.",
+    :gates
+    {:nine-printed-axiom-audits :pass,
+     :required-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :exact-scope :pass,
+     :commit :pass,
+     :exact-fixture-promotion :pass,
+     :placeholder-and-forbidden-declaration-scans :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warning,
+      :path "ConstructionTargets/CircleUniversalCover.lean:137:4",
+      :message "try 'simp' instead of 'simpa'"}],
+    :statement-hashes
+    {"classical_component_lifts_nullhomotopic"
+     "4f4c0a9acdbd5fd0599cce259c7f8e596860f6d1e00387bdb016f71ec80b87f7",
+     "empty_domain_lift"
+     "ff569b85557ef16e86b0ce65d7a5e73df4f09546239c022d3ff96602a7b77d87",
+     "component_loop_naturality"
+     "d77f5426c874a0c983eba7c6741db7e0265f4bb78c8e35e5aeddeab79f09fd7b",
+     "nullhomotopic_of_component_lifts"
+     "7cc21ff3dae4cb3596c7900ec25e62b28ed186cfe9811353b5ee9d795d5b59dd",
+     "componentDecomposition"
+     "062b01e27818a4bfb1b17985c0d605e84fdc419160927a6b7a5a89c8d913b0e2",
+     "exists_global_lift"
+     "519bebc7525ce653c2690031d3624996eacb847ea6c30cbe572f14373da22870",
+     "componentFiber_eq"
+     "535f9c0b1709de7a275f61dd167a1a9cd281683c249260676c984db2a6d84c6e",
+     "componentFiber_pathConnected"
+     "995ed9f34d7f9a9dff913b528c0be3a0ce2bfe24bd25e90995a9f69cd2b18dec",
+     "component_loop_trivial"
+     "3299c1a3dfad6bb5ed6c1a7614fbb3fac23d7c3a68ac09385816bacb5dc536a4"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/ComponentRealLiftAssemblyProbe.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/ComponentRealLiftAssemblyProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ComponentRealLiftAssembly.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ComponentRealLiftAssembly ConstructionTargets.ClassicalLocalPathConnectivity ConstructionTargets.CircleUniversalCover",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ComponentRealLiftAssembly.lean /tmp/ComponentRealLiftAssemblyProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "python3 inline audit: fixture byte equality and SHA-256, nine printed axiom audits in each compilation log, declaration hashes, comment-stripped placeholder scan",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "python3 inline audit: exact staged two-file scope, no unstaged tracked changes, git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Assemble component real lifts and explicit Circle null-homotopies\"",
+      :exit 0}
+     {:cmd
+      "python3 inline audit: exact committed two-file scope and clean git status --porcelain --untracked-files=no",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments, and dependency PASS receipt. Ledger, DAG, frozen consumers, and untracked supervisor files untouched; tracked checkout clean after commit.",
+    :commit "0322d72bca8a8ffba43c353bd689ba014f2e9946",
+    :changed-paths
+    ["ConstructionTargets/ComponentRealLiftAssembly.lean"
+     "ConstructionTargets/ComponentRealLiftAssembly.md"],
+    :dependency-commit "f8d3d38156369e16f70d38f9991ffaf88b957263",
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/ComponentRealLiftAssemblyProbe.lean",
+     :sha256
+     "c79a403303887e39689f2a787d278f478c93165772721545a4cc199fd9d6633d"},
+    :finding
+    "Promoted the exact fixture: open-component decomposition, continuous assembly with its pointwise exponential equation, explicit null-homotopy, empty-domain coverage, component topology, and actual inclusion-loop naturality.",
+    :statement-hash-method
+    "SHA-256 of declaration bytes beginning with theorem or def and ending immediately before the space preceding :=; names are in ConstructionTargets.ComponentRealLiftAssembly.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ComponentRealLiftAssembly.lean"
     "ConstructionTargets/ComponentRealLiftAssembly.md"],
