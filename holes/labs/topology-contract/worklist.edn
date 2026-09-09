@@ -41999,6 +41999,41 @@
    "Global smooth germ representatives are constructed from open-local regularity; derivative-germ transfer and neighborhood aggregation remain to connect this construction to conditional critical-image nullity.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if eventual equality fails to transfer derivative criticality and image nullity on the extracted neighborhoods, countable aggregation fails under the stated hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardOpenCriticalImageJetRangeOverlap.lean"
+    "ConstructionTargets/SardOpenCriticalImageJetRangeOverlap.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / OPEN CRITICAL IMAGE JET-RANGE OVERLAP",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardOpenCriticalImageJetRangeOverlapProbe.lean",
+     :sha256
+     "e4f8755a931f8849ceeb4e0cf10b2eb676903137c151b216008f01f008e4df54"},
+    :declarations
+    ["open_criticalImage_zero_of_jet_range_overlap_induction"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Close full lower-dimensional induction, repair the complementary regularity range, and extend open-source localization to the required rectangular local-set interface."},
+   :representation
+   {:source
+    "ContDiffOn of order k+2 on an open source set, classical admissibility, full lower-dimensional classical nullity, and the jet-range overlap bound, under the stated nontrivial finite-dimensional real inner-product Borel and proper-source hypotheses.",
+    :target
+    "Zero target add-Haar measure of the critical image localized to the open source set, without global regularity or supplied germ-extension premises."},
+   :id :critical-value-sard-open-critical-image-jet-range-overlap-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-critical-image-jet-range-overlap-1
+    :critical-value-sard-open-regularity-global-germ-extension-1
+    :critical-value-sard-local-nullity-second-countable-aggregation-1],
+   :current-residual
+   "Global regularity is replaced by open-local regularity through constructed germs and countable aggregation; the overlap bound and full induction hypothesis remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -42052,79 +42087,81 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank the constructed global smooth germ extension, connect it to local critical-image transfer and aggregation, and resolve full induction and the complementary analytic range before rectangular closure.",
+     "Bank open-local conditional critical-image nullity; close full induction and repair the complementary analytic range before rectangular closure.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_global_contDiff_germ_of_contDiffOn_open"
-      "39a0c9e2d1738ac3f755a63b9169ead39933d24e807072e2a19f52cba0c96b74"},
+     {"open_criticalImage_zero_of_jet_range_overlap_induction"
+      "1d174729eb9d45f54dc093a2965386cc5f18061b810ffcf5d75229c343f48712"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the smooth bump construction fails to preserve the stated regularity globally or local equality under these hypotheses, or nonstandard axioms are required.",
+      "Stop only if eventual equality fails to transfer derivative criticality and image nullity on the extracted neighborhoods, countable aggregation fails under the stated hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardOpenRegularityGlobalGermExtension.lean"
-       "ConstructionTargets/SardOpenRegularityGlobalGermExtension.md"],
+      ["ConstructionTargets/SardOpenCriticalImageJetRangeOverlap.lean"
+       "ConstructionTargets/SardOpenCriticalImageJetRangeOverlap.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / OPEN REGULARITY GLOBAL GERM EXTENSION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / OPEN CRITICAL IMAGE JET-RANGE OVERLAP",
       :acceptance
       {:fixture
-       {:path "/tmp/SardOpenRegularityGlobalGermExtensionProbe.lean",
+       {:path "/tmp/SardOpenCriticalImageJetRangeOverlapProbe.lean",
         :sha256
-        "622730360f86ab1ae0064f2dde42ce48c74b67532f15bc7e5b417c92bd944197"},
+        "e4f8755a931f8849ceeb4e0cf10b2eb676903137c151b216008f01f008e4df54"},
        :declarations
-       ["exists_global_contDiff_germ_of_contDiffOn_open"],
+       ["open_criticalImage_zero_of_jet_range_overlap_induction"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Transfer local critical images through the constructed germs and aggregate neighborhoods; close full lower-dimensional induction and repair the complementary regularity range."},
+       "Close full lower-dimensional induction, repair the complementary regularity range, and extend open-source localization to the required rectangular local-set interface."},
       :representation
       {:source
-       "A map from a real inner-product space to a real normed space, an open source neighborhood U of x, and ContDiffOn of order n in natural numbers with infinity on U.",
+       "ContDiffOn of order k+2 on an open source set, classical admissibility, full lower-dimensional classical nullity, and the jet-range overlap bound, under the stated nontrivial finite-dimensional real inner-product Borel and proper-source hypotheses.",
        :target
-       "A globally ContDiff map of the same order agreeing with the original map eventually at x; no finite-dimensionality or supplied extension hypothesis."},
-      :id :critical-value-sard-open-regularity-global-germ-extension-1,
+       "Zero target add-Haar measure of the critical image localized to the open source set, without global regularity or supplied germ-extension premises."},
+      :id :critical-value-sard-open-critical-image-jet-range-overlap-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-critical-image-jet-range-overlap-1],
+      [:critical-value-sard-critical-image-jet-range-overlap-1
+       :critical-value-sard-open-regularity-global-germ-extension-1
+       :critical-value-sard-local-nullity-second-countable-aggregation-1],
       :current-residual
-      "Global smooth germ representatives are constructed from open-local regularity; derivative-germ transfer and neighborhood aggregation remain to connect this construction to conditional critical-image nullity.",
+      "Global regularity is replaced by open-local regularity through constructed germs and countable aggregation; the overlap bound and full induction hypothesis remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite constructs a globally C^n map agreeing locally with a map C^n on an open neighborhood, using a smooth bump. This supplies genuine localization infrastructure rather than assuming a global extension. Full lower-dimensional Sard induction and the complementary regularity range remain unresolved; rectangular Morse-Sard is incomplete, not refuted.",
+     "One compiled prerequisite removes global regularity from conditional overlap critical-image nullity. Constructed global germs agree in value and derivative on open neighborhoods; image containment transfers nullity, and second-countable aggregation completes the open-source result. Full lower-dimensional induction and the overlap restriction remain explicit; general rectangular Morse-Sard is not refuted or closed.",
      :commands
      [{:cmd
-       "Read DAG, closure policy, build-loop design, overlap and aggregation modules, and their reviewed dependency receipts",
+       "Read DAG, closure policy, build-loop definitions, aggregation and derivative-germ APIs, and three reviewed dependency findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardOpenRegularityGlobalGermExtensionProbe.lean",
+       "lake env lean /tmp/SardOpenCriticalImageJetRangeOverlapProbe.lean",
        :exit 1,
        :output
-       "Initial draft failed at redundant dsimp and an unspecified constant; both corrected before final compilation."}
+       "Initial draft required unfolding set membership before rewriting the derivative equality; corrected."}
       {:cmd
-       "lake env lean /tmp/SardOpenRegularityGlobalGermExtensionProbe.lean",
+       "lake env lean /tmp/SardOpenCriticalImageJetRangeOverlapProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardOpenRegularityGlobalGermExtensionProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardOpenCriticalImageJetRangeOverlapProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
        "Fixture hash recorded; consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '7,12p' /tmp/SardOpenRegularityGlobalGermExtensionProbe.lean | sha256sum",
+       "sed -n '9,25p' /tmp/SardOpenCriticalImageJetRangeOverlapProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardOpenRegularityGlobalGermExtensionProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardOpenCriticalImageJetRangeOverlapProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 322 items OK; {:done 314, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 323 items OK; {:done 315, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -42136,12 +42173,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardOpenRegularityGlobalGermExtensionProbe.lean",
+     {:path "/tmp/SardOpenCriticalImageJetRangeOverlapProbe.lean",
       :sha256
-      "622730360f86ab1ae0064f2dde42ce48c74b67532f15bc7e5b417c92bd944197"},
+      "e4f8755a931f8849ceeb4e0cf10b2eb676903137c151b216008f01f008e4df54"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -42412,7 +42449,8 @@
     :critical-value-sard-compact-rank-zero-double-uncovered-assembly-1
     :critical-value-sard-compact-rank-zero-jet-range-overlap-1
     :critical-value-sard-critical-image-jet-range-overlap-1
-    :critical-value-sard-open-regularity-global-germ-extension-1],
+    :critical-value-sard-open-regularity-global-germ-extension-1
+    :critical-value-sard-open-critical-image-jet-range-overlap-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
