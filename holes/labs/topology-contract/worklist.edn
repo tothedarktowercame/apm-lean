@@ -52425,8 +52425,137 @@
      :review-outcomes]},
    :stop-condition
    "Only all campaign consumers closed or exact campaign refutation ends the campaign; preserve local specification counterexamples and outstanding coverage.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill23-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill23-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill23-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill23-proposed-worklist.edn",
+      :exit 0}],
+    :finding
+    {:baseline "60e35ec5c1e18b08849758bdc3291c0e8a1efd97",
+     :retained-coverage
+     "Positive-dimensional antipodal action, reduced-S0 degree and one-dimensional local index remain outstanding. No campaign-level refutation or unconditional Sard closure is inferred.",
+     :evidence
+     [{:path "/tmp/topology-refill23-measure.json",
+       :sha256
+       "5218c7de41572807eb96cb84cc03098f9539726a6e1d17b891b0f5589b76147c"}
+      {:path "/tmp/topology-refill23-reviews.edn",
+       :sha256
+       "98b653154b003cdd388e923dee643b07afa96e4ae32dc32d7e622d2219326db0"}
+      {:path "/tmp/topology-refill23-tail.edn",
+       :sha256
+       "a4614343b6ebdbc3d27892e1191fd0fd70cff13f6dfadcb78ce4baca590e006a"}],
+     :head "51a5be84b35e0123d97176e1d3bfc0b40f75649f",
+     :ranking
+     "Elect exactly one near-closure adapter, t95J06 with two placeholders, to test the actual invariant-surface representation against current geometry and quotient APIs. Avoid immediately repeating the reviewed Euler and mass boundaries. Then elect the five-consumer Sard positive-rank slice contract repair: its actual open slice can consume localization, whereas the current stronger arbitrary-set premise cannot be supplied by that theorem. Other DAG branches retain antipodal naturality, planar separation, covering classification, homology or global atlas foundations.",
+     :validation
+     "Temporary 402-item ledger validates; fresh IDs, exactly one adapter first, and checkpoint depends on both work rows. No canonical edits.",
+     :typed-residual-change
+     "Actual cutoff localization now transfers global genuinely smooth critical-image nullity to arbitrary subsets of an explicitly open smooth domain. It does not discharge the existing arbitrary-set pointwise-smooth induction contract. Concurrent regular-fiber coordinates advance local geometry without closing frozen consumers.",
+     :review-outcomes
+     {:t03j04
+      "STOP reviewed PASS invoke-1788988329421-17090-76cd7423: finite covering geometry compiles; rational torus Euler computation and finite-cover multiplicativity remain.",
+      :localization
+      "Commit bbaac0cf451047c690cad67eb3b8864c671c7ebe reviewed PASS invoke-1788988814977-17096-ae9d16af; both compilations and 8438-job build pass.",
+      :checkpoint22 "PASS invoke-1788987405081-17046-b933b84d."},
+     :infrastructure
+     {:before 629,
+      :after 632,
+      :portfolio
+      ["ConstructionTargets/SardGenuineSmoothOpenDomainLocalization.lean"],
+      :concurrent
+      ["ConstructionTargets/RegularFiberFixedModel.lean"
+       "ConstructionTargets/SmoothRegularFiberCoordinates.lean"]},
+     :census
+     {:open 39,
+      :closed 19,
+      :existing 58,
+      :placeholder-after 71,
+      :placeholder-delta 0,
+      :consumer-closures 0,
+      :placeholder-before 71,
+      :named 59,
+      :missing ["t93A05"],
+      :within-two 29}},
+    :replacement-items
+    [{:consumer "t95J06",
+      :stop-condition
+      "GO requires the full frozen consumer. Otherwise name the exact free-circle-action quotient or surface-classification boundary; partial action laws are not closure.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "SURFACE CLASSIFICATION / invariant Hopf surface",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free frozen Main preserving all definitions and hypotheses. Reuse the actual Hopf formula, periodicity and action laws to construct the free circle action on the invariant surface and prove the exact component-to-torus conclusion. Inspect current regular-fiber coordinates, quotient and surface APIs for applicability to the literal subtype. Do not assume a principal bundle, smooth action from algebraic laws alone, Euler vanishing, classification or stronger manifold/embeddedness hypotheses. Preserve the frozen orientation representation and all component quantifiers; no conditional bridge counts as GO.",
+       :frozen-file "problems/t95J06/lean/Main.lean",
+       :frozen-sha256
+       "482fc0478fe2b5c3252076b3a3e91f28ea9d9d81f7e5d3d3ada78ed5167a0d06",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t95j06-frozen-hopf-surface-closure-probe-refill23,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-23-after-torus-euler-and-localization],
+      :current-residual
+      "Two placeholders: classify components of an actual compact invariant orientable surface in S5 as tori. Explicit invariant torus, periodicity and flow laws are proved."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO requires a compiled actual-chart slice result with the weaker open-domain induction premise and demonstrated localization compatibility. REVISE requires exactly one compiled prerequisite. Never derive neighborhood infinity from one-point eventual regularity.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / compatible open-domain slice induction",
+      :acceptance
+      {:probe
+       "Reprove the actual positive deficient-rank residual-slice image nullity conclusion using only induction for strictly smaller finite-dimensional real inner-product sources on explicitly open smooth domains, including zero-dimensional sources. Invoke SardGenuineSmoothRankUpperResidualZero to produce the actual chart; derive strict kernel dimension drop and complementary-target nontriviality. For each first coordinate define the actual open target slice, derive ContDiffOn real genuine infinity of the complementary residual there, and apply the open-domain induction premise to its rank-bounded subset using the produced zero derivative. No arbitrary-set pointwise induction, assumed chart, dimension drop or residual nullity. Demonstrate that SardGenuineSmoothOpenDomainLocalization supplies this exact premise from global critical-image nullity at smaller source dimension. Reuse chart, dimension and regularity producers; preserve existing stronger-premise APIs and avoid duplicating their chart construction.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Positive-rank slice contract repair only. Propagation through compact/open/stratum/global assembly, analogous first-nonzero-jet rank-zero contract repair, induction discharge and manifold transport remain."},
+      :id
+      :sard-positive-rank-slice-open-induction-contract-probe-refill23,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-23-after-torus-euler-and-localization],
+      :current-residual
+      "Localization supplies smooth nullity on open domains, while the existing slice producer assumes pointwise smooth nullity on arbitrary sets. The actual slice has an open domain and genuine ContDiffOn regularity.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Only all campaign consumers closed or exact campaign-level refutation ends the campaign; preserve local specification evidence and uncovered cases.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned executable placeholders; compare typed residuals, reviewed outcomes and portfolio versus concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, and append a fresh dependent checkpoint. Retain antipodal action, reduced-S0 and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t95j06-frozen-hopf-surface-closure-probe-refill23
+       :sard-positive-rank-slice-open-induction-contract-probe-refill23],
+      :current-residual
+      "Await both reviewed outcomes and rerank the complete DAG with explicit induction-contract accounting."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -52440,7 +52569,80 @@
     :sard-genuine-smooth-open-domain-localization-probe-refill22
     :checkpoint-full-dag-refill-22-after-fivefold-and-global-critical-step],
    :current-residual
-   "Await both reviewed outcomes and rerank the complete DAG, accounting for the precise local smooth induction contract."}],
+   "Await both reviewed outcomes and rerank the complete DAG, accounting for the precise local smooth induction contract."}
+  {:consumer "t95J06",
+   :stop-condition
+   "GO requires the full frozen consumer. Otherwise name the exact free-circle-action quotient or surface-classification boundary; partial action laws are not closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SURFACE CLASSIFICATION / invariant Hopf surface",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free frozen Main preserving all definitions and hypotheses. Reuse the actual Hopf formula, periodicity and action laws to construct the free circle action on the invariant surface and prove the exact component-to-torus conclusion. Inspect current regular-fiber coordinates, quotient and surface APIs for applicability to the literal subtype. Do not assume a principal bundle, smooth action from algebraic laws alone, Euler vanishing, classification or stronger manifold/embeddedness hypotheses. Preserve the frozen orientation representation and all component quantifiers; no conditional bridge counts as GO.",
+    :frozen-file "problems/t95J06/lean/Main.lean",
+    :frozen-sha256
+    "482fc0478fe2b5c3252076b3a3e91f28ea9d9d81f7e5d3d3ada78ed5167a0d06",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t95j06-frozen-hopf-surface-closure-probe-refill23,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-23-after-torus-euler-and-localization
+    :checkpoint-full-dag-refill-23-after-torus-euler-and-localization],
+   :current-residual
+   "Two placeholders: classify components of an actual compact invariant orientable surface in S5 as tori. Explicit invariant torus, periodicity and flow laws are proved."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO requires a compiled actual-chart slice result with the weaker open-domain induction premise and demonstrated localization compatibility. REVISE requires exactly one compiled prerequisite. Never derive neighborhood infinity from one-point eventual regularity.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / compatible open-domain slice induction",
+   :acceptance
+   {:probe
+    "Reprove the actual positive deficient-rank residual-slice image nullity conclusion using only induction for strictly smaller finite-dimensional real inner-product sources on explicitly open smooth domains, including zero-dimensional sources. Invoke SardGenuineSmoothRankUpperResidualZero to produce the actual chart; derive strict kernel dimension drop and complementary-target nontriviality. For each first coordinate define the actual open target slice, derive ContDiffOn real genuine infinity of the complementary residual there, and apply the open-domain induction premise to its rank-bounded subset using the produced zero derivative. No arbitrary-set pointwise induction, assumed chart, dimension drop or residual nullity. Demonstrate that SardGenuineSmoothOpenDomainLocalization supplies this exact premise from global critical-image nullity at smaller source dimension. Reuse chart, dimension and regularity producers; preserve existing stronger-premise APIs and avoid duplicating their chart construction.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Positive-rank slice contract repair only. Propagation through compact/open/stratum/global assembly, analogous first-nonzero-jet rank-zero contract repair, induction discharge and manifold transport remain."},
+   :id
+   :sard-positive-rank-slice-open-induction-contract-probe-refill23,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-23-after-torus-euler-and-localization
+    :checkpoint-full-dag-refill-23-after-torus-euler-and-localization],
+   :current-residual
+   "Localization supplies smooth nullity on open domains, while the existing slice producer assumes pointwise smooth nullity on arbitrary sets. The actual slice has an open domain and genuine ContDiffOn regularity.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Only all campaign consumers closed or exact campaign-level refutation ends the campaign; preserve local specification evidence and uncovered cases.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned executable placeholders; compare typed residuals, reviewed outcomes and portfolio versus concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, and append a fresh dependent checkpoint. Retain antipodal action, reduced-S0 and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-24-after-hopf-and-open-slice-contract,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t95j06-frozen-hopf-surface-closure-probe-refill23
+    :sard-positive-rank-slice-open-induction-contract-probe-refill23
+    :checkpoint-full-dag-refill-23-after-torus-euler-and-localization],
+   :current-residual
+   "Await both reviewed outcomes and rerank the complete DAG with explicit induction-contract accounting."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
