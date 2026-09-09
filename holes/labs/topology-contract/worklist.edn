@@ -36580,6 +36580,40 @@
    "The compact rank-zero finite-jet adapter compiles; finite-order budget specialization and countable compact exhaustion remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if exact derivative rank zero does not force the order-one first-nonzero-jet locus to be empty, or if the identification requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.lean"
+    "ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER RANK-ZERO FIRST-JET EMPTINESS",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFiniteOrderRankZeroFirstJetEmptyProbe.lean",
+     :sha256
+     "200621dc73ded82ebd5861c5ae6ba82f62c8dd59cb0c117084fcd442b015f1d9"},
+    :declarations ["firstNonzeroJetLocus_one_eq_empty_of_rankZero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Eliminate the vacuous order-one induction input in compact rank-zero nullity and specialize the remaining higher-jet finite-order budget."},
+   :representation
+   {:source
+    "The order-one first-nonzero-jet locus inside a set contained in the exact derivative-rank-zero stratum.",
+    :target
+    "The empty set, because rank zero forces the ordinary Fréchet derivative to vanish while order-one jet membership forces it to be nonzero."},
+   :id :critical-value-sard-finite-order-rank-zero-first-jet-empty-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-nonzero-jet-one-fderiv-nonzero-1
+    :critical-value-sard-rank-strata-1
+    :critical-value-sard-finite-order-compact-rank-zero-induction-nullity-1],
+   :current-residual
+   "The order-one nonzero-jet locus on rank zero is compiled as empty; only higher-jet finite-order bookkeeping and compact exhaustion remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -36633,80 +36667,79 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Instantiate the compact rank-zero adapter from classical finite-order admissibility and strong lower-dimensional induction, then exhaust the closed rank-zero locus by countably many compact sets.",
+     "Use emptiness of the order-one jet locus to remove that induction interface, then specialize the higher-jet regularity budget and exhaust the rank-zero locus by compact sets.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"compact_rankZero_image_zero_of_finiteJet_induction"
-      "9fad1d55634079f1c746776446398f7ce57aa3c76d4b17206199d89ab3af6fcd"},
+     {"firstNonzeroJetLocus_one_eq_empty_of_rankZero"
+      "3a88c03f9d8de89fa2b9d7fe2bafa071639f7a70abb7b73be6963c4a9f229429"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if a compact exact derivative-rank-zero locus cannot be recognized as critical and passed to the localized finite-jet induction theorem with its finite-order analytic inputs unchanged, or if the adapter requires nonstandard axioms.",
+      "Stop only if exact derivative rank zero does not force the order-one first-nonzero-jet locus to be empty, or if the identification requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderCompactRankZeroInductionNullity.lean"
-       "ConstructionTargets/SardFiniteOrderCompactRankZeroInductionNullity.md"],
+      ["ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.lean"
+       "ConstructionTargets/SardFiniteOrderRankZeroFirstJetEmpty.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER COMPACT RANK-ZERO INDUCTION NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER RANK-ZERO FIRST-JET EMPTINESS",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardFiniteOrderCompactRankZeroInductionNullityProbe.lean",
+       {:path "/tmp/SardFiniteOrderRankZeroFirstJetEmptyProbe.lean",
         :sha256
-        "0d8be90069ef616b79309330555fa9983b71efb57feebeb64695c02f8f5482bb"},
-       :declarations
-       ["compact_rankZero_image_zero_of_finiteJet_induction"],
+        "200621dc73ded82ebd5861c5ae6ba82f62c8dd59cb0c117084fcd442b015f1d9"},
+       :declarations ["firstNonzeroJetLocus_one_eq_empty_of_rankZero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Specialize the Taylor and reduced-order induction inputs from classical finite-order admissibility, then apply countable compact exhaustion to rank zero."},
+       "Eliminate the vacuous order-one induction input in compact rank-zero nullity and specialize the remaining higher-jet finite-order budget."},
       :representation
       {:source
-       "A compact subset of the exact derivative-rank-zero stratum together with the finite Taylor exponent, regularity, and lower-dimensional induction inputs consumed by localized finite-jet nullity.",
+       "The order-one first-nonzero-jet locus inside a set contained in the exact derivative-rank-zero stratum.",
        :target
-       "Zero target measure for the compact rank-zero image, with criticality derived automatically from exact rank zero."},
+       "The empty set, because rank zero forces the ordinary Fréchet derivative to vanish while order-one jet membership forces it to be nonzero."},
       :id
-      :critical-value-sard-finite-order-compact-rank-zero-induction-nullity-1,
+      :critical-value-sard-finite-order-rank-zero-first-jet-empty-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-localized-finite-jet-induction-nullity-1
-       :critical-value-sard-rank-strata-1],
+      [:critical-value-sard-first-nonzero-jet-one-fderiv-nonzero-1
+       :critical-value-sard-rank-strata-1
+       :critical-value-sard-finite-order-compact-rank-zero-induction-nullity-1],
       :current-residual
-      "The compact rank-zero finite-jet adapter compiles; finite-order budget specialization and countable compact exhaustion remain.",
+      "The order-one nonzero-jet locus on rank zero is compiled as empty; only higher-jet finite-order bookkeeping and compact exhaustion remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The remaining rank-zero branch reaches the banked finite-jet/Taylor induction theorem, but finite-order budget instantiation is not yet packaged. A placeholder-free fixture proves a bounded compact-locus adapter: exact derivative rank zero automatically makes every point critical, including the order-one jet locus, so the existing localized finite-jet theorem yields nullity once its Taylor exponent, finite regularity, and lower-dimensional induction inputs are supplied. Banking this adapter leaves finite-order budget specialization and countable compact exhaustion.",
+     "The rectangular theorem is not refuted. On a subset of the exact derivative-rank-zero stratum, the ordinary Fréchet derivative is identically zero: zero finrank forces its linear range to be bottom. The banked order-one jet lemma then makes the first-nonzero-jet locus at order one empty. A placeholder-free fixture compiles this simplification, eliminating the compact rank-zero adapter's order-one induction input and leaving only the higher-jet finite-order budget and compact exhaustion.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderCompactRankZeroInductionNullityProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderRankZeroFirstJetEmptyProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderCompactRankZeroInductionNullityProbe.compact_rankZero_image_zero_of_finiteJet_induction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderRankZeroFirstJetEmptyProbe.firstNonzeroJetLocus_one_eq_empty_of_rankZero' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderCompactRankZeroInductionNullityProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderRankZeroFirstJetEmptyProbe.lean",
        :exit 0,
        :output
-       "0d8be90069ef616b79309330555fa9983b71efb57feebeb64695c02f8f5482bb  /tmp/SardFiniteOrderCompactRankZeroInductionNullityProbe.lean"}
+       "200621dc73ded82ebd5861c5ae6ba82f62c8dd59cb0c117084fcd442b015f1d9  /tmp/SardFiniteOrderRankZeroFirstJetEmptyProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderCompactRankZeroInductionNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderRankZeroFirstJetEmptyProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '9,64p' /tmp/SardFiniteOrderCompactRankZeroInductionNullityProbe.lean | sha256sum",
+       "sed -n '8,27p' /tmp/SardFiniteOrderRankZeroFirstJetEmptyProbe.lean | sha256sum",
        :exit 0,
        :output
-       "9fad1d55634079f1c746776446398f7ce57aa3c76d4b17206199d89ab3af6fcd  -"}
+       "3a88c03f9d8de89fa2b9d7fe2bafa071639f7a70abb7b73be6963c4a9f229429  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 278 items OK; {:done 270, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 279 items OK; {:done 271, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -36721,13 +36754,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path
-      "/tmp/SardFiniteOrderCompactRankZeroInductionNullityProbe.lean",
+     {:path "/tmp/SardFiniteOrderRankZeroFirstJetEmptyProbe.lean",
       :sha256
-      "0d8be90069ef616b79309330555fa9983b71efb57feebeb64695c02f8f5482bb"},
+      "200621dc73ded82ebd5861c5ae6ba82f62c8dd59cb0c117084fcd442b015f1d9"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -36954,7 +36986,8 @@
     :critical-value-sard-finite-order-positive-rank-exact-stratum-pointwise-nullity-1
     :critical-value-sard-finite-order-positive-rank-stratum-nullity-1
     :critical-value-sard-finite-order-critical-image-of-rank-zero-nullity-1
-    :critical-value-sard-finite-order-compact-rank-zero-induction-nullity-1],
+    :critical-value-sard-finite-order-compact-rank-zero-induction-nullity-1
+    :critical-value-sard-finite-order-rank-zero-first-jet-empty-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
