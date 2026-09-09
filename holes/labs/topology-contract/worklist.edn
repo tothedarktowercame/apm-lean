@@ -48234,9 +48234,25 @@
       :current-residual
       "Await both reviewed outcomes, then rerank the complete DAG including unrelated near-closure consumers and concurrent localization progress."}],
     :author :codex-12,
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788972959827-16644-4ccc0b73",
+     :commands
+     ["git show --stat 1008ca89"
+      "sha256sum /tmp/topology-refill12-measure.json /tmp/topology-refill12-infrastructure.json /tmp/topology-refill12-tail.edn /tmp/topology-refill12-reviewed-outcomes.edn"
+      "Reexecuted topology-refill12-measure.py at recorded head 364d094e with artifact writes replaced by byte-equality assertions"
+      "Reexecuted topology-refill12-audit.bb and topology-refill12-validate.bb against pinned inputs with writes replaced by equality assertions"
+      "Compared committed checkpoint transition and new rows against parent and pinned tail"
+      "Recomputed infrastructure additions and frozen a97J08 hash from git objects"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill12-proposed-worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 1008ca89"],
+     :finding
+     "Independent of author codex-12. Exact checkpoint transition plus three fresh dependent rows verified. All artifact hashes match. Reproduced 42 open, 16 closed, missing t93A05, 76 placeholders and zero consumer delta; infrastructure +5 splits 1 portfolio/4 concurrent. Two reviewed PASS outcomes comprise one implementation and one STOP, not consumer closure or refutation. Election preserves frozen planar hypotheses and genuine-smooth lower-dimensional induction boundary. Both ledger gates validate 371 items; no edits."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -48254,7 +48270,7 @@
    :stop-condition
    "If the complete frozen proof cannot be built, STOP naming the exact missing planar separation or winding theorem and distinguish missing infrastructure from mathematical refutation. Do not report a partial circle certificate as GO.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PLANAR SEPARATION / bounded complement component",
    :acceptance
@@ -48277,7 +48293,7 @@
    :stop-condition
    "GO needs the full compiled local producer/consumer composition. REVISE requires exactly one compiled prerequisite. Otherwise name the exact hypothesis or representation boundary; missing infrastructure is not refutation.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / smooth higher-jet local induction step",
