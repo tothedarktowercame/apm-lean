@@ -53708,9 +53708,63 @@
   {:consumer "t93A04",
    :stop-condition
    "GO requires compiled unconditional global and open-domain genuine-smooth critical-image nullity. REVISE requires exactly one compiled prerequisite. No residual nullity or induction premise may remain in the unconditional theorem.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Unconditional Euclidean inner-product-space genuine-smooth Sard is compiled. Any required normed-source comparison and actual manifold chart, criticality and measure transport remain before frozen t93A04 or other consumer closure.",
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {"critical_image_null_of_smaller_global"
+      "7087c2de178ecaf004ee540c210a847e779b384917033283511843c98e3fdf2c",
+      "critical_image_null_by_dimension"
+      "5b136dac4e5f6b18b2276c25599eb43f4c65b8b7e41334472f7f623444b78522",
+      "critical_image_null"
+      "70ca457abe755f50f4ce62a1240a7b0b444777d4b1fad8dee8e6ef20689c4aa4",
+      "open_domain_critical_image_null"
+      "cd2276638b2acee0e3e17c8966a51245e3c96494d9620521887b18d9df280dfd"},
+     :consumer-placeholder-delta 0,
+     :acceptance
+     {:declarations
+      ["SardGenuineSmoothEuclideanProbe.critical_image_null_of_smaller_global"
+       "SardGenuineSmoothEuclideanProbe.critical_image_null_by_dimension"
+       "SardGenuineSmoothEuclideanProbe.critical_image_null"
+       "SardGenuineSmoothEuclideanProbe.open_domain_critical_image_null"],
+      :gates
+      ["Verify fixture and documentation hashes before promotion."
+       "Compile promoted module and reproduce all four standard-only axiom audits."
+       "Run lake build ConstructionTargets.SardGenuineSmoothEuclidean."
+       "Verify zero executable placeholders, unconditional final signatures, and preservation of existing APIs and frozen consumers."],
+      :axioms :standard-only},
+     :axioms [propext Classical.choice Quot.sound],
+     :documentation
+     {:path "/tmp/SardGenuineSmoothEuclidean.md",
+      :sha256
+      "ba48c1555c079fa954af1b1466831b0cf26d8c6136036a547875bcfdb0842c58"},
+     :commands
+     [{:cmd "lake env lean /tmp/SardGenuineSmoothEuclidean.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/sard-euclidean-audit.py", :exit 0}
+      {:cmd "bb /tmp/t92j06-review.bb", :exit 0}],
+     :diagnostic-history [],
+     :changed-paths [],
+     :fixture-placeholders 0,
+     :fixture
+     {:path "/tmp/SardGenuineSmoothEuclidean.lean",
+      :sha256
+      "961a6b0c87b28ecd6d1e0c9453b39321bf42e9eafb25fcd583df79b57b8719c4"},
+     :finding
+     "Compiled unconditional global and open-domain genuine-infinity smooth critical-image nullity. Strong induction quantifies all sources, targets and Haar measures coherently by source finrank. Explicit subsingleton source/target branches handle dimension zero. The step derives rank-zero closedness, uses actual compact exhaustion and repaired compact rank-zero nullity, applies repaired positive-rank stratum nullity, and assembles the entire nonsurjective-derivative critical set. Open-domain localization then applies the unconditional global theorem. Neither final theorem retains a nullity or induction premise.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardGenuineSmoothEuclidean.lean"
+       "ConstructionTargets/SardGenuineSmoothEuclidean.md"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/SardGenuineSmoothEuclidean.lean"
+    "ConstructionTargets/SardGenuineSmoothEuclidean.md"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / Euclidean smooth induction discharge",
    :acceptance
