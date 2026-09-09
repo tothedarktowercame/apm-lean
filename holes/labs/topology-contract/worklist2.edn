@@ -173,64 +173,115 @@
    :other-consumers [:circle-oriented-chart-transition]}
   {:consumer :euclidean-one-disk-local-orientation,
    :stop-condition
+   "Bank exactly this geometric puncture-homotopy prerequisite and its increasing/identity consumer equations. Do not assume any induced-map sign, claim reflection or decreasing compatibility, or extend the result beyond the one-dimensional model.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/OneDiskIncreasingOrientationProbe.lean",
+      :sha256
+      "413f68890cd96998d353ad10a2dd2ca3223ecf7ee43c2f669e37b664ee6c0a28"},
+     :commands
+     [{:cmd
+       "cd /home/joe/code/apm-lean && lake env lean /tmp/OneDiskIncreasingOrientationProbe.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/OneDiskIncreasingOrientation.lean"
+    "ConstructionTargets/OneDiskIncreasingOrientation.md"],
+   :dag-node
+   "Queue D #2: oriented-manifold fundamental classes and localization; model-case geometric puncture homotopy and increasing sign",
+   :acceptance
+   {:declarations
+    ["ConstructionTargets.OneDiskIncreasingOrientation.puncture_homotopic_id_of_same_sign"
+     "ConstructionTargets.OneDiskIncreasingOrientation.punctureH0Map_eq_id_of_same_sign"
+     "ConstructionTargets.OneDiskIncreasingOrientation.modelGenerator_map_of_same_sign"
+     "ConstructionTargets.OneDiskIncreasingOrientation.modelGenerator_map_of_increasing"
+     "ConstructionTargets.OneDiskIncreasingOrientation.modelGenerator_map_identity"],
+    :implementation
+    "Promote the exact compiled fixture and document its limits. Same-sign one-dimensional vectors have identical radial normalization. Precompose the banked punctured radial deformation with the actual restricted map and join homotopies to obtain a homotopy to identity inside the puncture. Apply singular homology homotopy invariance and the banked injective connecting-map equation. Derive the geometric same-sign hypothesis and deleted-origin MapsTo witness from strict coordinate increase and fixing the origin.",
+    :consumer-equation
+    "For a continuous self-map f of euclideanOpenDisk 1, with f(origin)=origin and coord(x)<coord(y) implying coord(f(x))<coord(f(y)), homologyMap(relativeSingularMap P P f (increasing_mapsTo f hinc hfix),1)(openDiskOnePunctureRelativeH1Generator)=openDiskOnePunctureRelativeH1Generator, where P=puncturedOpenDiskSet 1. In particular this applies to pointed increasing coordinate homeomorphisms.",
+    :consumer-residual
+    "The increasing and identity branches are proved geometrically. The parent probe must still characterize all integral local generators and compute reflection's negative sign; the decreasing branch then needs its geometric reduction to reflection.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA-256 before implementation."
+     "Compile the fixture and canonical target."
+     "Run lake build ConstructionTargets.OneDiskIncreasingOrientation ConstructionTargets.RelativeSingularConnectingNaturality ConstructionTargets.ChartPairRelativeHomologyTransport."
+     "Audit all printed declarations; permit only propext, Classical.choice, Quot.sound."
+     "Run placeholder and forbidden-declaration scans, git diff --check, and exact-scope audit."]},
+   :id :oriented-manifold-one-disk-increasing-homotopy-1,
+   :kind :reusable-theorem,
+   :depends-on [:oriented-manifold-pair-connecting-naturality-1],
+   :current-residual
+   "Connecting-map naturality is banked, but the positive sign of a geometrically increasing pointed coordinate map has not been established canonically.",
+   :other-consumers [:circle-oriented-chart-transition]}
+  {:consumer :euclidean-one-disk-local-orientation,
+   :stop-condition
    "No all-dimensional claim from the one-dimensional banked computation; no assumed induced-map sign or new orientation axiom.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The complete generator/sign fixture is not proved. Exactly one compiled prerequisite is supplied: connecting-map naturality with an injective-boundary reduction for the actual one-disk model. Reflection and increasing/decreasing signs must still be computed geometrically.",
+     "Exactly one compiled geometric homotopy prerequisite is supplied, with the actual increasing-map local-generator equation. Remaining parent work: generator characterization, reflection's negative action on the boundary class, and the decreasing-map sign rule.",
      :outcome :revise,
      :warnings [],
      :statement-hashes {},
      :prerequisite
      {:consumer :euclidean-one-disk-local-orientation,
       :stop-condition
-      "Bank only this connecting-map naturality prerequisite and its concrete consumer reduction. Do not claim geometric orientation compatibility, assume an induced-map sign, or extend the one-dimensional model computation to arbitrary dimensions.",
+      "Bank exactly this geometric puncture-homotopy prerequisite and its increasing/identity consumer equations. Do not assume any induced-map sign, claim reflection or decreasing compatibility, or extend the result beyond the one-dimensional model.",
       :evidence
       {:probe
        {:outcome :go,
         :seat "codex-13",
         :fixture
-        {:path "/tmp/RelativeSingularConnectingNaturalityProbe.lean",
+        {:path "/tmp/OneDiskIncreasingOrientationProbe.lean",
          :sha256
-         "64cf111d7cb682142264242e13436250be389e6f17c1bd891b61d089fceb9b61"},
+         "413f68890cd96998d353ad10a2dd2ca3223ecf7ee43c2f669e37b664ee6c0a28"},
         :commands
         [{:cmd
-          "cd /home/joe/code/apm-lean && lake env lean /tmp/RelativeSingularConnectingNaturalityProbe.lean",
+          "cd /home/joe/code/apm-lean && lake env lean /tmp/OneDiskIncreasingOrientationProbe.lean",
           :exit 0}],
-        :axioms ["propext" "Classical.choice" "Quot.sound"],
-        :warnings []}},
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/RelativeSingularConnectingNaturality.lean"
-       "ConstructionTargets/RelativeSingularConnectingNaturality.md"],
+      ["ConstructionTargets/OneDiskIncreasingOrientation.lean"
+       "ConstructionTargets/OneDiskIncreasingOrientation.md"],
       :dag-node
-      "Queue D #2: oriented-manifold fundamental classes and localization; geometric model-sign connecting-map prerequisite",
+      "Queue D #2: oriented-manifold fundamental classes and localization; model-case geometric puncture homotopy and increasing sign",
       :acceptance
       {:declarations
-       ["ConstructionTargets.RelativeSingularConnectingNaturality.singularPairConnecting_naturality"
-        "ConstructionTargets.RelativeSingularConnectingNaturality.modelGenerator_boundary_map"
-        "ConstructionTargets.RelativeSingularConnectingNaturality.modelConnecting_injective"
-        "ConstructionTargets.RelativeSingularConnectingNaturality.modelGenerator_map_eq_iff_boundary"],
+       ["ConstructionTargets.OneDiskIncreasingOrientation.puncture_homotopic_id_of_same_sign"
+        "ConstructionTargets.OneDiskIncreasingOrientation.punctureH0Map_eq_id_of_same_sign"
+        "ConstructionTargets.OneDiskIncreasingOrientation.modelGenerator_map_of_same_sign"
+        "ConstructionTargets.OneDiskIncreasingOrientation.modelGenerator_map_of_increasing"
+        "ConstructionTargets.OneDiskIncreasingOrientation.modelGenerator_map_identity"],
        :implementation
-       "Promote the exact compiled fixture and document its boundary. Construct the morphism of production short exact pair complexes using the actual subspace, ambient, and relative maps; apply connecting-map naturality. Retain the concrete model consumer equation and its injectivity-based equivalence.",
+       "Promote the exact compiled fixture and document its limits. Same-sign one-dimensional vectors have identical radial normalization. Precompose the banked punctured radial deformation with the actual restricted map and join homotopies to obtain a homotopy to identity inside the puncture. Apply singular homology homotopy invariance and the banked injective connecting-map equation. Derive the geometric same-sign hypothesis and deleted-origin MapsTo witness from strict coordinate increase and fixing the origin.",
        :consumer-equation
-       "For every continuous self-map f of the open one-disk carrying its puncture into itself and every local class z, H1(f)(chosenGenerator) = z iff H0(f restricted to the puncture)(boundary(chosenGenerator)) = boundary(z).",
+       "For a continuous self-map f of euclideanOpenDisk 1, with f(origin)=origin and coord(x)<coord(y) implying coord(f(x))<coord(f(y)), homologyMap(relativeSingularMap P P f (increasing_mapsTo f hinc hfix),1)(openDiskOnePunctureRelativeH1Generator)=openDiskOnePunctureRelativeH1Generator, where P=puncturedOpenDiskSet 1. In particular this applies to pointed increasing coordinate homeomorphisms.",
        :consumer-residual
-       "Compute the boundary class in puncture-component coordinates, then prove the actual H0 action fixes or exchanges those components under increasing or decreasing pointed coordinate homeomorphisms. Generator characterization and the full model sign theorem remain in the parent probe.",
+       "The increasing and identity branches are proved geometrically. The parent probe must still characterize all integral local generators and compute reflection's negative sign; the decreasing branch then needs its geometric reduction to reflection.",
        :axioms :standard-only,
        :gates
-       ["Verify the fixture SHA-256 before implementation."
-        "Compile the fixture and canonical Lean target."
-        "Run lake build ConstructionTargets.RelativeSingularConnectingNaturality ConstructionTargets.ChartPairRelativeHomologyTransport."
-        "Audit all four declarations with #print axioms; permit only propext, Classical.choice, Quot.sound."
-        "Scan for placeholders and new axioms; run git diff --check and exact-scope audit."]},
-      :id :oriented-manifold-pair-connecting-naturality-1,
+       ["Verify fixture SHA-256 before implementation."
+        "Compile the fixture and canonical target."
+        "Run lake build ConstructionTargets.OneDiskIncreasingOrientation ConstructionTargets.RelativeSingularConnectingNaturality ConstructionTargets.ChartPairRelativeHomologyTransport."
+        "Audit all printed declarations; permit only propext, Classical.choice, Quot.sound."
+        "Run placeholder and forbidden-declaration scans, git diff --check, and exact-scope audit."]},
+      :id :oriented-manifold-one-disk-increasing-homotopy-1,
       :kind :reusable-theorem,
-      :depends-on [],
+      :depends-on [:oriented-manifold-pair-connecting-naturality-1],
       :current-residual
-      "Production relative maps have no public connecting-map naturality square; the local generator sign cannot yet be reduced through that square to the geometric map on puncture H0.",
+      "Connecting-map naturality is banked, but the positive sign of a geometrically increasing pointed coordinate map has not been established canonically.",
       :other-consumers [:circle-oriented-chart-transition]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :author "codex-13",
@@ -238,29 +289,28 @@
      [{:cmd "cd /home/joe/code/apm-lean && realpath .lake/packages",
        :exit 0}
       {:cmd
-       "cd /home/joe/code/apm-lean && lake env lean /tmp/RelativeSingularConnectingNaturalityProbe.lean",
+       "cd /home/joe/code/apm-lean && lake env lean /tmp/OneDiskIncreasingOrientationProbe.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/OneDiskIncreasingOrientationProbe.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/RelativeSingularConnectingNaturalityProbe.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|^axiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/RelativeSingularConnectingNaturalityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|^axiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/OneDiskIncreasingOrientationProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "cd /home/joe/code/apm-lean && git diff --exit-code",
        :exit 0}],
      :repository-note
-     "Canonical package authority verified. Existing untracked holes/labs/topology-contract/runs2/ was left untouched; no repository files modified.",
+     "Read-only probe; only the /tmp fixture was written. Existing untracked supervisor runs2 files were left untouched. Canonical package authority verified.",
      :changed-paths [],
      :fixture
-     {:path "/tmp/RelativeSingularConnectingNaturalityProbe.lean",
+     {:path "/tmp/OneDiskIncreasingOrientationProbe.lean",
       :sha256
-      "64cf111d7cb682142264242e13436250be389e6f17c1bd891b61d089fceb9b61"},
+      "413f68890cd96998d353ad10a2dd2ca3223ecf7ee43c2f669e37b664ee6c0a28"},
      :finding
-     "The production pair API lacks connecting-map naturality for continuous maps of pairs. Compiled that naturality square, proved injectivity of the one-disk connecting map from contractibility and exactness, and obtained an exact consumer equivalence reducing the geometric generator computation to puncture H0. This does not establish reflection or monotonicity signs.",
+     "Verified dependency 9f4e9d3ea394d9e4ae0093367fc3ca68d3c52c91 and codex-11 PASS. Compiled a geometric same-sign puncture homotopy and used it with the banked connecting-map naturality to prove that every pointed increasing coordinate map preserves the actual local H1 generator. Identity is instantiated. Reflection, decreasing maps, and characterization of all generators remain unproved; no complete model-sign GO is claimed.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "Queue D #2: oriented-manifold fundamental classes and localization; milestone 3, model case",
@@ -271,7 +321,9 @@
     "GO only with the complete axiom-clean model/sign fixture. If sign computation needs a missing homotopy or naturality lemma, REVISE to exactly one compiled prerequisite with its consumer equation; do not count an abstract group isomorphism or nonzero element as geometric orientation compatibility. STOP only for a demonstrated false statement or incompatible hypotheses/representation, naming the obstruction."},
    :id :oriented-manifold-model-generator-sign-1,
    :kind :reusable-theorem,
-   :depends-on [:oriented-manifold-pair-connecting-naturality-1],
+   :depends-on
+   [:oriented-manifold-pair-connecting-naturality-1
+    :oriented-manifold-one-disk-increasing-homotopy-1],
    :current-residual
    "The banked integral H1 isomorphism chooses a nonzero element but does not yet characterize all generators or compute the sign of geometric coordinate changes.",
    :other-consumers [:circle-oriented-chart-transition]}
