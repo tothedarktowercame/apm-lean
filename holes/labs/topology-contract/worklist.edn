@@ -42299,6 +42299,23 @@
       "git add ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean ConstructionTargets/SardZeroDimensionalBorelCriticalImage.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: prove zero-dimensional Borel critical-image nullity' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788953227686-16192-c29bb0db",
+     :commands
+     ["git show fbfdf14a --stat --oneline"
+      "sha256sum /tmp/SardZeroDimensionalBorelCriticalImageProbe.lean"
+      "cmp /tmp/SardZeroDimensionalBorelCriticalImageProbe.lean <(git show fbfdf14abd724e266f89e4c77c9bb7a8cae6d081:ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean)"
+      "git show fbfdf14abd724e266f89e4c77c9bb7a8cae6d081:ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean | sed -n '5,12p' | sha256sum"
+      "git diff --exit-code fbfdf14abd724e266f89e4c77c9bb7a8cae6d081 -- ConstructionTargets"
+      "lake env lean /tmp/SardZeroDimensionalBorelCriticalImageProbe.lean"
+      "lake env lean ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean"
+      "lake build ConstructionTargets.SardZeroDimensionalBorelCriticalImage"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit fbfdf14abd724e266f89e4c77c9bb7a8cae6d081 passes. Fixture SHA f0ff7b56bc36f9eb2f23cb1491e5b04dde2872d5716aa02f8ecb18f0d1a5007e and statement SHA f4ef454b1ec5b1210c5c647e4ad0d6be5fcd9a543a60cda7f36875ca8e5c5327 reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8243-job build successful. Lines 14–27 correctly separate empty-critical-set and singleton-nullity cases; the Borel premise is explicit and the broader induction predicate is not claimed discharged. Ledger untouched."},
     :commit "fbfdf14abd724e266f89e4c77c9bb7a8cae6d081",
     :changed-paths
     ["ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean"
@@ -42309,7 +42326,7 @@
      "f0ff7b56bc36f9eb2f23cb1491e5b04dde2872d5716aa02f8ecb18f0d1a5007e"},
     :declarations ["criticalImage_zero_of_source_finrank_zero_borel"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardZeroDimensionalBorelCriticalImage.lean"
     "ConstructionTargets/SardZeroDimensionalBorelCriticalImage.md"],
@@ -42475,7 +42492,7 @@
       "f0ff7b56bc36f9eb2f23cb1491e5b04dde2872d5716aa02f8ecb18f0d1a5007e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
