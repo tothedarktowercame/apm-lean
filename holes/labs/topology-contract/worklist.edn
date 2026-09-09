@@ -36705,8 +36705,76 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if emptiness of the rank-zero order-one first-nonzero-jet locus cannot eliminate the order-one induction input from compact finite-jet nullity, or if the wrapper requires nonstandard axioms.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Specialize the Taylor exponent and genuinely higher-jet regularity/induction budget from classical finite-order admissibility, then exhaust the closed rank-zero locus by compact sets.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"compact_rankZero_image_zero_of_higherJet_induction"
+     "0c5a1632d3cef55c154d39d8428047c316a100a4acc8fb44929033223ef14e69"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean",
+      :exit 0,
+      :output
+      "c6a38e81c8da37ed5514fdb80af57888e827d42708725743e166e780c1c2bad0  /tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean"}
+     {:cmd
+      "lake build ConstructionTargets.SardFiniteOrderCompactRankZeroHigherJetNullity",
+      :exit 0,
+      :output "Build completed successfully (8415 jobs)."}
+     {:cmd
+      "lake env lean /tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean",
+      :exit 0,
+      :output
+      "'SardFiniteOrderCompactRankZeroHigherJetNullityProbe.compact_rankZero_image_zero_of_higherJet_induction' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "cmp -s /tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.lean ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '9,47p' ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.lean | sha256sum",
+      :exit 0,
+      :output
+      "0c5a1632d3cef55c154d39d8428047c316a100a4acc8fb44929033223ef14e69  -"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 281 items OK; {:done 272, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea  problems/t93A04/lean/Main.lean"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check HEAD^", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "5bc0c7ed25e4e58915c0a09918b514317330dbb3",
+    :changed-paths
+    ["ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.lean"
+     "ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.md"],
+    :fixture
+    {:path
+     "/tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean",
+     :sha256
+     "c6a38e81c8da37ed5514fdb80af57888e827d42708725743e166e780c1c2bad0"},
+    :declarations
+    ["compact_rankZero_image_zero_of_higherJet_induction"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.lean"
     "ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.md"],
