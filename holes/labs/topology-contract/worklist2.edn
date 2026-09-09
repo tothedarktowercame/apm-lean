@@ -9665,87 +9665,90 @@
    :stop-condition
    "Use actual singularHomologyFunctor with coefficient object ModuleCat.of R R. No assumed H0 table, coefficient-change isomorphism, path-component classification or higher-sphere homology.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "The explicit-coefficient positive-sphere H0 endpoint is complete and ready for implementation. Higher sphere homology and the frozen consumer remain open.",
-     :axiom-audits 9,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture, preserving coefficient-generic generators, path-boundary relations, augmentation descent, naturality and constructed inverse. Retain the exact rational sphere witness.",
-      :namespace "ConstructionTargets.CoefficientH0",
-      :hypotheses
-      "R : Type with CommRing R; X,Y : Type with topologies. Augmentation and naturality require no connectedness. The inverse requires PathConnectedSpace X and an explicit point p : X. Sphere specialization requires NeZero n. Ring and spaces are universe zero.",
-      :declarations
-      ["singularGenerator"
-       "singularGenerator_boundary"
-       "singularEdgeOfPath_boundary"
-       "singularVertexH0Class"
-       "singularVertexH0Class_eq_of_path"
-       "zeroChainH0Class"
-       "zeroChainAugmentation"
-       "zeroChainH0Class_eq_augmentation_comp_vertex"
-       "h0Augmentation"
-       "zeroChainH0Class_comp_h0Augmentation"
-       "h0Augmentation_naturality"
-       "singularVertexH0Class_comp_h0Augmentation"
-       "augmentation_comp_vertex"
-       "h0Iso"
-       "sphereH0"
-       "rationalS2H0"
-       "integralS2H0"
-       "identity_induced"],
-      :consumer-equation
-      "For nonempty path-connected X, the canonical augmentation from actual H0(X;R) to R is an isomorphism, natural under continuous maps. In particular actual H0 of the literal Euclidean S2 with coefficient object ModuleCat.of Q Q is isomorphic to ModuleCat.of Q Q.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target."
-       "Run lake build ConstructionTargets.CoefficientH0 ConstructionTargets.SingularH0Augmentation ConstructionTargets.SphereHomology."
-       "Reproduce all nine standard-only axiom audits."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."],
-      :consumer-residual
-      "Rational H1 vanishing and H2 identification, coefficient-general sphere suspension and endpoints, product homology and full t00J01 closure remain downstream. Ordinary S0 retains its separate two-coordinate H0 answer."},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "bb dependency-review query for oriented-checkpoint14-regular-line-and-pair-naturality-refill",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientH0.lean", :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientH0.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientH0.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "First two lake env lean /tmp/CoefficientH0.lean attempts",
-       :exit 1,
-       :attempts 2,
-       :correction
-       "Corrected coefficient arguments in unfolding lists and supplied the homology projection epimorphism explicitly from its cokernel universal property, resolving instance search without changing resource limits."}
-      {:cmd "Initial identity-induced-map audit compilation",
-       :exit 1,
-       :correction
-       "Qualified CategoryTheory.Functor.map_id to distinguish it from the ordinary functional Functor theorem."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientH0.lean",
-      :sha256
-      "3accdb80581f1167e758706b4a7e80503c413f835cf53f09d47b50dcc5cbb932"},
-     :finding
-     "The complete coefficient-general H0 packet compiles. Actual singular generators satisfy the alternating boundary formula over ModuleCat R. Singular path boundaries identify endpoint classes. Coefficient summation descends to the canonical augmentation on actual H0, naturally under continuous maps. Zero-simplex generation proves that a chosen point class is its inverse on a path-connected space, with both inverse equations. Positive-dimensional literal sphere specializations include the exact rational S2 H0 comparison type and its integer specialization. Identity-induced map compatibility is proved. No integral isomorphism is treated as a rational one.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientH0.lean"
-       "ConstructionTargets/CoefficientH0.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Rational H1 vanishing and H2 identification, coefficient-general sphere suspension and endpoints, product homology and full t00J01 closure remain downstream. Ordinary S0 retains its separate two-coordinate H0 answer.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass,
+     :nine-axiom-audits :pass},
+    :axiom-audits 9,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 17 existing dependency warnings: SingularHomologyConcrete (1), SingularSubdivision (2), T02A06HemisphereCoordinates (6), T02A06HemisphereExcision (2), T02A06DiskRadialComparison (3), T02A06SphereShift (3). Fixture and canonical compilations were warning-free."],
+    :statement-hashes
+    {"identity_induced"
+     "6aedadb404d0f1c87b9bdd9fb1a91f062776dd114ce8f4c0b46796c0b75d4781",
+     "integralS2H0"
+     "74e96ac824f2fc361e52e9967a1416b7fec5e5eeb812520c9bb39a8552f437d7",
+     "h0Iso"
+     "8733304f9a14660d647db2c6b878e0e72a3c0660758feb64cd6280505f6e3d8b",
+     "singularVertexH0Class_eq_of_path"
+     "e77b7dd1582cf750efe9f067b3e31039be75dec0a42bdfbd528d469f89d247c9",
+     "h0Augmentation_naturality"
+     "67517ef096ea369e21f936ddb86ee080511ee530298eb5d169380ac4c3d401d3",
+     "rationalS2H0"
+     "a4570db1d54fc61f8d35aa97896276ff255774bc0db4d5933e548c81c7be655e",
+     "singularEdgeOfPath_boundary"
+     "c519d5351147996d739040f1097742f88117d5a7feb42da70b9ca61b2aaec154",
+     "augmentation_comp_vertex"
+     "d508b077518239ee05218bf366f9dfb43250ba1fb1b06adec4ac5698c503bf76",
+     "sphereH0"
+     "0c7cfb0ed6c5fcfe30f5196a30eace06aedeb65700fb9478831279c682d3ed25"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientH0.lean", :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientH0.lean", :exit 0}
+     {:cmd "lake env lean ConstructionTargets/CoefficientH0.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientH0 ConstructionTargets.SingularH0Augmentation ConstructionTargets.SphereHomology",
+      :exit 0}
+     {:cmd
+      "Python audit: exact promotion, fixture SHA256, nine standard-only audits per compilation, warnings, placeholders and declaration hashes",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientH0.lean /tmp/CoefficientH0.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope verification and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct explicit-coefficient H0 augmentation and sphere endpoint\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope and clean checkout verification",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and dependency evidence. Documentation clarifies inherited integral wording without modifying the exact fixture. Only the authorized two files changed; ledger and frozen consumers untouched. Checkout clean.",
+    :diagnostic-history [],
+    :commit "ba316dfcadbdcb6f7c2e5cff5b5ff54e95eba308",
+    :changed-paths
+    ["ConstructionTargets/CoefficientH0.lean"
+     "ConstructionTargets/CoefficientH0.md"],
+    :fixture
+    {:path "/tmp/CoefficientH0.lean",
+     :sha256
+     "3accdb80581f1167e758706b4a7e80503c413f835cf53f09d47b50dcc5cbb932"},
+    :finding
+    "Exact fixture promoted, preserving coefficient-generic generators, path-boundary relations, augmentation descent, naturality and both inverse equations. The exact rational S2 witness and identity-induced equation compile. Both compilations and the 8254-job build passed.",
+    :statement-hash-method
+    "SHA256 of declaration bytes beginning with def or theorem and ending immediately before the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientH0.lean"
     "ConstructionTargets/CoefficientH0.md"],
