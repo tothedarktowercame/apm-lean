@@ -49806,8 +49806,160 @@
      :review-outcomes]},
    :stop-condition
    "Only all consumers closed or an exact mathematical refutation terminates the campaign; infrastructure absence and owner authorization do not.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill16-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill16-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill16-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill16-measure.json /tmp/topology-refill16-tail.edn /tmp/topology-refill16-infrastructure.json /tmp/topology-refill16-reviews.edn",
+      :exit 0}],
+    :finding
+    {:baseline "f4bc5b1038ca55e5dc8bc86a0fb759154b2f18bc",
+     :election-rationale
+     ["Rule 0 elects exactly one near-closure adapter first: t94J08 has two placeholders concentrated in the sphere orientation and antipodal induced-map computation; its degree composition and local-index assembly already exist. Banked sphere homology improves the historical entry point, but does not itself establish antipodal naturality."
+      "The whole-DAG comparison retains separate boundaries: t00J01 combines quotient-manifold, homology and fold-fiber work; surface and graph-cover consumers need geometric producers; t95J05 and related surface integrals now require an explicit normalization audit. Previously stopped planar, degree-map and intrinsic Hausdorff consumers are not silently reclassified as ready."
+      "The five-consumer Sard foundation retains greater downstream reach than the remaining smaller shared branches. Its next bounded step connects the actual rank-upper residual producer to local smooth induction, with no unconditional-nullity claim. Concurrent localization infrastructure is accounted separately."
+      "Refill after two reviewed work rows. Zero consumer delta this round is reported explicitly and is not replaced by module-count growth."],
+     :measured-head "108bb4a0389452613e863e7e3a59486ca399fed6",
+     :placeholder-delta
+     {:open 39,
+      :closed 19,
+      :changed-consumers [],
+      :total-before 71,
+      :method
+      "Executable sorry tokens after stripping block and line comments across named DAG consumers at pinned revisions.",
+      :named-consumers 59,
+      :total-after 71,
+      :existing-files 58,
+      :delta 0,
+      :sha256
+      "19dd74048d169aee5ca000d5a265ae299507a23dc8c8515e0c381bfc36b78fd4",
+      :artifact "/tmp/topology-refill16-measure.json",
+      :within-two 29,
+      :missing-files ["t93A05"]},
+     :scope "No canonical source, DAG or ledger edits.",
+     :campaign-refutation false,
+     :infrastructure-packets
+     {:construction-modules-before 615,
+      :construction-modules-after 617,
+      :delta 2,
+      :portfolio-modules
+      ["ConstructionTargets/SardGenuineSmoothRankUpperResidualZero.lean"],
+      :concurrent-modules
+      ["ConstructionTargets/HigherChartLocalGenerator.lean"],
+      :removed [],
+      :artifact "/tmp/topology-refill16-infrastructure.json",
+      :sha256
+      "c28911e760b7c615992cb96d2124a1ecefd231b8b530da7d782f725b75e03e60"},
+     :portfolio-artifact
+     {:path "/tmp/topology-refill16-tail.edn",
+      :sha256
+      "ca40b4c2959d25862bbbd9dd576eda9c124d341a586c7059e099c9b00a33b581"},
+     :validation
+     "Fresh identities and checkpoint dependencies verified; temporary combined ledger passes canonical validation with 383 items: 373 done, 1 open, 6 superseded, 3 blocked.",
+     :typed-residual-change
+     {:t95J05
+      "Reviewed STOP: actual sphere reflection and mixed-moment cancellation compile, but summand integrability and exact Hausdorff normalization remain unresolved. No mathematical refutation was established.",
+      :rank-upper
+      "Reviewed implementation derives zero derivative of the actual complementary residual at rank-upper inverse-chart points, retaining genuine-infinity regularity. It does not prove image nullity.",
+      :next-edge
+      "Prove strict kernel dimension drop and apply local smooth induction to the actual complementary residual slice subset."},
+     :review-outcomes
+     {:pass 2,
+      :implementation-results 1,
+      :stop-results 1,
+      :consumer-closures 0,
+      :sphere-moment
+      {:review "invoke-1788978098068-16768-23d25505",
+       :outcome :pass,
+       :meaning "PASS validates the bounded STOP, not closure."},
+      :rank-upper
+      {:commit "2fa63b57740245e2037bd52604036131d8811e80",
+       :review "invoke-1788978513003-16781-5084e07a",
+       :outcome :pass},
+      :artifact "/tmp/topology-refill16-reviews.edn",
+      :sha256
+      "9fe12f5072cd30cddaad308837d1ffc5bd1b02eaeeb4b3131ed5027b894f05d9"}},
+    :replacement-items
+    [{:consumer "t94J08",
+      :stop-condition
+      "If full closure cannot compile, STOP naming the exact missing induced-map computation or representation boundary; distinguish missing infrastructure from mathematical refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "SPHERE ORIENTATION / antipodal homology action",
+      :acceptance
+      {:probe
+       "GO requires a complete placeholder-free compiled copy of problems/t94J08/lean/Main.lean with every frozen definition and statement preserved. Inspect the banked SphereHomology and integral coefficient comparisons to construct the literal ModuleCat orientation for each encoded sphere, and prove that its actual antipodal induced homology map acts by the frozen sign. Reuse degree multiplicativity and the normalized-link-negation identity to close the entire theorem. Do not substitute an abstract degree declaration, assume antipodal naturality, or infer the action from the group isomorphism alone. Audit the lowest encoded dimension explicitly. A partial orientation or point-set involution proof is not GO.",
+       :frozen-file "problems/t94J08/lean/Main.lean",
+       :frozen-sha256
+       "f75c03843555aca28c4abd3c772c5cee3216e912c2c1d52255de75db719a2c3e",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t94j08-frozen-antipodal-homology-closure-probe-refill16,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual],
+      :current-residual
+      "Two placeholders: actual integral sphere orientation and antipodal action, then uptake into the already-assembled local-index-negation proof."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO needs the complete compiled actual producer/consumer composition. REVISE requires exactly one compiled prerequisite. Otherwise identify the exact boundary; infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / local positive-rank residual nullity",
+      :acceptance
+      {:probe
+       "Compile the composition from global genuine-infinity smooth f between finite-dimensional real inner-product spaces and a basepoint derivative of positive rank strictly less than target dimension. Invoke SardGenuineSmoothRankUpperResidualZero to construct the actual chart. Prove the kernel source dimension is strictly smaller and the orthogonal-complement target is nontrivial. For each fixed first coordinate, on the actual target-slice subset whose inverse points have derivative rank at most the basepoint rank, deduce criticality from the produced zero derivative and apply an explicitly stated local genuine-smooth critical-image induction hypothesis for strictly smaller source dimension. Conclude Haar-null image under the actual complementary residual map on that subset. The sole nullity premise may be that lower-dimensional local smooth induction hypothesis, including zero-dimensional sources; no assumed chart, dimension drop, residual nullity, arbitrary-C1 induction or analytic-omega substitution. Reuse existing dimension and criticality producers. If the exact composition exists, reuse it and identify the next consumer edge.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Conditional complementary slice-image nullity only. Product/fiber measure assembly, full rank-stratum coverage, compatible induction discharge and manifold transport remain; no unconditional Sard or consumer closure."},
+      :id
+      :sard-genuine-smooth-positive-rank-slice-nullity-probe-refill16,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual],
+      :current-residual
+      "Actual rank-upper residual derivative zero and genuine smoothness are banked. Strict source dimension drop and application of local smooth induction to the actual complementary residual remain.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when all consumers close or an exact mathematical refutation is established; missing infrastructure and owner authorization do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG and reviewed receipts; recount executable placeholders at pinned revisions, separate portfolio and concurrent infrastructure and consumer changes, and record typed residuals and STOP/PASS outcomes. Elect exactly one near-closure adapter before foundations ranked by reach and simplicity, with a fresh dependent checkpoint and nonempty portfolio."},
+      :id
+      :checkpoint-full-dag-refill-17-after-antipodal-and-slice-nullity,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t94j08-frozen-antipodal-homology-closure-probe-refill16
+       :sard-genuine-smooth-positive-rank-slice-nullity-probe-refill16],
+      :current-residual
+      "Await both reviewed outcomes, then rerank the complete DAG including the Hausdorff normalization finding and concurrent localization progress."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -49822,6 +49974,78 @@
     :checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart],
    :current-residual
    "Await both reviewed outcomes, then rerank the full DAG with separate accounting for concurrent consumer closures and infrastructure."}
+  {:consumer "t94J08",
+   :stop-condition
+   "If full closure cannot compile, STOP naming the exact missing induced-map computation or representation boundary; distinguish missing infrastructure from mathematical refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SPHERE ORIENTATION / antipodal homology action",
+   :acceptance
+   {:probe
+    "GO requires a complete placeholder-free compiled copy of problems/t94J08/lean/Main.lean with every frozen definition and statement preserved. Inspect the banked SphereHomology and integral coefficient comparisons to construct the literal ModuleCat orientation for each encoded sphere, and prove that its actual antipodal induced homology map acts by the frozen sign. Reuse degree multiplicativity and the normalized-link-negation identity to close the entire theorem. Do not substitute an abstract degree declaration, assume antipodal naturality, or infer the action from the group isomorphism alone. Audit the lowest encoded dimension explicitly. A partial orientation or point-set involution proof is not GO.",
+    :frozen-file "problems/t94J08/lean/Main.lean",
+    :frozen-sha256
+    "f75c03843555aca28c4abd3c772c5cee3216e912c2c1d52255de75db719a2c3e",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t94j08-frozen-antipodal-homology-closure-probe-refill16,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual
+    :checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual],
+   :current-residual
+   "Two placeholders: actual integral sphere orientation and antipodal action, then uptake into the already-assembled local-index-negation proof."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO needs the complete compiled actual producer/consumer composition. REVISE requires exactly one compiled prerequisite. Otherwise identify the exact boundary; infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / local positive-rank residual nullity",
+   :acceptance
+   {:probe
+    "Compile the composition from global genuine-infinity smooth f between finite-dimensional real inner-product spaces and a basepoint derivative of positive rank strictly less than target dimension. Invoke SardGenuineSmoothRankUpperResidualZero to construct the actual chart. Prove the kernel source dimension is strictly smaller and the orthogonal-complement target is nontrivial. For each fixed first coordinate, on the actual target-slice subset whose inverse points have derivative rank at most the basepoint rank, deduce criticality from the produced zero derivative and apply an explicitly stated local genuine-smooth critical-image induction hypothesis for strictly smaller source dimension. Conclude Haar-null image under the actual complementary residual map on that subset. The sole nullity premise may be that lower-dimensional local smooth induction hypothesis, including zero-dimensional sources; no assumed chart, dimension drop, residual nullity, arbitrary-C1 induction or analytic-omega substitution. Reuse existing dimension and criticality producers. If the exact composition exists, reuse it and identify the next consumer edge.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Conditional complementary slice-image nullity only. Product/fiber measure assembly, full rank-stratum coverage, compatible induction discharge and manifold transport remain; no unconditional Sard or consumer closure."},
+   :id :sard-genuine-smooth-positive-rank-slice-nullity-probe-refill16,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual
+    :checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual],
+   :current-residual
+   "Actual rank-upper residual derivative zero and genuine smoothness are banked. Strict source dimension drop and application of local smooth induction to the actual complementary residual remain.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when all consumers close or an exact mathematical refutation is established; missing infrastructure and owner authorization do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG and reviewed receipts; recount executable placeholders at pinned revisions, separate portfolio and concurrent infrastructure and consumer changes, and record typed residuals and STOP/PASS outcomes. Elect exactly one near-closure adapter before foundations ranked by reach and simplicity, with a fresh dependent checkpoint and nonempty portfolio."},
+   :id
+   :checkpoint-full-dag-refill-17-after-antipodal-and-slice-nullity,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t94j08-frozen-antipodal-homology-closure-probe-refill16
+    :sard-genuine-smooth-positive-rank-slice-nullity-probe-refill16
+    :checkpoint-full-dag-refill-16-after-sphere-moment-and-rank-residual],
+   :current-residual
+   "Await both reviewed outcomes, then rerank the complete DAG including the Hausdorff normalization finding and concurrent localization progress."}
   {:consumer :t93A04,
    :stop-condition
    "STOP only for a counterexample to the stated local rank-normal-form theorem or hypotheses insufficient to select and invert a nonzero rank minor; otherwise REVISE with exactly one compiled prerequisite.",
