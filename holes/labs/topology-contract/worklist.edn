@@ -37140,6 +37140,28 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788920419147-15842-5fec36ec",
+     :commands
+     ["git show --stat --oneline 589e5736124a107c5875f19fae08de6b9bcbaecf"
+      "git diff-tree --no-commit-id --name-only -r 589e5736124a107c5875f19fae08de6b9bcbaecf"
+      "sha256sum /tmp/SardFiniteOrderRankZeroSameSpaceEndpointNullityProbe.lean"
+      "cmp -s /tmp/SardFiniteOrderRankZeroSameSpaceEndpointNullityProbe.lean ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.lean"
+      "sed -n '10,36p' <(git show 589e5736124a107c5875f19fae08de6b9bcbaecf:ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.lean) | sha256sum"
+      "lake env lean /tmp/SardFiniteOrderRankZeroSameSpaceEndpointNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.lean"
+      "lake build"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "rg -o '\\b(sorry|admit)\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.lean"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "rg -c '^theorem ' problems/t93A04/lean/Main.lean"
+      "readlink -f .lake/packages"
+      "git diff --check 589e5736124a107c5875f19fae08de6b9bcbaecf^ 589e5736124a107c5875f19fae08de6b9bcbaecf"],
+     :finding
+     "PASS: exact scope and fixture, frozen statement hash, valid rank-zero-to-zero-determinant bridge, correctly matched within-derivative Sard interface, honest same-space boundary, standard-only axioms, zero source placeholders, frozen consumer, full build, and worklist gate all reproduced."},
     :commit "589e5736124a107c5875f19fae08de6b9bcbaecf",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.lean"
@@ -37155,7 +37177,7 @@
      ["ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.lean"
       "ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.md"]}},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.lean"
     "ConstructionTargets/SardFiniteOrderRankZeroSameSpaceEndpointNullity.md"],
@@ -37334,7 +37356,7 @@
       "39452d6e3ce053ae16959b770277871e1c4e5cac2ab6e9e25a3ed075d3953a9c"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
