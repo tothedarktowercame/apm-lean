@@ -2808,21 +2808,79 @@
    :stop-condition
    "Bank only the local-connectivity conversion, component domain hypotheses, and conditional component covering-lift application. Do not assume global path connectivity, strengthen classical local contractibility, or claim global component assembly.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/ClassicalLocalPathConnectivityProbe.lean",
-      :sha256
-      "16a99e9bcff7464eb85dfca8eb59a05ca592b0710c18ebcc1694791c1e10b89e"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/ClassicalLocalPathConnectivityProbe.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Prove component-inclusion naturality to derive the component loop premise from the ambient homological result. Assemble continuous component lifts globally, including the empty domain, and construct the explicit null-homotopy. Global path connectivity, stronger local contractibility, global assembly, and full t97A02 closure are not claimed.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :all-four-printed-axiom-audits :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :fixture-compilation :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warning,
+      :count 1,
+      :path "ConstructionTargets/CircleUniversalCover.lean",
+      :log "/tmp/codex-14-classical-build.log"}],
+    :statement-hashes
+    {"locPathConnected_of_classical"
+     "402192f703066353487ec15c927492f39bc8f9364ef662e9b4b91d7bec740110",
+     "component_locPathConnected"
+     "47d2d0cfb412aa328a514bb2245645ade0952f8a2cd74095c13345b98e88691e",
+     "component_pathConnected"
+     "6e8111d8703fd1e9e7f83456f1f9dcb0382a73f6cc6e1829cdddb384490663eb",
+     "component_real_lift"
+     "1cd296d0e5ce9e277ee59ca459d86adf9df3a3ca1a5e21d6f96baf46dd5628a9"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/ClassicalLocalPathConnectivityProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/ClassicalLocalPathConnectivityProbe.lean > /tmp/codex-14-classical-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ClassicalLocalPathConnectivity.lean > /tmp/codex-14-classical-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ClassicalLocalPathConnectivity ConstructionTargets.CircleUniversalCover > /tmp/codex-14-classical-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ClassicalLocalPathConnectivity.lean /tmp/ClassicalLocalPathConnectivityProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Derive locally path-connected components from classical contractibility\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Checked the frozen t97A02 hypothesis and Mathlib classical definition. Existing untracked supervisor files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :commit "f8d3d38156369e16f70d38f9991ffaf88b957263",
+    :changed-paths
+    ["ConstructionTargets/ClassicalLocalPathConnectivity.lean"
+     "ConstructionTargets/ClassicalLocalPathConnectivity.md"],
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/ClassicalLocalPathConnectivityProbe.lean",
+     :sha256
+     "16a99e9bcff7464eb85dfca8eb59a05ca592b0710c18ebcc1694791c1e10b89e"},
+    :finding
+    "Promoted the exact fixture. Paths obtained by evaluating a null-homotopic neighborhood inclusion prove local path connectivity from the frozen classical hypothesis. Connected components inherit local path connectivity and are path connected. The actual exponential-cover range criterion yields a normalized component real lift under the explicit trivial-induced-loop premise.",
+    :statement-hash-method
+    "SHA-256 of UTF-8 theorem declaration bytes beginning with theorem and ending immediately before the space preceding :=; names below are in ConstructionTargets.ClassicalLocalPathConnectivity.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ClassicalLocalPathConnectivity.lean"
     "ConstructionTargets/ClassicalLocalPathConnectivity.md"],
