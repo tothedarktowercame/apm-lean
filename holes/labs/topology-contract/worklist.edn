@@ -46948,7 +46948,8 @@
      {:cmd "bb /tmp/topology-refill9-validate.bb", :exit 0}
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill9-proposed-worklist.edn",
-      :exit 0}],
+      :exit 0}
+     {:cmd "python3 /tmp/topology-refill9-repair-census.py", :exit 0}],
     :finding
     {:baseline "8f28a0b1f434cc2285c50e2e2f73419eb68ac12e",
      :election-rationale
@@ -46958,15 +46959,15 @@
       "Use only two work rows before another complete-DAG checkpoint, measuring consumer closure again rather than allowing another long conditional Sard chain. The foundation's downstream consumer count describes dependency reach, not an assertion of immediate closure."],
      :measured-head "874608e3685037614fc194d17d24332a9a35f7d4",
      :placeholder-delta
-     {:open 41,
+     {:open 42,
       :closed 16,
       :changed-consumers [],
       :total-before 76,
       :method
       "Executable sorry tokens after stripping block and line comments, for every consumer identifier named in the DAG.",
-      :named-consumers 58,
+      :named-consumers 59,
       :total-after 76,
-      :existing-files 57,
+      :existing-files 58,
       :delta 0,
       :sha256
       "9ebd9b4e4c1e722a7d9d534c17be6ed79402962c9a89cd0e360ae2b62f5f475d",
@@ -47078,15 +47079,9 @@
       :current-residual
       "Await reviewed exact t95J04 closure attempt and unconditional smooth rectangular Sard probe, then elect again from the complete DAG."}],
     :author :codex-12,
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-10",
-     :job "invoke-1788968193055-16522-8c0351cb",
-     :finding
-     "Recorded checkpoint transition 2f4dfe38 has incorrect :evidence :finding :placeholder-delta census counts: :named-consumers 58, :existing-files 57, :open 41. Recomputing from measured commit 874608e3685037614fc194d17d24332a9a35f7d4 and the matching SHA256-verified /tmp/topology-refill9-measure.json gives 59 named consumers, 58 existing files, 42 open consumers; a97J08 is included and t93A05 is missing. Correct these three summary fields. Total 76, delta 0, closed 16, within-two 32 and artifact hashes reproduce. No ledger or source edits."}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -47106,7 +47101,7 @@
    :stop-condition
    "If the whole frozen adapter cannot be built from existing material, return STOP naming the exact missing theorem or representation and explicitly distinguish missing infrastructure from refutation; do not replace closure with another conditional interface.",
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "SARD THEOREM / strict-dimension sphere consumer",
    :acceptance
@@ -47128,7 +47123,7 @@
    :stop-condition
    "Name an exact mathematical, hypothesis, or representation boundary if the probe fails. Missing infrastructure is not a refutation. REVISE requires exactly one compiled prerequisite under the probe protocol; no owner-authorization gate.",
    :phase :probe,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "SARD THEOREM",
    :acceptance
@@ -47156,7 +47151,7 @@
    :stop-condition
    "End the campaign only when every consumer closes or a genuine mathematical refutation is identified; missing infrastructure and owner authorization do not end the campaign.",
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
