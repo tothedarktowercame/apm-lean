@@ -6847,6 +6847,21 @@
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788989486121-17112-ab5c61e4",
+     :commands
+     ["git show 552efff9:holes/labs/topology-contract/worklist2.edn"
+      "git show 552efff9:docs/TN-topology-closure-experiments.md"
+      "lake env lean /tmp/RegularFiberAtlasBoundary.lean"
+      "python3 inline audit: fixture and frozen hashes, historical consumer equality, placeholder counts, forbidden tokens and transition scope"
+      "rg -l 'ChartedSpace|IsManifold|mfderiv' ConstructionTargets/RegularFiber*.lean ConstructionTargets/SmoothRegularFiber*.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 552efff9:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Independent review of codex-13 infrastructure STOP passes. Diagnostic compiles warning-free with two standard-only imported audits; MissingAtlasTheorem is a proposition definition, not a proved or assumed atlas. Smooth overlaps, atlas installation and manifold inclusion derivative comparison remain unresolved after two reviewed infrastructure packets. Fixture and frozen hashes match; t97J05 unchanged with 5 placeholders, diagnostic 0. No mathematical refutation or consumer closure claimed. Ledger untouched."},
     :changed-paths [],
     :audit-note
     "Two imported parameterization theorems have standard-only audits. The diagnostic's MissingAtlasTheorem is a proposition definition, not a proof or assumed premise.",
@@ -6860,7 +6875,7 @@
     "Infrastructure STOP, not mathematical refutation. Two successive reviewed packets construct smooth local slices and fixed-model parameterizations while leaving the named frozen smooth-submanifold bridge unchanged. The recorded two-packet stop rule applies. These results do not yet construct an atlas or prove overlap compatibility, and their ambient derivative-range equation is not an mfderiv equation for a constructed manifold inclusion.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: smooth atlas on the literal regular fiber",
@@ -6894,7 +6909,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: finite-cover specification and regular-fiber uptake",
