@@ -10103,8 +10103,66 @@
   {:consumer :t00J01-rational-sphere-homology,
    :stop-condition
    "No assumed small-chain quasi-isomorphism, subdivision homotopy, excision map invertibility, change-of-coefficients theorem or sphere table.",
+   :evidence
+   {:typed-evidence
+    {:namespace "CoefficientExcisionBoundary",
+     :constructed
+     ["remainder"
+      "inclusion"
+      "mapsTo"
+      "excisionMap"
+      "projection"
+      "smallInclusion"
+      "interior_cover"
+      "rational_projection"
+      "integral_projection"],
+     :unproved-obligation-definitions
+     ["MissingSmallComparison" "MissingExcision"],
+     :representation
+     "The remaining subspace is Subtype.val inverse A inside the literal complement subtype Uᶜ. Its relative complex is RelativeSingularChains R (remainder A U).",
+     :universes
+     "R, X and cover index types are Type 0; coefficients are ModuleCat.of R R.",
+     :limitations
+     "Integer and rational projection squares compile; no concrete excision isomorphism, subdivision homotopy or all-degree invertibility is claimed."},
+    :placeholder-delta 0,
+    :residual
+    "Prove the coefficient-specific small-chain comparison and assemble the actual relative excision isomorphism in every degree under the stated closure/interior hypothesis. Rational sphere H1/H2 and frozen t00J01 closure remain downstream.",
+    :axiom-audits 5,
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :reason :multiple-unconstructed-comparisons,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read DAG, closure stop rules, build-loop result vocabulary and reviewed dependency receipts",
+      :exit 0}
+     {:cmd
+      "Inspect SingularSubdivision, SingularExcision, RelativeSingularCoefficients and RelativePairNaturality definitions and theorem signatures",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientExcisionBoundary.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientExcisionBoundary.lean", :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientExcisionBoundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/CoefficientExcisionBoundary.lean",
+     :sha256
+     "e1f812723d40988e4fd441eadef627b60b776dda6dbac173994e04e59bd56855",
+     :role :boundary-diagnostic},
+    :finding
+    "The actual inclusion-induced relative chain map over an arbitrary commutative ring compiles, using the reviewed image-quotient construction and proving its projection square. The remaining comparison is not supplied by existing integral exports: SingularSubdivision uses integral chains, while SingularExcision exports positive-degree relative excision with an additional IsClosed U hypothesis. Required work includes the coefficient-general small-chain homology comparison, its relative quotient comparison including degree zero, and the comparison for potentially nonclosed U under closure U contained in interior A. This is missing infrastructure, not a mathematical refutation.",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION/EXCISION: actual relative homology with explicit ring coefficients",
