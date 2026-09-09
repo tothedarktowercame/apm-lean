@@ -39274,6 +39274,24 @@
      {:cmd
       "git add ConstructionTargets/SardCompactRankZeroAdmissibleJetAssembly.lean ConstructionTargets/SardCompactRankZeroAdmissibleJetAssembly.md && git diff --cached --check && git commit -m 'topology: assemble admissible compact rank-zero jets' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788927751706-15996-0a802c55",
+     :commands
+     ["git show ddf9d37002516240c252bbca29898bf8d52ecf7f --stat --oneline"
+      "sha256sum /tmp/SardCompactRankZeroAdmissibleJetAssemblyProbe.lean"
+      "cmp fixture recorded-source"
+      "git show commit:ConstructionTargets/SardCompactRankZeroAdmissibleJetAssembly.lean | sed -n '9,35p' | sha256sum"
+      "lake env lean /tmp/SardCompactRankZeroAdmissibleJetAssemblyProbe.lean"
+      "lake env lean ConstructionTargets/SardCompactRankZeroAdmissibleJetAssembly.lean"
+      "lake build ConstructionTargets.SardCompactRankZeroAdmissibleJetAssembly"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check commit^ commit"
+      "git diff --exit-code commit -- ConstructionTargets"
+      "consumer hash and placeholder checks"],
+     :finding
+     "Commit ddf9d370 has exact scope and matching fixture/frozen hashes. Admissibility yields the nonnegative dimension bound; rank zero eliminates the first jet; finite assembly preserves order k+1 and higher-jet range Icc 2 (k+1). Higher-jet nullity remains explicit. Standard axioms only, zero scoped placeholders, all gates passed."},
     :commit "ddf9d37002516240c252bbca29898bf8d52ecf7f",
     :changed-paths
     ["ConstructionTargets/SardCompactRankZeroAdmissibleJetAssembly.lean"
@@ -39285,7 +39303,7 @@
     :declarations
     ["compact_rankZero_image_zero_of_admissible_higherJets"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactRankZeroAdmissibleJetAssembly.lean"
     "ConstructionTargets/SardCompactRankZeroAdmissibleJetAssembly.md"],
@@ -39465,7 +39483,7 @@
       "4852d51636100f521d4f9ea12cad61460f612a21f8889977d866a23c013f8589"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
