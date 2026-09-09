@@ -51575,69 +51575,84 @@
    :stop-condition
    "GO requires full compiled actual local-producer/global-consumer composition. REVISE requires one compiled prerequisite. Do not assume open-cover nullity or replace smooth local induction with arbitrary-C1 or finite-order Sard.",
    :evidence
-   {:probe
-    {:induction-contract
-     "The sole nullity premise quantifies local genuinely smooth critical-image nullity over every strictly smaller finite-dimensional complete real normed source, including dimension zero, and every finite-dimensional real inner-product target with Borel Haar measure. It is instantiated at the actual orthogonal complement and selected Haar measure for each basepoint.",
-     :consumer
-     {:id "t93A04",
-      :placeholder-count 1,
-      :sha256
-      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
-     :placeholder-delta 0,
-     :residual
-     "Conditional positive-rank stratum nullity is ready. Rank-zero coverage, compatible local-domain induction discharge and base cases, full critical-locus assembly and manifold transport remain before unconditional Sard or t93A04 closure.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:measure_image_zero_positive_rank_stratum
-      "b9a604dc7683f67d479499dd5cd21170b0c6cff4089f8b4fa59e138e99b1b648"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/SardGenuineSmoothPositiveRankStratumNullity.lean",
-       :exit 0}
-      {:cmd "bb /tmp/sard-refill20-reviews.bb", :exit 0}
-      {:cmd
-       "Python placeholder and SHA-256 audit producing /tmp/SardGenuineSmoothPositiveRankStratumNullity.audit.json",
-       :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/SardGenuineSmoothPositiveRankStratumNullity.lean",
-       :exit 1,
-       :correction
-       "Passed the derived inherited BorelSpace proof explicitly to the induction hypothesis."}
-      {:cmd
-       "lake env lean /tmp/SardGenuineSmoothPositiveRankStratumNullity.lean",
-       :exit 1,
-       :correction
-       "Derived and explicitly passed the chosen complementary Haar measure instance."}
-      {:cmd "Inline bb dependency-review query",
-       :exit 1,
-       :correction
-       "Removed an unmatched delimiter; successful replacement is /tmp/sard-refill20-reviews.bb."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/SardGenuineSmoothPositiveRankStratumNullity.lean",
-      :sha256
-      "583ca10eb99588a23b1d3bff2a3d94ca8726fd71dc7e740c882bf84078702c97",
-      :placeholder-count 0},
-     :finding
-     "Complete producer/consumer composition compiles. At each point of the exact positive deficient-rank stratum, rank equality supplies the basepoint bounds for SardGenuineSmoothOpenRankUpperImageNullity. Derived Borel/proper-space data support actual coordinate addHaar measures. The resulting chart source and rank-upper image nullity restrict to the exact stratum and feed the existing pointwise-open aggregation theorem. Source second countability is derived from finite dimensionality. No chart or localized nullity is assumed.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/SardGenuineSmoothPositiveRankStratumNullity.lean"
-       "ConstructionTargets/SardGenuineSmoothPositiveRankStratumNullity.md"],
-      :source "/tmp/SardGenuineSmoothPositiveRankStratumNullity.lean",
-      :note "/tmp/SardGenuineSmoothPositiveRankStratumNullity.md",
-      :note-sha256
-      "0741839f92e479bdaccfcb12b2a26bb278027d4c593c62d268a38bd1d37a1749",
-      :acceptance
-      ["Promote the exact compiled fixture and note within the two-file scope."
-       "Compile the promoted module and run lake build ConstructionTargets.SardGenuineSmoothPositiveRankStratumNullity."
-       "Verify zero placeholders and standard-only theorem axioms; preserve the explicit local smooth induction premise."]},
-     :seat :codex-12}},
+   {:placeholder-delta
+    {:consumer "t93A04", :before 1, :after 1, :delta 0, :fixture 0},
+    :residual
+    "Conditional positive-rank stratum nullity compiled. Rank-zero coverage, compatible local-domain induction discharge and base cases, full critical-locus assembly and manifold transport remain. No unconditional Sard or t93A04 closure claimed; independent review remains.",
+    :gates
+    {:exact-promotion :pass,
+     :statement-preserved :pass,
+     :compile :pass,
+     :build :pass,
+     :explicit-smooth-induction-preserved :pass,
+     :consumer-unchanged :pass,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:measure_image_zero_positive_rank_stratum
+     "957c1682abd22f2667179fe35b3af2eb19f1e674cd46869c2102dc681f746fd5"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :note
+    {:path "/tmp/SardGenuineSmoothPositiveRankStratumNullity.md",
+     :sha256
+     "0741839f92e479bdaccfcb12b2a26bb278027d4c593c62d268a38bd1d37a1749"},
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, fixture, note and audit",
+      :exit 0}
+     {:cmd "bb /tmp/sard-refill20-reviews.bb", :exit 0}
+     {:cmd "sha256sum fixture and note", :exit 0}
+     {:cmd
+      "Python statement hash and comment-stripped placeholder audit",
+      :exit 0}
+     {:cmd "cmp pinned fixture and note against promoted files",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardGenuineSmoothPositiveRankStratumNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardGenuineSmoothPositiveRankStratumNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardGenuineSmoothPositiveRankStratumNullity",
+      :exit 0,
+      :output "Build completed successfully (8369 jobs)."}
+     {:cmd
+      "rg placeholder and prohibited-declaration scan over promoted Lean file",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output "393 items OK"}
+     {:cmd
+      "git diff --exit-code -- problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check; git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output
+      "Only unrelated untracked holes/labs/topology-contract/runs2/ remains; untouched."}],
+    :commit "9a1984881088e759d021aaada9be8e817b8c92e5",
+    :changed-paths
+    ["ConstructionTargets/SardGenuineSmoothPositiveRankStratumNullity.lean"
+     "ConstructionTargets/SardGenuineSmoothPositiveRankStratumNullity.md"],
+    :fixture
+    {:path "/tmp/SardGenuineSmoothPositiveRankStratumNullity.lean",
+     :sha256
+     "583ca10eb99588a23b1d3bff2a3d94ca8726fd71dc7e740c882bf84078702c97",
+     :placeholder-count 0},
+    :evidence-note
+    "Probe statement hash was not reproduced with this extraction method. Entire promoted fixture matches its pinned SHA256 byte-for-byte, preserving the statement exactly.",
+    :statement-hash-method
+    "SHA256 of UTF-8 text from 'theorem measure_image' up to but excluding the first ' := by'.",
+    :consumer-sha256
+    "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :source "/tmp/SardGenuineSmoothPositiveRankStratumNullity.lean",
    :scope
    ["ConstructionTargets/SardGenuineSmoothPositiveRankStratumNullity.lean"
