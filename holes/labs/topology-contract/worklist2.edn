@@ -3833,6 +3833,21 @@
       :exit 0}
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788978545290-16783-369683b9",
+     :commands
+     ["git show 1939a44b:holes/labs/topology-contract/worklist2.edn"
+      "realpath .lake/packages"
+      "sha256sum /tmp/T02A05FluxDiagnostic.lean"
+      "lake env lean /tmp/T02A05FluxDiagnostic.lean"
+      "Python audit: recorded frozen source SHA256, preserved definition prefix, both statement hashes, frozen and diagnostic placeholder counts, forbidden tokens"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 1939a44b:holes/labs/topology-contract/worklist2.edn)"
+      "Inspect HaarToSphere, current construction targets and recorded t96J08 integration proof"
+      "git show --format= --check 1939a44b; git diff --exit-code; git diff --check"],
+     :finding
+     "Independent of author codex-13. PASS validates the missing-infrastructure STOP, not mathematical closure. Fixture SHA256 984f2e8d9b989540dc2dbd90ae89b284754ef4a877241d97279001561fa89405 matches; compilation passes with five standard-only axiom audits and two recorded unnecessarySimpa warnings. Frozen source hash and both statement hashes match; definitions preserved, frozen placeholders remain 2, diagnostic placeholders and forbidden tokens 0. Actual outward coefficient and forward sphere-translation isometry give the exact Hausdorff integral reduction. UnitFluxMoment remains an explicit hypothesis only in the conditional diagnostic; no normalization, integrability or moment theorem is claimed. Haar-derived sphere measure and disk integration do not establish the required comparison here. Recorded ledger validates with 31 items OK. Empty implementation scope; no source or ledger edits."},
     :campaign-refutation false,
     :changed-paths [],
     :fixture
@@ -3844,7 +3859,7 @@
     :diagnostic-placeholders 0,
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "STOKES AND MOMENTS: exact outward sphere flux and minimizing centers",
