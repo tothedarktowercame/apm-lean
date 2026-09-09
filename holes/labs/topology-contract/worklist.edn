@@ -36328,6 +36328,42 @@
    "The fixed positive exact-rank stratum nullity theorem compiles; aggregate across the finite positive-rank index and combine with rank zero.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if nullity of every positive exact-rank stratum together with nullity of the rank-zero stratum cannot yield nullity of the full nonsurjective-derivative image, or if the aggregation requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderCriticalImageOfRankZeroNullity.lean"
+    "ConstructionTargets/SardFiniteOrderCriticalImageOfRankZeroNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER CRITICAL IMAGE FROM RANK-ZERO NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderCriticalImageOfRankZeroNullityProbe.lean",
+     :sha256
+     "9d446d46323048f223f81a66ed59814c3096eb56a95da22d15e0f81f24a1c4c0"},
+    :declarations
+    ["measure_criticalImage_zero_of_rankZero_finiteOrder"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Supply finite-order Taylor nullity for the rank-zero stratum and invoke this critical-image assembly."},
+   :representation
+   {:source
+    "Zero image measure for the rank-zero derivative stratum together with the banked finite-order nullity theorem for every positive exact-rank stratum.",
+    :target
+    "Zero target measure for the image of the complete nonsurjective-derivative locus, obtained by finite rank-strata aggregation."},
+   :id
+   :critical-value-sard-finite-order-critical-image-of-rank-zero-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-positive-rank-stratum-nullity-1
+    :critical-value-sard-rank-strata-null-aggregation-1],
+   :current-residual
+   "The finite-rank critical-image assembly compiles with rank zero as its only remaining analytic input.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -36381,83 +36417,80 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Aggregate the null positive exact-rank strata over the finite rank index and combine them with the rank-zero finite-order branch.",
+     "Prove zero target measure for the rank-zero finite-order derivative stratum using the Taylor-flat branch, then invoke the compiled critical-image assembly.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"measure_image_zero_of_positive_rankStratum_finiteOrder"
-      "ab334cbfee48e096439a36f32f364fa4fc13e8915953847c444e10cdbe19aff2"},
+     {"measure_criticalImage_zero_of_rankZero_finiteOrder"
+      "9a18fd638fdff73004a3b72cdfd5b049be7fbc1508f270f13760c1e9cfd79efc"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if pointwise null open neighborhoods on a fixed positive exact-rank stratum cannot aggregate using second countability to nullity of the entire stratum, or if the theorem requires nonstandard axioms.",
+      "Stop only if nullity of every positive exact-rank stratum together with nullity of the rank-zero stratum cannot yield nullity of the full nonsurjective-derivative image, or if the aggregation requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderPositiveRankStratumNullity.lean"
-       "ConstructionTargets/SardFiniteOrderPositiveRankStratumNullity.md"],
+      ["ConstructionTargets/SardFiniteOrderCriticalImageOfRankZeroNullity.lean"
+       "ConstructionTargets/SardFiniteOrderCriticalImageOfRankZeroNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POSITIVE-RANK STRATUM NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER CRITICAL IMAGE FROM RANK-ZERO NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderPositiveRankStratumNullityProbe.lean",
+        "/tmp/SardFiniteOrderCriticalImageOfRankZeroNullityProbe.lean",
         :sha256
-        "1873808f40dbe603b8e907ab9b9451510203a123369ce778901fd05f208c0a8c"},
+        "9d446d46323048f223f81a66ed59814c3096eb56a95da22d15e0f81f24a1c4c0"},
        :declarations
-       ["measure_image_zero_of_positive_rankStratum_finiteOrder"],
+       ["measure_criticalImage_zero_of_rankZero_finiteOrder"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Aggregate the resulting null strata over the finite positive-rank family and combine with rank zero."},
+       "Supply finite-order Taylor nullity for the rank-zero stratum and invoke this critical-image assembly."},
       :representation
       {:source
-       "Pointwise open neighborhoods with null localized image at every point of a fixed positive exact derivative-rank stratum.",
+       "Zero image measure for the rank-zero derivative stratum together with the banked finite-order nullity theorem for every positive exact-rank stratum.",
        :target
-       "Zero target measure for the image of the entire fixed positive exact-rank stratum, obtained by second-countable local aggregation."},
+       "Zero target measure for the image of the complete nonsurjective-derivative locus, obtained by finite rank-strata aggregation."},
       :id
-      :critical-value-sard-finite-order-positive-rank-stratum-nullity-1,
+      :critical-value-sard-finite-order-critical-image-of-rank-zero-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-positive-rank-exact-stratum-pointwise-nullity-1
-       :critical-value-sard-finite-order-rank-locus-local-aggregation-1],
+      [:critical-value-sard-finite-order-positive-rank-stratum-nullity-1
+       :critical-value-sard-rank-strata-null-aggregation-1],
       :current-residual
-      "The fixed positive exact-rank stratum nullity theorem compiles; aggregate across the finite positive-rank index and combine with rank zero.",
+      "The finite-rank critical-image assembly compiles with rank zero as its only remaining analytic input.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The banked pointwise exact-stratum witness supplies a null open neighborhood at every point of a fixed positive exact-rank stratum. A placeholder-free fixture applies the reviewed second-countable local aggregation theorem to obtain nullity of the entire fixed stratum while preserving the original finite order and induction hypotheses. Banking this bounded theorem leaves finite aggregation across positive ranks and combination with the rank-zero branch.",
+     "The rectangular theorem is not refuted. A placeholder-free fixture combines the banked nullity theorem for every positive exact-rank stratum with the reviewed finite rank-strata aggregation theorem. Surjectivity contradicts membership in any Fin-indexed positive stratum because its rank is strictly below the target dimension. The resulting bounded interface reduces the entire critical image to one explicit rank-zero nullity hypothesis; proving that analytic rank-zero branch remains.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake build ConstructionTargets.SardFiniteOrderPositiveRankExactStratumPointwiseNullity >/dev/null",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/SardFiniteOrderPositiveRankStratumNullityProbe.lean",
+       "lake env lean /tmp/SardFiniteOrderCriticalImageOfRankZeroNullityProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderPositiveRankStratumNullityProbe.measure_image_zero_of_positive_rankStratum_finiteOrder' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderCriticalImageOfRankZeroNullityProbe.measure_criticalImage_zero_of_rankZero_finiteOrder' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderPositiveRankStratumNullityProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderCriticalImageOfRankZeroNullityProbe.lean",
        :exit 0,
        :output
-       "1873808f40dbe603b8e907ab9b9451510203a123369ce778901fd05f208c0a8c  /tmp/SardFiniteOrderPositiveRankStratumNullityProbe.lean"}
+       "9d446d46323048f223f81a66ed59814c3096eb56a95da22d15e0f81f24a1c4c0  /tmp/SardFiniteOrderCriticalImageOfRankZeroNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderPositiveRankStratumNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderCriticalImageOfRankZeroNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '9,28p' /tmp/SardFiniteOrderPositiveRankStratumNullityProbe.lean | sha256sum",
+       "sed -n '9,39p' /tmp/SardFiniteOrderCriticalImageOfRankZeroNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "ab334cbfee48e096439a36f32f364fa4fc13e8915953847c444e10cdbe19aff2  -"}
+       "9a18fd638fdff73004a3b72cdfd5b049be7fbc1508f270f13760c1e9cfd79efc  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 276 items OK; {:done 268, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 277 items OK; {:done 269, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -36472,12 +36505,13 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardFiniteOrderPositiveRankStratumNullityProbe.lean",
+     {:path
+      "/tmp/SardFiniteOrderCriticalImageOfRankZeroNullityProbe.lean",
       :sha256
-      "1873808f40dbe603b8e907ab9b9451510203a123369ce778901fd05f208c0a8c"},
+      "9d446d46323048f223f81a66ed59814c3096eb56a95da22d15e0f81f24a1c4c0"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -36702,7 +36736,8 @@
     :critical-value-sard-finite-order-derivative-range-orthogonal-closed-open-chart-nullity-1
     :critical-value-sard-finite-order-positive-rank-pointwise-closed-open-nullity-1
     :critical-value-sard-finite-order-positive-rank-exact-stratum-pointwise-nullity-1
-    :critical-value-sard-finite-order-positive-rank-stratum-nullity-1],
+    :critical-value-sard-finite-order-positive-rank-stratum-nullity-1
+    :critical-value-sard-finite-order-critical-image-of-rank-zero-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
