@@ -4343,8 +4343,49 @@
   {:consumer :t02A05-sphere-measure-normalization,
    :stop-condition
    "No assumed Hausdorff normalization, radial-measure identification, moment value or area formula. This comparison does not itself close either frozen integration consumer.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove the normalized intrinsic Hausdorff cone identity. Then transfer finiteness and polynomial integrability and evaluate the radial moments. No conditional wrapper is elected, and neither frozen integration consumer is closed.",
+    :typed-boundary
+    ["SphereHausdorffRadialBoundary.ConeLaw 2 c2 with explicitly established 0<c2 and c2<top"
+     "SphereHausdorffRadialBoundary.ConeLaw 3 c3 with explicitly established 0<c3 and c3<top"],
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :reason
+    "Missing geometric measure comparison, not a mathematical refutation: for d=2 and d=3, intrinsic sphere Hausdorff measure has not been proved to satisfy the radial-cone identity with an explicitly determined finite positive normalization constant.",
+    :commands
+    [{:cmd
+      "cat docs/TN-topology-closure-experiments.md docs/TN-topology-build-loop-design.md TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd "cat /tmp/T95J05SphereMomentBoundary.md", :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/SphereHausdorffRadialBoundary.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SphereHausdorffRadialBoundary.lean /tmp/T02A05FluxDiagnostic.lean /tmp/T95J05SphereMomentBoundary.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/SphereHausdorffRadialBoundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :infrastructure-packets 0,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/SphereHausdorffRadialBoundary.lean",
+     :sha256
+     "34e4ed4b11a1df9180edd3f0b513eea7867decb1b3f9f85ecdec7464b03bc70c",
+     :role :boundary-diagnostic},
+    :finding
+    "Compiled the exact equivalence between the requested measure equality and ConeLaw: for every measurable sphere subset A, intrinsic d A = c * ((d+1) * volume (Ioo 0 1 • Subtype.val '' A)). Neither ConeLaw nor its normalization constant is proved. The diagnostic proves radial-measure finiteness, its total-mass formula, and radial integrability of the flux and coordinate-square polynomials. Integral conversions compile only conditional on the missing comparison; these are diagnostic consequences, not an implementation prerequisite or GO packet. The pinned Hausdorff definition uses diameter powers; ambient Haar uniqueness and radial polar coordinates do not supply the intrinsic sphere comparison. No numerical discrepancy with either frozen consumer has been proved.",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: literal sphere Hausdorff measure versus radial-cone measure",
