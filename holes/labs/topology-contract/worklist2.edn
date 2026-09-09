@@ -7196,9 +7196,84 @@
   {:consumer :t01A04-cover-base-change,
    :stop-condition
    "Construct local trivializations on the literal pullback. No assumed covering on the pullback, constant fiber cardinality, quotient gluing, deck classification or frozen closure.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Literal covering base change and fiber transport are proved. Frozen consumer assembly, wedge-point gluing, universal-cover construction and classification of total spaces remain separate.",
+     :axiom-audits 9,
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture and document its hypotheses and remaining consumer obligations.",
+      :declarations
+      ["Pullback"
+       "projection"
+       "fiberHomeomorph"
+       "fiberHomeomorph_apply"
+       "fiber_card"
+       "evenlyCovered"
+       "isCoveringMap"
+       "sheet_card"
+       "circle_pullback"
+       "empty_disconnected_pullback"
+       "empty_fiber_card"],
+      :namespace "ConstructionTargets.LiteralPullbackCover",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile the fixture and canonical target; run lake build ConstructionTargets.LiteralPullbackCover."
+       "Reproduce all nine standard-only axiom audits."
+       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG, closure stop rules, build-loop result definitions and reviewed checkpoint9 dependency receipt",
+       :exit 0}
+      {:cmd "lake env lean /tmp/LiteralPullbackCover.lean", :exit 0}
+      {:cmd "sha256sum /tmp/LiteralPullbackCover.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/LiteralPullbackCover.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial fixture compilation",
+       :exit 1,
+       :correction
+       "Unfolded preimage membership before rewriting and imported Mathlib for the real-circle example."}
+      {:cmd "Second fixture compilation",
+       :exit 1,
+       :correction
+       "Separated the two product-equality goals to resolve elaboration."}
+      {:cmd "Third fixture compilation",
+       :exit 1,
+       :correction
+       "Explicitly reduced subtype projections and supplied the product-coordinate equalities."}
+      {:cmd "Initial empty-fiber example compilation",
+       :exit 1,
+       :correction
+       "Supplied the discrete covering function argument and used simp for empty-subtype cardinality."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/LiteralPullbackCover.lean",
+      :sha256
+      "c4bcc90c9abaaaf871835c9f6eb6b2dcf4feffe7215d96b4d8d50e695015772e"},
+     :finding
+     "Complete placeholder-free fixture constructs the covering on the literal pullback subtype. Each original evenly covered neighborhood supplies an explicit homeomorphism over its continuous preimage, with proved inverse identities and projection equation. The fiber homeomorphism evaluates to the E coordinate and transports exact cardinalities. No uniform fiber type or nonemptiness is assumed. Compiled examples cover the real-to-AddCircle covering pulled back along doubling, and an empty covering pulled back to the disconnected Bool base with zero-cardinality fibers.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/LiteralPullbackCover.lean"
+       "ConstructionTargets/LiteralPullbackCover.md"]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/LiteralPullbackCover.lean"
+    "ConstructionTargets/LiteralPullbackCover.md"],
    :dag-node
    "COVERING-BASIC: literal pullback covering and fiber transport",
    :acceptance
