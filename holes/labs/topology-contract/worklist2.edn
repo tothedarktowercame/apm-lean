@@ -4825,19 +4825,79 @@
    :stop-condition
    "Bank only the cap graph and its quantitative image bound. Do not assume or claim finite hyperplane-domain measure, finite sphere coverage, intrinsic sphere finiteness, normalization or numerical moments.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/SphereCapGraphProbe.lean",
-      :sha256
-      "e39cf758629bb44251562af80de0641daa47d9f6b6f61db26e991f2e9a5df7af"},
-     :commands
-     [{:cmd "lake env lean /tmp/SphereCapGraphProbe.lean", :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Prove finite top-dimensional Hausdorff measure of cap domains through hyperplane-ball isometries, construct finite signed-coordinate cap covers in dimensions two and three, and derive the frozen integrability instances. Sphere finiteness, normalization and numerical moments are not claimed.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :required-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :exact-fixture-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass,
+     :six-axiom-audits :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"height_difference"
+     "573c903bc0e9d541af8e5e872347ebfda97ff1ca200d8ecf53b7ed4ed9ef50fb",
+     "graph_norm"
+     "c6d885740c22865f0ad1087a9048194baa398b61b5e27c6145fd10440eb481e5",
+     "graph_lipschitz"
+     "55fb0e1b5f93488a7a28a207404f5cd9c0e973108a5e989831bc83d6744f5d6a",
+     "capMap"
+     "e76fbe87391af151aa80389a7d0394c90d683370aa5a6e147f5acf40896e7473",
+     "capMap_lipschitz"
+     "8e7a8186186ed52ebb94de39493eab51127dcf7eb0b9cd798e31c9d65bc2d7fd",
+     "capMap_hausdorff_bound"
+     "16423eb155c30b587c8d6846d87f2c3149af4ec59047fa253e6377e9ec6c93ab"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "sha256sum /tmp/SphereCapGraphProbe.lean", :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/SphereCapGraphProbe.lean", :exit 0}
+     {:cmd "lake env lean ConstructionTargets/SphereCapGraph.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SphereCapGraph", :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/SphereCapGraph.lean /tmp/SphereCapGraphProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "python3 inline audit: exact fixture bytes and SHA, six standard-only axiom audits in both compilations, declaration hashes",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "python3 inline audit: exact staged two-file scope and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct Lipschitz sphere-cap graph and Hausdorff image bound\"",
+      :exit 0}
+     {:cmd
+      "python3 inline audit: exact committed scope and clean tracked checkout",
+      :exit 0}],
+    :repository-note
+    "Read DAG and closure experiments; this row has no dependency receipts. Only the authorized two files changed. Frozen consumers, DAG, ledger and untracked supervisor files untouched; tracked checkout clean.",
+    :commit "3d5d18e79f87b0d9cd0716183976b59529f7ab14",
+    :changed-paths
+    ["ConstructionTargets/SphereCapGraph.lean"
+     "ConstructionTargets/SphereCapGraph.md"],
+    :fixture
+    {:path "/tmp/SphereCapGraphProbe.lean",
+     :sha256
+     "e39cf758629bb44251562af80de0641daa47d9f6b6f61db26e991f2e9a5df7af"},
+    :finding
+    "Promoted the exact square-root cap graph, norm-one proof, subtype map, Lipschitz constant and Hausdorff image estimate. Both compilations and the build passed without warnings.",
+    :statement-hash-method
+    "SHA-256 of declaration bytes beginning with def or lemma and ending immediately before the space preceding :=; namespace ConstructionTargets.SphereCapGraph.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereCapGraph.lean"
     "ConstructionTargets/SphereCapGraph.md"],
