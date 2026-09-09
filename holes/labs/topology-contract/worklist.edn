@@ -46937,8 +46937,148 @@
      :review-outcomes]},
    :stop-condition
    "Stop only on a genuine mathematical refutation, naming it; never stop for missing infrastructure or owner authorization.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill9-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill9-ledger-measure.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill9-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill9-proposed-worklist.edn",
+      :exit 0}],
+    :finding
+    {:baseline "8f28a0b1f434cc2285c50e2e2f73419eb68ac12e",
+     :election-rationale
+     ["Rule 0 elects exactly one closing adapter first: t95J04 has one remaining placeholder, while its product comparisons and missed-point nullhomotopy are banked. Strict dimension drop permits investigating Hausdorff nullity without first proving full rectangular Sard."
+      "Other near-closure candidates were compared: t98A01 still combines universal surface-cover Euler multiplicativity and classification; t00A01 still needs its actual van Kampen bridge. A low placeholder count alone does not establish either adapter is available."
+      "Among shared foundations across the DAG, retain the five-consumer Sard dependency, but target unconditional smooth rectangular nullity with smoothness-preserving reductions. Stokes, surface classification and localization still require distinct geometric or representation producers; banked generic interfaces do not close their consumers."
+      "Use only two work rows before another complete-DAG checkpoint, measuring consumer closure again rather than allowing another long conditional Sard chain. The foundation's downstream consumer count describes dependency reach, not an assertion of immediate closure."],
+     :measured-head "874608e3685037614fc194d17d24332a9a35f7d4",
+     :placeholder-delta
+     {:open 41,
+      :closed 16,
+      :changed-consumers [],
+      :total-before 76,
+      :method
+      "Executable sorry tokens after stripping block and line comments, for every consumer identifier named in the DAG.",
+      :named-consumers 58,
+      :total-after 76,
+      :existing-files 57,
+      :delta 0,
+      :sha256
+      "9ebd9b4e4c1e722a7d9d534c17be6ed79402962c9a89cd0e360ae2b62f5f475d",
+      :artifact "/tmp/topology-refill9-measure.json",
+      :within-two 32,
+      :missing-files ["t93A05"]},
+     :scope
+     "Complete DAG and closure experiments reread; all five dependency receipts reviewed. No canonical DAG or ledger edits.",
+     :campaign-refutation false,
+     :infrastructure-packets
+     {:window "Original rectangular replan through this checkpoint",
+      :reviewed-implementation-rows 327,
+      :construction-modules-before 261,
+      :construction-modules-after 592,
+      :construction-module-delta 331,
+      :artifact "/tmp/topology-refill9-ledger-measure.json",
+      :sha256
+      "f94e04015f2eb50154940d8312eeb8ad85dd2208a854738e0c6b8558c8ab8aa2"},
+     :portfolio-artifact
+     {:path "/tmp/topology-refill9-tail.edn",
+      :sha256
+      "644d8ca41ed293578427cc1534081f6ce324aaeeb5a9f023aadd1965ab022a01"},
+     :validation
+     "Temporary combined ledger passes the canonical validator: 362 items, including three new blocked rows. No mathematical GO or consumer closure is claimed by this strategy election.",
+     :typed-residual-change
+     {:local-rank-normal-form
+      "Reviewed implementation supplies coordinates from ImplicitFunctionData; constructing that data from abstract rank hypotheses remains separate.",
+      :taylor-covering
+      "Reviewed implementation supplies compact flat-through-k image nullity under its smoothness and exponent hypotheses; it does not establish the entire critical locus is flat.",
+      :rank-source-induction
+      "Reviewed STOP refutes the proposed implication from a zero first derivative to higher-jet flatness, using a quadratic counterexample. This refutes that implication, not Sard.",
+      :rectangular-local
+      "Reviewed final STOP names missing infrastructure: rank aggregation and overlap closure still require undischarged nullity or induction premises. No unconditional manifold regular-value theorem was delivered.",
+      :smooth-interface
+      "The existing smooth assembly quantifies hindOne over arbitrary C1 reduced maps. Smooth lower-dimensional induction does not establish that premise; actual reductions must preserve smoothness in their theorem signatures."},
+     :review-outcomes
+     {:window-final-pass 330,
+      :implementation-results 327,
+      :reviewed-stop-results 2,
+      :reviewed-replan-results 1,
+      :superseded 6,
+      :checkpoint-open 1,
+      :dependency-reviews
+      "All five requested dependencies have PASS reviews, including the two STOP scheduling results; PASS does not convert their boundaries into proved theorems."}},
+    :replacement-items
+    [{:consumer "t95J04",
+      :stop-condition
+      "If the whole frozen adapter cannot be built from existing material, return STOP naming the exact missing theorem or representation and explicitly distinguish missing infrastructure from refutation; do not replace closure with another conditional interface.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "SARD THEOREM / strict-dimension sphere consumer",
+      :acceptance
+      {:probe
+       "GO requires a complete placeholder-free compiled copy of problems/t95J04/lean/Main.lean with its frozen statement unchanged, closing the only sorry and every conjunct. Investigate countable chartwise locally Lipschitz images and Hausdorff dimension for the strict dimension gap, then reuse t95J04_nullHomotopic_of_not_surjective. Haar nullity in coordinates alone does not establish the stated intrinsic Hausdorff conclusion. No assumed nullity, nonsurjectivity, manifold surrogates, or narrowed domain.",
+       :frozen-file "problems/t95J04/lean/Main.lean",
+       :frozen-sha256
+       "8321b881ae48f14a9d5e711534aa208eabd66dcdc16055f5ce22e9b66ce4fc15",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t95j04-frozen-hausdorff-closure-probe-refill9,
+      :kind :final-adapter,
+      :depends-on [:checkpoint-full-dag-refill-9],
+      :current-residual
+      "One executable placeholder: arbitrary compact smooth k-manifold map to the metric n-sphere, k<n, has intrinsic n-dimensional Hausdorff-null range, is nonsurjective, and is nullhomotopic. Remaining product and nonhomeomorphism conjuncts are already proved."}
+     {:consumer "t93A04",
+      :stop-condition
+      "Name an exact mathematical, hypothesis, or representation boundary if the probe fails. Missing infrastructure is not a refutation. REVISE requires exactly one compiled prerequisite under the probe protocol; no owner-authorization gate.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "SARD THEOREM",
+      :acceptance
+      {:probe
+       "GO requires a complete placeholder-free compiled theorem: for arbitrary positive finite-dimensional real Euclidean source and target, a globally smooth map has Haar-null image of its nonsurjective-derivative locus, with no rank-zero-nullity, hremaining, arbitrary finite-order Sard, or lower-dimensional Sard assumptions left. Use source-dimension induction only after proving that the actual reduced maps retain smoothness on their domains. SardSmoothCriticalImageInductionAssembly's hindOne quantifies over arbitrary C1 maps and cannot be discharged by smooth induction; do not silently identify those propositions. Zero-dimensional cases must be explicit if generalizing the signature. Any REVISE names one compiled smoothness-preserving prerequisite with an actual producer/consumer connection, not a renamed final conclusion as an assumption.",
+       :axioms :standard-only,
+       :consumer-residual
+       "t93A04 remains one placeholder until an unconditional rectangular theorem is transported through the actual manifold charts and the frozen regular-value statement is proved; no consumer closure is inferred from this foundation alone."},
+      :id :sard-smooth-rectangular-unconditional-probe-refill9,
+      :kind :reusable-theorem,
+      :depends-on [:checkpoint-full-dag-refill-9],
+      :current-residual
+      "Banked rank normal forms, Taylor flat-locus nullity and critical-image assemblies remain conditional. Full smooth rectangular critical-image nullity is not supplied; manifold regular-value and countability adapters remain downstream.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End the campaign only when every consumer closes or a genuine mathematical refutation is identified; missing infrastructure and owner authorization do not end the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, closure experiments and reviewed receipts of both elected rows. Recount executable consumer placeholders with comments stripped; compare typed residuals, infrastructure packets and reviewed STOP/PASS outcomes. Apply rule 0 by electing exactly one near-closure adapter before shared foundations. Elect a nonempty portfolio in standing strategic order and append another dependent refill checkpoint; do not merely extend the latest Sard chain."},
+      :id :checkpoint-full-dag-refill-10-after-closure-and-smooth,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t95j04-frozen-hausdorff-closure-probe-refill9
+       :sard-smooth-rectangular-unconditional-probe-refill9],
+      :current-residual
+      "Await reviewed exact t95J04 closure attempt and unconditional smooth rectangular Sard probe, then elect again from the complete DAG."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -46954,6 +47094,74 @@
     :critical-value-sard-rectangular-local-probe-1],
    :current-residual
    "await reviewed replacement Sard sub-DAG outcomes, then refill from the complete DAG"}
+  {:consumer "t95J04",
+   :stop-condition
+   "If the whole frozen adapter cannot be built from existing material, return STOP naming the exact missing theorem or representation and explicitly distinguish missing infrastructure from refutation; do not replace closure with another conditional interface.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SARD THEOREM / strict-dimension sphere consumer",
+   :acceptance
+   {:probe
+    "GO requires a complete placeholder-free compiled copy of problems/t95J04/lean/Main.lean with its frozen statement unchanged, closing the only sorry and every conjunct. Investigate countable chartwise locally Lipschitz images and Hausdorff dimension for the strict dimension gap, then reuse t95J04_nullHomotopic_of_not_surjective. Haar nullity in coordinates alone does not establish the stated intrinsic Hausdorff conclusion. No assumed nullity, nonsurjectivity, manifold surrogates, or narrowed domain.",
+    :frozen-file "problems/t95J04/lean/Main.lean",
+    :frozen-sha256
+    "8321b881ae48f14a9d5e711534aa208eabd66dcdc16055f5ce22e9b66ce4fc15",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t95j04-frozen-hausdorff-closure-probe-refill9,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-9 :checkpoint-full-dag-refill-9],
+   :current-residual
+   "One executable placeholder: arbitrary compact smooth k-manifold map to the metric n-sphere, k<n, has intrinsic n-dimensional Hausdorff-null range, is nonsurjective, and is nullhomotopic. Remaining product and nonhomeomorphism conjuncts are already proved."}
+  {:consumer "t93A04",
+   :stop-condition
+   "Name an exact mathematical, hypothesis, or representation boundary if the probe fails. Missing infrastructure is not a refutation. REVISE requires exactly one compiled prerequisite under the probe protocol; no owner-authorization gate.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SARD THEOREM",
+   :acceptance
+   {:probe
+    "GO requires a complete placeholder-free compiled theorem: for arbitrary positive finite-dimensional real Euclidean source and target, a globally smooth map has Haar-null image of its nonsurjective-derivative locus, with no rank-zero-nullity, hremaining, arbitrary finite-order Sard, or lower-dimensional Sard assumptions left. Use source-dimension induction only after proving that the actual reduced maps retain smoothness on their domains. SardSmoothCriticalImageInductionAssembly's hindOne quantifies over arbitrary C1 maps and cannot be discharged by smooth induction; do not silently identify those propositions. Zero-dimensional cases must be explicit if generalizing the signature. Any REVISE names one compiled smoothness-preserving prerequisite with an actual producer/consumer connection, not a renamed final conclusion as an assumption.",
+    :axioms :standard-only,
+    :consumer-residual
+    "t93A04 remains one placeholder until an unconditional rectangular theorem is transported through the actual manifold charts and the frozen regular-value statement is proved; no consumer closure is inferred from this foundation alone."},
+   :id :sard-smooth-rectangular-unconditional-probe-refill9,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-9 :checkpoint-full-dag-refill-9],
+   :current-residual
+   "Banked rank normal forms, Taylor flat-locus nullity and critical-image assemblies remain conditional. Full smooth rectangular critical-image nullity is not supplied; manifold regular-value and countability adapters remain downstream.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End the campaign only when every consumer closes or a genuine mathematical refutation is identified; missing infrastructure and owner authorization do not end the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, closure experiments and reviewed receipts of both elected rows. Recount executable consumer placeholders with comments stripped; compare typed residuals, infrastructure packets and reviewed STOP/PASS outcomes. Apply rule 0 by electing exactly one near-closure adapter before shared foundations. Elect a nonempty portfolio in standing strategic order and append another dependent refill checkpoint; do not merely extend the latest Sard chain."},
+   :id :checkpoint-full-dag-refill-10-after-closure-and-smooth,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t95j04-frozen-hausdorff-closure-probe-refill9
+    :sard-smooth-rectangular-unconditional-probe-refill9
+    :checkpoint-full-dag-refill-9],
+   :current-residual
+   "Await reviewed exact t95J04 closure attempt and unconditional smooth rectangular Sard probe, then elect again from the complete DAG."}
   {:consumer :t93A04,
    :stop-condition
    "STOP only for a counterexample to the stated local rank-normal-form theorem or hypotheses insufficient to select and invert a nonzero rank minor; otherwise REVISE with exactly one compiled prerequisite.",
