@@ -55434,8 +55434,64 @@
   {:consumer "t96J05",
    :stop-condition
    "Require the exact chosen-atlas smooth-inclusion theorem to compile without placeholders or nonstandard axioms; preserve existing APIs.",
+   :evidence
+   {:placeholder-delta
+    {:consumer "t96J05", :before 1, :after 1, :delta 0, :fixture 0},
+    :residual
+    "Chosen-atlas smooth inclusion compiled using the selected backward parameterizations. Derivative injectivity, kernel-range equality, manifold-source transport and frozen consumer uptake remain. No consumer closure claimed; independent review remains.",
+    :gates
+    {:exact-promotion :pass,
+     :compile :pass,
+     :standard-only-axioms :pass,
+     :chosen-atlas-preserved true,
+     :inherited-topology-preserved true,
+     :genuine-infinity-preserved true,
+     :existing-apis-preserved true,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"ConstructionTargets.RegularFiberSmoothInclusion.smooth_inclusion"
+     "90b02c24860daced58ec257edd5da896a45ec565f62c44d77b68494befead2b1"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, dependency review receipt and complete fixture",
+      :exit 0}
+     {:cmd "sha256sum /tmp/RegularFiberSmoothInclusion.lean", :exit 0}
+     {:cmd
+      "cmp /tmp/RegularFiberSmoothInclusion.lean ConstructionTargets/RegularFiberSmoothInclusion.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RegularFiberSmoothInclusion.lean",
+      :exit 0}
+     {:cmd
+      "Python forbidden-token, statement-hash and consumer hash/placeholder audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 426 items OK; {:done 416, :needs-owner 1, :superseded 6, :open 1, :blocked 2}"}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check and git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "2793ca55797f40df4deca2b90986186b66dca67b",
+    :changed-paths
+    ["ConstructionTargets/RegularFiberSmoothInclusion.lean"],
+    :fixture
+    {:path "/tmp/RegularFiberSmoothInclusion.lean",
+     :sha256
+     "a39cf89f3354ff39c0978dfcdc3651bed1a5cbc4c8ae8a433c6ce76ba107f4ed",
+     :placeholder-count 0},
+    :consumer-sha256
+    "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RegularFiberSmoothInclusion.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / chosen-atlas smooth inclusion",
