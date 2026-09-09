@@ -6908,8 +6908,153 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint9Census.py", :exit 0}
+     {:cmd "cat docs/TN-topology-foundational-programs.md", :exit 0}
+     {:cmd "sed -n '94,125p' docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd "sed -n '448,482p' TOPOLOGY-DEPENDENCY-DAG.md", :exit 0}
+     {:cmd "sha256sum problems/t92J06/lean/Main.lean", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/Checkpoint9Combined.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/Checkpoint9Tail.edn /tmp/Checkpoint9Census.json",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer :t92J06,
+      :stop-condition
+      "Preserve the literal wedge quotient and nonhomeomorphism of total spaces, which is stronger than inequivalence over the base. No assumed graph realization, universal cover or cover classification.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "COVERING-BASIC: literal wedge graph-cover consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t92J06/lean/Main.lean",
+       :stop-condition
+       "If full closure is unavailable, STOP with the exact missing graph-realization, covering-gluing or nonhomeomorphism theorem and typed evidence. No conditional or partial GO; distinguish infrastructure from refutation.",
+       :gates
+       ["GO requires full zero-placeholder frozen fixture, unchanged statement hash, fixture SHA256 and standard-only audits."
+        "Propose implementation scope only after full closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Read the exact frozen quotient and construct the covering spaces and maps using current graph, Circle and covering APIs. Verify wedge-point neighborhoods, exact three-point fiber cardinalities and pairwise nonhomeomorphism of total spaces. Construct the simply-connected total space and its actual covering map for the first conjunct. Permutation actions alone are insufficient. Compile a complete temporary exact Main without its placeholder.",
+       :consumer-equation
+       "The literal wedge admits the specified simply-connected cover and four actual three-sheeted covers whose total spaces are pairwise nonhomeomorphic.",
+       :frozen-sha256
+       "85f64495f251de4b505d8981f77b947a8775ab71b685dd580dbc98e13abd82fa"},
+      :id :oriented-checkpoint9-t92j06-exact-graph-covers-1,
+      :kind :final-adapter,
+      :depends-on [:oriented-checkpoint9-cover-and-fiber-atlas-refill],
+      :current-residual
+      "One frozen placeholder: an actual simply-connected covering and four three-sheeted coverings with pairwise nonhomeomorphic total spaces.",
+      :other-consumers []}
+     {:consumer :t01A04-cover-base-change,
+      :stop-condition
+      "Construct local trivializations on the literal pullback. No assumed covering on the pullback, constant fiber cardinality, quotient gluing, deck classification or frozen closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "COVERING-BASIC: literal pullback covering and fiber transport",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Given an actual covering p:E->B and continuous f:Y->B, construct IsCoveringMap for the projection from the literal subtype {(y,e):Y times E | f y=p e} to Y, with its induced topology. Pull back actual covering neighborhoods and build their local trivializations using pinned covering and bundle APIs. Construct the homeomorphism from each projection fiber over y to the original p-fiber over f y, prove the evaluation equation and transport finite fiber cardinalities. Include empty fibers and disconnected bases without imposing a global uniform fiber type; compile a concrete circle-cover pullback instance.",
+       :consumer-equation
+       "The constructed literal pullback projection is a covering; its fiber over y is homeomorphic to {e | p e=f y} by sending a pullback point to its E coordinate, so exact sheet cardinalities transport.",
+       :stop-condition
+       "GO requires the actual covering construction, fiber homeomorphism and cardinality equations. REVISE only to one compiled missing trivialization or topology prerequisite. This does not resolve stopped wedge-point covering gluing or classify total spaces."},
+      :id :oriented-checkpoint9-literal-pullback-cover-1,
+      :kind :reusable-theorem,
+      :depends-on [:oriented-checkpoint9-cover-and-fiber-atlas-refill],
+      :current-residual
+      "Product coverings are banked, but the full-DAG pullback/base-change constructor remains unelected.",
+      :other-consumers [:t01A02 :t98A01 :t92J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No repeated unresolved STOP, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: graph-cover uptake and full-DAG continuation",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs, including t01A05 and the fiber atlas boundary; exclude concurrent work. Return one to five fresh work rows plus a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+      :id :oriented-checkpoint10-graph-and-base-change-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint9-t92j06-exact-graph-covers-1
+       :oriented-checkpoint9-literal-pullback-cover-1
+       :oriented-checkpoint9-cover-and-fiber-atlas-refill],
+      :current-residual
+      "Measure actual graph-cover closure separately from pullback infrastructure; retain the t01A05 refutation and regular-fiber atlas STOP."}],
+    :changed-paths [],
+    :measures
+    {:baseline "55168acddf8f86f82b1edfebfccca97b60ab2796",
+     :head "6a188c8ff7f7494c150ace09d3595e49d100510c",
+     :placeholder-delta 0,
+     :consumer-placeholders
+     {:before 71,
+      :after 71,
+      :named-consumers 59,
+      :existing-files 58,
+      :zero-placeholder-files 19,
+      :missing-paths ["problems/t93A05/lean/Main.lean"],
+      :method
+      "Executable sorry tokens after stripping block and line comments."},
+     :infrastructure-packets
+     {:this-portfolio 2,
+      :concurrent-sard 2,
+      :modules-before 628,
+      :modules-after 632,
+      :consumer-closures 0},
+     :review-outcomes
+     {:t01A05-refutation :pass,
+      :smooth-fiber-coordinates :pass,
+      :fixed-model-coordinates :pass,
+      :fiber-atlas-infrastructure-stop :pass},
+     :typed-residual-change
+     {:t01A05
+      "Compiled and reviewed counterexample: the two-sheeted Fin 2 to Unit cover satisfies the dimension-zero hypotheses but its H0 is Z^2, contradicting the demanded orientation. Frozen statement remains unchanged.",
+      :fiber-atlas
+      "Smooth fixed-model local parameterizations are banked. Actual atlas, smooth overlaps and manifold inclusion derivative comparison remain unproved; reviewed two-packet STOP preserved.",
+      :concurrent-sard
+      "Open-domain localization and a global critical-induction step were added by the other campaign. Its open-slice induction contract remains active; no unconditional Sard closure is inferred."}},
+    :portfolio-artifact
+    {:path "/tmp/Checkpoint9Tail.edn",
+     :sha256
+     "ab17662c3d8a9c26cae546c489f0267e41f43f8650261fbf87f0568f2e7b17b3",
+     :validation
+     "55-item combined ledger validates with inserted rows blocked pending current checkpoint review."},
+    :finding
+    "Elect exactly one fresh near-closure probe first: t92J06 has one placeholder and no prior full-consumer probe found in either ledger. Its requirement concerns nonhomeomorphic total spaces, not merely inequivalent covering maps. Next elect literal pullback-cover construction: four proposed consumers, a narrower construction than general orientation, product homology or closed gluing, and supported by pinned covering/trivialization APIs. It does not retry stopped wedge-point gluing. Preserve the reviewed t01A05 refutation, original t94J08 refutation, atlas STOP, and unresolved normalization, polygon and manifold-localization boundaries. Exclude the other campaign's active Sard work. No frozen closure occurred.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint9Census.json",
+     :sha256
+     "080b7932285440b580eb28310b78610ad009cdbd2cd64065493f92a9ab1cb542"}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: finite-cover specification and regular-fiber uptake",
@@ -6927,6 +7072,91 @@
     :oriented-checkpoint8-hopf-and-regular-fiber-refill],
    :current-residual
    "Measure exact covering-consumer outcome separately from smooth fiber infrastructure; retain numerical normalization, orientation and surface-classification boundaries."}
+  {:consumer :t92J06,
+   :stop-condition
+   "Preserve the literal wedge quotient and nonhomeomorphism of total spaces, which is stronger than inequivalence over the base. No assumed graph realization, universal cover or cover classification.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "COVERING-BASIC: literal wedge graph-cover consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t92J06/lean/Main.lean",
+    :stop-condition
+    "If full closure is unavailable, STOP with the exact missing graph-realization, covering-gluing or nonhomeomorphism theorem and typed evidence. No conditional or partial GO; distinguish infrastructure from refutation.",
+    :gates
+    ["GO requires full zero-placeholder frozen fixture, unchanged statement hash, fixture SHA256 and standard-only audits."
+     "Propose implementation scope only after full closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Read the exact frozen quotient and construct the covering spaces and maps using current graph, Circle and covering APIs. Verify wedge-point neighborhoods, exact three-point fiber cardinalities and pairwise nonhomeomorphism of total spaces. Construct the simply-connected total space and its actual covering map for the first conjunct. Permutation actions alone are insufficient. Compile a complete temporary exact Main without its placeholder.",
+    :consumer-equation
+    "The literal wedge admits the specified simply-connected cover and four actual three-sheeted covers whose total spaces are pairwise nonhomeomorphic.",
+    :frozen-sha256
+    "85f64495f251de4b505d8981f77b947a8775ab71b685dd580dbc98e13abd82fa"},
+   :id :oriented-checkpoint9-t92j06-exact-graph-covers-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint9-cover-and-fiber-atlas-refill
+    :oriented-checkpoint9-cover-and-fiber-atlas-refill],
+   :current-residual
+   "One frozen placeholder: an actual simply-connected covering and four three-sheeted coverings with pairwise nonhomeomorphic total spaces.",
+   :other-consumers []}
+  {:consumer :t01A04-cover-base-change,
+   :stop-condition
+   "Construct local trivializations on the literal pullback. No assumed covering on the pullback, constant fiber cardinality, quotient gluing, deck classification or frozen closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "COVERING-BASIC: literal pullback covering and fiber transport",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Given an actual covering p:E->B and continuous f:Y->B, construct IsCoveringMap for the projection from the literal subtype {(y,e):Y times E | f y=p e} to Y, with its induced topology. Pull back actual covering neighborhoods and build their local trivializations using pinned covering and bundle APIs. Construct the homeomorphism from each projection fiber over y to the original p-fiber over f y, prove the evaluation equation and transport finite fiber cardinalities. Include empty fibers and disconnected bases without imposing a global uniform fiber type; compile a concrete circle-cover pullback instance.",
+    :consumer-equation
+    "The constructed literal pullback projection is a covering; its fiber over y is homeomorphic to {e | p e=f y} by sending a pullback point to its E coordinate, so exact sheet cardinalities transport.",
+    :stop-condition
+    "GO requires the actual covering construction, fiber homeomorphism and cardinality equations. REVISE only to one compiled missing trivialization or topology prerequisite. This does not resolve stopped wedge-point covering gluing or classify total spaces."},
+   :id :oriented-checkpoint9-literal-pullback-cover-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint9-cover-and-fiber-atlas-refill
+    :oriented-checkpoint9-cover-and-fiber-atlas-refill],
+   :current-residual
+   "Product coverings are banked, but the full-DAG pullback/base-change constructor remains unelected.",
+   :other-consumers [:t01A02 :t98A01 :t92J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No repeated unresolved STOP, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: graph-cover uptake and full-DAG continuation",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs, including t01A05 and the fiber atlas boundary; exclude concurrent work. Return one to five fresh work rows plus a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+   :id :oriented-checkpoint10-graph-and-base-change-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint9-t92j06-exact-graph-covers-1
+    :oriented-checkpoint9-literal-pullback-cover-1
+    :oriented-checkpoint9-cover-and-fiber-atlas-refill
+    :oriented-checkpoint9-cover-and-fiber-atlas-refill],
+   :current-residual
+   "Measure actual graph-cover closure separately from pullback infrastructure; retain the t01A05 refutation and regular-fiber atlas STOP."}
   {:consumer :t00A01,
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
