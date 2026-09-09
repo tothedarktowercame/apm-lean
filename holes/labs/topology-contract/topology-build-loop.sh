@@ -36,15 +36,52 @@ done
 
 log() { echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] $*" | tee -a "$LOG"; }
 valid_seat() { [[ "$1" =~ ^(codex-[0-9]+|claude-[0-9]+)$ ]]; }
+# Hoisted above the first die(): notice_target calls these, and validate()
+# and repository_safe() can die long before the seat-resolution block runs.
+# A function defined later than its caller is simply absent at that point.
+seat_registered() {
+  curl -fsS --max-time 10 "$AGENCY/api/alpha/agents/$1" 2>/dev/null \
+    | jq -e '.ok == true' >/dev/null 2>&1
+}
+registered_codex_seats() {
+  curl -fsS --max-time 15 "$AGENCY/api/alpha/agents" 2>/dev/null \
+    | jq -r '(.agents // .) | if type=="object" then [.[]] else . end
+             | .[] | ."id"."id/value" // empty' 2>/dev/null \
+    | grep -E '^codex-[0-9]+$' | sort -u
+}
+
+# A notification must not be lost because its target name went stale. OWNER
+# defaults to codex-18 and is only replaced by resolve_seat at startup LINE ~281
+# -- but validate() and repository_safe() can die() well before that, so an
+# early failure bells the unresolved default. On 2026-09-09 codex-18 was gone
+# ("Agent not found") and six notifications 404'd, every one of them reporting a
+# stop. The failures most worth reporting were precisely the ones whose report
+# was silently dropped.
+notice_target() {
+  if seat_registered "$OWNER" 2>/dev/null; then printf '%s' "$OWNER"; return 0; fi
+  local cand
+  cand="$(registered_codex_seats 2>/dev/null | head -1)"
+  if [ -n "$cand" ]; then
+    # stderr: this function's value is captured with $(...), so a log line on
+    # stdout would be captured INTO the seat name. Same trap as resolve_seat.
+    log "notice target $OWNER is not registered; notifying $cand instead" >&2
+    printf '%s' "$cand"; return 0
+  fi
+  # No registered seat at all: still emit to OWNER so the failure is visible in
+  # the log as a failed send rather than silently skipped.
+  printf '%s' "$OWNER"
+}
 send_notice() {
-  local reason="$1" note
+  local reason="$1" note target
   if [ "${TOPOLOGY_NO_NOTIFY:-0}" = 1 ]; then log "notification suppressed: $reason"; return 0; fi
+  target="$(notice_target)"
   note="$(mktemp)"
   { echo "topology-build-loop: $reason"; echo "ledger: $LEDGER";
     echo "counts: $(bb "$HERE/build_step.bb" counts "$LEDGER" 2>/dev/null || true)";
     echo "last log lines:"; tail -40 "$LOG"; } > "$note"
   python3 /home/joe/code/futon3c/scripts/agency_send.py --from topology-build-loop \
-    --to "$OWNER" --kind bell --type assert < "$note" >> "$LOG" 2>&1 || log "notification failed"
+    --to "$target" --kind bell --type assert < "$note" >> "$LOG" 2>&1 \
+    || log "notification failed (target=$target)"
   rm -f "$note"
 }
 notify() { [ "$NOTIFIED" = 1 ] && return 0; NOTIFIED=1; send_notice "$1"; }
@@ -241,16 +278,6 @@ send_notice "campaign started or resumed"
 # pool; and if the pool cannot fill a distinct role, a fresh seat is registered
 # via POST /api/alpha/agents/auto. Dying is reserved for the case where the
 # Agency itself will not give us a seat -- a substrate failure, not a typo.
-seat_registered() {
-  curl -fsS --max-time 10 "$AGENCY/api/alpha/agents/$1" 2>/dev/null \
-    | jq -e '.ok == true' >/dev/null 2>&1
-}
-registered_codex_seats() {
-  curl -fsS --max-time 15 "$AGENCY/api/alpha/agents" 2>/dev/null \
-    | jq -r '(.agents // .) | if type=="object" then [.[]] else . end
-             | .[] | ."id"."id/value" // empty' 2>/dev/null \
-    | grep -E '^codex-[0-9]+$' | sort -u
-}
 register_new_codex_seat() {
   curl -fsS --max-time 30 -X POST "$AGENCY/api/alpha/agents/auto" \
     -H 'Content-Type: application/json' -d '{"type":"codex"}' 2>/dev/null \
