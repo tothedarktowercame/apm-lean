@@ -45717,6 +45717,44 @@
    "The order-zero critical-image obligation is identified as entire-image nullity; its validity and the complementary higher-order analytic cases remain unresolved.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the positive-order case split fails, reviewed order-one or zero-source nullity fails under these hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean"
+    "ConstructionTargets/SardBorelPositiveOrderCriticalNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL POSITIVE-ORDER CRITICAL NULLITY INTERFACE",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardBorelPositiveOrderCriticalNullityProbe.lean",
+     :sha256
+     "8f4624e74293eb3149555805ea7cbf530ae7f12b088a7e2efc51c6913f095329"},
+    :declarations
+    ["BorelPositiveOrderCriticalNullityAtDimension"
+     "borelPositiveOrderCriticalNullity_iff_highOrder"
+     "borelPositiveOrderCriticalNullity_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Adapt analytic induction dependencies to the explicitly positive-order interface, prove complementary higher-order cases, and connect to the smooth frozen consumer. Do not substitute this predicate for the broader all-orders predicate without new proofs."},
+   :representation
+   {:source
+    "Borel critical-image nullity at a fixed source dimension for every admissible finite order at least one, over finite-dimensional real normed spaces and arbitrary source subsets.",
+    :target
+    "The same nullity obligation restricted to orders at least two; the order-one case is supplied by a reviewed theorem.",
+    :direction
+    "Logical equivalence from the explicitly positive-order predicate to its order-at-least-two formulation, with the reverse implication supplied by order-one nullity."},
+   :id :critical-value-sard-borel-positive-order-critical-nullity-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:critical-value-sard-order-one-critical-nullity-1
+    :critical-value-sard-borel-classical-critical-nullity-predicate-1],
+   :current-residual
+   "A distinct positive-order interface and its zero-source base case are established; higher-order induction migration and complementary analytic cases remain. The original all-orders predicate is unchanged and unproved.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -45770,79 +45808,90 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank the exact lower-dimensional critical-image comparison, audit the order-zero specification, and resolve complementary higher-order cases. No rectangular closure or mathematical refutation claimed; ledger and frozen consumer unchanged.",
+     "Bank the distinct positive-order interface; migrate the higher-order induction arguments with explicit positivity proofs. Neither the original all-orders predicate nor full rectangular closure is proved. Ledger and frozen consumer unchanged.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"criticalImage_eq_image_of_lower_dimension"
-      "17e27e6df88e70a602d2c5b99d070bcc653ff33877d27681fcb5ee01b54a51e7"},
+     {"BorelPositiveOrderCriticalNullityAtDimension"
+      "e07028f927a3d4cc247edf3eba620256238f9f37203b0462341b082d857e5d53",
+      "borelPositiveOrderCriticalNullity_iff_highOrder"
+      "7870bbf15f3862e6a2b4e505de0659da52b6a58481e05c3136609752415c60e8",
+      "borelPositiveOrderCriticalNullity_zero"
+      "594f37ad7751aa931fff40640f44576424676f637fa570b29ab8218a303924ff"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if a linear map from strictly smaller finite dimension can be surjective, the localized image equality fails under these hypotheses, or nonstandard axioms are required.",
+      "Stop only if the positive-order case split fails, reviewed order-one or zero-source nullity fails under these hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardLowerDimensionCriticalImageEquality.lean"
-       "ConstructionTargets/SardLowerDimensionCriticalImageEquality.md"],
+      ["ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean"
+       "ConstructionTargets/SardBorelPositiveOrderCriticalNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOWER-DIMENSION CRITICAL IMAGE EQUALITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL POSITIVE-ORDER CRITICAL NULLITY INTERFACE",
       :acceptance
       {:fixture
-       {:path "/tmp/SardLowerDimensionCriticalImageEqualityProbe.lean",
+       {:path "/tmp/SardBorelPositiveOrderCriticalNullityProbe.lean",
         :sha256
-        "16fe2a309f9654f2469b526d68ed6c102e3088d91b646611a1cd7eed631fd620"},
-       :declarations ["criticalImage_eq_image_of_lower_dimension"],
+        "8f4624e74293eb3149555805ea7cbf530ae7f12b088a7e2efc51c6913f095329"},
+       :declarations
+       ["BorelPositiveOrderCriticalNullityAtDimension"
+        "borelPositiveOrderCriticalNullity_iff_highOrder"
+        "borelPositiveOrderCriticalNullity_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Audit the order-zero induction specification using this exact comparison; preserve the smooth frozen consumer and resolve complementary higher-order analytic cases."},
+       "Adapt analytic induction dependencies to the explicitly positive-order interface, prove complementary higher-order cases, and connect to the smooth frozen consumer. Do not substitute this predicate for the broader all-orders predicate without new proofs."},
       :representation
       {:source
-       "The localized nonsurjective ambient fderiv image of an arbitrary map between finite-dimensional real normed spaces with strictly smaller source dimension.",
+       "Borel critical-image nullity at a fixed source dimension for every admissible finite order at least one, over finite-dimensional real normed spaces and arbitrary source subsets.",
        :target
-       "The entire image of the same arbitrary source subset, without differentiability or measure assumptions.",
+       "The same nullity obligation restricted to orders at least two; the order-one case is supplied by a reviewed theorem.",
        :direction
-       "Exact equality from the localized critical-image representation to the entire subset-image representation."},
-      :id
-      :critical-value-sard-lower-dimension-critical-image-equality-1,
+       "Logical equivalence from the explicitly positive-order predicate to its order-at-least-two formulation, with the reverse implication supplied by order-one nullity."},
+      :id :critical-value-sard-borel-positive-order-critical-nullity-1,
       :kind :representation-comparison,
       :depends-on
-      [:critical-value-sard-lower-dimension-ambient-image-nullity-1],
+      [:critical-value-sard-order-one-critical-nullity-1
+       :critical-value-sard-borel-classical-critical-nullity-predicate-1],
       :current-residual
-      "The order-zero critical-image obligation is identified as entire-image nullity; its validity and the complementary higher-order analytic cases remain unresolved.",
+      "A distinct positive-order interface and its zero-source base case are established; higher-order induction migration and complementary analytic cases remain. The original all-orders predicate is unchanged and unproved.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite identifies the critical image with the entire image whenever source dimension is strictly smaller, without any regularity assumption. Thus the induction predicate's admissible order-zero case requires entire-image nullity from C0 regularity, not the differentiability-based result already banked. This comparison exposes the exact obligation; it does not prove that obligation or refute the smooth frozen consumer.",
+     "One compiled prerequisite defines an explicitly positive-order Borel critical-nullity predicate, proves its equivalence to the order-at-least-two obligation using reviewed order-one nullity, and proves its zero-source-dimension base case. This is a separately named restricted interface, not a proof or replacement of the existing all-orders predicate. Migrating the analytic induction dependencies remains necessary.",
      :commands
      [{:cmd
-       "Read frozen consumer, Borel induction predicate, DAG certification rule, closure policy, and reviewed order-one and lower-dimensional dependency receipts",
+       "Read DAG certification rule, closure policy, Borel predicate and zero-source module, and reviewed predicate, order-one, and critical-image-comparison findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardLowerDimensionCriticalImageEqualityProbe.lean",
+       "lake env lean /tmp/SardBorelPositiveOrderCriticalNullityProbe.lean",
        :exit 0,
        :output
-       "Final fixture compiles without warnings; standard axioms only."}
+       "No warnings; both theorem audits report standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardLowerDimensionCriticalImageEqualityProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardBorelPositiveOrderCriticalNullityProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
-       "Final fixture 16fe2a309f9654f2469b526d68ed6c102e3088d91b646611a1cd7eed631fd620; frozen consumer 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
+       "Fixture 8f4624e74293eb3149555805ea7cbf530ae7f12b088a7e2efc51c6913f095329; frozen consumer 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '5,11p' /tmp/SardLowerDimensionCriticalImageEqualityProbe.lean | sha256sum",
-       :exit 0,
-       :output
-       "17e27e6df88e70a602d2c5b99d070bcc653ff33877d27681fcb5ee01b54a51e7"}
+       "sed -n '8,16p' /tmp/SardBorelPositiveOrderCriticalNullityProbe.lean | sha256sum",
+       :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLowerDimensionCriticalImageEqualityProbe.lean",
+       "sed -n '18,27p' /tmp/SardBorelPositiveOrderCriticalNullityProbe.lean | sha256sum",
+       :exit 0}
+      {:cmd
+       "sed -n '39,40p' /tmp/SardBorelPositiveOrderCriticalNullityProbe.lean | sha256sum",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelPositiveOrderCriticalNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 352 items OK; {:done 344, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 353 items OK; {:done 345, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -45852,25 +45901,14 @@
        :output "/home/joe/code/apm-lean/.lake/packages"}
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-     :diagnostic-history
-     [{:cmd
-       "Initial inspection batch ending with rg in Mathlib/Topology/PeanoCurve.lean",
-       :exit 2,
-       :output
-       "Requested search path absent; preceding source reads succeeded."}
-      {:cmd
-       "lake env lean /tmp/SardLowerDimensionCriticalImageEqualityProbe.lean",
-       :exit 1,
-       :output
-       "Initial simplification left a propositional goal and an unused-simp warning; replaced with explicit conjunction witnesses before successful final compilation."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardLowerDimensionCriticalImageEqualityProbe.lean",
+     {:path "/tmp/SardBorelPositiveOrderCriticalNullityProbe.lean",
       :sha256
-      "16fe2a309f9654f2469b526d68ed6c102e3088d91b646611a1cd7eed631fd620"},
+      "8f4624e74293eb3149555805ea7cbf530ae7f12b088a7e2efc51c6913f095329"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -46171,7 +46209,8 @@
     :critical-value-sard-lower-dimension-surjective-lift-nullity-1
     :critical-value-sard-lower-dimension-ambient-image-nullity-1
     :critical-value-sard-order-one-critical-nullity-1
-    :critical-value-sard-lower-dimension-critical-image-equality-1],
+    :critical-value-sard-lower-dimension-critical-image-equality-1
+    :critical-value-sard-borel-positive-order-critical-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
