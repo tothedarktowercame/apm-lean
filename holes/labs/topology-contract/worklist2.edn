@@ -319,89 +319,92 @@
    :stop-condition
    "No arbitrary-dimensional orientation claim, global fundamental class, or localization injectivity follows from this model packet. Do not assume geometric sign conclusions or alter frozen statements.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Ready for exact two-file implementation and independent review. No model/sign proof residual remains; manifold chart construction, ambient localization/excision, and overlap compatibility are downstream.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {"model_generators_exactly_two"
-      "a41294fcc058d7ed1cdf7ceec021cfc6186f87781debd0d70d8e9fcef71c2e65",
-      "chosen_generator_ne_negative"
-      "d5d8f227de42872d4fbbf15fffea39961113fd7129d91864799dd98c1aa538cc",
-      "identity_H1_eq_id"
-      "c24289b2dedd8595692e71e92a1c50aecd00f236116cf774994170b7ade53866",
-      "reflection_H1_eq_neg_id"
-      "5cab9c757410a696f825e9ba00fcfd24fb8f978e689e0dae5c15ef8208e256f9",
-      "increasing_homeomorph_generator"
-      "cff8d698a6454f53321f92e16770e238d9ce82c9cacf2d4e365b1eb6edb25014",
-      "decreasing_homeomorph_generator"
-      "749a0ba51de6d2da0f559846db8267578f4907c862aeaf31afb7d8fb939412d4"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :author "codex-13",
-     :commands
-     [{:cmd "cd /home/joe/code/apm-lean && realpath .lake/packages",
-       :exit 0}
-      {:cmd
-       "cd /home/joe/code/apm-lean && lake env lean /tmp/OneDiskLocalOrientationProbe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/OneDiskLocalOrientationProbe.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/OneDiskLocalOrientationProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "cd /home/joe/code/apm-lean && git diff --exit-code",
-       :exit 0}
-      {:cmd "cd /home/joe/code/apm-lean && git diff --check",
-       :exit 0}],
-     :repository-note
-     "Read-only probe: no repository files modified. Canonical package authority verified; existing untracked supervisor runs2 files left untouched.",
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/OneDiskLocalOrientationProbe.lean",
-      :sha256
-      "53f08685ff3c6b5b8545c53ddc65c4873045f749796f6f513b6748bc299c38ad"},
-     :finding
-     "Complete placeholder-free model/sign fixture compiled. Local orientation generators generate the entire integral local H1 group and are exactly the chosen class and its distinct negative. Identity induces identity; geometric reflection induces negation on the entire local H1 group. Increasing and decreasing pointed coordinate homeomorphisms transport the chosen generator with positive and negative signs through the production chart-pair map. Pair witnesses are constructed from origin fixation and injectivity. Reflection's sign follows from its actual endpoint swap, connecting-map naturality, and commuting affine/radial pair maps; no induced-map sign is assumed.",
-     :dependency-commits
-     ["9f4e9d3ea394d9e4ae0093367fc3ca68d3c52c91"
-      "5c9b65aa3740a6e5837fcafbb9149dbafda8cc0a"],
-     :statement-hash-method
-     "SHA-256 of UTF-8 theorem declaration bytes beginning with theorem and ending immediately before the space preceding :=; names below are in ConstructionTargets.OneDiskLocalOrientation.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/OneDiskLocalOrientation.lean"
-       "ConstructionTargets/OneDiskLocalOrientation.md"],
-      :acceptance
-      {:declarations
-       ["ConstructionTargets.OneDiskLocalOrientation.IsLocalOrientationGenerator"
-        "ConstructionTargets.OneDiskLocalOrientation.model_generators_exactly_two"
-        "ConstructionTargets.OneDiskLocalOrientation.chosen_generator_ne_negative"
-        "ConstructionTargets.OneDiskLocalOrientation.identity_H1_eq_id"
-        "ConstructionTargets.OneDiskLocalOrientation.reflection_H1_eq_neg_id"
-        "ConstructionTargets.OneDiskLocalOrientation.increasing_homeomorph_generator"
-        "ConstructionTargets.OneDiskLocalOrientation.decreasing_homeomorph_generator"
-        "ConstructionTargets.OneDiskLocalOrientation.identity_homeomorph_generator"
-        "ConstructionTargets.OneDiskLocalOrientation.reflection_homeomorph_generator"],
-       :implementation
-       "Promote the exact compiled fixture to the canonical Lean file and document the geometric proof and one-dimensional boundary. Preserve all hypotheses and production relative-homology maps. No further mathematical construction is required for this row.",
-       :axioms :standard-only,
-       :gates
-       ["Verify the recorded fixture SHA-256 before copying."
-        "Compile the fixture and canonical target."
-        "Run lake build ConstructionTargets.OneDiskLocalOrientation ConstructionTargets.OneDiskIncreasingOrientation ConstructionTargets.RelativeSingularConnectingNaturality ConstructionTargets.ChartPairRelativeHomologyTransport."
-        "Reproduce all fifteen printed axiom audits; permit only propext, Classical.choice, Quot.sound."
-        "Reproduce the recorded statement hashes and scan for placeholders and forbidden declarations."
-        "Run git diff --check, verify exact two-file scope, and commit the scoped implementation."],
-       :consumer-residual
-       "The one-dimensional model generator/sign packet is complete. The next campaign row must construct actual restricted manifold chart pairs and their ambient excision comparison; overlap compatibility and global fundamental classes remain separate."},
-      :stop-condition
-      "No arbitrary-dimensional orientation claim, global fundamental class, or localization injectivity follows from this model packet. Do not assume geometric sign conclusions or alter frozen statements."},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "No one-dimensional model/sign proof residual remains; implementation awaits independent review. Next construct actual restricted manifold chart pairs and their ambient excision comparison. Overlap compatibility, arbitrary-dimensional orientation, global fundamental classes, and localization injectivity remain separate.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :all-fifteen-printed-axiom-audits :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :fixture-compilation :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass,
+     :six-recorded-statement-hashes :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 17,
+      :log "/tmp/codex-14-local-orientation-build.log",
+      :paths
+      {"ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/SingularSubdivision.lean" 2,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/T02A06SphereShift.lean" 3}}],
+    :statement-hashes
+    {"model_generators_exactly_two"
+     "a41294fcc058d7ed1cdf7ceec021cfc6186f87781debd0d70d8e9fcef71c2e65",
+     "chosen_generator_ne_negative"
+     "d5d8f227de42872d4fbbf15fffea39961113fd7129d91864799dd98c1aa538cc",
+     "identity_H1_eq_id"
+     "c24289b2dedd8595692e71e92a1c50aecd00f236116cf774994170b7ade53866",
+     "reflection_H1_eq_neg_id"
+     "5cab9c757410a696f825e9ba00fcfd24fb8f978e689e0dae5c15ef8208e256f9",
+     "increasing_homeomorph_generator"
+     "cff8d698a6454f53321f92e16770e238d9ce82c9cacf2d4e365b1eb6edb25014",
+     "decreasing_homeomorph_generator"
+     "749a0ba51de6d2da0f559846db8267578f4907c862aeaf31afb7d8fb939412d4"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/OneDiskLocalOrientationProbe.lean", :exit 0}
+     {:cmd
+      "lake env lean /tmp/OneDiskLocalOrientationProbe.lean > /tmp/codex-14-local-orientation-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/OneDiskLocalOrientation.lean > /tmp/codex-14-local-orientation-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.OneDiskLocalOrientation ConstructionTargets.OneDiskIncreasingOrientation ConstructionTargets.RelativeSingularConnectingNaturality ConstructionTargets.ChartPairRelativeHomologyTransport > /tmp/codex-14-local-orientation-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/OneDiskLocalOrientation.lean /tmp/OneDiskLocalOrientationProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Complete one-disk local orientation generators and geometric signs\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Dependency PASS reviews checked. Existing untracked supervisor runs2 files left untouched. Ledger, DAG, and frozen statements unchanged.",
+    :commit "1333150cc6443e151e5df62e24d4d3ddf1417cab",
+    :changed-paths
+    ["ConstructionTargets/OneDiskLocalOrientation.lean"
+     "ConstructionTargets/OneDiskLocalOrientation.md"],
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/OneDiskLocalOrientationProbe.lean",
+     :sha256
+     "53f08685ff3c6b5b8545c53ddc65c4873045f749796f6f513b6748bc299c38ad"},
+    :finding
+    "Promoted the complete fixture unchanged. Integral local generators are exactly the chosen class and its distinct negative. Identity induces identity and geometric reflection induces negation on the whole local H1 group. Increasing and decreasing pointed coordinate homeomorphisms have the proved generator signs through production chart-pair transport, with constructed pair witnesses. Reflection's sign follows from the actual endpoint swap, connecting-map naturality, and commuting affine/radial pair maps.",
+    :dependency-commits
+    ["9f4e9d3ea394d9e4ae0093367fc3ca68d3c52c91"
+     "5c9b65aa3740a6e5837fcafbb9149dbafda8cc0a"],
+    :statement-hash-method
+    "SHA-256 of UTF-8 theorem declaration bytes beginning with theorem and ending immediately before the space preceding :=; names below are in ConstructionTargets.OneDiskLocalOrientation.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/OneDiskLocalOrientation.lean"
     "ConstructionTargets/OneDiskLocalOrientation.md"],
