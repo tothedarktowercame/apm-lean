@@ -48828,17 +48828,82 @@
   {:consumer "t93A04",
    :stop-condition
    "GO needs the complete compiled producer and compact rank-zero conclusion. REVISE requires exactly one compiled prerequisite. Otherwise identify the exact boundary; infrastructure absence is not refutation.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:source-pins
+     {:path "/tmp/SardSmoothCompactRankZeroInduction-sources.json",
+      :sha256
+      "81824a7a343a17021df3df5a204e62453266427a0fd0cfd1cc751fbc43214c1d"},
+     :placeholder-delta
+     {:fixture 0, :consumer-before 1, :consumer-after 1, :delta 0},
+     :residual
+     "Conditional compact rank-zero induction step established. Positive-rank reduction with preserved smoothness, compatible local-domain induction, base cases, full critical-set coverage and manifold transport remain. No unconditional Sard or frozen t93A04 closure is claimed.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :documentation
+     {:path "/tmp/SardSmoothCompactRankZeroInduction.md",
+      :sha256
+      "3ff6705b4c48b90ed32eae76a40c8917b2a46c0454a9a6ef771f3134f3acd148"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/SardSmoothCompactRankZeroInduction.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/check-sard-smooth-compact-rank-zero.py",
+       :exit 0}
+      {:cmd
+       "git diff --exit-code -- ConstructionTargets problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+       :exit 0}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/SardSmoothCompactRankZeroInduction.lean",
+      :sha256
+      "b253ed6a67b8d0fc2d8d7bcc6866e05daacd6168050e4a4193c99e5902a2d236",
+      :placeholder-count 0},
+     :finding
+     "Complete conditional compact rank-zero image-nullity theorem compiles for actual target Haar measure. Nonzero jets supply scalar directions through the existing producer; the reviewed smooth local-induction theorem supplies null open pieces, and second-countable aggregation derives higher-jet locus nullity. Choosing k=finrank(E) supplies admissible finite order k+1 from genuine infinity smoothness. The existing compact rank-zero assembly then proves the conclusion. The sole nullity input is local genuinely smooth critical-image induction over strictly smaller sources, explicitly including zero-dimensional sources.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardSmoothCompactRankZeroInduction.lean"
+       "ConstructionTargets/SardSmoothCompactRankZeroInduction.md"],
+      :acceptance
+      {:consumer-placeholder-count 1,
+       :preserve-zero-dimensional-induction-sources true,
+       :axioms :standard-only,
+       :consumer-file "problems/t93A04/lean/Main.lean",
+       :build
+       "lake build ConstructionTargets.SardSmoothCompactRankZeroInduction",
+       :preserve-genuine-infinity true,
+       :fixture-placeholders 0,
+       :declarations
+       ["SardSmoothCompactRankZeroInductionProbe.compact_rankZero_image_null_of_smooth_local_induction"],
+       :compile
+       "lake env lean ConstructionTargets/SardSmoothCompactRankZeroInduction.lean",
+       :consumer-sha256
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}},
+     :seat :codex-12}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/SardSmoothCompactRankZeroInduction.lean"
+    "ConstructionTargets/SardSmoothCompactRankZeroInduction.md"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / compact smooth rank-zero induction step",
    :acceptance
-   {:probe
-    "Compile compact rank-zero image nullity for globally ContDiff real genuine infinity f between nontrivial finite-dimensional real inner-product spaces and a compact K on which fderiv is zero, with actual target Haar measure. The sole nullity input may be the local genuinely smooth critical-image induction hypothesis for every strictly smaller finite-dimensional source, including zero-dimensional sources. Select scalar directions from nonzero jets using existing producers, invoke SardSmoothFirstNonzeroJetLocalInduction, aggregate its open neighborhoods with SardFirstNonzeroJetLocusLocalAggregation, and feed the derived higher-jet nullity into compact_rankZero_image_zero_of_admissible_higherJets. Choose and justify a sufficient finite Taylor order from smoothness and the dimensions. No supplied higher-jet nullity, local-piece nullity, arbitrary-C1 induction, analytic omega substitution or global flatness inferred from first derivative zero. Reuse existing finite-jet decomposition and flat-locus Taylor bounds. If this exact theorem already exists, reuse it and identify the next consumer edge rather than duplicate it.",
+   {:consumer-placeholder-count 1,
+    :preserve-zero-dimensional-induction-sources true,
     :axioms :standard-only,
-    :consumer-residual
-    "Conditional compact rank-zero induction step only. Positive-rank reduction with preserved smoothness, compatible local-domain induction, base cases, full critical-set coverage and actual manifold transport remain before unconditional Sard or t93A04 closure."},
+    :consumer-file "problems/t93A04/lean/Main.lean",
+    :build
+    "lake build ConstructionTargets.SardSmoothCompactRankZeroInduction",
+    :preserve-genuine-infinity true,
+    :fixture-placeholders 0,
+    :declarations
+    ["SardSmoothCompactRankZeroInductionProbe.compact_rankZero_image_null_of_smooth_local_induction"],
+    :compile
+    "lake env lean ConstructionTargets/SardSmoothCompactRankZeroInduction.lean",
+    :consumer-sha256
+    "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
    :id :sard-smooth-compact-rank-zero-induction-probe-refill13,
    :kind :reusable-theorem,
    :depends-on
