@@ -38478,6 +38478,39 @@
    "The finite cover and scale construction are compiled; arbitrarily small uniform Taylor coefficients must still be obtained from smoothness and flatness.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if continuity of the nth derivative and its vanishing on a compact locus cannot give an arbitrarily small derivative norm on a uniform neighborhood of that locus, or if the proof requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCompactFlatHighestDerivativeSmall.lean"
+    "ConstructionTargets/SardCompactFlatHighestDerivativeSmall.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT FLAT HIGHEST DERIVATIVE SMALLNESS",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardCompactFlatHighestDerivativeSmallProbe.lean",
+     :sha256
+     "43144d01bf19edbcb897da802eba3acc8bfe4ea23a33310db3c6075d2087ba68"},
+    :declarations
+    ["exists_uniform_small_iteratedFDeriv_near_compact_flat"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Apply the uniform highest-derivative bound along short affine segments to obtain arbitrarily small Taylor remainder coefficients, then invoke compact cover construction and endpoint nullity."},
+   :representation
+   {:source
+    "A globally C^n map between real normed spaces whose nth derivative vanishes on a compact source locus, together with a positive norm tolerance.",
+    :target
+    "One positive radius such that the nth derivative has norm below the tolerance at every point within that radius of any locus point."},
+   :id :critical-value-sard-compact-flat-highest-derivative-small-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-local-endpoint-compact-cover-data-1],
+   :current-residual
+   "Uniform smallness of the highest derivative near the compact flat locus compiles; the affine-line Taylor remainder estimate must consume this local bound.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -38531,83 +38564,83 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Prove compact uniform little-o Taylor control yielding arbitrarily small coefficients and positive validity radii, then use the compiled cover construction.",
+     "Derive uniform small Taylor remainder coefficients from the compiled highest-derivative neighborhood bound, then apply compact cover construction and endpoint nullity.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"localEndpoint_coverData_of_compact_remainder"
-      "a13e6204ec52b44f224b4665bb3d25e4c3a1cfd14d70bc05ed4adf5ef3cd4662"},
+     {"exists_uniform_small_iteratedFDeriv_near_compact_flat"
+      "a793ca2a1b179da437b4c8969541fe075d75b12648b5ef528d4db0038d79d0d1"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if compactness and a Taylor remainder estimate valid below a positive radius cannot supply a finite source cover at a smaller scale with the required packing and localized remainder data, or if the construction requires nonstandard axioms.",
+      "Stop only if continuity of the nth derivative and its vanishing on a compact locus cannot give an arbitrarily small derivative norm on a uniform neighborhood of that locus, or if the proof requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardLocalEndpointCompactCoverData.lean"
-       "ConstructionTargets/SardLocalEndpointCompactCoverData.md"],
+      ["ConstructionTargets/SardCompactFlatHighestDerivativeSmall.lean"
+       "ConstructionTargets/SardCompactFlatHighestDerivativeSmall.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / LOCAL ENDPOINT COMPACT COVER DATA",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT FLAT HIGHEST DERIVATIVE SMALLNESS",
       :acceptance
       {:fixture
-       {:path "/tmp/SardLocalEndpointCompactCoverDataProbe.lean",
+       {:path "/tmp/SardCompactFlatHighestDerivativeSmallProbe.lean",
         :sha256
-        "2a32e00dde823cd0cfe6b9680fd9a2babf835ce1308518f1044e9f2d4be853be"},
-       :declarations ["localEndpoint_coverData_of_compact_remainder"],
+        "43144d01bf19edbcb897da802eba3acc8bfe4ea23a33310db3c6075d2087ba68"},
+       :declarations
+       ["exists_uniform_small_iteratedFDeriv_near_compact_flat"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Derive arbitrarily small uniform Taylor coefficients and positive validity radii on compact flat loci, then apply this cover construction and endpoint nullity."},
+       "Apply the uniform highest-derivative bound along short affine segments to obtain arbitrarily small Taylor remainder coefficients, then invoke compact cover construction and endpoint nullity."},
       :representation
       {:source
-       "A compact bounded locus, a nonnegative Taylor coefficient valid for pairs at distance below a positive radius, and the coefficient expression below the target tolerance.",
+       "A globally C^n map between real normed spaces whose nth derivative vanishes on a compact source locus, together with a positive norm tolerance.",
        :target
-       "Localized endpoint small-coefficient cover data, including a positive scale at most one, finite cover, packing-cardinality bound, and per-ball remainder estimates."},
-      :id :critical-value-sard-local-endpoint-compact-cover-data-1,
+       "One positive radius such that the nth derivative has norm below the tolerance at every point within that radius of any locus point."},
+      :id :critical-value-sard-compact-flat-highest-derivative-small-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-local-endpoint-small-coefficient-nullity-1
-       :critical-value-sard-maximal-separated-finite-dimensional-cover-cardinality-1],
+      [:critical-value-sard-local-endpoint-compact-cover-data-1],
       :current-residual
-      "The finite cover and scale construction are compiled; arbitrarily small uniform Taylor coefficients must still be obtained from smoothness and flatness.",
+      "Uniform smallness of the highest derivative near the compact flat locus compiles; the affine-line Taylor remainder estimate must consume this local bound.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem remains incomplete, not refuted. A compiled prerequisite constructs the localized endpoint cover data from compactness, a coefficient valid below a positive radius, and the required coefficient bound. It chooses scale min(1, delta/2), obtains a maximal separated finite cover with packing control, and uses centre containment to instantiate every localized remainder estimate. Deriving arbitrarily small coefficients from smoothness and flatness remains.",
+     "The rectangular theorem remains incomplete. A placeholder-free fixture proves that a continuous highest derivative vanishing on a compact locus has arbitrarily small norm throughout one uniform neighborhood of that locus. This provides the small derivative bound needed along short Taylor segments. Converting this bound into uniform Taylor remainder coefficients remains.",
      :commands
      [{:cmd
-       "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md; sed -n '1,240p' docs/TN-topology-closure-experiments.md; sed -n '1,200p' docs/TN-topology-build-loop-design.md",
+       "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,200p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "sed -n '1,140p' ConstructionTargets/SardMaximalSeparatedFiniteDimensionalCoverCardinality.lean; sed -n '1,100p' ConstructionTargets/SardFiniteOrderLocalEndpointSmallCoefficientNullity.lean",
+       "sed -n '1,140p' ConstructionTargets/SardAffineLineDerivativeBound.lean",
        :exit 0}
       {:cmd
-       "sed -n '4970,5008p' holes/labs/topology-contract/worklist.edn",
+       "sed -n '443,459p' .lake/packages/mathlib/Mathlib/Topology/MetricSpace/Thickening.lean; sed -n '149,163p' .lake/packages/mathlib/Mathlib/Topology/MetricSpace/Thickening.lean; sed -n '1200,1213p' .lake/packages/mathlib/Mathlib/Analysis/Calculus/ContDiff/Defs.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardLocalEndpointCompactCoverDataProbe.lean",
+       "lake env lean /tmp/SardCompactFlatHighestDerivativeSmallProbe.lean",
        :exit 0,
        :output
-       "'localEndpoint_coverData_of_compact_remainder' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'exists_uniform_small_iteratedFDeriv_near_compact_flat' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardLocalEndpointCompactCoverDataProbe.lean",
+       "sha256sum /tmp/SardCompactFlatHighestDerivativeSmallProbe.lean",
        :exit 0,
        :output
-       "2a32e00dde823cd0cfe6b9680fd9a2babf835ce1308518f1044e9f2d4be853be"}
+       "43144d01bf19edbcb897da802eba3acc8bfe4ea23a33310db3c6075d2087ba68"}
       {:cmd
-       "sed -n '7,37p' /tmp/SardLocalEndpointCompactCoverDataProbe.lean | sha256sum",
+       "sed -n '5,23p' /tmp/SardCompactFlatHighestDerivativeSmallProbe.lean | sha256sum",
        :exit 0,
        :output
-       "a13e6204ec52b44f224b4665bb3d25e4c3a1cfd14d70bc05ed4adf5ef3cd4662"}
+       "a793ca2a1b179da437b4c8969541fe075d75b12648b5ef528d4db0038d79d0d1"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardLocalEndpointCompactCoverDataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactFlatHighestDerivativeSmallProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 293 items OK; {:done 285, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 294 items OK; {:done 286, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -38622,12 +38655,12 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
-     {:path "/tmp/SardLocalEndpointCompactCoverDataProbe.lean",
+     {:path "/tmp/SardCompactFlatHighestDerivativeSmallProbe.lean",
       :sha256
-      "2a32e00dde823cd0cfe6b9680fd9a2babf835ce1308518f1044e9f2d4be853be"},
+      "43144d01bf19edbcb897da802eba3acc8bfe4ea23a33310db3c6075d2087ba68"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -38869,7 +38902,8 @@
     :critical-value-sard-finite-order-local-taylor-finite-target-cover-measure-1
     :critical-value-sard-finite-order-local-endpoint-taylor-coefficient-bound-1
     :critical-value-sard-finite-order-local-endpoint-small-coefficient-nullity-1
-    :critical-value-sard-local-endpoint-compact-cover-data-1],
+    :critical-value-sard-local-endpoint-compact-cover-data-1
+    :critical-value-sard-compact-flat-highest-derivative-small-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
