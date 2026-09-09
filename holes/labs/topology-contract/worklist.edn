@@ -45001,6 +45001,38 @@
    "Dimension induction is assembled conditionally; the low-order and complementary-overlap analytic premise remains unproved.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if ambient derivative witnesses fail to restrict to the critical set, nonsurjectivity fails to force zero determinant in finite dimension, the Jacobian nullity theorem fails under these hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardSameSpaceAmbientCriticalNullity.lean"
+    "ConstructionTargets/SardSameSpaceAmbientCriticalNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SAME-SPACE AMBIENT CRITICAL NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
+     :sha256
+     "22f27c56f476e685a4f4408982b088dd5073890131502aa4df91cc70e559b126"},
+    :declarations ["sameSpace_ambient_criticalImage_zero"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Transport the same-space result to equal-dimensional distinct spaces, handle lower-source-dimensional low-order cases, and discharge the complementary-overlap analytic premise."},
+   :representation
+   {:source
+    "A finite-dimensional real normed Borel space with additive Haar measure, a self-map, an arbitrary source subset, and ambient differentiability at every point of that subset.",
+    :target
+    "Nullity of the image of the subset's entire nonsurjective ambient derivative locus, without rank-zero, set measurability, openness, unique differentiability, or derivative-continuity assumptions."},
+   :id :critical-value-sard-same-space-ambient-critical-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-rank-zero-same-space-endpoint-nullity-1],
+   :current-residual
+   "Same-space low-order critical nullity is established; distinct-space transport, other low-order cases, and complementary analytic cases remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -45054,75 +45086,73 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank conditional overlap induction closure; discharge its explicit low-order and complementary-range premise before claiming full rectangular closure.",
+     "Bank same-space ambient critical nullity; extend the low-order result across dimensions and discharge complementary analytic cases before rectangular closure.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"borelClassicalCriticalNullity_of_overlap_complement"
-      "632fa802b1b56a922079ebd2584a1f46ac5a4c6cbb4219879f64b2d9af10102e"},
+     {"sameSpace_ambient_criticalImage_zero"
+      "fb23bf2fdddd4118356f2bab3b274288cd7c546c7c702c9fd2c8128d54a82532"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the order and overlap case split is not exhaustive, strong induction cannot instantiate the reviewed overlap theorem under these hypotheses, or nonstandard axioms are required.",
+      "Stop only if ambient derivative witnesses fail to restrict to the critical set, nonsurjectivity fails to force zero determinant in finite dimension, the Jacobian nullity theorem fails under these hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardBorelOverlapInductionClosure.lean"
-       "ConstructionTargets/SardBorelOverlapInductionClosure.md"],
+      ["ConstructionTargets/SardSameSpaceAmbientCriticalNullity.lean"
+       "ConstructionTargets/SardSameSpaceAmbientCriticalNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL OVERLAP INDUCTION CLOSURE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SAME-SPACE AMBIENT CRITICAL NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardBorelOverlapInductionClosureProbe.lean",
+       {:path "/tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
         :sha256
-        "7e2f02676632f92731536ed6292d426a30de86f22c8c05c982a4a271db7ee59c"},
-       :declarations
-       ["borelClassicalCriticalNullity_of_overlap_complement"],
+        "22f27c56f476e685a4f4408982b088dd5073890131502aa4df91cc70e559b126"},
+       :declarations ["sameSpace_ambient_criticalImage_zero"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Prove the explicit low-order and complementary-overlap inductive premise; then specialize the resulting Borel finite-order theorem to the remaining rectangular and manifold interfaces."},
+       "Transport the same-space result to equal-dimensional distinct spaces, handle lower-source-dimensional low-order cases, and discharge the complementary-overlap analytic premise."},
       :representation
       {:source
-       "An inductive nullity theorem for admissible finite orders restricted to order < 2 or targetDim+order+1 < sourceDim+(sourceDim-1)/targetDim, assuming Borel-compatible critical nullity at strictly smaller source dimensions.",
+       "A finite-dimensional real normed Borel space with additive Haar measure, a self-map, an arbitrary source subset, and ambient differentiability at every point of that subset.",
        :target
-       "BorelClassicalCriticalNullityAtDimension at every source dimension, for finite-dimensional real normed spaces, Borel targets with additive Haar measures, arbitrary source sets and pointwise ambient finite-order regularity."},
-      :id :critical-value-sard-borel-overlap-induction-closure-1,
+       "Nullity of the image of the subset's entire nonsurjective ambient derivative locus, without rank-zero, set measurability, openness, unique differentiability, or derivative-continuity assumptions."},
+      :id :critical-value-sard-same-space-ambient-critical-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-borel-overlap-normed-spaces-1
-       :critical-value-sard-borel-classical-critical-nullity-predicate-1],
+      [:critical-value-sard-finite-order-rank-zero-same-space-endpoint-nullity-1],
       :current-residual
-      "Dimension induction is assembled conditionally; the low-order and complementary-overlap analytic premise remains unproved.",
+      "Same-space low-order critical nullity is established; distinct-space transport, other low-order cases, and complementary analytic cases remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite closes strong source-dimension induction conditionally on exactly the low-order and complementary-overlap cases. The reviewed normed-space theorem supplies every order-at-least-two overlap case. The remaining analytic premise is explicit and unproved; this is not unconditional rectangular Morse-Sard closure or a refutation.",
+     "One compiled prerequisite proves same-space critical-image nullity from pointwise ambient differentiability on an arbitrary set. Ambient derivatives provide within-derivative witnesses on the critical set; nonsurjectivity forces zero determinant, enabling the Jacobian nullity theorem. This removes rank-zero and unique-differentiability restrictions for this same-space case, but does not close rectangular Morse-Sard.",
      :commands
      [{:cmd
-       "Read DAG certification rule, closure policy, normed-space overlap module, Borel induction predicate, and reviewed normed-space dependency receipt",
+       "Read DAG, closure policy, endpoint modules, Jacobian theorem, determinant equivalence interface, and reviewed endpoint and induction-closure findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardBorelOverlapInductionClosureProbe.lean",
+       "lake env lean /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardBorelOverlapInductionClosureProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
        "Frozen consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '7,23p' /tmp/SardBorelOverlapInductionClosureProbe.lean | sha256sum",
+       "sed -n '5,11p' /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelOverlapInductionClosureProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 346 items OK; {:done 338, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 347 items OK; {:done 339, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -45132,14 +45162,35 @@
        :output "/home/joe/code/apm-lean/.lake/packages"}
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+     :diagnostic-history
+     [{:cmd
+       "rg search including nonexistent Analysis/Calculus/*Sard* path",
+       :exit 2,
+       :output
+       "Missing path; Jacobian source located and inspected separately."}
+      {:cmd
+       "rg -n 'det.*(surjective|bijective)|surjective.*det' .lake/packages/mathlib/Mathlib/LinearAlgebra",
+       :exit 1,
+       :output
+       "No matches; inspected determinant equivalence construction instead."}
+      {:cmd
+       "lake env lean /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
+       :exit 1,
+       :output
+       "Initial draft passed an implicit linear-map argument positionally."}
+      {:cmd
+       "lake env lean /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
+       :exit 1,
+       :output
+       "Second draft required pointwise equivalence application simplification. Fixed before final compile."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardBorelOverlapInductionClosureProbe.lean",
+     {:path "/tmp/SardSameSpaceAmbientCriticalNullityProbe.lean",
       :sha256
-      "7e2f02676632f92731536ed6292d426a30de86f22c8c05c982a4a271db7ee59c"},
+      "22f27c56f476e685a4f4408982b088dd5073890131502aa4df91cc70e559b126"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -45434,7 +45485,8 @@
     :critical-value-sard-target-equiv-critical-image-1
     :critical-value-sard-borel-overlap-target-equiv-transfer-1
     :critical-value-sard-borel-overlap-normed-spaces-1
-    :critical-value-sard-borel-overlap-induction-closure-1],
+    :critical-value-sard-borel-overlap-induction-closure-1
+    :critical-value-sard-same-space-ambient-critical-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
