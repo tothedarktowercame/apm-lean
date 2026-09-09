@@ -5826,8 +5826,154 @@
      :review-outcomes]},
    :stop-condition
    "Preserve unresolved STOPs and refutations; no unproved numerical normalization, duplicate concurrent work or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint7Census.py", :exit 0}
+     {:cmd
+      "bb: inspect active rows and dependency reviews in both ledgers",
+      :exit 0}
+     {:cmd "cat docs/TN-topology-foundational-programs.md", :exit 0}
+     {:cmd "sed -n '440,485p' TOPOLOGY-DEPENDENCY-DAG.md", :exit 0}
+     {:cmd "sed -n '90,128p' docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd "sed -n '1,120p' problems/t95J06/lean/Main.lean", :exit 0}
+     {:cmd "sha256sum problems/t95J06/lean/Main.lean", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/Checkpoint7Combined.edn",
+      :exit 0}
+     {:cmd "sha256sum /tmp/Checkpoint7Tail.edn", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :replacement-items
+    [{:consumer :t95J06,
+      :stop-condition
+      "Preserve frozen hypotheses and the actual surface subtype. Do not assume smooth embedded inclusion, a smooth restricted action, a principal bundle, Euler vanishing or surface classification.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Surface classification: exact invariant Hopf-surface consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t95J06/lean/Main.lean",
+       :stop-condition
+       "If no bounded closing adapter exists, STOP under rule 0 with exact typed missing action-regularity, orbit-space or classification hypotheses/theorems. Distinguish infrastructure from refutation; no conditional or partial GO.",
+       :gates
+       ["GO only with a complete zero-placeholder exact fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+        "Propose implementation scope only after full closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 2,
+       :probe
+       "Compile a complete temporary exact Main with both placeholders removed. Inspect precisely the existential ChartedSpace/IsManifold hypothesis and component H2 orientation encoding. Construct the actual restricted Circle action from the explicit Hopf formula; check which continuity or smoothness facts follow under those exact charts. Supply any orbit-space, bundle, Euler or surface-classification comparison needed to obtain homeomorphisms of the actual components with Circle x Circle, including empty F. Reuse the proved explicit-torus invariance for final assembly.",
+       :consumer-equation
+       "Every component of every frozen compact invariant orientable surface is homeomorphic to the actual torus, completing both frozen declarations.",
+       :frozen-sha256
+       "482fc0478fe2b5c3252076b3a3e91f28ea9d9d81f7e5d3d3ada78ed5167a0d06"},
+      :id :oriented-checkpoint7-t95j06-exact-hopf-surface-closure-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "Two frozen placeholders: each actual compact invariant surface component must be homeomorphic to Circle x Circle. Periodicity, action laws and explicit torus invariance are proved.",
+      :other-consumers []}
+     {:consumer :t02A07-regular-fiber-geometry,
+      :stop-condition
+      "Local Euclidean fiber geometry only. No assumed fiber chart, global regular value, Sard induction, manifold orientation, transverse intersection comparison or t00J02 closure. Do not duplicate the other campaign's nullity work.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE: finite-dimensional regular-fiber chart with arbitrary target dimension",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For finite-dimensional real normed spaces E and F and a genuinely smooth map f:E->F with surjective derivative at x, construct the kernel/complement splitting and an actual local coordinate homeomorphism near x with model ker(Df x) x F. Use the pinned implicit/inverse-function API, reusing banked parameterization results when applicable. Prove the coordinate projection equation for f-f(x), then restrict to the literal fiber f inverse {f(x)} and construct its local homeomorphism with an open kernel neighborhood. Prove the derivative of the inverse fiber parameterization at the origin is kernel inclusion. Include arbitrary target dimension and a concrete codimension-two instance; state all smoothness and completeness hypotheses explicitly.",
+       :consumer-equation
+       "In the constructed coordinates Phi, snd(Phi y)=f(y)-f(x); the actual zero slice parameterizes exactly the local fiber, and its inverse derivative at zero is the kernel inclusion.",
+       :stop-condition
+       "GO requires constructed chart data and exact fiber/derivative equations, not supplied ImplicitFunctionData or an assumed chart. REVISE only to one compiled missing splitting or coordinate prerequisite. Global manifold assembly and orientation remain downstream."},
+      :id :oriented-checkpoint7-surjective-derivative-fiber-chart-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Banked transverse linear algebra and scalar implicit parameterizations do not yet provide a constructed regular-fiber chart for arbitrary surjective finite-dimensional derivatives.",
+      :other-consumers [:t94A06 :t97J05 :t00J02]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Preserve reviewed STOPs and refutations; no duplicate concurrent work, unproved normalization or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: exact surface uptake and regular-preimage continuation",
+      :acceptance
+      {:strategy
+       "Reread complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumer reach and simplicity. Retry a reviewed STOP only with evidence resolving its exact boundary. Return one to five fresh work rows plus a successor with identical checkpoint keys. Exclude active work of the other campaign and do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish missing infrastructure from refutation and infrastructure from frozen closure."},
+      :id :oriented-checkpoint8-hopf-and-regular-fiber-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint7-t95j06-exact-hopf-surface-closure-1
+       :oriented-checkpoint7-surjective-derivative-fiber-chart-1],
+      :current-residual
+      "Measure exact Hopf-surface uptake separately from local regular-fiber geometry. Numerical Hausdorff normalization, polygon invariants and general manifold orientation remain independent."}],
+    :changed-paths [],
+    :measures
+    {:baseline "65e9444654f1966d500f62ec6ae946fe8a3c9fa3",
+     :head "012ff0c78ec69b1db57365522757eed7a3cae18b",
+     :placeholder-delta 0,
+     :consumer-placeholders
+     {:before 71,
+      :after 71,
+      :named-consumers 59,
+      :existing-files 58,
+      :zero-placeholder-files 19,
+      :missing-paths ["problems/t93A05/lean/Main.lean"],
+      :method
+      "Executable sorry tokens after stripping block and line comments."},
+     :infrastructure-packets
+     {:this-portfolio 2,
+      :concurrent-sard 1,
+      :modules-before 622,
+      :modules-after 625,
+      :consumer-closures 0},
+     :review-outcomes
+     {:t97A01-infrastructure-stop :pass,
+      :second-moments :pass,
+      :fourth-moments :pass,
+      :concurrent-compact-rank-nullity :pass,
+      :concurrent-t95J05-normalization-stop :awaiting-review},
+     :typed-residual-change
+     {:t97A01
+      "Actual standard-polygon homeomorphism and homology transport compile; polygon-specific invariant calculations remain unproved.",
+      :intrinsic-moments
+      "Reviewed second and fourth moments establish both exact consumer reductions in terms of intrinsic total mass. Numerical normalization remains.",
+      :concurrent-t95J05
+      "New diagnostic identifies the complete frozen proposition with M_3=2*pi^2; neither this identity nor its negation is proved. Do not duplicate the pending row."}},
+    :portfolio-artifact
+    {:path "/tmp/Checkpoint7Tail.edn",
+     :sha256
+     "30cce80a2be7090ddf12323a09cbe0e943333d39752132688f1cb1db0167fc79",
+     :validation "Temporary combined ledger: 47 items OK."},
+    :finding
+    "Elect one fresh near-closure consumer first: t95J06 has two placeholders and no reviewed full-consumer STOP in either ledger. Test its exact action and component hypotheses without assuming an embedded smooth structure. Then elect arbitrary-target regular-fiber chart geometry, a bounded implicit-function construction serving four DAG consumers. The full-DAG comparison excludes active Sard work; general orientation/gluing, product homology and surface classification require broader constructions. Numerical sphere normalization remains stopped and is also under the other campaign's review. Existing scalar implicit parameterizations are inputs, not evidence for arbitrary-target fiber charts. Preserve the t94J08 original refutation and repaired-scope accounting, all unresolved polygon/gluing/degree STOPs, and the absence of any proved Hausdorff normalization discrepancy.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint7Census.json",
+     :sha256
+     "be98dbc4e0a560d3cbf9f79644b42704d08b7288aae55ad6c3b3e5148b4d6c16"}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact polygon uptake and intrinsic normalization boundary",
@@ -5844,6 +5990,87 @@
     :oriented-checkpoint6-gluing-and-intrinsic-measure-refill],
    :current-residual
    "Measure frozen polygon uptake separately from intrinsic moment reductions. Total sphere mass, arbitrary-manifold orientation and embedded-ball gluing remain independent."}
+  {:consumer :t95J06,
+   :stop-condition
+   "Preserve frozen hypotheses and the actual surface subtype. Do not assume smooth embedded inclusion, a smooth restricted action, a principal bundle, Euler vanishing or surface classification.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Surface classification: exact invariant Hopf-surface consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t95J06/lean/Main.lean",
+    :stop-condition
+    "If no bounded closing adapter exists, STOP under rule 0 with exact typed missing action-regularity, orbit-space or classification hypotheses/theorems. Distinguish infrastructure from refutation; no conditional or partial GO.",
+    :gates
+    ["GO only with a complete zero-placeholder exact fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+     "Propose implementation scope only after full closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 2,
+    :probe
+    "Compile a complete temporary exact Main with both placeholders removed. Inspect precisely the existential ChartedSpace/IsManifold hypothesis and component H2 orientation encoding. Construct the actual restricted Circle action from the explicit Hopf formula; check which continuity or smoothness facts follow under those exact charts. Supply any orbit-space, bundle, Euler or surface-classification comparison needed to obtain homeomorphisms of the actual components with Circle x Circle, including empty F. Reuse the proved explicit-torus invariance for final assembly.",
+    :consumer-equation
+    "Every component of every frozen compact invariant orientable surface is homeomorphic to the actual torus, completing both frozen declarations.",
+    :frozen-sha256
+    "482fc0478fe2b5c3252076b3a3e91f28ea9d9d81f7e5d3d3ada78ed5167a0d06"},
+   :id :oriented-checkpoint7-t95j06-exact-hopf-surface-closure-1,
+   :kind :final-adapter,
+   :depends-on [:oriented-checkpoint7-polygon-and-moment-refill],
+   :current-residual
+   "Two frozen placeholders: each actual compact invariant surface component must be homeomorphic to Circle x Circle. Periodicity, action laws and explicit torus invariance are proved.",
+   :other-consumers []}
+  {:consumer :t02A07-regular-fiber-geometry,
+   :stop-condition
+   "Local Euclidean fiber geometry only. No assumed fiber chart, global regular value, Sard induction, manifold orientation, transverse intersection comparison or t00J02 closure. Do not duplicate the other campaign's nullity work.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE: finite-dimensional regular-fiber chart with arbitrary target dimension",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For finite-dimensional real normed spaces E and F and a genuinely smooth map f:E->F with surjective derivative at x, construct the kernel/complement splitting and an actual local coordinate homeomorphism near x with model ker(Df x) x F. Use the pinned implicit/inverse-function API, reusing banked parameterization results when applicable. Prove the coordinate projection equation for f-f(x), then restrict to the literal fiber f inverse {f(x)} and construct its local homeomorphism with an open kernel neighborhood. Prove the derivative of the inverse fiber parameterization at the origin is kernel inclusion. Include arbitrary target dimension and a concrete codimension-two instance; state all smoothness and completeness hypotheses explicitly.",
+    :consumer-equation
+    "In the constructed coordinates Phi, snd(Phi y)=f(y)-f(x); the actual zero slice parameterizes exactly the local fiber, and its inverse derivative at zero is the kernel inclusion.",
+    :stop-condition
+    "GO requires constructed chart data and exact fiber/derivative equations, not supplied ImplicitFunctionData or an assumed chart. REVISE only to one compiled missing splitting or coordinate prerequisite. Global manifold assembly and orientation remain downstream."},
+   :id :oriented-checkpoint7-surjective-derivative-fiber-chart-1,
+   :kind :reusable-theorem,
+   :depends-on [:oriented-checkpoint7-polygon-and-moment-refill],
+   :current-residual
+   "Banked transverse linear algebra and scalar implicit parameterizations do not yet provide a constructed regular-fiber chart for arbitrary surjective finite-dimensional derivatives.",
+   :other-consumers [:t94A06 :t97J05 :t00J02]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Preserve reviewed STOPs and refutations; no duplicate concurrent work, unproved normalization or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: exact surface uptake and regular-preimage continuation",
+   :acceptance
+   {:strategy
+    "Reread complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumer reach and simplicity. Retry a reviewed STOP only with evidence resolving its exact boundary. Return one to five fresh work rows plus a successor with identical checkpoint keys. Exclude active work of the other campaign and do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish missing infrastructure from refutation and infrastructure from frozen closure."},
+   :id :oriented-checkpoint8-hopf-and-regular-fiber-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint7-t95j06-exact-hopf-surface-closure-1
+    :oriented-checkpoint7-surjective-derivative-fiber-chart-1
+    :oriented-checkpoint7-polygon-and-moment-refill],
+   :current-residual
+   "Measure exact Hopf-surface uptake separately from local regular-fiber geometry. Numerical Hausdorff normalization, polygon invariants and general manifold orientation remain independent."}
   {:consumer :t00A01,
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
