@@ -39150,6 +39150,24 @@
      {:cmd
       "git add ConstructionTargets/SardCompactFlatNonnegativeBudgetNullity.lean ConstructionTargets/SardCompactFlatNonnegativeBudgetNullity.md && git diff --cached --check && git commit -m 'topology: unify nonnegative Taylor budget nullity' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788927352302-15986-c4bdfd01",
+     :commands
+     ["git show 2075b9435187cb9febc6a2148e6e380701e0514f --stat --oneline"
+      "sha256sum /tmp/SardCompactFlatNonnegativeBudgetNullityProbe.lean"
+      "cmp fixture recorded-source"
+      "git show commit:ConstructionTargets/SardCompactFlatNonnegativeBudgetNullity.lean | sed -n '7,36p' | sha256sum"
+      "lake env lean /tmp/SardCompactFlatNonnegativeBudgetNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardCompactFlatNonnegativeBudgetNullity.lean"
+      "lake build ConstructionTargets.SardCompactFlatNonnegativeBudgetNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check commit^ commit"
+      "git diff --exit-code commit -- ConstructionTargets"
+      "consumer hash and placeholder checks"],
+     :finding
+     "Commit 2075b943 has exact scope and matching fixture/frozen hashes. Equality orientation, positive natural surplus, strict-branch dimension identity, and order-(k+1)-to-order-k image containment are correct. Add-Haar measure and Borel structures are preserved. Standard axioms only, zero scoped placeholders, all gates passed."},
     :commit "2075b9435187cb9febc6a2148e6e380701e0514f",
     :changed-paths
     ["ConstructionTargets/SardCompactFlatNonnegativeBudgetNullity.lean"
@@ -39161,7 +39179,7 @@
     :declarations
     ["compact_flatThrough_image_zero_of_nonnegative_budget"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactFlatNonnegativeBudgetNullity.lean"
     "ConstructionTargets/SardCompactFlatNonnegativeBudgetNullity.md"],
@@ -39330,7 +39348,7 @@
       "7f43fd8adcff6518a857751b4a9069d3a4cb6260b6c8560cd578c6dbebda83e5"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
