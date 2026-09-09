@@ -49989,8 +49989,61 @@
   {:consumer "t94J08",
    :stop-condition
    "If full closure cannot compile, STOP naming the exact missing induced-map computation or representation boundary; distinguish missing infrastructure from mathematical refutation.",
+   :evidence
+   {:placeholder-delta
+    {:consumer "t94J08",
+     :before 2,
+     :after 2,
+     :delta 0,
+     :frozen-sha256
+     "f75c03843555aca28c4abd3c772c5cee3216e912c2c1d52255de75db719a2c3e"},
+    :residual
+    "Frozen encoding is refuted. A structural specification repair must address reduced degree-zero homology or explicitly restrict dimensions and adjust the local-index clause. No repair, source edit, DAG edit or ledger edit was made. This does not refute the classical antipodal-degree theorem or Sard.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1788978797839-16791-8ac340f8"},
+    :outcome :stop,
+    :warnings
+    ["Three inherited prefix lints."
+     "Unused hv, hp and hr binders in the copied negated proposition."],
+    :frozen-proposition-sha256
+    "a6f7312d3c9a90ce4663087d4af2cdf5b9a636b6a046b00bde7c3a4dff27cf48",
+    :disposition :stop,
+    :axioms [propext Classical.choice Quot.sound],
+    :author :codex-12,
+    :reason :mathematical-refutation,
+    :commands
+    [{:cmd "lake env lean /tmp/T94J08ZeroSphereRefutation.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/T94J08ZeroSphereRefutation-audit.json",
+      :exit 0}
+     {:cmd "git diff --exit-code -- problems/t94J08/lean/Main.lean",
+      :exit 0}],
+    :campaign-refutation true,
+    :refutation
+    "The frozen theorem includes n=0. T94J08Sphere (n+1) uses ambient dimension, so this case is the two-point sphere S0. Ordinary integral H0 of that sphere cannot be isomorphic to Z. The fixture proves the literal negation of the complete frozen apm_t94j08 proposition by extracting its impossible n=0 orientation.",
+    :changed-paths [],
+    :proved-declarations
+    [diagnostic_no_zero_orientation diagnostic_refutes_frozen_theorem],
+    :fixture
+    {:path "/tmp/T94J08ZeroSphereRefutation.lean",
+     :sha256
+     "b336d0daf658fe45acb4f63ded0203e92747e02359867eb953770d1747a57948",
+     :purpose :refutation,
+     :placeholders 0},
+    :finding
+    "The proof uses actual discrete H0 coordinates in ModuleCat Z, the categorical coproduct/direct-sum comparison, finrank invariance and two explicitly distinct zero-sphere points. It does not import either frozen sorry-bearing theorem. The exact frozen proposition was compared textually with the proposition negated in the fixture. The DAG assertion that Sphere (n+1) avoids the ordinary-H0 defect is incorrect: n+1 is the ambient dimension. Positive-dimensional sphere orientations and the reduced zero-sphere difference generator do not supply the requested ordinary-H0 orientation.",
+    :artifacts
+    {:report
+     {:path "/tmp/T94J08ZeroSphereRefutation.md",
+      :sha256
+      "496477708269ba2235b1818808b12d4e546a018ab9555632f429a8e052fff6c6"},
+     :audit
+     {:path "/tmp/T94J08ZeroSphereRefutation-audit.json",
+      :sha256
+      "f3333bcced046c07422c4c8ac1fc54a9f7fabecde11cbe6a33f655bce42c0c65"}},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SPHERE ORIENTATION / antipodal homology action",
    :acceptance
