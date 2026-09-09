@@ -45063,6 +45063,23 @@
       :exit 0,
       :output
       "Committed exactly two scoped files; final worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788962097546-16391-72f852fa",
+     :commands
+     ["git show --stat --oneline e2d65b3937d7bf5583c0115a9ecde1c15cad7c48"
+      "sha256sum /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean"
+      "cmp /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean <(git show e2d65b3937d7bf5583c0115a9ecde1c15cad7c48:ConstructionTargets/SardSameSpaceAmbientCriticalNullity.lean)"
+      "git show e2d65b3937d7bf5583c0115a9ecde1c15cad7c48:ConstructionTargets/SardSameSpaceAmbientCriticalNullity.lean | sed -n '5,11p' | sha256sum"
+      "git diff --exit-code e2d65b3937d7bf5583c0115a9ecde1c15cad7c48 -- ConstructionTargets"
+      "lake env lean /tmp/SardSameSpaceAmbientCriticalNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardSameSpaceAmbientCriticalNullity.lean"
+      "lake build ConstructionTargets.SardSameSpaceAmbientCriticalNullity"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Commit e2d65b3937d7bf5583c0115a9ecde1c15cad7c48 passes. Exact two-file scope; fixture SHA 22f27c56f476e685a4f4408982b088dd5073890131502aa4df91cc70e559b126 and statement SHA fb23bf2fdddd4118356f2bab3b274288cd7c546c7c702c9fd2c8128d54a82532 reproduced. Lines 12-22 correctly apply Jacobian nullity with ambient derivative witnesses and prove determinant zero via invertibility contradiction. Mathlib MeasureTheory/Function/Jacobian.lean:650 supports arbitrary subsets. Same-space boundary preserved. Both compilations exit 0 with standard axioms only; build8242 succeeds. Zero new placeholders; frozen consumer unchanged with one existing placeholder. Worklist348 valid. Ledger untouched."},
     :commit "e2d65b3937d7bf5583c0115a9ecde1c15cad7c48",
     :changed-paths
     ["ConstructionTargets/SardSameSpaceAmbientCriticalNullity.lean"
@@ -45073,7 +45090,7 @@
      "22f27c56f476e685a4f4408982b088dd5073890131502aa4df91cc70e559b126"},
     :declarations ["sameSpace_ambient_criticalImage_zero"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardSameSpaceAmbientCriticalNullity.lean"
     "ConstructionTargets/SardSameSpaceAmbientCriticalNullity.md"],
@@ -45259,7 +45276,7 @@
       "22f27c56f476e685a4f4408982b088dd5073890131502aa4df91cc70e559b126"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
