@@ -34903,6 +34903,45 @@
    "Inherited topology data is compiled; expose those topology parameters explicitly in the pointwise witness wrapper before specializing it to derivative-range coordinates.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if exact positive derivative rank, a localized derivative-rank upper bound, finite-order regularity, and the inherited coordinate topology-and-measure packets cannot jointly yield an open neighborhood whose closed localized source image has zero target measure, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.lean"
+    "ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POSITIVE-RANK POINTWISE NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean",
+     :sha256
+     "050b41683ddf8b96214b90217d449fb08f27babd70a2fee8d4e44dc6f657f101"},
+    :declarations
+    ["exists_open_image_zero_of_finiteOrder_positiveRank"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Aggregate the pointwise positive-rank neighborhoods over each finite rank stratum and combine them with the rank-zero finite-order branch."},
+   :representation
+   {:source
+    "A finite-order smooth map at a point of exact positive derivative rank, with a local rank upper bound, induction hypotheses, and admissible regularity.",
+    :target
+    "An open neighborhood of the point on which the image of any closed localized source set has zero target additive-Haar measure."},
+   :id
+   :critical-value-sard-finite-order-positive-rank-pointwise-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-pointwise-witness-explicit-topology-measure-spaces-1
+    :critical-value-sard-projected-coordinate-explicit-inherited-topology-data-1
+    :critical-value-sard-finite-order-positive-rank-installed-pointwise-data-1
+    :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2
+    :critical-value-sard-projected-rank-reduced-dimension-identities-1],
+   :current-residual
+   "The pointwise positive-rank local nullity theorem compiles; bank it before finite-rank local aggregation.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -34956,78 +34995,87 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Invoke the fully explicit topology-and-measure-space wrapper with the positive-rank packet and localized chart-slice certificate, then aggregate rank strata.",
+     "Bank the compiled positive-rank pointwise local-nullity theorem, then aggregate its neighborhoods across positive-rank strata and combine with the rank-zero finite-order nullity branch.",
      :outcome :revise,
      :warnings [],
+     :statement-hashes
+     {"exists_open_image_zero_of_finiteOrder_positiveRank"
+      "2049b1b189481678372cc5770b4d386de7f11bdee13439fd1c6489142e7e9157"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the finite-order pointwise nullity witness cannot accept explicit coordinate topology spaces followed by locally compact, second-countable, measurable-space, Borel, measure, and additive-Haar data, or if that specialization requires nonstandard axioms.",
+      "Stop only if exact positive derivative rank, a localized derivative-rank upper bound, finite-order regularity, and the inherited coordinate topology-and-measure packets cannot jointly yield an open neighborhood whose closed localized source image has zero target measure, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces.lean"
-       "ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces.md"],
+      ["ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.lean"
+       "ConstructionTargets/SardFiniteOrderPositiveRankPointwiseNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POINTWISE WITNESS EXPLICIT TOPOLOGY AND MEASURE SPACES",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER POSITIVE-RANK POINTWISE NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean",
+        "/tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean",
         :sha256
-        "fe81a892ce45a74e9e9fef5af20ea8acd2e548b4cbd7ba004ca604b11e064aa2"},
+        "050b41683ddf8b96214b90217d449fb08f27babd70a2fee8d4e44dc6f657f101"},
        :declarations
-       ["exists_projectedCoordinates_explicit_inherited_topologyData"],
+       ["exists_open_image_zero_of_finiteOrder_positiveRank"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Specialize the pointwise witness after fixing both coordinate topology spaces and measurable spaces explicitly."},
+       "Aggregate the pointwise positive-rank neighborhoods over each finite rank stratum and combine them with the rank-zero finite-order branch."},
       :representation
       {:source
-       "The pointwise nullity witness with anonymous inferred locally compact, second-countable, measurable-space, Borel, measure, and additive-Haar coordinate parameters.",
+       "A finite-order smooth map at a point of exact positive derivative rank, with a local rank upper bound, induction hypotheses, and admissible regularity.",
        :target
-       "A wrapper taking both coordinate topology spaces and measurable spaces explicitly before all topology, Borel, measure, and additive-Haar proofs, and returning the generic witness nullity conclusion."},
+       "An open neighborhood of the point on which the image of any closed localized source set has zero target additive-Haar measure."},
       :id
-      :critical-value-sard-finite-order-pointwise-witness-explicit-topology-measure-spaces-1,
+      :critical-value-sard-finite-order-positive-rank-pointwise-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-pointwise-witness-explicit-measurable-spaces-1
-       :critical-value-sard-projected-coordinate-explicit-inherited-topology-data-1],
+      [:critical-value-sard-finite-order-pointwise-witness-explicit-topology-measure-spaces-1
+       :critical-value-sard-projected-coordinate-explicit-inherited-topology-data-1
+       :critical-value-sard-finite-order-positive-rank-installed-pointwise-data-1
+       :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2
+       :critical-value-sard-projected-rank-reduced-dimension-identities-1],
       :current-residual
-      "Inherited topology data is compiled; expose those topology parameters explicitly in the pointwise witness wrapper before specializing it to derivative-range coordinates.",
+      "The pointwise positive-rank local nullity theorem compiles; bank it before finite-rank local aggregation.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. Destructuring and installing the compiled inherited topology packet still does not orient the anonymous LocallyCompactSpace parameters of the existing explicit-measurable-space wrapper: elaboration requests LocallyCompactSpace for its coordinate type before the installed subtype instance is selected. The wrapper must therefore take the two topology spaces and their locally compact and second-countable proofs as explicit ordinary arguments, just as it already does for measurable spaces, Borel proofs, measures, and additive-Haar proofs.",
+     "The rectangular theorem is not refuted. The fully explicit topology-and-measure-space wrapper now composes placeholder-free with the inherited coordinate topology and measure packets, exact positive-rank dimension bounds, localized finite-order projected chart, and residual-slice-zero certificate. This yields a compiled pointwise positive-rank local image-nullity theorem. The remaining rectangular work is to bank this bounded theorem and aggregate positive-rank strata with the rank-zero branch.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
+       "lake build ConstructionTargets.SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces",
+       :exit 0,
+       :output "Build completed successfully (8363 jobs)."}
+      {:cmd
        "lake env lean /tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean",
-       :exit 1,
-       :expected-exit 1,
-       :output
-       "After destructuring and locally installing all four inherited topology structures, application of the current wrapper still fails at LocallyCompactSpace for the derivative-range coordinate."}
-      {:cmd
-       "lake env lean /tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean",
        :exit 0,
        :output
-       "'exists_projectedCoordinates_explicit_inherited_topologyData' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'exists_open_image_zero_of_finiteOrder_positiveRank' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean",
        :exit 0,
        :output
-       "fe81a892ce45a74e9e9fef5af20ea8acd2e548b4cbd7ba004ca604b11e064aa2  /tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean"}
+       "050b41683ddf8b96214b90217d449fb08f27babd70a2fee8d4e44dc6f657f101  /tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
+      {:cmd
+       "sed -n '20,97p' /tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean | sha256sum",
+       :exit 0,
+       :output
+       "2049b1b189481678372cc5770b4d386de7f11bdee13439fd1c6489142e7e9157  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 265 items OK; {:done 257, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 266 items OK; {:done 258, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -35039,12 +35087,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean",
+      "/tmp/SardFiniteOrderPositiveRankPointwiseNullityProbe.lean",
       :sha256
-      "fe81a892ce45a74e9e9fef5af20ea8acd2e548b4cbd7ba004ca604b11e064aa2"},
+      "050b41683ddf8b96214b90217d449fb08f27babd70a2fee8d4e44dc6f657f101"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -35258,7 +35306,8 @@
     :critical-value-sard-finite-order-positive-rank-projected-chart-slice-data-2
     :critical-value-sard-finite-order-pointwise-witness-explicit-measurable-spaces-1
     :critical-value-sard-projected-coordinate-explicit-inherited-topology-data-1
-    :critical-value-sard-finite-order-pointwise-witness-explicit-topology-measure-spaces-1],
+    :critical-value-sard-finite-order-pointwise-witness-explicit-topology-measure-spaces-1
+    :critical-value-sard-finite-order-positive-rank-pointwise-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
