@@ -6452,8 +6452,57 @@
   {:consumer :t01A05,
    :stop-condition
    "Preserve dimension zero, disconnected total spaces and the literal top-homology orientation encoding. No assumed orientation compatibility, degree formula or top-homology cyclicity.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "Structural specification repair is required before proof work resumes: the universal clause permits disconnected covering total spaces while demanding cyclic top homology. Preserve this compiled counterexample; no statement repair or implementation was performed. This refutes the frozen encoding, not the appropriately hypothesized classical covering-degree theorem.",
+    :axiom-audits 5,
+    :outcome :stop,
+    :warnings
+    ["One unused-variable warning for hk in the verbatim copied frozen proposition."],
+    :statement-hashes
+    {"apm_t01a05"
+     "7be098fe67dfdfa6b74a3ff5629a71a1b6566b8e58db282bbd31d4ab63c1f3a9"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :placeholder-before 1,
+    :reason :mathematical-refutation,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/T01A05Counterexample.lean", :exit 0}
+     {:cmd
+      "Python audit: exact frozen prefix, literal negated proposition, frozen SHA256 and comment-stripped placeholder counts",
+      :exit 0}
+     {:cmd "sha256sum /tmp/T01A05Counterexample.lean", :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T01A05Counterexample.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial lake env lean /tmp/T01A05Counterexample.lean",
+      :exit 1,
+      :correction
+      "Supplied the explicit covering-map function argument and exposed the concrete module types before simplifying finrank. Subsequent compilation proves the counterexample."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T01A05Counterexample.lean",
+     :sha256
+     "3f7271678d72276ce8bf379bf2ec2e57bf7424e69e39c4b55b302877abf114d1",
+     :role :counterexample,
+     :placeholder-count 0},
+    :finding
+    "The complete frozen proposition is refuted by T01A05Counterexample.frozen_refuted. Set n=0, k=2, X=Unit and Xtilde=Fin 2 with their discrete topologies. Constructed zero-dimensional charts and smooth manifold instances satisfy every frozen topological hypothesis. The constant map is a covering with exactly two points in every fiber. Direct production singular homology with ModuleCat integer coefficients gives H0(Unit) isomorphic to Z and H0(Fin 2) isomorphic to Z^2. Thus the base has the required orientation, while any demanded total-space orientation would give a linear equivalence Z^2 with Z, contradicting finrank. The fixture proves the negation of the verbatim complete frozen statement without using its placeholder.",
+    :statement-hash-method
+    "SHA256 of the original theorem declaration through the text immediately preceding := by.",
+    :frozen-sha256
+    "51f5c94da12b4d5e1eb1f7ada0fd397cbbfccdfb223a6ae6287978da86605750",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "COVER-DEGREE: exact finite-cover fundamental-class consumer",
