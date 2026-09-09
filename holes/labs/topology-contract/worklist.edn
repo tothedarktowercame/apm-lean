@@ -40327,6 +40327,42 @@
    "Compatible source shrinking and parameter regularity localization are assembled; base-point regularity instantiation, aggregation, and uncovered jet cases remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the scalarized chart construction, codimension-one identity, or local aggregation fails to imply the stated strict-surplus nullity, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.lean"
+    "ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST NONZERO JET TAYLOR SURPLUS NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean",
+     :sha256
+     "010bdca420d4465e0049ab2bdc06f7ecc9c313cdd7e93bcdd94d22493b2f53b6"},
+    :declarations
+    ["firstNonzeroJetLocus_image_null_of_taylor_surplus"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Apply this result to jet orders satisfying strict Taylor surplus; handle source dimensions at most one and repair remaining jet cases outside the surplus range before rectangular induction and exhaustion."},
+   :representation
+   {:source
+    "Global C^(i+1) regularity with i >= 1, sourceDim > 1, and sourceDim-1 < (i+1)*targetDim, under the stated finite-dimensional inner-product and target Borel hypotheses.",
+    :target
+    "Zero target add-Haar measure of the entire first-nonzero-(i+1)-jet locus image for an arbitrary source subset K, without supplied chart data or induction nullity hypotheses."},
+   :id :critical-value-sard-first-nonzero-jet-taylor-surplus-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-nonzero-jet-local-kernel-taylor-nullity-1
+    :critical-value-sard-first-nonzero-jet-scalarized-chart-data-1
+    :critical-value-sard-first-nonzero-jet-locus-local-aggregation-1
+    :critical-value-sard-scalar-derivative-kernel-dimension-1],
+   :current-residual
+   "Chart construction, C1 specialization, kernel dimension bookkeeping, and local aggregation are discharged for strict-surplus higher jets; other dimension and jet regimes remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -40380,84 +40416,91 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank local kernel Taylor nullity, instantiate base-point chart regularity, aggregate local witnesses, and repair higher-jet cases outside the strict dimension range.",
+     "Bank whole jet-locus Taylor-surplus nullity and repair the remaining dimension and jet regimes before rectangular induction.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_open_firstNonzeroJet_image_null_of_kernel_taylor_surplus"
-      "98a7351b0e96fd86d04c7dc52173a4714ec439b7f78c99a16506a07834f2235e"},
+     {"firstNonzeroJetLocus_image_null_of_taylor_surplus"
+      "bc220b8c4865c94ee8c930281a7187a7d2dc522afa3e1dd0d2ddaad9d826d283"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if base-point C1 regularity fails to localize as stated, restricted kernel coordinates fail to transfer the localized jet image into the flat parameter locus, or nonstandard axioms are required.",
+      "Stop only if the scalarized chart construction, codimension-one identity, or local aggregation fails to imply the stated strict-surplus nullity, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstNonzeroJetLocalKernelTaylorNullity.lean"
-       "ConstructionTargets/SardFirstNonzeroJetLocalKernelTaylorNullity.md"],
+      ["ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.lean"
+       "ConstructionTargets/SardFirstNonzeroJetTaylorSurplusNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST NONZERO JET LOCAL KERNEL TAYLOR NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST NONZERO JET TAYLOR SURPLUS NULLITY",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardFirstNonzeroJetLocalKernelTaylorNullityProbe.lean",
+       {:path "/tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean",
         :sha256
-        "b3cc06b85c2d982493915dfb2327769b28dbb804bb4c9f23c413bef786b5d2c9"},
+        "010bdca420d4465e0049ab2bdc06f7ecc9c313cdd7e93bcdd94d22493b2f53b6"},
        :declarations
-       ["exists_open_firstNonzeroJet_image_null_of_kernel_taylor_surplus"],
+       ["firstNonzeroJetLocus_image_null_of_taylor_surplus"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Supply base-point kernel C1 regularity from scalarized jet chart data, aggregate local witnesses, and repair jet cases outside the strict Taylor dimension range before rectangular induction."},
+       "Apply this result to jet orders satisfying strict Taylor surplus; handle source dimensions at most one and repair remaining jet cases outside the surplus range before rectangular induction and exhaustion."},
       :representation
       {:source
-       "A scalarized i-jet implicit-function chart based at a first-nonzero-(i+1)-jet point, C1 kernel parametrization at the base coordinate, global C^(i+1) ambient regularity, and kernelDim < (i+1)*targetDim under the stated finite-dimensional Borel hypotheses.",
+       "Global C^(i+1) regularity with i >= 1, sourceDim > 1, and sourceDim-1 < (i+1)*targetDim, under the stated finite-dimensional inner-product and target Borel hypotheses.",
        :target
-       "An open source neighborhood containing the base point whose localized first-nonzero-(i+1)-jet image has zero target add-Haar measure."},
+       "Zero target add-Haar measure of the entire first-nonzero-(i+1)-jet locus image for an arbitrary source subset K, without supplied chart data or induction nullity hypotheses."},
       :id
-      :critical-value-sard-first-nonzero-jet-local-kernel-taylor-nullity-1,
+      :critical-value-sard-first-nonzero-jet-taylor-surplus-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-nonzero-jet-kernel-taylor-nullity-1
-       :critical-value-sard-c1-parameterized-flat-locus-nullity-1
-       :critical-value-sard-implicit-function-kernel-parameter-local-regularity-1
-       :critical-value-sard-implicit-function-restricted-kernel-parameterization-1
-       :critical-value-sard-first-nonzero-jet-kernel-parameter-containment-1],
+      [:critical-value-sard-first-nonzero-jet-local-kernel-taylor-nullity-1
+       :critical-value-sard-first-nonzero-jet-scalarized-chart-data-1
+       :critical-value-sard-first-nonzero-jet-locus-local-aggregation-1
+       :critical-value-sard-scalar-derivative-kernel-dimension-1],
       :current-residual
-      "Compatible source shrinking and parameter regularity localization are assembled; base-point regularity instantiation, aggregation, and uncovered jet cases remain.",
+      "Chart construction, C1 specialization, kernel dimension bookkeeping, and local aggregation are discharged for strict-surplus higher jets; other dimension and jet regimes remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "Rectangular Morse-Sard remains incomplete, not refuted. One compiled prerequisite constructs an open source neighborhood with null first-nonzero-jet image from C1 regularity of the exact kernel parametrization at its base point, using restricted kernel coordinates and strict Taylor dimension surplus.",
+     "One compiled prerequisite now supplies scalarized charts and base-point C1 regularity, derives the kernel dimension bound, and aggregates local nullity to whole first-nonzero-jet locus image nullity. No chart or lower-dimensional nullity hypotheses remain explicit. The theorem requires sourceDim > 1 and sourceDim-1 < (i+1)*targetDim; rectangular Morse-Sard remains incomplete, not refuted.",
      :commands
      [{:cmd
-       "Read DAG, closure policy, local regularity and restricted parameterization modules, and reviewed dependency receipts",
+       "Read DAG, closure policy, scalarized chart modules, and reviewed dependency findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFirstNonzeroJetLocalKernelTaylorNullityProbe.lean",
+       "lake env lean /tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean",
        :exit 1,
        :output
-       "Initial simplification unfolded the membership statement excessively; corrected using simpa only."}
+       "Initial compilation failed to synthesize the kernel BorelSpace instance."}
       {:cmd
-       "lake env lean /tmp/SardFirstNonzeroJetLocalKernelTaylorNullityProbe.lean",
-       :exit 0,
+       "lake env lean /tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean",
+       :exit 1,
        :output
-       "No warnings; axioms propext, Classical.choice, Quot.sound."}
+       "Explicit kernel type alone did not resolve BorelSpace synthesis."}
       {:cmd
-       "sha256sum /tmp/SardFirstNonzeroJetLocalKernelTaylorNullityProbe.lean",
+       "lake env lean /tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean",
+       :exit 1,
+       :output
+       "Explicit Borel data resolved that issue; SecondCountableTopology required an explicitly retained instance."}
+      {:cmd
+       "lake env lean /tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean",
+       :exit 0,
+       :output "No warnings; standard axioms only."}
+      {:cmd
+       "sha256sum /tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean",
        :exit 0}
       {:cmd
-       "sed -n '9,28p' /tmp/SardFirstNonzeroJetLocalKernelTaylorNullityProbe.lean | sha256sum",
+       "sed -n '7,16p' /tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstNonzeroJetLocalKernelTaylorNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 308 items OK; {:done 300, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 309 items OK; {:done 301, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -40473,13 +40516,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
-     {:path
-      "/tmp/SardFirstNonzeroJetLocalKernelTaylorNullityProbe.lean",
+     {:path "/tmp/SardFirstNonzeroJetTaylorSurplusNullityProbe.lean",
       :sha256
-      "b3cc06b85c2d982493915dfb2327769b28dbb804bb4c9f23c413bef786b5d2c9"},
+      "010bdca420d4465e0049ab2bdc06f7ecc9c313cdd7e93bcdd94d22493b2f53b6"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -40736,7 +40778,8 @@
     :critical-value-sard-closed-open-c1-parameterized-flat-nullity-1
     :critical-value-sard-c1-parameterized-flat-locus-nullity-1
     :critical-value-sard-first-nonzero-jet-kernel-taylor-nullity-1
-    :critical-value-sard-first-nonzero-jet-local-kernel-taylor-nullity-1],
+    :critical-value-sard-first-nonzero-jet-local-kernel-taylor-nullity-1
+    :critical-value-sard-first-nonzero-jet-taylor-surplus-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
