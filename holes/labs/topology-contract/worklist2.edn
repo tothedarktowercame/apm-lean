@@ -6107,42 +6107,67 @@
    :stop-condition
    "Local Euclidean fiber geometry only. No assumed fiber chart, global regular value, Sard induction, manifold orientation, transverse intersection comparison or t00J02 closure. Do not duplicate the other campaign's nullity work.",
    :evidence
-   {:placeholder-delta 0,
-    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+   {:repair-kind :receipt-only,
+    :placeholder-delta 0,
     :residual
-    "Global manifold assembly, smooth atlas compatibility, orientation and transverse-intersection comparisons remain downstream. No Sard induction, global regular-value theorem or frozen consumer closure is claimed.",
+    "Receipt correction awaits independent review. Global manifold assembly, smooth atlas compatibility, orientation and transverse-intersection comparisons remain downstream; no frozen consumer closure is claimed.",
     :gates
-    {:post-commit-cleanliness :pass,
+    {:eighteen-complete-statement-hashes :pass,
      :required-build :pass,
      :forbidden-token-scans :pass,
      :fixture-hash :pass,
+     :unchanged-implementation :pass,
      :canonical-compilation :pass,
+     :original-two-file-commit-scope :pass,
+     :tracked-cleanliness :pass,
      :eighteen-axiom-audits :pass,
      :exact-fixture-promotion :pass,
      :fixture-compilation :pass,
-     :diff-check :pass,
-     :exact-two-file-scope :pass},
+     :diff-check :pass},
     :outcome :done-unreviewed,
     :warnings [],
     :statement-hashes
-    {"kernelProjection_retract"
-     "3fe6c1c7767b2fddc32894e4da38c5418e6f284def51b1782a85070857ade7d5",
+    {"param_image"
+     "469349692517ee534c62e552f7a6762c8743f2c075b18f955c60caca9c97363f",
      "kernel_complement"
      "c6d770c28a13887ccc77ae355e67623a266106c1a081d5871ef0e3eed73e7ad1",
-     "chart_fst"
-     "bed0f3e4ad647c66ee0a98a5d34f118e1cd387d65fecee27c9df9f93092e4325",
+     "kernelOpen_isOpen"
+     "e0491f350f4e801299b73b1b1746d084c9d3a5ffe8c2e31bb7cc609be5e62d65",
+     "param_derivative"
+     "34866f469e2f47b58d10c9bb0ac4d3c3017ad267e9d5cebcb40026a684a10e2f",
+     "param_zero"
+     "9685bcd273c18d48e5ba432c14a0513ced958f7b5eb553eb3393e7ff2b1e81f6",
+     "zero_mem"
+     "7662f6030b9fc054db851c19335bf085a1055c93e585a3bccd21e494f363fc4f",
+     "smoothFiberHomeomorph"
+     "c3b42fd322863cfc679d24271d91b662ccb9cac15160bbbd3cdfb19d4ab45ebf",
+     "fiber_neighborhood_open"
+     "ffa7578d05729bef345898464328fe5f959629f33ebd6933b49023e35c70d77d",
+     "kernelProjection_retract"
+     "3fe6c1c7767b2fddc32894e4da38c5418e6f284def51b1782a85070857ade7d5",
+     "codimensionTwoFiberHomeomorph"
+     "ebc08e5724330474405c2f72caaa2e1aa64c1522e720356d0f62e887fab96d90",
+     "codimensionTwoTargetDimension"
+     "535f3a77b83e52ff78b1d1a3e87138e4cbbcc0bc16ea7a7eb89504d610fd2d21",
      "chart_snd"
      "592344263fa0bc435742ad034bff07652228c08abdb70701d8736f0265ca4f11",
-     "chart_center_mem"
-     "a0b013e7544b84697de3a825d398113f2b45a87b4264cc322a61c2bcd96d7039",
+     "literalFiberHomeomorph_inverse"
+     "4eb07841c2594a9723b49ed952ffbe023f4b2fbaccd8a414200129a46c55401c",
      "chart_center"
      "501f4e91b85762b32e36898a79228e1b0c7b78cc3b5af4d0d5cdfaa1078b7092",
-     "kernelOpen_isOpen" "e0491f350f4e801299b73b1b1..."},
+     "literalFiberHomeomorph"
+     "842c09fc55418327aebecbd4f6aa84187d7793282fde991b245d4e2cd80b6307",
+     "chart_center_mem"
+     "a0b013e7544b84697de3a825d398113f2b45a87b4264cc322a61c2bcd96d7039",
+     "chart_fst"
+     "bed0f3e4ad647c66ee0a98a5d34f118e1cd387d65fecee27c9df9f93092e4325",
+     "codimensionTwoInverseDerivative"
+     "f205d1a66e3b739509c3fac8b36d092c240da2edc0974aff33ea742624c51849"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "codex-14",
     :commands
-    [{:cmd "sha256sum /tmp/RegularFiberChartProbe.lean", :exit 0}
-     {:cmd "realpath .lake/packages", :exit 0}
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/RegularFiberChartProbe.lean", :exit 0}
      {:cmd "lake env lean /tmp/RegularFiberChartProbe.lean", :exit 0}
      {:cmd "lake env lean ConstructionTargets/RegularFiberChart.lean",
       :exit 0}
@@ -6154,45 +6179,31 @@
       :exit 1,
       :expected-exit 1}
      {:cmd
-      "python3 inline audit: exact promotion, fixture SHA, eighteen standard-only axiom audits in both compilations and declaration hashes",
-      :exit 0}
-     {:cmd "rg -n 'warning:|error:' /tmp/codex-14-fiber-build.log",
-      :exit 1,
-      :expected-exit 1}
-     {:cmd "git diff --check", :exit 0}
-     {:cmd
-      "python3 inline audit: exact staged scope and git diff --cached --check",
+      "python3 inline audit: fixture equality and SHA, all eighteen complete declaration digests, exact committed scope, unchanged implementation, git diff --check and clean tracked checkout",
       :exit 0}
      {:cmd
-      "git commit -m \"Construct local fiber charts from surjective strict derivatives\"",
-      :exit 0}
-     {:cmd
-      "python3 inline audit: exact committed scope and clean tracked checkout",
+      "python3 inline audit: eighteen standard-only axiom audits in both compilations and successful warning-free build",
       :exit 0}],
     :repository-note
-    "Read DAG, closure experiments and checkpoint PASS. Only the authorized two files changed; frozen consumers, DAG, ledgers and untracked supervisor files untouched. Tracked checkout clean.",
+    "No repository files or ledger entries changed. Existing implementation commit and exact two-file scope verified; tracked checkout clean.",
     :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1788985802719-16996-a7d8fd54",
-     :finding
-     "Deterministic evidence defect in recorded transition a5a3b473 for implementation ecfe1d8f0ed29aa70e419e23f153fadd30ffc938: :statement-hashes records kernelOpen_isOpen as e0491f350f4e801299b73b1b1..., which is not a SHA256 digest. Recomputed using the stated declaration-byte method, the exact hash is e0491f350f4e801299b73b1b1746d084c9d3a5ffe8c2e31bb7cc609be5e62d65. Repair the receipt with the complete digest. Fixture hash and exact two-file scope match; both Lean compilations and focused build pass without warnings (8255 jobs), all 18 audits per compilation use standard axioms, and frozen placeholders remain 322. No proof defect found in coordinate order, literal-fiber homeomorphism, kernel-inclusion derivative or genuine-smooth specialization. Ledger untouched."},
     :commit "ecfe1d8f0ed29aa70e419e23f153fadd30ffc938",
-    :changed-paths
-    ["ConstructionTargets/RegularFiberChart.lean"
-     "ConstructionTargets/RegularFiberChart.md"],
+    :changed-paths [],
     :fixture
     {:path "/tmp/RegularFiberChartProbe.lean",
      :sha256
      "565d6e660df9ef1b1b4b167768409f7be33d1d8b073cb51bbb93dd40d871a653"},
     :finding
-    "Promoted the exact fixture. Constructed centered coordinates, local literal-fiber homeomorphism, inverse parameterization and kernel-inclusion strict derivative compile, including smooth specialization and codimension-two instance. Both compilations and required build passed without warnings.",
+    "Corrected the truncated kernelOpen_isOpen digest and supplied all eighteen complete recomputed hashes. Both compilations and the 8255-job build pass without warnings. The reviewed implementation is unchanged; no source repair or new commit was needed.",
+    :new-commit nil,
     :statement-hash-method
     "SHA-256 of declaration bytes beginning with def or lemma and ending immediately before the space preceding := or where; namespace ConstructionTargets.RegularFiberChart.",
+    :implementation-paths
+    ["ConstructionTargets/RegularFiberChart.lean"
+     "ConstructionTargets/RegularFiberChart.md"],
     :seat "codex-14"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/RegularFiberChart.lean"
     "ConstructionTargets/RegularFiberChart.md"],
