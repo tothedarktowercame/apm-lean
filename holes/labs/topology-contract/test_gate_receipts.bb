@@ -56,5 +56,28 @@
             (is (= original (slurp ledger)))))
         (finally (.delete ledger) (.delete receipt))))))
 
+(deftest corrected-diagnostics-remain-history-not-gates
+  (let [ledger (java.io.File/createTempFile "gate-ledger" ".edn")
+        receipt (java.io.File/createTempFile "gate-receipt" ".edn")
+        original (slurp (io/file here "fixtures/transition-ledger.edn"))
+        failed {:cmd "lake env lean /tmp/Boundary.lean" :exit 1
+                :stage "Initial diagnostic: corrected before successful compilation."}
+        passed {:cmd "lake env lean /tmp/Boundary.lean" :exit 0 :stage :final}
+        base {:outcome :stop :seat "test-author" :reason "bounded stop"}]
+    (try
+      (spit ledger original)
+      (spit receipt (pr-str (assoc base :commands [failed passed])))
+      (let [result (sh/sh "bb" (str here "/build_step.bb") "apply-result"
+                          (str ledger) "edge" (str receipt))]
+        (is (= 1 (:exit result)))
+        (is (re-find #"unexpected gate exit" (:err result)))
+        (is (= original (slurp ledger))))
+      (spit receipt (pr-str (assoc base :commands [passed] :diagnostic-history [failed])))
+      (is (zero? (:exit (sh/sh "bb" (str here "/build_step.bb") "apply-result"
+                              (str ledger) "edge" (str receipt)))))
+      (is (= [failed] (get-in (edn/read-string (slurp ledger))
+                             [:items 0 :evidence :diagnostic-history])))
+      (finally (.delete ledger) (.delete receipt)))))
+
 (let [{:keys [fail error]} (run-tests)]
   (System/exit (if (zero? (+ fail error)) 0 1)))

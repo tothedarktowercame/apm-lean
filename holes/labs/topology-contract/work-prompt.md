@@ -97,6 +97,12 @@ placeholder delta, statement hashes, and next consumer residual in the receipt.
 For a deliberately inverted diagnostic such as an `rg` no-match scan, retain
 the real `:exit` and add `:expected-exit` with that same value. Other commands
 default to expected exit zero.
+Keep corrected exploratory failures in a separate top-level `:diagnostic-history`
+vector, preserving their actual exit codes and explaining the correction. Only
+final acceptance checks belong in `:commands`. A `:stage` label does not exempt
+a command from gate validation. Never mark a failed compile as expected merely
+because a later compile succeeded; record the successful rerun in `:commands`
+and the initial failure in `:diagnostic-history` instead.
 Do not edit the ledger; the supervisor applies and commits its transition.
 Never weaken an invariant or use a workaround. Never use an fNN agent.
 
