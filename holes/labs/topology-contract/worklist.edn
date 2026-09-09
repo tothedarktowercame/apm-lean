@@ -39462,6 +39462,42 @@
    "Variable remaining-order smoothness and higher-jet aggregation compile; the lower-dimensional nullity hypotheses remain explicit and are not justified by this theorem.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the stated arithmetic equivalences or explicit numerical witness are false, or require nonstandard axioms; the witness refutes only automatic remaining-order admissibility, not Morse-Sard.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardRemainingOrderAdmissibilityBoundary.lean"
+    "ConstructionTargets/SardRemainingOrderAdmissibilityBoundary.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / REMAINING-ORDER ADMISSIBILITY BOUNDARY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardRemainingOrderAdmissibilityBoundaryProbe.lean",
+     :sha256
+     "f07f1562bd70e452475f1986ccc0514d491dcb14d7a5a6e8efdfc4d903572ace"},
+    :declarations
+    ["remainingOrder_admissible_iff"
+     "codimensionOne_remainingOrder_admissible_iff"
+     "classical_admissibility_does_not_cover_all_jet_losses"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Use the exact admissible range to repair higher-jet induction; supply a different analytic argument for losses outside that range rather than assuming lower-dimensional nullity."},
+   :representation
+   {:source
+    "Classical Sard admissibility after a natural differentiability-order loss, including a codimension-one source reduction.",
+    :target
+    "Exact arithmetic criteria for remaining-order admissibility and a verified failure of automatic inheritance for all jet losses."},
+   :id :critical-value-sard-remaining-order-admissibility-boundary-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-classical-regularity-admissibility-1
+    :critical-value-sard-finite-order-higher-jet-variable-induction-1],
+   :current-residual
+   "The admissibility seam is classified and automatic inheritance is disproved; rectangular Morse-Sard remains blocked on an analytic repair for uncovered higher jets.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -39515,78 +39551,74 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Implement variable-order higher-jet induction; the mathematical task of supplying its remaining-order nullity hypotheses still remains.",
+     "Bank the exact remaining-order admissibility criterion, then repair the uncovered higher-jet analytic path; do not infer its induction hypotheses from classical admissibility alone.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"higher_firstNonzeroJetLoci_null_of_remainingOrder_induction"
-      "81eb14a99ea705009f2f07938b7927175ef3176a2c1494090d606f16ef6c2f91"},
+     {"remainingOrder_admissibility_boundary_declarations"
+      "af8a36c94bed4269d5805f41c21b6825b63f287b81fc33555c24d65b4d208cf2"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the positive natural remaining order and its sum with i fail to recover k+1 on the stated index range, or the banked single-locus induction cannot aggregate with these hypotheses, or nonstandard axioms are required.",
+      "Stop only if the stated arithmetic equivalences or explicit numerical witness are false, or require nonstandard axioms; the witness refutes only automatic remaining-order admissibility, not Morse-Sard.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderHigherJetVariableInduction.lean"
-       "ConstructionTargets/SardFiniteOrderHigherJetVariableInduction.md"],
+      ["ConstructionTargets/SardRemainingOrderAdmissibilityBoundary.lean"
+       "ConstructionTargets/SardRemainingOrderAdmissibilityBoundary.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER HIGHER-JET VARIABLE INDUCTION",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / REMAINING-ORDER ADMISSIBILITY BOUNDARY",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
+       {:path "/tmp/SardRemainingOrderAdmissibilityBoundaryProbe.lean",
         :sha256
-        "c887d2994533c0117d2c4fc57e3e11a1cbf501f97c246f1e5af16fd380ee5a00"},
+        "f07f1562bd70e452475f1986ccc0514d491dcb14d7a5a6e8efdfc4d903572ace"},
        :declarations
-       ["higher_firstNonzeroJetLoci_null_of_remainingOrder_induction"],
+       ["remainingOrder_admissible_iff"
+        "codimensionOne_remainingOrder_admissible_iff"
+        "classical_admissibility_does_not_cover_all_jet_losses"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Determine how to supply the remaining-order lower-dimensional nullity hypotheses under classical admissibility, then instantiate compact rank-zero assembly and localization."},
+       "Use the exact admissible range to repair higher-jet induction; supply a different analytic argument for losses outside that range rather than assuming lower-dimensional nullity."},
       :representation
       {:source
-       "Global C^(k+1) regularity, criticality on K, and for each 1<=i<=k a lower-dimensional critical-image nullity hypothesis at natural remaining order k+1-i.",
+       "Classical Sard admissibility after a natural differentiability-order loss, including a codimension-one source reduction.",
        :target
-       "Nullity of every first-nonzero-jet locus image of orders 2 through k+1."},
+       "Exact arithmetic criteria for remaining-order admissibility and a verified failure of automatic inheritance for all jet losses."},
       :id
-      :critical-value-sard-finite-order-higher-jet-variable-induction-1,
+      :critical-value-sard-remaining-order-admissibility-boundary-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-higher-first-nonzero-jet-loci-induction-1
-       :critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1],
+      [:critical-value-sard-classical-regularity-admissibility-1
+       :critical-value-sard-finite-order-higher-jet-variable-induction-1],
       :current-residual
-      "Variable remaining-order smoothness and higher-jet aggregation compile; the lower-dimensional nullity hypotheses remain explicit and are not justified by this theorem.",
+      "The admissibility seam is classified and automatic inheritance is disproved; rectangular Morse-Sard remains blocked on an analytic repair for uncovered higher jets.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem remains incomplete, not refuted. A compiled prerequisite indexes the lower-dimensional induction hypothesis by remaining differentiability order k+1-i, deriving the required smoothness from global C^(k+1). It does not prove that classical admissibility supplies these lower-dimensional nullity hypotheses.",
+     "The remaining-order induction hypotheses do not follow from classical admissibility in general. A compiled arithmetic criterion identifies the exact admissible range, including a counterexample to that implication at sourceDim=3, targetDim=1, order=3, loss=2. This is not a counterexample to rectangular Morse-Sard and does not justify STOP. The uncovered jet cases require a repaired analytic argument.",
      :commands
      [{:cmd
-       "lake env lean /tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
-       :exit 1,
-       :output
-       "Initial fixture failed on interval unpacking and natural-order coercions; corrected before final compilation."}
-      {:cmd
-       "lake env lean /tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
+       "lake env lean /tmp/SardRemainingOrderAdmissibilityBoundaryProbe.lean",
        :exit 0,
        :output
-       "Final fixture uses only propext, Classical.choice, Quot.sound"}
+       "All three declarations use only propext, Classical.choice, Quot.sound"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
+       "sha256sum /tmp/SardRemainingOrderAdmissibilityBoundaryProbe.lean",
        :exit 0}
       {:cmd
-       "sed -n '6,38p' /tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean | sha256sum",
+       "sed -n '5,24p' /tmp/SardRemainingOrderAdmissibilityBoundaryProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardRemainingOrderAdmissibilityBoundaryProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 301 items OK; {:done 293, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 302 items OK; {:done 294, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -39601,12 +39633,12 @@
        :exit 0,
        :output "/home/joe/code/apm-lean/.lake/packages"}],
      :fixture
-     {:path "/tmp/SardFiniteOrderHigherJetVariableInductionProbe.lean",
+     {:path "/tmp/SardRemainingOrderAdmissibilityBoundaryProbe.lean",
       :sha256
-      "c887d2994533c0117d2c4fc57e3e11a1cbf501f97c246f1e5af16fd380ee5a00"},
+      "f07f1562bd70e452475f1986ccc0514d491dcb14d7a5a6e8efdfc4d903572ace"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -39856,7 +39888,8 @@
     :critical-value-sard-localized-flat-through-endpoint-nullity-1
     :critical-value-sard-compact-flat-nonnegative-budget-nullity-1
     :critical-value-sard-compact-rank-zero-admissible-jet-assembly-1
-    :critical-value-sard-finite-order-higher-jet-variable-induction-1],
+    :critical-value-sard-finite-order-higher-jet-variable-induction-1
+    :critical-value-sard-remaining-order-admissibility-boundary-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
