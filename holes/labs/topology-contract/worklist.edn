@@ -43580,6 +43580,23 @@
       :exit 0,
       :output
       "Committed exactly two scoped files; final worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788957015799-16269-e0f9f2cd",
+     :commands
+     ["git show 0fbd2e4c --stat --oneline"
+      "sha256sum /tmp/SardBorelCriticalImageOfRankZeroNullityProbe.lean"
+      "cmp /tmp/SardBorelCriticalImageOfRankZeroNullityProbe.lean <(git show 0fbd2e4c0a11db4006a2e5028de495243a90a356:ConstructionTargets/SardBorelCriticalImageOfRankZeroNullity.lean)"
+      "git show 0fbd2e4c0a11db4006a2e5028de495243a90a356:ConstructionTargets/SardBorelCriticalImageOfRankZeroNullity.lean | sed -n '9,22p' | sha256sum"
+      "git diff --exit-code 0fbd2e4c0a11db4006a2e5028de495243a90a356 -- ConstructionTargets"
+      "lake env lean /tmp/SardBorelCriticalImageOfRankZeroNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardBorelCriticalImageOfRankZeroNullity.lean"
+      "lake build ConstructionTargets.SardBorelCriticalImageOfRankZeroNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit 0fbd2e4c0a11db4006a2e5028de495243a90a356 passes. Fixture SHA e11d2e2afb2a81882e91dd9ec26a381748de4abfc614912e011eac9facc5711c and statement SHA 1decd091929d5fe4c873b4cf325490912081fba0d6bb92d07adb36a1e45d8f6e reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8384-job build successful. Lines 23–39 correctly use bounded critical ranks and preserve rank-zero nullity and Borel induction premises; no representation-boundary defect found. Ledger untouched."},
     :commit "0fbd2e4c0a11db4006a2e5028de495243a90a356",
     :changed-paths
     ["ConstructionTargets/SardBorelCriticalImageOfRankZeroNullity.lean"
@@ -43591,7 +43608,7 @@
     :declarations
     ["SardBorelCriticalImageOfRankZeroNullityProbe.measure_criticalImage_zero_of_rankZero_finiteOrder"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardBorelCriticalImageOfRankZeroNullity.lean"
     "ConstructionTargets/SardBorelCriticalImageOfRankZeroNullity.md"],
@@ -43762,7 +43779,7 @@
       "e11d2e2afb2a81882e91dd9ec26a381748de4abfc614912e011eac9facc5711c"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
