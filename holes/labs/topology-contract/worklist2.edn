@@ -1916,6 +1916,59 @@
    "Banked rotation transport gives relative classes but has not yet been identified with the actual maps and classes of constructed rotated charts.",
    :other-consumers
    [:circle-degree-localization :oriented-circle-chart-naturality]}
+  {:consumer :oriented-circle-chart-naturality,
+   :stop-condition
+   "Bank recentering and its positive coordinate embedding only. Do not claim positivity of the transition between different rotated charts, infer geometric compatibility from homology equality, or claim the parent packet is complete.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/PointedChartRecenteringProbe.lean",
+      :sha256
+      "28b272797d8fcd7d62ade1407ce6795e136bdcb85e85d26666bd9232844742c2"},
+     :commands
+     [{:cmd "lake env lean /tmp/PointedChartRecenteringProbe.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PointedChartRecentering.lean"
+    "ConstructionTargets/PointedChartRecentering.md"],
+   :dag-node
+   "Queue D #2: geometric overlap comparison at arbitrary points; positive affine chart recentering",
+   :acceptance
+   {:implementation
+    "Promote the exact fixture. Preserve the explicit coordinate-ball subtype homeomorphism, positive affine coordinate map, radius construction, ambient formula, strict-increase proof, and concrete rotated-Circle overlap specialization.",
+    :declarations
+    ["ConstructionTargets.PointedChartRecentering.recenteredChart"
+     "ConstructionTargets.PointedChartRecentering.recentered_ambient_formula"
+     "ConstructionTargets.PointedChartRecentering.recentered_coordinate_increasing"
+     "ConstructionTargets.PointedChartRecentering.exists_recenter_radius"
+     "ConstructionTargets.PointedChartRecentering.exists_recentered_chart"
+     "ConstructionTargets.PointedChartRecentering.circle_overlap_recenter"],
+    :consumer-equation
+    "The recentered chart satisfies d.ambient(u)=c.ambient(r·u+v), with r>0 and d.neighborhood contained in the requested open and c.neighborhood. Its coordinates into c strictly preserve order. For overlapping rotated Circle charts, this constructs d at the actual overlap point inside both neighborhoods.",
+    :consumer-residual
+    "Prove geometric order preservation for the transition from this common restriction into the second rotated chart, including its recentering. Combine that proof with the already banked unique-global-generator localization equations; no further homological existence theorem is needed.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA-256 before implementation."
+     "Compile the fixture and canonical target."
+     "Run lake build ConstructionTargets.PointedChartRecentering ConstructionTargets.RotatedCircleChartTransport ConstructionTargets.OrientedOverlapPuncturedCircle."
+     "Reproduce all six printed axiom audits; permit only propext, Classical.choice, Quot.sound."
+     "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."]},
+   :id :oriented-circle-overlap-chart-recentering-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-circle-rotated-chart-transport-1
+    :oriented-manifold-overlap-punctured-circle-1],
+   :current-residual
+   "Existing common-chart restriction compares charts already centered at the same point. Comparing rotated charts around different centers requires constructing a pointed chart at an arbitrary overlap point.",
+   :other-consumers
+   [:circle-fundamental-class :one-manifold-chart-recentering]}
   {:consumer :circle-fundamental-class,
    :stop-condition
    "Circle only; no assumed global class, assumed rotation action, general compact-manifold theorem, or t98A02 closure.",
@@ -1923,97 +1976,88 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Exactly one compiled prerequisite supplied. The parent now has constructed rotated charts and the complete unique-generator localization equation; geometric transition compatibility remains.",
+     "Exactly one compiled geometric prerequisite supplied. Common restrictions can now be centered at arbitrary Circle overlap points; order preservation into the second rotated chart remains the parent obligation.",
      :outcome :revise,
      :warnings [],
      :prerequisite
-     {:consumer :circle-fundamental-class,
+     {:consumer :oriented-circle-chart-naturality,
       :stop-condition
-      "Bank constructed charts, actual map comparisons, and localization consequences only. Geometric overlap compatibility remains downstream; do not claim the full parent orientation packet, higher-dimensional results, or t98A02 closure.",
+      "Bank recentering and its positive coordinate embedding only. Do not claim positivity of the transition between different rotated charts, infer geometric compatibility from homology equality, or claim the parent packet is complete.",
       :evidence
       {:probe
        {:outcome :go,
         :seat "codex-13",
         :fixture
-        {:path "/tmp/RotatedCircleChartTransportProbe.lean",
+        {:path "/tmp/PointedChartRecenteringProbe.lean",
          :sha256
-         "80fb4ce21a5c498bbac7644e31a6f575edd67b0f1910b6e2e111bf77ba183622"},
+         "28b272797d8fcd7d62ade1407ce6795e136bdcb85e85d26666bd9232844742c2"},
         :commands
-        [{:cmd
-          "lake env lean /tmp/RotatedCircleChartTransportProbe.lean",
+        [{:cmd "lake env lean /tmp/PointedChartRecenteringProbe.lean",
           :exit 0}],
-        :axioms ["propext" "Classical.choice" "Quot.sound"],
-        :warnings []}},
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/RotatedCircleChartTransport.lean"
-       "ConstructionTargets/RotatedCircleChartTransport.md"],
+      ["ConstructionTargets/PointedChartRecentering.lean"
+       "ConstructionTargets/PointedChartRecentering.md"],
       :dag-node
-      "Queue D #2: constructed rotated Circle charts and actual relative-map comparison",
+      "Queue D #2: geometric overlap comparison at arbitrary points; positive affine chart recentering",
       :acceptance
       {:implementation
-       "Promote the exact fixture. Construct neighborhoods as rotation images and coordinate homeomorphisms by restriction of the actual rotation homeomorphism. Preserve the origin equation, ambient-map equality, relative chain-map equality, and constructed-chart localization consequences.",
+       "Promote the exact fixture. Preserve the explicit coordinate-ball subtype homeomorphism, positive affine coordinate map, radius construction, ambient formula, strict-increase proof, and concrete rotated-Circle overlap specialization.",
        :declarations
-       ["ConstructionTargets.RotatedCircleChartTransport.rotatedChart"
-        "ConstructionTargets.RotatedCircleChartTransport.rotatedChart_ambient"
-        "ConstructionTargets.RotatedCircleChartTransport.rotatedChart_chain_map"
-        "ConstructionTargets.RotatedCircleChartTransport.rotatedChart_localClass"
-        "ConstructionTargets.RotatedCircleChartTransport.globalClass_localizes_chart"
-        "ConstructionTargets.RotatedCircleChartTransport.unique_global_chart_class"],
+       ["ConstructionTargets.PointedChartRecentering.recenteredChart"
+        "ConstructionTargets.PointedChartRecentering.recentered_ambient_formula"
+        "ConstructionTargets.PointedChartRecentering.recentered_coordinate_increasing"
+        "ConstructionTargets.PointedChartRecentering.exists_recenter_radius"
+        "ConstructionTargets.PointedChartRecentering.exists_recentered_chart"
+        "ConstructionTargets.PointedChartRecentering.circle_overlap_recenter"],
        :consumer-equation
-       "For every x, localization x globalClass = (rotatedChart x).localClass. There exists a unique absolute integral H1 generator satisfying all these constructed-chart equations.",
+       "The recentered chart satisfies d.ambient(u)=c.ambient(r·u+v), with r>0 and d.neighborhood contained in the requested open and c.neighborhood. Its coordinates into c strictly preserve order. For overlapping rotated Circle charts, this constructs d at the actual overlap point inside both neighborhoods.",
        :consumer-residual
-       "Prove geometric coordinate-order compatibility of the rotated charts on constructed common restrictions, with the required recentering when comparing charts around different centers. Do not infer that geometric condition merely from the established homology equations.",
+       "Prove geometric order preservation for the transition from this common restriction into the second rotated chart, including its recentering. Combine that proof with the already banked unique-global-generator localization equations; no further homological existence theorem is needed.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA-256 before implementation."
         "Compile the fixture and canonical target."
-        "Run lake build ConstructionTargets.RotatedCircleChartTransport ConstructionTargets.CircleRotationLocalization ConstructionTargets.CircleActualLocalization."
+        "Run lake build ConstructionTargets.PointedChartRecentering ConstructionTargets.RotatedCircleChartTransport ConstructionTargets.OrientedOverlapPuncturedCircle."
         "Reproduce all six printed axiom audits; permit only propext, Classical.choice, Quot.sound."
         "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."]},
-      :representation
-      {:source
-       "The actual model-to-Circle relative singular chain map of the constructed rotated pointed chart",
-       :target
-       "The fixed chart relative chain map followed by the relative map induced by Circle rotation",
-       :direction
-       "Exact equality from the constructed chart map to the fixed-chart-then-rotation composite; consequently its local class equals rotation transport of the fixed local class."},
-      :id :oriented-circle-rotated-chart-transport-1,
-      :kind :representation-comparison,
+      :id :oriented-circle-overlap-chart-recentering-1,
+      :kind :reusable-theorem,
       :depends-on
-      [:oriented-circle-rotation-localization-naturality-1
-       :oriented-circle-actual-localization-isomorphism-repair1
+      [:oriented-circle-rotated-chart-transport-1
        :oriented-manifold-overlap-punctured-circle-1],
       :current-residual
-      "Banked rotation transport gives relative classes but has not yet been identified with the actual maps and classes of constructed rotated charts.",
+      "Existing common-chart restriction compares charts already centered at the same point. Comparing rotated charts around different centers requires constructing a pointed chart at an arbitrary overlap point.",
       :other-consumers
-      [:circle-degree-localization :oriented-circle-chart-naturality]},
+      [:circle-fundamental-class :one-manifold-chart-recentering]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :author "codex-13",
      :commands
      [{:cmd "realpath .lake/packages", :exit 0}
-      {:cmd "lake env lean /tmp/RotatedCircleChartTransportProbe.lean",
+      {:cmd "lake env lean /tmp/PointedChartRecenteringProbe.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/RotatedCircleChartTransportProbe.lean",
+      {:cmd "sha256sum /tmp/PointedChartRecenteringProbe.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/RotatedCircleChartTransportProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/PointedChartRecenteringProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :changed-paths [],
-     :dependency-commit "b349ae35bc82e42b0ead8623710e2375abd29275",
+     :dependency-commit "8554a6d05a1ed35d31532395c45e837818c1dbcf",
      :fixture
-     {:path "/tmp/RotatedCircleChartTransportProbe.lean",
+     {:path "/tmp/PointedChartRecenteringProbe.lean",
       :sha256
-      "80fb4ce21a5c498bbac7644e31a6f575edd67b0f1910b6e2e111bf77ba183622"},
+      "28b272797d8fcd7d62ade1407ce6795e136bdcb85e85d26666bd9232844742c2"},
      :finding
-     "Compiled one geometric chart-transport prerequisite. Rotating the fixed chart at 1 constructs an open pointed model chart at every Circle point. Its actual ambient map is rotation composed with the fixed chart map, and its production relative chain map equals the corresponding composite. Its local class therefore equals the banked rotation-transported class. The fixture proves existence and uniqueness of one absolute integral generator satisfying every constructed-chart localization equation. Geometric coordinate-order compatibility between charts on common restrictions remains unproved, so the full parent is not GO.",
+     "Compiled one geometric recentering prerequisite. Given a pointed chart, any coordinate point v, and an ambient open neighborhood containing its image, construct a positive coordinate radius and a pointed chart centered at that image inside both neighborhoods. The actual coordinate map is positive scaling followed by translation, with a proved strict-increase equation. A concrete specialization constructs a common restriction at any point of overlap of two rotated Circle charts. This supplies recentering at arbitrary overlap points; it does not yet prove that the transition into the second rotated chart preserves order.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "Queue D #2: compact connected Circle, milestones 4 and 5",
@@ -2039,7 +2083,8 @@
     :oriented-manifold-overlap-punctured-circle-1
     :oriented-manifold-checkpoint-refill-1
     :oriented-circle-rotation-localization-naturality-1
-    :oriented-circle-rotated-chart-transport-1],
+    :oriented-circle-rotated-chart-transport-1
+    :oriented-circle-overlap-chart-recentering-1],
    :current-residual
    "Independent pointwise normalizations do not yet give one class or a coherent geometric orientation family.",
    :other-consumers
