@@ -43,13 +43,45 @@ every consumer problem is closed. `FOUNDATION`, `SPEC-DEFECT` and
 `DEFERRED-REP` rows are STANDING AUTHORIZED: electing one needs no further
 owner approval. Rank the whole DAG and elect the top rows by, in order:
 
+0. CLOSE WHAT IS NEARLY CLOSED FIRST. Before ranking anything, count the
+   remaining placeholders in each consumer problem the DAG names, with
+   comments stripped -- a bare `rg` for `sorry` matches PROSE, which is how
+   b93J03 read as unfinished while its branch was byte-identical:
+
+       python3 -c 'import re,sys; t=open(sys.argv[1]).read();
+       t=re.sub(r"/-.*?-/"," ",t,flags=re.S); t=re.sub(r"--[^\n]*"," ",t);
+       print(len(re.findall(r"(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])",t)))' \
+         problems/<id>/lean/Main.lean
+
+   If any consumer is within TWO placeholders of closing, elect the adapter
+   that closes it AHEAD of every foundation. Elect exactly one such adapter
+   per checkpoint, so the foundations keep advancing behind it.
+
+   This rule is here because the ranking below cannot elect one on its own.
+   An adapter unblocks exactly one problem by definition, so it never outranks
+   a foundation on criterion 1, and the campaign applied that faithfully for
+   eight days. Measured 2026-09-09: 349 rows completed, ConstructionTargets
+   grown from 257 to 588 modules, and not one topology problem's placeholder
+   count changed -- 52 problems stood at zero sorries on 2026-09-02 and 52
+   stand there now. t93A04, named as consumer by 330 of those rows, still
+   carries the single placeholder it had on 2026-08-08, and its file has not
+   been edited since.
+
+   `TN-topology-foundational-programs.md` states the counterweight, in a
+   document this checkpoint does not otherwise read: "the program is not
+   considered successful merely because a sequence of ConstructionTargets
+   compiles." Closing one named problem is what shows the infrastructure was
+   worth building. If the nearest adapter CANNOT be built from what exists,
+   STOP and name exactly what is missing -- that is a more useful result than
+   another foundation, and it is not a refutation, so say which it is.
+
 1. how many downstream consumer problems the row unblocks (most first);
 2. how little work it is (simplest first), preferring one coherent theorem or
    one bounded construction.
 
-A `FOUNDATION` that unblocks several consumers outranks an adapter that
-unblocks one. `STOP :needs-owner` is NO LONGER a valid strategy outcome and
-must not be returned: if the only remaining rows are foundations, specification
+Except under rule 0, a `FOUNDATION` that unblocks several consumers outranks
+an adapter that unblocks one. `STOP :needs-owner` is NO LONGER a valid
+strategy outcome and must not be returned: if the only remaining rows are foundations, specification
 repairs or deferred representations, ELECT THE BEST ONE under the ranking above
 and proceed. The prior gate inverted this policy -- it stopped the campaign
 precisely when the remaining work was the work that matters -- and it is
