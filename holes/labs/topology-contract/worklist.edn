@@ -35222,6 +35222,29 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788913999465-15734-828474fa",
+     :commands
+     ["git show --stat --oneline 02fe6d29e0fcb85a096d2ff690e4e239236a3669"
+      "git diff-tree --no-commit-id --name-only -r 02fe6d29e0fcb85a096d2ff690e4e239236a3669"
+      "git show 02fe6d29e0fcb85a096d2ff690e4e239236a3669:ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.lean"
+      "sha256sum /tmp/SardFiniteOrderProjectedChartLocalizedResidualSliceZeroProbe.lean"
+      "cmp -s /tmp/SardFiniteOrderProjectedChartLocalizedResidualSliceZeroProbe.lean <(git show 02fe6d29e0fcb85a096d2ff690e4e239236a3669:ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.lean)"
+      "git show 02fe6d29e0fcb85a096d2ff690e4e239236a3669:ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.lean | sed -n '12,31p' | sha256sum"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.lean ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.md"
+      "lake env lean /tmp/SardFiniteOrderProjectedChartLocalizedResidualSliceZeroProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.lean"
+      "lake build ConstructionTargets.SardFiniteOrderProjectedChartLocalizedResidualSliceZero"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "readlink -f .lake/packages"
+      "git diff --check 02fe6d29e0fcb85a096d2ff690e4e239236a3669^ 02fe6d29e0fcb85a096d2ff690e4e239236a3669"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: exact scope, fixture, and frozen statement hash reproduce; the finite-order wrapper correctly downgrades regularity while preserving the A intersect U restriction on both the rank hypothesis and residual inverse-slice conclusion, without strengthening it to an open or global bound; compilation uses only standard axioms and no placeholders."},
     :commit "02fe6d29e0fcb85a096d2ff690e4e239236a3669",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.lean"
@@ -35234,7 +35257,7 @@
     :declarations
     ["forall_hasFDerivAt_zero_residual_inverseSlice_on_locus_finiteOrder"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.lean"
     "ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.md"],
@@ -35418,7 +35441,7 @@
       "a7e080d6da8e7e7fd3dafdd93d11b43136ba509dc675ffef17863a5b5e927211"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
