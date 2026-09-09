@@ -8477,6 +8477,20 @@
      {:cmd "sha256sum problems/t99J03/lean/Main.lean", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788993058448-17222-17abe163",
+     :commands
+     ["git show c9631ef6:holes/labs/topology-contract/worklist2.edn"
+      "git show c9631ef6:problems/t99J03/lean/Main.lean"
+      "python3 inline independent census and SHA256, frozen hash, module attribution and scope audit"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show c9631ef6:holes/labs/topology-contract/worklist2.edn)"
+      "bb inline tail equality, successor-policy and historical concurrency audit"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Independent strategy review passes. Census hash and all 59 consumer counts reproduce: placeholders 71 -> 71; modules 638 -> 640 with one portfolio and one concurrent addition. Frozen t99J03 hash and one placeholder match. Exactly one consumer probe precedes the explicit-coefficient relative-chain prerequisite; genus-zero and coefficient boundaries remain explicit without unproved refutation or closure claims. Successor policy preserved and active Sard work excluded. Ledger untouched."},
     :replacement-items
     [{:consumer :t99J03,
       :stop-condition
@@ -8610,7 +8624,7 @@
     "Reviewed the complete DAG, foundational-program note, closure rules, standing policy, both ledgers and dependency receipts. Elect exactly one fresh near-closure adapter, t99J03, before a reusable relative-chain coefficient prerequisite. Its genus-zero relation needs explicit scrutiny: the empty list of edge identifications does not collapse the disk boundary. This observation alone is not a compiled refutation of the classification theorem. Among remaining work, finite-dimensional Sard and its manifold uptake are reserved by the other campaign; general orientation, quotient classification, product homology and numerical sphere normalization require substantially broader constructions. Explicit-coefficient relative-chain exactness is a bounded shared prerequisite for four named consumers. It addresses one precise missing edge without retrying the stopped full sphere table.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact transversality scope and coefficient uptake",
@@ -8632,7 +8646,7 @@
    :stop-condition
    "Preserve the literal relations, genus-zero case and all manifold hypotheses. No supplied classification, Euler invariance or silent boundary collapse.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Surface classification: exact literal polygon-family consumer",
@@ -8665,7 +8679,7 @@
    :stop-condition
    "Construct the actual chain maps and quotient complex. No assumed monomorphism, short exact sequence, coefficient comparison, excision, sphere table or frozen closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Relative homology: actual singular-chain short exact sequence with explicit ring coefficients",
