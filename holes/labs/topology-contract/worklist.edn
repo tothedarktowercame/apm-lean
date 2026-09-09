@@ -46103,6 +46103,43 @@
    "Rank-reduced slice nullity consumes positive-order induction directly; chart integration, rank-zero aggregation, and complementary analytic cases remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if inherited coordinate measure structures cannot be installed, positive remaining order or rank-subtracted admissibility fails under the stated hypotheses, reviewed closed-open chart aggregation fails, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardBorelPositiveOrderOrthogonalChartNullity.lean"
+    "ConstructionTargets/SardBorelPositiveOrderOrthogonalChartNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL POSITIVE-ORDER ORTHOGONAL CHART NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardBorelPositiveOrderOrthogonalChartNullityProbe.lean",
+     :sha256
+     "fa1c10644ac2c5e72e46347b52d9bfb5a31d48c8eabbf0769ded6f9823ce8f6a"},
+    :declarations
+    ["SardBorelPositiveOrderOrthogonalChartNullityProbe.measure_image_zero_of_rangeOrthogonal_closedOpenChart_positiveOrder"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Construct and aggregate positive-rank chart witnesses using this interface, integrate positive-order jet nullity into rank-zero aggregation, and resolve complementary analytic cases before rectangular closure."},
+   :representation
+   {:source
+    "Finite-dimensional real inner-product source and Borel target, a nonsurjective linear map, an orthogonal-coordinate chart on a closed-open source intersection, bounded common-rank dimension identities, positive finite order, lower-dimensional positive-order induction, slice regularity, and zero residual derivatives.",
+    :target
+    "Nullity of the entire image of the closed-open intersection under the supplied chart data, with inherited coordinate Borel structures and internally installed Haar measures."},
+   :id
+   :critical-value-sard-borel-positive-order-orthogonal-chart-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-borel-positive-order-reduced-dimension-nullity-1
+    :critical-value-sard-borel-derivative-range-orthogonal-closed-open-chart-nullity-1
+    :critical-value-sard-finite-order-closed-open-explicit-topology-measure-spaces-1],
+   :current-residual
+   "Orthogonal closed-open chart nullity consumes positive-order induction directly; pointwise chart integration, rank-zero aggregation, and complementary analytic cases remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -46156,79 +46193,78 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank positive-order rank-reduced slice nullity, integrate chart and rank-zero arguments, and discharge complementary analytic cases. Full rectangular closure remains open; ledger and frozen consumer unchanged.",
+     "Bank positive-order orthogonal chart nullity, integrate pointwise chart and rank-zero arguments, and discharge complementary analytic cases. Ledger and frozen consumer unchanged; no rectangular closure or refutation claimed.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"reducedDimension_slice_nullity_of_borel_positive_order"
-      "2511d8a9e4d617a540b7657c740743803ea6eaa858b638ede9e7d71d86fcf8fe"},
+     {"SardBorelPositiveOrderOrthogonalChartNullityProbe.measure_image_zero_of_rangeOrthogonal_closedOpenChart_positiveOrder"
+      "ebffa3941222400bcb307b4f4e96f3fb5e1a05cb9986a145f3f4ad91e67ce167"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if common rank subtraction fails to preserve admissibility under the stated rank bounds, positive-order induction fails to instantiate for the smaller-dimensional slice, or nonstandard axioms are required.",
+      "Stop only if inherited coordinate measure structures cannot be installed, positive remaining order or rank-subtracted admissibility fails under the stated hypotheses, reviewed closed-open chart aggregation fails, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardBorelPositiveOrderReducedDimensionNullity.lean"
-       "ConstructionTargets/SardBorelPositiveOrderReducedDimensionNullity.md"],
+      ["ConstructionTargets/SardBorelPositiveOrderOrthogonalChartNullity.lean"
+       "ConstructionTargets/SardBorelPositiveOrderOrthogonalChartNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL POSITIVE-ORDER REDUCED-DIMENSION NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL POSITIVE-ORDER ORTHOGONAL CHART NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean",
+        "/tmp/SardBorelPositiveOrderOrthogonalChartNullityProbe.lean",
         :sha256
-        "7cd3db8b4b0c6a07f51e370f3f4ae25d6f0281eda9bb444f9cb0fa888fb3624c"},
+        "fa1c10644ac2c5e72e46347b52d9bfb5a31d48c8eabbf0769ded6f9823ce8f6a"},
        :declarations
-       ["reducedDimension_slice_nullity_of_borel_positive_order"],
+       ["SardBorelPositiveOrderOrthogonalChartNullityProbe.measure_image_zero_of_rangeOrthogonal_closedOpenChart_positiveOrder"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Integrate this interface into positive-rank chart nullity and the positive-order jet theorem into rank-zero aggregation; resolve complementary analytic cases before rectangular closure."},
+       "Construct and aggregate positive-rank chart witnesses using this interface, integrate positive-order jet nullity into rank-zero aggregation, and resolve complementary analytic cases before rectangular closure."},
       :representation
       {:source
-       "Positive-order Borel critical nullity below a source-dimension bound, finite-dimensional normed slice spaces with Borel target and additive Haar measure, common-rank dimension identities, rank bounds, and original admissibility at an explicitly positive finite order.",
+       "Finite-dimensional real inner-product source and Borel target, a nonsurjective linear map, an orthogonal-coordinate chart on a closed-open source intersection, bounded common-rank dimension identities, positive finite order, lower-dimensional positive-order induction, slice regularity, and zero residual derivatives.",
        :target
-       "Nullity of localized critical images of slice maps with pointwise ambient regularity at that same finite order."},
+       "Nullity of the entire image of the closed-open intersection under the supplied chart data, with inherited coordinate Borel structures and internally installed Haar measures."},
       :id
-      :critical-value-sard-borel-positive-order-reduced-dimension-nullity-1,
+      :critical-value-sard-borel-positive-order-orthogonal-chart-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-borel-positive-order-critical-nullity-1
-       :critical-value-sard-rank-drop-regularity-admissibility-1],
+      [:critical-value-sard-borel-positive-order-reduced-dimension-nullity-1
+       :critical-value-sard-borel-derivative-range-orthogonal-closed-open-chart-nullity-1
+       :critical-value-sard-finite-order-closed-open-explicit-topology-measure-spaces-1],
       :current-residual
-      "Rank-reduced slice nullity consumes positive-order induction directly; chart integration, rank-zero aggregation, and complementary analytic cases remain.",
+      "Orthogonal closed-open chart nullity consumes positive-order induction directly; pointwise chart integration, rank-zero aggregation, and complementary analytic cases remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite supplies rank-reduced slice nullity from positive-order Borel induction. Common rank subtraction preserves admissibility, while the unchanged finite order retains the explicit positivity premise. No all-orders predicate conversion is used.",
+     "One compiled prerequisite integrates positive-order reduced-dimension induction into orthogonal closed-open chart nullity, preserving inherited Borel and Haar structures. Positivity is proved at the slice induction call; no conversion to the broader all-orders predicate is used. Rectangular closure remains unproved.",
      :commands
      [{:cmd
-       "Read DAG certification rule, closure policy, reduced-dimension and rank-admissibility modules, and reviewed positive-order, rank-subtraction, and jet-loss findings",
+       "Read DAG certification rule, closure policy, build-loop definitions, chart aggregation sources, and complete reviewed chart and positive-order reduced-dimension receipts",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean",
+       "lake env lean /tmp/SardBorelPositiveOrderOrthogonalChartNullityProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardBorelPositiveOrderOrthogonalChartNullityProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
-       "Fixture 7cd3db8b4b0c6a07f51e370f3f4ae25d6f0281eda9bb444f9cb0fa888fb3624c; frozen consumer 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
+       "Fixture matches recorded hash; frozen consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '7,19p' /tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean | sha256sum",
-       :exit 0,
-       :output
-       "2511d8a9e4d617a540b7657c740743803ea6eaa858b638ede9e7d71d86fcf8fe"}
+       "sed -n '14,46p' /tmp/SardBorelPositiveOrderOrthogonalChartNullityProbe.lean | sha256sum",
+       :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelPositiveOrderOrthogonalChartNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 355 items OK; {:done 347, :open 1, :blocked 1, :superseded 6}"}
+       "356 items OK; {:done 348, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -46239,19 +46275,23 @@
       {:cmd "git diff --check", :exit 0}
       {:cmd "git status --porcelain=v1",
        :exit 0,
-       :output
-       "A ConstructionTargets/RelativeSingularConnectingNaturality.lean; A ConstructionTargets/RelativeSingularConnectingNaturality.md; ?? holes/labs/topology-contract/runs2/",
-       :note
-       "Unrelated staged files and untracked directory preserved untouched."}],
+       :output "?? holes/labs/topology-contract/runs2/",
+       :note "Unrelated directory untouched."}],
+     :diagnostic-history
+     [{:cmd
+       "Initial inspection batch ending with rg --files -g AGENTS.md -g '!holes/labs/topology-contract/runs2/**'",
+       :exit 1,
+       :expected-exit 1,
+       :output "No matching AGENTS.md; preceding reads succeeded."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/SardBorelPositiveOrderReducedDimensionNullityProbe.lean",
+      "/tmp/SardBorelPositiveOrderOrthogonalChartNullityProbe.lean",
       :sha256
-      "7cd3db8b4b0c6a07f51e370f3f4ae25d6f0281eda9bb444f9cb0fa888fb3624c"},
+      "fa1c10644ac2c5e72e46347b52d9bfb5a31d48c8eabbf0769ded6f9823ce8f6a"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -46555,7 +46595,8 @@
     :critical-value-sard-lower-dimension-critical-image-equality-1
     :critical-value-sard-borel-positive-order-critical-nullity-1
     :critical-value-sard-jet-borel-positive-order-loss-nullity-1
-    :critical-value-sard-borel-positive-order-reduced-dimension-nullity-1],
+    :critical-value-sard-borel-positive-order-reduced-dimension-nullity-1
+    :critical-value-sard-borel-positive-order-orthogonal-chart-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
