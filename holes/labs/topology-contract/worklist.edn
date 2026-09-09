@@ -42482,6 +42482,41 @@
    "A Borel-compatible induction interface now has a proved base; existing conditional analytic theorems still require the older broader predicate.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if the stated budget fails to imply lower-dimensional remaining-order admissibility, explicit Borel compatibility fails to instantiate the reviewed jet induction, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardJetBorelClassicalAdmissibleLossNullity.lean"
+    "ConstructionTargets/SardJetBorelClassicalAdmissibleLossNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / JET BOREL CLASSICAL ADMISSIBLE-LOSS NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardJetBorelClassicalAdmissibleLossNullityProbe.lean",
+     :sha256
+     "0021f9d76d8aba2d586fa7a15b960197e9b5ab840052a438db025c4f41edbe69"},
+    :declarations
+    ["firstNonzeroJet_image_null_of_borel_classical_admissible_loss"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Migrate the remaining rank and jet assembly interfaces to Borel-compatible induction, close that induction, and repair jet orders outside the covered analytic ranges."},
+   :representation
+   {:source
+    "Global C^(k+1) regularity, 1 <= i <= k, sourceDim+i <= targetDim+k+1, criticality of K, and Borel-compatible classical nullity at every strictly lower source dimension, under the stated finite-dimensional inner-product, completeness, second-countability, and Borel target add-Haar hypotheses.",
+    :target
+    "Zero target measure of the first-nonzero-(i+1)-jet image on K without the older arbitrary-measurable-target induction premise or supplied remaining-order nullity."},
+   :id
+   :critical-value-sard-jet-borel-classical-admissible-loss-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1
+    :critical-value-sard-borel-classical-critical-nullity-predicate-1],
+   :current-residual
+   "The admissible-loss jet interface now consumes the Borel-compatible predicate directly; remaining analytic interfaces still need migration and induction closure.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -42535,83 +42570,77 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank the explicit Borel-compatible induction interface and base; migrate analytic steps without assuming the broader predicate, then close induction and the remaining analytic range.",
+     "Bank Borel-compatible admissible-loss jet nullity, migrate the remaining induction interfaces, and close induction and the complementary analytic range before rectangular closure.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"BorelClassicalCriticalNullityAtDimension"
-      "f4ab73c47dc481730adefda5f9b4097dd3e994d4ef37713372af5d91c32f2af4",
-      "borelClassicalCriticalNullity_zero"
-      "5269d1aaf3164c4b5e6d8b8efb5d630420b5c1e88dc827376f6f948eb6302d86"},
+     {"firstNonzeroJet_image_null_of_borel_classical_admissible_loss"
+      "b28529f5e7f75ff68d9cc457647954dfb48d221961892467feca4d2d8c53624b"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the reviewed zero-dimensional Borel theorem fails to instantiate the explicit predicate, its quantifiers fail to preserve the stated localized classical conclusion, or nonstandard axioms are required.",
+      "Stop only if the stated budget fails to imply lower-dimensional remaining-order admissibility, explicit Borel compatibility fails to instantiate the reviewed jet induction, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.lean"
-       "ConstructionTargets/SardBorelClassicalCriticalNullityPredicate.md"],
+      ["ConstructionTargets/SardJetBorelClassicalAdmissibleLossNullity.lean"
+       "ConstructionTargets/SardJetBorelClassicalAdmissibleLossNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL CLASSICAL CRITICAL NULLITY PREDICATE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / JET BOREL CLASSICAL ADMISSIBLE-LOSS NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean",
+        "/tmp/SardJetBorelClassicalAdmissibleLossNullityProbe.lean",
         :sha256
-        "ab52aa42ad6df9f3fe87359b106ff68318782df89fdd1046ac1e8eb7401669c3"},
+        "0021f9d76d8aba2d586fa7a15b960197e9b5ab840052a438db025c4f41edbe69"},
        :declarations
-       ["SardBorelClassicalCriticalNullityPredicateProbe.BorelClassicalCriticalNullityAtDimension"
-        "SardBorelClassicalCriticalNullityPredicateProbe.borelClassicalCriticalNullity_zero"],
+       ["firstNonzeroJet_image_null_of_borel_classical_admissible_loss"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Reprove the required analytic induction interfaces with the Borel-compatible predicate, close positive-dimensional induction, and repair the complementary regularity range before rectangular closure."},
+       "Migrate the remaining rank and jet assembly interfaces to Borel-compatible induction, close that induction, and repair jet orders outside the covered analytic ranges."},
       :representation
       {:source
-       "Classical finite-order localized critical-image nullity indexed by exact source finrank, with target Borel compatibility explicitly quantified.",
+       "Global C^(k+1) regularity, 1 <= i <= k, sourceDim+i <= targetDim+k+1, criticality of K, and Borel-compatible classical nullity at every strictly lower source dimension, under the stated finite-dimensional inner-product, completeness, second-countability, and Borel target add-Haar hypotheses.",
        :target
-       "A named Borel-compatible induction proposition and its proved zero-dimensional base, without changing or claiming equivalence to the existing arbitrary-measurable-target proposition."},
+       "Zero target measure of the first-nonzero-(i+1)-jet image on K without the older arbitrary-measurable-target induction premise or supplied remaining-order nullity."},
       :id
-      :critical-value-sard-borel-classical-critical-nullity-predicate-1,
+      :critical-value-sard-jet-borel-classical-admissible-loss-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-zero-dimensional-borel-critical-image-1
-       :critical-value-sard-classical-finite-order-critical-nullity-predicate-1],
+      [:critical-value-sard-first-nonzero-jet-inductive-locus-nullity-1
+       :critical-value-sard-borel-classical-critical-nullity-predicate-1],
       :current-residual
-      "A Borel-compatible induction interface now has a proved base; existing conditional analytic theorems still require the older broader predicate.",
+      "The admissible-loss jet interface now consumes the Borel-compatible predicate directly; remaining analytic interfaces still need migration and induction closure.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite provides an explicitly Borel-compatible classical induction predicate and proves its dimension-zero case. It preserves exact source dimension, classical admissibility, arbitrary source subsets, and ambient pointwise regularity. The existing broader predicate and its consumers remain unchanged; migrating analytic steps to the new interface is still required. No general Sard conclusion or equivalence of predicates is claimed.",
+     "One compiled prerequisite re-establishes admissible-loss jet nullity from the Borel-compatible lower-dimensional predicate. The proof instantiates the generic jet induction directly, using explicit target Borel compatibility and deriving remaining-order admissibility from the regularity budget. It does not assume or derive the older broader predicate. Other induction interfaces and the complementary analytic range remain unresolved.",
      :commands
      [{:cmd
-       "Read DAG, closure policy, build-loop definitions, both dependency modules, and reviewed dependency findings",
+       "Read DAG, closure policy, admissible-loss proof, and reviewed generic-jet and Borel-predicate dependency findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean",
+       "lake env lean /tmp/SardJetBorelClassicalAdmissibleLossNullityProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardJetBorelClassicalAdmissibleLossNullityProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
-       "Fixture hash recorded; frozen consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
+       "Fixture hash recorded; consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '9,21p' /tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean | sha256sum",
+       "sed -n '7,20p' /tmp/SardJetBorelClassicalAdmissibleLossNullityProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "sed -n '23,24p' /tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean | sha256sum",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardJetBorelClassicalAdmissibleLossNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 326 items OK; {:done 318, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 327 items OK; {:done 319, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -42624,12 +42653,12 @@
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/SardBorelClassicalCriticalNullityPredicateProbe.lean",
+      "/tmp/SardJetBorelClassicalAdmissibleLossNullityProbe.lean",
       :sha256
-      "ab52aa42ad6df9f3fe87359b106ff68318782df89fdd1046ac1e8eb7401669c3"},
+      "0021f9d76d8aba2d586fa7a15b960197e9b5ab840052a438db025c4f41edbe69"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -42904,7 +42933,8 @@
     :critical-value-sard-open-critical-image-jet-range-overlap-1
     :critical-value-sard-local-set-critical-image-jet-range-overlap-1
     :critical-value-sard-zero-dimensional-borel-critical-image-1
-    :critical-value-sard-borel-classical-critical-nullity-predicate-1],
+    :critical-value-sard-borel-classical-critical-nullity-predicate-1
+    :critical-value-sard-jet-borel-classical-admissible-loss-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
