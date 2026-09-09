@@ -6487,6 +6487,20 @@
       :exit 1,
       :correction
       "Supplied the explicit covering-map function argument and exposed the concrete module types before simplifying finrank. Subsequent compilation proves the counterexample."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788986791271-17028-241d46dd",
+     :commands
+     ["git show 8424d211:holes/labs/topology-contract/worklist2.edn"
+      "lake env lean /tmp/T01A05Counterexample.lean"
+      "python3 inline audit: fixture and frozen SHA256, exact prefix, literal negated proposition, declaration hash, placeholder counts, forbidden tokens, provider equality and transition scope"
+      "readlink -f .lake/packages"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 8424d211:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Independent review of codex-13 refutation passes. Exact frozen proposition is contradicted by the constructed two-sheeted Fin 2 -> Unit cover at dimension zero: production ModuleCat integral H0 gives Z^2 upstairs and Z downstairs, ruling out the demanded upstairs orientation by finrank. All hashes reproduce; compile passes with five standard-only audits and one recorded unused-hk warning. Frozen placeholders remain 1; diagnostic 0. This refutes the frozen encoding, not the appropriately hypothesized classical theorem. Ledger untouched."},
     :changed-paths [],
     :fixture
     {:path "/tmp/T01A05Counterexample.lean",
@@ -6502,7 +6516,7 @@
     "51f5c94da12b4d5e1eb1f7ada0fd397cbbfccdfb223a6ae6287978da86605750",
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "COVER-DEGREE: exact finite-cover fundamental-class consumer",
