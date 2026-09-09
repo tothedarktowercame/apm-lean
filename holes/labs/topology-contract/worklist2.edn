@@ -1393,6 +1393,21 @@
       :exit 0}
      {:cmd "sha256sum /tmp/T97A02BoundarySources.json", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788970813855-16596-55365337",
+     :commands
+     ["Inspect recorded 71528993 evidence and pinned sources"
+      "lake env lean /tmp/T97A02FiniteH1Probe.lean"
+      "lake env lean /tmp/T97A02LocalPathBoundary.lean (expected exit 1)"
+      "python3: verify three artifact hashes, seven source pins, frozen statement hashes, placeholder counts and forbidden-declaration scan"
+      "Inspect LocallyContractibleSpace definitions and existsUnique_continuousMap_lifts_of_range_le hypotheses"
+      "rg classical-local-contractibility/local-path-connectivity bridge (expected no matches)"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git show --format= --check 71528993"],
+     :finding
+     "Independent PASS of codex-13 STOP, not closure. Compiled coefficient transport, finite-H1 map vanishing, normalized Circle loop triviality, connected-domain lift and actual-lift null-homotopy have correct directions and standard-only audited axioms. Exact frozen hypotheses do not synthesize LocPathConnectedSpace; the inspected lifting criterion additionally requires path connectivity. Classical-local-contractibility bridge and disconnected/empty-domain assembly remain unproved, explicitly distinguished from mathematical refutation. Three artifact hashes and seven source pins verified; frozen statement hashes unchanged and placeholders remain 2 to 2. No source or ledger edits."},
     :campaign-termination false,
     :changed-paths [],
     :finding
@@ -1400,7 +1415,7 @@
     :mathematical-refutation false,
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS: homological circle-lifting criterion; t97A02",
