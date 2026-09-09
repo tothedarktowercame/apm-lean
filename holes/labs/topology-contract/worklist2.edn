@@ -5671,84 +5671,111 @@
    :stop-condition
    "No assumed numerical sphere area, positive total mass, radial identification or moment value. This is a symmetry calculation, not a retry of the stopped Hausdorff-cone comparison or a full consumer closure.",
    :evidence
-   {:probe
-    {:consumer-audit
-     {:path "/tmp/IntrinsicFourthMomentConsumerAudit.lean",
-      :sha256
-      "d55b35a914d0e8b938861ea157cda591f149e5e4e3101652d153260d17c62c31",
-      :exit 0,
-      :warnings ["Three inherited unnecessarySimpa warnings."],
-      :finding
-      "Compiled the exact original unitFlux formula, t95J05InclusionPullback integral and S3 coordinate-square moment against their diagnostic definitions."},
-     :placeholder-delta 0,
-     :residual
-     "The requested mass-relative moment packet is complete. Numerical identification of M_2 and M_3 remains unproved; neither frozen integration consumer is claimed closed.",
-     :axiom-audits 9,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact primary fixture. Preserve the explicit rotation and inverse, actual Hausdorff integral transport, fourth/mixed-fourth calculations and shifted-polynomial flux assembly. Document the imported second-moment and projective-density results and the remaining numerical normalization boundary.",
-      :declarations
-      ["ConstructionTargets.IntrinsicSphereFourthMoments.rotation"
-       "ConstructionTargets.IntrinsicSphereFourthMoments.rotation_apply"
-       "ConstructionTargets.IntrinsicSphereFourthMoments.rotate_inverse"
-       "ConstructionTargets.IntrinsicSphereFourthMoments.inverse_rotate"
-       "ConstructionTargets.IntrinsicSphereFourthMoments.quartic_rotation_identity"
-       "ConstructionTargets.IntrinsicSphereFourthMoments.fourth_eq_three_mixed"
-       "ConstructionTargets.IntrinsicSphereFourthMoments.fourth_moment"
-       "ConstructionTargets.IntrinsicSphereFourthMoments.mixed_fourth_moment"
-       "ConstructionTargets.IntrinsicSphereFourthMoments.unitFlux_moment"],
-      :consumer-equation
-      "With M_d the real total intrinsic Hausdorff sphere measure, integral unitFlux c = M_2*(11/15+(c0-1)^2+(c1-2)^2), integral x0^2 on S3 = M_3/4, and integral t95J05InclusionPullback = -M_3.",
-      :axioms :standard-only,
-      :gates
-      ["Verify primary fixture SHA256 before implementation."
-       "Compile fixture and canonical target."
-       "Run lake build ConstructionTargets.IntrinsicSphereFourthMoments ConstructionTargets.IntrinsicSphereSecondMoments ConstructionTargets.IntrinsicSphereFinite."
-       "Reproduce all nine printed standard-only axiom audits."
-       "Recompile the exact consumer audit."
-       "Run forbidden-token scans, git diff --check, exact two-file scope verification and commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :author "codex-13",
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "bb: inspect second-moment dependency commit and PASS receipt",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/IntrinsicSphereFourthMomentsProbe.lean",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/IntrinsicFourthMomentConsumerAudit.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/IntrinsicSphereFourthMomentsProbe.lean /tmp/IntrinsicFourthMomentConsumerAudit.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/IntrinsicSphereFourthMomentsProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "Python compilation-log audit: nine standard-only audits, no primary errors or warnings",
-       :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :changed-paths [],
-     :dependency-commit "99b196c3b27f65b150b595325a0fe3e9df4b5b37",
-     :fixture
-     {:path "/tmp/IntrinsicSphereFourthMomentsProbe.lean",
-      :sha256
-      "c68fa1712227f928beb112983370d586814a5063e00f755309c51a3e463468ac"},
-     :finding
-     "Constructed the actual plane rotation (x0,x1,x2) to ((x0+x1)/sqrt(2),(x1-x0)/sqrt(2),x2), with explicit inverse and norm preservation. Its sphere restriction preserves literal Hausdorff integrals. Quartic expansion and reflection cancellation give fourth moment equal to three times the mixed fourth moment; the norm-one identity then gives M_2/5 and M_2/15. Integrable polynomial expansion proves the complete mass-relative flux formula. Together with the banked second moments, both requested consumer reductions compile without numerical normalization, assumed positive mass or radial identification.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/IntrinsicSphereFourthMoments.lean"
-       "ConstructionTargets/IntrinsicSphereFourthMoments.md"]},
-     :seat "codex-13"}},
+   {:consumer-audit
+    {:path "/tmp/IntrinsicFourthMomentConsumerAudit.lean",
+     :sha256
+     "d55b35a914d0e8b938861ea157cda591f149e5e4e3101652d153260d17c62c31",
+     :exit 0},
+    :placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Numerical identification of M_2 and M_3 remains unproved. No positive-mass assumption, radial identification, stopped-comparison retry or frozen consumer closure is claimed.",
+    :build-warning-count 0,
+    :gates
+    {:consumer-audit :pass,
+     :post-commit-cleanliness :pass,
+     :required-build :pass,
+     :forbidden-token-scans :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :exact-fixture-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass,
+     :nine-axiom-audits :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :inherited-diagnostic-warnings,
+      :count 3,
+      :path "/tmp/IntrinsicFourthMomentConsumerAudit.lean",
+      :lines [280 312 384],
+      :message "unnecessarySimpa"}],
+    :statement-hashes
+    {"inverse_rotate"
+     "43fa48f53da14da8f12139c2844f73b0ee2f72a78406cb5a586c0b400634d973",
+     "rotate_inverse"
+     "0d04d6329eeea5a8d9c563068c8043d4e63adf1dc82f36e5c5a4bda2bac4dd4b",
+     "quartic_rotation_identity"
+     "085675ee1a8037dfc4de328fce1830083d6ac256ef131c69e3951918fc3ed59a",
+     "fourth_moment"
+     "740f196ee1be5d6808701424f1c0e61e65b49009772bad30130d2d811434dc7b",
+     "fourth_eq_three_mixed"
+     "80e894e2a7898398ec50f290a13ccc26ebf5d01223c85a8bbad0ded94fbfc24a",
+     "unitFlux_moment"
+     "4f7e9b32decd459287f8e9396d5f92c598b498d8c455f8d20a0d828c6a4a9a9a",
+     "rotation_apply"
+     "19b27df0356b2bc37b66539fa5625be104dc4631e94eff1645d34fc8e0533eca",
+     "rotation"
+     "46334788bab6dc50adb51b0944d320b282c7dbf25c333928302e7e24679c17f7",
+     "mixed_fourth_moment"
+     "0f65d61368b2b738737504d6a3a4022d3ae0ad92da4e4559ad3da0c623569259"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/IntrinsicSphereFourthMomentsProbe.lean /tmp/IntrinsicFourthMomentConsumerAudit.lean",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/IntrinsicSphereFourthMomentsProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/IntrinsicSphereFourthMoments.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/IntrinsicFourthMomentConsumerAudit.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.IntrinsicSphereFourthMoments ConstructionTargets.IntrinsicSphereSecondMoments ConstructionTargets.IntrinsicSphereFinite",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/IntrinsicSphereFourthMoments.lean /tmp/IntrinsicSphereFourthMomentsProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "python3 inline audit: exact promotion, fixture SHA, nine standard-only axiom audits in both compilations, declaration hashes and consumer warnings",
+      :exit 0}
+     {:cmd "rg -n 'warning:|error:' /tmp/codex-14-fourth-build.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "python3 inline audit: exact staged scope and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Compute intrinsic fourth moments and mass-relative flux formula\"",
+      :exit 0}
+     {:cmd
+      "python3 inline audit: exact committed scope and clean tracked checkout",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments, dependency evidence and second-moment PASS. Only the authorized two files changed; frozen consumers, DAG, ledgers and untracked supervisor files untouched. Tracked checkout clean.",
+    :primary-warning-count 0,
+    :commit "a306913602c9ba0f83d7bddf45ea38b33117b5e5",
+    :changed-paths
+    ["ConstructionTargets/IntrinsicSphereFourthMoments.lean"
+     "ConstructionTargets/IntrinsicSphereFourthMoments.md"],
+    :dependency-commit "99b196c3b27f65b150b595325a0fe3e9df4b5b37",
+    :fixture
+    {:path "/tmp/IntrinsicSphereFourthMomentsProbe.lean",
+     :sha256
+     "c68fa1712227f928beb112983370d586814a5063e00f755309c51a3e463468ac"},
+    :finding
+    "Promoted the exact rotation, inverse identities, fourth and mixed-fourth moments, and shifted-polynomial flux assembly. Primary compilations and build passed without warnings. The exact consumer audit verifies the mass-relative flux formula, S3 square moment and projective pullback integral.",
+    :statement-hash-method
+    "SHA-256 of declaration bytes beginning with def, theorem or lemma and ending immediately before the space preceding :=; namespace ConstructionTargets.IntrinsicSphereFourthMoments.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/IntrinsicSphereFourthMoments.lean"
     "ConstructionTargets/IntrinsicSphereFourthMoments.md"],
