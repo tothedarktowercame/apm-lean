@@ -9806,8 +9806,162 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["Preserve t96J05, t01A05 and t96J07 compiled refutations; distinguish the historical t94J08 defect from its repaired statement."
+     "Do not retry t01A08 or t94A06 arbitrary-model nullity, t99J03 classification, polygon invariants, graph covers, Hopf classification or numerical sphere normalization without resolving their exact boundaries."
+     "H0 completion does not discharge the positive-dimensional sphere table's remaining excision and higher-degree endpoints."],
+    :disposition :replan,
+    :excluded-concurrent
+    [:regular-fiber-global-atlas-assembly-probe-refill29
+     :t92j07-reviewed-closure-documentation-refill29
+     :checkpoint-full-dag-refill-30-after-general-model-and-fiber-atlas],
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint15Census.py", :exit 0}
+     {:cmd
+      "bb dependency-review, active-row and candidate-history queries across both ledgers",
+      :exit 0}
+     {:cmd
+      "Read DAG, foundational-program note, closure policy, documentation changes, frozen t01J04 and SingularExcision substrate",
+      :exit 0}
+     {:cmd "sha256sum problems/t01J04/lean/Main.lean", :exit 0}],
+    :replacement-items
+    [{:consumer :t01J04,
+      :stop-condition
+      "Preserve the exact separation, boundarylessness, dimension-zero and neighborhood hypotheses. No assumed second countability, regular boundary value or manifold-with-boundary atlas.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE: exact closed-neighborhood manifold-with-boundary consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t01J04/lean/Main.lean",
+       :stop-condition
+       "No partial GO, silent second-countability repair or assumed atlas. STOP with the exact missing hypothesis or boundary-chart theorem if neither closure nor refutation compiles.",
+       :gates
+       ["GO requires a complete zero-placeholder exact fixture, unchanged statement hash, fixture SHA256 and standard-only audits."
+        "A refutation requires a compiled counterexample satisfying every frozen hypothesis and contradicting the full existential conclusion."
+        "Propose implementation scope only after complete closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Audit the full frozen theorem before applying Sard. Test whether the absence of source second countability prevents a common regular boundary choice; do not infer falsity merely from that missing hypothesis. Construct the closed-neighborhood shrinking and actual preimage charts, including zero source or target dimension, empty preimages and the specified Euclidean half-space model. Reuse reviewed infrastructure only where all hypotheses are proved, and do not duplicate active global fiber-atlas work. Compile a complete exact Main if possible; a refutation must compile an admissible instance contradicting every allowed neighborhood choice.",
+       :consumer-equation
+       "There exists V in nhds y with closure V contained in U such that the literal subtype f inverse closure V has the frozen smooth manifold-with-boundary structure of dimension n.",
+       :frozen-sha256
+       "45809d8373c2342cf817e88713ac2cae3fe14318bb38539977a0847950af2c8b"},
+      :id :oriented-checkpoint15-t01j04-exact-neighborhood-preimage-1,
+      :kind :final-adapter,
+      :depends-on [:oriented-checkpoint15-radial-level-and-h0-refill],
+      :current-residual
+      "One frozen placeholder asks for a neighborhood whose closed preimage admits the literal dimension-n manifold-with-boundary structure. The source has no second-countability hypothesis.",
+      :other-consumers []}
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "No assumed small-chain quasi-isomorphism, subdivision homotopy, excision map invertibility, change-of-coefficients theorem or sphere table.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SINGULAR-SUBDIVISION/EXCISION: actual relative homology with explicit ring coefficients",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a commutative ring R, a topological space X and subsets A,U with closure U contained in interior A, construct the actual inclusion of pairs (X minus U,A minus U)->(X,A) and its map on RelativeSingularCoefficients through RelativePairNaturality. Generalize the existing geometric small-chain and subdivision arguments to coefficient object ModuleCat.of R R, reusing coefficient-independent simplex geometry. Prove that the induced relative homology map is an isomorphism in every degree, with explicit treatment of degree zero. Compile integer and rational instances on a concrete interval or disk pair satisfying the closure/interior hypothesis. State universes and the exact subtype representation of A minus U.",
+       :consumer-equation
+       "The actual inclusion-induced map H_k(X minus U,A minus U;R)->H_k(X,A;R) is an isomorphism for every k when closure U is contained in interior A.",
+       :consumer-residual
+       "Sphere cover and disk-pair specialization, positive-degree suspension, circle H1 and the exact rational S2 H1/H2 witnesses remain downstream.",
+       :gates
+       ["GO requires a complete placeholder-free compiled fixture with the constructed pair map and all-degree excision proof."
+        "Record fixture SHA256, concrete integer/rational examples and standard-only audits."
+        "REVISE only to exactly one compiled missing coefficient-general small-chain or subdivision prerequisite."],
+       :stop-condition
+       "Do not substitute an integer homology isomorphism for an R-linear one or retry the entire sphere table. If multiple independent unconstructed foundations remain, STOP with precise typed boundaries."},
+      :id :oriented-checkpoint15-explicit-coefficient-excision-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint15-radial-level-and-h0-refill
+       :oriented-checkpoint12-relative-singular-explicit-coefficients-1
+       :oriented-checkpoint13-relative-pair-homology-naturality-1],
+      :current-residual
+      "Actual ModuleCat R relative complexes and natural pair sequences are reviewed. Existing geometric subdivision and excision exports remain coefficient-specific; the rational sphere calculation requires the actual excision comparison over R.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: exact neighborhood-preimage scope and coefficient excision",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+      :id :oriented-checkpoint16-neighborhood-and-excision-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint15-t01j04-exact-neighborhood-preimage-1
+       :oriented-checkpoint15-explicit-coefficient-excision-1],
+      :current-residual
+      "Measure frozen neighborhood-preimage outcome separately from coefficient excision; retain all reviewed refutations and higher-sphere boundaries.",
+      :other-consumers []}],
+    :changed-paths [],
+    :measures
+    {:concurrent-placeholder-delta 0,
+     :baseline "440c5fe000b5f864164bb109e44e0af4d5796a10",
+     :placeholder-after 68,
+     :placeholder-delta 0,
+     :placeholder-before 68,
+     :head "ad871b858cbd5c8993cfe7321b7fe2e351526e15",
+     :concurrent-attribution
+     "DAG and closure-experiments changes document the earlier t93A04 closure; they are not new closure or infrastructure counts.",
+     :frozen-closures [],
+     :infrastructure-packets
+     {:portfolio 1,
+      :concurrent 0,
+      :modules-before 644,
+      :modules-after 645,
+      :portfolio-modules ["CoefficientH0"]},
+     :typed-residual-change
+     ["t96J05 is now exactly refuted by an admissible unit circle whose only inhabited radial level cannot be a zero-dimensional manifold."
+      "Actual coefficient-general H0 augmentation, naturality, point-class inverse and positive-sphere endpoint are reviewed, including the exact rational S2 H0 witness."
+      "Rational S2 H1 and H2, coefficient-general excision and sphere suspension remain unresolved."],
+     :review-outcomes
+     {:refutation-stop-pass 1,
+      :implementation-pass 1,
+      :refutation-review "invoke-1788995165323-17291-201cc79c",
+      :implementation-review "invoke-1788995590916-17301-4d9fa8b5",
+      :implementation-commit
+      "ba316dfcadbdcb6f7c2e5cff5b5ff54e95eba308"},
+     :portfolio-placeholder-delta 0,
+     :census
+     {:path "/tmp/Checkpoint15Census.json",
+      :sha256
+      "c3cba1c93843dac79672e1b1255a5d8dafbbe310470ad3283f30310f892e37bc",
+      :named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :zero-placeholder 21,
+      :open 37}},
+    :finding
+    "Preserve the independently reviewed t96J05 refutation without retry or silent repair. Elect exactly one fresh near-closure adapter, t01J04, whose literal manifold-with-boundary conclusion needs an exact hypothesis audit, particularly absence of second countability. Rank remaining work across the DAG: completed covering constructors require no repetition; global regular-fiber atlas work is reserved by the other campaign; unresolved orientation, gluing, classification and numerical normalization boundaries remain. Explicit-coefficient excision serves four concrete proposed consumers and now has reviewed relative complexes, pair maps, natural connecting morphisms and H0 endpoints beneath it. Elect that missing geometric chain comparison rather than further pair-map aliases or a premature full sphere-table retry.",
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: radial-level scope and explicit H0 uptake",
@@ -9824,6 +9978,101 @@
     :oriented-checkpoint14-regular-line-and-pair-naturality-refill],
    :current-residual
    "Measure exact radial-level outcome separately from the coefficient-general H0 endpoint; attribute concurrent changes and retain all unresolved boundaries.",
+   :other-consumers []}
+  {:consumer :t01J04,
+   :stop-condition
+   "Preserve the exact separation, boundarylessness, dimension-zero and neighborhood hypotheses. No assumed second countability, regular boundary value or manifold-with-boundary atlas.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE: exact closed-neighborhood manifold-with-boundary consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t01J04/lean/Main.lean",
+    :stop-condition
+    "No partial GO, silent second-countability repair or assumed atlas. STOP with the exact missing hypothesis or boundary-chart theorem if neither closure nor refutation compiles.",
+    :gates
+    ["GO requires a complete zero-placeholder exact fixture, unchanged statement hash, fixture SHA256 and standard-only audits."
+     "A refutation requires a compiled counterexample satisfying every frozen hypothesis and contradicting the full existential conclusion."
+     "Propose implementation scope only after complete closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Audit the full frozen theorem before applying Sard. Test whether the absence of source second countability prevents a common regular boundary choice; do not infer falsity merely from that missing hypothesis. Construct the closed-neighborhood shrinking and actual preimage charts, including zero source or target dimension, empty preimages and the specified Euclidean half-space model. Reuse reviewed infrastructure only where all hypotheses are proved, and do not duplicate active global fiber-atlas work. Compile a complete exact Main if possible; a refutation must compile an admissible instance contradicting every allowed neighborhood choice.",
+    :consumer-equation
+    "There exists V in nhds y with closure V contained in U such that the literal subtype f inverse closure V has the frozen smooth manifold-with-boundary structure of dimension n.",
+    :frozen-sha256
+    "45809d8373c2342cf817e88713ac2cae3fe14318bb38539977a0847950af2c8b"},
+   :id :oriented-checkpoint15-t01j04-exact-neighborhood-preimage-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint15-radial-level-and-h0-refill
+    :oriented-checkpoint15-radial-level-and-h0-refill],
+   :current-residual
+   "One frozen placeholder asks for a neighborhood whose closed preimage admits the literal dimension-n manifold-with-boundary structure. The source has no second-countability hypothesis.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No assumed small-chain quasi-isomorphism, subdivision homotopy, excision map invertibility, change-of-coefficients theorem or sphere table.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SINGULAR-SUBDIVISION/EXCISION: actual relative homology with explicit ring coefficients",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a commutative ring R, a topological space X and subsets A,U with closure U contained in interior A, construct the actual inclusion of pairs (X minus U,A minus U)->(X,A) and its map on RelativeSingularCoefficients through RelativePairNaturality. Generalize the existing geometric small-chain and subdivision arguments to coefficient object ModuleCat.of R R, reusing coefficient-independent simplex geometry. Prove that the induced relative homology map is an isomorphism in every degree, with explicit treatment of degree zero. Compile integer and rational instances on a concrete interval or disk pair satisfying the closure/interior hypothesis. State universes and the exact subtype representation of A minus U.",
+    :consumer-equation
+    "The actual inclusion-induced map H_k(X minus U,A minus U;R)->H_k(X,A;R) is an isomorphism for every k when closure U is contained in interior A.",
+    :consumer-residual
+    "Sphere cover and disk-pair specialization, positive-degree suspension, circle H1 and the exact rational S2 H1/H2 witnesses remain downstream.",
+    :gates
+    ["GO requires a complete placeholder-free compiled fixture with the constructed pair map and all-degree excision proof."
+     "Record fixture SHA256, concrete integer/rational examples and standard-only audits."
+     "REVISE only to exactly one compiled missing coefficient-general small-chain or subdivision prerequisite."],
+    :stop-condition
+    "Do not substitute an integer homology isomorphism for an R-linear one or retry the entire sphere table. If multiple independent unconstructed foundations remain, STOP with precise typed boundaries."},
+   :id :oriented-checkpoint15-explicit-coefficient-excision-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint15-radial-level-and-h0-refill
+    :oriented-checkpoint12-relative-singular-explicit-coefficients-1
+    :oriented-checkpoint13-relative-pair-homology-naturality-1
+    :oriented-checkpoint15-radial-level-and-h0-refill],
+   :current-residual
+   "Actual ModuleCat R relative complexes and natural pair sequences are reviewed. Existing geometric subdivision and excision exports remain coefficient-specific; the rational sphere calculation requires the actual excision comparison over R.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: exact neighborhood-preimage scope and coefficient excision",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+   :id :oriented-checkpoint16-neighborhood-and-excision-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint15-t01j04-exact-neighborhood-preimage-1
+    :oriented-checkpoint15-explicit-coefficient-excision-1
+    :oriented-checkpoint15-radial-level-and-h0-refill],
+   :current-residual
+   "Measure frozen neighborhood-preimage outcome separately from coefficient excision; retain all reviewed refutations and higher-sphere boundaries.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
