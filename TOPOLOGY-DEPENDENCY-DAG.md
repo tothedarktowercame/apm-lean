@@ -464,7 +464,7 @@ compiles independently of every final problem.
 
 | Cluster | Representative consumers | Current disposition |
 |---|---|---|
-| Critical-value manifold Sard | `t01A08`, `t01J04`, `t92J07`, `t93A04`, `t96J05` | `FOUNDATION`; probe `invoke-1788166722965-5400-bccfd117` compiled the chart-criticality comparison but stopped at the absent rectangular local Morse--Sard theorem for arbitrary finite source dimension; dimension-gap nullity does not address these regular-value problems |
+| Critical-value manifold Sard | closed `t93A04`; `t01A08`, `t01J04`, `t92J07`, `t96J05` have separate uptake records | Genuine-smooth Euclidean and manifold-to-vector Sard are `BANKED`; `t93A04` closed at `a49c8476`, with exact reusable extraction `337bdd48`. The historical missing rectangular theorem STOP is superseded for this consumer, not erased. General target-manifold transport and regular-preimage geometry remain separate. |
 | Dimension-gap manifold nullity | closed `t94J05`; nonsurjectivity part of `t95J04` | generic coordinate-nullity and nonsurjectivity chain is `BANKED`; exact Hausdorff nullity in `t95J04` remains separate |
 | Regular/transverse preimages | `t00J02`, `t02A07`, `t94A06`, `t97J05` | `FOUNDATION`; begin with boundaryless regular-preimage geometry |
 | Fundamental classes/localization | `t00J02`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; `t00A01` instead assumes its punctured pieces are homology balls and needs MV/van Kampen |
@@ -621,6 +621,7 @@ critical-value Sard.
 
 | Problem | Canonical closure | Audit result |
 |---|---|---|
+| `t93A04` | `a49c84764968d8286ff05d87e5d218018505f50c`; reusable extraction `337bdd48a1770df37cd2ed8cb48fea924f4203cd` | frozen definitions and statement preserved; placeholders `1 → 0`; independent PASS `invoke-1788993199960-17228-ce848168`; extraction PASS `invoke-1788993593682-17243-48fdadcf`, not a second closure; standard axioms and inherited unnecessarySimpa warning only |
 | `t01A03` | `8ef14798` | no executable placeholders; only standard axioms |
 | `t01J02` | `3ba7726a` using `37524eb4` | status `solved`, zero placeholders, statements unchanged, only standard axioms |
 | `t94J05` | `3348f833` using the banked dimension-gap chain | status `solved`, zero placeholders, statements unchanged, only standard axioms |
@@ -863,12 +864,39 @@ This construction does not elect either remaining `t95J04` foundation.
    Target-natural composition and source reconstruction would follow as a
    third stage.  Do not implement partial connector or `Monoid.Coprod`
    wrappers as though they close the frozen bridge.
-6. **STOP: manifold Sard.**  Probe
+6. **Historical STOP: manifold Sard (t93A04 subsequently closed).**  Probe
    `invoke-1788166722965-5400-bccfd117` compiled fixed-chart criticality and
    critical-image inclusion for `t93A04`, but pinned Mathlib only supplies an
    equal-dimensional determinant Sard theorem.  Do not promote those partial
    chart lemmas or begin countable assembly before a rectangular local-set
    Morse--Sard theorem handles arbitrary finite source dimension.
+   This records the dependency boundary at that probe, not a mathematical
+   refutation or the current status: reviewed closure `a49c8476` subsequently
+   discharged the frozen consumer using genuine-smooth Sard and actual chart
+   criticality transport. See the closure evidence below.
+
+### Reviewed t93A04 closure evidence (2026-09-09)
+
+Closure `a49c84764968d8286ff05d87e5d218018505f50c` was independently
+approved by codex-10 in `invoke-1788993199960-17228-ce848168`.
+Actual source-chart criticality transport and countable null-image aggregation
+give a regular projection value; the projection kernel and frozen
+range-plus-span bridge prove the literal affine-line transversality predicate.
+Empty and zero-dimensional sources require no added assumptions.
+
+- Frozen source SHA-256: `4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea`.
+- Unchanged `apm_t93a04` statement SHA-256: `854fea2e1c0bd60b27caee326f218fa4dd639f9dcc3791fe9975dbe9990e7e11`.
+- Closure fixture `/tmp/T93A04Closed.lean` and committed consumer SHA-256: `ca834f20b42db9742d8b4c90b6ab7fb8364ee8dcf617a59df97d02c623437bbd`.
+- Extraction `337bdd48a1770df37cd2ed8cb48fea924f4203cd`, independently approved in `invoke-1788993593682-17243-48fdadcf`, preserves `T93A04ManifoldWork.null_critical` exactly in `ConstructionTargets/SardGenuineSmoothManifoldVector.lean` (SHA-256 `ff63bdc1e857973e9b2cecc345e9e2fab37aefd81973718267a1ee50fe7dd951`).
+- Importing consumer fixture `/tmp/T93A04ManifoldReuse.lean` and current source SHA-256: `5baf0e7d27ecb11934c0862e5955cedca42e307deed38ab569d31a90eb8c2f83`; its tail is byte-identical to the closure consumer after the extracted producer.
+
+Executable placeholders decreased `1 → 0` at closure and stayed `0 → 0`
+at extraction. Both reviews reproduced only `propext`, `Classical.choice`,
+and `Quot.sound`, with the inherited `unnecessarySimpa` warning in
+`lineDirection_ne_zero`. Extraction is reuse, not a second closure.
+General target-manifold chartwise transport and regular-preimage global atlas,
+embedded inclusion and tangent-image geometry remain downstream obligations;
+they are not residual hypotheses of the closed t93A04 theorem.
 
 ## Strategy reset after the first topology closure campaigns
 

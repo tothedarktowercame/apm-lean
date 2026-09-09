@@ -524,6 +524,48 @@ chosen-object seams were separately compiled before frozen wiring.
 
 ## Balanced parallel program after t01J03
 
+### Subsequent reviewed result: t93A04 CLOSED (2026-09-09)
+
+The historical manifold-Sard STOP in the table below is retained as evidence
+of the missing infrastructure at that time. It is no longer the consumer's
+current boundary. Commit `a49c84764968d8286ff05d87e5d218018505f50c`
+closed the complete frozen transverse-line theorem, with independent codex-10
+PASS `invoke-1788993199960-17228-ce848168`. Actual smooth source-chart
+representatives, derivative criticality transport and second-countable null
+aggregation consume unconditional Euclidean Sard. A regular projection value,
+the computed projection kernel and the frozen range-plus-span lemma yield
+the unchanged `IsSmoothLinePreimage` predicate, including empty and
+zero-dimensional sources without extra hypotheses.
+
+The frozen source hash is
+`4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea`;
+the preserved `apm_t93a04` statement hash is
+`854fea2e1c0bd60b27caee326f218fa4dd639f9dcc3791fe9975dbe9990e7e11`.
+The closure fixture `/tmp/T93A04Closed.lean` and closure consumer hash is
+`ca834f20b42db9742d8b4c90b6ab7fb8364ee8dcf617a59df97d02c623437bbd`.
+Executable placeholders decreased **1 to 0**. Compilation and independent
+review found only `propext`, `Classical.choice`, and `Quot.sound`, with the
+inherited `unnecessarySimpa` warning in `lineDirection_ne_zero`.
+
+Commit `337bdd48a1770df37cd2ed8cb48fea924f4203cd` then extracted the exact
+`T93A04ManifoldWork.null_critical` declaration and proof into
+`ConstructionTargets/SardGenuineSmoothManifoldVector.lean`, SHA-256
+`ff63bdc1e857973e9b2cecc345e9e2fab37aefd81973718267a1ee50fe7dd951`.
+Independent codex-10 PASS `invoke-1788993593682-17243-48fdadcf` verified
+exact extraction, unchanged consumer tail, standard axioms and successful
+consumer/module compilation and focused build. The importing fixture
+`/tmp/T93A04ManifoldReuse.lean` and current consumer hash is
+`5baf0e7d27ecb11934c0862e5955cedca42e307deed38ab569d31a90eb8c2f83`.
+Placeholders stayed **0 to 0**: extraction is reuse, not a second closure.
+
+No mathematical t93A04 residual remains. General target-manifold chartwise
+critical-value transport and regular-preimage atlas, embedded-inclusion and
+tangent-image construction remain separate downstream work, as do other
+consumers' individual uptake obligations. The earlier STOP is neither erased
+nor reinterpreted as a counterexample.
+
+### Historical experiments
+
 Three read-only experiments ran concurrently after the `t01J03` closure.
 
 | Job | Lane | Decision | Exact result |
