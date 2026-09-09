@@ -47193,8 +47193,58 @@
   {:consumer "t93A04",
    :stop-condition
    "Name an exact mathematical, hypothesis, or representation boundary if the probe fails. Missing infrastructure is not a refutation. REVISE requires exactly one compiled prerequisite under the probe protocol; no owner-authorization gate.",
+   :evidence
+   {:source-pins
+    {:path "/tmp/SardSmoothRegularityBoundary-sources.json",
+     :sha256
+     "3b6bd905689d901fe86799ff6beece6aeba7f3836ac29ed6667b17927652a8ab"},
+    :diagnostic
+    {:path "/tmp/SardSmoothRegularityBoundary.lean",
+     :sha256
+     "92599827ca4b18ee956c8e92136a06e8bf93fd543f2a54195fa066ecd66552c2",
+     :placeholder-count 0,
+     :full-requested-fixture false,
+     :proved
+     ["Outer top is omega; inner top is infinity; the orders differ."
+      "The higher interface's exclusion cannot hold at smooth infinity."
+      "The existing residual inverse-slice producer preserves genuine smooth infinity when supplied smooth-on-domain f and inverse chart."
+      "SardOrderAdmissible 4 2 1 is false; the banked admissible C1 endpoint cannot supply arbitrary rectangular C1 nullity."],
+     :axioms [propext Classical.choice Quot.sound],
+     :warnings []},
+    :placeholder-delta
+    {:consumer "t93A04",
+     :before 1,
+     :after 1,
+     :delta 0,
+     :frozen-sha256
+     "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
+    :residual
+    "Construct a compatible local induction statement preserving actual reduced-map regularity: either smooth-on-neighborhood reductions with smooth inverse charts, or sufficiently high finite orders with explicit losses and admissibility. Discharge dimension base cases and local-domain obligations before claiming unconditional rectangular nullity; manifold regular-value transport remains downstream. No owner authorization or mathematical refutation is asserted.",
+    :outcome :stop,
+    :boundary
+    "The existing assembly does not discharge unconditional smooth rectangular Sard. Its input uses outer top in WithTop ℕ∞, which is analytic regularity omega, not smooth infinity. Its hindOne demands nullity for arbitrary C1 reduced maps, exceeding a smooth induction hypothesis. Its higher-jet chain excludes infinity because neighborhood extraction uses ContDiffAt.eventually with that exclusion. These require substantive regularity-preserving producer/consumer changes, not annotation substitution.",
+    :disposition :stop,
+    :author :codex-12,
+    :reason :hypothesis-and-representation-boundary,
+    :commands
+    [{:cmd "lake env lean /tmp/SardSmoothRegularityBoundary.lean",
+      :exit 0}
+     {:cmd "python3 /tmp/check-sard-smooth-boundary.py", :exit 0}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}],
+    :campaign-termination false,
+    :changed-paths [],
+    :finding
+    "Read the DAG's dimension-gap/critical-value distinction, closure experiments and the checkpoint's PASS review. Traced the higher-order exclusion to SardImplicitFunctionKernelParameterLocalRegularity, which uses h.eventually hnTop. Pointwise C-infinity does not itself provide a neighborhood uniformly smooth in all orders. The residual-slice specialization compiles but is already supplied by an existing producer; it does not discharge the independent induction-quantifier and neighborhood obligations. No new compiled prerequisite qualifying for REVISE is claimed. The analytic-versus-smooth distinction corrects the earlier strategy description of the banked assembly.",
+    :mathematical-refutation false,
+    :boundary-artifact
+    {:path "/tmp/SardSmoothRegularityBoundary.md",
+     :sha256
+     "337089245a258341fccc0f5a6729d70b4c56828e259294907088841da59d6816"},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SARD THEOREM",
    :acceptance
