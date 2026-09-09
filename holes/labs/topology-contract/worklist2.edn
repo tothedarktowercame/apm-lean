@@ -9556,8 +9556,70 @@
   {:consumer :t96J05,
    :stop-condition
    "Preserve all frozen hypotheses and the literal radial-level subtype. Do not assume radial variation, regularity of an attained value or a global fiber atlas.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "The frozen statement is refuted by the constant-radius unit circle. Additional Sard or atlas infrastructure cannot close it unchanged. No statement repair or implementation was performed.",
+    :frozen-file "problems/t96J05/lean/Main.lean",
+    :dependency-review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788994912321-17284-5172acfd"},
+    :axiom-audits 5,
+    :outcome :stop,
+    :warnings
+    ["One inherited EuclideanSpace.norm_single deprecation warning in the copied frozen helper."
+     "Five unused-variable warnings for named hypothesis binders in the exact FrozenClaim proposition."],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :placeholder-before 1,
+    :reason :specification-refutation,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "bb dependency-review query for oriented-checkpoint14-regular-line-and-pair-naturality-refill",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T96J05Refutation.lean", :exit 0}
+     {:cmd
+      "sha256sum /tmp/T96J05Refutation.lean problems/t96J05/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T96J05Refutation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial lake env lean /tmp/T96J05Refutation.lean",
+      :exit 1,
+      :correction
+      "Constructed the zero-dimensional model's Subsingleton instance explicitly, then obtained its discrete topology. Removed unused simp arguments."}],
+    :refutation
+    {:declaration "T96J05Refutation.refutes_frozen",
+     :type "¬ T96J05Refutation.FrozenClaim",
+     :admissible-instance
+     "m=1, n=2, X=Metric.sphere (0 : EuclideanSpace Real (Fin 2)) 1",
+     :hypothesis-witness "T96J05Refutation.counterexample",
+     :level-classification
+     "An inhabitant forces r=1; levelHomeo identifies that literal level with X.",
+     :obstruction
+     "ChartedSpace over EuclideanSpace Real (Fin 0) implies DiscreteTopology. Connectedness then forces subsingleton, contradicted by opposite unit points."},
+    :changed-paths [],
+    :frozen-file-unchanged true,
+    :fixture
+    {:path "/tmp/T96J05Refutation.lean",
+     :sha256
+     "75f6345ee5d9329cf34e748f32b25c59cee7c4571f476d541befa13e9edd0c13",
+     :role :compiled-refutation},
+    :finding
+    "Compiled a counterexample satisfying every frozen hypothesis: m=1, n=2 and X the literal Euclidean unit circle. X is nonempty and connected, has the required smooth manifold structure, and its actual subtype inclusion is smooth. Every inhabited radial level has radius one and is homeomorphic to X. Any demanded zero-dimensional charted structure would make that level discrete, hence make the connected circle subsingleton, contradicting its explicit positive and negative coordinate points. The fixture proves the negation of the complete frozen universal proposition.",
+    :frozen-sha256
+    "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: exact radial-level consumer and constant-radius audit",
