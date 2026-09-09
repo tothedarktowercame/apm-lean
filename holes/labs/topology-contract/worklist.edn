@@ -48269,8 +48269,54 @@
   {:consumer "a97J08",
    :stop-condition
    "If the complete frozen proof cannot be built, STOP naming the exact missing planar separation or winding theorem and distinguish missing infrastructure from mathematical refutation. Do not report a partial circle certificate as GO.",
+   :evidence
+   {:source-pins
+    {:path "/tmp/A97J08PlanarBoundary-sources.json",
+     :sha256
+     "66d7a249149e9ceede63076423a00a9bb61cf7d933db881019a3bc0dae884bbf"},
+    :diagnostic
+    {:path "/tmp/A97J08PlanarBoundary.lean",
+     :sha256
+     "3c70b5ab1a88e17c9b4f5325c918ff2a9b528abb8c0d7aa61e61c685b19c1019",
+     :full-consumer-fixture false,
+     :placeholder-count 0,
+     :proved
+     "Under the explicitly stronger hypothesis that the entire complement is bounded, constructs c(u)=z+R*u inside D, proves radial normalization composed with c equals the identity, and derives non-nullhomotopy using the existing detector.",
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :warnings []},
+    :placeholder-delta
+    {:consumer "a97J08",
+     :before 1,
+     :after 1,
+     :delta 0,
+     :frozen-sha256
+     "d32684e6584ec0043c688bca0a740e0ffc412588ed1429025c56ef2a42b370af"},
+    :residual
+    "Prove apm_a97j08_exists_noncontractible_circle_of_bounded_compl_component with its unchanged hypotheses, then compile the complete frozen consumer. STOP records missing infrastructure, not refutation or consumer closure.",
+    :outcome :stop,
+    :boundary
+    "The frozen theorem requires an actual non-nullhomotopic circle in D from boundedness of one complementary component. Existing compact-component and radial-map helpers do not construct that circle. A planar separation/winding construction accommodating the other complementary components remains missing.",
+    :disposition :stop,
+    :author :codex-12,
+    :reason :missing-planar-separation-winding-producer,
+    :commands
+    [{:cmd "lake env lean /tmp/A97J08PlanarBoundary.lean", :exit 0}
+     {:cmd "python3 /tmp/check-a97j08-planar-boundary.py", :exit 0}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets problems/a97J08/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}],
+    :campaign-termination false,
+    :changed-paths [],
+    :finding
+    "Reviewed the dependency checkpoint PASS, frozen obstruction and available component, circle and winding APIs. The compiled diagnostic isolates the geometric gap: boundedness of one component cannot be substituted for boundedness of the whole complement, nor does compactness justify assuming component isolation. No full frozen proof or compiled REVISE prerequisite is supplied.",
+    :mathematical-refutation false,
+    :boundary-artifact
+    {:path "/tmp/A97J08PlanarBoundary.md",
+     :sha256
+     "b92f1aeb148e8b5084fc179c41872210200b5007b75caa935c28b679e5e3fa45"},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PLANAR SEPARATION / bounded complement component",
    :acceptance
