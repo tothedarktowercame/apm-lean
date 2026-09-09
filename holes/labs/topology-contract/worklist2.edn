@@ -9997,8 +9997,67 @@
   {:consumer :t01J04,
    :stop-condition
    "Preserve the exact separation, boundarylessness, dimension-zero and neighborhood hypotheses. No assumed second countability, regular boundary value or manifold-with-boundary atlas.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Establish an admissible common boundary choice under the frozen source hypotheses and construct the actual positive-dimensional half-space atlas on its closed preimage, including empty preimages and zero target dimension. Neither full closure nor an admissible refutation is claimed.",
+    :axiom-audits 2,
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :reason :missing-hypothesis-and-boundary-atlas,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read frozen Main, DAG, closure stop rules, build-loop result vocabulary, checkpoint15 review and concurrent atlas row",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T01J04Boundary.lean", :exit 0}
+     {:cmd
+      "sha256sum /tmp/T01J04Boundary.lean problems/t01J04/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T01J04Boundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "Comment-stripped frozen placeholder count",
+      :exit 0,
+      :result 1}
+     {:cmd "git diff --exit-code -- problems/t01J04/lean/Main.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial lake env lean /tmp/T01J04Boundary.lean",
+      :exit 1,
+      :correction
+      "Replaced incorrectly directed equality transport with simplification by the closed-set closure equation; successful rerun audits contain no sorryAx."}
+     {:cmd "git diff --exit-code",
+      :exit 1,
+      :explanation
+      "Concurrent documentation edits appeared in the DAG and closure-experiments note. Restricted frozen-file verification subsequently passed; these edits were left untouched."}],
+    :changed-paths [],
+    :concurrent-changed-paths
+    ["TOPOLOGY-DEPENDENCY-DAG.md"
+     "docs/TN-topology-closure-experiments.md"],
+    :fixture
+    {:path "/tmp/T01J04Boundary.lean",
+     :sha256
+     "1f074923e7620668f5a89a7ae586a1b0d3779654a936daca9ce282cb714db80b",
+     :role :boundary-diagnostic},
+    :finding
+    "Compiled neighborhood shrinking under exactly RegularSpace Y and the complete zero-source-dimensional conclusion, constructing the discrete subtype atlas. Positive source dimension remains unresolved: T93A04ManifoldWork.null_critical requires SecondCountableTopology X, absent from the frozen hypotheses; no alternative simultaneous regular-boundary selection is established. Independently, constructing ChartedSpace (EuclideanHalfSpace n) on the literal closed preimage and its smooth IsManifold instance remains necessary. These are proof-route boundaries, not a refutation of the frozen theorem. Active global fiber-atlas work was not duplicated.",
+    :frozen
+    {:path "problems/t01J04/lean/Main.lean",
+     :sha256
+     "45809d8373c2342cf817e88713ac2cae3fe14318bb38539977a0847950af2c8b",
+     :unchanged true,
+     :placeholder-before 1,
+     :placeholder-after 1},
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: exact closed-neighborhood manifold-with-boundary consumer",
