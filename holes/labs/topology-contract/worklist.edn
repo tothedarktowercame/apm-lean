@@ -43060,6 +43060,23 @@
       "git add ConstructionTargets/SardBorelReducedDimensionInductionNullity.lean ConstructionTargets/SardBorelReducedDimensionInductionNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: instantiate Borel induction after rank subtraction' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788955422288-16241-a65719a3",
+     :commands
+     ["git show a3b9e014 --stat --oneline"
+      "sha256sum /tmp/SardBorelReducedDimensionInductionNullityProbe.lean"
+      "cmp /tmp/SardBorelReducedDimensionInductionNullityProbe.lean <(git show a3b9e0147fd899b23d93fbc93a237b7c1c37df4b:ConstructionTargets/SardBorelReducedDimensionInductionNullity.lean)"
+      "git show a3b9e0147fd899b23d93fbc93a237b7c1c37df4b:ConstructionTargets/SardBorelReducedDimensionInductionNullity.lean | sed -n '8,20p' | sha256sum"
+      "git diff --exit-code a3b9e0147fd899b23d93fbc93a237b7c1c37df4b -- ConstructionTargets"
+      "lake env lean /tmp/SardBorelReducedDimensionInductionNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardBorelReducedDimensionInductionNullity.lean"
+      "lake build ConstructionTargets.SardBorelReducedDimensionInductionNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit a3b9e0147fd899b23d93fbc93a237b7c1c37df4b passes. Fixture SHA 286b31b3461b1d10426a8d6e529f28f5c1c0317fd100191d7df2492ed1f0cbdf and statement SHA 5a13b9335609aba4d4c11364fcdae63526498c9b1f63ab2f128ad362e61b5c81 reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8246-job build successful. Lines 21–22 correctly orient dimension substitution and retain unchanged regularity order, explicit Borel structure, and induction premises. Ledger untouched."},
     :commit "a3b9e0147fd899b23d93fbc93a237b7c1c37df4b",
     :changed-paths
     ["ConstructionTargets/SardBorelReducedDimensionInductionNullity.lean"
@@ -43071,7 +43088,7 @@
     :declarations
     ["SardBorelReducedDimensionInductionNullityProbe.reducedDimension_slice_nullity"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardBorelReducedDimensionInductionNullity.lean"
     "ConstructionTargets/SardBorelReducedDimensionInductionNullity.md"],
@@ -43243,7 +43260,7 @@
       "286b31b3461b1d10426a8d6e529f28f5c1c0317fd100191d7df2492ed1f0cbdf"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
