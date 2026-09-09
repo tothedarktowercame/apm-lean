@@ -40823,6 +40823,41 @@
    "The compact rank-zero branch has no remaining analytic nullity assumptions in the stated dimension range; larger-source regimes remain.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if C1 regularity fails to make the rank-zero locus closed, compact exhaustion fails to transfer the reviewed compact nullity under these hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardRankZeroSmallSourceNullity.lean"
+    "ConstructionTargets/SardRankZeroSmallSourceNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-ZERO SMALL-SOURCE NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardRankZeroSmallSourceNullityProbe.lean",
+     :sha256
+     "fb09056b425cdfe223284b2563a3e64da279d9fb1d8d78420795f36770337dc9"},
+    :declarations
+    ["rankZero_image_zero_of_sourceDim_le_twice_targetDim"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Combine this rank-zero branch with positive-rank induction where its dimension bound applies; repair larger-source uncovered higher jets and complete rectangular localization."},
+   :representation
+   {:source
+    "Global C^(k+1) regularity, classical Sard admissibility, and sourceDim <= 2*targetDim under the stated nontrivial finite-dimensional inner-product Borel hypotheses.",
+    :target
+    "Zero target add-Haar measure of the image of the entire derivative rank-zero locus, without compactness or supplied higher-jet nullity."},
+   :id :critical-value-sard-rank-zero-small-source-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-compact-rank-zero-small-source-nullity-1
+    :critical-value-sard-closed-open-image-nullity-1
+    :critical-value-sard-derivative-rank-upper-locus-closed-1],
+   :current-residual
+   "Compact exhaustion is discharged for the small-source rank-zero branch; positive-rank assembly and larger-source regimes remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -40876,73 +40911,73 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank compact rank-zero nullity for sourceDim <= 2*targetDim; localize this branch and repair larger-source uncovered jets.",
+     "Bank whole rank-zero-locus nullity in the small-source dimension range; complete positive-rank assembly and repair larger-source regimes.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"compact_rankZero_image_zero_of_sourceDim_le_twice_targetDim"
-      "b0c88c7c7ec4cd0b47be9c26264dccc336782f87e2524e275fd6f90f47def922"},
+     {"rankZero_image_zero_of_sourceDim_le_twice_targetDim"
+      "1663babf3b899379cd76297cc65a0f1e65f4d1f7a120fcd9a5937e70b41a9dae"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if sourceDim <= 2*targetDim fails to eliminate the uncovered orders j >= 2 under source nontriviality, the reviewed compact assembly fails with those obligations discharged, or nonstandard axioms are required.",
+      "Stop only if C1 regularity fails to make the rank-zero locus closed, compact exhaustion fails to transfer the reviewed compact nullity under these hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardCompactRankZeroSmallSourceNullity.lean"
-       "ConstructionTargets/SardCompactRankZeroSmallSourceNullity.md"],
+      ["ConstructionTargets/SardRankZeroSmallSourceNullity.lean"
+       "ConstructionTargets/SardRankZeroSmallSourceNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT RANK-ZERO SMALL-SOURCE NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-ZERO SMALL-SOURCE NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardCompactRankZeroSmallSourceNullityProbe.lean",
+       {:path "/tmp/SardRankZeroSmallSourceNullityProbe.lean",
         :sha256
-        "880a420c9f02e1911511e7c572a0a70f05f14da773efb552e11fa25b1f12e719"},
+        "fb09056b425cdfe223284b2563a3e64da279d9fb1d8d78420795f36770337dc9"},
        :declarations
-       ["compact_rankZero_image_zero_of_sourceDim_le_twice_targetDim"],
+       ["rankZero_image_zero_of_sourceDim_le_twice_targetDim"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Localize and exhaust this compact rank-zero result in its dimension range; repair uncovered higher jets for sourceDim > 2*targetDim before full rectangular induction."},
+       "Combine this rank-zero branch with positive-rank induction where its dimension bound applies; repair larger-source uncovered higher jets and complete rectangular localization."},
       :representation
       {:source
-       "A compact rank-zero source set, global C^(k+1) regularity, classical Sard admissibility, and sourceDim <= 2*targetDim under the stated nontrivial finite-dimensional inner-product Borel hypotheses.",
+       "Global C^(k+1) regularity, classical Sard admissibility, and sourceDim <= 2*targetDim under the stated nontrivial finite-dimensional inner-product Borel hypotheses.",
        :target
-       "Zero target add-Haar measure of the compact source image without any higher-jet nullity premises."},
-      :id
-      :critical-value-sard-compact-rank-zero-small-source-nullity-1,
+       "Zero target add-Haar measure of the image of the entire derivative rank-zero locus, without compactness or supplied higher-jet nullity."},
+      :id :critical-value-sard-rank-zero-small-source-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-compact-rank-zero-uncovered-jet-assembly-1],
+      [:critical-value-sard-compact-rank-zero-small-source-nullity-1
+       :critical-value-sard-closed-open-image-nullity-1
+       :critical-value-sard-derivative-rank-upper-locus-closed-1],
       :current-residual
-      "The compact rank-zero branch has no remaining analytic nullity assumptions in the stated dimension range; larger-source regimes remain.",
+      "Compact exhaustion is discharged for the small-source rank-zero branch; positive-rank assembly and larger-source regimes remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite discharges every higher-jet nullity obligation in compact rank-zero assembly when sourceDim <= 2*targetDim. Every higher order j >= 2 then has strict Taylor surplus. The result retains classical admissibility but requires no supplied jet nullity. Larger-source regimes and rectangular assembly remain unresolved; Morse-Sard is not refuted.",
+     "One compiled prerequisite extends small-source compact rank-zero nullity to the entire rank-zero locus. C1 regularity gives closedness of that locus; compact exhaustion then applies the reviewed compact theorem. No compactness or higher-jet nullity premise remains. The dimension restriction remains, and rectangular Morse-Sard is incomplete, not refuted.",
      :commands
      [{:cmd
-       "Read DAG, closure policy, compact uncovered-jet assembly, and its reviewed receipt",
+       "Read DAG, closure policy, exhaustion and rank-locus modules, and reviewed dependency findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardCompactRankZeroSmallSourceNullityProbe.lean",
+       "lake env lean /tmp/SardRankZeroSmallSourceNullityProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
-      {:cmd
-       "sha256sum /tmp/SardCompactRankZeroSmallSourceNullityProbe.lean",
+      {:cmd "sha256sum /tmp/SardRankZeroSmallSourceNullityProbe.lean",
        :exit 0}
       {:cmd
-       "sed -n '5,19p' /tmp/SardCompactRankZeroSmallSourceNullityProbe.lean | sha256sum",
+       "sed -n '7,19p' /tmp/SardRankZeroSmallSourceNullityProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactRankZeroSmallSourceNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardRankZeroSmallSourceNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 312 items OK; {:done 304, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 313 items OK; {:done 305, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -40958,12 +40993,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardCompactRankZeroSmallSourceNullityProbe.lean",
+     {:path "/tmp/SardRankZeroSmallSourceNullityProbe.lean",
       :sha256
-      "880a420c9f02e1911511e7c572a0a70f05f14da773efb552e11fa25b1f12e719"},
+      "fb09056b425cdfe223284b2563a3e64da279d9fb1d8d78420795f36770337dc9"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -41224,7 +41259,8 @@
     :critical-value-sard-first-nonzero-jet-taylor-surplus-nullity-1
     :critical-value-sard-first-nonzero-jet-all-source-taylor-nullity-1
     :critical-value-sard-compact-rank-zero-uncovered-jet-assembly-1
-    :critical-value-sard-compact-rank-zero-small-source-nullity-1],
+    :critical-value-sard-compact-rank-zero-small-source-nullity-1
+    :critical-value-sard-rank-zero-small-source-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
