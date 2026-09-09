@@ -3139,8 +3139,156 @@
      :review-outcomes]},
    :stop-condition
    "Infrastructure does not count as frozen closure. Model homology does not imply geometric orientation compatibility or arbitrary-manifold localization.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "bb: read both ledgers and export /tmp/Checkpoint2Ledgers.json",
+      :exit 0}
+     {:cmd
+      "python3: recount every DAG-named consumer against 0cdd316e and write /tmp/OrientedCheckpoint2Census.json; inspect reviewed STOPs and dependency receipts",
+      :exit 0}
+     {:cmd "cat docs/TN-topology-foundational-programs.md", :exit 0}
+     {:cmd
+      "sed -n '1,115p' holes/labs/topology-contract/work-prompt.md",
+      :exit 0}
+     {:cmd
+      "git diff 0cdd316e -- TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd
+      "git diff --name-only --diff-filter=A 0cdd316e -- 'ConstructionTargets/*.lean'",
+      :exit 0}
+     {:cmd "sha256sum problems/t97A02/lean/Main.lean", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :replacement-items
+    [{:consumer :t97A02,
+      :stop-condition
+      "No assumed component lifts, finite fundamental group, global path connectivity, stronger local-contractibility hypothesis, or changed frozen statements.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "CIRCLE/SPHERE INVARIANTS: finite-H1 Circle lifting and exact torus consumer uptake",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t97A02/lean/Main.lean",
+       :stop-condition
+       "If closure still requires a missing theorem, STOP under rule 0 with its exact typed boundary. No conditional replacement or partial closure GO.",
+       :gates
+       ["GO only with the complete zero-placeholder frozen-facing fixture, unchanged statement hashes, fixture SHA-256, and standard-only axiom audits."
+        "Propose implementation scope only after complete closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 2,
+       :probe
+       "Compile an exact temporary frozen Main with both placeholders removed. Reuse the reviewed finite-H1 diagnostic and canonical coefficient comparison/Hurewicz naturality. Normalize each component's Circle map at a chosen point, transfer ambient loop triviality through the actual inclusion, apply the covering-lift criterion, and undo the normalization by a real angle constant. Assemble the resulting lifts with ComponentRealLiftAssembly and recombine coordinate null-homotopies using the existing frozen theorem. Handle empty X under precisely the frozen hypotheses.",
+       :consumer-equation
+       "Every actual Circle coordinate map is homotopic to a constant; the existing product-homotopy assembly proves apm_t97a02, reducing placeholders from two to zero.",
+       :frozen-sha256
+       "d5f4eeead7566421b8446530469637df8a192e3f68617d5201b9a3841e4a90a4"},
+      :id :oriented-checkpoint2-t97a02-exact-closure-1,
+      :kind :final-adapter,
+      :depends-on
+      [:classical-local-contractibility-path-components-1
+       :oriented-successor-local-contractibility-component-lifts-1],
+      :current-residual
+      "Two frozen placeholders remain. The prior local-connectivity and global component-assembly boundary now has reviewed implementations; finite-H1 component normalization and exact frozen assembly remain.",
+      :other-consumers []}
+     {:consumer :higher-manifold-chart-local-homology,
+      :stop-condition
+      "Local calculation only. Do not claim coordinate-change signs, coherent global orientation, fundamental classes, localization monicity, or t98A02 gluing.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Queue D #2: higher-dimensional restricted charts and actual local-homology transport",
+      :acceptance
+      {:probe
+       "For a T1 space charted on Euclidean n-space, n at least two, construct a restricted chart centered at the specified point and its deleted-point pair homeomorphism. Use production relative maps and excision to identify the actual model-to-ambient Hn map as an isomorphism. Transport HigherModelLocalHomology.generator and prove it generates ambient local Hn. Compile Euclidean dimensions two and four. State all topological and coefficient hypotheses explicitly and preserve the canonical integral singular-chain representation.",
+       :consumer-equation
+       "The actual chart-then-inclusion Hn map sends the banked model generator to a class g such that every ambient local Hn class is an integer multiple of g; prove equality with the constructed pair transport and excision composite.",
+       :axioms :standard-only,
+       :stop-condition
+       "GO requires constructed chart data, actual comparison maps, generator preservation, concrete instances, fixture hash and axiom audits. REVISE only to one compiled missing chart or excision prerequisite. Supplied chart-pair data or an assumed local isomorphism is insufficient."},
+      :representation
+      {:source
+       "Integral relative Hn of the open n-disk modulo its origin, n at least two",
+       :target
+       "Integral relative Hn of a T1 boundaryless n-manifold modulo a specified point",
+       :direction
+       "Forward map through a constructed restricted pointed chart followed by actual neighborhood inclusion; identify its relative chain map with the pair-homeomorphism/excision composite."},
+      :id :oriented-checkpoint2-higher-chart-local-generator-1,
+      :kind :representation-comparison,
+      :depends-on [:oriented-successor-higher-model-local-homology-1],
+      :current-residual
+      "Higher-dimensional Euclidean model generators are banked, but an actual restricted chart and neighborhood inclusion have not transported them into ambient local Hn in this campaign.",
+      :other-consumers [:t98A02 :t01A02 :t01A05]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Attribute frozen closures to their actual campaign. Neither local generators nor group isomorphisms establish global orientation compatibility.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: exact consumer certification and manifold continuation",
+      :acceptance
+      {:strategy
+       "Recount all DAG-named consumers with comments stripped and inspect both ledgers, the full DAG, foundational-program note and current policy. Elect exactly one eligible near-closure consumer first, then rank the full DAG by downstream consumers and simplicity. Check new evidence against every prior STOP before retrying. Assess whether new inverse-square-root integration results resolve the exact t96J08 boundary. Return one to five fresh work rows plus a successor carrying identical checkpoint keys; do not duplicate Morse-Sard or begin with t00J02.",
+       :stop-condition
+       "Report missing theorems distinctly from refutations. No owner-authorization stop and no empty ordinary refill."},
+      :id :oriented-checkpoint3-consumer-and-localization,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint2-t97a02-exact-closure-1
+       :oriented-checkpoint2-higher-chart-local-generator-1],
+      :current-residual
+      "Measure actual t97A02 uptake separately from higher-dimensional chart infrastructure. Geometric orientation signs, global localization and manifold gluing remain distinct obligations."}],
+    :changed-paths [],
+    :measures
+    {:baseline "0cdd316e375edcedd466f4e3cf1aef27524b6b08",
+     :head "35eda607bd44f633d05775a3770e51e14b9ca6a4",
+     :placeholder-delta 0,
+     :dag-consumer-placeholders
+     {:before 76,
+      :after 75,
+      :delta -1,
+      :missing-paths ["problems/t93A05/lean/Main.lean"],
+      :attribution
+      "The decrease is t03J06, closed by another campaign at 7caeb0018c793cafaf9c6ea7700eb2fa9f306abf. This portfolio changed no frozen placeholder."},
+     :portfolio-consumers {:t96J08 [2 2], :t97A02 [2 2]},
+     :infrastructure-packets
+     {:portfolio-completed 3,
+      :portfolio-modules-added 3,
+      :all-modules-before 604,
+      :all-modules-after 614,
+      :other-campaign-modules-added 7},
+     :review-outcomes {:implementation-pass 3, :stop-pass 1},
+     :typed-residual-change
+     {:t96J08
+      "Compiled nonexactness and exact conditional assembly; radial square-root evaluation and singular-term integrability remain the recorded analytic obligations. Newly banked UnitDiskInverseSqrtIntegrability supplies relevant domination infrastructure, but its application to this exact term has not been compiled here.",
+      :higher-model
+      "Actual connecting-map/radial normalization now computes model local homology in every dimension at least two, with generators and dimensions two/four instantiated.",
+      :t97A02
+      "Classical local contractibility now supplies component lifting hypotheses. Open-component decomposition, continuous global lift assembly, empty-domain handling, and actual inclusion-loop naturality are reviewed. These resolve the specific topological boundary of the prior STOP; finite-H1 normalization and component-lift application still require an exact consumer fixture."}},
+    :finding
+    "Elect exactly one near-closure consumer first: t97A02. This retry has explicit new boundary-resolving evidence, ClassicalLocalPathConnectivity at f8d3d381 and ComponentRealLiftAssembly at 0322d72b, both independently PASS-reviewed. It is not a repetition based merely on unrelated infrastructure growth. Preserve the other reviewed STOP boundaries; do not duplicate the running Morse-Sard campaign. Next elect higher-dimensional restricted-chart local generator transport, which uses the newly reviewed model calculation and serves several manifold consumers. It precedes global orientation and gluing because those require an actual model-to-ambient comparison. No complete t97A02 closure is claimed by this election.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/OrientedCheckpoint2Census.json",
+     :sha256
+     "91e01aefb6ec348841dea9cde5e4915f5ef0be2af346b5568841ce2daa5fb63f"}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: frozen uptake and manifold/covering continuation",
@@ -3158,6 +3306,99 @@
     :oriented-manifold-checkpoint-refill-repair1-successor],
    :current-residual
    "Measure t96J08 closure separately from model and component-lifting infrastructure. Reconsider t97A02 only if its precise reviewed boundary has been resolved; higher-dimensional geometric orientation and manifold gluing remain separate."}
+  {:consumer :t97A02,
+   :stop-condition
+   "No assumed component lifts, finite fundamental group, global path connectivity, stronger local-contractibility hypothesis, or changed frozen statements.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CIRCLE/SPHERE INVARIANTS: finite-H1 Circle lifting and exact torus consumer uptake",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t97A02/lean/Main.lean",
+    :stop-condition
+    "If closure still requires a missing theorem, STOP under rule 0 with its exact typed boundary. No conditional replacement or partial closure GO.",
+    :gates
+    ["GO only with the complete zero-placeholder frozen-facing fixture, unchanged statement hashes, fixture SHA-256, and standard-only axiom audits."
+     "Propose implementation scope only after complete closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 2,
+    :probe
+    "Compile an exact temporary frozen Main with both placeholders removed. Reuse the reviewed finite-H1 diagnostic and canonical coefficient comparison/Hurewicz naturality. Normalize each component's Circle map at a chosen point, transfer ambient loop triviality through the actual inclusion, apply the covering-lift criterion, and undo the normalization by a real angle constant. Assemble the resulting lifts with ComponentRealLiftAssembly and recombine coordinate null-homotopies using the existing frozen theorem. Handle empty X under precisely the frozen hypotheses.",
+    :consumer-equation
+    "Every actual Circle coordinate map is homotopic to a constant; the existing product-homotopy assembly proves apm_t97a02, reducing placeholders from two to zero.",
+    :frozen-sha256
+    "d5f4eeead7566421b8446530469637df8a192e3f68617d5201b9a3841e4a90a4"},
+   :id :oriented-checkpoint2-t97a02-exact-closure-1,
+   :kind :final-adapter,
+   :depends-on
+   [:classical-local-contractibility-path-components-1
+    :oriented-successor-local-contractibility-component-lifts-1
+    :oriented-successor-checkpoint-2],
+   :current-residual
+   "Two frozen placeholders remain. The prior local-connectivity and global component-assembly boundary now has reviewed implementations; finite-H1 component normalization and exact frozen assembly remain.",
+   :other-consumers []}
+  {:consumer :higher-manifold-chart-local-homology,
+   :stop-condition
+   "Local calculation only. Do not claim coordinate-change signs, coherent global orientation, fundamental classes, localization monicity, or t98A02 gluing.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Queue D #2: higher-dimensional restricted charts and actual local-homology transport",
+   :acceptance
+   {:probe
+    "For a T1 space charted on Euclidean n-space, n at least two, construct a restricted chart centered at the specified point and its deleted-point pair homeomorphism. Use production relative maps and excision to identify the actual model-to-ambient Hn map as an isomorphism. Transport HigherModelLocalHomology.generator and prove it generates ambient local Hn. Compile Euclidean dimensions two and four. State all topological and coefficient hypotheses explicitly and preserve the canonical integral singular-chain representation.",
+    :consumer-equation
+    "The actual chart-then-inclusion Hn map sends the banked model generator to a class g such that every ambient local Hn class is an integer multiple of g; prove equality with the constructed pair transport and excision composite.",
+    :axioms :standard-only,
+    :stop-condition
+    "GO requires constructed chart data, actual comparison maps, generator preservation, concrete instances, fixture hash and axiom audits. REVISE only to one compiled missing chart or excision prerequisite. Supplied chart-pair data or an assumed local isomorphism is insufficient."},
+   :representation
+   {:source
+    "Integral relative Hn of the open n-disk modulo its origin, n at least two",
+    :target
+    "Integral relative Hn of a T1 boundaryless n-manifold modulo a specified point",
+    :direction
+    "Forward map through a constructed restricted pointed chart followed by actual neighborhood inclusion; identify its relative chain map with the pair-homeomorphism/excision composite."},
+   :id :oriented-checkpoint2-higher-chart-local-generator-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-successor-higher-model-local-homology-1
+    :oriented-successor-checkpoint-2],
+   :current-residual
+   "Higher-dimensional Euclidean model generators are banked, but an actual restricted chart and neighborhood inclusion have not transported them into ambient local Hn in this campaign.",
+   :other-consumers [:t98A02 :t01A02 :t01A05]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Attribute frozen closures to their actual campaign. Neither local generators nor group isomorphisms establish global orientation compatibility.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: exact consumer certification and manifold continuation",
+   :acceptance
+   {:strategy
+    "Recount all DAG-named consumers with comments stripped and inspect both ledgers, the full DAG, foundational-program note and current policy. Elect exactly one eligible near-closure consumer first, then rank the full DAG by downstream consumers and simplicity. Check new evidence against every prior STOP before retrying. Assess whether new inverse-square-root integration results resolve the exact t96J08 boundary. Return one to five fresh work rows plus a successor carrying identical checkpoint keys; do not duplicate Morse-Sard or begin with t00J02.",
+    :stop-condition
+    "Report missing theorems distinctly from refutations. No owner-authorization stop and no empty ordinary refill."},
+   :id :oriented-checkpoint3-consumer-and-localization,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint2-t97a02-exact-closure-1
+    :oriented-checkpoint2-higher-chart-local-generator-1
+    :oriented-successor-checkpoint-2],
+   :current-residual
+   "Measure actual t97A02 uptake separately from higher-dimensional chart infrastructure. Geometric orientation signs, global localization and manifold gluing remain distinct obligations."}
   {:consumer :t00A01,
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
