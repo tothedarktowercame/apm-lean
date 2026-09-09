@@ -47283,8 +47283,146 @@
      :review-outcomes]},
    :stop-condition
    "End the campaign only when every consumer closes or a genuine mathematical refutation is identified; missing infrastructure and owner authorization do not end the campaign.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill10-measure.py", :exit 0}
+     {:cmd
+      "git diff --exit-code 874608e3685037614fc194d17d24332a9a35f7d4 -- TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill10-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill10-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill10-measure.json /tmp/topology-refill10-tail.edn problems/t00A01/lean/Main.lean",
+      :exit 0}],
+    :finding
+    {:baseline "52fb94597025a219d1e1516f668a1ae0492a3be0",
+     :election-rationale
+     ["The complete DAG and closure-experiments sources are unchanged from the previous full survey; current consumer counts were recomputed. Rule 0 elects exactly one near-closure adapter first."
+      "Elect t00A01 rather than repeat t95J04's unchanged metric gap: its homology branch and factorwise final assembly are banked, while ConnectedGroupoidSingleObjEquivalence, FreeProductPointSpanRepresentations and FreeProductRepresentationSingleObjEquivalence provide concrete advances beyond the historical categorical STOP. The actual cover-to-free-product identification must still be demonstrated."
+      "Behind that adapter, the Sard dependency reaches five named consumers. Elect one smooth-neighborhood chart producer instead of repeating unconditional Sard. Its output directly supplies the existing residual-slice consumer; remaining induction obligations stay explicit."
+      "Other DAG branches remain available at the next checkpoint: Stokes and surface classification require broader geometric constructions; t98A01 still needs universal surface-cover classification; dimension-gap Hausdorff transport remains separate from general Sard. Concurrent local-homology work is not duplicated."],
+     :measured-head "b60e803c9efa8de044f890d3f0be2a4faa01b758",
+     :placeholder-delta
+     {:open 42,
+      :closed 16,
+      :total-before 76,
+      :method
+      "Comment-stripped executable sorry census over all consumer identifiers in the complete DAG.",
+      :named-consumers 59,
+      :total-after 76,
+      :existing-files 58,
+      :delta 0,
+      :sha256
+      "f547e930d1c414973f2f210b17ed6e99112a3f9dce411672aaf7b2f1958d4af3",
+      :artifact "/tmp/topology-refill10-measure.json",
+      :within-two 32,
+      :missing-files ["t93A05"]},
+     :campaign-refutation false,
+     :infrastructure-packets
+     {:portfolio-implementation-packets 0,
+      :construction-modules-before 593,
+      :construction-modules-after 594,
+      :construction-module-delta 1,
+      :concurrent-addition
+      "ConstructionTargets/NestedOrientedChartCompatibility.lean; not produced by either reviewed probe."},
+     :portfolio-artifact
+     {:path "/tmp/topology-refill10-tail.edn",
+      :sha256
+      "e4045a549df222778795c9584263e006fbac2668b64b4c36331e5133c54a886e"},
+     :validation
+     "Temporary combined ledger passes: 365 items, with three new blocked rows. No canonical DAG, ledger or source edits.",
+     :typed-residual-change
+     {:t95J04
+      "Exact manifold nonsurjectivity and null-homotopy compile; intrinsic sphere Hausdorff nullity remains an unconstructed metric chart transport theorem. No consumer placeholder removed.",
+      :smooth-sard
+      "The existing assembly assumes analytic outer top, not smooth infinity; arbitrary-C1 hindOne exceeds smooth induction; higher-jet neighborhood extraction excludes infinity. The residual-slice producer does preserve genuine infinity when supplied smooth-on-domain charts. These distinctions narrow the repair target without proving Sard."},
+     :review-outcomes
+     {:stop 2,
+      :pass 2,
+      :consumer-closures 0,
+      :reviews
+      ["invoke-1788968974718-16542-35544d6c"
+       "invoke-1788969244809-16549-3650a08e"],
+      :interpretation
+      "Both PASS reviews validate STOP boundaries, not theorem completion."}},
+    :replacement-items
+    [{:consumer "t00A01",
+      :stop-condition
+      "If full closure cannot be built, STOP with the exact remaining categorical or topological theorem and distinguish missing infrastructure from mathematical refutation; do not grow a conditional interface in place of the adapter.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "VAN KAMPEN / generic quotient and gluing PI1",
+      :acceptance
+      {:probe
+       "GO requires a complete placeholder-free compiled copy of problems/t00A01/lean/Main.lean preserving every frozen statement and definition. Use the actual supplied open cover, simply-connected overlap and basepoint transports; inspect the now-banked connected-groupoid and point-span/free-product equivalences and their target naturality. Prove the genuine fundamental-group bridge and final theorem; do not assume a pushout comparison, replace the quotient, strengthen hcover, or report partial closure as GO.",
+       :frozen-file "problems/t00A01/lean/Main.lean",
+       :frozen-sha256
+       "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t00a01-frozen-free-product-closure-probe-refill10,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-10-after-closure-and-smooth],
+      :current-residual
+      "Two placeholders: actual standard-cover fundamental-group free-product bridge and final assembly; homology bridge already proved. ConnectedGroupoidSingleObjEquivalence and point-span/free-product equivalences now exist beyond the historical STOP."}
+     {:consumer "t93A04",
+      :stop-condition
+      "REVISE only with exactly one compiled prerequisite and demonstrated producer/consumer connection. Otherwise name the exact mathematical, hypothesis or representation boundary; missing infrastructure is not refutation and needs no owner authorization.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / smooth implicit neighborhood",
+      :acceptance
+      {:probe
+       "Compile one placeholder-free theorem for real finite-dimensional complete normed spaces and actual ImplicitFunctionData phi: given an open U containing phi.pt, contained in the existing chart source, with ContDiffOn real infinity phi.leftFun U and ContDiffOn real infinity phi.rightFun U, produce a basepoint-preserving restriction e of phi.toOpenPartialHomeomorph, source contained in U, with the original forward map and inverse agreement on e.target, and ContDiffOn real infinity in both directions on e.source/e.target. Use genuine inner infinity, not analytic outer top. Derive inverse regularity from the derivative isomorphism and neighborhood data, never by deleting the exclusion from ContDiffAt.eventually. Demonstrate its actual consumer by feeding the resulting inverse-chart regularity to SardProjectedChartResidualSlicesContDiffOn at infinity. No nullity hypothesis or Sard conclusion is permitted as an input. If the theorem already exists, reuse it and identify the remaining consumer edge rather than mint a duplicate wrapper.",
+       :axioms :standard-only,
+       :consumer-residual
+       "This supplies a smooth chart producer only. Proving these neighborhood hypotheses for the scalarized jet maps, replacing arbitrary-C1 hindOne with a compatible induction interface, base cases and local-domain nullity remain; no unconditional Sard or consumer closure is inferred."},
+      :id :sard-smooth-neighborhood-implicit-chart-probe-refill10,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-10-after-closure-and-smooth],
+      :current-residual
+      "Existing ImplicitFunctionData smooth chart restriction excludes genuine infinity, using eventual regularity from one point. The residual-slice producer accepts infinity when supplied smooth-on-domain charts; its producer needs a valid neighborhood contract.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when all consumers close or an exact mathematical refutation is established; missing infrastructure and owner authorization do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG and reviewed outcomes. Recompute comment-stripped placeholder counts from pinned source, distinguish branch packets from concurrent infrastructure growth, measure residual changes and STOP/PASS outcomes. Elect exactly one near-closure adapter before shared foundations under standing policy, and append a nonempty newly elected portfolio plus its dependent refill checkpoint."},
+      :id
+      :checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t00a01-frozen-free-product-closure-probe-refill10
+       :sard-smooth-neighborhood-implicit-chart-probe-refill10],
+      :current-residual
+      "Await both reviewed rows, then rerank the complete DAG, including near-closure adapters outside these branches."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -47298,6 +47436,78 @@
     :checkpoint-full-dag-refill-9],
    :current-residual
    "Await reviewed exact t95J04 closure attempt and unconditional smooth rectangular Sard probe, then elect again from the complete DAG."}
+  {:consumer "t00A01",
+   :stop-condition
+   "If full closure cannot be built, STOP with the exact remaining categorical or topological theorem and distinguish missing infrastructure from mathematical refutation; do not grow a conditional interface in place of the adapter.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "VAN KAMPEN / generic quotient and gluing PI1",
+   :acceptance
+   {:probe
+    "GO requires a complete placeholder-free compiled copy of problems/t00A01/lean/Main.lean preserving every frozen statement and definition. Use the actual supplied open cover, simply-connected overlap and basepoint transports; inspect the now-banked connected-groupoid and point-span/free-product equivalences and their target naturality. Prove the genuine fundamental-group bridge and final theorem; do not assume a pushout comparison, replace the quotient, strengthen hcover, or report partial closure as GO.",
+    :frozen-file "problems/t00A01/lean/Main.lean",
+    :frozen-sha256
+    "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t00a01-frozen-free-product-closure-probe-refill10,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-10-after-closure-and-smooth
+    :checkpoint-full-dag-refill-10-after-closure-and-smooth],
+   :current-residual
+   "Two placeholders: actual standard-cover fundamental-group free-product bridge and final assembly; homology bridge already proved. ConnectedGroupoidSingleObjEquivalence and point-span/free-product equivalences now exist beyond the historical STOP."}
+  {:consumer "t93A04",
+   :stop-condition
+   "REVISE only with exactly one compiled prerequisite and demonstrated producer/consumer connection. Otherwise name the exact mathematical, hypothesis or representation boundary; missing infrastructure is not refutation and needs no owner authorization.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / smooth implicit neighborhood",
+   :acceptance
+   {:probe
+    "Compile one placeholder-free theorem for real finite-dimensional complete normed spaces and actual ImplicitFunctionData phi: given an open U containing phi.pt, contained in the existing chart source, with ContDiffOn real infinity phi.leftFun U and ContDiffOn real infinity phi.rightFun U, produce a basepoint-preserving restriction e of phi.toOpenPartialHomeomorph, source contained in U, with the original forward map and inverse agreement on e.target, and ContDiffOn real infinity in both directions on e.source/e.target. Use genuine inner infinity, not analytic outer top. Derive inverse regularity from the derivative isomorphism and neighborhood data, never by deleting the exclusion from ContDiffAt.eventually. Demonstrate its actual consumer by feeding the resulting inverse-chart regularity to SardProjectedChartResidualSlicesContDiffOn at infinity. No nullity hypothesis or Sard conclusion is permitted as an input. If the theorem already exists, reuse it and identify the remaining consumer edge rather than mint a duplicate wrapper.",
+    :axioms :standard-only,
+    :consumer-residual
+    "This supplies a smooth chart producer only. Proving these neighborhood hypotheses for the scalarized jet maps, replacing arbitrary-C1 hindOne with a compatible induction interface, base cases and local-domain nullity remain; no unconditional Sard or consumer closure is inferred."},
+   :id :sard-smooth-neighborhood-implicit-chart-probe-refill10,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-10-after-closure-and-smooth
+    :checkpoint-full-dag-refill-10-after-closure-and-smooth],
+   :current-residual
+   "Existing ImplicitFunctionData smooth chart restriction excludes genuine infinity, using eventual regularity from one point. The residual-slice producer accepts infinity when supplied smooth-on-domain charts; its producer needs a valid neighborhood contract.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when all consumers close or an exact mathematical refutation is established; missing infrastructure and owner authorization do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG and reviewed outcomes. Recompute comment-stripped placeholder counts from pinned source, distinguish branch packets from concurrent infrastructure growth, measure residual changes and STOP/PASS outcomes. Elect exactly one near-closure adapter before shared foundations under standing policy, and append a nonempty newly elected portfolio plus its dependent refill checkpoint."},
+   :id
+   :checkpoint-full-dag-refill-11-after-free-product-and-smooth-chart,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t00a01-frozen-free-product-closure-probe-refill10
+    :sard-smooth-neighborhood-implicit-chart-probe-refill10
+    :checkpoint-full-dag-refill-10-after-closure-and-smooth],
+   :current-residual
+   "Await both reviewed rows, then rerank the complete DAG, including near-closure adapters outside these branches."}
   {:consumer :t93A04,
    :stop-condition
    "STOP only for a counterexample to the stated local rank-normal-form theorem or hypotheses insufficient to select and invert a nonzero rank minor; otherwise REVISE with exactly one compiled prerequisite.",
