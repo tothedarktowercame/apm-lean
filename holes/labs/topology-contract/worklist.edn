@@ -48027,6 +48027,21 @@
       :exit 0,
       :output "?? holes/labs/topology-contract/runs2/",
       :note "Unrelated workspace work preserved untouched."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788971704982-16620-685b1aab",
+     :commands
+     ["git show cb0a1015cb16a3288f75ed015b29c7b1814c17f9 --format=fuller"
+      "sha256sum ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean ConstructionTargets/SardScalarizedJetSmoothNeighborhood.md problems/t93A04/lean/Main.lean /tmp/SardScalarizedJetSmoothNeighborhood.lean /tmp/SardScalarizedJetSmoothNeighborhood.md"
+      "sed -n '7,29p' ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean | sha256sum"
+      "lake env lean ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean"
+      "lake env lean /tmp/SardScalarizedJetSmoothNeighborhood.lean"
+      "lake build ConstructionTargets.SardScalarizedJetSmoothNeighborhood"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check cb0a1015cb16a3288f75ed015b29c7b1814c17f9"],
+     :finding
+     "Independent of recorded author codex-6 and probe author codex-12. Exact two-file scope; fixture and documentation pins match; statement SHA256 3c0e132562633e16f21235fa4fbb87198927fdd8d4ce3a2b6f753ba71bf26b2a reproduced. Compilation and build exit 0, standard axioms only. Actual scalarized-jet fields produce genuine smooth chart and inverse slices; no nullity or consumer closure assumed. Fixture placeholders 0; frozen consumer hash unchanged with 1 placeholder. Worklist validates 368 items; no ledger edits."},
     :commit "cb0a1015cb16a3288f75ed015b29c7b1814c17f9",
     :changed-paths
     ["ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean"
@@ -48038,7 +48053,7 @@
     :declarations
     ["SardScalarizedJetSmoothNeighborhoodProbe.exists_scalarized_jet_smooth_chart"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean"
     "ConstructionTargets/SardScalarizedJetSmoothNeighborhood.md"],
@@ -48076,7 +48091,7 @@
    :stop-condition
    "Only all consumers closed or an exact mathematical refutation terminates the campaign; missing infrastructure and owner authorization do not.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
