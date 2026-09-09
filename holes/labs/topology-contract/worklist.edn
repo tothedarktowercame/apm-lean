@@ -53013,9 +53013,64 @@
   {:consumer "t93A04",
    :stop-condition
    "GO requires compiled positive-rank stratum nullity with only the compatible open-domain induction premise. REVISE requires exactly one compiled prerequisite. No conversion from open-domain induction to arbitrary-set pointwise infinity is permitted.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Rank-zero first-nonzero-jet contract repair, compatible global/local induction discharge, base cases and manifold transport remain. No unconditional Sard or frozen consumer closure.",
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {"exists_compact_positive_rank_image_null"
+      "e6f88d699e59574b61303117b7e2b24db1b62b37c56535b29ab33924457a7100",
+      "exists_open_rank_upper_image_null"
+      "a01cfc5a2c4ab621e5ca52fd0de4df8b75e684f9f2ddf4665305cb5f9811ce11",
+      "measure_image_zero_positive_rank_stratum"
+      "745f4b869b439f885ff40302bd67cc3d70ad435b4363b12d533ef2a3ff694966",
+      "measure_image_zero_positive_rank_stratum_of_global_induction"
+      "c51733d364bd916132c60eb3bbd992952b1cf424e8f2d0f0daa6a090d515ce28"},
+     :consumer-placeholder-delta 0,
+     :acceptance
+     {:declarations
+      ["SardOpenContractCompactProbe.exists_compact_positive_rank_image_null"
+       "SardOpenContractChartProbe.exists_open_rank_upper_image_null"
+       "SardPositiveRankStratumOpenContractAssemblyProbe.measure_image_zero_positive_rank_stratum"
+       "SardPositiveRankStratumOpenContractAssemblyProbe.measure_image_zero_positive_rank_stratum_of_global_induction"],
+      :gates
+      ["Verify fixture and documentation hashes before promotion."
+       "Compile promoted module and reproduce all four standard-only axiom audits."
+       "Run lake build ConstructionTargets.SardPositiveRankStratumOpenContractAssembly."
+       "Verify zero executable placeholders and preservation of existing APIs and frozen consumers."],
+      :axioms :standard-only},
+     :axioms [propext Classical.choice Quot.sound],
+     :documentation
+     {:path "/tmp/SardPositiveRankStratumOpenContractAssembly.md",
+      :sha256
+      "1105dc175990b9aa07c752913a50b708a1edb09ee5b6a9dadd6103077d05d946"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/SardPositiveRankStratumOpenContractAssembly.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/sard-open-stratum-audit.py", :exit 0}
+      {:cmd "bb /tmp/t02a08-review.bb", :exit 0}],
+     :diagnostic-history [],
+     :changed-paths [],
+     :fixture-placeholders 0,
+     :fixture
+     {:path "/tmp/SardPositiveRankStratumOpenContractAssembly.lean",
+      :sha256
+      "88bfe07d41c24ca8ecebecc6d07b212eef36d81067387ee6f62357aa6e28b1d2"},
+     :finding
+     "Compiled the complete actual-chart compact/open/positive-rank-stratum assembly using only open-domain genuine-smooth induction over strictly smaller inner-product sources, including dimension zero. Derived coordinate Borel/Haar/topology facts, compact-fiber containment, rank-upper closedness, compact exhaustion and second countability through existing producers. A fourth theorem supplies the exact premise from smaller-dimensional global nullity through reviewed localization compatibility. Original target Haar measure and subset-specific rank bounds are preserved.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardPositiveRankStratumOpenContractAssembly.lean"
+       "ConstructionTargets/SardPositiveRankStratumOpenContractAssembly.md"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/SardPositiveRankStratumOpenContractAssembly.lean"
+    "ConstructionTargets/SardPositiveRankStratumOpenContractAssembly.md"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / compatible positive-rank stratum assembly",
    :acceptance
