@@ -45719,8 +45719,95 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if the positive-order case split fails, reviewed order-one or zero-source nullity fails under these hypotheses, or nonstandard axioms are required.",
+   :evidence
+   {:scoped-placeholder-delta {:before 0, :after 0, :delta 0},
+    :placeholder-delta {:before 1, :after 1, :delta 0},
+    :residual
+    "The distinct positive-order interface, high-order equivalence, and zero-source base case are established. Analytic induction dependencies still require new proofs with explicit positivity checks, complementary higher-order cases remain, and no equivalence with the broader all-orders predicate is claimed. Ledger and frozen consumer unchanged.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"BorelPositiveOrderCriticalNullityAtDimension"
+     "e07028f927a3d4cc247edf3eba620256238f9f37203b0462341b082d857e5d53",
+     "borelPositiveOrderCriticalNullity_iff_highOrder"
+     "7870bbf15f3862e6a2b4e505de0659da52b6a58481e05c3136609752415c60e8",
+     "borelPositiveOrderCriticalNullity_zero"
+     "594f37ad7751aa931fff40640f44576424676f637fa570b29ab8218a303924ff"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rule, closure policy, and complete reviewed order-one and Borel-predicate dependency receipts",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardBorelPositiveOrderCriticalNullityProbe.lean problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "Fixture matches acceptance; frozen consumer SHA 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
+     {:cmd
+      "lake env lean /tmp/SardBorelPositiveOrderCriticalNullityProbe.lean && lake env lean ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean",
+      :exit 0,
+      :output
+      "Both compile without warnings; both theorem audits report standard axioms only."}
+     {:cmd
+      "cmp /tmp/SardBorelPositiveOrderCriticalNullityProbe.lean ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean && sha256sum ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output "Module matches fixture; frozen consumer unchanged."}
+     {:cmd
+      "sed -n '8,16p' ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "sed -n '18,27p' ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "sed -n '39,40p' ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 354 items OK; {:done 345, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.SardBorelPositiveOrderCriticalNullity 2>&1 | awk '/warning:|error:|Build completed/ {print}'",
+      :exit 0,
+      :output "Build completed successfully (8276 jobs)."}
+     {:cmd
+      "git add ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean ConstructionTargets/SardBorelPositiveOrderCriticalNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m \"Bank Borel positive-order critical-nullity interface\" && git rev-parse HEAD && git status --porcelain=v1",
+      :exit 0,
+      :output
+      "Committed exactly two scoped files; final worktree clean."}],
+    :representation
+    {:source
+     "Borel critical nullity at a fixed source dimension for admissible finite orders at least one.",
+     :target "The same obligation restricted to orders at least two.",
+     :direction
+     "Logical equivalence from the positive-order predicate to its order-at-least-two formulation, with the reverse implication supplied by reviewed order-one nullity."},
+    :commit "e00d3f22c0994284383086a24578fc569dcbcb74",
+    :changed-paths
+    ["ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean"
+     "ConstructionTargets/SardBorelPositiveOrderCriticalNullity.md"],
+    :fixture
+    {:path "/tmp/SardBorelPositiveOrderCriticalNullityProbe.lean",
+     :sha256
+     "8f4624e74293eb3149555805ea7cbf530ae7f12b088a7e2efc51c6913f095329"},
+    :declarations
+    ["BorelPositiveOrderCriticalNullityAtDimension"
+     "borelPositiveOrderCriticalNullity_iff_highOrder"
+     "borelPositiveOrderCriticalNullity_zero"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean"
     "ConstructionTargets/SardBorelPositiveOrderCriticalNullity.md"],
