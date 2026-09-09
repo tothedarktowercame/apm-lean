@@ -148,7 +148,23 @@ apply_job_result() {
   transition="$(bb "$HERE/build_step.bb" apply-result "$LEDGER" "$row" "$receipt" 2>&1)" || die "invalid receipt from $LAST_JOB: $transition"
   log "$transition"
   git -C "$ROOT" add "$LEDGER"
-  git -C "$ROOT" commit -q -m "topology-loop: record $row transition $LAST_JOB" || die "could not commit $row ledger transition"
+  # Applying a receipt is IDEMPOTENT, and the reclaim path re-applies a
+  # retained in-flight result on every restart. When someone else has already
+  # applied and committed that same receipt -- a human, or one of the repair
+  # agents this loop's own supervisor dispatches -- the re-apply is a no-op and
+  # there is nothing to commit. `git commit` exits non-zero on that, and dying
+  # there stopped the loop at 00:21:44 on 2026-09-09 immediately after an
+  # escalated repair had correctly advanced the same row.
+  #
+  # An empty diff means the ledger already records this transition, which is
+  # success. Check the LEDGER's staged diff specifically rather than swallowing
+  # every commit failure -- a real one still dies.
+  if git -C "$ROOT" diff --cached --quiet -- "$LEDGER"; then
+    log "ledger already records $row transition $LAST_JOB; nothing to commit"
+  else
+    git -C "$ROOT" commit -q -m "topology-loop: record $row transition $LAST_JOB" \
+      || die "could not commit $row ledger transition"
+  fi
   bb "$HERE/inflight.bb" clear "$INFLIGHT" || die "could not clear committed in-flight job"
   send_notice "milestone applied: row=$row job=$LAST_JOB $transition"
 }
