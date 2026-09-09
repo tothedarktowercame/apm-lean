@@ -38905,6 +38905,24 @@
      {:cmd
       "git add ConstructionTargets/SardCompactFlatEndpointNormalizedNullity.lean ConstructionTargets/SardCompactFlatEndpointNormalizedNullity.md && git diff --cached --check && git commit -m 'topology: normalize compact flat endpoint nullity' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788926535328-15967-fbb8d3dc",
+     :commands
+     ["git show c54620173e615c1418ff6599944fde127bea4517 --stat --oneline"
+      "sha256sum /tmp/SardCompactFlatEndpointNormalizedNullityProbe.lean"
+      "cmp fixture recorded-source"
+      "git show commit:ConstructionTargets/SardCompactFlatEndpointNormalizedNullity.lean | sed -n '6,25p' | sha256sum"
+      "lake env lean /tmp/SardCompactFlatEndpointNormalizedNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardCompactFlatEndpointNormalizedNullity.lean"
+      "lake build ConstructionTargets.SardCompactFlatEndpointNormalizedNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check commit^ commit"
+      "git diff --exit-code commit -- ConstructionTargets"
+      "consumer hash and placeholder checks"],
+     :finding
+     "Commit c5462017 has exact scope and matching fixture/frozen hashes. Compact boundedness supplies the enclosing ball; positive square-root-pi power and Gamma at a positive argument correctly discharge source normalization via ENNReal.ofReal_pos. Endpoint hypotheses and representation boundaries are preserved. Standard axioms only, zero scoped placeholders, all gates passed."},
     :commit "c54620173e615c1418ff6599944fde127bea4517",
     :changed-paths
     ["ConstructionTargets/SardCompactFlatEndpointNormalizedNullity.lean"
@@ -38915,7 +38933,7 @@
      "75f7ecfd92907ea27aec2208544487f769d6cb566b8a98840cbcfb28c4df7a26"},
     :declarations ["compact_flat_endpoint_volume_eq_zero_normalized"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactFlatEndpointNormalizedNullity.lean"
     "ConstructionTargets/SardCompactFlatEndpointNormalizedNullity.md"],
@@ -39081,7 +39099,7 @@
       "75f7ecfd92907ea27aec2208544487f769d6cb566b8a98840cbcfb28c4df7a26"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
