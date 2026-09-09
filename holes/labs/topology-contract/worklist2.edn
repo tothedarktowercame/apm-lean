@@ -5089,91 +5089,77 @@
    "No assumed finite intrinsic measure, area formula, radial identification, normalization constant or numerical moment. Do not retry the stopped full comparison.",
    :evidence
    {:probe
-    {:placeholder-delta 0,
+    {:consumer-audit
+     {:path "/tmp/IntrinsicSphereConsumerAudit.lean",
+      :sha256
+      "8c3ec6cabc306ae8cf2ec22a5924b9209aad97d05991df8c6172ed050ab6f828",
+      :finding
+      "Compiled against both original diagnostic definitions, including integrability of T02A05Diagnostic.unitFlux and t95J05InclusionPullback.",
+      :warnings
+      ["Three unnecessarySimpa warnings inherited from diagnostic proofs."]},
+     :placeholder-delta 0,
      :residual
-     "Exactly one compiled measure prerequisite supplied. Individual cap measures are now proved finite; finite coverage and the resulting whole-sphere integrability remain in the parent probe.",
-     :outcome :revise,
+     "Intrinsic polynomial integrability is established for the required spheres. Numerical Hausdorff normalization, radial-measure comparison and moment evaluation remain downstream; neither frozen integration consumer is claimed closed.",
+     :axiom-audits 10,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t02A05-polynomial-integrability,
-      :stop-condition
-      "Bank cap-domain and cap-image finiteness only. Do not claim finite coverage, whole-sphere finiteness, global integrability, normalization or numerical moments.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/SphereCapFiniteMeasureProbe.lean",
-         :sha256
-         "fc88ca53846907636b0525ae218b65c62687c72542caacf1d8af6c1275d822a3"},
-        :commands
-        [{:cmd "lake env lean /tmp/SphereCapFiniteMeasureProbe.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/SphereCapFiniteMeasure.lean"
-       "ConstructionTargets/SphereCapFiniteMeasure.md"],
-      :dag-node
-      "MANIFOLD INTEGRATION: intrinsic finite measure of constructed sphere caps",
-      :acceptance
-      {:implementation
-       "Promote the exact compiled fixture. Preserve the actual domain-to-hyperplane-ball isometry, Hausdorff measure equality, orthonormal-coordinate transport, finite cap-image bound and dimension specializations.",
-       :declarations
-       ["ConstructionTargets.SphereCapFiniteMeasure.domainBallIsometry"
-        "ConstructionTargets.SphereCapFiniteMeasure.domain_measure_eq"
-        "ConstructionTargets.SphereCapFiniteMeasure.domain_measure_finite"
-        "ConstructionTargets.SphereCapFiniteMeasure.cap_measure_finite"
-        "ConstructionTargets.SphereCapFiniteMeasure.euclidean_cap_measure_finite"
-        "ConstructionTargets.SphereCapFiniteMeasure.dimension_two"
-        "ConstructionTargets.SphereCapFiniteMeasure.dimension_three"],
-       :consumer-equation
-       "For the actual capMap into the unit sphere in EuclideanSpace Real (Fin (d+1)), hausdorffMeasure d (range capMap) < top, under its proved positive-height hypotheses.",
-       :consumer-residual
-       "Construct finitely many signed coordinate cap images covering the entire spheres of dimensions two and three. Sum these finite intrinsic measure bounds, then deduce integrability of the exact flux polynomial and projective-sphere mixed and square summands. No normalization theorem is needed for this finiteness step.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target."
-        "Run lake build ConstructionTargets.SphereCapFiniteMeasure ConstructionTargets.SphereCapGraph."
-        "Reproduce all seven printed axiom audits; permit only propext, Classical.choice and Quot.sound."
-        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification and commit the scoped implementation."]},
-      :id :intrinsic-sphere-cap-domain-finiteness-1,
-      :kind :reusable-theorem,
-      :depends-on [:intrinsic-sphere-lipschitz-cap-graph-1],
-      :current-residual
-      "The cap graph image bound has an unproved potentially infinite domain-measure factor.",
-      :other-consumers [:t95J05 :t94A10 :t01J06]},
+     :acceptance
+     {:implementation
+      "Promote the exact primary fixture and document the cap reconstruction, finite cover, intrinsic measure finiteness and consumer integral splits.",
+      :declarations
+      ["ConstructionTargets.IntrinsicSphereFinite.in_cap"
+       "ConstructionTargets.IntrinsicSphereFinite.caps_cover"
+       "ConstructionTargets.IntrinsicSphereFinite.sphere_measure_finite"
+       "ConstructionTargets.IntrinsicSphereFinite.sphere_isFiniteMeasure"
+       "ConstructionTargets.IntrinsicSphereFinite.continuous_integrable"
+       "ConstructionTargets.IntrinsicSphereFinite.unitFlux_integrable"
+       "ConstructionTargets.IntrinsicSphereFinite.unitFlux_split"
+       "ConstructionTargets.IntrinsicSphereFinite.mixed_integrable"
+       "ConstructionTargets.IntrinsicSphereFinite.square_integrable"
+       "ConstructionTargets.IntrinsicSphereFinite.projective_density_split"],
+      :axioms :standard-only,
+      :gates
+      ["Verify primary fixture SHA256 before implementation."
+       "Compile fixture and canonical target."
+       "Run lake build ConstructionTargets.IntrinsicSphereFinite ConstructionTargets.SphereCapFiniteMeasure ConstructionTargets.SphereCapGraph."
+       "Reproduce all ten printed standard-only axiom audits."
+       "Run forbidden-token scans, git diff --check, exact two-file scope verification and commit the scoped implementation."]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :author "codex-13",
      :commands
-     [{:cmd
-       "Read DAG, closure-experiment stop rules and reviewed dependency receipts",
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd "lake env lean /tmp/IntrinsicSphereFiniteProbe.lean",
        :exit 0}
-      {:cmd "realpath .lake/packages", :exit 0}
-      {:cmd "lake env lean /tmp/SphereCapFiniteMeasureProbe.lean",
+      {:cmd "lake env lean /tmp/IntrinsicSphereConsumerAudit.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/SphereCapFiniteMeasureProbe.lean", :exit 0}
+      {:cmd "sha256sum /tmp/IntrinsicSphereFiniteProbe.lean", :exit 0}
+      {:cmd "sha256sum /tmp/IntrinsicSphereConsumerAudit.lean",
+       :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/SphereCapFiniteMeasureProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/IntrinsicSphereFiniteProbe.lean",
        :exit 1,
        :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
+     :repository-note
+     "Read-only probe; only temporary fixtures written. Existing concurrent repository changes were left untouched.",
      :changed-paths [],
-     :dependency-commit "3d5d18e79f87b0d9cd0716183976b59529f7ab14",
+     :dependency-commit "c57f09381088e06fc9b385b83354f2e9decf7567",
      :fixture
-     {:path "/tmp/SphereCapFiniteMeasureProbe.lean",
+     {:path "/tmp/IntrinsicSphereFiniteProbe.lean",
       :sha256
-      "fc88ca53846907636b0525ae218b65c62687c72542caacf1d8af6c1275d822a3"},
+      "f8ed178719b52dfe6b8d67310b3084f0f1bc809b7fc9887fbc89a9c06dd61f8b"},
      :finding
-     "Compiled one measure prerequisite. The actual cap domain is isometrically equivalent to a closed ball in the orthogonal hyperplane. Hausdorff isometry transport identifies its measure with that ball's measure; orthonormal coordinates and compact-set Haar finiteness prove this measure finite. The banked Lipschitz bound therefore proves finite intrinsic Hausdorff measure of each cap image. The hyperplane dimension calculation gives explicit sphere-dimension-two and sphere-dimension-three instances. Finite cap coverage and global polynomial integrability remain; the parent is not GO.",
+     "Constructed finitely many signed coordinate cap images covering the literal Euclidean sphere for d<=3. Every sphere point has a coordinate of absolute value at least one half; explicit orthogonal projection reconstructs it through the banked radius-9/10 cap map. Finite cap-image bounds prove intrinsic Hausdorff measure finite. Compactness then proves continuous polynomial integrability, including the exact flux, mixed and square summands. Both flux integral addition and projective density subtraction compile.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/IntrinsicSphereFinite.lean"
+       "ConstructionTargets/IntrinsicSphereFinite.md"]},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/IntrinsicSphereFinite.lean"
+    "ConstructionTargets/IntrinsicSphereFinite.md"],
    :dag-node
    "MANIFOLD INTEGRATION: finite intrinsic Hausdorff sphere measure through Lipschitz caps",
    :acceptance
