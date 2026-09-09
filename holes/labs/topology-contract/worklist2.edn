@@ -2398,6 +2398,21 @@
      {:cmd "git diff --stat dd05a502 -- problems", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788974101248-16672-6375d624",
+     :commands
+     ["git show 0d3bef0e:holes/labs/topology-contract/worklist2.edn"
+      "git show 0cdd316e:problems/t96J08/lean/Main.lean"
+      "python3: verify census SHA256, frozen t96J08 hash and statement hashes, comment-stripped counts, module counts and both pinned ledgers for prior t96J08 probes"
+      "bb: assert three work rows, t96J08 first, identical checkpoint policy and complete successor dependencies"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git diff --stat dd05a502 0cdd316e -- problems"
+      "git diff --name-only dd05a502 0cdd316e -- ConstructionTargets"
+      "git show --format= --check 0d3bef0e"],
+     :finding
+     "Independent PASS of codex-13 strategy refill. Fresh t96J08 full-consumer probe is first and preserves exact integration/form representations; no previous closure probe appears in either pinned ledger. Subsequent rows address higher-dimensional model homology and the explicit t97A02 local-connectivity/component-lifting boundary without repeating stopped full-closure claims. Connecting-map/radial direction and coefficient obligations are explicit; no Circle-to-higher-manifold extrapolation. Census hash and frozen t96J08 hash verified, placeholders 76 to 76, modules 596 to 604 comprising six portfolio and two other-campaign additions. Three work rows and successor preserve policy and dependency coverage; schema and whitespace checks pass. Strategy-only, no source changes or review edits."},
     :replacement-items
     [{:consumer :t96J08,
       :stop-condition
@@ -2544,7 +2559,7 @@
     :t98A02-assessment
     "Circle completion supplies no four-dimensional theorem. The frozen embedded-four-ball quotient still needs model local H4, geometric orientation/localization compatibility, punctured-summand and boundary-map control, an excisive comparison for the actual gluing, and vanishing above dimension four. The elected model calculation supplies only the first of these obligations."},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: consumer certification and oriented-manifold continuation",
@@ -2566,7 +2581,7 @@
    :stop-condition
    "Preserve both frozen statements and the actual volume/integrand. No assumed Stokes theorem, integral value, or exactness obstruction.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Stokes and moments; explicit differential-form and radial-integral consumer t96J08",
@@ -2597,7 +2612,7 @@
    :stop-condition
    "This is a model calculation only: no arbitrary-manifold fundamental class, localization monicity, coordinate-change sign, or t98A02 closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue D #2: higher-dimensional model-pair calculation before manifold localization",
@@ -2627,7 +2642,7 @@
    :stop-condition
    "Address the recorded topological prerequisite directly; do not assume path connectivity of the whole space, finite fundamental group, or the desired Circle null-homotopy.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS and COVERING-BASIC: local connectivity and componentwise lift assembly",
