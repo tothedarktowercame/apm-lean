@@ -40704,8 +40704,79 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if sourceDim <= 2*targetDim fails to eliminate the uncovered orders j >= 2 under source nontriviality, the reviewed compact assembly fails with those obligations discharged, or nonstandard axioms are required.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Localize and exhaust this compact rank-zero result in its dimension range; repair uncovered higher jets for sourceDim > 2*targetDim before full rectangular induction.",
+    :gates
+    {:direct-compilations-passed true,
+     :frozen-consumer-unchanged true,
+     :placeholder-free true,
+     :focused-build-passed true,
+     :worktree-clean true,
+     :exact-scope true,
+     :fixture-byte-identical-to-module true,
+     :worklist-valid true,
+     :fixture-hash-verified true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"compact_rankZero_image_zero_of_sourceDim_le_twice_targetDim"
+     "b0c88c7c7ec4cd0b47be9c26264dccc336782f87e2524e275fd6f90f47def922"},
+    :consumer-placeholder-delta {:before 1, :after 1, :delta 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/SardCompactRankZeroSmallSourceNullityProbe.lean",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/SardCompactRankZeroSmallSourceNullityProbe.lean ConstructionTargets/SardCompactRankZeroSmallSourceNullity.lean && lake env lean ConstructionTargets/SardCompactRankZeroSmallSourceNullity.lean && lake env lean /tmp/SardCompactRankZeroSmallSourceNullityProbe.lean",
+      :exit 0,
+      :output "Both compilations passed with standard axioms only."}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.SardCompactRankZeroSmallSourceNullity 2>&1 | awk '/warning:|error:|Build completed/ {print}'",
+      :exit 0,
+      :output "Build completed successfully (8422 jobs)."}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardCompactRankZeroSmallSourceNullity.lean ConstructionTargets/SardCompactRankZeroSmallSourceNullity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sed -n '5,19p' ConstructionTargets/SardCompactRankZeroSmallSourceNullity.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 313 items OK; {:done 304, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd "sha256sum problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardCompactRankZeroSmallSourceNullity.lean ConstructionTargets/SardCompactRankZeroSmallSourceNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: prove compact rank-zero nullity for small source dimension' && git rev-parse HEAD && git status --porcelain=v1",
+      :exit 0}],
+    :commit "9693119c543180418d95530f43c38ca7454a3a7c",
+    :changed-paths
+    ["ConstructionTargets/SardCompactRankZeroSmallSourceNullity.lean"
+     "ConstructionTargets/SardCompactRankZeroSmallSourceNullity.md"],
+    :fixture
+    {:path "/tmp/SardCompactRankZeroSmallSourceNullityProbe.lean",
+     :sha256
+     "880a420c9f02e1911511e7c572a0a70f05f14da773efb552e11fa25b1f12e719"},
+    :declarations
+    ["compact_rankZero_image_zero_of_sourceDim_le_twice_targetDim"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardCompactRankZeroSmallSourceNullity.lean"
     "ConstructionTargets/SardCompactRankZeroSmallSourceNullity.md"],
