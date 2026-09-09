@@ -8763,88 +8763,88 @@
    :stop-condition
    "Construct the actual chain maps and quotient complex. No assumed monomorphism, short exact sequence, coefficient comparison, excision, sphere table or frozen closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "The bounded explicit-coefficient relative-chain short exactness packet is complete and ready for implementation. Homology connecting maps, excision and rational sphere computations remain separate.",
-     :axiom-audits 7,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture, preserving the coefficient-generic construction and reuse of the existing geometric inclusion and simplex-injectivity theorem.",
-      :namespace "ConstructionTargets.RelativeSingularCoefficients",
-      :hypotheses
-      "R : Type with CommRing R; X : Type with TopologicalSpace X; arbitrary A : Set X. Both are universe zero. No nontriviality, compactness, finiteness or extra categorical hypotheses are supplied.",
-      :declarations
-      ["SingularChains"
-       "singularSubspaceMap"
-       "relativeSingularSubcomplex"
-       "relativeSingularSubcomplex.ι"
-       "relativeSingularSubcomplex_differential_restricts"
-       "RelativeSingularChains"
-       "relativeSingularProjection"
-       "relativeSingularChainsIsoCokernelSubspaceMap"
-       "singularSubspaceMap_degree_injective"
-       "singularSubspaceMap_degree_mono"
-       "singularSubspaceMap_mono"
-       "singularPairShortComplex"
-       "singularPairShortComplexIsoCokernel"
-       "singularPairShortComplex_shortExact"
-       "integral_disk_pair"
-       "rational_disk_pair"],
-      :consumer-equation
-      "The actual sequence C_*(A;R) -> C_*(X;R) -> C_*(X,A;R) is short exact, with the first arrow induced by subtype inclusion and the second the constructed quotient projection.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile the fixture and canonical target."
-       "Run lake build ConstructionTargets.RelativeSingularCoefficients ConstructionTargets.SingularHomologyConcrete."
-       "Reproduce all seven standard-only axiom audits."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."],
-      :consumer-residual
-      "Connecting morphisms, pair long-exactness, coefficient-general excision, sphere suspension and endpoints remain downstream. No positive-dimensional sphere table or frozen consumer closure is claimed."},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "bb dependency-review query for oriented-checkpoint12-transversality-and-coefficients-refill",
-       :exit 0}
-      {:cmd "lake env lean /tmp/RelativeSingularCoefficients.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/RelativeSingularCoefficients.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/RelativeSingularCoefficients.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "Initial lake env lean /tmp/RelativeSingularCoefficients.lean",
-       :exit 1,
-       :correction
-       "Removed applied coefficient arguments from simp unfolding lists; retained them in constructed terms."}
-      {:cmd
-       "Compilation after reusing the existing geometric inclusion",
-       :exit 1,
-       :correction
-       "Added explicit space, topology and subset binders to the inclusion abbreviation, resolving its stuck typeclass metavariable."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/RelativeSingularCoefficients.lean",
-      :sha256
-      "337da567d23409921c88c30c154f68ee37e8e0b27537a492603c1deb828b00c6"},
-     :finding
-     "The complete requested short-exact-sequence fixture compiles. It constructs singular chains with coefficient object ModuleCat.of R R, the actual inclusion-induced chain map, its image subcomplex and relative cokernel quotient. The existing geometric simplex-injectivity theorem yields degreewise monomorphisms and underlying R-linear injectivity. The constructed image quotient is compared with the direct cokernel, proving short exactness with actual subspace chains on the left. Integer and rational specializations compile for the boundary {x : closedBall (0 : Complex) 1 | norm x = 1} inside the literal closed disk.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/RelativeSingularCoefficients.lean"
-       "ConstructionTargets/RelativeSingularCoefficients.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Connecting morphisms, pair long-exactness, coefficient-general excision, sphere suspension and endpoints remain downstream, followed by exact rational S2 comparisons. No positive-dimensional sphere table or frozen closure claimed.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :seven-axiom-audits :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 7,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed one unused-section-variable warning at ConstructionTargets/SingularHomologyConcrete.lean:127 for directDiscreteH0Iso_pointInclusion. Fixture and canonical compilations had no warnings."],
+    :statement-hashes
+    {"relativeSingularSubcomplex_differential_restricts"
+     "b2bdfba231859e700a10fa4a462b9c745f197a68c6f53c9ec1db473ce40c4199",
+     "relativeSingularChainsIsoCokernelSubspaceMap"
+     "41ecdd9d3ca9e76effb83a9d186224a33a159664b1b9d2e517756534657baa8e",
+     "singularSubspaceMap_degree_injective"
+     "85e5c35fd95a949a442e2082bcb0deb745a375104e1662bed0c080a0cc2b6e35",
+     "singularSubspaceMap_degree_mono"
+     "7bf9d0bfe3111751efd643bf908b05da46f1eeb6410a4c425155f6a499285da9",
+     "singularPairShortComplex_shortExact"
+     "725ed80c9d3e035a4c4d89560b42ee0e89b7ae076695e8cd56c29b80c023e6d5",
+     "integral_disk_pair"
+     "5ff9c73b1690ab27934d94f0144b9a83ec1d15534bb04242b07d06c0326608af",
+     "rational_disk_pair"
+     "80989356a51d2aea917de0c4eca444f52e94ac072823e6f1d0ee0da4a566d80c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/RelativeSingularCoefficients.lean", :exit 0}
+     {:cmd "lake env lean /tmp/RelativeSingularCoefficients.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RelativeSingularCoefficients.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.RelativeSingularCoefficients ConstructionTargets.SingularHomologyConcrete",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/RelativeSingularCoefficients.lean /tmp/RelativeSingularCoefficients.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python audit: exact promotion, fixture SHA256, seven standard-only audits per compilation, warnings, placeholders and statement hashes",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope verification and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct relative singular chain short exactness over explicit rings\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope and clean checkout verification",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and dependency evidence. Only the authorized two files changed; ledger and frozen consumers untouched. Checkout clean.",
+    :diagnostic-history [],
+    :commit "2b73ce416afd6b9aeab937a80839996c59ddf422",
+    :changed-paths
+    ["ConstructionTargets/RelativeSingularCoefficients.lean"
+     "ConstructionTargets/RelativeSingularCoefficients.md"],
+    :fixture
+    {:path "/tmp/RelativeSingularCoefficients.lean",
+     :sha256
+     "337da567d23409921c88c30c154f68ee37e8e0b27537a492603c1deb828b00c6"},
+    :finding
+    "Exact fixture promoted. The coefficient-generic inclusion-induced map, image subcomplex, relative quotient and short exact sequence compile, including integer and rational disk-boundary examples. Both compilations and the 8241-job build passed.",
+    :statement-hash-method
+    "SHA256 of declaration bytes beginning with def, theorem or instance and ending immediately before the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/RelativeSingularCoefficients.lean"
     "ConstructionTargets/RelativeSingularCoefficients.md"],
