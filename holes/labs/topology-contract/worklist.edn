@@ -47148,6 +47148,19 @@
      {:cmd
       "git diff --exit-code -- problems/t95J04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788968974718-16542-35544d6c",
+     :commands
+     ["git show 18efe3e0 recorded row and frozen consumer"
+      "sha256sum /tmp/T95J04HausdorffBoundary.lean /tmp/T95J04HausdorffBoundary.md"
+      "lake env lean /tmp/T95J04HausdorffBoundary.lean"
+      "python3 recorded consumer SHA256, comment-stripped placeholder counts, and diagnostic import comparison"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 18efe3e0"],
+     :finding
+     "Independent review of codex-12 STOP at 18efe3e0. Diagnostic and boundary hashes match; Lean exits 0 with propext, Classical.choice, Quot.sound only, no warnings or placeholders. Frozen t95J04 SHA8321b881ae48f14a9d5e711534aa208eabd66dcdc16055f5ce22e9b66ce4fc15 and one placeholder reproduced. Exact manifold nonsurjectivity/null-homotopy established; Euclidean Hausdorff fragment does not supply intrinsic sphere range nullity for arbitrary manifold domains. Missing metric chart transport is honestly distinguished from refutation and full closure, satisfying explicit STOP condition. Validator 362 items and whitespace check exit 0; scope empty; no edits."},
     :campaign-termination false,
     :changed-paths [],
     :finding
@@ -47159,7 +47172,7 @@
      "acf44fd8f8e717bfca21968c0f470d0b6fac20b7f6b047a831073b4ac9403dc0"},
     :seat :codex-12},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "SARD THEOREM / strict-dimension sphere consumer",
    :acceptance
