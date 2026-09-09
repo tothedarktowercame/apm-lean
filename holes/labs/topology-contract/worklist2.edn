@@ -2580,8 +2580,66 @@
   {:consumer :t96J08,
    :stop-condition
    "Preserve both frozen statements and the actual volume/integrand. No assumed Stokes theorem, integral value, or exactness obstruction.",
+   :evidence
+   {:placeholder-after 2,
+    :placeholder-delta 0,
+    :compiled-declarations
+    ["t96_nonexact"
+     "t96_integrable_radial"
+     "t96_disk_area"
+     "t96_radial_Haar_reduction"
+     "t96_complete_of_two_analytic_inputs"],
+    :residual
+    "Prove the two explicit analytic inputs before retrying full t96J08 closure. Exterior-derivative nonexactness is resolved in the diagnostic; frozen uptake remains zero.",
+    :outcome :stop,
+    :warnings [],
+    :statement-hashes
+    {"apm_t96J08_bridge_radialDiskIntegral"
+     "b4be8070b7db440e6fde8484460b47f10c690728d2abc814929f4a75a081978e",
+     "apm_t96j08"
+     "d09b5d8f1a44e8e117c823a6203feead9ca1920f52c3c32d11869dbdcb738ed3"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :available-route
+    "The compiled radial Haar formula reduces integrals of f(norm q) to 2*pi times the integral of r*f(r) over positive reals. Completing the consumer still requires the concrete square-root evaluation and an integrable domination or direct integration argument for the boundary-singular term.",
+    :placeholder-before 2,
+    :head "c5836f17bfbcd03035692e054b9d1fbdaf2665d5",
+    :reason :missing-analytic-evaluation-and-integrability,
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/T96J08ClosureDiagnostic.lean", :exit 0}
+     {:cmd
+      "sha256sum /tmp/T96J08ClosureDiagnostic.lean problems/t96J08/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "python3: strip comments and audit diagnostic/frozen placeholders, forbidden declarations, and frozen statement hashes",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :repository-note
+    "Read-only probe; canonical package authority verified and repository files unchanged. Diagnostic has zero executable placeholders and six standard-only axiom audits. No complete frozen replacement or implementation scope is proposed.",
+    :changed-paths [],
+    :consumer-equation
+    "t96_complete_of_two_analytic_inputs proves the exact final conjunction from these two explicitly stated inputs. It does not discharge either input.",
+    :fixture
+    {:path "/tmp/T96J08ClosureDiagnostic.lean",
+     :sha256
+     "d35641f22eaf29fcf7c8e4ddb4214b150d759009879d67093a6dd54dff9c4615",
+     :role :compiled-boundary-diagnostic,
+     :complete-consumer false},
+    :finding
+    "Rule-0 closure STOP, not mathematical refutation. Compiled the actual nonexactness obstruction using extDeriv_extDeriv and coordinate differentiation. Also proved square-root integrability, disk area, and the radial Haar reduction in the frozen Euclidean volume representation. The full frozen conclusion follows from exactly two remaining analytic inputs: the radial square-root integral value and integrability of the singular quotient term. Neither input is proved by this fixture. The existing symmetry argument proves a totalized integral is zero without integrability; it cannot alone justify integral_add. No missing general Stokes or surface-measure-normalization theorem is claimed.",
+    :statement-hash-method
+    "SHA-256 of theorem declaration bytes ending immediately before the space preceding :=.",
+    :frozen-sha256
+    "eaafd946f3385e1d5ca8964c64a003aacf4562151ebac5e19b12f6a328e1f3d9",
+    :typed-residuals
+    ["(∫ q : EuclideanSpace ℝ (Fin 2) in Metric.closedBall 0 1, Real.sqrt (1 - (q 0)^2 - (q 1)^2)) = 2 * Real.pi / 3"
+     "IntegrableOn (fun q : EuclideanSpace ℝ (Fin 2) => ((q 0)^2 - (q 1)^2) / Real.sqrt (1 - (q 0)^2 - (q 1)^2)) (Metric.closedBall 0 1)"],
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "Stokes and moments; explicit differential-form and radial-integral consumer t96J08",
