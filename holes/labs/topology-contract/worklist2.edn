@@ -8830,6 +8830,24 @@
     :repository-note
     "Read DAG, closure experiments and dependency evidence. Only the authorized two files changed; ledger and frozen consumers untouched. Checkout clean.",
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788993661175-17246-e4236756",
+     :commands
+     ["git show f6be10cd:holes/labs/topology-contract/worklist2.edn"
+      "git show 2b73ce41:ConstructionTargets/RelativeSingularCoefficients.lean"
+      "git show 2b73ce41:ConstructionTargets/RelativeSingularCoefficients.md"
+      "lake env lean /tmp/RelativeSingularCoefficients.lean"
+      "lake env lean ConstructionTargets/RelativeSingularCoefficients.lean"
+      "lake build ConstructionTargets.RelativeSingularCoefficients ConstructionTargets.SingularHomologyConcrete"
+      "python3 inline audit: fixture equality and SHA256, seven declaration hashes, scope, provider equality, forbidden tokens and frozen placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show f6be10cd:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check 2b73ce41"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Exact two-file promotion verified. Both compilations pass warning-free with seven standard-only audits; 8241-job build passes with the recorded dependency warning. Actual coefficient-generic inclusion, image subcomplex, quotient projection and correctly oriented cokernel comparison establish short exactness without assumed exactness. Integer and rational disk-boundary examples compile. Frozen placeholders unchanged at 321; no sphere-table or consumer closure claimed. Ledger untouched."},
     :commit "2b73ce416afd6b9aeab937a80839996c59ddf422",
     :changed-paths
     ["ConstructionTargets/RelativeSingularCoefficients.lean"
@@ -8844,7 +8862,7 @@
     "SHA256 of declaration bytes beginning with def, theorem or instance and ending immediately before the space preceding := or where.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/RelativeSingularCoefficients.lean"
     "ConstructionTargets/RelativeSingularCoefficients.md"],
@@ -8885,7 +8903,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: literal surface classification and relative coefficient uptake",
