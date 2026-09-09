@@ -45794,6 +45794,23 @@
      :target "The same obligation restricted to orders at least two.",
      :direction
      "Logical equivalence from the positive-order predicate to its order-at-least-two formulation, with the reverse implication supplied by reviewed order-one nullity."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788964652191-16436-32b6233b",
+     :commands
+     ["git show --stat --oneline e00d3f22c0994284383086a24578fc569dcbcb74"
+      "sha256sum /tmp/SardBorelPositiveOrderCriticalNullityProbe.lean"
+      "cmp /tmp/SardBorelPositiveOrderCriticalNullityProbe.lean <(git show e00d3f22c0994284383086a24578fc569dcbcb74:ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean)"
+      "for span in 8,16p 18,27p 39,40p; do git show e00d3f22c0994284383086a24578fc569dcbcb74:ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean | sed -n \"$span\" | sha256sum; done"
+      "git diff --exit-code e00d3f22c0994284383086a24578fc569dcbcb74 -- ConstructionTargets"
+      "lake env lean /tmp/SardBorelPositiveOrderCriticalNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean"
+      "lake build ConstructionTargets.SardBorelPositiveOrderCriticalNullity"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Commit e00d3f22c0994284383086a24578fc569dcbcb74 passes. Exact two-file scope; fixture SHA 8f4624e74293eb3149555805ea7cbf530ae7f12b088a7e2efc51c6913f095329 reproduced. Statement hashes e07028f927a3d4cc247edf3eba620256238f9f37203b0462341b082d857e5d53, 7870bbf15f3862e6a2b4e505de0659da52b6a58481e05c3136609752415c60e8 and 594f37ad7751aa931fff40640f44576424676f637fa570b29ab8218a303924ff reproduced. Lines 28-43 correctly prove the positive/high-order equivalence and zero-dimensional base case. Broader all-orders predicate remains unchanged; analytic induction cannot be migrated without new positivity proofs. Both compilations exit 0 with standard axioms only; build8276 succeeds. Zero new placeholders; frozen consumer unchanged with one existing placeholder. Worklist354 valid. Ledger untouched."},
     :commit "e00d3f22c0994284383086a24578fc569dcbcb74",
     :changed-paths
     ["ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean"
@@ -45807,7 +45824,7 @@
      "borelPositiveOrderCriticalNullity_iff_highOrder"
      "borelPositiveOrderCriticalNullity_zero"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardBorelPositiveOrderCriticalNullity.lean"
     "ConstructionTargets/SardBorelPositiveOrderCriticalNullity.md"],
@@ -45995,7 +46012,7 @@
       "8f4624e74293eb3149555805ea7cbf530ae7f12b088a7e2efc51c6913f095329"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
