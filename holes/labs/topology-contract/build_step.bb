@@ -83,7 +83,11 @@
          (nil? (:residual receipt))
          (some? (:next-consumer-residual receipt)))
     (assoc :residual (:next-consumer-residual receipt))))
-(defn validate-inserted-row! [row]
+(defn validate-inserted-row! [row allowed-ids]
+  (doseq [dependency (:depends-on row)]
+    (when-not (allowed-ids dependency)
+      (throw (ex-info "inserted row has unknown dependency"
+                      {:id (:id row) :dependency dependency}))))
   (when (= :representation-comparison (:kind row))
     (doseq [[label paths]
             [[:source-representation [[:representation :source]
@@ -174,9 +178,11 @@
       ;; and given its orientation; the receipt still carried the older copy
       ;; without one, and the loop stopped over a row that was already correct.
       :revise (when-not (by-id (:id (:prerequisite receipt)))
-                (validate-inserted-row! (:prerequisite receipt)))
-      :replan (doseq [row (:replacement-items receipt)]
-                (validate-inserted-row! row))
+                (validate-inserted-row! (:prerequisite receipt) (set ids)))
+      :replan (let [rows (:replacement-items receipt)
+                    allowed-ids (into (set ids) (map :id rows))]
+                (doseq [row rows]
+                  (validate-inserted-row! row allowed-ids)))
       nil)
     (let [new-items
           (case outcome
@@ -321,6 +327,30 @@
       (write-ledger! (assoc data :items (unblock-ready new-items)))
       (println "applied" (name outcome) "to" (name id)))))
 
+(defn repair-dependencies! []
+  (let [id (keyword (nth *command-line-args* 2 ""))
+        replacements (partition-all 2 (drop 3 *command-line-args*))
+        item (by-id id)]
+    (when-not item (throw (ex-info "unknown repair row" {:id id})))
+    (when-not (and (seq replacements)
+                   (every? #(= 2 (count %)) replacements))
+      (throw (ex-info "dependency repair needs OLD NEW pairs" {:id id})))
+    (let [pairs (mapv (fn [[old new]] [(keyword old) (keyword new)]) replacements)
+          dependencies (set (:depends-on item))]
+      (doseq [[old new] pairs]
+        (when-not (dependencies old)
+          (throw (ex-info "repair source dependency absent"
+                          {:id id :dependency old})))
+        (when-not (by-id new)
+          (throw (ex-info "repair target dependency unknown"
+                          {:id id :dependency new}))))
+      (let [replacement-map (into {} pairs)
+            repaired (update item :depends-on
+                             #(mapv (fn [dependency]
+                                      (get replacement-map dependency dependency)) %))]
+        (write-ledger! (assoc data :items (replace-item items id (constantly repaired))))
+        (println "repaired dependencies for" (name id))))))
+
 ;; A refusal has to arrive as a sentence. build_step.bb's failures reach the
 ;; operator through topology-build-loop.sh's `die "invalid receipt ...: $out"`
 ;; and then through the supervisor's last_stop_reason, which keeps the FIRST
@@ -345,8 +375,9 @@
   "row" (let [id (keyword (nth *command-line-args* 2 ""))]
           (if-let [i (by-id id)] (prn i) (System/exit 2)))
   "apply-result" (apply-result!)
+  "repair-dependencies" (repair-dependencies!)
   "replay" (replay!)
   (do (binding [*out* *err*]
-        (println "usage: build_step.bb next-open|unreviewed|counts|row|apply-result|replay [ledger] [row-id] [receipt]"))
+        (println "usage: build_step.bb next-open|unreviewed|counts|row|apply-result|repair-dependencies|replay [ledger] [args...]"))
       (System/exit 2)))
 (catch clojure.lang.ExceptionInfo t (die! t)))

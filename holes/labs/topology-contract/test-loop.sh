@@ -69,6 +69,17 @@ rm -f "$checkpoint_stop"
 
 revised="$(mktemp)"
 cp "$HERE/fixtures/transition-ledger.edn" "$revised"
+invalid_revise="$(mktemp)"
+sed 's/:phase :probe/:phase :probe :depends-on [:missing-dependency]/' \
+  "$HERE/fixtures/revise-receipt.edn" > "$invalid_revise"
+revised_before="$(sha256sum "$revised" | cut -d' ' -f1)"
+if bb "$HERE/build_step.bb" apply-result "$revised" edge "$invalid_revise" \
+    >/dev/null 2>&1; then
+  echo "expected unknown prerequisite dependency rejection" >&2
+  exit 1
+fi
+[ "$(sha256sum "$revised" | cut -d' ' -f1)" = "$revised_before" ]
+rm -f "$invalid_revise"
 bb "$HERE/build_step.bb" apply-result "$revised" edge "$HERE/fixtures/revise-receipt.edn"
 [ "$(bb "$HERE/build_step.bb" next-open "$revised")" = prerequisite ]
 bb "$HERE/worklist_check.bb" "$revised"

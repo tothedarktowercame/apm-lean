@@ -37512,8 +37512,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:critical-value-sard-finite-order-rank-zero-order-one-endpoint-nullity-1
-    :critical-value-sard-finite-cover-measure-1
-    :critical-value-sard-arbitrarily-small-limit-1],
+    :critical-value-sard-finite-cover-measure-bound-1
+    :critical-value-sard-arbitrarily-small-measure-limit-1],
    :current-residual
    "The one-dimensional endpoint limit and finite-cover aggregation compile; deriving the certificates from little-o Taylor control remains.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
