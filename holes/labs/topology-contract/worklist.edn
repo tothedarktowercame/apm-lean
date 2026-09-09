@@ -46588,6 +46588,20 @@
       "t03J04" 1,
       "t03J02" 2,
       "t02A05" 2}},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788967381792-16505-5d19dac7",
+     :commands
+     ["git show 41954b19:holes/labs/topology-contract/work-prompt.md"
+      "git show 41954b19:ConstructionTargets/SardBorelPositiveOrderRankAggregation.lean"
+      "git show 41954b19:ConstructionTargets/SardBorelOverlapInductionClosure.lean"
+      "python3 recorded-commit DAG census, comment-stripped placeholder count and SHA256 recomputation"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 41954b19"
+      "git diff --check"],
+     :finding
+     "Accept missing-infrastructure STOP under updated rule 0 at work-prompt.md:75, not mathematical refutation or implementation acceptance. Recorded transition 41954b196b471fa0418e24422fda10d04bb6e25a; author codex-6; empty source scope and no fixture. Conditional induction/rank-zero premises remain explicit; manifold transfer remains unprovided. Frozen consumer hash and one placeholder reproduced; census 57 files with t93A05 absent; validation and whitespace checks exit 0. No ledger or source edits."},
     :changed-paths [],
     :missing
     {:consumer-interface
@@ -46601,7 +46615,7 @@
     :mathematical-refutation false,
     :seat :codex-6},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -46924,7 +46938,7 @@
    :stop-condition
    "Stop only on a genuine mathematical refutation, naming it; never stop for missing infrastructure or owner authorization.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
