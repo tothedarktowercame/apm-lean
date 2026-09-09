@@ -48352,59 +48352,105 @@
    :stop-condition
    "GO needs the full compiled local producer/consumer composition. REVISE requires exactly one compiled prerequisite. Otherwise name the exact hypothesis or representation boundary; missing infrastructure is not refutation.",
    :evidence
-   {:probe
-    {:source-pins
-     {:path
-      "/tmp/SardSmoothFirstNonzeroJetLocalInduction-sources.json",
-      :sha256
-      "6cee24230e65b81a1dab642c9737d9aaa2b7cec303e833d0a5dde1c62f633c8d"},
-     :placeholder-delta
-     {:fixture 0, :consumer-before 1, :consumer-after 1, :delta 0},
-     :residual
-     "Conditional local first-nonzero-jet induction step established. Discharging induction through base cases, other critical-rank strata, flat-locus coverage, countable/local-domain assembly and manifold transport remains. No unconditional Sard or frozen consumer closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :documentation
-     {:path "/tmp/SardSmoothFirstNonzeroJetLocalInduction.md",
-      :sha256
-      "cc02a6dcdb3cc38602bc3c56db21154f5cb2965ddb54e81a794d6babe3b1416d"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/SardSmoothFirstNonzeroJetLocalInduction.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/check-sard-smooth-local-induction.py",
-       :exit 0}
-      {:cmd
-       "git diff --exit-code -- ConstructionTargets problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
-       :exit 0}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/SardSmoothFirstNonzeroJetLocalInduction.lean",
-      :sha256
-      "4cf21fc2f359190823adeaa0fa67dde24691c6d45c019c40b383152c5a07440f"},
-     :finding
-     "Complete local producer/consumer composition compiles. The banked scalarized-jet producer constructs the restricted smooth chart. Existing lower-jet vanishing proves containment in its zero-coordinate inverse slice; the existing scalar-derivative theorem proves strict kernel dimension drop. The actual inverse slice supplies genuine-infinity regularity to SardLowerDimensionalLocalCriticalImageInduction. Its sole nullity input is explicitly restricted to local smooth maps on the lower-dimensional kernel. The resulting local-image nullity theorem works for any measure with that induction premise, including Haar measure.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean"
-       "ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.md"],
-      :acceptance
-      {:consumer-placeholder-count 1,
-       :preserve-explicit-lower-dimensional-induction true,
-       :axioms :standard-only,
-       :consumer-file "problems/t93A04/lean/Main.lean",
-       :preserve-genuine-infinity true,
-       :fixture-placeholders 0,
-       :declarations
-       ["SardSmoothFirstNonzeroJetLocalInductionProbe.exists_local_firstNonzeroJet_image_null"],
-       :compile
-       "lake env lean ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean",
-       :consumer-sha256
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}},
-     :seat :codex-12}},
+   {:source-pins
+    {:path "/tmp/SardSmoothFirstNonzeroJetLocalInduction-sources.json",
+     :sha256
+     "6cee24230e65b81a1dab642c9737d9aaa2b7cec303e833d0a5dde1c62f633c8d",
+     :verified true,
+     :unchanged true},
+    :placeholder-delta
+    {:fixture 0,
+     :scoped-before 0,
+     :scoped-after 0,
+     :consumer-before 1,
+     :consumer-after 1,
+     :delta 0},
+    :residual
+    "Conditional local first-nonzero-jet induction step established. Discharging induction through base cases, other critical-rank strata, flat-locus coverage, countable/local-domain assembly, and manifold transport remains. No unconditional Sard or frozen consumer closure claimed; ledger and frozen consumer unchanged.",
+    :gates
+    {:preserve-explicit-lower-dimensional-induction true,
+     :preserve-genuine-infinity true,
+     :fixture-byte-identical true,
+     :documentation-byte-identical true,
+     :consumer-unchanged true,
+     :exact-scope true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"SardSmoothFirstNonzeroJetLocalInductionProbe.exists_local_firstNonzeroJet_image_null"
+     "ce7ad7416a156a8103ad419f02f386d26e748827618a8916e87e7eb1962cbd0a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :documentation
+    {:path "/tmp/SardSmoothFirstNonzeroJetLocalInduction.md",
+     :sha256
+     "cc02a6dcdb3cc38602bc3c56db21154f5cb2965ddb54e81a794d6babe3b1416d"},
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rule, closure policy, complete fixture, documentation, validation script, and dependency checkpoint receipt",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardSmoothFirstNonzeroJetLocalInduction.lean /tmp/SardSmoothFirstNonzeroJetLocalInduction.md /tmp/SardSmoothFirstNonzeroJetLocalInduction-sources.json",
+      :exit 0}
+     {:cmd
+      "Read-only Python verification of every source hash, fixture hash, and documentation hash against the pinned source manifest",
+      :exit 0,
+      :output "All pins verified; manifest was not rewritten."}
+     {:cmd
+      "lake env lean /tmp/SardSmoothFirstNonzeroJetLocalInduction.lean && lake env lean ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean",
+      :exit 0,
+      :output "Both compilations warning-free; standard axioms only."}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.SardSmoothFirstNonzeroJetLocalInduction 2>&1 | awk '/warning:|error:|Build completed/ {print}'",
+      :exit 0,
+      :output "Build completed successfully (8315 jobs)."}
+     {:cmd
+      "cmp /tmp/SardSmoothFirstNonzeroJetLocalInduction.lean ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean && cmp /tmp/SardSmoothFirstNonzeroJetLocalInduction.md ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.md",
+      :exit 0}
+     {:cmd
+      "sed -n '10,33p' ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder and SHA audit of production module and frozen consumer",
+      :exit 0,
+      :output
+      "Module 0 placeholders and pinned fixture hash; consumer 1 placeholder and SHA 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "371 items OK; {:done 363, :open 1, :blocked 1, :superseded 6}"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit --only ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.md -m \"Bank smooth first-nonzero-jet local induction step\"",
+      :exit 0}
+     {:cmd "git show --stat --oneline HEAD",
+      :exit 0,
+      :output "Exactly two scoped files; 125 insertions."}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output "?? holes/labs/topology-contract/runs2/",
+      :note "Unrelated directory untouched."}],
+    :commit "6c4f3d0b6c7f581738f2b3a841d36da148a6f49d",
+    :changed-paths
+    ["ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean"
+     "ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.md"],
+    :fixture
+    {:path "/tmp/SardSmoothFirstNonzeroJetLocalInduction.lean",
+     :sha256
+     "4cf21fc2f359190823adeaa0fa67dde24691c6d45c019c40b383152c5a07440f"},
+    :declarations
+    ["SardSmoothFirstNonzeroJetLocalInductionProbe.exists_local_firstNonzeroJet_image_null"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean"
     "ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.md"],
