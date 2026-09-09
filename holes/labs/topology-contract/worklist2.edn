@@ -3606,8 +3606,164 @@
      :review-outcomes]},
    :stop-condition
    "Attribute frozen closures to their actual campaign. Neither local generators nor group isomorphisms establish global orientation compatibility.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "cat docs/TN-topology-foundational-programs.md holes/labs/topology-contract/work-prompt.md",
+      :exit 0}
+     {:cmd
+      "Inspect full DAG, closure-experiment policy, and reviewed results in both worklist.edn and worklist2.edn",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped census at 072ced05769dc11238641dbf479166a0dd022506 and f627f75fe90e41eabfb150001dec9ee163324fc5",
+      :exit 0}
+     {:cmd
+      "Read UnitDiskInverseSqrtIntegrability and reviewed t96J08 closure in worklist.edn",
+      :exit 0}
+     {:cmd
+      "Read frozen t02A05 and query both ledgers for prior t02A05 elections",
+      :exit 0}
+     {:cmd "sha256sum problems/t02A05/lean/Main.lean", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :replacement-items
+    [{:consumer :t02A05,
+      :stop-condition
+      "No assumed Stokes theorem, sphere area, moment value, integrability or identification of radial sphere measure with subtype Hausdorff measure; preserve both frozen statements.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "STOKES AND MOMENTS: exact outward sphere flux and minimizing centers",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t02A05/lean/Main.lean",
+       :stop-condition
+       "If a bounded closing adapter is unavailable, STOP under rule 0 naming the exact missing Hausdorff normalization, projection identity, moment or integrability theorem. Distinguish missing infrastructure from refutation; no partial closure GO.",
+       :gates
+       ["GO requires a complete zero-placeholder fixture, unchanged statement hashes, fixture SHA-256 and standard-only axiom audits."
+        "Propose implementation scope only after full closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 2,
+       :probe
+       "Compile a complete temporary frozen Main with both placeholders removed and every definition and statement preserved. Expand the actual orthogonal-projection coefficient, prove translation transport for sphere-subtype Hausdorff measure, establish integrability, and evaluate the required sphere coordinate moments. Inspect current integration APIs and the reviewed t96J08 method, but prove every measure comparison required here. Use the existing quadratic-minimum theorem to assemble the exact final conclusion.",
+       :consumer-equation
+       "The actual outwardSphereIntegral equals 44*pi/15 + 4*pi*((c0-1)^2+(c1-2)^2); hence its minimum is 44*pi/15 exactly when c0=1 and c1=2.",
+       :frozen-sha256
+       "fb006cf7fd68026fa20f517e58e4f6b3bbf1c34fce2f3ee42064f5e7b3cc89d5"},
+      :id :oriented-checkpoint3-t02a05-exact-flux-closure-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "Two placeholders remain: apm_t02A05_bridge_1 and apm_t02a05. Quadratic minimization is proved; the actual tangent-projection Hausdorff sphere integral remains.",
+      :other-consumers []}
+     {:consumer :higher-sphere-global-local-homology,
+      :stop-condition
+      "Sphere calculation only. No arbitrary-manifold localization monicity, coordinate-change sign, global orientation coherence or t98A02 gluing conclusion.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "Queue D #2: higher-sphere puncture geometry and actual absolute-to-local projection",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For every k and point x on the Euclidean unit sphere of dimension k+2, construct its punctured-space homeomorphism with Euclidean space using stereographic projection and actual point transport. Prove the required positive-degree integral homology vanishing. Apply production pair exactness to show homologyMap(relativeSingularProjection(deletedPoint x),k+2) is an isomorphism. Exhibit inverse identities and prove the inverse image of HigherChartLocalGenerator.ambientLocalGenerator generates absolute H(k+2). Compile sphere dimensions two and four with actual chart instances and coefficient comparisons.",
+       :consumer-equation
+       "For the actual localization Lx and constructed chart-local generator gx, Lx(inv(Lx)(gx))=gx, and inv(Lx)(gx) generates integral absolute sphere H(k+2).",
+       :stop-condition
+       "GO requires constructed puncture geometry, actual projection-map invertibility and generator equations. REVISE only to exactly one compiled missing geometric, exactness or coefficient prerequisite. Pointwise normalization does not establish orientation coherence between different points."},
+      :representation
+      {:source
+       "Integral absolute H(k+2) of the literal Euclidean unit sphere of dimension k+2",
+       :target
+       "Integral relative H(k+2) of that sphere modulo the complement of a specified point",
+       :direction
+       "Forward localization induced by the production relativeSingularProjection; prove this actual map is an isomorphism and identify its inverse image of the constructed chart-local generator."},
+      :id :oriented-checkpoint3-higher-sphere-actual-localization-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint2-higher-chart-local-generator-1],
+      :current-residual
+      "Higher-dimensional local generators and chart/excision isomorphisms are banked. The actual absolute-to-relative map on a higher sphere has not been proved invertible by this campaign.",
+      :other-consumers [:t98A02 :t01A02 :sphere-degree-localization]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Local generators and pointwise inverse localization do not establish coherent global orientation or general manifold gluing.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: frozen uptake and sphere-to-manifold continuation",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped, attribute concurrent changes correctly, and preserve reviewed STOP boundaries absent resolving evidence. Elect exactly one eligible near-closure adapter first, then the simplest highest-reuse work across the full DAG. Return one to five fresh work rows and a successor with identical checkpoint keys. Check documentation uptake for t97A02 and any newly closed consumer. Do not duplicate the other campaign's active rows or begin with t00J02.",
+       :stop-condition
+       "No owner-authorization stop, repeated unresolved STOP probe or empty ordinary refill; distinguish missing mathematics from refutation."},
+      :id :oriented-checkpoint4-flux-and-sphere-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint3-t02a05-exact-flux-closure-1
+       :oriented-checkpoint3-higher-sphere-actual-localization-1],
+      :current-residual
+      "Measure flux-consumer uptake separately from sphere localization infrastructure. Global orientation compatibility and manifold gluing remain distinct; reviewed consumer closures also require DAG documentation."}],
+    :changed-paths [],
+    :measures
+    {:baseline "072ced05769dc11238641dbf479166a0dd022506",
+     :head "f627f75fe90e41eabfb150001dec9ee163324fc5",
+     :placeholder-delta -2,
+     :dag-consumer-placeholders
+     {:before 73,
+      :after 71,
+      :missing-paths ["problems/t93A05/lean/Main.lean"],
+      :method
+      "Count executable sorry tokens after stripping block and line comments in all existing DAG-named Main.lean files."},
+     :consumer-uptake
+     {:t97A02
+      {:before 2,
+       :after 0,
+       :commit "69fd2f354468e1409b979d75818a1d01cf727e6c",
+       :review :pass},
+      :t96J08
+      {:before 0,
+       :after 0,
+       :attribution
+       "Other campaign closure at 60711917a5e7876a99a6205778adade9028578a7 predates this measurement baseline; no credit in this interval."}},
+     :infrastructure-packets
+     {:portfolio 1,
+      :modules-before 614,
+      :modules-after 616,
+      :portfolio-module "HigherChartLocalGenerator",
+      :other-campaign-module "SardGenuineSmoothProjectedRankChart"},
+     :review-outcomes
+     {:portfolio-pass 2, :portfolio-stop 0, :consumer-closures 1},
+     :typed-residual-change
+     {:t97A02
+      "Exact frozen Circle lifting and torus null-homotopy theorem now closed, including empty domains.",
+      :higher-chart
+      "Constructed restricted chart and actual chart/excision Hn isomorphism now transport model generators to ambient local groups in every dimension at least two; geometric signs and global localization remain separate."}},
+    :finding
+    "Elect exactly one fresh near-closure consumer first: t02A05, with two placeholders and an already-proved quadratic optimization step. Both ledgers contain no prior t02A05 election. This is an exact-consumer probe, not a claim that Hausdorff normalization already follows from disk integrals. Exclude the other campaign's elected t95J05 and Sard work, and preserve unresolved reviewed STOP boundaries for t00A01, t98A01, t02A08, a97J08 and other stopped consumers. Next elect higher-sphere actual localization: it uses the reviewed higher model/chart calculations and serves the manifold, puncture and degree programs through a concrete projection-map equation. General gluing, surface classification, Kunneth and arbitrary-manifold orientation require broader constructions.",
+    :t96J08-assessment
+    "The boundary is resolved, with stronger evidence than related integration APIs: worklist.edn records independently PASS-reviewed complete frozen closure at 60711917a5e7876a99a6205778adade9028578a7. Actual radial integration, required integrability and the exterior-derivative obstruction prove both frozen statements. Do not re-elect it.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/OrientedCheckpoint3Census.json",
+     :sha256
+     "505f6262f6223d8965f683adfe91cc1a9a435127458c12ce3cb26b30bb7c253e"}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact consumer certification and manifold continuation",
@@ -3624,6 +3780,96 @@
     :oriented-successor-checkpoint-2],
    :current-residual
    "Measure actual t97A02 uptake separately from higher-dimensional chart infrastructure. Geometric orientation signs, global localization and manifold gluing remain distinct obligations."}
+  {:consumer :t02A05,
+   :stop-condition
+   "No assumed Stokes theorem, sphere area, moment value, integrability or identification of radial sphere measure with subtype Hausdorff measure; preserve both frozen statements.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "STOKES AND MOMENTS: exact outward sphere flux and minimizing centers",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t02A05/lean/Main.lean",
+    :stop-condition
+    "If a bounded closing adapter is unavailable, STOP under rule 0 naming the exact missing Hausdorff normalization, projection identity, moment or integrability theorem. Distinguish missing infrastructure from refutation; no partial closure GO.",
+    :gates
+    ["GO requires a complete zero-placeholder fixture, unchanged statement hashes, fixture SHA-256 and standard-only axiom audits."
+     "Propose implementation scope only after full closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 2,
+    :probe
+    "Compile a complete temporary frozen Main with both placeholders removed and every definition and statement preserved. Expand the actual orthogonal-projection coefficient, prove translation transport for sphere-subtype Hausdorff measure, establish integrability, and evaluate the required sphere coordinate moments. Inspect current integration APIs and the reviewed t96J08 method, but prove every measure comparison required here. Use the existing quadratic-minimum theorem to assemble the exact final conclusion.",
+    :consumer-equation
+    "The actual outwardSphereIntegral equals 44*pi/15 + 4*pi*((c0-1)^2+(c1-2)^2); hence its minimum is 44*pi/15 exactly when c0=1 and c1=2.",
+    :frozen-sha256
+    "fb006cf7fd68026fa20f517e58e4f6b3bbf1c34fce2f3ee42064f5e7b3cc89d5"},
+   :id :oriented-checkpoint3-t02a05-exact-flux-closure-1,
+   :kind :final-adapter,
+   :depends-on [:oriented-checkpoint3-consumer-and-localization],
+   :current-residual
+   "Two placeholders remain: apm_t02A05_bridge_1 and apm_t02a05. Quadratic minimization is proved; the actual tangent-projection Hausdorff sphere integral remains.",
+   :other-consumers []}
+  {:consumer :higher-sphere-global-local-homology,
+   :stop-condition
+   "Sphere calculation only. No arbitrary-manifold localization monicity, coordinate-change sign, global orientation coherence or t98A02 gluing conclusion.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "Queue D #2: higher-sphere puncture geometry and actual absolute-to-local projection",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For every k and point x on the Euclidean unit sphere of dimension k+2, construct its punctured-space homeomorphism with Euclidean space using stereographic projection and actual point transport. Prove the required positive-degree integral homology vanishing. Apply production pair exactness to show homologyMap(relativeSingularProjection(deletedPoint x),k+2) is an isomorphism. Exhibit inverse identities and prove the inverse image of HigherChartLocalGenerator.ambientLocalGenerator generates absolute H(k+2). Compile sphere dimensions two and four with actual chart instances and coefficient comparisons.",
+    :consumer-equation
+    "For the actual localization Lx and constructed chart-local generator gx, Lx(inv(Lx)(gx))=gx, and inv(Lx)(gx) generates integral absolute sphere H(k+2).",
+    :stop-condition
+    "GO requires constructed puncture geometry, actual projection-map invertibility and generator equations. REVISE only to exactly one compiled missing geometric, exactness or coefficient prerequisite. Pointwise normalization does not establish orientation coherence between different points."},
+   :representation
+   {:source
+    "Integral absolute H(k+2) of the literal Euclidean unit sphere of dimension k+2",
+    :target
+    "Integral relative H(k+2) of that sphere modulo the complement of a specified point",
+    :direction
+    "Forward localization induced by the production relativeSingularProjection; prove this actual map is an isomorphism and identify its inverse image of the constructed chart-local generator."},
+   :id :oriented-checkpoint3-higher-sphere-actual-localization-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint2-higher-chart-local-generator-1
+    :oriented-checkpoint3-consumer-and-localization],
+   :current-residual
+   "Higher-dimensional local generators and chart/excision isomorphisms are banked. The actual absolute-to-relative map on a higher sphere has not been proved invertible by this campaign.",
+   :other-consumers [:t98A02 :t01A02 :sphere-degree-localization]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Local generators and pointwise inverse localization do not establish coherent global orientation or general manifold gluing.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: frozen uptake and sphere-to-manifold continuation",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped, attribute concurrent changes correctly, and preserve reviewed STOP boundaries absent resolving evidence. Elect exactly one eligible near-closure adapter first, then the simplest highest-reuse work across the full DAG. Return one to five fresh work rows and a successor with identical checkpoint keys. Check documentation uptake for t97A02 and any newly closed consumer. Do not duplicate the other campaign's active rows or begin with t00J02.",
+    :stop-condition
+    "No owner-authorization stop, repeated unresolved STOP probe or empty ordinary refill; distinguish missing mathematics from refutation."},
+   :id :oriented-checkpoint4-flux-and-sphere-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint3-t02a05-exact-flux-closure-1
+    :oriented-checkpoint3-higher-sphere-actual-localization-1
+    :oriented-checkpoint3-consumer-and-localization],
+   :current-residual
+   "Measure flux-consumer uptake separately from sphere localization infrastructure. Global orientation compatibility and manifold gluing remain distinct; reviewed consumer closures also require DAG documentation."}
   {:consumer :t00A01,
    :stop-condition
    "Consumer-first probe only; no partial wrapper packet, assumed free-product equivalence, or fixed-target source reconstruction.",
