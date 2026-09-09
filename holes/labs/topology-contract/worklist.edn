@@ -48951,8 +48951,163 @@
      :review-outcomes]},
    :stop-condition
    "Only all consumers closed or an exact mathematical refutation ends the campaign; infrastructure absence and owner authorization do not.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill14-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill14-audit.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill14-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill14-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill14-measure.json /tmp/topology-refill14-tail.edn /tmp/topology-refill14-infrastructure.json /tmp/topology-refill14-reviewed-outcomes.edn",
+      :exit 0}],
+    :finding
+    {:baseline "b8d8e031ba1b8351f9be6ceb586a167a504706ff",
+     :election-rationale
+     ["Rule 0 elects exactly one near-closure adapter first: t96J08 has two placeholders, and newly banked disk-integral machinery plus the t03J06 form-calculus proof directly address its remaining integral and exactness obligations."
+      "Across the complete DAG, a97J08 still needs planar separation, t95J04 intrinsic Hausdorff transport, t00A01 actual-cover comparisons and target naturality, and t02A08 arbitrary-integer geometric degree maps with their H2 action. Their small placeholder counts do not establish availability of complete adapters."
+      "Among shared foundations, retain the five-consumer Sard dependency and elect its bounded projected-chart producer at genuine infinity. Surface, graph-cover and localization branches retain distinct producers; concurrent localization work is accounted for separately."
+      "Refill after two reviewed work rows and measure consumer closure again. No unconditional Sard or additional consumer closure is inferred from this election."],
+     :measured-head "feed9efbc192d31dd3012a6fc68cec7095305f6d",
+     :placeholder-delta
+     {:open 41,
+      :closed 17,
+      :changed-consumers [{:consumer "t03J06", :before 1, :after 0}],
+      :total-before 76,
+      :method
+      "Executable sorry tokens after stripping block and line comments in every named DAG consumer at pinned revisions.",
+      :named-consumers 59,
+      :total-after 75,
+      :existing-files 58,
+      :delta -1,
+      :sha256
+      "e0df834748aeb912010e917ff88981b44944bb66b26aef9f599351fa751911b8",
+      :artifact "/tmp/topology-refill14-measure.json",
+      :within-two 31,
+      :missing-files ["t93A05"]},
+     :scope
+     "Complete DAG, closure experiments and reviewed dependency outcomes considered. No canonical source, DAG or ledger edits.",
+     :campaign-refutation false,
+     :infrastructure-packets
+     {:construction-module-delta 9,
+      :portfolio-breakdown {:capped-cylinder 6, :compact-rank-zero 1},
+      :method
+      "Pinned git-tree comparison distinguishes portfolio additions from concurrent additions; the rank-zero evidence-only repair's empty changed-paths is not treated as absence of its source module.",
+      :construction-modules-after 613,
+      :construction-modules-before 604,
+      :sha256
+      "f7715e777028b1668b8604f40cdeeb27e3d5774b4ec08ecc81f3b4a3b317d59b",
+      :artifact "/tmp/topology-refill14-infrastructure.json",
+      :portfolio-modules 7,
+      :concurrent-modules
+      ["ClassicalLocalPathConnectivity" "HigherModelLocalHomology"]},
+     :portfolio-artifact
+     {:path "/tmp/topology-refill14-tail.edn",
+      :sha256
+      "b71a3fb32fe99513b85dc9f83047343ca6cbe30d23399a46ee67f79a82ef3b32"},
+     :validation
+     "Temporary combined ledger passes canonical validation: 377 items, with 367 done, 1 open, 6 superseded and 3 blocked. Fresh identities and final checkpoint dependencies verified.",
+     :typed-residual-change
+     {:t03J06
+      "Reviewed canonical closure: frozen definitions and statements preserved; smoothness, exterior derivative, nonexactness and literal 7*pi integral compiled. This is an actual consumer closure.",
+      :rank-zero
+      "Compact rank-zero image nullity now derives higher-jet nullity from local genuine-smooth lower-dimensional induction, including zero-dimensional sources. It remains conditional on that induction; t93A04 retains one placeholder.",
+      :positive-rank
+      "The existing projected smooth local-rank chart excludes genuine infinity. A neighborhood-based producer must supply smooth inverse residual slices before compatible positive-rank induction."},
+     :review-outcomes
+     {:portfolio-pass 2,
+      :portfolio-stop 0,
+      :t03J06
+      {:commit "7caeb0018c793cafaf9c6ea7700eb2fa9f306abf",
+       :review "invoke-1788975133016-16693-54e4168e",
+       :statement-sha256
+       "0a4564e7ed7c06fc2c2d3bf3d6dddb83af4dac83262382eb887c079a92475003",
+       :result :pass},
+      :compact-rank-zero
+      {:commit "5d84d2edd1225b54fbdfcfedcba515c1533fef01",
+       :review "invoke-1788975923087-16715-68ccfecd",
+       :result :pass},
+      :artifact "/tmp/topology-refill14-reviewed-outcomes.edn",
+      :sha256
+      "c4aa446bf9220c03f1a1ecdf510eb73415da3a562cb9f50a1e832b2b4c4bd8b0"}},
+    :replacement-items
+    [{:consumer "t96J08",
+      :stop-condition
+      "If full closure cannot be compiled, STOP naming the exact remaining calculus, integrability or measure-transport theorem. Distinguish infrastructure absence from mathematical refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "STOKES AND MOMENTS / hemisphere radial integral and exactness",
+      :acceptance
+      {:probe
+       "GO requires a complete placeholder-free compiled copy of problems/t96J08/lean/Main.lean preserving every frozen definition and statement. Reuse newly banked HemisphereInverseSqrtDiskIntegral/UnitDiskInverseSqrtIntegrability and the t03J06 form-calculus method to evaluate the literal EuclideanSpace two-dimensional closed-disk square-root integral as 2*pi/3 and prove the exactness obstruction through the existing etaForm/extDeriv bridge. Transport measures explicitly between disk representations; establish required integrability before splitting integrals. Prove the full 5*pi/3 hemisphere value and every conjunct. Do not assume Stokes, radial normalization, integral value or a derivative identity; do not replace the frozen custom exactness predicate. No partial bridge counts as full closure.",
+       :frozen-file "problems/t96J08/lean/Main.lean",
+       :frozen-sha256
+       "eaafd946f3385e1d5ca8964c64a003aacf4562151ebac5e19b12f6a328e1f3d9",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t96j08-frozen-hemisphere-closure-probe-refill14,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero],
+      :current-residual
+      "Two placeholders: radial square-root disk integral and final hemisphere/nonexactness assembly. Pullback simplification, swap cancellation, nonclosedness and degree-one exactness packaging are proved."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO needs the complete compiled actual chart producer and residual-slice consumer. REVISE requires exactly one compiled prerequisite. Otherwise identify the exact representation or hypothesis boundary; missing infrastructure is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / genuine smooth projected rank chart",
+      :acceptance
+      {:probe
+       "Compile an actual projected local rank chart for globally ContDiff real genuine infinity f between finite-dimensional real inner-product spaces, with L=fderiv real f x, R=range L and G=ker(R.orthogonalProjection.comp L). Construct or reuse the existing projected ImplicitFunctionData with exact leftFun R.orthogonalProjection composed with f and rightFun the kernel orthogonal projection. Derive both fields' neighborhood smoothness from global f smoothness and invoke SardSmoothNeighborhoodImplicitChart to obtain a basepoint-preserving restriction with original forward map, inverse agreement and genuine infinity smoothness in both directions. Exhibit that its first coordinate is the R projection of f and exercise its inverse in SardProjectedChartResidualSlicesContDiffOn with the complementary target projection. Reuse defining-field producers; no assumed chart or inverse regularity, analytic omega, arbitrary-C1 induction or nullity premise. If this exact producer already exists, reuse it and identify the next positive-rank consumer edge rather than duplicate it.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Projected smooth chart producer only. Positive-rank residual criticality/nullity, compatible local smooth induction and base cases, full critical-set coverage and manifold transport remain before unconditional Sard or t93A04 closure."},
+      :id :sard-genuine-smooth-projected-rank-chart-probe-refill14,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero],
+      :current-residual
+      "Compact rank-zero nullity now follows from local genuine-smooth induction. Positive-rank projected charts still need a neighborhood-based genuine-infinity producer and actual smooth residual slices; finite-order or pointwise-eventual APIs cannot supply this by substitution.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all consumers closed or exact mathematical refutation; missing infrastructure and owner authorization do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount executable placeholders at pinned revisions across all DAG consumers; compare residual changes, reviewed outcomes and portfolio versus concurrent infrastructure. Elect exactly one near-closure adapter first, then foundations by downstream reach and simplicity. Return a nonempty fresh portfolio with a final checkpoint depending on every elected work row."},
+      :id
+      :checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t96j08-frozen-hemisphere-closure-probe-refill14
+       :sard-genuine-smooth-projected-rank-chart-probe-refill14],
+      :current-residual
+      "Await both reviewed rows, then rerank the full DAG and account separately for concurrent foundation work."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -48967,6 +49122,79 @@
     :checkpoint-full-dag-refill-13-after-planar-and-local-induction],
    :current-residual
    "Await both reviewed rows, then rerank the entire DAG including unrelated consumers and concurrent localization work."}
+  {:consumer "t96J08",
+   :stop-condition
+   "If full closure cannot be compiled, STOP naming the exact remaining calculus, integrability or measure-transport theorem. Distinguish infrastructure absence from mathematical refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "STOKES AND MOMENTS / hemisphere radial integral and exactness",
+   :acceptance
+   {:probe
+    "GO requires a complete placeholder-free compiled copy of problems/t96J08/lean/Main.lean preserving every frozen definition and statement. Reuse newly banked HemisphereInverseSqrtDiskIntegral/UnitDiskInverseSqrtIntegrability and the t03J06 form-calculus method to evaluate the literal EuclideanSpace two-dimensional closed-disk square-root integral as 2*pi/3 and prove the exactness obstruction through the existing etaForm/extDeriv bridge. Transport measures explicitly between disk representations; establish required integrability before splitting integrals. Prove the full 5*pi/3 hemisphere value and every conjunct. Do not assume Stokes, radial normalization, integral value or a derivative identity; do not replace the frozen custom exactness predicate. No partial bridge counts as full closure.",
+    :frozen-file "problems/t96J08/lean/Main.lean",
+    :frozen-sha256
+    "eaafd946f3385e1d5ca8964c64a003aacf4562151ebac5e19b12f6a328e1f3d9",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t96j08-frozen-hemisphere-closure-probe-refill14,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero
+    :checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero],
+   :current-residual
+   "Two placeholders: radial square-root disk integral and final hemisphere/nonexactness assembly. Pullback simplification, swap cancellation, nonclosedness and degree-one exactness packaging are proved."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO needs the complete compiled actual chart producer and residual-slice consumer. REVISE requires exactly one compiled prerequisite. Otherwise identify the exact representation or hypothesis boundary; missing infrastructure is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / genuine smooth projected rank chart",
+   :acceptance
+   {:probe
+    "Compile an actual projected local rank chart for globally ContDiff real genuine infinity f between finite-dimensional real inner-product spaces, with L=fderiv real f x, R=range L and G=ker(R.orthogonalProjection.comp L). Construct or reuse the existing projected ImplicitFunctionData with exact leftFun R.orthogonalProjection composed with f and rightFun the kernel orthogonal projection. Derive both fields' neighborhood smoothness from global f smoothness and invoke SardSmoothNeighborhoodImplicitChart to obtain a basepoint-preserving restriction with original forward map, inverse agreement and genuine infinity smoothness in both directions. Exhibit that its first coordinate is the R projection of f and exercise its inverse in SardProjectedChartResidualSlicesContDiffOn with the complementary target projection. Reuse defining-field producers; no assumed chart or inverse regularity, analytic omega, arbitrary-C1 induction or nullity premise. If this exact producer already exists, reuse it and identify the next positive-rank consumer edge rather than duplicate it.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Projected smooth chart producer only. Positive-rank residual criticality/nullity, compatible local smooth induction and base cases, full critical-set coverage and manifold transport remain before unconditional Sard or t93A04 closure."},
+   :id :sard-genuine-smooth-projected-rank-chart-probe-refill14,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero
+    :checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero],
+   :current-residual
+   "Compact rank-zero nullity now follows from local genuine-smooth induction. Positive-rank projected charts still need a neighborhood-based genuine-infinity producer and actual smooth residual slices; finite-order or pointwise-eventual APIs cannot supply this by substitution.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all consumers closed or exact mathematical refutation; missing infrastructure and owner authorization do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount executable placeholders at pinned revisions across all DAG consumers; compare residual changes, reviewed outcomes and portfolio versus concurrent infrastructure. Elect exactly one near-closure adapter first, then foundations by downstream reach and simplicity. Return a nonempty fresh portfolio with a final checkpoint depending on every elected work row."},
+   :id
+   :checkpoint-full-dag-refill-15-after-hemisphere-and-projected-chart,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t96j08-frozen-hemisphere-closure-probe-refill14
+    :sard-genuine-smooth-projected-rank-chart-probe-refill14
+    :checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero],
+   :current-residual
+   "Await both reviewed rows, then rerank the full DAG and account separately for concurrent foundation work."}
   {:consumer :t93A04,
    :stop-condition
    "STOP only for a counterexample to the stated local rank-normal-form theorem or hypotheses insufficient to select and invert a nonzero rank minor; otherwise REVISE with exactly one compiled prerequisite.",
