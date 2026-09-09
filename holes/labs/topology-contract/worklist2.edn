@@ -5601,6 +5601,22 @@
       :exit 0}],
     :repository-note
     "Read DAG, closure experiments and dependency PASS receipt. Only the authorized two files changed; frozen consumers, DAG, ledgers and untracked supervisor files untouched. Tracked checkout clean.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788983782774-16940-a05686ec",
+     :commands
+     ["git show 99b196c3b27f65b150b595325a0fe3e9df4b5b37"
+      "realpath .lake/packages"
+      "sha256sum /tmp/IntrinsicSphereSecondMomentsProbe.lean"
+      "lake env lean /tmp/IntrinsicSphereSecondMomentsProbe.lean"
+      "lake env lean ConstructionTargets/IntrinsicSphereSecondMoments.lean"
+      "lake build ConstructionTargets.IntrinsicSphereSecondMoments ConstructionTargets.IntrinsicSphereFinite"
+      "Python independent audit: exact promotion, seven statement hashes, recorded import closure, forbidden tokens and frozen placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 5c0b032c:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --name-only 99b196c3; git show --format= --check 99b196c3"],
+     :finding
+     "Independent of author codex-14. Exact two-file scope; fixture SHA256 243e91987507e34dd3d11e420e10630d70350d62afe4eab625cdda3e0c29b57a and seven statement hashes match. Both compilations and focused build pass without warnings (8243 jobs); seven audits per compilation use only standard axioms. Actual sphere isometries preserve intrinsic Hausdorff measure; permutation uses inverse indices correctly. Proved square integrability licenses finite-sum integration, yielding mass/(d+1) for d<=3. Coordinate-zero reflection cancels the mixed moment, and the justified density split gives -mass 3. No numerical normalization, positive-mass assumption or frozen closure is claimed. Frozen problem tree unchanged, placeholders 322 to 322; no forbidden tokens. Recorded ledger validates: 44 items OK. Ledger untouched."},
     :commit "99b196c3b27f65b150b595325a0fe3e9df4b5b37",
     :changed-paths
     ["ConstructionTargets/IntrinsicSphereSecondMoments.lean"
@@ -5616,7 +5632,7 @@
     "SHA-256 of declaration bytes beginning with def or theorem and ending immediately before the space preceding := or where; namespace ConstructionTargets.IntrinsicSphereSecondMoments.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/IntrinsicSphereSecondMoments.lean"
     "ConstructionTargets/IntrinsicSphereSecondMoments.md"],
@@ -5753,7 +5769,7 @@
      "Compiled exactly one symmetry/second-moment prerequisite. Ambient linear isometries restrict to actual sphere isometries and preserve literal Hausdorff integrals. Constructed coordinate reflections and permutations prove odd cancellation and equal square moments. The norm-one identity and reviewed integrability yield square moment M_d/(d+1) for d<=3. The exact projective-sphere density integral is consequently -M_3. No numerical mass, positivity or radial identification is assumed. Plane-rotation fourth moments and the full flux reduction remain, so the parent is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: intrinsic polynomial moments relative to total mass",
