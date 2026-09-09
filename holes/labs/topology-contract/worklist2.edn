@@ -2686,74 +2686,104 @@
    :stop-condition
    "This is a model calculation only: no arbitrary-manifold fundamental class, localization monicity, coordinate-change sign, or t98A02 closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Promote and independently review the model calculation. Higher-dimensional geometric sign compatibility, manifold chart transport, global localization, and t98A02 gluing remain separate obligations.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :author "codex-13",
-     :commands
-     [{:cmd "realpath .lake/packages", :exit 0}
-      {:cmd "lake env lean /tmp/HigherModelLocalHomologyProbe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/HigherModelLocalHomologyProbe.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/HigherModelLocalHomologyProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :repository-note
-     "Read-only probe; canonical package authority and checkpoint PASS verified. Repository files unchanged.",
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/HigherModelLocalHomologyProbe.lean",
-      :sha256
-      "b1ff5b97ed848a02ca923f385c8d4be2b4a39197567c0eddbb6c83b650ffd65b"},
-     :finding
-     "Complete model fixture compiles for dimension k+2, covering every dimension at least two. Contractibility and production pair exactness make the actual connecting map invertible. The geometric punctured-open-disk radial homotopy equivalence identifies its target with sphere homology. Composition with the banked sphere normalization defines the integer isomorphism and generator. The fixture proves generation, normalization, equality of the actual composite maps, and the boundary/radial generator equation. Dimension-two and dimension-four generation instances compile.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/HigherModelLocalHomology.lean"
-       "ConstructionTargets/HigherModelLocalHomology.md"],
-      :acceptance
-      {:implementation
-       "Promote the exact compiled fixture. Document dimension k+2, integral AddCommGrpCat coefficients, the actual connecting-map and radial-normalization directions, and the remaining geometric orientation obligations.",
-       :declarations
-       ["ConstructionTargets.HigherModelLocalHomology.connectingIso"
-        "ConstructionTargets.HigherModelLocalHomology.radialIso"
-        "ConstructionTargets.HigherModelLocalHomology.localIsoInt"
-        "ConstructionTargets.HigherModelLocalHomology.generator"
-        "ConstructionTargets.HigherModelLocalHomology.normalization"
-        "ConstructionTargets.HigherModelLocalHomology.generates"
-        "ConstructionTargets.HigherModelLocalHomology.comparison"
-        "ConstructionTargets.HigherModelLocalHomology.boundary_radial_generator"
-        "ConstructionTargets.HigherModelLocalHomology.dimension_two_generates"
-        "ConstructionTargets.HigherModelLocalHomology.dimension_four_generates"],
-       :consumer-equation
-       "For dimension k+2, radialNormalizeMap_* applied to singularPairConnecting(generator k) equals (sphereTopHomologyIsoInt (k+1)).inv 1. Every relative class is an integer multiple of generator k.",
-       :representation
-       {:source
-        "Integral relative H(k+2) of the open (k+2)-disk modulo its puncture",
-        :target
-        "Integral H(k+1) of the unit (k+1)-sphere, then integers",
-        :direction
-        "Forward composite of the actual pair connecting map, the homology map induced by radial normalization, and the banked sphere normalization."},
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA-256 before implementation."
-        "Compile fixture and canonical target."
-        "Run lake build ConstructionTargets.HigherModelLocalHomology ConstructionTargets.SphereHomology ConstructionTargets.T02A06DiskRadialComparison."
-        "Reproduce all nine printed axiom audits; permit only propext, Classical.choice, Quot.sound."
-        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."],
-       :stop-condition
-       "Model calculation only. No coordinate-change sign, arbitrary-manifold localization, global fundamental class, or frozen consumer closure."}},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Model calculation implemented and awaiting independent review. Higher-dimensional geometric signs, manifold chart transport, global localization, and t98A02 gluing remain separate. No arbitrary-manifold fundamental class, localization monicity, or frozen consumer closure is claimed.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :fixture-compilation :pass,
+     :all-nine-printed-axiom-audits :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 19,
+      :log "/tmp/codex-14-higher-build.log",
+      :paths
+      {"ConstructionTargets/PuncturedNormedSpaceRadialEquivalence.lean"
+       2,
+       "ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/SingularSubdivision.lean" 2,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/T02A06SphereShift.lean" 3}}],
+    :statement-hashes
+    {"radialIso"
+     "9348a0c6902d700c18381cadf43140422295df00741236f81a936648d649b386",
+     "comparison"
+     "141a34710bae04938ba2df43ea44a8e67e7b30241aed20949733c6b179e8fadb",
+     "dimension_four_generates"
+     "08f7d175cc41caa6e8b5a573dcc59206b1c492d77a7b8afba451fcae1f89b15b",
+     "generates"
+     "b3c14c81fdb568271ca3fcf25f131aded96eb378283f34af994a930bb79c84a1",
+     "localIsoInt"
+     "dda3eac77bea2def532c6f97e2b552595128ae6a26e64d842458d04b38b2c53a",
+     "connectingIso"
+     "8deb702bee5e3fcdb7c72bbe1eb7ccfe7a2f69e7a60387489f956bfa1cfafe68",
+     "normalization"
+     "89da0aa5a72836db8c26e4c842d424dfd00dc4312717f8f8e7d6d4c4b9695c57",
+     "dimension_two_generates"
+     "9bab42bef2af0f29b6853bff5cc08b710dfd1df79f419e4c5e16a43a01c5661d",
+     "boundary_radial_generator"
+     "f960f498c05db9f9188fce0be071ed693b3f7b570c332120aa9bc64ea060ad2a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/HigherModelLocalHomologyProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/HigherModelLocalHomologyProbe.lean > /tmp/codex-14-higher-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/HigherModelLocalHomology.lean > /tmp/codex-14-higher-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.HigherModelLocalHomology ConstructionTargets.SphereHomology ConstructionTargets.T02A06DiskRadialComparison > /tmp/codex-14-higher-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/HigherModelLocalHomology.lean /tmp/HigherModelLocalHomologyProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Compute higher-dimensional punctured-disk local generators\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Checked independent checkpoint PASS. Existing untracked supervisor files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :representation
+    {:source
+     "Integral relative H(k+2) of the open (k+2)-disk modulo its puncture.",
+     :target
+     "Integral H(k+1) of the unit (k+1)-sphere, then integers.",
+     :direction
+     "Forward composite of the actual pair connecting map, the homology map induced by radial normalization, and the banked sphere normalization."},
+    :commit "ab4cc42e6c62e20c2c6e9a3778c9916433c598a4",
+    :changed-paths
+    ["ConstructionTargets/HigherModelLocalHomology.lean"
+     "ConstructionTargets/HigherModelLocalHomology.md"],
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/HigherModelLocalHomologyProbe.lean",
+     :sha256
+     "b1ff5b97ed848a02ca923f385c8d4be2b4a39197567c0eddbb6c83b650ffd65b"},
+    :finding
+    "Promoted the exact fixture for every dimension k+2. Contractibility and pair exactness invert the actual connecting map; radial normalization and banked sphere homology give the integer normalization. Generation, normalization, exact composite comparison, and boundary/radial generator equations hold, with dimension-two and dimension-four instances.",
+    :statement-hash-method
+    "SHA-256 of UTF-8 declaration bytes beginning with theorem, lemma, or def and ending immediately before the space preceding :=; names below are in ConstructionTargets.HigherModelLocalHomology.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/HigherModelLocalHomology.lean"
     "ConstructionTargets/HigherModelLocalHomology.md"],
