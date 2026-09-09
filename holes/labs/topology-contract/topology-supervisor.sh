@@ -63,6 +63,15 @@ not_repairable() {
     # an agent that had committed those files would have committed a
     # half-written test file as if it were finished. Escalate to a human.
     *"worktree is dirty"*) return 0 ;;
+    # PROVIDER QUOTA. No agent can repair "you've hit your usage limit" -- the
+    # remedy is money, a different provider, or waiting for the weekly reset.
+    # Retrying spends the repair budget on jobs that fail instantly and, because
+    # every exhausted budget escalates to a Claude seat, burns the quota of a
+    # DIFFERENT provider to report a problem nobody can fix. On 2026-09-09 the
+    # Codex account hit 100% weekly with a reset five days out while the Claude
+    # account sat at 95%, so three futile repairs plus an escalation was the
+    # worst possible use of what was left. Stop and tell a human once.
+    *"usage limit"*|*"quota"*|*"rate limit"*|*"purchase more credits"*) return 0 ;;
   *) return 1 ;;
   esac
 }
@@ -203,7 +212,16 @@ while true; do
   slog "loop exited rc=$rc reason='$reason'"
 
   if not_repairable "$reason"; then
-    slog "not auto-repairable by policy; leaving stopped"
+    # A refusal still deserves ONE report, or the loop simply goes quiet and
+    # the operator finds out hours later. The exception is a deliberate signal:
+    # someone who stopped the loop on purpose does not need to be told they did.
+    case "$reason" in
+      *"received signal"*)
+        slog "deliberate stop; leaving stopped, not escalating" ;;
+      *)
+        slog "not auto-repairable by policy; escalating once and leaving stopped"
+        escalate "$reason" ;;
+    esac
     exit "$rc"
   fi
 
