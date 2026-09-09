@@ -27,9 +27,13 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ROOT="${TOPOLOGY_ROOT:-/home/joe/code/apm-lean}"
-LEDGER="$HERE/worklist.edn"
-LOG="$HERE/runs/build-loop.log"
-SUPLOG="$HERE/runs/supervisor.log"
+# Ledger and run directory match the loop's, so a second campaign supervises
+# its own ledger and writes its own logs instead of interleaving with this one.
+LEDGER="${TOPOLOGY_LEDGER:-$HERE/worklist.edn}"
+RUNS="${TOPOLOGY_RUNS:-$HERE/runs}"
+LOG="$RUNS/build-loop.log"
+SUPLOG="$RUNS/supervisor.log"
+mkdir -p "$RUNS"
 AGENCY="${AGENCY_BASE:-http://127.0.0.1:7070}"
 SEND="${TOPOLOGY_SEND:-/home/joe/code/futon3c/scripts/agency_send.py}"
 REPAIR_SEAT="${TOPOLOGY_REPAIR_SEAT:-}"

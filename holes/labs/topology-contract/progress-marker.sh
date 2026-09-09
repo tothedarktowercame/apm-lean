@@ -11,7 +11,7 @@
 set -uo pipefail
 LEAN=/home/joe/code/apm-lean
 LAB="$LEAN/holes/labs/topology-contract"
-OUT="$LAB/runs/progress-baseline.json"
+OUT="${TOPOLOGY_RUNS:-$LAB/runs}/progress-baseline.json"
 
 snapshot() {
 python3 - "$LEAN" <<'PY'

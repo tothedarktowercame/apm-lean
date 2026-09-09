@@ -5,7 +5,10 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$HERE/../../.." && pwd)"
 LEDGER="${TOPOLOGY_LEDGER:-$HERE/worklist.edn}"
-LOG="$HERE/runs/build-loop.log"
+# Every per-run artifact lives here. A second loop needs its own, or it
+# shares this one's in-flight pointer and reclaims the other loop's job.
+RUNS="${TOPOLOGY_RUNS:-$HERE/runs}"
+LOG="$RUNS/build-loop.log"
 AGENCY="${AGENCY_BASE:-http://localhost:7070}"
 OWNER="${OWNER_SEAT:-codex-18}"
 PROBE_SEAT="${PROBE_SEAT:-codex-12}"
@@ -16,13 +19,13 @@ POLL_SECONDS="${POLL_SECONDS:-20}"
 JOB_TIMEOUT="${JOB_TIMEOUT:-14400}"
 STATUS_RETRIES="${STATUS_RETRIES:-5}"
 MAX_ITER="${MAX_ITER:-60}"
-INFLIGHT="$HERE/runs/inflight.edn"
-HEARTBEAT="$HERE/runs/heartbeat.edn"
+INFLIGHT="$RUNS/inflight.edn"
+HEARTBEAT="$RUNS/heartbeat.edn"
 MODE=live
 REPLAY=""
 ONCE=0
 NOTIFIED=0
-mkdir -p "$HERE/runs"
+mkdir -p "$RUNS"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -141,8 +144,8 @@ wait_job() {
     state="$(jq -r '.job.state // empty' <<<"$body")"
     case "$state" in
       done)
-        LAST_JOB="$job"; mkdir -p "$HERE/runs/jobs"
-        LAST_RESULT="$HERE/runs/jobs/$job.result.txt"
+        LAST_JOB="$job"; mkdir -p "$RUNS/jobs"
+        LAST_RESULT="$RUNS/jobs/$job.result.txt"
         jq -r '.job.result // ""' <<<"$body" > "$LAST_RESULT"
         log "$label done job=$job result=$LAST_RESULT"; return 0 ;;
       failed|error|cancelled) die "$label terminal state=$state job=$job" ;;
@@ -172,7 +175,7 @@ dispatch_and_wait() {
 }
 apply_job_result() {
   local row="$1" token="$2" receipt transition
-  receipt="$HERE/runs/jobs/$LAST_JOB.receipt.edn"
+  receipt="$RUNS/jobs/$LAST_JOB.receipt.edn"
   if ! "$HERE/extract-receipt.sh" "$LAST_RESULT" "$token" "$receipt"; then
     # A completed job result is immutable. Retaining its in-flight pointer
     # makes every supervisor restart reclaim the same unusable result, so the
@@ -215,7 +218,11 @@ apply_job_result() {
   if git -C "$ROOT" diff --cached --quiet -- "$LEDGER"; then
     log "ledger already records $row transition $LAST_JOB; nothing to commit"
   else
-    git -C "$ROOT" commit -q -m "topology-loop: record $row transition $LAST_JOB" \
+    # Path-scoped on purpose. A bare `git commit` takes whatever is staged,
+    # and this repo has other committers -- the apm-land-certified timer, the
+    # frames' own end-of-frame commits, and now a second topology loop. Naming
+    # the ledger keeps this commit to the transition it claims to record.
+    git -C "$ROOT" commit -q -m "topology-loop: record $row transition $LAST_JOB" -- "$LEDGER" \
       || die "could not commit $row ledger transition"
   fi
   bb "$HERE/inflight.bb" clear "$INFLIGHT" || die "could not clear committed in-flight job"
