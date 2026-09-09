@@ -47949,52 +47949,96 @@
    :stop-condition
    "GO needs the full producer and consumer fixture. REVISE requires exactly one compiled prerequisite. Otherwise name the exact mathematical, hypothesis or representation boundary; no owner-authorization stop.",
    :evidence
-   {:probe
-    {:placeholder-delta
-     {:fixture 0, :consumer-before 1, :consumer-after 1, :delta 0},
-     :residual
-     "Scalarized-jet smooth chart producer established. Zero-level containment, source-dimension drop, compatible local critical-nullity induction, base cases and manifold transport remain. Arbitrary-C1 hindOne is not discharged; no unconditional Sard or consumer closure claimed.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :documentation
-     {:path "/tmp/SardScalarizedJetSmoothNeighborhood.md",
-      :sha256
-      "0d77417dd05d0e4540336d3fdf3496911303c9930071ac8133ea7c715d8be1e2"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/SardScalarizedJetSmoothNeighborhood.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/check-sard-scalarized-neighborhood.py",
-       :exit 0}
-      {:cmd
-       "git diff --exit-code -- ConstructionTargets problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
-       :exit 0}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/SardScalarizedJetSmoothNeighborhood.lean",
-      :sha256
-      "1ddfb9ad9b43537ad8513253aab40828bc32f3a12db071f922c2883286449629"},
-     :finding
-     "Complete producer and consumer theorem compiles. Existing defining-field producers construct the exact scalarized jet, derivative and kernel orthogonal projection at x. Global genuine infinity smoothness supplies field regularity on the original open chart source. The reviewed neighborhood theorem supplies a restricted chart preserving the basepoint, original forward map and inverse agreement, smooth in both directions. Its inverse feeds the existing residual-slice consumer at genuine infinity. No neighborhood smoothness or nullity assumptions added.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean"
-       "ConstructionTargets/SardScalarizedJetSmoothNeighborhood.md"],
-      :acceptance
-      {:compile
-       "lake env lean ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean",
-       :fixture-placeholders 0,
-       :axioms :standard-only,
-       :preserve-defining-fields true,
-       :preserve-genuine-infinity true,
-       :consumer-file "problems/t93A04/lean/Main.lean",
-       :consumer-sha256
-       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea",
-       :consumer-placeholder-count 1}},
-     :seat :codex-12}},
+   {:placeholder-delta
+    {:fixture 0,
+     :scoped-before 0,
+     :scoped-after 0,
+     :consumer-before 1,
+     :consumer-after 1,
+     :delta 0},
+    :residual
+    "Scalarized-jet smooth chart producer established. Zero-level containment, source-dimension drop, compatible local critical-nullity induction, base cases, and manifold transport remain. Arbitrary-C1 hindOne is not discharged; no unconditional Sard or consumer closure claimed. Ledger and frozen consumer unchanged.",
+    :gates
+    {:preserve-defining-fields true,
+     :preserve-genuine-infinity true,
+     :fixture-byte-identical true,
+     :documentation-byte-identical true,
+     :consumer-unchanged true,
+     :exact-scope true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"SardScalarizedJetSmoothNeighborhoodProbe.exists_scalarized_jet_smooth_chart"
+     "3c0e132562633e16f21235fa4fbb87198927fdd8d4ce3a2b6f753ba71bf26b2a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :documentation
+    {:path "/tmp/SardScalarizedJetSmoothNeighborhood.md",
+     :sha256
+     "0d77417dd05d0e4540336d3fdf3496911303c9930071ac8133ea7c715d8be1e2"},
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rule, closure policy, complete fixture, documentation, validation script, and dependency checkpoint receipt",
+      :exit 0}
+     {:cmd "python3 /tmp/check-sard-scalarized-neighborhood.py",
+      :exit 0,
+      :output
+      "Executed before promotion: production paths new; fixture placeholders 0; consumer placeholders 1 and frozen hash verified."}
+     {:cmd
+      "lake env lean /tmp/SardScalarizedJetSmoothNeighborhood.lean && lake env lean ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean",
+      :exit 0,
+      :output "Both compilations warning-free; standard axioms only."}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.SardScalarizedJetSmoothNeighborhood 2>&1 | awk '/warning:|error:|Build completed/ {print}'",
+      :exit 0,
+      :output "Build completed successfully (8314 jobs)."}
+     {:cmd
+      "cmp /tmp/SardScalarizedJetSmoothNeighborhood.lean ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean && cmp /tmp/SardScalarizedJetSmoothNeighborhood.md ConstructionTargets/SardScalarizedJetSmoothNeighborhood.md",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean ConstructionTargets/SardScalarizedJetSmoothNeighborhood.md problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "Production files match pinned hashes; consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
+     {:cmd
+      "sed -n '7,29p' ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "368 items OK; {:done 360, :open 1, :blocked 1, :superseded 6}"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit --only ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean ConstructionTargets/SardScalarizedJetSmoothNeighborhood.md -m \"Bank scalarized-jet genuine smooth chart producer\"",
+      :exit 0}
+     {:cmd "git show --stat --oneline HEAD",
+      :exit 0,
+      :output "Exactly two scoped files; 105 insertions."}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output "?? holes/labs/topology-contract/runs2/",
+      :note "Unrelated workspace work preserved untouched."}],
+    :commit "cb0a1015cb16a3288f75ed015b29c7b1814c17f9",
+    :changed-paths
+    ["ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean"
+     "ConstructionTargets/SardScalarizedJetSmoothNeighborhood.md"],
+    :fixture
+    {:path "/tmp/SardScalarizedJetSmoothNeighborhood.lean",
+     :sha256
+     "1ddfb9ad9b43537ad8513253aab40828bc32f3a12db071f922c2883286449629"},
+    :declarations
+    ["SardScalarizedJetSmoothNeighborhoodProbe.exists_scalarized_jet_smooth_chart"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardScalarizedJetSmoothNeighborhood.lean"
     "ConstructionTargets/SardScalarizedJetSmoothNeighborhood.md"],
