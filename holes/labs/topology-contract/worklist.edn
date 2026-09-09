@@ -55530,73 +55530,71 @@
    :stop-condition
    "GO requires compiled smooth inclusion and both actual derivative injectivity and kernel-range equality. REVISE requires exactly one compiled prerequisite; no conditional embeddedness certificate.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Euclidean-source regular-fiber smooth inclusion, actual derivative injectivity and kernel-range comparison are complete. Manifold-source transport and individual consumer uptake remain. Preserve the local t96J05 centered-circle specification counterexample; this geometry does not repair its false attained radial-level conclusion.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:backward-injective
-      "1a778964f47888552b1dded8d6b275787025bf33797228f3332c3e25989346c2",
-      :derivative-eq
-      "f08172e644110cae8e5325bf22f61617ecf8003b16a259b4b4a6b2295fc18cc8",
-      :inclusion-injective
-      "a2ce657cb2ee1e59ff59f34d78b2ae684cea16c9b637bb8132dde1ef74116500",
-      :inclusion-range
-      "dc63a0a7113f4e1658aee980e5cb4db1ba2a2c01ad81f39e1b35b184623c67c4"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "bb /tmp/fiber-inclusion-review.bb", :exit 0}
-      {:cmd
-       "lake env lean -o /tmp/fiber-tangent-build/ConstructionTargets/RegularFiberSmoothInclusion.olean ConstructionTargets/RegularFiberSmoothInclusion.lean",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/fiber-tangent-build:$LEAN_PATH; lean /tmp/RegularFiberTangentImage.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/fiber-tangent-audit.py", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial inline bb dependency-receipt reader",
-       :exit 1,
-       :correction
-       "Corrected unmatched parenthesis and reran as /tmp/fiber-inclusion-review.bb."}
-      {:cmd "lake env lean /tmp/RegularFiberTangentImage.lean",
-       :exit 1,
-       :correction
-       "Newly banked inclusion source lacked an olean. Initially checked with its exact source prefix; final fixture imports the separately compiled producer."}
-      {:cmd "lake env lean /tmp/RegularFiberTangentImage.lean",
-       :exit 1,
-       :correction
-       "Simplified continuous-linear-map applications before rewriting derivative equality; used mfld_simps for the actual extended charts."}
-      {:cmd "lake env lean /tmp/RegularFiberTangentImage.lean",
-       :exit 1,
-       :correction
-       "Corrected hasFDerivAt_const argument order; subsequent complete proof compiled."}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/fiber-tangent-build:$LEAN_PATH; lean /tmp/RegularFiberTangentImage.lean'",
-       :exit 1,
-       :correction
-       "The temporary ConstructionTargets namespace shadowed canonical dependency objects. Added temporary symlinks to existing canonical build entries, preserving the freshly compiled inclusion object; final import-based compilation succeeds."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/RegularFiberTangentImage.lean",
-      :sha256
-      "731804d0090ebddb2db324ae81fa6d4e3eb99bb8e78462dba49eb34c34ae0109"},
-     :finding
-     "Complete packet compiles. Reuses banked genuine-infinity smooth inclusion under exactly RegularFiberGlobalAtlas.chartedSpace. Differentiating the forward/backward identity on the actual open chart target proves backward derivative injectivity, using forward regularity only within its ambient subset. derivative_eq identifies the actual inclusion mfderiv with this backward fderiv. Differentiating the locally constant defining-map composition gives kernel containment; injectivity and the existing surjective rank-nullity theorem give exact kernel-range equality. No replacement atlas, topology, assumed tangent identity, nonempty fiber or positive kernel dimension.",
-     :implementation
-     {:scope ["ConstructionTargets/RegularFiberTangentImage.lean"],
-      :acceptance
-      {:implementation
-       "Promote the exact fixture, retaining its import of RegularFiberSmoothInclusion and the chosen RegularFiberGlobalAtlas.chartedSpace. Compile the module and audit all four exported theorem axioms and absence of placeholders. Preserve existing producers.",
-       :commands
-       ["lake env lean ConstructionTargets/RegularFiberTangentImage.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0}},
-     :seat "codex-12"}},
+   {:placeholder-delta
+    {:consumer "t96J05", :before 1, :after 1, :delta 0, :fixture 0},
+    :residual
+    "Euclidean-source chosen-atlas inclusion derivative injectivity and exact kernel-range equality compiled, reusing smooth inclusion. Manifold-source transport and individual consumer uptake remain. The recorded t96J05 centered-circle specification counterexample is not repaired by this geometry; no consumer closure claimed. Independent review remains.",
+    :gates
+    {:exact-promotion :pass,
+     :compile :pass,
+     :standard-only-axioms :pass,
+     :chosen-atlas-preserved true,
+     :producer-hashes-preserved true,
+     :actual-derivative-injectivity :pass,
+     :kernel-range-equality :pass,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:backward-injective
+     "1a778964f47888552b1dded8d6b275787025bf33797228f3332c3e25989346c2",
+     :derivative-eq
+     "f08172e644110cae8e5325bf22f61617ecf8003b16a259b4b4a6b2295fc18cc8",
+     :inclusion-injective
+     "a2ce657cb2ee1e59ff59f34d78b2ae684cea16c9b637bb8132dde1ef74116500",
+     :inclusion-range
+     "dc63a0a7113f4e1658aee980e5cb4db1ba2a2c01ad81f39e1b35b184623c67c4"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, dependency review receipts and complete fixture",
+      :exit 0}
+     {:cmd "python3 /tmp/fiber-tangent-audit.py", :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.RegularFiberSmoothInclusion",
+      :exit 0,
+      :output "Build completed successfully (8319 jobs)."}
+     {:cmd
+      "cmp /tmp/RegularFiberTangentImage.lean ConstructionTargets/RegularFiberTangentImage.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RegularFiberTangentImage.lean",
+      :exit 0}
+     {:cmd "sha256sum problems/t96J05/lean/Main.lean", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 426 items OK; {:done 417, :needs-owner 1, :superseded 6, :open 1, :blocked 1}"}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check and git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "a7588aaf497bde67a317ce21d84783f3b6830231",
+    :changed-paths
+    ["ConstructionTargets/RegularFiberTangentImage.lean"],
+    :fixture
+    {:path "/tmp/RegularFiberTangentImage.lean",
+     :sha256
+     "731804d0090ebddb2db324ae81fa6d4e3eb99bb8e78462dba49eb34c34ae0109",
+     :placeholder-count 0},
+    :consumer-sha256
+    "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RegularFiberTangentImage.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / smooth inclusion and tangent image",
