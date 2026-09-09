@@ -54928,6 +54928,20 @@
       "Python frozen SHA-256 and comment-stripped placeholder audit",
       :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788995605052-17303-1db78ca9",
+     :commands
+     ["git show 27dd18d6"
+      "Independent frozen-source and diagnostic SHA-256, statement and placeholder audit"
+      "lake env lean /tmp/T01A08GeneralModelBoundary.lean"
+      "Inspect ContDiffWithinAt neighborhood APIs, mfderiv definition and banked open-domain Sard"
+      "bb /tmp/t01a08-review.bb"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 27dd18d6"],
+     :finding
+     "Independent review of codex-12 STOP passes. Fixture hash matches; diagnostic compiles without warnings using standard axioms only. Frozen source and statement unchanged, placeholders remain 1. Diagnostic establishes within-model-range smoothness, not ambient open-domain regularity; mfderiv uses fderivWithin, while banked Sard requires ambient derivatives on an open smooth domain. Cited neighborhood APIs do not supply the required infinity extension and derivative agreement. No closure or refutation claimed, and no strengthened hypotheses introduced. Ledger checker passes 422 items; whitespace clean. No edits."},
     :campaign-refutation false,
     :changed-paths [],
     :fixture
@@ -54941,7 +54955,7 @@
     "e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7",
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / general-model projected regular value",
