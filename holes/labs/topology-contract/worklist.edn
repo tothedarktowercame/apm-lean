@@ -55092,8 +55092,63 @@
   {:consumer "t92J07",
    :stop-condition
    "Stop on evidence or hash mismatch; do not count documentation as another closure.",
+   :evidence
+   {:placeholder-delta
+    {:consumer "t92J07",
+     :before 0,
+     :after 0,
+     :delta 0,
+     :documented-closure-delta -2},
+    :residual
+    "Reviewed t92J07 closure is documented with predicate equality, reused manifold Sard, countable common-value assembly and retained zero-target branch. No mathematical consumer residual or additional closure claimed. General-model/target-manifold transport and regular-preimage geometry remain separate downstream obligations; independent documentation review remains.",
+    :gates
+    {:review-evidence-verified :pass,
+     :source-and-statement-hashes :pass,
+     :closed-results-updated :pass,
+     :historical-stop-preserved :pass,
+     :no-double-counting :pass,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Documented reviewed unused-hm warning; no Lean source changed or new compilation claimed."],
+    :statement-hashes
+    {"apm_t92J07_bridge_1"
+     "5da05c37abf248a169fd810c3e66d794b7e173e9771594077b1e8fc8481bacee",
+     "apm_t92j07"
+     "50d85b6512de9021ccacdab5476c51f9f0bfe299945caf00faa130994202b977"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read scoped documentation and closure/checkpoint independent PASS receipts",
+      :exit 0}
+     {:cmd
+      "Python verification of preclosure, closure and current source hashes, both unchanged statement hashes, 2-to-0 executable placeholders and exact current/fixture equality",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 422 items OK; {:done 413, :needs-owner 1, :superseded 6, :open 1, :blocked 1}"}
+     {:cmd
+      "git diff --exit-code -- problems ConstructionTargets holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check and scoped git commit --only",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "ef33c30c67c3a58d2e805e7368f7c51c6fee762f",
+    :changed-paths
+    ["TOPOLOGY-DEPENDENCY-DAG.md"
+     "docs/TN-topology-closure-experiments.md"],
+    :fixture
+    {:path "/tmp/T92J07FullClosure.lean",
+     :sha256
+     "0e7bf95466e914d03b456449f5605abd35a49df231aa4c6fef4d0edbedc943e3"},
+    :consumer-sha256
+    "0e7bf95466e914d03b456449f5605abd35a49df231aa4c6fef4d0edbedc943e3"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
