@@ -35873,6 +35873,28 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788916122083-15773-b41bb2d8",
+     :commands
+     ["git show --stat --oneline 54d38cc1cf7593f1d1b7e445884cd3cabf7606d4"
+      "git diff-tree --no-commit-id --name-only -r 54d38cc1cf7593f1d1b7e445884cd3cabf7606d4"
+      "sha256sum /tmp/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean"
+      "cmp -s /tmp/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean ConstructionTargets/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
+      "sed -n '13,78p' <(git show 54d38cc1cf7593f1d1b7e445884cd3cabf7606d4:ConstructionTargets/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullity.lean) | sha256sum"
+      "lake env lean /tmp/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
+      "lake build"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "rg -o '\\b(sorry|admit)\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "rg -c '^theorem ' problems/t93A04/lean/Main.lean"
+      "readlink -f .lake/packages"
+      "git diff --check 54d38cc1cf7593f1d1b7e445884cd3cabf7606d4^ 54d38cc1cf7593f1d1b7e445884cd3cabf7606d4"],
+     :finding
+     "PASS: exact recorded scope and fixture, frozen statement hash, nullity orientation, derivative-range/orthogonal representation boundary, standard-only axioms, zero source placeholders, frozen consumer, full build, and worklist gate all reproduced."},
     :commit "54d38cc1cf7593f1d1b7e445884cd3cabf7606d4",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
@@ -35885,7 +35907,7 @@
     :declarations
     ["measure_image_zero_of_rangeOrthogonal_closedOpenChart_finiteOrder"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
     "ConstructionTargets/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullity.md"],
@@ -36080,7 +36102,7 @@
       "129a606c8de6fffafe0a6cf9cc29b136abff4ff29a28560f85db385f037c425e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
