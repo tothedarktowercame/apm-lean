@@ -9827,6 +9827,21 @@
       "Read DAG, foundational-program note, closure policy, documentation changes, frozen t01J04 and SingularExcision substrate",
       :exit 0}
      {:cmd "sha256sum problems/t01J04/lean/Main.lean", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788995845903-17309-7430fc75",
+     :commands
+     ["git show c7dc6845:holes/labs/topology-contract/worklist2.edn"
+      "git show ad871b85:problems/t01J04/lean/Main.lean"
+      "git diff 440c5fe0 ad871b85 -- TOPOLOGY-DEPENDENCY-DAG.md"
+      "python3 inline audit: census SHA256, all 59 consumer counts, module counts, changed paths, frozen t01J04 SHA256 and ledger-only scope"
+      "bb inline audit: exact replacement tail, successor policy, dependencies and pinned active rows in both ledgers"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show c7dc6845:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Independent review of codex-13 strategy receipt at c7dc6845. Census hash matches: placeholders 68->68, modules 644->645, 21 zero-placeholder consumers and 37 open; t93A05 missing. Frozen t01J04 hash matches. Refutation is preserved without repair; absent second countability is an audit obligation, not an inferred refutation. Excision requires the actual correctly directed inclusion-induced R-linear map in all degrees. Concurrent atlas work remains excluded. Exact three-row tail and successor policy verified. Strategy-only packet has no Lean fixture or new theorem hashes. Ledger untouched."},
     :replacement-items
     [{:consumer :t01J04,
       :stop-condition
@@ -9961,7 +9976,7 @@
     "Preserve the independently reviewed t96J05 refutation without retry or silent repair. Elect exactly one fresh near-closure adapter, t01J04, whose literal manifold-with-boundary conclusion needs an exact hypothesis audit, particularly absence of second countability. Rank remaining work across the DAG: completed covering constructors require no repetition; global regular-fiber atlas work is reserved by the other campaign; unresolved orientation, gluing, classification and numerical normalization boundaries remain. Explicit-coefficient excision serves four concrete proposed consumers and now has reviewed relative complexes, pair maps, natural connecting morphisms and H0 endpoints beneath it. Elect that missing geometric chain comparison rather than further pair-map aliases or a premature full sphere-table retry.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: radial-level scope and explicit H0 uptake",
@@ -9983,7 +9998,7 @@
    :stop-condition
    "Preserve the exact separation, boundarylessness, dimension-zero and neighborhood hypotheses. No assumed second countability, regular boundary value or manifold-with-boundary atlas.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: exact closed-neighborhood manifold-with-boundary consumer",
@@ -10016,7 +10031,7 @@
    :stop-condition
    "No assumed small-chain quasi-isomorphism, subdivision homotopy, excision map invertibility, change-of-coefficients theorem or sphere table.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION/EXCISION: actual relative homology with explicit ring coefficients",
