@@ -35745,6 +35745,25 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788915710398-15765-bc5b5b54",
+     :commands
+     ["git show --stat --oneline 3158eb37169d1e0d587ad067e256f50c382189aa"
+      "git diff-tree --no-commit-id --name-only -r 3158eb37169d1e0d587ad067e256f50c382189aa"
+      "sha256sum /tmp/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpacesProbe.lean"
+      "git show 3158eb37169d1e0d587ad067e256f50c382189aa:ConstructionTargets/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpaces.lean | sed -n '5,48p' | sha256sum"
+      "cmp -s /tmp/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpacesProbe.lean ConstructionTargets/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpaces.lean"
+      "lake env lean /tmp/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpacesProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpaces.lean"
+      "lake build"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "rg -o '\\b(sorry|admit)\\b' ConstructionTargets/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpaces.lean | wc -l"],
+     :finding
+     "PASS: recorded two-file scope, fixture and frozen hashes, theorem orientation, explicit topology/measurable-space boundary, expected axioms, zero source placeholders, unchanged one-placeholder consumer, full build, and worklist gate all reproduced."},
     :commit "3158eb37169d1e0d587ad067e256f50c382189aa",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpaces.lean"
@@ -35757,7 +35776,7 @@
     :declarations
     ["measure_image_zero_of_closedOpen_explicit_topology_measureSpaces"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpaces.lean"
     "ConstructionTargets/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpaces.md"],
@@ -35944,7 +35963,7 @@
       "05032d7011773a483511445597c1a14e82cc5248b0184bbb7b7e679d6ced3c55"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
