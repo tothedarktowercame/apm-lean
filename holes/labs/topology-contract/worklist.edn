@@ -48839,85 +48839,66 @@
     :placeholder-delta
     {:consumer "t93A04", :before 1, :after 1, :delta 0, :fixture 0},
     :residual
-    "Conditional compact rank-zero induction step compiled. Positive-rank smooth reduction, compatible local-domain induction, base cases, full critical-set coverage and manifold transport remain. No unconditional Sard or t93A04 closure claimed; independent review remains.",
+    "Conditional compact rank-zero induction remains compiled. Positive-rank smooth reduction, local-domain induction, base cases, critical-set coverage and manifold transport remain. No unconditional Sard or t93A04 closure claimed. Ledger untouched; corrected evidence awaits review.",
     :gates
-    {:exact-fixture-promotion :pass,
+    {:consumer-hash :pass,
+     :source-pins :pass,
+     :exact-fixture-promotion :pass,
      :compile :pass,
      :build :pass,
      :preserve-genuine-infinity true,
-     :preserve-zero-dimensional-induction-sources true,
-     :frozen-consumer-unchanged true,
-     :scope :pass},
+     :preserve-zero-dimensional-induction-sources true},
+    :repair :evidence-only,
     :outcome :done-unreviewed,
     :warnings [],
     :statement-hashes
     {"SardSmoothCompactRankZeroInductionProbe.compact_rankZero_image_null_of_smooth_local_induction"
      "5e31685184a5563e0124be1cdfcef5e835e62237fd4057acb163986758be95bc"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
-    :documentation
-    {:path "/tmp/SardSmoothCompactRankZeroInduction.md",
-     :sha256
-     "3ff6705b4c48b90ed32eae76a40c8917b2a46c0454a9a6ef771f3134f3acd148"},
     :author :codex-6,
+    :reason
+    "Corrected the mistyped consumer-sha256. Committed consumer bytes and working-tree bytes independently yield the acceptance hash. No Lean changes or new commit needed; supervisor applies the evidence correction.",
     :commands
     [{:cmd
-      "Read DAG certification rules, closure policy, dependency review receipts and assembly sources",
+      "git show 5d84d2edd1225b54fbdfcfedcba515c1533fef01:problems/t93A04/lean/Main.lean | sha256sum",
+      :exit 0,
+      :output
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"}
+     {:cmd
+      "sha256sum problems/t93A04/lean/Main.lean /tmp/SardSmoothCompactRankZeroInduction.lean /tmp/SardSmoothCompactRankZeroInduction-sources.json",
       :exit 0}
      {:cmd
-      "Read-only Python verification of every pinned source hash and comment-stripped consumer placeholder count",
+      "cmp pinned fixture and documentation against promoted files",
       :exit 0}
      {:cmd
-      "cmp pinned fixture and documentation against both promoted files",
+      "Read-only Python verification of source pins and executable consumer placeholder count",
       :exit 0}
      {:cmd
       "lake env lean ConstructionTargets/SardSmoothCompactRankZeroInduction.lean",
-      :exit 0}
-     {:cmd
-      "lake env lean /tmp/SardSmoothCompactRankZeroInduction.lean",
       :exit 0}
      {:cmd
       "lake build ConstructionTargets.SardSmoothCompactRankZeroInduction",
       :exit 0,
       :output "Build completed successfully (8415 jobs)."}
      {:cmd
-      "sed -n '12,27p' ConstructionTargets/SardSmoothCompactRankZeroInduction.lean | sha256sum",
-      :exit 0}
-     {:cmd
-      "rg placeholder and prohibited-declaration scan over promoted Lean file",
-      :exit 1,
-      :expected-exit 1}
-     {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-      :exit 0,
-      :output "374 items OK"}
-     {:cmd
-      "git diff --exit-code -- problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
       :exit 0}
-     {:cmd "git diff --check; git diff --cached --check", :exit 0}
-     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git diff --check", :exit 0}
      {:cmd "git status --porcelain=v1",
       :exit 0,
       :output
-      "Only unrelated untracked holes/labs/topology-contract/runs2/ remains; untouched."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-10",
-     :job "invoke-1788975751876-16708-489a02ab",
-     :finding
-     "Deterministic evidence-hash defect: this row's :evidence :consumer-sha256 is 4431ba028376d7a85867d9ec81e3ac94a64d891661c7ee149701461a56d3fea, missing b after 85867. Replace it with 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea, independently recomputed from commit 5d84d2edd1225b54fbdfcfedcba515c1533fef01:problems/t93A04/lean/Main.lean and matching the acceptance hash and source manifest. No Lean repair needed: exact scope, fixture/source hashes, statement hash, unchanged consumer placeholder count, focused build and both compilations pass; theorem preserves genuine infinity and zero-dimensional induction sources. Ledger untouched."},
+      "Only unrelated untracked holes/labs/topology-contract/runs2/; untouched."}],
     :commit "5d84d2edd1225b54fbdfcfedcba515c1533fef01",
-    :changed-paths
-    ["ConstructionTargets/SardSmoothCompactRankZeroInduction.lean"
-     "ConstructionTargets/SardSmoothCompactRankZeroInduction.md"],
+    :changed-paths [],
     :fixture
     {:path "/tmp/SardSmoothCompactRankZeroInduction.lean",
      :sha256
      "b253ed6a67b8d0fc2d8d7bcc6866e05daacd6168050e4a4193c99e5902a2d236",
      :placeholder-count 0},
     :consumer-sha256
-    "4431ba028376d7a85867d9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
+    "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardSmoothCompactRankZeroInduction.lean"
     "ConstructionTargets/SardSmoothCompactRankZeroInduction.md"],
