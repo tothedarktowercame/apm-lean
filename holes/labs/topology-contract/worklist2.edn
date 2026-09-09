@@ -9209,94 +9209,98 @@
    :stop-condition
    "Construct maps on the actual relative quotients. No supplied short-complex morphism, assumed connecting-map naturality, excision, sphere table or change-of-coefficients theorem.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Constructed coefficient-specific pair maps, functoriality, exactness and connecting-map naturality are ready for implementation. Excision and sphere computations remain separate.",
-     :axiom-audits 11,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture. Preserve the actual image-quotient descent, commuting squares, relative-map functoriality and orientation of the connecting equation.",
-      :namespace "ConstructionTargets.RelativePairNaturality",
-      :hypotheses
-      "R : Type with CommRing R; X,Y,Z : Type with their topologies; arbitrary subsets A,B,D; continuous maps with explicit MapsTo proofs. All spaces and the coefficient ring are universe zero. No exactness or short-complex morphism is supplied as a hypothesis.",
-      :declarations
-      ["submap"
-       "inclusion_square"
-       "arrowMap"
-       "relativeMap"
-       "projection_square"
-       "pairMap"
-       "relativeMap_id"
-       "relativeMap_comp"
-       "connecting"
-       "connecting_naturality"
-       "singularPairHomology_exact_subspace"
-       "singularPairHomology_exact_absolute"
-       "singularPairHomology_exact_relative"
-       "integral_disk_identity"
-       "rational_disk_identity"
-       "diskNeg"
-       "diskNeg_boundary"
-       "diskNeg_ne_id"
-       "rational_disk_neg_naturality"],
-      :consumer-equation
-      "H(relativeMap f) followed by the target connecting map equals the source connecting map followed by H(submap f). The actual coefficient-specific pair sequence is exact at subspace, absolute and relative homology.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target."
-       "Run lake build ConstructionTargets.RelativePairNaturality ConstructionTargets.RelativeSingularCoefficients."
-       "Reproduce all eleven standard-only axiom audits."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."],
-      :consumer-residual
-      "Coefficient-general excision, sphere suspension and degree-one endpoints remain downstream before the exact rational S2 witnesses. No arbitrary coefficient-change naturality or frozen closure is claimed."},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd "bb dependency-review query for both prerequisites",
-       :exit 0}
-      {:cmd "lake env lean /tmp/RelativePairNaturality.lean", :exit 0}
-      {:cmd "sha256sum /tmp/RelativePairNaturality.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/RelativePairNaturality.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "Initial and two subsequent lake env lean /tmp/RelativePairNaturality.lean attempts",
-       :exit 1,
-       :attempts 3,
-       :correction
-       "Exposed the constructed arrow-map components in image.map_ι and reduced the arrow definition before reassociating the cokernel equation."}
-      {:cmd
-       "Fourth lake env lean /tmp/RelativePairNaturality.lean attempt",
-       :exit 1,
-       :correction
-       "Corrected generated exactness declaration names, supplied disk-negation continuity, and made projection epimorphism obligations explicit."}
-      {:cmd
-       "Fifth lake env lean /tmp/RelativePairNaturality.lean attempt",
-       :exit 1,
-       :correction
-       "Obtained projection epimorphisms from the proved pair short exactness instead of relying on typeclass unfolding through the quotient definitions."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/RelativePairNaturality.lean",
-      :sha256
-      "75186dfb83701db491a8e971decd2fd69b7be5231418101506f7a50188c96daf"},
-     :finding
-     "The complete packet compiles. A continuous map preserving the subspaces induces actual subspace and absolute chain maps. Their inclusion square constructs an image map, which descends through the reviewed relative cokernel quotient. The projection square, relative identity and composition laws, and morphism of pair short complexes are proved. All three homology exactness positions and connecting-map naturality follow for these constructed maps. Integer and rational disk-boundary identity examples compile. Disk negation preserves the boundary, is proved nonidentity, and satisfies the rational connecting naturality equation.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/RelativePairNaturality.lean"
-       "ConstructionTargets/RelativePairNaturality.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Coefficient-general excision, sphere suspension and degree-one endpoints remain downstream before exact rational S2 witnesses. No change-of-coefficients theorem, sphere table or frozen closure claimed.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :eleven-axiom-audits :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 11,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed one unused-section-variable warning at ConstructionTargets/SingularHomologyConcrete.lean:127 for directDiscreteH0Iso_pointInclusion. Fixture and canonical compilations were warning-free."],
+    :statement-hashes
+    {"relativeMap_comp"
+     "7e4702cd7c7ff02e70f40ba14cc103cae2f86eb679a72460e5ea95ba8d50243b",
+     "integral_disk_identity"
+     "ae173cec215b9642725879e9c03d782ae8c256754b122e26cfa5910a374d58df",
+     "relativeMap_id"
+     "04a386cfeed4ceb9f0184a9f4b0d3441c7c796a3569b9804237558d68344aa47",
+     "diskNeg_ne_id"
+     "a8511d8903a49bcf1fa8df880f0499453b32b261c74b63e43ffed372639a8e31",
+     "singularPairHomology_exact_subspace"
+     "8648da01f3316a744a72a0a0f000bee5e05a4750a638f716081201481f3a6852",
+     "pairMap"
+     "a060cb9abcacc0bd24ddaebec8320272771d9e42d6d00fb6dd1018edddb5e5a3",
+     "rational_disk_neg_naturality"
+     "ad660124ad7adab799f940bc9b0913c07be5af113f531829453ea6f05301c2b4",
+     "singularPairHomology_exact_absolute"
+     "e588ab5c8e236d5923a13de75fc7dfaf27dd274650fd43d4d41087c54453b519",
+     "connecting_naturality"
+     "6031f4a5d70de4204d25ff513cbe3a43409e449986dc70483e51093997c46005",
+     "rational_disk_identity"
+     "9bf4ee0ca86eacd9966e0cda0659923f4fd230feb4c974641d763a1d3b030210",
+     "singularPairHomology_exact_relative"
+     "60f2862dd3bd73c13eaaec2051ad8610c306c68cca5ae93dbfcee4ce58234a69"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/RelativePairNaturality.lean", :exit 0}
+     {:cmd "lake env lean /tmp/RelativePairNaturality.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RelativePairNaturality.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.RelativePairNaturality ConstructionTargets.RelativeSingularCoefficients",
+      :exit 0}
+     {:cmd
+      "Python audit: exact promotion, fixture SHA256, eleven standard-only audits per compilation, warnings, placeholders and declaration hashes",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/RelativePairNaturality.lean /tmp/RelativePairNaturality.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope verification and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct relative pair maps and connecting homology naturality\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope and clean checkout verification",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and dependency evidence. Only the authorized two files changed; ledger and frozen consumers untouched. Checkout clean.",
+    :diagnostic-history [],
+    :commit "60d0daca2b7f4fdcb342580e60bf7218c67f28a5",
+    :changed-paths
+    ["ConstructionTargets/RelativePairNaturality.lean"
+     "ConstructionTargets/RelativePairNaturality.md"],
+    :consumer-equation
+    "H(relativeMap f) followed by the target connecting map equals the source connecting map followed by H(submap f).",
+    :dependency-commit "2b73ce416afd6b9aeab937a80839996c59ddf422",
+    :fixture
+    {:path "/tmp/RelativePairNaturality.lean",
+     :sha256
+     "75186dfb83701db491a8e971decd2fd69b7be5231418101506f7a50188c96daf"},
+    :finding
+    "Exact fixture promoted, preserving image-quotient descent, inclusion and projection squares, relative identity and composition laws, three homology exactness positions and connecting naturality. Integer and rational identity examples and nonidentity disk-negation naturality compile. Both compilations and the 8242-job build passed.",
+    :statement-hash-method
+    "SHA256 of declaration bytes beginning with def or theorem and ending immediately before the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/RelativePairNaturality.lean"
     "ConstructionTargets/RelativePairNaturality.md"],
