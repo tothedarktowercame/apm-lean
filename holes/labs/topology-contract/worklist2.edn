@@ -8923,6 +8923,22 @@
       :exit 0}
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788993918496-17255-7be36238",
+     :commands
+     ["git show 5e9f126b:holes/labs/topology-contract/worklist2.edn"
+      "git show 813f8511:problems/t01A08/lean/Main.lean"
+      "git show 813f8511:ConstructionTargets/SardGenuineSmoothManifoldVector.lean"
+      "python3 inline audit: pinned census SHA256, all 59 consumer counts, module counts, changed paths, frozen t01A08 SHA256 and transition scope"
+      "bb inline audit: exact replacement tail, successor policy, dependencies and both pinned ledgers' active rows"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 5e9f126b:holes/labs/topology-contract/worklist2.edn)"
+      "git log -3 --oneline 813f8511 -- problems/t93A04/lean/Main.lean"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Census reproduces 71->70 placeholders, solely concurrent t93A04; modules 640->642. Frozen t01A08 hash matches. Its arbitrary-corners and smoothness compatibility obligations remain explicit. Pair naturality requires actual quotient maps and correctly oriented connecting squares; downstream sphere claims remain excluded. Exact three-row tail and successor policy verified; 69-item ledger valid. Strategy-only packet has no Lean fixture or new theorem hashes. Ledger untouched."},
     :replacement-items
     [{:consumer :t01A08,
       :stop-condition
@@ -9066,7 +9082,7 @@
     "Elect exactly one near-closure adapter first: t01A08, whose finite-dimensional regular-value conclusion can now be tested against the newly reviewed manifold-vector Sard producer. Its arbitrary model-with-corners hypotheses remain an explicit compatibility obligation; no self-model assumption may be inserted. Rank the remaining DAG with completed covering constructors removed and unresolved orientation, gluing, atlas and normalization STOPs preserved. The next explicit-coefficient pair packet serves four proposed consumers and uses the newly constructed short exact sequence. Require actual maps of pairs and connecting-map naturality, not aliases for abstract long-exactness. This is a smaller coherent construction than global orientation, surface classification or product homology. The other campaign currently has only its strategy checkpoint open; no overlapping active work row was observed at the final ledger check.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: literal surface classification and relative coefficient uptake",
@@ -9088,7 +9104,7 @@
    :stop-condition
    "Preserve the arbitrary model with corners, finite-dimensional normed source model and second-countability hypotheses. No assumed boundarylessness, self-model atlas, critical-value nullity or regular value.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD: exact affine-line regular-value consumer",
@@ -9120,7 +9136,7 @@
    :stop-condition
    "Construct maps on the actual relative quotients. No supplied short-complex morphism, assumed connecting-map naturality, excision, sphere table or change-of-coefficients theorem.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Relative homology: explicit-coefficient pair maps and natural connecting morphisms",
