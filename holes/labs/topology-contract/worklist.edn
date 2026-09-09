@@ -50232,6 +50232,20 @@
      {:cmd
       "git diff --exit-code -- TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn problems/t94J08/lean/Main.lean problems/t93A04/lean/Main.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788980274475-16845-85960495",
+     :commands
+     ["git show 71c23ef9:holes/labs/topology-contract/worklist.edn"
+      "Independent pinned-Git recomputation of all consumer counts and hashes plus three artifact hashes"
+      "python3 /tmp/topology-refill17-verify.py"
+      "bb assertions comparing all three review-artifact rows against pinned ledger 0c11b8ea"
+      "lake env lean /tmp/T94J08ZeroSphereRefutation.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 71c23ef9"],
+     :finding
+     "Independent of codex-12. Verified 59 named consumers, 58 existing, missing t93A05; 39 open, 19 closed, 29 within two; placeholders unchanged at 71. Modules 617→619 partition correctly into one portfolio and one concurrent addition. Two work-row PASS reviews comprise one mathematical refutation and one conditional implementation, with zero closures. Refutation recompiles using standard axioms: frozen t94J08 incorrectly requires ordinary H0(S0) isomorphic to Z. The explicit mathematical-refutation termination condition justifies no replacement portfolio; this is not an infrastructure stop or a refutation of classical antipodal degree or Sard. Ledger untouched."},
     :campaign-refutation true,
     :refutation
     "The literal frozen t94J08 proposition is false: n=0 requests an ordinary integral H0(S0) isomorphism to Z, whereas the two-point sphere has H0 of rank two. diagnostic_refutes_frozen_theorem proves its exact negation.",
@@ -50296,7 +50310,7 @@
       :implementation-results 1}},
     :seat :codex-12},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :needs-owner,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
