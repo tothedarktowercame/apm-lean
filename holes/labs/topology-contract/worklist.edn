@@ -51185,65 +51185,87 @@
    :stop-condition
    "GO needs the full compiled actual-chart composition. REVISE requires exactly one compiled prerequisite. Identify missing hypotheses without assuming compact coverage, local nullity, arbitrary-C1 induction or measurability.",
    :evidence
-   {:probe
-    {:placeholder-delta
-     {:consumer "t93A04", :before 1, :after 1, :delta 0, :fixture 0},
-     :residual
-     "Conditional open-chart rank-upper nullity only. Global rank-stratum coverage, compatible local-domain induction discharge and base cases, and actual manifold transport remain before unconditional Sard or t93A04 closure.",
-     :dependency-review
-     {:outcome :pass, :job "invoke-1788984222711-16952-c1b80145"},
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:exists_open_rank_upper_image_null
-      "1db8a6f1d743982e682d79be186da36ebe3d24cf7fcd59db2e307764320419e5"},
-     :axioms [propext Classical.choice Quot.sound],
-     :note
-     {:path "/tmp/SardGenuineSmoothOpenRankUpperImageNullity.md",
-      :sha256
-      "abafcee30003068dea05a12a2550c9d6073952825b2fa20339c0945e76cd104f"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/SardGenuineSmoothOpenRankUpperImageNullity.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/audit-open-rank-upper.py", :exit 0}
-      {:cmd
-       "git diff --exit-code -- problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :audit
-     {:path
-      "/tmp/SardGenuineSmoothOpenRankUpperImageNullity-audit.json",
-      :sha256
-      "567e91af6976870b6916a9da740bea1be76368030d4e4c163fb082179021be10"},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/SardGenuineSmoothOpenRankUpperImageNullity.lean",
-      :sha256
-      "9a61a9e727fff7901157aef603d5c23f10f8683dc421b44473e005bf2209dadf"},
-     :finding
-     "Compiled the complete actual-chart composition. Global genuine-infinity smoothness supplies rank-upper closedness; finite-dimensional source topology and chart-source openness supply the existing closed/open compact exhaustion. Each compact lies in the actual source and satisfies the rank bound, so the reviewed compact producer applies. Countable image-null assembly proves original-target Haar nullity of the entire intersection. The sole nullity premise remains local genuine-smooth induction over every strictly smaller source, including dimension zero.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/SardGenuineSmoothOpenRankUpperImageNullity.lean"
-       "ConstructionTargets/SardGenuineSmoothOpenRankUpperImageNullity.md"],
-      :acceptance
-      {:source-pins
-       "Verify fixture, note and producer hashes against the audit.",
-       :compile
-       ["lake env lean /tmp/SardGenuineSmoothOpenRankUpperImageNullity.lean"
-        "lake env lean ConstructionTargets/SardGenuineSmoothOpenRankUpperImageNullity.lean"
-        "lake build ConstructionTargets.SardGenuineSmoothOpenRankUpperImageNullity"],
-       :statement "Preserve audited theorem statement.",
-       :axioms :standard-only,
-       :placeholders 0,
-       :consumer
-       "Preserve t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea and its one placeholder.",
-       :scope
-       "Commit only the two scoped files after git diff --check; no DAG, ledger, existing producer or track-2 edits."}},
-     :seat :codex-12}},
+   {:placeholder-delta
+    {:consumer "t93A04", :before 1, :after 1, :delta 0, :fixture 0},
+    :residual
+    "Conditional open-chart rank-upper image nullity compiled using derived closedness, compact exhaustion and countable image-null assembly. Global rank-stratum coverage, compatible local-domain induction discharge and base cases, and manifold transport remain. No unconditional Sard or t93A04 closure claimed; independent review remains.",
+    :gates
+    {:exact-promotion :pass,
+     :producer-hashes :pass,
+     :statement-preserved :pass,
+     :compile :pass,
+     :build :pass,
+     :consumer-unchanged :pass,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:exists_open_rank_upper_image_null
+     "1db8a6f1d743982e682d79be186da36ebe3d24cf7fcd59db2e307764320419e5"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :note
+    {:path "/tmp/SardGenuineSmoothOpenRankUpperImageNullity.md",
+     :sha256
+     "abafcee30003068dea05a12a2550c9d6073952825b2fa20339c0945e76cd104f"},
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, dependency PASS receipt, fixture and note",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardGenuineSmoothOpenRankUpperImageNullity-audit.json",
+      :exit 0}
+     {:cmd
+      "Read-only Python verification of fixture, note, producer hashes, statement hash and executable placeholder counts",
+      :exit 0}
+     {:cmd "cmp pinned fixture and note against promoted files",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardGenuineSmoothOpenRankUpperImageNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardGenuineSmoothOpenRankUpperImageNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardGenuineSmoothOpenRankUpperImageNullity",
+      :exit 0,
+      :output "Build completed successfully (8356 jobs)."}
+     {:cmd
+      "rg placeholder and prohibited-declaration scan over promoted Lean file",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output "390 items OK"}
+     {:cmd
+      "git diff --exit-code -- problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check; git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output
+      "Only unrelated untracked holes/labs/topology-contract/runs2/ remains; untouched."}],
+    :audit
+    {:path
+     "/tmp/SardGenuineSmoothOpenRankUpperImageNullity-audit.json",
+     :sha256
+     "567e91af6976870b6916a9da740bea1be76368030d4e4c163fb082179021be10",
+     :verified true},
+    :commit "699245a3278b206155feeb60881e7ead1903dffd",
+    :changed-paths
+    ["ConstructionTargets/SardGenuineSmoothOpenRankUpperImageNullity.lean"
+     "ConstructionTargets/SardGenuineSmoothOpenRankUpperImageNullity.md"],
+    :fixture
+    {:path "/tmp/SardGenuineSmoothOpenRankUpperImageNullity.lean",
+     :sha256
+     "9a61a9e727fff7901157aef603d5c23f10f8683dc421b44473e005bf2209dadf",
+     :placeholder-count 0},
+    :consumer-sha256
+    "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardGenuineSmoothOpenRankUpperImageNullity.lean"
     "ConstructionTargets/SardGenuineSmoothOpenRankUpperImageNullity.md"],
