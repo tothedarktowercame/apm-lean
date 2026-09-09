@@ -2937,98 +2937,97 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Exactly one compiled prerequisite supplied. Component inclusion naturality and continuous global lift assembly, including the empty domain, remain in the parent row.",
-     :outcome :revise,
+     "Promote and independently review this complete topological prerequisite. Then combine the finite-H1 diagnostic with component normalization, inclusion naturality, covering lifts, and this assembly in an exact t97A02 closure fixture; no frozen closure is claimed here.",
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t97A02-component-lifting,
-      :stop-condition
-      "Bank only the local-connectivity conversion, component domain hypotheses, and conditional component covering-lift application. Do not assume global path connectivity, strengthen classical local contractibility, or claim global component assembly.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/ClassicalLocalPathConnectivityProbe.lean",
-         :sha256
-         "16a99e9bcff7464eb85dfca8eb59a05ca592b0710c18ebcc1694791c1e10b89e"},
-        :commands
-        [{:cmd
-          "lake env lean /tmp/ClassicalLocalPathConnectivityProbe.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/ClassicalLocalPathConnectivity.lean"
-       "ConstructionTargets/ClassicalLocalPathConnectivity.md"],
-      :dag-node
-      "CIRCLE/SPHERE INVARIANTS: classical local contractibility supplies covering-lift domain hypotheses",
-      :acceptance
-      {:implementation
-       "Promote the exact fixture. Preserve the path construction from the null-homotopic inclusion, component topology proofs, and concrete covering-lift application. Document that component loop triviality remains a premise of the last theorem and that global assembly is downstream.",
-       :declarations
-       ["ConstructionTargets.ClassicalLocalPathConnectivity.locPathConnected_of_classical"
-        "ConstructionTargets.ClassicalLocalPathConnectivity.component_locPathConnected"
-        "ConstructionTargets.ClassicalLocalPathConnectivity.component_pathConnected"
-        "ConstructionTargets.ClassicalLocalPathConnectivity.component_real_lift"],
-       :consumer-equation
-       "For classically locally contractible X, f : C(X,Circle), and x with f(x)=1, triviality of the actual induced loop map on connectedComponent x yields F : C(connectedComponent x,Real) with F(x)=0 and Circle.exp(F(y))=f(y) for every component point y.",
-       :consumer-residual
-       "Prove component inclusion naturality to obtain the loop premise from the ambient homological result. Construct the continuous global lift from component lifts, including the empty domain, then its explicit null-homotopy. Do not claim full t97A02 closure before these steps compile.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA-256 before implementation."
-        "Compile fixture and canonical target."
-        "Run lake build ConstructionTargets.ClassicalLocalPathConnectivity ConstructionTargets.CircleUniversalCover."
-        "Reproduce all four printed axiom audits; permit only propext, Classical.choice, Quot.sound."
-        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."]},
-      :id :classical-local-contractibility-path-components-1,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :current-residual
-      "The frozen classical local-contractibility hypothesis has no banked conversion to locally path-connected component domains.",
-      :other-consumers
-      [:circle-valued-map-lifting :covering-lift-component-assembly]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :author "codex-13",
      :commands
      [{:cmd "realpath .lake/packages", :exit 0}
-      {:cmd
-       "lake env lean /tmp/ClassicalLocalPathConnectivityProbe.lean",
+      {:cmd "lake env lean /tmp/ComponentRealLiftAssemblyProbe.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/ClassicalLocalPathConnectivityProbe.lean",
+      {:cmd "sha256sum /tmp/ComponentRealLiftAssemblyProbe.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/ClassicalLocalPathConnectivityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/ComponentRealLiftAssemblyProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :repository-note
-     "Read-only probe; canonical package authority verified. Reviewed t97A02 STOP and diagnostic inspected. Repository files unchanged.",
+     "Read-only probe; canonical package authority and dependency PASS verified. Repository files unchanged.",
      :changed-paths [],
+     :dependency-commit "f8d3d38156369e16f70d38f9991ffaf88b957263",
      :fixture
-     {:path "/tmp/ClassicalLocalPathConnectivityProbe.lean",
+     {:path "/tmp/ComponentRealLiftAssemblyProbe.lean",
       :sha256
-      "16a99e9bcff7464eb85dfca8eb59a05ca592b0710c18ebcc1694791c1e10b89e"},
+      "c79a403303887e39689f2a787d278f478c93165772721545a4cc199fd9d6633d"},
      :finding
-     "Compiled exactly one local-connectivity prerequisite. Classical local contractibility supplies a neighborhood inclusion null-homotopy; its evaluated paths join every point of the smaller neighborhood to its center inside the original neighborhood. This proves LocPathConnectedSpace without assuming strongly local contractibility. Connected components are then locally path-connected and path-connected. The fixture instantiates the actual Circle covering criterion on a component and proves its normalized lift equation from an explicit component-loop triviality premise. Global component assembly, empty-domain handling, and inclusion naturality remain unproved, so the parent is not GO.",
+     "Complete prerequisite packet compiles. The connected-component quotient has open fibers; the canonical sigma-fiber equivalence is proved continuous and open, yielding an actual homeomorphism onto X. Continuous component lifts assemble through its inverse into a continuous global real lift, with the pointwise exponential equation proved. Its explicit real contraction gives a null-homotopy to 1. No nonempty-domain assumption is used, and an explicit empty-domain lift also compiles. Fibers are identified with connected components, whose path connectivity follows from the banked classical-local-contractibility conversion. Actual component-inclusion loop naturality transfers ambient loop triviality.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/ComponentRealLiftAssembly.lean"
+       "ConstructionTargets/ComponentRealLiftAssembly.md"],
+      :acceptance
+      {:implementation
+       "Promote the exact compiled fixture. Document the open-component decomposition, actual assembly formula, empty-domain coverage, and inclusion-map naturality. Preserve the distinction between component-lift assembly and the remaining finite-H1 consumer application.",
+       :declarations
+       ["ConstructionTargets.ComponentRealLiftAssembly.componentDecomposition"
+        "ConstructionTargets.ComponentRealLiftAssembly.assembledLift"
+        "ConstructionTargets.ComponentRealLiftAssembly.assembledLift_apply"
+        "ConstructionTargets.ComponentRealLiftAssembly.exists_global_lift"
+        "ConstructionTargets.ComponentRealLiftAssembly.nullhomotopic_of_component_lifts"
+        "ConstructionTargets.ComponentRealLiftAssembly.component_loop_naturality"
+        "ConstructionTargets.ComponentRealLiftAssembly.componentFiber_eq"
+        "ConstructionTargets.ComponentRealLiftAssembly.componentFiber_pathConnected"
+        "ConstructionTargets.ComponentRealLiftAssembly.component_loop_trivial"
+        "ConstructionTargets.ComponentRealLiftAssembly.classical_component_lifts_nullhomotopic"
+        "ConstructionTargets.ComponentRealLiftAssembly.empty_domain_lift"],
+       :consumer-equation
+       "assembledLift F x = F [x] (x,rfl), hence Circle.exp(assembledLift F x)=f x. The constructed homotopy is (t,x) ↦ Circle.exp((1-t)*assembledLift F x). For component inclusion i, pi1(f composed with i)(p)=pi1(f)(pi1(i)(p)), so ambient loop triviality implies component loop triviality.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA-256 before implementation."
+        "Compile fixture and canonical target."
+        "Run lake build ConstructionTargets.ComponentRealLiftAssembly ConstructionTargets.ClassicalLocalPathConnectivity ConstructionTargets.CircleUniversalCover."
+        "Reproduce all nine printed axiom audits; permit only propext, Classical.choice, Quot.sound."
+        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."],
+       :stop-condition
+       "Do not claim finite-H1 or frozen t97A02 closure from supplied component lifts alone. The consumer must construct those lifts using the homological diagnostic, normalization, and actual inclusion naturality."}},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/ComponentRealLiftAssembly.lean"
+    "ConstructionTargets/ComponentRealLiftAssembly.md"],
    :dag-node
    "CIRCLE/SPHERE INVARIANTS and COVERING-BASIC: local connectivity and componentwise lift assembly",
    :acceptance
-   {:probe
-    "Read the reviewed t97A02 STOP and its compiled diagnostics. Under precisely the frozen local hypotheses, derive LocPathConnectedSpace from the actual classical local-contractibility definition. Construct the open connected-component decomposition and prove that continuous real lifts on those components assemble to a continuous global lift of the actual Circle map. Include empty-domain handling. Prove the component inclusion naturality equation needed to restrict the already established ambient loop-triviality result.",
+   {:implementation
+    "Promote the exact compiled fixture. Document the open-component decomposition, actual assembly formula, empty-domain coverage, and inclusion-map naturality. Preserve the distinction between component-lift assembly and the remaining finite-H1 consumer application.",
+    :declarations
+    ["ConstructionTargets.ComponentRealLiftAssembly.componentDecomposition"
+     "ConstructionTargets.ComponentRealLiftAssembly.assembledLift"
+     "ConstructionTargets.ComponentRealLiftAssembly.assembledLift_apply"
+     "ConstructionTargets.ComponentRealLiftAssembly.exists_global_lift"
+     "ConstructionTargets.ComponentRealLiftAssembly.nullhomotopic_of_component_lifts"
+     "ConstructionTargets.ComponentRealLiftAssembly.component_loop_naturality"
+     "ConstructionTargets.ComponentRealLiftAssembly.componentFiber_eq"
+     "ConstructionTargets.ComponentRealLiftAssembly.componentFiber_pathConnected"
+     "ConstructionTargets.ComponentRealLiftAssembly.component_loop_trivial"
+     "ConstructionTargets.ComponentRealLiftAssembly.classical_component_lifts_nullhomotopic"
+     "ConstructionTargets.ComponentRealLiftAssembly.empty_domain_lift"],
     :consumer-equation
-    "If each component restriction of f has a continuous real lift Fc, the constructed F satisfies Circle.exp(F x)=f x for every x. Its explicit real contraction gives a null-homotopy of f; component loop triviality is obtained through the actual inclusion map.",
+    "assembledLift F x = F [x] (x,rfl), hence Circle.exp(assembledLift F x)=f x. The constructed homotopy is (t,x) ↦ Circle.exp((1-t)*assembledLift F x). For component inclusion i, pi1(f composed with i)(p)=pi1(f)(pi1(i)(p)), so ambient loop triviality implies component loop triviality.",
     :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA-256 before implementation."
+     "Compile fixture and canonical target."
+     "Run lake build ConstructionTargets.ComponentRealLiftAssembly ConstructionTargets.ClassicalLocalPathConnectivity ConstructionTargets.CircleUniversalCover."
+     "Reproduce all nine printed axiom audits; permit only propext, Classical.choice, Quot.sound."
+     "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."],
     :stop-condition
-    "GO requires the local-connectivity conversion and actual component assembly, without supplied global lift or strengthened connectivity. REVISE only to one compiled prerequisite with an exact consumer equation. Do not re-elect or claim full t97A02 closure until this reviewed boundary is resolved."},
+    "Do not claim finite-H1 or frozen t97A02 closure from supplied component lifts alone. The consumer must construct those lifts using the homological diagnostic, normalization, and actual inclusion naturality."},
    :id :oriented-successor-local-contractibility-component-lifts-1,
    :kind :reusable-theorem,
    :depends-on
