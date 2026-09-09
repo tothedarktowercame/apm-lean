@@ -40016,6 +40016,24 @@
      {:cmd
       "git add ConstructionTargets/SardC1ParameterizedFlatLocusNullity.lean ConstructionTargets/SardC1ParameterizedFlatLocusNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: prove exact C1 parameterized flat locus nullity' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788930084156-16050-636b168c",
+     :commands
+     ["git show 78a647962833c8a94cbd294614577af96e90dcc8 --stat --oneline"
+      "sha256sum /tmp/SardC1ParameterizedFlatLocusNullityProbe.lean"
+      "cmp fixture recorded-source"
+      "git show commit:ConstructionTargets/SardC1ParameterizedFlatLocusNullity.lean | sed -n '5,19p' | sha256sum"
+      "lake env lean /tmp/SardC1ParameterizedFlatLocusNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardC1ParameterizedFlatLocusNullity.lean"
+      "set -o pipefail; lake build ConstructionTargets.SardC1ParameterizedFlatLocusNullity 2>&1 | awk '/warning:|error:|Build completed/ {print}'"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check commit^ commit"
+      "git diff --exit-code commit -- ConstructionTargets"
+      "consumer hash and placeholder checks"],
+     :finding
+     "Commit 78a64796 has exact scope and matching fixture/frozen hashes. Derivative zero sets are closed; continuity on U supplies the relative closed-preimage representation with correct equality orientation. Exact flat locus, derivative orders and target measure are preserved. Standard axioms only, zero scoped placeholders, all gates passed."},
     :commit "78a647962833c8a94cbd294614577af96e90dcc8",
     :changed-paths
     ["ConstructionTargets/SardC1ParameterizedFlatLocusNullity.lean"
@@ -40027,7 +40045,7 @@
     :declarations
     ["C1_parameterized_flat_locus_image_addHaar_eq_zero"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardC1ParameterizedFlatLocusNullity.lean"
     "ConstructionTargets/SardC1ParameterizedFlatLocusNullity.md"],
@@ -40200,7 +40218,7 @@
       "e338a616dfe4649b9586bffc44ca6f83daa890feab49c39752d4905844e0910b"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
