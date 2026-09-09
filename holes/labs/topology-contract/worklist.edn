@@ -48504,8 +48504,149 @@
      :review-outcomes]},
    :stop-condition
    "End only on all consumers closed or an exact mathematical refutation. Missing infrastructure and owner authorization do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :seat :codex-12,
+    :commands
+    [{:cmd "python3 /tmp/topology-refill13-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill13-audit.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill13-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill13-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "git diff --exit-code 364d094e b8d8e031 -- TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}],
+    :finding
+    {:baseline "364d094e2ca9e538099ce1567c1172de2aec23c9",
+     :election-rationale
+     ["Elect exactly one near-closure adapter first: t03J06 has one placeholder, and its historical integral theorem was inspected at a pinned revision. Its remaining smoothness and exterior-derivative calculation is explicit finite calculus; the historical final adapter assumes those facts, so full closure must prove them."
+      "Previously probed a97J08, t02A08, t00A01 and t95J04 retain their reviewed boundaries. Other near-closure alternatives include independent graph-cover realization, polygon invariant computations, surface classification and quotient-manifold constructions. The capped-cylinder election tests full closure rather than promoting another partial historical packet."
+      "Across shared foundations, retain the five-consumer Sard branch for a compact rank-zero induction step that consumes the newly banked local theorem and existing finite-jet/Taylor assembly. Concurrent localization is measured separately and not duplicated. Downstream reach does not mean immediate consumer closure."
+      "Rerank the complete DAG after these two rows; unchanged consumer counts remain explicit."],
+     :measured-head "b8d8e031ba1b8351f9be6ceb586a167a504706ff",
+     :placeholder-delta
+     {:open 42,
+      :closed 16,
+      :total-before 76,
+      :method
+      "Comment-stripped executable sorry census over all DAG consumer identifiers, using pinned Git source.",
+      :named-consumers 59,
+      :total-after 76,
+      :existing-files 58,
+      :delta 0,
+      :sha256
+      "96de0970580d09ab8437b8df9eff73bfeb15666322888f0cb23708e885ffac8e",
+      :artifact "/tmp/topology-refill13-measure.json",
+      :within-two 32,
+      :missing-files ["t93A05"]},
+     :campaign-refutation false,
+     :infrastructure-packets
+     {:construction-module-delta 3,
+      :concurrent-module-additions 2,
+      :portfolio-reviewed-implementations 1,
+      :construction-modules-after 604,
+      :portfolio-module-additions 1,
+      :construction-modules-before 601,
+      :sha256
+      "d556658d177de84c52c154d3f620c0766a05847107070d0e6e7b721689ccf5bd",
+      :artifact "/tmp/topology-refill13-infrastructure.json",
+      :concurrent-modules
+      ["CircleAngleTransition" "CircleCoherentFundamentalClass"]},
+     :portfolio-artifact
+     {:path "/tmp/topology-refill13-tail.edn",
+      :sha256
+      "babc96f0d6b48c376aa2fd769ec6327c91fc72f19db096357969345fcd406813"},
+     :validation
+     "Fresh identities and final checkpoint dependencies verified. Temporary combined ledger passes with 374 items, including three new blocked rows. No canonical source, DAG or ledger edits.",
+     :typed-residual-change
+     {:a97J08
+      "Reviewed STOP: whole-complement boundedness constructs a noncontractible circle, but the frozen bounded-component hypothesis still needs the planar separation/winding producer. No hypothesis substitution or refutation.",
+      :smooth-local-induction
+      "Reviewed 6c4f3d0b6c7f581738f2b3a841d36da148a6f49d connects the actual restricted chart, zero-coordinate containment and strict kernel dimension drop to genuine-infinity lower-dimensional local induction. Compact rank-zero assembly still requires deriving higher-jet nullity from this producer."},
+     :review-outcomes
+     {:pass 2,
+      :reviewed-implementation 1,
+      :reviewed-stop 1,
+      :consumer-closures 0,
+      :artifact "/tmp/topology-refill13-reviewed-outcomes.edn",
+      :sha256
+      "2483a5f7dc9cca532ae43fdc54c69d3af9d05df907e2fa9374d90780ec9bef96"}},
+    :replacement-items
+    [{:consumer "t03J06",
+      :stop-condition
+      "If full closure cannot be compiled, STOP naming the exact remaining calculus, integral or representation theorem. Distinguish missing infrastructure from refutation; no conditional final adapter counts as GO.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "STOKES AND MOMENTS / capped-cylinder explicit form",
+      :acceptance
+      {:probe
+       "GO requires a complete placeholder-free compiled copy of problems/t03J06/lean/Main.lean preserving every frozen definition and conjunct. Audit the historical CappedCylinderSurfaceIntegral, CappedCylinderHemisphereIntegral and T03J06FinalAdapter dependency packet on qualification/library-loop-t00J02-solver at its pinned revision, and compare its literal parametrizations with the current frozen bulletIntegral. Prove genuine smoothness of the specified alternating form and its coordinate exterior derivative equal to 3, using coefficient uniqueness and explicit calculus; reuse the frozen consequences for nonzero derivative and nonexactness. Reconcile all exact types and compile the full 7*pi conclusion. Do not assume a Stokes bridge, derivative computation, integrability or integral value, or promote a partial historical packet as closure. Historical sources may be staged in temporary probe space with pinned hashes, never merged wholesale.",
+       :frozen-file "problems/t03J06/lean/Main.lean",
+       :frozen-sha256
+       "e1c06a2dddd2b73bd565c0eba0cd2c6026b2c1fdf90e70251c6e1c18e06ee285",
+       :historical-revision "8c0ea03bf42e418f43b62bc68d1ae6afb0b8def6",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t03j06-frozen-capped-cylinder-closure-probe-refill13,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-13-after-planar-and-local-induction],
+      :current-residual
+      "One placeholder packages smoothness, exterior derivative equal to 3, nonexactness and the 7*pi integral. Historical capped-cylinder modules address the integral; the finite coefficient/exterior-derivative calculation remains."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO needs the complete compiled producer and compact rank-zero conclusion. REVISE requires exactly one compiled prerequisite. Otherwise identify the exact boundary; infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / compact smooth rank-zero induction step",
+      :acceptance
+      {:probe
+       "Compile compact rank-zero image nullity for globally ContDiff real genuine infinity f between nontrivial finite-dimensional real inner-product spaces and a compact K on which fderiv is zero, with actual target Haar measure. The sole nullity input may be the local genuinely smooth critical-image induction hypothesis for every strictly smaller finite-dimensional source, including zero-dimensional sources. Select scalar directions from nonzero jets using existing producers, invoke SardSmoothFirstNonzeroJetLocalInduction, aggregate its open neighborhoods with SardFirstNonzeroJetLocusLocalAggregation, and feed the derived higher-jet nullity into compact_rankZero_image_zero_of_admissible_higherJets. Choose and justify a sufficient finite Taylor order from smoothness and the dimensions. No supplied higher-jet nullity, local-piece nullity, arbitrary-C1 induction, analytic omega substitution or global flatness inferred from first derivative zero. Reuse existing finite-jet decomposition and flat-locus Taylor bounds. If this exact theorem already exists, reuse it and identify the next consumer edge rather than duplicate it.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Conditional compact rank-zero induction step only. Positive-rank reduction with preserved smoothness, compatible local-domain induction, base cases, full critical-set coverage and actual manifold transport remain before unconditional Sard or t93A04 closure."},
+      :id :sard-smooth-compact-rank-zero-induction-probe-refill13,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-13-after-planar-and-local-induction],
+      :current-residual
+      "The actual smooth local first-nonzero-jet induction step is reviewed. Compact rank-zero nullity still assumes higher-jet image nullity instead of deriving it from that producer and lower-dimensional smooth induction.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Only all consumers closed or an exact mathematical refutation ends the campaign; infrastructure absence and owner authorization do not.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount executable consumer placeholders at pinned revisions, compare typed residual changes, distinguish portfolio infrastructure from concurrent additions, and record reviewed STOP/PASS outcomes. Elect exactly one near-closure adapter before shared foundations ordered by downstream reach and simplicity; append a fresh checkpoint depending on every newly elected work row. Return a nonempty portfolio."},
+      :id
+      :checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t03j06-frozen-capped-cylinder-closure-probe-refill13
+       :sard-smooth-compact-rank-zero-induction-probe-refill13],
+      :current-residual
+      "Await both reviewed rows, then rerank the entire DAG including unrelated consumers and concurrent localization work."}],
+    :author :codex-12,
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -48519,6 +48660,79 @@
     :checkpoint-full-dag-refill-12-after-degree-and-jet-chart],
    :current-residual
    "Await both reviewed outcomes, then rerank the complete DAG including unrelated near-closure consumers and concurrent localization progress."}
+  {:consumer "t03J06",
+   :stop-condition
+   "If full closure cannot be compiled, STOP naming the exact remaining calculus, integral or representation theorem. Distinguish missing infrastructure from refutation; no conditional final adapter counts as GO.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "STOKES AND MOMENTS / capped-cylinder explicit form",
+   :acceptance
+   {:probe
+    "GO requires a complete placeholder-free compiled copy of problems/t03J06/lean/Main.lean preserving every frozen definition and conjunct. Audit the historical CappedCylinderSurfaceIntegral, CappedCylinderHemisphereIntegral and T03J06FinalAdapter dependency packet on qualification/library-loop-t00J02-solver at its pinned revision, and compare its literal parametrizations with the current frozen bulletIntegral. Prove genuine smoothness of the specified alternating form and its coordinate exterior derivative equal to 3, using coefficient uniqueness and explicit calculus; reuse the frozen consequences for nonzero derivative and nonexactness. Reconcile all exact types and compile the full 7*pi conclusion. Do not assume a Stokes bridge, derivative computation, integrability or integral value, or promote a partial historical packet as closure. Historical sources may be staged in temporary probe space with pinned hashes, never merged wholesale.",
+    :frozen-file "problems/t03J06/lean/Main.lean",
+    :frozen-sha256
+    "e1c06a2dddd2b73bd565c0eba0cd2c6026b2c1fdf90e70251c6e1c18e06ee285",
+    :historical-revision "8c0ea03bf42e418f43b62bc68d1ae6afb0b8def6",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t03j06-frozen-capped-cylinder-closure-probe-refill13,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-13-after-planar-and-local-induction
+    :checkpoint-full-dag-refill-13-after-planar-and-local-induction],
+   :current-residual
+   "One placeholder packages smoothness, exterior derivative equal to 3, nonexactness and the 7*pi integral. Historical capped-cylinder modules address the integral; the finite coefficient/exterior-derivative calculation remains."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO needs the complete compiled producer and compact rank-zero conclusion. REVISE requires exactly one compiled prerequisite. Otherwise identify the exact boundary; infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / compact smooth rank-zero induction step",
+   :acceptance
+   {:probe
+    "Compile compact rank-zero image nullity for globally ContDiff real genuine infinity f between nontrivial finite-dimensional real inner-product spaces and a compact K on which fderiv is zero, with actual target Haar measure. The sole nullity input may be the local genuinely smooth critical-image induction hypothesis for every strictly smaller finite-dimensional source, including zero-dimensional sources. Select scalar directions from nonzero jets using existing producers, invoke SardSmoothFirstNonzeroJetLocalInduction, aggregate its open neighborhoods with SardFirstNonzeroJetLocusLocalAggregation, and feed the derived higher-jet nullity into compact_rankZero_image_zero_of_admissible_higherJets. Choose and justify a sufficient finite Taylor order from smoothness and the dimensions. No supplied higher-jet nullity, local-piece nullity, arbitrary-C1 induction, analytic omega substitution or global flatness inferred from first derivative zero. Reuse existing finite-jet decomposition and flat-locus Taylor bounds. If this exact theorem already exists, reuse it and identify the next consumer edge rather than duplicate it.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Conditional compact rank-zero induction step only. Positive-rank reduction with preserved smoothness, compatible local-domain induction, base cases, full critical-set coverage and actual manifold transport remain before unconditional Sard or t93A04 closure."},
+   :id :sard-smooth-compact-rank-zero-induction-probe-refill13,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-13-after-planar-and-local-induction
+    :checkpoint-full-dag-refill-13-after-planar-and-local-induction],
+   :current-residual
+   "The actual smooth local first-nonzero-jet induction step is reviewed. Compact rank-zero nullity still assumes higher-jet image nullity instead of deriving it from that producer and lower-dimensional smooth induction.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Only all consumers closed or an exact mathematical refutation ends the campaign; infrastructure absence and owner authorization do not.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount executable consumer placeholders at pinned revisions, compare typed residual changes, distinguish portfolio infrastructure from concurrent additions, and record reviewed STOP/PASS outcomes. Elect exactly one near-closure adapter before shared foundations ordered by downstream reach and simplicity; append a fresh checkpoint depending on every newly elected work row. Return a nonempty portfolio."},
+   :id
+   :checkpoint-full-dag-refill-14-after-capped-cylinder-and-rank-zero,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t03j06-frozen-capped-cylinder-closure-probe-refill13
+    :sard-smooth-compact-rank-zero-induction-probe-refill13
+    :checkpoint-full-dag-refill-13-after-planar-and-local-induction],
+   :current-residual
+   "Await both reviewed rows, then rerank the entire DAG including unrelated consumers and concurrent localization work."}
   {:consumer :t93A04,
    :stop-condition
    "STOP only for a counterexample to the stated local rank-normal-form theorem or hypotheses insufficient to select and invert a nonzero rank minor; otherwise REVISE with exactly one compiled prerequisite.",
