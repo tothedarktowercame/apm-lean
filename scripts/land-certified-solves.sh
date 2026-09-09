@@ -102,10 +102,24 @@ verify() {
     local f="problems/$prob/lean/Main.lean"
     local lower; lower=$(echo "$prob" | tr "[:upper:]" "[:lower:]")
     local a b
-    a=$(git show "master:$f" 2>/dev/null | sed -n "/^theorem apm_${lower}[^_a-z0-9]/,/:=/p" | tr -s "[:space:]" " ")
-    b=$(git show "$branch:$f" 2>/dev/null | sed -n "/^theorem apm_${lower}[^_a-z0-9]/,/:=/p" | tr -s "[:space:]" " ")
-    if [ -z "$a" ] || [ "$a" != "$b" ]; then
-      echo "  DROP $prob: registered statement differs from master (or not found)" >&2
+    # The name may END its line: 148 of the 367 problems carrying a registered
+    # theorem write `theorem apm_<id>` alone and put the binders underneath.
+    # sed matches a line with its newline already stripped, so [^_a-z0-9]
+    # had nothing to match on those and the extractor returned empty --
+    # dropping 40% of the corpus as "statement differs" when it had simply
+    # not been read. m02A06 was dropped this way every 30 minutes on
+    # 2026-09-09 with a complete proof on its branch. The alternation keeps
+    # the guard that made the class necessary: apm_m02a06_greenKernel_comm
+    # still does not match apm_m02a06.
+    local sig="/^theorem apm_${lower}\([^_a-z0-9]\|$\)/,/:=/p"
+    a=$(git show "master:$f" 2>/dev/null | sed -n "$sig" | tr -s "[:space:]" " ")
+    b=$(git show "$branch:$f" 2>/dev/null | sed -n "$sig" | tr -s "[:space:]" " ")
+    if [ -z "$a" ]; then
+      echo "  DROP $prob: no registered theorem apm_${lower} found on master" >&2
+      continue
+    fi
+    if [ "$a" != "$b" ]; then
+      echo "  DROP $prob: registered statement differs from master" >&2
       continue
     fi
     local tmp out; tmp=$(mktemp /tmp/land-verify-XXXXXX.lean)
