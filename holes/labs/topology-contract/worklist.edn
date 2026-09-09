@@ -35811,6 +35811,46 @@
    "The explicit topology-and-measure-space closed-open wrapper compiles; specialize it to derivative-range coordinates with the installed inherited packets.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if inherited derivative-range and orthogonal-residual coordinate packets plus finite-order reduced-dimension induction cannot specialize closed-open projected-chart nullity while retaining locus-restricted slice hypotheses, or if the specialization requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
+    "ConstructionTargets/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER DERIVATIVE-RANGE ORTHOGONAL CLOSED-OPEN CHART NULLITY",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean",
+     :sha256
+     "129a606c8de6fffafe0a6cf9cc29b136abff4ff29a28560f85db385f037c425e"},
+    :declarations
+    ["measure_image_zero_of_rangeOrthogonal_closedOpenChart_finiteOrder"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Construct a projected chart at each positive exact-rank point and invoke this theorem on the closed derivative-rank-upper locus."},
+   :representation
+   {:source
+    "Finite-order closed-open projected-chart nullity with explicit inherited coordinate topology and measure packets, reduced-dimension induction, and derivative-range/orthogonal-residual coordinates.",
+    :target
+    "Zero target measure for the image of a closed localized derivative-rank locus, preserving the original finite order and locus-restricted slice hypotheses."},
+   :id
+   :critical-value-sard-finite-order-derivative-range-orthogonal-closed-open-chart-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-finite-order-closed-open-explicit-topology-measure-spaces-1
+    :critical-value-sard-finite-order-reduced-dimension-induction-nullity-1
+    :critical-value-sard-derivative-range-coordinate-topology-package-1
+    :critical-value-sard-derivative-range-inherited-borel-space-1
+    :critical-value-sard-derivative-range-inherited-borel-add-haar-package-1
+    :critical-value-sard-target-orthogonal-coordinate-equiv-1],
+   :current-residual
+   "The finite-order derivative-coordinate closed-open theorem compiles; invoke it pointwise on positive exact-rank loci before aggregation.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -35864,85 +35904,91 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Invoke the explicit topology-and-measure-space closed-open wrapper with inherited derivative-range coordinate packets and the reduced-dimension induction adapter.",
+     "Use the finite-order derivative-range closed-open theorem to construct null neighborhoods at positive exact-rank points, then aggregate those strata with the rank-zero branch.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"measure_image_zero_of_closedOpen_explicit_topology_measureSpaces"
-      "4c686caf10f51c19ad20aa8f2c85b8bcc8c5ebe8bc85fa5e5390c38cb0cd9a8f"},
+     {"measure_image_zero_of_rangeOrthogonal_closedOpenChart_finiteOrder"
+      "00057deb2e2759e87681f20ba372ac864a5ec8ede6361f65b3980a446fde828b"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if finite-order closed-open projected-chart nullity cannot accept both coordinate topology spaces and measurable spaces explicitly before their Borel, measure, and additive-Haar data, or if the wrapper requires nonstandard axioms.",
+      "Stop only if inherited derivative-range and orthogonal-residual coordinate packets plus finite-order reduced-dimension induction cannot specialize closed-open projected-chart nullity while retaining locus-restricted slice hypotheses, or if the specialization requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpaces.lean"
-       "ConstructionTargets/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpaces.md"],
+      ["ConstructionTargets/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
+       "ConstructionTargets/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER CLOSED-OPEN EXPLICIT TOPOLOGY AND MEASURE SPACES",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER DERIVATIVE-RANGE ORTHOGONAL CLOSED-OPEN CHART NULLITY",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpacesProbe.lean",
+        "/tmp/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean",
         :sha256
-        "05032d7011773a483511445597c1a14e82cc5248b0184bbb7b7e679d6ced3c55"},
+        "129a606c8de6fffafe0a6cf9cc29b136abff4ff29a28560f85db385f037c425e"},
        :declarations
-       ["measure_image_zero_of_closedOpen_explicit_topology_measureSpaces"],
+       ["measure_image_zero_of_rangeOrthogonal_closedOpenChart_finiteOrder"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Specialize the wrapper with inherited derivative-range and orthogonal-residual topology, Borel, measure, and additive-Haar packets."},
+       "Construct a projected chart at each positive exact-rank point and invoke this theorem on the closed derivative-rank-upper locus."},
       :representation
       {:source
-       "Finite-order closed-open projected-chart nullity whose coordinate topology, measurable-space, Borel, measure, and additive-Haar parameters would otherwise be inferred anonymously.",
+       "Finite-order closed-open projected-chart nullity with explicit inherited coordinate topology and measure packets, reduced-dimension induction, and derivative-range/orthogonal-residual coordinates.",
        :target
-       "A wrapper taking both coordinate topology spaces and measurable spaces explicitly before all dependent Borel and Haar data, while retaining locus-restricted slice hypotheses."},
+       "Zero target measure for the image of a closed localized derivative-rank locus, preserving the original finite order and locus-restricted slice hypotheses."},
       :id
-      :critical-value-sard-finite-order-closed-open-explicit-topology-measure-spaces-1,
+      :critical-value-sard-finite-order-derivative-range-orthogonal-closed-open-chart-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-closed-open-projected-chart-image-nullity-1
+      [:critical-value-sard-finite-order-closed-open-explicit-topology-measure-spaces-1
        :critical-value-sard-finite-order-reduced-dimension-induction-nullity-1
-       :critical-value-sard-projected-coordinate-explicit-inherited-topology-data-1
-       :critical-value-sard-projected-coordinate-explicit-inherited-measure-data-1],
+       :critical-value-sard-derivative-range-coordinate-topology-package-1
+       :critical-value-sard-derivative-range-inherited-borel-space-1
+       :critical-value-sard-derivative-range-inherited-borel-add-haar-package-1
+       :critical-value-sard-target-orthogonal-coordinate-equiv-1],
       :current-residual
-      "The explicit topology-and-measure-space closed-open wrapper compiles; specialize it to derivative-range coordinates with the installed inherited packets.",
+      "The finite-order derivative-coordinate closed-open theorem compiles; invoke it pointwise on positive exact-rank loci before aggregation.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The reduced-dimension induction adapter supplies the correct finite-order slice-nullity function, but direct derivative-range specialization still encounters elaboration ambiguity because coordinate Borel and locally compact instances are requested before the inherited subtype structures are selected. A placeholder-free wrapper now accepts both coordinate topology spaces and measurable spaces explicitly, followed by their Borel, measure, and additive-Haar data, while preserving the localized closed-locus hypotheses and finite differentiability order. This is the bounded interface needed before derivative-range specialization.",
+     "The rectangular theorem is not refuted. The explicit closed-open wrapper now composes with inherited derivative-range and orthogonal-residual topology, Borel, measure, and additive-Haar packets. A placeholder-free fixture specializes it to derivative-range coordinates, uses the finite-order reduced-dimension induction hypothesis after common rank subtraction, and retains slice regularity and zero derivative only over the localized closed locus. Banking this theorem leaves the pointwise positive exact-rank chart construction and finite-rank aggregation.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "sed -n '1,190p' ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces.lean; sed -n '1,150p' ConstructionTargets/SardProjectedCoordinateExplicitInheritedTopologyData.lean; sed -n '1,150p' ConstructionTargets/SardProjectedCoordinateExplicitInheritedMeasureData.lean",
+       "sed -n '1,190p' ConstructionTargets/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpaces.lean; sed -n '1,150p' ConstructionTargets/SardProjectedCoordinateExplicitInheritedTopologyData.lean; sed -n '1,150p' ConstructionTargets/SardProjectedCoordinateExplicitInheritedMeasureData.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpacesProbe.lean",
+       "lake build ConstructionTargets.SardFiniteOrderClosedOpenExplicitTopologyMeasureSpaces",
+       :exit 0,
+       :output "Build completed successfully (8311 jobs)."}
+      {:cmd
+       "lake env lean /tmp/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean",
        :exit 0,
        :output
-       "'SardFiniteOrderClosedOpenExplicitTopologyMeasureSpacesProbe.measure_image_zero_of_closedOpen_explicit_topology_measureSpaces' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullityProbe.measure_image_zero_of_rangeOrthogonal_closedOpenChart_finiteOrder' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpacesProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean",
        :exit 0,
        :output
-       "05032d7011773a483511445597c1a14e82cc5248b0184bbb7b7e679d6ced3c55  /tmp/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpacesProbe.lean"}
+       "129a606c8de6fffafe0a6cf9cc29b136abff4ff29a28560f85db385f037c425e  /tmp/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpacesProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '5,48p' /tmp/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpacesProbe.lean | sha256sum",
+       "sed -n '13,78p' /tmp/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean | sha256sum",
        :exit 0,
        :output
-       "4c686caf10f51c19ad20aa8f2c85b8bcc8c5ebe8bc85fa5e5390c38cb0cd9a8f  -"}
+       "00057deb2e2759e87681f20ba372ac864a5ec8ede6361f65b3980a446fde828b  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 272 items OK; {:done 264, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 273 items OK; {:done 265, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -35958,12 +36004,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardFiniteOrderClosedOpenExplicitTopologyMeasureSpacesProbe.lean",
+      "/tmp/SardFiniteOrderDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean",
       :sha256
-      "05032d7011773a483511445597c1a14e82cc5248b0184bbb7b7e679d6ced3c55"},
+      "129a606c8de6fffafe0a6cf9cc29b136abff4ff29a28560f85db385f037c425e"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -36184,7 +36230,8 @@
     :critical-value-sard-finite-order-exact-rank-closed-open-projected-chart-nullity-1
     :critical-value-sard-finite-order-closed-open-projected-chart-image-nullity-1
     :critical-value-sard-finite-order-reduced-dimension-induction-nullity-1
-    :critical-value-sard-finite-order-closed-open-explicit-topology-measure-spaces-1],
+    :critical-value-sard-finite-order-closed-open-explicit-topology-measure-spaces-1
+    :critical-value-sard-finite-order-derivative-range-orthogonal-closed-open-chart-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
