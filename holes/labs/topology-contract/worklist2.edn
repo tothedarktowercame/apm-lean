@@ -3456,78 +3456,102 @@
    :stop-condition
    "Local calculation only. Do not claim coordinate-change signs, coherent global orientation, fundamental classes, localization monicity, or t98A02 gluing.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "The requested higher-dimensional chart-local calculation is complete in the fixture. Independent review and banking remain. Coordinate-change signs, coherent global orientation, fundamental classes, localization monicity, and t98A02 gluing remain separate obligations.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {"modelChart"
-      "9ff8984523bbf5ebbbb4b061bf35e8cb526639a2dff929df65c7be2c06e0521e",
-      "dimension_four_local_generator"
-      "ed31832646cfe253d81bc8f2bad80e1e6acd68cb82d60cfdafb4ac3d25c9fed7",
-      "ambientChartMap_excision_chain_eq"
-      "fb5b0f7b896eaea45f27340eddf9539c705a66f0ac577fef6638f09c601a7883",
-      "modelChart_deletedPoint_iff"
-      "86fdf218d89349630e56322f88c4dfebff9de745ea1752daf28399460eb00799",
-      "ambientLocalGenerator_eq_inclusion_transport"
-      "7f8047559e5cd8df0a5d22dd7136fcf822e00ebc5b28f43691ceae580568dbf5",
-      "ambientChartMap_Hn_isIso"
-      "244f35d0ba82476185eb8d27276d9b7d644e849f84b975cf680257ce4dc3455f",
-      "dimension_two_local_generator"
-      "4dbc8c6c003fecd3e5121e19346b0e930a164ebe8e67223296bc720ab4d5ffbc",
-      "modelChart_origin"
-      "af566a21e42e27c85c5925702e3ae1dfed5095404827df0fc77beb6c2e206ed1",
-      "ambientLocalGenerator_generates"
-      "26ca42df49547e18c2bcdf869c6d30e4a7fb8ceae9b87712c929659fad1160ff"},
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture and document its hypotheses and local-only scope. Preserve constructed chart data, actual map comparisons, generator transport, and concrete instances.",
-      :consumer-equation
-      "For each k and point x, the actual chart-then-inclusion H(k+2) map is an isomorphism and sends HigherModelLocalHomology.generator k to ambientLocalGenerator x; every ambient local class is an integer multiple of this class.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA-256 before implementation."
-       "Compile fixture and canonical target."
-       "Run lake build ConstructionTargets.HigherChartLocalGenerator ConstructionTargets.HigherModelLocalHomology ConstructionTargets.OneDimensionalChartLocalGenerator."
-       "Reproduce all nine printed axiom audits and statement hashes."
-       "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :author "codex-13",
-     :commands
-     [{:cmd "realpath .lake/packages", :exit 0}
-      {:cmd "lake env lean /tmp/HigherChartLocalGeneratorProbe.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/HigherChartLocalGeneratorProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :representation
-     {:source
-      "Integral relative H(k+2) of the open Euclidean (k+2)-disk modulo its origin.",
-      :target
-      "Integral relative H(k+2) of a T1 space charted on EuclideanSpace Real (Fin (k+2)), modulo its specified point.",
-      :direction
-      "Forward actual chart-then-inclusion map; exact chain equality identifies it with constructed pair-homeomorphism transport, double-complement subtype identification, and production excision."},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/HigherChartLocalGeneratorProbe.lean",
-      :sha256
-      "88a76ee4d496073f92f963aed331c56283e99a2c119a47ba1f046e1c469244c3"},
-     :finding
-     "Complete placeholder-free fixture compiles with nine standard-only axiom audits. A positive-radius ball inside the actual chart target supplies a restricted inverse chart. Translation and positive scaling construct the pointed model homeomorphism, with origin and deleted-point compatibility proved. Production excision proves the actual ambient H(k+2) map is an isomorphism. Its image of HigherModelLocalHomology.generator generates ambient local homology. Exact chain and generator transport equations and Euclidean dimensions two and four compile. Repository files remain unchanged.",
-     :statement-hash-method
-     "SHA-256 of declaration bytes beginning with def or theorem and ending immediately before the space preceding :=; namespace ConstructionTargets.HigherChartLocalGenerator.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/HigherChartLocalGenerator.lean"
-       "ConstructionTargets/HigherChartLocalGenerator.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Independent review remains. Coordinate-change signs, coherent global orientation, fundamental classes, localization monicity, and t98A02 gluing remain separate obligations.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :required-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :exact-fixture-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass,
+     :nine-axiom-audits :pass,
+     :nine-statement-hashes :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 19,
+      :log "/tmp/codex-14-higherchart-build.log"}],
+    :statement-hashes
+    {"modelChart"
+     "9ff8984523bbf5ebbbb4b061bf35e8cb526639a2dff929df65c7be2c06e0521e",
+     "dimension_four_local_generator"
+     "ed31832646cfe253d81bc8f2bad80e1e6acd68cb82d60cfdafb4ac3d25c9fed7",
+     "ambientChartMap_excision_chain_eq"
+     "fb5b0f7b896eaea45f27340eddf9539c705a66f0ac577fef6638f09c601a7883",
+     "modelChart_deletedPoint_iff"
+     "86fdf218d89349630e56322f88c4dfebff9de745ea1752daf28399460eb00799",
+     "ambientLocalGenerator_eq_inclusion_transport"
+     "7f8047559e5cd8df0a5d22dd7136fcf822e00ebc5b28f43691ceae580568dbf5",
+     "ambientChartMap_Hn_isIso"
+     "244f35d0ba82476185eb8d27276d9b7d644e849f84b975cf680257ce4dc3455f",
+     "dimension_two_local_generator"
+     "4dbc8c6c003fecd3e5121e19346b0e930a164ebe8e67223296bc720ab4d5ffbc",
+     "modelChart_origin"
+     "af566a21e42e27c85c5925702e3ae1dfed5095404827df0fc77beb6c2e206ed1",
+     "ambientLocalGenerator_generates"
+     "26ca42df49547e18c2bcdf869c6d30e4a7fb8ceae9b87712c929659fad1160ff"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "sha256sum /tmp/HigherChartLocalGeneratorProbe.lean",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/HigherChartLocalGeneratorProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/HigherChartLocalGenerator.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.HigherChartLocalGenerator ConstructionTargets.HigherModelLocalHomology ConstructionTargets.OneDimensionalChartLocalGenerator",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/HigherChartLocalGenerator.lean /tmp/HigherChartLocalGeneratorProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "python3 inline audit: exact fixture bytes and hash, nine recorded statement hashes, nine standard-only axiom audits in both compilation logs",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "python3 inline audit: exact staged two-file scope and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct higher-dimensional chart-local homology generators\"",
+      :exit 0}
+     {:cmd
+      "python3 inline audit: exact committed scope and clean tracked checkout",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments, and model/checkpoint PASS receipts. Ledger, DAG, frozen consumers, and untracked supervisor files untouched; tracked checkout clean after commit.",
+    :representation
+    {:source
+     "Integral relative H(k+2) of the punctured Euclidean model pair",
+     :target
+     "Integral relative H(k+2) of the charted T1 space modulo its specified point",
+     :direction
+     "Forward actual chart-then-inclusion map, identified by exact chain equality with constructed pair transport, double-complement identification, and production excision."},
+    :commit "263ab681b5047a379c3fd1ec1378c8aefefdcd4d",
+    :changed-paths
+    ["ConstructionTargets/HigherChartLocalGenerator.lean"
+     "ConstructionTargets/HigherChartLocalGenerator.md"],
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/HigherChartLocalGeneratorProbe.lean",
+     :sha256
+     "88a76ee4d496073f92f963aed331c56283e99a2c119a47ba1f046e1c469244c3"},
+    :finding
+    "Promoted the exact fixture. Constructed restricted pointed charts and deleted-point compatibility yield an isomorphism for the actual ambient map. Its image of the model generator generates ambient local homology; exact transport equations and dimensions two and four compile.",
+    :statement-hash-method
+    "SHA-256 of declaration bytes beginning with def or theorem and ending immediately before the space preceding :=; namespace ConstructionTargets.HigherChartLocalGenerator.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/HigherChartLocalGenerator.lean"
     "ConstructionTargets/HigherChartLocalGenerator.md"],
