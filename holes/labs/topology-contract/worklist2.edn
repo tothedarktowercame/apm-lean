@@ -4823,9 +4823,136 @@
    :other-consumers []}
   {:consumer :t02A05-polynomial-integrability,
    :stop-condition
-   "No assumed finite intrinsic measure, area formula, radial identification, normalization constant or numerical moment. Do not retry the stopped full comparison.",
-   :phase :probe,
+   "Bank only the cap graph and its quantitative image bound. Do not assume or claim finite hyperplane-domain measure, finite sphere coverage, intrinsic sphere finiteness, normalization or numerical moments.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/SphereCapGraphProbe.lean",
+      :sha256
+      "e39cf758629bb44251562af80de0641daa47d9f6b6f61db26e991f2e9a5df7af"},
+     :commands
+     [{:cmd "lake env lean /tmp/SphereCapGraphProbe.lean", :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/SphereCapGraph.lean"
+    "ConstructionTargets/SphereCapGraph.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: quantitative sphere-cap graph geometry",
+   :acceptance
+   {:implementation
+    "Promote the exact compiled fixture. Preserve the explicit square-root height, positive lower-bound hypotheses, graph norm calculation, subtype cap map and Hausdorff image bound. Document all remaining finite-cover and measure obligations.",
+    :declarations
+    ["ConstructionTargets.SphereCapGraph.height_difference"
+     "ConstructionTargets.SphereCapGraph.graph_norm"
+     "ConstructionTargets.SphereCapGraph.graph_lipschitz"
+     "ConstructionTargets.SphereCapGraph.capMap"
+     "ConstructionTargets.SphereCapGraph.capMap_lipschitz"
+     "ConstructionTargets.SphereCapGraph.capMap_hausdorff_bound"],
+    :consumer-equation
+    "For the constructed cap map g from the radius-r disk orthogonal to unit e, hausdorffMeasure d (range g) <= (1+r/a)^d * hausdorffMeasure d univ on that actual domain. The graph formula and norm-one equation identify its target as the literal metric sphere subtype.",
+    :consumer-residual
+    "Identify each cap domain isometrically with a compact ball in a d-dimensional hyperplane and prove its top-dimensional Hausdorff measure finite. Construct finitely many signed coordinate caps covering spheres of dimensions two and three, sum the bounds, and deduce the exact frozen polynomial integrability instances. Normalization and moments remain separate.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target."
+     "Run lake build ConstructionTargets.SphereCapGraph."
+     "Reproduce all six printed axiom audits; permit only propext, Classical.choice and Quot.sound."
+     "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification and commit the scoped implementation."]},
+   :id :intrinsic-sphere-lipschitz-cap-graph-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "The proposed intrinsic-measure proof needs a constructed Lipschitz graph into the actual sphere subtype with an explicit Hausdorff image estimate.",
+   :other-consumers [:t95J05 :t94A10 :t01J06]}
+  {:consumer :t02A05-polynomial-integrability,
+   :stop-condition
+   "No assumed finite intrinsic measure, area formula, radial identification, normalization constant or numerical moment. Do not retry the stopped full comparison.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Exactly one compiled geometric prerequisite supplied. No intrinsic finite-measure instance or frozen consumer integrability theorem is claimed yet.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t02A05-polynomial-integrability,
+      :stop-condition
+      "Bank only the cap graph and its quantitative image bound. Do not assume or claim finite hyperplane-domain measure, finite sphere coverage, intrinsic sphere finiteness, normalization or numerical moments.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path "/tmp/SphereCapGraphProbe.lean",
+         :sha256
+         "e39cf758629bb44251562af80de0641daa47d9f6b6f61db26e991f2e9a5df7af"},
+        :commands
+        [{:cmd "lake env lean /tmp/SphereCapGraphProbe.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/SphereCapGraph.lean"
+       "ConstructionTargets/SphereCapGraph.md"],
+      :dag-node
+      "MANIFOLD INTEGRATION: quantitative sphere-cap graph geometry",
+      :acceptance
+      {:implementation
+       "Promote the exact compiled fixture. Preserve the explicit square-root height, positive lower-bound hypotheses, graph norm calculation, subtype cap map and Hausdorff image bound. Document all remaining finite-cover and measure obligations.",
+       :declarations
+       ["ConstructionTargets.SphereCapGraph.height_difference"
+        "ConstructionTargets.SphereCapGraph.graph_norm"
+        "ConstructionTargets.SphereCapGraph.graph_lipschitz"
+        "ConstructionTargets.SphereCapGraph.capMap"
+        "ConstructionTargets.SphereCapGraph.capMap_lipschitz"
+        "ConstructionTargets.SphereCapGraph.capMap_hausdorff_bound"],
+       :consumer-equation
+       "For the constructed cap map g from the radius-r disk orthogonal to unit e, hausdorffMeasure d (range g) <= (1+r/a)^d * hausdorffMeasure d univ on that actual domain. The graph formula and norm-one equation identify its target as the literal metric sphere subtype.",
+       :consumer-residual
+       "Identify each cap domain isometrically with a compact ball in a d-dimensional hyperplane and prove its top-dimensional Hausdorff measure finite. Construct finitely many signed coordinate caps covering spheres of dimensions two and three, sum the bounds, and deduce the exact frozen polynomial integrability instances. Normalization and moments remain separate.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target."
+        "Run lake build ConstructionTargets.SphereCapGraph."
+        "Reproduce all six printed axiom audits; permit only propext, Classical.choice and Quot.sound."
+        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification and commit the scoped implementation."]},
+      :id :intrinsic-sphere-lipschitz-cap-graph-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "The proposed intrinsic-measure proof needs a constructed Lipschitz graph into the actual sphere subtype with an explicit Hausdorff image estimate.",
+      :other-consumers [:t95J05 :t94A10 :t01J06]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :author "codex-13",
+     :commands
+     [{:cmd "realpath .lake/packages", :exit 0}
+      {:cmd "lake env lean /tmp/SphereCapGraphProbe.lean", :exit 0}
+      {:cmd "sha256sum /tmp/SphereCapGraphProbe.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/SphereCapGraphProbe.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/SphereCapGraphProbe.lean",
+      :sha256
+      "e39cf758629bb44251562af80de0641daa47d9f6b6f61db26e991f2e9a5df7af"},
+     :finding
+     "Compiled one geometric prerequisite: for 0<=r<1, a>0 and a^2<=1-r^2, the actual height sqrt(1-norm(u)^2) is Lipschitz with constant r/a on the radius-r ball. For a unit vector e, its graph u+height(u)*e lands on the literal unit sphere when u is orthogonal to e. The constructed subtype cap map is Lipschitz with constant 1+r/a and satisfies the actual Hausdorff image bound. Finite coordinate-cap coverage, finite intrinsic measure of the hyperplane domains and consumer integrability remain; the parent is not GO.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: finite intrinsic Hausdorff sphere measure through Lipschitz caps",
@@ -4839,7 +4966,9 @@
     "GO requires constructed finite Lipschitz cap geometry, finite intrinsic measure and exact consumer integrability instances. REVISE only to one compiled geometric or measure prerequisite. Numerical normalization and moment evaluation remain downstream."},
    :id :oriented-checkpoint5-intrinsic-sphere-finite-measure-1,
    :kind :reusable-theorem,
-   :depends-on [:oriented-checkpoint5-euler-measure-refill],
+   :depends-on
+   [:oriented-checkpoint5-euler-measure-refill
+    :intrinsic-sphere-lipschitz-cap-graph-1],
    :current-residual
    "Radial measure is finite, but this does not establish finiteness or polynomial integrability for literal sphere-subtype Hausdorff measure.",
    :other-consumers [:t95J05 :t94A10 :t01J06]}
