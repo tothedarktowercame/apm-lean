@@ -40579,6 +40579,40 @@
    "The low-source-dimension boundary is discharged by subsingleton kernel images; higher jets outside strict surplus remain unresolved.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if regularity restriction and the reviewed strict-surplus theorem fail to discharge the complementary jet range, the compact assembly fails under the stated hypotheses, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardCompactRankZeroUncoveredJetAssembly.lean"
+    "ConstructionTargets/SardCompactRankZeroUncoveredJetAssembly.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT RANK-ZERO UNCOVERED JET ASSEMBLY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardCompactRankZeroUncoveredJetAssemblyProbe.lean",
+     :sha256
+     "1d98a23b2a3b47f93f7b785b41f45474e7d4fbbf86aa18f9a2fab16d80d47885"},
+    :declarations
+    ["compact_rankZero_image_zero_of_uncovered_higherJets"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Prove nullity for the remaining higher-jet orders j with j*targetDim <= sourceDim-1, then complete rank-zero localization, rectangular induction, and exhaustion."},
+   :representation
+   {:source
+    "A compact rank-zero source set, global C^(k+1) regularity, classical Sard admissibility, and higher-jet image nullity only for 2 <= j <= k+1 with j*targetDim <= sourceDim-1, under the stated nontrivial finite-dimensional inner-product Borel hypotheses.",
+    :target
+    "Zero target add-Haar measure of the compact source image, with all strict-surplus higher-jet obligations discharged internally."},
+   :id :critical-value-sard-compact-rank-zero-uncovered-jet-assembly-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-compact-rank-zero-admissible-jet-assembly-1
+    :critical-value-sard-first-nonzero-jet-all-source-taylor-nullity-1],
+   :current-residual
+   "Compact assembly requires only the uncovered jet range; its nullity remains an explicit analytic obligation.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -40632,83 +40666,79 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank all-source strict-surplus jet nullity; repair uncovered jet orders before rectangular induction and exhaustion.",
+     "Bank compact rank-zero assembly with only uncovered higher-jet hypotheses; prove that remaining analytic range before rectangular induction.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"firstNonzeroJetLocus_image_null_of_taylor_surplus_all_source_dimensions"
-      "e877673280f163eb8d322e2665e503afddcf5ab814e592377d9e349930da329c"},
+     {"compact_rankZero_image_zero_of_uncovered_higherJets"
+      "c88828a904d3ace60a657d0d20656984fc505fce108dbb36cb1367fcddd50390"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the codimension-one identity fails to yield the stated subsingleton kernel boundary, localized subsingleton images fail to be null under the stated target measure hypotheses, or nonstandard axioms are required.",
+      "Stop only if regularity restriction and the reviewed strict-surplus theorem fail to discharge the complementary jet range, the compact assembly fails under the stated hypotheses, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardFirstNonzeroJetAllSourceTaylorNullity.lean"
-       "ConstructionTargets/SardFirstNonzeroJetAllSourceTaylorNullity.md"],
+      ["ConstructionTargets/SardCompactRankZeroUncoveredJetAssembly.lean"
+       "ConstructionTargets/SardCompactRankZeroUncoveredJetAssembly.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FIRST NONZERO JET ALL-SOURCE TAYLOR NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / COMPACT RANK-ZERO UNCOVERED JET ASSEMBLY",
       :acceptance
       {:fixture
-       {:path
-        "/tmp/SardFirstNonzeroJetAllSourceTaylorNullityProbe.lean",
+       {:path "/tmp/SardCompactRankZeroUncoveredJetAssemblyProbe.lean",
         :sha256
-        "c53a45fa2ef38247079c3633bf9417cede8c78a50b2dab6a5ee4f69dcafe41d9"},
+        "1d98a23b2a3b47f93f7b785b41f45474e7d4fbbf86aa18f9a2fab16d80d47885"},
        :declarations
-       ["firstNonzeroJetLocus_image_null_of_taylor_surplus_all_source_dimensions"],
+       ["compact_rankZero_image_zero_of_uncovered_higherJets"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Apply all-source strict-surplus nullity to the applicable higher jets; repair jet orders outside that surplus range and complete rectangular induction and exhaustion."},
+       "Prove nullity for the remaining higher-jet orders j with j*targetDim <= sourceDim-1, then complete rank-zero localization, rectangular induction, and exhaustion."},
       :representation
       {:source
-       "Global C^(i+1) regularity with i >= 1 and sourceDim-1 < (i+1)*targetDim, with arbitrary finite source dimension and the stated inner-product and target Borel hypotheses.",
+       "A compact rank-zero source set, global C^(k+1) regularity, classical Sard admissibility, and higher-jet image nullity only for 2 <= j <= k+1 with j*targetDim <= sourceDim-1, under the stated nontrivial finite-dimensional inner-product Borel hypotheses.",
        :target
-       "Zero target add-Haar measure of the entire first-nonzero-(i+1)-jet locus image, including source dimensions zero and one."},
+       "Zero target add-Haar measure of the compact source image, with all strict-surplus higher-jet obligations discharged internally."},
       :id
-      :critical-value-sard-first-nonzero-jet-all-source-taylor-nullity-1,
+      :critical-value-sard-compact-rank-zero-uncovered-jet-assembly-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-first-nonzero-jet-taylor-surplus-nullity-1
-       :critical-value-sard-first-nonzero-jet-kernel-parameter-containment-1
-       :critical-value-sard-first-nonzero-jet-scalarized-chart-data-1
-       :critical-value-sard-scalar-derivative-kernel-dimension-1
-       :critical-value-sard-first-nonzero-jet-locus-local-aggregation-1],
+      [:critical-value-sard-compact-rank-zero-admissible-jet-assembly-1
+       :critical-value-sard-first-nonzero-jet-all-source-taylor-nullity-1],
       :current-residual
-      "The low-source-dimension boundary is discharged by subsingleton kernel images; higher jets outside strict surplus remain unresolved.",
+      "Compact assembly requires only the uncovered jet range; its nullity remains an explicit analytic obligation.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite removes the sourceDim > 1 restriction from strict-surplus jet-locus nullity. In source dimensions at most one, the scalar derivative kernel is subsingleton; chart containment makes each localized jet locus subsingleton, hence its image null, and local aggregation completes the proof. Rectangular Morse-Sard remains incomplete, not refuted.",
+     "One compiled prerequisite integrates all-source Taylor-surplus jet nullity into compact rank-zero assembly. Explicit higher-jet nullity is now required only for orders j satisfying j*targetDim <= sourceDim-1. Covered orders are proved from ambient regularity. The remaining hypotheses are not discharged, so rectangular Morse-Sard remains incomplete, not refuted.",
      :commands
      [{:cmd
-       "Read DAG, closure policy, kernel containment module, and reviewed dependency findings",
+       "Read DAG, closure policy, compact rank-zero assembly, and reviewed dependency findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardFirstNonzeroJetAllSourceTaylorNullityProbe.lean",
+       "lake env lean /tmp/SardCompactRankZeroUncoveredJetAssemblyProbe.lean",
        :exit 1,
        :output
-       "Initial compilation used an incorrect dimension lemma name and an underdetermined congrArg; both corrected."}
+       "Initial regularity restriction inferred subtraction in the smoothness-order type; corrected with explicit natural subtraction."}
       {:cmd
-       "lake env lean /tmp/SardFirstNonzeroJetAllSourceTaylorNullityProbe.lean",
+       "lake env lean /tmp/SardCompactRankZeroUncoveredJetAssemblyProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardFirstNonzeroJetAllSourceTaylorNullityProbe.lean",
+       "sha256sum /tmp/SardCompactRankZeroUncoveredJetAssemblyProbe.lean",
        :exit 0}
       {:cmd
-       "sed -n '5,13p' /tmp/SardFirstNonzeroJetAllSourceTaylorNullityProbe.lean | sha256sum",
+       "sed -n '6,22p' /tmp/SardCompactRankZeroUncoveredJetAssemblyProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFirstNonzeroJetAllSourceTaylorNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardCompactRankZeroUncoveredJetAssemblyProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 310 items OK; {:done 302, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 311 items OK; {:done 303, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -40724,12 +40754,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardFirstNonzeroJetAllSourceTaylorNullityProbe.lean",
+     {:path "/tmp/SardCompactRankZeroUncoveredJetAssemblyProbe.lean",
       :sha256
-      "c53a45fa2ef38247079c3633bf9417cede8c78a50b2dab6a5ee4f69dcafe41d9"},
+      "1d98a23b2a3b47f93f7b785b41f45474e7d4fbbf86aa18f9a2fab16d80d47885"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -40988,7 +41018,8 @@
     :critical-value-sard-first-nonzero-jet-kernel-taylor-nullity-1
     :critical-value-sard-first-nonzero-jet-local-kernel-taylor-nullity-1
     :critical-value-sard-first-nonzero-jet-taylor-surplus-nullity-1
-    :critical-value-sard-first-nonzero-jet-all-source-taylor-nullity-1],
+    :critical-value-sard-first-nonzero-jet-all-source-taylor-nullity-1
+    :critical-value-sard-compact-rank-zero-uncovered-jet-assembly-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
