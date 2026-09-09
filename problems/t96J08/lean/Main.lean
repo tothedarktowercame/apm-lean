@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.UnitDiskInverseSqrtIntegrability
 
 /-!
 # APM t96J08
@@ -161,77 +162,205 @@ lemma apm_t96j08_not_isClosed : ¬apm_t96j08_IsClosed := by
   norm_num [apm_t96j08_domega, Matrix.cons_val_zero, Matrix.cons_val_one,
     Matrix.cons_val_two] at hh
 
-/-- Why this unblocks `apm_t96j08`: after `apm_t96j08_pullback_eq` and
-`apm_t96j08_integral_singularTerm_eq_zero`, this is the only nonconstant
-contribution left in the hemisphere integral.  Together with the standard
-area of the unit disk, it gives `π + 2π/3 = 5π/3`. -/
+
+open Metric Real Set
+open scoped Interval
+def radialSqrt (r : ℝ) := Real.sqrt (1-r^2)
+lemma radialSqrt_eq_rpow {r : ℝ} (_hr : 0 ≤ 1-r^2) : radialSqrt r = (1-r^2)^((1/2:ℝ)) := by simp [radialSqrt, Real.sqrt_eq_rpow]
+lemma radialSqrt_eq_zero_of_one_le {r : ℝ} (hr : 1 ≤ r) : radialSqrt r = 0 := by
+  exact Real.sqrt_eq_zero'.mpr (by nlinarith)
+lemma intervalIntegrable_mul_radialSqrt : IntervalIntegrable (fun r : ℝ => r * radialSqrt r) volume 0 1 := by
+  apply Continuous.intervalIntegrable
+  unfold radialSqrt
+  fun_prop
+abbrev E2 := EuclideanSpace ℝ (Fin 2)
+theorem integral_zero_one_mul_radialSqrt :
+    (∫ r in (0 : ℝ)..1, r * radialSqrt r) = 1 / 3 := by
+  have hsub := intervalIntegral.integral_comp_mul_deriv_of_deriv_nonpos
+    (a := (0 : ℝ)) (b := 1)
+    (f := fun r : ℝ => 1 - r ^ 2) (f' := fun r : ℝ => -2 * r)
+    (g := fun u : ℝ => u ^ ((1 / 2 : ℝ)))
+    (by fun_prop)
+    (fun r _ => by
+      simpa [mul_comm] using
+        (hasDerivAt_const r 1).sub ((hasDerivAt_id r).pow 2))
+    (fun r hr => by norm_num at hr ⊢; linarith)
+  have hrpow : (∫ u in (0 : ℝ)..1, u ^ ((1 / 2 : ℝ))) = 2 / 3 := by
+    rw [integral_rpow]
+    · norm_num
+    · left
+      norm_num
+  have hreverse : (∫ u in (1 : ℝ)..0, u ^ ((1 / 2 : ℝ))) = -(2 / 3) := by
+    rw [intervalIntegral.integral_symm, hrpow]
+  dsimp only [Function.comp_apply] at hsub
+  norm_num only [zero_pow, one_pow, sub_zero] at hsub
+  change (∫ r in (0 : ℝ)..1,
+      (1 - r ^ 2) ^ ((1 / 2 : ℝ)) * (-2 * r)) =
+        ∫ u in (1 : ℝ)..0, u ^ ((1 / 2 : ℝ)) at hsub
+  rw [hreverse] at hsub
+  have hscale :
+      (∫ r in (0 : ℝ)..1,
+        (1 - r ^ 2) ^ ((1 / 2 : ℝ)) * (-2 * r)) =
+        -2 * ∫ r in (0 : ℝ)..1, r * radialSqrt r := by
+    rw [← intervalIntegral.integral_const_mul]
+    apply intervalIntegral.integral_congr
+    intro r hr
+    norm_num at hr
+    change (1 - r ^ 2) ^ ((1 / 2 : ℝ)) * (-2 * r) =
+      -2 * (r * radialSqrt r)
+    rw [radialSqrt_eq_rpow (by nlinarith)]
+    ring
+  rw [hscale] at hsub
+  linarith
+
+theorem integral_Ioi_mul_radialSqrt :
+    (∫ r in Ioi (0 : ℝ), r * radialSqrt r) = 1 / 3 := by
+  have htail : IntegrableOn (fun r : ℝ => r * radialSqrt r) (Ioi 1) := by
+    apply integrableOn_zero.congr_fun
+    · intro r hr
+      simp [radialSqrt_eq_zero_of_one_le hr.le]
+    · exact measurableSet_Ioi
+  have hsplit := intervalIntegral.integral_interval_add_Ioi'
+    (a := (0 : ℝ)) (b := 1) intervalIntegrable_mul_radialSqrt htail
+  rw [integral_zero_one_mul_radialSqrt] at hsplit
+  have hzero : (∫ r in Ioi (1 : ℝ), r * radialSqrt r) = 0 := by
+    apply integral_eq_zero_of_ae
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with r hr
+    simp [radialSqrt_eq_zero_of_one_le hr.le]
+  rw [hzero, add_zero] at hsplit
+  exact hsplit.symm
+
+theorem integral_radialSqrt_euclidean :
+    (∫ q : E2, radialSqrt ‖q‖) = 2 * Real.pi / 3 := by
+  rw [MeasureTheory.integral_fun_norm_addHaar (volume : Measure E2) radialSqrt]
+  simp only [E2, finrank_euclideanSpace, Fintype.card_fin, Nat.reduceSubDiff,
+    nsmul_eq_mul, smul_eq_mul]
+  rw [measureReal_def, EuclideanSpace.volume_ball_fin_two]
+  norm_num
+  rw [ENNReal.toReal_ofReal (by positivity : 0 ≤ Real.pi)]
+  rw [integral_Ioi_mul_radialSqrt]
+  ring
+
+
+lemma norm_sq_coords (q : E2) : ‖q‖^2 = (q 0)^2 + (q 1)^2 := by
+  rw [EuclideanSpace.norm_sq_eq]
+  simp [Fin.sum_univ_succ]
+
 theorem apm_t96J08_bridge_radialDiskIntegral :
     (∫ q : apm_t96j08_DiskPoint in Metric.closedBall 0 1,
       Real.sqrt (1 - (q 0) ^ 2 - (q 1) ^ 2)) = 2 * Real.pi / 3 := by
-  sorry
+  rw [← integral_indicator measurableSet_closedBall]
+  have heq : (Metric.closedBall (0 : E2) 1).indicator
+      (fun q => Real.sqrt (1-(q 0)^2-(q 1)^2)) = (fun q : E2 => radialSqrt ‖q‖) := by
+    funext q
+    by_cases hq : q ∈ Metric.closedBall (0 : E2) 1
+    · rw [indicator_of_mem hq, radialSqrt, norm_sq_coords]
+      congr 1; ring
+    · rw [indicator_of_notMem hq, radialSqrt_eq_zero_of_one_le]
+      simp only [Metric.mem_closedBall, dist_zero_right] at hq
+      exact (lt_of_not_ge hq).le
+  rw [heq, integral_radialSqrt_euclidean]
+
+lemma diagnostic_direction (a : apm_t96j08_Point → ℝ) (x w : apm_t96j08_Point)
+    (c : ℝ) (ha : DifferentiableAt ℝ a x)
+    (hline : ∀ t : ℝ, a (x + t • w) = a x + c * t) :
+    fderiv ℝ a x w = c := by
+  have hpath : HasDerivAt (fun t : ℝ => x + t • w) w 0 := by
+    simpa only [Pi.add_apply, id_eq, zero_add, one_smul] using (hasDerivAt_const (0 : ℝ) x).add ((hasDerivAt_id (0 : ℝ)).smul_const w)
+  have ha' : HasFDerivAt a (fderiv ℝ a x) (x + (0 : ℝ) • w) := by
+    simpa using ha.hasFDerivAt
+  have hd := ha'.comp_hasDerivAt 0 hpath
+  have he : (fun t : ℝ => a (x + t • w)) = fun t => a x + c * t := funext hline
+  change HasDerivAt (fun t : ℝ => a (x + t • w)) (fderiv ℝ a x w) 0 at hd
+  rw [he] at hd
+  have hc : HasDerivAt (fun t : ℝ => a x + c * t) c 0 := by
+    simpa only [Pi.add_apply, id_eq, zero_add, mul_one] using (hasDerivAt_const (0 : ℝ) (a x)).add ((hasDerivAt_id (0 : ℝ)).const_mul c)
+  exact hd.unique hc
+
+lemma diagnostic_coordinate (j : Fin 3) : fderiv ℝ (fun y : apm_t96j08_Point => y j) 0 (EuclideanSpace.single j 1) = 1 := by
+  apply diagnostic_direction
+  · fun_prop
+  · intro t; simp
+
+lemma diagnostic_not_exact : ¬apm_t96j08_IsExact := by
+  rintro ⟨η, hη, heval⟩
+  let ω := extDeriv (apm_t96j08_etaForm η)
+  have hw : ∀ p v, ω p v = apm_t96j08_omega p (v 0) (v 1) := by
+    intro p v
+    have hv : v = ![v 0, v 1] := by ext i; fin_cases i <;> rfl
+    rw [hv]
+    exact (apm_t96j08_extDeriv_etaForm_apply η hη p (v 0) (v 1)).trans (heval p (v 0) (v 1))
+  have hs : ContDiff ℝ (⊤ : ℕ∞) ω := by
+    have he : ω = fun p => p 0 • ω (EuclideanSpace.single 0 1) +
+        p 1 • ω (EuclideanSpace.single 1 1) + p 2 • ω (EuclideanSpace.single 2 1) := by
+      funext p; ext v
+      simp only [ContinuousAlternatingMap.add_apply, ContinuousAlternatingMap.smul_apply, smul_eq_mul]
+      rw [hw, hw, hw, hw]
+      simp [apm_t96j08_omega]
+    rw [he]
+    fun_prop
+  have hd : extDeriv ω 0 (fun i => EuclideanSpace.single i (1 : ℝ)) = 1 := by
+    rw [extDeriv_apply (hs.differentiable (by simp) 0)]
+    change (∑ j : Fin 3, (-1 : ℤ) ^ (j : ℕ) •
+      fderiv ℝ (fun y => ω y (j.removeNth (fun i => EuclideanSpace.single i (1 : ℝ)))) 0
+        (EuclideanSpace.single j 1)) = 1
+    rw [Fin.sum_univ_three]
+    simp_rw [show ∀ v, (fun y => ω y v) = fun y => apm_t96j08_omega y (v 0) (v 1) from fun v => funext (fun y => hw y v)]
+    simp only [Fin.removeNth]
+    have hfin : Fin.succAbove (2 : Fin 3) (1 : Fin 2) = 1 := rfl
+    simp only [apm_t96j08_omega, hfin]
+    simp
+    change fderiv ℝ (fun y : apm_t96j08_Point => y 0) 0 (EuclideanSpace.single 0 1) +
+      -fderiv ℝ (fun y : apm_t96j08_Point => y 1) 0 (EuclideanSpace.single 1 1) +
+      fderiv ℝ (fun y : apm_t96j08_Point => y 2) 0 (EuclideanSpace.single 2 1) = 1
+    rw [diagnostic_coordinate, diagnostic_coordinate, diagnostic_coordinate]
+    norm_num
+  have heta : ContDiff ℝ (⊤ : ℕ∞) (apm_t96j08_etaForm η) := by
+    unfold apm_t96j08_etaForm
+    exact (ContinuousAlternatingMap.ofSubsingletonLIE
+      (𝕜 := ℝ) (E := apm_t96j08_Point) (F := ℝ)
+      (0 : Fin 1)).toContinuousLinearEquiv.contDiff.comp hη
+  have hz : extDeriv ω = 0 := extDeriv_extDeriv heta (by
+    rw [minSmoothness_of_isRCLikeNormedField]
+    exact WithTop.coe_le_coe.mpr (show (2 : ℕ∞) ≤ ⊤ from le_top))
+  rw [hz] at hd
+  norm_num at hd
+
+lemma diagnostic_singular_integrable : IntegrableOn
+    (fun q : E2 => ((q 0)^2-(q 1)^2)/Real.sqrt (1-(q 0)^2-(q 1)^2))
+    (Metric.closedBall 0 1) := by
+  have h := ConstructionTargets.UnitDiskInverseSqrtIntegrability.integrable_radialInverseSqrt_euclidean.integrableOn
+    (s := Metric.closedBall (0 : E2) 1)
+  have hc : ContinuousOn (fun q : E2 => (q 0)^2-(q 1)^2) (Metric.closedBall 0 1) := by fun_prop
+  have hm := h.mul_continuousOn hc (isCompact_closedBall (0 : E2) 1)
+  apply hm.congr_fun _ measurableSet_closedBall
+  intro q _
+  simp only [ConstructionTargets.UnitDiskInverseSqrtIntegrability.radialInverseSqrt, norm_sq_coords]
+  rw [show 1-((q 0)^2+(q 1)^2) = 1-(q 0)^2-(q 1)^2 by ring]
+  simp [div_eq_mul_inv, mul_comm]
+
+lemma diagnostic_hemisphere : apm_t96j08_hemisphereIntegral = 5 * Real.pi / 3 := by
+  have hs : IntegrableOn (fun q : E2 => Real.sqrt (1-(q 0)^2-(q 1)^2)) (Metric.closedBall 0 1) :=
+    (by fun_prop : Continuous (fun q : E2 => Real.sqrt (1-(q 0)^2-(q 1)^2))).continuousOn.integrableOn_compact (isCompact_closedBall _ _)
+  have hc : IntegrableOn (fun _ : E2 => (1 : ℝ)) (Metric.closedBall 0 1) :=
+    continuous_const.continuousOn.integrableOn_compact (isCompact_closedBall _ _)
+  unfold apm_t96j08_hemisphereIntegral
+  simp_rw [apm_t96j08_pullback_eq]
+  have hadd := integral_add (hc.add hs) diagnostic_singular_integrable
+  simp only [Pi.add_apply] at hadd
+  rw [hadd, integral_add hc hs,
+    apm_t96J08_bridge_radialDiskIntegral, apm_t96j08_integral_singularTerm_eq_zero]
+  simp only [integral_const, smul_eq_mul, mul_one, add_zero]
+  rw [measureReal_def, Measure.restrict_apply_univ, EuclideanSpace.volume_closedBall_fin_two]
+  norm_num
+  rw [ENNReal.toReal_ofReal (by positivity : 0 ≤ Real.pi)]
+  ring
 
 theorem apm_t96j08 :
     ¬apm_t96j08_IsClosed ∧
     ¬apm_t96j08_IsExact ∧
     apm_t96j08_hemisphereIntegral = 5 * Real.pi / 3 := by
-  /-
-  PARTIAL boundary (closer hop 1).
+  exact ⟨apm_t96j08_not_isClosed, diagnostic_not_exact, diagnostic_hemisphere⟩
 
-  `apm_t96j08_not_isClosed` now closes the first frozen conjunct by evaluating
-  the concrete coordinate exterior derivative on the three standard basis
-  vectors; it returns `1`, contradicting closedness.
-
-  The exactness obstruction can in principle be routed through Mathlib's
-  `extDeriv_extDeriv`: package the covector field `η` as a degree-one
-  continuous alternating form, identify the custom `apm_t96j08_dOneForm`
-  with `extDeriv η`, and use smoothness to obtain `d(dη)=0`, contradicting the
-  same basis evaluation. That representation/identification bridge is not
-  currently packaged in this encoding.
-
-  Direct simplification of the pullback gives
-  `1 + sqrt (1-x^2-y^2) + (x^2-y^2)/sqrt (1-x^2-y^2)` on the unit disk. The
-  last term cancels under coordinate swap, the constant integrates to `π`,
-  and the radial square-root term integrates to `2π/3`. Searches of
-  `LEMMA-INDEX.md`, all `ConstructionTargets/`, sibling disk/polar artifacts
-  (`a01A07`, `m99A02`, `m97A03`, `t92J09`), Mathlib's polar-coordinate and
-  differential-form sources, and git history found no theorem transporting
-  the `EuclideanSpace ℝ (Fin 2)` disk integral to the available complex polar
-  formula or evaluating this singular boundary representative directly.
-  Thus the exactness packaging and disk-integration bridges remain open; the
-  frozen statement is unchanged.
-
-  CLOSER HOP 2: the pullback simplification and the full antisymmetric
-  cancellation now compile. `apm_t96j08_pullback_eq` proves the displayed
-  three-term coordinate identity exactly. `apm_t96j08_swapEquiv` realizes
-  coordinate exchange as a volume-preserving linear isometry of
-  `EuclideanSpace ℝ (Fin 2)`, and
-  `apm_t96j08_integral_singularTerm_eq_zero` uses Mathlib's
-  `MeasurePreserving.setIntegral_preimage_emb` to show that the singular last
-  term integrates to its own negative over the invariant closed disk, hence
-  to zero. This bypasses the missing Euclidean-to-complex polar transport for
-  the nonradial term.
-
-  Renewed consultation of `LEMMA-INDEX.md`, `ConstructionTargets/`, sibling
-  `a01A07`, Mathlib's `LinearIsometryEquiv` Haar-measure API, radial integral
-  sources, exterior-derivative sources, and git history leaves two independent
-  bridges: evaluate the radial square-root disk integral as `2 * π / 3`, and
-  package the custom exactness predicate into the `extDeriv_extDeriv`
-  obstruction. The frozen statement remains unchanged.
-
-  CLOSER HOP 3 closes the degree-one half of the exactness packaging.
-  `apm_t96j08_etaForm` converts the frozen covector field to Mathlib's
-  continuous alternating one-form, and
-  `apm_t96j08_extDeriv_etaForm_apply` proves that its actual `extDeriv`
-  evaluates exactly to `apm_t96j08_dOneForm` on every pair of vectors. This
-  uses `ContinuousAlternatingMap.ofSubsingletonLIE` and the general
-  `extDeriv_apply` formula, going beyond the prior representation-only
-  search. The remaining exactness sub-bridge is now only to bundle the
-  explicit trilinear coordinate formula `omega` as a continuous alternating
-  two-form and identify its exterior derivative with `domega`; then
-  `extDeriv_extDeriv` contradicts the compiled basis evaluation. The
-  independent radial disk integral `2 * π / 3` remains open.
-  -/
-  sorry
-
-
+#print axioms apm_t96J08_bridge_radialDiskIntegral
 #print axioms apm_t96j08
