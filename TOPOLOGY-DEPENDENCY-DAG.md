@@ -464,7 +464,7 @@ compiles independently of every final problem.
 
 | Cluster | Representative consumers | Current disposition |
 |---|---|---|
-| Critical-value manifold Sard | closed `t93A04`; `t01A08`, `t01J04`, `t92J07`, `t96J05` have separate uptake records | Genuine-smooth Euclidean and manifold-to-vector Sard are `BANKED`; `t93A04` closed at `a49c8476`, with exact reusable extraction `337bdd48`. The historical missing rectangular theorem STOP is superseded for this consumer, not erased. General target-manifold transport and regular-preimage geometry remain separate. |
+| Critical-value manifold Sard | closed `t93A04`, closed `t92J07`; `t01A08`, `t01J04`, `t96J05` have separate uptake records | Genuine-smooth Euclidean and manifold-to-vector Sard are `BANKED`; `t93A04` closed at `a49c8476`, with exact reusable extraction `337bdd48`; `t92J07` closed at `b364803a` by predicate equality and countable common-value assembly. Historical missing-infrastructure STOP evidence is retained. General-model/target-manifold transport and regular-preimage geometry remain separate. |
 | Dimension-gap manifold nullity | closed `t94J05`; nonsurjectivity part of `t95J04` | generic coordinate-nullity and nonsurjectivity chain is `BANKED`; exact Hausdorff nullity in `t95J04` remains separate |
 | Regular/transverse preimages | `t00J02`, `t02A07`, `t94A06`, `t97J05` | `FOUNDATION`; begin with boundaryless regular-preimage geometry |
 | Fundamental classes/localization | `t00J02`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; `t00A01` instead assumes its punctured pieces are homology balls and needs MV/van Kampen |
@@ -621,6 +621,7 @@ critical-value Sard.
 
 | Problem | Canonical closure | Audit result |
 |---|---|---|
+| `t92J07` | `b364803ac4e0c6b2d20d06d9c937f1f0a9892eb4` using the extracted manifold Sard theorem | independent PASS `invoke-1788994194142-17263-038c93a8`; frozen definitions and both statements unchanged; placeholders `2 → 0`; standard axioms and unused-`hm` warning only; zero-target branch retained |
 | `t93A04` | `a49c84764968d8286ff05d87e5d218018505f50c`; reusable extraction `337bdd48a1770df37cd2ed8cb48fea924f4203cd` | frozen definitions and statement preserved; placeholders `1 → 0`; independent PASS `invoke-1788993199960-17228-ce848168`; extraction PASS `invoke-1788993593682-17243-48fdadcf`, not a second closure; standard axioms and inherited unnecessarySimpa warning only |
 | `t01A03` | `8ef14798` | no executable placeholders; only standard axioms |
 | `t01J02` | `3ba7726a` using `37524eb4` | status `solved`, zero placeholders, statements unchanged, only standard axioms |
@@ -874,6 +875,33 @@ This construction does not elect either remaining `t95J04` foundation.
    refutation or the current status: reviewed closure `a49c8476` subsequently
    discharged the frozen consumer using genuine-smooth Sard and actual chart
    criticality transport. See the closure evidence below.
+
+### Reviewed t92J07 closure evidence (2026-09-09)
+
+Commit `b364803ac4e0c6b2d20d06d9c937f1f0a9892eb4` closes the complete
+common-regular-value consumer. Independent codex-10 PASS
+`invoke-1788994194142-17263-038c93a8` verifies exact one-file promotion,
+unchanged definitions and statements, and executable placeholders `2 → 0`.
+The frozen `criticalValues` predicate equals the image of the actual
+nonsurjective-mfderiv locus. Reused `T93A04ManifoldWork.null_critical` gives
+nullity; the existing countable common-value theorem and frozen regular-fiber
+equivalence close every literal fiber certificate. The zero-target branch
+is unchanged, and no source nonemptiness or positive dimension is added.
+
+- Frozen source SHA-256: `413b97f2d2b2075305818c6c25d5db79744aa95aa5b5c04762c146033d2740fe`.
+- Closure fixture `/tmp/T92J07FullClosure.lean` and current source SHA-256: `0e7bf95466e914d03b456449f5605abd35a49df231aa4c6fef4d0edbedc943e3`.
+- Unchanged `apm_t92J07_bridge_1` statement SHA-256: `5da05c37abf248a169fd810c3e66d794b7e173e9771594077b1e8fc8481bacee`.
+- Unchanged `apm_t92j07` statement SHA-256: `50d85b6512de9021ccacdab5476c51f9f0bfe299945caf00faa130994202b977`.
+
+Both reviewed compilations use only `propext`, `Classical.choice`, and
+`Quot.sound`. The sole warning is unused `hm` in the preserved bridge
+signature: the imported theorem also covers zero-dimensional targets.
+This is one distinct consumer closure, not another t93A04 closure or an
+infrastructure count; this documentation adds no further placeholder delta.
+Historical STOP records remain evidence of their then-missing infrastructure.
+General-model/target-manifold transport and actual regular-preimage atlas,
+embedded inclusion and tangent-image geometry remain separate obligations,
+not residual hypotheses of the closed t92J07 theorem.
 
 ### Reviewed t93A04 closure evidence (2026-09-09)
 

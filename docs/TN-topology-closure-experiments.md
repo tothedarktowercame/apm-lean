@@ -524,6 +524,36 @@ chosen-object seams were separately compiled before frozen wiring.
 
 ## Balanced parallel program after t01J03
 
+### Subsequent reviewed result: t92J07 CLOSED (2026-09-09)
+
+Commit `b364803ac4e0c6b2d20d06d9c937f1f0a9892eb4` closes both frozen
+t92J07 placeholders, with independent codex-10 PASS
+`invoke-1788994194142-17263-038c93a8`. The proof identifies the exact frozen
+nonregular-value set with the image of the nonsurjective-mfderiv locus and
+reuses `T93A04ManifoldWork.null_critical`. The banked countable common-value
+assembly then supplies one value regular for every family member; the frozen
+regular-fiber equivalence gives every literal fiber certificate. The existing
+zero-target branch is retained unchanged. No new source nonemptiness or
+dimension hypothesis is introduced.
+
+- Frozen source SHA-256: `413b97f2d2b2075305818c6c25d5db79744aa95aa5b5c04762c146033d2740fe`.
+- Full fixture `/tmp/T92J07FullClosure.lean` and current source SHA-256: `0e7bf95466e914d03b456449f5605abd35a49df231aa4c6fef4d0edbedc943e3`.
+- Preserved `apm_t92J07_bridge_1` statement SHA-256: `5da05c37abf248a169fd810c3e66d794b7e173e9771594077b1e8fc8481bacee`.
+- Preserved `apm_t92j07` statement SHA-256: `50d85b6512de9021ccacdab5476c51f9f0bfe299945caf00faa130994202b977`.
+
+Independent review reproduced the **2 to 0** executable-placeholder change,
+unchanged definitions and statements, and successful consumer/fixture
+compilation with only `propext`, `Classical.choice`, and `Quot.sound`.
+The sole warning is unused `hm` in the preserved bridge signature, because
+the imported theorem also covers zero-dimensional targets.
+
+No mathematical t92J07 residual remains. This is distinct uptake of the
+reusable theorem, not a second t93A04 closure or infrastructure-only result;
+this documentation itself contributes no closure or placeholder change.
+Historical STOP evidence below remains intact. General-model and
+target-manifold transport, and regular-preimage atlas/embedded-inclusion/
+tangent-image geometry for other consumers, remain separate obligations.
+
 ### Subsequent reviewed result: t93A04 CLOSED (2026-09-09)
 
 The historical manifold-Sard STOP in the table below is retained as evidence
