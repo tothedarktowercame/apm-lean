@@ -55815,8 +55815,44 @@
   {:consumer "t94J08",
    :stop-condition
    "GO requires complete repaired frozen closure; otherwise identify the exact missing signed induced-map naturality theorem. Ordinary H0 evidence or an orientation alone is not closure.",
+   :evidence
+   {:placeholder-after 2,
+    :placeholder-delta 0,
+    :residual
+    "The repaired n>=1 antipodal degree and m>=1 local-index branch remains open on the actual signed sphere-shift comparison. Preserve the old ordinary-H0(S0) refutation and separately outstanding reduced-S0 degree and one-dimensional local-index coverage. This infrastructure boundary neither refutes the repaired mathematics nor terminates the campaign.",
+    :outcome :stop,
+    :warnings
+    ["Three inherited lint warnings in the unchanged frozen prefix: two unnecessary simpa warnings and one unused Metric.mem_sphere simp argument."],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :placeholder-before 2,
+    :reason
+    "Missing signed naturality of the actual production sphere suspension shift under antipodal reflection. The available orientation, involution and categorical connecting-map sign do not establish the frozen induced-map action.",
+    :commands
+    [{:cmd "bb /tmp/t94j08-refill31-review.bb", :exit 0}
+     {:cmd "lake env lean /tmp/T94J08SignedBoundary.lean", :exit 0}
+     {:cmd "python3 /tmp/t94j08-signed-audit.py", :exit 0}
+     {:cmd
+      "rg -n '^(theorem|def|noncomputable def)' ConstructionTargets/CoverSmallRelativeProjectionComparison.lean ConstructionTargets/MayerVietorisConnectingSwap.lean ConstructionTargets/ProductionPairConnectingMayerVietorisComparison.lean",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/T94J08SignedBoundary.lean",
+      :exit 1,
+      :correction
+      "Qualified CategoryTheory.Functor.map_id to avoid resolving the unrelated Functor.map_id; successful rerun recorded in commands."}],
+    :campaign-refutation false,
+    :commit nil,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T94J08SignedBoundary.lean",
+     :sha256
+     "e0f8eb373f980510e984064b8169a99244ef52b67489be11d5662b13d8b042d3"},
+    :finding
+    "Compiled the actual frozen positive-dimensional ModuleCat integral orientation, equality of the frozen antipodal map with SphereAntipodalHomology.sphereAntipodal, and involutivity of its actual induced homology map. All frozen definitions and existing helper proofs in the diagnostic prefix are byte-identical. Inspected the later production-pair, nested-subspace, range-cokernel and cover-small projection comparisons, not merely their historical predecessors. CoverSmallRelativeProjectionComparison supplies the projection equation, but identifying rightPairToAmbientRelative with the applicable relativeExcisionMap at Z=V complement and transporting through its positive-degree homology inverse remains. That comparison must connect MayerVietorisConnectingSwap.connecting_swap to the actual spherePositiveHomologyShift, yielding the negative antipodal recurrence, including the degree-one endpoint through the reduced zero-sphere difference. RelativePairNaturality supplies pair-map naturality; coefficient small-path chains do not supply this signed sphere-shift comparison. No complete frozen closure fixture was obtained.",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SPHERE ORIENTATION / signed antipodal action",
    :acceptance
