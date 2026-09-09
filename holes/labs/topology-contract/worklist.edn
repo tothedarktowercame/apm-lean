@@ -50787,66 +50787,88 @@
    :stop-condition
    "GO requires the complete compiled producer/consumer composition. REVISE requires exactly one compiled prerequisite. Name remaining hypotheses or representation boundaries without assuming fiber nullity or measurability.",
    :evidence
-   {:probe
-    {:placeholder-delta
-     {:consumer "t93A04", :before 1, :after 1, :delta 0, :fixture 0},
-     :residual
-     "Conditional compact positive-rank chart image nullity only. Local/rank-stratum coverage, compatible induction discharge and base cases, and actual manifold transport remain before unconditional Sard or t93A04 closure.",
-     :dependency-review
-     {:outcome :pass, :job "invoke-1788982627020-16898-debf6d92"},
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:exists_compact_positive_rank_image_null
-      "22ce0c18ece6d9c3feb78f2c9452de0721fad5da955e1a67876bbc1a1c2130d8"},
-     :axioms [propext Classical.choice Quot.sound],
-     :note
-     {:path "/tmp/SardGenuineSmoothCompactPositiveRankImageNullity.md",
-      :sha256
-      "121dd5e62ca49b30a954cf1bd14e1f2a0c1d89f966be1a8dbe5a65bf71db37a3"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/SardGenuineSmoothCompactPositiveRankImageNullity.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/audit-compact-positive-rank.py", :exit 0}
-      {:cmd
-       "git diff --exit-code -- problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :audit
-     {:path
-      "/tmp/SardGenuineSmoothCompactPositiveRankImageNullity-audit.json",
-      :sha256
-      "73c8b6e65c943ad4ba12dd6e6f2444d5c9b8bd5f4a6d63e5ae825af3794bf521"},
-     :changed-paths [],
-     :fixture
-     {:path
-      "/tmp/SardGenuineSmoothCompactPositiveRankImageNullity.lean",
-      :sha256
-      "f2eac1a88f3c6a80511be8bb048c43eaa136c6d1d3fc4892f62f62663c41679b"},
-     :finding
-     "Compiled the complete actual chart-to-compact-image composition. The second chart coordinate witnesses containment of each source fiber in the rank-bounded target slice. Existing slice nullity then supplies fiber nullity by monotonicity. The banked compact coordinate-fiber theorem performs product/Fubini assembly and continuous-linear-equivalence transport to the original target Haar measure. Coordinate Borel structures and topology are derived, not assumed. The sole nullity premise remains local genuine-infinity smooth induction over every strictly smaller source, including dimension zero.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.lean"
-       "ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.md"],
-      :acceptance
-      {:source-pins
-       "Verify fixture, note and all producer hashes against the audit.",
-       :compile
-       ["lake env lean /tmp/SardGenuineSmoothCompactPositiveRankImageNullity.lean"
-        "lake env lean ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.lean"
-        "lake build ConstructionTargets.SardGenuineSmoothCompactPositiveRankImageNullity"],
-       :statement "Preserve audited theorem statement.",
-       :axioms :standard-only,
-       :placeholders 0,
-       :consumer
-       "Preserve t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea and its one placeholder.",
-       :scope
-       "Commit only the two scoped files after git diff --check; no DAG, ledger, existing producer or track-2 edits."}},
-     :seat :codex-12}},
+   {:placeholder-delta
+    {:consumer "t93A04", :before 1, :after 1, :delta 0, :fixture 0},
+    :residual
+    "Conditional compact positive-rank chart image nullity compiled via actual source-fiber containment, slice nullity and coordinate-fiber measure assembly. Local/rank-stratum coverage, compatible induction discharge and base cases, and manifold transport remain. No unconditional Sard or t93A04 closure claimed; independent review remains.",
+    :gates
+    {:exact-promotion :pass,
+     :producer-hashes :pass,
+     :statement-preserved :pass,
+     :compile :pass,
+     :build :pass,
+     :consumer-unchanged :pass,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:exists_compact_positive_rank_image_null
+     "22ce0c18ece6d9c3feb78f2c9452de0721fad5da955e1a67876bbc1a1c2130d8"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :note
+    {:path "/tmp/SardGenuineSmoothCompactPositiveRankImageNullity.md",
+     :sha256
+     "121dd5e62ca49b30a954cf1bd14e1f2a0c1d89f966be1a8dbe5a65bf71db37a3"},
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, dependency PASS receipt, fixture and note",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardGenuineSmoothCompactPositiveRankImageNullity-audit.json",
+      :exit 0}
+     {:cmd
+      "Read-only Python verification of fixture, note, all producer hashes, statement hash and executable placeholder counts",
+      :exit 0}
+     {:cmd "cmp pinned fixture and note against both promoted files",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/SardGenuineSmoothCompactPositiveRankImageNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SardGenuineSmoothCompactPositiveRankImageNullity",
+      :exit 0,
+      :output "Build completed successfully (8355 jobs)."}
+     {:cmd
+      "rg placeholder and prohibited-declaration scan over promoted Lean file",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output "387 items OK"}
+     {:cmd
+      "git diff --exit-code -- problems/t93A04/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check; git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1",
+      :exit 0,
+      :output
+      "Only unrelated untracked holes/labs/topology-contract/runs2/ remains; untouched."}],
+    :audit
+    {:path
+     "/tmp/SardGenuineSmoothCompactPositiveRankImageNullity-audit.json",
+     :sha256
+     "73c8b6e65c943ad4ba12dd6e6f2444d5c9b8bd5f4a6d63e5ae825af3794bf521",
+     :verified true},
+    :commit "79032f69e921c4292bd14486f30c8b2d1d7cbcd3",
+    :changed-paths
+    ["ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.lean"
+     "ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.md"],
+    :fixture
+    {:path
+     "/tmp/SardGenuineSmoothCompactPositiveRankImageNullity.lean",
+     :sha256
+     "f2eac1a88f3c6a80511be8bb048c43eaa136c6d1d3fc4892f62f62663c41679b",
+     :placeholder-count 0},
+    :consumer-sha256
+    "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.lean"
     "ConstructionTargets/SardGenuineSmoothCompactPositiveRankImageNullity.md"],
