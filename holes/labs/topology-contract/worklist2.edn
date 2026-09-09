@@ -945,78 +945,19 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Exactly one compiled nested-chart compatibility prerequisite supplied. General common-neighborhood restriction, concrete oriented circle overlap, and the punctured-circle calculation remain in the parent row.",
-     :outcome :revise,
+     "Promote and independently review the complete fixture. Global fundamental classes and general localization injectivity remain outside this row.",
+     :outcome :go,
      :warnings [],
-     :statement-hashes {},
-     :prerequisite
-     {:consumer :circle-local-orientation-overlap,
-      :stop-condition
-      "Bank only the nested-chart comparison and its common-chart consequence. The common chart is an input to that consequence, not yet a constructed overlap restriction. Do not claim the parent overlap/punctured-circle packet is complete or infer a global fundamental class or localization monicity.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/NestedOrientedChartCompatibilityProbe.lean",
-         :sha256
-         "d6a320fc64a7b85cee13c6346bf165425a619d9dba2e6a7d74d633cd0ede7fbb"},
-        :commands
-        [{:cmd
-          "cd /home/joe/code/apm-lean && lake env lean /tmp/NestedOrientedChartCompatibilityProbe.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/NestedOrientedChartCompatibility.lean"
-       "ConstructionTargets/NestedOrientedChartCompatibility.md"],
-      :dag-node
-      "Queue D #2: oriented overlap; nested-neighborhood coordinate transition and ambient class comparison",
-      :acceptance
-      {:declarations
-       ["ConstructionTargets.NestedOrientedChartCompatibility.PointedModelChart.transition"
-        "ConstructionTargets.NestedOrientedChartCompatibility.PointedModelChart.ambient_transition"
-        "ConstructionTargets.NestedOrientedChartCompatibility.PointedModelChart.transition_homology_square"
-        "ConstructionTargets.NestedOrientedChartCompatibility.PointedModelChart.compatible_localClass_eq"
-        "ConstructionTargets.NestedOrientedChartCompatibility.PointedModelChart.localClass_generates"
-        "ConstructionTargets.NestedOrientedChartCompatibility.constructedChart_localClass"
-        "ConstructionTargets.NestedOrientedChartCompatibility.localClass_eq_of_common_nested_chart"],
-       :implementation
-       "Promote the exact compiled fixture and document the remaining common-restriction construction. Preserve purely geometric chart data and define compatibility by strict increase of the constructed transition, never by equality of local classes or an assumed homology-map sign.",
-       :consumer-equation
-       "For pointed charts c and d with c.neighborhood contained in d.neighborhood, construct transition=d.coordinates.inverse composed with subtype inclusion composed with c.coordinates. Then d.ambient composed with transition equals c.ambient. If transition is increasing, the actual relative-H1 composition square yields c.localClass=d.localClass. For a common nested chart with increasing transitions into both charts, the two ambient local generators are equal.",
-       :consumer-residual
-       "Construct a common restricted pointed chart for overlapping oriented charts and verify its two increasing transitions; instantiate distinct overlapping circle charts. Complete the punctured-circle-to-line homeomorphism, positive-degree integral homology vanishing, and local-generator comparison in the parent probe.",
-       :axioms :standard-only,
-       :gates
-       ["Verify the fixture SHA-256 before implementation."
-        "Compile the fixture and canonical target."
-        "Run lake build ConstructionTargets.NestedOrientedChartCompatibility ConstructionTargets.OneDimensionalChartLocalGenerator ConstructionTargets.OneDiskLocalOrientation."
-        "Reproduce all seven printed axiom audits; permit only propext, Classical.choice, Quot.sound."
-        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."]},
-      :id :oriented-manifold-nested-chart-compatibility-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:oriented-manifold-model-generator-sign-1
-       :oriented-manifold-chart-local-generator-1],
-      :current-residual
-      "Separate chart-local generators lack a public comparison through an actual increasing coordinate transition on nested neighborhoods.",
-      :other-consumers [:punctured-circle-local-homology]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :author "codex-13",
      :commands
-     [{:cmd "cd /home/joe/code/apm-lean && realpath .lake/packages",
+     [{:cmd
+       "cd /home/joe/code/apm-lean && lake env lean /tmp/OrientedOverlapPuncturedCircleProbe.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/OrientedOverlapPuncturedCircleProbe.lean",
        :exit 0}
       {:cmd
-       "cd /home/joe/code/apm-lean && lake env lean /tmp/NestedOrientedChartCompatibilityProbe.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/NestedOrientedChartCompatibilityProbe.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/NestedOrientedChartCompatibilityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/OrientedOverlapPuncturedCircleProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "cd /home/joe/code/apm-lean && git diff --exit-code",
@@ -1024,26 +965,81 @@
       {:cmd "cd /home/joe/code/apm-lean && git diff --check",
        :exit 0}],
      :repository-note
-     "Read-only probe; no repository files modified. Canonical package authority verified; existing supervisor files left untouched.",
+     "Read-only probe; only the temporary fixture was written. Existing untracked supervisor files were untouched.",
      :changed-paths [],
-     :dependency-commit "80e84e8694036cf750564b74a1496b83e71a5c04",
+     :dependency-commit "77786b3c35ec70eb3e6674b385dca0ef0af706dd",
      :fixture
-     {:path "/tmp/NestedOrientedChartCompatibilityProbe.lean",
+     {:path "/tmp/OrientedOverlapPuncturedCircleProbe.lean",
       :sha256
-      "d6a320fc64a7b85cee13c6346bf165425a619d9dba2e6a7d74d633cd0ede7fbb"},
+      "48cfa5e5c5b2552c6b7109e43def8f77f0ad7d6824954246da357d353b7dedee"},
      :finding
-     "Compiled one nested-chart compatibility prerequisite. PointedModelChart contains only geometric neighborhood/homeomorphism data. For nested neighborhoods, the coordinate transition is constructed from the two homeomorphisms and subtype inclusion. Compatibility means that this actual transition is increasing. Relative-map composition and the banked increasing-map computation prove equality of the two ambient local classes. Excision proves these classes generate local H1 in T1 spaces. A common nested chart then implies overlap equality, but construction of that common restriction and the punctured-circle comparison remain unfinished.",
+     "Compiled the complete overlap and punctured-circle fixture. Positive coordinate scaling constructs a restricted pointed chart. Openness constructs a positive radius placing that chart inside both neighborhoods. Compatibility is strict increase of the actual transition into the second chart; the transition into the first is proved increasing. The banked relative-map square proves equality of ambient local generators. Concrete Circle charts consist of the constructed chart and its half-radius restriction, whose neighborhoods are proved distinct. Restricted stereographic projection gives a homeomorphism from Circle minus any specified point to the real line, with its actual induced homology comparison and positive-degree integral homology vanishing. The relative local generator is identified exactly with chart-pair transport followed by neighborhood inclusion/excision.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/OrientedOverlapPuncturedCircle.lean"
+       "ConstructionTargets/OrientedOverlapPuncturedCircle.md"],
+      :acceptance
+      {:implementation
+       "Promote the exact compiled fixture and document its geometric constructions, hypotheses, comparison maps, and one-dimensional boundary.",
+       :declarations
+       ["ConstructionTargets.OrientedOverlapPuncturedCircle.shrinkCoordinates"
+        "ConstructionTargets.OrientedOverlapPuncturedCircle.exists_common_radius"
+        "ConstructionTargets.OrientedOverlapPuncturedCircle.common_ambient_maps"
+        "ConstructionTargets.OrientedOverlapPuncturedCircle.OrientedCompatible"
+        "ConstructionTargets.OrientedOverlapPuncturedCircle.oriented_overlap_localClass_eq"
+        "ConstructionTargets.OrientedOverlapPuncturedCircle.half_neighborhood_ne"
+        "ConstructionTargets.OrientedOverlapPuncturedCircle.circle_half_chart_overlap"
+        "ConstructionTargets.OrientedOverlapPuncturedCircle.puncturedCircleLine"
+        "ConstructionTargets.OrientedOverlapPuncturedCircle.puncturedCircleHomologyIsoLine_hom"
+        "ConstructionTargets.OrientedOverlapPuncturedCircle.puncturedCircle_positive_homology"
+        "ConstructionTargets.OrientedOverlapPuncturedCircle.circle_relative_generator"
+        "ConstructionTargets.OrientedOverlapPuncturedCircle.circle_relative_generator_comparison"],
+       :hypotheses
+       "Overlap equality uses a topological space and two geometric pointed open one-disk charts. Compatibility means strict coordinate increase on the constructed common restriction. Generator preservation uses the banked T1 excision result; Circle satisfies these hypotheses. Coefficients are integers in the canonical relative singular-chain representation.",
+       :gates
+       ["Verify fixture SHA-256 before implementation."
+        "Compile the fixture and canonical target."
+        "Run lake build ConstructionTargets.OrientedOverlapPuncturedCircle ConstructionTargets.NestedOrientedChartCompatibility ConstructionTargets.OneDimensionalChartLocalGenerator."
+        "Reproduce all eleven printed axiom audits; permit only propext, Classical.choice, Quot.sound."
+        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."],
+       :axioms :standard-only,
+       :stop-condition
+       "Do not infer a global fundamental class, general localization monicity, or closure of t00J02 from these local one-dimensional results."}},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/OrientedOverlapPuncturedCircle.lean"
+    "ConstructionTargets/OrientedOverlapPuncturedCircle.md"],
    :dag-node
    "Queue D #2: milestone 3, overlap compatibility and first punctured-manifold consumer",
    :acceptance
-   {:probe
-    "Define compatible local orientation data for boundaryless one-manifolds using the geometric sign of coordinate transitions. Prove that two compatible charts at a point give equal ambient local H1 generators by restriction to a common neighborhood, naturality, and excision. Instantiate with overlapping oriented circle charts. Then compile a punctured-circle calculation: identify the complement of a point with a line, compute its positive-degree integral homology vanishing, and identify the generator of H1(circle, circle minus that point) using the chart comparison. Exhibit the actual comparison maps and audit all fixture axioms before GO. These are foundation fixtures, not a claim to close t00J02 or any frozen problem.",
+   {:implementation
+    "Promote the exact compiled fixture and document its geometric constructions, hypotheses, comparison maps, and one-dimensional boundary.",
+    :declarations
+    ["ConstructionTargets.OrientedOverlapPuncturedCircle.shrinkCoordinates"
+     "ConstructionTargets.OrientedOverlapPuncturedCircle.exists_common_radius"
+     "ConstructionTargets.OrientedOverlapPuncturedCircle.common_ambient_maps"
+     "ConstructionTargets.OrientedOverlapPuncturedCircle.OrientedCompatible"
+     "ConstructionTargets.OrientedOverlapPuncturedCircle.oriented_overlap_localClass_eq"
+     "ConstructionTargets.OrientedOverlapPuncturedCircle.half_neighborhood_ne"
+     "ConstructionTargets.OrientedOverlapPuncturedCircle.circle_half_chart_overlap"
+     "ConstructionTargets.OrientedOverlapPuncturedCircle.puncturedCircleLine"
+     "ConstructionTargets.OrientedOverlapPuncturedCircle.puncturedCircleHomologyIsoLine_hom"
+     "ConstructionTargets.OrientedOverlapPuncturedCircle.puncturedCircle_positive_homology"
+     "ConstructionTargets.OrientedOverlapPuncturedCircle.circle_relative_generator"
+     "ConstructionTargets.OrientedOverlapPuncturedCircle.circle_relative_generator_comparison"],
+    :hypotheses
+    "Overlap equality uses a topological space and two geometric pointed open one-disk charts. Compatibility means strict coordinate increase on the constructed common restriction. Generator preservation uses the banked T1 excision result; Circle satisfies these hypotheses. Coefficients are integers in the canonical relative singular-chain representation.",
+    :gates
+    ["Verify fixture SHA-256 before implementation."
+     "Compile the fixture and canonical target."
+     "Run lake build ConstructionTargets.OrientedOverlapPuncturedCircle ConstructionTargets.NestedOrientedChartCompatibility ConstructionTargets.OneDimensionalChartLocalGenerator."
+     "Reproduce all eleven printed axiom audits; permit only propext, Classical.choice, Quot.sound."
+     "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."],
+    :axioms :standard-only,
     :stop-condition
-    "GO requires an overlap equality and the concrete punctured-circle calculation with actual maps. REVISE to exactly one compiled missing prerequisite if either cannot yet be built. A record assuming overlap equality, an arbitrary choice of isomorphisms, or a global-class hypothesis is not a proof. STOP only on a demonstrated mathematical or representation obstruction, stating the residual needed by the consumer."},
+    "Do not infer a global fundamental class, general localization monicity, or closure of t00J02 from these local one-dimensional results."},
    :id :oriented-manifold-overlap-punctured-circle-1,
    :kind :reusable-theorem,
    :depends-on
