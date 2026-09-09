@@ -43188,6 +43188,23 @@
       "git add ConstructionTargets/SardBorelDerivativeRangeOrthogonalClosedOpenChartNullity.lean ConstructionTargets/SardBorelDerivativeRangeOrthogonalClosedOpenChartNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: assemble orthogonal chart nullity with Borel induction' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788955801608-16248-749113e1",
+     :commands
+     ["git show b79b7233 --stat --oneline"
+      "sha256sum /tmp/SardBorelDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean"
+      "cmp /tmp/SardBorelDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean <(git show b79b7233ac8352b8cf3ef5bf2dd80648c5278fb3:ConstructionTargets/SardBorelDerivativeRangeOrthogonalClosedOpenChartNullity.lean)"
+      "git show b79b7233ac8352b8cf3ef5bf2dd80648c5278fb3:ConstructionTargets/SardBorelDerivativeRangeOrthogonalClosedOpenChartNullity.lean | sed -n '14,46p' | sha256sum"
+      "git diff --exit-code b79b7233ac8352b8cf3ef5bf2dd80648c5278fb3 -- ConstructionTargets"
+      "lake env lean /tmp/SardBorelDerivativeRangeOrthogonalClosedOpenChartNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardBorelDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
+      "lake build ConstructionTargets.SardBorelDerivativeRangeOrthogonalClosedOpenChartNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit b79b7233ac8352b8cf3ef5bf2dd80648c5278fb3 passes. Fixture SHA 4bf7909f7e2b0c003e53a36ce644077e4278daea593945c7b3187991bb5a6ea6 and statement SHA 0b3a0e398f90cb2ac7624bfb56b243f86a0b1f47e58f652a4315fb1382e075da reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8360-job build successful. Lines 55–77 preserve inherited Borel representations and correctly instantiate reduced-dimension nullity and the explicit chart aggregator; chart and induction premises remain explicit. Ledger untouched."},
     :commit "b79b7233ac8352b8cf3ef5bf2dd80648c5278fb3",
     :changed-paths
     ["ConstructionTargets/SardBorelDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
@@ -43200,7 +43217,7 @@
     :declarations
     ["SardBorelDerivativeRangeOrthogonalClosedOpenChartNullityProbe.measure_image_zero_of_rangeOrthogonal_closedOpenChart_finiteOrder"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardBorelDerivativeRangeOrthogonalClosedOpenChartNullity.lean"
     "ConstructionTargets/SardBorelDerivativeRangeOrthogonalClosedOpenChartNullity.md"],
@@ -43389,7 +43406,7 @@
       "4bf7909f7e2b0c003e53a36ce644077e4278daea593945c7b3187991bb5a6ea6"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
