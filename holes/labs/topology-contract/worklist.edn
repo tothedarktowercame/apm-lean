@@ -41943,6 +41943,23 @@
       "git add ConstructionTargets/SardOpenRegularityGlobalGermExtension.lean ConstructionTargets/SardOpenRegularityGlobalGermExtension.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: construct global smooth germs from open regularity' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788936576205-16168-5632c9f0",
+     :commands
+     ["git show e9455bfe --stat --oneline"
+      "sha256sum /tmp/SardOpenRegularityGlobalGermExtensionProbe.lean"
+      "cmp /tmp/SardOpenRegularityGlobalGermExtensionProbe.lean <(git show e9455bfe4a31b3973df7c57be54ab781f0043a7f:ConstructionTargets/SardOpenRegularityGlobalGermExtension.lean)"
+      "git show e9455bfe4a31b3973df7c57be54ab781f0043a7f:ConstructionTargets/SardOpenRegularityGlobalGermExtension.lean | sed -n '7,12p' | sha256sum"
+      "git diff --exit-code e9455bfe4a31b3973df7c57be54ab781f0043a7f -- ConstructionTargets"
+      "lake env lean /tmp/SardOpenRegularityGlobalGermExtensionProbe.lean"
+      "lake env lean ConstructionTargets/SardOpenRegularityGlobalGermExtension.lean"
+      "lake build ConstructionTargets.SardOpenRegularityGlobalGermExtension"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit e9455bfe4a31b3973df7c57be54ab781f0043a7f passes. Fixture SHA 622730360f86ab1ae0064f2dde42ce48c74b67532f15bc7e5b417c92bd944197 and statement SHA 39a0c9e2d1738ac3f755a63b9169ead39933d24e807072e2a19f52cba0c96b74 reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 2423-job build successful. Lines 13–31 preserve global regularity and the stated germ-equality orientation, including the outer-ball boundary; no representation-boundary defect found. Ledger untouched."},
     :commit "e9455bfe4a31b3973df7c57be54ab781f0043a7f",
     :changed-paths
     ["ConstructionTargets/SardOpenRegularityGlobalGermExtension.lean"
@@ -41953,7 +41970,7 @@
      "622730360f86ab1ae0064f2dde42ce48c74b67532f15bc7e5b417c92bd944197"},
     :declarations ["exists_global_contDiff_germ_of_contDiffOn_open"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardOpenRegularityGlobalGermExtension.lean"
     "ConstructionTargets/SardOpenRegularityGlobalGermExtension.md"],
@@ -42124,7 +42141,7 @@
       "622730360f86ab1ae0064f2dde42ce48c74b67532f15bc7e5b417c92bd944197"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
