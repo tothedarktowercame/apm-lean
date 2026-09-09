@@ -44256,6 +44256,40 @@
    "Source-coordinate critical-image equality is established without measure or finite-dimensional assumptions; its integration with overlap nullity, target representation, and full induction remain open.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if source-equivalence composition fails to preserve regularity or dimension data, reviewed critical-image equality fails to transfer nullity, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardBorelOverlapSourceEquivTransfer.lean"
+    "ConstructionTargets/SardBorelOverlapSourceEquivTransfer.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL OVERLAP SOURCE EQUIVALENCE TRANSFER",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardBorelOverlapSourceEquivTransferProbe.lean",
+     :sha256
+     "17a98a6872958c65643bdcdf5fe515cf26d08cfe1cfc4837325e08655ce02e4d"},
+    :declarations
+    ["localSet_criticalImage_zero_of_borel_overlap_source_equiv"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Construct a same-universe inner-product source model, bridge target representation, close Borel-compatible induction, and resolve complementary analytic and remaining regularity cases."},
+   :representation
+   {:source
+    "A finite-dimensional real normed source E, a same-universe finite-dimensional real inner-product Borel proper model G with a supplied continuous linear equivalence G to E, an inner-product Borel target F with add-Haar measure, pointwise ambient C^(k+2) regularity on an arbitrary set, classical admissibility, Borel-compatible induction below finrank E, and the overlap inequality.",
+    :target
+    "Nullity of the localized critical image of the original E-to-F map, without inner-product, measurable-space, or proper-space hypotheses on E and without supplied model-map nullity."},
+   :id :critical-value-sard-borel-overlap-source-equiv-transfer-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-source-equiv-critical-image-1
+    :critical-value-sard-borel-overlap-degenerate-dimensions-1],
+   :current-residual
+   "Overlap nullity transfers through a supplied source equivalence; model construction, target representation, induction closure, and complementary analytic cases remain.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -44309,76 +44343,80 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank source-coordinate critical-image equality; integrate representation transport, close induction, and resolve complementary analytic and regularity obligations before rectangular closure.",
+     "Bank source-equivalence overlap transfer; construct the model, bridge target representation, close induction, and resolve complementary analytic and regularity obligations.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"criticalImage_eq_of_source_continuousLinearEquiv"
-      "a986fcda545db6887221027e6d073f24428b909d107bde27c424b8437d571cf8"},
+     {"localSet_criticalImage_zero_of_borel_overlap_source_equiv"
+      "2e061dc64563fbc1cf9bf8f04200f193631a00b6725427fc3dd4e94d6cc9d2f7"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if the chain rule and invertible source derivative fail to preserve criticality in both directions, inverse coordinates fail to identify the localized images, or nonstandard axioms are required.",
+      "Stop only if source-equivalence composition fails to preserve regularity or dimension data, reviewed critical-image equality fails to transfer nullity, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardSourceEquivCriticalImage.lean"
-       "ConstructionTargets/SardSourceEquivCriticalImage.md"],
+      ["ConstructionTargets/SardBorelOverlapSourceEquivTransfer.lean"
+       "ConstructionTargets/SardBorelOverlapSourceEquivTransfer.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / SOURCE EQUIVALENCE CRITICAL IMAGE",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL OVERLAP SOURCE EQUIVALENCE TRANSFER",
       :acceptance
       {:fixture
-       {:path "/tmp/SardSourceEquivCriticalImageProbe.lean",
+       {:path "/tmp/SardBorelOverlapSourceEquivTransferProbe.lean",
         :sha256
-        "732285f5cec6582ac1fd7d74784474cf041bcedfb0e00ce4680c25d39122db8c"},
+        "17a98a6872958c65643bdcdf5fe515cf26d08cfe1cfc4837325e08655ce02e4d"},
        :declarations
-       ["criticalImage_eq_of_source_continuousLinearEquiv"],
+       ["localSet_criticalImage_zero_of_borel_overlap_source_equiv"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Use source-coordinate equality with regularity and dimension transport to bridge normed and inner-product source representations; close Borel-compatible induction and resolve complementary analytic and remaining regularity cases."},
+       "Construct a same-universe inner-product source model, bridge target representation, close Borel-compatible induction, and resolve complementary analytic and remaining regularity cases."},
       :representation
       {:source
-       "The image under f of its ambient derivative-critical locus intersected with an arbitrary set s in a real normed source E.",
+       "A finite-dimensional real normed source E, a same-universe finite-dimensional real inner-product Borel proper model G with a supplied continuous linear equivalence G to E, an inner-product Borel target F with add-Haar measure, pointwise ambient C^(k+2) regularity on an arbitrary set, classical admissibility, Borel-compatible induction below finrank E, and the overlap inequality.",
        :target
-       "The image under f composed with e of its ambient derivative-critical locus intersected with the preimage of s, where e is a continuous linear equivalence from a real normed space G to E and f is differentiable at every point of s.",
-       :direction
-       "Exact equality from the target coordinate-composite critical-image representation to the source original-map critical-image representation, as subsets of the unchanged real normed target F."},
-      :id :critical-value-sard-source-equiv-critical-image-1,
-      :kind :representation-comparison,
+       "Nullity of the localized critical image of the original E-to-F map, without inner-product, measurable-space, or proper-space hypotheses on E and without supplied model-map nullity."},
+      :id :critical-value-sard-borel-overlap-source-equiv-transfer-1,
+      :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-critical-set-under-parameterization-1],
+      [:critical-value-sard-source-equiv-critical-image-1
+       :critical-value-sard-borel-overlap-degenerate-dimensions-1],
       :current-residual
-      "Source-coordinate critical-image equality is established without measure or finite-dimensional assumptions; its integration with overlap nullity, target representation, and full induction remain open.",
+      "Overlap nullity transfers through a supplied source equivalence; model construction, target representation, induction closure, and complementary analytic cases remain.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite identifies localized critical images exactly under a continuous linear change of source coordinates. The chain rule and surjectivity of the coordinate equivalence give equivalence of criticality; inverse coordinates prove equality of images. This supplies a source-representation transport step, not induction closure or a proof outside the overlap regime.",
+     "One compiled prerequisite transfers localized Borel overlap nullity to a finite-dimensional normed source equipped with a continuous linear equivalence from an inner-product model. Composition transports regularity, finrank equality transports admissibility and induction bounds, and reviewed critical-image equality transfers nullity back. Constructing the model and closing induction remain unresolved; rectangular Morse-Sard is not refuted.",
      :commands
      [{:cmd
-       "Read DAG, closure policy, build-loop definitions, parameterization modules, continuous-linear-equivalence derivative declarations, and reviewed dependency finding",
+       "Read DAG, closure policy, build-loop definitions, source-equivalence and overlap modules, dimension interfaces, and both reviewed dependency findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardSourceEquivCriticalImageProbe.lean",
+       "lake env lean /tmp/SardBorelOverlapSourceEquivTransferProbe.lean",
+       :exit 1,
+       :output
+       "Initial draft had an extra omega after norm_cast closed the goal; removed the redundant tactic."}
+      {:cmd
+       "lake env lean /tmp/SardBorelOverlapSourceEquivTransferProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardSourceEquivCriticalImageProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardBorelOverlapSourceEquivTransferProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
-       "Fixture hash recorded; frozen consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
+       "Frozen consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '5,13p' /tmp/SardSourceEquivCriticalImageProbe.lean | sha256sum",
+       "sed -n '7,23p' /tmp/SardBorelOverlapSourceEquivTransferProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardSourceEquivCriticalImageProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelOverlapSourceEquivTransferProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 340 items OK; {:done 332, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 341 items OK; {:done 333, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -44390,12 +44428,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardSourceEquivCriticalImageProbe.lean",
+     {:path "/tmp/SardBorelOverlapSourceEquivTransferProbe.lean",
       :sha256
-      "732285f5cec6582ac1fd7d74784474cf041bcedfb0e00ce4680c25d39122db8c"},
+      "17a98a6872958c65643bdcdf5fe515cf26d08cfe1cfc4837325e08655ce02e4d"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -44684,7 +44722,8 @@
     :critical-value-sard-borel-open-critical-image-jet-range-overlap-1
     :critical-value-sard-borel-local-set-critical-image-jet-range-overlap-1
     :critical-value-sard-borel-overlap-degenerate-dimensions-1
-    :critical-value-sard-source-equiv-critical-image-1],
+    :critical-value-sard-source-equiv-critical-image-1
+    :critical-value-sard-borel-overlap-source-equiv-transfer-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
