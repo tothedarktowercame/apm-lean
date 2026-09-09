@@ -40885,6 +40885,23 @@
      {:cmd
       "git add ConstructionTargets/SardRankZeroSmallSourceNullity.lean ConstructionTargets/SardRankZeroSmallSourceNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: exhaust small-source rank-zero locus nullity' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788932992312-16099-0f2df153",
+     :commands
+     ["git show 63a1de731aa2919edc9b8907da54bf20f46b82db --stat --oneline"
+      "sha256sum /tmp/SardRankZeroSmallSourceNullityProbe.lean"
+      "cmp /tmp/SardRankZeroSmallSourceNullityProbe.lean <(git show 63a1de731aa2919edc9b8907da54bf20f46b82db:ConstructionTargets/SardRankZeroSmallSourceNullity.lean)"
+      "git show 63a1de731aa2919edc9b8907da54bf20f46b82db:ConstructionTargets/SardRankZeroSmallSourceNullity.lean | sed -n '7,19p' | sha256sum"
+      "git diff --exit-code 63a1de731aa2919edc9b8907da54bf20f46b82db -- ConstructionTargets"
+      "lake env lean /tmp/SardRankZeroSmallSourceNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardRankZeroSmallSourceNullity.lean"
+      "lake build ConstructionTargets.SardRankZeroSmallSourceNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit 63a1de731aa2919edc9b8907da54bf20f46b82db passes: exact scope, fixture and frozen statement hashes reproduced, no new placeholders, consumer unchanged, both compilations successful with standard axioms only, build successful (8423 jobs). Lines 20–28 correctly transfer compact nullity to the entire closed rank-zero locus; no theorem-orientation or representation-boundary defect found. Ledger untouched."},
     :commit "63a1de731aa2919edc9b8907da54bf20f46b82db",
     :changed-paths
     ["ConstructionTargets/SardRankZeroSmallSourceNullity.lean"
@@ -40896,7 +40913,7 @@
     :declarations
     ["rankZero_image_zero_of_sourceDim_le_twice_targetDim"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardRankZeroSmallSourceNullity.lean"
     "ConstructionTargets/SardRankZeroSmallSourceNullity.md"],
@@ -41068,7 +41085,7 @@
       "fb09056b425cdfe223284b2563a3e64da279d9fb1d8d78420795f36770337dc9"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
