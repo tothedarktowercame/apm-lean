@@ -702,6 +702,29 @@
      "Production integral relative H1 of the charted space relative to the complement of its specified point.",
      :direction
      "Model to ambient space: exact equality identifies the induced chart-to-ambient chain map with constructed chart-pair transport followed by neighborhood inclusion; the ambient generator equals inclusion applied to the transported model generator."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788968233457-16524-d58cdcdf",
+     :commands
+     ["cd /home/joe/code/apm-lean"
+      "realpath .lake/packages"
+      "git show 80e84e86:ConstructionTargets/OneDimensionalChartLocalGenerator.lean"
+      "git show 80e84e86:ConstructionTargets/OneDimensionalChartLocalGenerator.md"
+      "git diff-tree --no-commit-id --name-status -r 80e84e86"
+      "sha256sum /tmp/OneDimensionalChartLocalGeneratorProbe.lean"
+      "git show 80e84e86:ConstructionTargets/OneDimensionalChartLocalGenerator.lean | sha256sum"
+      "cmp /tmp/OneDimensionalChartLocalGeneratorProbe.lean ConstructionTargets/OneDimensionalChartLocalGenerator.lean"
+      "lake env lean /tmp/OneDimensionalChartLocalGeneratorProbe.lean"
+      "lake env lean ConstructionTargets/OneDimensionalChartLocalGenerator.lean"
+      "set -o pipefail; lake build ConstructionTargets.OneDimensionalChartLocalGenerator ConstructionTargets.LocalHomologyNeighborhoodExcision ConstructionTargets.OneDiskLocalOrientation ConstructionTargets.ChartPairRelativeHomologyTransport 2>&1 | rg '^warning:|^error:|Build completed|OneDimensionalChartLocalGenerator'"
+      "git show 80e84e86:ConstructionTargets/OneDimensionalChartLocalGenerator.lean | python3 -c 'import sys,re,hashlib; s=sys.stdin.buffer.read(); names={\"modelChart_origin\",\"modelChart_deletedPoint_iff\",\"ambientChartMap_chain_eq\",\"ambientChartMap_H1_isIso\",\"ambientLocalGenerator_generates\",\"ambientLocalGenerator_eq_inclusion_transport\",\"realLine_local_generator\",\"circle_local_generator\"}; print(\"\\n\".join(n.decode()+\" \"+hashlib.sha256(b\"theorem \"+n+t).hexdigest() for n,t in re.findall(rb\"theorem (\\w+)(.*?)(?= :=)\",s,re.S) if n.decode() in names)); print(\"forbidden_count\",len(re.findall(rb\"\\b(?:sorry|admit|sorryAx|axiom|opaque|unsafe)\\b\",s))); print(\"axiom_audit_count\",s.count(b\"#print axioms\"))'"
+      "git diff --exit-code 80e84e86 -- '*.lean' lakefile.toml lakefile.lean lake-manifest.json lean-toolchain"
+      "git show --format= --check 80e84e86"
+      "git diff --check"
+      "git status --porcelain --untracked-files=no"],
+     :finding
+     "Independent review of codex-14 commit 80e84e8694036cf750564b74a1496b83e71a5c04. Exact permitted two-file scope; fixture SHA-256 44459f5d5ebdc8fad706447b56335012767955043a440536f7aefa5f1940598a and all eight statement hashes reproduced. Tested sources and build configuration match the recorded commit. Fixture and target compile; focused build passes with 17 replayed dependency warnings and none in the target. Eleven axiom audits use only propext, Classical.choice, Quot.sound. Zero placeholders or forbidden declarations; placeholder delta zero; frozen problems unchanged. Actual chartAt is restricted to a positive-radius coordinate ball and rescaled from the model disk. Origin mapping and deleted-point pair equivalence are proved, not assumed. Forward chain-map equality identifies model-to-ambient transport with chart-pair transport followed by actual neighborhood inclusion. T1 is used for excision; the resulting actual H1 isomorphism proves integer generation. Euclidean-space, explicit real-line atlas, and existing stereographic Circle atlas specializations are valid. No differentiability, global orientation, fundamental class, or localization injectivity is assumed; overlap compatibility remains downstream. Ledger untouched."},
     :commit "80e84e8694036cf750564b74a1496b83e71a5c04",
     :changed-paths
     ["ConstructionTargets/OneDimensionalChartLocalGenerator.lean"
@@ -720,7 +743,7 @@
     "SHA-256 of UTF-8 theorem declaration bytes beginning with theorem and ending immediately before the space preceding :=; names below are in ConstructionTargets.OneDimensionalChartLocalGenerator.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/OneDimensionalChartLocalGenerator.lean"
     "ConstructionTargets/OneDimensionalChartLocalGenerator.md"],
@@ -772,7 +795,7 @@
    :stop-condition
    "Do not elect t00J02 or infer general top-homology localization monicity from this one-dimensional local result.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue D #2: milestone 3, overlap compatibility and first punctured-manifold consumer",
