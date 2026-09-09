@@ -1452,65 +1452,104 @@
    :stop-condition
    "No abstract isomorphism substituted for the actual map; no arbitrary-manifold or higher-dimensional claim.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Construct a geometrically coherent rotation-oriented chart family and prove that one global Circle class satisfies every localization equation. Pointwise inverse localization does not establish that coherence.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :author "codex-13",
-     :commands
-     [{:cmd "realpath .lake/packages", :exit 0}
-      {:cmd "lake env lean /tmp/CircleActualLocalizationProbe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CircleActualLocalizationProbe.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CircleActualLocalizationProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :repository-note
-     "Read-only probe; only the temporary fixture was written.",
-     :changed-paths [],
-     :dependency-commit "487f1de0315ae18a93ffa518c74e49e2aa52c9ac",
-     :fixture
-     {:path "/tmp/CircleActualLocalizationProbe.lean",
-      :sha256
-      "69d7fb8cfdbc03f14539e0308edb02fef494113baab74e8ebb78c0f1d57592f2"},
-     :finding
-     "Compiled the complete actual-localization fixture. For every Circle point, augmentation/naturality proves the actual puncture-inclusion H0 map is an isomorphism. Cancelling that map in the pair sequence proves the connecting map is zero. Punctured-circle H1 vanishing and production exactness then make the actual absolute-to-relative H1 projection both monic and epic, hence invertible. Both categorical inverse identities compile. The inverse image of the constructed chart-local generator localizes to that generator and generates absolute integral H1.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CircleActualLocalization.lean"
-       "ConstructionTargets/CircleActualLocalization.md"],
-      :acceptance
-      {:implementation
-       "Promote the exact compiled fixture and document the actual maps and pointwise normalization boundary.",
-       :declarations
-       ["ConstructionTargets.CircleActualLocalization.punctureH0Inclusion_isIso"
-        "ConstructionTargets.CircleActualLocalization.connecting_eq_zero"
-        "ConstructionTargets.CircleActualLocalization.localization_isIso"
-        "ConstructionTargets.CircleActualLocalization.localization_hom_inv"
-        "ConstructionTargets.CircleActualLocalization.localization_inv_hom"
-        "ConstructionTargets.CircleActualLocalization.normalizedClass_localizes"
-        "ConstructionTargets.CircleActualLocalization.normalizedClass_generates"],
-       :consumer-equation
-       "For the actual localization Lx = homologyMap(relativeSingularProjection(deletedPoint x),1), normalizedClass x = (asIso Lx).inv((constructedChart x).localClass), Lx(normalizedClass x) = (constructedChart x).localClass, and every absolute H1 class is an integer multiple of normalizedClass x.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA-256 before implementation."
-        "Compile the fixture and canonical target."
-        "Run lake build ConstructionTargets.CircleActualLocalization ConstructionTargets.OrientedOverlapPuncturedCircle ConstructionTargets.SingularH0Augmentation."
-        "Reproduce all seven printed axiom audits; permit only propext, Classical.choice, Quot.sound."
-        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."],
-       :stop-condition
-       "Pointwise Circle normalization only. Do not claim independently chosen chart signs agree across points, global orientation coherence, arbitrary-manifold localization, or higher-dimensional results."}},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct a geometrically coherent rotation-oriented chart family and prove that one global Circle class satisfies every localization equation. Pointwise inverse localization does not establish agreement of independently chosen chart signs across points. No arbitrary-manifold or higher-dimensional result is claimed.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :all-seven-printed-axiom-audits :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :fixture-compilation :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 30,
+      :log "/tmp/codex-14-localization-build.log",
+      :paths
+      {"ConstructionTargets/CircleUniversalCover.lean" 1,
+       "ConstructionTargets/TopologicalSumSingularHomology.lean" 1,
+       "ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/T02A06SphereShift.lean" 3,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/SolidTorusGluingOpenCover.lean" 5,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/BoundaryTorusOpenCover.lean" 4,
+       "ConstructionTargets/PuncturedNormedSpaceRadialEquivalence.lean"
+       2,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/SingularSubdivision.lean" 2}}],
+    :statement-hashes
+    {"punctureH0Inclusion_isIso"
+     "69877970adf9049b8698b4972c54eeb1702479800f567001320487f594eda553",
+     "connecting_eq_zero"
+     "99da38340e44f5bb35305cd7b01993081f83c8e3e60f8550a53fbc9bc51bf449",
+     "localization_isIso"
+     "a4ca4adea7506ae46f788ed185f831eede10843a252416d81f56463a381e5825",
+     "localization_hom_inv"
+     "6ab8aa0ef125ac15dd6d3e0b4d1d575c911674d406eb16088216988db84581b3",
+     "localization_inv_hom"
+     "928bcd5e0bd4f6fdaca6376c0d4031b7672102adc23b00c96358ad5964c3bc8b",
+     "normalizedClass_localizes"
+     "a7cbc7541c5226b6410cde28eafdd30f696e29959d5982039b172746858b92a6",
+     "normalizedClass_generates"
+     "4e8e8020980f5dc940772d1bbcae7cad21f06a73b602981e6b160b95be4638cd"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CircleActualLocalizationProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CircleActualLocalizationProbe.lean > /tmp/codex-14-localization-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CircleActualLocalization.lean > /tmp/codex-14-localization-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CircleActualLocalization ConstructionTargets.OrientedOverlapPuncturedCircle ConstructionTargets.SingularH0Augmentation > /tmp/codex-14-localization-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CircleActualLocalization.lean /tmp/CircleActualLocalizationProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Prove actual Circle localization is invertible and normalize pointwise\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Dependency and checkpoint receipts reviewed. Existing untracked supervisor files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :representation
+    {:source "Integral absolute singular H1 of Circle.",
+     :target
+     "Integral relative singular H1 of Circle modulo the complement of a specified point.",
+     :direction
+     "Forward localization induced by relativeSingularProjection; the actual map is proved invertible and asIso supplies its inverse."},
+    :commit "a172e498cff17b894d371aa260f783534d5ee706",
+    :changed-paths
+    ["ConstructionTargets/CircleActualLocalization.lean"
+     "ConstructionTargets/CircleActualLocalization.md"],
+    :dependency-commit "487f1de0315ae18a93ffa518c74e49e2aa52c9ac",
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/CircleActualLocalizationProbe.lean",
+     :sha256
+     "69d7fb8cfdbc03f14539e0308edb02fef494113baab74e8ebb78c0f1d57592f2"},
+    :finding
+    "Promoted the exact fixture. Augmentation/naturality proves the actual puncture-inclusion H0 map invertible; cancellation proves the connecting map zero. Punctured-circle H1 vanishing and production exactness prove the actual projection-induced localization monic and epic, hence invertible. Both inverse identities hold. Its inverse image of the constructed chart-local generator localizes correctly and generates absolute integral H1.",
+    :statement-hash-method
+    "SHA-256 of UTF-8 declaration bytes beginning with theorem or instance and ending immediately before the space preceding :=; names below are in ConstructionTargets.CircleActualLocalization.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CircleActualLocalization.lean"
     "ConstructionTargets/CircleActualLocalization.md"],
