@@ -6731,6 +6731,24 @@
       :session-id 59516,
       :error "Unknown process id 59516",
       :correction "Reran the required build and obtained exit zero."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788989275606-17106-7695b82c",
+     :commands
+     ["git show efe3a69b:holes/labs/topology-contract/worklist2.edn"
+      "git show d6256e6d:ConstructionTargets/RegularFiberFixedModel.lean"
+      "git show d6256e6d:ConstructionTargets/RegularFiberFixedModel.md"
+      "lake env lean /tmp/RegularFiberFixedModel.lean"
+      "lake env lean ConstructionTargets/RegularFiberFixedModel.lean"
+      "lake build ConstructionTargets.RegularFiberFixedModel ConstructionTargets.SmoothRegularFiberCoordinates"
+      "python3 inline audit: fixture equality and SHA256, five declaration hashes, exact scope, forbidden tokens, 77-file import closure and frozen placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show efe3a69b:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --check d6256e6d"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Exact two-file implementation and fixture verified. Both compilations and 8316-job build pass without warnings; three audits per compilation use standard axioms only. Constructed fixed-model equivalence and inverse transport preserve smooth injective parameterization, exact local fiber image and derivative range equal to ker L. No global atlas or frozen closure claimed. Frozen placeholders unchanged at 322. Ledger untouched."},
     :commit "d6256e6d4d1cacfc925e780b8f4ceec63ade527e",
     :changed-paths
     ["ConstructionTargets/RegularFiberFixedModel.lean"
@@ -6745,7 +6763,7 @@
     "SHA256 of declaration bytes beginning with def, lemma or theorem and ending immediately before the space preceding :=.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/RegularFiberFixedModel.lean"
     "ConstructionTargets/RegularFiberFixedModel.md"],
@@ -6869,7 +6887,7 @@
      "Exactly one fixed-model coordinate prerequisite compiles. Rank-nullity proves the derivative kernel has dimension finrank E minus finrank F. A constructed continuous linear equivalence identifies it with that fixed Euclidean model. Transporting the reviewed smooth slice yields an injective smooth parameterization on an open neighborhood of zero whose image is exactly an ambient open neighborhood intersected with the literal fiber. Its strict derivative is the transported kernel inclusion, and that linear map's range is proved equal to the original kernel. The global atlas, smooth overlap compatibility and manifold inclusion theorem remain unconstructed; the parent is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE: smooth atlas on the literal regular fiber",
