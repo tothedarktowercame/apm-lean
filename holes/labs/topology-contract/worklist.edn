@@ -51100,8 +51100,56 @@
   {:consumer "t95J05",
    :stop-condition
    "If complete closure cannot compile, name the exact remaining measure normalization or representation theorem. Preserve any counterexample and classify a false frozen encoding as local SPEC-DEFECT, not campaign refutation.",
+   :evidence
+   {:placeholder-delta
+    {:consumer "t95J05",
+     :before 1,
+     :after 1,
+     :delta 0,
+     :frozen-sha256
+     "bc69f32681ce9fa5abe5e22256661c1bec11c5a85d9433c166e89352596df698"},
+    :residual
+    "Numerical intrinsic mass normalization remains the exact frozen consumer obligation. This is missing infrastructure, not an established specification refutation. No partial mass certificate counts as GO; no implementation elected.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1788984222711-16952-c1b80145"},
+    :outcome :stop,
+    :warnings ["One inherited unnecessarySimpa prefix lint."],
+    :frozen-proposition-sha256
+    "f817936f85150fc85206c4f3153bb4d2dd4241b5afefe7bfde3e930abd094e48",
+    :boundary
+    "(Measure.hausdorffMeasure 3 (Set.univ : Set t95J05SphereThree)).toReal = 2 * Real.pi ^ 2 remains unproved. The diameter-power Hausdorff definition and ambient cone-based Haar-to-sphere measure cannot be identified without a proved comparison constant. Neither this identity nor its negation was established.",
+    :disposition :stop,
+    :axioms [propext Classical.choice Quot.sound],
+    :author :codex-12,
+    :reason :missing-intrinsic-hausdorff-normalization,
+    :commands
+    [{:cmd "lake env lean /tmp/T95J05IntrinsicMassBoundary.lean",
+      :exit 0}
+     {:cmd
+      "git diff --exit-code -- problems/t95J05/lean/Main.lean TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}],
+    :campaign-refutation false,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T95J05IntrinsicMassBoundary.lean",
+     :sha256
+     "f40cec683925d073118dae07be7c98a3ee972ee260d0970b71c39869a622004e",
+     :purpose :boundary-diagnostic,
+     :placeholders 0},
+    :finding
+    "Compiled the literal inclusion-pullback integral as -mass 3 and the descended integral as -mass 3 / 2. Using the existing descent existence/uniqueness theorem, diagnostic_frozen_iff_mass proves that the complete frozen proposition is equivalent to mass 3 = 2*pi^2. Integrability, density transport and the quotient factor are resolved without assuming numerical normalization.",
+    :artifacts
+    {:report
+     {:path "/tmp/T95J05IntrinsicMassBoundary.md",
+      :sha256
+      "4589ea25eea8729fa0b46b31327c4e162b23912bba5cec111b7fb0c5b070329c"},
+     :audit
+     {:path "/tmp/T95J05IntrinsicMassBoundary-audit.json",
+      :sha256
+      "f9924df8d776874fbb7dfe9039056707c3ed7768333d4f099aaac5f24763b294"}},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "STOKES AND MOMENTS / intrinsic sphere normalization",
    :acceptance
