@@ -41356,6 +41356,23 @@
       "git add ConstructionTargets/SardCompactRankZeroThirdJetAssembly.lean ConstructionTargets/SardCompactRankZeroThirdJetAssembly.md && git diff --cached --check && git diff --cached --name-only && git commit -m 'topology: assemble compact rank-zero nullity from third-order uncovered jets' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0,
       :output "Committed exactly two scoped files; worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788934557088-16126-342238c0",
+     :commands
+     ["git show 92154346ed30bdec23722adcdebfac7afc02ba13 --stat --oneline"
+      "sha256sum /tmp/SardCompactRankZeroThirdJetAssemblyProbe.lean"
+      "cmp /tmp/SardCompactRankZeroThirdJetAssemblyProbe.lean <(git show 92154346ed30bdec23722adcdebfac7afc02ba13:ConstructionTargets/SardCompactRankZeroThirdJetAssembly.lean)"
+      "git show 92154346ed30bdec23722adcdebfac7afc02ba13:ConstructionTargets/SardCompactRankZeroThirdJetAssembly.lean | sed -n '7,25p' | sha256sum"
+      "git diff --exit-code 92154346ed30bdec23722adcdebfac7afc02ba13 -- ConstructionTargets"
+      "lake env lean /tmp/SardCompactRankZeroThirdJetAssemblyProbe.lean"
+      "lake env lean ConstructionTargets/SardCompactRankZeroThirdJetAssembly.lean"
+      "lake build ConstructionTargets.SardCompactRankZeroThirdJetAssembly"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"],
+     :finding
+     "Commit 92154346ed30bdec23722adcdebfac7afc02ba13 passes. Fixture SHA b18cbb50370860e4eee3e58f428daa9fe47480bbd20f4dac034083968496572b and statement SHA d2d08698dc3789cf177a2ef650991493640f01d13e8808367622b446ab2e5d2b reproduced. Exact scope, zero new placeholders, unchanged consumer, standard axioms only, both compilations and 8429-job build successful. Lines 26–38 correctly discharge second jets and retain uncovered orders at least three; no theorem-orientation or representation-boundary defect found. Ledger untouched."},
     :commit "92154346ed30bdec23722adcdebfac7afc02ba13",
     :changed-paths
     ["ConstructionTargets/SardCompactRankZeroThirdJetAssembly.lean"
@@ -41367,7 +41384,7 @@
     :declarations
     ["compact_rankZero_image_zero_of_uncovered_third_and_higherJets"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardCompactRankZeroThirdJetAssembly.lean"
     "ConstructionTargets/SardCompactRankZeroThirdJetAssembly.md"],
@@ -41544,7 +41561,7 @@
       "b18cbb50370860e4eee3e58f428daa9fe47480bbd20f4dac034083968496572b"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
