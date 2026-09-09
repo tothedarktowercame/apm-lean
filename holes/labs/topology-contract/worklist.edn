@@ -52586,8 +52586,47 @@
   {:consumer "t95J06",
    :stop-condition
    "GO requires the full frozen consumer. Otherwise name the exact free-circle-action quotient or surface-classification boundary; partial action laws are not closure.",
+   :evidence
+   {:placeholder-after 2,
+    :placeholder-delta 0,
+    :residual
+    "Construct an applicable topological circle-action quotient/classification argument, or separately establish the smooth compatibility needed by a smooth quotient argument, without strengthening the frozen hypotheses. Both consumer placeholders remain.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms [propext Classical.choice Quot.sound],
+    :author "codex-12",
+    :placeholder-before 2,
+    :reason
+    "Missing applicable free-circle-action quotient and surface-classification theorem, not mathematical refutation. The frozen surface predicate supplies an intrinsic smooth atlas and component H2 isomorphisms, but no smooth compatibility of the ambient inclusion or restricted action. Existing regular-fiber producers require a smooth defining map with surjective derivative. A theorem constructing the orbit quotient and deriving the component homeomorphism to Circle × Circle under the exact frozen hypotheses remains absent.",
+    :commands
+    [{:cmd "lake env lean /tmp/T95J06FrozenBoundary.lean", :exit 0}
+     {:cmd "bb /tmp/t95j06-review.bb", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/T95J06FrozenBoundary.lean",
+      :exit 1,
+      :correction
+      "Replaced unknown continuous_subtype_mk with continuous_induced_rng.mpr."}
+     {:cmd "lake env lean /tmp/T95J06FrozenBoundary.lean",
+      :exit 1,
+      :correction
+      "Made the subtype coercion composition explicit before rewriting the Hopf formula; subsequent compilation passed."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T95J06FrozenBoundary.lean",
+     :sha256
+     "96e2ac7579187a6b7daee5d5c4bc45011b4e154601bdadcb13373d76d48abb27",
+     :role :partial-diagnostic},
+    :finding
+    "Compiled continuity of the actual Hopf flow and its restriction to every invariant subtype, preserving the exact proved frozen prefix. This does not establish the required component classification. The frozen conclusion requests homeomorphisms despite its Diffeomorphic name; all component quantifiers and integral-homology orientation data remain unchanged.",
+    :frozen
+    {:path "problems/t95J06/lean/Main.lean",
+     :sha256
+     "482fc0478fe2b5c3252076b3a3e91f28ea9d9d81f7e5d3d3ada78ed5167a0d06",
+     :verified true},
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SURFACE CLASSIFICATION / invariant Hopf surface",
    :acceptance
