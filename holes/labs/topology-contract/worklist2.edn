@@ -10670,116 +10670,93 @@
    :stop-condition
    "No assumed small-chain homology isomorphism, subdivision operator or path-component classification. Do not claim positive-degree comparison, relative excision or sphere-table closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Positive-degree small-chain comparison, relative excision including degree zero and potentially nonclosed excision, sphere suspension and rational S2 H1/H2 remain downstream. No frozen consumer closure is claimed.",
-     :axiom-audits 8,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture, preserving actual inclusion maps, constructed chain lifts, exactness proof and examples.",
-      :namespace "ConstructionTargets.CoefficientSmallH0",
-      :declarations
-      ["component_mono"
-       "liftZero"
-       "liftZero_inc"
-       "component_epi_zero"
-       "edge_lift"
-       "liftOne"
-       "liftOne_boundary"
-       "exists_boundary"
-       "h0_injective"
-       "h0_isIso"
-       "h0Iso"
-       "h0Iso_hom"
-       "inverse_left"
-       "inverse_right"
-       "rational_interval"
-       "integral_interval"
-       "empty_cover"],
-      :hypotheses
-      "R, X and the arbitrary cover index type are Type 0; R is a commutative ring, X a topological space, and the indexed open sets cover X. No connectedness or nonemptiness assumptions.",
-      :consumer-equation
-      "h0Iso.hom equals HomologicalComplex.homologyMap of the actual CoefficientSmallPath.coverSmallInclusion in degree zero; inverse_left and inverse_right establish its two inverse identities.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSmallH0 ConstructionTargets.CoefficientSmallPath ConstructionTargets.CoefficientH0."
-       "Reproduce all eight standard-only axiom audits, integer/rational interval examples and empty-cover example."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure stop rules, dependency reviews and coefficient/path/homology APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientSmallH0.lean", :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientSmallH0.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSmallH0.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial chain-lift compilation",
-       :exit 1,
-       :correction
-       "Qualified coefficient-specific chain definitions, specified coproduct indices and bundled the inverse homeomorphism continuously."}
-      {:cmd "Second chain-lift compilation",
-       :exit 1,
-       :correction
-       "Specified the small-simplex coproduct family and adjusted composition normalization."}
-      {:cmd "Third chain-lift compilation",
-       :exit 1,
-       :correction "Investigated unresolved coproduct simplification."}
-      {:cmd "Fourth chain-lift compilation",
-       :exit 1,
-       :correction
-       "Qualified Limits.Sigma operations; further unfolding remained necessary."}
-      {:cmd "Fifth chain-lift diagnostic compilation",
-       :exit 1,
-       :correction "Inspected the exact elaborated coproduct goal."}
-      {:cmd "Sixth chain-lift compilation",
-       :exit 1,
-       :correction
-       "Unfolded chain abbreviations; the zero-chain identity then compiled."}
-      {:cmd "Seventh chain-lift compilation",
-       :exit 1,
-       :correction
-       "Replaced a change tactic that incorrectly treated associativity as definitional equality."}
-      {:cmd "Eighth chain-lift compilation",
-       :exit 1,
-       :correction
-       "Unfolded the one-chain lift before coproduct extensionality; the successful rerun proved the boundary equation."}
-      {:cmd "Initial H0 injectivity compilation",
-       :exit 1,
-       :correction
-       "Used moduleCat_exact_iff rather than the abelian-group-specific theorem and removed an unavailable zero-evaluation name."}
-      {:cmd "Second H0 injectivity compilation",
-       :exit 1,
-       :correction
-       "Exposed the short-complex boundary equation before rewriting its evaluation. Subsequent full compilations pass."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientSmallH0.lean",
-      :sha256
-      "605f1bc748910d477aa9f2ef4272f007a02b518aac32fb806ebbb63dc27e2312"},
-     :finding
-     "The actual coefficient-general small-chain inclusion induces an H0 isomorphism. The proof constructs a zero-chain lift, lifts every singular one-simplex boundary using the reviewed finite small-path construction, and assembles those lifts into a map on all one-chains. Exactness proves injectivity on H0; the zero-chain lift proves surjectivity. The exported isomorphism has the actual inclusion-induced homology map as its forward map, with both inverse equations proved. Integer and rational overlapping-interval examples and an empty-space/empty-cover example compile. No path-connectedness or nonemptiness is assumed.",
-     :dependency-reviews
-     ["invoke-1788997386659-17354-52aa4336"
-      "invoke-1788995590916-17301-4d9fa8b5"
-      "invoke-1788996653832-17335-a8396115"],
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientSmallH0.lean"
-       "ConstructionTargets/CoefficientSmallH0.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Positive-degree small-chain comparison, relative excision including degree zero and potentially nonclosed excision, sphere suspension and rational S2 H1/H2 remain downstream. No frozen consumer closure claimed.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :interval-and-empty-examples :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :eight-axiom-audits :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 8,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 20 dependency warnings: SimplyConnectedOpenCover (3), SingularHomologyConcrete (1), SingularSubdivision (2), T02A06HemisphereCoordinates (6), T02A06HemisphereExcision (2), T02A06DiskRadialComparison (3), T02A06SphereShift (3). Fixture and canonical compilations were warning-free."],
+    :statement-hashes
+    {"empty_cover"
+     "f7383cb1b06b0cc7a1187e4b8afa9cddb27970030f45322f6c03737312479d5a",
+     "edge_lift"
+     "5c35fe51ac0c55199d942c0818ff959c2cc0e4fb2a7fe92ff535ea74431f1bfc",
+     "liftOne_boundary"
+     "14ff9a54400399b8285de4f06263e19d19e9a04ff79ccaafd04dc51e100f7395",
+     "h0_isIso"
+     "64058b915ff5049366c614b48d4afb8d2d5550ded6455df4ead69c43e70046a0",
+     "inverse_left"
+     "54072b55c1941fb64529e87dfdb41415044c5263ea981f8d5e9f1338ea00200c",
+     "inverse_right"
+     "b69de87a312a8f6288b0cb5fcad58e915204fcdac83e95a6758e434829326e97",
+     "rational_interval"
+     "4adcf7a3f88dcc5c0a1959d491709a8d41f9a99ac20e3e7c8f8a6acb8984803f",
+     "integral_interval"
+     "cb33770b39aae9a2e03ff270afe27257008fcd5f1e5e100babfa6ff1efec284e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientSmallH0.lean", :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientSmallH0.lean", :exit 0}
+     {:cmd "lake env lean ConstructionTargets/CoefficientSmallH0.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientSmallH0 ConstructionTargets.CoefficientSmallPath ConstructionTargets.CoefficientH0",
+      :exit 0}
+     {:cmd
+      "Python audit: exact promotion, fixture SHA256, eight standard-only audits per compilation including all examples, warnings, placeholders and declaration hashes",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientSmallH0.lean /tmp/CoefficientSmallH0.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope verification and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Prove explicit-coefficient small-chain H0 comparison\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope and clean checkout verification",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and all three dependency PASS records. Only the authorized two files changed; ledger and frozen consumers untouched. Checkout clean.",
+    :diagnostic-history [],
+    :commit "9152580f8eba8db4a9848ac3cf8d96bebf85103f",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSmallH0.lean"
+     "ConstructionTargets/CoefficientSmallH0.md"],
+    :fixture
+    {:path "/tmp/CoefficientSmallH0.lean",
+     :sha256
+     "605f1bc748910d477aa9f2ef4272f007a02b518aac32fb806ebbb63dc27e2312"},
+    :finding
+    "Exact fixture promoted, preserving zero-chain and one-chain boundary lifts, H0 injectivity and surjectivity, the actual inclusion-induced forward map and both inverse identities. Integer/rational interval examples and the empty-cover example compile. Both compilations and the 8258-job build passed.",
+    :dependency-reviews
+    ["invoke-1788997386659-17354-52aa4336"
+     "invoke-1788995590916-17301-4d9fa8b5"
+     "invoke-1788996653832-17335-a8396115"],
+    :statement-hash-method
+    "SHA256 of declaration bytes beginning with def or theorem and ending immediately before the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSmallH0.lean"
     "ConstructionTargets/CoefficientSmallH0.md"],
