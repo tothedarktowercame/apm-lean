@@ -52225,8 +52225,47 @@
   {:consumer "t03J04",
    :stop-condition
    "GO requires every frozen conjunct. Otherwise name the exact torus homology or finite-cover Euler theorem missing; partial covering data is not closure.",
+   :evidence
+   {:residual
+    "Compute the actual rational torus Euler sum and prove its finite-cover relation, including the required homology finiteness or an equivalent direct argument. Partial covering geometry is not full frozen closure.",
+    :dependency-review
+    "Checkpoint22 reviewed PASS invoke-1788987405081-17046-b933b84d.",
+    :outcome :stop,
+    :warnings
+    ["One unused hphi warning in the unresolved CoverEulerRelation definition."],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-12,
+    :reason
+    "Two exact homological obligations remain: vanishing of the frozen rational ModuleCat singular-homology alternating rank sum for every positive-dimensional Fin n → Circle, and multiplicativity of that literal sum under the finite covering produced by the supplied local diffeomorphism. Available boundary-torus integral homology and tensor-homotopy results establish neither obligation. This is missing infrastructure, not refutation.",
+    :commands
+    [{:cmd "lake env lean /tmp/T03J04EulerDiagnostic.lean", :exit 0}
+     {:cmd "bb /tmp/t03j04-review.bb", :exit 0}
+     {:cmd "sha256sum problems/t03J04/lean/Main.lean", :exit 0}
+     {:cmd
+      "Python frozen-prefix, placeholder and SHA-256 audit producing /tmp/T03J04Refill22Audit.json",
+      :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T03J04EulerDiagnostic.lean",
+     :sha256
+     "0ba77e7694d3fa4528e6580b4285ae707f2cf1bf1c83cca9238511cc4c3fc118",
+     :role :boundary-diagnostic,
+     :placeholder-count 0,
+     :full-consumer-closure false},
+    :finding
+    "Reused and recompiled actual_finite_cover: the literal local diffeomorphism is a covering map, is surjective by the frozen lemma, and has finite fibers by compactness and discrete covering fibers. No covering hypothesis is added. TorusEulerVanishing and CoverEulerRelation remain explicitly defined unresolved propositions, not assumed computations. No finite-cover Euler law or general rational torus homology formula was found among the inspected banked producers.",
+    :frozen
+    {:path "problems/t03J04/lean/Main.lean",
+     :sha256
+     "b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41",
+     :placeholder-before 1,
+     :placeholder-after 1,
+     :placeholder-delta 0,
+     :proved-prefix-preserved true},
+    :seat :codex-12},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "COVERINGS / rational torus Euler characteristic",
    :acceptance
