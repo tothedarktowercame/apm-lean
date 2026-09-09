@@ -6105,54 +6105,86 @@
    :stop-condition
    "Local Euclidean fiber geometry only. No assumed fiber chart, global regular value, Sard induction, manifold orientation, transverse intersection comparison or t00J02 closure. Do not duplicate the other campaign's nullity work.",
    :evidence
-   {:probe
-    {:hypotheses
-     "Real normed spaces; complete source E; finite-dimensional target F; strict derivative L at x and surjectivity of L. The smooth specialization derives strict differentiability from ContDiff at smooth order and uses L=fderiv Real f x. This covers finite-dimensional real source and target spaces.",
-     :placeholder-delta 0,
-     :residual
-     "Local regular-fiber geometry is ready for implementation. Global manifold assembly, smooth atlas compatibility, orientation and transverse-intersection comparisons remain downstream; no frozen consumer closure is claimed.",
-     :axiom-audits 18,
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd "lake env lean /tmp/RegularFiberChartProbe.lean", :exit 0}
-      {:cmd "sha256sum /tmp/RegularFiberChartProbe.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/RegularFiberChartProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :repository-note
-     "Repository files unchanged; an existing untracked topology runs directory was observed and left untouched.",
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/RegularFiberChartProbe.lean",
-      :sha256
-      "565d6e660df9ef1b1b4b167768409f7be33d1d8b073cb51bbb93dd40d871a653"},
-     :finding
-     "Complete placeholder-free fixture compiles. Surjectivity constructs a kernel projection and complementary kernel. The production implicit-function theorem constructs centered coordinates Phi with snd(Phi y)=f(y)-f(x), Phi(x)=0 and x in its source. The zero slice has exactly the local fiber as its image. An explicit homeomorphism identifies an open neighborhood in the literal fiber subtype with an open kernel neighborhood containing zero. Its inverse agrees with the constructed parameterization, whose strict derivative at zero is kernel inclusion. A genuine smooth-map specialization and a concrete codimension-two projection instance compile. No chart or ImplicitFunctionData is supplied as a premise.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/RegularFiberChart.lean"
-       "ConstructionTargets/RegularFiberChart.md"],
-      :acceptance
-      {:implementation
-       "Promote the exact compiled fixture and document its hypotheses, equations and downstream limits.",
-       :consumer-equation
-       "snd(Phi y)=f(y)-f(x); the inverse zero slice parameterizes exactly the local literal fiber, and its derivative at zero is kernel inclusion.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256."
-        "Compile fixture and canonical target."
-        "Run lake build ConstructionTargets.RegularFiberChart ConstructionTargets.SardImplicitFunctionLevelSetKernelParameterization."
-        "Reproduce all eighteen printed standard-only axiom audits."
-        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]}},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Global manifold assembly, smooth atlas compatibility, orientation and transverse-intersection comparisons remain downstream. No Sard induction, global regular-value theorem or frozen consumer closure is claimed.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :required-build :pass,
+     :forbidden-token-scans :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :eighteen-axiom-audits :pass,
+     :exact-fixture-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"kernelProjection_retract"
+     "3fe6c1c7767b2fddc32894e4da38c5418e6f284def51b1782a85070857ade7d5",
+     "kernel_complement"
+     "c6d770c28a13887ccc77ae355e67623a266106c1a081d5871ef0e3eed73e7ad1",
+     "chart_fst"
+     "bed0f3e4ad647c66ee0a98a5d34f118e1cd387d65fecee27c9df9f93092e4325",
+     "chart_snd"
+     "592344263fa0bc435742ad034bff07652228c08abdb70701d8736f0265ca4f11",
+     "chart_center_mem"
+     "a0b013e7544b84697de3a825d398113f2b45a87b4264cc322a61c2bcd96d7039",
+     "chart_center"
+     "501f4e91b85762b32e36898a79228e1b0c7b78cc3b5af4d0d5cdfaa1078b7092",
+     "kernelOpen_isOpen" "e0491f350f4e801299b73b1b1..."},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "sha256sum /tmp/RegularFiberChartProbe.lean", :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/RegularFiberChartProbe.lean", :exit 0}
+     {:cmd "lake env lean ConstructionTargets/RegularFiberChart.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.RegularFiberChart ConstructionTargets.SardImplicitFunctionLevelSetKernelParameterization",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/RegularFiberChart.lean /tmp/RegularFiberChartProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "python3 inline audit: exact promotion, fixture SHA, eighteen standard-only axiom audits in both compilations and declaration hashes",
+      :exit 0}
+     {:cmd "rg -n 'warning:|error:' /tmp/codex-14-fiber-build.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "python3 inline audit: exact staged scope and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct local fiber charts from surjective strict derivatives\"",
+      :exit 0}
+     {:cmd
+      "python3 inline audit: exact committed scope and clean tracked checkout",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and checkpoint PASS. Only the authorized two files changed; frozen consumers, DAG, ledgers and untracked supervisor files untouched. Tracked checkout clean.",
+    :diagnostic-history [],
+    :commit "ecfe1d8f0ed29aa70e419e23f153fadd30ffc938",
+    :changed-paths
+    ["ConstructionTargets/RegularFiberChart.lean"
+     "ConstructionTargets/RegularFiberChart.md"],
+    :fixture
+    {:path "/tmp/RegularFiberChartProbe.lean",
+     :sha256
+     "565d6e660df9ef1b1b4b167768409f7be33d1d8b073cb51bbb93dd40d871a653"},
+    :finding
+    "Promoted the exact fixture. Constructed centered coordinates, local literal-fiber homeomorphism, inverse parameterization and kernel-inclusion strict derivative compile, including smooth specialization and codimension-two instance. Both compilations and required build passed without warnings.",
+    :statement-hash-method
+    "SHA-256 of declaration bytes beginning with def or lemma and ending immediately before the space preceding := or where; namespace ConstructionTargets.RegularFiberChart.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/RegularFiberChart.lean"
     "ConstructionTargets/RegularFiberChart.md"],
