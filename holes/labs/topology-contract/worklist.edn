@@ -34834,6 +34834,29 @@
       :output "1"}
      {:cmd "git diff --check HEAD^ HEAD", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788912219295-15698-b6e86567",
+     :commands
+     ["git show --stat --oneline 09428b9359dd1f5abe43d70f2735311badf6f39d"
+      "git diff-tree --no-commit-id --name-only -r 09428b9359dd1f5abe43d70f2735311badf6f39d"
+      "git show 09428b9359dd1f5abe43d70f2735311badf6f39d:ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces.lean"
+      "sha256sum /tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean"
+      "cmp -s /tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean <(git show 2848b967b90057b6e877c126a28e94f2265e3605:ConstructionTargets/SardProjectedCoordinateExplicitInheritedTopologyData.lean)"
+      "git show 09428b9359dd1f5abe43d70f2735311badf6f39d:ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces.lean | sed -n '11,56p' | sha256sum"
+      "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces.lean ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces.md"
+      "lake env lean /tmp/SardProjectedCoordinateExplicitInheritedTopologyDataProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces.lean"
+      "lake build ConstructionTargets.SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "readlink -f .lake/packages"
+      "git diff --check 09428b9359dd1f5abe43d70f2735311badf6f39d^ 09428b9359dd1f5abe43d70f2735311badf6f39d"
+      "git status --porcelain=v1"],
+     :finding
+     "PASS: commit scope, fixture, and statement hash reproduce; the wrapper exposes both coordinate locally compact and second-countable structures before measurable-space, Borel, measure, and additive-Haar data, installs them before forwarding to the explicit-measurable-space witness, and preserves the correctly oriented nullity conclusion; compilation uses only standard axioms and no placeholders."},
     :commit "09428b9359dd1f5abe43d70f2735311badf6f39d",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces.lean"
@@ -34847,7 +34870,7 @@
     ["exists_projectedCoordinates_explicit_inherited_topologyData"
      "exists_open_rankLocus_image_zero_explicit_topology_measureSpaces"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces.lean"
     "ConstructionTargets/SardFiniteOrderPointwiseWitnessExplicitTopologyAndMeasureSpaces.md"],
@@ -35021,7 +35044,7 @@
       "fe81a892ce45a74e9e9fef5af20ea8acd2e548b4cbd7ba004ca604b11e064aa2"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
