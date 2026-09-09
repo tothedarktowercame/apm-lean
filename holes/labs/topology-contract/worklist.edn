@@ -46296,6 +46296,23 @@
       :exit 0,
       :output "?? holes/labs/topology-contract/runs2/",
       :note "Unrelated directory untouched."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788966714237-16489-181e841b",
+     :commands
+     ["git show --stat --oneline b9fac8e0180b952e2e1c7829841f7efc77ef5737"
+      "sha256sum /tmp/SardBorelPositiveOrderRankPointwiseNullityProbe.lean"
+      "cmp /tmp/SardBorelPositiveOrderRankPointwiseNullityProbe.lean <(git show b9fac8e0180b952e2e1c7829841f7efc77ef5737:ConstructionTargets/SardBorelPositiveOrderRankPointwiseNullity.lean)"
+      "git show b9fac8e0180b952e2e1c7829841f7efc77ef5737:ConstructionTargets/SardBorelPositiveOrderRankPointwiseNullity.lean | sed -n '16,31p' | sha256sum"
+      "git diff --exit-code b9fac8e0180b952e2e1c7829841f7efc77ef5737 -- ConstructionTargets"
+      "lake env lean /tmp/SardBorelPositiveOrderRankPointwiseNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardBorelPositiveOrderRankPointwiseNullity.lean"
+      "lake build ConstructionTargets.SardBorelPositiveOrderRankPointwiseNullity"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Commit b9fac8e0180b952e2e1c7829841f7efc77ef5737 passes. Exact two-file scope; fixture SHA 907e42910a93e8549ba708032dc71b106cc294d8b06307cc39eb57029da72d5f and statement SHA 8d00f7aa5b778c8fd175d9c59d87d7f5fbdf5cd69142e952d3109f1a301e10a0 reproduced. Lines 33-70 correctly construct the chart, prove strict slice dimension drop, and supply regularity and localized residual-zero certificates to positive-order orthogonal chart nullity. Rank-upper neighborhood conclusion and explicit induction boundary preserved; no all-orders conversion. Both compilations exit 0 with standard axioms only; build8381 succeeds. Zero new placeholders; frozen consumer unchanged with one existing placeholder. Worklist358 valid. Ledger and unrelated untracked runs2 directory untouched."},
     :commit "b9fac8e0180b952e2e1c7829841f7efc77ef5737",
     :changed-paths
     ["ConstructionTargets/SardBorelPositiveOrderRankPointwiseNullity.lean"
@@ -46307,7 +46324,7 @@
     :declarations
     ["SardBorelPositiveOrderRankPointwiseNullityProbe.exists_open_rankUpper_image_zero_positiveOrder"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardBorelPositiveOrderRankPointwiseNullity.lean"
     "ConstructionTargets/SardBorelPositiveOrderRankPointwiseNullity.md"],
@@ -46483,7 +46500,7 @@
       "907e42910a93e8549ba708032dc71b106cc294d8b06307cc39eb57029da72d5f"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
