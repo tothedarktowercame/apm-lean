@@ -44700,6 +44700,23 @@
       :exit 0,
       :output
       "Committed exactly two scoped files; final worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788960982709-16364-123f81c3",
+     :commands
+     ["git show --stat --oneline 985a338105544303fb2053e911a7508942c0cca5"
+      "sha256sum /tmp/SardBorelOverlapTargetEquivTransferProbe.lean"
+      "cmp /tmp/SardBorelOverlapTargetEquivTransferProbe.lean <(git show 985a338105544303fb2053e911a7508942c0cca5:ConstructionTargets/SardBorelOverlapTargetEquivTransfer.lean)"
+      "git show 985a338105544303fb2053e911a7508942c0cca5:ConstructionTargets/SardBorelOverlapTargetEquivTransfer.lean | sed -n '8,25p' | sha256sum"
+      "git diff --exit-code 985a338105544303fb2053e911a7508942c0cca5 -- ConstructionTargets"
+      "lake env lean /tmp/SardBorelOverlapTargetEquivTransferProbe.lean"
+      "lake env lean ConstructionTargets/SardBorelOverlapTargetEquivTransfer.lean"
+      "lake build ConstructionTargets.SardBorelOverlapTargetEquivTransfer"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Commit 985a338105544303fb2053e911a7508942c0cca5 passes. Exact two-file scope; fixture SHA 90976f5f662ef33f1d645fe6cf772f1aeeeda16620663665e9cea1b84bb0ab2a and statement SHA 50f39b80bfaa969265f802c82dc3331a4fb84566bf325b3053071e3bb22eb62f reproduced. Lines 26-36 correctly transport dimensions and regularity, identify the target-equivalence image and reflect nullity between Borel Haar measures. No unconditional Sard closure claimed. Both compilations exit 0 with standard axioms only; build8467 succeeds. Zero new placeholders; frozen consumer unchanged with one existing placeholder. Worklist345 valid. Ledger untouched."},
     :commit "985a338105544303fb2053e911a7508942c0cca5",
     :changed-paths
     ["ConstructionTargets/SardBorelOverlapTargetEquivTransfer.lean"
@@ -44711,7 +44728,7 @@
     :declarations
     ["localSet_criticalImage_zero_of_borel_overlap_target_equiv"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardBorelOverlapTargetEquivTransfer.lean"
     "ConstructionTargets/SardBorelOverlapTargetEquivTransfer.md"],
@@ -44882,7 +44899,7 @@
       "90976f5f662ef33f1d645fe6cf772f1aeeeda16620663665e9cea1b84bb0ab2a"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
