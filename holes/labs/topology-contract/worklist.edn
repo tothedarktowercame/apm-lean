@@ -54607,8 +54607,61 @@
   {:consumer "t93A04",
    :stop-condition
    "Stop on any mismatch of reviewed source, statement hash or review evidence; do not claim a second closure or erase historical evidence.",
+   :evidence
+   {:placeholder-delta
+    {:consumer "t93A04",
+     :before 0,
+     :after 0,
+     :delta 0,
+     :documented-closure-delta -1},
+    :residual
+    "Documentation now records reviewed t93A04 closure and exact reusable extraction, retaining historical STOP evidence. No mathematical consumer residual or second closure claimed. General target-manifold transport and regular-preimage geometry remain separate downstream obligations; independent documentation review remains.",
+    :gates
+    {:review-evidence-verified :pass,
+     :source-and-statement-hashes :pass,
+     :closed-results-updated :pass,
+     :historical-stop-preserved :pass,
+     :extraction-not-double-counted :pass,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Documented inherited unnecessarySimpa warning; no Lean source changed or new compilation claimed."],
+    :statement-hashes
+    {"apm_t93a04"
+     "854fea2e1c0bd60b27caee326f218fa4dd639f9dcc3791fe9975dbe9990e7e11"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read scoped documentation and closure, extraction and checkpoint independent PASS receipts",
+      :exit 0}
+     {:cmd
+      "Python verification of preclosure, closure, extraction and current git source hashes, statement hashes and executable placeholder counts; verify closure, reuse and extracted-module fixture hashes",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 418 items OK; {:done 409, :needs-owner 1, :superseded 6, :open 1, :blocked 1}"}
+     {:cmd
+      "git diff --exit-code -- problems ConstructionTargets holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check and scoped git commit --only",
+      :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "0c7da53d84d8ed513b9afc706d51957a17054082",
+    :changed-paths
+    ["TOPOLOGY-DEPENDENCY-DAG.md"
+     "docs/TN-topology-closure-experiments.md"],
+    :fixture
+    {:path "/tmp/T93A04Closed.lean",
+     :sha256
+     "ca834f20b42db9742d8b4c90b6ab7fb8364ee8dcf617a59df97d02c623437bbd"},
+    :consumer-sha256
+    "5baf0e7d27ecb11934c0862e5955cedca42e307deed38ab569d31a90eb8c2f83"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
