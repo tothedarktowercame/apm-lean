@@ -1533,6 +1533,24 @@
      "Integral relative singular H1 of Circle modulo the complement of a specified point.",
      :direction
      "Forward localization induced by relativeSingularProjection; the actual map is proved invertible and asIso supplies its inverse."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788971233104-16608-cbab1eb3",
+     :commands
+     ["git show a172e498:ConstructionTargets/CircleActualLocalization.lean"
+      "git show a172e498:ConstructionTargets/CircleActualLocalization.md"
+      "git diff --exit-code a172e498 -- ConstructionTargets lake-manifest.json lakefile.lean lakefile.toml lean-toolchain"
+      "cmp recorded-commit-source /tmp/CircleActualLocalizationProbe.lean"
+      "sha256sum /tmp/CircleActualLocalizationProbe.lean"
+      "lake env lean /tmp/CircleActualLocalizationProbe.lean"
+      "lake env lean ConstructionTargets/CircleActualLocalization.lean"
+      "lake build ConstructionTargets.CircleActualLocalization ConstructionTargets.OrientedOverlapPuncturedCircle ConstructionTargets.SingularH0Augmentation"
+      "python3: verify seven statement hashes, forbidden-declaration scan, frozen problems tree and comment-stripped placeholder counts"
+      "git show --format= --name-only a172e498"
+      "git show --format= --check a172e498"],
+     :finding
+     "Independent PASS: exact two-file scope and byte-identical fixture; both compilations and focused build succeed. Seven statement hashes match; seven audits use only propext, Classical.choice and Quot.sound. Actual H0 inclusion is invertible via augmentation naturality; pair exactness proves the projection-induced localization invertible. Both inverse orientations and pointwise generator equations are correct in integral singular chains. No global sign coherence or higher-dimensional claim. Frozen problems tree unchanged, placeholders 327 to 327, zero target placeholders. Dependency warnings only; no review edits."},
     :commit "a172e498cff17b894d371aa260f783534d5ee706",
     :changed-paths
     ["ConstructionTargets/CircleActualLocalization.lean"
@@ -1549,7 +1567,7 @@
     "SHA-256 of UTF-8 declaration bytes beginning with theorem or instance and ending immediately before the space preceding :=; names below are in ConstructionTargets.CircleActualLocalization.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CircleActualLocalization.lean"
     "ConstructionTargets/CircleActualLocalization.md"],
@@ -1595,7 +1613,7 @@
    :stop-condition
    "Circle only; no assumed global class, assumed rotation action, general compact-manifold theorem, or t98A02 closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "Queue D #2: compact connected Circle, milestones 4 and 5",
