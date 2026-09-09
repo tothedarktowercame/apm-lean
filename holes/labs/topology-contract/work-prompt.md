@@ -81,9 +81,9 @@ owner approval. Rank the whole DAG and elect the top rows by, in order:
 
 Except under rule 0, a `FOUNDATION` that unblocks several consumers outranks
 an adapter that unblocks one. `STOP :needs-owner` is NO LONGER a valid
-strategy outcome and must not be returned: if the only remaining rows are foundations, specification
-repairs or deferred representations, ELECT THE BEST ONE under the ranking above
-and proceed. The prior gate inverted this policy -- it stopped the campaign
+strategy outcome and must not be returned: if the only remaining rows are
+foundations, specification repairs or deferred representations, ELECT THE
+BEST ONE under the ranking above and proceed. The prior gate inverted this policy -- it stopped the campaign
 precisely when the remaining work was the work that matters -- and it is
 withdrawn. Only two conditions end the campaign: every consumer problem closed,
 or a row whose mathematics is genuinely refuted, which is reported as a STOP
