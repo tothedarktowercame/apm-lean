@@ -35160,6 +35160,43 @@
    "The exact-stratum restriction adapter compiles; combine it pointwise with positive-rank nullity before invoking rank-locus aggregation.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if finite nonzero differentiability order cannot be downgraded to the first-order regularity needed to prove zero derivative on residual inverse-chart slices under a rank bound restricted to an explicit closed locus, or if the theorem requires nonstandard axioms.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.lean"
+    "ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED-CHART LOCALIZED RESIDUAL-SLICE ZERO",
+   :acceptance
+   {:fixture
+    {:path
+     "/tmp/SardFiniteOrderProjectedChartLocalizedResidualSliceZeroProbe.lean",
+     :sha256
+     "a7e080d6da8e7e7fd3dafdd93d11b43136ba509dc675ffef17863a5b5e927211"},
+    :declarations
+    ["forall_hasFDerivAt_zero_residual_inverseSlice_on_locus_finiteOrder"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Feed the locus-restricted zero-derivative certificate into a finite-order closed-open projected-chart nullity theorem."},
+   :representation
+   {:source
+    "A finite-order projected chart with a derivative-rank upper bound required only when the inverse-chart point lies in a designated closed locus inside an open localization.",
+    :target
+    "Zero Fréchet derivative on every residual inverse-chart slice at target points whose inverse belongs to that localized closed locus."},
+   :id
+   :critical-value-sard-finite-order-projected-chart-localized-residual-slice-zero-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-projected-chart-localized-residual-slice-zero-1
+    :critical-value-sard-finite-order-positive-rank-pointwise-nullity-1
+    :critical-value-sard-positive-rank-upper-locus-to-rank-stratum-local-nullity-1],
+   :current-residual
+   "The finite-order locus-restricted residual-slice-zero certificate compiles; the next theorem must consume it without strengthening the closed-locus rank bound to an open-neighborhood bound.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -35213,82 +35250,87 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank the exact-stratum local restriction adapter, compose positive-rank pointwise neighborhoods for every nonzero rank, then supply the rank-zero branch and invoke finite-rank aggregation.",
+     "Bank the finite-order localized residual-slice certificate, then prove closed-open finite-order projected-chart nullity with slice hypotheses restricted to the closed rank-upper locus.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"exists_open_rankStratum_image_zero_of_rankUpper"
-      "e9efca4c2d291507ab8a8db6be795db65a67555870ab3a99fea3fbedda6d9d42"},
+     {"forall_hasFDerivAt_zero_residual_inverseSlice_on_locus_finiteOrder"
+      "89c77482298ace6a4917ddc37fc9ff1ea6ffd5efa4a169d32bc7f0dd7cc67cf2"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if local equality of an exact derivative-rank stratum with a closed rank-upper locus cannot transfer a null localized image from the rank-upper locus to an open neighborhood on the exact stratum, or if the theorem requires nonstandard axioms.",
+      "Stop only if finite nonzero differentiability order cannot be downgraded to the first-order regularity needed to prove zero derivative on residual inverse-chart slices under a rank bound restricted to an explicit closed locus, or if the theorem requires nonstandard axioms.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.lean"
-       "ConstructionTargets/SardPositiveRankUpperLocusToRankStratumLocalNullity.md"],
+      ["ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.lean"
+       "ConstructionTargets/SardFiniteOrderProjectedChartLocalizedResidualSliceZero.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / POSITIVE-RANK UPPER LOCUS TO EXACT STRATUM LOCAL NULLITY",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / FINITE-ORDER PROJECTED-CHART LOCALIZED RESIDUAL-SLICE ZERO",
       :acceptance
       {:fixture
        {:path
-        "/tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean",
+        "/tmp/SardFiniteOrderProjectedChartLocalizedResidualSliceZeroProbe.lean",
         :sha256
-        "3cb95feeb10d9818d69ae1174d24526c2517e8fda5a11acaec7b4d2b2c6b0337"},
+        "a7e080d6da8e7e7fd3dafdd93d11b43136ba509dc675ffef17863a5b5e927211"},
        :declarations
-       ["exists_open_rankStratum_image_zero_of_rankUpper"],
+       ["forall_hasFDerivAt_zero_residual_inverseSlice_on_locus_finiteOrder"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Compose this set-local adapter with the positive-rank pointwise theorem and exact-rank local upper-locus certificate."},
+       "Feed the locus-restricted zero-derivative certificate into a finite-order closed-open projected-chart nullity theorem."},
       :representation
       {:source
-       "A null-image neighborhood on a closed rank-upper locus together with an open neighborhood where that locus equals the exact derivative-rank stratum.",
+       "A finite-order projected chart with a derivative-rank upper bound required only when the inverse-chart point lies in a designated closed locus inside an open localization.",
        :target
-       "An open neighborhood whose intersection with the exact derivative-rank stratum has null image."},
+       "Zero Fréchet derivative on every residual inverse-chart slice at target points whose inverse belongs to that localized closed locus."},
       :id
-      :critical-value-sard-positive-rank-upper-locus-to-rank-stratum-local-nullity-1,
+      :critical-value-sard-finite-order-projected-chart-localized-residual-slice-zero-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-finite-order-positive-rank-pointwise-nullity-1
-       :critical-value-sard-first-derivative-rank-piece-local-upper-locus-1
-       :critical-value-sard-derivative-rank-upper-locus-closed-1
-       :critical-value-sard-finite-order-rank-locus-local-aggregation-1],
+      [:critical-value-sard-projected-chart-localized-residual-slice-zero-1
+       :critical-value-sard-finite-order-positive-rank-pointwise-nullity-1
+       :critical-value-sard-positive-rank-upper-locus-to-rank-stratum-local-nullity-1],
       :current-residual
-      "The exact-stratum restriction adapter compiles; combine it pointwise with positive-rank nullity before invoking rank-locus aggregation.",
+      "The finite-order locus-restricted residual-slice-zero certificate compiles; the next theorem must consume it without strengthening the closed-locus rank bound to an open-neighborhood bound.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "The rectangular theorem is not refuted. The positive-rank pointwise theorem supplies nullity on a closed derivative-rank-upper locus, whereas the finite-rank aggregator consumes exact rank strata. A placeholder-free compiled adapter intersects the open rank-lower neighborhood with the nullity neighborhood, uses the local equality between the exact stratum and rank-upper locus, and transfers nullity by image containment. After banking it, the analytic obligation is the rank-zero branch and final finite-rank aggregation.",
+     "The rectangular theorem is not refuted. Exact derivative rank does not imply a rank-upper bound on any open neighborhood: nearby derivative rank may increase. Consequently the banked positive-rank pointwise theorem, which assumes the upper bound throughout an open chart neighborhood, cannot directly supply the exact-stratum aggregator. The correct closed-open route requires the rank bound only when the inverse-chart point belongs to the closed rank-upper locus. A placeholder-free finite-order localized residual-slice-zero certificate now compiles with precisely that locus-restricted hypothesis.",
      :commands
      [{:cmd
        "sed -n '1,220p' TOPOLOGY-DEPENDENCY-DAG.md >/dev/null; sed -n '1,240p' docs/TN-topology-closure-experiments.md >/dev/null; sed -n '1,240p' docs/TN-topology-build-loop-design.md >/dev/null",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean",
+       "sed -n '1,130p' ConstructionTargets/SardFiniteOrderClosedOpenLocalRankChartNullity.lean",
+       :exit 0}
+      {:cmd
+       "sed -n '1,140p' ConstructionTargets/SardExactRankClosedOpenProjectedChartNullity.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/SardFiniteOrderProjectedChartLocalizedResidualSliceZeroProbe.lean",
        :exit 0,
        :output
-       "'exists_open_rankStratum_image_zero_of_rankUpper' depends on axioms: [propext, Classical.choice, Quot.sound]"}
+       "'forall_hasFDerivAt_zero_residual_inverseSlice_on_locus_finiteOrder' depends on axioms: [propext, Classical.choice, Quot.sound]"}
       {:cmd
-       "sha256sum /tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean",
+       "sha256sum /tmp/SardFiniteOrderProjectedChartLocalizedResidualSliceZeroProbe.lean",
        :exit 0,
        :output
-       "3cb95feeb10d9818d69ae1174d24526c2517e8fda5a11acaec7b4d2b2c6b0337  /tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean"}
+       "a7e080d6da8e7e7fd3dafdd93d11b43136ba509dc675ffef17863a5b5e927211  /tmp/SardFiniteOrderProjectedChartLocalizedResidualSliceZeroProbe.lean"}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardFiniteOrderProjectedChartLocalizedResidualSliceZeroProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "sed -n '8,27p' /tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean | sha256sum",
+       "sed -n '12,31p' /tmp/SardFiniteOrderProjectedChartLocalizedResidualSliceZeroProbe.lean | sha256sum",
        :exit 0,
        :output
-       "e9efca4c2d291507ab8a8db6be795db65a67555870ab3a99fea3fbedda6d9d42  -"}
+       "89c77482298ace6a4917ddc37fc9ff1ea6ffd5efa4a169d32bc7f0dd7cc67cf2  -"}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 267 items OK; {:done 259, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 268 items OK; {:done 260, :open 1, :blocked 1, :superseded 6}"}
       {:cmd "sha256sum problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
@@ -35300,12 +35342,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :fixture
      {:path
-      "/tmp/SardPositiveRankUpperLocusToRankStratumLocalNullityProbe.lean",
+      "/tmp/SardFiniteOrderProjectedChartLocalizedResidualSliceZeroProbe.lean",
       :sha256
-      "3cb95feeb10d9818d69ae1174d24526c2517e8fda5a11acaec7b4d2b2c6b0337"},
+      "a7e080d6da8e7e7fd3dafdd93d11b43136ba509dc675ffef17863a5b5e927211"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -35521,7 +35563,8 @@
     :critical-value-sard-projected-coordinate-explicit-inherited-topology-data-1
     :critical-value-sard-finite-order-pointwise-witness-explicit-topology-measure-spaces-1
     :critical-value-sard-finite-order-positive-rank-pointwise-nullity-1
-    :critical-value-sard-positive-rank-upper-locus-to-rank-stratum-local-nullity-1],
+    :critical-value-sard-positive-rank-upper-locus-to-rank-stratum-local-nullity-1
+    :critical-value-sard-finite-order-projected-chart-localized-residual-slice-zero-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
