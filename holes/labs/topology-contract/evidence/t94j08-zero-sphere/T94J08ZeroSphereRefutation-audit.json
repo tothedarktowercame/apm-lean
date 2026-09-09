@@ -1,0 +1,9 @@
+{
+  "frozen-sha256": "f75c03843555aca28c4abd3c772c5cee3216e912c2c1d52255de75db719a2c3e",
+  "fixture-sha256": "b336d0daf658fe45acb4f63ded0203e92747e02359867eb953770d1747a57948",
+  "frozen-proposition-sha256": "a6f7312d3c9a90ce4663087d4af2cdf5b9a636b6a046b00bde7c3a4dff27cf48",
+  "report-sha256": "496477708269ba2235b1818808b12d4e546a018ab9555632f429a8e052fff6c6",
+  "consumer-placeholders": 2,
+  "fixture-placeholders": 0,
+  "exact-negation-verified": true
+}

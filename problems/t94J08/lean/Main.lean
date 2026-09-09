@@ -13,7 +13,14 @@ degree applied to the normalized linking map around an isolated zero.
 
 ## Statement repairs
 
-None.
+2026-09-09: restrict the ordinary-homology sphere degree to `1 ≤ n`, and
+its local-index specialization to `1 ≤ m` (ambient dimension `m + 1 ≥ 2`).
+`T94J08Sphere k` uses ambient dimension k, so the old n = 0 case was S⁰
+and incorrectly demanded H₀(S⁰) ≅ ℤ. The exact old proposition's refutation
+is retained under holes/labs/topology-contract/evidence/t94j08-zero-sphere/.
+This is a newly frozen positive-dimensional branch, not closure of the old
+statement. The classical S⁰ / one-dimensional local-index cases require a
+separately elected reduced-homology encoding; they are outside this branch.
 
 ## Encoding questions
 
@@ -158,7 +165,7 @@ singular-homology computation for metric spheres, including both an integral
 orientation and the induced antipodal action.  Folding the conclusion with
 `t94J08HasDegree` gives exactly the family used in the main proof. -/
 theorem apm_t94J08_bridge_1 :
-    ∀ n : ℕ, ∃ orientation : T94J08TopHomology n ≅ ModuleCat.of ℤ ℤ,
+    ∀ n : ℕ, 1 ≤ n → ∃ orientation : T94J08TopHomology n ≅ ModuleCat.of ℤ ℤ,
       ∀ a : T94J08TopHomology n,
         orientation.hom
             (t94J08TopHomologyMap n
@@ -168,11 +175,11 @@ theorem apm_t94J08_bridge_1 :
   sorry
 
 theorem apm_t94j08 :
-    (∀ n : ℕ,
+    (∀ n : ℕ, 1 ≤ n →
       t94J08HasDegree n
         (t94J08Antipodal : C(T94J08Sphere (n + 1), T94J08Sphere (n + 1)))
         ((-1 : ℤ) ^ (n + 1))) ∧
-    ∀ (m : ℕ)
+    ∀ (m : ℕ) (hm : 1 ≤ m)
       (v : T94J08Euclidean (m + 1) → T94J08Euclidean (m + 1))
       (hv : ContDiff ℝ ⊤ v) (p : T94J08Euclidean (m + 1))
       (hp : t94J08HasIsolatedZero v p)
@@ -183,7 +190,7 @@ theorem apm_t94j08 :
       t94J08HasLocalIndex v p r hlink d →
       t94J08HasLocalIndex (fun x ↦ -v x) p r hlinkNeg
         ((-1 : ℤ) ^ (m + 1) * d) := by
-  let hantipodal : ∀ n : ℕ,
+  let hantipodal : ∀ n : ℕ, 1 ≤ n →
       t94J08HasDegree n
         (t94J08Antipodal : C(T94J08Sphere (n + 1), T94J08Sphere (n + 1)))
         ((-1 : ℤ) ^ (n + 1)) := by
@@ -207,7 +214,7 @@ theorem apm_t94j08 :
   `LEMMA-INDEX.md`, `ConstructionTargets/`, sphere/degree siblings, Mathlib's
   singular-homology, sphere, antipodal, ModuleCat, and functoriality sources,
   and git history found no sphere homology generator or compiled antipodal
-  computation.  The frozen statement is unchanged.
+  computation. This historical search preceded the 2026-09-09 specification repair.
 
   CLOSER HOP 3 goes beyond the prior boundary by compiling the antipodal
   map's full point-set involution identity and its fixed-point-freeness on
@@ -215,17 +222,17 @@ theorem apm_t94j08 :
   inverse, or sphere-membership bookkeeping is hidden in the gap. A further
   search through the zero-sphere reduction in `t98J03`, categorical homology
   functor sources, and all sphere-degree siblings still found no orientation
-  isomorphism even for `H₀(S⁰)`, much less the universal top-homology and
+  isomorphism for `H₀(S⁰)` (now refuted, not an API gap), or the positive-dimensional top-homology and
   induced antipodal action. The bridge therefore remains exactly the missing
   singular-homology computation, not a point-set lemma.
   -/
     sorry
   refine ⟨hantipodal, ?_⟩
-  intro m v hv p hp r hr hlink hlinkNeg d hindex
+  intro m hm v hv p hp r hr hlink hlinkNeg d hindex
   obtain ⟨link, hlink_eq, hdegree⟩ := hindex
   let anti : C(T94J08Sphere (m + 1), T94J08Sphere (m + 1)) :=
     t94J08Antipodal
-  refine ⟨anti.comp link, ?_, (hantipodal m).comp hdegree⟩
+  refine ⟨anti.comp link, ?_, (hantipodal m hm).comp hdegree⟩
   intro x
   change anti (link x) = t94J08NormalizedLink (fun y ↦ -v y) p r hlinkNeg x
   rw [t94J08NormalizedLink_neg v p r hlink hlinkNeg x]

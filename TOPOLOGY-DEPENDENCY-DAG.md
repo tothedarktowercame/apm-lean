@@ -491,8 +491,17 @@ compiles independently of every final problem.
   orientation defect remains open canonically.
 - The former `t03J04` warning about missing separation/connectedness is stale:
   canonical Main now assumes `T2Space X` and `ConnectedSpace X`.
-- Canonical `t94J08` avoids the ordinary-homology `S⁰` defect by using
-  `T94J08Sphere (n + 1)`; antipodal-degree naturality is still missing.
+- `T94J08Sphere k` is the unit sphere in ambient dimension `k`, so
+  `T94J08Sphere (n + 1)` is Sⁿ and does **not** avoid S⁰ at `n = 0`.
+  The old ordinary-H₀ statement is exactly refuted (codex-12, independently
+  passed by codex-10). On 2026-09-09 the owner-authorized specification repair
+  re-freezes the ordinary-homology branch at `1 ≤ n`, and its local-index
+  specialization at `1 ≤ m` (ambient dimension at least two). This branch
+  retains the existing positive-dimensional sphere orientation/naturality route;
+  it remains open with two placeholders. The S⁰ / one-dimensional local-index
+  cases need a separately elected reduced-homology encoding. Neither that
+  outstanding coverage nor the old refutation is erased or counted as closure.
+  See `holes/labs/topology-contract/evidence/t94j08-zero-sphere/REPAIR.md`.
 - Canonical `t95J06` asks only for a homeomorphism with `Circle × Circle`, not
   the diffeomorphism wording of the source.  This weakening should remain
   visible in the statement paper trail.

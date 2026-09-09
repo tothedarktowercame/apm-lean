@@ -50309,6 +50309,15 @@
       :artifact "/tmp/topology-refill17-reviews.edn",
       :implementation-results 1}},
     :seat :codex-12},
+   :owner-resolution
+   {:date "2026-09-09"
+    :owner-request "claude-5 invoke-1788982090497-16885-dd3cb200"
+    :disposition :consumer-local-spec-defect
+    :historical-evidence-preserved true
+    :superseded-claim :campaign-refutation
+    :reason "The literal stop reading is retained in evidence, but the canonical DAG SPEC-DEFECT rule requires statement/paper-trail repair; the refutation only negates t94J08 at n=0. The source mathematics and other portfolio consumers are not refuted."
+    :repair-record "holes/labs/topology-contract/evidence/t94j08-zero-sphere/REPAIR.md"
+    :continuation :checkpoint-full-dag-refill-18-after-t94j08-spec-repair}
    :phase :strategy,
    :state :needs-owner,
    :scope [],
@@ -50485,7 +50494,25 @@
    [:critical-value-sard-rectangular-local-probe-1
     :checkpoint-full-dag-refill-6],
    :current-residual
-   "await the reviewed rectangular local Morse--Sard foundation probe, then refill from the complete DAG"}],
+   "await the reviewed rectangular local Morse--Sard foundation probe, then refill from the complete DAG"}
+  {:consumer :portfolio,
+   :id :checkpoint-full-dag-refill-18-after-t94j08-spec-repair,
+   :kind :strategy-checkpoint,
+   :phase :strategy,
+   :state :open,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY / OWNER-AUTHORIZED SPEC-DEFECT REPAIR",
+   :depends-on [:checkpoint-full-dag-refill-17-after-antipodal-and-slice-nullity],
+   :stop-condition "End only when all campaign consumers close or an exact refutation of the campaign-level mathematical claim is established. A false individual encoding is SPEC-DEFECT: preserve its counterexample, repair/re-freeze with owner authority, account for uncovered cases, and return to the remaining portfolio. Missing infrastructure and owner authorization do not terminate the campaign.",
+   :acceptance {:strategy "Independently check the owner-authorized t94J08 specification repair and retained exact old-statement refutation in evidence/t94j08-zero-sphere/REPAIR.md. Reread the complete DAG and reviewed receipts, recount consumers/placeholders at current pins, and elect exactly one bounded near-closure adapter before foundations with a fresh dependent checkpoint and nonempty portfolio. Re-freeze any new t94J08 row to the corrected Main hash; never reuse the old universal n=0 target. Explicitly retain reduced S0 and one-dimensional local-index coverage as outstanding. Do not edit track-2 worklist2.edn, runs2/, shared loop scripts, or use codex-8/11/13/14."},
+   :checkpoint {:after-problems 1 :may-supersede-future true
+                :required-measures [:placeholder-delta :typed-residual-change :infrastructure-packets :review-outcomes]},
+   :current-residual "Refill17 is retained as historical needs-owner evidence with a local-spec-defect owner resolution. The corrected ordinary-homology t94J08 branch has n>=1 and local-index ambient dimension>=2; two placeholders remain. No antipodal or Sard theorem was refuted.",
+   :spec-repair {:consumer :t94J08
+                 :path "problems/t94J08/lean/Main.lean"
+                 :prior-sha256 "f75c03843555aca28c4abd3c772c5cee3216e912c2c1d52255de75db719a2c3e"
+                 :sha256 "cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee"
+                 :placeholder-count 2}}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
