@@ -53824,8 +53824,138 @@
      :review-outcomes]},
    :stop-condition
    "Only all campaign consumers closed or exact campaign-level refutation ends the campaign; preserve local specification evidence and outstanding coverage.",
+   :evidence
+   {:evidence
+    {:census
+     {:path "/tmp/topology-refill27-measure.json",
+      :sha256
+      "d17425dc8dc5427f0ba638d419b653a0bb5a2d2a896e6b86e152577b701e6480"},
+     :reviews
+     {:path "/tmp/topology-refill27-reviews.edn",
+      :sha256
+      "5340ce0d4bf455a5d1faeaf5bc3d878df29e0050dafb3aec3beb1d1ad042103e"},
+     :tail
+     {:path "/tmp/topology-refill27-tail.edn",
+      :sha256
+      "fb682235405f1c877e09c062371544838555526168e1c5148e6374ba13e4302d"}},
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill27-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill27-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill27-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill27-proposed-worklist.edn",
+      :exit 0}],
+    :replacement-items
+    [{:consumer "t93A04",
+      :stop-condition
+      "GO requires the complete frozen consumer. Otherwise name the exact manifold chart-criticality, countable nullity or regular-value transport boundary; Euclidean nullity alone is not closure.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / frozen transverse affine line",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free copy of frozen Main preserving every definition and statement. Use SardGenuineSmoothEuclidean on actual open source-chart domains to prove nullity of critical values of the projected manifold map into R2. Derive smoothness and mfderiv/fderiv criticality transport on those domains, choose a countable source-chart cover using frozen second countability, and obtain an actual regular value from Haar-nullity. Construct its affine-line fiber in R3, compute projection kernel and derivative composition, and use the frozen range-plus-span bridge to prove the exact custom IsSmoothLinePreimage predicate. Handle empty and zero-dimensional sources. No assumed manifold Sard, chart nullity, derivative identity or regular value; no changed predicate, arbitrary-C1 or analytic omega. A conditional final bridge is not GO.",
+       :frozen-file "problems/t93A04/lean/Main.lean",
+       :frozen-sha256
+       "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t93a04-frozen-transverse-line-closure-probe-refill27,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard],
+      :current-residual
+      "One placeholder: choose a regular value of the projection of a genuine smooth manifold map to R2, then recover the frozen affine-line transversality. Euclidean global and open-domain Sard are now unconditional."}
+     {:consumer "t93A04",
+      :stop-condition
+      "GO requires compiled unconditional manifold-to-vector-target critical-image nullity. REVISE requires exactly one compiled prerequisite. Reuse an exact producer from the preceding adapter if available rather than duplicate it.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / manifold source and vector target",
+      :acceptance
+      {:probe
+       "For a second-countable Hausdorff genuine-infinity smooth manifold modeled on a finite-dimensional complete real inner-product space and a genuine-infinity ContMDiff map into a finite-dimensional real inner-product space with Borel Haar measure, prove Haar-null image of its actual nonsurjective-mfderiv critical locus. Construct actual chart representatives on explicitly open domains, derive ContDiffOn infinity and derivative criticality comparison, invoke SardGenuineSmoothEuclidean.open_domain_critical_image_null, and aggregate using a derived countable chart cover. Preserve original target measure and handle empty and zero-dimensional cases. Do not assume chart nullity, smooth neighborhoods from pointwise infinity, countable coverage, manifold Sard or regular values. Inspect and reuse existing chart/criticality and aggregation producers. If the exact theorem was compiled in the preceding adapter, reuse it and identify the next manifold-target or consumer edge.",
+       :axioms :standard-only,
+       :consumer-residual
+       "Manifold source to vector-target critical-value nullity only. General target-manifold chart transport and separate frozen consumer regular-value/transversality adapters remain where not already closed."},
+      :id :sard-genuine-smooth-manifold-vector-target-probe-refill27,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard],
+      :current-residual
+      "Unconditional Euclidean genuine-smooth Sard is reviewed. Actual source-chart smoothness, criticality transport and countable source coverage must be composed for a manifold map into a finite-dimensional vector target.",
+      :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "Only all campaign consumers closed or exact campaign-level refutation ends the campaign; preserve local specification evidence and outstanding coverage.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned executable placeholders across all DAG consumers and compare typed residuals, reviewed outcomes, portfolio and concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, with a fresh dependent checkpoint. Retain missing signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t93a04-frozen-transverse-line-closure-probe-refill27
+       :sard-genuine-smooth-manifold-vector-target-probe-refill27],
+      :current-residual
+      "Await both reviewed outcomes; measure actual consumer closure and reuse any manifold transport produced by the adapter."}],
+    :changed-paths [],
+    :finding
+    {:baseline "1c4a8e789094d67b19abef3cba30a8b6c4d1a92b",
+     :head "c0f83d33d934d8beccd0d1d50b666737d0b0b259",
+     :campaign-refutation false,
+     :reviews
+     {:wedge-coverings :stop-reviewed-pass,
+      :euclidean-sard :implementation-reviewed-pass,
+      :previous-checkpoint :pass},
+     :ranking
+     "Exactly one near-closure adapter first: t93A04 has one placeholder and newly reviewed Euclidean Sard supporting its projected regular-value argument. Manifold-source critical-image nullity then serves five named consumers and is the next shared composition; reuse any exact theorem produced by the adapter. Other DAG branches retain their previously identified sphere-action, integration-normalization, covering and surface-classification boundaries.",
+     :typed-residual-change
+     "Unconditional global and open-domain Euclidean genuine-smooth Sard is reviewed; source-dimension induction and degenerate cases are discharged. Manifold transport remains. A literal three-sheet wedge cover compiles, but universal-cover construction and four nonhomeomorphic total spaces remain absent. Concurrent equivariant covering transport preserves actual quotient-cover data without supplying graph realization.",
+     :infrastructure
+     {:before 637,
+      :after 639,
+      :portfolio-added ["SardGenuineSmoothEuclidean.lean"],
+      :concurrent-added ["EquivariantCoverTransport.lean"],
+      :consumer-changes []},
+     :outstanding
+     ["Signed positive-dimensional antipodal action"
+      "Reduced-S0 degree"
+      "One-dimensional local-index coverage"
+      "Actual manifold criticality and measure transport"],
+     :census
+     {:open 39,
+      :closed 19,
+      :existing 58,
+      :within-two-placeholders 29,
+      :placeholders-before 71,
+      :placeholders-after 71,
+      :delta 0,
+      :named 59,
+      :missing ["t93A05"]}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -53839,7 +53969,80 @@
     :sard-genuine-smooth-euclidean-induction-discharge-probe-refill26
     :checkpoint-full-dag-refill-26-after-connected-sum-and-open-rank-zero],
    :current-residual
-   "Await reviewed covering and Euclidean induction outcomes, then rerank all consumers and measure actual closure progress separately from infrastructure."}],
+   "Await reviewed covering and Euclidean induction outcomes, then rerank all consumers and measure actual closure progress separately from infrastructure."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO requires the complete frozen consumer. Otherwise name the exact manifold chart-criticality, countable nullity or regular-value transport boundary; Euclidean nullity alone is not closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / frozen transverse affine line",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free copy of frozen Main preserving every definition and statement. Use SardGenuineSmoothEuclidean on actual open source-chart domains to prove nullity of critical values of the projected manifold map into R2. Derive smoothness and mfderiv/fderiv criticality transport on those domains, choose a countable source-chart cover using frozen second countability, and obtain an actual regular value from Haar-nullity. Construct its affine-line fiber in R3, compute projection kernel and derivative composition, and use the frozen range-plus-span bridge to prove the exact custom IsSmoothLinePreimage predicate. Handle empty and zero-dimensional sources. No assumed manifold Sard, chart nullity, derivative identity or regular value; no changed predicate, arbitrary-C1 or analytic omega. A conditional final bridge is not GO.",
+    :frozen-file "problems/t93A04/lean/Main.lean",
+    :frozen-sha256
+    "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t93a04-frozen-transverse-line-closure-probe-refill27,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard
+    :checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard],
+   :current-residual
+   "One placeholder: choose a regular value of the projection of a genuine smooth manifold map to R2, then recover the frozen affine-line transversality. Euclidean global and open-domain Sard are now unconditional."}
+  {:consumer "t93A04",
+   :stop-condition
+   "GO requires compiled unconditional manifold-to-vector-target critical-image nullity. REVISE requires exactly one compiled prerequisite. Reuse an exact producer from the preceding adapter if available rather than duplicate it.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / manifold source and vector target",
+   :acceptance
+   {:probe
+    "For a second-countable Hausdorff genuine-infinity smooth manifold modeled on a finite-dimensional complete real inner-product space and a genuine-infinity ContMDiff map into a finite-dimensional real inner-product space with Borel Haar measure, prove Haar-null image of its actual nonsurjective-mfderiv critical locus. Construct actual chart representatives on explicitly open domains, derive ContDiffOn infinity and derivative criticality comparison, invoke SardGenuineSmoothEuclidean.open_domain_critical_image_null, and aggregate using a derived countable chart cover. Preserve original target measure and handle empty and zero-dimensional cases. Do not assume chart nullity, smooth neighborhoods from pointwise infinity, countable coverage, manifold Sard or regular values. Inspect and reuse existing chart/criticality and aggregation producers. If the exact theorem was compiled in the preceding adapter, reuse it and identify the next manifold-target or consumer edge.",
+    :axioms :standard-only,
+    :consumer-residual
+    "Manifold source to vector-target critical-value nullity only. General target-manifold chart transport and separate frozen consumer regular-value/transversality adapters remain where not already closed."},
+   :id :sard-genuine-smooth-manifold-vector-target-probe-refill27,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard
+    :checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard],
+   :current-residual
+   "Unconditional Euclidean genuine-smooth Sard is reviewed. Actual source-chart smoothness, criticality transport and countable source coverage must be composed for a manifold map into a finite-dimensional vector target.",
+   :other-consumers ["t01A08" "t01J04" "t92J07" "t96J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "Only all campaign consumers closed or exact campaign-level refutation ends the campaign; preserve local specification evidence and outstanding coverage.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned executable placeholders across all DAG consumers and compare typed residuals, reviewed outcomes, portfolio and concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, with a fresh dependent checkpoint. Retain missing signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-28-after-transverse-line-and-manifold-sard,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t93a04-frozen-transverse-line-closure-probe-refill27
+    :sard-genuine-smooth-manifold-vector-target-probe-refill27
+    :checkpoint-full-dag-refill-27-after-wedge-covers-and-euclidean-sard],
+   :current-residual
+   "Await both reviewed outcomes; measure actual consumer closure and reuse any manifold transport produced by the adapter."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
