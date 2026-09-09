@@ -39025,6 +39025,24 @@
      {:cmd
       "git add ConstructionTargets/SardLocalizedFlatThroughEndpointNullity.lean ConstructionTargets/SardLocalizedFlatThroughEndpointNullity.md && git diff --cached --check && git commit -m 'topology: specialize flat-through endpoint nullity' && git rev-parse HEAD && git status --porcelain=v1",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788926973745-15977-a49223ef",
+     :commands
+     ["git show 2befb2e2700525a47547e40f6e56361abc7a9fec --stat --oneline"
+      "sha256sum /tmp/SardLocalizedFlatThroughEndpointNullityProbe.lean"
+      "cmp fixture recorded-source"
+      "git show commit:ConstructionTargets/SardLocalizedFlatThroughEndpointNullity.lean | sed -n '8,27p' | sha256sum"
+      "lake env lean /tmp/SardLocalizedFlatThroughEndpointNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardLocalizedFlatThroughEndpointNullity.lean"
+      "lake build ConstructionTargets.SardLocalizedFlatThroughEndpointNullity"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check commit^ commit"
+      "git diff --exit-code commit -- ConstructionTargets"
+      "consumer hash and placeholder checks"],
+     :finding
+     "Commit 2befb2e2 has exact scope and matching fixture/frozen hashes. Compactness and derivative vanishing apply to the exact order-(k+1) flatThrough locus; normalized endpoint nullity and volume-to-add-Haar transfer preserve the image and Borel structure. Standard axioms only, zero scoped placeholders, all gates passed."},
     :commit "2befb2e2700525a47547e40f6e56361abc7a9fec",
     :changed-paths
     ["ConstructionTargets/SardLocalizedFlatThroughEndpointNullity.lean"
@@ -39036,7 +39054,7 @@
     :declarations
     ["localized_flatThrough_endpoint_image_addHaar_eq_zero"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardLocalizedFlatThroughEndpointNullity.lean"
     "ConstructionTargets/SardLocalizedFlatThroughEndpointNullity.md"],
@@ -39207,7 +39225,7 @@
       "b06f275526d83039374157d077ad4e937286e9083c60514441853a9537fe2fb9"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
