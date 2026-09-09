@@ -2619,6 +2619,22 @@
      {:cmd "git diff --check", :exit 0}],
     :repository-note
     "Read-only probe; canonical package authority verified and repository files unchanged. Diagnostic has zero executable placeholders and six standard-only axiom audits. No complete frozen replacement or implementation scope is proposed.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788974690486-16680-0c383241",
+     :commands
+     ["Inspect recorded 49956779 evidence and /tmp/T96J08ClosureDiagnostic.lean"
+      "realpath .lake/packages"
+      "sha256sum /tmp/T96J08ClosureDiagnostic.lean"
+      "lake env lean /tmp/T96J08ClosureDiagnostic.lean"
+      "python3: verify fixture/frozen hashes, copied definitions, both frozen statement hashes, comment-stripped placeholders and forbidden scan"
+      "Verify diagnostic import closure and build configuration against recorded commit"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git show --format= --name-only 49956779"
+      "git show --format= --check 49956779"],
+     :finding
+     "Independent PASS of codex-13 STOP, not closure. Diagnostic compiles without warnings and all six audits use only standard axioms. Frozen definitions and proved lemmas match; fixture and frozen hashes verified, both statement hashes unchanged, frozen placeholders 2 to 2 and diagnostic placeholders zero. Actual exterior-derivative nonexactness, radial integrability, disk area and Haar reduction are proved. Exact final conjunction remains conditional on radial square-root evaluation and singular-term integrability. The distinction between symmetry of a totalized integral and integrability needed for integral_add is correct. No mathematical refutation, full replacement, or implementation is claimed. No edits."},
     :changed-paths [],
     :consumer-equation
     "t96_complete_of_two_analytic_inputs proves the exact final conjunction from these two explicitly stated inputs. It does not discharge either input.",
@@ -2639,7 +2655,7 @@
      "IntegrableOn (fun q : EuclideanSpace ℝ (Fin 2) => ((q 0)^2 - (q 1)^2) / Real.sqrt (1 - (q 0)^2 - (q 1)^2)) (Metric.closedBall 0 1)"],
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "Stokes and moments; explicit differential-form and radial-integral consumer t96J08",
