@@ -4715,8 +4715,73 @@
   {:consumer :t98A02,
    :stop-condition
    "No assumed collar, manifold orientation compatibility, punctured-summand vanishing, dimension bound or replacement quotient.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "No complete frozen fixture or implementation packet. The diagnostic omits the final theorem and leaves its named boundary propositions unproved. Arbitrary-summand localization, excisive embedded-ball gluing and dimension vanishing remain before the exact frozen conjunction can close.",
+    :typed-boundaries
+    {:SummandLocalization
+     "Under the exact frozen compact, path-connected four-manifold and H4-isomorphic-to-Z hypotheses, prove invertibility of homologyMap(relativeSingularProjection(deletedPoint x),4).",
+     :PieceComparison
+     "Prove the actual pieceToDeletedCenter inclusion induces homology isomorphisms; the diagnostic states this in the frozen ModuleCat integral representation.",
+     :AboveDimensionVanishing
+     "Prove integral singular homology vanishes above degree four for the frozen summands.",
+     :gluing
+     "Construct an excisive comparison for the literal embedded-ball quotient, with piece/intersection homology and actual inclusion/connecting-map compatibility. No collar is assumed or asserted necessary."},
+    :outcome :stop,
+    :warnings
+    [{:line 34, :kind :inherited-unnecessarySimpa}
+     {:line 247, :kind :diagnostic-unnecessarySimpa}],
+    :statement-hashes
+    {"apm_t98a02"
+     "d6fbea30a44b0fccfa981ed059e44bacc8f3d1390bff445f0525817f14b18376"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :proved
+    ["Embedding injectivity puts every boundary-sphere image in the frozen punctured piece."
+     "The actual boundary map into the punctured piece is continuous."
+     "Every punctured-piece point avoids the embedded center."
+     "The actual inclusion from the punctured piece to the deleted-center complement is continuous."],
+    :author "codex-13",
+    :placeholder-before 1,
+    :reason :missing-summand-localization-and-excisive-gluing,
+    :commands
+    [{:cmd "cat problems/t98A02/lean/Main.lean", :exit 0}
+     {:cmd
+      "Inspect HigherChartLocalGenerator, HigherSphereLocalization and ProductionOpenCoverMayerVietoris declarations",
+      :exit 0}
+     {:cmd
+      "bb: read independently PASS-reviewed dependency checkpoint receipt",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/T98A02GluingDiagnostic.lean", :exit 0}
+     {:cmd
+      "sha256sum /tmp/T98A02GluingDiagnostic.lean problems/t98A02/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "Python audit: preserved frozen prefix, frozen hash, statement hash and comment-stripped placeholder count",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T98A02GluingDiagnostic.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T98A02GluingDiagnostic.lean",
+     :sha256
+     "2eaf8d4621dd06cfd7a57d756e582aed424f3e315c53e8b3d46a188146ddf4a1",
+     :role :boundary-diagnostic},
+    :finding
+    "The exact frozen consumer requires several unproved comparisons, not a bounded final adapter. HigherChartLocalGenerator proves a relative-to-relative chart isomorphism; HigherSphereLocalization proves absolute-to-local invertibility only for spheres. Neither proves localization for arbitrary compact four-manifold summands. Production Mayer-Vietoris requires an actual open cover and comparison of its arrows with the frozen quotient inclusions. The quotient maps-out property does not supply that cover or its homology comparisons. This is an infrastructure boundary, not a mathematical refutation.",
+    :statement-hash-method
+    "Declaration text from theorem apm_t98a02 through the text immediately preceding := by.",
+    :frozen-sha256
+    "c711febdaded1c3790e4a572a2fc191442244836dabb8d350fadbde2484a93ed",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "Queue D: exact embedded-four-ball connected-sum homology consumer",
