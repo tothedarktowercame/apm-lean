@@ -45181,6 +45181,23 @@
       :exit 0,
       :output
       "Committed exactly two scoped files; final worktree clean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788962437173-16400-dc2b6824",
+     :commands
+     ["git show --stat --oneline 530c8238b9ce35ffd68c681d2e0ab398b0306658"
+      "sha256sum /tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean"
+      "cmp /tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean <(git show 530c8238b9ce35ffd68c681d2e0ab398b0306658:ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean)"
+      "git show 530c8238b9ce35ffd68c681d2e0ab398b0306658:ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean | sed -n '6,15p' | sha256sum"
+      "git diff --exit-code 530c8238b9ce35ffd68c681d2e0ab398b0306658 -- ConstructionTargets"
+      "lake env lean /tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean"
+      "lake build ConstructionTargets.SardEqualDimensionAmbientCriticalNullity"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Commit 530c8238b9ce35ffd68c681d2e0ab398b0306658 passes. Exact two-file scope; fixture SHA dbb3ca05674292fa6426ee6bd697c0816f63629f4f7164e8b3648e58767b09ca and statement SHA 73acde7ba18f1dab9c9f8430278c8f771377a9c5f7613c40bca27e66e55f650c reproduced. Lines 16-22 correctly transport source coordinates and ambient differentiability while preserving target F and measure μ, then use exact critical-image equality. Equal-dimension restriction preserved. Both compilations exit 0 with standard axioms only; build8267 succeeds. Zero new placeholders; frozen consumer unchanged with one existing placeholder. Worklist349 valid. Ledger untouched."},
     :commit "530c8238b9ce35ffd68c681d2e0ab398b0306658",
     :changed-paths
     ["ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean"
@@ -45191,7 +45208,7 @@
      "dbb3ca05674292fa6426ee6bd697c0816f63629f4f7164e8b3648e58767b09ca"},
     :declarations ["equalDimension_ambient_criticalImage_zero"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean"
     "ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.md"],
@@ -45360,7 +45377,7 @@
       "dbb3ca05674292fa6426ee6bd697c0816f63629f4f7164e8b3648e58767b09ca"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
