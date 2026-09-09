@@ -51937,20 +51937,82 @@
     :checkpoint-full-dag-refill-21-after-flux-and-rank-stratum],
    :current-residual
    "One placeholder packages the actual fivefold regular torus cover and Euler/genus rigidity for homeomorphic orientable polygon surfaces; printed connected-sum arithmetic is proved."}
-  {:consumer "t93A04",
+  {:note-sha256
+   "00759fd1b89389b768a0acb69941c46e004c9cc9fa0bcc68ec2d73a945028676",
+   :consumer "t93A04",
    :stop-condition
    "GO requires full compiled critical-image composition. REVISE needs exactly one compiled prerequisite. Do not assume rank-zero nullity, compact coverage or global critical nullity; missing infrastructure is not refutation.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:induction-contract
+     "The sole nullity premise is local genuine-infinity smooth critical-image induction for every strictly smaller finite-dimensional complete real normed source, including dimension zero, and finite-dimensional real inner-product targets with Borel Haar measure. No compact coverage, rank-zero nullity, stratum nullity or chart is assumed.",
+     :consumer
+     {:id "t93A04",
+      :placeholder-count 1,
+      :sha256
+      "4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea"},
+     :placeholder-delta 0,
+     :residual
+     "Conditional global smooth critical-image induction step only. Compatible local-domain globalization, induction discharge and actual manifold transport remain before unconditional Sard or frozen t93A04 closure.",
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {:critical_image_null_of_local_smooth_induction
+      "ceb38684a0b472130acab465d3b041b4536c003a1ab85cef0b83d8301aa6078d"},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/SardGenuineSmoothGlobalCriticalInductionStep.lean",
+       :exit 0}
+      {:cmd "bb /tmp/t98a01-review.bb", :exit 0}
+      {:cmd
+       "Python placeholder and SHA-256 audit producing /tmp/SardGenuineSmoothGlobalCriticalInductionStep.audit.json",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/SardGenuineSmoothGlobalCriticalInductionStep.lean",
+       :exit 1,
+       :correction
+       "The zero-derivative argument supplied pointwise equality where equality of underlying linear maps was required."}
+      {:cmd
+       "lake env lean /tmp/SardGenuineSmoothGlobalCriticalInductionStep.lean",
+       :exit 1,
+       :correction
+       "Function extensionality still targeted the wrong coercion; passed LinearMap.range_eq_bot.mp directly through ContinuousLinearMap.coe_injective."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/SardGenuineSmoothGlobalCriticalInductionStep.lean",
+      :sha256
+      "f3738330af1f36ff940af040568cd88824b440ce8a11ac321d6c9453bc4b7452",
+      :placeholder-count 0},
+     :finding
+     "Complete conditional global critical-image composition compiles. The proof handles subsingleton targets by empty critical set and subsingleton sources using the banked zero-dimensional theorem. Otherwise it derives the source Borel/proper-space data, closedness of rank zero, and actual countable compact exhaustion through SardClosedOpenImageNullity. Each compact subset has derivative zero and invokes SardSmoothCompactRankZeroInduction. The exact finite critical-rank decomposition combines this result with SardGenuineSmoothPositiveRankStratumNullity for every positive deficient rank.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/SardGenuineSmoothGlobalCriticalInductionStep.lean"
+       "ConstructionTargets/SardGenuineSmoothGlobalCriticalInductionStep.md"],
+      :source "/tmp/SardGenuineSmoothGlobalCriticalInductionStep.lean",
+      :note "/tmp/SardGenuineSmoothGlobalCriticalInductionStep.md",
+      :note-sha256
+      "00759fd1b89389b768a0acb69941c46e004c9cc9fa0bcc68ec2d73a945028676",
+      :acceptance
+      ["Promote the exact compiled fixture and note within the two-file scope."
+       "Compile the promoted module and run lake build ConstructionTargets.SardGenuineSmoothGlobalCriticalInductionStep."
+       "Verify zero placeholders and standard-only axioms; retain the explicit local smooth induction premise and all dimensional cases."]},
+     :seat :codex-12}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :source "/tmp/SardGenuineSmoothGlobalCriticalInductionStep.lean",
+   :scope
+   ["ConstructionTargets/SardGenuineSmoothGlobalCriticalInductionStep.lean"
+    "ConstructionTargets/SardGenuineSmoothGlobalCriticalInductionStep.md"],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / global smooth critical induction step",
    :acceptance
-   {:probe
-    "For globally ContDiff real genuine infinity f between finite-dimensional real inner-product spaces, prove Haar-null image of the actual nonsurjective-derivative critical set under one local genuine-smooth critical-image induction hypothesis for every strictly smaller complete finite-dimensional real normed source and finite-dimensional inner-product target with Borel Haar measure. Include zero-dimensional sources in the hypothesis. Derive closedness of the derivative-zero locus, an actual countable compact exhaustion, and rank-zero image nullity using SardSmoothCompactRankZeroInduction. Use SardGenuineSmoothPositiveRankStratumNullity for each positive deficient rank and prove the critical set is covered by these and rank zero. Handle zero-dimensional source and target cases explicitly; derive required Borel, properness, second countability and measure facts rather than assuming them. Reuse existing exhaustion, rank and countable-nullity producers. No arbitrary-C1 induction, analytic omega, assumed stratum nullity or unconditional Sard. If the exact composition already exists reuse it and identify the remaining local-domain edge.",
-    :axioms :standard-only,
-    :consumer-residual
-    "Conditional global smooth critical-image induction step only. Local-domain globalization compatible with this induction, induction discharge and manifold transport remain before unconditional Sard or frozen closure."},
+   ["Promote the exact compiled fixture and note within the two-file scope."
+    "Compile the promoted module and run lake build ConstructionTargets.SardGenuineSmoothGlobalCriticalInductionStep."
+    "Verify zero placeholders and standard-only axioms; retain the explicit local smooth induction premise and all dimensional cases."],
+   :note "/tmp/SardGenuineSmoothGlobalCriticalInductionStep.md",
    :id
    :sard-genuine-smooth-global-critical-induction-step-probe-refill21,
    :kind :reusable-theorem,
