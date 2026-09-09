@@ -5018,6 +5018,23 @@
       :exit 0}],
     :repository-note
     "Read DAG, closure experiments and dependency PASS receipt. Only the authorized two files changed; frozen consumers, DAG, ledger and untracked supervisor files untouched. Tracked checkout clean.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788981899434-16880-5b03b305",
+     :commands
+     ["git show c57f09381088e06fc9b385b83354f2e9decf7567"
+      "realpath .lake/packages"
+      "sha256sum /tmp/SphereCapFiniteMeasureProbe.lean"
+      "lake env lean /tmp/SphereCapFiniteMeasureProbe.lean"
+      "lake env lean ConstructionTargets/SphereCapFiniteMeasure.lean"
+      "lake build ConstructionTargets.SphereCapFiniteMeasure ConstructionTargets.SphereCapGraph"
+      "Python independent audit: exact fixture promotion, seven statement hashes, dependency pin, forbidden tokens, frozen problem tree and placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 6db55c80:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --name-only c57f0938; git show --format= --check c57f0938"
+      "git diff --exit-code c57f0938 -- lake-manifest.json lakefile.lean lean-toolchain"],
+     :finding
+     "Independent of author codex-14. Exact two-file scope; fixture SHA256 fc88ca53846907636b0525ae218b65c62687c72542caacf1d8af6c1275d822a3 and seven statement hashes match. Both compilations and focused build pass without warnings (8241 jobs); seven audits per compilation use only standard axioms. Actual domain-to-hyperplane-ball isometry and subtype inclusion yield correctly oriented Hausdorff measure equality. Orthonormal-coordinate compactness gives finite top-dimensional domain measure; the finite Lipschitz factor gives finite intrinsic cap-image measure. Unit-vector nonvanishing justifies codimension one and dimension-two/three specializations. Whole-sphere coverage, global integrability and normalization remain explicitly downstream. Frozen problem tree unchanged, placeholders 322 to 322; no forbidden tokens. Recorded ledger validates: 40 items OK. Ledger untouched."},
     :commit "c57f09381088e06fc9b385b83354f2e9decf7567",
     :changed-paths
     ["ConstructionTargets/SphereCapFiniteMeasure.lean"
@@ -5033,7 +5050,7 @@
     "SHA-256 of declaration bytes beginning with def or lemma and ending immediately before the space preceding := or where; namespace ConstructionTargets.SphereCapFiniteMeasure.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereCapFiniteMeasure.lean"
     "ConstructionTargets/SphereCapFiniteMeasure.md"],
@@ -5155,7 +5172,7 @@
      "Compiled one measure prerequisite. The actual cap domain is isometrically equivalent to a closed ball in the orthogonal hyperplane. Hausdorff isometry transport identifies its measure with that ball's measure; orthonormal coordinates and compact-set Haar finiteness prove this measure finite. The banked Lipschitz bound therefore proves finite intrinsic Hausdorff measure of each cap image. The hyperplane dimension calculation gives explicit sphere-dimension-two and sphere-dimension-three instances. Finite cap coverage and global polynomial integrability remain; the parent is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: finite intrinsic Hausdorff sphere measure through Lipschitz caps",
