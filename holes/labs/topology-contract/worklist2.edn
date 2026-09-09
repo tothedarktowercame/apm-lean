@@ -622,105 +622,105 @@
    :stop-condition
    "Do not infer overlap compatibility, arbitrary-dimensional model homology, a global fundamental class, or localization monicity from these constructed local generators.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Ready for exact two-file implementation and independent review. No chart-local-generator proof residual remains in this row; the next row must establish oriented overlap equality and the punctured-circle computation.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {"modelChart_origin"
-      "753689a88261032310071a577d430da4e225916be36b90db99f7fd0b329d992b",
-      "modelChart_deletedPoint_iff"
-      "4b5cb16d3b16eb5ccf3bfb03a39189b3df724599e49775d1b1c4805ffbaee12c",
-      "ambientChartMap_chain_eq"
-      "b7797a15ac6964d4971b6c35825df606e8440493b5ebe93b6a94fbb6bdda7a9e",
-      "ambientChartMap_H1_isIso"
-      "6861ef4e25925d33cc456c3b6e816cdcdeabfc9c5d5a6dfed51ed9c67f8e773b",
-      "ambientLocalGenerator_generates"
-      "c59e4c6c02365cc3fdd36bdf38a3fe9d4d2f32a89b57074dd0c13726115340ef",
-      "ambientLocalGenerator_eq_inclusion_transport"
-      "fee37126d2b2ae490186c9469c04b47e36306396939288056afcf3a0ec452f82",
-      "realLine_local_generator"
-      "55b7adee1a64da94660d796794c2c186bcbbd1f30728fc6117ec91d4b3b53e84",
-      "circle_local_generator"
-      "95546b308ea98bd26f22deb5b06c1bbbbd5515bb5ca39dd8a6a258954650ed4b"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :author "codex-13",
-     :commands
-     [{:cmd "cd /home/joe/code/apm-lean && realpath .lake/packages",
-       :exit 0}
-      {:cmd
-       "cd /home/joe/code/apm-lean && lake env lean /tmp/OneDimensionalChartLocalGeneratorProbe.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/OneDimensionalChartLocalGeneratorProbe.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/OneDimensionalChartLocalGeneratorProbe.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "cd /home/joe/code/apm-lean && git diff --exit-code",
-       :exit 0}
-      {:cmd "cd /home/joe/code/apm-lean && git diff --check",
-       :exit 0}],
-     :repository-note
-     "Read-only probe; no repository files modified. Canonical package authority verified; existing untracked supervisor runs2 files left untouched.",
-     :representation
-     {:source
-      "Production integral relative H1 of the pointed Euclidean open one-disk model",
-      :target
-      "Production integral relative H1 of the charted space relative to the complement of its specified point",
-      :direction
-      "Model to ambient space: exact equality identifies the induced chart-to-ambient chain map with constructed chart-pair transport followed by neighborhood inclusion; the resulting class equality identifies the ambient generator with inclusion applied to the transported model generator."},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/OneDimensionalChartLocalGeneratorProbe.lean",
-      :sha256
-      "44459f5d5ebdc8fad706447b56335012767955043a440536f7aefa5f1940598a"},
-     :finding
-     "Complete chart-local-generator fixture compiled. Starting from chartAt at the specified point, it selects a positive-radius ball inside the chart target, rescales the model unit disk into that ball, and restricts the inverse chart. The resulting homeomorphism sends the origin to the specified point and identifies the deleted-point subsets. Its composite with actual neighborhood inclusion induces an isomorphism on integral relative H1 and sends the banked model generator to a generator of ambient local H1. Concrete Euclidean one-space, literal real-line, and Circle instances compile. No chart-pair equivalence or local homology isomorphism is assumed.",
-     :dependency-commits
-     ["1333150cc6443e151e5df62e24d4d3ddf1417cab"
-      "3dc832fc33991b0a7b387743e7c1ab784f255d51"],
-     :statement-hash-method
-     "SHA-256 of UTF-8 theorem declaration bytes beginning with theorem and ending immediately before the space preceding :=; names below are in ConstructionTargets.OneDimensionalChartLocalGenerator.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/OneDimensionalChartLocalGenerator.lean"
-       "ConstructionTargets/OneDimensionalChartLocalGenerator.md"],
-      :acceptance
-      {:declarations
-       ["ConstructionTargets.OneDimensionalChartLocalGenerator.modelChart"
-        "ConstructionTargets.OneDimensionalChartLocalGenerator.modelChart_origin"
-        "ConstructionTargets.OneDimensionalChartLocalGenerator.modelChart_deletedPoint_iff"
-        "ConstructionTargets.OneDimensionalChartLocalGenerator.ambientChartMap_chain_eq"
-        "ConstructionTargets.OneDimensionalChartLocalGenerator.ambientChartMap_H1_isIso"
-        "ConstructionTargets.OneDimensionalChartLocalGenerator.ambientLocalGenerator_generates"
-        "ConstructionTargets.OneDimensionalChartLocalGenerator.ambientLocalGenerator_eq_inclusion_transport"
-        "ConstructionTargets.OneDimensionalChartLocalGenerator.euclideanLine_local_generator"
-        "ConstructionTargets.OneDimensionalChartLocalGenerator.realLine_local_generator"
-        "ConstructionTargets.OneDimensionalChartLocalGenerator.circle_local_generator"],
-       :implementation
-       "Promote the exact compiled fixture and document the constructed chart, deleted-point comparison, and ambient generator. Preserve the explicit real-line atlas and existing Circle atlas specialization.",
-       :hypotheses
-       "TopologicalSpace M and ChartedSpace (EuclideanSpace ℝ (Fin 1)) M for the boundaryless chart construction; T1Space M additionally for neighborhood excision. No differentiability, global orientation, fundamental class, or localization injectivity hypothesis.",
-       :coefficients
-       "Integral production RelativeSingularChains in AddCommGrpCat throughout; no coefficient or homology-representation replacement.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA-256 before copying."
-        "Compile the fixture and canonical target."
-        "Run lake build ConstructionTargets.OneDimensionalChartLocalGenerator ConstructionTargets.LocalHomologyNeighborhoodExcision ConstructionTargets.OneDiskLocalOrientation ConstructionTargets.ChartPairRelativeHomologyTransport."
-        "Reproduce all eleven printed axiom audits and eight recorded statement hashes."
-        "Run placeholder and forbidden-declaration scans, git diff --check, exact two-file scope verification, and commit the implementation."],
-       :consumer-residual
-       "Restricted charts, deleted-point equivalences, ambient excision comparison, and generator construction are complete for this row. Compatibility between overlapping oriented charts and the punctured-circle comparison remain downstream."},
-      :stop-condition
-      "Do not infer overlap compatibility, arbitrary-dimensional model homology, a global fundamental class, or localization monicity from these constructed local generators."},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "No chart-local-generator proof residual remains in this row; implementation awaits independent review. Oriented overlap equality and the punctured-circle comparison remain downstream. No arbitrary-dimensional model homology, global fundamental class, or localization monicity is claimed.",
+    :gates
+    {:tracked-worktree-clean :pass,
+     :focused-build :pass,
+     :all-eleven-printed-axiom-audits :pass,
+     :fixture-hash :pass,
+     :fixture-byte-identical :pass,
+     :canonical-compilation :pass,
+     :exact-staged-and-committed-scope :pass,
+     :eight-recorded-statement-hashes :pass,
+     :fixture-compilation :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    [{:kind :replayed-dependency-warnings,
+      :count 17,
+      :log "/tmp/codex-14-chart-build.log",
+      :paths
+      {"ConstructionTargets/SingularHomologyConcrete.lean" 1,
+       "ConstructionTargets/SingularSubdivision.lean" 2,
+       "ConstructionTargets/T02A06HemisphereCoordinates.lean" 6,
+       "ConstructionTargets/T02A06HemisphereExcision.lean" 2,
+       "ConstructionTargets/T02A06DiskRadialComparison.lean" 3,
+       "ConstructionTargets/T02A06SphereShift.lean" 3}}],
+    :statement-hashes
+    {"modelChart_origin"
+     "753689a88261032310071a577d430da4e225916be36b90db99f7fd0b329d992b",
+     "modelChart_deletedPoint_iff"
+     "4b5cb16d3b16eb5ccf3bfb03a39189b3df724599e49775d1b1c4805ffbaee12c",
+     "ambientChartMap_chain_eq"
+     "b7797a15ac6964d4971b6c35825df606e8440493b5ebe93b6a94fbb6bdda7a9e",
+     "ambientChartMap_H1_isIso"
+     "6861ef4e25925d33cc456c3b6e816cdcdeabfc9c5d5a6dfed51ed9c67f8e773b",
+     "ambientLocalGenerator_generates"
+     "c59e4c6c02365cc3fdd36bdf38a3fe9d4d2f32a89b57074dd0c13726115340ef",
+     "ambientLocalGenerator_eq_inclusion_transport"
+     "fee37126d2b2ae490186c9469c04b47e36306396939288056afcf3a0ec452f82",
+     "realLine_local_generator"
+     "55b7adee1a64da94660d796794c2c186bcbbd1f30728fc6117ec91d4b3b53e84",
+     "circle_local_generator"
+     "95546b308ea98bd26f22deb5b06c1bbbbd5515bb5ca39dd8a6a258954650ed4b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd
+      "sha256sum /tmp/OneDimensionalChartLocalGeneratorProbe.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/OneDimensionalChartLocalGeneratorProbe.lean > /tmp/codex-14-chart-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/OneDimensionalChartLocalGenerator.lean > /tmp/codex-14-chart-target.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.OneDimensionalChartLocalGenerator ConstructionTargets.LocalHomologyNeighborhoodExcision ConstructionTargets.OneDiskLocalOrientation ConstructionTargets.ChartPairRelativeHomologyTransport > /tmp/codex-14-chart-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/OneDimensionalChartLocalGenerator.lean /tmp/OneDimensionalChartLocalGeneratorProbe.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Construct one-dimensional chart pairs and ambient local generators\"",
+      :exit 0}
+     {:cmd "git show --pretty= --name-only HEAD", :exit 0}
+     {:cmd "git status --porcelain --untracked-files=no", :exit 0}],
+    :repository-note
+    "Dependency PASS reviews checked. Existing untracked supervisor runs2 files untouched. Ledger, DAG, and frozen problems unchanged.",
+    :representation
+    {:source
+     "Production integral relative H1 of the pointed Euclidean open one-disk model.",
+     :target
+     "Production integral relative H1 of the charted space relative to the complement of its specified point.",
+     :direction
+     "Model to ambient space: exact equality identifies the induced chart-to-ambient chain map with constructed chart-pair transport followed by neighborhood inclusion; the ambient generator equals inclusion applied to the transported model generator."},
+    :commit "80e84e8694036cf750564b74a1496b83e71a5c04",
+    :changed-paths
+    ["ConstructionTargets/OneDimensionalChartLocalGenerator.lean"
+     "ConstructionTargets/OneDimensionalChartLocalGenerator.md"],
+    :new-warning-count 0,
+    :fixture
+    {:path "/tmp/OneDimensionalChartLocalGeneratorProbe.lean",
+     :sha256
+     "44459f5d5ebdc8fad706447b56335012767955043a440536f7aefa5f1940598a"},
+    :finding
+    "Promoted the exact fixture. Constructed a positive-radius restriction of chartAt and the rescaled pointed model homeomorphism, proved deleted-point compatibility, and identified the actual ambient map with chart-pair transport followed by inclusion. Excision proves its integral local H1 map is an isomorphism and its model-generator image generates ambient local H1. Euclidean one-space, explicit real-line atlas, and existing Circle atlas instances are preserved.",
+    :dependency-commits
+    ["1333150cc6443e151e5df62e24d4d3ddf1417cab"
+     "3dc832fc33991b0a7b387743e7c1ab784f255d51"],
+    :statement-hash-method
+    "SHA-256 of UTF-8 theorem declaration bytes beginning with theorem and ending immediately before the space preceding :=; names below are in ConstructionTargets.OneDimensionalChartLocalGenerator.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/OneDimensionalChartLocalGenerator.lean"
     "ConstructionTargets/OneDimensionalChartLocalGenerator.md"],
