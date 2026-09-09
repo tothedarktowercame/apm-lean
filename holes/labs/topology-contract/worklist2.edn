@@ -5759,6 +5759,23 @@
       :exit 0}],
     :repository-note
     "Read DAG, closure experiments, dependency evidence and second-moment PASS. Only the authorized two files changed; frozen consumers, DAG, ledgers and untracked supervisor files untouched. Tracked checkout clean.",
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788984408721-16957-33f44997",
+     :commands
+     ["git show a306913602c9ba0f83d7bddf45ea38b33117b5e5"
+      "realpath .lake/packages"
+      "sha256sum /tmp/IntrinsicSphereFourthMomentsProbe.lean /tmp/IntrinsicFourthMomentConsumerAudit.lean"
+      "lake env lean /tmp/IntrinsicSphereFourthMomentsProbe.lean"
+      "lake env lean ConstructionTargets/IntrinsicSphereFourthMoments.lean"
+      "lake env lean /tmp/IntrinsicFourthMomentConsumerAudit.lean"
+      "lake build ConstructionTargets.IntrinsicSphereFourthMoments ConstructionTargets.IntrinsicSphereSecondMoments ConstructionTargets.IntrinsicSphereFinite"
+      "Python independent audit: exact promotion, nine statement hashes, preserved consumer diagnostic bodies, recorded import closure, forbidden tokens and frozen placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 673cf031:holes/labs/topology-contract/worklist2.edn)"
+      "git show --format= --name-only a3069136; git show --format= --check a3069136"],
+     :finding
+     "Independent of author codex-14. Exact two-file scope. Primary SHA256 c68fa1712227f928beb112983370d586814a5063e00f755309c51a3e463468ac and consumer-audit SHA256 d55b35a914d0e8b938861ea157cda591f149e5e4e3101652d153260d17c62c31 match; nine statement hashes verified. Primary compilations and build pass without warnings (8244 jobs); nine audits per compilation use only standard axioms. Consumer audit passes with three inherited warnings and preserves both diagnostic bodies. Explicit rotation and inverse laws justify quartic transport; proved integrability licenses expansions. Fourth moments M2/5 and mixed moments M2/15 yield the exact flux formula; consumer applications also verify M3/4 and -M3. No numerical normalization or positive-mass assumption, and no frozen closure claim. Frozen tree unchanged, placeholders 322 to 322; no forbidden tokens. Recorded ledger validates: 44 items OK. Ledger untouched."},
     :primary-warning-count 0,
     :commit "a306913602c9ba0f83d7bddf45ea38b33117b5e5",
     :changed-paths
@@ -5775,7 +5792,7 @@
     "SHA-256 of declaration bytes beginning with def, theorem or lemma and ending immediately before the space preceding :=; namespace ConstructionTargets.IntrinsicSphereFourthMoments.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/IntrinsicSphereFourthMoments.lean"
     "ConstructionTargets/IntrinsicSphereFourthMoments.md"],
@@ -5810,7 +5827,7 @@
    :stop-condition
    "Preserve unresolved STOPs and refutations; no unproved numerical normalization, duplicate concurrent work or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact polygon uptake and intrinsic normalization boundary",
