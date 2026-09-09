@@ -42992,6 +42992,41 @@
    "Compactness is discharged for rank-zero overlap nullity using Borel-compatible induction; positive-rank assembly and full induction remain open.",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
   {:consumer :t93A04,
+   :stop-condition
+   "Stop only if common rank subtraction fails to preserve admissibility under both rank bounds, explicit Borel compatibility fails to instantiate the induction predicate, or nonstandard axioms are required.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SardBorelReducedDimensionInductionNullity.lean"
+    "ConstructionTargets/SardBorelReducedDimensionInductionNullity.md"],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL REDUCED-DIMENSION INDUCTION NULLITY",
+   :acceptance
+   {:fixture
+    {:path "/tmp/SardBorelReducedDimensionInductionNullityProbe.lean",
+     :sha256
+     "286b31b3461b1d10426a8d6e529f28f5c1c0317fd100191d7df2492ed1f0cbdf"},
+    :declarations
+    ["SardBorelReducedDimensionInductionNullityProbe.reducedDimension_slice_nullity"],
+    :axioms :standard-only,
+    :warnings [],
+    :consumer-residual
+    "Connect Borel-compatible reduced-dimension nullity to positive-rank chart assembly, close induction, and repair the complementary analytic range before rectangular localization."},
+   :representation
+   {:source
+    "Borel-compatible classical nullity at all source dimensions below d, finite-dimensional real normed spaces G and S with finrank G < d and dimensions sourceDim-rank and targetDim-rank, target Borel-compatible add-Haar measure, classical admissibility before rank subtraction, and rank bounded by both original dimensions.",
+    :target
+    "Localized critical-image nullity for every G-to-S map with ambient pointwise regularity of the unchanged finite order on an arbitrary source subset, without the older arbitrary-measurable-target induction premise."},
+   :id
+   :critical-value-sard-borel-reduced-dimension-induction-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:critical-value-sard-borel-classical-critical-nullity-predicate-1
+    :critical-value-sard-rank-drop-regularity-admissibility-1],
+   :current-residual
+   "The reduced-dimension slice interface consumes Borel-compatible induction directly; positive-rank chart consumers still require migration and induction closure.",
+   :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
+  {:consumer :t93A04,
    :review-finding
    "Deterministic scheduling defect: the recorded STOP does not satisfy this row's stop condition. No counterexample to rectangular local-set Morse–Sard is exhibited, and its smoothness/dimension hypotheses are not incompatible. The evidence shows only that the currently banked first-order implicit-slice theorem cannot supply the higher-jet hypotheses required by SardMultivariableTaylorCoveringNullity, so the named dependency chain is incomplete. Under the standing policy, inability to assemble the theorem from current dependencies is missing infrastructure, not a mathematical refutation; this row must remain blocked on a repaired/reopened rank-source induction path or return REVISE with one compiled prerequisite. The read-only audit otherwise reproduced standard-only axioms for both aggregation theorems, worklist validation, canonical package authority, and frozen t93A04 hash 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea with one theorem and one placeholder.",
    :stop-condition
@@ -43045,76 +43080,77 @@
     :probe
     {:placeholder-delta {:before 1, :after 1, :delta 0},
      :residual
-     "Bank global rank-zero overlap nullity with Borel-compatible induction; migrate positive-rank assembly, close induction, and resolve the complementary analytic range before rectangular closure.",
+     "Bank the Borel-compatible reduced-dimension slice interface; migrate positive-rank assembly, close induction, and resolve the complementary analytic range before rectangular closure.",
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {"rankZero_image_zero_of_borel_jet_range_overlap_induction"
-      "60d054857393f23ed5920539c5ad102a1fa49069a61a2782909dbca1baaecc11"},
+     {"SardBorelReducedDimensionInductionNullityProbe.reducedDimension_slice_nullity"
+      "5a13b9335609aba4d4c11364fcdae63526498c9b1f63ab2f128ad362e61b5c81"},
      :prerequisite
      {:consumer :t93A04,
       :stop-condition
-      "Stop only if C1 rank-zero closedness or compact exhaustion fails to transfer the reviewed compact overlap nullity under these hypotheses, or nonstandard axioms are required.",
+      "Stop only if common rank subtraction fails to preserve admissibility under both rank bounds, explicit Borel compatibility fails to instantiate the induction predicate, or nonstandard axioms are required.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SardRankZeroBorelJetRangeOverlap.lean"
-       "ConstructionTargets/SardRankZeroBorelJetRangeOverlap.md"],
+      ["ConstructionTargets/SardBorelReducedDimensionInductionNullity.lean"
+       "ConstructionTargets/SardBorelReducedDimensionInductionNullity.md"],
       :dag-node
-      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RANK-ZERO BOREL JET-RANGE OVERLAP",
+      "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / BOREL REDUCED-DIMENSION INDUCTION NULLITY",
       :acceptance
       {:fixture
-       {:path "/tmp/SardRankZeroBorelJetRangeOverlapProbe.lean",
+       {:path
+        "/tmp/SardBorelReducedDimensionInductionNullityProbe.lean",
         :sha256
-        "0422ca8e6857e86f2fbe87d820c08991e26e6aab0cf12a407244a03c14f1d956"},
+        "286b31b3461b1d10426a8d6e529f28f5c1c0317fd100191d7df2492ed1f0cbdf"},
        :declarations
-       ["rankZero_image_zero_of_borel_jet_range_overlap_induction"],
+       ["SardBorelReducedDimensionInductionNullityProbe.reducedDimension_slice_nullity"],
        :axioms :standard-only,
        :warnings [],
        :consumer-residual
-       "Migrate positive-rank assembly to Borel-compatible induction, close induction, repair the complementary analytic range, and remove global regularity through localization."},
+       "Connect Borel-compatible reduced-dimension nullity to positive-rank chart assembly, close induction, and repair the complementary analytic range before rectangular localization."},
       :representation
       {:source
-       "Global C^(k+2) regularity, classical admissibility, Borel-compatible classical nullity at every strictly lower source dimension, and sourceDim+floor((sourceDim-1)/targetDim) <= targetDim+k+3, under the stated nontrivial finite-dimensional real inner-product Borel, proper-source, and target add-Haar hypotheses.",
+       "Borel-compatible classical nullity at all source dimensions below d, finite-dimensional real normed spaces G and S with finrank G < d and dimensions sourceDim-rank and targetDim-rank, target Borel-compatible add-Haar measure, classical admissibility before rank subtraction, and rank bounded by both original dimensions.",
        :target
-       "Zero target measure of the image of the entire derivative rank-zero locus, without compactness or supplied jet-nullity premises."},
-      :id :critical-value-sard-rank-zero-borel-jet-range-overlap-1,
+       "Localized critical-image nullity for every G-to-S map with ambient pointwise regularity of the unchanged finite order on an arbitrary source subset, without the older arbitrary-measurable-target induction premise."},
+      :id
+      :critical-value-sard-borel-reduced-dimension-induction-nullity-1,
       :kind :reusable-theorem,
       :depends-on
-      [:critical-value-sard-compact-rank-zero-borel-jet-range-overlap-1
-       :critical-value-sard-closed-open-image-nullity-1
-       :critical-value-sard-derivative-rank-upper-locus-closed-1],
+      [:critical-value-sard-borel-classical-critical-nullity-predicate-1
+       :critical-value-sard-rank-drop-regularity-admissibility-1],
       :current-residual
-      "Compactness is discharged for rank-zero overlap nullity using Borel-compatible induction; positive-rank assembly and full induction remain open.",
+      "The reduced-dimension slice interface consumes Borel-compatible induction directly; positive-rank chart consumers still require migration and induction closure.",
       :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :reason
-     "One compiled prerequisite extends compact Borel-compatible overlap nullity to the entire rank-zero locus. C1 regularity supplies closedness, and compact exhaustion aggregates the reviewed compact nullity theorem. Positive-rank assembly, induction closure, and the complementary analytic range remain unresolved; rectangular Morse-Sard is not refuted.",
+     "One compiled prerequisite supplies reduced-dimension slice critical-image nullity directly from Borel-compatible induction. Common rank subtraction preserves classical admissibility; explicit target Borel compatibility permits instantiation of the new predicate. Positive-rank chart assembly and full induction remain unresolved; no equivalence with the older broader predicate or rectangular closure is claimed.",
      :commands
      [{:cmd
-       "Read DAG, closure policy, build-loop definitions, exhaustion and overlap modules, and three reviewed dependency findings",
+       "Read DAG, closure policy, build-loop definitions, reduced-dimension and predicate modules, and reviewed dependency findings",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/SardRankZeroBorelJetRangeOverlapProbe.lean",
+       "lake env lean /tmp/SardBorelReducedDimensionInductionNullityProbe.lean",
        :exit 0,
        :output "No warnings; standard axioms only."}
       {:cmd
-       "sha256sum /tmp/SardRankZeroBorelJetRangeOverlapProbe.lean problems/t93A04/lean/Main.lean",
+       "sha256sum /tmp/SardBorelReducedDimensionInductionNullityProbe.lean problems/t93A04/lean/Main.lean",
        :exit 0,
        :output
        "Fixture hash recorded; frozen consumer remains 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
       {:cmd
-       "sed -n '8,24p' /tmp/SardRankZeroBorelJetRangeOverlapProbe.lean | sha256sum",
+       "sed -n '8,20p' /tmp/SardBorelReducedDimensionInductionNullityProbe.lean | sha256sum",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardRankZeroBorelJetRangeOverlapProbe.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' /tmp/SardBorelReducedDimensionInductionNullityProbe.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
        :exit 0,
        :output
-       "topology-worklist: 330 items OK; {:done 322, :open 1, :blocked 1, :superseded 6}"}
+       "topology-worklist: 331 items OK; {:done 323, :open 1, :blocked 1, :superseded 6}"}
       {:cmd
        "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
        :exit 0,
@@ -43126,12 +43162,12 @@
       {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/SardRankZeroBorelJetRangeOverlapProbe.lean",
+     {:path "/tmp/SardBorelReducedDimensionInductionNullityProbe.lean",
       :sha256
-      "0422ca8e6857e86f2fbe87d820c08991e26e6aab0cf12a407244a03c14f1d956"},
+      "286b31b3461b1d10426a8d6e529f28f5c1c0317fd100191d7df2492ed1f0cbdf"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
@@ -43410,7 +43446,8 @@
     :critical-value-sard-jet-borel-classical-admissible-loss-nullity-1
     :critical-value-sard-compact-rank-zero-borel-double-uncovered-assembly-1
     :critical-value-sard-compact-rank-zero-borel-jet-range-overlap-1
-    :critical-value-sard-rank-zero-borel-jet-range-overlap-1],
+    :critical-value-sard-rank-zero-borel-jet-range-overlap-1
+    :critical-value-sard-borel-reduced-dimension-induction-nullity-1],
    :current-residual
    "the rectangular theorem remains blocked on the explicit analytic sub-DAG; reviewed aggregation modules remain banked",
    :other-consumers [:t01A08 :t01J04 :t92J07 :t96J05]}
