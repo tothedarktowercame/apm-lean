@@ -36762,6 +36762,28 @@
       :output "/home/joe/code/apm-lean/.lake/packages"}
      {:cmd "git diff --check HEAD^", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788919180385-15821-54a840d2",
+     :commands
+     ["git show --stat --oneline 5bc0c7ed25e4e58915c0a09918b514317330dbb3"
+      "git diff-tree --no-commit-id --name-only -r 5bc0c7ed25e4e58915c0a09918b514317330dbb3"
+      "sha256sum /tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean"
+      "cmp -s /tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.lean"
+      "sed -n '9,47p' <(git show 5bc0c7ed25e4e58915c0a09918b514317330dbb3:ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.lean) | sha256sum"
+      "lake env lean /tmp/SardFiniteOrderCompactRankZeroHigherJetNullityProbe.lean"
+      "lake env lean ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.lean"
+      "lake build"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "rg -o '\\b(sorry|admit)\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.lean"
+      "sha256sum problems/t93A04/lean/Main.lean"
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l"
+      "rg -c '^theorem ' problems/t93A04/lean/Main.lean"
+      "readlink -f .lake/packages"
+      "git diff --check 5bc0c7ed25e4e58915c0a09918b514317330dbb3^ 5bc0c7ed25e4e58915c0a09918b514317330dbb3"],
+     :finding
+     "PASS: exact scope and fixture, frozen statement hash, valid elimination of the empty order-one jet branch, unchanged higher-jet and Taylor inputs, standard-only axioms, zero source placeholders, frozen consumer, full build, and worklist gate all reproduced."},
     :commit "5bc0c7ed25e4e58915c0a09918b514317330dbb3",
     :changed-paths
     ["ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.lean"
@@ -36774,7 +36796,7 @@
     :declarations
     ["compact_rankZero_image_zero_of_higherJet_induction"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.lean"
     "ConstructionTargets/SardFiniteOrderCompactRankZeroHigherJetNullity.md"],
@@ -36954,7 +36976,7 @@
       "c6a38e81c8da37ed5514fdb80af57888e827d42708725743e166e780c1c2bad0"},
      :seat :codex-6}},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD [FOUNDATION] / RECTANGULAR LOCAL ASSEMBLY",
