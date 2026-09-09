@@ -45121,8 +45121,77 @@
   {:consumer :t93A04,
    :stop-condition
    "Stop only if equal finrank fails to provide a continuous linear equivalence, differentiability fails to transport through it, reviewed source critical-image equality or same-space nullity fails under these hypotheses, or nonstandard axioms are required.",
+   :evidence
+   {:scoped-placeholder-delta {:before 0, :after 0, :delta 0},
+    :placeholder-delta {:before 1, :after 1, :delta 0},
+    :residual
+    "Equal-dimensional ambient critical-image nullity is established without source measure assumptions. Lower-source-dimensional low-order cases and the complementary-overlap analytic premise remain unresolved. Ledger and frozen consumer unchanged.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"equalDimension_ambient_criticalImage_zero"
+     "73acde7ba18f1dab9c9f8430278c8f771377a9c5f7613c40bca27e66e55f650c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rule, closure policy, fixture source, and both reviewed dependency findings",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean problems/t93A04/lean/Main.lean",
+      :exit 0,
+      :output
+      "Fixture matches acceptance; frozen consumer SHA 4431ba028376d7a85867bd9ec81e3ac94a64d891661c7ee149701461a56d3fea."}
+     {:cmd
+      "lake env lean /tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean && lake env lean ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean",
+      :exit 0,
+      :output "Both compile without warnings; standard axioms only."}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.SardEqualDimensionAmbientCriticalNullity 2>&1 | awk '/warning:|error:|Build completed/ {print}'",
+      :exit 0,
+      :output "Build completed successfully (8267 jobs)."}
+     {:cmd
+      "cmp /tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean problems/t93A04/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '6,15p' ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean | sha256sum",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|\\bsorryAx\\b|^[[:space:]]*(axiom|opaque|unsafe)\\b' ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 349 items OK; {:done 340, :open 1, :blocked 2, :superseded 6}"}
+     {:cmd
+      "rg -o '\\bsorry\\b' problems/t93A04/lean/Main.lean | wc -l",
+      :exit 0,
+      :output "1"}
+     {:cmd "readlink -f .lake/packages",
+      :exit 0,
+      :output "/home/joe/code/apm-lean/.lake/packages"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git add ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.md && git diff --cached --check && git diff --cached --name-only && git commit -m \"Bank equal-dimensional ambient critical-image nullity\" && git rev-parse HEAD && git status --porcelain=v1",
+      :exit 0,
+      :output
+      "Committed exactly two scoped files; final worktree clean."}],
+    :commit "530c8238b9ce35ffd68c681d2e0ab398b0306658",
+    :changed-paths
+    ["ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean"
+     "ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.md"],
+    :fixture
+    {:path "/tmp/SardEqualDimensionAmbientCriticalNullityProbe.lean",
+     :sha256
+     "dbb3ca05674292fa6426ee6bd697c0816f63629f4f7164e8b3648e58767b09ca"},
+    :declarations ["equalDimension_ambient_criticalImage_zero"]},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.lean"
     "ConstructionTargets/SardEqualDimensionAmbientCriticalNullity.md"],
