@@ -48439,6 +48439,22 @@
       :exit 0,
       :output "?? holes/labs/topology-contract/runs2/",
       :note "Unrelated directory untouched."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788973700693-16661-64ba358f",
+     :commands
+     ["git show 6c4f3d0b --format=fuller"
+      "Read-only Python verification of committed source pins, fixture/documentation byte equality and comment-stripped placeholder counts"
+      "sha256sum /tmp/SardSmoothFirstNonzeroJetLocalInduction-sources.json"
+      "sed -n '10,33p' ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean | sha256sum"
+      "lake env lean ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean"
+      "lake env lean /tmp/SardSmoothFirstNonzeroJetLocalInduction.lean"
+      "lake build ConstructionTargets.SardSmoothFirstNonzeroJetLocalInduction"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 6c4f3d0b"],
+     :finding
+     "Independent of implementer codex-6 and probe author codex-12. Exact scope and all hashes reproduced, including statement ce7ad7416a156a8103ad419f02f386d26e748827618a8916e87e7eb1962cbd0a. Fixture placeholders 0; frozen t93A04 placeholders 1, hash unchanged. Both compiles and 8315-job build exit 0; only propext, Classical.choice, Quot.sound. Correct inverse-slice containment and strict kernel dimension drop feed the actual reduced map into genuine-infinity local induction; no arbitrary-C1 substitution or unconditional Sard claim. Ledger validates 371 items; no reviewer edits."},
     :commit "6c4f3d0b6c7f581738f2b3a841d36da148a6f49d",
     :changed-paths
     ["ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean"
@@ -48450,7 +48466,7 @@
     :declarations
     ["SardSmoothFirstNonzeroJetLocalInductionProbe.exists_local_firstNonzeroJet_image_null"]},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.lean"
     "ConstructionTargets/SardSmoothFirstNonzeroJetLocalInduction.md"],
@@ -48489,7 +48505,7 @@
    :stop-condition
    "End only on all consumers closed or an exact mathematical refutation. Missing infrastructure and owner authorization do not terminate the campaign.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
