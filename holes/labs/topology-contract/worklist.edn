@@ -59782,8 +59782,57 @@
   {:consumer "t00J02",
    :stop-condition
    "Require the actual incidence homeomorphism and constructed manifold/smooth-inclusion existence packet; no supplied atlas or regularity premise.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Chosen-chart specifications and same-atlas inclusion derivative injectivity/tangent equalizer comparison remain. Target-manifold localization and consumer-specific obligations remain separate. No frozen consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789011251802-17771-84f161ab"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:incidenceHomeomorph
+     "b445b444eea817bbcee2aa6f5c14cb058428f23b00af93ed1301484a96d2ab17",
+     :incidenceHomeomorph_val
+     "842b317634ef783c5a71862b6dc8780ead48fb5f723493e790e75540f73437df",
+     :incidenceHomeomorph_symm_val
+     "17fa4f4139001a066169b16066392dfa0531c67108261931b0b70ae53ed568fd",
+     :exists_atlas
+     "5c6cc71e85228cf7ca8aaf704b173ec03b39f84cd0a0d1c7362a2e4ea225ad90"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "python3 /tmp/transverse-incidence-manifold-audit.py",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ChartedSpaceModelDerivativeTransport ConstructionTargets.ManifoldRegularFiberGlobalAtlas",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/TransverseIncidenceManifold.lean ConstructionTargets/TransverseIncidenceManifold.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/TransverseIncidenceManifold.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "d56071ca6089d347fb5cb9ebe1cc5368005deae9",
+    :changed-paths
+    ["ConstructionTargets/TransverseIncidenceManifold.lean"],
+    :fixture
+    {:path "/tmp/TransverseIncidenceManifold.lean",
+     :sha256
+     "2996b4ad36f7bc64d2f1a7533472263786d754aea50de1708aa2e4cd42a0c6ca"},
+    :axiom-audit-declarations 4},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TransverseIncidenceManifold.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / literal incidence manifold and smooth inclusion",
