@@ -28952,19 +28952,22 @@
     :author "codex-13",
     :commands
     [{:cmd
-      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      "Read complete DAG, foundational-program note, closure experiments, build-loop design, both ledgers and the failed review",
       :exit 0}
      {:cmd
-      "Inspect all open, blocked, done-unreviewed and recently reviewed rows and their dependency receipts",
+      "git ls-tree -r --name-only e0ddf23d ConstructionTargets | count Lean modules",
       :exit 0}
      {:cmd
-      "Python comment-stripped census of every problems/*/lean/Main.lean consumer named by the DAG",
+      "git ls-tree -r --name-only d260df79^ ConstructionTargets | count Lean modules",
       :exit 0}
      {:cmd
-      "Inspect C1GraphGlobalBounds, SphereCapGraph, SphereCapFiniteMeasure, IntrinsicSphereFinite and frozen t02A05, t95J05, t01J06 and t94A10 sphere-integral interfaces",
+      "git diff --name-status e0ddf23d d260df79^ -- ConstructionTargets problems",
       :exit 0}
      {:cmd
-      "find ConstructionTargets -maxdepth 1 -type f -name '*.lean' | wc -l",
+      "Python comment-stripped placeholder comparison for problems/m02J06/lean/Main.lean at e0ddf23d and d260df79^",
+      :exit 0}
+     {:cmd
+      "Inspect commit a25314a5 and attribute the concurrent frozen m02J06 closure separately from infrastructure additions",
       :exit 0}
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -28972,14 +28975,13 @@
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
       :exit 0}
-     {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1789045638299-18633-cabde5bc",
-     :finding
-     "Deterministic census attribution defect in strategy commit d260df79: the recorded infrastructure packet claims modules 762->772 and lists ConstructionTargets/FiniteTranslatedEmbeddedArcsChartContainment.lean as a concurrent addition, but that file does not exist at the recorded pre-transition head d260df79^. The actual earlier-to-head change instead includes ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean, which the packet omits. Using the post-subcomplex baseline e0ddf23d reproduces 763->772 with nine additions (five portfolio plus four compact-complement modules), not 762->772. Using the prior checkpoint head e90e523c reproduces 762->772 but includes the omitted subcomplex module and the m02J06 consumer change, while still not including the claimed finite-arc module. Thus no commit interval supports the recorded before/after counts and attributed ten-module list."},
+    :diagnostic-history
+    [{:cmd
+      "Prior infrastructure attribution in strategy commit d260df79",
+      :exit 0,
+      :correction
+      "The prior receipt incorrectly named nonexistent ConstructionTargets/FiniteTranslatedEmbeddedArcsChartContainment.lean as a concurrent addition and reported 762 to 772 without including CoefficientSubcomplexMayerVietoris or the concurrent m02J06 consumer change. Recomputed from the post-subcomplex baseline e0ddf23d to d260df79^: 763 to 772, exactly nine Lean modules, plus the separate m02J06 frozen-file closure."}],
     :replacement-items
     [{:consumer :t95J05,
       :stop-condition
@@ -28994,7 +28996,7 @@
        :hypotheses
        "Use d=2 and d=3 exactly. The source is EuclideanSpace real (Fin (d+1)) with its L2 metric and the literal unit sphere. The target uses EuclideanSpace real (Fin d), WithLp 2 of its product with real, and the open unit ball. No supplied isometry, measurable equivalence, area identity or normalization constant is allowed.",
        :probe
-       "Construct explicit coordinate linear isometries between WithLp 2 (EuclideanSpace real (Fin d) × real) and EuclideanSpace real (Fin (d+1)). Define the upper and lower height graphs on the open unit ball, prove ContDiffOn real 1 there, compute their fderivatives and graph densities, and prove their images are exactly the corresponding strict upper and lower sphere caps. Transport the reviewed C1GraphGlobalBounds.exact_area_value through the actual isometries and subtype inclusions to obtain exact cap Hausdorff-measure formulas. Prove all measurable-set and ambient-versus-intrinsic subtype identifications used. This supplies the sphere-cap representation step for the sole t95J05 placeholder and the sphere-period placeholders of t02A05, t01J06 and t94A10. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled missing representation or measure-transport prerequisite. STOP names the exact independent boundary.",
+       "Construct explicit coordinate linear isometries between WithLp 2 (EuclideanSpace real (Fin d) × real) and EuclideanSpace real (Fin (d+1)). Define the upper and lower height graphs on the open unit ball, prove ContDiffOn real 1 there, compute their fderivatives and graph densities, and prove their images are exactly the corresponding strict upper and lower sphere caps. Transport C1GraphGlobalBounds.exact_area_value through the actual isometries and subtype inclusions to obtain exact cap Hausdorff-measure formulas. Prove all measurable-set and ambient-versus-intrinsic subtype identifications used. This supplies the sphere-cap representation step for the sole t95J05 placeholder and the sphere-period placeholders of t02A05, t01J06 and t94A10. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled missing representation or measure-transport prerequisite. STOP names the exact independent boundary.",
        :consumer-equation
        "For d=2 and d=3, each literal strict upper or lower unit-sphere cap has actual Hausdorff d-measure equal to the reviewed graph-density lintegral over the open unit ball, after a constructed L2 coordinate isometry, with no numerical normalization factor suppressed.",
        :consumer-residual
@@ -29015,7 +29017,8 @@
        "The images of the scalar functions u ↦ ±sqrt(1-norm(u)^2) over open radius-less-than-one domains under C1GraphGlobalBounds in WithLp 2 of EuclideanSpace real (Fin d) times real",
        :direction
        "Construct measure-preserving linear isometries from the target L2 graph ambient space onto the source Euclidean ambient space, then prove exact equality from each target graph image and its Hausdorff measure to the corresponding source sphere-cap subset and intrinsic measure."},
-      :id :oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-1,
+      :id
+      :oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair1,
       :kind :representation-comparison,
       :depends-on
       [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1
@@ -29044,20 +29047,27 @@
        "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
        :stop-condition
        "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
-      :id :oriented-checkpoint48-sphere-cap-area-and-consumer-refill,
+      :id
+      :oriented-checkpoint48-sphere-cap-area-and-consumer-refill-repair1,
       :kind :strategy-checkpoint,
       :depends-on
-      [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-1],
+      [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair1],
       :current-residual
       "Measure actual sphere-cap representation progress separately from equator nullity, cap assembly, numerical Hausdorff normalization and frozen moment closure; rerank every consumer against concurrent outcomes.",
       :other-consumers []}],
     :measures
-    {:proved-refutations 0,
+    {:baseline
+     {:commit "e0ddf23da4d6dea2d66f07891aeb1fdd0c4df5b3",
+      :description "Post-CoefficientSubcomplexMayerVietoris baseline"},
+     :proved-refutations 0,
      :frozen-branch-uptake 0,
-     :placeholder-delta 0,
-     :frozen-closures 0,
+     :placeholder-delta -4,
+     :head
+     {:commit "4d0bf3c0e3ccab048af80aa7861ec03ea4e8854e",
+      :description "Pre-strategy head d260df79^"},
+     :frozen-closures 1,
      :infrastructure-packets
-     {:before 762,
+     {:before 763,
       :after 772,
       :portfolio
       ["ConstructionTargets/ENNRealMultiplicativeSqueeze.lean"
@@ -29069,22 +29079,31 @@
       ["ConstructionTargets/CoefficientCompactComplementGeometry.lean"
        "ConstructionTargets/CoefficientCompactComplementSmallComparison.lean"
        "ConstructionTargets/CoefficientCompactComplementPairHomeomorph.lean"
-       "ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean"
-       "ConstructionTargets/FiniteTranslatedEmbeddedArcsChartContainment.lean"]},
+       "ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean"],
+      :excluded-baseline-module
+      "ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean was already present at e0ddf23d.",
+      :nonexistent-claimed-module
+      "ConstructionTargets/FiniteTranslatedEmbeddedArcsChartContainment.lean was not present at d260df79^ and is removed from attribution."},
      :corrected-closures 0,
      :typed-residual-change
-     "The exact C1 scalar-graph Hausdorff area formula is now reviewed and banked for arbitrary zero, finite and infinite measures. The integration route advances from measurable approximation pieces to an exact variable-density equation. Actual sphere-cap representation, measurable cap assembly, Euclidean Hausdorff normalization and numerical moments remain.",
+     "Exact C1 scalar-graph Hausdorff area is reviewed and banked. Independently, m02J06 changed from four placeholders to zero in commit a25314a5. Sphere-cap representation, measurable cap assembly, Euclidean Hausdorff normalization and numerical sphere moments remain on the four integration routes.",
      :review-outcomes
      {:exact-c1-graph-area
       {:outcome :pass,
        :commit "3c551fb6a315e4c16a111fd87beaf495a3ff6679",
        :review "invoke-1789045271081-18623-40dd4178"},
+      :m02J06-frozen-closure
+      {:outcome :closed,
+       :commit "a25314a5",
+       :placeholder-before 4,
+       :placeholder-after 0},
       :compact-complement-homology-transport
       {:outcome :done-unreviewed,
        :disposition "Excluded as active concurrent work."},
       :finite-translated-arcs-chart-containment
       {:outcome :open,
-       :disposition "Excluded as active concurrent work."},
+       :disposition
+       "Excluded as active concurrent work; no module addition attributed."},
       :fivefold-cover-adapter
       {:outcome :stop,
        :review :pass,
@@ -29093,18 +29112,18 @@
      {:named 59,
       :existing 58,
       :missing [:t93A05],
-      :open-consumers 33,
-      :zero-placeholder 25,
-      :within-two 23,
-      :placeholder-before 62,
-      :placeholder-after 62}},
+      :placeholder-before 66,
+      :placeholder-after 62,
+      :zero-placeholder-before 24,
+      :zero-placeholder-after 25,
+      :within-two-after 23}},
     :ranking
-    "No near-closure consumer has a complete unreserved route. The one-placeholder t95J05 route still lacks literal S3 Hausdorff normalization and coordinate moments; t02A05, t01J06 and t94A10 need the same sphere-measure bridge. The highest-ranked eligible shared step is therefore the exact identification of upper and lower unit-sphere caps with the reviewed scalar L2 graph formula. It lies on four open problem routes and is simpler than global cap assembly or numerical Hausdorff-to-volume normalization.",
+    "The corrected attribution does not change route eligibility. No near-closure consumer has a complete unreserved route. The one-placeholder t95J05 route still lacks literal S3 Hausdorff normalization and coordinate moments; t02A05, t01J06 and t94A10 need the same sphere-measure bridge. The highest-ranked eligible shared step remains the exact identification of upper and lower unit-sphere caps with the reviewed scalar L2 graph formula.",
     :finding
-    "The frozen files remain byte-unchanged and the comment-stripped total remains 62 placeholders across 33 open consumers. Routes: t95J05 has 1 placeholder: banked exact graph area -> missing actual S3 cap representation -> missing measurable cap assembly and Euclidean Hausdorff normalization -> missing square and fourth-coordinate moments -> frozen sphere integral. t02A05 has 2 placeholders: banked coefficient and projection reductions -> missing actual S2 cap representation -> missing cap assembly and normalization -> missing centered sphere moments -> frozen integral and minimum. t01J06 has 3 placeholders: banked restriction algebra -> the same S2 cap and moment route for the nonzero period, plus a separate manifold Stokes bridge and final conjunction. t94A10 has 3 placeholders: banked solid-angle algebra -> the same S2 cap and normalization route for the period, plus closedness/nonexactness assembly. t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 follow the compact-complement Mayer-Vietoris route; homology transport is done-unreviewed and compact-support conjugation/excision, localization, duality and gluing remain, so duplicate election is excluded. t99J03, t00A03, t01J01, t91J05 and t94J09 follow the finite translated-arc route; prescribed-chart containment and endpoint control are actively reserved, with polygon or classification steps later. t98A01 has 1 placeholder but its reviewed STOP identifies missing five-torsion cardinality, polygon-genus invariance and finite-cover Euler multiplicativity. t00J01 still needs concrete Klein-product and exact fold-fiber geometry. t01A05 retains its connectedness specification defect in addition to the shared compact-support route. t01A08 still needs arbitrary-model chart-domain and within-derivative applicability. t01J04 and t94A06 still need exact regular-preimage, half-space atlas and normal-translation applicability. t02A08 still needs an actual arbitrary-integer sphere map and its homology action. t03J02 retains the reviewed closed-circle gluing STOP. t03J04 still needs uniform rational torus homology and finite-cover Euler comparison. t92J06 still needs covering classification, monodromy, surface-cover realization and genus invariance. t96J05 retains the proved radial counterexample and requires a corrected analytic or smooth statement before uptake. No route is complete, so no frozen closure adapter is eligible. Infrastructure outside these named routes is deferred. One shared sphere-cap representation row is elected, followed by a successor checkpoint.",
+    "Repair: the supported interval is e0ddf23d to d260df79^. It contains nine new ConstructionTargets Lean modules: five exact-graph-area modules and four compact-complement modules. CoefficientSubcomplexMayerVietoris predates the baseline; FiniteTranslatedEmbeddedArcsChartContainment does not exist at the head. The interval also contains the independent frozen m02J06 closure, changing its comment-stripped placeholders from four to zero; total named-consumer placeholders therefore change 66 to 62. Routes otherwise remain as previously measured: t95J05 has 1 placeholder through actual S3 cap representation, cap assembly, Hausdorff normalization, coordinate moments and frozen integration. t02A05 has 2 through the shared S2 cap and moment route plus final minimum. t01J06 has 3 through the shared S2 period route, a separate Stokes bridge and final conjunction. t94A10 has 3 through the shared S2 period route plus closedness and nonexactness assembly. t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 remain on the reserved compact-complement Mayer-Vietoris, localization and duality route. t99J03, t00A03, t01J01, t91J05 and t94J09 remain on the active translated-arc route. t98A01 retains its reviewed STOP for five-torsion cardinality, genus invariance and covering Euler multiplicativity. t00J01 needs Klein-product and fold-fiber geometry; t01A05 also retains its connectedness specification defect; t01A08 needs arbitrary-model chart applicability; t01J04 and t94A06 need regular-preimage and half-space geometry; t02A08 needs arbitrary-integer sphere-map homology action; t03J02 retains the closed-circle gluing STOP; t03J04 needs rational torus homology and finite-cover Euler comparison; t92J06 needs covering classification and genus invariance; t96J05 retains its radial counterexample and needs a corrected statement. No additional route is complete. The same shared sphere-cap comparison is re-elected under fresh identifiers, followed by a fresh successor checkpoint.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact graph area and renewed consumer eligibility",
@@ -29121,6 +29140,80 @@
     :oriented-checkpoint46-measurable-graph-partition-and-consumer-refill],
    :current-residual
    "Measure exact graph-area progress separately from sphere-chart assembly and numerical normalization; rerank every consumer against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t95J05,
+   :stop-condition
+   "Do not assume a cap parameterization is measure-preserving, suppress subtype or ambient measure transport, include the equator without a proved null-boundary comparison, or assume numerical Euclidean Hausdorff normalization. Do not evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Exclude active compact-support, arc, orientation and surface work; use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD INTEGRATION: actual unit-sphere caps as reviewed C1 L2 graphs",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use d=2 and d=3 exactly. The source is EuclideanSpace real (Fin (d+1)) with its L2 metric and the literal unit sphere. The target uses EuclideanSpace real (Fin d), WithLp 2 of its product with real, and the open unit ball. No supplied isometry, measurable equivalence, area identity or normalization constant is allowed.",
+    :probe
+    "Construct explicit coordinate linear isometries between WithLp 2 (EuclideanSpace real (Fin d) × real) and EuclideanSpace real (Fin (d+1)). Define the upper and lower height graphs on the open unit ball, prove ContDiffOn real 1 there, compute their fderivatives and graph densities, and prove their images are exactly the corresponding strict upper and lower sphere caps. Transport C1GraphGlobalBounds.exact_area_value through the actual isometries and subtype inclusions to obtain exact cap Hausdorff-measure formulas. Prove all measurable-set and ambient-versus-intrinsic subtype identifications used. This supplies the sphere-cap representation step for the sole t95J05 placeholder and the sphere-period placeholders of t02A05, t01J06 and t94A10. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled missing representation or measure-transport prerequisite. STOP names the exact independent boundary.",
+    :consumer-equation
+    "For d=2 and d=3, each literal strict upper or lower unit-sphere cap has actual Hausdorff d-measure equal to the reviewed graph-density lintegral over the open unit ball, after a constructed L2 coordinate isometry, with no numerical normalization factor suppressed.",
+    :consumer-residual
+    "Prove the equator has zero d-dimensional Hausdorff measure, assemble the two caps into the whole sphere, determine Euclidean Hausdorff-to-volume normalization and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
+    :gates
+    ["Compile a complete fixture and record SHA256."
+     "Audit the explicit L2-to-Euclidean linear isometries and coordinate formulas for d=2 and d=3."
+     "Verify upper and lower height functions are C1 on the open unit ball and compute their actual derivatives and graph densities."
+     "Prove exact image equalities with the literal strict sphere caps."
+     "Verify every Hausdorff-measure equality uses actual isometry transport and proved subtype/ambient identifications."
+     "Reuse C1GraphGlobalBounds.exact_area_value rather than reconstructing graph area."
+     "Compile both dimensions and both cap signs with standard-only axioms."
+     "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reservations, reviewed STOPs and refutations."]},
+   :representation
+   {:source
+    "The actual upper and lower cap subsets of Metric.sphere 0 1 in EuclideanSpace real (Fin (d+1)), together with their intrinsic subtype Hausdorff d-measures",
+    :target
+    "The images of the scalar functions u ↦ ±sqrt(1-norm(u)^2) over open radius-less-than-one domains under C1GraphGlobalBounds in WithLp 2 of EuclideanSpace real (Fin d) times real",
+    :direction
+    "Construct measure-preserving linear isometries from the target L2 graph ambient space onto the source Euclidean ambient space, then prove exact equality from each target graph image and its Hausdorff measure to the corresponding source sphere-cap subset and intrinsic measure."},
+   :id
+   :oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1
+    :oriented-checkpoint47-exact-graph-area-and-consumer-refill
+    :oriented-checkpoint47-exact-graph-area-and-consumer-refill],
+   :current-residual
+   "The exact scalar graph-area theorem is banked, but the literal upper and lower unit-sphere subsets have not been identified with its WithLp 2 graph representation and induced Hausdorff measures.",
+   :other-consumers [:t02A05 :t01J06 :t94A10]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: sphere-cap area comparison and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint48-sphere-cap-area-and-consumer-refill-repair1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair1
+    :oriented-checkpoint47-exact-graph-area-and-consumer-refill],
+   :current-residual
+   "Measure actual sphere-cap representation progress separately from equator nullity, cap assembly, numerical Hausdorff normalization and frozen moment closure; rerank every consumer against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
