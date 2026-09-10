@@ -29369,22 +29369,133 @@
    :stop-condition
    "Bank only the exact height derivative maps and application formulas. Do not claim derivative-norm or graph-density simplification, an ambient coordinate isometry, cap-image equality, Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint47-cap-derivative/SphereCapHeightDerivative.lean",
-      :sha256
-      "33450e747309696c526adc3f13a4a3668ecb97be7072f46490d27e76c03f5199"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/codex13-checkpoint47-cap-derivative/SphereCapHeightDerivative.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Compute the derivative norms and graph densities, construct the explicit WithLp 2 to EuclideanSpace coordinate isometry, prove exact strict-cap image equalities and transport C1GraphGlobalBounds.exact_area_value.",
+    :gates
+    {:canonical-compile :pass,
+     :lower-application-formula :pass,
+     :lower-fderiv :pass,
+     :whitespace :pass,
+     :dimension-two-both-signs :pass,
+     :fixture-hash :pass,
+     :square-root-radicand :pass,
+     :derivative-negation :pass,
+     :axiom-audits 10,
+     :exact-scope :pass,
+     :lower-derivative-construction :pass,
+     :claim-boundary :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :dimension-three-both-signs :pass,
+     :upper-derivative-construction :pass,
+     :warning-scan :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :upper-application-formula :pass,
+     :upper-fderiv :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"dimension_two_upper"
+     "e30ee9048d9393f08d01f99abb124a4361bbfb75a0eff62289f6dc21c9e5e965",
+     "lowerDerivative_eq_neg"
+     "51299d1a7c5973a8da15a27de25fc049c7aca5c207b4f51368cbcdef9afdad62",
+     "upperDerivative"
+     "fd5f7ef99aaeb869a79e48fee3720bb690e3bd43a65d667d90b1ddf4b26efec1",
+     "hasFDerivAt_lower"
+     "4b4df62ce764f49c6cd4159029e6887e5014a7cb73e96ec4ebc5f62e139f84c4",
+     "fderiv_upper"
+     "d237807f905f6a7fb78f174f3ae4e62c63fb9a11217045dfac413840d0db0c73",
+     "dimension_three_lower"
+     "3de55a888b85d03bff49a7f5a01644f28436ae2eda47925958a07cadb77cff2f",
+     "dimension_three_upper"
+     "3f1fb5e0ac4eb187e8067588f3768946c8ad7ac137eaa1708243c2e57ec8e7d3",
+     "lowerDerivative"
+     "f9ed72895880df95d3d7d35467f575042bb345a2962b9e1199206e89504cca90",
+     "hasFDerivAt_upper"
+     "badb282e27c67d1b567cd1b1871f0e81ac65454c171a2e412fc09af20481451b",
+     "upperDerivative_apply"
+     "ffebc3dfd7f781c3420c3dd3f185c0965bc5d53e15d201053b7052dfc0afe364",
+     "lowerDerivative_apply"
+     "9475fd2bd56e1442a7ee535b190237ad20bbf53af104302df0bb5bf938d8b980",
+     "fderiv_lower"
+     "45a2e6807e97e97ca2083998937970076450f92c689974ec1047c87a61743cfc",
+     "dimension_two_lower"
+     "e8366b7f3dccf12520f9000aab17e3e3ffd2b484bf8413c59f4ef0f729c42c7c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, build-loop design, both ledgers and reviewed dependency receipt",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint47-cap-derivative/SphereCapHeightDerivative.lean ConstructionTargets/SphereCapHeightDerivative.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint47-cap-derivative/SphereCapHeightDerivative.lean ConstructionTargets/SphereCapHeightDerivative.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint47-cap-derivative/SphereCapHeightDerivative.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SphereCapHeightDerivative.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SphereCapHeightDerivative",
+      :exit 0}
+     {:cmd "Audit ten namespace-local standard-only axiom reports",
+      :exit 0}
+     {:cmd
+      "Audit norm-square differentiation, square-root division using radicand_pos, both fderiv equalities, derivative negation and explicit inner-product application formulas",
+      :exit 0}
+     {:cmd
+      "rg -n 'warning:|error:' /tmp/codex14-cap-deriv-fixture.log /tmp/codex14-cap-deriv-canonical.log /tmp/codex14-cap-deriv-build.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/SphereCapHeightDerivative.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n '[[:blank:]]+$' ConstructionTargets/SphereCapHeightDerivative.lean ConstructionTargets/SphereCapHeightDerivative.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --cached --check and exact two-file staged-scope audit",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline 67eedcc3 && git diff 67eedcc3^ 67eedcc3 --check",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "Initial warning audit used two mistyped .log.log paths under an inverted scan",
+      :exit 0,
+      :correction
+      "Reran the no-match scan against the three actual fixture, canonical and build logs; all were present and contained no warnings or errors."}],
+    :dependency-uptake
+    {:id :sphere-cap-height-c1-unit-graph-1,
+     :commit "40ed9a46b8d1cf310a63c9eb617b361e2210e668",
+     :review "invoke-1789047383656-18684-fc6fa62f"},
+    :commit "67eedcc383de0eeb1bce7b89d2c0e3be56af7bf3",
+    :changed-paths
+    ["ConstructionTargets/SphereCapHeightDerivative.lean"
+     "ConstructionTargets/SphereCapHeightDerivative.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint47-cap-derivative/SphereCapHeightDerivative.lean",
+     :sha256
+     "33450e747309696c526adc3f13a4a3668ecb97be7072f46490d27e76c03f5199",
+     :placeholder-count 0},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereCapHeightDerivative.lean"
     "ConstructionTargets/SphereCapHeightDerivative.md"],
