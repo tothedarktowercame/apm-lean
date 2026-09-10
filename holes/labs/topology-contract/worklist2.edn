@@ -30202,6 +30202,24 @@
      "The literal subsets of Metric.sphere 0 1 in EuclideanSpace real (Fin (d+1)) selected by positive or negative Fin.last coordinate",
      :direction
      "Exact equality from the source L2 graph and cap images under the reviewed coordinate isometry to the target literal Euclidean strict sphere-cap subsets, with reverse membership reconstructed through the isometry inverse."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789050666455-18765-b51d4385",
+     :commands
+     ["git show --stat 13533147"
+      "git diff-tree --no-commit-id --name-status -r 13533147"
+      "git diff --check 13533147^ 13533147"
+      "sha256sum fixture and canonical SphereCapEuclideanImage.lean"
+      "cmp -s fixture canonical"
+      "lake env lean fixture"
+      "lake env lean ConstructionTargets/SphereCapEuclideanImage.lean"
+      "lake build ConstructionTargets.SphereCapEuclideanImage"
+      "Python proposition-only nine-statement hash and comment-stripped placeholder audit"
+      "rg forbidden declarations and trailing whitespace"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers"],
+     :finding
+     "PASS: exact two-file scope and fixture SHA256 verified; fixture, canonical target and 2548-job build pass; all nine statement hashes match, zero placeholders and forbidden declarations, and six standard-only axiom audits reproduce. Forward and inverse cap-image inclusions correctly preserve norm and Fin.last sign, and graph-image equalities reuse the reviewed native L2 set equalities. Hausdorff transport and normalization remain downstream."},
     :dependency-uptake
     {:id :sphere-cap-l2-euclidean-coordinate-isometry-1,
      :commit "7b50fe637df7b9a0c65f6c754f017798a17e31e5",
@@ -30218,7 +30236,7 @@
      :placeholder-count 0},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereCapEuclideanImage.lean"
     "ConstructionTargets/SphereCapEuclideanImage.md"],
@@ -30391,7 +30409,7 @@
      "Exactly one complete compiled representation prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 sphere-integration routes. It defines the literal strict upper and lower caps inside Metric.sphere 0 1 in EuclideanSpace real (Fin (d+1)) and proves that the reviewed coordinate isometry maps the native L2 upper and lower caps, and hence the actual cap-height graphs, exactly onto those Euclidean subsets. Both directions use the proved inverse, norm preservation and last-coordinate formula; d=2 and d=3 examples compile. The parent comparison is not GO: ambient Hausdorff-measure preservation, subtype-to-ambient measure identification and the final substitution into C1GraphGlobalBounds.exact_area_value remain unproved. No canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual unit-sphere caps as reviewed C1 L2 graphs",
