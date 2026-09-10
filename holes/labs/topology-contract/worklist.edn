@@ -59870,8 +59870,90 @@
   {:consumer "t00J02",
    :stop-condition
    "Require the constructed chosen atlas and actual derivative transport with all specifications; an existential atlas alone is insufficient.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Same-atlas inclusion derivative injectivity, tangent equalizer range equality and final model-expression normalization remain. The chosen model retains the zero-fiber dimension expression, with its finrank proved equal to finrank A plus finrank B minus finrank V. No consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789012418278-17793-70ad6890"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:predicate_eq
+     "e7dacf5bf0bf0039f299347f6c409333e36ffdcbbc9d933000b33f6c94180fc3",
+     :chartedSpace
+     "ef6110797c2ed72a5660774c4ce1533048e4d4c65ef72f9fd65558ce1b046fc4",
+     :smooth_inclusion
+     "aae2705541428f38251834b17413cbffae7ae4fc17a44a1d88bd852cd3b418fd",
+     :chart_symm_apply
+     "c3449cae85ddde051c0be07d99f46fedab6f7ce783be3857080addffdffb0727",
+     :model_dimension
+     "0f2ae8d3e39cfea029d3f529e5083fef497f62d7e06148cc0f02df808338b271",
+     :chosen_isManifold
+     "5b0dcf201e7f75702ee6df37911b0085a638e9aa31ff2c45fabf0fd7763ef47c",
+     :chosen_smooth_inclusion
+     "109d9b876272e6b3e98f64daf23e71ae79af1155993d7d4ea054e7cce530317c",
+     :homeomorph_val
+     "a1568c724735bd53b039c3f492a0f8390c106e1b83cc8b5553fa718ba79b5c9d",
+     :atlas_eq
+     "64fad233af3ee64f20189f032b349838317ffaec123a9e71514cda68d109d4de",
+     :zeroAtlas
+     "ddccf69b01d2286bd975e724115e3df317ed60cf86d178cb81d329392e6acb26",
+     :chosenAtlas
+     "a76c88e2bc8cb0f6e18ded7e272dbdf295a1810e28a22d5f42b295c822248407",
+     :chart
+     "ffa8161e3ec0134488fe495d4d45966c0830448712b82e15d0204bf0f91add22",
+     :isManifold
+     "ace8f14501bf6556c7196fd8ba782659fa84a6b67be169efdc23f52ea75558b9",
+     :chartAt_eq
+     "23513131ab14484e5907d790a46d19606a17da3e7c3b77d13e0a2946f0bda8f0",
+     :inclusion_derivative
+     "661302528e3ac534157fc72f51788a1a3d083c69752c4b15d108a891c81ead3c",
+     :chosen_atlas
+     "1611d1e3983a53b79ceedb7a17fab55b34927e1920713ddf0dd5bef5994a4e05",
+     :chosen_chartAt
+     "aaf3f640bfe8510ee084c9dbdc9ccb35242ee6283ac0b82410dd33c615b4fa28",
+     :chosen_inclusion_derivative
+     "b17ca4c17f609819cc0bf6fab5f96771787f4b032effc818cf2e561967f6a878",
+     :chart_apply
+     "7d18d78333e1888cabbbfebb170c3c103b9052f584c7bd7a631d1d042fb693ea",
+     :homeomorph
+     "40e2506eab3b649fc2c29ea726bdf82b83ff5556448b3bdfb921cbc8d22e0e51"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "python3 /tmp/transverse-incidence-chosen-audit.py",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/TransverseIncidenceChosenAtlas.lean ConstructionTargets/TransverseIncidenceChosenAtlas.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/TransverseIncidenceChosenAtlas.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "rg --files /tmp -g '*chosen*audit*'",
+      :exit 2,
+      :correction
+      "Recursive discovery encountered unrelated permission-denied directories. Read and successfully ran the located /tmp/transverse-incidence-chosen-audit.py directly."}],
+    :commit "7587067571c0e30ada8f76bc2199ccb2450a1081",
+    :changed-paths
+    ["ConstructionTargets/TransverseIncidenceChosenAtlas.lean"],
+    :fixture
+    {:path "/tmp/TransverseIncidenceChosenAtlas.lean",
+     :sha256
+     "1bac3145ded3ba6fcd4cc412903b489c471728395f587963fe41db981bb1ced1"},
+    :axiom-audit-declarations 18},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TransverseIncidenceChosenAtlas.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / chosen incidence atlas and derivative transport",
