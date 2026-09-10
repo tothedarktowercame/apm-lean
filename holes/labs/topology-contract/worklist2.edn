@@ -11109,9 +11109,150 @@
    :other-consumers []}
   {:consumer :t00J01-rational-sphere-homology,
    :stop-condition
-   "Construct the operator on actual ModuleCat R singular chains. No assumed chain map, coefficient-change theorem, subdivision homotopy or homology isomorphism.",
-   :phase :probe,
+   "Bank only the ordered-vertex cone and boundary identities. Do not claim affine realization, singular subdivision, homotopy to identity, small-chain comparison, excision or frozen closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/CoefficientVertexCone.lean",
+      :sha256
+      "ad8c47fd37db295af2f29889168035d40eeffbb35e9bab0021cba09d1b404e9b"},
+     :commands
+     [{:cmd "lake env lean /tmp/CoefficientVertexCone.lean", :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientVertexCone.lean"
+    "ConstructionTargets/CoefficientVertexCone.md"],
+   :dag-node
+   "SINGULAR-SUBDIVISION: explicit-coefficient ordered-vertex cone contraction",
+   :acceptance
+   {:implementation
+    "Promote the exact compiled fixture, preserving the existing coefficient-independent vertexSSet and prependVertex geometry and the direct ModuleCat R alternating-face proofs.",
+    :namespace "ConstructionTargets.CoefficientVertexCone",
+    :declarations
+    ["VertexChains"
+     "vertexGenerator"
+     "vertexGenerator_boundary"
+     "vertexCone"
+     "vertexGenerator_vertexCone"
+     "vertexCone_boundary"
+     "vertexGenerator_cone_zero_boundary"],
+    :hypotheses
+    "R and V are Type 0; R is a commutative ring. VertexChains uses coefficient object ModuleCat.of R R. The cone takes a vertex b : V; no topology, finiteness or global nonemptiness instance is assumed.",
+    :consumer-equation
+    "The constructed cone satisfies cone(n+1) followed by d = identity minus d followed by cone(n); in degree zero its boundary on a point generator is that generator minus the cone-point generator.",
+    :consumer-residual
+    "Affine realization, recursive barycentric subdivision and the natural singular chain endomorphism remain in the parent probe.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientVertexCone."
+     "Reproduce all four standard-only axiom audits and the integer and rational examples."
+     "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+   :id :coefficient-general-ordered-vertex-cone-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "Barycentric subdivision recursion needs the signed cone contraction on actual coefficient-general ordered-vertex chains.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "Construct the operator on actual ModuleCat R singular chains. No assumed chain map, coefficient-change theorem, subdivision homotopy or homology isomorphism.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Construct coefficient-general affine realization and barycentric recursion, then the actual singular subdivision endomorphism and continuous-map naturality. Homotopy, smallness, positive-degree comparison and excision remain downstream.",
+     :axiom-audits 4,
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Bank only the ordered-vertex cone and boundary identities. Do not claim affine realization, singular subdivision, homotopy to identity, small-chain comparison, excision or frozen closure.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path "/tmp/CoefficientVertexCone.lean",
+         :sha256
+         "ad8c47fd37db295af2f29889168035d40eeffbb35e9bab0021cba09d1b404e9b"},
+        :commands
+        [{:cmd "lake env lean /tmp/CoefficientVertexCone.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/CoefficientVertexCone.lean"
+       "ConstructionTargets/CoefficientVertexCone.md"],
+      :dag-node
+      "SINGULAR-SUBDIVISION: explicit-coefficient ordered-vertex cone contraction",
+      :acceptance
+      {:implementation
+       "Promote the exact compiled fixture, preserving the existing coefficient-independent vertexSSet and prependVertex geometry and the direct ModuleCat R alternating-face proofs.",
+       :namespace "ConstructionTargets.CoefficientVertexCone",
+       :declarations
+       ["VertexChains"
+        "vertexGenerator"
+        "vertexGenerator_boundary"
+        "vertexCone"
+        "vertexGenerator_vertexCone"
+        "vertexCone_boundary"
+        "vertexGenerator_cone_zero_boundary"],
+       :hypotheses
+       "R and V are Type 0; R is a commutative ring. VertexChains uses coefficient object ModuleCat.of R R. The cone takes a vertex b : V; no topology, finiteness or global nonemptiness instance is assumed.",
+       :consumer-equation
+       "The constructed cone satisfies cone(n+1) followed by d = identity minus d followed by cone(n); in degree zero its boundary on a point generator is that generator minus the cone-point generator.",
+       :consumer-residual
+       "Affine realization, recursive barycentric subdivision and the natural singular chain endomorphism remain in the parent probe.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientVertexCone."
+        "Reproduce all four standard-only axiom audits and the integer and rational examples."
+        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+      :id :coefficient-general-ordered-vertex-cone-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Barycentric subdivision recursion needs the signed cone contraction on actual coefficient-general ordered-vertex chains.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG singular-chain representations, closure stop rules, reviewed checkpoint17 dependency and SingularSubdivision/CoefficientH0 APIs",
+       :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientVertexCone.lean", :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientVertexCone.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientVertexCone.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial lake env lean /tmp/CoefficientVertexCone.lean",
+       :exit 1,
+       :correction
+       "Used declaration names rather than partially applied definitions in dsimp unfolding lists; the successful rerun has no warnings or nonstandard axioms."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientVertexCone.lean",
+      :sha256
+      "ad8c47fd37db295af2f29889168035d40eeffbb35e9bab0021cba09d1b404e9b"},
+     :finding
+     "Exactly one compiled coefficient-general cone prerequisite is supplied. It constructs ModuleCat R chains on the existing ordered-vertex simplicial set, their coproduct generators and linear cone operator. The alternating-face proof establishes the positive-degree cone contraction identity and the degree-zero endpoint difference directly over R. Integer and rational specializations compile. No integral homology conclusion is reinterpreted as R-linear. The parent singular subdivision endomorphism, affine realization and naturality remain unconstructed; no parent GO is claimed.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION: explicit-coefficient barycentric chain endomorphism",
@@ -11133,7 +11274,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:oriented-checkpoint17-product-tori-and-small-h0-refill
-    :oriented-checkpoint17-product-tori-and-small-h0-refill],
+    :coefficient-general-ordered-vertex-cone-1],
    :current-residual
    "Actual coefficient-general chains and the small-chain H0 comparison are banked. Positive-degree comparison still needs an actual subdivision operator and subsequent homotopy and smallness arguments.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
