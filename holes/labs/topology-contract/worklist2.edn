@@ -26297,6 +26297,18 @@
       :exit 0}
      {:cmd "sha256sum /tmp/codex13-checkpoint43-census.json", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789036476706-18404-eb290e0c",
+     :commands
+     ["git show 05d174fc (recorded checkpoint and scope)"
+      "Python read-only census reconstruction at b8e903eff7a6f18cd1fdf5135dea0902a7446e52 and 1569ccdfe3f716644ee88f4d86131008274970bf; artifact SHA256, consumer counts, module counts and unchanged source bytes"
+      "bb EDN audit of replacement installation, dependencies and successor checkpoint keys"
+      "bb holes/labs/topology-contract/worklist_check.bb on both recorded ledgers at 05d174fc"
+      "git diff --check 05d174fc^ 05d174fc"],
+     :finding
+     "Independent of author codex-13. Census SHA256 36fb68d396966d4757a95cf5f272c721abc4b3cc469985db77c849faf2e32ba3 verified. Reproduced 59 named/58 existing consumers, 25 zero-placeholder, 33 open, 23 within two placeholders, total 62->62 and modules 751->751. Consumer and infrastructure bytes unchanged. One linear graph Hausdorff-distortion probe and matching successor installed. The proposed actual range isometry and same-dimensional Haar calculation address the STOP's linear prerequisite without assuming nonlinear area transport or numerical normalization. Actual L2 geometry, zero-functional case, range-subtype measure identification, unresolved STOPs and concurrent reservations are preserved; no closure credit is inferred."},
     :replacement-items
     [{:consumer :t02A05,
       :stop-condition
@@ -26429,7 +26441,7 @@
      :named 59,
      :missing ["t93A05"]}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: graph-area progress and renewed consumer eligibility",
@@ -26450,7 +26462,7 @@
    :stop-condition
    "Do not assume a graph-area formula, measure-preserving range identification, Gram determinant value or numerical Hausdorff normalization. Do not replace the L2 metric with the ordinary product or function-space sup metric. Do not retry nonlinear area transport, infer sphere masses or claim consumer closure. Use a unique row-specific scratch directory.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact linear Euclidean graph Hausdorff distortion",
