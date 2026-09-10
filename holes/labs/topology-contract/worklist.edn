@@ -68504,6 +68504,42 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the actual coefficient homology isomorphism between the two range-subcomplex piece terms and the biproduct of the literal subtype terms, with forward and inverse projection formulas; no supplied union comparison, exactness conjugation or excision.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / coefficient piece-range biproduct comparison",
+   :acceptance
+   {:fixture "/tmp/CoefficientPieceRangeBiproductComparison.lean",
+    :fixture-sha256
+    "e9ca8cac704c128859f2f872b753cd4d2687bb18dcd588fa179c7bb04d73c795",
+    :implementation
+    "Promote the exact fixture. Compile pieceHomologyIso, pieceHomologyIso_hom_fst, pieceHomologyIso_hom_snd, pieceHomologyIso_inv_fst and pieceHomologyIso_inv_snd. This supplies the middle-term biproduct comparison on the compact-support placeholder route. Verify CoefficientIntersectionRangeNaturality SHA256 4619a45836530c6e5706d113a86132b8aa5fc6236e05221423e1ab72c6fe9f09. Preserve arbitrary topological X, arbitrary subsets A and B, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim the union comparison, Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The biproduct of coefficient homology groups of the left and right ambient range subcomplexes in the instantiated Mayer-Vietoris sequence",
+    :target
+    "The biproduct of coefficient homology groups of the corresponding actual topological subtypes",
+    :direction
+    "Apply the two forward ambient-range-to-subtype homology isomorphisms componentwise, producing an exact biproduct isomorphism whose forward and inverse arrows commute with both canonical projections."},
+   :id
+   :coefficient-piece-range-biproduct-comparison-implementation-refill49,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-intersection-range-naturality-implementation-refill49
+    :coefficient-ambient-subspace-range-comparison-implementation-refill49],
+   :current-residual
+   "Construct the coefficient homology comparison for the union range term and actual ambient complement, then conjugate the instantiated signed Mayer-Vietoris exactness through the intersection, biproduct and union comparisons and transport the relative terms to the requested pairs in X by coefficient excision.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
    :evidence
    {:probe
@@ -68513,77 +68549,66 @@
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require both actual coefficient chain and homology compatibility squares from the literal intersection comparison to the left and right piece inclusions; no supplied conjugated exactness or excision.",
+      "Require the actual coefficient homology isomorphism between the two range-subcomplex piece terms and the biproduct of the literal subtype terms, with forward and inverse projection formulas; no supplied union comparison, exactness conjugation or excision.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientIntersectionRangeNaturality.lean"],
+      ["ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / coefficient intersection-range naturality",
+      "MANIFOLD FUNDAMENTAL CLASS / coefficient piece-range biproduct comparison",
       :acceptance
-      {:fixture "/tmp/CoefficientIntersectionRangeNaturality.lean",
+      {:fixture "/tmp/CoefficientPieceRangeBiproductComparison.lean",
        :fixture-sha256
-       "4619a45836530c6e5706d113a86132b8aa5fc6236e05221423e1ab72c6fe9f09",
+       "e9ca8cac704c128859f2f872b753cd4d2687bb18dcd588fa179c7bb04d73c795",
        :implementation
-       "Promote the exact fixture. Compile chain_square_left, chain_square_right, homology_square_left and homology_square_right. This supplies the two literal-intersection inclusion compatibility squares on the compact-support placeholder route. Verify CoefficientIntersectionRangeComparison SHA256 9280858720ad2cc52aeccd1a69f8e3135498d729e2053b77bdc5c9aeb0e7973f. Preserve arbitrary topological X, arbitrary subsets A and B, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim biproduct or union comparison, Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile pieceHomologyIso, pieceHomologyIso_hom_fst, pieceHomologyIso_hom_snd, pieceHomologyIso_inv_fst and pieceHomologyIso_inv_snd. This supplies the middle-term biproduct comparison on the compact-support placeholder route. Verify CoefficientIntersectionRangeNaturality SHA256 4619a45836530c6e5706d113a86132b8aa5fc6236e05221423e1ab72c6fe9f09. Preserve arbitrary topological X, arbitrary subsets A and B, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim the union comparison, Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientIntersectionRangeNaturality.lean"],
+       ["lake env lean ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "The coefficient chain and homology comparison from the Mayer-Vietoris infimum range term to the literal intersection subtype, followed by either actual subtype inclusion into the left or right piece",
+       "The biproduct of coefficient homology groups of the left and right ambient range subcomplexes in the instantiated Mayer-Vietoris sequence",
        :target
-       "The direct infimum-to-left or infimum-to-right range map, followed by the corresponding ambient-range-to-subtype comparison",
+       "The biproduct of coefficient homology groups of the corresponding actual topological subtypes",
        :direction
-       "Prove exact forward equality from each intersection-subtype composite to its direct range-map composite, first on coefficient chains and then on homology in every natural degree."},
+       "Apply the two forward ambient-range-to-subtype homology isomorphisms componentwise, producing an exact biproduct isomorphism whose forward and inverse arrows commute with both canonical projections."},
       :id
-      :coefficient-intersection-range-naturality-implementation-refill49,
+      :coefficient-piece-range-biproduct-comparison-implementation-refill49,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-intersection-range-comparison-implementation-refill49
-       :coefficient-ambient-subspace-range-naturality-implementation-refill49],
+      [:coefficient-intersection-range-naturality-implementation-refill49
+       :coefficient-ambient-subspace-range-comparison-implementation-refill49],
       :current-residual
-      "Construct the coefficient homology comparison for the two-piece biproduct and the union/ambient term, conjugate the instantiated signed Mayer-Vietoris exactness through all four comparisons, then transport the relative terms to the requested pairs in X by coefficient excision.",
+      "Construct the coefficient homology comparison for the union range term and actual ambient complement, then conjugate the instantiated signed Mayer-Vietoris exactness through the intersection, biproduct and union comparisons and transport the relative terms to the requested pairs in X by coefficient excision.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientIntersectionRangeComparison >/tmp/coefficient-intersection-build.log",
+       "lake build ConstructionTargets.CoefficientIntersectionRangeNaturality >/tmp/coefficient-intersection-naturality-build.log",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientIntersectionRangeNaturality.lean",
+       "lake env lean /tmp/CoefficientPieceRangeBiproductComparison.lean",
        :exit 0}
       {:cmd
-       "python3 placeholder-and-declaration audit over /tmp/CoefficientIntersectionRangeNaturality.lean",
+       "python3 placeholder-and-declaration audit over /tmp/CoefficientPieceRangeBiproductComparison.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientIntersectionRangeNaturality.lean ConstructionTargets/CoefficientIntersectionRangeComparison.lean",
+       "sha256sum /tmp/CoefficientPieceRangeBiproductComparison.lean ConstructionTargets/CoefficientIntersectionRangeNaturality.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/CoefficientIntersectionRangeNaturality.lean",
-       :exit 1,
-       :correction
-       "The initial proof reassociated a composite that Lean already parsed in the needed direction. Removed that rewrite and retained the exact naturality and functorial-composition argument."}
-      {:cmd
-       "lake env lean /tmp/CoefficientIntersectionRangeNaturality.lean",
-       :exit 1,
-       :correction
-       "The first correction still attempted the same reassociation after rewriting the naturality square. Rewrote the square directly, exposed the nested composite, and combined the two mapped arrows by functoriality; final compilation succeeds."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientIntersectionRangeNaturality.lean",
+     {:path "/tmp/CoefficientPieceRangeBiproductComparison.lean",
       :sha256
-      "4619a45836530c6e5706d113a86132b8aa5fc6236e05221423e1ab72c6fe9f09",
+      "e9ca8cac704c128859f2f872b753cd4d2687bb18dcd588fa179c7bb04d73c795",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one missing representation prerequisite. The coefficient chain comparison from the Mayer-Vietoris infimum range term to the literal intersection subtype commutes with both actual inclusions into the left and right subtype pieces. Applying homology proves both forward squares in every natural degree. Piece-biproduct and union comparisons, conjugated exactness and coefficient excision remain.",
+     "Compiled exactly one missing comparison prerequisite. The direct sum of the two ambient range-subcomplex homology groups is now isomorphic to the direct sum of the actual left and right topological-subtype homology groups. Both forward and inverse maps have proved first- and second-projection formulas in every natural degree. The union comparison, conjugated exactness and coefficient excision remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -68606,7 +68631,8 @@
     :coefficient-ambient-subspace-range-comparison-implementation-refill49
     :coefficient-ambient-subspace-range-naturality-implementation-refill49
     :coefficient-intersection-range-comparison-implementation-refill49
-    :coefficient-intersection-range-naturality-implementation-refill49],
+    :coefficient-intersection-range-naturality-implementation-refill49
+    :coefficient-piece-range-biproduct-comparison-implementation-refill49],
    :current-residual
    "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
