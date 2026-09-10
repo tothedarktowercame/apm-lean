@@ -19675,88 +19675,116 @@
    :stop-condition
    "No assumed reflection sign, boundary coordinate exchange or kernel naturality. Preserve ordinary two-point H0 and the original S0 refutation. Do not claim higher-dimensional antipodal action, orientation coherence or consumer closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Higher-dimensional hemisphere exchange and sphere-suspension compatibility remain before antipodal action and consumer uptake; no higher-sphere sign, orientation coherence or frozen closure is claimed.",
-     :axiom-audits 14,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:namespace "ConstructionTargets.CoefficientDiskReflection",
-      :implementation
-      "Promote the exact compiled fixture, documenting its use of reviewed actual boundary maps and connecting naturality.",
-      :declarations
-      ["kernelMap"
-       "kernel_projection"
-       "signed_swap"
-       "kernel_inverse_action"
-       "relativeMap"
-       "connectingIso"
-       "normalization"
-       "connecting_kernel_naturality"
-       "kernel_conjugation"
-       "relative_conjugation"
-       "normalization_hom"
-       "normalization_inverse_left"
-       "normalization_inverse_right"
-       "relative_forward"
-       "relative_eq_neg_id"
-       "integral_sign"
-       "rational_sign"],
-      :hypotheses
-      "R is any Type 0 commutative ring, without nontriviality, field or characteristic restrictions. The space and boundary are the actual one-dimensional Euclidean closed-disk subtypes. Chains and homology use ModuleCat.of R R. Ordinary boundary H0 remains the two-coordinate module.",
-      :consumer-equation
-      "The actual boundary-inclusion kernel map normalizes to minus identity. Actual connecting naturality transports this action to the disk-reflection relative H1 map, which equals minus identity and has the stated exact normalized conjugation and forward-map equations.",
-      :consumer-residual
-      "Higher-dimensional hemisphere exchange and compatibility with sphere suspension remain before antipodal action and t94J08 uptake. All-integer degree realization, localization/gluing and nonbounding retain their own geometric obligations.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientDiskReflection."
-       "Reproduce fourteen standard-only axiom audits and integer/rational sign examples."
-       "Audit the actual kernel map and its inclusion equation, signed coordinate convention, connecting naturality, normalization forward map and both inverse laws."
-       "Verify imported CoefficientBoundaryReflection supplies actual negation, boundary coordinate exchange and every-degree cokernel-projection equations."
-       "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure rules, both ledgers and all dependency PASS receipts; inspect actual kernel and connecting-map APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientDiskReflection.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientDiskReflection.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientDiskReflection.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial disk-reflection fixture compilation",
-       :exit 1,
-       :correction
-       "Replaced unsuccessful categorical rewrites with explicit module-map equalities and monicity."}
-      {:cmd "Second disk-reflection fixture compilation",
-       :exit 1,
-       :correction
-       "Used explicit congrArg equality composition across elaborated module maps and the normalization inverse equations. Subsequent complete compilation succeeds without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientDiskReflection.lean",
-      :sha256
-      "37083e8bc9d62d53b7b607e2f5bcd157c6259c35c477cfb439d3bb9a78d63888"},
-     :finding
-     "Complete placeholder-free fixture compiled. Reviewed geometric negation and boundary coordinate exchange induce the constructed map on the actual boundary-inclusion kernel. Its signed normalization is minus identity. The actual relative-H1 kernel comparison commutes with reflection by reviewed pair connecting naturality, yielding the exact relative-H1 conjugation, forward equation and equality to minus identity. The normalization has its exact forward composite and both inverse laws. Integer and rational specializations pass. No integral homology conclusion is reinterpreted as R-linear; ordinary two-point H0 and the original S0 refutation are preserved.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientDiskReflection.lean"
-       "ConstructionTargets/CoefficientDiskReflection.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Higher-dimensional hemisphere exchange and sphere-suspension compatibility remain before antipodal action and t94J08 uptake. Degree realization, localization/gluing and nonbounding retain their geometric obligations. No higher-sphere sign, orientation coherence or consumer closure is claimed.",
+    :gates
+    {:normalization-and-inverse-laws :pass,
+     :integer-rational-examples :pass,
+     :whitespace :pass,
+     :placeholders :pass,
+     :actual-kernel-and-connecting-naturality :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :two-file-scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :fixture-compilation :pass,
+     :imported-boundary-map-equations :pass},
+    :axiom-audits 14,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation emitted no warnings. Build replayed 20 dependency warnings; none originated in this module."],
+    :statement-hashes
+    {:normalization_hom
+     "9e2bf54070011c2b4fd37bff7cc3a16d4000977f7b8a41acc90736bf6ab81548",
+     :integral_sign
+     "38ab7564943ccd6eb6615a7b03eb71b12c0b292c66bc875aa6bbf1c4ee7c767d",
+     :relative_conjugation
+     "33c42f7402be4e10ad46fb32783a431c170f1a559af972f172bbddf5514ca060",
+     :kernel_inverse_action
+     "45fa76f39138d816c92cdd0a05a729618f904960292b5449c82c3bbb99c8ca73",
+     :normalization_inverse_left
+     "6db67c0225bc0cf8fa6c1b1db3a0e8bf11761597f1d459560aeffe57fe0ab4a5",
+     :relativeMap
+     "1bcfe75c74a72e07ad6ca3c1dbb4a303781bb058448d0315d5ca4c5fdadd6390",
+     :connectingIso
+     "731ef1aff74286047d889f3a01d802963fb9e171dcaf5da1c8488d8acfe38713",
+     :kernelMap
+     "84a022f814a699cc3bba094018230c1bf3d6d5e1c4c6db2049494a2733d44e8b",
+     :rational_sign
+     "cd5cd59804ea9b7b746866422d465c17af203b1cabdea15159dfa9b52ba20ceb",
+     :relative_forward
+     "5845e0ac9dc8f287ea0d1e5053c472429a23132b5a73ec158898c606c71dc5f6",
+     :kernel_conjugation
+     "2aceb8bc1ef215f838546beb3a4e0dfd4e11503683574e4c236ffc9bfa484823",
+     :connecting_kernel_naturality
+     "028a25a57f53f80b50883c795b819084b1d003281fe6538b0c63f61dafdb8bcb",
+     :kernel_projection
+     "c90319c3b551be74f7991c4212515f83af4afa3629419a384854d066deb87979",
+     :signed_swap
+     "d10b2d512ba282428f448f80e950c45674e6d0b01d5b5d8f52fccc533d641e96",
+     :relative_eq_neg_id
+     "e57889f4eda6d7811f4661737e6605c98c4d2669185ed7ff353d19c5381030f2",
+     :normalization_inverse_right
+     "40b1c27c72267c87925fd92982ed0d79a2a349d2d333e0285da742c1862f9a91",
+     :normalization
+     "c9a21f1bceef8cd983a91211dd02fda901b619148a1e1bc3f628d4231722ae80"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure rules, both ledgers and dependency PASS receipts; inspect fixture and reviewed actual boundary-map equations",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "Verify fixture SHA256 before byte-identical promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientDiskReflection.lean > /tmp/disk-reflection-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientDiskReflection.lean > /tmp/disk-reflection-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientDiskReflection > /tmp/disk-reflection-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Validate fourteen standard-only audits in each direct compilation log and inspect build warnings",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientDiskReflection.lean ConstructionTargets/CoefficientDiskReflection.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python audit of fixture equality, zero placeholders, seventeen statement hashes and exact two-file scope",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Prove coefficient-general actual disk-reflection sign'",
+      :exit 0}
+     {:cmd "git diff --check d9f48550^ d9f48550", :exit 0}
+     {:cmd
+      "Python verification of pinned commit scope, fixture equality and scoped cleanliness; git status --short",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "d9f48550bd527f4fffbca519fb106a4165c4419f",
+    :changed-paths
+    ["ConstructionTargets/CoefficientDiskReflection.lean"
+     "ConstructionTargets/CoefficientDiskReflection.md"],
+    :fixture
+    {:path "/tmp/CoefficientDiskReflection.lean",
+     :sha256
+     "37083e8bc9d62d53b7b607e2f5bcd157c6259c35c477cfb439d3bb9a78d63888",
+     :promotion :byte-identical},
+    :finding
+    "Promoted the exact compiled fixture. The actual boundary-inclusion kernel action normalizes to minus identity, and actual connecting naturality transports this action to the disk-reflection relative H1 map. Exact conjugation, forward-map and inverse equations compile over every Type 0 commutative ring. Ordinary two-point H0 and historical refutations remain unchanged.",
+    :statement-hash-method
+    "SHA256 from declaration keyword to immediately before the space preceding :=.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientDiskReflection.lean"
     "ConstructionTargets/CoefficientDiskReflection.md"],
