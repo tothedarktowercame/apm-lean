@@ -70962,6 +70962,21 @@
       "git diff --check -- ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789067087939-19217-5e279f60",
+     :commands
+     ["git show 8d87cb45ca2bc5e02f286f7ad7c69d0a249251dd:ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean > /tmp/review-cccurf.lean"
+      "sha256sum /tmp/review-cccurf.lean ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean"
+      "lake env lean /tmp/review-cccurf.lean"
+      "python3 comment-stripped placeholder census /tmp/review-cccurf.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git diff-tree --no-commit-id --name-only -r 8d87cb45ca2bc5e02f286f7ad7c69d0a249251dd"
+      "git diff --check"],
+     :finding
+     "PASS: independently reviewed author codex-12's recorded commit 8d87cb45ca2bc5e02f286f7ad7c69d0a249251dd from immutable commit content. Exact scope is the single declared file ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean. The fixture reproduces SHA256 894c53c84f2aabc6d6533fd7472c97caca005b3b7a6410e37463e44e3532af4d and its pinned dependency reproduces 545c94e194b682e805c80e3b316996b2a303b84b0d549bd783dc6f748559e2a7. Lean compiles both formulas without warnings or placeholders and reports only [propext, Classical.choice, Quot.sound]. Orientations and representation boundaries are exact: the left compact-complement inclusion composite is proved equal to zero, while the right composite is proved in the forward direction as the right-range chain isomorphism followed by the production cokernel projection. The implementation preserves arbitrary X, K, L and commutative-ring R and makes none of the deferred excision, transported exactness, localization, vanishing, or fundamental-class claims. Both ledgers validate and the diff check is clean."},
     :commit "8d87cb45ca2bc5e02f286f7ad7c69d0a249251dd",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean"],
@@ -70974,7 +70989,7 @@
     :finding
     "Promoted the exact fixture. Both explicit compact-complement piece formulas compile in the required forward orientation: the left composite is zero, while the right composite is the forward right-range chain comparison followed by the production quotient projection. The module has no placeholders or warnings, its dependency hash matches the pinned value, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean"],
    :dag-node
@@ -71076,7 +71091,7 @@
      "Compiled exactly one missing compact formula prerequisite. With both source maps written explicitly, the compact-specialized genuine union-to-relative map kills the left compact-complement range and restricts on the right range to the forward range-chain isomorphism followed by the production relative quotient projection. Coefficient excision and the three final exactness transports remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
