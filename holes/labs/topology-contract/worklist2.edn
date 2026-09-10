@@ -28943,7 +28943,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :review-finding
-   "Deterministic census attribution defect in strategy commit d260df79: the recorded infrastructure packet claims modules 762->772 and lists ConstructionTargets/FiniteTranslatedEmbeddedArcsChartContainment.lean as a concurrent addition, but that file does not exist at the recorded pre-transition head d260df79^. The actual earlier-to-head change instead includes ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean, which the packet omits. Using the post-subcomplex baseline e0ddf23d reproduces 763->772 with nine additions (five portfolio plus four compact-complement modules), not 762->772. Using the prior checkpoint head e90e523c reproduces 762->772 but includes the omitted subcomplex module and the m02J06 consumer change, while still not including the claimed finite-arc module. Thus no commit interval supports the recorded before/after counts and attributed ten-module list.",
+   "Deterministic repaired-census scope defect in transition 2ed544c9. The declared interval e0ddf23da4d6dea2d66f07891aeb1fdd0c4df5b3..4d0bf3c0e3ccab048af80aa7861ec03ea4e8854e correctly reproduces 763->772 ConstructionTargets Lean modules and the stated nine module additions. However, the 59 consumers named by TOPOLOGY-DEPENDENCY-DAG.md exclude m02J06 at both endpoints. Recomputing those exact 59 named consumers gives 62->62 placeholders, 25->25 zero-placeholder consumers, and delta 0. The repaired evidence instead records 66->62, 24->25, delta -4 and frozen-closures 1 by incorporating the unrelated m02J06 closure while still labeling the census named=59/existing=58. Therefore the repaired named-consumer census remains internally inconsistent; m02J06 may be separately attributed as concurrent work but cannot change the stated 59-consumer topology census.",
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
@@ -28982,6 +28982,12 @@
       :exit 0,
       :correction
       "The prior receipt incorrectly named nonexistent ConstructionTargets/FiniteTranslatedEmbeddedArcsChartContainment.lean as a concurrent addition and reported 762 to 772 without including CoefficientSubcomplexMayerVietoris or the concurrent m02J06 consumer change. Recomputed from the post-subcomplex baseline e0ddf23d to d260df79^: 763 to 772, exactly nine Lean modules, plus the separate m02J06 frozen-file closure."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1789045967479-18639-466233d2",
+     :finding
+     "Deterministic repaired-census scope defect in transition 2ed544c9. The declared interval e0ddf23da4d6dea2d66f07891aeb1fdd0c4df5b3..4d0bf3c0e3ccab048af80aa7861ec03ea4e8854e correctly reproduces 763->772 ConstructionTargets Lean modules and the stated nine module additions. However, the 59 consumers named by TOPOLOGY-DEPENDENCY-DAG.md exclude m02J06 at both endpoints. Recomputing those exact 59 named consumers gives 62->62 placeholders, 25->25 zero-placeholder consumers, and delta 0. The repaired evidence instead records 66->62, 24->25, delta -4 and frozen-closures 1 by incorporating the unrelated m02J06 closure while still labeling the census named=59/existing=58. Therefore the repaired named-consumer census remains internally inconsistent; m02J06 may be separately attributed as concurrent work but cannot change the stated 59-consumer topology census."},
     :replacement-items
     [{:consumer :t95J05,
       :stop-condition
@@ -29123,7 +29129,7 @@
     "Repair: the supported interval is e0ddf23d to d260df79^. It contains nine new ConstructionTargets Lean modules: five exact-graph-area modules and four compact-complement modules. CoefficientSubcomplexMayerVietoris predates the baseline; FiniteTranslatedEmbeddedArcsChartContainment does not exist at the head. The interval also contains the independent frozen m02J06 closure, changing its comment-stripped placeholders from four to zero; total named-consumer placeholders therefore change 66 to 62. Routes otherwise remain as previously measured: t95J05 has 1 placeholder through actual S3 cap representation, cap assembly, Hausdorff normalization, coordinate moments and frozen integration. t02A05 has 2 through the shared S2 cap and moment route plus final minimum. t01J06 has 3 through the shared S2 period route, a separate Stokes bridge and final conjunction. t94A10 has 3 through the shared S2 period route plus closedness and nonexactness assembly. t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 remain on the reserved compact-complement Mayer-Vietoris, localization and duality route. t99J03, t00A03, t01J01, t91J05 and t94J09 remain on the active translated-arc route. t98A01 retains its reviewed STOP for five-torsion cardinality, genus invariance and covering Euler multiplicativity. t00J01 needs Klein-product and fold-fiber geometry; t01A05 also retains its connectedness specification defect; t01A08 needs arbitrary-model chart applicability; t01J04 and t94A06 need regular-preimage and half-space geometry; t02A08 needs arbitrary-integer sphere-map homology action; t03J02 retains the closed-circle gluing STOP; t03J04 needs rational torus homology and finite-cover Euler comparison; t92J06 needs covering classification and genus invariance; t96J05 retains its radial counterexample and needs a corrected statement. No additional route is complete. The same shared sphere-cap comparison is re-elected under fresh identifiers, followed by a fresh successor checkpoint.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact graph area and renewed consumer eligibility",
@@ -29145,7 +29151,7 @@
    :stop-condition
    "Do not assume a cap parameterization is measure-preserving, suppress subtype or ambient measure transport, include the equator without a proved null-boundary comparison, or assume numerical Euclidean Hausdorff normalization. Do not evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Exclude active compact-support, arc, orientation and surface work; use a unique row-specific scratch directory.",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual unit-sphere caps as reviewed C1 L2 graphs",
@@ -29197,7 +29203,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: sphere-cap area comparison and renewed consumer eligibility",
