@@ -19678,129 +19678,88 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Construct the actual inclusion-kernel action and derive its negative sign, then apply connecting naturality to relative H1. Higher-dimensional hemisphere exchange, sphere-action compatibility and consumer uptake remain downstream.",
-     :axiom-audits 13,
-     :outcome :revise,
+     "Higher-dimensional hemisphere exchange and sphere-suspension compatibility remain before antipodal action and consumer uptake; no higher-sphere sign, orientation coherence or frozen closure is claimed.",
+     :axiom-audits 14,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t94J08,
-      :stop-condition
-      "Bank the actual boundary-map comparison only. Do not claim the induced kernel sign, relative-H1 sign, higher-dimensional antipodal action or consumer closure.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/CoefficientBoundaryReflection.lean",
-         :sha256
-         "fc75fd9984c2e5a887a507e8e58feb221e46ba5b83fa2b52b0bdd38d5cad164d"},
-        :commands
-        [{:cmd "lake env lean /tmp/CoefficientBoundaryReflection.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientBoundaryReflection.lean"
-       "ConstructionTargets/CoefficientBoundaryReflection.md"],
-      :dag-node
-      "SPHERE ORIENTATION: actual coefficient-general disk-boundary reflection coordinates",
-      :acceptance
-      {:namespace "ConstructionTargets.CoefficientBoundaryReflection",
-       :implementation
-       "Promote the exact compiled fixture and document its geometric maps and remaining kernel calculation.",
-       :declarations
-       ["reflection"
-        "reflection_mapsTo"
-        "restricted"
-        "boolNot"
-        "coordinates_reflection"
-        "sigmaSwap"
-        "swap"
-        "boundaryMap"
-        "sigma_coordinates"
-        "sigmaSwap_coordinates"
-        "boundary_coordinates"
-        "absolute"
-        "relative"
-        "projection_degree"
-        "inclusion_square"
-        "boundary_conjugation"
-        "boundaryMap_actual"
-        "swap_false"
-        "swap_true"
-        "integral_boundary"
-        "rational_boundary"],
-       :hypotheses
-       "R is a Type 0 commutative ring. The disk is the actual one-dimensional Euclidean closed disk and the boundary is its actual subtype. No nontriviality, field or characteristic assumption is imposed. Chains and homology use ModuleCat.of R R.",
-       :consumer-equation
-       "The actual disk negation restricts to boundary coordinate exchange, and its actual H0 map conjugates through CoefficientSphereEndpoints.boundaryIso to v mapped to the function b mapped to v(not b). The actual inclusion square and relative cokernel-projection equation hold.",
-       :consumer-residual
-       "Construct the induced map on the actual boundary-inclusion kernel, prove its normalized sign, and use actual connecting naturality to establish the relative-H1 reflection sign.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientBoundaryReflection."
-        "Reproduce thirteen standard-only axiom audits and integer/rational boundary examples."
-        "Audit literal negation, actual restricted and cokernel maps, exact boundaryIso conjugation and degreewise projection."
-        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :coefficient-general-boundary-reflection-comparison-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint32-coefficient-pair-connecting-naturality-1
-       :oriented-checkpoint30-coefficient-sphere-endpoints-1],
-      :current-residual
-      "The disk-reflection sign calculation requires the actual restricted boundary H0 map identified with coordinate exchange under the reviewed boundaryIso.",
-      :other-consumers [:t02A08 :t98A02 :t96J06]},
+     :acceptance
+     {:namespace "ConstructionTargets.CoefficientDiskReflection",
+      :implementation
+      "Promote the exact compiled fixture, documenting its use of reviewed actual boundary maps and connecting naturality.",
+      :declarations
+      ["kernelMap"
+       "kernel_projection"
+       "signed_swap"
+       "kernel_inverse_action"
+       "relativeMap"
+       "connectingIso"
+       "normalization"
+       "connecting_kernel_naturality"
+       "kernel_conjugation"
+       "relative_conjugation"
+       "normalization_hom"
+       "normalization_inverse_left"
+       "normalization_inverse_right"
+       "relative_forward"
+       "relative_eq_neg_id"
+       "integral_sign"
+       "rational_sign"],
+      :hypotheses
+      "R is any Type 0 commutative ring, without nontriviality, field or characteristic restrictions. The space and boundary are the actual one-dimensional Euclidean closed-disk subtypes. Chains and homology use ModuleCat.of R R. Ordinary boundary H0 remains the two-coordinate module.",
+      :consumer-equation
+      "The actual boundary-inclusion kernel map normalizes to minus identity. Actual connecting naturality transports this action to the disk-reflection relative H1 map, which equals minus identity and has the stated exact normalized conjugation and forward-map equations.",
+      :consumer-residual
+      "Higher-dimensional hemisphere exchange and compatibility with sphere suspension remain before antipodal action and t94J08 uptake. All-integer degree realization, localization/gluing and nonbounding retain their own geometric obligations.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientDiskReflection."
+       "Reproduce fourteen standard-only axiom audits and integer/rational sign examples."
+       "Audit the actual kernel map and its inclusion equation, signed coordinate convention, connecting naturality, normalization forward map and both inverse laws."
+       "Verify imported CoefficientBoundaryReflection supplies actual negation, boundary coordinate exchange and every-degree cokernel-projection equations."
+       "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure rules, both ledgers and dependency PASS receipts; inspect boundary geometry and coefficient-general H0 naturality",
+       "Read DAG, closure rules, both ledgers and all dependency PASS receipts; inspect actual kernel and connecting-map APIs",
        :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientBoundaryReflection.lean",
+      {:cmd "lake env lean /tmp/CoefficientDiskReflection.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientBoundaryReflection.lean",
-       :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientDiskReflection.lean", :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientBoundaryReflection.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientDiskReflection.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git status --short", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial boundary-reflection fixture compilation",
+     [{:cmd "Initial disk-reflection fixture compilation",
        :exit 1,
        :correction
-       "Reoriented the geometric equality through the inverse boundary homeomorphism, explicitly typed the TopCat isomorphism and corrected the coproduct API search."}
-      {:cmd "Second boundary-reflection fixture compilation",
+       "Replaced unsuccessful categorical rewrites with explicit module-map equalities and monicity."}
+      {:cmd "Second disk-reflection fixture compilation",
        :exit 1,
        :correction
-       "Unfolded the subtype homeomorphism explicitly and replaced the nonexistent coproduct lemma."}
-      {:cmd "Third boundary-reflection fixture compilation",
-       :exit 1,
-       :correction
-       "Completed endpoint arithmetic and used the actual Sigma.ι_comp_map' theorem."}
-      {:cmd "Fourth boundary-reflection fixture compilation",
-       :exit 1,
-       :correction
-       "Specified both coproduct families and simplified the single-coordinate functions explicitly."}
-      {:cmd "Compilation after adding actual inclusion compatibility",
-       :exit 1,
-       :correction
-       "Replaced unsuccessful simplification with explicit composition and transport of homologyMap_comp. Final compilation succeeds without warnings."}],
+       "Used explicit congrArg equality composition across elaborated module maps and the normalization inverse equations. Subsequent complete compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientBoundaryReflection.lean",
+     {:path "/tmp/CoefficientDiskReflection.lean",
       :sha256
-      "fc75fd9984c2e5a887a507e8e58feb221e46ba5b83fa2b52b0bdd38d5cad164d"},
+      "37083e8bc9d62d53b7b607e2f5bcd157c6259c35c477cfb439d3bb9a78d63888"},
      :finding
-     "Exactly one complete compiled boundary-map prerequisite is supplied. It constructs actual disk negation and its restricted and relative maps, proves boundary coordinate exchange geometrically, and derives the exact R-linear H0 conjugation through the reviewed boundaryIso. Inclusion compatibility and the cokernel-projection equation in every degree are proved. Integer and rational examples compile. The actual kernel action and relative-H1 sign remain unproved in this fixture; the parent is not GO.",
+     "Complete placeholder-free fixture compiled. Reviewed geometric negation and boundary coordinate exchange induce the constructed map on the actual boundary-inclusion kernel. Its signed normalization is minus identity. The actual relative-H1 kernel comparison commutes with reflection by reviewed pair connecting naturality, yielding the exact relative-H1 conjugation, forward equation and equality to minus identity. The normalization has its exact forward composite and both inverse laws. Integer and rational specializations pass. No integral homology conclusion is reinterpreted as R-linear; ordinary two-point H0 and the original S0 refutation are preserved.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientDiskReflection.lean"
+       "ConstructionTargets/CoefficientDiskReflection.md"]},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientDiskReflection.lean"
+    "ConstructionTargets/CoefficientDiskReflection.md"],
    :dag-node
    "SPHERE ORIENTATION: coefficient-general actual one-dimensional disk-reflection sign",
    :acceptance
