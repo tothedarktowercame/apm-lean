@@ -29266,6 +29266,24 @@
      {:cmd
       "git show --check --oneline 40ed9a46 && git diff 40ed9a46^ 40ed9a46 --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789047383656-18684-fc6fa62f",
+     :commands
+     ["git show --stat 40ed9a46"
+      "git diff-tree --no-commit-id --name-status -r 40ed9a46"
+      "git diff --check 40ed9a46^ 40ed9a46"
+      "sha256sum /tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean ConstructionTargets/SphereCapHeight.lean"
+      "cmp -s /tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean ConstructionTargets/SphereCapHeight.lean"
+      "lake env lean /tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean"
+      "lake env lean ConstructionTargets/SphereCapHeight.lean"
+      "lake build ConstructionTargets.SphereCapHeight"
+      "Python proposition-only 17-statement hash and comment-stripped placeholder audit"
+      "rg forbidden declarations and trailing whitespace"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers"],
+     :finding
+     "PASS: exact two-file scope and fixture SHA256 verified; fixture, canonical target and 2543-job build pass; 17 statement hashes match, zero placeholders and forbidden declarations, and eleven standard-only axiom audits reproduce. Inequality, sign, C1, and literal L2 unit-norm orientations are correct, while derivative, isometry, Hausdorff transport, normalization, equator and moment claims remain explicitly downstream."},
     :dependency-uptake
     {:id :oriented-checkpoint46-c1-graph-exact-hausdorff-area-1,
      :commit "3c551fb6a315e4c16a111fd87beaf495a3ff6679",
@@ -29281,7 +29299,7 @@
      :placeholder-count 0},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereCapHeight.lean"
     "ConstructionTargets/SphereCapHeight.md"],
@@ -29483,7 +29501,7 @@
      "Exactly one complete compiled geometric prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 sphere-integration routes. On the open unit ball of EuclideanSpace real (Fin d), the literal upper and lower height functions ±sqrt(1-norm(x)^2) have strictly positive radicand, the expected strict signs and ContDiffOn real 1 regularity. Their actual graph points in WithLp 2 of the Euclidean domain times real have squared norm one. Dimension-two and dimension-three specializations compile. The parent comparison is not GO: the explicit height fderivatives and densities, the L2-product-to-Euclidean coordinate isometry, exact cap-image equality and Hausdorff transport remain unproved. No equator, numerical normalization, sphere mass, moment, Stokes or consumer closure claim is made; current reservations, reviewed STOPs and refutations are preserved.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual unit-sphere caps as reviewed C1 L2 graphs",
