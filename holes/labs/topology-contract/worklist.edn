@@ -63001,8 +63001,154 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill43-measure.py", :exit 0}
+     {:cmd "python3 /tmp/topology-refill43-attribution.py", :exit 0}
+     {:cmd "lake env lean problems/t94J08/lean/Main.lean", :exit 0}
+     {:cmd "bb /tmp/topology-refill43-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill43-proposed-worklist.edn",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :measurement
+    {:head "0e16695e8869af92afdf382365c1f2c5e05fbf52",
+     :baseline "a02047fb5a62fe711fdba08d5145449875bf97df",
+     :path "/tmp/topology-refill43-measure.json",
+     :sha256
+     "1c8324af554d27409d20d9d82b175f014534caaff1015451e87b422f61dcd9eb",
+     :placeholder-delta -2,
+     :portfolio-placeholder-delta 0,
+     :infrastructure-packets
+     {:modules-before 706,
+      :modules-after 722,
+      :portfolio-modules 10,
+      :concurrent-modules 6,
+      :completed-portfolio-packets 3,
+      :new-duplicates 0},
+     :excluded-concurrent-untracked
+     ["ConstructionTargets/CoefficientModelLocal.lean"
+      "ConstructionTargets/CoefficientModelLocal.md"]},
+    :tail
+    {:path "/tmp/topology-refill43-tail.edn",
+     :sha256
+     "2c54472caf5c04f1fd9be6bc6137deabd3ca4ea91cb664396b5e0d6a147f7b76"},
+    :replacement-items
+    [{:consumer "t01A08",
+      :stop-condition
+      "GO requires complete frozen closure; otherwise identify the exact regularity, model or Sard applicability boundary without inferring refutation from missing infrastructure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "MANIFOLD SARD / frozen regular affine line",
+      :acceptance
+      {:frozen-file "problems/t01A08/lean/Main.lean",
+       :frozen-sha256
+       "e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile complete frozen Main using the actual projection to the first two coordinates and a regular value. Audit banked SardGenuineSmoothManifoldVector against the exact arbitrary ModelWithCorners, second-countable source and explicitly typed top-in-Nat-infinity regularity. Prove any required regularity conversion; do not replace it by genuine infinity without proof. Preserve every hypothesis, literal affine-line predicate and actual mfderiv. No assumed Sard or surjectivity bridge."},
+      :id :t01a08-frozen-regular-line-closure-probe-refill43,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+      :current-residual
+      "One placeholder remains. Banked genuine-smooth manifold Sard may supply the regular-value argument; exact frozen regularity and model compatibility require checking."}
+     {:consumer "t99J03",
+      :stop-condition
+      "GO requires constructed compatible finite faces; REVISE requires exactly one compiled geometric prerequisite; otherwise identify the precise unavailable construction. No campaign termination.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE TRIANGULATION / compatible embedded face refinement",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Starting from the constructed CompactSurfaceTriangleCover on a compact Hausdorff smooth real two-manifold, construct a finite embedded graph and disk faces refining its triangle neighborhoods, with pairwise face intersections proved to be unions of shared vertices and edges. Audit perturbation, embedded arc and finite-intersection APIs. Arbitrary smooth chart boundaries need not have finite intersections: prove the required position or construct replacement arcs. No supplied compatibility, finite intersection, triangulation or classification. Realization and polygon normalization remain subsequent."},
+      :id :surface-triangle-compatible-refinement-probe-refill43,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+      :current-residual
+      "Finite embedded triangle interiors cover the surface. Shared-face refinement is absent; the cover alone is not a triangulation.",
+      :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+     {:consumer "t02A07",
+      :stop-condition
+      "GO requires same-atlas smooth projection, actual derivative formula and both directions of the regularity criterion. REVISE requires one compiled prerequisite.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PARAMETRIC TRANSVERSALITY / actual incidence projection derivative",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For the exact banked normalized manifold-target incidence atlas, construct the smooth second projection to N. Compute its actual mfderiv using the proved inclusion equalizer and prove that it is surjective at an incident pair exactly when the actual derivative of f at the first point is surjective, under banked range-sum transversality. Derive all projection and tangent transport identities. Preserve original topology, product norm, dimension and genuine infinity; include empty incidence and zero-dimensional kernels. Do not assume an alternative atlas or claim generic parameter density, component coverage or oriented homology."},
+      :id :incidence-parameter-projection-regularity-probe-refill43,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+      :current-residual
+      "The normalized incidence tangent equalizer is complete. Its actual projection regularity criterion is the next bounded calculus edge before Sard-based parameter arguments.",
+      :other-consumers ["t00J02" "t94A06" "t97J05"]}
+     {:consumer "t03J04",
+      :stop-condition
+      "GO requires actual rational chain and induced homology identities; REVISE requires exactly one compiled prerequisite. Euler multiplicativity and consumer closure remain subsequent.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "COVER-DEGREE / rational singular-chain transfer",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Construct transfer on the actual ModuleCat rational singular-chain complex of a finite k-sheeted covering, deriving all boundary identities and projection-after-transfer equals k times identity. Reuse the integral transfer and lift restriction bijections; if using coefficient extension, prove its actual chain comparison rather than assuming it. Derive the induced rational homology identity in every degree. Include k=0. Audit existing coefficient APIs before adding any comparison. Do not infer Euler multiplicativity or finite homology dimensions from the transfer identity."},
+      :id :finite-cover-rational-transfer-probe-refill43,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+      :current-residual
+      "Integral production chain transfer is complete; rational coefficient transport and its induced homology identity remain.",
+      :other-consumers ["t01A02" "t98A01"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 4,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when all campaign consumers are closed or an exact campaign-level refutation is established; local gaps do not terminate the campaign.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped consumers across the complete DAG, separating campaign closures, concurrent closures, typed uptake and duplicate infrastructure. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve repaired t94J08 positive-dimensional closure and banked signed antipodal action while retaining ordinary versus reduced S0 and one-dimensional local-index boundaries. Preserve conditional polygon witnesses, genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff normalization concern, t96J05 defect, t01J04/t94A06 applicability, and t96J07 historical refutation versus corrected closure. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t01a08-frozen-regular-line-closure-probe-refill43
+       :surface-triangle-compatible-refinement-probe-refill43
+       :incidence-parameter-projection-regularity-probe-refill43
+       :finite-cover-rational-transfer-probe-refill43],
+      :current-residual
+      "Await four independently reviewed outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    "Pinned complete-DAG census: 59 named consumers, 58 files, missing t93A05; placeholders 66→64, zero-placeholder consumers 23→24, open consumers 35→34, and 24 consumers remain within two placeholders. The sole closure is concurrent repaired t94J08 at 69eb3d52, independently recompiled here with standard axioms and existing linter warnings. Portfolio consumer closures: zero. Ten portfolio modules complete three shared packets: finite embedded triangle coverage, normalized incidence tangent equalizer, and integral singular-chain transfer. Six concurrent coefficient modules include positive-dimensional signed antipodal action. Four dependency reviews PASS: one STOP for arbitrary-integer degree realization and three completed infrastructure probes. Reranking the complete DAG elects the one-placeholder t01A08 adapter first, then compatible surface faces by five-consumer reach, incidence projection regularity by four-consumer reach, and rational transfer by three-consumer reach. Prior pullback duplication is not counted as new progress. Conditional polygon witnesses and genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff normalization concern, t96J05 defect, t01J04/t94A06 applicability limits, t96J07 historical refutation versus corrected closure, ordinary/reduced S0 and one-dimensional local-index boundaries remain explicit.",
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -63018,7 +63164,118 @@
     :finite-cover-singular-chain-transfer-probe-refill42
     :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
    :current-residual
-   "Await all four independently reviewed outcomes, then rerank the complete DAG."}],
+   "Await all four independently reviewed outcomes, then rerank the complete DAG."}
+  {:consumer "t01A08",
+   :stop-condition
+   "GO requires complete frozen closure; otherwise identify the exact regularity, model or Sard applicability boundary without inferring refutation from missing infrastructure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "MANIFOLD SARD / frozen regular affine line",
+   :acceptance
+   {:frozen-file "problems/t01A08/lean/Main.lean",
+    :frozen-sha256
+    "e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile complete frozen Main using the actual projection to the first two coordinates and a regular value. Audit banked SardGenuineSmoothManifoldVector against the exact arbitrary ModelWithCorners, second-countable source and explicitly typed top-in-Nat-infinity regularity. Prove any required regularity conversion; do not replace it by genuine infinity without proof. Preserve every hypothesis, literal affine-line predicate and actual mfderiv. No assumed Sard or surjectivity bridge."},
+   :id :t01a08-frozen-regular-line-closure-probe-refill43,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer
+    :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+   :current-residual
+   "One placeholder remains. Banked genuine-smooth manifold Sard may supply the regular-value argument; exact frozen regularity and model compatibility require checking."}
+  {:consumer "t99J03",
+   :stop-condition
+   "GO requires constructed compatible finite faces; REVISE requires exactly one compiled geometric prerequisite; otherwise identify the precise unavailable construction. No campaign termination.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SURFACE TRIANGULATION / compatible embedded face refinement",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Starting from the constructed CompactSurfaceTriangleCover on a compact Hausdorff smooth real two-manifold, construct a finite embedded graph and disk faces refining its triangle neighborhoods, with pairwise face intersections proved to be unions of shared vertices and edges. Audit perturbation, embedded arc and finite-intersection APIs. Arbitrary smooth chart boundaries need not have finite intersections: prove the required position or construct replacement arcs. No supplied compatibility, finite intersection, triangulation or classification. Realization and polygon normalization remain subsequent."},
+   :id :surface-triangle-compatible-refinement-probe-refill43,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer
+    :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+   :current-residual
+   "Finite embedded triangle interiors cover the surface. Shared-face refinement is absent; the cover alone is not a triangulation.",
+   :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+  {:consumer "t02A07",
+   :stop-condition
+   "GO requires same-atlas smooth projection, actual derivative formula and both directions of the regularity criterion. REVISE requires one compiled prerequisite.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PARAMETRIC TRANSVERSALITY / actual incidence projection derivative",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For the exact banked normalized manifold-target incidence atlas, construct the smooth second projection to N. Compute its actual mfderiv using the proved inclusion equalizer and prove that it is surjective at an incident pair exactly when the actual derivative of f at the first point is surjective, under banked range-sum transversality. Derive all projection and tangent transport identities. Preserve original topology, product norm, dimension and genuine infinity; include empty incidence and zero-dimensional kernels. Do not assume an alternative atlas or claim generic parameter density, component coverage or oriented homology."},
+   :id :incidence-parameter-projection-regularity-probe-refill43,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer
+    :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+   :current-residual
+   "The normalized incidence tangent equalizer is complete. Its actual projection regularity criterion is the next bounded calculus edge before Sard-based parameter arguments.",
+   :other-consumers ["t00J02" "t94A06" "t97J05"]}
+  {:consumer "t03J04",
+   :stop-condition
+   "GO requires actual rational chain and induced homology identities; REVISE requires exactly one compiled prerequisite. Euler multiplicativity and consumer closure remain subsequent.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "COVER-DEGREE / rational singular-chain transfer",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Construct transfer on the actual ModuleCat rational singular-chain complex of a finite k-sheeted covering, deriving all boundary identities and projection-after-transfer equals k times identity. Reuse the integral transfer and lift restriction bijections; if using coefficient extension, prove its actual chain comparison rather than assuming it. Derive the induced rational homology identity in every degree. Include k=0. Audit existing coefficient APIs before adding any comparison. Do not infer Euler multiplicativity or finite homology dimensions from the transfer identity."},
+   :id :finite-cover-rational-transfer-probe-refill43,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer
+    :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+   :current-residual
+   "Integral production chain transfer is complete; rational coefficient transport and its induced homology identity remain.",
+   :other-consumers ["t01A02" "t98A01"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 4,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when all campaign consumers are closed or an exact campaign-level refutation is established; local gaps do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped consumers across the complete DAG, separating campaign closures, concurrent closures, typed uptake and duplicate infrastructure. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve repaired t94J08 positive-dimensional closure and banked signed antipodal action while retaining ordinary versus reduced S0 and one-dimensional local-index boundaries. Preserve conditional polygon witnesses, genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff normalization concern, t96J05 defect, t01J04/t94A06 applicability, and t96J07 historical refutation versus corrected closure. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t01a08-frozen-regular-line-closure-probe-refill43
+    :surface-triangle-compatible-refinement-probe-refill43
+    :incidence-parameter-projection-regularity-probe-refill43
+    :finite-cover-rational-transfer-probe-refill43
+    :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+   :current-residual
+   "Await four independently reviewed outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
