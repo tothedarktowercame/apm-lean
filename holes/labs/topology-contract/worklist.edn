@@ -74344,8 +74344,75 @@
   {:consumer "t98A02",
    :stop-condition
    "Require proof that the compiled signed quotient arrows have zero composite and form a short exact sequence; then construct the genuine connecting morphism and transport all three exactness segments to the literal complement pairs.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove piecesToUnionRelative after intersectionToPiecesRelative is zero using the four cokernel projection equations and signed cancellation; package the resulting ShortComplex and establish its short exactness. Then specialize P and Q to compact-complement subspace ranges and transport the union quotient through relativeComparisonIso.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:unionAmbient
+     "dc6af45a09812a35a44861ae226cbe051cb656e5fb3bcae11e2749d40b24ae36",
+     :rightC
+     "4b88d70c4bb0e5ed327e27429de56e2df01d250a060e36b5fd91a3f38f8fc4cc",
+     :intersectionToLeftRelative
+     "a4ce63e5941b4eabe16149356fea2a84eef15c19fab7c5c1d9267675798edfc9",
+     :intersectionToRightRelative
+     "60e56d70eeba5596054a14cdba6892b1e3c21388fda7eda8122b29497e909e48",
+     :leftAmbient
+     "7af52cdbaebf7c289d6630efc1ad3f161f409da64344cdb9a5fbd189df6e8bf4",
+     :C
+     "910fa8eea4349757e31276056dd93eccb83be4073d24122d502a2eac607ce77b",
+     :intersectionToPiecesRelative
+     "bce6001508e446e42fd3961006d29795c300f6e44870511fba07295eb9f98167",
+     :intersectionC
+     "4c6368aaa38f54949add9c824f90bfabe421e7bc0334a59979eab8b07e344c5d",
+     :unionC
+     "2b30b535742afe7be63df706ea5734813c68b3d541146f7e2b2d0f3d585c5671",
+     :leftToUnionRelative
+     "9a7cd106304b5f36813a5620f3b569697336cfeec2e8801467964dd72814feb5",
+     :rightToUnionRelative
+     "be13004c476c465bc7bd951a459f32888eda56c70f740afbfc21ccbd6231d93b",
+     :piecesToUnionRelative
+     "8ab5fea65f9fc36d9ea75327e02c400307267a3cce3a55a5decf9c01af0320c1",
+     :leftC
+     "a2ea34569297cd0c3a893ae953153a32be0eb542f0dfcb0688d234776f6540eb",
+     :rightAmbient
+     "7dc8dfbe809c5e91cad982c36b4d111d69ef2a11f5634ad090ebc052237e03b5",
+     :intersectionAmbient
+     "0ac90997a8047a58ef568b48f614e5484505499a5e68424da2abe9dc38775312"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisArrows.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubcomplexRelativeMayerVietorisArrows.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisArrows.lean ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-fifteen-declaration audit over ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisArrows.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 35a623ce72a822f5b0e833e1897972c0503f7792",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 35a623ce72a822f5b0e833e1897972c0503f7792",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "35a623ce72a822f5b0e833e1897972c0503f7792",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisArrows.lean"],
+    :fixture
+    {:path
+     "/tmp/CoefficientSubcomplexRelativeMayerVietorisArrows.lean",
+     :sha256
+     "392dca8b05c875d0f15f7cdf817bbacd464d0f42e1c7f2bf7e6cf905974e0890",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded relative-cokernel-square dependency hash reproduce. All fifteen requested quotient-chain objects and arrows compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisArrows.lean"],
    :dag-node
