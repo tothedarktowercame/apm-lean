@@ -73164,6 +73164,19 @@
       "git diff-tree --no-commit-id --name-only -r bba7fd50c75e0efe09f8bd5ef2fade96d1014b6f",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789076337068-19559-cc424a14",
+     :commands
+     ["lake env lean ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean"
+      "sha256sum /tmp/CoefficientCompactSupportRelativeArrowComplex.lean ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean"
+      "python3 placeholder-and-six-declaration audit over ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean"
+      "git diff-tree --no-commit-id --name-only -r bba7fd50c75e0efe09f8bd5ef2fade96d1014b6f"
+      "git diff --exit-code bba7fd50c75e0efe09f8bd5ef2fade96d1014b6f -- ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean"
+      "git show --check --oneline --stat bba7fd50c75e0efe09f8bd5ef2fade96d1014b6f"],
+     :finding
+     "PASS: independently reviewed recorded commit bba7fd50c75e0efe09f8bd5ef2fade96d1014b6f authored by codex-6. Its sole changed path is the scoped module, byte-identical to fixture SHA256 72954abe1c76ae051d5f7e1269318801dde886e60235787ea172c82449edf349; dependency SHA256 is 604d7bb48ddd2ba7ae769e34c7c2210476b33745b754ad0a2581a52eb9279401. Lean compiles without warnings; the subset lemma is axiom-free, the categorical constructions use only propext, Classical.choice, and Quot.sound; placeholder count is zero; all six declaration hashes recompute exactly. The arrow order, signs, and quotient-pair representations are correct: (K union L)-complement includes into each piece complement and directly into (K intersection L)-complement; restrictPiecesChain is the diagonal biproduct lift, while piecesToIntersection is the signed descent extendLeft minus extendRight. Pair-map functoriality identifies both composites with directExtend, so the total composite reduces to directExtend minus itself and is zero. This establishes only the literal two-arrow chain complex; it does not claim kernel-image exactness, surjectivity, a short exact sequence, a connecting morphism, homology exactness, localization, vanishing, or a fundamental class."},
     :commit "bba7fd50c75e0efe09f8bd5ef2fade96d1014b6f",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean"],
@@ -73175,7 +73188,7 @@
     :finding
     "The exact fixture and recorded pieces-to-intersection dependency hash reproduce. All six requested declarations compile without warnings or placeholders; the subset lemma is axiom-free and the chain-complex constructions and zero-composite proof use only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean"],
    :dag-node
@@ -73275,7 +73288,7 @@
      "Compiled exactly one direct-sequence prerequisite. Pair-map functoriality identifies both paths from the union-support quotient to the intersection-support quotient with the same direct inclusion map. The diagonal first arrow followed by the signed second arrow is therefore zero by additive cancellation. This establishes a genuine literal quotient-pair chain complex and does not use supportConnecting or either false ordinary-excision premise. Exactness and the connecting morphism still require the degreewise quotient calculation together with the valid open-cover small-chain comparison.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
