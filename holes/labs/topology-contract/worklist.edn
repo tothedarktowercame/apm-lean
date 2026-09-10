@@ -56097,87 +56097,71 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Apply transfer to each actual source chart and the banked agreement neighborhood, compose with the extension-fiber chart, prove center coverage and genuine-infinity smooth overlaps. No globally regular extension is needed. This pointwise constructor does not impose global fiber nonemptiness or exclude zero-dimensional kernels. General-model, target-manifold and consumer-specific orientation/boundary/transversality obligations remain.",
-     :outcome :revise,
+     "Next assemble the global ChartedSpace/IsManifold structure from these actual charts, then transport smooth inclusion and tangent-image geometry. The theorem currently covers self-model finite-dimensional real inner-product manifold sources and vector targets. Named consumers retain their target-manifold, general-model, orientation, boundary and transversality obligations; in particular it supplies neither t00J02 duality, t94A06 general-model almost-everywhere transversality nor t01J04 half-space boundary geometry. Preserve the independent t96J05 specification defect. No frozen consumer closes in this packet.",
+     :outcome :go,
      :warnings [],
      :statement-hashes
-     {:transfer
-      "b31037ed6aa6a70aa3ea785664ec56766f99cbf65dca8da88d8ffdfc3c24b97d",
-      :source-eq
-      "c890308921e7742c17c22aa64ff7a849efc3be5c1a172af2ae5c7a118f268029",
-      :target-eq
-      "6c1d7fedfd64f997d87536361f952458369c55b01e6c7ff1a9e3a2f7e3818561",
-      :center-mem
-      "321550fbfea1120eb7881916bb761550bdc59b9fbf1f4462745061a651fa5dbc",
-      :forward-eq
-      "12cf1ffc035aabf360aaaf4cbcec456fd4324dab5436020511d672db217c4b45",
-      :backward-eq
-      "0533e6adfa6bbcb0dc0cd3392e20bafab5049b2ebbb98a0fd53ae251f0583550"},
-     :prerequisite
-     {:consumer "t00J02",
-      :stop-condition
-      "Require the actual open partial homeomorphism and all five specifications to compile; an equivalence without continuity and openness is insufficient.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/OpenPartialHomeomorphFiberTransfer.lean"],
-      :dag-node "REGULAR-PREIMAGE/SUBMERSION / literal fiber transfer",
-      :acceptance
-      {:fixture "/tmp/OpenPartialHomeomorphFiberTransfer.lean",
-       :fixture-sha256
-       "4c22110a281a32a615b957f5c8eb3971079932906ecfe498f2bfb6ad77d6d7a8",
-       :implementation
-       "Promote the exact fixture preserving inherited subtype topologies, exact source and target, both underlying-value formulas and center membership. Compile the constructor and five public specifications with standard-only axioms and zero placeholders. Do not claim smooth overlaps or a global manifold structure.",
-       :commands
-       ["lake env lean ConstructionTargets/OpenPartialHomeomorphFiberTransfer.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :id
-      :open-partial-homeomorph-fiber-transfer-implementation-refill31,
-      :kind :reusable-theorem,
-      :depends-on
-      [:manifold-fiber-chart-extension-implementation-refill31],
-      :current-residual
-      "Complete topological fiber-transfer constructor compiled; bank it for composition with the constructed extension-fiber charts.",
-      :other-consumers ["t02A07" "t94A06" "t01J04"]},
+     {:exists-chart
+      "d72f2c8d692f36d1e83f58c8fe1e9bee0cb53038ffd0985ac8a5f974b168b301",
+      :overlap-smooth
+      "ccf6147428d3045cf7a82780a4f37a4828ae36b16b5e37d66c7cad14828d06e7",
+      :exists-cover
+      "06288d909b4581aa8f893412fef0a4ffba8e1e268350c46441e4492e65b5b02d"},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "bb /tmp/manifold-fiber-review.bb", :exit 0}
+     [{:cmd "bb /tmp/fiber-transfer-review.bb", :exit 0}
       {:cmd
-       "lake env lean /tmp/OpenPartialHomeomorphFiberTransfer.lean",
+       "lake env lean -o /tmp/manifold-chart-build/ConstructionTargets/ManifoldFiberChartExtension.olean ConstructionTargets/ManifoldFiberChartExtension.lean",
        :exit 0}
-      {:cmd "python3 /tmp/fiber-transfer-audit.py", :exit 0}],
+      {:cmd
+       "lake env lean -o /tmp/manifold-chart-build/ConstructionTargets/OpenPartialHomeomorphFiberTransfer.olean ConstructionTargets/OpenPartialHomeomorphFiberTransfer.lean",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldRegularFiberCharts.lean'",
+       :exit 0}
+      {:cmd "python3 /tmp/manifold-fiber-charts-audit.py", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/OpenPartialHomeomorphFiberTransfer.lean",
+       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldRegularFiberCharts.lean'",
        :exit 1,
        :correction
-       "Included the agreement hypothesis in helper declarations, supplied classical decidability and corrected formula simplification."}
+       "Exposed preimage membership before rewriting the backward formula and explicitly typed the overlap-source membership used by forward_eq."}
       {:cmd
-       "lake env lean /tmp/OpenPartialHomeomorphFiberTransfer.lean",
+       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldRegularFiberCharts.lean'",
        :exit 1,
        :correction
-       "Reformatted the structure literal into separate fields to resolve its parse error; final compilation succeeds."}],
+       "Replaced dependent simplification in the coverage proof with fiber-point elimination and substitution of its value equality. Omitted unused overlap-theorem instances; final compilation is warning-free."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/OpenPartialHomeomorphFiberTransfer.lean",
+     {:path "/tmp/ManifoldRegularFiberCharts.lean",
       :sha256
-      "4c22110a281a32a615b957f5c8eb3971079932906ecfe498f2bfb6ad77d6d7a8"},
+      "e64e24e362372e341aab3ce5a67069f611fe4cc9865faefa08ff40b64fb46597"},
      :finding
-     "Compiled one generic fiber-transfer prerequisite. Given an ambient open partial homeomorphism e, an open V contained in its target, and g y = f (e.symm y) on V, transfer constructs an actual OpenPartialHomeomorph between the literal fibers f=c and g=c. Its source is exactly {u | u.val lies in e.source and e u.val lies in V}; its target is exactly the extension fiber over V. Both inverse laws, openness, continuity, center membership and underlying-value formulas are proved. The banked ManifoldFiberChartExtension supplies this agreement neighborhood for actual chart representatives without globally regular extensions. Composition with its extension-fiber chart and smooth-overlap assembly are not yet compiled.",
+     "Complete actual manifold-source fiber-chart packet compiles. exists_chart invokes the banked chart-extension producer, transfers between literal fibers on its constructed agreement neighborhood, and composes with the actual extension-fiber chart. FiberChart retains exact source membership, forward and backward formulas on their valid domains, and genuine-infinity ambient manifold smoothness. overlap_smooth proves smoothness of each actual transition on its actual open source through these formulas. exists_cover chooses a center-containing chart at every fiber point and proves all overlaps smooth. No global regularity of the extension, new topology, assumed chart or compatibility is introduced. Empty fibers and zero-dimensional kernels are included.",
+     :implementation
+     {:scope ["ConstructionTargets/ManifoldRegularFiberCharts.lean"],
+      :acceptance
+      {:implementation
+       "Promote the exact fixture and preserve both prerequisite imports, inherited fiber topology, fixed Euclidean model dimension, restricted coordinate formulas and genuine-infinity smoothness. Compile exists_chart, overlap_smooth and exists_cover; verify standard-only axioms, no warnings and zero placeholders. Do not claim global atlas, embedded inclusion or consumer closure.",
+       :commands
+       ["lake env lean ConstructionTargets/ManifoldRegularFiberCharts.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0}},
      :seat "codex-12"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/ManifoldRegularFiberCharts.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / manifold-source fiber charts",
    :acceptance
-   {:probe
-    "For a genuine-infinity smooth manifold with self-model finite-dimensional real inner-product space E and a ContMDiff infinity map to a finite-dimensional real inner-product space F, at a regular value construct actual OpenPartialHomeomorph charts on the inherited-topology literal fiber into Euclidean dimension finrank E minus finrank F. Derive source-chart representative smoothness on its actual open domain and surjectivity at the center from mfderiv transport. Reuse existing cutoff-extension and RegularFiberFixedModelOverlaps.exists_chart producers, or their exact local forms; do not assume a globally regular extension. Transport local fiber charts back through the source chart and prove coverage and genuine-infinity overlap smoothness on actual overlap domains. Reuse existing implicit-function geometry rather than rebuilding it. No assumed chart, extension agreement, derivative transport or atlas compatibility. Include empty fibers and zero-dimensional kernels. State the exact applicability limits for the named consumers.",
+   {:implementation
+    "Promote the exact fixture and preserve both prerequisite imports, inherited fiber topology, fixed Euclidean model dimension, restricted coordinate formulas and genuine-infinity smoothness. Compile exists_chart, overlap_smooth and exists_cover; verify standard-only axioms, no warnings and zero placeholders. Do not claim global atlas, embedded inclusion or consumer closure.",
+    :commands
+    ["lake env lean ConstructionTargets/ManifoldRegularFiberCharts.lean"],
     :axioms :standard-only,
-    :consumer-residual
-    "Manifold-source local fixed-model fiber charts and overlaps only. Global atlas, smooth inclusion/tangent transport, general-model or target-manifold cases and consumer-specific orientation/boundary/transversality obligations remain."},
+    :placeholder-before 0,
+    :placeholder-after 0},
    :id :regular-fiber-manifold-source-local-charts-probe-refill31,
    :kind :reusable-theorem,
    :depends-on
