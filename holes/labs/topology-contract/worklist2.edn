@@ -30627,8 +30627,173 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      :exit 0}
+     {:cmd
+      "Inspect all open, blocked, done-unreviewed and recently reviewed rows and their dependency receipts",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped census of every frozen consumer named by TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd
+      "Compare e199644d08e4c79fdc32b70e9e609b3dd2ec034f..c6b9ab49640cf4d24893af6a4bb6d3b8d928ab0b and attribute all ConstructionTargets Lean additions",
+      :exit 0}
+     {:cmd
+      "Inspect SphereCapC1GraphAreaComparison, Hausdorff Euclidean normalization APIs and the frozen t95J05, t02A05, t01J06 and t94A10 interfaces",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check && git diff --exit-code", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial named-consumer census script",
+      :exit 1,
+      :correction
+      "Removed an accidental undefined Python placeholder and reran the census against the DAG."}
+     {:cmd "Second named-consumer census script",
+      :exit 1,
+      :correction
+      "Excluded the missing t93A05 file from numeric summation while retaining it in the named and missing counts. The final exact 59-consumer census succeeds."}],
+    :replacement-items
+    [{:consumer :t95J05,
+      :stop-condition
+      "Do not assume a normalization constant, sphere mass, cap assembly, equator nullity, polar-coordinate formula or moment value. Use only d=2 and d=3 at the generality required by the named consumers. Do not infer consumer closure; use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD INTEGRATION: exact Euclidean Hausdorff-to-volume normalization in dimensions two and three",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use EuclideanSpace real (Fin 2) and EuclideanSpace real (Fin 3), their actual L2 metrics, Borel structures, d-dimensional Hausdorff measures and canonical volume measures. No supplied scalar normalization or finite-measure hypothesis is allowed.",
+       :route-step
+       "Supplies the Hausdorff-to-volume normalization step for the sole t95J05 placeholder and the sphere-period placeholders of t02A05, t01J06 and t94A10, immediately after the reviewed strict-cap graph-area comparison.",
+       :probe
+       "Construct the actual measurable linear isometries needed to compare EuclideanSpace with finite real coordinate functions. Prove the exact measure equalities between hausdorffMeasure 2 and volume on EuclideanSpace real (Fin 2), and between hausdorffMeasure 3 and volume on EuclideanSpace real (Fin 3), respecting Mathlib's diameter-power convention. Derive exact set-measure and set-lintegral transport statements usable on the reviewed open unit balls and reciprocal-height cap densities. Compile zero-measure, infinite-measure, open-ball and dimensions two and three examples. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled missing measure-representation prerequisite. STOP names an exact normalization mismatch or unavailable construction.",
+       :consumer-equation
+       "In dimensions two and three, the repository's Euclidean d-dimensional Hausdorff measure is identified exactly with canonical Lebesgue volume, and the reviewed strict-cap reciprocal-height integrals can be rewritten without an unspecified scalar factor.",
+       :consumer-residual
+       "Prove the equator has zero d-dimensional Hausdorff measure, assemble strict caps into the whole S2 and S3 spheres, and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
+       :gates
+       ["Compile a complete fixture and record SHA256."
+        "Audit the actual EuclideanSpace and finite-coordinate representations and every measure transport."
+        "Verify exact hausdorffMeasure-to-volume equalities for d=2 and d=3 under the active convention."
+        "Verify set-measure and set-lintegral rewrites for the reviewed open balls and reciprocal-height densities."
+        "Check zero and infinite measure cases without cancellation."
+        "Compile dimension-two and dimension-three examples with standard-only axioms."
+        "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reservations, reviewed STOPs and refutations."]},
+      :id
+      :oriented-checkpoint48-euclidean-hausdorff-volume-normalization-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint48-sphere-cap-area-and-consumer-refill-repair2
+       :oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2],
+      :current-residual
+      "The strict sphere-cap formulas integrate against d-dimensional Hausdorff measure on EuclideanSpace real (Fin d); numerical evaluation requires its exact comparison with Lebesgue volume under the repository's diameter-power convention.",
+      :other-consumers [:t02A05 :t01J06 :t94A10]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: Euclidean Hausdorff normalization and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint49-euclidean-normalization-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint48-euclidean-hausdorff-volume-normalization-1],
+      :current-residual
+      "Measure numerical normalization progress separately from equator nullity, cap assembly, moment evaluation and frozen closure; rerank every open consumer route against concurrent outcomes.",
+      :other-consumers []}],
+    :measures
+    {:baseline
+     {:commit "e199644d08e4c79fdc32b70e9e609b3dd2ec034f",
+      :description
+      "Accepted repaired checkpoint47 strategy transition"},
+     :proved-refutations 0,
+     :frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :head
+     {:commit "c6b9ab49640cf4d24893af6a4bb6d3b8d928ab0b",
+      :description "Pre-checkpoint48 strategy head"},
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:before 773,
+      :after 789,
+      :portfolio
+      ["ConstructionTargets/SphereCapHeight.lean"
+       "ConstructionTargets/SphereCapHeightDerivative.lean"
+       "ConstructionTargets/SphereCapGraphDensity.lean"
+       "ConstructionTargets/SphereCapL2Image.lean"
+       "ConstructionTargets/SphereCapCoordinateIsometry.lean"
+       "ConstructionTargets/SphereCapEuclideanImage.lean"
+       "ConstructionTargets/SphereCapHausdorffTransport.lean"
+       "ConstructionTargets/SphereCapC1GraphAreaComparison.lean"],
+      :concurrent
+      ["ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean"
+       "ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean"
+       "ConstructionTargets/CoefficientIntersectionRangeComparison.lean"
+       "ConstructionTargets/CoefficientIntersectionRangeNaturality.lean"
+       "ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean"
+       "ConstructionTargets/CoefficientCompactComplementCoverSequence.lean"
+       "ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean"
+       "ConstructionTargets/CoefficientCompactComplementUnionComparison.lean"]},
+     :corrected-closures 0,
+     :typed-residual-change
+     "The actual upper and lower C1 height graphs are now identified with literal strict Euclidean sphere caps through an explicit L2 coordinate isometry, and both ambient and intrinsic Hausdorff measures equal the reciprocal-height integral. Equator nullity, whole-sphere assembly, Euclidean Hausdorff-to-volume normalization and numerical coordinate moments remain.",
+     :review-outcomes
+     {:sphere-cap-c1-graph-area
+      {:outcome :pass,
+       :commit "453d67d084e3f9dc3cfe29a349f6f285f3ef418c"},
+      :coefficient-compact-complement-union-comparison
+      {:outcome :done-unreviewed,
+       :disposition "Excluded as concurrent work."},
+      :coefficient-compact-support-mayer-vietoris
+      {:outcome :blocked,
+       :disposition "Preserved; no duplicate election."},
+      :fivefold-cover-adapter
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-polygon-genus-and-cover-euler-comparison}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 33,
+      :zero-placeholder 25,
+      :within-two 23,
+      :placeholder-before 62,
+      :placeholder-after 62}},
+    :finding
+    "The 59 DAG-named consumers retain 62 comment-stripped placeholders across 33 open files; 25 existing consumers have zero placeholders and t93A05 remains missing. No frozen file changed in the measured interval. Routes: t95J05 has 1 placeholder: banked intrinsic strict S3 cap areas -> missing Euclidean Hausdorff-to-volume normalization -> missing equator-null cap assembly -> missing square and fourth-coordinate moments -> frozen sphere integral. t02A05 has 2: banked coefficient/projection reductions and strict S2 cap areas -> the same normalization and equator assembly -> centered sphere moments -> frozen integral and minimum. t01J06 has 3: banked restriction algebra and the same S2 normalization/moment route for its period -> separate manifold Stokes bridge -> final conjunction. t94A10 has 3: banked solid-angle algebra and the same S2 normalization/moment route -> closedness/nonexactness assembly. t98A02(1), t00J02(1), t00A04(0), t01A05(1), t02A07(3) and t97J05(5) remain on the compact-complement Mayer-Vietoris route through the concurrently advancing range comparisons, cover sequence, homology square, localization, duality and gluing; t01A05 also retains its connectedness specification defect, and duplicate election is excluded. t99J03(1), t00A03(2), t01J01(3), t91J05(3) and t94J09(1) remain on the translated embedded-arc route through prescribed-chart containment, endpoint control and later polygon or classification steps; active work is excluded. t01A02(3) retains H2 degree/nonsurjectivity, Lefschetz and final assembly after its banked product cover. t01A04(4), t92J06(1) and t98A01(1) retain covering construction/classification, genus invariance and Euler-multiplicativity steps; t98A01's reviewed STOP is preserved. t00J01(1) still needs concrete Klein-product and exact fold-fiber geometry. t01A08(1) needs arbitrary-model chart-domain and within-derivative applicability. t01J04(1) and t94A06(1) need regular-preimage, half-space-atlas and normal-translation applicability. t02A08(1) needs an arbitrary-integer sphere map and its homology action. t03J02(2) and t97A01(1) retain the collar/cofibration and closed-circle gluing boundary. t03J04(1) needs rational torus homology and finite-cover Euler comparison. t03J05(1) and t96J06(2) remain on fundamental-class, cap/Thom and product-homology comparisons. t92J05(3) needs the RP2 antipodal bridge, genus-two classification bridge and final assembly. t95J06(2) retains the concrete torus homeomorphism route. t96J05(1) retains the proved radial counterexample and requires a corrected statement. t96J06 and t97A04(4) also retain the singular Eilenberg-Zilber and integral Kunneth route. a97J08(1) remains an uptake route whose geometric producer is not yet complete. t03J05, t95J06, t96J06, t97A04, t97A01, t01A02 and t01A04 therefore have no complete closure route. No near-closure adapter is presently eligible. Among eligible shared steps, exact Euclidean Hausdorff-to-volume normalization is on four open sphere-integral routes and is simpler than equator-null chart assembly or numerical moment evaluation. Unused general infrastructure is deferred. One bounded normalization row is elected, followed by a fresh successor checkpoint.",
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: sphere-cap area comparison and renewed consumer eligibility",
@@ -30645,6 +30810,74 @@
     :oriented-checkpoint47-exact-graph-area-and-consumer-refill],
    :current-residual
    "Measure actual sphere-cap representation progress separately from equator nullity, cap assembly, numerical Hausdorff normalization and frozen moment closure; rerank every consumer against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t95J05,
+   :stop-condition
+   "Do not assume a normalization constant, sphere mass, cap assembly, equator nullity, polar-coordinate formula or moment value. Use only d=2 and d=3 at the generality required by the named consumers. Do not infer consumer closure; use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD INTEGRATION: exact Euclidean Hausdorff-to-volume normalization in dimensions two and three",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use EuclideanSpace real (Fin 2) and EuclideanSpace real (Fin 3), their actual L2 metrics, Borel structures, d-dimensional Hausdorff measures and canonical volume measures. No supplied scalar normalization or finite-measure hypothesis is allowed.",
+    :route-step
+    "Supplies the Hausdorff-to-volume normalization step for the sole t95J05 placeholder and the sphere-period placeholders of t02A05, t01J06 and t94A10, immediately after the reviewed strict-cap graph-area comparison.",
+    :probe
+    "Construct the actual measurable linear isometries needed to compare EuclideanSpace with finite real coordinate functions. Prove the exact measure equalities between hausdorffMeasure 2 and volume on EuclideanSpace real (Fin 2), and between hausdorffMeasure 3 and volume on EuclideanSpace real (Fin 3), respecting Mathlib's diameter-power convention. Derive exact set-measure and set-lintegral transport statements usable on the reviewed open unit balls and reciprocal-height cap densities. Compile zero-measure, infinite-measure, open-ball and dimensions two and three examples. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled missing measure-representation prerequisite. STOP names an exact normalization mismatch or unavailable construction.",
+    :consumer-equation
+    "In dimensions two and three, the repository's Euclidean d-dimensional Hausdorff measure is identified exactly with canonical Lebesgue volume, and the reviewed strict-cap reciprocal-height integrals can be rewritten without an unspecified scalar factor.",
+    :consumer-residual
+    "Prove the equator has zero d-dimensional Hausdorff measure, assemble strict caps into the whole S2 and S3 spheres, and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
+    :gates
+    ["Compile a complete fixture and record SHA256."
+     "Audit the actual EuclideanSpace and finite-coordinate representations and every measure transport."
+     "Verify exact hausdorffMeasure-to-volume equalities for d=2 and d=3 under the active convention."
+     "Verify set-measure and set-lintegral rewrites for the reviewed open balls and reciprocal-height densities."
+     "Check zero and infinite measure cases without cancellation."
+     "Compile dimension-two and dimension-three examples with standard-only axioms."
+     "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reservations, reviewed STOPs and refutations."]},
+   :id
+   :oriented-checkpoint48-euclidean-hausdorff-volume-normalization-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint48-sphere-cap-area-and-consumer-refill-repair2
+    :oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2
+    :oriented-checkpoint48-sphere-cap-area-and-consumer-refill-repair2],
+   :current-residual
+   "The strict sphere-cap formulas integrate against d-dimensional Hausdorff measure on EuclideanSpace real (Fin d); numerical evaluation requires its exact comparison with Lebesgue volume under the repository's diameter-power convention.",
+   :other-consumers [:t02A05 :t01J06 :t94A10]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: Euclidean Hausdorff normalization and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint49-euclidean-normalization-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint48-euclidean-hausdorff-volume-normalization-1
+    :oriented-checkpoint48-sphere-cap-area-and-consumer-refill-repair2],
+   :current-residual
+   "Measure numerical normalization progress separately from equator nullity, cap assembly, moment evaluation and frozen closure; rerank every open consumer route against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
