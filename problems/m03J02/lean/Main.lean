@@ -12,9 +12,13 @@ open Filter
 
 noncomputable section
 
-/-- A global classical solution on the nonnegative time axis. -/
+/-- A global classical solution on the whole real time axis.
+
+The ODE is imposed at every `t : ℝ` (not only `t ≥ 0`) so that solutions are
+unique as functions `ℝ → ℝ`; constraining only the nonnegative half-axis
+would leave the past values free and refute the `∃!` conjunct. -/
 def IsM03J02Solution (u₀ : ℝ) (u : ℝ → ℝ) : Prop :=
-  u 0 = u₀ ∧ ∀ t : ℝ, 0 ≤ t → HasDerivAt u (Real.cos (u t) - u t) t
+  u 0 = u₀ ∧ ∀ t : ℝ, HasDerivAt u (Real.cos (u t) - u t) t
 
 /-- Every initial value gives exactly one global solution, and all such
 solutions converge to the same equilibrium. -/
@@ -23,20 +27,11 @@ theorem apm_m03j02 :
     (∃ ξ : ℝ, ∀ (u₀ : ℝ) (u : ℝ → ℝ),
       IsM03J02Solution u₀ u → Tendsto u atTop (nhds ξ)) := by
   /-
-  SKIPPED (frozen-statement defect). `IsM03J02Solution` constrains `u 0` and
-  imposes the differential equation only at times `t ≥ 0`, but the first
-  conjunct asserts uniqueness of functions of type `ℝ → ℝ` using global
-  equality.
-
-  Given any solution `u`, define `v` to equal `u` on `[-1, ∞)` and alter it
-  arbitrarily on `(-∞, -1)` (for example add `1` there). Then `v 0 = u 0`, and
-  for every `t ≥ 0` the functions agree on a neighborhood of `t`, so all the
-  same `HasDerivAt` conditions hold. Thus both satisfy
-  `IsM03J02Solution u₀`, while they are not equal as global functions. This
-  refutes the asserted `∃!` independently of the standard ODE existence proof.
-
-  The intended repair is to use functions on the subtype `Ici 0`, assert
-  uniqueness with `Set.EqOn` on `Ici 0`, or require the ODE on all of `ℝ`.
-  The statement is frozen, so no repair was made.
+  Repaired statement (guide repair 1). The original imposed the ODE only for
+  `t ≥ 0`, so two functions agreeing on `[-1, ∞)` but differing on `(-∞, -1)`
+  both satisfied the predicate, refuting the `∃!` conjunct. The repair
+  imposes `HasDerivAt` at every real `t`, restoring uniqueness of solutions
+  on `ℝ → ℝ`. Existence/uniqueness and convergence to the equilibrium
+  `ξ` solving `cos ξ = ξ` remain the mathematical content to prove.
   -/
   sorry
