@@ -28049,9 +28049,184 @@
    :other-consumers []}
   {:consumer :t02A05,
    :stop-condition
-   "Do not assume an area formula, integrability, finite measure, numerical Hausdorff normalization or measure-preserving parameterization. Retain actual L2 graph and Borel structures. Do not infer sphere masses, Stokes, periods or consumer closure. Exclude reserved orientation, covering and surface work; use a unique row-specific scratch directory.",
-   :phase :probe,
+   "Bank the ENNReal limit and squeeze theorem only. Do not claim global graph-integral bounds, an area formula, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+      :sha256
+      "6d3e18144322b0d66cfeedfbfd978bc5663dd7941bab5784a0b349a4a73e95f9"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/ENNRealMultiplicativeSqueeze.lean"
+    "ConstructionTargets/ENNRealMultiplicativeSqueeze.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: ENNReal multiplicative squeeze at unit",
+   :acceptance
+   {:namespace "ConstructionTargets.ENNRealMultiplicativeSqueeze",
+    :implementation
+    "Promote the exact compiled fixture and document that it handles finite, zero and infinite ENNReal values without conversion or cancellation.",
+    :declarations ["upper_tendsto" "lower_tendsto" "eq_of_bounds"],
+    :hypotheses
+    "d is any natural number and A,B are arbitrary extended nonnegative reals. For every real epsilon with 0<epsilon<1, assume (ofReal(1-epsilon))^d*B≤A≤(ofReal(1+epsilon))^d*B. No finiteness or nonzero hypothesis is imposed.",
+    :consumer-equation
+    "The stated family of multiplicative bounds forces A=B, including B=0 and B=∞, by convergence of both factors to one.",
+    :consumer-residual
+    "Use the reviewed measurable graph partitions to prove the required global bounds for every epsilon by countable additivity and actual derivative-density comparison.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.ENNRealMultiplicativeSqueeze."
+     "Reproduce three standard-only axiom audits."
+     "Verify convergence of both ofReal factors along the punctured interval 0<epsilon<1."
+     "Verify ENNReal multiplication continuity is invoked at the finite nonzero limiting factor one and permits arbitrary B, including infinity."
+     "Verify eq_of_bounds uses eventual lower and upper inequalities without converting to real numbers or cancelling measures."
+     "Compile zero, finite and infinite B examples."
+     "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :ennreal-multiplicative-unit-squeeze-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint45-c1-graph-measurable-approximation-partition-1],
+   :current-residual
+   "Exact graph area requires passage from global bounds with multiplicative factors (1±epsilon)^d to equality, including when the density integral is infinite.",
+   :other-consumers [:t95J05 :t01J06 :t94A10]}
+  {:consumer :t02A05,
+   :stop-condition
+   "Do not assume an area formula, integrability, finite measure, numerical Hausdorff normalization or measure-preserving parameterization. Retain actual L2 graph and Borel structures. Do not infer sphere masses, Stokes, periods or consumer closure. Exclude reserved orientation, covering and surface work; use a unique row-specific scratch directory.",
+   :evidence
+   {:probe
+    {:concurrent-reservations
+     [:coefficient-subcomplex-mayer-vietoris-implementation-refill49
+      :finite-translated-embedded-arcs-chart-containment-probe-refill49],
+     :placeholder-delta 0,
+     :residual
+     "Construct the global integral bounds for every epsilon from the reviewed measurable graph partitions, actual density proximity and countable additivity, then apply the compiled squeeze theorem. Sphere charts and numerical Hausdorff normalization remain downstream; reservations, reviewed STOPs and refutations are preserved.",
+     :axiom-audits 3,
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t02A05,
+      :stop-condition
+      "Bank the ENNReal limit and squeeze theorem only. Do not claim global graph-integral bounds, an area formula, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path
+         "/tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+         :sha256
+         "6d3e18144322b0d66cfeedfbfd978bc5663dd7941bab5784a0b349a4a73e95f9"},
+        :commands
+        [{:cmd
+          "lake env lean /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ENNRealMultiplicativeSqueeze.lean"
+       "ConstructionTargets/ENNRealMultiplicativeSqueeze.md"],
+      :dag-node
+      "MANIFOLD INTEGRATION: ENNReal multiplicative squeeze at unit",
+      :acceptance
+      {:namespace "ConstructionTargets.ENNRealMultiplicativeSqueeze",
+       :implementation
+       "Promote the exact compiled fixture and document that it handles finite, zero and infinite ENNReal values without conversion or cancellation.",
+       :declarations ["upper_tendsto" "lower_tendsto" "eq_of_bounds"],
+       :hypotheses
+       "d is any natural number and A,B are arbitrary extended nonnegative reals. For every real epsilon with 0<epsilon<1, assume (ofReal(1-epsilon))^d*B≤A≤(ofReal(1+epsilon))^d*B. No finiteness or nonzero hypothesis is imposed.",
+       :consumer-equation
+       "The stated family of multiplicative bounds forces A=B, including B=0 and B=∞, by convergence of both factors to one.",
+       :consumer-residual
+       "Use the reviewed measurable graph partitions to prove the required global bounds for every epsilon by countable additivity and actual derivative-density comparison.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.ENNRealMultiplicativeSqueeze."
+        "Reproduce three standard-only axiom audits."
+        "Verify convergence of both ofReal factors along the punctured interval 0<epsilon<1."
+        "Verify ENNReal multiplication continuity is invoked at the finite nonzero limiting factor one and permits arbitrary B, including infinity."
+        "Verify eq_of_bounds uses eventual lower and upper inequalities without converting to real numbers or cancelling measures."
+        "Compile zero, finite and infinite B examples."
+        "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+      :id :ennreal-multiplicative-unit-squeeze-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint45-c1-graph-measurable-approximation-partition-1],
+      :current-residual
+      "Exact graph area requires passage from global bounds with multiplicative factors (1±epsilon)^d to equality, including when the density integral is infinite.",
+      :other-consumers [:t95J05 :t01J06 :t94A10]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG, closure experiments and build-loop design; inspect both ledgers and dependency PASS receipts",
+       :exit 0}
+      {:cmd
+       "Inspect Mathlib Jacobian partition, ENNReal convergence and order-limit APIs",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "Python comment-stripped placeholder, forbidden-declaration and whitespace audit",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial ENNReal squeeze fixture compilation",
+       :exit 1,
+       :correction
+       "Made the punctured-neighborhood filter explicit and replaced unavailable global multiplication continuity with the ENNReal finite-limit multiplication theorem."}
+      {:cmd "Compilation after initial filter correction",
+       :exit 1,
+       :correction
+       "Corrected the order-limit lemma directions and supplied the NeBot instance for the right punctured neighborhood."}
+      {:cmd "Compilation with explicit real limits",
+       :exit 1,
+       :correction
+       "Normalized the real limits before composing with ENNReal.ofReal and selected the specialized ENNReal power theorem."}
+      {:cmd "Compilation after importing ENNReal limit lemmas",
+       :exit 1,
+       :correction
+       "Replaced generic Tendsto.pow, which requires globally continuous ENNReal multiplication, with ENNReal.Tendsto.pow. Final compilation succeeds."}],
+     :changed-paths [],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+      :sha256
+      "6d3e18144322b0d66cfeedfbfd978bc5663dd7941bab5784a0b349a4a73e95f9",
+      :placeholder-count 0},
+     :finding
+     "Exactly one complete compiled analytic prerequisite is supplied. Multiplicative ENNReal bounds with factors tending to one imply equality for arbitrary extended values, including infinity, without unsafe cancellation. Mathlib contains analogous differentiable partition arguments for null-image estimates but no exact dimension-increasing graph-area or Jacobian-integral theorem. The parent is not GO: global bounds comparing the summed selected densities with the actual derivative-density integral remain unproved.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact C1 graph Hausdorff area from measurable approximation partitions",
@@ -28080,7 +28255,7 @@
    :depends-on
    [:oriented-checkpoint46-measurable-graph-partition-and-consumer-refill
     :oriented-checkpoint45-c1-graph-measurable-approximation-partition-1
-    :oriented-checkpoint46-measurable-graph-partition-and-consumer-refill],
+    :ennreal-multiplicative-unit-squeeze-1],
    :current-residual
    "Reviewed measurable pieces satisfy uniform graph bounds and approximate actual derivatives. Prove that their sums converge to the integral of the pointwise graph density and squeeze the graph measure to that integral.",
    :other-consumers [:t95J05 :t01J06 :t94A10]}
