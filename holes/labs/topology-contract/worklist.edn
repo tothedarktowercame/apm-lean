@@ -70597,8 +70597,52 @@
   {:consumer "t98A02",
    :stop-condition
    "Require a corrected ledger packet carrying the verified fixture hash before implementation; after promotion, compact-complement specialization and three coefficient-excision exactness transports remain.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Specialize the compiled union-to-production-relative comparison to compact complements, then transport all three exactness statements through valid coefficient-excision and naturality comparisons.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:unionToProductionRelative
+     "ef6bc3510fb3e75ad63b71feb8f6b97d88bf3db35316a0545fba8aa3215b6525",
+     :leftToUnion_unionToProductionRelative
+     "e8a7863d215ddebad77efc1529e73fa7eccd5798fff1507ff84969dc50d38ea5",
+     :rightToUnion_unionToProductionRelative
+     "92a73c8704ade9709d7386a23ca844b4ec79ced45668d99a93d3acf699b7b6a9"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean /tmp/CoefficientUnionToProductionRelativeComparison.lean ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-three-declaration audit over ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "5a605d1fd1674c7ffed5db84ea3d2137834c90b8",
+    :changed-paths
+    ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
+    :fixture
+    {:path "/tmp/CoefficientUnionToProductionRelativeComparison.lean",
+     :sha256
+     "ea64a7591efc48a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71",
+     :placeholder-count 0,
+     :recorded-hash-correction
+     {:from
+      "ea64a7591efc48a5e2f21Botsc8989a67049cb9e4d5991e18f1ca85d773886f57d71",
+      :to
+      "ea64a7591efc48a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71"}},
+    :finding
+    "Corrected the documented malformed fixture hash to the independently verified SHA256 and promoted the exact fixture. The coefficient union-to-production-relative map, its zero left-piece composite and its right-piece quotient-projection formula compile without warnings or placeholders. Both actual dependency files were independently hashed, and the final worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
    :dag-node
