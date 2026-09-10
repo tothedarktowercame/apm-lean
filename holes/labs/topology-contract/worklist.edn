@@ -58832,8 +58832,183 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill38-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill38-reviews.bb", :exit 0}
+     {:cmd
+      "git diff --name-status 06f215df8fa1ff19604b32e737c7fdcb4357a4df..5e01f134527a2121217b673ffb08455c97832300 -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill38-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill38-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill38-measure.json /tmp/topology-refill38-reviews.edn /tmp/topology-refill38-tail.edn",
+      :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer "t95J05",
+      :stop-condition
+      "GO requires complete frozen closure; otherwise STOP names the precise absent intrinsic measure normalization or area comparison. Infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "MANIFOLD INTEGRATION / literal projective density integral",
+      :acceptance
+      {:frozen-file "problems/t95J05/lean/Main.lean",
+       :frozen-sha256
+       "bc69f32681ce9fa5abe5e22256661c1bec11c5a85d9433c166e89352596df698",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile the complete frozen Main preserving every definition and conjunct. Reuse IntrinsicSphereFinite and IntrinsicSphereSecondMoments.projective_density_moment on the literal unit sphere subtype. Derive the actual Hausdorff mass of S3 as 2*pi^2 or the equivalent literal density integral, with the required measure comparison and normalization proved. Reuse existing descent and uniqueness and close the quotient factor of one half. Audit current coarea, area-formula, sphere measure and ambient radial APIs before declaring a boundary. No supplied mass value, measure normalization, Stokes theorem or conditional final bridge; replacing intrinsic Hausdorff measure by a normalized measure is forbidden."},
+      :id :t95j05-frozen-hausdorff-integral-closure-probe-refill38,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
+      :current-residual
+      "One placeholder. Intrinsic finiteness and density moment relative to sphere mass are banked; numerical Hausdorff mass and frozen assembly remain."}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires the complete explicit recharting and actual derivative transport packet. REVISE requires exactly one compiled prerequisite. Do not claim an incidence atlas or consumer closure.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "TRANSVERSE-PULLBACK / product self-model recharting",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For self-model genuine-infinity manifolds M and N modeled on finite-dimensional complete real inner-product E and G, construct an explicit ChartedSpace (WithLp 2 (E*G)) (M*N) and IsManifold of its self model, retaining the existing topology and ordinary product norm. Construct chartAt and atlas specifications by composing original product charts with the canonical continuous linear equivalence. Prove the identity maps between the original product-model manifold and this recharted self-model manifold are genuinely smooth and derive their actual mfderiv formulas and inverse identities. For the banked transverse difference map derive smoothness and surjectivity transport to this self model, and prove the model finrank is finrank E plus finrank G. No supplied charts, compatibility, derivative comparison or altered norm instances. The existing transContinuousLinearEquiv construction retaining chart carrier E*G alone is insufficient. Include zero-dimensional factors and empty manifolds; preserve existing APIs.",
+       :consumer-residual
+       "Self-model product recharting and derivative transport only. Applying regular-fiber geometry and transporting its atlas and inclusion to literal incidence remain, followed by target-manifold and oriented homological obligations."},
+      :id :product-self-model-recharting-probe-refill38,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
+      :current-residual
+      "Reviewed STOP identifies the mismatch between the ordinary product chart carrier and the inner-product self-model required by the banked regular-fiber constructor.",
+      :other-consumers ["t02A07" "t94A06" "t97J05"]}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires a compiled exact representation result. Otherwise report the precise homology or typing boundary. Preserve local evidence separately from frozen consumer validity; no campaign termination.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "POINCARE/THOM COMPARISON / null-winding representation audit",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Audit the exact canonical HasNullWindingPreimage and OrientedSurfacePreimageDuality.Producer definitions. Compile a placeholder-free theorem establishing whether constant loops make HasNullWindingPreimage universally true for actual integral singular H1. Construct the loops and prove all incidence, range, composition and actual induced-map clauses without an assumed constant-map homology lemma or nullity premise. Reuse actual singular-homology APIs. Identify precisely which component-coverage condition is lost relative to ComponentsBoundByDisks. Do not edit definitions, silently repair the Producer, or infer a refutation of frozen Main from failure of the auxiliary Producer. Any additional refutation claim requires a compiled counterexample satisfying its exact quantified hypotheses."},
+      :representation
+      {:source
+       "EmbeddedCirclePreimage.HasNullWindingPreimage for the actual integral singular H1 functor and arbitrary continuous f and c",
+       :target
+       "The proposition True, via constant loops through each incident point, contrasted with the intended requirement to parametrize entire inverse-image components",
+       :direction
+       "Test and prove logical equivalence from the literal HasNullWindingPreimage predicate to True by constructing constant-loop witnesses and deriving their actual induced H1 maps are zero; no equivalence with full component coverage is assumed."},
+      :id :null-winding-preimage-constant-loop-audit-probe-refill38,
+      :kind :representation-comparison,
+      :depends-on
+      [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
+      :current-residual
+      "Reviewed STOP exposed constant-loop witnesses in the weak null-winding predicate, but no universal triviality theorem or exact Producer counterexample has been compiled."}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped placeholders across all DAG consumers and distinguish closures, infrastructure, specification evidence and concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve the null-winding representation audit without conflating auxiliary Producer failure with frozen Main refutation; retain t96J05 local defect, t01J04/t94A06 applicability boundaries, t96J07 old refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t95j05-frozen-hausdorff-integral-closure-probe-refill38
+       :product-self-model-recharting-probe-refill38
+       :null-winding-preimage-constant-loop-audit-probe-refill38],
+      :current-residual
+      "Await reviewed integral, recharting and representation-audit outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    {:baseline "06f215df8fa1ff19604b32e737c7fdcb4357a4df",
+     :placeholder-delta 0,
+     :coverage
+     "Retain t96J05 local defect; t01J04 and t94A06 applicability boundaries; t96J07 historical refutation separately from corrected encoded closure; signed antipodal action, reduced-S0 degree and one-dimensional local-index obligations. No new consumer closure or campaign refutation.",
+     :head "5e01f134527a2121217b673ffb08455c97832300",
+     :infrastructure-packets
+     {:modules-before 669,
+      :modules-after 673,
+      :portfolio
+      ["TransverseDifferenceRegularity" "TransverseDifferenceKernel"],
+      :concurrent
+      ["CoefficientChainSupport" "CoefficientSmallPreservation"],
+      :portfolio-documentation 0,
+      :concurrent-module-documentation 2,
+      :consumer-closures 0,
+      :consumer-file-changes 0},
+     :ranking
+     "Exactly one near-closure adapter first: t95J05 has one placeholder and a banked literal density integral relative to intrinsic sphere mass, leaving numerical Hausdorff normalization and assembly. This election requests a complete closure audit, not a claim that normalization is already available. Other near-closure consumers retain reviewed degree-naturality, polygon classification, general-model Sard, boundary-chart, planar-separation, fundamental-group or localization boundaries. Among shared foundations, explicit product recharting serves four named consumers and is narrower than general oriented localization, Poincare/Thom comparison, closed gluing, surface classification or Kunneth. The one-consumer null-winding audit follows it to resolve the newly reviewed representation concern before further Producer construction.",
+     :validation
+     "Four fresh rows, exactly one final adapter first, final checkpoint depends on all three work rows; proposed ledger validates 460 items.",
+     :typed-residual-change
+     "Actual product-model difference smoothness, derivative, transversality-derived regularity, literal zero-fiber equality, tangent equalizer kernel and kernel dimension are now banked. The incidence atlas and inclusion tangent comparison remain behind explicit self-model product recharting. The duality probe identified a separate null-winding representation concern: constant-loop witnesses need not cover inverse-image components. This concern has not been compiled into a frozen-statement refutation.",
+     :review-outcomes
+     {:duality
+      {:outcome :stop,
+       :review :pass,
+       :job "invoke-1789006768733-17646-7857c903"},
+      :product
+      {:outcome :stop,
+       :review :pass,
+       :job "invoke-1789007974334-17681-98a01185"},
+      :regularity
+      {:review :pass,
+       :commit "d775d4083df884f250a89e5ac7e5137748f12cde",
+       :job "invoke-1789007224423-17661-38db1531"},
+      :kernel
+      {:review :pass,
+       :commit "1d45605fb372cb48d047f52b37f4be24dd8472b1",
+       :job "invoke-1789007534862-17671-a9f7ab23"}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing ["t93A05"],
+      :zero-placeholder 23,
+      :open 35,
+      :within-two 25,
+      :before 66,
+      :after 66}},
+    :artifacts
+    [{:path "/tmp/topology-refill38-measure.json",
+      :sha256
+      "5cedd0405334352c356d85e76f39931636d1c5bd90cd38653dbccb43bc6944fb"}
+     {:path "/tmp/topology-refill38-reviews.edn",
+      :sha256
+      "5b5171f9ea69cd20edd971724e388d612cbf5c3c1254835d4f6b14ce4f5ae69d"}
+     {:path "/tmp/topology-refill38-tail.edn",
+      :sha256
+      "efd84565eda0a71ce920a7ca3ed1d5d8ac910f5058f3218d91098c32349707ef"}],
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -58847,7 +59022,106 @@
     :transverse-vector-fiber-product-geometry-probe-refill37
     :checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent],
    :current-residual
-   "Await reviewed duality and transverse-product outcomes, then rerank the complete DAG."}],
+   "Await reviewed duality and transverse-product outcomes, then rerank the complete DAG."}
+  {:consumer "t95J05",
+   :stop-condition
+   "GO requires complete frozen closure; otherwise STOP names the precise absent intrinsic measure normalization or area comparison. Infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD INTEGRATION / literal projective density integral",
+   :acceptance
+   {:frozen-file "problems/t95J05/lean/Main.lean",
+    :frozen-sha256
+    "bc69f32681ce9fa5abe5e22256661c1bec11c5a85d9433c166e89352596df698",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile the complete frozen Main preserving every definition and conjunct. Reuse IntrinsicSphereFinite and IntrinsicSphereSecondMoments.projective_density_moment on the literal unit sphere subtype. Derive the actual Hausdorff mass of S3 as 2*pi^2 or the equivalent literal density integral, with the required measure comparison and normalization proved. Reuse existing descent and uniqueness and close the quotient factor of one half. Audit current coarea, area-formula, sphere measure and ambient radial APIs before declaring a boundary. No supplied mass value, measure normalization, Stokes theorem or conditional final bridge; replacing intrinsic Hausdorff measure by a normalized measure is forbidden."},
+   :id :t95j05-frozen-hausdorff-integral-closure-probe-refill38,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product
+    :checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
+   :current-residual
+   "One placeholder. Intrinsic finiteness and density moment relative to sphere mass are banked; numerical Hausdorff mass and frozen assembly remain."}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires the complete explicit recharting and actual derivative transport packet. REVISE requires exactly one compiled prerequisite. Do not claim an incidence atlas or consumer closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TRANSVERSE-PULLBACK / product self-model recharting",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For self-model genuine-infinity manifolds M and N modeled on finite-dimensional complete real inner-product E and G, construct an explicit ChartedSpace (WithLp 2 (E*G)) (M*N) and IsManifold of its self model, retaining the existing topology and ordinary product norm. Construct chartAt and atlas specifications by composing original product charts with the canonical continuous linear equivalence. Prove the identity maps between the original product-model manifold and this recharted self-model manifold are genuinely smooth and derive their actual mfderiv formulas and inverse identities. For the banked transverse difference map derive smoothness and surjectivity transport to this self model, and prove the model finrank is finrank E plus finrank G. No supplied charts, compatibility, derivative comparison or altered norm instances. The existing transContinuousLinearEquiv construction retaining chart carrier E*G alone is insufficient. Include zero-dimensional factors and empty manifolds; preserve existing APIs.",
+    :consumer-residual
+    "Self-model product recharting and derivative transport only. Applying regular-fiber geometry and transporting its atlas and inclusion to literal incidence remain, followed by target-manifold and oriented homological obligations."},
+   :id :product-self-model-recharting-probe-refill38,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product
+    :checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
+   :current-residual
+   "Reviewed STOP identifies the mismatch between the ordinary product chart carrier and the inner-product self-model required by the banked regular-fiber constructor.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires a compiled exact representation result. Otherwise report the precise homology or typing boundary. Preserve local evidence separately from frozen consumer validity; no campaign termination.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "POINCARE/THOM COMPARISON / null-winding representation audit",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Audit the exact canonical HasNullWindingPreimage and OrientedSurfacePreimageDuality.Producer definitions. Compile a placeholder-free theorem establishing whether constant loops make HasNullWindingPreimage universally true for actual integral singular H1. Construct the loops and prove all incidence, range, composition and actual induced-map clauses without an assumed constant-map homology lemma or nullity premise. Reuse actual singular-homology APIs. Identify precisely which component-coverage condition is lost relative to ComponentsBoundByDisks. Do not edit definitions, silently repair the Producer, or infer a refutation of frozen Main from failure of the auxiliary Producer. Any additional refutation claim requires a compiled counterexample satisfying its exact quantified hypotheses."},
+   :representation
+   {:source
+    "EmbeddedCirclePreimage.HasNullWindingPreimage for the actual integral singular H1 functor and arbitrary continuous f and c",
+    :target
+    "The proposition True, via constant loops through each incident point, contrasted with the intended requirement to parametrize entire inverse-image components",
+    :direction
+    "Test and prove logical equivalence from the literal HasNullWindingPreimage predicate to True by constructing constant-loop witnesses and deriving their actual induced H1 maps are zero; no equivalence with full component coverage is assumed."},
+   :id :null-winding-preimage-constant-loop-audit-probe-refill38,
+   :kind :representation-comparison,
+   :depends-on
+   [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product
+    :checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
+   :current-residual
+   "Reviewed STOP exposed constant-loop witnesses in the weak null-winding predicate, but no universal triviality theorem or exact Producer counterexample has been compiled."}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped placeholders across all DAG consumers and distinguish closures, infrastructure, specification evidence and concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve the null-winding representation audit without conflating auxiliary Producer failure with frozen Main refutation; retain t96J05 local defect, t01J04/t94A06 applicability boundaries, t96J07 old refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t95j05-frozen-hausdorff-integral-closure-probe-refill38
+    :product-self-model-recharting-probe-refill38
+    :null-winding-preimage-constant-loop-audit-probe-refill38
+    :checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
+   :current-residual
+   "Await reviewed integral, recharting and representation-audit outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
