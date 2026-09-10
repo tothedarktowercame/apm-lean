@@ -42235,6 +42235,26 @@
      {:cmd
       "git show --check --stat --oneline HEAD; git status --short",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789078133216-19620-77c2c85a",
+     :commands
+     ["git show --stat --oneline f6aa26fc"
+      "git show --format=fuller --no-ext-diff f6aa26fc"
+      "git archive f6aa26fc | tar -x -C /tmp/topology-balance-review-UMlfKS"
+      "git diff-tree --no-commit-id --name-status -r f6aa26fc"
+      "git show --check --oneline f6aa26fc"
+      "sha256sum archived canonical fixture and reviewed source fixture"
+      "cmp archived canonical fixture against reviewed source fixture"
+      "lake env lean archived ProductSimplexPathWordBalance.lean"
+      "lake build ConstructionTargets.ProductSimplexPathWordBalance"
+      "scan for placeholders, forbidden declarations, and deferred interfaces"
+      "bb worklist_check.bb on both archived ledgers"
+      "recompute four recorded statement hashes"
+      "recompute t03J05 t96J06 t97A04 hashes and placeholder counts"],
+     :finding
+     "PASS: commit f6aa26fc6df06e0c926cfe4c0aea13ba9bc47333 has exact two-file scope and clean whitespace. The committed Lean module is byte-identical to the reviewed fixture at SHA256 e098b767727e645025f6ad8203d75a9ebd88708aac00508b4be195a0ada9a35e, compiles, builds, has zero placeholders or forbidden declarations, and both ledgers validate. horizontalCount_stepWord is correctly oriented from the step-word prefix count to the path’s first coordinate: its zero case uses the prefix partition plus grid_start, and its successor cases use the matching true/false count and coordinate recurrences. verticalCount_stepWord derives the analogous second-coordinate equality from the partition and maximalPath_coordinate_sum. At grid_end these identities give horizontal total p and vertical total q, so balancedStepWord packages exactly stepWord z as BalancedWord p q; balancedStepWord_toWord is definitional. Axiom audits report only propext, Classical.choice, and Quot.sound. Statement hashes reproduce as e4144d76fc2fd194a88b2d29a4a92e229386da3b915cf7e22e65ac35179c4913, a021dd1b43caa86e5ff4c7203e5e5b2e3a620143fd631a02df40be4932cd6682, ce8c45bae973e6f9307f1ebd653836e9049c3df6b2ae8206a30e875285435615, and d775c49af2804fe9bcfc43b75d0e9dc92e4a699a5d4be818a25b40ffda9d394a. Reconstruction after extraction, equivalence packaging, corner swaps, cancellation, cross products, and closure remain correctly outside scope. Frozen hashes remain db4071c33fa3b5fb6af0d5d7955bf431400fe7d2c4f8dbc759941f4bf6611af4, 1d8874db11a786b11d04b5af4f0375fa439c05d5ac1bdafacd9943a89e238a71, and 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with placeholder counts 1/2/4."},
     :commit "f6aa26fc6df06e0c926cfe4c0aea13ba9bc47333",
     :changed-paths
     ["ConstructionTargets/ProductSimplexPathWordBalance.lean"
@@ -42256,7 +42276,7 @@
     "The canonical module is byte-identical to the reviewed placeholder-free fixture. horizontalCount_stepWord uses Fin induction from grid_start and the exact true/false count and coordinate recurrences. verticalCount_stepWord follows from the prefix partition and maximal-path coordinate sum. balancedStepWord uses exactly stepWord and derives both terminal totals from grid_end; balancedStepWord_toWord is definitional. No reconstruction-after-extraction, packaged equivalence, corner swap, cancellation, chain construction, cross product, intersection or closure declaration was added.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexPathWordBalance.lean"
     "ConstructionTargets/ProductSimplexPathWordBalance.md"],
@@ -42405,7 +42425,7 @@
      "Exactly one complete compiled prerequisite is supplied. The fixture proves by Fin induction that horizontal prefix counts of an arbitrary maximal path's step word recover its first coordinate; the prefix partition and maximal coordinate sum then recover the second coordinate. The terminal grid endpoint supplies both prescribed totals, yielding a canonical BalancedWord. The parent equivalence is not GO because reconstructedPath after this extraction and the packaged equivalence remain uncompiled. No corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: reconstructed balanced words and maximal paths are inverse",
