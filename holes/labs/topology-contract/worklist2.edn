@@ -18130,6 +18130,20 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789015773700-17882-20e0b4cb",
+     :commands
+     ["lake env lean /tmp/CoefficientCodiagonalKernel.lean"
+      "lake env lean ConstructionTargets/CoefficientCodiagonalKernel.lean"
+      "lake build ConstructionTargets.CoefficientCodiagonalKernel"
+      "git diff --check 089792c9^ 089792c9"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 2b1497bc:holes/labs/topology-contract/worklist2.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 2b1497bc:holes/labs/topology-contract/worklist.edn)"
+      "Read-only Python audit of fixture SHA256, 13 declaration hashes, committed scope, forbidden declarations and placeholder counts"],
+     :finding
+     "Commit 089792c96eeca964059b880db51828277040970b independently verified. Fixture SHA256 1a17d9517ba4d962caf3a5ccd1d9031165d1e4d78cdc69592c678f1a69773d1a matches. Actual categorical kernel normalization has false-positive/true-negative orientation, exact projection equations and both inverse laws. Integer and rational-half examples pass; ten standard-only audits reproduced. All gates pass; frozen sources unchanged; placeholders 312->312. No geometric H0 identification or consumer closure inferred."},
     :commit "089792c96eeca964059b880db51828277040970b",
     :changed-paths
     ["ConstructionTargets/CoefficientCodiagonalKernel.lean"
@@ -18145,7 +18159,7 @@
     "SHA256 of declaration text from theorem/def keyword to immediately before the space preceding := or where.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCodiagonalKernel.lean"
     "ConstructionTargets/CoefficientCodiagonalKernel.md"],
@@ -18295,7 +18309,7 @@
      "Exactly one compiled kernel-normalization prerequisite is supplied. It constructs the categorical kernel of the R-linear two-point codiagonal, identifies it with R by the false coordinate, and proves that the inverse followed by kernel inclusion is r mapped to (r,-r), with both inverse laws. Integer and nonintegral rational examples compile. Identification of the geometric H0 inclusion with this codiagonal and sphere endpoint assembly remain; the parent is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SPHERE HOMOLOGY: coefficient-general low-dimensional endpoints and kernel normalization",
