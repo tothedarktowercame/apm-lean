@@ -31326,8 +31326,160 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      :exit 0}
+     {:cmd
+      "Inspect all open, blocked, done-unreviewed and recently reviewed rows and dependency receipts",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped census of all 59 frozen consumers named by TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd
+      "Compare 48731fa17103e5808029b372997c2817fbd0ff7c..bd792aedfebf9d6b3734a538015a03c3e33a0142 and attribute ConstructionTargets and frozen-consumer changes",
+      :exit 0}
+     {:cmd
+      "Search ConstructionTargets and the DAG for existing sphere-equator Hausdorff-nullity results",
+      :exit 0}
+     {:cmd
+      "Inspect the reviewed raw-normalization STOP and preserve its missing addHaarScalarFactor characterization boundary",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :replacement-items
+    [{:consumer :t95J05,
+      :stop-condition
+      "Do not use the blocked raw Hausdorff normalization, assume that a lower-dimensional coordinate hyperplane is null, infer intrinsic nullity from ambient nullity without an actual subtype isometry, assemble caps, evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Prove only d=2 and d=3 and use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD INTEGRATION: Hausdorff-null equators for the literal S2 and S3 cap decompositions",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "For d=2 and d=3, use EuclideanSpace real (Fin (d+1)), its raw d-dimensional Hausdorff measure, the literal unit sphere and the subset where the Fin.last coordinate is zero. No normalization, finite sphere measure or supplied null-set hypothesis is allowed.",
+       :route-step
+       "Supplies the equator-nullity and strict-cap assembly prerequisite shared by the sole t95J05 placeholder and the sphere-period placeholders of t02A05, t01J06 and t94A10, independently of the blocked numerical normalization step.",
+       :probe
+       "Define the literal S2 and S3 equator subsets used by SphereCapEuclideanImage. Construct their exact representation as isometric images of lower-dimensional Euclidean spheres or as subsets of the last-coordinate hyperplane. Prove their raw d-dimensional Hausdorff measure is zero by a genuine dimension-gap theorem. Prove the corresponding intrinsic subtype Hausdorff measures are zero through the actual coercion isometry, and compile measurable-set and union-difference lemmas showing that the upper cap, lower cap and null equator partition each literal unit sphere. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled missing dimension-gap or subtype-transport prerequisite. STOP names the exact independent boundary.",
+       :consumer-equation
+       "For d=2 and d=3, the Fin.last-coordinate equator of the literal unit sphere in EuclideanSpace real (Fin (d+1)) has zero raw d-dimensional Hausdorff measure, both as an ambient subset and through its intrinsic subtype, and the sphere is the disjoint union of the two strict caps and that null equator.",
+       :consumer-residual
+       "Resolve the preserved addHaarScalarFactor normalization boundary, then combine cap areas with equator nullity and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
+       :gates
+       ["Compile a complete fixture and record SHA256."
+        "Audit the literal sphere, Fin.last equator and both strict-cap predicates against SphereCapEuclideanImage."
+        "Construct and audit the lower-dimensional equator representation or coordinate-hyperplane inclusion."
+        "Prove ambient raw d-dimensional Hausdorff nullity for d=2 and d=3 using an actual dimension-gap theorem."
+        "Prove intrinsic subtype nullity through the coercion isometry."
+        "Verify measurable exact sphere partition into strict upper cap, strict lower cap and equator."
+        "Compile both dimensions with standard-only axioms."
+        "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reservations, reviewed STOPs and refutations."]},
+      :id :oriented-checkpoint50-sphere-equator-hausdorff-nullity-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2],
+      :current-residual
+      "The two strict cap area formulas are banked, but assembling them into whole-sphere formulas requires proving that the literal last-coordinate equator is d-dimensional Hausdorff-null in dimensions two and three.",
+      :other-consumers [:t02A05 :t01J06 :t94A10]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: sphere-equator nullity and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint51-sphere-equator-nullity-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint50-sphere-equator-hausdorff-nullity-1],
+      :current-residual
+      "Measure equator-nullity and cap-assembly progress separately from the blocked raw normalization, moment evaluation and frozen closure; rerank every open consumer route against concurrent outcomes.",
+      :other-consumers []}],
+    :measures
+    {:baseline
+     {:commit "48731fa17103e5808029b372997c2817fbd0ff7c",
+      :description "Reviewed checkpoint49 strategy transition"},
+     :proved-refutations 0,
+     :frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :head
+     {:commit "bd792aedfebf9d6b3734a538015a03c3e33a0142",
+      :description "Pre-checkpoint50 strategy head"},
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:before 791,
+      :after 794,
+      :portfolio
+      ["ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean"],
+      :concurrent
+      ["ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean"
+       "ConstructionTargets/CoefficientCompactComplementTransportedExactness.lean"]},
+     :corrected-closures 0,
+     :typed-residual-change
+     "Exact Euclidean and sup-metric unit-ball volumes are banked, but the reviewed corrected-normalization STOP establishes that Mathlib lacks the theorem identifying addHaarScalarFactor with their quotient. The normalization route remains blocked without mathematical refutation. Equator nullity is independent and remains an eligible shared step. No frozen consumer changed.",
+     :review-outcomes
+     {:unit-ball-volumes
+      {:outcome :pass,
+       :commit "dc2c1c45",
+       :fixture
+       "c99e1f91b71820c5188a90561c5b5de2a1b24a081a779984437d4030dde1accf"},
+      :corrected-raw-normalization
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-add-haar-scalar-characterization,
+       :commit "873fe5b9"},
+      :coefficient-compact-complement-transported-arrows
+      {:outcome :done-unreviewed,
+       :disposition "Excluded as concurrent work."},
+      :coefficient-compact-support-mayer-vietoris
+      {:outcome :blocked,
+       :disposition "Preserved; no duplicate election."},
+      :fivefold-cover-adapter
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-polygon-genus-and-cover-euler-comparison}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 33,
+      :zero-placeholder 25,
+      :within-two 23,
+      :placeholder-before 62,
+      :placeholder-after 62}},
+    :finding
+    "The exact 59-consumer census remains 62 comment-stripped placeholders across 33 open files; 25 existing consumers have zero placeholders and t93A05 is missing. No frozen file changed. Routes: t95J05(1) needs banked strict S3 cap areas -> blocked raw μH3 normalization -> missing equator nullity and cap assembly -> square and fourth-coordinate moments -> frozen integral. t02A05(2) needs banked coefficient/projection reductions and strict S2 cap areas -> blocked raw μH2 normalization -> missing equator nullity and cap assembly -> centered moments -> frozen integral and minimum. t01J06(3) needs the same S2 measure and moment route -> manifold Stokes bridge -> final conjunction. t94A10(3) needs the same S2 period route -> closedness and nonexactness assembly. The missing addHaarScalarFactor characterization is preserved as a reviewed STOP and is not retried. Equator nullity is independent of its numerical scalar and advances all four routes. t98A02(1), t00J02(1), t01A05(1), t02A07(3) and t97J05(5) remain on the active or blocked compact-complement Mayer-Vietoris, localization, duality and gluing route; t00A04 is zero-placeholder and t01A05 also retains its connectedness specification defect. t99J03(1), t00A03(2), t01J01(3), t91J05(3) and t94J09(1) remain on the active translated-arc route through prescribed-chart containment, endpoint control and later polygon or classification steps. t01A02(3) needs H2 degree and nonsurjectivity, Lefschetz and final assembly. t01A04(4), t92J06(1) and t98A01(1) need covering construction or classification, genus invariance and Euler multiplicativity; t98A01's reviewed STOP is preserved. t00J01(1) needs Klein-product and exact fold-fiber geometry. t01A08(1) needs arbitrary-model chart-domain and within-derivative applicability. t01J04(1) and t94A06(1) need regular-preimage, half-space-atlas and normal-translation applicability. t02A08(1) needs an arbitrary-integer sphere map and its homology action. t03J02(2) and t97A01(1) retain collar, cofibration and closed-circle gluing boundaries. t03J04(1) needs rational torus homology and finite-cover Euler comparison. t03J05(1), t96J06(2) and t97A04(4) retain fundamental-class, cap/Thom, Eilenberg-Zilber and integral Kunneth comparisons. t92J05(3) needs RP2 antipodal and genus-two bridges plus final assembly. t95J06(2) needs its concrete torus homeomorphism route. t96J05(1) retains the proved radial counterexample and needs a corrected statement. a97J08(1) remains an uptake route whose geometric producer is incomplete. No near-closure consumer has a complete route, so no closure adapter is eligible. Existing equator-gluing modules provide topological geometry but no raw Hausdorff-nullity theorem. The bounded d=2/d=3 equator-nullity step is shared by four open consumers and is simpler than their moment evaluations. Unrelated infrastructure is deferred.",
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: corrected raw Hausdorff normalization and renewed consumer eligibility",
@@ -31344,6 +31496,73 @@
     :oriented-checkpoint49-euclidean-normalization-and-consumer-refill-repair1],
    :current-residual
    "Measure the corrected raw normalization separately from equator nullity, cap assembly, moment evaluation and frozen closure; rerank every open consumer route against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t95J05,
+   :stop-condition
+   "Do not use the blocked raw Hausdorff normalization, assume that a lower-dimensional coordinate hyperplane is null, infer intrinsic nullity from ambient nullity without an actual subtype isometry, assemble caps, evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Prove only d=2 and d=3 and use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD INTEGRATION: Hausdorff-null equators for the literal S2 and S3 cap decompositions",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "For d=2 and d=3, use EuclideanSpace real (Fin (d+1)), its raw d-dimensional Hausdorff measure, the literal unit sphere and the subset where the Fin.last coordinate is zero. No normalization, finite sphere measure or supplied null-set hypothesis is allowed.",
+    :route-step
+    "Supplies the equator-nullity and strict-cap assembly prerequisite shared by the sole t95J05 placeholder and the sphere-period placeholders of t02A05, t01J06 and t94A10, independently of the blocked numerical normalization step.",
+    :probe
+    "Define the literal S2 and S3 equator subsets used by SphereCapEuclideanImage. Construct their exact representation as isometric images of lower-dimensional Euclidean spheres or as subsets of the last-coordinate hyperplane. Prove their raw d-dimensional Hausdorff measure is zero by a genuine dimension-gap theorem. Prove the corresponding intrinsic subtype Hausdorff measures are zero through the actual coercion isometry, and compile measurable-set and union-difference lemmas showing that the upper cap, lower cap and null equator partition each literal unit sphere. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled missing dimension-gap or subtype-transport prerequisite. STOP names the exact independent boundary.",
+    :consumer-equation
+    "For d=2 and d=3, the Fin.last-coordinate equator of the literal unit sphere in EuclideanSpace real (Fin (d+1)) has zero raw d-dimensional Hausdorff measure, both as an ambient subset and through its intrinsic subtype, and the sphere is the disjoint union of the two strict caps and that null equator.",
+    :consumer-residual
+    "Resolve the preserved addHaarScalarFactor normalization boundary, then combine cap areas with equator nullity and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
+    :gates
+    ["Compile a complete fixture and record SHA256."
+     "Audit the literal sphere, Fin.last equator and both strict-cap predicates against SphereCapEuclideanImage."
+     "Construct and audit the lower-dimensional equator representation or coordinate-hyperplane inclusion."
+     "Prove ambient raw d-dimensional Hausdorff nullity for d=2 and d=3 using an actual dimension-gap theorem."
+     "Prove intrinsic subtype nullity through the coercion isometry."
+     "Verify measurable exact sphere partition into strict upper cap, strict lower cap and equator."
+     "Compile both dimensions with standard-only axioms."
+     "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reservations, reviewed STOPs and refutations."]},
+   :id :oriented-checkpoint50-sphere-equator-hausdorff-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2
+    :oriented-checkpoint50-corrected-raw-normalization-and-consumer-refill-1],
+   :current-residual
+   "The two strict cap area formulas are banked, but assembling them into whole-sphere formulas requires proving that the literal last-coordinate equator is d-dimensional Hausdorff-null in dimensions two and three.",
+   :other-consumers [:t02A05 :t01J06 :t94A10]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: sphere-equator nullity and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint51-sphere-equator-nullity-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint50-sphere-equator-hausdorff-nullity-1
+    :oriented-checkpoint50-corrected-raw-normalization-and-consumer-refill-1],
+   :current-residual
+   "Measure equator-nullity and cap-assembly progress separately from the blocked raw normalization, moment evaluation and frozen closure; rerank every open consumer route against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
