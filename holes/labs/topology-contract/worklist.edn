@@ -73786,6 +73786,20 @@
      "The union-generated ambient subcomplex formed by the supremum of the A and B subspace ranges",
      :direction
      "Exact equality from the target union-generated subcomplex to the categorical range of the source direct ambient map."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789078762512-19642-e262a66a",
+     :commands
+     ["git show bd2614cdc3a82f3c6aa80e2896a5886ef5c98c49:ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"
+      "git diff-tree --no-commit-id --name-only -r bd2614cdc3a82f3c6aa80e2896a5886ef5c98c49"
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"
+      "sha256sum /tmp/CoefficientSubspaceUnionRestrictedAmbientRange.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedCoverImage.lean"
+      "cmp -s /tmp/CoefficientSubspaceUnionRestrictedAmbientRange.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"
+      "git show --check --oneline --stat bd2614cdc3a82f3c6aa80e2896a5886ef5c98c49"
+      "python3 declaration-hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at d76c938f7ec14ae8d60627ae40c38f6c4fec3fb2cb55915b99af210871568d02, and the restricted-cover-image dependency reproduces e0b3ddac33210a18466719ef6efa3e93610b27abcbc43d947175888d464d2dd9. Lean compilation succeeds without warnings, both frozen declaration hashes reproduce, placeholders are zero, and printed axioms are standard-only. The direct map is correctly composed from the restricted cover-small inclusion into the union subtype and the subtype inclusion into X. The range theorem has the recorded target-to-range equality orientation and derives it through range-of-composition plus the reviewed image equality; it does not claim surjectivity onto all ambient singular simplices or any unproved homology/relative consequence."},
     :commit "bd2614cdc3a82f3c6aa80e2896a5886ef5c98c49",
     :changed-paths
     ["ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"],
@@ -73797,7 +73811,7 @@
     :finding
     "The exact fixture and recorded restricted-cover-image dependency hash reproduce. Both requested range-factor declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"],
    :dag-node
@@ -73912,7 +73926,7 @@
      "Compiled exactly one range-factor prerequisite. The direct map from restricted union-cover small simplices into ambient singular simplices is now named, and its categorical range is proved exactly equal to the supremum of the two ambient subspace ranges. The calculation uses the range of the subcomplex inclusion and the previously reviewed restricted-cover image equality. It does not identify the range with all simplices in the union or invoke either false ordinary-excision premise.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
