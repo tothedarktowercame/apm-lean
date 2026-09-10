@@ -35543,107 +35543,119 @@
    :stop-condition
    "Construct only the exact representation bridge from canonical maximal simplicial-product paths to continuous affine simplices in the product of topological standard simplices. Do not prove oriented face cancellation, define chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Restrict downstream instances to total degree at most four and use a unique row-specific scratch directory.",
    :evidence
-   {:probe
-    {:residual
-     "Implement the two-file canonical module, then combine its face-compatible realization with ProductSimplexShuffleParity to prove oriented interior-face cancellation and the surviving Leibniz faces.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
-       :exit 0}
-      {:cmd
-       "Inspect canonical ProductSimplexMaximalPaths, ProductSimplexShuffleParity and SingularSubdivision affine realization APIs",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "Reproduce standard-only axiom audits for pathRealization_standardVertex and productAffine_comp_face",
-       :exit 0}
-      {:cmd
-       "Verify the generic construction instantiates every p,q with p+q at most four",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
-       :exit 1,
-       :finding
-       "The first draft contained a malformed theorem binder, attempted componentwise extensionality at the wrong function level and included an unnecessary dependent cast for a specialized path-face statement.",
-       :correction
-       "Replaced the malformed theorem with a generic ordered-product-vertex realization and a dimension-independent face theorem."}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
-       :exit 1,
-       :finding
-       "After ContinuousMap.ext the goal already quantified the input point, so funext did not match.",
-       :correction
-       "Introduced the point directly and then used product extensionality."}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
-       :exit 1,
-       :finding
-       "The attempted use of affineSimplex_comp_map expected stdSimplex.map, while faceAffine is itself expressed as an affine simplex on undeleted basis vertices.",
-       :correction
-       "Used affineSimplex_comp_affineSimplex and proved the standard-basis evaluation lemma needed to simplify the composed vertex family."}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
-       :exit 1,
-       :finding
-       "Direct simplification exposed a double finite sum and did not invoke the affine-composition theorem.",
-       :correction
-       "Applied affineSimplex_comp_affineSimplex separately to both product coordinates; the final rerun compiled."}],
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
-      :sha256
-      "e8e851a9749c46e899692253501ca0f4b4af8189c1d9e0b3c7e7125f7b0ec5e3",
-      :placeholder-count 0},
-     :finding
-     "A complete placeholder-free representation fixture compiles. It maps every canonical maximal simplicial-product path vertex to the corresponding pair of topological standard-simplex basis vertices, realizes the two coordinate families affinely as one continuous map into their product, packages each maximal path as a production singular simplex, proves exact evaluation on every standard vertex, and proves that precomposition by every affine face map deletes the same ordered vertex. The construction is uniform in p and q, so all required total degrees at most four are instances. No orientation cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection result or consumer closure is claimed.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/ProductSimplexAffineRealization.lean"
-       "ConstructionTargets/ProductSimplexAffineRealization.md"],
-      :namespace "ConstructionTargets.ProductSimplexAffineRealization",
-      :declarations
-      ["gridVertex"
-       "productAffine"
-       "pathRealization"
-       "productAffine_standardVertex"
-       "pathRealization_standardVertex"
-       "affineSimplex_standardVertex'"
-       "productAffine_comp_face"],
-      :representation
-      {:source
-       "A maximal nondegenerate simplex of the simplicial-set product Δ[p] ⊗ Δ[q], represented by its canonical monotone lattice path of grid vertices",
-       :target
-       "A production singular (p+q)-simplex represented by a continuous affine map into stdSimplex real (Fin (p+1)) × stdSimplex real (Fin (q+1))",
-       :direction
-       "Exact face-compatible realization from the source lattice-path vertex representation to the target affine singular-product-simplex representation; standard vertices map to the corresponding grid vertices and source vertex deletion maps to target affine-face precomposition."},
-      :consumer-residual
-      "Use productAffine_comp_face with the banked shuffle parity to pair and cancel interior faces and identify the surviving exterior faces with the two Leibniz boundary terms."},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Use productAffine_comp_face with the banked shuffle parity to pair and cancel interior faces and identify the surviving exterior faces with the two Leibniz boundary terms.",
+    :gates
+    {:canonical-compile :pass,
+     :whitespace :pass,
+     :fixture-hash :pass,
+     :target-continuous-affine-product-simplex :pass,
+     :axiom-audits 4,
+     :exact-scope :pass,
+     :source-maximal-path :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :grid-vertex-coordinate-exactness :pass,
+     :target-warning-scan :pass,
+     :bounded-instances 15,
+     :commit-check :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :standard-vertex-evaluation :pass,
+     :ledger-validation :pass,
+     :face-precomposition :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"gridVertex"
+     "020d09eb0a2d3517ed862d29b88b8ffcc69cbf275b4f60f4643e9c404e05d625",
+     "productAffine"
+     "fac7b8d84fdee4a31c7f75069cb40c05fac37115f8ea43ef25e45b8ead5fc3ab",
+     "pathRealization"
+     "6fd929702858f89b6bc3a292ea67814a6c959bb3d4fcbd5315ccf66b265d7d09",
+     "productAffine_standardVertex"
+     "aa96ff2d1dc660453415cafa508e9042b567afd2170d71d30d03f58589c343f4",
+     "pathRealization_standardVertex"
+     "e7c35a74c4ca730d7242b765929c31d0cea19976c775b5c973b5db5ce0c123ae",
+     "affineSimplex_standardVertex'"
+     "c48a75f644189f913e1b6e098a2fe5726a038797139e622ad61f0de8f5ef331a",
+     "productAffine_comp_face"
+     "6cc28425c991f494bb0d4e63b9714d6cf41e8dc11d1ba651db924ee1a667d007"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the dependency receipts",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexAffineRealization.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexAffineRealization",
+      :exit 0}
+     {:cmd
+      "Compile unique scratch audit with four canonical standard-only axiom audits and all fifteen p,q specializations satisfying p+q at most four",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ProductSimplexAffineRealization.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace, fixture-hash, representation-shape and declaration-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; verify exact two-file scope; git diff --cached --check; git commit -m 'Realize product simplex paths affinely'",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat HEAD; recompute canonical source, documentation, commit and Git blob hashes; git status --short",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "First combined final-audit script",
+      :exit 1,
+      :correction
+      "The declaration-region regular expression used a word boundary after the apostrophe in affineSimplex_standardVertex', so it failed to locate that declaration after all compiler, bounded-instance and axiom checks passed. Replaced the boundary with an explicit whitespace-or-binder lookahead and reran the complete source audit successfully."}],
+    :canonical
+    {:path "ConstructionTargets/ProductSimplexAffineRealization.lean",
+     :sha256
+     "fb3ef1a48dd345a6b3dea5f1813dd415fbf88ab977b36dbb03ed8cb01ee46a90",
+     :git-blob "7b3fb54ed9b5ff678b7025f46683fa933f90fefa"},
+    :commit "78980bd138efde302982bc2babcd881c94605606",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexAffineRealization.lean"
+     "ConstructionTargets/ProductSimplexAffineRealization.md"],
+    :dependency-warnings
+    [{:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 2960,
+      :kind :unused-tactic}
+     {:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 3580,
+      :kind :unnecessary-simpa}],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
+     :sha256
+     "e8e851a9749c46e899692253501ca0f4b4af8189c1d9e0b3c7e7125f7b0ec5e3",
+     :placeholder-count 0},
+    :finding
+    "The canonical module realizes each maximal simplicial-product lattice path as a continuous affine map into the product of real topological standard simplices. Each grid vertex uses exactly the two coordinates from prodStdSimplex.objEquiv. Standard basis vertices evaluate to the corresponding grid vertices, and precomposition by faceAffine deletes exactly the selected ordered vertex through Fin.succAbove. All fifteen dimension pairs with total degree at most four elaborate. No oriented cancellation, chain sum, singular cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure result is introduced.",
+    :seat "codex-14"},
    :consumer-residual
    "Use productAffine_comp_face with the banked shuffle parity to pair and cancel interior faces and identify the surviving exterior faces with the two Leibniz boundary terms.",
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexAffineRealization.lean"
     "ConstructionTargets/ProductSimplexAffineRealization.md"],
