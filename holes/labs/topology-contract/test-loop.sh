@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+suite_runs="$(mktemp -d)"
+export TOPOLOGY_RUNS="$suite_runs"
+trap 'rm -rf "$suite_runs"' EXIT
 bb "$HERE/worklist_check.bb" "$HERE/worklist.edn"
 TOPOLOGY_ALLOW_DIRTY=1 TOPOLOGY_NO_NOTIFY=1 "$HERE/topology-build-loop.sh" --dry-run
 TOPOLOGY_NO_NOTIFY=1 "$HERE/topology-build-loop.sh" --replay "$HERE/fixtures/t02A03-replay.edn"
 
 bad="$(mktemp)"
-trap 'rm -f "$bad"' EXIT
+trap 'rm -f "$bad"; rm -rf "$suite_runs"' EXIT
 sed '0,/:depends-on \[\]/s//:depends-on [:edge]/' \
   "$HERE/fixtures/transition-ledger.edn" > "$bad"
 if bb "$HERE/worklist_check.bb" "$bad" >/dev/null 2>&1; then
@@ -124,4 +127,5 @@ grep -q 'would invalidate the ledger' <<<"$out"
 [ ! -e "$checkpoint_go.tmp" ]
 rm -f "$checkpoint_go"
 
+bash "$HERE/test-rejected-receipt.sh"
 echo "topology-loop tests: PASS"

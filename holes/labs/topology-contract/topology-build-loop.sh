@@ -21,6 +21,7 @@ STATUS_RETRIES="${STATUS_RETRIES:-5}"
 MAX_ITER="${MAX_ITER:-60}"
 INFLIGHT="$RUNS/inflight.edn"
 HEARTBEAT="$RUNS/heartbeat.edn"
+REJECTION="$RUNS/last-rejected-receipt.json"
 MODE=live
 REPLAY=""
 ONCE=0
@@ -180,7 +181,11 @@ dispatch_and_wait() {
   valid_seat "$seat" || die "invalid regular seat: $seat"
   token="$(printf '%s-%s-%s' "$row" "$(date +%s%N)" "$RANDOM" | sha256sum | cut -c1-24)"
   augmented="$(mktemp)"
-  { cat "$prompt"; printf '\nReturn the result in THIS invoke job final response; do not bell, whistle, or open a separate reply thread. Your final machine receipt must be exactly one unindented line beginning:\nTOPOLOGY_RECEIPT_EDN %s {EDN map}\nDo not repeat that nonce elsewhere.\n' "$token"; } > "$augmented"
+  { cat "$prompt"
+    if [ -f "$REJECTION" ] && [ "$(jq -r '.row' "$REJECTION")" = "$row" ]; then
+      printf '\nYour previous receipt for this row was rejected: %s\n' "$(jq -r '.reason | gsub("[\\r\\n]+"; " ")' "$REJECTION")"
+    fi
+    printf '\nReturn the result in THIS invoke job final response; do not bell, whistle, or open a separate reply thread. Your final machine receipt must be exactly one unindented line beginning:\nTOPOLOGY_RECEIPT_EDN %s {EDN map}\nDo not repeat that nonce elsewhere.\n' "$token"; } > "$augmented"
   log "$label dispatch to $seat receipt-token=$token"
   response="$(python3 /home/joe/code/futon3c/scripts/agency_send.py --from topology-build-loop \
     --to "$seat" --kind bell --type request --mode work < "$augmented")" || die "$label dispatch failed"
@@ -204,22 +209,22 @@ apply_job_result() {
     die "job $LAST_JOB emitted no unique nonce-bound receipt"
   fi
   if ! transition="$(bb "$HERE/build_step.bb" apply-result "$LEDGER" "$row" "$receipt" 2>&1)"; then
-    # Clear the pointer for the same reason the nonce-extraction failure above
-    # does, and with the same consequence when it does not: a completed job
-    # result is immutable, so a retained pointer makes every restart reclaim
-    # the same rejected receipt.
-    #
-    # 2026-09-09: build_step began rejecting receipts that record an unexpected
-    # gate exit (64301a10). This line still died with the pointer intact, so
-    # the loop stopped, restarted, reclaimed the same receipt and stopped
-    # again -- 13:28:40 and 13:29:12, thirty-two seconds apart -- spending two
-    # of the supervisor's three repairs on a row that could never advance.
-    # Keep the receipt file as evidence, clear only the pointer, and let the
-    # supervisor redispatch the row with a new nonce.
+    # The refused transition leaves the ledger unchanged. Preserve its receipt,
+    # remember the row across restarts, and permit one fresh-nonce retry.
+    local previous="" pending
+    if [ -f "$REJECTION" ]; then
+      previous="$(jq -er '.row' "$REJECTION")" || die "could not read receipt rejection state"
+    fi
+    pending="$(mktemp "$RUNS/.rejection.XXXXXX")" || die "could not create receipt rejection state"
+    jq -n --arg row "$row" --arg reason "$transition" '{row: $row, reason: $reason}' > "$pending" \
+      && mv "$pending" "$REJECTION" || die "could not persist receipt rejection state"
     bb "$HERE/inflight.bb" clear "$INFLIGHT" \
       || die "could not clear rejected in-flight job $LAST_JOB"
-    die "invalid receipt from $LAST_JOB: $transition"
+    log "REJECTED receipt from $LAST_JOB for $row: $transition"
+    [ "$previous" != "$row" ] || die "invalid receipt from $LAST_JOB: $transition"
+    return 1
   fi
+  rm -f "$REJECTION" || die "could not clear receipt rejection state"
   log "$transition"
   git -C "$ROOT" add "$LEDGER"
   # Applying a receipt is IDEMPOTENT, and the reclaim path re-applies a
@@ -350,7 +355,7 @@ while [ "$i" -lt "$MAX_ITER" ]; do
     { echo "ROWS AWAITING REVIEW: $unreviewed -- review the first only."; cat "$HERE/review-prompt.md"; } > "$prompt"
     current="${unreviewed%% *}"
     dispatch_and_wait "$REVIEW_SEAT" "$prompt" "review($unreviewed)" "$current"; rm -f "$prompt"
-    apply_job_result "$current" "$(bb "$HERE/inflight.bb" field "$INFLIGHT" token)"
+    apply_job_result "$current" "$(bb "$HERE/inflight.bb" field "$INFLIGHT" token)" || continue
   else
     next="$(bb "$HERE/build_step.bb" next-open "$LEDGER")"
     if [ "$next" = NONE ]; then
@@ -369,7 +374,7 @@ while [ "$i" -lt "$MAX_ITER" ]; do
     prompt="$(mktemp)"
     { echo "ROW TO DO THIS INVOCATION: $next"; echo "$row"; echo; cat "$HERE/work-prompt.md"; } > "$prompt"
     dispatch_and_wait "$seat" "$prompt" "work($next)" "$next"; rm -f "$prompt"
-    apply_job_result "$next" "$(bb "$HERE/inflight.bb" field "$INFLIGHT" token)"
+    apply_job_result "$next" "$(bb "$HERE/inflight.bb" field "$INFLIGHT" token)" || continue
   fi
   validate
   key="$(sha256sum "$LEDGER" | cut -d' ' -f1)"
