@@ -10,9 +10,14 @@ terminal `horizontalCount` and `verticalCount`, that the full word contains
 a function. `terminal_partition` rewrites by those two fields to show that the
 totals partition the full length `p+q`.
 
-This module proves no prefix monotonicity and constructs no cumulative path,
-inverse law, corner swap, face pairing or cancellation, chain sum, cross
+`BalancedWord.horizontalCount_le_total` and
+`BalancedWord.verticalCount_le_total` compare any prefix with the terminal
+prefix by the exported monotonicity theorems, then rewrite by the stored
+totals. Thus every cumulative horizontal coordinate is at most `p` and every
+cumulative vertical coordinate is at most `q`.
+
+This module constructs no cumulative path, inverse law, corner swap, face
+pairing or cancellation, chain sum, cross
 product, Eilenberg-Zilber, Kunneth, intersection, or consumer result. The next
-step exposes prefix-count monotonicity, bounds cumulative coordinates by the
-balanced totals, constructs the canonical path, and proves the word/path
+step uses these bounds to construct the canonical path and prove the word/path
 inverse laws.
