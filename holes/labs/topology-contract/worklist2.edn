@@ -25044,119 +25044,182 @@
    :other-consumers [:t01A02 :t03J05 :t96J06]}
   {:consumer :t98A02,
    :stop-condition
+   "Bank compact-boundary separation, actual center-motion homotopy and coefficient homology equations only. Do not claim chart transition-unit constancy, a relative-normalization comparison, orientation compatibility or consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/CoefficientCompactBoundaryMotion.lean",
+      :sha256
+      "4b8c63cdeb80ca4d9b7574727409a864f88a83fff226525f6ce1ceb07a376e1e"},
+     :commands
+     [{:cmd "lake env lean /tmp/CoefficientCompactBoundaryMotion.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientCompactBoundaryMotion.lean"
+    "ConstructionTargets/CoefficientCompactBoundaryMotion.md"],
+   :dag-node
+   "LOCAL ORIENTATION: compact mapped-boundary separation and center-motion homotopy",
+   :acceptance
+   {:namespace "ConstructionTargets.CoefficientCompactBoundaryMotion",
+    :implementation
+    "Promote the exact compiled fixture and document the remaining actual-chart boundary construction and relative-normalization comparison.",
+    :declarations
+    ["separation"
+     "boundaryMap"
+     "avoid"
+     "new_center"
+     "boundaryHomotopy"
+     "homology_eq"
+     "local_homology_constancy"
+     "radialBoundary"
+     "radial_homology_eq"
+     "integral_example"
+     "rational_example"],
+    :hypotheses
+    "K and E are Type 0; K is a topological space and E a real normed vector space. Compactness of K is required to construct the separation radius and local homology constancy. R is a Type 0 commutative ring. The continuous map f avoids the specified center c. No injectivity, orientation, nontriviality or supplied positive separation bound is required by the local theorem.",
+    :consumer-equation
+    "A positive radius is constructed such that every nearby center q is avoided by f, and the actual maps z ↦ f(z)-c and z ↦ f(z)-q induce equal coefficient homology maps in every natural degree. The corresponding radially normalized maps also induce equal maps.",
+    :consumer-residual
+    "Construct a compact sphere boundary inside an actual chart overlap, apply this theorem to its chart-transition image, and identify the resulting boundary maps with the relative local-homology normalizations at distinct points. Transition-unit local constancy remains to be proved.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientCompactBoundaryMotion."
+     "Reproduce nine standard-only axiom audits and integer/rational mapped-sphere examples."
+     "Audit construction of a positive uniform gap from compactness and center avoidance."
+     "Verify zero avoidance, continuity and both endpoints of the actual center-motion homotopy."
+     "Verify coefficient homology equality in every natural degree and its radial-normalization equation."
+     "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :coefficient-general-compact-boundary-center-motion-1,
+   :kind :reusable-theorem,
+   :depends-on [:coefficient-general-moving-sphere-center-homotopy-1],
+   :current-residual
+   "The unit-sphere motion calculation must extend to a nonlinear compact boundary image, with a constructed uniform separation bound.",
+   :other-consumers [:t01A02 :t03J05 :t96J06]}
+  {:consumer :t98A02,
+   :stop-condition
    "Do not assume local constancy, a continuous unit-valued map, an orientation, or compatible generators. Do not infer that units equal one or construct global classes. Exclude reserved Euler, surface and vertex-coproduct work; reuse reviewed triple-overlap composition.",
    :evidence
    {:probe
     {:concurrent-reservations
-     [:coefficient-triple-overlap-geometric-composition-probe-refill46
-      :compact-transverse-arc-intersection-finiteness-probe-refill46
-      :generic-two-open-vertex-coproduct-comparison-probe-refill46],
+     [:compact-transverse-arc-intersection-finiteness-probe-refill46
+      :two-open-point-span-comparison-implementation-refill46],
      :placeholder-delta 0,
      :residual
-     "Moving-center boundary homotopy is compiled. Arbitrary-chart point variation and its relative-normalization comparison remain in the parent. No local constancy, orientation or global conclusion is claimed; reviewed STOPs, refutations and concurrent reservations remain untouched.",
+     "Nonlinear compact-boundary center motion is compiled. Actual chart-boundary construction and comparison with relative normalizations remain in the parent. No transition-unit local constancy, orientation or global conclusion is claimed; reviewed STOPs, refutations and concurrent work remain untouched.",
      :axiom-audits 9,
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t98A02,
       :stop-condition
-      "Bank the moving-center boundary homotopy and its actual coefficient homology equations only. Do not claim arbitrary-chart transition local constancy, relative localization isomorphisms, orientation compatibility or consumer closure.",
+      "Bank compact-boundary separation, actual center-motion homotopy and coefficient homology equations only. Do not claim chart transition-unit constancy, a relative-normalization comparison, orientation compatibility or consumer closure.",
       :evidence
       {:probe
        {:outcome :go,
         :seat "codex-13",
         :fixture
-        {:path "/tmp/CoefficientMovingSphereCenter.lean",
+        {:path "/tmp/CoefficientCompactBoundaryMotion.lean",
          :sha256
-         "39cbabeb13c100817d70e6c1fa61a084cda2311d210eba60e854202762ae79fe"},
+         "4b8c63cdeb80ca4d9b7574727409a864f88a83fff226525f6ce1ceb07a376e1e"},
         :commands
-        [{:cmd "lake env lean /tmp/CoefficientMovingSphereCenter.lean",
+        [{:cmd
+          "lake env lean /tmp/CoefficientCompactBoundaryMotion.lean",
           :exit 0}],
         :warnings [],
         :axioms ["propext" "Classical.choice" "Quot.sound"]}},
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientMovingSphereCenter.lean"
-       "ConstructionTargets/CoefficientMovingSphereCenter.md"],
+      ["ConstructionTargets/CoefficientCompactBoundaryMotion.lean"
+       "ConstructionTargets/CoefficientCompactBoundaryMotion.md"],
       :dag-node
-      "LOCAL ORIENTATION: actual moving-center sphere boundary homotopy",
+      "LOCAL ORIENTATION: compact mapped-boundary separation and center-motion homotopy",
       :acceptance
-      {:namespace "ConstructionTargets.CoefficientMovingSphereCenter",
+      {:namespace
+       "ConstructionTargets.CoefficientCompactBoundaryMotion",
        :implementation
-       "Promote the exact compiled fixture and document the remaining chart-transition and relative-normalization comparisons.",
+       "Promote the exact compiled fixture and document the remaining actual-chart boundary construction and relative-normalization comparison.",
        :declarations
-       ["avoid_zero"
-        "shiftedInclusion"
-        "shiftHomotopy"
-        "recenteredSphere"
-        "recentered_value"
-        "centerFamily"
-        "centerFamily_value"
-        "betweenCenters"
-        "homology_shift"
-        "homology_recentered"
-        "homology_betweenCenters"
+       ["separation"
+        "boundaryMap"
+        "avoid"
+        "new_center"
+        "boundaryHomotopy"
+        "homology_eq"
+        "local_homology_constancy"
+        "radialBoundary"
+        "radial_homology_eq"
         "integral_example"
         "rational_example"],
        :hypotheses
-       "E is a Type 0 real normed vector space. R is a Type 0 commutative ring. Each moving center satisfies norm strictly less than one. Homology equations hold in every natural degree without a finite-dimensionality, nontriviality or orientation assumption. No rank-one statement about ordinary H0 of S0 is made.",
+       "K and E are Type 0; K is a topological space and E a real normed vector space. Compactness of K is required to construct the separation radius and local homology constancy. R is a Type 0 commutative ring. The continuous map f avoids the specified center c. No injectivity, orientation, nontriviality or supplied positive separation bound is required by the local theorem.",
        :consumer-equation
-       "For every center p inside the unit ball, the actual map z ↦ z-p from the literal unit sphere into the punctured space is homotopic to inclusion. Its coefficient homology map is independent of p, and z ↦ normalize(z-p) induces identity on sphere homology.",
+       "A positive radius is constructed such that every nearby center q is avoided by f, and the actual maps z ↦ f(z)-c and z ↦ f(z)-q induce equal coefficient homology maps in every natural degree. The corresponding radially normalized maps also induce equal maps.",
        :consumer-residual
-       "Compare the moving boundary through an actual chart transition and identify the resulting homology equations with the reviewed relative normalizations at distinct points. Then prove local constancy of transition units; orientation compatibility and global localization remain downstream.",
+       "Construct a compact sphere boundary inside an actual chart overlap, apply this theorem to its chart-transition image, and identify the resulting boundary maps with the relative local-homology normalizations at distinct points. Transition-unit local constancy remains to be proved.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientMovingSphereCenter."
-        "Reproduce nine standard-only axiom audits and integer/rational Euclidean examples."
-        "Audit the strict unit-ball bound, zero avoidance and both actual homotopy endpoints."
-        "Verify joint continuity of the center family and the literal recentered-sphere formula."
-        "Verify actual coefficient homology-map equality and radial-normalization identity in every natural degree."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientCompactBoundaryMotion."
+        "Reproduce nine standard-only axiom audits and integer/rational mapped-sphere examples."
+        "Audit construction of a positive uniform gap from compactness and center avoidance."
+        "Verify zero avoidance, continuity and both endpoints of the actual center-motion homotopy."
+        "Verify coefficient homology equality in every natural degree and its radial-normalization equation."
         "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :coefficient-general-moving-sphere-center-homotopy-1,
+      :id :coefficient-general-compact-boundary-center-motion-1,
       :kind :reusable-theorem,
       :depends-on
-      [:oriented-checkpoint41-overlap-transition-and-consumer-refill
-       :oriented-checkpoint40-coefficient-actual-overlap-transition-1],
+      [:coefficient-general-moving-sphere-center-homotopy-1],
       :current-residual
-      "Point variation requires a geometric comparison of boundary maps recentered at different points; fixed-point restriction and cocycle equations do not provide it.",
+      "The unit-sphere motion calculation must extend to a nonlinear compact boundary image, with a constructed uniform separation bound.",
       :other-consumers [:t01A02 :t03J05 :t96J06]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure experiments and build-loop design; inspect both ledgers, dependency PASS receipts and current reservations",
+       "Read DAG, closure experiments and build-loop design; inspect both ledgers, three dependency PASS receipts and current reservations",
        :exit 0}
       {:cmd
-       "Inspect punctured-space radial equivalence and coefficient homotopy-invariance APIs",
+       "Inspect coefficient radial/model maps and reviewed moving-sphere-center homotopy",
        :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientMovingSphereCenter.lean",
+      {:cmd "lake env lean /tmp/CoefficientCompactBoundaryMotion.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientMovingSphereCenter.lean",
+      {:cmd "sha256sum /tmp/CoefficientCompactBoundaryMotion.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientMovingSphereCenter.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientCompactBoundaryMotion.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial moving-center fixture compilation",
+     [{:cmd "Initial compact-boundary-motion compilation",
        :exit 1,
        :correction
-       "Used ContinuousMap.ext after TopCat.hom_ext, qualified the categorical functor identity theorem, and replaced unnecessary simplification. The corrected and extended fixture compiles without warnings."}],
+       "Removed a redundant tactic after simplification closed the endpoint equation; scoped compactness and normed-space assumptions to eliminate unused-variable warnings."}
+      {:cmd
+       "Compilation after adding radial normalization and examples",
+       :exit 1,
+       :correction
+       "Supplied the constructed new-center avoidance proof explicitly in the categorical composition. Final compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientMovingSphereCenter.lean",
+     {:path "/tmp/CoefficientCompactBoundaryMotion.lean",
       :sha256
-      "39cbabeb13c100817d70e6c1fa61a084cda2311d210eba60e854202762ae79fe",
+      "4b8c63cdeb80ca4d9b7574727409a864f88a83fff226525f6ce1ceb07a376e1e",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled geometric point-variation prerequisite is supplied. Moving a center p inside the unit ball gives the actual punctured-space boundary map z ↦ z-p. The explicit homotopy z ↦ z-t*p avoids zero, and the center-dependent family is jointly continuous. Its coefficient homology map is independent of p; radial normalization induces identity in every natural degree. The parent is not GO: comparison through arbitrary chart transitions and its identification with nearby transition units remain.",
+     "Exactly one complete compiled geometric point-variation prerequisite is supplied. For any continuous compact boundary avoiding a center, compactness constructs a positive separation bound. Nearby center motion then gives an explicit zero-avoiding boundary homotopy and equal actual coefficient homology maps in every natural degree, including after radial normalization. This applies to nonlinear mapped boundaries. The parent is not GO: constructing the relevant boundary inside the actual chart overlap and identifying its maps with the relative chart normalizations remain.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "LOCAL ORIENTATION: local constancy of actual chart transition units",
@@ -25182,7 +25245,8 @@
    :depends-on
    [:oriented-checkpoint41-overlap-transition-and-consumer-refill
     :oriented-checkpoint40-coefficient-actual-overlap-transition-1
-    :coefficient-general-moving-sphere-center-homotopy-1],
+    :coefficient-general-moving-sphere-center-homotopy-1
+    :coefficient-general-compact-boundary-center-motion-1],
    :current-residual
    "Actual transition units and their geometric cocycle are reviewed, but no equality of transition units at nearby distinct points has been proved.",
    :other-consumers [:t01A02 :t03J05 :t96J06]}
