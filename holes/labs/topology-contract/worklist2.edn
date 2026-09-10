@@ -24873,9 +24873,183 @@
    :other-consumers []}
   {:consumer :t98A02,
    :stop-condition
-   "Do not assume local constancy, a continuous unit-valued map, an orientation, or compatible generators. Do not infer that units equal one or construct global classes. Exclude reserved Euler, surface and vertex-coproduct work; reuse reviewed triple-overlap composition.",
-   :phase :probe,
+   "Bank the moving-center boundary homotopy and its actual coefficient homology equations only. Do not claim arbitrary-chart transition local constancy, relative localization isomorphisms, orientation compatibility or consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/CoefficientMovingSphereCenter.lean",
+      :sha256
+      "39cbabeb13c100817d70e6c1fa61a084cda2311d210eba60e854202762ae79fe"},
+     :commands
+     [{:cmd "lake env lean /tmp/CoefficientMovingSphereCenter.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientMovingSphereCenter.lean"
+    "ConstructionTargets/CoefficientMovingSphereCenter.md"],
+   :dag-node
+   "LOCAL ORIENTATION: actual moving-center sphere boundary homotopy",
+   :acceptance
+   {:namespace "ConstructionTargets.CoefficientMovingSphereCenter",
+    :implementation
+    "Promote the exact compiled fixture and document the remaining chart-transition and relative-normalization comparisons.",
+    :declarations
+    ["avoid_zero"
+     "shiftedInclusion"
+     "shiftHomotopy"
+     "recenteredSphere"
+     "recentered_value"
+     "centerFamily"
+     "centerFamily_value"
+     "betweenCenters"
+     "homology_shift"
+     "homology_recentered"
+     "homology_betweenCenters"
+     "integral_example"
+     "rational_example"],
+    :hypotheses
+    "E is a Type 0 real normed vector space. R is a Type 0 commutative ring. Each moving center satisfies norm strictly less than one. Homology equations hold in every natural degree without a finite-dimensionality, nontriviality or orientation assumption. No rank-one statement about ordinary H0 of S0 is made.",
+    :consumer-equation
+    "For every center p inside the unit ball, the actual map z ↦ z-p from the literal unit sphere into the punctured space is homotopic to inclusion. Its coefficient homology map is independent of p, and z ↦ normalize(z-p) induces identity on sphere homology.",
+    :consumer-residual
+    "Compare the moving boundary through an actual chart transition and identify the resulting homology equations with the reviewed relative normalizations at distinct points. Then prove local constancy of transition units; orientation compatibility and global localization remain downstream.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientMovingSphereCenter."
+     "Reproduce nine standard-only axiom audits and integer/rational Euclidean examples."
+     "Audit the strict unit-ball bound, zero avoidance and both actual homotopy endpoints."
+     "Verify joint continuity of the center family and the literal recentered-sphere formula."
+     "Verify actual coefficient homology-map equality and radial-normalization identity in every natural degree."
+     "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :coefficient-general-moving-sphere-center-homotopy-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint41-overlap-transition-and-consumer-refill
+    :oriented-checkpoint40-coefficient-actual-overlap-transition-1],
+   :current-residual
+   "Point variation requires a geometric comparison of boundary maps recentered at different points; fixed-point restriction and cocycle equations do not provide it.",
+   :other-consumers [:t01A02 :t03J05 :t96J06]}
+  {:consumer :t98A02,
+   :stop-condition
+   "Do not assume local constancy, a continuous unit-valued map, an orientation, or compatible generators. Do not infer that units equal one or construct global classes. Exclude reserved Euler, surface and vertex-coproduct work; reuse reviewed triple-overlap composition.",
+   :evidence
+   {:probe
+    {:concurrent-reservations
+     [:coefficient-triple-overlap-geometric-composition-probe-refill46
+      :compact-transverse-arc-intersection-finiteness-probe-refill46
+      :generic-two-open-vertex-coproduct-comparison-probe-refill46],
+     :placeholder-delta 0,
+     :residual
+     "Moving-center boundary homotopy is compiled. Arbitrary-chart point variation and its relative-normalization comparison remain in the parent. No local constancy, orientation or global conclusion is claimed; reviewed STOPs, refutations and concurrent reservations remain untouched.",
+     :axiom-audits 9,
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t98A02,
+      :stop-condition
+      "Bank the moving-center boundary homotopy and its actual coefficient homology equations only. Do not claim arbitrary-chart transition local constancy, relative localization isomorphisms, orientation compatibility or consumer closure.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path "/tmp/CoefficientMovingSphereCenter.lean",
+         :sha256
+         "39cbabeb13c100817d70e6c1fa61a084cda2311d210eba60e854202762ae79fe"},
+        :commands
+        [{:cmd "lake env lean /tmp/CoefficientMovingSphereCenter.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/CoefficientMovingSphereCenter.lean"
+       "ConstructionTargets/CoefficientMovingSphereCenter.md"],
+      :dag-node
+      "LOCAL ORIENTATION: actual moving-center sphere boundary homotopy",
+      :acceptance
+      {:namespace "ConstructionTargets.CoefficientMovingSphereCenter",
+       :implementation
+       "Promote the exact compiled fixture and document the remaining chart-transition and relative-normalization comparisons.",
+       :declarations
+       ["avoid_zero"
+        "shiftedInclusion"
+        "shiftHomotopy"
+        "recenteredSphere"
+        "recentered_value"
+        "centerFamily"
+        "centerFamily_value"
+        "betweenCenters"
+        "homology_shift"
+        "homology_recentered"
+        "homology_betweenCenters"
+        "integral_example"
+        "rational_example"],
+       :hypotheses
+       "E is a Type 0 real normed vector space. R is a Type 0 commutative ring. Each moving center satisfies norm strictly less than one. Homology equations hold in every natural degree without a finite-dimensionality, nontriviality or orientation assumption. No rank-one statement about ordinary H0 of S0 is made.",
+       :consumer-equation
+       "For every center p inside the unit ball, the actual map z ↦ z-p from the literal unit sphere into the punctured space is homotopic to inclusion. Its coefficient homology map is independent of p, and z ↦ normalize(z-p) induces identity on sphere homology.",
+       :consumer-residual
+       "Compare the moving boundary through an actual chart transition and identify the resulting homology equations with the reviewed relative normalizations at distinct points. Then prove local constancy of transition units; orientation compatibility and global localization remain downstream.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientMovingSphereCenter."
+        "Reproduce nine standard-only axiom audits and integer/rational Euclidean examples."
+        "Audit the strict unit-ball bound, zero avoidance and both actual homotopy endpoints."
+        "Verify joint continuity of the center family and the literal recentered-sphere formula."
+        "Verify actual coefficient homology-map equality and radial-normalization identity in every natural degree."
+        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+      :id :coefficient-general-moving-sphere-center-homotopy-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint41-overlap-transition-and-consumer-refill
+       :oriented-checkpoint40-coefficient-actual-overlap-transition-1],
+      :current-residual
+      "Point variation requires a geometric comparison of boundary maps recentered at different points; fixed-point restriction and cocycle equations do not provide it.",
+      :other-consumers [:t01A02 :t03J05 :t96J06]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG, closure experiments and build-loop design; inspect both ledgers, dependency PASS receipts and current reservations",
+       :exit 0}
+      {:cmd
+       "Inspect punctured-space radial equivalence and coefficient homotopy-invariance APIs",
+       :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientMovingSphereCenter.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientMovingSphereCenter.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientMovingSphereCenter.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial moving-center fixture compilation",
+       :exit 1,
+       :correction
+       "Used ContinuousMap.ext after TopCat.hom_ext, qualified the categorical functor identity theorem, and replaced unnecessary simplification. The corrected and extended fixture compiles without warnings."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientMovingSphereCenter.lean",
+      :sha256
+      "39cbabeb13c100817d70e6c1fa61a084cda2311d210eba60e854202762ae79fe",
+      :placeholder-count 0},
+     :finding
+     "Exactly one complete compiled geometric point-variation prerequisite is supplied. Moving a center p inside the unit ball gives the actual punctured-space boundary map z ↦ z-p. The explicit homotopy z ↦ z-t*p avoids zero, and the center-dependent family is jointly continuous. Its coefficient homology map is independent of p; radial normalization induces identity in every natural degree. The parent is not GO: comparison through arbitrary chart transitions and its identification with nearby transition units remain.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "LOCAL ORIENTATION: local constancy of actual chart transition units",
@@ -24901,7 +25075,7 @@
    :depends-on
    [:oriented-checkpoint41-overlap-transition-and-consumer-refill
     :oriented-checkpoint40-coefficient-actual-overlap-transition-1
-    :oriented-checkpoint41-overlap-transition-and-consumer-refill],
+    :coefficient-general-moving-sphere-center-homotopy-1],
    :current-residual
    "Actual transition units and their geometric cocycle are reviewed, but no equality of transition units at nearby distinct points has been proved.",
    :other-consumers [:t01A02 :t03J05 :t96J06]}
