@@ -68737,8 +68737,69 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the canonical coefficient-module isomorphism from homology of a binary chain-complex biproduct to the biproduct of the two homology objects, with both arrow formulas; no supplied compact-complement exactness transport or excision.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Compose the coefficient homology-biproduct isomorphism with the reviewed two-piece range comparison, then instantiate the three transported compact-complement exactness segments and identify their conjugated arrows before coefficient excision.",
+    :dependency-hashes
+    {:CoefficientCompactComplementUnionComparison
+     "a91c06af52938916deb44ee2f9f45f3cd260969d75357268267f1ab539672de9"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:homologyBiprodIso
+     "b7fedb71ebdf0dac30c0eb8134edeb40cb6d721d8ef62972ff150727443e8b87",
+     :homologyBiprodIso_hom
+     "52eb7966441badf02da3afb82dc6ec29e82a09644b1d628acaf2cc529c546251",
+     :homologyBiprodIso_inv
+     "5ba446ab638a0584f10a65b3ccc7cac098b839f4b74d11139187e7ecfa3f610f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientHomologyBiprodIso.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and three complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientHomologyBiprodIso.lean ConstructionTargets/CoefficientCompactComplementUnionComparison.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add coefficient homology biproduct isomorphism'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "Coefficient homology of the binary biproduct of the two chain complexes appearing as the Mayer-Vietoris middle object",
+     :target
+     "The binary biproduct of the separate coefficient homology objects used by the actual piece comparison",
+     :direction
+     "The additive homology functor's canonical forward binary-biproduct comparison identifies its forward arrow with the lift of the two projection-induced homology maps and its inverse with the descent of the two injection-induced homology maps."},
+    :commit "4dc36f088790d6607d4a828683c887cea86c921c",
+    :changed-paths
+    ["ConstructionTargets/CoefficientHomologyBiprodIso.lean"],
+    :fixture
+    {:path "/tmp/CoefficientHomologyBiprodIso.lean",
+     :sha256
+     "5928c28ac7aea03bde12f13d2fd55695e3f5771ffefbc60477e2c04f97b44cc0",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled the canonical coefficient-module isomorphism from homology of a binary chain-complex biproduct to the biproduct of the two homology objects. Its forward lift and inverse descent formulas are explicit for arbitrary commutative-ring coefficients, chain complexes and natural degree. No compact-complement arrow conjugation, relative Mayer-Vietoris exactness, coefficient excision, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 3,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoefficientHomologyBiprodIso.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / coefficient homology-biproduct comparison",
