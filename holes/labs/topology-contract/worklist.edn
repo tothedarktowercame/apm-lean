@@ -67826,8 +67826,69 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the simultaneous left, right and overlap forward homology equalities; no supplied naturality square or exactness.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Use the bundled naturality theorem to conjugate the signed subcomplex Mayer-Vietoris arrows and connecting morphism, prove exactness on the complement presentation, then transport its relative terms to the four requested pairs by coefficient excision.",
+    :dependency-hashes
+    {:CoefficientCompactComplementHomologySquares
+     "d05fbae98ce3d7c3fe41492b0bf552691d75ed36a363a6813ff6623834ee87d5"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:homology_square_bundle
+     "112d891680c0b8a160341ba28df5f8a6c58329da510550c1c3e1079832f52b59"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.CoefficientCompactComplementHomologySquares",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, zero placeholders, one complete declaration-header hash and six homology-map occurrences",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientCompactComplementHomologySquareBundle.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Bundle compact complement homology squares'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "The three homeomorphism-induced coefficient homology maps for the nested left, right and overlap complement pieces, each followed by its original-complement inclusion into X",
+     :target
+     "The three direct coefficient homology maps induced by the corresponding nested-piece inclusions into X",
+     :direction
+     "One simultaneous conjunction of exact forward equalities from every transported composite to its direct nested inclusion map in each natural degree."},
+    :commit "3cae1240ea51de3bdb5d30f9248d9074b999eaaa",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean"],
+    :fixture
+    {:path
+     "/tmp/CoefficientCompactComplementHomologySquareBundle.lean",
+     :sha256
+     "dfb2a7cead7ce630e8e96382f27d2ff64cfbc515668b256477669a41ac614be4",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled homology_square_bundle. It packages the reviewed left, right and overlap coefficient-homology naturality squares into one simultaneous theorem for arbitrary topological X, subsets K and L, commutative-ring coefficients and every natural degree. No Mayer-Vietoris exactness, coefficient excision, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 1,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean"],
    :dag-node
