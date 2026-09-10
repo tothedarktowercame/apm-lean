@@ -43524,9 +43524,147 @@
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
-   "Construct only the immutable predecessor artifact and explicit byte-preserving fixture-path transition for completed checkpoint67 recurrence promotion. Preserve its source bytes, fixture hash, declarations, statement hashes, evidence commit and PASS review. Do not weaken validation, alter topology declarations, promote terminal counts, define balanced swaps, compare faces, prove cancellation or claim consumer closure.",
-   :phase :probe,
+   "Bank only the immutable repository artifact containing checkpoint67's exact ProductSimplexWordPrefixCounts recurrence bytes. Do not edit ledger evidence, modify the canonical source, promote terminal counts, define balanced swaps, compare faces, prove cancellation or claim consumer closure.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean"],
+   :dag-node
+   "LEDGER REPRESENTATION: immutable checkpoint67 recurrence source artifact",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Recover the exact source from evidence commit 30f261b66c5ed95ef136addb5cda9ab1a1ab491d; its SHA256 is 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08 and Git blob is 88377d544abc36a0e20a2164ff9600814ddd6261.",
+    :route-step
+    "Supplies the stable target required by the atomic checkpoint67 fixture-path transition on the t03J05, t96J06 and t97A04 routes.",
+    :implementation
+    "Copy the verified scratch artifact byte-for-byte to the scoped stable evidence path.",
+    :consumer-equation
+    "The immutable artifact is byte-identical to checkpoint67's reviewed recurrence source and independently reproduces its fixture SHA256 and Git blob.",
+    :consumer-residual
+    "Atomically repoint checkpoint67 evidence.fixture.path from the mutable canonical source to this immutable artifact while preserving every other evidence and review field.",
+    :gates
+    ["Verify the scratch fixture SHA256 before copying."
+     "Verify the stable artifact is byte-identical to git show 30f261b66c5ed95ef136addb5cda9ab1a1ab491d:ConstructionTargets/ProductSimplexWordPrefixCounts.lean."
+     "Verify SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08 and Git blob 88377d544abc36a0e20a2164ff9600814ddd6261."
+     "Compile the stable artifact."
+     "Run placeholder and forbidden-declaration scans."
+     "Run both ledger checks and exact one-file scope and whitespace checks; commit the scoped artifact."
+     "Confirm no ledger evidence, canonical source, theorem statement or consumer problem is changed."]},
+   :representation
+   {:source
+    "Checkpoint67 ProductSimplexWordPrefixCounts bytes recovered from evidence commit 30f261b66c5ed95ef136addb5cda9ab1a1ab491d",
+    :target
+    "A stable repository evidence artifact containing those exact bytes",
+    :direction
+    "Exact byte equality from the source evidence-commit representation to the target immutable-artifact representation, preserving SHA256 and Git blob identity."},
+   :id
+   :t03j05-checkpoint67-product-simplex-prefix-counts-immutable-artifact-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint70-product-simplex-adjacent-corners-and-consumer-refill-1],
+   :current-residual
+   "Checkpoint67's bytes are recoverable and verified in scratch, but the stable repository artifact required by the atomic transition does not yet exist.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the immutable predecessor artifact and explicit byte-preserving fixture-path transition for completed checkpoint67 recurrence promotion. Preserve its source bytes, fixture hash, declarations, statement hashes, evidence commit and PASS review. Do not weaken validation, alter topology declarations, promote terminal counts, define balanced swaps, compare faces, prove cancellation or claim consumer closure.",
+   :evidence
+   {:probe
+    {:residual
+     "After banking the immutable artifact, apply the existing atomic supervisor completion-transition to repoint checkpoint67 while preserving its fixture hash, declarations, statement hashes, evidence commit and PASS review.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t03J05,
+      :stop-condition
+      "Bank only the immutable repository artifact containing checkpoint67's exact ProductSimplexWordPrefixCounts recurrence bytes. Do not edit ledger evidence, modify the canonical source, promote terminal counts, define balanced swaps, compare faces, prove cancellation or claim consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean"],
+      :dag-node
+      "LEDGER REPRESENTATION: immutable checkpoint67 recurrence source artifact",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Recover the exact source from evidence commit 30f261b66c5ed95ef136addb5cda9ab1a1ab491d; its SHA256 is 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08 and Git blob is 88377d544abc36a0e20a2164ff9600814ddd6261.",
+       :route-step
+       "Supplies the stable target required by the atomic checkpoint67 fixture-path transition on the t03J05, t96J06 and t97A04 routes.",
+       :implementation
+       "Copy the verified scratch artifact byte-for-byte to the scoped stable evidence path.",
+       :consumer-equation
+       "The immutable artifact is byte-identical to checkpoint67's reviewed recurrence source and independently reproduces its fixture SHA256 and Git blob.",
+       :consumer-residual
+       "Atomically repoint checkpoint67 evidence.fixture.path from the mutable canonical source to this immutable artifact while preserving every other evidence and review field.",
+       :gates
+       ["Verify the scratch fixture SHA256 before copying."
+        "Verify the stable artifact is byte-identical to git show 30f261b66c5ed95ef136addb5cda9ab1a1ab491d:ConstructionTargets/ProductSimplexWordPrefixCounts.lean."
+        "Verify SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08 and Git blob 88377d544abc36a0e20a2164ff9600814ddd6261."
+        "Compile the stable artifact."
+        "Run placeholder and forbidden-declaration scans."
+        "Run both ledger checks and exact one-file scope and whitespace checks; commit the scoped artifact."
+        "Confirm no ledger evidence, canonical source, theorem statement or consumer problem is changed."]},
+      :representation
+      {:source
+       "Checkpoint67 ProductSimplexWordPrefixCounts bytes recovered from evidence commit 30f261b66c5ed95ef136addb5cda9ab1a1ab491d",
+       :target
+       "A stable repository evidence artifact containing those exact bytes",
+       :direction
+       "Exact byte equality from the source evidence-commit representation to the target immutable-artifact representation, preserving SHA256 and Git blob identity."},
+      :id
+      :t03j05-checkpoint67-product-simplex-prefix-counts-immutable-artifact-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint70-immutable-checkpoint67-recurrence-artifact-transition-1],
+      :current-residual
+      "Checkpoint67's bytes are recoverable and verified in scratch, but the stable repository artifact required by the atomic transition does not yet exist.",
+      :other-consumers [:t96J06 :t97A04]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and dependency receipts",
+       :exit 0}
+      {:cmd
+       "Inspect checkpoint67 completion evidence, prior immutable-artifact transitions and atomic supervisor completion-transition schema",
+       :exit 0}
+      {:cmd
+       "git show 30f261b66c5ed95ef136addb5cda9ab1a1ab491d:ConstructionTargets/ProductSimplexWordPrefixCounts.lean > /tmp/codex13-checkpoint70-checkpoint67-artifact/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint70-checkpoint67-artifact/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint70-checkpoint67-artifact/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
+       :exit 0}
+      {:cmd
+       "git show 30f261b66c5ed95ef136addb5cda9ab1a1ab491d:ConstructionTargets/ProductSimplexWordPrefixCounts.lean | git hash-object --stdin",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint70-checkpoint67-artifact/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint70-checkpoint67-artifact/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
+      :sha256
+      "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
+      :git-blob "88377d544abc36a0e20a2164ff9600814ddd6261",
+      :placeholder-count 0,
+      :source-commit "30f261b66c5ed95ef136addb5cda9ab1a1ab491d"},
+     :finding
+     "Exactly one complete tested prerequisite is supplied. The checkpoint67 source was recovered directly from evidence commit 30f261b66c5ed95ef136addb5cda9ab1a1ab491d into a row-specific scratch artifact. It is byte-identical to the current canonical source, compiles without placeholders, reproduces SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08 and has Git blob 88377d544abc36a0e20a2164ff9600814ddd6261. The parent transition is not GO because the atomic supervisor requires the target artifact to exist as a regular file at its stable repository path before it can repoint checkpoint67 evidence.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: immutable checkpoint67 recurrence artifact transition",
@@ -43563,7 +43701,7 @@
    :kind :representation-comparison,
    :depends-on
    [:oriented-checkpoint70-product-simplex-adjacent-corners-and-consumer-refill-1
-    :oriented-checkpoint70-product-simplex-adjacent-corners-and-consumer-refill-1],
+    :t03j05-checkpoint67-product-simplex-prefix-counts-immutable-artifact-1],
    :current-residual
    "The terminal-count extension compiles, but checkpoint67 pins the predecessor bytes at the mutable canonical path and must be transitioned to immutable evidence before promotion.",
    :other-consumers [:t96J06 :t97A04]}
