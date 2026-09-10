@@ -28838,6 +28838,19 @@
       :exit 1,
       :correction
       "Generalized the audit boundary to the first := token so direct term proofs for dimension_two and dimension_three are hashed by the same proposition-only convention; the corrected audit produced all eleven hashes."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789045271081-18623-40dd4178",
+     :commands
+     ["lake env lean /tmp/codex13-checkpoint46-assembly/C1GraphGlobalBounds.lean"
+      "lake env lean ConstructionTargets/C1GraphGlobalBounds.lean"
+      "lake build ConstructionTargets.C1GraphGlobalBounds"
+      "git diff --check 3c551fb6^ 3c551fb6"
+      "Python exact fixture, two-file scope, eleven statement hashes and placeholder audit"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers at b19cef74"],
+     :finding
+     "Independent review of codex-14 commit 3c551fb6a315e4c16a111fd87beaf495a3ff6679 passes. Exact two-file scope and fixture SHA256 9755e82c8a8c5e57e88899d665294b404ae735c689a17ef80f983031d00f6a2c verified. Eleven statement hashes match; eleven target axiom audits are standard-only. Fixture, canonical target and 2529-job build pass without warnings. Piecewise lower and upper inequalities have the correct orientations: the lower route uses (1-epsilon)(1+epsilon)<=1 without division, yielding exponent d+1, while the upper route uses the reverse selected-density comparison. Exact graph-measure and density-integral decompositions sum globally, and the arbitrary-ENNReal squeeze proves the stated literal L2 Hausdorff area equation for zero, finite and infinite values. No numerical normalization or sphere-mass claim is introduced. Zero target placeholders; problem count unchanged at 308 across the implementation commit. Ledgers untouched."},
     :dependency-uptake
     [:oriented-checkpoint45-c1-graph-measurable-approximation-partition-1
      :ennreal-multiplicative-unit-squeeze-1
@@ -28858,7 +28871,7 @@
    :consumer-residual
    "Specialize to upper and lower sphere-cap graphs, prove the measurable chart assembly, and determine Euclidean Hausdorff-to-volume normalization before literal sphere-mass evaluation.",
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/C1GraphGlobalBounds.lean"
     "ConstructionTargets/C1GraphGlobalBounds.md"],
@@ -28932,7 +28945,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact graph area and renewed consumer eligibility",
