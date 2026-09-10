@@ -58748,67 +58748,48 @@
    :stop-condition
    "GO requires the complete actual geometry packet compiled. REVISE requires exactly one compiled prerequisite; no conditional duality producer or consumer closure claim.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "The banked manifold-fiber atlas requires an inner-product source model; applying it to the ordinary product model still requires explicit model transport. Then transport the zero-fiber atlas to the literal incidence subtype, prove smooth inclusion, and identify its derivative range using this kernel packet. No product norm or topology was changed. Empty incidence and zero-dimensional kernels remain included. Target-manifold localization, oriented duality and frozen consumer uptake remain subsequent.",
-     :dependency-review
-     {:outcome :pass,
-      :commit "d775d4083df884f250a89e5ac7e5137748f12cde",
-      :job "invoke-1789007224423-17661-38db1531"},
-     :outcome :revise,
-     :warnings [],
-     :statement-hashes
-     {:mem-kernel
-      "6075e58cfd8e6b0612db5cd69edead7433b1aaa30cefad6749a4de5b12255238",
-      :kernel-dimension
-      "791888c7aa870cd5cdb0daa53650f32402cc1373cb5ea2bc57813976c7f5f0a8"},
-     :prerequisite
-     {:consumer "t00J02",
-      :stop-condition
-      "Require the actual derivative-kernel characterization and derived dimension formula; no supplied kernel identity or dimension assumption.",
-      :phase :implementation,
-      :state :open,
-      :scope ["ConstructionTargets/TransverseDifferenceKernel.lean"],
-      :dag-node
-      "TRANSVERSE-PULLBACK / actual difference kernel and dimension",
-      :acceptance
-      {:fixture "/tmp/TransverseDifferenceKernel.lean",
-       :fixture-sha256
-       "9a50b4fe1ffe16a7cc83de9e430a5581531ae03603439bf5897bc1ad5918913a",
-       :implementation
-       "Promote the exact compiled fixture. Compile mem_kernel and kernel_dimension with zero placeholders and standard-only axioms. Preserve the actual product-model mfderiv and derived transversality regularity. Retain the weaker hypotheses proved by the fixture and existing APIs. Do not claim an incidence atlas, inclusion derivative theorem or consumer closure.",
-       :commands
-       ["lake env lean ConstructionTargets/TransverseDifferenceKernel.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :id :transverse-difference-kernel-implementation-refill37,
-      :kind :reusable-theorem,
-      :depends-on
-      [:transverse-difference-regularity-implementation-refill37],
-      :current-residual
-      "The actual difference derivative kernel is characterized and its dimension derived; product-model and literal incidence atlas transport remain.",
-      :other-consumers ["t02A07" "t94A06" "t97J05"]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean -o /tmp/manifold-chart-build/ConstructionTargets/TransverseDifferenceRegularity.olean ConstructionTargets/TransverseDifferenceRegularity.lean && lean /tmp/TransverseDifferenceKernel.lean'",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/TransverseDifferenceKernel.lean'",
-       :exit 0}],
-     :diagnostic-history [],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/TransverseDifferenceKernel.lean",
-      :sha256
-      "9a50b4fe1ffe16a7cc83de9e430a5581531ae03603439bf5897bc1ad5918913a"},
-     :finding
-     "Compiled one prerequisite. Membership in the actual difference-map mfderiv kernel is equivalent to Df(v)=Dg(w). At every incident pair, range-sum transversality supplies surjectivity and rank-nullity gives finrank E+finrank G-finrank F. No inner-product structure on the ordinary product norm, positive dimension or nonempty incidence is assumed.",
-     :seat "codex-12"}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct self-model product recharting with smoothness and actual derivative transport, apply the regular-fiber atlas, and transport that atlas to {p:M×N // f p.1=g p.2}. Prove inclusion smoothness, derivative injectivity and the tangent equalizer range for this same atlas in the original product model. Preserve inherited topology and the original product norm; include empty incidence and zero-dimensional kernels. Target-manifold localization, orientations and homological duality remain subsequent. No frozen consumer closure.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :reason :representation-boundary,
+    :commands
+    [{:cmd "lake env lean /tmp/TransverseProductModelBoundary.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/TransverseDifferenceRegularity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/TransverseDifferenceKernel.lean",
+      :exit 0}
+     {:cmd
+      "Python SHA256, comment-stripped placeholder, exact banked-fixture equality and git status audit",
+      :exit 0}],
+    :diagnostic-history [],
+    :refutation false,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/TransverseProductModelBoundary.lean",
+     :sha256
+     "4214d8da12c0c021894686c7b0c3c850a2b6ffdb2bc53e9137a5467808aefbb9",
+     :role :boundary-diagnostic,
+     :placeholder-count 0},
+    :finding
+    "The difference-map regularity and kernel packets recompile successfully. The remaining boundary is application of the self-model inner-product fiber constructor to the ordinary product model. The compiled diagnostic constructs the existing WithLp 2 model change, whose chart carrier remains E × G. ManifoldRegularFiberGlobalAtlas.chartedSpace instead requires ChartedSpace H (M × N) and IsManifold (modelWithCornersSelf real H) infinity for the inner-product model H. The audited model-change API alone does not provide that self-model recharting or its actual derivative comparison. Subsequent transport to the literal incidence subtype must also preserve the selected atlas, smooth inclusion and inclusion derivative. No complete geometry fixture or new complete prerequisite is claimed. This is missing construction, not mathematical refutation or campaign termination.",
+    :dependency-reviews
+    [{:commit "d775d4083df884f250a89e5ac7e5137748f12cde",
+      :outcome :pass,
+      :job "invoke-1789007224423-17661-38db1531"}
+     {:commit "1d45605fb372cb48d047f52b37f4be24dd8472b1",
+      :outcome :pass,
+      :job "invoke-1789007534862-17671-a9f7ab23"}],
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TRANSVERSE-PULLBACK / vector-target fiber product",
    :acceptance
