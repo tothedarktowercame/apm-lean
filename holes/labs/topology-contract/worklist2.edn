@@ -19484,20 +19484,127 @@
    :stop-condition
    "Bank the actual boundary-map comparison only. Do not claim the induced kernel sign, relative-H1 sign, higher-dimensional antipodal action or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientBoundaryReflection.lean",
-      :sha256
-      "fc75fd9984c2e5a887a507e8e58feb221e46ba5b83fa2b52b0bdd38d5cad164d"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientBoundaryReflection.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Construct the induced map on the actual boundary-inclusion kernel, prove its normalized sign, and use connecting naturality to establish the relative-H1 reflection sign. No kernel sign, higher-dimensional antipodal action or consumer closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :whitespace :pass,
+     :placeholders :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :two-file-scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :fixture-compilation :pass,
+     :actual-map-audit :pass},
+    :axiom-audits 13,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Direct fixture and canonical compilation emitted no warnings. Build replayed 20 dependency warnings; none originated in this module."
+     "Concurrent untracked ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean was preserved outside the committed scope."],
+    :statement-hashes
+    {:inclusion_square
+     "df559ec2b75772fa593f7bed76a90d07c8b738d32011da7acd29a490da355a57",
+     :integral_boundary
+     "01f913a1db30b8d98dc821d60af5615de38eaec3f7680eeb7d48ebd8d5708ed4",
+     :sigma_coordinates
+     "6f90539965f685bcf0e9349277fe9cb5afda053e5fb0295c23cd05cc88a9c21c",
+     :sigmaSwap
+     "96840aff9424681ad57bd3bd6d29202083429defe35fb1ab27f0f5441b88f05c",
+     :absolute
+     "c6f95eff34e31760481056605b104bac45fda436f8c56e8d5553013c630063e1",
+     :projection_degree
+     "0c47ae2e3c87e952a0c0bddfc51c0599dbf0e03913fccc33f8cfe16d1abd0fe3",
+     :boundary_coordinates
+     "fc7ffc319638ffcb5c37c145c0ed45e5e0583ae50a478a5bb590a08d4385379b",
+     :restricted
+     "6e22700992c9d960e75126175b5867dfcb79fff1d0bea31853ef69f265e7095e",
+     :sigmaSwap_coordinates
+     "fa8fd1e16728413e05af3716a795b12c3a53f30f1dd96142ed87b7b6c7f17a1b",
+     :swap_false
+     "dfc62b63cd1d595d65e3bdc77fa93373cf1bc103485730b8c633336d136345e2",
+     :boundaryMap
+     "6c79127c15414e1c75175a3f31e03f2cb82e4b2140e236436f6a0a2de31b34cf",
+     :swap
+     "ec06ecb2aa13b174cc37a4fb0266cfd0037e7dd7bf11089fa5cda4acb5689a61",
+     :boundaryMap_actual
+     "3c6546ae930eef66b39c6ef32ea6a5f8ffb161abd691187eae6c6862710cec91",
+     :boolNot
+     "b07a411c4d09a839c6309b4a6a7a99c34a6127d5707f0ad865bf5b2d40ac4472",
+     :boundary_conjugation
+     "8e91d9b7e6152fccafdab2a1605ff90d04c6734df743ba8b1e2fbab1254d7654",
+     :reflection_mapsTo
+     "7a27d24a6239448e7478dd2fd9f0eed3090539260fff51f39114b676652f4d4d",
+     :rational_boundary
+     "7d034efdeb50bb29ef5db3a6010ccfab369699481b420d94b692e98af04e8c8a",
+     :reflection
+     "b65c2b63f87f5fc1c4ffc3c0f952427913f8100e4e26bd2974280bca126b0771",
+     :swap_true
+     "05c2722de23bd231ecd5ec349870ffbbf1a7bee9422c69a7a05bb6cfea89b828",
+     :relative
+     "6808b91e49ae64a7b706cd8f76c6073e212daf248f25f05aa7f8eeaa2b116c69",
+     :coordinates_reflection
+     "c93059a3549c4a2ae80dc2107aa2c2c0daffaf93c11e1747dee501af2dab8d25"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "Read DAG, closure rules and dependency PASS receipts",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "Verify fixture SHA256 before byte-identical promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientBoundaryReflection.lean > /tmp/reflection-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientBoundaryReflection.lean > /tmp/reflection-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientBoundaryReflection > /tmp/reflection-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Validate thirteen standard-only audits in each direct compilation log and inspect build warnings",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientBoundaryReflection.lean /tmp/CoefficientBoundaryReflection.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python audit of fixture equality, zero placeholders, 21 statement hashes and exact two-file scope",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Construct coefficient-general boundary reflection coordinates'",
+      :exit 0}
+     {:cmd "git diff --check 6f66faff^ 6f66faff", :exit 0}
+     {:cmd
+      "Python verification of pinned commit scope, fixture equality and scoped working-tree cleanliness",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "Post-commit verification including global working-tree cleanliness",
+      :exit 1,
+      :correction
+      "An unrelated atlas file appeared concurrently. Inspected status and reran pinned commit scope, fixture equality and scoped cleanliness checks successfully; preserved the unrelated file."}],
+    :commit "6f66faffa3b127bf4f4b2bcb480d32a81b3c1579",
+    :changed-paths
+    ["ConstructionTargets/CoefficientBoundaryReflection.lean"
+     "ConstructionTargets/CoefficientBoundaryReflection.md"],
+    :fixture
+    {:path "/tmp/CoefficientBoundaryReflection.lean",
+     :sha256
+     "fc75fd9984c2e5a887a507e8e58feb221e46ba5b83fa2b52b0bdd38d5cad164d",
+     :promotion :byte-identical},
+    :finding
+    "Promoted the exact fixture proving literal disk negation exchanges actual boundary coordinates. The actual restricted H0 map conjugates through boundaryIso to Boolean coordinate exchange; actual inclusion and degreewise cokernel-projection equations compile.",
+    :statement-hash-method
+    "SHA256 from declaration keyword to immediately before the whitespace preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientBoundaryReflection.lean"
     "ConstructionTargets/CoefficientBoundaryReflection.md"],
