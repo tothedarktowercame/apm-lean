@@ -57522,6 +57522,20 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789004464076-17561-0878509f",
+     :commands
+     ["git show c20972de0f36d273644ea424e28d49ff411cb029"
+      "Independent pinned scope, fixture and dependency-byte audit"
+      "python3 /tmp/manifold-target-charts-audit.py"
+      "lake build ConstructionTargets.ManifoldTargetFiberChartExtension ConstructionTargets.FiberPredicateTransfer"
+      "lake env lean ConstructionTargets/ManifoldTargetRegularFiberCharts.lean"
+      "git show --format= --check c20972de"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact one-file promotion; fixture and three statement hashes reproduce; zero placeholders; consumers unchanged. Predicate transfer composed with extension-fiber charts yields actual inherited-topology literal-fiber charts. Restricted coordinate formulas justify smoothness and overlaps on their exact domains; regularity supplies center coverage. Empty fibers and zero-dimensional kernels remain included. Self-model applicability retained; no global atlas, inclusion, tangent geometry or consumer closure claimed. Three declarations compile warning-free with standard axioms; prerequisite build succeeds (8445 jobs). Whitespace clean; 444 ledger items validate; no edits."},
     :commit "c20972de0f36d273644ea424e28d49ff411cb029",
     :changed-paths
     ["ConstructionTargets/ManifoldTargetRegularFiberCharts.lean"],
@@ -57533,7 +57547,7 @@
     :finding
     "Exact fixture promoted. Actual literal-fiber charts, coverage and genuine-infinity overlaps compile warning-free with standard-only axioms and zero placeholders. Inherited topology, fixed Euclidean dimension and restricted coordinate formulas are preserved. Existing APIs and consumers unchanged; worktree clean. Validator reports 444 items OK."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ManifoldTargetRegularFiberCharts.lean"],
    :dag-node
@@ -57565,7 +57579,7 @@
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
