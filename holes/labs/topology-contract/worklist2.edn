@@ -13919,20 +13919,103 @@
    :stop-condition
    "Bank only finite signed-chain realization and subordinate-support factorization. Do not claim identification with subdivision or prism, restricted homotopy, eventual smallness, homology comparison or excision.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientFiniteRealization.lean",
-      :sha256
-      "de296b315978f3ddf6818d2c5e71a7eee15499bd75f74aaa0a9999d4660e8932"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientFiniteRealization.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Identify finite realizations with the reviewed subdivision and prism, construct their small-chain restrictions and assemble the inclusion-compatible restricted homotopy. No eventual smallness, homology comparison, excision or frozen closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :five-standard-only-audits :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 5,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 20 existing dependency warnings; both direct compilations had zero warnings."],
+    :statement-hashes
+    {"rightEdge_small"
+     "11f2987af91f8fdcc3bd8604c00591af044c0ed011c49429860aba34f531562d",
+     "finiteSingularChainRealize"
+     "73836c138d8987ec1655d5636605432e48b57f2293521d3f225133bc6c6e955e",
+     "finiteSingularChainRealize_factors"
+     "d9f18dc4d87ac8418a22a0e0a915f0a7d86362c192589b7015b6c4f184602adb",
+     "leftEdge"
+     "c0affda169eebd0f371d1d02a0329f3bac4669cfeaa225e7a90ef8365597548d",
+     "leftEdge_small"
+     "49a23f67b6886a06ce8d4736a8165a5deeacdc05866b8f3992c7232ee332546f",
+     "rational_interval"
+     "eb147bc8bf339d6c49de734330c6acef7cf26a5d13f5f7ae4a330f7428004f6d",
+     "finiteSingularChainRealize_add"
+     "26828c1609f89a8e4a12252a25fba3e4965c415ebbf4f04389eef5da8c413bcb",
+     "finiteSingularChainRealize_single"
+     "9e51046c8ced47734d2bf0c4dcc96a5c861a05fa3c1d705ef9e33caa58c76a2b",
+     "interval_factorization"
+     "79de1b2a3d1bc17f93e029c55b4292b3f123ba2046b997c739e2023f5973e4a1",
+     "integral_interval"
+     "bb7c01ad58e8aa77affaa00b77ae2f4a2275a0d1973a56557576e39ad93f4a25",
+     "rightEdge"
+     "f115eb687566a6b17915304b77ca2c48754f439f8055260d690d7310315ad360"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure stop rules and CoefficientSmallPath dependency PASS receipt",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientFiniteRealization.lean", :exit 0}
+     {:cmd "Python verify fixture SHA256 and promote exact fixture",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientFiniteRealization.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientFiniteRealization.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientFiniteRealization",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientFiniteRealization.lean /tmp/CoefficientFiniteRealization.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, five standard-only audits per compilation, warning and declaration-hash audit",
+      :exit 0}
+     {:cmd
+      "Python verify eleven declaration names excluding comment text and inspect build warnings",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope audit and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Realize finite signed chains with explicit coefficients\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope audit pinned to acbc19f4 and clean tracked checkout verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "acbc19f4dbdbf16fa96171575974ee2966c09f97",
+    :changed-paths
+    ["ConstructionTargets/CoefficientFiniteRealization.lean"
+     "ConstructionTargets/CoefficientFiniteRealization.md"],
+    :fixture
+    {:path "/tmp/CoefficientFiniteRealization.lean",
+     :sha256
+     "de296b315978f3ddf6818d2c5e71a7eee15499bd75f74aaa0a9999d4660e8932"},
+    :finding
+    "Promoted the exact fixture and documented coefficient representation and limits. Finite integer-weighted simplex formulas realize as R-linear morphisms; subordinate support constructs a factorization through the actual cover-small inclusion without openness or covering assumptions. Integer and rational interval examples compile. Focused build passed with 8258 jobs.",
+    :statement-hash-method
+    "SHA256 of declaration text beginning with theorem or def, excluding preceding attributes, and ending immediately before the space preceding := or where; namespace ConstructionTargets.CoefficientFiniteRealization.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientFiniteRealization.lean"
     "ConstructionTargets/CoefficientFiniteRealization.md"],
