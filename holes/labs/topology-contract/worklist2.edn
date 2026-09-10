@@ -37818,7 +37818,8 @@
       :line 3580,
       :kind :unnecessary-simpa}],
     :fixture
-    {:path "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+    {:path
+     "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean",
      :sha256
      "e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187",
      :supporting-path
@@ -40951,8 +40952,116 @@
   {:consumer :t03J05,
    :stop-condition
    "Implement only validated atomic supervisor application of an explicitly recorded historical fixture-path transition. Do not permit arbitrary ledger mutation, change fixture hashes, supporting evidence, commits, reviews, scopes or row states through this operation; do not promote recurrence theorems or claim topology closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "After this completion receipt atomically repoints checkpoint60 to the immutable artifact, promote the reviewed prefix-successor recurrence fixture, then prove both word/path inverse laws.",
+    :gates
+    {:all-preserved-values :pass,
+     :wrong-path-rejection :pass,
+     :whitespace :pass,
+     :focused-tests 55,
+     :exact-source-path :pass,
+     :pre-outcome-application :pass,
+     :exact-target-path :pass,
+     :exact-scope :pass,
+     :scratch-concrete-transition :pass,
+     :check-parens :pass,
+     :wrong-source-rejection :pass,
+     :target-sha256 :pass,
+     :whole-ledger-prewrite-validation :pass,
+     :optional-field-compatibility :pass,
+     :commit :pass,
+     :single-completed-row :pass,
+     :only-fixture-path-mutated :pass,
+     :absent-target-rejection :pass,
+     :target-hash-rejection :pass,
+     :non-completed-row-rejection :pass,
+     :target-regular-file :pass,
+     :all-preserved-value-rejections :pass,
+     :unknown-row-rejection :pass,
+     :atomic-write :pass,
+     :clj-kondo :pass,
+     :live-ledgers :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "Inspect build_step.bb apply-result and write-ledger atomic validation flow plus test_gate_receipts.bb",
+      :exit 0}
+     {:cmd
+      "emacs --batch -Q -l /home/joe/code/futon4/dev/check-parens.el -- holes/labs/topology-contract/build_step.bb holes/labs/topology-contract/test_gate_receipts.bb",
+      :exit 0}
+     {:cmd
+      "clj-kondo --lint holes/labs/topology-contract/build_step.bb holes/labs/topology-contract/test_gate_receipts.bb",
+      :exit 0}
+     {:cmd "bb holes/labs/topology-contract/test_gate_receipts.bb",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; stage exact two-file scope; git diff --cached --check; git commit -m 'Apply fixture path transitions atomically'",
+      :exit 0}
+     {:cmd
+      "Apply a concrete completion receipt carrying the checkpoint60 transition through committed build_step.bb to /tmp/codex14-atomic-transition-final-KsGmXu/ledger.edn; validate the resulting ledger and assert the live fixture path changed to the immutable artifact",
+      :exit 0}
+     {:cmd
+      "git show --check --stat --oneline f96d30c1; sha256sum both scoped files; git ls-tree HEAD for both scoped files; git status --short",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial combined paren, lint and focused-test invocation",
+      :exit 1,
+      :finding
+      "The paren checker was invoked as a directly executable relative path that did not exist from apm-lean; clj-kondo also found one unused test binding, and a pre-existing PASS test used an open row without implementation evidence.",
+      :correction
+      "Invoked check-parens.el through Emacs at its workspace path, removed the unused binding, prepared the PASS test row as done-unreviewed with valid implementation evidence, and reran all checks successfully."}
+     {:cmd "Second combined paren, lint and focused-test invocation",
+      :exit 1,
+      :finding
+      "The Emacs Lisp file is not executable directly, and the test preparation edit had initially landed in the wrong similarly shaped test block.",
+      :correction
+      "Used emacs --batch -Q -l and moved the setup into review-command-descriptions-are-not-exit-records; the final suite passed 55 assertions with zero failures or errors."}],
+    :commit "f96d30c1129620704c9bfa11ca2afb0510f6cc02",
+    :git-blobs
+    {"holes/labs/topology-contract/build_step.bb"
+     "312908af0ceadb5ff15b1b47208e50ac66d67464",
+     "holes/labs/topology-contract/test_gate_receipts.bb"
+     "310a74aedd822169f193ffb0739d2e79738296f2"},
+    :changed-paths
+    ["holes/labs/topology-contract/build_step.bb"
+     "holes/labs/topology-contract/test_gate_receipts.bb"],
+    :fixture
+    {:path "holes/labs/topology-contract/build_step.bb",
+     :sha256
+     "ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b",
+     :supporting-path
+     "holes/labs/topology-contract/test_gate_receipts.bb",
+     :supporting-sha256
+     "22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc"},
+    :finding
+    "build_step.bb now recognizes one optional, narrowly typed completion-transition on done-unreviewed receipts. It requires exactly the five transition fields, permits only [:evidence :fixture :path], locates exactly one completed row, checks the asserted source path, requires all six preserved evidence values, verifies that the target is a regular file with the existing fixture SHA256, and changes only that path. The transition is applied before outcome-specific row replacement; write-ledger! validates the combined post-transition ledger before its existing atomic move. Receipts without the field retain prior behavior. Focused tests reject every specified malformed transition and a concrete scratch application of the checkpoint60 transition validates.",
+    :completion-transition
+    {:row
+     :oriented-checkpoint60-product-simplex-prefix-monotonicity-repair-1,
+     :path [:evidence :fixture :path],
+     :from "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+     :to
+     "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean",
+     :preserve
+     {:sha256
+      "e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187",
+      :supporting-path
+      "ConstructionTargets/ProductSimplexBalancedWords.lean",
+      :supporting-sha256
+      "4b9bf06c446c0ff52bbe1d92f9a5b6a0e7238e19725a426d96ffcd7575d1b023",
+      :placeholder-count 0,
+      :commit "d7ecc4b411b2f783f762da03ac598994100be9a1",
+      :review-outcome :pass}},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["holes/labs/topology-contract/build_step.bb"
     "holes/labs/topology-contract/test_gate_receipts.bb"],
