@@ -74056,7 +74056,7 @@
     {:unionCover_eq_restrictedCover
      "07f890d100e4f48907e46c913ad90c72df01b4963a8aee64cb94a7785c722c64",
      :unionRangeChainsInclusion_factorization
-     "2b78fa4e847cermany? no"},
+     "2b78fa4e847c24666d9b15375dc817ce8a5cde0aab91bf163cfac059bd5ff079"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "codex-6",
     :commands
@@ -74084,12 +74084,6 @@
      "The composite through restricted Boolean cover-small chains, production coefficient chains on the union subtype and the coefficient ambient-range presentation",
      :direction
      "Exact equality from the source literal union-range inclusion to the target three-factor chain-map representation, oriented through the inverses of the restricted-cover range isomorphism and ambient-subspace range isomorphism."},
-    :review
-    {:outcome :fail,
-     :seat "codex-10",
-     :job "invoke-1789080177984-19692-0d1ea8d9",
-     :finding
-     "Deterministic ledger-evidence defect: :unionRangeChainsInclusion_factorization records the malformed value \"2b78fa4e847cermany? no\" instead of its recomputed SHA-256 2b78fa4e847c24666d9b15375dc817ce8a5cde0aab91bf163cfac059bd5ff079. The first declaration hash reproduces, fixture/dependency hashes and byte identity reproduce, compilation/axioms/scope/placeholders pass, and the theorem orientation is coherent; repair the frozen statement hash before review can pass."},
     :commit "7bf9a0247dc6f91f3842091464724fa1d680ff55",
     :changed-paths
     ["ConstructionTargets/CoefficientSubspaceUnionRangeFactorization.lean"],
@@ -74099,9 +74093,9 @@
      "3aa64ffc5e174f5f434b4d759fa6bd46e94d7765eec00d2a528aae44ad10385c",
      :placeholder-count 0},
     :finding
-    "The exact fixture and recorded ambient-subspace-range compatibility dependency hash reproduce. Both requested factorization declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
+    "The malformed ledger statement hash is corrected to the exact recomputed SHA-256. The fixture, target and dependency hashes reproduce byte-for-byte; compilation, standard axioms, zero placeholders and exact one-file commit scope all pass. No source edit or replacement commit was required. An unrelated untracked checkpoint evidence file was left untouched."},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRangeFactorization.lean"],
    :dag-node
