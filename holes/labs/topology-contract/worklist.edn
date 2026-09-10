@@ -70850,8 +70850,43 @@
   {:consumer "t98A02",
    :stop-condition
    "Require explicit compact piece formulas and valid coefficient-excision comparisons before transporting the three relative exactness statements.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove the left-zero and right-quotient formulas with fully explicit compact source maps, then transport the resulting sequence through coefficient excision to the four requested relative pairs.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:compactUnionToRelative
+     "12235c21e7b9d549ea9dab5f52d9ffb40a2dd04f3bdc730d54bac51a1826e5b6"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean /tmp/CoefficientCompactComplementUnionToRelative.lean ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-declaration audit over ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "a26a97c1501b9e03c546addfe2123a4bbe379dc3",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactComplementUnionToRelative.lean",
+     :sha256
+     "545c94e194b682e805c80e3b316996b2a303b84b0d549bd783dc6f748559e2a7",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The genuine coefficient union-to-production-relative map specializes in the forward direction to the actual compact-complement left and right subsets. The module compiles without warnings or placeholders, its dependency hash matches the pinned value, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean"],
    :dag-node
