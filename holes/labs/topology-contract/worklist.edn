@@ -69320,8 +69320,72 @@
   {:consumer "t98A02",
    :stop-condition
    "Require both actual coefficient pair connecting naturality squares for the identity-induced K- and L-restriction maps; no supplied sign comparison, coefficient excision or relative Mayer-Vietoris exactness.",
+   :evidence
+   {:concurrent-untracked-paths
+    ["docs/statement-construction-backlog-2026-09-10.json"
+     "docs/statement-construction-roundup-2026-09-10.md"],
+    :placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Construct the coefficient-excision comparisons relating the named absolute-complement Mayer-Vietoris arrows to the four relative pairs in X; use these two connecting naturality squares to identify the restriction arrows with the required sign convention and transport exactness.",
+    :dependency-hashes
+    {:CoefficientCompactSupportRestrictionMaps
+     "d511cdea24b570aff04d8a47f5d53566a370539dd31bf252f49776ce13bf9ea6",
+     :CoefficientPairNaturality
+     "62ae88d6bc3fd4de0b065813b3e157da15d0cf75e5e8ee4ac2c5c09b046b9580"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:restrictLeft_connecting
+     "8cefad04e8703674774fbf94c1bea8972bbef066bcbd440759e5dc2c6fef45c8",
+     :restrictRight_connecting
+     "6ef8a3990e5735648107f3a66e1398037a1326f8dd80d68d8bd4c33cb6d988e5"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and two complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientCompactSupportRestrictionNaturality.lean ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean ConstructionTargets/CoefficientPairNaturality.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add compact support restriction naturality'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "The coefficient pair connecting morphism for the union-support complement followed by the actual complement-subspace inclusion into the K-support or L-support complement",
+     :target
+     "The actual relative restriction map in degree n+1 followed by the coefficient pair connecting morphism for the K-support or L-support complement",
+     :direction
+     "Exact forward equality from each union-support connecting-and-subspace composite to its relative-restriction-and-target-connecting composite, separately for K and L in every natural degree."},
+    :commit "ba28b5eeed28d39f20f52f8fc367d14f0963bba7",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactSupportRestrictionNaturality.lean",
+     :sha256
+     "78c21c6f8b359cd3ba3dce8ed47a2d12ce0a1f1366b5f05b0d61ec3fb1e938ae",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled the two actual coefficient pair connecting-naturality squares for the identity-induced K- and L-restriction maps in every natural degree. The concurrent untracked documentation files were preserved untouched. No sign comparison, transported-arrow equality, coefficient excision, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 2,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean"],
    :dag-node
