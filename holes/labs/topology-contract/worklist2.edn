@@ -27819,8 +27819,202 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:concurrent-reservations
+    [:t98a01-frozen-fivefold-cover-closure-probe-refill49
+     :coefficient-compact-support-mayer-vietoris-probe-refill49
+     :finite-translated-embedded-arcs-chart-containment-probe-refill49],
+    :near-closure-eligibility
+    {:eligible-unreserved 0,
+     :boundaries
+     [{:consumers [:t98A01],
+       :boundary
+       "The elected one-placeholder fivefold-cover adapter is done-unreviewed and therefore unavailable for duplicate election."}
+      {:consumers [:t00J02 :t03J05 :t96J06 :t98A02],
+       :boundary
+       "Transition-unit local constancy is reviewed, but compact-support Mayer-Vietoris, global localization, duality and gluing remain; compact-support work is reserved."}
+      {:consumers [:a97J08 :t00A03 :t94J09 :t97A01 :t99J03 :t95J06],
+       :boundary
+       "Finite simultaneous translations are reviewed, while chart containment and relative endpoint control are reserved. Polygon invariants and surface classification remain later."}
+      {:consumers [:t02A05 :t95J05],
+       :boundary
+       "The measurable graph partition is reviewed, but exact variable-density area equality and literal sphere masses are absent."}
+      {:consumers [:t00J01],
+       :boundary
+       "Concrete Klein-product and exact fold-fiber obligations remain."}
+      {:consumers [:t01A05],
+       :boundary
+       "The recorded connectedness specification defect remains."}
+      {:consumers [:t01A08],
+       :boundary
+       "Arbitrary-model chart-domain and within-derivative applicability remain."}
+      {:consumers [:t01J04 :t94A06],
+       :boundary
+       "Exact regular-preimage, half-space atlas and normal-translation applicability remain."}
+      {:consumers [:t02A08],
+       :boundary
+       "Actual arbitrary-integer sphere-map homology action remains unconstructed."}
+      {:consumers [:t03J02],
+       :boundary
+       "Reviewed closed-circle gluing STOP remains unresolved."}
+      {:consumers [:t03J04],
+       :boundary
+       "Uniform rational torus homology and the finite-cover Euler relation remain absent."}
+      {:consumers [:t92J06],
+       :boundary
+       "Cover classification, monodromy, surface-cover realization and genus invariance remain."}
+      {:consumers [:t96J05],
+       :boundary
+       "Preserve the proved radial counterexample and separate analytic or smooth repair obligations."}]},
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read complete DAG, foundational-program note, closure experiments, build-loop design and both ledgers",
+      :exit 0}
+     {:cmd
+      "Inspect dependency PASS receipts and all open, active and done-unreviewed rows",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped consumer census and module/path comparison at fe25dcd9a49c788e2f18031551c549d2c188762f and e90e523c43cd3794ba5cdce4552db030b82409e0",
+      :exit 0}
+     {:cmd
+      "Inspect lintegral convergence, disjoint-union integration and Hausdorff measure additivity APIs",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :replacement-items
+    [{:consumer :t02A05,
+      :stop-condition
+      "Do not assume an area formula, integrability, finite measure, numerical Hausdorff normalization or measure-preserving parameterization. Retain actual L2 graph and Borel structures. Do not infer sphere masses, Stokes, periods or consumer closure. Exclude reserved orientation, covering and surface work; use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD INTEGRATION: exact C1 graph Hausdorff area from measurable approximation partitions",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "E is EuclideanSpace real (Fin d), d is natural, U is open, and f:E→real is ContDiffOn real 1 f U. Use Hausdorff d-measure on E and on WithLp 2 (E×real), with the existing diameter-power convention. No finiteness assumption on U or either measure.",
+       :probe
+       "For the actual density J(x)=ENNReal.ofReal(sqrt(1+norm(fderiv real f x)^2)), construct the reviewed measurable partitions for a sequence of positive errors tending to zero. Prove measurability of J on U. On every partition, compare each selected constant density with J using the proved derivative proximity, sum the actual disjoint graph measures, and derive global lower and upper bounds without cancelling an infinite measure. Prove convergence of all scalar and lintegral bounds and squeeze to the exact equation H_d(Graph(f,U))=∫⁻x in U,J(x)∂H_d. Include empty U, zero f and dimensions two and three. GO requires a complete placeholder-free fixture; REVISE requires exactly one complete compiled missing analytic measure-limit prerequisite; STOP names the exact independent construction or a compiled refutation.",
+       :consumer-equation
+       "The Hausdorff d-measure of the actual L2 graph of a C1 scalar function over an open Euclidean domain equals the Hausdorff integral of sqrt(1+norm(fderiv f)^2) over that domain, with no numerical Hausdorff-to-volume normalization suppressed.",
+       :consumer-residual
+       "Specialize to upper and lower sphere-cap graphs, assemble compatible measurable charts, and determine Euclidean Hausdorff-to-volume normalization before evaluating literal sphere masses and frozen integrals.",
+       :gates
+       ["Compile complete fixture and record SHA256."
+        "Audit the actual density measurability and restriction to U."
+        "Verify every partition and local estimate is constructed from the reviewed C1GraphPartition theorem."
+        "Verify countable additivity for the measurable disjoint graph images and domain pieces."
+        "Prove density comparison from actual derivative proximity and control both ENNReal bounds."
+        "Audit convergence as error tends to zero, including zero and infinite measure cases without unsafe cancellation."
+        "Prove the exact graph-area equation and empty-domain and zero-function cases."
+        "Compile dimension-two and dimension-three examples and standard-only axiom audits."
+        "Recheck both ledgers and preserve reservations, unresolved STOPs and refutations; run placeholder and forbidden-declaration scans."]},
+      :id :oriented-checkpoint46-c1-graph-exact-hausdorff-area-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint46-measurable-graph-partition-and-consumer-refill
+       :oriented-checkpoint45-c1-graph-measurable-approximation-partition-1],
+      :current-residual
+      "Reviewed measurable pieces satisfy uniform graph bounds and approximate actual derivatives. Prove that their sums converge to the integral of the pointwise graph density and squeeze the graph measure to that integral.",
+      :other-consumers [:t95J05 :t01J06 :t94A10]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: exact graph area and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id :oriented-checkpoint47-exact-graph-area-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1
+       :oriented-checkpoint46-measurable-graph-partition-and-consumer-refill],
+      :current-residual
+      "Measure exact graph-area progress separately from sphere-chart assembly and numerical normalization; rerank every consumer against concurrent outcomes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :measures
+    {:infrastructure-packets
+     {:before 758,
+      :after 762,
+      :portfolio
+      ["ConstructionTargets/C1GraphLocalApproximation.lean"
+       "ConstructionTargets/C1GraphPartition.lean"],
+      :concurrent
+      ["ConstructionTargets/CoefficientTransitionLocalConstancy.lean"
+       "ConstructionTargets/PlaneArcFiniteSmallTranslations.lean"]},
+     :typed-residual-change
+     "C1 regularity now constructs local convex approximation balls, and a countable disjoint Borel partition carries derivative proximity, two-point residual bounds, measurable disjoint L2 graph images, exact graph coverage and piecewise Hausdorff bounds. Concurrent work proves actual transition-unit local constancy and simultaneous finite-family plane translations. Exact graph area, compact-support localization and chart-contained endpoint-preserving arc perturbation remain separate.",
+     :review-outcomes
+     {:local-graph-approximation
+      {:outcome :pass,
+       :commit "86ce47bdc7822a4e038b8ded58536541630c9366",
+       :review "invoke-1789039488806-18476-79fad9a3"},
+      :measurable-graph-partition
+      {:outcome :pass,
+       :commit "d0b56c5f053b8b7320e82ebeb506a058391f7551",
+       :review "invoke-1789040285110-18495-d73b74cd"},
+      :transition-unit-local-constancy
+      {:outcome :pass,
+       :commit "84213e950cb5a1f26fb9f4933760312c87e863f7",
+       :review "invoke-1789039437917-18474-10f54cc9"},
+      :finite-plane-arc-translations
+      {:outcome :pass,
+       :commit "6e60b009bd87f8833a1aae0d3c54e1082035beb1",
+       :review "invoke-1789039667503-18481-4a608e32"},
+      :fivefold-cover-adapter
+      {:outcome :done-unreviewed,
+       :disposition "Exclude until independent review."}},
+     :frozen-branch-uptake 0,
+     :frozen-closures 0,
+     :corrected-closures 0,
+     :proved-refutations 0},
+    :ranking
+    "No newly eligible near-closure adapter is unreserved. The four-consumer integration route now has the shortest bounded continuation: use partitions at errors tending to zero, actual countable additivity, density proximity and ENNReal convergence to prove exact graph area. This directly follows the two reviewed graph packets and remains independent of numerical Euclidean Hausdorff normalization.",
+    :finding
+    "All four infrastructure additions passed independent review and no consumer bytes or placeholder counts changed. Elect one exact C1 graph-area probe and a successor checkpoint. Preserve the pending fivefold-cover review, two active reservations, unresolved STOPs and historical refutations.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/codex13-checkpoint46-census.json",
+     :baseline "fe25dcd9a49c788e2f18031551c549d2c188762f",
+     :existing 58,
+     :placeholder-after 62,
+     :zero-placeholder 25,
+     :placeholder-delta 0,
+     :open-consumers 33,
+     :placeholder-before 62,
+     :head "e90e523c43cd3794ba5cdce4552db030b82409e0",
+     :sha256
+     "e8341a5dd9e0baa8c8f9e30af4eaf8df22a26aa79ffa541f1e6b208dbddb03a7",
+     :named 59,
+     :missing [:t93A05],
+     :within-two 23}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: measurable graph approximation and renewed consumer eligibility",
@@ -27838,6 +28032,73 @@
     :oriented-checkpoint45-uniform-area-bounds-and-consumer-refill],
    :current-residual
    "Measure measurable approximation progress separately from exact area equality and numerical normalization; rerank every consumer against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t02A05,
+   :stop-condition
+   "Do not assume an area formula, integrability, finite measure, numerical Hausdorff normalization or measure-preserving parameterization. Retain actual L2 graph and Borel structures. Do not infer sphere masses, Stokes, periods or consumer closure. Exclude reserved orientation, covering and surface work; use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD INTEGRATION: exact C1 graph Hausdorff area from measurable approximation partitions",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "E is EuclideanSpace real (Fin d), d is natural, U is open, and f:E→real is ContDiffOn real 1 f U. Use Hausdorff d-measure on E and on WithLp 2 (E×real), with the existing diameter-power convention. No finiteness assumption on U or either measure.",
+    :probe
+    "For the actual density J(x)=ENNReal.ofReal(sqrt(1+norm(fderiv real f x)^2)), construct the reviewed measurable partitions for a sequence of positive errors tending to zero. Prove measurability of J on U. On every partition, compare each selected constant density with J using the proved derivative proximity, sum the actual disjoint graph measures, and derive global lower and upper bounds without cancelling an infinite measure. Prove convergence of all scalar and lintegral bounds and squeeze to the exact equation H_d(Graph(f,U))=∫⁻x in U,J(x)∂H_d. Include empty U, zero f and dimensions two and three. GO requires a complete placeholder-free fixture; REVISE requires exactly one complete compiled missing analytic measure-limit prerequisite; STOP names the exact independent construction or a compiled refutation.",
+    :consumer-equation
+    "The Hausdorff d-measure of the actual L2 graph of a C1 scalar function over an open Euclidean domain equals the Hausdorff integral of sqrt(1+norm(fderiv f)^2) over that domain, with no numerical Hausdorff-to-volume normalization suppressed.",
+    :consumer-residual
+    "Specialize to upper and lower sphere-cap graphs, assemble compatible measurable charts, and determine Euclidean Hausdorff-to-volume normalization before evaluating literal sphere masses and frozen integrals.",
+    :gates
+    ["Compile complete fixture and record SHA256."
+     "Audit the actual density measurability and restriction to U."
+     "Verify every partition and local estimate is constructed from the reviewed C1GraphPartition theorem."
+     "Verify countable additivity for the measurable disjoint graph images and domain pieces."
+     "Prove density comparison from actual derivative proximity and control both ENNReal bounds."
+     "Audit convergence as error tends to zero, including zero and infinite measure cases without unsafe cancellation."
+     "Prove the exact graph-area equation and empty-domain and zero-function cases."
+     "Compile dimension-two and dimension-three examples and standard-only axiom audits."
+     "Recheck both ledgers and preserve reservations, unresolved STOPs and refutations; run placeholder and forbidden-declaration scans."]},
+   :id :oriented-checkpoint46-c1-graph-exact-hausdorff-area-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint46-measurable-graph-partition-and-consumer-refill
+    :oriented-checkpoint45-c1-graph-measurable-approximation-partition-1
+    :oriented-checkpoint46-measurable-graph-partition-and-consumer-refill],
+   :current-residual
+   "Reviewed measurable pieces satisfy uniform graph bounds and approximate actual derivatives. Prove that their sums converge to the integral of the pointwise graph density and squeeze the graph measure to that integral.",
+   :other-consumers [:t95J05 :t01J06 :t94A10]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: exact graph area and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint47-exact-graph-area-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1
+    :oriented-checkpoint46-measurable-graph-partition-and-consumer-refill
+    :oriented-checkpoint46-measurable-graph-partition-and-consumer-refill],
+   :current-residual
+   "Measure exact graph-area progress separately from sphere-chart assembly and numerical normalization; rerank every consumer against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
