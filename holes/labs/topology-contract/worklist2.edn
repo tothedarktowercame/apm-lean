@@ -29734,6 +29734,70 @@
    :other-consumers [:t02A05 :t01J06 :t94A10]}
   {:consumer :t95J05,
    :stop-condition
+   "Bank only the exact upper and lower strict-cap set equalities in WithLp 2, including coordinate reconstruction. Do not claim a Euclidean coordinate isometry, Euclidean cap equality, subtype or Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean",
+      :sha256
+      "4db1d007386e6e607bfffe609d04029fe45ce3b633b10b48628238d74b50ce74"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SphereCapL2Image.lean"
+    "ConstructionTargets/SphereCapL2Image.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: exact strict sphere-cap images in the L2 graph ambient space",
+   :acceptance
+   {:namespace "ConstructionTargets.SphereCapL2Image",
+    :implementation
+    "Promote the exact compiled fixture and document how its native L2 cap equalities feed the remaining Euclidean coordinate-isometry and Hausdorff-transport comparison.",
+    :hypotheses
+    "Use EuclideanSpace real (Fin d), the reviewed open unit ball and upper and lower cap heights inside WithLp 2 of the Euclidean domain times real. Results hold for every natural d; consumer examples use d=2 and d=3. No isometry, measure or normalization hypothesis is supplied.",
+    :declarations
+    ["Ambient"
+     "upperCap"
+     "lowerCap"
+     "norm_eq_one_of_sq"
+     "upper_graph_subset_cap"
+     "lower_graph_subset_cap"
+     "upperCap_fst_mem"
+     "lowerCap_fst_mem"
+     "upperCap_snd"
+     "lowerCap_snd"
+     "upper_graph_eq_cap"
+     "lower_graph_eq_cap"],
+    :consumer-equation
+    "In the native L2 graph ambient space, Graph upper domain equals the unit-norm subset with positive last coordinate, and Graph lower domain equals the unit-norm subset with negative last coordinate.",
+    :consumer-residual
+    "Construct the explicit linear isometric equivalence from WithLp 2 (EuclideanSpace real (Fin d) times real) to EuclideanSpace real (Fin (d+1)), prove its coordinate formulas and literal Euclidean cap images, and transport C1GraphGlobalBounds.exact_area_value through it.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.SphereCapL2Image."
+     "Reproduce six standard-only axiom audits and dimension-two and dimension-three examples for both cap signs."
+     "Audit both graph-to-cap inclusions using the reviewed literal L2 unit-norm equations and strict signs."
+     "Audit both cap-to-graph inclusions, including strict open-ball membership and signed square-root reconstruction."
+     "Verify exact set equality in both directions for each sign."
+     "Confirm no Euclidean isometry, measure transport, normalization, equator or moment result is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :sphere-cap-l2-strict-image-1,
+   :kind :reusable-theorem,
+   :depends-on [:sphere-cap-height-graph-density-1],
+   :current-residual
+   "Before transporting graph area to the literal Euclidean sphere, the reviewed upper and lower graphs must be identified exactly with strict unit caps in their native WithLp 2 ambient space.",
+   :other-consumers [:t02A05 :t01J06 :t94A10]}
+  {:consumer :t95J05,
+   :stop-condition
    "Do not assume a cap parameterization is measure-preserving, suppress subtype or ambient measure transport, include the equator without a proved null-boundary comparison, or assume numerical Euclidean Hausdorff normalization. Do not evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Exclude active compact-support, arc, orientation and surface work; use a unique row-specific scratch directory.",
    :evidence
    {:probe
@@ -29743,64 +29807,67 @@
      :prerequisite
      {:consumer :t95J05,
       :stop-condition
-      "Bank only the exact derivative norms and upper and lower graph-density formulas. Do not claim an ambient coordinate isometry, cap-image equality, subtype or Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
+      "Bank only the exact upper and lower strict-cap set equalities in WithLp 2, including coordinate reconstruction. Do not claim a Euclidean coordinate isometry, Euclidean cap equality, subtype or Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
       :evidence
       {:probe
        {:outcome :go,
         :seat "codex-13",
         :fixture
         {:path
-         "/tmp/codex13-checkpoint47-cap-density/SphereCapGraphDensity.lean",
+         "/tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean",
          :sha256
-         "ead6d3e5f1495df18fad9742abd7a178da4e2d4082e1943efd1b6a4082dcb8d1"},
+         "4db1d007386e6e607bfffe609d04029fe45ce3b633b10b48628238d74b50ce74"},
         :commands
         [{:cmd
-          "lake env lean /tmp/codex13-checkpoint47-cap-density/SphereCapGraphDensity.lean",
+          "lake env lean /tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean",
           :exit 0}],
         :warnings [],
         :axioms ["propext" "Classical.choice" "Quot.sound"]}},
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SphereCapGraphDensity.lean"
-       "ConstructionTargets/SphereCapGraphDensity.md"],
+      ["ConstructionTargets/SphereCapL2Image.lean"
+       "ConstructionTargets/SphereCapL2Image.md"],
       :dag-node
-      "MANIFOLD INTEGRATION: exact graph densities of sphere-cap heights",
+      "MANIFOLD INTEGRATION: exact strict sphere-cap images in the L2 graph ambient space",
       :acceptance
-      {:namespace "ConstructionTargets.SphereCapGraphDensity",
+      {:namespace "ConstructionTargets.SphereCapL2Image",
        :implementation
-       "Promote the exact compiled fixture and document how its reciprocal-height density formula feeds the remaining cap representation and measure transport.",
+       "Promote the exact compiled fixture and document how its native L2 cap equalities feed the remaining Euclidean coordinate-isometry and Hausdorff-transport comparison.",
        :hypotheses
-       "Use EuclideanSpace real (Fin d), the reviewed open unit ball, cap heights and their exact Frechet derivatives. Results hold for every natural d; named consumer examples use d=2 and d=3. No measure, normalization or isometry hypothesis is supplied.",
+       "Use EuclideanSpace real (Fin d), the reviewed open unit ball and upper and lower cap heights inside WithLp 2 of the Euclidean domain times real. Results hold for every natural d; consumer examples use d=2 and d=3. No isometry, measure or normalization hypothesis is supplied.",
        :declarations
-       ["upperDerivative_eq"
-        "norm_upperDerivative"
-        "norm_lowerDerivative"
-        "density_upperDerivative_sq"
-        "density_lowerDerivative_sq"
-        "density_upperDerivative"
-        "density_lowerDerivative"
-        "fderiv_upper_density"
-        "fderiv_lower_density"],
+       ["Ambient"
+        "upperCap"
+        "lowerCap"
+        "norm_eq_one_of_sq"
+        "upper_graph_subset_cap"
+        "lower_graph_subset_cap"
+        "upperCap_fst_mem"
+        "lowerCap_fst_mem"
+        "upperCap_snd"
+        "lowerCap_snd"
+        "upper_graph_eq_cap"
+        "lower_graph_eq_cap"],
        :consumer-equation
-       "On the open unit ball, both cap-height derivative norms equal norm(x)/upper(x), and the actual L2 graph density of either height derivative equals 1/upper(x).",
+       "In the native L2 graph ambient space, Graph upper domain equals the unit-norm subset with positive last coordinate, and Graph lower domain equals the unit-norm subset with negative last coordinate.",
        :consumer-residual
-       "Construct the explicit WithLp 2 to EuclideanSpace coordinate isometry, prove exact strict-cap image equalities and subtype identifications, and transport C1GraphGlobalBounds.exact_area_value.",
+       "Construct the explicit linear isometric equivalence from WithLp 2 (EuclideanSpace real (Fin d) times real) to EuclideanSpace real (Fin (d+1)), prove its coordinate formulas and literal Euclidean cap images, and transport C1GraphGlobalBounds.exact_area_value through it.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.SphereCapGraphDensity."
-        "Reproduce eight standard-only axiom audits and dimension-two and dimension-three examples for both signs."
-        "Audit the continuous-linear-functional norm calculation using innerSL_apply_norm."
-        "Verify both squared-density identities use the reviewed upper-height square equation and strict positivity."
-        "Verify both fderiv graph densities simplify exactly to the reciprocal upper height."
-        "Confirm no isometry, measure transport, normalization, equator or moment result is claimed."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.SphereCapL2Image."
+        "Reproduce six standard-only axiom audits and dimension-two and dimension-three examples for both cap signs."
+        "Audit both graph-to-cap inclusions using the reviewed literal L2 unit-norm equations and strict signs."
+        "Audit both cap-to-graph inclusions, including strict open-ball membership and signed square-root reconstruction."
+        "Verify exact set equality in both directions for each sign."
+        "Confirm no Euclidean isometry, measure transport, normalization, equator or moment result is claimed."
         "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :sphere-cap-height-graph-density-1,
+      :id :sphere-cap-l2-strict-image-1,
       :kind :reusable-theorem,
-      :depends-on [:sphere-cap-height-fderivative-1],
+      :depends-on [:sphere-cap-height-graph-density-1],
       :current-residual
-      "The cap representation needs the norms of the reviewed height derivatives and simplification of their L2 graph densities before applying the exact graph-area theorem.",
+      "Before transporting graph area to the literal Euclidean sphere, the reviewed upper and lower graphs must be identified exactly with strict unit caps in their native WithLp 2 ambient space.",
       :other-consumers [:t02A05 :t01J06 :t94A10]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
@@ -29809,20 +29876,20 @@
        "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
        :exit 0}
       {:cmd
-       "Inspect SphereCapHeightDerivative, C1GraphDensityControl, inner-product functional norms and exact graph-area interfaces",
+       "Inspect SphereCapHeight, SphereCapGraphDensity, GraphMetricComparison and L2 product norm APIs",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint47-cap-density/SphereCapGraphDensity.lean",
+       "lake env lean /tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/codex13-checkpoint47-cap-density/SphereCapGraphDensity.lean",
+       "sha256sum /tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint47-cap-density/SphereCapGraphDensity.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "Python comment-stripped placeholder, whitespace, warning and eight standard-only axiom audits",
+       "Python comment-stripped placeholder, whitespace, warning and six standard-only axiom audits",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -29832,30 +29899,30 @@
        :exit 0}
       {:cmd "git diff --exit-code && git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial cap graph-density fixture compilation",
+     [{:cmd "Initial L2 cap-image fixture compilation",
        :exit 1,
        :correction
-       "Reordered absolute-value rewrites, replaced unsuccessful field normalization with an explicit common-denominator calculation, and applied the nonnegative square equality in the correct direction."}
-      {:cmd "Compilation after the first algebra correction",
+       "Exposed GraphMetricComparison.point before rewriting by point_recover, unfolded the reviewed domain definition, qualified ambiguous height names and corrected the signed square-root reconstruction."}
+      {:cmd "Compilation after initial representation corrections",
        :exit 1,
        :correction
-       "Used the reviewed upper-height square identity directly in the common-denominator proof and supplied explicit nonnegativity of the reciprocal density. The corrected fixture compiles."}
-      {:cmd "First final compile-log command",
+       "Used Real.sqrt_sq_eq_abs followed by the strict negative sign to reconstruct the lower height. The corrected fixture compiles without warnings."}
+      {:cmd "First batched final-audit orchestration",
        :exit 1,
        :correction
-       "The shell command contained the malformed redirection token 2d. Reran the unchanged fixture with 2>&1; Lean exited zero and emitted only the requested axiom reports."}],
+       "Corrected a JavaScript yield-time identifier typo and reran every intended audit command; all final checks completed with their recorded exits."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint47-cap-density/SphereCapGraphDensity.lean",
+      "/tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean",
       :sha256
-      "ead6d3e5f1495df18fad9742abd7a178da4e2d4082e1943efd1b6a4082dcb8d1",
+      "4db1d007386e6e607bfffe609d04029fe45ce3b633b10b48628238d74b50ce74",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled analytic prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 sphere-integration routes. It proves exact norms for both cap-height derivatives and simplifies both reviewed L2 graph densities to 1/upper(x) throughout the open unit ball, including dimension-two and dimension-three examples. The parent comparison is not GO: the explicit L2-product-to-Euclidean coordinate isometry, strict-cap image equalities, subtype identifications and Hausdorff-measure transport remain unproved. No canonical source or ledger was edited.",
+     "Exactly one complete compiled representation prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 sphere-integration routes. In the reviewed WithLp 2 ambient space, it defines the strict positive and negative unit caps and proves exact equality with the upper and lower cap-height graphs. The reverse inclusions derive open-ball membership and recover the signed square root from the literal L2 unit-norm equation. The parent comparison is not GO: the linear isometric equivalence to EuclideanSpace real (Fin (d+1)), its coordinate formulas, the resulting literal Euclidean cap equality, subtype identifications and Hausdorff-measure transport remain unproved. No canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual unit-sphere caps as reviewed C1 L2 graphs",
@@ -29893,7 +29960,8 @@
     :oriented-checkpoint47-exact-graph-area-and-consumer-refill
     :sphere-cap-height-c1-unit-graph-1
     :sphere-cap-height-fderivative-1
-    :sphere-cap-height-graph-density-1],
+    :sphere-cap-height-graph-density-1
+    :sphere-cap-l2-strict-image-1],
    :current-residual
    "The exact scalar graph-area theorem is banked, but the literal upper and lower unit-sphere subsets have not been identified with its WithLp 2 graph representation and induced Hausdorff measures.",
    :other-consumers [:t02A05 :t01J06 :t94A10]}
