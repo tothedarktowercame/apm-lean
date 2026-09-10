@@ -21547,8 +21547,182 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint37Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint37Eligibility.bb", :exit 0}
+     {:cmd
+      "Read complete DAG inventory and foundational-program note; inspect closure rules, both ledgers, dependency receipts and concurrent reservations",
+      :exit 0}
+     {:cmd
+      "Inspect HigherModelLocalHomology, ChartPairRelativeHomologyTransport and PuncturedNormedSpaceRadialEquivalence representation boundaries",
+      :exit 0}
+     {:cmd
+      "git log --format='%h %s' d4bbe309..HEAD -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "Python SHA256 audit of DAG, closure note, foundational-program note and repaired t94J08 Main",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer :t94J08,
+      :stop-condition
+      "Do not classify the original ordinary-S0 proposition as proved, change frozen sources, erase historical refutations or edit either ledger.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "CLOSURE RECORD: repaired positive-dimensional t94J08",
+      :acceptance
+      {:probe
+       "Prepare an exact reviewable documentation patch for TOPOLOGY-DEPENDENCY-DAG.md and docs/TN-topology-closure-experiments.md. Record the repaired positive-dimensional closure commit and independent review, exact preserved theorem hashes, fixture/Main SHA256, placeholder change 2 to 0, standard-only axioms and warning attribution. Update stale current-status statements while retaining historical evidence. Explicitly distinguish repaired-statement closure from the original ordinary-S0 refutation and outstanding reduced-homology coverage.",
+       :implementation-scope
+       ["TOPOLOGY-DEPENDENCY-DAG.md"
+        "docs/TN-topology-closure-experiments.md"],
+       :consumer-equation
+       "The canonical repaired t94J08 antipodal and local-index theorem is reviewed complete.",
+       :consumer-residual
+       "Closure documentation only; no remaining proof obligation in the repaired consumer.",
+       :gates
+       ["Verify commit 69eb3d52d58a9189da8413b0f26bc09ddd90f035 and review invoke-1789024889748-18126-04ebb0b2."
+        "Verify Main SHA256 005a6a4d7d785eb3d9c90c54127b6ae6001a4ed481846959e19c4e98ab945ee5 and zero executable placeholders."
+        "Preserve the original S0 refutation and reduced-homology boundary."
+        "Supply an exact two-file documentation patch; implementation must pass whitespace and scope checks."]},
+      :id
+      :oriented-checkpoint37-t94j08-reviewed-closure-documentation-1,
+      :kind :documentation,
+      :depends-on
+      [:oriented-checkpoint37-t94j08-uptake-and-consumer-refill
+       :oriented-checkpoint36-t94j08-positive-antipodal-closure-1],
+      :current-residual
+      "Reviewed consumer closure is not yet reflected in the DAG and closure-experiment note.",
+      :other-consumers []}
+     {:consumer :t98A02,
+      :stop-condition
+      "No integral-to-R reinterpretation, assumed relative isomorphism, assumed local sign or manifold orientation coherence. Do not claim global localization, gluing, nonbounding or frozen closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "LOCAL HOMOLOGY: actual coefficient-general Euclidean model normalization and negation",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a Type 0 commutative ring R and Euclidean ambient dimension d at least two, construct an isomorphism from H_d of the actual subtype-cokernel pair (EuclideanSpace ℝ (Fin d), complement of the origin) over ModuleCat.of R R to ModuleCat.of R R. Use contractible ambient vanishing, the actual pair connecting map, the reviewed punctured-space radial homotopy equivalence and the constructed positive sphere normalization. Prove the exact connecting-radial-normalization forward composite, both inverse laws and generator normalization. Construct actual negation on this pair, prove its restricted radial square, and use actual connecting naturality and antipodal_action to prove its normalized relative action is multiplication by (-1)^d. Compile integer and rational examples in dimensions two and three. GO requires a complete placeholder-free fixture; REVISE requires exactly one complete compiled missing actual radial-pair comparison; STOP names independent foundations.",
+       :hypotheses
+       "Keep coefficients Type 0 and separate from real geometry. Require d at least two for the positive sphere endpoint; do not silently apply it to ordinary H0 of S0.",
+       :consumer-equation
+       "The actual R-linear local homology of the Euclidean model in degree d is R with explicit radial normalization, and actual local negation acts by (-1)^d.",
+       :consumer-residual
+       "Transport model generators through actual deleted-point manifold charts and prove overlap compatibility before global localization and t98A02 gluing. Cover-degree and nonbounding require their separate global comparisons.",
+       :gates
+       ["Compile complete fixture and record SHA256."
+        "Audit actual subtype cokernel, connecting arrow, radial map orientation and negation square."
+        "Verify scalar equation, generator normalization and inverse laws without coefficient-change assumptions."
+        "Record integer/rational examples and standard-only axiom audits."
+        "Recheck both ledgers and preserve concurrent reservations and all reviewed consumer STOPs."]},
+      :id :oriented-checkpoint37-coefficient-model-local-negation-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint37-t94j08-uptake-and-consumer-refill
+       :oriented-checkpoint35-coefficient-positive-sphere-antipodal-1
+       :oriented-checkpoint32-coefficient-pair-connecting-naturality-1
+       :oriented-checkpoint28-coefficient-contractible-pair-sequence-1],
+      :current-residual
+      "The banked higher model calculation uses AddCommGrpCat integers. Actual R-linear model local homology and its geometric negation action are not yet assembled for coefficient-general localization.",
+      :other-consumers [:t01A02 :t03J05 :t96J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: local model progress and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id :oriented-checkpoint38-local-model-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint37-t94j08-reviewed-closure-documentation-1
+       :oriented-checkpoint37-coefficient-model-local-negation-1],
+      :current-residual
+      "Measure closure documentation and actual local-model progress separately; rerank all consumers against concurrent outcomes.",
+      :other-consumers []}],
+    :attribution
+    {:closure "69eb3d52d58a9189da8413b0f26bc09ddd90f035",
+     :closure-review "invoke-1789024889748-18126-04ebb0b2",
+     :concurrent ["dfe31bd0" "3e20822e"],
+     :concurrent-reviews
+     ["invoke-1789024599031-18116-20e605c0"
+      "invoke-1789024933179-18128-efeca2f0"],
+     :reserved
+     [:compact-surface-embedded-triangle-cover-probe-refill42
+      :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer]},
+    :changed-paths [],
+    :measures
+    {:baseline "d4bbe3097b2e9575b1d3effea46f6b2697abcb8b",
+     :concurrent-infrastructure-packets 2,
+     :portfolio-infrastructure-packets 0,
+     :existing-consumers 58,
+     :missing-consumers [:t93A05],
+     :placeholder-delta -2,
+     :within-two-placeholders 24,
+     :zero-placeholder-consumers 24,
+     :placeholders-before 66,
+     :open-consumers 34,
+     :head "25f3a911cef82633bf6bf27f7592fc3f5ab7fe56",
+     :named-consumers 59,
+     :construction-modules-after 721,
+     :placeholders-after 64,
+     :construction-modules-before 719,
+     :typed-residual-change
+     "t94J08's positive-dimensional antipodal bridge and local-index theorem have no remaining proof obligations.",
+     :review-outcomes
+     {:repaired-consumer-closure-pass 1,
+      :concurrent-infrastructure-pass 2,
+      :new-refutations 0}},
+    :ranking
+    {:near-closure
+     "No eligible adapter established by the current evidence. Antipodal action does not construct every integer degree for t02A08, localization/gluing for t98A02, or fundamental classes and nonbounding for t96J06.",
+     :preserved-boundaries
+     ["t00A01: exact connected-sum van Kampen comparison."
+      "t00J01: independent Klein-product and fold-fiber obligations."
+      "t03J02 and a97J08: embedded-circle collar or planar separation geometry."
+      "t01A05: disconnected-cover specification defect; t96J05: reviewed radial-level refutation."
+      "t01A08, t01J04 and t94A06: exact regular-preimage or transversality geometry."
+      "t03J04 and surface consumers: global Euler/classification and finite compatible-face obligations."
+      "Moment and flux consumers: frozen measure/integration comparisons."
+      "t00J02: independent duality/intersection foundations; not elected first."],
+     :foundation-choice
+     "Model local homology advances the fundamental-class/localization program for t98A02, t01A02, t03J05 and t96J06. The existing HigherModelLocalHomology is explicitly integral AddCommGrpCat and lacks the actual R-linear local negation comparison. Reviewed R-linear pair maps, connecting naturality and signed sphere action now support a bounded construction. Global localization, Kunneth, Stokes and classification require larger independent developments."},
+    :finding
+    "Repaired positive-dimensional t94J08 is independently reviewed closed at 69eb3d52d58a9189da8413b0f26bc09ddd90f035. Its exact definitions and statements are preserved and both placeholders are removed. The original ordinary-S0 statement remains refuted. No other near-closure adapter has newly resolved its recorded boundary. Elect closure documentation and one bounded coefficient-general model-local-homology construction; preserve concurrent surface reservations.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint37Census.json",
+     :sha256
+     "9984b5b3847016bd605c42d532198cb7c2e515ca238d9fc204d832df6fd4ef0e",
+     :script "/tmp/Checkpoint37Census.py",
+     :method
+     "All DAG-named consumers counted from pinned Git blobs after stripping block and line comments."}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: repaired t94J08 uptake and renewed consumer eligibility",
@@ -21564,6 +21738,102 @@
     :oriented-checkpoint36-antipodal-computation-and-consumer-refill],
    :current-residual
    "Verify exact repaired consumer uptake and placeholder changes, distinguish it from the original S0 refutation, and rerank the complete DAG against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t94J08,
+   :stop-condition
+   "Do not classify the original ordinary-S0 proposition as proved, change frozen sources, erase historical refutations or edit either ledger.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "CLOSURE RECORD: repaired positive-dimensional t94J08",
+   :acceptance
+   {:probe
+    "Prepare an exact reviewable documentation patch for TOPOLOGY-DEPENDENCY-DAG.md and docs/TN-topology-closure-experiments.md. Record the repaired positive-dimensional closure commit and independent review, exact preserved theorem hashes, fixture/Main SHA256, placeholder change 2 to 0, standard-only axioms and warning attribution. Update stale current-status statements while retaining historical evidence. Explicitly distinguish repaired-statement closure from the original ordinary-S0 refutation and outstanding reduced-homology coverage.",
+    :implementation-scope
+    ["TOPOLOGY-DEPENDENCY-DAG.md"
+     "docs/TN-topology-closure-experiments.md"],
+    :consumer-equation
+    "The canonical repaired t94J08 antipodal and local-index theorem is reviewed complete.",
+    :consumer-residual
+    "Closure documentation only; no remaining proof obligation in the repaired consumer.",
+    :gates
+    ["Verify commit 69eb3d52d58a9189da8413b0f26bc09ddd90f035 and review invoke-1789024889748-18126-04ebb0b2."
+     "Verify Main SHA256 005a6a4d7d785eb3d9c90c54127b6ae6001a4ed481846959e19c4e98ab945ee5 and zero executable placeholders."
+     "Preserve the original S0 refutation and reduced-homology boundary."
+     "Supply an exact two-file documentation patch; implementation must pass whitespace and scope checks."]},
+   :id :oriented-checkpoint37-t94j08-reviewed-closure-documentation-1,
+   :kind :documentation,
+   :depends-on
+   [:oriented-checkpoint37-t94j08-uptake-and-consumer-refill
+    :oriented-checkpoint36-t94j08-positive-antipodal-closure-1
+    :oriented-checkpoint37-t94j08-uptake-and-consumer-refill],
+   :current-residual
+   "Reviewed consumer closure is not yet reflected in the DAG and closure-experiment note.",
+   :other-consumers []}
+  {:consumer :t98A02,
+   :stop-condition
+   "No integral-to-R reinterpretation, assumed relative isomorphism, assumed local sign or manifold orientation coherence. Do not claim global localization, gluing, nonbounding or frozen closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "LOCAL HOMOLOGY: actual coefficient-general Euclidean model normalization and negation",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a Type 0 commutative ring R and Euclidean ambient dimension d at least two, construct an isomorphism from H_d of the actual subtype-cokernel pair (EuclideanSpace ℝ (Fin d), complement of the origin) over ModuleCat.of R R to ModuleCat.of R R. Use contractible ambient vanishing, the actual pair connecting map, the reviewed punctured-space radial homotopy equivalence and the constructed positive sphere normalization. Prove the exact connecting-radial-normalization forward composite, both inverse laws and generator normalization. Construct actual negation on this pair, prove its restricted radial square, and use actual connecting naturality and antipodal_action to prove its normalized relative action is multiplication by (-1)^d. Compile integer and rational examples in dimensions two and three. GO requires a complete placeholder-free fixture; REVISE requires exactly one complete compiled missing actual radial-pair comparison; STOP names independent foundations.",
+    :hypotheses
+    "Keep coefficients Type 0 and separate from real geometry. Require d at least two for the positive sphere endpoint; do not silently apply it to ordinary H0 of S0.",
+    :consumer-equation
+    "The actual R-linear local homology of the Euclidean model in degree d is R with explicit radial normalization, and actual local negation acts by (-1)^d.",
+    :consumer-residual
+    "Transport model generators through actual deleted-point manifold charts and prove overlap compatibility before global localization and t98A02 gluing. Cover-degree and nonbounding require their separate global comparisons.",
+    :gates
+    ["Compile complete fixture and record SHA256."
+     "Audit actual subtype cokernel, connecting arrow, radial map orientation and negation square."
+     "Verify scalar equation, generator normalization and inverse laws without coefficient-change assumptions."
+     "Record integer/rational examples and standard-only axiom audits."
+     "Recheck both ledgers and preserve concurrent reservations and all reviewed consumer STOPs."]},
+   :id :oriented-checkpoint37-coefficient-model-local-negation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint37-t94j08-uptake-and-consumer-refill
+    :oriented-checkpoint35-coefficient-positive-sphere-antipodal-1
+    :oriented-checkpoint32-coefficient-pair-connecting-naturality-1
+    :oriented-checkpoint28-coefficient-contractible-pair-sequence-1
+    :oriented-checkpoint37-t94j08-uptake-and-consumer-refill],
+   :current-residual
+   "The banked higher model calculation uses AddCommGrpCat integers. Actual R-linear model local homology and its geometric negation action are not yet assembled for coefficient-general localization.",
+   :other-consumers [:t01A02 :t03J05 :t96J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: local model progress and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint38-local-model-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint37-t94j08-reviewed-closure-documentation-1
+    :oriented-checkpoint37-coefficient-model-local-negation-1
+    :oriented-checkpoint37-t94j08-uptake-and-consumer-refill],
+   :current-residual
+   "Measure closure documentation and actual local-model progress separately; rerank all consumers against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
