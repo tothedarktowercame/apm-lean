@@ -28369,8 +28369,113 @@
   {:consumer :t02A05,
    :stop-condition
    "Bank only the exact graph-measure and density-integral decompositions, density continuity and piecewise density comparisons. Do not claim summed global bounds, exact graph area, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Combine these decompositions with C1GraphPartition.piece_bounds, integrate the density comparisons, sum the inequalities, and apply ENNRealMultiplicativeSqueeze. No summed global bounds, exact graph area, numerical Hausdorff normalization, sphere mass, Stokes, periods or consumer closure is claimed.",
+    :scratch "/tmp/codex14-c1-measure-decomp-Pqm7mn",
+    :gates
+    {:dimension-two-three-examples :pass,
+     :selected-constant-density-integral :pass,
+     :build-jobs 2527,
+     :forward-density-piece-comparison :pass,
+     :no-finiteness-or-integrability-premise :pass,
+     :reverse-density-piece-comparison :pass,
+     :graph-measure-countable-additivity :pass,
+     :no-ennreal-cancellation :pass,
+     :derivative-density-continuity :pass,
+     :density-lintegral-countable-additivity :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 9,
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"density_integral_sum"
+     "bd36e66773a639a90934b84419dd4bd2d047b7f191fd20f7300117df23b81d51",
+     "ambientMeasure"
+     "21d62ae42d234d1a43e8b07e0591e5b96166801b602c8f3de4f3b605cc653448",
+     "selected_density_upper"
+     "b75a9a2ed93b2953eefa515c6f5e1cf2c33e890821574fceadad295ead35b32c",
+     "graph_measure_sum"
+     "317d41021b06b7b2b986d98cc30d00e672710e314ab273027fad32bcc7827696",
+     "densityAt_continuousOn"
+     "96a05ef6df5dd4407f23a9ec1d7be860615f4cae22d5103a9e5fc415e043da71",
+     "dimension_three"
+     "febbd8ec42504d75c81ad09d8aabe47e33db086247bd044f184b260446c8f38b",
+     "densityAt_value"
+     "36ffd7576ce9519d5acd04b13d13a54b047459fab4d23ffde0f50ff65b21e83a",
+     "domainMeasure"
+     "14a6edf89175809b8d0756114e1ccad27740800f70bcfc7ddb79ac9fbd12d231",
+     "selected_density_integral"
+     "4e4854dd364fd2df446c174799932b9527e572572372758456931c824dc5d552",
+     "dimension_two"
+     "f539fa6696e63b07b748dc36a0fb81451489c92261a98103f066842d03371fdf",
+     "density_piece_bounds"
+     "f49bbd304b04549d45e5fdd9180f52a5d1ddf232d39c3c1315d2ce905e30cd5a",
+     "densityAt"
+     "2a68a8e8586fa7fe725cc7ad1e157739c11dc052c0a1840e57272b88f70a85b0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG and closure experiments; inspect both ledgers and two dependency PASS receipts",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s ConstructionTargets/C1GraphMeasureDecomposition.lean /tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/C1GraphMeasureDecomposition.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.C1GraphMeasureDecomposition",
+      :exit 0}
+     {:cmd
+      "Python compile-log audit: nine target reports, standard-only axioms, zero warnings and errors",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/C1GraphMeasureDecomposition.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder scan and twelve statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check; git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m 'Decompose C1 graph measure and density integrals'",
+      :exit 0}
+     {:cmd "git diff --check 2c2bdae3^ 2c2bdae3", :exit 0}
+     {:cmd
+      "Python committed scope, fixture equality and clean scoped status verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :id :c1-graph-countable-measure-decomposition-1,
+    :commit "2c2bdae3dc99c457a4946f0b9d218a690dbe8e43",
+    :changed-paths
+    ["ConstructionTargets/C1GraphMeasureDecomposition.lean"
+     "ConstructionTargets/C1GraphMeasureDecomposition.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+     :sha256
+     "de4423dbec32306d4c5191a7b165dbf09dd446d3c76f52584b619ae9dda421af",
+     :exact-promotion true,
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The actual graph Hausdorff measure and derivative-density lintegral decompose exactly across the reviewed measurable disjoint partition. The selected constant density has its exact integral, and derivative proximity supplies both pointwise density comparisons without finiteness, cancellation or numerical normalization. Both ledgers and unrelated consumers remain untouched.",
+    :dependency-reviews
+    ["invoke-1789040285110-18495-d73b74cd"
+     "invoke-1789042656719-18555-e42ba614"],
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/C1GraphMeasureDecomposition.lean"
     "ConstructionTargets/C1GraphMeasureDecomposition.md"],
