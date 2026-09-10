@@ -13591,8 +13591,174 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["Retain the original t96J05 circle refutation and the nonconstant-radius analytic-atlas STOP; no further radial retry is elected."
+     "Retain the old t96J07 zero-vector refutation separately from its corrected closure."
+     "Retain the original t01A05 disconnected-cover refutation; any connectedness repair must be explicit and fully audited."
+     "Do not retry unchanged polygon, pants, projective-nonbounding, generic-gluing or other unresolved consumer STOPs."
+     "Preserve signed antipodal naturality, the historical ordinary-H0(S0) refutation, reduced-S0 degree and one-dimensional local-index coverage."
+     "No inferred orientation coherence, coefficient-change isomorphism, small-chain comparison or sphere-table closure."],
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint22Census.py", :exit 0}
+     {:cmd
+      "Read current DAG, foundational-program note, closure policy and both ledgers",
+      :exit 0}
+     {:cmd "bb /tmp/Checkpoint22Reviews.bb", :exit 0}
+     {:cmd
+      "Read canonical t01A05 and singular subdivision support/restriction constructions",
+      :exit 0}
+     {:cmd
+      "git log --oneline ce00018a..51f3ad03 -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd "sha256sum problems/t01A05/lean/Main.lean", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial inline bb dependency-review audit",
+      :exit 1,
+      :correction
+      "Removed an extra closing parenthesis and successfully reran the audit as /tmp/Checkpoint22Reviews.bb."}],
+    :replacement-items
+    [{:consumer :t01A05,
+      :stop-condition
+      "Preserve the old refutation. Add only ConnectedSpace hypotheses for the base and total space in the general-cover clause. Do not assume fundamental-class localization, orientation compatibility or covering degree.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SPEC-DEFECT / COVER-DEGREE: connected finite-cover fundamental-class consumer",
+      :acceptance
+      {:frozen-file "problems/t01A05/lean/Main.lean",
+       :frozen-sha256
+       "51f5c94da12b4d5e1eb1f7ada0fd397cbbfccdfb223a6ae6287978da86605750",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Under standing specification-repair authorization, construct a complete temporary Main adding only ConnectedSpace X and ConnectedSpace Xtilde to the general covering clause. Preserve all definitions, the concrete torus clause, analytic manifold order, dimensions including zero, positive sheet count and actual ModuleCat integral homology maps. Recheck the reviewed Fin 2 to Unit refutation and retain its artifact. Prove the concrete k-sheeted torus construction and both demanded fundamental-class equations without supplying an orientation or degree theorem as an assumption. Record exact old/corrected statement hashes, syntax diff and a repair note. No canonical edits during probe. If complete closure is unavailable, STOP with precise typed covering-degree or fundamental-class boundaries; absence of infrastructure is not a refutation of the corrected theorem.",
+       :consumer-equation
+       "The concrete positive-degree torus cover and every connected positive-sheeted compact cover in the corrected clause admit the demanded upstairs orientation, whose fundamental class maps to k times the downstairs class.",
+       :gates
+       ["GO requires a complete zero-placeholder compiled corrected Main, fixture SHA256 and standard-only audits."
+        "Audit that the sole statement change is the two connectedness hypotheses; preserve the original refutation."
+        "Propose implementation scope only after complete corrected closure compiles."]},
+      :id :oriented-checkpoint22-t01a05-connected-cover-repair-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint22-radial-repair-and-subdivision-homotopy-refill],
+      :current-residual
+      "The one-placeholder frozen theorem is refuted by a disconnected two-sheeted cover. Explicit connectedness removes that counterexample; the concrete torus and general actual homology-map degree equations still require proof.",
+      :other-consumers []}
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Construct restrictions of the reviewed operators; do not supply preservation equations as assumptions or reinterpret an integral conclusion as R-linear. Do not claim eventual smallness, homology comparison, excision or sphere homology.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SINGULAR-SUBDIVISION: coefficient-general preservation of cover-small chains",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a commutative ring R and an indexed family of subsets of X, construct coefficient-general subdivision and prism restrictions on the existing coverSmallSSet chains. Reuse CoefficientSmallPath.coverSmallChains and its actual inclusion, CoefficientSingularSubdivision and CoefficientSingularPrism. Generalize the finite-support realization and factorization proofs as needed, reusing coefficient-independent simplex range geometry. Prove that each restricted operator followed by inclusion equals inclusion followed by the reviewed absolute operator in every degree. Assemble the restricted subdivision chain map and its Homotopy to identity, verifying the inclusion compatibility and zero-degree equation. State universes and handle empty spaces and arbitrary index types without assuming a cover when preservation alone does not require it. Compile integer and rational overlapping interval-cover examples. REVISE requires exactly one compiled missing finite-support realization prerequisite; STOP if independent foundations remain.",
+       :consumer-equation
+       "The reviewed R-valued subdivision and prism preserve cover-small chains, and their constructed restrictions satisfy the same subdivision-minus-identity homotopy equation with the actual inclusion.",
+       :consumer-residual
+       "Eventual smallness of iterated subdivision, positive-degree small-chain comparison, relative excision and sphere suspension remain before rational S2 H1/H2.",
+       :gates
+       ["GO requires a complete placeholder-free fixture with constructed restrictions, actual inclusion equations and restricted homotopy in every degree."
+        "Record fixture SHA256, integer/rational examples and standard-only audits."]},
+      :id
+      :oriented-checkpoint22-coefficient-small-chain-preservation-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint22-radial-repair-and-subdivision-homotopy-refill
+       :oriented-checkpoint21-coefficient-subdivision-homotopy-1
+       :oriented-checkpoint16-coefficient-small-chain-h0-1],
+      :current-residual
+      "Actual coefficient-general subdivision and its singular prism are reviewed. Their restrictions to the actual cover-small subcomplex, with inclusion equations, remain unconstructed.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: connected-cover repair and small-chain preservation uptake",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint23-connected-cover-and-small-preservation-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint22-t01a05-connected-cover-repair-1
+       :oriented-checkpoint22-coefficient-small-chain-preservation-1],
+      :current-residual
+      "Measure corrected connected-cover outcome separately from cover-small preservation; attribute concurrent work and retain historical refutations.",
+      :other-consumers []}],
+    :changed-paths [],
+    :finding
+    {:concurrent-placeholder-delta 0,
+     :baseline "ce00018ae639c70ef4b5335183036497be85acf2",
+     :concurrency
+     "Exclude t02a08-frozen-integer-degree-closure-probe-refill35 and manifold-target-fiber-global-atlas-inclusion-probe-refill35. The other ledger also reserves t96j07-reviewed-corrected-closure-documentation-refill35, whose requested documentation is already completed by 7ba06a9e; elect no duplicate documentation.",
+     :placeholder-delta 0,
+     :head "51f3ad0371ee114180e107351cac9e9cc4b29a00",
+     :infrastructure-packets
+     {:modules-before 660,
+      :modules-after 665,
+      :portfolio 2,
+      :concurrent 3,
+      :portfolio-modules
+      ["CoefficientVertexPrism" "CoefficientSingularPrism"],
+      :concurrent-modules
+      ["ManifoldTargetFiberChartExtension"
+       "FiberPredicateTransfer"
+       "ManifoldTargetRegularFiberCharts"],
+      :documentation-packets 1},
+     :ranking
+     "Elect exactly one near-closure specification-repair adapter first: t01A05 has one placeholder and a reviewed disconnected-cover counterexample addressed by explicit connectedness hypotheses. This is a fresh corrected-statement probe, not a retry of the refuted frozen theorem; complete covering-degree mathematics is still required. Among available shared foundations, coefficient-general preservation serves four named consumers and has concrete integral support/restriction constructions to generalize. It is a smaller bounded step than global fundamental classes, Poincare/Thom comparison, Kunneth, surface classification, generic collars or integration. Manifold-target global atlas assembly also serves four consumers but is reserved by the other campaign.",
+     :unchanged-statement-closures 0,
+     :corrected-statement-closures 0,
+     :typed-residual-change
+     "Actual coefficient-general singular subdivision is now homotopic to identity, including degree zero. Cover-small preservation and eventual smallness remain. The radial repair does not close: reviewed infinity-order fiber atlases do not supply the frozen analytic top-order atlas, and attained regular-radius selection remains unproved. Concurrent work supplies manifold-target literal-fiber charts and overlaps, with global atlas assembly reserved elsewhere. Documentation records the earlier corrected t96J07 closure without a second reduction.",
+     :review-outcomes
+     {:radial-stop-pass "invoke-1789003475270-17533-584e1f7d",
+      :vertex-prism-pass "invoke-1789003876642-17547-3efb57ea",
+      :singular-homotopy-pass "invoke-1789004546504-17564-df3bc0a6",
+      :corrected-closure-documentation-pass
+      "invoke-1789004781629-17571-7b47e35b"},
+     :portfolio-placeholder-delta 0,
+     :census
+     {:path "/tmp/Checkpoint22Census.json",
+      :open 35,
+      :existing 58,
+      :zero-placeholder 23,
+      :after 66,
+      :sha256
+      "6e7a33ce967ce1560d13a9351490f9663fadadf9ea40b8ba867f0ad646bd366e",
+      :named 59,
+      :missing [:t93A05],
+      :within-two 25,
+      :before 66}},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: corrected radial-level uptake and subdivision homotopy",
@@ -13611,6 +13777,97 @@
     :oriented-checkpoint21-axis-repair-and-singular-subdivision-refill],
    :current-residual
    "Measure corrected radial-level outcome separately from subdivision homotopy and documentation; preserve original refutations and attribute concurrent changes.",
+   :other-consumers []}
+  {:consumer :t01A05,
+   :stop-condition
+   "Preserve the old refutation. Add only ConnectedSpace hypotheses for the base and total space in the general-cover clause. Do not assume fundamental-class localization, orientation compatibility or covering degree.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SPEC-DEFECT / COVER-DEGREE: connected finite-cover fundamental-class consumer",
+   :acceptance
+   {:frozen-file "problems/t01A05/lean/Main.lean",
+    :frozen-sha256
+    "51f5c94da12b4d5e1eb1f7ada0fd397cbbfccdfb223a6ae6287978da86605750",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Under standing specification-repair authorization, construct a complete temporary Main adding only ConnectedSpace X and ConnectedSpace Xtilde to the general covering clause. Preserve all definitions, the concrete torus clause, analytic manifold order, dimensions including zero, positive sheet count and actual ModuleCat integral homology maps. Recheck the reviewed Fin 2 to Unit refutation and retain its artifact. Prove the concrete k-sheeted torus construction and both demanded fundamental-class equations without supplying an orientation or degree theorem as an assumption. Record exact old/corrected statement hashes, syntax diff and a repair note. No canonical edits during probe. If complete closure is unavailable, STOP with precise typed covering-degree or fundamental-class boundaries; absence of infrastructure is not a refutation of the corrected theorem.",
+    :consumer-equation
+    "The concrete positive-degree torus cover and every connected positive-sheeted compact cover in the corrected clause admit the demanded upstairs orientation, whose fundamental class maps to k times the downstairs class.",
+    :gates
+    ["GO requires a complete zero-placeholder compiled corrected Main, fixture SHA256 and standard-only audits."
+     "Audit that the sole statement change is the two connectedness hypotheses; preserve the original refutation."
+     "Propose implementation scope only after complete corrected closure compiles."]},
+   :id :oriented-checkpoint22-t01a05-connected-cover-repair-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint22-radial-repair-and-subdivision-homotopy-refill
+    :oriented-checkpoint22-radial-repair-and-subdivision-homotopy-refill],
+   :current-residual
+   "The one-placeholder frozen theorem is refuted by a disconnected two-sheeted cover. Explicit connectedness removes that counterexample; the concrete torus and general actual homology-map degree equations still require proof.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "Construct restrictions of the reviewed operators; do not supply preservation equations as assumptions or reinterpret an integral conclusion as R-linear. Do not claim eventual smallness, homology comparison, excision or sphere homology.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SINGULAR-SUBDIVISION: coefficient-general preservation of cover-small chains",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a commutative ring R and an indexed family of subsets of X, construct coefficient-general subdivision and prism restrictions on the existing coverSmallSSet chains. Reuse CoefficientSmallPath.coverSmallChains and its actual inclusion, CoefficientSingularSubdivision and CoefficientSingularPrism. Generalize the finite-support realization and factorization proofs as needed, reusing coefficient-independent simplex range geometry. Prove that each restricted operator followed by inclusion equals inclusion followed by the reviewed absolute operator in every degree. Assemble the restricted subdivision chain map and its Homotopy to identity, verifying the inclusion compatibility and zero-degree equation. State universes and handle empty spaces and arbitrary index types without assuming a cover when preservation alone does not require it. Compile integer and rational overlapping interval-cover examples. REVISE requires exactly one compiled missing finite-support realization prerequisite; STOP if independent foundations remain.",
+    :consumer-equation
+    "The reviewed R-valued subdivision and prism preserve cover-small chains, and their constructed restrictions satisfy the same subdivision-minus-identity homotopy equation with the actual inclusion.",
+    :consumer-residual
+    "Eventual smallness of iterated subdivision, positive-degree small-chain comparison, relative excision and sphere suspension remain before rational S2 H1/H2.",
+    :gates
+    ["GO requires a complete placeholder-free fixture with constructed restrictions, actual inclusion equations and restricted homotopy in every degree."
+     "Record fixture SHA256, integer/rational examples and standard-only audits."]},
+   :id :oriented-checkpoint22-coefficient-small-chain-preservation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint22-radial-repair-and-subdivision-homotopy-refill
+    :oriented-checkpoint21-coefficient-subdivision-homotopy-1
+    :oriented-checkpoint16-coefficient-small-chain-h0-1
+    :oriented-checkpoint22-radial-repair-and-subdivision-homotopy-refill],
+   :current-residual
+   "Actual coefficient-general subdivision and its singular prism are reviewed. Their restrictions to the actual cover-small subcomplex, with inclusion equations, remain unconstructed.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: connected-cover repair and small-chain preservation uptake",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint23-connected-cover-and-small-preservation-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint22-t01a05-connected-cover-repair-1
+    :oriented-checkpoint22-coefficient-small-chain-preservation-1
+    :oriented-checkpoint22-radial-repair-and-subdivision-homotopy-refill],
+   :current-residual
+   "Measure corrected connected-cover outcome separately from cover-small preservation; attribute concurrent work and retain historical refutations.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
