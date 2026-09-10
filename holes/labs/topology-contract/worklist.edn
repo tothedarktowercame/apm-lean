@@ -60776,8 +60776,57 @@
   {:consumer "t00J02",
    :stop-condition
    "Require actual local smoothness, derivative formula and surjectivity derived from range-sum transversality; no supplied difference derivative or regularity premise.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :compiled-declarations 4,
+    :residual
+    "Generic local difference smoothness, actual fderiv formula and transversality-derived surjectivity are compiled under normed-space hypotheses without finite-dimensionality or completeness. Manifold-coordinate specialization, local regular-fiber construction and literal incidence chart transport remain. No overlaps or consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789016029555-17891-0ffb6ef5"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:difference
+     "b9cf2bd6db100fc4d1b186ead496f172d390996df5aa1c264e1315b10e4f2bd3",
+     :smooth_on
+     "26083fc2f568d7513996a6c4b02e3cd96af16a5823c17bb63861e7076141de0a",
+     :derivative
+     "b0263048a1c953bb5cc9a027e8940ee090234aa14161c5cca5928686839c365e",
+     :surjective
+     "69a5fbd9fc2f76994c5f16437957076c998ed65e1a799b41f50e4b9ea0a4c67c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/LocalTransverseDifference.lean", :exit 0}
+     {:cmd
+      "Python read-only fixture audit: comment-stripped placeholders and four declaration-header SHA256 hashes",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/LocalTransverseDifference.lean ConstructionTargets/LocalTransverseDifference.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/LocalTransverseDifference.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "61b2f309247354b812375a42f1696f65856cd3bf",
+    :changed-paths
+    ["ConstructionTargets/LocalTransverseDifference.lean"],
+    :fixture
+    {:path "/tmp/LocalTransverseDifference.lean",
+     :sha256
+     "87e8aac0eddbedbb5d1f2f47adde51ad2a11099072ce40e5e34cbb637ced07c3"},
+    :axiom-audit-declarations 3},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/LocalTransverseDifference.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / local coordinate difference regularity",
