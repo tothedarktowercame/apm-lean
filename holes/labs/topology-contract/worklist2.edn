@@ -18727,11 +18727,92 @@
    "Measure endpoint computations separately from frozen closure and recheck exact consumer branches, reviewed boundaries and concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00J01,
+   :candidate
+   {:path "/tmp/T00J01SphereIdentityMain.lean",
+    :sha256
+    "037c040f55305ffb306cf5c68311b080b69194c103b44d8b5ac1ac8b9c40fb83",
+    :placeholders 1},
    :stop-condition
    "No detached trace arithmetic, assumed rational homology witnesses, weakened final statement, new placeholders or full-closure claim. Do not retry the independent Klein-product or fold-fiber STOPs in this packet.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Implementation will discharge the sphere conjunct only. The Klein-product manifold/top-homology and exact circle fold-fiber conjunction remain; full t00J01 closure is not claimed.",
+     :axiom-audits 3,
+     :outcome :go,
+     :warnings
+     ["The standalone branch fixture has zero warnings. The Main candidate emits one declaration-uses-sorry warning for the retained final obligation."],
+     :statement-hashes
+     {:apm_t00j01
+      "a4694de420ca12c03f48bfabf5375e39fa325ebeff7872c9756546c3c9cbc4ca",
+      :apm_t00j01_sphere_identity_bridge
+      "850f057004fd50c6ec4f7286958f637b399907694ab173b620c3514f76c8371c"},
+     :acceptance
+     {:declarations
+      ["t00J01Identity_conjugate"
+       "t00J01Identity_lefschetz_value"
+       "apm_t00j01_sphere_identity_bridge"],
+      :frozen-file "problems/t00J01/lean/Main.lean",
+      :frozen-sha256
+      "03f9c56fbb9d5b417dc16298c6b81d10876a4463f9c7e5a8479615706584c217",
+      :placeholder-before 1,
+      :placeholder-after 1,
+      :consumer-equation
+      "The exact frozen sphere identity has Lefschetz number two and does not have Lefschetz number one.",
+      :gates
+      ["Verify both fixture hashes and the frozen Main hash before implementation."
+       "Compile the placeholder-free branch fixture and the exact Main candidate; compile promoted Main."
+       "Reproduce three standard-only axiom audits for the new declarations; do not claim the remaining final theorem is axiom-clean."
+       "Verify the complete original declaration prefix and final statement are unchanged, apart from the added import and new proved lemmas."
+       "Verify exactly one placeholder remains and its type contains only the Klein-product and fold-fiber obligations."
+       "Verify one-file scope, git diff --check and commit the scoped uptake."]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd "Read DAG, closure rules and dependency PASS receipts",
+       :exit 0}
+      {:cmd "sha256sum problems/t00J01/lean/Main.lean", :exit 0}
+      {:cmd "lake env lean /tmp/T00J01SphereIdentity.lean", :exit 0}
+      {:cmd "lake env lean /tmp/T00J01SphereIdentityMain.lean",
+       :exit 0}
+      {:cmd
+       "Python audit of fixture hashes, original declaration prefix, final statement equality and placeholder counts 1/0/1",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T00J01SphereIdentity.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial branch fixture compilation",
+       :exit 1,
+       :correction
+       "Replaced simplification with numeric normalization to reduce the rational expression 1+1 to 2. The successful rerun proves the arbitrary-witness value theorem."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/T00J01SphereIdentity.lean",
+      :sha256
+      "4a1138a8e8777173ad4fb3d5afc89566d1a00bf81ba06f48259cf3f95a23c387",
+      :placeholders 0},
+     :finding
+     "The complete exact sphere branch compiles without placeholders. Identity conjugation holds for arbitrary witness isomorphisms, so every witness gives traces 1,0,1 and Lefschetz number two. Reviewed endpoint isomorphisms supply existence; the arbitrary-witness theorem excludes number one. The compiled Main candidate consumes this branch without changing any frozen definition or the final statement and retains exactly one narrower placeholder.",
+     :statement-hash-method
+     "SHA256 from theorem keyword through the declaration statement, excluding the space preceding := by.",
+     :implementation
+     {:scope ["problems/t00J01/lean/Main.lean"],
+      :candidate
+      {:path "/tmp/T00J01SphereIdentityMain.lean",
+       :sha256
+       "037c040f55305ffb306cf5c68311b080b69194c103b44d8b5ac1ac8b9c40fb83",
+       :placeholders 1},
+      :action
+      "Promote the compiled Main candidate. It imports the reviewed endpoints, adds the proved sphere branch, and uses it in the unchanged final theorem. A single suffices obligation retains only the Klein-product and fold-fiber conjunction."},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["problems/t00J01/lean/Main.lean"],
    :dag-node
    "CONSUMER UPTAKE: exact t00J01 rational sphere-identity branch",
    :acceptance
@@ -18755,6 +18836,8 @@
     "03f9c56fbb9d5b417dc16298c6b81d10876a4463f9c7e5a8479615706584c217"},
    :id :oriented-checkpoint31-t00j01-sphere-identity-uptake-1,
    :kind :final-adapter,
+   :action
+   "Promote the compiled Main candidate. It imports the reviewed endpoints, adds the proved sphere branch, and uses it in the unchanged final theorem. A single suffices obligation retains only the Klein-product and fold-fiber conjunction.",
    :depends-on
    [:oriented-checkpoint31-sphere-endpoints-and-consumer-refill
     :oriented-checkpoint30-coefficient-sphere-endpoints-1
