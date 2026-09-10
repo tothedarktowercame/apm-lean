@@ -20249,115 +20249,155 @@
    :stop-condition
    "No supplied geometric commuting squares, sphere equivariance or signed sphere-action theorem. Do not conflate height-preserving orthogonal maps with hemisphere exchange. Preserve actual subtype cokernels and ordinary-H0 endpoints.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Transport reflection signs and establish the remaining coordinate-permutation or hemisphere-exchange comparisons before full antipodal action and frozen uptake.",
-     :axiom-audits 28,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:namespace "ConstructionTargets.CoefficientOrthogonalSphere",
-      :implementation
-      "Promote the exact compiled fixture and document its actual geometric actions and oriented comparison equations.",
-      :declarations
-      ["sphereAction"
-       "height"
-       "north_mapsTo"
-       "lower_mapsTo"
-       "upper_mapsTo"
-       "upperAction"
-       "punctured_mapsTo"
-       "coordinate_square"
-       "upperPair"
-       "spherePair"
-       "relative_coordinate_square"
-       "coordinate_naturality"
-       "upperInclusion"
-       "upperInclusion_mapsTo"
-       "excision_geometric_square"
-       "excision_actual"
-       "relative_excision_square"
-       "excision_naturality"
-       "coordinate_inverse_naturality"
-       "excision_inverse_naturality"
-       "upper_projection"
-       "sphere_projection"
-       "sphereHomologyMap"
-       "projection_naturality"
-       "sphereToDisk_naturality"
-       "sphereToDisk_inverse_naturality"
-       "boundaryHomologyMap"
-       "boundary_homeomorphism_naturality"
-       "sphereShift_naturality"
-       "sphereShift_inverse_naturality"
-       "integral_comparison"
-       "rational_comparison"
-       "zero_dimensional"
-       "reflection_comparison"
-       "reflection_disk_action"],
-      :hypotheses
-      "R is any Type 0 commutative ring. Q is a real linear isometry equivalence of EuclideanSpace ℝ (Fin n). The constructed sphere action applies Q to the first n coordinates and fixes height. All dimensions include zero. Sphere-to-disk comparison requires positive homology degree; sphere-shift comparison requires positive target degree. Actual subtype chains and categorical cokernels are retained.",
-      :consumer-equation
-      "The actual sphere action followed by sphereToDiskIso.hom equals sphereToDiskIso.hom followed by the actual disk-pair action. The corresponding inverse equation and both sphereShift intertwining equations hold for the actual boundary action.",
-      :consumer-residual
-      "Transport reflection signs through these comparisons, then establish the coordinate-permutation or hemisphere-exchange comparisons needed for full antipodal action. Degree realization, localization/gluing and nonbounding retain independent obligations.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientOrthogonalSphere."
-       "Reproduce all twenty-eight standard-only axiom audits and integer/rational, zero-dimensional and reflection specializations."
-       "Audit constructed height-preserving action, subset preservation, geometric coordinate and excision squares, actual cokernel components and projection equations."
-       "Verify exact forward and inverse sphere-to-disk and sphere-shift equations; retain positive-degree hypotheses."
-       "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure rules, both ledgers and dependency PASS receipts; inspect hemisphere geometry and actual comparison APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientOrthogonalSphere.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientOrthogonalSphere.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientOrthogonalSphere.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial hemisphere fixture compilation",
-       :exit 1,
-       :correction
-       "Made north-complement membership explicit and separated the coordinate norm calculation."}
-      {:cmd "Second hemisphere fixture compilation",
-       :exit 1,
-       :correction
-       "Exposed the actual open-disk action before applying norm preservation."}
-      {:cmd "Compilation after adding excision naturality",
-       :exit 1,
-       :correction
-       "Used the reviewed exact hemisphereIso forward-map equation rather than assuming definitional equality."}
-      {:cmd
-       "Compilation after adding sphere-to-disk inverse naturality",
-       :exit 1,
-       :correction
-       "Proved and applied an abstract categorical inverse-intertwining lemma to avoid unsuccessful rewriting across elaborated objects. Final complete fixture compiles without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientOrthogonalSphere.lean",
-      :sha256
-      "8f89caff7fd8a19e09bdf99c7c76f921f99fbad28033e13ee037b6345e440de4"},
-     :finding
-     "Complete placeholder-free fixture compiled. The height-preserving sphere action and subset preservation are constructed. Geometric hemisphere-coordinate and excision squares induce the actual cokernel-map equations. Combined with reviewed radial equivariance, these prove sphere-to-disk equivariance; actual connecting naturality and boundary-homeomorphism compatibility prove sphere-shift equivariance. Forward and inverse equations, coefficient specializations, dimension zero and the exact one-dimensional disk-reflection identification are verified. No hemisphere exchange, determinant sign, antipodal action or consumer closure is inferred.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientOrthogonalSphere.lean"
-       "ConstructionTargets/CoefficientOrthogonalSphere.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Transport reflection signs, then establish the coordinate-permutation or hemisphere-exchange comparisons needed for full antipodal action and frozen uptake. Degree realization, localization/gluing and nonbounding retain independent obligations. No hemisphere exchange, determinant sign, full antipodal action, orientation coherence or consumer closure is claimed.",
+    :gates
+    {:forward-inverse-comparisons :pass,
+     :cokernel-and-projection-equations :pass,
+     :integer-rational-examples :pass,
+     :whitespace :pass,
+     :placeholders :pass,
+     :positive-degree-hypotheses :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :two-file-scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :actual-geometric-squares :pass,
+     :fixture-compilation :pass,
+     :zero-dimensional-example :pass,
+     :reflection-specialization :pass},
+    :axiom-audits 28,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation emitted no warnings. Build replayed 20 dependency warnings; none originated in this module."],
+    :statement-hashes
+    {:north_mapsTo
+     "aeb7e0cbf3ea4baba59f7964034709097e33c84bdad6eff115f12a8b4202f835",
+     :sphereToDisk_inverse_naturality
+     "cc997d8be8a53e288e0756203dfb97dbd36dfd9fd27142ea2ff856ff5f4ef84b",
+     :sphereShift_inverse_naturality
+     "04253b2d2123647b5edd89beddf96330d5872b46f2a7a96cb71e78d08a122e52",
+     :sphereAction
+     "5fd8d018817d6f3380a45ad2cc17372af902df1c74b2eb02393ee090e66fe917",
+     :upperInclusion_mapsTo
+     "e92996c465b05e40d2eaffbde903a0484fca6edbe28d54296676b72a451bc448",
+     :sphereShift_naturality
+     "aebe9b44b340984a8192f1d21cb5477863be5b913a0f0ba61744e6d3309861c5",
+     :excision_actual
+     "86b70171f93e4471b996aba1e8e1d94e1e8b287bdc1a78b4049c3d0746dd6557",
+     :upper_projection
+     "bcb5fe546b3c66d42e1d75fc6d73e5965ad098e676ce0b39a73a606d660fabe8",
+     :upperPair
+     "5bbe51f552703168e023861b9b6c50f29a1cf0aaea0386c7db8e0403433cb9dd",
+     :boundaryHomologyMap
+     "45d53cfdae4162564f4e804ee3f377fe80cab6bd2edc8e2bf2da41d68360467a",
+     :relative_excision_square
+     "3dc07b05838b8039a4488d6bd502eb2426a5c5dda9eee7fbf1803e77cc011f73",
+     :coordinate_square
+     "a0f72d420b93999b6a54dc7639b6af8a07a2b8687c5f216b160363f2b5e507d9",
+     :relative_coordinate_square
+     "6d61ed31b0ff20094f77cd02ca8f354ae5331ed4e7eacaeb3c6088ded2c2c189",
+     :lower_mapsTo
+     "78d8db2f36009b0548afa46f45d33932731427d2d0eb5be6f852d6cdae7e4a1e",
+     :coordinate_naturality
+     "89c21dbe0460183cf83d64a80ae671e3697d029bd33a37e8450ee8c7a4340801",
+     :excision_geometric_square
+     "8ca0bf6f6f480dc7b286c3145acc6e0f9fad09fb5f3b7d4306c74f77113c5665",
+     :zero_dimensional
+     "0b3380fb9c91eb2e5656efa431b2b8f24accfa839f61fdaf47dde507237ea5fa",
+     :sphereToDisk_naturality
+     "d47816fb86a03a591ed49ed71beeffc28962b8e864005608ab42cfd550314ddf",
+     :rational_comparison
+     "93b6664c40f73352af6802fb1d73c8289dbec46190736416ab4361572244147f",
+     :boundary_homeomorphism_naturality
+     "1826af9c10536fc25e9d3bc3004b4902833185991128907d84c5c521261bb4a9",
+     :reflection_comparison
+     "bd05971d8f791413706e0cbdd8044c8aebc2ead1d141d98563196f04d93bf02b",
+     :upperAction
+     "5c87f1dac50903bdbc6c93f3fc72193562ac654aef3dd8680146b27457c5e73b",
+     :upper_mapsTo
+     "110d12a0240be3599eecc232e13b0efa84027fe814a4cc6ee3e43ffb0e2f7874",
+     :excision_naturality
+     "f20f1bf93d4ce93ec08d3fc4e814a9e35e4efb518629f375e4e4391e584bbf97",
+     :sphereHomologyMap
+     "1dbaee078d8230903429d2294097bdafe30a37826d98b6c35291c306936dbd73",
+     :integral_comparison
+     "e1603aa63b66b8769112b1f28af174ed8c40d6e15c6a3c26fadebf8521120086",
+     :excision_inverse_naturality
+     "d7067cc00d54ddc43cccbf7ba1a67057e8f585a711c1f32e69605a2043b49e6c",
+     :projection_naturality
+     "04379d31f16ff06d5818902707813c423e65be1bb310d25edde0a0706150acdc",
+     :spherePair
+     "a3e21739da29c01c882d213794af13983e2105e856fee85061a753cad5a1dad1",
+     :punctured_mapsTo
+     "ab860d1b189cb0625de3defba0e5c9b07a198fcc346297ccdaf3de7e8334dbda",
+     :upperInclusion
+     "89d55a47f3c1c27a635425fc9a4546512968bfdd2bf3d130dbba2a5a14cda95f",
+     :sphere_projection
+     "3168121a4f371283c9348640fd81261dc6e13961fa026b28165e37db0b8fbf67",
+     :coordinate_inverse_naturality
+     "2919bb712db967c4392dbcf2d975e7916c2fe46caa5ba52004378c540988426c",
+     :reflection_disk_action
+     "8d6530e022c00955696ad76b76402198dcfd87590f88d80d1f8f44ef13652ad1",
+     :height
+     "30bed13b817f7b95e97150d8c8329ee37bcd6c1447244f422b0c7c5b6e4032c4"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure rules, both ledgers and dependency PASS receipts; inspect fixture geometric maps and comparison equations",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "Verify fixture SHA256 before byte-identical promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientOrthogonalSphere.lean > /tmp/orthosphere-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientOrthogonalSphere.lean > /tmp/orthosphere-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientOrthogonalSphere > /tmp/orthosphere-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Validate twenty-eight standard-only audits in each direct compilation log and inspect build warnings",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientOrthogonalSphere.lean ConstructionTargets/CoefficientOrthogonalSphere.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python audit of fixture equality, zero placeholders, thirty-five public statement hashes and exact two-file scope",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Prove height-preserving orthogonal sphere comparison equivariance'",
+      :exit 0}
+     {:cmd "git diff --check 788855cf^ 788855cf", :exit 0}
+     {:cmd
+      "Python verification of pinned commit scope, fixture equality and scoped cleanliness; git status --short",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "788855cf349b8be015b18eee50e7715b52a66667",
+    :changed-paths
+    ["ConstructionTargets/CoefficientOrthogonalSphere.lean"
+     "ConstructionTargets/CoefficientOrthogonalSphere.md"],
+    :fixture
+    {:path "/tmp/CoefficientOrthogonalSphere.lean",
+     :sha256
+     "8f89caff7fd8a19e09bdf99c7c76f921f99fbad28033e13ee037b6345e440de4",
+     :promotion :byte-identical},
+    :finding
+    "Promoted the exact fixture constructing the height-preserving sphere action and its geometric coordinate and excision squares. Actual cokernel maps, radial equivariance, connecting naturality and boundary-homeomorphism compatibility prove forward and inverse sphere-to-disk and sphere-shift equations with explicit positive-degree hypotheses. All specializations compile; ordinary-H0 endpoints and actual subtype cokernels are preserved.",
+    :statement-hash-method
+    "SHA256 from public declaration keyword to immediately before the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientOrthogonalSphere.lean"
     "ConstructionTargets/CoefficientOrthogonalSphere.md"],
