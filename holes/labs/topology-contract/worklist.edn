@@ -55888,8 +55888,69 @@
   {:consumer "t00J02",
    :stop-condition
    "Require the complete compiled extension-and-center-chart packet without assumed extension agreement, derivative transport or global regularity.",
+   :evidence
+   {:placeholder-delta
+    {:consumer "t00J02", :before 1, :after 1, :delta 0, :fixture 0},
+    :residual
+    "Actual chart representative smoothness, center derivative identity, open-neighborhood extension agreement and extension-fiber center chart compiled. Original-manifold fiber chart transport, smooth overlaps and consumer uptake remain. No global regularity of the extension or consumer closure claimed; independent review remains.",
+    :gates
+    {:standard-only-axioms :pass,
+     :scope :pass,
+     :self-model-hypotheses-preserved true,
+     :exact-promotion :pass,
+     :genuine-infinity-preserved true,
+     :center-chart-preserved true,
+     :existing-apis-preserved true,
+     :compile :pass,
+     :open-neighborhood-agreement-preserved true},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"representative_smooth"
+     "458ae97833949df768dfe3b4b2bf59ccd66eec8494c6cd615e16f1c8b750ea0c",
+     "representative_derivative"
+     "51fb826762aebd7633d0d9ac8444bc4be70e6fbb15218a53c769506b130ee332",
+     "exists_extension_chart"
+     "13bd24ea0b370e62c83c7de7bfa9977d1d1e6e8a589da7f34c4657c9d46f5711"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, dependency review receipt and complete fixture",
+      :exit 0}
+     {:cmd "sha256sum /tmp/ManifoldFiberChartExtension.lean", :exit 0}
+     {:cmd
+      "cmp /tmp/ManifoldFiberChartExtension.lean ConstructionTargets/ManifoldFiberChartExtension.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldFiberChartExtension.lean",
+      :exit 0}
+     {:cmd
+      "Python forbidden-token, three statement-hash and consumer hash/placeholder audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 431 items OK; {:done 420, :needs-owner 1, :superseded 6, :open 2, :blocked 2}"}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check and git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "937a5c78559bca54386c944ad1819c2005124915",
+    :changed-paths
+    ["ConstructionTargets/ManifoldFiberChartExtension.lean"],
+    :fixture
+    {:path "/tmp/ManifoldFiberChartExtension.lean",
+     :sha256
+     "ab384f4a64ce8ef790fb381e733672a099f9de6a6db2fa7e12ae2f48844b0c0d",
+     :placeholder-count 0},
+    :consumer-sha256
+    "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldFiberChartExtension.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / actual chart extension and center regularity",
