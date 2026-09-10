@@ -13057,8 +13057,76 @@
   {:consumer :t96J05,
    :stop-condition
    "Preserve the original refutation and inhabited literal radial-level conclusion. Add only explicit nonconstant radius; no assumed regular value, extra countability hypothesis, supplied atlas or silent smooth-order restriction.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "Construct an analytic regular scalar-fiber atlas under the actual analytic hypotheses, then complete attained positive regular-radius selection and literal squared-radius subtype/model transport. These constructions remain unproved. Canonical Main and the original centered-circle refutation remain unchanged; no specification repair was implemented.",
+    :dependency-review "invoke-1789003157409-17522-76b9a7c4",
+    :axiom-audits 4,
+    :outcome :stop,
+    :warnings
+    ["One inherited EuclideanSpace.norm_single deprecation warning from the preserved frozen helper."],
+    :statement-hashes
+    {:old
+     "4394da1c84c6e143f3b8e244912c2e0372f01d3893d5e0a019ad2cdc20f30760",
+     :proposed
+     "468459a6eebe00914dd18e16d9fdc31ccfc7d4160725f0a3ee8aca41a1d0e607"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :placeholder-before 1,
+    :reason :analytic-regular-fiber-atlas-boundary,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read both ledgers, dependency review, frozen source, DAG and closure stop rules",
+      :exit 0}
+     {:cmd
+      "Inspect SardGenuineSmoothManifoldVector, ManifoldRegularFiberGlobalAtlas and ContDiff order definitions",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T96J05AnalyticBoundary.lean", :exit 0}
+     {:cmd
+      "Python audit of frozen hash, proposed statement hash, preserved definitions/helpers and placeholder-free diagnostic",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/T96J05AnalyticBoundary.lean /tmp/T96J05AnalyticBoundaryAudit.json",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Search ConstructionTargets/T93A04ManifoldWork.lean",
+      :exit 2,
+      :correction
+      "Located the namespace in SardGenuineSmoothManifoldVector.lean."}
+     {:cmd "First fixed-Euclidean-model diagnostic compilation",
+      :exit 1,
+      :correction
+      "Attempted explicit finite-rank normalization of the dependent chart model."}
+     {:cmd "Second fixed-Euclidean-model diagnostic compilation",
+      :exit 1,
+      :correction
+      "Retained the actual reviewed model in the successful diagnostic. Transport to the literal model is not claimed."}],
+    :campaign-termination false,
+    :audit
+    {:path "/tmp/T96J05AnalyticBoundaryAudit.json",
+     :sha256
+     "43481dc5d46b2856596f91a65726e1ea60cf4180f74c29d3baa23e6aef08c612"},
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T96J05AnalyticBoundary.lean",
+     :sha256
+     "1fbeb3f49ab4d602a7034bafddf9fa1addaefa4965d1c2b69c3f5b3f46e6d6eb",
+     :role :typed-boundary-diagnostic},
+    :finding
+    "The frozen top order is analytic regularity, distinct from genuine infinity-order smoothness. The compiled diagnostic lowers analytic source and map hypotheses to infinity order and constructs the reviewed regular scalar-fiber atlas at that order. It does not construct the analytic atlas required by the literal radial-level conclusion. AnalyticScalarFiberBoundary states that missing theorem without assuming or proving it. Nonconstant radius does not resolve this independent atlas boundary. No complete corrected Main or refutation of the corrected statement was obtained.",
+    :statement-hash-method
+    "Declaration text beginning with theorem apm_t96j05 and ending immediately before the space preceding := by; proposed text adds only hradial.",
+    :frozen-sha256
+    "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48",
+    :mathematical-refutation false,
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "SPEC-DEFECT / REGULAR-PREIMAGE: nonconstant-radius repair and complete literal radial-level consumer",
