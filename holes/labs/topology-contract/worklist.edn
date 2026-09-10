@@ -70237,8 +70237,51 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the coefficient-general union-range-to-production-relative map and both piece formulas after this nested-pair identification; no compact-support exactness or excision transport is supplied yet.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use the coefficient nested-pair isomorphism to transport the reviewed union-to-right-relative pushout map into production relative chains, prove its left-zero and right-projection formulas, then instantiate it on compact complements and apply coefficient excision with actual naturality squares.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:intersectionNestedChainsIso
+     "ce3d7f53e0c7ad53f86a2565f450f4f034ebbeb90dfc3fb27caf9e4a49fbd477",
+     :intersectionNested_chain_square
+     "3887d27fbc38ccb83bc094ecc63396ce33ff8aea45b76d8025766b60acecf0af",
+     :intersectionNestedHomologyIso
+     "a30d379e240b1d826ee0aab33db4e368cf506eb7eb08432d947159afb70d364d",
+     :intersectionNested_homology_square
+     "07fb65d2fc6c9d55af716c90bedcddad512871bb70930e37e6ec9e0bd59ab3a9",
+     :intersectionNestedRelativeChainsIso
+     "fa79416c53eee243c6bf21484ef0b02055a792dfdd15042ca4e72344e12a73be"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean /tmp/CoefficientNestedSubspaceIntersectionComparison.lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean ConstructionTargets/NestedSubspaceIntersectionComparison.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-five-declaration audit over ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "eb029b48d2c11fccbc63b878dceadf0c0e170f24",
+    :changed-paths
+    ["ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean"],
+    :fixture
+    {:path "/tmp/CoefficientNestedSubspaceIntersectionComparison.lean",
+     :sha256
+     "7b7db522a204b44ce7cdcc9540def617abdce0e86cf10787286d69b99f24e1cd",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The coefficient chain and homology isomorphisms from the literal intersection to the nested subspace, both inclusion-compatibility squares and the induced relative-cokernel isomorphism compile without warnings or placeholders. Both dependency hashes match their pinned values. Two unrelated pre-existing untracked documentation files remain untouched."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean"],
    :dag-node
