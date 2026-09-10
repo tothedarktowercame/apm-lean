@@ -482,6 +482,18 @@ compiles independently of every final problem.
 
 ## Specification and ledger corrections
 
+- `t96J05` is a local `SPEC-DEFECT`, not a missing-Sard closure edge.
+  The reviewed centered-unit-circle counterexample satisfies every frozen
+  hypothesis, but every inhabited radial level is the circle and cannot
+  carry the required zero-dimensional atlas. Independent PASS:
+  `invoke-1788996921425-17341-4294c07a`. The exact fixture, frozen hash and
+  unchanged one-placeholder count are recorded in
+  `holes/labs/topology-contract/evidence/t96j05-radial-level/BOUNDARY.md`.
+  Banked Euclidean fiber geometry does not supply an attained regular radius.
+  A corrected statement needs an explicit decision about attained regular
+  levels or permitted empty levels; no repair is chosen and Main is unchanged.
+  This local refutation is neither consumer closure nor campaign termination;
+  all older counterexamples and uncovered cases below remain in force.
 - `t96J07` remains `SPEC-DEFECT`: the implication in the frozen axis
   characterization has incorrect precedence and contradicts the zero vector
   specialization.

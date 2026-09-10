@@ -68,6 +68,25 @@ missing theorem.  It proceeds as follows:
 An experiment is allowed to conclude that no useful theorem should be built.
 That is a successful scheduling result.
 
+## Reviewed local counterexample: t96J05
+
+The radial-level experiment is a local `SPEC-DEFECT`, not an infrastructure
+gap: the centered unit circle satisfies the frozen hypotheses, while every
+inhabited radial level is the circle and cannot admit the required
+zero-dimensional atlas. Independent PASS
+`invoke-1788996921425-17341-4294c07a` reviewed the exact compiled counterexample;
+checkpoint PASS `invoke-1788998095915-17369-ba4af7bc` elected its preservation.
+See `holes/labs/topology-contract/evidence/t96j05-radial-level/BOUNDARY.md`
+for the canonical fixture, hashes, proof and standard-only axiom audit.
+
+Frozen Main is unchanged at one placeholder. Preservation is neither closure,
+specification repair nor campaign termination. An explicit specification
+decision must address attained regular levels versus permitting empty levels;
+Sard and the banked Euclidean fiber geometry do not supply attainment.
+Other regular-preimage work remains valid under its own hypotheses. Historical
+local refutations and outstanding cases, including reduced-S0 degree and
+one-dimensional local-index coverage, are retained.
+
 ## Required report
 
 Every closure experiment reports these fields:
