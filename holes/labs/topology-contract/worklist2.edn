@@ -42979,79 +42979,113 @@
    :other-consumers [:t96J06 :t97A04]}
   {:consumer :t03J05,
    :stop-condition
+   "Bank only the terminal characterizations of horizontalCount and verticalCount as cardinalities of the true-letter and false-letter filters over all word positions. Do not define swaps, package balanced words or paths, compare faces, assign signs, cancel chains, construct a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+    "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: terminal prefix counts enumerate all word positions",
+   :acceptance
+   {:hypotheses
+    "Use an arbitrary Boolean word on Fin n. No balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Preserve every existing ProductSimplexWordPrefixCounts declaration."
+     "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexWordPrefixCounts."
+     "Verify horizontalCount_last_eq_card_filter counts exactly all true positions."
+     "Verify verticalCount_last_eq_card_filter counts exactly all false positions."
+     "Reproduce standard-only axiom audits for both theorems."
+     "Confirm no swap, balanced-word packaging, path transport, face comparison, sign, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace, exact two-file scope and both-ledger checks; commit the scoped implementation."],
+    :consumer-residual
+    "Use invariance of filtered cardinality under Equiv.swap to prove adjacentSwapWord preserves both terminal counts, then package the balanced and path swaps and prove their common deleted face.",
+    :axioms :standard-only,
+    :consumer-equation
+    "At Fin.last n, horizontalCount is the cardinality of the true-letter filter on Finset.univ and verticalCount is the cardinality of the false-letter filter on Finset.univ.",
+    :declarations
+    ["horizontalCount_last_eq_card_filter"
+     "verticalCount_last_eq_card_filter"],
+    :namespace "ConstructionTargets.ProductSimplexWordPrefixCounts",
+    :route-step
+    "Supplies the terminal-count interface needed to prove adjacent-swap balance preservation on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes.",
+    :implementation
+    "Promote the compiled additive fixture, preserving every existing declaration and documenting the two terminal-count characterizations."},
+   :id :t03j05-product-simplex-terminal-word-counts-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint69-product-simplex-word-path-inverses-and-consumer-refill-1
+    :t03j05-product-simplex-adjacent-word-swap-1],
+   :current-residual
+   "The generic adjacent transposition is banked, but terminal prefix counts have no exported all-positions characterization, blocking the balance-preservation proof outside their defining module.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :t03J05,
+   :stop-condition
    "Construct only the adjacent unequal-letter swap on balanced words, its transport to canonical maximal paths through wordPathEquiv, involutivity, and equality of the affine faces obtained by deleting the exchanged corner. Do not assign shuffle signs, pair or cancel a chain sum, construct a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
    :evidence
    {:probe
     {:residual
-     "After banking the generic transposition, prove preservation of horizontal and vertical terminal counts, package the balanced and path swaps, prove path-level involutivity, and identify the common deleted affine face.",
+     "After banking the terminal-count characterizations, prove filtered-cardinality invariance under the adjacent transposition, package the BalancedWord and MaximalPath swaps, prove path involutivity, and identify the common deleted affine face.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t03J05,
       :stop-condition
-      "Bank only the generic adjacent Boolean-word transposition and its exact pointwise and involutive laws. Do not prove balanced totals, package a BalancedWord or MaximalPath swap, compare deleted faces, assign shuffle signs, cancel chains, construct a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+      "Bank only the terminal characterizations of horizontalCount and verticalCount as cardinalities of the true-letter and false-letter filters over all word positions. Do not define swaps, package balanced words or paths, compare faces, assign signs, cancel chains, construct a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/ProductSimplexAdjacentWordSwap.lean"
-       "ConstructionTargets/ProductSimplexAdjacentWordSwap.md"],
+      ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+       "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
       :dag-node
-      "PRODUCT HOMOLOGY: generic adjacent Boolean-word transposition",
+      "PRODUCT HOMOLOGY: terminal prefix counts enumerate all word positions",
       :acceptance
       {:hypotheses
-       "Use an arbitrary Boolean word on Fin (n+1) and a cut index i : Fin n. No unequal-letter, balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+       "Use an arbitrary Boolean word on Fin n. No balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexAdjacentWordSwap."
-        "Verify the left and right adjacent positions are exchanged."
-        "Verify every position distinct from both adjacent positions is unchanged."
-        "Verify applying the same adjacent swap twice is functionally equal to the original word."
-        "Reproduce standard-only axiom audits for all four theorems."
-        "Confirm no balanced-word packaging, path transport, deleted-face comparison, shuffle sign, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
-        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
+        "Preserve every existing ProductSimplexWordPrefixCounts declaration."
+        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexWordPrefixCounts."
+        "Verify horizontalCount_last_eq_card_filter counts exactly all true positions."
+        "Verify verticalCount_last_eq_card_filter counts exactly all false positions."
+        "Reproduce standard-only axiom audits for both theorems."
+        "Confirm no swap, balanced-word packaging, path transport, face comparison, sign, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+        "Run placeholder, forbidden-declaration, warning, whitespace, exact two-file scope and both-ledger checks; commit the scoped implementation."],
        :consumer-residual
-       "Prove the adjacent transposition preserves both terminal counts, package it as a BalancedWord and canonical MaximalPath operation, then prove the common deleted-face equation.",
+       "Use invariance of filtered cardinality under Equiv.swap to prove adjacentSwapWord preserves both terminal counts, then package the balanced and path swaps and prove their common deleted face.",
        :axioms :standard-only,
        :consumer-equation
-       "Precomposition with Equiv.swap i.castSucc i.succ exchanges exactly the two positions adjacent to i, fixes every other position, and applying the same transposition twice returns the original Boolean word.",
+       "At Fin.last n, horizontalCount is the cardinality of the true-letter filter on Finset.univ and verticalCount is the cardinality of the false-letter filter on Finset.univ.",
        :declarations
-       ["adjacentSwapWord"
-        "adjacentSwapWord_left"
-        "adjacentSwapWord_right"
-        "adjacentSwapWord_of_ne"
-        "adjacentSwapWord_involutive"],
-       :namespace "ConstructionTargets.ProductSimplexAdjacentWordSwap",
+       ["horizontalCount_last_eq_card_filter"
+        "verticalCount_last_eq_card_filter"],
+       :namespace "ConstructionTargets.ProductSimplexWordPrefixCounts",
        :route-step
-       "Supplies the generic involutive transposition needed by the adjacent-corner construction on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes.",
+       "Supplies the terminal-count interface needed to prove adjacent-swap balance preservation on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes.",
        :implementation
-       "Promote the compiled fixture as the generic adjacent word-swap foundation."},
-      :id :t03j05-product-simplex-adjacent-word-swap-1,
+       "Promote the compiled additive fixture, preserving every existing declaration and documenting the two terminal-count characterizations."},
+      :id :t03j05-product-simplex-terminal-word-counts-1,
       :kind :reusable-theorem,
       :depends-on
       [:oriented-checkpoint69-product-simplex-adjacent-corner-swap-1],
       :current-residual
-      "The word/path equivalence is banked, but the generic adjacent Boolean-word transposition and its involutive laws were not yet available.",
+      "The generic adjacent transposition is banked, but terminal prefix counts have no exported all-positions characterization, blocking the balance-preservation proof outside their defining module.",
       :other-consumers [:t96J06 :t97A04]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
+       "lake env lean /tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean",
        :exit 0}
       {:cmd
-       "Inspect ProductSimplexWordPrefixCounts, ProductSimplexBalancedWords and ProductSimplexWordPathEquivalence plus existing Fin and Equiv.swap.swap APIs",
+       "sha256sum /tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint69-adjacent-word-swap/AdjacentWordSwap.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint69-adjacent-word-swap/AdjacentWordSwap.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint69-adjacent-word-swap/AdjacentWordSwap.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "Reproduce standard-only axiom audits for adjacentSwapWord_left, adjacentSwapWord_right, adjacentSwapWord_of_ne and adjacentSwapWord_involutive",
+       "Reproduce standard-only axiom audits for horizontalCount_last_eq_card_filter and verticalCount_last_eq_card_filter",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -43061,17 +43095,30 @@
        :exit 0}
       {:cmd "git diff --check", :exit 0}
       {:cmd "git diff --exit-code", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/codex13-checkpoint69-swap-balance/SwapBalance.lean",
+       :exit 1,
+       :finding
+       "An external module could unfold horizontalCount but could not establish membership in the private wordPrefix at Fin.last because the defining module exports no terminal-prefix characterization.",
+       :correction
+       "Placed the characterization in a scratch additive extension of ProductSimplexWordPrefixCounts, where its private prefix definition is available; both exported terminal-count equations then compiled."}
+      {:cmd "git diff --check && git diff --exit-codee",
+       :exit 129,
+       :finding "The verification command misspelled --exit-code.",
+       :correction
+       "Reran git diff --check && git diff --exit-code with the correct option; it exited zero."}],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint69-adjacent-word-swap/AdjacentWordSwap.lean",
+      "/tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean",
       :sha256
-      "0fa575f4c08f037f2dfe0b1e03ee0ebc218fbbac18fd275684648ffce6523d53",
+      "f2d795b7b39602eb881503a501bef7e30cf25773b4cea4c4bda245b6dbc430ac",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled prerequisite is supplied. The fixture defines the adjacent transposition by precomposition with Equiv.swap, proves that it exchanges the two positions bordering the indexed cut, fixes every other position, and is involutive on arbitrary Boolean words. The parent row is not GO because preservation of horizontal and vertical terminal counts, BalancedWord packaging, path transport, and the common deleted-face equation remain uncompiled. No shuffle sign, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
+     "Exactly one complete compiled prerequisite is supplied with current execution evidence. Proving that the banked adjacent transposition preserves a BalancedWord requires identifying terminal horizontalCount and verticalCount with filters over all word positions. The underlying prefix finset is private and no exported theorem currently gives those identities. The fixture adds exactly the two required equations in their defining module. Balanced-word packaging, path transport, deleted-face equality, shuffle signs and cancellation remain unproved.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: adjacent balanced-word corner swaps and common deleted faces",
@@ -43101,7 +43148,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:oriented-checkpoint69-product-simplex-word-path-inverses-and-consumer-refill-1
-    :t03j05-product-simplex-adjacent-word-swap-1],
+    :t03j05-product-simplex-adjacent-word-swap-1
+    :t03j05-product-simplex-terminal-word-counts-1],
    :current-residual
    "Balanced words and maximal paths are exactly equivalent, but no adjacent unequal-letter swap, involutivity law or common deleted-face equation has been constructed.",
    :other-consumers [:t96J06 :t97A04]}
