@@ -14627,20 +14627,97 @@
    :stop-condition
    "Bank only the coordinate equivalence and finite reconstruction. Do not claim iterate realization, eventual smallness, homology comparison or excision.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientChainSupport.lean",
-      :sha256
-      "925af120ead4db53582b302b9975249e0a32364a595a82f99bb619b11a3e3cc8"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientChainSupport.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Prove iterate-realization compatibility, apply geometric subordinate support at a common exponent, and use preservation to obtain actual preimages for every larger exponent. No eventual smallness, homology comparison, excision or frozen closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :four-standard-only-audits :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 4,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 20 existing dependency warnings; both direct compilations had zero warnings."],
+    :statement-hashes
+    {"coordinates"
+     "2b1b962f836bbe9b0647bd330976eea0cb9d4197273abefbeab8957460e79340",
+     "coordinates_generator"
+     "711a1cbd167fe49ad8ea681b8706f0d9a167493e2bb6c8b300270094d7f060ee",
+     "inverse_single"
+     "d967468f405fb3a8704a655ae5493d4412773794132a946906c7c3026c729d0f",
+     "finite_expansion"
+     "c71f8fdfadb05bea4e46ea41b1ec3b51f294cba159d63c3ba91f4a8620a0c302",
+     "exists_finite_expansion"
+     "902ef0d3ccad721abe7b79e5df2065219d43d5973d49f2bccd0a8b9699331ead",
+     "integral_interval_edge"
+     "a2a105b7aed9b30363f5e78b87ad61bc8a3ed58433ef7470e108fd3284c3027b",
+     "rational_interval_edge"
+     "6ef3ffa00fe9f13fda06901329ef449134dd2afbb54613757f1f463bdbe7b703"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure stop rules and finite-realization dependency PASS receipt",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientChainSupport.lean", :exit 0}
+     {:cmd "Python verify fixture SHA256 and promote exact fixture",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientChainSupport.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientChainSupport.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientChainSupport",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientChainSupport.lean /tmp/CoefficientChainSupport.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, four standard-only audits per compilation, warning and seven declaration-hash audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope audit and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct finite coordinates for actual coefficient-general chains\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope audit pinned to 1e40c51c and clean tracked checkout verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Actual degree-n singular-chain object with coefficient object ModuleCat.of R R.",
+     :target
+     "Finitely supported functions from actual singular n-simplices to arbitrary coefficients in R.",
+     :direction
+     "Construct an R-linear equivalence from the actual chain object to finitely supported coefficients, with inverse reconstruction by evaluating simplex generators at those coefficients."},
+    :commit "1e40c51ca8c3f07db1f3ecdbbd2505f1801ac183",
+    :changed-paths
+    ["ConstructionTargets/CoefficientChainSupport.lean"
+     "ConstructionTargets/CoefficientChainSupport.md"],
+    :fixture
+    {:path "/tmp/CoefficientChainSupport.lean",
+     :sha256
+     "925af120ead4db53582b302b9975249e0a32364a595a82f99bb619b11a3e3cc8"},
+    :finding
+    "Promoted the exact fixture and documented arbitrary R-valued reconstruction. The coordinate equivalence identifies actual singular chains with finite simplex coefficients and reconstructs each chain by generator evaluation. Integer and rational interval-edge examples, including coefficient 1/2, compile. Focused build passed with 8259 jobs.",
+    :statement-hash-method
+    "SHA256 of declaration text beginning with theorem or def, excluding preceding attributes, and ending immediately before the space preceding := or where; namespace ConstructionTargets.CoefficientChainSupport.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientChainSupport.lean"
     "ConstructionTargets/CoefficientChainSupport.md"],
