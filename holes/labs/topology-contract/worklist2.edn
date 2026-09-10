@@ -29913,22 +29913,125 @@
    :stop-condition
    "Bank only the explicit linear isometric equivalence, its inverse and coordinate formulas. Do not claim Euclidean cap-image equality, subtype or Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint47-coordinate/SphereCapCoordinateIsometry.lean",
-      :sha256
-      "8f9aa55ce85dd856e4e6e0fd3a6866cb17f16df7b20e48cb0b08a61b6fb99074"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/codex13-checkpoint47-coordinate/SphereCapCoordinateIsometry.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Prove that coordinateIsometry maps upperCap and lowerCap exactly onto the corresponding literal strict subsets of Metric.sphere 0 1, establish subtype and ambient Hausdorff identifications, and transport C1GraphGlobalBounds.exact_area_value.",
+    :gates
+    {:canonical-compile :pass,
+     :left-inverse :pass,
+     :whitespace :pass,
+     :norm-preservation :pass,
+     :fixture-hash :pass,
+     :dimension-three :pass,
+     :axiom-audits 5,
+     :last-formula :pass,
+     :dimension-two :pass,
+     :exact-scope :pass,
+     :claim-boundary :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :castSucc-formula :pass,
+     :linearity :pass,
+     :representation-direction :pass,
+     :warning-scan :pass,
+     :right-inverse :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :inverse-map :pass,
+     :forward-map :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"coordinateIsometry_last"
+     "6813d434ae1b04103d4f52b202c79ba7b36599fdc512b926d2487da2abc09525",
+     "coordinateLinearEquiv"
+     "3e8bfa1ba3030dcc293e1b096d1a8478ff429751446207a3d6a6d9a6c46dc1c8",
+     "coordinateLinearEquiv_last"
+     "d7cda524bf24a7f15f2bcc8f6cfcf7185090dc2fe52c6c25ffd85b52c7bf5402",
+     "coordinateLinearEquiv_norm"
+     "c451f31220f74ff696f60c83c3e6a62afb87b7967d4823b62c8fcbf423838526",
+     "coordinateIsometry"
+     "450879a57263b3fe7d3bcc5ffcebdbf392fc6a3d8eb0cafc0b2fe67ef92e701f",
+     "EuclideanAmbient"
+     "b4565a397782fb25c335f5cbb762d0a7c7d5e5b15082615450a9ee5015002f61",
+     "coordinateIsometry_apply"
+     "1a688eeaffcad0a3446344e93542c3fbaa143cfe8a5dfa9307ed612f9ff5cc3f",
+     "coordinateIsometry_castSucc"
+     "1cb7fdbe005ab53394a741ff7ac55f912b9d21d8489321e8244ba79978fa8a5f",
+     "coordinateLinearEquiv_castSucc"
+     "ccd08a9a06e2e27a0332911a22262a93073921892cc1b9414369fed22e6ffa35",
+     "coordinateLinearEquiv_apply"
+     "bafba20656368181377b76cd7c89ac31e3e2e26293e8c66f13539f5901773d36"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, build-loop design, both ledgers and reviewed dependency receipt",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint47-coordinate/SphereCapCoordinateIsometry.lean ConstructionTargets/SphereCapCoordinateIsometry.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint47-coordinate/SphereCapCoordinateIsometry.lean ConstructionTargets/SphereCapCoordinateIsometry.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint47-coordinate/SphereCapCoordinateIsometry.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SphereCapCoordinateIsometry.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SphereCapCoordinateIsometry",
+      :exit 0}
+     {:cmd
+      "Audit five namespace-local standard-only axiom reports and zero warnings or errors",
+      :exit 0}
+     {:cmd
+      "Audit explicit forward and inverse coordinate maps, linearity, both inverse laws, Fin.castSucc and Fin.last formulas, Fin.sum_univ_castSucc norm decomposition and exact L2 norm preservation",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/SphereCapCoordinateIsometry.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n '[[:blank:]]+$' ConstructionTargets/SphereCapCoordinateIsometry.lean ConstructionTargets/SphereCapCoordinateIsometry.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --cached --check and exact two-file staged-scope audit",
+      :exit 0}
+     {:cmd "git diff 7b50fe63^ 7b50fe63 --check", :exit 0}],
+    :representation
+    {:source
+     "WithLp 2 (EuclideanSpace real (Fin d) times real), with the first component representing the graph source and the second component representing height",
+     :target
+     "EuclideanSpace real (Fin (d+1)), with source coordinates at Fin.castSucc and height at Fin.last d",
+     :direction
+     "Exact linear isometric equivalence from the source L2 product representation to the target appended-coordinate Euclidean representation, with a proved inverse and coordinate equalities in both directions."},
+    :dependency-uptake
+    {:id :sphere-cap-l2-strict-image-1,
+     :commit "961683199fb4fe926bd527743a14b2366485d029",
+     :review "invoke-1789049546822-18737-1db5ebe5"},
+    :commit "7b50fe637df7b9a0c65f6c754f017798a17e31e5",
+    :changed-paths
+    ["ConstructionTargets/SphereCapCoordinateIsometry.lean"
+     "ConstructionTargets/SphereCapCoordinateIsometry.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint47-coordinate/SphereCapCoordinateIsometry.lean",
+     :sha256
+     "8f9aa55ce85dd856e4e6e0fd3a6866cb17f16df7b20e48cb0b08a61b6fb99074",
+     :placeholder-count 0},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereCapCoordinateIsometry.lean"
     "ConstructionTargets/SphereCapCoordinateIsometry.md"],
