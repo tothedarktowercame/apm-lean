@@ -73147,9 +73147,100 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t00A03",
    :stop-condition
-   "Require generic perturbation parameters whose coincidence fibers on the entire compact square are finite, including proof that interior coincidences cannot accumulate at the four fixed endpoint pairs. Interior submersivity and finiteness of the four endpoints alone are insufficient.",
-   :phase :probe,
+   "Require a corners-aware parametric transversality theorem proving that generic full coincidence fibers are closed and discrete in the entire unit square, including isolation at each coincident endpoint pair.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/PlaneArcEndpointCompactDiscreteFiberFinite.lean"],
+   :dag-node
+   "SURFACE TRIANGULATION / compact discrete coincidence-fiber finiteness",
+   :acceptance
+   {:fixture "/tmp/PlaneArcEndpointCompactDiscreteFiberFinite.lean",
+    :fixture-sha256
+    "529f06fe7a9179012ecd0b2c4ea7bcf899fdaefd9ae71033e9346ae60a11e7d0",
+    :implementation
+    "Promote the exact fixture. Compile unitSquare, unitSquare_compact, compact_of_closed_subset_unitSquare and finite_of_closed_discrete_subset_unitSquare. This supplies the compactness-to-finiteness step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 routes: every closed discrete subset of the full closed unit square is finite. Verify PlaneArcEndpointIncidenceFiberSection SHA256 9fdd5f5167662c0ace5c5f3f18927a0193a859503b81750f12341d5446771a82. Preserve the literal closed unit square. Require zero placeholders, no warnings and standard-only axioms. Do not claim that a coincidence fiber is closed or discrete, endpoint isolation, parametric transversality, generic parameter existence, simultaneous finite-family selection, embedding stability, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+    :commands
+    ["lake env lean ConstructionTargets/PlaneArcEndpointCompactDiscreteFiberFinite.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :plane-arc-endpoint-compact-discrete-fiber-finite-implementation-refill51,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion
+    :finite-chartwise-endpoint-preserving-arcs-probe-refill50
+    :plane-arc-endpoint-incidence-fiber-section-implementation-refill50],
+   :current-residual
+   "Prove that a generic endpoint-weighted coincidence fiber is closed and discrete in the full unit square. Interior submersivity supplies local discreteness away from endpoint pairs, but a corners argument must isolate every coincident prescribed endpoint and prevent interior zeros from accumulating there.",
+   :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
+  {:consumer "t00A03",
+   :stop-condition
+   "Require generic perturbation parameters whose coincidence fibers on the entire compact square are finite, including proof that interior coincidences cannot accumulate at the four fixed endpoint pairs. Interior submersivity and finiteness of the four endpoints alone are insufficient.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Compact-discrete finiteness is now available on the entire parameter square. The remaining analytic step is generic closedness and discreteness of the actual full coincidence fiber, with explicit endpoint-pair isolation; finite-family simultaneity, embedding stability and cross-chart transport remain afterward.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer "t00A03",
+      :stop-condition
+      "Require a corners-aware parametric transversality theorem proving that generic full coincidence fibers are closed and discrete in the entire unit square, including isolation at each coincident endpoint pair.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/PlaneArcEndpointCompactDiscreteFiberFinite.lean"],
+      :dag-node
+      "SURFACE TRIANGULATION / compact discrete coincidence-fiber finiteness",
+      :acceptance
+      {:fixture "/tmp/PlaneArcEndpointCompactDiscreteFiberFinite.lean",
+       :fixture-sha256
+       "529f06fe7a9179012ecd0b2c4ea7bcf899fdaefd9ae71033e9346ae60a11e7d0",
+       :implementation
+       "Promote the exact fixture. Compile unitSquare, unitSquare_compact, compact_of_closed_subset_unitSquare and finite_of_closed_discrete_subset_unitSquare. This supplies the compactness-to-finiteness step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 routes: every closed discrete subset of the full closed unit square is finite. Verify PlaneArcEndpointIncidenceFiberSection SHA256 9fdd5f5167662c0ace5c5f3f18927a0193a859503b81750f12341d5446771a82. Preserve the literal closed unit square. Require zero placeholders, no warnings and standard-only axioms. Do not claim that a coincidence fiber is closed or discrete, endpoint isolation, parametric transversality, generic parameter existence, simultaneous finite-family selection, embedding stability, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+       :commands
+       ["lake env lean ConstructionTargets/PlaneArcEndpointCompactDiscreteFiberFinite.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :id
+      :plane-arc-endpoint-compact-discrete-fiber-finite-implementation-refill51,
+      :kind :reusable-theorem,
+      :depends-on
+      [:endpoint-compact-boundary-parametric-transversality-probe-refill51
+       :plane-arc-endpoint-incidence-fiber-section-implementation-refill50],
+      :current-residual
+      "Prove that a generic endpoint-weighted coincidence fiber is closed and discrete in the full unit square. Interior submersivity supplies local discreteness away from endpoint pairs, but a corners argument must isolate every coincident prescribed endpoint and prevent interior zeros from accumulating there.",
+      :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake build ConstructionTargets.PlaneArcEndpointIncidenceFiberSection >/tmp/endpoint-incidence-dep.log 2>&1",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/PlaneArcEndpointCompactDiscreteFiberFinite.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/PlaneArcEndpointCompactDiscreteFiberFinite.lean ConstructionTargets/PlaneArcEndpointIncidenceFiberSection.lean",
+       :exit 0}
+      {:cmd
+       "python3 comment-stripped placeholder-and-four-declaration audit over /tmp/PlaneArcEndpointCompactDiscreteFiberFinite.lean",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/PlaneArcEndpointCompactDiscreteFiberFinite.lean",
+      :sha256
+      "529f06fe7a9179012ecd0b2c4ea7bcf899fdaefd9ae71033e9346ae60a11e7d0",
+      :placeholder-count 0},
+     :finding
+     "Compiled exactly one compact-fiber prerequisite. The closed unit square is compact, every closed subset of it is compact, and every such subset that is discrete is finite. This identifies the precise conclusion a corners-aware transversality argument must establish for the actual coincidence fiber. The reviewed interior submersion alone gives no closedness or isolation at the four endpoint pairs, so it cannot exclude an infinite discrete interior locus accumulating at the boundary.",
+     :seat "codex-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / compact-boundary endpoint-relative parametric transversality",
@@ -73163,7 +73254,7 @@
    :depends-on
    [:checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion
     :finite-chartwise-endpoint-preserving-arcs-probe-refill50
-    :checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion],
+    :plane-arc-endpoint-compact-discrete-fiber-finite-implementation-refill51],
    :current-residual
    "Interior incidence fibers can be discrete yet infinite by accumulating at removed endpoints; compact-boundary transversality and endpoint isolation are required before finiteness.",
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
