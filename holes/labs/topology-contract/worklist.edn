@@ -60415,8 +60415,53 @@
   {:consumer "t94J09",
    :stop-condition
    "GO requires the complete frozen consumer. Otherwise STOP names the exact missing polygon attachment, chain comparison or induced boundary-map calculation; infrastructure absence is not refutation.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "Actual polygon normalization and attachment-to-integral-singular-homology computation remain. No complete closure fixture was compiled. This is an infrastructure boundary, not a mathematical refutation or campaign termination.",
+    :dependency-review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789014917549-17852-fe8c5dbf"},
+    :evidence
+    {:path "/tmp/t94j09-refill40-audit.json",
+     :sha256
+     "5ee87fc8228a24562cc33ad59f0d7216aa5c11a96a454dbbc662efbbc5de45f9",
+     :frozen-file "problems/t94J09/lean/Main.lean",
+     :frozen-sha256
+     "7726693f11c45b961ddec5736361aae56b94476b84048f9be760a2db6c0c96a5"},
+    :outcome :stop,
+    :warnings [],
+    :boundary
+    {:quotient
+     "Construct Nonempty (apm_t94J09_PolygonSurface ≃ₜ apm_t94J09_N6), supplying actual normalization maps and their compatibility and inverse proofs, or another proved homeomorphism construction.",
+     :homology
+     "For the literal quotient X, construct its boundary-image skeleton A and prove the attachment comparison for actual relative singular chains. Identify the connecting map H_2(X,A;Z) → H_1(A;Z) under proved coordinate isomorphisms, including its kernel and cokernel. No banked theorem supplies this polygon-specific identification or a cellular-to-singular comparison. Then derive the literal ModuleCat Z conclusions H_0(X)=Z, H_1(X)=Z^5×ZMod 2 and IsZero H_k(X) for every k≥2.",
+     :available
+     "CoefficientPairSequence supplies actual exact segments and connecting maps; CoefficientExcision supplies excision isomorphisms under closedness/interior hypotheses; CoefficientRadialPair supplies the actual disk-to-punctured-disk relative comparison. Integral pair and radial APIs also exist. Their existence does not discharge the polygon-specific geometric hypotheses or determine its induced boundary map."},
+    :disposition :stop,
+    :axioms :not-audited-no-new-proof,
+    :author "codex-12",
+    :placeholder-before 1,
+    :reason :missing-infrastructure,
+    :commands
+    [{:cmd "python3 /tmp/t94j09-refill40-audit.py", :exit 0}
+     {:cmd "sha256sum /tmp/t94j09-refill40-audit.json", :exit 0}
+     {:cmd
+      "rg -n 'apm_t94J09|N6Rel|PolygonRel|cellular|attaching' ConstructionTargets --glob '*.lean'",
+      :exit 0}
+     {:cmd
+      "rg -n 'attaching|cellular.*homology|homology.*cellular' .lake/packages/mathlib/Mathlib/AlgebraicTopology/SingularHomology .lake/packages/mathlib/Mathlib/Topology/CWComplex",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :finding
+    "Two independent constructions remain. Correction to the preceding strategy receipt: apm_t94J09_homeomorphOfDiskMaps is conditional, not a constructed homeomorphism between the frozen quotients. It requires continuous disk maps p,q, compatibility with both generating relations, and both quotient-level inverse identities. Those witnesses remain absent. Separately, current integral and coefficient-general excision, pair sequences, relative-map naturality and radial comparisons do not compute the attaching map for this polygon quotient. The finite vertex-count and Euler certificates do not establish its actual cellular structure or singular homology.",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "SURFACE HOMOLOGY / frozen nonorientable genus-six polygon",
