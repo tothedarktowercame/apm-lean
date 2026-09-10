@@ -20454,8 +20454,196 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:placeholder-delta 0,
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read DAG, foundational-program note, closure rules and standing portfolio policy",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint35Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint35Eligibility.bb", :exit 0}
+     {:cmd
+      "Inspect both ledgers, dependency PASS receipts and concurrent refill42 work",
+      :exit 0}
+     {:cmd
+      "Inspect exact t94J08 homology, degree and final proof obligations",
+      :exit 0}
+     {:cmd
+      "git log --format='%h %s' 2470cc2f..205dbfa7 -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :infrastructure-packets
+    {:modules-before 707,
+     :modules-after 711,
+     :portfolio 2,
+     :concurrent 2,
+     :portfolio-commits ["cbd921f6" "788855cf"],
+     :concurrent-commits ["3830e6d3" "753cb1e7"],
+     :new-branch-uptake 0},
+    :replacement-items
+    [{:consumer :t94J08,
+      :stop-condition
+      "No assumed sphere homology table, determinant-degree theorem, coordinate-permutation sign or antipodal action. Preserve the ordinary-S0 refutation and positive-dimensional hypotheses. Do not claim frozen consumer closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SPHERE ORIENTATION: positive-dimensional top homology and actual antipodal action",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For every Type 0 commutative ring R and n at least one, construct an isomorphism from actual R-valued H_n of the literal unit sphere in EuclideanSpace ℝ (Fin (n+1)) to ModuleCat.of R R, using the reviewed circle endpoint and sphere shift. Construct actual coordinate reflections and coordinate-permutation sphere homeomorphisms. Prove the first-coordinate reflection acts by minus identity on top homology: use CoefficientDiskReflection and sphereToDisk equivariance for the circle base, and the reviewed sphereShift equivariance for induction. Prove actual point-set conjugation transporting this result to every coordinate reflection; do not assume the homology sign of the conjugating permutation. Prove that the product of all coordinate reflections is literal negation, and use actual homology functor composition to derive multiplication by (-1)^(n+1) for the antipodal map. State exact forward normalization, inverse laws and scalar equations. Compile integer and rational examples in dimensions one and two. GO requires the complete actual-map fixture; REVISE requires exactly one compiled missing coordinate-reflection or permutation-conjugation prerequisite; STOP names independent foundations.",
+       :consumer-equation
+       "For n at least one, actual top homology H_n(S^n;R) is isomorphic to R and the actual antipodal map acts by multiplication by (-1)^(n+1).",
+       :consumer-residual
+       "Transport the integral specialization into the exact repaired t94J08 definitions and discharge its degree and local-index obligations. All-integer degree realization, localization/gluing and nonbounding remain separate.",
+       :gates
+       ["Compile a complete placeholder-free fixture and record SHA256."
+        "Audit actual sphere types, coordinate maps, induction degree shifts and the n=1 disk-reflection base."
+        "Prove permutation conjugation and the product-to-negation equation; do not assume determinant or orientation signs."
+        "Record exact normalization and inverse equations, integer/rational examples and standard-only axiom audits."
+        "Recheck both ledgers and preserve the original ordinary-S0 refutation; no frozen closure claim."]},
+      :id
+      :oriented-checkpoint35-coefficient-positive-sphere-antipodal-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint35-orthogonal-comparison-and-consumer-refill
+       :oriented-checkpoint34-coefficient-orthogonal-sphere-comparison-1
+       :oriented-checkpoint33-coefficient-disk-reflection-sign-1
+       :oriented-checkpoint30-coefficient-sphere-endpoints-1],
+      :current-residual
+      "Actual orthogonal sphere equivariance is reviewed. Positive-dimensional top-homology coordinates, coordinate-reflection induction and the antipodal product calculation remain unassembled.",
+      :other-consumers [:t02A08 :t98A02 :t96J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: antipodal computation and frozen consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint36-antipodal-computation-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint35-coefficient-positive-sphere-antipodal-1
+       :oriented-checkpoint35-orthogonal-comparison-and-consumer-refill],
+      :current-residual
+      "Measure the actual signed computation separately from frozen uptake and rerank every consumer against concurrent outcomes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :ranking
+    ["No newly eligible unassigned complete-consumer adapter exists among the 25 near consumers. The latest t02A08 STOP is preserved, not retried."
+     "Exclude concurrent embedded-triangle, incidence-tangent and finite-cover-transfer work and their prerequisites."
+     "Elect positive-dimensional sphere top homology and antipodal action over R. Four proposed consumer paths use its signed degree or orientation calculation; disk reflection, sphere shift and actual orthogonal equivariance now provide the induction substrate."
+     "Global localization, product homology, cap/Thom, integration and surface classification remain broader foundations. The elected computation directly supplies the missing reusable theorem required by the inspected t94J08 degree predicate."],
+    :near-consumer-boundaries
+    {:t00J02
+     "Fundamental classes and geometric homological comparison.",
+     :t03J02 "Generic collar/NDR and gluing comparison.",
+     :t92J06 "Actual graph-covering construction.",
+     :t95J06 "Hopf-surface torus homeomorphism.",
+     :t97A01 "Literal polygon invariants.",
+     :t94A06 "General-model smoothness and dimension hypotheses.",
+     :a97J08 "Planar separation.",
+     :t01A05
+     "Covering fundamental-class equation and disconnected orientation defect.",
+     :t96J06 "Compact-manifold nonbounding and fundamental classes.",
+     :t00A03 "Literal pants decomposition and cutting count.",
+     :t01J04 "Analytic boundary-preimage atlas and countability.",
+     :t03J05 "Literal curves and intersection/nonhomotopy.",
+     :t94J09 "Polygon normalization and attaching-map homology.",
+     :t03J04
+     "Uniform rational torus Euler calculation and finite-cover Euler comparison.",
+     :t95J05 "Numerical Hausdorff mass normalization.",
+     :t00J01
+     "Klein-product manifold/top-homology and exact fold fibers.",
+     :t99J03
+     "Compatible triangulation, realization homeomorphism and polygon normalization.",
+     :t01A08 "General-model projected regular preimage.",
+     :t00A01
+     "Actual two-open free-product comparison and basepoint extraction.",
+     :t98A02 "Localization and gluing.",
+     :t02A05 "Literal flux and measure comparison.",
+     :t96J05
+     "Preserved radial-level refutation and unresolved attained-level specification.",
+     :t98A01 "Genus invariance and Euler multiplicativity.",
+     :t02A08
+     "All-integer degree realization; latest reviewed STOP retained.",
+     :t94J08
+     "Positive-dimensional top-homology coordinates and actual antipodal scalar action, followed by frozen transport."},
+    :finding
+    "Two reviewed orthogonal-comparison modules and two concurrent covering modules were added, with consumer files and placeholder counts unchanged. The next packet must compute the actual signed action, rather than infer it from equivariance. Earlier frozen-branch uptake, corrected closure, original refutations and unresolved STOPs remain distinct. Elect one computation and a matching successor.",
+    :typed-residual-change
+    {:before
+     "The sphere-to-disk composite lacked orthogonal equivariance.",
+     :after
+     "Actual radial, hemisphere-coordinate and excision equations establish forward and inverse sphere-to-disk and sphere-shift equivariance. Positive-dimensional top-homology coordinates and antipodal action remain to be assembled.",
+     :consumer-files-changed false,
+     :t94J08
+     "The frozen degree predicate requires an actual top-homology isomorphism to Z and the actual antipodal scalar equation; neither follows merely from equivariance."},
+    :review-outcomes
+    {:radial-review "invoke-1789021275220-18040-7b65d452",
+     :concurrent-lift-restriction :pass,
+     :orthogonal-radial :pass,
+     :new-corrected-closures 0,
+     :concurrent-degree-realization :pass-as-stop,
+     :lift-review "invoke-1789021651883-18048-2ce7b12f",
+     :concurrent-simplex-transfer :awaiting-review,
+     :new-proved-refutations 0,
+     :orthogonal-sphere :pass,
+     :degree-review "invoke-1789020910502-18030-2537de00",
+     :new-frozen-closures 0,
+     :sphere-review "invoke-1789021988608-18056-f01bac7a"},
+    :reserved-concurrent
+    [:standard-triangle-embedding-implementation-refill42
+     :compact-surface-embedded-triangle-cover-probe-refill42
+     :manifold-target-incidence-immersion-implementation-refill42
+     :manifold-target-incidence-tangent-probe-refill42
+     :covering-simplex-transfer-implementation-refill42
+     :finite-cover-singular-chain-transfer-probe-refill42
+     :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint35Census.json",
+     :open 35,
+     :baseline "2470cc2f2a270a5ac22f86ef867ae27b480a78ca",
+     :existing 58,
+     :placeholder-after 66,
+     :zero-placeholder 23,
+     :placeholder-before 66,
+     :head "205dbfa759f72baf2354106d20c31531f0fe1c55",
+     :sha256
+     "1ea5258a32c63ff119fdbe921dedb749782cf369c8790af6c664f197e8b56c21",
+     :named 59,
+     :missing [:t93A05],
+     :within-two 25}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: orthogonal sphere comparison and consumer eligibility",
@@ -20473,6 +20661,70 @@
     :oriented-checkpoint34-disk-reflection-and-consumer-refill],
    :current-residual
    "Measure geometric equivariance separately from signed-action and consumer conclusions, and rerank the complete DAG against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t94J08,
+   :stop-condition
+   "No assumed sphere homology table, determinant-degree theorem, coordinate-permutation sign or antipodal action. Preserve the ordinary-S0 refutation and positive-dimensional hypotheses. Do not claim frozen consumer closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SPHERE ORIENTATION: positive-dimensional top homology and actual antipodal action",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For every Type 0 commutative ring R and n at least one, construct an isomorphism from actual R-valued H_n of the literal unit sphere in EuclideanSpace ℝ (Fin (n+1)) to ModuleCat.of R R, using the reviewed circle endpoint and sphere shift. Construct actual coordinate reflections and coordinate-permutation sphere homeomorphisms. Prove the first-coordinate reflection acts by minus identity on top homology: use CoefficientDiskReflection and sphereToDisk equivariance for the circle base, and the reviewed sphereShift equivariance for induction. Prove actual point-set conjugation transporting this result to every coordinate reflection; do not assume the homology sign of the conjugating permutation. Prove that the product of all coordinate reflections is literal negation, and use actual homology functor composition to derive multiplication by (-1)^(n+1) for the antipodal map. State exact forward normalization, inverse laws and scalar equations. Compile integer and rational examples in dimensions one and two. GO requires the complete actual-map fixture; REVISE requires exactly one compiled missing coordinate-reflection or permutation-conjugation prerequisite; STOP names independent foundations.",
+    :consumer-equation
+    "For n at least one, actual top homology H_n(S^n;R) is isomorphic to R and the actual antipodal map acts by multiplication by (-1)^(n+1).",
+    :consumer-residual
+    "Transport the integral specialization into the exact repaired t94J08 definitions and discharge its degree and local-index obligations. All-integer degree realization, localization/gluing and nonbounding remain separate.",
+    :gates
+    ["Compile a complete placeholder-free fixture and record SHA256."
+     "Audit actual sphere types, coordinate maps, induction degree shifts and the n=1 disk-reflection base."
+     "Prove permutation conjugation and the product-to-negation equation; do not assume determinant or orientation signs."
+     "Record exact normalization and inverse equations, integer/rational examples and standard-only axiom audits."
+     "Recheck both ledgers and preserve the original ordinary-S0 refutation; no frozen closure claim."]},
+   :id :oriented-checkpoint35-coefficient-positive-sphere-antipodal-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint35-orthogonal-comparison-and-consumer-refill
+    :oriented-checkpoint34-coefficient-orthogonal-sphere-comparison-1
+    :oriented-checkpoint33-coefficient-disk-reflection-sign-1
+    :oriented-checkpoint30-coefficient-sphere-endpoints-1
+    :oriented-checkpoint35-orthogonal-comparison-and-consumer-refill],
+   :current-residual
+   "Actual orthogonal sphere equivariance is reviewed. Positive-dimensional top-homology coordinates, coordinate-reflection induction and the antipodal product calculation remain unassembled.",
+   :other-consumers [:t02A08 :t98A02 :t96J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: antipodal computation and frozen consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint36-antipodal-computation-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint35-coefficient-positive-sphere-antipodal-1
+    :oriented-checkpoint35-orthogonal-comparison-and-consumer-refill
+    :oriented-checkpoint35-orthogonal-comparison-and-consumer-refill],
+   :current-residual
+   "Measure the actual signed computation separately from frozen uptake and rerank every consumer against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
