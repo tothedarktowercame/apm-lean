@@ -58698,6 +58698,19 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789007534862-17671-a9f7ab23",
+     :commands
+     ["git show 1d45605fb372cb48d047f52b37f4be24dd8472b1"
+      "Independent pinned scope, fixture SHA256, statement hashes and placeholder audit"
+      "lake build ConstructionTargets.TransverseDifferenceRegularity ConstructionTargets.RegularFiberFixedModel"
+      "lake env lean ConstructionTargets/TransverseDifferenceKernel.lean"
+      "git show --format= --check 1d45605f"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact one-file promotion; fixture and both statement hashes reproduce; zero placeholders; consumers unchanged. Kernel membership is exactly Df(v)=Dg(w) for the actual product-model derivative. Dimension follows from transversality-derived surjectivity and rank-nullity. Membership requires no finite dimensionality; dimension retains only finite-dimensional source factors. No incidence atlas or inclusion derivative claim. Both declarations compile warning-free with standard axioms; prerequisite build succeeds (8318 jobs). Whitespace clean; 456 ledger items validate; no edits."},
     :commit "1d45605fb372cb48d047f52b37f4be24dd8472b1",
     :changed-paths
     ["ConstructionTargets/TransverseDifferenceKernel.lean"],
@@ -58709,7 +58722,7 @@
     :finding
     "Exact fixture promoted. Both declarations compile warning-free with standard-only axioms and zero placeholders. Actual product-model mfderiv, transversality-derived regularity and weaker hypotheses are preserved. Existing APIs and consumers unchanged; worktree clean. Validator reports 456 items OK."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TransverseDifferenceKernel.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / actual difference kernel and dimension",
@@ -58795,7 +58808,7 @@
      "Compiled one prerequisite. Membership in the actual difference-map mfderiv kernel is equivalent to Df(v)=Dg(w). At every incident pair, range-sum transversality supplies surjectivity and rank-nullity gives finrank E+finrank G-finrank F. No inner-product structure on the ordinary product norm, positive dimension or nonempty incidence is assumed.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TRANSVERSE-PULLBACK / vector-target fiber product",
    :acceptance
