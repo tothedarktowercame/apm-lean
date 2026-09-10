@@ -57399,8 +57399,57 @@
   {:consumer "t00J02",
    :stop-condition
    "Require the actual open partial homeomorphism and all five specifications; a set equivalence without topology is insufficient.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Original-fiber chart composition and smooth overlap assembly remain. No global manifold structure or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:transfer
+     "2ebb57940214acf4b484c1b6bc5208a4cdeb0c56a8521212ab6c0d012dc4821c",
+     :source-eq
+     "b9ff90fdfee86062f8ea942937104db4bb2d7d11ab6c06f5197c915479a57fcb",
+     :target-eq
+     "178adbef0ca443898bbfc2f639c2b77f1b30a85ec5277984a0df1ba77d6a6d85",
+     :center-mem
+     "01ad068848fffd8a10c4bdd64281e585efd99098d6ffa2cade63edcf43d7f9bf",
+     :forward-eq
+     "978508b1ad6935649ca9e48b3b197a48729bd81e98d6390a7f9ae7588b03dcb2",
+     :backward-eq
+     "0777a129022a13ac031185dc3df21b9f0b810dd3777e4ca9691120d2cf481247"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "Python fixture hash, forbidden-token and declaration-signature audit",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/FiberPredicateTransfer.lean ConstructionTargets/FiberPredicateTransfer.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/FiberPredicateTransfer.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history [],
+    :commit "638aeee0b5d9bf53664d2db05a4a47efbd6a9e8a",
+    :changed-paths ["ConstructionTargets/FiberPredicateTransfer.lean"],
+    :fixture
+    {:path "/tmp/FiberPredicateTransfer.lean",
+     :sha256
+     "26b7d66e7f387f962f97e0eb6e2cc7d88b873de1160e319aaf455dbbad49eef7",
+     :placeholder-count 0},
+    :finding
+    "Exact fixture promoted. Constructor and five specifications compile warning-free with standard-only axioms and zero placeholders. Inherited topologies, exact source/target, center membership and restricted coordinate formulas are preserved, reusing the existing fiber-transfer theorem. Existing APIs and consumers unchanged; worktree clean. Validator reports 444 items OK."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/FiberPredicateTransfer.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / predicate fiber transport across coordinate codomains",
