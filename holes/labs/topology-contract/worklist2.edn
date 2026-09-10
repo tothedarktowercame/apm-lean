@@ -22625,19 +22625,133 @@
    :stop-condition
    "Bank the actual chart-pair comparison only. Do not claim translation-to-zero normalization, ambient local generators, overlap orientation coherence, global localization or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientChartPair.lean",
-      :sha256
-      "e93b27eddddbbd8d6929545edaf2a055175f42f3563fe374fb58e89148de4676"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientChartPair.lean", :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Construct translation of the actual chart coordinate to zero, then compose this comparison with neighborhood inclusion isomorphisms and CoefficientModelLocal normalization to construct the ambient local generator. No translation-to-zero normalization, ambient local generator, overlap orientation coherence, global localization or consumer closure is claimed.",
+    :gates
+    {:pair-map-inverse-laws :pass,
+     :actual-chartAt-restrictions :pass,
+     :point-membership-and-evaluation :pass,
+     :integer-rational-examples :pass,
+     :whitespace :pass,
+     :placeholders :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :two-file-scope :pass,
+     :axioms :pass,
+     :deleted-subset-identities :pass,
+     :build :pass,
+     :homology-forward-and-inverse-equations :pass,
+     :fixture-compilation :pass,
+     :degreewise-projections :pass},
+    :axiom-audits 16,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation emitted no warnings. Build replayed 22 dependency warnings; none originated in this module."],
+    :statement-hashes
+    {:pair_inverse_right
+     "103fd614f71efa324e8bba7ebb5ee0cc3c56a7095eb655ca92fa53203cd6344d",
+     :chartHomeo
+     "0f529c0f547cfbdefb64f31a52e699c809ea48dbefeac80aad7c87a8be90fe97",
+     :chart_projection
+     "77314a50d9bdb33ba52561e8f4b18b3f0527e4ed3c0d7301b12b754bf1030d80",
+     :source_member
+     "ecb84fba5489d3d03a908da68cd67a806cffdd2f981a1f7356d99b623e6371e5",
+     :chartHomologyIso
+     "54bfa37401d812e8a41f993decf3763e16ac809838b44d7b3b831a2a063b2859",
+     :homologyIso
+     "f5b1c87a123ff7e2917514fba5801f195596772b1966ed44b0dba99d6bed6e53",
+     :deletedInverse
+     "96beb589befb7f229dbbe17833ca24e29f055df0d3cc10d8ad83d9f9823652ab",
+     :chart_value
+     "a19d2524946b6bf0d1d5bee5c2b826aa330903ccbbe8971dbdd44826ae70418b",
+     :pairIso
+     "c787eb7fa829397eac3895ee918f733a59b9ddc44f1567eb80546ccec3dcf568",
+     :chart_deleted_iff
+     "a41843075fc3c9f3a34aec0fac3f6b95f6b06da33fb8e8753d9fd853b8be2d47",
+     :deletedMap
+     "02d72adb8a2ddaf107c0316daf0fa2aeb534d0f41be8c7def47f11ed30928fdc",
+     :target_member
+     "67f87974e078c1551605a348580ab50899dea06c964caba29e3a2329365ec821",
+     :source_deleted
+     "99c986eb545d64c441391cdd04a3e4deaf7e4160bd395367c855c4e36a626b90",
+     :chart_inverse_projection
+     "0faa657cc2df0451735603cea747d654c097198a7054bb58ebd02fc2a565d6c5",
+     :pair_inverse_left
+     "cda9bcb90773716503d1b2c4934d2614a368839fdc2572e5b979d57a5087329c",
+     :chart_inverse_right
+     "5789ed53c4da01e2be76800f0dd53a54953d2e046bdba56e17439fb4166076b5",
+     :target_deleted
+     "f1b9f89c121bcd991316d6eb0cdd0be9ad9a9929ee5d09a2ee3a19c4de841574",
+     :chartPairIso
+     "b0a9a18db65d033f1140fd014d2a59c8aff5ed93d61839fefa38e606ce72d57e",
+     :chart_forward
+     "b1b6eb113480af83e902c0aa4e2bb8482a903634c7480c2e544088115f9e8483",
+     :rational_chart
+     "0c32d5970b5c547809c524e061d9908620f4d67c66ffab7d35a074d15a4ed622",
+     :chart_inverse_left
+     "ede7645437c9b49747dd2677ac3110ce8216d06dc794dfb34a28ee9424c8b0c6",
+     :sourcePoint
+     "72f98975be0a3b6ef98d2ed3fba2da747d80dc659c24e2aff9068312c85ebf3f",
+     :homeoMap
+     "50fd752187053cd330da4411455be493c118ced67537db17132cd0cde6f2bc0b",
+     :integral_chart
+     "679d783e62f697623cc8f95824fdad3603e84aa84e878e6d5ba0be33d49bbe66"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure rules, both ledgers and dependency PASS receipts; inspect actual chart restrictions, deleted subsets and inverse equations",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "Verify fixture SHA256 before byte-identical promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientChartPair.lean > /tmp/chartpair-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientChartPair.lean > /tmp/chartpair-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientChartPair > /tmp/chartpair-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Validate sixteen standard-only audits in each direct compilation log and inspect build warnings",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientChartPair.lean ConstructionTargets/CoefficientChartPair.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python audit of fixture equality, zero placeholders, twenty-four declaration hashes and exact two-file scope",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Construct actual coefficient-general chart deleted-point comparison'",
+      :exit 0}
+     {:cmd "git diff --check 6f7d4072^ 6f7d4072", :exit 0}
+     {:cmd
+      "Python verification of pinned commit scope, fixture equality and scoped cleanliness; git status --short",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "6f7d4072f5919e08cd1ca6d68864f3f0d84cd7a5",
+    :changed-paths
+    ["ConstructionTargets/CoefficientChartPair.lean"
+     "ConstructionTargets/CoefficientChartPair.md"],
+    :fixture
+    {:path "/tmp/CoefficientChartPair.lean",
+     :sha256
+     "e93b27eddddbbd8d6929545edaf2a055175f42f3563fe374fb58e89148de4676",
+     :promotion :byte-identical},
+    :finding
+    "Promoted the exact fixture constructing the actual chartAt source-target deleted-point subtype-cokernel comparison and its R-linear homology isomorphism. Point membership, coordinate evaluation, deleted-subset identities, both projection equations and chain/homology inverse laws compile in all natural dimensions and degrees without separation hypotheses.",
+    :statement-hash-method
+    "SHA256 from declaration keyword to immediately before the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientChartPair.lean"
     "ConstructionTargets/CoefficientChartPair.md"],
