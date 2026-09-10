@@ -66096,63 +66096,70 @@
    :stop-condition
    "GO requires a constructed arbitrarily small translation and derived finite coincidences; REVISE requires one compiled prerequisite. Do not claim fixed endpoints, coverage preservation or triangulation.",
    :evidence
-   {:probe
-    {:concurrent-untracked-paths
-     ["ConstructionTargets/LinearGraphMeasure.lean"
-      "ConstructionTargets/LinearGraphMeasure.md"],
-     :placeholder-delta 0,
-     :residual
-     "Endpoint-preserving relative perturbation, chart-containment and coverage control, compatible faces and triangulation remain subsequent. No consumer closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean -o /tmp/chartball47/ConstructionTargets/CompactTransverseArcIntersections.olean ConstructionTargets/CompactTransverseArcIntersections.lean",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/PlaneArcSmallTranslation.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/plane-arc-small-translation-audit.py",
-       :exit 0}
-      {:cmd
-       "sha256sum ConstructionTargets/CompactTransverseArcIntersections.lean ConstructionTargets/SardGenuineSmoothEuclidean.lean",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/PlaneSmallRegularValue.lean",
-       :exit 1,
-       :correction
-       "Opened the ContDiff notation scope for genuine infinity."}
-      {:cmd "lake env lean /tmp/PlaneSmallRegularValue.lean",
-       :exit 1,
-       :correction
-       "Specified volume in the measure monotonicity inequality."}
-      {:cmd "lake env lean /tmp/PlaneArcSmallTranslation.lean",
-       :exit 1,
-       :correction
-       "Compiled the missing promoted dependency object into a private temporary directory. Final full compilation succeeds; an ineffective congr tactic was removed before final validation."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/PlaneArcSmallTranslation.lean",
-      :sha256
-      "ebc973d64d07bd8599abf8dcc91fcda16e72a055dd9b71b11fbe25546cf8089a",
-      :placeholder-count 0},
-     :finding
-     "Compiled the complete small-translation theorem. Constructed continuous linear coordinates transport the original product-norm plane to Euclidean space for open-domain Sard. Positive measure of the inverse image of a small ball yields a regular value. Derived conjugate derivatives transfer surjectivity back, equal-dimensional linear algebra supplies invertibility, and the banked compact-fiber theorem proves finite coincidences. Translation and curve-derivative identities are proved. Open neighborhood extensions include endpoints.",
-     :implementation
-     {:scope ["ConstructionTargets/PlaneArcSmallTranslation.lean"],
-      :acceptance
-      {:implementation
-       "Promote the exact fixture. Compile coordinates, conjugate_derivative, surjective_of_conjugate, exists_small_regular, translation_difference, translated_derivative and finite_translated. Preserve genuine infinity, the original product norm, open neighborhood extensions and arbitrary positive epsilon. Verify CompactTransverseArcIntersections SHA256 d68193212c479c551ab8aa838a088841d8bf5480e3ffc4c09f6765efed07b739 and SardGenuineSmoothEuclidean SHA256 961a6b0c87b28ecd6d1e0c9453b39321bf42e9eafb25fcd583df79b57b8719c4. Require zero placeholders, no warnings and standard-only axioms. The translation moves endpoints; no coverage preservation or finite-position triangle cover is claimed.",
-       :commands
-       ["lake env lean ConstructionTargets/PlaneArcSmallTranslation.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0}},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Endpoint-preserving relative perturbation, chart-containment and coverage control, compatible faces and triangulation remain subsequent. Translation may move endpoints; no consumer closure claimed.",
+    :dependency-hashes
+    {:CompactTransverseArcIntersections
+     "d68193212c479c551ab8aa838a088841d8bf5480e3ffc4c09f6765efed07b739",
+     :SardGenuineSmoothEuclidean
+     "961a6b0c87b28ecd6d1e0c9453b39321bf42e9eafb25fcd583df79b57b8719c4"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:conjugate_derivative
+     "f3650548ee519bf7b10dd344b90462523a3fc193b03fd5ae8f275218906676f9",
+     :surjective_of_conjugate
+     "658c354ee84964a6789baf4dbc8676e46f32296e9c47f8364ef73a7b3a9993aa",
+     :exists_small_regular
+     "0802570f6af44bb39abafcb766b414f7e2eedcba43334c9ace32edbaba641b27",
+     :translation_difference
+     "bda911ab8431e63133468d65be0903ece6f6c23ae52aca3d00fc8e092ed5c424",
+     :translated_derivative
+     "4a8ee8a710bbef9736954cd7ddcb7e39a6dfa404a2a438466161ed872f35bb0e",
+     :finite_translated
+     "f777a8bec75da7dddccb5d33a9a022095f262c1bfd0abbd556d693b718513546"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/PlaneArcSmallTranslation.lean ConstructionTargets/CompactTransverseArcIntersections.lean ConstructionTargets/SardGenuineSmoothEuclidean.lean",
+      :exit 0}
+     {:cmd "python3 /tmp/plane-arc-small-translation-audit.py",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/PlaneArcSmallTranslation.lean ConstructionTargets/PlaneArcSmallTranslation.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CompactTransverseArcIntersections ConstructionTargets.SardGenuineSmoothEuclidean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/PlaneArcSmallTranslation.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "8b3aa9a1bed98a184d0d8ea2d43a8afcdb50d7d4",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcSmallTranslation.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcSmallTranslation.lean",
+     :sha256
+     "ebc973d64d07bd8599abf8dcc91fcda16e72a055dd9b71b11fbe25546cf8089a",
+     :exact-promotion true},
+    :finding
+    "Exact fixture promoted. Constructed coordinates and conjugate derivatives transfer Sard regularity to the original product-norm plane. Every positive epsilon admits a translation with finite parameter coincidences, including endpoints through open-neighborhood extensions. Genuine infinity is preserved. Ledger untouched.",
+    :axiom-audit-count 6,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/PlaneArcSmallTranslation.lean"],
    :dag-node
    "SURFACE TRIANGULATION / small translations in finite position",
