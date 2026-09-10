@@ -13166,9 +13166,161 @@
    :other-consumers []}
   {:consumer :t00J01-rational-sphere-homology,
    :stop-condition
-   "No supplied chain homotopy, contraction identity, coefficient-change isomorphism or small-chain comparison. Do not claim smallness, excision or sphere homology.",
-   :phase :probe,
+   "Bank only the constructed ordered-vertex prism, boundary identity and naturality. Do not claim a singular-chain Homotopy, small-chain comparison, excision or frozen closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/CoefficientVertexPrism.lean",
+      :sha256
+      "09c3a742f6c44c3c93272a41faf3de451bd14b1e5924cc8229a57e5bc9f2b287"},
+     :commands
+     [{:cmd "lake env lean /tmp/CoefficientVertexPrism.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientVertexPrism.lean"
+    "ConstructionTargets/CoefficientVertexPrism.md"],
+   :dag-node
+   "SINGULAR-SUBDIVISION: coefficient-general ordered-vertex prism identity and affine naturality",
+   :acceptance
+   {:implementation
+    "Promote the exact compiled fixture, reusing the reviewed coefficient-general cone, subdivision and vertex maps.",
+    :namespace "ConstructionTargets.CoefficientVertexPrism",
+    :declarations
+    ["vertexPrism"
+     "vertexPrismCorrection"
+     "vertexPrism_zero"
+     "vertexGenerator_vertexPrism_succ"
+     "d_comp_vertexPrismCorrection"
+     "vertexPrism_identity"
+     "vertexPrism_standardEdge_identity"
+     "vertexPrism_natural"
+     "vertexPrism_affine_natural"
+     "integral_standard_edge"
+     "rational_standard_edge"],
+    :hypotheses
+    "R and simplex vertex index types are Type 0; R is a commutative ring and index types have Fintype. Chains are actual ModuleCat R ordered-vertex chains with coefficient object ModuleCat.of R R. General vertex naturality explicitly requires barycenter preservation, established geometrically for affine simplex maps.",
+    :consumer-equation
+    "The constructed prism satisfies T_n followed by d_(n+1,n) plus the degree-n correction equals subdivision_n minus identity; the correction is zero at n=0 and d_(n,n-1) followed by T_(n-1) otherwise. Affine vertex maps commute with T.",
+    :consumer-residual
+    "Realize the prism on actual singular chains, prove singular face transport and construct the correctly oriented Homotopy from subdivision to identity.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientVertexPrism."
+     "Reproduce all five standard-only axiom audits and integer/rational standard-edge identities."
+     "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+   :id :coefficient-general-ordered-vertex-prism-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint20-coefficient-singular-subdivision-assembly-1],
+   :current-residual
+   "The singular subdivision homotopy needs a constructed coefficient-general prism with boundary identity and affine-change compatibility before realization.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No supplied chain homotopy, contraction identity, coefficient-change isomorphism or small-chain comparison. Do not claim smallness, excision or sphere homology.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Construct the realized singular prism and its face equations, then assemble the actual Homotopy with the verified subdivision-minus-identity sign. Smallness, positive-degree comparison, relative excision and rational sphere H1/H2 remain downstream.",
+     :axiom-audits 5,
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Bank only the constructed ordered-vertex prism, boundary identity and naturality. Do not claim a singular-chain Homotopy, small-chain comparison, excision or frozen closure.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path "/tmp/CoefficientVertexPrism.lean",
+         :sha256
+         "09c3a742f6c44c3c93272a41faf3de451bd14b1e5924cc8229a57e5bc9f2b287"},
+        :commands
+        [{:cmd "lake env lean /tmp/CoefficientVertexPrism.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/CoefficientVertexPrism.lean"
+       "ConstructionTargets/CoefficientVertexPrism.md"],
+      :dag-node
+      "SINGULAR-SUBDIVISION: coefficient-general ordered-vertex prism identity and affine naturality",
+      :acceptance
+      {:implementation
+       "Promote the exact compiled fixture, reusing the reviewed coefficient-general cone, subdivision and vertex maps.",
+       :namespace "ConstructionTargets.CoefficientVertexPrism",
+       :declarations
+       ["vertexPrism"
+        "vertexPrismCorrection"
+        "vertexPrism_zero"
+        "vertexGenerator_vertexPrism_succ"
+        "d_comp_vertexPrismCorrection"
+        "vertexPrism_identity"
+        "vertexPrism_standardEdge_identity"
+        "vertexPrism_natural"
+        "vertexPrism_affine_natural"
+        "integral_standard_edge"
+        "rational_standard_edge"],
+       :hypotheses
+       "R and simplex vertex index types are Type 0; R is a commutative ring and index types have Fintype. Chains are actual ModuleCat R ordered-vertex chains with coefficient object ModuleCat.of R R. General vertex naturality explicitly requires barycenter preservation, established geometrically for affine simplex maps.",
+       :consumer-equation
+       "The constructed prism satisfies T_n followed by d_(n+1,n) plus the degree-n correction equals subdivision_n minus identity; the correction is zero at n=0 and d_(n,n-1) followed by T_(n-1) otherwise. Affine vertex maps commute with T.",
+       :consumer-residual
+       "Realize the prism on actual singular chains, prove singular face transport and construct the correctly oriented Homotopy from subdivision to identity.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientVertexPrism."
+        "Reproduce all five standard-only axiom audits and integer/rational standard-edge identities."
+        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+      :id :coefficient-general-ordered-vertex-prism-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint20-coefficient-singular-subdivision-assembly-1],
+      :current-residual
+      "The singular subdivision homotopy needs a constructed coefficient-general prism with boundary identity and affine-change compatibility before realization.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG singular-chain representation, closure stop rules, dependency reviews and existing prism APIs",
+       :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientVertexPrism.lean", :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientVertexPrism.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientVertexPrism.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial lake env lean /tmp/CoefficientVertexPrism.lean",
+       :exit 1,
+       :correction
+       "Removed the explicit ring argument from the subdivision definition in the simplification unfolding list. Final compilation succeeds without warnings."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientVertexPrism.lean",
+      :sha256
+      "09c3a742f6c44c3c93272a41faf3de451bd14b1e5924cc8229a57e5bc9f2b287"},
+     :finding
+     "Exactly one compiled prism prerequisite is supplied. It constructs the recursive coefficient-general ordered-vertex prism and proves T followed by d plus d followed by T equals subdivision minus identity, with zero-degree correction explicitly zero. Naturality is proved for barycenter-preserving vertex functions and specialized to affine simplex maps. Integer and rational standard-edge identities compile. Realization on singular chains, singular face transport and the actual Homotopy remain unconstructed; the parent is not GO.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION: coefficient-general chain homotopy to identity",
@@ -13188,7 +13340,7 @@
    :depends-on
    [:oriented-checkpoint21-axis-repair-and-singular-subdivision-refill
     :oriented-checkpoint20-coefficient-singular-subdivision-assembly-1
-    :oriented-checkpoint21-axis-repair-and-singular-subdivision-refill],
+    :coefficient-general-ordered-vertex-prism-1],
    :current-residual
    "Actual coefficient-general singular subdivision is reviewed. A constructed chain homotopy to identity, including its degree-zero equation, remains absent.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
