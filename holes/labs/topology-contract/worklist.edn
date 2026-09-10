@@ -64873,8 +64873,182 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :evidence
+   {:baseline "2a77a5927fc96a99ad89c860db985cf812302391",
+    :outcome :replan,
+    :disposition :replan,
+    :pin "f699206d8890866401b060cfb71c9049d5ca6c43",
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill46-measure.py", :exit 0}
+     {:cmd "bb /tmp/refill46-reviews.bb", :exit 0}
+     {:cmd "python3 /tmp/topology-refill46-tail.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill46-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill46-proposed-worklist.edn",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer "t03J04",
+      :stop-condition
+      "GO requires complete frozen closure; otherwise name the exact missing uniform torus computation or Euler comparison. Infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "COVER-DEGREE / frozen rational Euler closure",
+      :acceptance
+      {:axioms :standard-only,
+       :frozen-file "problems/t03J04/lean/Main.lean",
+       :frozen-sha256
+       "b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :probe
+       "Compile the complete frozen Main, retaining every dimension, manifold, boundarylessness and local-diffeomorphism hypothesis and all three conjuncts. Audit the actual arbitrary-dimensional torus rational homology computation, finite-sheet covering deduction and banked rational chain/homology transfer. Derive the literal finite alternating finrank sums for both torus and target. Do not infer finite-dimensional homology or Euler multiplicativity from projection-after-transfer alone. Preserve the proved nonzero field and surjectivity facts. No assumed Kunneth, Euler comparison or finite-cell presentation."},
+      :id :t03j04-frozen-rational-euler-closure-probe-refill46,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+      :current-residual
+      "One placeholder remains. Rational covering transfer is banked; its applicability to the literal Euler sums requires a complete audit.",
+      :other-consumers []}
+     {:consumer "t98A02",
+      :stop-condition
+      "GO requires actual triple-overlap map composition and derived relative/homology identities; REVISE requires one compiled prerequisite. No orientation or fundamental-class claim.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD FUNDAMENTAL CLASS / actual triple-overlap composition",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Audit concurrent CoefficientChartRestriction and CoefficientChartTransitionUnit first. On the actual common intersection of three chart sources, construct all restricted translated chart maps and prove that the directed transition from a to b followed by b to c equals a to c. Derive the corresponding deleted-point relative-chain and homology equalities in every natural degree, with exact arrows and restrictions. Connect the geometric composite to the banked normalization and unit cocycle in dimension m+2. Do not duplicate the already banked algebraic cocycle or assume a geometric composition square. Preserve lower-dimensional local-comparison coverage without extending normalization."},
+      :representation
+      {:source
+       "Actual deleted-point relative chains and homology of translated charts restricted to a common triple overlap",
+       :target
+       "The direct a-to-c transition and the existing normalization-comparison cocycle",
+       :direction
+       "Prove equality from the actual a-to-b then b-to-c composite to the direct a-to-c map, then transport this equality to relative chains, homology and normalized comparisons."},
+      :id
+      :coefficient-triple-overlap-geometric-composition-probe-refill46,
+      :kind :representation-comparison,
+      :depends-on
+      [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+      :current-residual
+      "Pair overlaps, neighborhood restriction, distinguished normalization recovery and scalar transition units are banked. Explicit common-triple geometric composition remains.",
+      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+     {:consumer "t99J03",
+      :stop-condition
+      "GO requires derived derivative, local isolation and finite parameter coincidences; REVISE requires one compiled prerequisite. Do not claim a finite-position triangle cover.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE TRIANGULATION / compact transverse arc intersections",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For two C1 plane curves defined on open neighborhoods of the closed unit interval, prove the set of parameter pairs in the closed square with equal curve values is finite when the actual derivative of the difference map is invertible at every such pair. Derive the difference derivative from the curve derivatives, local isolation from the inverse-function theorem, and finiteness from compactness. Include coincidences at endpoints by using the stated neighborhood extensions. Do not assume finite intersection, discreteness or local injectivity. State explicitly that this conditional finiteness theorem does not construct a perturbation or establish transversality for the triangle cover. Audit existing regular-fiber and compact-discrete APIs before adding anything."},
+      :id
+      :compact-transverse-arc-intersection-finiteness-probe-refill46,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+      :current-residual
+      "Nested triangle coverage is banked. A finite-intersection theorem under actual transverse derivative hypotheses is a bounded prerequisite; controlled endpoint-preserving position adjustment remains separate.",
+      :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+     {:consumer "t00A01",
+      :stop-condition
+      "GO requires the generic actual-cover comparison, its target naturality and chosen-basepoint group equivalence; REVISE requires exactly one compiled prerequisite.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "VAN KAMPEN / generic chosen-vertex coproduct assembly",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For an actual two-open cover with path-connected pieces and nonempty simply connected overlap, reuse the banked fundamental-groupoid pseudopushout, leg-compatible connectors and connected-groupoid single-object equivalence. Construct the generic target-natural comparison from cover pseudococones to representations of the point span of the two vertex groups. Derive reconstruction of the fundamental group at a specified overlap basepoint as their group coproduct, and explicitly transport to chosen piece basepoints using paths. Do not assume a pushout, source equivalence or target-natural comparison. Audit twice-spiral and torus-wedge assemblies before extracting general infrastructure; prove every new connector compatibility. No claim that unrelated quotient consumers already supply these covers."},
+      :representation
+      {:source
+       "Fundamental group of an actual two-open union at a chosen point, using its fundamental-groupoid descent",
+       :target
+       "Group coproduct of the fundamental groups of the two path-connected pieces with explicit basepoint connectors",
+       :direction
+       "Construct a group isomorphism from the union fundamental group to the coproduct by a target-natural pseudococone-to-point-span comparison and chosen-object reconstruction."},
+      :id :generic-two-open-vertex-coproduct-comparison-probe-refill46,
+      :kind :representation-comparison,
+      :depends-on
+      [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+      :current-residual
+      "Reviewed t00A01 STOP identifies this generic assembly; special-cover reconstructions and the component foundations are banked.",
+      :other-consumers ["t03J02" "t97A01" "t92J06"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 4,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped consumers across the complete DAG, separating campaign and concurrent closures, typed uptake and duplicate infrastructure. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve repaired t94J08 and t96J07 closures versus historical defects, signed positive-dimensional antipodal action versus ordinary/reduced S0 and integral dimension-one local index, arbitrary-dimensional local comparison versus m+2 normalization, conditional polygon witnesses and genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff mass normalization, t96J05 defect, t01J04/t94A06 applicability limits, resolved t01A08 regularity conversion versus general-model Sard, and transfer identities versus Euler multiplicativity. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t03j04-frozen-rational-euler-closure-probe-refill46
+       :coefficient-triple-overlap-geometric-composition-probe-refill46
+       :compact-transverse-arc-intersection-finiteness-probe-refill46
+       :generic-two-open-vertex-coproduct-comparison-probe-refill46],
+      :current-residual
+      "Await four independently reviewed outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :measures
+    {:reviewed-local-stops 1,
+     :infrastructure-before 733,
+     :existing-consumers 58,
+     :missing-consumers ["t93A05"],
+     :placeholders 64,
+     :placeholder-delta 0,
+     :review-pass 3,
+     :infrastructure-after 740,
+     :concurrent-closures 0,
+     :zero-placeholder-consumers 24,
+     :duplicate-packets-observed 0,
+     :open-consumers 34,
+     :named-consumers 59,
+     :campaign-closures 0,
+     :consumer-changed-paths [],
+     :portfolio-modules 4,
+     :within-two 24,
+     :reviewed-completed-packets 2,
+     :concurrent-modules 3},
+    :finding
+    "No consumer bytes or placeholder counts changed. Portfolio work completed distinguished normalization recovery and finite nested triangle coverage; concurrent work supplied ambient overlap normalization, neighborhood restriction and transition units. The reviewed t00A01 STOP isolates generic actual-cover vertex coproduct assembly. Elect the one-placeholder t03J04 frozen adapter first to test uptake of banked rational transfer against its literal Euler sums. Then elect two five-consumer foundations: actual triple-overlap composition, avoiding duplication of the concurrent algebraic cocycle, and compact transverse curve-intersection finiteness, explicitly conditional and not a perturbation construction. Follow with the four-consumer generic two-open vertex comparison. Other near-closure consumers retain separate polygon/classification, global orientation, general-model Sard, sphere normalization, degree realization or graph-cover boundaries. No local STOP terminates the campaign.",
+    :artifacts
+    {:measurement
+     {:path "/tmp/topology-refill46-measure.json",
+      :sha256
+      "89fb1336f8838ed60e09cc48fb6e29767860f8bff50eb4d3c1d62482c962c9e4"},
+     :tail
+     {:path "/tmp/topology-refill46-tail.edn",
+      :sha256
+      "2bb207ff4634643c6fcfa504bb0d04d65e812d4a17ff08045326b24337caf17f"}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -64889,7 +65063,134 @@
     :surface-nested-triangle-cover-margin-probe-refill45
     :checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
    :current-residual
-   "Await three independently reviewed outcomes and rerank the complete DAG."}],
+   "Await three independently reviewed outcomes and rerank the complete DAG."}
+  {:consumer "t03J04",
+   :stop-condition
+   "GO requires complete frozen closure; otherwise name the exact missing uniform torus computation or Euler comparison. Infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "COVER-DEGREE / frozen rational Euler closure",
+   :acceptance
+   {:axioms :standard-only,
+    :frozen-file "problems/t03J04/lean/Main.lean",
+    :frozen-sha256
+    "b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :probe
+    "Compile the complete frozen Main, retaining every dimension, manifold, boundarylessness and local-diffeomorphism hypothesis and all three conjuncts. Audit the actual arbitrary-dimensional torus rational homology computation, finite-sheet covering deduction and banked rational chain/homology transfer. Derive the literal finite alternating finrank sums for both torus and target. Do not infer finite-dimensional homology or Euler multiplicativity from projection-after-transfer alone. Preserve the proved nonzero field and surjectivity facts. No assumed Kunneth, Euler comparison or finite-cell presentation."},
+   :id :t03j04-frozen-rational-euler-closure-probe-refill46,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles
+    :checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+   :current-residual
+   "One placeholder remains. Rational covering transfer is banked; its applicability to the literal Euler sums requires a complete audit.",
+   :other-consumers []}
+  {:consumer "t98A02",
+   :stop-condition
+   "GO requires actual triple-overlap map composition and derived relative/homology identities; REVISE requires one compiled prerequisite. No orientation or fundamental-class claim.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / actual triple-overlap composition",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Audit concurrent CoefficientChartRestriction and CoefficientChartTransitionUnit first. On the actual common intersection of three chart sources, construct all restricted translated chart maps and prove that the directed transition from a to b followed by b to c equals a to c. Derive the corresponding deleted-point relative-chain and homology equalities in every natural degree, with exact arrows and restrictions. Connect the geometric composite to the banked normalization and unit cocycle in dimension m+2. Do not duplicate the already banked algebraic cocycle or assume a geometric composition square. Preserve lower-dimensional local-comparison coverage without extending normalization."},
+   :representation
+   {:source
+    "Actual deleted-point relative chains and homology of translated charts restricted to a common triple overlap",
+    :target
+    "The direct a-to-c transition and the existing normalization-comparison cocycle",
+    :direction
+    "Prove equality from the actual a-to-b then b-to-c composite to the direct a-to-c map, then transport this equality to relative chains, homology and normalized comparisons."},
+   :id
+   :coefficient-triple-overlap-geometric-composition-probe-refill46,
+   :kind :representation-comparison,
+   :depends-on
+   [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles
+    :checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+   :current-residual
+   "Pair overlaps, neighborhood restriction, distinguished normalization recovery and scalar transition units are banked. Explicit common-triple geometric composition remains.",
+   :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+  {:consumer "t99J03",
+   :stop-condition
+   "GO requires derived derivative, local isolation and finite parameter coincidences; REVISE requires one compiled prerequisite. Do not claim a finite-position triangle cover.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SURFACE TRIANGULATION / compact transverse arc intersections",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For two C1 plane curves defined on open neighborhoods of the closed unit interval, prove the set of parameter pairs in the closed square with equal curve values is finite when the actual derivative of the difference map is invertible at every such pair. Derive the difference derivative from the curve derivatives, local isolation from the inverse-function theorem, and finiteness from compactness. Include coincidences at endpoints by using the stated neighborhood extensions. Do not assume finite intersection, discreteness or local injectivity. State explicitly that this conditional finiteness theorem does not construct a perturbation or establish transversality for the triangle cover. Audit existing regular-fiber and compact-discrete APIs before adding anything."},
+   :id :compact-transverse-arc-intersection-finiteness-probe-refill46,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles
+    :checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+   :current-residual
+   "Nested triangle coverage is banked. A finite-intersection theorem under actual transverse derivative hypotheses is a bounded prerequisite; controlled endpoint-preserving position adjustment remains separate.",
+   :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+  {:consumer "t00A01",
+   :stop-condition
+   "GO requires the generic actual-cover comparison, its target naturality and chosen-basepoint group equivalence; REVISE requires exactly one compiled prerequisite.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "VAN KAMPEN / generic chosen-vertex coproduct assembly",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For an actual two-open cover with path-connected pieces and nonempty simply connected overlap, reuse the banked fundamental-groupoid pseudopushout, leg-compatible connectors and connected-groupoid single-object equivalence. Construct the generic target-natural comparison from cover pseudococones to representations of the point span of the two vertex groups. Derive reconstruction of the fundamental group at a specified overlap basepoint as their group coproduct, and explicitly transport to chosen piece basepoints using paths. Do not assume a pushout, source equivalence or target-natural comparison. Audit twice-spiral and torus-wedge assemblies before extracting general infrastructure; prove every new connector compatibility. No claim that unrelated quotient consumers already supply these covers."},
+   :representation
+   {:source
+    "Fundamental group of an actual two-open union at a chosen point, using its fundamental-groupoid descent",
+    :target
+    "Group coproduct of the fundamental groups of the two path-connected pieces with explicit basepoint connectors",
+    :direction
+    "Construct a group isomorphism from the union fundamental group to the coproduct by a target-natural pseudococone-to-point-span comparison and chosen-object reconstruction."},
+   :id :generic-two-open-vertex-coproduct-comparison-probe-refill46,
+   :kind :representation-comparison,
+   :depends-on
+   [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles
+    :checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+   :current-residual
+   "Reviewed t00A01 STOP identifies this generic assembly; special-cover reconstructions and the component foundations are banked.",
+   :other-consumers ["t03J02" "t97A01" "t92J06"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 4,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped consumers across the complete DAG, separating campaign and concurrent closures, typed uptake and duplicate infrastructure. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve repaired t94J08 and t96J07 closures versus historical defects, signed positive-dimensional antipodal action versus ordinary/reduced S0 and integral dimension-one local index, arbitrary-dimensional local comparison versus m+2 normalization, conditional polygon witnesses and genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff mass normalization, t96J05 defect, t01J04/t94A06 applicability limits, resolved t01A08 regularity conversion versus general-model Sard, and transfer identities versus Euler multiplicativity. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t03j04-frozen-rational-euler-closure-probe-refill46
+    :coefficient-triple-overlap-geometric-composition-probe-refill46
+    :compact-transverse-arc-intersection-finiteness-probe-refill46
+    :generic-two-open-vertex-coproduct-comparison-probe-refill46
+    :checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+   :current-residual
+   "Await four independently reviewed outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
