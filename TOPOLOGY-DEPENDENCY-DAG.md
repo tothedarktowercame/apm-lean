@@ -494,9 +494,16 @@ compiles independently of every final problem.
   levels or permitted empty levels; no repair is chosen and Main is unchanged.
   This local refutation is neither consumer closure nor campaign termination;
   all older counterexamples and uncovered cases below remain in force.
-- `t96J07` remains `SPEC-DEFECT`: the implication in the frozen axis
-  characterization has incorrect precedence and contradicts the zero vector
-  specialization.
+- `t96J07` has reviewed **corrected closure** at
+  `6f475b3c40e2a2528a0efd7e17c89f8f1af904a7`, PASS
+  `invoke-1789002417270-17501-59e6c3e7`. Exactly two added statement
+  parentheses put the axis equivalence under the nonzero-vector implication;
+  placeholders decreased `1 → 0` in that implementation. The old frozen
+  clause remains false at zero, with its refutation preserved verbatim.
+  This is specification repair plus corrected closure, not unchanged frozen
+  closure or an intrinsic projective-derivative comparison. See
+  `problems/t96J07/STATEMENT-REPAIR.md` and the corrected-closure record in
+  `docs/TN-topology-closure-experiments.md`.
 - The experimental ledger's claimed `t01A05` connectedness repair is not on
   canonical master.  Canonical `apm_t01a05` still lacks `ConnectedSpace`
   assumptions for both base and cover, so the disconnected-manifold
@@ -702,8 +709,10 @@ Current audited classification beyond these closures:
   frozen placeholders, and independent review job
   `invoke-1788094761055-3915-1d0e382a` passed source-integrity, mathematical,
   compilation, placeholder, axiom, and scope audits.
-- `t96J07` remains `SPEC-DEFECT` and must not receive proof scaffolding before
-  statement repair.
+- `t96J07` has reviewed corrected closure at `6f475b3c`, PASS
+  `invoke-1789002417270-17501-59e6c3e7`, after the explicit two-parenthesis
+  statement repair. Its historical false-statement refutation is retained;
+  this documentation update contributes no additional placeholder reduction.
 
 ## Next decision point
 

@@ -68,6 +68,41 @@ missing theorem.  It proceeds as follows:
 An experiment is allowed to conclude that no useful theorem should be built.
 That is a successful scheduling result.
 
+## Reviewed corrected closure: t96J07
+
+Commit `6f475b3c40e2a2528a0efd7e17c89f8f1af904a7`, independently passed in
+`invoke-1789002417270-17501-59e6c3e7`, repairs and proves the encoded axis
+characterization. Exactly two added statement parentheses change
+`(x ≠ 0 → P x) ↔ Q x` to `x ≠ 0 → (P x ↔ Q x)` beneath the universal
+quantifier. Here `P x` is projective equivalence with the diagonal image and
+`Q x` is projective equivalence with a coordinate axis.
+
+All definitions, the other index/sum conjuncts and the old zero-vector
+refutation `apm_t96j07_not_fixed_axis_clause` are preserved verbatim.
+Coordinate cancellation proves the corrected equivalence; the defined local
+indices are `-1, 1, -1, 1` and sum to zero. The original clause remains
+refuted. This is specification repair plus corrected closure, not unchanged
+frozen closure or a comparison with an intrinsic projective derivative.
+
+The reviewed implementation reduced executable placeholders `1 → 0`.
+Canonical Main still has zero; this documentation update is `0 → 0` and
+contributes no additional reduction. Independent review compiled both the
+fixture and canonical Main without warnings, with two audits using only
+`propext`, `Classical.choice` and `Quot.sound` in each compilation.
+
+Verified evidence:
+
+- Canonical Main SHA256: `6eac671c9e7ac401f30c08e2c10643e00c1ee968599462285b9273adf8f345e6`.
+- Original Main SHA256: `e6e6a2247da5fef25f52343ba20b00c0b4b9efd9d29e4803808df7da7a645b74`.
+- Old statement SHA256: `73ea287c4fcc2f57d66253d4f3d13e1933715c77418a1d2c902a16bc2bd5c7fc`.
+- Corrected statement SHA256: `4ac8e3368212f29658a06d810fc3043f0a7b3dd16c7fbb603a46fd3cf09ee195`.
+- Repair note `problems/t96J07/STATEMENT-REPAIR.md` SHA256: `14f89a7eeb71dc809d3eff9f7bff87a5a356c2b25d89cf67af60d65e1a605fdc`.
+
+Statement hashes cover the declaration from `theorem apm_t96j07 :` to
+immediately before ` := by`. The repair note retains the before/after syntax
+and historical probe evidence. Other unresolved specification defects and
+historical experiment records remain in force.
+
 ## Reviewed local counterexample: t96J05
 
 The radial-level experiment is a local `SPEC-DEFECT`, not an infrastructure
