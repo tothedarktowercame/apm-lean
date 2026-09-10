@@ -32225,8 +32225,168 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      :exit 0}
+     {:cmd
+      "Inspect all current open, blocked, done and reviewed rows and the sphere-equator dependency receipts",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped census of every frozen consumer named by TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd
+      "Compare a372ef384487c5419f7e5ee10e71c367b8bfc22d..1d87319bfd8f7da04ad0b0f6aeee4d58c2e6d659 and attribute ConstructionTargets additions and frozen-file changes",
+      :exit 0}
+     {:cmd
+      "Verify absence of the six required canonical sphere-equator support modules and inspect the reviewed namespace/import STOPs",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check && git diff --exit-code", :exit 0}],
+    :measures
+    {:baseline
+     {:commit "a372ef384487c5419f7e5ee10e71c367b8bfc22d",
+      :description "Reviewed checkpoint50 strategy transition"},
+     :proved-refutations 0,
+     :frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :head
+     {:commit "1d87319bfd8f7da04ad0b0f6aeee4d58c2e6d659",
+      :description "Pre-checkpoint51 strategy head"},
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:before 795,
+      :after 799,
+      :portfolio [],
+      :concurrent
+      ["ConstructionTargets/CoefficientCompactSupportConnecting.lean"
+       "ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean"
+       "ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean"
+       "ConstructionTargets/PlaneArcContainedSmallTranslations.lean"]},
+     :corrected-closures 0,
+     :typed-residual-change
+     "The sphere-equator mathematics now compiles in a private multi-module fixture, including Borel-instance transport, ambient and intrinsic nullity and exact cap partitions, but review established that none of its six support modules has a canonical ConstructionTargets namespace or import. The route therefore moved from a mathematical nullity gap to one bounded canonical-representation repair. Raw Hausdorff normalization remains independently blocked at the reviewed missing addHaarScalarFactor characterization.",
+     :review-outcomes
+     {:sphere-equator-nullity
+      {:outcome :stop,
+       :review :pass,
+       :reason :noncanonical-private-module-assembly},
+      :raw-hausdorff-normalization
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-addHaarScalarFactor-characterization},
+      :coefficient-pair-connecting-comparison
+      {:outcome :pass,
+       :commit "1a3323486cc03f16c5b547f9b272125f89814066",
+       :disposition
+       "Concurrent route progress; excluded from election."},
+      :compact-support-and-arcs
+      {:disposition
+       "Active or blocked concurrent work; duplicate election excluded."}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 33,
+      :zero-placeholder 25,
+      :within-two 23,
+      :placeholder-before 62,
+      :placeholder-after 62}},
+    :finding
+    "The exact census remains 59 DAG-named consumers, 58 existing files, t93A05 missing, 33 open files, 25 zero-placeholder files and 62 comment-stripped placeholders; no frozen problem file changed. Routes: t95J05(1) has reviewed strict S3 cap-area mathematics and a complete private equator-nullity assembly, but needs the six-module canonical sphere-equator representation repair, the independently blocked raw μH3 normalization, square and fourth-coordinate moments, then frozen integral uptake. t02A05(2) has banked coefficient/projection reductions and strict S2 cap-area mathematics, then needs the same canonical equator repair, blocked raw μH2 normalization, centered moments, frozen integral and minimum. t01J06(3) needs that shared S2 measure-and-moment route, a separate manifold Stokes bridge and final conjunction. t94A10(3) needs the shared S2 period route followed by closedness and nonexactness assembly. The reviewed addHaarScalarFactor STOP is preserved and is not retried. The reviewed equator STOP is a representation boundary: all required theorems compile, but LowerDimensionalSphereNullity, SphereEquatorEmbedding, SphereEquatorImageNullity, HausdorffSubtypeNullity, SphereCapEquatorPartition and HausdorffBorelInstanceCoherence exist only as private unqualified scratch modules, so the parent cannot be promoted under ConstructionTargets. t98A02(1), t00J02(1), t01A05(1), t02A07(3) and t97J05(5) remain on the active compact-complement Mayer-Vietoris, localization, duality and gluing route; t00A04 is zero-placeholder and t01A05 also retains its connectedness specification defect. The coefficient pair connecting comparison is newly reviewed, while its topological specialization remains active, so duplicate election is excluded. t99J03(1), t00A03(2), t01J01(3), t91J05(3) and t94J09(1) remain on the active translated-arc route through endpoint-preserving chartwise control and later polygon or classification steps. t01A02(3) needs H2 degree and nonsurjectivity, Lefschetz and final assembly. t01A04(4), t92J06(1) and t98A01(1) need covering construction or classification, genus invariance and Euler multiplicativity; the five-torsion calculation is active and t98A01's reviewed polygon-genus/Euler STOP is preserved. t00J01(1) needs concrete Klein-product and fold-fiber geometry. t01A08(1) needs arbitrary-model chart-domain and within-derivative applicability. t01J04(1) and t94A06(1) need regular-preimage, half-space-atlas and normal-translation applicability. t02A08(1) needs an arbitrary-integer sphere map and its homology action. t03J02(2) and t97A01(1) retain collar, cofibration and closed-circle gluing boundaries. t03J04(1) needs rational torus homology and finite-cover Euler comparison. t03J05(1), t96J06(2) and t97A04(4) retain fundamental-class, cap/Thom, Eilenberg-Zilber and integral Kunneth comparisons. t92J05(3) needs RP2 antipodal and genus-two bridges plus final assembly. t95J06(2) needs its concrete torus homeomorphism route. t96J05(1) retains the proved radial counterexample and needs a corrected statement. a97J08(1) remains an uptake route whose geometric producer is incomplete. No near-closure consumer has a complete route, so no final adapter is eligible. The namespace-correct sphere-equator repair is a bounded shared step on four open routes, uses already compiled mathematics, and is simpler than moment evaluation or implementing the blocked normalization characterization. Unrelated infrastructure is deferred. One repair probe is elected, followed by a fresh successor checkpoint.",
+    :replacement-items
+    [{:consumer :t95J05,
+      :stop-condition
+      "Do not weaken exact namespace and import coherence, retain private unqualified imports in the final fixture, assume equator nullity, suppress Borel measurable-space transport, use raw Hausdorff normalization, sum cap measures, evaluate sphere masses or moments, invoke Stokes or claim consumer closure. Use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD INTEGRATION: canonical ConstructionTargets assembly of the reviewed sphere-equator nullity chain",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use only d=2 and d=3, raw d-dimensional Hausdorff measure, literal unit spheres and Fin.last-zero equators. No normalization or finite sphere-measure hypothesis is supplied.",
+       :route-step
+       "Repairs the canonical representation step required by the sole t95J05 placeholder and the sphere-period placeholders of t02A05, t01J06 and t94A10 after the reviewed strict-cap area comparison.",
+       :probe
+       "Create namespace-correct fixtures for ConstructionTargets.LowerDimensionalSphereNullity, ConstructionTargets.SphereEquatorEmbedding, ConstructionTargets.SphereEquatorImageNullity, ConstructionTargets.HausdorffSubtypeNullity, ConstructionTargets.SphereCapEquatorPartition and ConstructionTargets.HausdorffBorelInstanceCoherence. Import those canonical modules from a ConstructionTargets.SphereEquatorHausdorffNullity fixture. Preserve the reviewed theorem statements and explicit Borel-instance transport. Compile all modules and the parent without a private LEAN_PATH, prove ambient and intrinsic raw Hausdorff nullity and exact measurable pairwise-disjoint cap partitions for d=2 and d=3, and record every SHA256. GO requires a complete placeholder-free canonical-layout fixture bundle and a bounded implementation scope. REVISE requires exactly one complete compiled missing canonical representation prerequisite. STOP names an exact independent namespace, import or theorem boundary.",
+       :consumer-equation
+       "Importable canonical ConstructionTargets modules prove that the literal S2 and S3 Fin.last equators are ambiently and intrinsically raw-Hausdorff-null and that each sphere is the measurable pairwise-disjoint union of its two strict caps and equator.",
+       :consumer-residual
+       "Resolve the preserved raw Hausdorff normalization boundary, then combine cap formulas with the canonical null-equator partitions and evaluate the coordinate moments required by all four consumers.",
+       :gates
+       ["Compile every namespace-correct support fixture and the parent fixture without a private-module import name or private LEAN_PATH."
+        "Record SHA256 for all seven fixtures."
+        "Audit exact correspondence with the reviewed private declarations and preserve explicit Borel-instance transport."
+        "Verify ambient nullity uses the append-zero isometry and exact sphere-image equality."
+        "Verify intrinsic nullity uses the subtype coercion isometry."
+        "Verify measurability, pairwise disjointness and exact partitions for d=2 and d=3."
+        "Reproduce standard-only axiom audits for every exported declaration."
+        "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and concurrent reservations."]},
+      :representation
+      {:source
+       "The six reviewed private scratch modules proving lower-dimensional source-sphere nullity, append-zero embedding, exact equator image and ambient nullity, intrinsic subtype transport, measurable cap partition and Borel-instance Hausdorff coherence",
+       :target
+       "Namespace-correct, importable ConstructionTargets modules and a ConstructionTargets.SphereEquatorHausdorffNullity parent fixture for the literal S2 and S3 equators",
+       :direction
+       "Exact theorem-preserving promotion from each private source module to its canonical ConstructionTargets namespace, followed by explicit forward composition into the parent ambient-nullity, intrinsic-nullity and sphere-partition declarations."},
+      :id
+      :oriented-checkpoint51-sphere-equator-canonical-module-repair-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint51-sphere-equator-nullity-and-consumer-refill-1
+       :oriented-checkpoint50-sphere-equator-hausdorff-nullity-1
+       :lower-dimensional-sphere-raw-hausdorff-nullity-1
+       :sphere-equator-append-zero-isometric-embedding-1
+       :sphere-equator-image-ambient-nullity-1
+       :hausdorff-subtype-nullity-transport-1
+       :sphere-cap-equator-measurable-partition-1
+       :hausdorff-borel-measurable-instance-coherence-1],
+      :current-residual
+      "The complete private fixture compiles, but its six unqualified support modules and parent namespace cannot be imported or promoted as canonical ConstructionTargets declarations.",
+      :other-consumers [:t02A05 :t01J06 :t94A10]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: canonical sphere-equator repair and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint52-sphere-equator-canonical-repair-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint51-sphere-equator-canonical-module-repair-1],
+      :current-residual
+      "Measure canonical equator-module promotion separately from the blocked raw normalization, cap summation, moment evaluation and frozen closure; rerank every open consumer route against concurrent outcomes.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: sphere-equator nullity and renewed consumer eligibility",
@@ -32243,6 +32403,87 @@
     :oriented-checkpoint50-corrected-raw-normalization-and-consumer-refill-1],
    :current-residual
    "Measure equator-nullity and cap-assembly progress separately from the blocked raw normalization, moment evaluation and frozen closure; rerank every open consumer route against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t95J05,
+   :stop-condition
+   "Do not weaken exact namespace and import coherence, retain private unqualified imports in the final fixture, assume equator nullity, suppress Borel measurable-space transport, use raw Hausdorff normalization, sum cap measures, evaluate sphere masses or moments, invoke Stokes or claim consumer closure. Use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD INTEGRATION: canonical ConstructionTargets assembly of the reviewed sphere-equator nullity chain",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use only d=2 and d=3, raw d-dimensional Hausdorff measure, literal unit spheres and Fin.last-zero equators. No normalization or finite sphere-measure hypothesis is supplied.",
+    :route-step
+    "Repairs the canonical representation step required by the sole t95J05 placeholder and the sphere-period placeholders of t02A05, t01J06 and t94A10 after the reviewed strict-cap area comparison.",
+    :probe
+    "Create namespace-correct fixtures for ConstructionTargets.LowerDimensionalSphereNullity, ConstructionTargets.SphereEquatorEmbedding, ConstructionTargets.SphereEquatorImageNullity, ConstructionTargets.HausdorffSubtypeNullity, ConstructionTargets.SphereCapEquatorPartition and ConstructionTargets.HausdorffBorelInstanceCoherence. Import those canonical modules from a ConstructionTargets.SphereEquatorHausdorffNullity fixture. Preserve the reviewed theorem statements and explicit Borel-instance transport. Compile all modules and the parent without a private LEAN_PATH, prove ambient and intrinsic raw Hausdorff nullity and exact measurable pairwise-disjoint cap partitions for d=2 and d=3, and record every SHA256. GO requires a complete placeholder-free canonical-layout fixture bundle and a bounded implementation scope. REVISE requires exactly one complete compiled missing canonical representation prerequisite. STOP names an exact independent namespace, import or theorem boundary.",
+    :consumer-equation
+    "Importable canonical ConstructionTargets modules prove that the literal S2 and S3 Fin.last equators are ambiently and intrinsically raw-Hausdorff-null and that each sphere is the measurable pairwise-disjoint union of its two strict caps and equator.",
+    :consumer-residual
+    "Resolve the preserved raw Hausdorff normalization boundary, then combine cap formulas with the canonical null-equator partitions and evaluate the coordinate moments required by all four consumers.",
+    :gates
+    ["Compile every namespace-correct support fixture and the parent fixture without a private-module import name or private LEAN_PATH."
+     "Record SHA256 for all seven fixtures."
+     "Audit exact correspondence with the reviewed private declarations and preserve explicit Borel-instance transport."
+     "Verify ambient nullity uses the append-zero isometry and exact sphere-image equality."
+     "Verify intrinsic nullity uses the subtype coercion isometry."
+     "Verify measurability, pairwise disjointness and exact partitions for d=2 and d=3."
+     "Reproduce standard-only axiom audits for every exported declaration."
+     "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and concurrent reservations."]},
+   :representation
+   {:source
+    "The six reviewed private scratch modules proving lower-dimensional source-sphere nullity, append-zero embedding, exact equator image and ambient nullity, intrinsic subtype transport, measurable cap partition and Borel-instance Hausdorff coherence",
+    :target
+    "Namespace-correct, importable ConstructionTargets modules and a ConstructionTargets.SphereEquatorHausdorffNullity parent fixture for the literal S2 and S3 equators",
+    :direction
+    "Exact theorem-preserving promotion from each private source module to its canonical ConstructionTargets namespace, followed by explicit forward composition into the parent ambient-nullity, intrinsic-nullity and sphere-partition declarations."},
+   :id :oriented-checkpoint51-sphere-equator-canonical-module-repair-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint51-sphere-equator-nullity-and-consumer-refill-1
+    :oriented-checkpoint50-sphere-equator-hausdorff-nullity-1
+    :lower-dimensional-sphere-raw-hausdorff-nullity-1
+    :sphere-equator-append-zero-isometric-embedding-1
+    :sphere-equator-image-ambient-nullity-1
+    :hausdorff-subtype-nullity-transport-1
+    :sphere-cap-equator-measurable-partition-1
+    :hausdorff-borel-measurable-instance-coherence-1
+    :oriented-checkpoint51-sphere-equator-nullity-and-consumer-refill-1],
+   :current-residual
+   "The complete private fixture compiles, but its six unqualified support modules and parent namespace cannot be imported or promoted as canonical ConstructionTargets declarations.",
+   :other-consumers [:t02A05 :t01J06 :t94A10]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: canonical sphere-equator repair and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint52-sphere-equator-canonical-repair-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint51-sphere-equator-canonical-module-repair-1
+    :oriented-checkpoint51-sphere-equator-nullity-and-consumer-refill-1],
+   :current-residual
+   "Measure canonical equator-module promotion separately from the blocked raw normalization, cap summation, moment evaluation and frozen closure; rerank every open consumer route against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
