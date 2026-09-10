@@ -58615,6 +58615,19 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789007224423-17661-38db1531",
+     :commands
+     ["git show d775d4083df884f250a89e5ac7e5137748f12cde"
+      "Independent pinned scope, fixture SHA256, four statement hashes and placeholder audit"
+      "lake env lean ConstructionTargets/TransverseDifferenceRegularity.lean"
+      "lake build ConstructionTargets.TransverseLinearPair"
+      "git show --format= --check d775d408"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact one-file promotion; fixture and four statement hashes reproduce; zero placeholders; consumers unchanged. Actual product-model derivative is Df(v)-Dg(w); choosing (a,-b) correctly converts coproduct surjectivity into difference-map regularity. Zero-fiber equality is literal. Genuine infinity retained without finite-dimensionality assumptions; no atlas, tangent-comparison or duality claim. Four declarations compile warning-free with standard axioms; prerequisite build succeeds (1023 jobs). Whitespace clean; 455 ledger items validate; no edits."},
     :commit "d775d4083df884f250a89e5ac7e5137748f12cde",
     :changed-paths
     ["ConstructionTargets/TransverseDifferenceRegularity.lean"],
@@ -58626,7 +58639,7 @@
     :finding
     "Exact fixture promoted. Smoothness, actual product-model derivative formula, transversality-derived regularity and zero-fiber equality compile warning-free with standard-only axioms and zero placeholders. No finite-dimensionality assumptions added. Existing APIs and consumers unchanged; worktree clean. Validator reports 455 items OK."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TransverseDifferenceRegularity.lean"],
    :dag-node "TRANSVERSE-PULLBACK / difference-map regularity",
    :acceptance
@@ -58734,7 +58747,7 @@
      "Compiled one prerequisite. The difference map f(x)-g(y) is genuinely smooth; its actual manifold derivative sends (v,w) to Df(v)-Dg(w). Range-sum transversality gives coproduct surjectivity, and negating the second input proves zero is regular. The zero-fiber set equals the literal incidence set. These results assume neither derivative transport nor regularity and do not exclude empty incidence or zero-dimensional models.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TRANSVERSE-PULLBACK / vector-target fiber product",
    :acceptance
