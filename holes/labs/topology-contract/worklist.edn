@@ -71760,6 +71760,19 @@
      {:cmd
       "sha256sum ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean /tmp/PlaneArcEndpointPairBoundaryFinite.lean ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789071556516-19379-4f7f5287",
+     :commands
+     ["git diff --name-only 282edb7a^ 282edb7a"
+      "git diff --exit-code 282edb7ab67ca7cfcb6d0952c88a3c8e48b51536 -- ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"
+      "lake env lean ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"
+      "sha256sum ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean /tmp/PlaneArcEndpointPairBoundaryFinite.lean ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean"
+      "python3 placeholder audit"
+      "git diff --check 282edb7a^ 282edb7a -- ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"],
+     :finding
+     "Exact one-file scope; fixture and dependency hashes match; Lean compiles with only propext, Classical.choice, and Quot.sound; zero placeholders. The non-interior boundary is correctly bounded by the four endpoint pairs, is finite, and its union with any finite residual is finite. No statement hashes were recorded, and no Sard, interior-fiber, embedding, or chart-transition claim is made."},
     :commit "282edb7ab67ca7cfcb6d0952c88a3c8e48b51536",
     :changed-paths
     ["ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"],
@@ -71771,7 +71784,7 @@
     :finding
     "Promoted the exact fixture. The non-interior boundary is contained in the product of the two-point endpoint set, is finite, and adjoining it to any finite interior residual preserves finiteness. The module compiles without warnings or placeholders and its dependency hash matches."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"],
    :dag-node
@@ -71859,7 +71872,7 @@
      "Compiled exactly one set-level boundary-finiteness prerequisite. The subset of the closed coincidence square where neither coordinate is interior lies in {0,1} times {0,1}, hence is finite. The union of this boundary residual with any finite interior coincidence set remains finite. This proves that fixed endpoint pairs cannot destroy a future relative-Sard finiteness conclusion, without asserting that the interior coincidence set is already finite or that one parameter tuple works for the whole family.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
