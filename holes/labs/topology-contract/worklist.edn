@@ -60496,8 +60496,60 @@
   {:consumer "t99J03",
    :stop-condition
    "No assumed classification, triangulation or quotient homeomorphism. Report a precise foundation boundary if no complete fixture or single compiled prerequisite exists; no owner gate or campaign termination.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Finite surface presentation and geometric polygon normalization remain independent constructions. No complete fixture or single compiled prerequisite was obtained. This is a local infrastructure STOP, not a refutation, owner-authorization request or campaign termination. Genus detection, cutting, covering and homology comparisons remain subsequent.",
+    :dependency-review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789014917549-17852-fe8c5dbf"},
+    :evidence
+    {:path "/tmp/compact-surface-refill40-audit.json",
+     :sha256
+     "50c25bfc0b85d1ca378ed0a06cd833e1108eae963c1fe6763c013ea092a04284",
+     :head "06d3c87c7d9f924ccb765d332cfd1ab3054a0afc"},
+    :outcome :stop,
+    :warnings [],
+    :boundary
+    {:first
+     "Derive a finite two-dimensional presentation of M, with a proved homeomorphism from its geometric realization or polygon quotient to M, from the stated manifold hypotheses.",
+     :second
+     "Construct quotient-preserving polygon reductions identifying that presentation with literal S2 or a positive-genus standard Surface o g, including continuity and inverse laws.",
+     :genus-zero
+     "Keep S2 separate. In SurfaceRel o 0 the bounded existential has no witnesses; the existing definition does not collapse the disk boundary to construct S2. No identification with S2 or refutation of frozen Main is asserted."},
+    :disposition :stop,
+    :axioms :not-audited-no-new-proof,
+    :author "codex-12",
+    :reason :missing-infrastructure,
+    :commands
+    [{:cmd "cat ConstructionTargets/Surfaces.lean", :exit 0}
+     {:cmd
+      "rg -n 'triangulat|polygon|collar|cutAlong' ConstructionTargets --glob '*.lean' | head -45",
+      :exit 0}
+     {:cmd
+      "sed -n '1,95p' .lake/packages/mathlib/Mathlib/Topology/CWComplex/Abstract/Basic.lean",
+      :exit 0}
+     {:cmd
+      "rg -n 'classification|homeomorph|theorem|sorry' problems/t99J03/lean/Main.lean problems/t00A03/lean/Main.lean problems/t01J01/lean/Main.lean | tail -35",
+      :exit 0}
+     {:cmd "sha256sum /tmp/compact-surface-refill40-audit.json",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "A nonempty compact connected Hausdorff genuine-infinity manifold modeled on EuclideanSpace R (Fin 2)",
+     :target
+     "The literal Euclidean S2 or ConstructionTargets.Surfaces.Surface o g with 0 < g",
+     :direction
+     "Construct a homeomorphism from the source manifold to one of these target spaces; no classification or triangulation is assumed."},
+    :changed-paths [],
+    :finding
+    "The audited APIs do not construct a finite triangulation or polygon presentation from these manifold hypotheses. Mathlib's CW definitions require attachment data; they do not produce it for an arbitrary compact surface. Banked square triangulation and solid-torus collar constructions concern specific spaces. Surfaces supplies the target quotients, continuous surjective quotient maps and arithmetic formulas, but no polygon normalization or classification homeomorphism. The t99J03 uniqueness adapter assumes the existence dichotomy and Euler invariance, so it cannot establish the requested existence theorem.",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "SURFACE CUTTING/CLASSIFICATION / compact surface polygon presentation",
