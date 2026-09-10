@@ -62308,106 +62308,61 @@
    :stop-condition
    "GO requires same-atlas actual derivative injectivity and exact equalizer range; REVISE requires one compiled prerequisite. No component-coverage, orientation or consumer closure claim.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "The requested normalized-atlas tangent packet is complete. Component coverage, orientations, homological comparisons and consumer closure remain subsequent.",
-     :dependency-review
-     {:outcome :pass,
-      :seat "codex-10",
-      :job "invoke-1789023481744-18088-5c48a3ed"},
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:inclusionLinear
-      "4861ed275f0348ec48d353904967e3fba2ed93d05b958649779ce65c8d17f06e",
-      :differenceLinear
-      "9207cf015e7bf58f39da5bccbe1708cfb3cd106c44c3db888f4219b6027697ed",
-      :range_le
-      "60de8274102f388eccb023dd3c86ade1338bc94e615578cbe32bff92f2205845",
-      :difference_surjective
-      "a230231ccdd3b90f6c3558070e193a6a9c9867400ce023168b6ccf286a91f679",
-      :inclusion_range
-      "8faeed80626d21c0cf81278838acc2863b8a2a2cc0347ee11935c00ebbb5a7eb",
-      :tangent_equalizer
-      "e905d1be35ba19a6ee90f30a2bce3ca59997174d6522149b7fa063bd94b57818"},
-     :acceptance
-     {:implementation
-      "Promote the exact fixture. Compile inclusionLinear, differenceLinear, range_le, difference_surjective, inclusion_range and tangent_equalizer. Preserve exactly normalizedAtlas, actual mfderivs, original topology and product norm, normalized dimension and derived rank equality. Retain the weaker auxiliary surjectivity hypotheses. Audit zero placeholders and standard-only axioms.",
-      :commands
-      ["lake env lean ConstructionTargets/ManifoldTargetIncidenceTangent.lean"],
-      :axioms :standard-only,
-      :placeholder-before 0,
-      :placeholder-after 0},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/ManifoldTargetIncidenceImmersion.olean ConstructionTargets/ManifoldTargetIncidenceImmersion.lean'",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceTangent.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/manifold-target-incidence-tangent-audit.py",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/ManifoldTargetIncidenceTangent.lean",
-       :exit 1,
-       :correction
-       "Compiled the missing banked immersion object privately."}
-      {:cmd "Private-path tangent compilation, difference definition",
-       :exit 1,
-       :correction
-       "Annotated derivative maps with their common vector-space target."}
-      {:cmd "Private-path tangent compilation, containment",
-       :exit 1,
-       :correction
-       "Explicitly unfolded kernel membership and difference-map evaluation."}
-      {:cmd "Private-path tangent compilation, range equality",
-       :exit 1,
-       :correction
-       "Included transversality and installed the product tangent finite-dimensional instance."}
-      {:cmd
-       "Private-path tangent compilation, surjectivity simplification",
-       :exit 1,
-       :correction
-       "Replaced insufficient simplification of negation with an explicit calculation."}
-      {:cmd "Private-path tangent compilation, derivative subtraction",
-       :exit 1,
-       :correction
-       "Introduced explicitly typed continuous linear maps into F."}
-      {:cmd
-       "Private-path tangent compilation, generic negation rewrite",
-       :exit 1,
-       :correction
-       "Annotated the tangent input with its vector-space model."}
-      {:cmd
-       "Private-path tangent compilation, annotated negation rewrite",
-       :exit 1,
-       :correction "Supplied the map and input explicitly to map_neg."}
-      {:cmd
-       "Private-path tangent compilation, explicit map_neg rewrite",
-       :exit 1,
-       :correction
-       "Used congrArg and a typed calculation to handle definitionally equal tangent representations."}
-      {:cmd "Private-path tangent compilation, complete theorem",
-       :exit 0,
-       :correction
-       "Removed unused section assumptions from difference_surjective; final compilation is warning-free."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/ManifoldTargetIncidenceTangent.lean",
-      :sha256
-      "9277d1a8a855482a51fd24fe1dcada62ab97fe94c7e5c6d5f2421be97bf2a244",
-      :placeholder-count 0},
-     :finding
-     "Compiled actual inclusion derivative injectivity and exact tangent equalizer range for precisely normalizedAtlas. Differentiating the incidence identity through both product projections proves range containment. Transversality proves surjectivity of the derivative difference; rank-nullity and banked inclusion injectivity give exact range equality. The inherited topology, original product norm and normalized sum-minus-target dimension are preserved. Empty incidence and zero-dimensional kernels require no exclusions.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/ManifoldTargetIncidenceTangent.lean"]},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Actual inclusion derivative injectivity and exact tangent equalizer range compile for precisely normalizedAtlas, preserving inherited topology, original product norm, normalized dimension and weaker auxiliary surjectivity hypotheses. Component coverage, orientations, homological comparisons and consumer closure remain subsequent.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:inclusionLinear
+     "4861ed275f0348ec48d353904967e3fba2ed93d05b958649779ce65c8d17f06e",
+     :differenceLinear
+     "9207cf015e7bf58f39da5bccbe1708cfb3cd106c44c3db888f4219b6027697ed",
+     :range_le
+     "60de8274102f388eccb023dd3c86ade1338bc94e615578cbe32bff92f2205845",
+     :difference_surjective
+     "a230231ccdd3b90f6c3558070e193a6a9c9867400ce023168b6ccf286a91f679",
+     :inclusion_range
+     "8faeed80626d21c0cf81278838acc2863b8a2a2cc0347ee11935c00ebbb5a7eb",
+     :tangent_equalizer
+     "e905d1be35ba19a6ee90f30a2bce3ca59997174d6522149b7fa063bd94b57818"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/ManifoldTargetIncidenceTangent.lean",
+      :exit 0}
+     {:cmd
+      "sed 's/^pathlib.Path.*; print(json.dumps(r))/print(json.dumps(r))/' /tmp/manifold-target-incidence-tangent-audit.py | python3",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.ManifoldTargetIncidenceImmersion 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ManifoldTargetIncidenceTangent.lean ConstructionTargets/ManifoldTargetIncidenceTangent.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldTargetIncidenceTangent.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "b831e4012f68281dfa003ca1b59d14a766a3cab1",
+    :changed-paths
+    ["ConstructionTargets/ManifoldTargetIncidenceTangent.lean"],
+    :fixture
+    {:path "/tmp/ManifoldTargetIncidenceTangent.lean",
+     :sha256
+     "9277d1a8a855482a51fd24fe1dcada62ab97fe94c7e5c6d5f2421be97bf2a244"},
+    :axiom-audit-declarations 4},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ManifoldTargetIncidenceTangent.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / normalized incidence tangent equalizer",
