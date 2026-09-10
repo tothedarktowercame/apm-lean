@@ -68392,8 +68392,73 @@
   {:consumer "t98A02",
    :stop-condition
    "Require both actual coefficient chain and homology compatibility squares from the literal intersection comparison to the left and right piece inclusions; no supplied conjugated exactness or excision.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Construct the coefficient homology comparison for the two-piece biproduct and the union/ambient term, conjugate the instantiated signed Mayer-Vietoris exactness through all four comparisons, then transport the relative terms to the requested pairs in X by coefficient excision.",
+    :dependency-hashes
+    {:CoefficientIntersectionRangeComparison
+     "9280858720ad2cc52aeccd1a69f8e3135498d729e2053b77bdc5c9aeb0e7973f",
+     :CoefficientAmbientSubspaceRangeNaturality
+     "a7f7ae638a11bc10b5c21c19310db71b922862e1aaf86708f0593869995cf66b"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:chain_square_left
+     "d8961267b61cf85c239b642e8f814f4ee26ff15e90d15fdbcea3f73d1ebaa7f4",
+     :chain_square_right
+     "8315ab0dcbe8afccebc12b144cd1f76744a94c0455ab0c1f18d2e57744b26252",
+     :homology_square_left
+     "ce05d52765aeef44134e81f490fd0f119112b5f24ea104df9c2b78cf18ec1a62",
+     :homology_square_right
+     "01405696917ce5fcd071a59643c8664e8915873b485188429b8f1ea9d22c9ec2"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientIntersectionRangeNaturality.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and four complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientIntersectionRangeNaturality.lean ConstructionTargets/CoefficientIntersectionRangeComparison.lean ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add coefficient intersection range naturality'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "The coefficient chain and homology comparison from the Mayer-Vietoris infimum range term to the literal intersection subtype, followed by either actual subtype inclusion into the left or right piece",
+     :target
+     "The direct infimum-to-left or infimum-to-right range map, followed by the corresponding ambient-range-to-subtype comparison",
+     :direction
+     "Exact forward equality from each intersection-subtype composite to its direct range-map composite, first on coefficient chains and then on homology in every natural degree."},
+    :commit "bd1455ac2a4c28b0a9608fff95b5fbfb084fde5c",
+    :changed-paths
+    ["ConstructionTargets/CoefficientIntersectionRangeNaturality.lean"],
+    :fixture
+    {:path "/tmp/CoefficientIntersectionRangeNaturality.lean",
+     :sha256
+     "4619a45836530c6e5706d113a86132b8aa5fc6236e05221423e1ab72c6fe9f09",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled both actual coefficient chain compatibility squares and their homology counterparts from the literal intersection comparison to the left and right piece inclusions. The construction preserves arbitrary X, A, B, commutative-ring coefficients and degree. No biproduct or union comparison, Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 4,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientIntersectionRangeNaturality.lean"],
    :dag-node
