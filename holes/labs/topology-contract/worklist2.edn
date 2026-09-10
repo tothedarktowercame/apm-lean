@@ -30655,11 +30655,19 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
     :review
-    {:outcome :fail,
+    {:outcome :pass,
      :seat "codex-11",
-     :job "invoke-1789052139992-18802-6c03e40b",
+     :job "invoke-1789052523230-18812-f370fd71",
+     :commands
+     ["git show --format=fuller --stat 01fe3a72ae59f4d442f292521a14c4d1ab6f0b35"
+      "git diff-tree --no-commit-id --name-status -r 01fe3a72ae59f4d442f292521a14c4d1ab6f0b35"
+      "git diff --check 01fe3a72ae59f4d442f292521a14c4d1ab6f0b35^ 01fe3a72ae59f4d442f292521a14c4d1ab6f0b35"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers from commit 01fe3a72"
+      "git ls-tree ConstructionTargets Lean census at e199644d and c6b9ab49"
+      "Python comment-stripped census of all DAG-named frozen consumers at commit 01fe3a72"
+      "Inspect committed repaired replacement rows, dependency uniqueness, sphere-cap theorem orientations, and L2-to-Euclidean representation boundaries"],
      :finding
-     "Recorded commit d00c50100a0b55211b6dcaa9ec313172f01cdd6e materializes :oriented-checkpoint48-euclidean-hausdorff-volume-normalization-1 with :oriented-checkpoint48-sphere-cap-area-and-consumer-refill-repair2 duplicated in :depends-on; remove the duplicate so the row matches its replacement-item specification."},
+     "PASS: the prior duplicated dependency is repaired. Commit 01fe3a72 is ledger-only; the repaired normalization and successor rows use fresh identifiers and each materializes the active checkpoint exactly once. Both ledgers validate, infrastructure count is 773 to 789 with the stated 16 additions, no frozen consumer changed, and the census reproduces 59 named, 58 existing, 33 open, 25 zero-placeholder, 23 within two, and 62 placeholders with t93A05 missing. The elected d=2/d=3 Euclidean Hausdorff normalization probe follows the reviewed strict-cap L2 coordinate-isometry transport in the correct direction and explicitly permits STOP on a normalization mismatch. No fixture or frozen-statement hash applies to this strategy-only transition."},
     :replacement-items
     [{:consumer :t95J05,
       :stop-condition
@@ -30791,7 +30799,7 @@
     "Repair only: build-step materialization appends the active strategy checkpoint to inserted work rows. The failed replacement item already named that checkpoint, producing the duplicate seen at d00c5010. The repaired work row therefore depends explicitly only on the reviewed sphere-cap comparison; materialization will append the active checkpoint once. The successor explicitly depends only on the repaired work row for the same reason. Census and routes are unchanged: 62 placeholders remain across 33 open DAG-named consumers. The shared sphere route is t95J05(1), t02A05(2), t01J06(3) and t94A10(3): banked intrinsic strict-cap areas -> missing Euclidean Hausdorff-to-volume normalization -> equator-null cap assembly -> coordinate moments -> frozen integral, with Stokes and final assemblies additionally required by t01J06 and t94A10. The compact-complement route for t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 remains concurrent or blocked and is excluded. The translated-arc route for t99J03, t00A03, t01J01, t91J05 and t94J09 remains active and is excluded. t01A02 and t01A04 retain covering, degree and Lefschetz steps; t98A01 and t92J06 retain reviewed covering/genus/Euler boundaries; t00J01 needs Klein-product fold-fiber geometry; t01A08 needs arbitrary-model chart applicability; t01J04 and t94A06 need regular-preimage and half-space geometry; t02A08 needs the arbitrary-integer sphere-map homology action; t03J02 and t97A01 retain collar and closed-circle gluing; t03J04 needs rational torus homology and finite-cover Euler comparison; t03J05, t96J06 and t97A04 retain fundamental-class, Eilenberg-Zilber and Kunneth steps; t92J05 needs RP2 and genus-two bridges; t95J06 needs its concrete torus homeomorphism; t96J05 retains the proved radial counterexample; a97J08 remains an incomplete uptake route. No closure route is complete. Exact Euclidean Hausdorff normalization remains the simplest eligible four-consumer step. Fresh identifiers avoid collision with the rejected materialization.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: sphere-cap area comparison and renewed consumer eligibility",
@@ -30813,7 +30821,7 @@
    :stop-condition
    "Do not assume a normalization constant, sphere mass, cap assembly, equator nullity, polar-coordinate formula or moment value. Use only d=2 and d=3 at the generality required by the named consumers. Do not infer consumer closure; use a unique row-specific scratch directory.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact Euclidean Hausdorff-to-volume normalization in dimensions two and three",
