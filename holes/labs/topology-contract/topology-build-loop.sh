@@ -197,16 +197,22 @@ dispatch_and_wait() {
   wait_job "$job" "$label"
 }
 apply_job_result() {
-  local row="$1" token="$2" receipt transition
+  local row="$1" token="$2" receipt transition extraction_error pending
   receipt="$RUNS/jobs/$LAST_JOB.receipt.edn"
-  if ! "$HERE/extract-receipt.sh" "$LAST_RESULT" "$token" "$receipt"; then
+  if ! extraction_error="$("$HERE/extract-receipt.sh" "$LAST_RESULT" "$token" "$receipt" 2>&1)"; then
     # A completed job result is immutable. Retaining its in-flight pointer
     # makes every supervisor restart reclaim the same unusable result, so the
     # open row can never be dispatched again. Keep the result file as evidence,
     # clear only the pointer, and let the supervisor redispatch with a new nonce.
+    # Persist the extractor's exact complaint so the fresh dispatch tells the
+    # agent why its previous receipt was unusable, just as the apply-result
+    # rejection path below does for a schema-invalid receipt.
+    pending="$(mktemp "$RUNS/.rejection.XXXXXX")" || die "could not create receipt rejection state"
+    jq -n --arg row "$row" --arg reason "$extraction_error" '{row: $row, reason: $reason}' > "$pending" \
+      && mv "$pending" "$REJECTION" || die "could not persist receipt rejection state"
     bb "$HERE/inflight.bb" clear "$INFLIGHT" \
       || die "could not clear unusable in-flight job $LAST_JOB"
-    die "job $LAST_JOB emitted no unique nonce-bound receipt"
+    die "job $LAST_JOB emitted no unique nonce-bound receipt: $extraction_error"
   fi
   if ! transition="$(bb "$HERE/build_step.bb" apply-result "$LEDGER" "$row" "$receipt" 2>&1)"; then
     # The refused transition leaves the ledger unchanged. Preserve its receipt,
