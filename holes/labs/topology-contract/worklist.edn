@@ -65985,77 +65985,83 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Ambient chart-normalization identification remains. Nearby transition-unit equality, orientation, global localization and consumer closure remain subsequent; no lower-dimensional normalization extension is claimed.",
-     :outcome :revise,
+     "Nearby transition-unit equality, orientation compatibility, global localization and consumer closure remain subsequent. All-dimensional local comparison coverage is preserved; normalization remains restricted to dimension m+2.",
+     :dependency-review
+     {:outcome :pass,
+      :seat "codex-10",
+      :job "invoke-1789035903404-18390-a907e443"},
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer "t98A02",
-      :stop-condition
-      "Require the constructed chart-ball map, actual relative square and derived lifted normalization; no supplied commuting square or pair transport.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientChartBallTransport.lean"],
-      :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / actual chart-ball relative transport",
-      :acceptance
-      {:fixture "/tmp/CoefficientChartBallTransport.lean",
-       :fixture-sha256
-       "5a7dc7170534b9bf72791848e751dadd1cc01a548780a520d9530d9a20706528",
-       :implementation
-       "Promote the exact fixture. Compile ballMap, coordinate, boundary_deleted, coordinates_deleted, coordinate_composite, relative_square, homology_square and lifted_normalization. Preserve the constructed radius, actual subtype maps, arbitrary natural homology degree and explicit dimension m+2. Verify CoefficientBallBoundaryLift SHA256 d116bc9cdec7e777a7fbe22a205fb3aeab7658ce61d40584c9895337ce7aca01 and CoefficientChartBoundaryNeighborhood SHA256 00f467857529fd6d33f1ba79eee6f4aebdfa9d6c1ae7f5aafbb01c06a1e20d29. Require zero placeholders, no warnings and standard-only axioms. Do not claim identification with ambient chart normalization or transition-unit local constancy.",
-       :commands
-       ["lake env lean ConstructionTargets/CoefficientChartBallTransport.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :representation
-      {:source
-       "Actual relative chains of the constructed closed chart ball and its fixed boundary",
-       :target
-       "Relative chains of the common chart source deleted at a nearby point, followed by the recentered Euclidean model pair",
-       :direction
-       "Prove equality from ball transport followed by actual chart-coordinate transport to the direct Euclidean recentering pair map; derive homology and lifted model-normalization equalities."},
-      :id :coefficient-chart-ball-transport-implementation-refill47,
-      :kind :representation-comparison,
-      :depends-on
-      [:checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
-      :current-residual
-      "Identify coordinateMap with the banked pointed-chart pair transport followed by model inclusion, then derive the ambient chart-normalization comparison.",
-      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/CoefficientChartBallTransport.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/coefficient-chart-ball-transport-audit.py",
+     [{:cmd
+       "lake env lean -o /tmp/chartball47/ConstructionTargets/CoefficientChartBallTransport.olean ConstructionTargets/CoefficientChartBallTransport.lean",
        :exit 0}
       {:cmd
-       "git log -1 --format='%H %s' -- ConstructionTargets/CoefficientBallBoundaryLift.lean",
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientChartBallNormalization.lean'",
+       :exit 0}
+      {:cmd
+       "python3 /tmp/coefficient-chart-ball-normalization-audit.py",
+       :exit 0}
+      {:cmd
+       "sha256sum ConstructionTargets/CoefficientChartBallTransport.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/CoefficientChartBallTransport.lean",
+     [{:cmd
+       "lake env lean /tmp/CoefficientChartBallNormalization.lean",
        :exit 1,
        :correction
-       "Replaced unavailable Homeomorph.toContinuousMap with the existing homeoMap constructor and explicitly included the nearby-point membership hypothesis. Final compilation succeeds."}],
+       "Compiled the promoted dependency into a private temporary object directory because its canonical object was absent."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientChartBallNormalization.lean'",
+       :exit 1,
+       :correction
+       "Closed the homology factorization's definitional equality and used elaborating reassociation."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientChartBallNormalization.lean'",
+       :exit 1,
+       :correction
+       "Expanded normalization and ambientIso to expose the neighborhood-inclusion inverse."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientChartBallNormalization.lean'",
+       :exit 1,
+       :correction
+       "Used elaborating inverse cancellation across definitionally equal homology presentations. Final compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientChartBallTransport.lean",
+     {:path "/tmp/CoefficientChartBallNormalization.lean",
       :sha256
-      "5a7dc7170534b9bf72791848e751dadd1cc01a548780a520d9530d9a20706528",
+      "1e5daa85369856ec864f5fd7abc4c8f511585490c0ead0367ddfff6f5788cd61",
       :placeholder-count 0},
      :finding
-     "Concurrent CoefficientBallBoundaryLift at 76299a8f91a9bc6a992a92e28c0678f40a884411 already proves the Euclidean connecting equation and normalization. Reusing it, compiled one actual chart-ball transport prerequisite: the constructed ball maps into the common chart source, its boundary avoids each permitted nearby point, and chart coordinates give the literal recentering map. The resulting relative-chain square, arbitrary-degree homology square and lifted model normalization compile. Identification with the banked ambient chart normalization remains.",
+     "Compiled the full ambient chart-normalization comparison. The actual coordinate pair map factors through pointed-chart transport and model inclusion, yielding the all-degree homology square. Neighborhood-excision inverse laws identify its model normalization with the banked ambient chart normalization. The constructed ball-boundary lift therefore has the required normalization at every point of a constructed open neighborhood. Existing connecting naturality, boundary homotopies and radial inverse laws are reused.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientChartBallNormalization.lean"],
+      :acceptance
+      {:implementation
+       "Promote the exact fixture. Compile coordinate_factorization, coordinate_homology, inclusion_normalization, ambient_normalization and nearby_normalization. Verify CoefficientChartBallTransport SHA256 5a7dc7170534b9bf72791848e751dadd1cc01a548780a520d9530d9a20706528. Preserve actual pair maps, arbitrary natural homology degree, Hausdorff ambient hypotheses and explicit dimension m+2 for normalization. Require zero placeholders, no warnings and standard-only axioms. Do not claim transition-unit local constancy, orientation compatibility or global localization.",
+       :commands
+       ["lake env lean ConstructionTargets/CoefficientChartBallNormalization.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0}},
      :seat "codex-12"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientChartBallNormalization.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / moving boundary relative normalization",
    :acceptance
-   {:axioms :standard-only,
-    :probe
-    "Audit concurrent CoefficientChartBoundaryNeighborhood, CoefficientCompactBoundaryMotion, CoefficientScaledBoundaryNormalization and CoefficientOverlapTransition before adding anything. Construct actual deleted-pair connecting naturality and neighborhood-inclusion comparisons identifying the scaled recentered sphere boundary with the local chart normalization at each nearby point. Prove exact forward arrows in dimension m+2; reuse the banked boundary homotopies and radial inverse laws. Do not assume the connecting square or normalization equality. Preserve arbitrary-degree boundary homology and all-dimensional local comparisons without extending the m+2 normalization. Nearby transition-unit equality, orientation and global localization remain subsequent."},
+   {:implementation
+    "Promote the exact fixture. Compile coordinate_factorization, coordinate_homology, inclusion_normalization, ambient_normalization and nearby_normalization. Verify CoefficientChartBallTransport SHA256 5a7dc7170534b9bf72791848e751dadd1cc01a548780a520d9530d9a20706528. Preserve actual pair maps, arbitrary natural homology degree, Hausdorff ambient hypotheses and explicit dimension m+2 for normalization. Require zero placeholders, no warnings and standard-only axioms. Do not claim transition-unit local constancy, orientation compatibility or global localization.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientChartBallNormalization.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
    :representation
    {:source
     "Actual coefficient homology maps of a scaled sphere boundary recentered at nearby chart points",
