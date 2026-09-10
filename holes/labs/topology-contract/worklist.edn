@@ -70445,6 +70445,21 @@
       "git diff --check -- ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789061056550-19071-e154505e",
+     :commands
+     ["git show --format=fuller --no-ext-diff 57c7a392951f647255c24bb88a333d4be04068ff --"
+      "sha256sum /tmp/CoefficientRangeRightRelativeCokernelComparison.lean ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean"
+      "git show 57c7a392951f647255c24bb88a333d4be04068ff:ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean | sha256sum"
+      "git diff 57c7a392^ 57c7a392 --name-only"
+      "lake env lean ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean"
+      "lake env lean /tmp/CoefficientRangeRightRelativeCokernelComparison.lean"
+      "python3 placeholder/declaration/statement-hash audit"
+      "git diff --check 57c7a392^ 57c7a392 -- ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean"],
+     :finding
+     "PASS: recorded commit 57c7a392951f647255c24bb88a333d4be04068ff changes exactly the permitted target; committed target is byte-identical to the pinned fixture SHA256 590d2bdf61c233a910f04d83e3a59a19cf6b8005e0df4ca144feec23ac255bc4 and the dependency SHA256 is 2cc6c862b9c7d9a74815fb1418e7b995b0bc3c1de545be9fcdbca4e4e799b2e8. Target and fixture compile without warnings; axioms are exactly propext, Classical.choice, Quot.sound. Placeholder count remains 0 and the frozen declaration hash reproduces as acb9660cecd6a6110e55d3dea00d53365a39faf52eafebe3c7850b469d1502fc. The source/target cokernel orientation is correct: cokernel.mapIso requires f ≫ q.hom = p.hom ≫ f', while the reviewed square is stated oppositely, so .symm supplies the required forward equality. No downstream composite, excision, exactness, localization, vanishing, or fundamental-class claim is introduced."},
     :commit "57c7a392951f647255c24bb88a333d4be04068ff",
     :changed-paths
     ["ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean"],
@@ -70456,7 +70471,7 @@
     :finding
     "Promoted the exact fixture. The forward cokernel.mapIso from the range-intersection/right-range quotient to the literal intersection/right-subtype quotient compiles without warnings or placeholders, and the dependency hash matches its pinned value. Three unrelated pre-existing untracked files remain untouched."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean"],
    :dag-node
@@ -70572,7 +70587,7 @@
      "Compiled exactly one induced coefficient cokernel comparison. The relative quotient of the Mayer-Vietoris range-intersection inclusion into the right range is isomorphic to the relative quotient of the literal intersection inclusion into the actual right subtype. This uses the previously proved chain square and remains nonzero-capable; it does not use the refuted zero supportConnecting map. The unrelated pre-existing untracked documentation files remain untouched.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
