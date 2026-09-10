@@ -73749,8 +73749,55 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the canonical isomorphism from the restricted cover-small source onto this identified range and its compatibility with the union-generated inclusion, then transport the reviewed union-subspace homology equivalence to the denominator inclusion.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use Subfunctor.toRange and restrictedUnionAmbientMap_range to construct the chain isomorphism from restricted union-cover small chains to union-generated ambient range chains, and prove that its composite with the range inclusion is the direct ambient map. Then transfer the open-cover homology isomorphism.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:restrictedUnionAmbientMap
+     "6a9aa70e34b1b49ddeeb7d1926dd613bf648489ac79e07913b2af9a4058b9f4b",
+     :restrictedUnionAmbientMap_range
+     "4bdb95d1d30b5f47d11f0d2b21d87bbb9bde645d926e55a89e6a4cde1264a123"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubspaceUnionRestrictedAmbientRange.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedCoverImage.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-two-declaration audit over ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat bd2614cdc3a82f3c6aa80e2896a5886ef5c98c49",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r bd2614cdc3a82f3c6aa80e2896a5886ef5c98c49",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "The direct simplicial map from the restricted Boolean cover-small object on A union B into ambient singular simplices of X",
+     :target
+     "The union-generated ambient subcomplex formed by the supremum of the A and B subspace ranges",
+     :direction
+     "Exact equality from the target union-generated subcomplex to the categorical range of the source direct ambient map."},
+    :commit "bd2614cdc3a82f3c6aa80e2896a5886ef5c98c49",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubspaceUnionRestrictedAmbientRange.lean",
+     :sha256
+     "d76c938f7ec14ae8d60627ae40c38f6c4fec3fb2cb55915b99af210871568d02",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded restricted-cover-image dependency hash reproduce. Both requested range-factor declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"],
    :dag-node
