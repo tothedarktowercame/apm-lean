@@ -27890,6 +27890,20 @@
       :exit 0}
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789040585410-18504-5dcff0f1",
+     :commands
+     ["sha256sum /tmp/codex13-checkpoint46-census.json"
+      "Python read-only census reconstruction at fe25dcd9a49c788e2f18031551c549d2c188762f and e90e523c43cd3794ba5cdce4552db030b82409e0"
+      "git diff --check e4475c91^ e4475c91"
+      "git diff-tree --no-commit-id --name-only -r e4475c91"
+      "bb holes/labs/topology-contract/worklist_check.bb on both recorded ledgers at e4475c91"
+      "bb row uniqueness, phase and state audit"
+      "git merge-base --is-ancestor dependency and review verification"],
+     :finding
+     "Independent review of codex-13 strategy commit e4475c915a84012561a122b79aa7dd3d881b0a13 passes. The commit changes only worklist2.edn; no theorem statement hashes apply. Census SHA256 e8341a5dd9e0baa8c8f9e30af4eaf8df22a26aa79ffa541f1e6b208dbddb03a7 matches. Reproduced 59 named and 58 existing consumers, 25 zero-placeholder, 33 open, 23 positive within two placeholders, total placeholders 62->62, and modules 758->762. All 58 consumer files are byte-identical. Six changed infrastructure paths exactly match the two portfolio and two concurrent modules plus documentation. All four reviewed dependencies and the excluded done-unreviewed fivefold adapter are correctly represented. The exact graph-area probe and matching successor are uniquely installed, preserve actual L2 Hausdorff representations, forbid unsafe infinite-measure cancellation, and leave sphere normalization downstream. Both ledgers validate; whitespace is clean; ledger untouched."},
     :replacement-items
     [{:consumer :t02A05,
       :stop-condition
@@ -28014,7 +28028,7 @@
      :missing [:t93A05],
      :within-two 23}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: measurable graph approximation and renewed consumer eligibility",
@@ -28037,7 +28051,7 @@
    :stop-condition
    "Do not assume an area formula, integrability, finite measure, numerical Hausdorff normalization or measure-preserving parameterization. Retain actual L2 graph and Borel structures. Do not infer sphere masses, Stokes, periods or consumer closure. Exclude reserved orientation, covering and surface work; use a unique row-specific scratch directory.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact C1 graph Hausdorff area from measurable approximation partitions",
