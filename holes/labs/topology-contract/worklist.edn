@@ -63265,8 +63265,52 @@
   {:consumer "t99J03",
    :stop-condition
    "GO requires constructed compatible finite faces; REVISE requires exactly one compiled geometric prerequisite; otherwise identify the precise unavailable construction. No campaign termination.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct embedded arcs in controlled position with finite intersections and retained coverage, then prove a finite graph subdivision with disk faces and shared-edge intersections. Realization, polygon normalization, classification and consumer closure remain subsequent.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "codex-12",
+    :reason :missing-compatible-face-construction,
+    :commands
+    [{:cmd "cat ConstructionTargets/CompactSurfaceTriangleCover.lean",
+      :exit 0}
+     {:cmd
+      "rg -n 'IsArc|IsJordan|SimplePath|JordanCurve|Schoenflies|[Ii]sotopy|[Tt]riangulation|[Tt]ransverse' .lake/packages/mathlib/Mathlib/Topology/Connected .lake/packages/mathlib/Mathlib/Geometry/Manifold",
+      :exit 0}
+     {:cmd
+      "sed -n '210,244p' .lake/packages/mathlib/Mathlib/Geometry/Manifold/Bordism.lean",
+      :exit 0}
+     {:cmd
+      "rg -n 'structure|class|inter_subset|disjoint|face' .lake/packages/mathlib/Mathlib/Analysis/Convex/SimplicialComplex/Basic.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '^class|^structure|closure|disjoint' .lake/packages/mathlib/Mathlib/Topology/CWComplex/Classical/Basic.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/CompactSurfaceTriangleCover.lean ConstructionTargets/ChartTriangleEmbedding.lean ConstructionTargets/ManifoldTargetIncidenceTangent.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "rg -n 'finite|discrete|isolated|compact' ConstructionTargets/ManifoldTargetIncidenceTangent.lean ConstructionTargets/IncidenceParameterProjection.lean",
+      :exit 2,
+      :correction
+      "IncidenceParameterProjection had not been promoted at inspection time. No claim of its absence as a mathematical obstruction is made; projection regularity alone does not construct compatible surface faces."}],
+    :changed-paths [],
+    :finding
+    "The banked finite triangle cover proves embeddings, chart containment and open-interior coverage, but supplies no compatibility between boundaries. The audited APIs do not construct replacement embedded arcs with controlled finite intersections while preserving coverage, nor subdivide their union into a finite embedded graph with proved disk complementary faces. These are the missing geometric constructions. Arbitrary smooth chart boundaries cannot be treated as having finite intersections. Mathlib's simplicial-complex and CW interfaces require intersection or cell-disjointness data; they do not derive it from this cover. The transversality discussion in Bordism is documentation, not a perturbation constructor. No complete fixture or single compiled geometric prerequisite was obtained. This is a local foundation boundary, not refutation or campaign termination.",
+    :dependency-reviews
+    [{:outcome :pass,
+      :seat "codex-10",
+      :job "invoke-1789025648871-18146-cf15549c"}
+     {:outcome :pass,
+      :seat "codex-10",
+      :job "invoke-1789025310202-18140-681b0c9e"}],
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / compatible embedded face refinement",
