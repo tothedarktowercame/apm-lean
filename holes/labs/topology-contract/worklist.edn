@@ -67212,8 +67212,73 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the constructed compact-complement ambient space, actual open cover, intersection identification and canonical subtype maps; no supplied cover or relative sequence.",
+   :evidence
+   {:dependency
+    {:path
+     "ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean",
+     :sha256
+     "bed519ae21e3a1bad02abf9775eb734bcec6bb3c4e8f41a98cec894be2cf71e9",
+     :review :pass},
+    :placeholder-after 0,
+    :axiom-free-count 3,
+    :placeholder-delta 0,
+    :residual
+    "Identify the cover-small subcomplex terms with relative pairs for complements of K intersection L, K union L, K and L using actual arrows and coefficient excision. Relative Mayer-Vietoris exactness, localization monicity and fundamental classes remain subsequent.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:left_open
+     "b664bea54df7276320465a36974bac9fdb76470fdd502e16a3e42a353227b9d8",
+     :right_open
+     "59052b4ffce361d38c433fc03c84a265b0162fbd6b39b6efc31c540375061a1b",
+     :left_union_right
+     "af7058d120890111c62760907c57b4b1aec5c93164489050ebfa33cd04af790d",
+     :left_inter_right
+     "5fa64701a06fc3414ee95d83b815b76b8bf08c3a38b316e80861f245971326b5",
+     :leftToKComplement_value
+     "a554c3dbe6b9c7deba2ee6088c21359f36ce0ad7958a22557d685d42e16c09d8",
+     :rightToLComplement_value
+     "e9cf8d93b3cbc09f2cb25d45c787f2fb72c9dbf6f1f345f7f36857cff7204151",
+     :overlapToUnionComplement_value
+     "601e7fd93fac095672657d097f5d467e0beb29e08bb846b8c678aba05e4b0986"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CoefficientCompactComplementGeometry.lean ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientSubcomplexMayerVietoris",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementGeometry.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, pinned SHA256, comment-stripped zero placeholders and seven complete theorem-header hashes",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "3f84f9e5be9b60d15005aad9ec84fa27fe503083",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementGeometry.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactComplementGeometry.lean",
+     :sha256
+     "b6c94bbe9598cec21e4ac54d255479a99045372efc91dbb6c5e95b84b206cdaf",
+     :exact-promotion true},
+    :finding
+    "Exact fixture promoted. For arbitrary compact K and L in a Hausdorff space, the complement of their intersection is covered by the literal open complements of K and L; their overlap is identified with the complement of the union, and canonical subtype maps have the required values. Ledger untouched.",
+    :axiom-audit-count 7,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementGeometry.lean"],
    :dag-node
