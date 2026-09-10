@@ -73426,6 +73426,19 @@
      "Coefficient chains on the Boolean cover-small simplicial set for the same two subsets",
      :direction
      "Exact chain isomorphism from the source union-generated range representation to the target Boolean cover-small representation, with equality of both induced inclusions into ambient coefficient singular chains."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789077388125-19596-06332415",
+     :commands
+     ["lake env lean ConstructionTargets/CoefficientSubspaceUnionCoverSmallComparison.lean"
+      "sha256sum /tmp/CoefficientSubspaceUnionCoverSmallComparison.lean ConstructionTargets/CoefficientSubspaceUnionCoverSmallComparison.lean ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean"
+      "python3 placeholder-and-two-declaration audit over ConstructionTargets/CoefficientSubspaceUnionCoverSmallComparison.lean"
+      "git diff-tree --no-commit-id --name-only -r 19400d9912ef2c07adff78eceb030c99cf200625"
+      "git diff --exit-code 19400d9912ef2c07adff78eceb030c99cf200625 -- ConstructionTargets/CoefficientSubspaceUnionCoverSmallComparison.lean"
+      "git show --check --oneline --stat 19400d9912ef2c07adff78eceb030c99cf200625"],
+     :finding
+     "PASS: independently reviewed recorded commit 19400d9912ef2c07adff78eceb030c99cf200625 authored by codex-6. Its sole changed path is the scoped module, byte-identical to fixture SHA256 d1acad87fe47b8183949d4872eb840544fff743d92891c3ddf84b68dd2ea012d; dependency SHA256 is f082c52703e6e08185349e06ffc2b91db4e535e9bece25395f5fb9c5d33f9fcb. Lean compiles without warnings using only propext, Classical.choice, and Quot.sound; placeholder count is zero; both declaration hashes recompute exactly. The representation and direction are correct: applying coefficient chains to smallSSetIsoCoverSmall gives an isomorphism from chains on the supremum of ambientSubspaceRange A and B to chains on the Boolean cover-small simplicial set. Composing its hom with coverSmallInclusion equals the union-range chain inclusion followed by the production union-range ambient inclusion, as shown through functoriality and the underlying simplicial commuting identity. This exact comparison does not assert that every simplex in A union B lies in one member, nor claim a homology equivalence without openness, relative short exactness, a connecting morphism, localization, vanishing, or a fundamental class."},
     :commit "19400d9912ef2c07adff78eceb030c99cf200625",
     :changed-paths
     ["ConstructionTargets/CoefficientSubspaceUnionCoverSmallComparison.lean"],
@@ -73437,7 +73450,7 @@
     :finding
     "The exact fixture and recorded union-range-inclusion dependency hash reproduce. Both requested comparison declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionCoverSmallComparison.lean"],
    :dag-node
@@ -73540,7 +73553,7 @@
      "Compiled exactly one denominator representation prerequisite. The union-generated range complex is identified by an actual chain isomorphism with the Boolean cover-small complex, and the isomorphism followed by the generic cover-small inclusion equals the union-range chain inclusion followed by the production union-range inclusion. This exposes the precise route for importing the reviewed open-cover homology equivalence while retaining the literal ambient denominator map. No false assertion that every union simplex belongs to one cover member is made.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
