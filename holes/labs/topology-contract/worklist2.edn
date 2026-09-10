@@ -26113,8 +26113,68 @@
   {:consumer :t02A05,
    :stop-condition
    "Do not assume an area formula, numerical sphere mass, measure-preserving chart or Euclidean-to-sup-norm isometry. Preserve the diameter-power Hausdorff convention. No Stokes theorem, frozen integral value or consumer closure follows from this comparison alone. Use a row-specific scratch directory.",
+   :evidence
+   {:concurrent-reservations-preserved
+    [:coefficient-chart-ball-transport-implementation-refill47
+     :plane-arc-small-translation-finite-intersections-probe-refill47],
+    :placeholder-delta 0,
+    :residual
+    "Missing linear Hausdorff-density transport and nonlinear graph-area measure comparison are construction boundaries, not a refutation. Numerical sphere masses, frozen t02A05/t95J05 closure, Stokes and period comparisons remain downstream. No canonical source or ledger was edited; existing STOPs and refutations remain intact.",
+    :axiom-audits 4,
+    :outcome :stop,
+    :warnings [],
+    :boundary
+    {:linear
+     "Construct the exact Hausdorff measure distortion for an injective Euclidean linear graph map, with its Gram-determinant density and the actual induced range metric.",
+     :nonlinear
+     "Construct the differentiable graph area comparison from local linear approximation and measure estimates on measurable subsets. The available general-codomain approximation theorem does not itself supply this image-measure equality.",
+     :normalization
+     "hausdorffMeasure_pi_real concerns the ordinary function-space metric. It cannot identify L2 Euclidean Hausdorff measure with volume by an assumed isometry. The top-dimensional Hausdorff Haar instance establishes Haar status, not the requested numerical normalization."},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :reason :missing-codimension-one-area-comparison,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read DAG, closure experiments and build-loop design; inspect both ledgers and checkpoint42 review",
+      :exit 0}
+     {:cmd
+      "Inspect Mathlib Jacobian and Hausdorff sources and SphereCapFiniteMeasure",
+      :exit 0}
+     {:cmd
+      "Search ConstructionTargets and Mathlib for area-formula, Gram-density and Hausdorff derivative comparisons",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-oriented-checkpoint42-graph-area/BoundaryAudit.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-oriented-checkpoint42-graph-area/BoundaryAudit.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-oriented-checkpoint42-graph-area/BoundaryAudit.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial boundary-audit compilation",
+      :exit 1,
+      :correction
+      "Qualified lintegral_abs_det_fderiv_eq_addHaar_image with MeasureTheory. The corrected audit compiles without warnings."}],
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/codex13-oriented-checkpoint42-graph-area/BoundaryAudit.lean",
+     :sha256
+     "0a1d5dbd8f207e9ccec29ef488abde6f7905c5d92e130f4473e80d0a6bcf808a",
+     :role :signature-and-dimension-diagnostic,
+     :placeholder-count 0},
+    :finding
+    "The compiled audit establishes an exact applicability boundary. Mathlib's Jacobian image-measure theorem uses f:E→E, derivatives E→L E and an additive Haar measure on E. The requested graph maps Euclidean dimension d into d+1 and requires d-dimensional Hausdorff image measure. The audit proves the dimension gap and absence of a linear equivalence between these ambient spaces, including d=2 and d=3. This rules out direct same-space Jacobian transport, not the requested theorem. Existing sphere-cap results provide subtype measure identification and Lipschitz finiteness, not the graph-density equality. No complete graph-area fixture or complete new geometric prerequisite was obtained.",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual Euclidean graph Hausdorff-area comparison",
