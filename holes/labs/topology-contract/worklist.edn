@@ -56899,97 +56899,61 @@
    :stop-condition
    "GO requires both actual derivative injectivity and exact kernel-range equality compiled for the chosen atlas. REVISE requires one compiled prerequisite. No consumer closure claim.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "The requested tangent geometry is complete for self-model finite-dimensional complete real inner-product manifold sources and finite-dimensional inner-product vector targets, including empty fibers and zero-dimensional kernels. General models, target manifolds and consumer orientation, duality, boundary and transversality obligations remain. Local t96J05 specification evidence and the independent t01J04 countability/boundary-chart obstruction remain unchanged; no consumer closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:backward-injective
-      "ecd392b49a47ca43d65d6a72dfa2178119f0a5fbbac1a7846bb251316cab5ce7",
-      :derivative-eq
-      "b28c94f77666dae8688b572d4de76e2e3e03c9343ca799de99aa72ea3bad8fdd",
-      :inclusion-injective
-      "bfa0f479acfaa0c88570f03e23d243cc156414f59790b4a465ce697dcfa12642",
-      :inclusion-range
-      "d9119409724575400724f6c2087f04d0403c0a4e702f70b87ceac97739b00a5c"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean -o /tmp/manifold-chart-build/ConstructionTargets/ManifoldRegularFiberGlobalAtlas.olean ConstructionTargets/ManifoldRegularFiberGlobalAtlas.lean'",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldRegularFiberTangentImage.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/manifold-tangent-audit.py", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/ManifoldRegularFiberTangentImage.lean",
-       :exit 1,
-       :correction
-       "Canonical atlas object was absent; compiled its canonical source into the temporary probe directory."}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldRegularFiberTangentImage.lean'",
-       :exit 1,
-       :correction
-       "Replaced nonexistent MDifferentiableAt.mfderivWithin field notation with mfderivWithin_of_mem_nhds."}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldRegularFiberTangentImage.lean'",
-       :exit 1,
-       :correction
-       "Tangent-space expressions prevented simplification of the evaluated composition; replaced simp with explicit change statements."}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldRegularFiberTangentImage.lean'",
-       :exit 1,
-       :correction
-       "The expanded fixture still contained the composition simplification issue and unresolved coordinate congruences. Used explicit evaluated equations and backward-coordinate formulas."}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldRegularFiberTangentImage.lean'",
-       :exit 1,
-       :correction
-       "Used backward_eq at the center for the pointwise derivative congruence; omitted unused section instances from the local injectivity lemma."}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldRegularFiberTangentImage.lean'",
-       :exit 1,
-       :correction
-       "Installed finite-dimensional tangent-space instances from the definitionally underlying model spaces."}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldRegularFiberTangentImage.lean'",
-       :exit 1,
-       :correction
-       "Specified E and F explicitly in the kernel-dimension theorem to avoid normed-space inference on tangent-space aliases."}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldRegularFiberTangentImage.lean'",
-       :exit 1,
-       :correction
-       "Replaced rewriting across tangent-space instance representations with an explicit calculation ending in the kernel-dimension equality. Final compilation succeeds."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/ManifoldRegularFiberTangentImage.lean",
-      :sha256
-      "d9c018d248a36d714929bfcbe617771d677ffbb2502c281fd2eb1f2ed338053b"},
-     :finding
-     "Compiled backward-parameterization derivative injectivity from the actual local inverse laws and the manifold chain rule within the ambient subset. Proved equality between the chosen-atlas inclusion mfderiv and the selected backward map's mfderiv, using actual coordinate formulas on an open neighborhood. This gives inclusion injectivity. Differentiating the global identity that the defining map is constant on its literal fiber gives range containment in its mfderiv kernel; injectivity and rank-nullity give exact equality. Both results use exactly ManifoldRegularFiberGlobalAtlas.chartedSpace. No immersion, derivative identity, alternate atlas or global extension regularity is assumed.",
-     :dependency-reviews
-     [{:job "invoke-1789001180573-17465-23c9c0aa", :outcome :pass}
-      {:job "invoke-1789001461232-17472-9b510539", :outcome :pass}],
-     :implementation
-     {:scope
-      ["ConstructionTargets/ManifoldRegularFiberTangentImage.lean"],
-      :acceptance
-      {:fixture "/tmp/ManifoldRegularFiberTangentImage.lean",
-       :fixture-sha256
-       "d9c018d248a36d714929bfcbe617771d677ffbb2502c281fd2eb1f2ed338053b",
-       :implementation
-       "Promote the exact fixture preserving the chosen atlas, inherited topology, genuine infinity and all hypotheses. Compile all four declarations, verify zero placeholders and standard-only axioms, and preserve existing APIs. Do not claim frozen consumer closure or broader model applicability.",
-       :commands
-       ["lake env lean ConstructionTargets/ManifoldRegularFiberTangentImage.lean"],
-       :placeholder-before 0,
-       :placeholder-after 0,
-       :axioms :standard-only}},
-     :seat "codex-12"}},
+   {:placeholder-delta 0,
+    :residual
+    "Tangent geometry is complete within the stated self-model inner-product-source and vector-target hypotheses. General models, target manifolds and consumer orientation, duality, boundary and transversality obligations remain. The t96J05 specification defect and t01J04 countability/boundary-chart obstruction are unchanged. No consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:backward-injective
+     "ecd392b49a47ca43d65d6a72dfa2178119f0a5fbbac1a7846bb251316cab5ce7",
+     :derivative-eq
+     "b28c94f77666dae8688b572d4de76e2e3e03c9343ca799de99aa72ea3bad8fdd",
+     :inclusion-injective
+     "bfa0f479acfaa0c88570f03e23d243cc156414f59790b4a465ce697dcfa12642",
+     :inclusion-range
+     "d9119409724575400724f6c2087f04d0403c0a4e702f70b87ceac97739b00a5c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd "python3 /tmp/manifold-tangent-audit.py", :exit 0}
+     {:cmd "sha256sum /tmp/ManifoldRegularFiberTangentImage.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ManifoldRegularFiberGlobalAtlas",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ManifoldRegularFiberTangentImage.lean ConstructionTargets/ManifoldRegularFiberTangentImage.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldRegularFiberTangentImage.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/ManifoldRegularFiberTangentImage.lean",
+      :exit 1,
+      :correction
+      "Compilation started before the dependency build completed and found the atlas olean absent. Waited for the successful build, then reran compilation successfully."}],
+    :commit "822296cada11aa7ea4fe97840543b092eb03f29b",
+    :changed-paths
+    ["ConstructionTargets/ManifoldRegularFiberTangentImage.lean"],
+    :fixture
+    {:path "/tmp/ManifoldRegularFiberTangentImage.lean",
+     :sha256
+     "d9c018d248a36d714929bfcbe617771d677ffbb2502c281fd2eb1f2ed338053b",
+     :placeholder-count 0},
+    :finding
+    "Exact fixture promoted. All four declarations compile warning-free with standard-only axioms and zero placeholders. Inclusion derivative injectivity and exact kernel-range equality use the chosen atlas. Existing APIs and consumers unchanged; worktree clean. Validator reports 439 items OK."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ManifoldRegularFiberTangentImage.lean"],
    :dag-node
