@@ -185,7 +185,7 @@ dispatch_and_wait() {
     if [ -f "$REJECTION" ] && [ "$(jq -r '.row' "$REJECTION")" = "$row" ]; then
       printf '\nYour previous receipt for this row was rejected: %s\n' "$(jq -r '.reason | gsub("[\\r\\n]+"; " ")' "$REJECTION")"
     fi
-    printf '\nReturn the result in THIS invoke job final response; do not bell, whistle, or open a separate reply thread. Your final machine receipt must be exactly one unindented line beginning:\nTOPOLOGY_RECEIPT_EDN %s {EDN map}\nBefore responding, parse the exact map after the nonce with clojure.edn/read-string; visual inspection is not an EDN syntax check. Do not repeat that nonce elsewhere.\n' "$token"; } > "$augmented"
+    printf '\nThis is a work-mode job: execute at least one relevant verification command during THIS invocation, even when retrying previously completed work; reusing an earlier receipt without fresh tool execution is rejected.\nReturn the result in THIS invoke job final response; do not bell, whistle, or open a separate reply thread. Your final machine receipt must be exactly one unindented line beginning:\nTOPOLOGY_RECEIPT_EDN %s {EDN map}\nBefore responding, parse the exact map after the nonce with clojure.edn/read-string; visual inspection is not an EDN syntax check. Do not repeat that nonce elsewhere.\n' "$token"; } > "$augmented"
   log "$label dispatch to $seat receipt-token=$token"
   response="$(python3 /home/joe/code/futon3c/scripts/agency_send.py --from topology-build-loop \
     --to "$seat" --kind bell --type request --mode work < "$augmented")" || die "$label dispatch failed"
