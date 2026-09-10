@@ -20064,20 +20064,121 @@
    :stop-condition
    "Bank radial equivariance only. Do not claim a height-preserving ambient sphere action, hemisphere-coordinate equivariance, sphere-shift naturality or signed sphere action.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientOrthogonalRadial.lean",
-      :sha256
-      "31cf135ff217e502e6e51acb81d6ee20e5a69a093c768cbd6b83e53ed9fc0193"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientOrthogonalRadial.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Construct the height-preserving ambient sphere action and its hemisphere-coordinate and excision squares, then assemble sphere-to-disk and sphere-shift equivariance. No ambient sphere action, hemisphere-coordinate equivariance, sphere-shift naturality, signed sphere action or consumer closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :whitespace :pass,
+     :placeholders :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :two-file-scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :forward-inverse-intertwining :pass,
+     :fixture-compilation :pass,
+     :zero-dimensional-example :pass,
+     :negation-one :pass,
+     :actual-geometric-and-cokernel-maps :pass},
+    :axiom-audits 13,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation emitted no warnings. Build replayed 20 dependency warnings; none originated in this module."],
+    :statement-hashes
+    {:rational_naturality
+     "0161c362a990b731efed17dd272d4a5a7c5568ee9f3302467420ab9381e10d53",
+     :openAction
+     "4d708479031f8e11c1263619667380980747e9decd85ea7b2c2675b2b933716b",
+     :boundaryAction
+     "32b365ffff763fe497e62968575d0992b9ab99ccb6e402191b580e49f17645c2",
+     :closed_projection
+     "d6a8fdc8dcb217e2d7b634f713d575f1ade0f241083e3c5e2793679c05d09f68",
+     :open_projection
+     "acd223f7ab9404ad0e100d014ab7184ffdb2fa65fc5b45c01302339b16ae9193",
+     :closedPair
+     "e94dc6d4b4140c88378359246efc5bb3defa2aa978d30a8a413b0980c0fbf813",
+     :relative_square
+     "7a3597af6fd659d6f9d3aced1371d8ed5ed7b7068dd7623fcc12852fa6c2cfaf",
+     :zero_dimensional
+     "11ef444a26dc9aa204d3d41dc432737a9a5340d61dc152e15a1aa762268cbeee",
+     :closed_mapsTo
+     "0afb1151c5186dc59b5a455aab031df0ee9f43c37a60f6126c97f60b08c3fa6a",
+     :radial_inverse_naturality
+     "478ff955a6273f11d6d53dc38144ce78d3d40030dc014c8f7eabe313b5b06c41",
+     :boundary_square
+     "cc61cb99df036c3adfdbdd66271e34ad1d2ef3a3157d8e74246b2a28de3962c1",
+     :negation_one
+     "a05549184cd2fb4a7b4c9517eea8ce87400d3ec585904275e2c5e2c32406250a",
+     :open_mapsTo
+     "1c5a3089135c14d2b393a526b1997c3d959d70c910215dc5a4219cd7ad1906fb",
+     :integral_naturality
+     "2e96c0ce84687094a963b78d75a0b8cdaba6ee530179756c95d5e5b90bca6997",
+     :radial_naturality
+     "d76ed84c4448c6c3f26a799051551eeff96302d66fffe051d11fe5ea31f25f0a",
+     :closedAction
+     "9b43f8ded840b815fa4421a9d00dd995787470a090f47b4c3eb56e3b30309647",
+     :openPair
+     "0856817af598a7caf25b0c6167b050402c7def3b96917b29d2f7c7d5324edee5",
+     :radialPair
+     "abb4a2d4df30216bdcdb02eba1fbd83753e530a6cc1e4fd227070242f8bd811c",
+     :radial_square
+     "00ac8a6635a3f1e334cfcbd3bd77f238256a4af7c1cf7ed540c907a6d56a6b29"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure rules, both ledgers and dependency PASS receipts; inspect actual geometric and pair-map equations",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "Verify fixture SHA256 before byte-identical promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientOrthogonalRadial.lean > /tmp/orthogonal-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientOrthogonalRadial.lean > /tmp/orthogonal-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientOrthogonalRadial > /tmp/orthogonal-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Validate thirteen standard-only audits in each direct compilation log and inspect build warnings",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientOrthogonalRadial.lean ConstructionTargets/CoefficientOrthogonalRadial.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python audit of fixture equality, zero placeholders, nineteen statement hashes and exact two-file scope",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Prove orthogonal equivariance of the actual radial pair comparison'",
+      :exit 0}
+     {:cmd "git diff --check cbd921f6^ cbd921f6", :exit 0}
+     {:cmd
+      "Python verification of pinned commit scope, fixture equality and scoped cleanliness; git status --short",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "cbd921f6177307b5341ec6e9a66aa7830d4ec154",
+    :changed-paths
+    ["ConstructionTargets/CoefficientOrthogonalRadial.lean"
+     "ConstructionTargets/CoefficientOrthogonalRadial.md"],
+    :fixture
+    {:path "/tmp/CoefficientOrthogonalRadial.lean",
+     :sha256
+     "31cf135ff217e502e6e51acb81d6ee20e5a69a093c768cbd6b83e53ed9fc0193",
+     :promotion :byte-identical},
+    :finding
+    "Promoted the exact fixture proving actual orthogonal disk-pair actions intertwine the radial comparison and its inverse in every degree. Both degreewise cokernel-projection equations, boundary compatibility, one-dimensional negation identification and zero-dimensional example compile. Real geometry remains separate from the arbitrary coefficient ring.",
+    :statement-hash-method
+    "SHA256 from declaration keyword to immediately before the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientOrthogonalRadial.lean"
     "ConstructionTargets/CoefficientOrthogonalRadial.md"],
