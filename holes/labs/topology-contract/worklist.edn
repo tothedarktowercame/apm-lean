@@ -71893,6 +71893,19 @@
      {:cmd
       "sha256sum ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean /tmp/PlaneArcEndpointPairParameterDerivative.lean ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789072139868-19404-4cdfb19f",
+     :commands
+     ["git diff --name-only d1c101bf^ d1c101bf"
+      "git diff --exit-code d1c101bf3797b6157d43382f1a80ee2f1f3ac314 -- ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean"
+      "lake env lean ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean"
+      "sha256sum ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean /tmp/PlaneArcEndpointPairParameterDerivative.lean ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"
+      "python3 placeholder audit"
+      "git diff --check d1c101bf^ d1c101bf -- ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean"],
+     :finding
+     "Exact one-file scope; fixture and dependency hashes match; Lean compiles with only propext, Classical.choice, and Quot.sound; zero placeholders. The left vector-coordinate derivative is exactly endpointWeight(t) times the identity and is surjective for t in the open unit interval. No statement hashes were recorded, and the right derivative, full submersivity, Sard, and finite-fiber claims remain out of scope."},
     :commit "d1c101bf3797b6157d43382f1a80ee2f1f3ac314",
     :changed-paths
     ["ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean"],
@@ -71904,7 +71917,7 @@
     :finding
     "Promoted the exact fixture. The left perturbation derivative is the endpoint-weight scalar continuous-linear map, its fderiv formula is explicit, and it is surjective at every interior left parameter. The module compiles without warnings or placeholders and its dependency hash matches."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean"],
    :dag-node
@@ -71994,7 +72007,7 @@
      "Compiled exactly one derivative-level prerequisite. For the left perturbation-vector coordinate, the Fréchet derivative of the pairwise coincidence difference is scalar multiplication by the endpoint weight t(1-t), and this derivative is surjective whenever the left curve parameter is interior. This converts the reviewed pointwise parameter surjectivity into the derivative statement needed for submersivity. The corresponding right derivative block, full total-map submersivity away from the four endpoint pairs, parametric Sard, simultaneous finite-family selection, embedding stability and chart-transition comparison remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
