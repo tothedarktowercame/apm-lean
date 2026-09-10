@@ -39998,6 +39998,29 @@
       "The shell command misspelled cp as cpcp, so no artifact was created and the following hash and compile steps reported the absent file.",
       :correction
       "Reran the copy with cp, verified byte identity and SHA256, and compiled the repository artifact successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789075307017-19518-d91dc0e2",
+     :commands
+     ["git show --stat --oneline 5a936aa4888fb7d4418afed931e459e752a43356"
+      "git diff-tree --no-commit-id --name-status -r 5a936aa4888fb7d4418afed931e459e752a43356"
+      "git show 5a936aa4888fb7d4418afed931e459e752a43356:holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean | sha256sum"
+      "sha256sum immutable artifact canonical predecessor and ProductSimplexBalancedWords supporting source"
+      "git hash-object immutable artifact"
+      "git diff --check 5a936aa^ 5a936aa"
+      "git show --format=fuller 4298b0ea4b2100e3b3a7f6940883ffb9560c9115 -- holes/labs/topology-contract/worklist2.edn"
+      "git diff-tree --no-commit-id --name-status -r 4298b0ea"
+      "git diff --check 4298b0ea^ 4298b0ea"
+      "lake env lean holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/codex13-checkpoint64-artifact-transition-19509/transition.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/codex13-checkpoint64-artifact-transition-19509/wrong-hash-targeted.edn # expected exit 1"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "forbidden-declaration and comment-stripped placeholder scans"
+      "frozen t03J05 t96J06 t97A04 placeholder and SHA256 audit"],
+     :finding
+     "PASS: immutable artifact commit has exactly the declared one-file scope. Artifact, checkpoint60 canonical predecessor, and evidence-commit source all reproduce SHA256 e1da7ae4... and Git blob d52f2865...; supporting ProductSimplexBalancedWords hash is 4b9bf06c.... The artifact compiles, has zero placeholders and no forbidden declarations. The temporary ledger transition validates, while the targeted wrong-hash case exits 1; recorded altered/absent rejection is consistent with the same strict validator branch. The transition preserves checkpoint60 hash, supporting evidence, commit, placeholder count and PASS outcome, and correctly relocates predecessor bytes before any additive-successor promotion. Canonical source and 7db40149... successor remain separate and unmodified. Both live ledgers and whitespace pass. Frozen consumers remain 1/2/4 placeholders with hashes db4071c3..., 1d8874db..., and 79ca8541.... No predecessor statement hashes were recorded, so none apply."},
     :commit "5a936aa4888fb7d4418afed931e459e752a43356",
     :changed-paths
     ["holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean"],
@@ -40012,7 +40035,7 @@
     "The exact checkpoint60 predecessor bytes are now committed at a uniquely named immutable repository evidence path. They match the reviewed fixture, the source recovered from evidence commit d7ecc4b411b2f783f762da03ac598994100be9a1, SHA256 e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187 and derived Git blob d52f2865d16e184c2a6aa13ccdc508e9765a9008. A temporary transition repointing only checkpoint60's fixture path validates with the existing checker, while mutation, absence and a wrong hash are rejected. The canonical module and recurrence successor were not modified or promoted. The supervisor must apply the recorded transition while retaining checkpoint60's supporting hash, declarations, evidence commit and PASS review.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean"],
    :dag-node
@@ -40071,7 +40094,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: immutable predecessor artifacts and renewed consumer eligibility",
