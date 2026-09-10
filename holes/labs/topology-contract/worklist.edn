@@ -66501,6 +66501,18 @@
      "The actual mapped sphere boundary recentered at that point and its Euclidean model normalization",
      :direction
      "Prove equality from the fixed lift followed by second-chart relative homology and connecting to the recentered boundary homology map; derive the directed model-normalization composite."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789037999068-18444-447071d9",
+     :commands
+     ["git show --check bd4a32af"
+      "Python read-only pinned audit: exact fixture promotion, dependency hash, four statement hashes and zero placeholders"
+      "lake build ConstructionTargets.CoefficientChartBallNormalization"
+      "lake env lean ConstructionTargets/CoefficientSecondChartBoundary.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 7280226c:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "Independent review of codex-6 commit bd4a32af71ac87b15ef685642519c89948d48d84 passes. Exact single-file scope, fixture, dependency and four statement hashes verified. Actual second-chart maps preserve boundary avoidance via chart injectivity and the nearby-point bound. The sphere formula has the correct recentering sign; connecting naturality and inverse laws yield the directed normalization composite. Commutative-ring coefficients and dimension m+2 remain explicit; ambient second-chart normalization and transition-unit constancy remain unclaimed. Build succeeds (8307 jobs); compilation is warning-free with four standard-only axiom audits. Pinned ledger validates 528 items. No files edited."},
     :commit "bd4a32af71ac87b15ef685642519c89948d48d84",
     :changed-paths
     ["ConstructionTargets/CoefficientSecondChartBoundary.lean"],
@@ -66514,7 +66526,7 @@
     :axiom-audit-count 4,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CoefficientSecondChartBoundary.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / second-chart boundary connecting comparison",
@@ -66614,7 +66626,7 @@
      "Compiled one second-chart boundary prerequisite. The actual chart-ball map is evaluated through the second chart and recentered at a nearby point. Boundary avoidance follows from the first-chart radius bound and second-chart injectivity. Its sphere map has the literal mapped-boundary recentering formula. Actual pair connecting naturality and the fixed lift's inverse law give the connecting equation and its model-normalized composite. Ambient second-chart identification and transition-unit equality remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / nearby transition-unit equality",
