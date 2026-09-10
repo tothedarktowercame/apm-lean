@@ -64188,8 +64188,159 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill45-measure.py", :exit 0}
+     {:cmd "bb /tmp/refill45-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill45-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill45-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "git diff --stat 1336224bcc770c7814961101c8629f1b868d2a83 2a77a5927fc96a99ad89c860db985cf812302391 -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :measurement
+    {:infrastructure-before 726,
+     :baseline "1336224bcc770c7814961101c8629f1b868d2a83",
+     :existing-consumers 58,
+     :missing-consumers ["t93A05"],
+     :placeholder-delta 0,
+     :within-two-placeholders 24,
+     :infrastructure-after 733,
+     :concurrent-closures 0,
+     :zero-placeholder-consumers 24,
+     :placeholders-before 64,
+     :pin "2a77a5927fc96a99ad89c860db985cf812302391",
+     :open-consumers 34,
+     :named-consumers 59,
+     :placeholders-after 64,
+     :new-duplicate-modules 0,
+     :consumer-changed-paths [],
+     :portfolio-modules
+     ["CoefficientChartLocalAllDegrees"
+      "CoefficientFiniteModelChart"
+      "CoefficientManifoldLocalComparison"],
+     :review-outcomes {:pass 3, :stop 2, :completed-packet 1},
+     :concurrent-modules
+     ["CoefficientChartPair"
+      "CoefficientChartLocal"
+      "CoefficientOverlapPair"
+      "CoefficientOverlapRelative"],
+     :portfolio-closures 0},
+    :replacement-items
+    [{:consumer "t00A01",
+      :stop-condition
+      "GO requires complete frozen closure; otherwise name the exact missing actual-cover or chosen-basepoint comparison. Infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "VAN KAMPEN / frozen connected-sum open-union adapter",
+      :acceptance
+      {:frozen-file "problems/t00A01/lean/Main.lean",
+       :frozen-sha256
+       "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile the complete frozen Main preserving all supplied open-cover, overlap, homology and basepoint hypotheses. Audit the full banked two-open groupoid descent and chosen-object reconstruction used by t01J03 and t02A03. Derive the actual fundamental-group coproduct equivalence with required connectors; do not supply a pushout, comparison equivalence or new connectivity hypotheses. Retain the proved homology branch and every final conjunct."},
+      :id :t00a01-frozen-open-union-pi1-closure-probe-refill45,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
+      :current-residual
+      "Homology branch is proved; actual chosen-basepoint fundamental-group free-product bridge and final conjunction are the two placeholders."}
+     {:consumer "t98A02",
+      :stop-condition
+      "GO requires actual ambient invertibility and normalization comparison; REVISE requires one compiled prerequisite. Do not duplicate concurrent work or claim a fundamental class.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD FUNDAMENTAL CLASS / ambient overlap normalization comparison",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Audit current concurrent overlap work before adding anything. Use actual overlap relative maps and neighborhood excision to prove both ambient maps induce isomorphisms in every natural degree. Identify the distinguished-chart specialization and derive normalization compatibility in dimension m+2 with exact forward arrows. Reuse CoefficientManifoldLocalComparison, CoefficientChartLocal, CoefficientOverlapPair and CoefficientOverlapRelative; no supplied ambient isomorphism, orientation compatibility or global localization monicity. Preserve all lower-dimensional comparison coverage without extending the higher-dimensional normalization."},
+      :representation
+      {:source
+       "Actual deleted-point homology of translated chart overlaps and their ambient manifold maps",
+       :target
+       "The banked manifold local-homology normalizations obtained from the two charts",
+       :direction
+       "Derive equality of the directed forward composites from overlap local homology to ambient local homology, and construct the induced comparison between the two chart normalizations."},
+      :id :coefficient-overlap-ambient-normalization-probe-refill45,
+      :kind :representation-comparison,
+      :depends-on
+      [:checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
+      :current-residual
+      "Concurrent CoefficientOverlapPair and CoefficientOverlapRelative construct actual relative transition squares. Ambient-map invertibility and normalization compatibility remain.",
+      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+     {:consumer "t99J03",
+      :stop-condition
+      "GO requires constructed nested embedded triangles, strict containment and inner coverage. REVISE requires exactly one compiled geometric prerequisite; no finite chart-cover wrapper alone.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE TRIANGULATION / nested triangle coverage margin",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "On the original compact Hausdorff real two-manifold topology, construct finitely many pairs of concentric positively scaled affine chart triangles. Prove each inner closed triangle lies in the outer positive-barycentric interior, each outer closed triangle stays inside its actual chart target, and the inner open interiors cover the manifold. Derive scales and strict containment from coordinate geometry and compactness using the banked triangle constructions; no supplied nested cover or stability margin. This geometric packet does not assert perturbations, finite intersections, shared faces or triangulation."},
+      :id :surface-nested-triangle-cover-margin-probe-refill45,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
+      :current-residual
+      "Controlled arc perturbation remains unavailable. A constructed nested cover can supply the coverage margin needed before moving boundaries.",
+      :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped DAG consumers and separate closures, typed uptake, duplicate infrastructure and concurrent changes. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve repaired t94J08 and t96J07 closures versus historical defects, positive-dimensional signed antipodal action versus ordinary/reduced S0 and one-dimensional local-index boundaries, actual all-dimensional chart comparisons versus higher-dimensional normalization, conditional polygon witnesses and literal genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff mass normalization concerns, t96J05 defect, t01J04/t94A06 applicability and resolved t01A08 regularity conversion versus unresolved general-model Sard. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t00a01-frozen-open-union-pi1-closure-probe-refill45
+       :coefficient-overlap-ambient-normalization-probe-refill45
+       :surface-nested-triangle-cover-margin-probe-refill45],
+      :current-residual
+      "Await three independently reviewed outcomes and rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    "Complete-DAG census shows no consumer change or closure. Three portfolio modules complete actual coefficient manifold-to-model local comparison in all dimensions and natural degrees; normalization remains m+2. Four concurrent modules supply chart and overlap geometry. Reviewed flux evidence reduces the frozen conclusion exactly to intrinsic sphere mass=4*pi without proving either normalization or refutation. Controlled endpoint-preserving arc perturbation remains unavailable. Elect t00A01 first: its homology branch is proved and the remaining two placeholders concern the actual open-union fundamental-group adapter and final assembly, with substantial banked descent infrastructure. Then elect two five-consumer foundations: ambient overlap normalization comparison, using newly available relative squares, followed by constructed nested triangle coverage margins. Other near-closure consumers retain independent degree-realization, Euler, polygon, general-model Sard, normalization or specification boundaries. Preserve repaired t94J08 and t96J07 closures versus historical defects, positive-dimensional signed antipodal action versus ordinary/reduced S0 and one-dimensional local-index coverage, conditional polygon witnesses and literal genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff normalization concerns, t96J05 defect, t01J04/t94A06 applicability limits and resolved t01A08 regularity conversion versus unresolved general-model Sard.",
+    :artifacts
+    {:measurement
+     {:path "/tmp/topology-refill45-measure.json",
+      :sha256
+      "017a58d80cdbfed74f28afa79e4a1159cefc7c0235063546a1149d555239260c"},
+     :tail
+     {:path "/tmp/topology-refill45-tail.edn",
+      :sha256
+      "cea1836f47fb6344edf5ea789e07a5ad6e561b8ba06a87102978ea54e09af30a"}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -64203,7 +64354,104 @@
     :surface-embedded-arcs-finite-position-probe-refill44
     :checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
    :current-residual
-   "Await three independently reviewed outcomes, then rerank the complete DAG."}],
+   "Await three independently reviewed outcomes, then rerank the complete DAG."}
+  {:consumer "t00A01",
+   :stop-condition
+   "GO requires complete frozen closure; otherwise name the exact missing actual-cover or chosen-basepoint comparison. Infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "VAN KAMPEN / frozen connected-sum open-union adapter",
+   :acceptance
+   {:frozen-file "problems/t00A01/lean/Main.lean",
+    :frozen-sha256
+    "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile the complete frozen Main preserving all supplied open-cover, overlap, homology and basepoint hypotheses. Audit the full banked two-open groupoid descent and chosen-object reconstruction used by t01J03 and t02A03. Derive the actual fundamental-group coproduct equivalence with required connectors; do not supply a pushout, comparison equivalence or new connectivity hypotheses. Retain the proved homology branch and every final conjunct."},
+   :id :t00a01-frozen-open-union-pi1-closure-probe-refill45,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs
+    :checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
+   :current-residual
+   "Homology branch is proved; actual chosen-basepoint fundamental-group free-product bridge and final conjunction are the two placeholders."}
+  {:consumer "t98A02",
+   :stop-condition
+   "GO requires actual ambient invertibility and normalization comparison; REVISE requires one compiled prerequisite. Do not duplicate concurrent work or claim a fundamental class.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / ambient overlap normalization comparison",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Audit current concurrent overlap work before adding anything. Use actual overlap relative maps and neighborhood excision to prove both ambient maps induce isomorphisms in every natural degree. Identify the distinguished-chart specialization and derive normalization compatibility in dimension m+2 with exact forward arrows. Reuse CoefficientManifoldLocalComparison, CoefficientChartLocal, CoefficientOverlapPair and CoefficientOverlapRelative; no supplied ambient isomorphism, orientation compatibility or global localization monicity. Preserve all lower-dimensional comparison coverage without extending the higher-dimensional normalization."},
+   :representation
+   {:source
+    "Actual deleted-point homology of translated chart overlaps and their ambient manifold maps",
+    :target
+    "The banked manifold local-homology normalizations obtained from the two charts",
+    :direction
+    "Derive equality of the directed forward composites from overlap local homology to ambient local homology, and construct the induced comparison between the two chart normalizations."},
+   :id :coefficient-overlap-ambient-normalization-probe-refill45,
+   :kind :representation-comparison,
+   :depends-on
+   [:checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs
+    :checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
+   :current-residual
+   "Concurrent CoefficientOverlapPair and CoefficientOverlapRelative construct actual relative transition squares. Ambient-map invertibility and normalization compatibility remain.",
+   :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+  {:consumer "t99J03",
+   :stop-condition
+   "GO requires constructed nested embedded triangles, strict containment and inner coverage. REVISE requires exactly one compiled geometric prerequisite; no finite chart-cover wrapper alone.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SURFACE TRIANGULATION / nested triangle coverage margin",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "On the original compact Hausdorff real two-manifold topology, construct finitely many pairs of concentric positively scaled affine chart triangles. Prove each inner closed triangle lies in the outer positive-barycentric interior, each outer closed triangle stays inside its actual chart target, and the inner open interiors cover the manifold. Derive scales and strict containment from coordinate geometry and compactness using the banked triangle constructions; no supplied nested cover or stability margin. This geometric packet does not assert perturbations, finite intersections, shared faces or triangulation."},
+   :id :surface-nested-triangle-cover-margin-probe-refill45,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs
+    :checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
+   :current-residual
+   "Controlled arc perturbation remains unavailable. A constructed nested cover can supply the coverage margin needed before moving boundaries.",
+   :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped DAG consumers and separate closures, typed uptake, duplicate infrastructure and concurrent changes. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve repaired t94J08 and t96J07 closures versus historical defects, positive-dimensional signed antipodal action versus ordinary/reduced S0 and one-dimensional local-index boundaries, actual all-dimensional chart comparisons versus higher-dimensional normalization, conditional polygon witnesses and literal genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff mass normalization concerns, t96J05 defect, t01J04/t94A06 applicability and resolved t01A08 regularity conversion versus unresolved general-model Sard. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t00a01-frozen-open-union-pi1-closure-probe-refill45
+    :coefficient-overlap-ambient-normalization-probe-refill45
+    :surface-nested-triangle-cover-margin-probe-refill45
+    :checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
+   :current-residual
+   "Await three independently reviewed outcomes and rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
