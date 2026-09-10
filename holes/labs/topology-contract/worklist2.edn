@@ -12348,8 +12348,180 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["Preserve t94J09 and every unchanged reviewed consumer STOP; numerical genus certificates do not supply quotient homeomorphisms."
+     "Preserve t96J05 and t01A05 refutations and the old t96J07 parsed-clause refutation."
+     "Preserve historical ordinary-H0(S0) refutation, reduced-S0 degree, one-dimensional local-index coverage and signed orientation obligations."
+     "Exclude active t01j04-frozen-closed-neighborhood-preimage-closure-probe-refill33, manifold-regular-fiber-tangent-image-probe-refill33, t95j04-reviewed-closure-documentation-refill33 and their reserved successor."
+     "Full excision and sphere-table STOPs remain; only the specifically resolved subdivision face-transport boundary permits renewed assembly."],
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint20Census.py", :exit 0}
+     {:cmd
+      "Read complete DAG, foundational-program note, closure policy, both ledgers and dependency reviews",
+      :exit 0}
+     {:cmd
+      "git log --oneline 6d41ad7f0debdcf49241a36f98c2228d1741da43..HEAD -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd "sha256sum problems/t96J07/lean/Main.lean", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/Checkpoint20ProposedLedger.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/Checkpoint20Census.json /tmp/Checkpoint20Portfolio.edn",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial temporary proposed-ledger validation",
+      :exit 1,
+      :correction
+      "Added scheduling evidence to the simulated completed checkpoint."}
+     {:cmd "Second temporary proposed-ledger validation",
+      :exit 1,
+      :correction
+      "Added author and commands to the simulated scheduling evidence."}
+     {:cmd "Third temporary proposed-ledger validation",
+      :exit 1,
+      :correction
+      "Explicitly simulated future PASS review for dependency-state validation; this is not an actual review or canonical transition."}],
+    :measurement
+    {:concurrent-placeholder-delta -1,
+     :baseline "6d41ad7f0debdcf49241a36f98c2228d1741da43",
+     :placeholder-after 67,
+     :existing-consumers 58,
+     :missing-consumers [:t93A05],
+     :placeholder-delta -1,
+     :zero-placeholder-consumers 22,
+     :specification-repairs 0,
+     :open-consumers 36,
+     :placeholder-before 68,
+     :head "76e1612d30fe1c21b79326b4813430cbfcc268e9",
+     :named-consumers 59,
+     :near-closure-consumers 26,
+     :frozen-closures {:portfolio 0, :concurrent 1},
+     :infrastructure-packets
+     {:modules-before 656,
+      :modules-after 658,
+      :portfolio 1,
+      :concurrent 1},
+     :commits
+     {:barycentric "3f41ed7d65c5ebf382f57492c65e5fe1460676e2",
+      :concurrent-t95j04 "a13852f35c671f0d40d4bbf58e832710563a4ef7",
+      :concurrent-global-atlas
+      "62d6817a673d5d0fbce70691e0808b85e31bdd63"},
+     :review-outcomes
+     {:polygon-stop-pass "invoke-1789000922001-17458-82a8ccc2",
+      :barycentric-implementation-pass
+      "invoke-1789001467985-17474-faea7287",
+      :concurrent-t95j04-closure-pass
+      "invoke-1789000811470-17453-38632ef7",
+      :concurrent-global-atlas-pass
+      "invoke-1789001180573-17465-23c9c0aa"},
+     :portfolio-placeholder-delta 0,
+     :census
+     {:path "/tmp/Checkpoint20Census.json",
+      :sha256
+      "6e087db0b24863876bdc227b3aa2977e3f0daee26c5a007389a8509d9a811de5"}},
+    :replacement-items
+    [{:consumer :t96J07,
+      :stop-condition
+      "Preserve the compiled refutation of the old statement. Change only the precedence of the nonzero-vector hypothesis; do not call this unchanged frozen closure or infer an actual projective differential theorem.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SPEC-DEFECT: parenthesized projective-axis characterization and complete corrected consumer",
+      :acceptance
+      {:axioms :standard-only,
+       :frozen-file "problems/t96J07/lean/Main.lean",
+       :frozen-sha256
+       "e6e6a2247da5fef25f52343ba20b00c0b4b9efd9d29e4803808df7da7a645b74",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :probe
+       "Under standing authorization for specification repairs, construct a complete temporary Main with the sole mathematical statement change: forall x, x != 0 -> (projectivelyEq x (A x) iff exists i, projectivelyEq x (axis i)). Retain the existing negation theorem for the old parsed clause. Prove the corrected characterization by coordinate cancellation, all four frozen localIndex values and their sum. Preserve all definitions and other conjuncts. Record old and corrected statement hashes and an exact syntax diff. Include a concrete before/after statement-repair note in the proposed implementation packet. No canonical edits during probe.",
+       :consumer-equation
+       "For every nonzero vector, its diagonal image is projectively equivalent to it exactly when it is projectively equivalent to a coordinate axis; the four defined local indices are -1, 1, -1, 1 and sum to zero.",
+       :gates
+       ["GO requires a complete zero-placeholder compiled corrected Main, preserved old refutation, explicit statement-change audit, fixture SHA256 and standard-only axioms."
+        "Distinguish specification repair plus corrected closure from frozen closure. Propose implementation scope only after full compilation."]},
+      :id :oriented-checkpoint20-t96j07-parenthesized-axis-repair-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint20-polygon-and-barycentric-refill],
+      :current-residual
+      "One placeholder remains in a refuted statement. The intended nonzero-vector implication must enclose the equivalence; coordinate cancellation and four determinant signs then remain.",
+      :other-consumers []}
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "No assumed chain-map differential equation, coefficient-change theorem, homotopy or small-chain isomorphism. Do not retry excision or the sphere table.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SINGULAR-SUBDIVISION: actual coefficient-general singular chain endomorphism assembly",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a commutative ring R, assemble the existing CoefficientBarycentricNaturality.degree maps into an endomorphism of actual singular chains with coefficient object ModuleCat.of R R. Use its actual_subdivided_face equation, generator_degree and vertex differential theorem with the reviewed realization chain map to prove every differential equation. Prove the generator formula, degree-zero identity and naturality under arbitrary continuous maps. Reuse the banked recursion and affine-change proofs without duplication. Compile integer and rational standard-edge subdivision formulas and their boundaries. State universes explicitly. This fresh assembly is justified by the now-proved exact face-transport boundary of the earlier STOP.",
+       :consumer-equation
+       "The actual R-valued singular subdivision degree maps constitute a chain endomorphism, natural for continuous maps, identity in degree zero and given by barycentric subdivision on each simplex generator.",
+       :consumer-residual
+       "Coefficient-general homotopy to identity, preservation and eventual smallness, positive-degree comparison, relative excision and sphere suspension remain before rational S2 H1/H2.",
+       :gates
+       ["GO requires a complete zero-placeholder fixture with chain-map construction, all differential equations, generator formula, degree-zero identity and naturality."
+        "Record fixture SHA256, integer/rational edge examples and standard-only audits. REVISE requires exactly one compiled prerequisite."]},
+      :id
+      :oriented-checkpoint20-coefficient-singular-subdivision-assembly-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint20-polygon-and-barycentric-refill
+       :oriented-checkpoint19-coefficient-barycentric-affine-change-1],
+      :current-residual
+      "Reviewed actual_subdivided_face resolves the recorded MissingFaceTransport boundary. The actual singular degree maps still need assembly into a natural chain endomorphism with degree-zero identity.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: corrected axis characterization and actual singular subdivision uptake",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint21-axis-repair-and-singular-subdivision-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint20-t96j07-parenthesized-axis-repair-1
+       :oriented-checkpoint20-coefficient-singular-subdivision-assembly-1],
+      :current-residual
+      "Measure specification repair and corrected consumer closure separately from singular subdivision infrastructure; attribute concurrent changes and retain historical refutations.",
+      :other-consumers []}],
+    :changed-paths [],
+    :finding
+    "The polygon consumer remains at one placeholder: literal quotient normalization and actual integral singular homology are independently unresolved. Reviewed barycentric recursion and affine-change compatibility now reach actual singular face generators, resolving MissingFaceTransport and permitting a fresh bounded singular-subdivision assembly. Concurrent work alone closed t95J04 and banked the global manifold-fiber atlas with smooth inclusion. Elect exactly one near-closure adapter first: the standing-authorized t96J07 precedence repair with complete corrected proof. This preserves the proved refutation rather than retrying the false frozen statement. No active repair row was found in either ledger. Among reusable programs, coefficient subdivision serves four named downstream consumers and now requires one concrete assembly; surface classification, fundamental classes, intersection, product homology, integration and covering gluing require larger constructions. The competing four-consumer tangent-image packet is already reserved by the other campaign. No canonical files changed.",
+    :validation
+    {:items 93, :simulation-only true, :canonical-ledger-edited false},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: polygon normalization and barycentric affine-change uptake",
@@ -12366,6 +12538,96 @@
     :oriented-checkpoint19-pants-and-affine-naturality-refill],
    :current-residual
    "Measure exact polygon outcome separately from barycentric affine-change infrastructure; attribute concurrent changes and preserve reviewed boundaries.",
+   :other-consumers []}
+  {:consumer :t96J07,
+   :stop-condition
+   "Preserve the compiled refutation of the old statement. Change only the precedence of the nonzero-vector hypothesis; do not call this unchanged frozen closure or infer an actual projective differential theorem.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SPEC-DEFECT: parenthesized projective-axis characterization and complete corrected consumer",
+   :acceptance
+   {:axioms :standard-only,
+    :frozen-file "problems/t96J07/lean/Main.lean",
+    :frozen-sha256
+    "e6e6a2247da5fef25f52343ba20b00c0b4b9efd9d29e4803808df7da7a645b74",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :probe
+    "Under standing authorization for specification repairs, construct a complete temporary Main with the sole mathematical statement change: forall x, x != 0 -> (projectivelyEq x (A x) iff exists i, projectivelyEq x (axis i)). Retain the existing negation theorem for the old parsed clause. Prove the corrected characterization by coordinate cancellation, all four frozen localIndex values and their sum. Preserve all definitions and other conjuncts. Record old and corrected statement hashes and an exact syntax diff. Include a concrete before/after statement-repair note in the proposed implementation packet. No canonical edits during probe.",
+    :consumer-equation
+    "For every nonzero vector, its diagonal image is projectively equivalent to it exactly when it is projectively equivalent to a coordinate axis; the four defined local indices are -1, 1, -1, 1 and sum to zero.",
+    :gates
+    ["GO requires a complete zero-placeholder compiled corrected Main, preserved old refutation, explicit statement-change audit, fixture SHA256 and standard-only axioms."
+     "Distinguish specification repair plus corrected closure from frozen closure. Propose implementation scope only after full compilation."]},
+   :id :oriented-checkpoint20-t96j07-parenthesized-axis-repair-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint20-polygon-and-barycentric-refill
+    :oriented-checkpoint20-polygon-and-barycentric-refill],
+   :current-residual
+   "One placeholder remains in a refuted statement. The intended nonzero-vector implication must enclose the equivalence; coordinate cancellation and four determinant signs then remain.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No assumed chain-map differential equation, coefficient-change theorem, homotopy or small-chain isomorphism. Do not retry excision or the sphere table.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SINGULAR-SUBDIVISION: actual coefficient-general singular chain endomorphism assembly",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a commutative ring R, assemble the existing CoefficientBarycentricNaturality.degree maps into an endomorphism of actual singular chains with coefficient object ModuleCat.of R R. Use its actual_subdivided_face equation, generator_degree and vertex differential theorem with the reviewed realization chain map to prove every differential equation. Prove the generator formula, degree-zero identity and naturality under arbitrary continuous maps. Reuse the banked recursion and affine-change proofs without duplication. Compile integer and rational standard-edge subdivision formulas and their boundaries. State universes explicitly. This fresh assembly is justified by the now-proved exact face-transport boundary of the earlier STOP.",
+    :consumer-equation
+    "The actual R-valued singular subdivision degree maps constitute a chain endomorphism, natural for continuous maps, identity in degree zero and given by barycentric subdivision on each simplex generator.",
+    :consumer-residual
+    "Coefficient-general homotopy to identity, preservation and eventual smallness, positive-degree comparison, relative excision and sphere suspension remain before rational S2 H1/H2.",
+    :gates
+    ["GO requires a complete zero-placeholder fixture with chain-map construction, all differential equations, generator formula, degree-zero identity and naturality."
+     "Record fixture SHA256, integer/rational edge examples and standard-only audits. REVISE requires exactly one compiled prerequisite."]},
+   :id
+   :oriented-checkpoint20-coefficient-singular-subdivision-assembly-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint20-polygon-and-barycentric-refill
+    :oriented-checkpoint19-coefficient-barycentric-affine-change-1
+    :oriented-checkpoint20-polygon-and-barycentric-refill],
+   :current-residual
+   "Reviewed actual_subdivided_face resolves the recorded MissingFaceTransport boundary. The actual singular degree maps still need assembly into a natural chain endomorphism with degree-zero identity.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: corrected axis characterization and actual singular subdivision uptake",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint21-axis-repair-and-singular-subdivision-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint20-t96j07-parenthesized-axis-repair-1
+    :oriented-checkpoint20-coefficient-singular-subdivision-assembly-1
+    :oriented-checkpoint20-polygon-and-barycentric-refill],
+   :current-residual
+   "Measure specification repair and corrected consumer closure separately from singular subdivision infrastructure; attribute concurrent changes and retain historical refutations.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
