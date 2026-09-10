@@ -18207,20 +18207,101 @@
    :stop-condition
    "Bank connected H0-map normalization and its S2 H1 application only. Do not claim the disconnected boundary codiagonal identification, circle H1, S2 H2, general signed naturality or frozen closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientConnectedH0Map.lean",
-      :sha256
-      "d664b77de85b55eee08e1655625e99c3c37220907aac2033314da143a2d67c8f"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientConnectedH0Map.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Identify the one-dimensional disk-boundary H0 map with the codiagonal, apply signed kernel normalization, and assemble circle H1 and S2 H2 with exact forward maps. No disconnected-boundary identification, circle H1, S2 H2, general signed naturality or frozen closure is claimed.",
+    :gates
+    {:normalization-and-connectivity :pass,
+     :fixture-hash :pass,
+     :scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :examples :pass,
+     :commit :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass,
+     :compilation :pass},
+    :axiom-audits 10,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Direct fixture and canonical compilations produced zero warnings. Lake build replayed 20 dependency warnings."],
+    :statement-hashes
+    {"mapIso"
+     "d0f788f18367c5861bd4b1930f19bd3e94e340bb842e81af622c0d288444b3cd",
+     "integral_sphereTwo_H1_zero"
+     "519a1b1a70c3f122a5bc21ea1b50820a4da59b19ed76ed7ac95f8ab46400f66d",
+     "rational_sphereTwo_H1_zero"
+     "65a837f504770910a6f502003d90f6a22283f5f7536a9e2eccd862ceb33d1e52",
+     "inclusion_kernel_zero"
+     "6c1205053f929cdf5a50f2d4d09f263f88970075501d7246d289b5fcd83cd9e2",
+     "map_isIso"
+     "f12ddd1347143cdeb358e3945a5c01590415e77deb0ae02497da1464d2a31d0d",
+     "mapIso_hom"
+     "1c7b0283fa2384060b8162cbb08b18bf19996b120fe6266708c4b642f0236112",
+     "sphereTwo_H1_zero"
+     "1dffafd8d1a627a71c3e359765ffb9e01285b4fdbc0a9e7991e25da687b542de",
+     "diskTwo_kernel_zero"
+     "3c890c548799509924acb645789461a9a4f2b2e40a82368c26b97e97c73f5b8e",
+     "diskTwo_inclusion_isIso"
+     "62c238d411ace7cdebaa8b3904fa1aa5dd5c81a26dac4570a9b35c5cbd02d31e",
+     "inclusion_isIso"
+     "f8382bf96a70f42dc6f637dbbbc19d205d71a63aaab380b8ade780c0203539e4",
+     "normalized_map"
+     "2a253489bccae647c7ca7a26da04a37e63058bf113e323e2f8279f3fd0f552e2"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientConnectedH0Map.lean", :exit 0}
+     {:cmd "Read DAG, closure rules and dependency PASS receipt",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientConnectedH0Map.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientConnectedH0Map.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientConnectedH0Map",
+      :exit 0,
+      :jobs 8281}
+     {:cmd
+      "Validate ten standard-only audits in both compilation logs, including integer/rational S2 H1 examples",
+      :exit 0}
+     {:cmd
+      "Inspect actual subtype inclusion, augmentation normalization and derived disk-boundary path-connectivity",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientConnectedH0Map.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Verify eleven declaration hashes and byte-identical fixture promotion",
+      :exit 0}
+     {:cmd "Verify exact staged two-file scope", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Normalize connected coefficient H0 maps and prove S2 H1 vanishing'",
+      :exit 0}
+     {:cmd
+      "Verify exact committed scope, fixture equality and clean workspace",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "58ea5c3159fa6d8042ba513b4ba948af9efb1c64",
+    :changed-paths
+    ["ConstructionTargets/CoefficientConnectedH0Map.lean"
+     "ConstructionTargets/CoefficientConnectedH0Map.md"],
+    :fixture
+    {:path "/tmp/CoefficientConnectedH0Map.lean",
+     :sha256
+     "d664b77de85b55eee08e1655625e99c3c37220907aac2033314da143a2d67c8f",
+     :promoted-verbatim true},
+    :finding
+    "Promoted the exact fixture proving that connected-space H0 maps become identity under augmentation coordinates. Derived connectivity makes the actual two-dimensional disk-boundary H0 inclusion invertible, yielding H1(S2;R)=0 through the reviewed kernel comparison.",
+    :statement-hash-method
+    "SHA256 of declaration text from theorem/def keyword to immediately before the space preceding :=.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientConnectedH0Map.lean"
     "ConstructionTargets/CoefficientConnectedH0Map.md"],
