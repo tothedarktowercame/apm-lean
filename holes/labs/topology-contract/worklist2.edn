@@ -21830,6 +21830,19 @@
       "Python verification of pinned two-file commit scope and scoped cleanliness; git status --short",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789026070823-18160-2538c1e9",
+     :commands
+     ["Python patch/source/result SHA256, Main equality, theorem hashes, scope and placeholder audits"
+      "git apply --reverse --check --whitespace=error /tmp/T94J08ClosureDocs.patch"
+      "git diff --check e8822f1a^ e8822f1a"
+      "lake env lean problems/t94J08/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show bbf579f5:holes/labs/topology-contract/worklist2.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show bbf579f5:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "PASS e8822f1a9d97d76dec8967feed88b9215d71b679; independent of author codex-14. Exact two-document scope and patch/source/result hashes verified. Closure commit, independent receipt, Main SHA256 and both frozen theorem hashes match. Main compilation reproduces two standard-only audits and seven attributed warnings. Documentation correctly distinguishes repaired positive-dimensional closure from original S0 refutation and outstanding reduced-homology coverage. Frozen sources and ledgers unchanged; placeholders 310->310; no additional closure credited."},
     :commit "e8822f1a9d97d76dec8967feed88b9215d71b679",
     :changed-paths
     ["TOPOLOGY-DEPENDENCY-DAG.md"
@@ -21849,7 +21862,7 @@
     "Applied the exact verified documentation patch. Both documents now record independently reviewed closure of repaired positive-dimensional t94J08, including commit, review, hashes, placeholder reduction and warning attribution. Stale current-status statements are updated while historical refutation evidence remains.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
@@ -22069,7 +22082,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: local model progress and renewed consumer eligibility",
