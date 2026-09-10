@@ -15289,93 +15289,109 @@
    :stop-condition
    "Do not assume homology-map injectivity, surjectivity or an isomorphism. Do not import an integral conclusion as R-linear. Do not claim relative excision, sphere homology or frozen closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Coefficient-general relative excision and sphere suspension remain before rational S2 H1/H2. No relative-excision theorem, sphere homology calculation or frozen consumer closure is claimed.",
-     :axiom-audits 8,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture and document the actual inclusion-induced all-degree comparison.",
-      :namespace "ConstructionTargets.CoefficientSmallComparison",
-      :declarations
-      ["elementHom"
-       "elementHom_one"
-       "cycle_lift"
-       "exists_boundary"
-       "surjective_succ"
-       "injective_all"
-       "inclusion_isIso"
-       "homologyIso"
-       "homologyIso_hom"
-       "inverse_left"
-       "inverse_right"
-       "integral_interval"
-       "rational_interval"],
-      :hypotheses
-      "R, X and the cover index type are Type 0. R is a commutative ring, X a topological space, and the indexed subsets form an open cover. Arbitrary actual R-valued cycles and bounding chains are supported. No connectedness, nonemptiness or finite-cover hypothesis is imposed. Generic cycle and boundary helpers use ChainComplex (ModuleCat.{0} R) Nat.",
-      :consumer-equation
-      "The actual cover-small inclusion induces an isomorphism on homology in every natural-number degree; homologyIso_hom identifies its forward map exactly, and inverse_left and inverse_right prove both inverse laws.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSmallComparison."
-       "Reproduce eight standard-only axiom audits and all-degree integer/rational interval-cover examples."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure rules, reviewed dependencies and actual cycle, boundary and homology-map APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientSmallComparison.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientSmallComparison.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSmallComparison.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial comparison-fixture compilation",
-       :exit 1,
-       :correction
-       "Specified the ModuleCat object universe and corrected elementwise naturality orientations and zero-map evaluation."}
-      {:cmd "Second comparison-fixture compilation",
-       :exit 1,
-       :correction
-       "Used explicit linear-map extensionality and restricted simplification in the cycle-lift proof."}
-      {:cmd "Third comparison-fixture compilation",
-       :exit 1,
-       :correction
-       "Composed the lift equation explicitly with elementHom_one; the surjectivity fixture then compiled."}
-      {:cmd "First complete comparison-fixture compilation",
-       :exit 1,
-       :correction
-       "Removed the nonexistent ModuleCat.zero_apply simplification name. Final complete compilation succeeds without warnings."}],
-     :representation
-     {:source
-      "Homology of actual cover-small ModuleCat R chains with coefficient object ModuleCat.of R R.",
-      :target "Homology of actual R-valued singular chains of X.",
-      :direction
-      "Construct an isomorphism from cover-small homology to singular homology whose forward arrow equals HomologicalComplex.homologyMap of the actual coverSmallInclusion, in every degree."},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientSmallComparison.lean",
-      :sha256
-      "d70b14c6d71ccbf4c9bcdea7613261413bfa3f68457aa3bac1fcdfb2b52f16dc"},
-     :finding
-     "Complete coefficient-general small-chain homology comparison compiles. Positive-degree surjectivity follows by subdividing an actual cycle, lifting it through the monic inclusion, and using the absolute iterate homotopy. Injectivity follows by subdividing an actual bounding chain and using the restricted iterate homotopy. The reviewed H0 comparison completes all degrees. The constructed isomorphism has exactly the inclusion-induced homology map as its forward arrow, with both inverse laws. No integral comparison theorem is reinterpreted over R.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientSmallComparison.lean"
-       "ConstructionTargets/CoefficientSmallComparison.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Coefficient-general relative excision and sphere suspension remain before rational S2 H1/H2. No relative-excision theorem, sphere homology calculation or frozen consumer closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :eight-standard-only-audits :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 8,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 20 existing dependency warnings; both direct compilations had zero warnings."],
+    :statement-hashes
+    {"elementHom"
+     "4b4f9a30c51467036ae84b7fc0331c520e8a66e0777015029e87abf7e513a362",
+     "inverse_right"
+     "3f7005dda96e0f674fdad3db9dd2e28e1e4fbba854ac0efbf28e7899d041c6c0",
+     "homologyIso_hom"
+     "ce1c9010911caccd84421d8dd5951b7c5e745e17f141791da6ee4865c1d13dcd",
+     "elementHom_one"
+     "f8d1d6d5f1eecd73612df5404ff6e3bac24d5ecc34ec3871ce4603d37ddef7cb",
+     "rational_interval"
+     "44198f4a2970d85d95031447aeb87f696ce494a8e911004b8323d4c33263daac",
+     "inverse_left"
+     "5fdd52b13af9b39ec2fe9e212bb4be27b312d076efc0c14cb8e96e84e50f5448",
+     "surjective_succ"
+     "80f338ce6330c16bb7f87f8b5bc3987cbba009472ae9207d5d363610c8e9a812",
+     "homologyIso"
+     "59b15645bbacb7f4080877c3402b87a449c512e22fd58d5e69deca135cdec562",
+     "exists_boundary"
+     "bdb3c0194f1c71d2b3ef4bf564794448f7bea89c2e98f3c8d9aaced49b97bb1d",
+     "injective_all"
+     "d311753f4a964e833cdd41659af4a878f5f5bf2a331d3187fc9d9e675517200d",
+     "integral_interval"
+     "f5a576ee6a751f82e5a8c91473a415df88e5e63461c14940b5878c7bc3d2cccc",
+     "cycle_lift"
+     "e41221303984a193d5f16c66a0637babab418e1b3ea84caf1a0a5d1a2585e6a3",
+     "inclusion_isIso"
+     "49927b8224ccfa8af11e04315e2d4d27934848fa3a9ab36a647224dd276b0bc2"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure stop rules and all dependency PASS receipts",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientSmallComparison.lean", :exit 0}
+     {:cmd "Python verify fixture SHA256 and promote exact fixture",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientSmallComparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientSmallComparison.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientSmallComparison",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientSmallComparison.lean /tmp/CoefficientSmallComparison.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, eight standard-only audits per compilation, warning and thirteen declaration-hash audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope audit and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Prove coefficient-general small-chain homology comparison\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope audit pinned to ad9d15f3 and clean tracked checkout verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Homology of actual cover-small ModuleCat R chains with coefficient object ModuleCat.of R R.",
+     :target "Homology of actual R-valued singular chains of X.",
+     :direction
+     "Construct an isomorphism from cover-small homology to singular homology whose forward arrow equals HomologicalComplex.homologyMap of the actual coverSmallInclusion, in every degree."},
+    :commit "ad9d15f31e8b970d705d3b46f4c0482f69d5aca5",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSmallComparison.lean"
+     "ConstructionTargets/CoefficientSmallComparison.md"],
+    :fixture
+    {:path "/tmp/CoefficientSmallComparison.lean",
+     :sha256
+     "d70b14c6d71ccbf4c9bcdea7613261413bfa3f68457aa3bac1fcdfb2b52f16dc"},
+    :finding
+    "Promoted the exact fixture and documented the actual inclusion-induced comparison. Constructed positive-degree surjectivity and all-degree injectivity using actual cycles, bounding chains, eventual factorization and iterated homotopies. Combined with reviewed H0 to construct the all-degree isomorphism, exact forward-map equation and both inverse laws. Integer/rational interval examples compile. Focused build passed with 8272 jobs.",
+    :statement-hash-method
+    "SHA256 of declaration text beginning with theorem or def, excluding preceding attributes, and ending immediately before the space preceding := or where; namespace ConstructionTargets.CoefficientSmallComparison.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSmallComparison.lean"
     "ConstructionTargets/CoefficientSmallComparison.md"],
