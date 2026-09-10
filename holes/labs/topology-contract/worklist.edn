@@ -68902,6 +68902,24 @@
      "The biproduct of coefficient singular homologies of the literal left and right compact-complement subtypes",
      :direction
      "The forward canonical homology-of-biproduct comparison is followed by the forward componentwise ambient-range-to-subtype comparison, while the inverse uses the reverse composite order."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789053108422-18828-249702c3",
+     :commands
+     ["git show b0ea2749:holes/labs/topology-contract/worklist.edn"
+      "git show --stat --format=fuller f7a8fc36"
+      "git diff --name-status f7a8fc36^ f7a8fc36"
+      "git show f7a8fc36:ConstructionTargets/CoefficientCompactComplementPiecesComparison.lean > /tmp/CoefficientCompactComplementPiecesComparison.lean"
+      "sha256sum /tmp/CoefficientCompactComplementPiecesComparison.lean"
+      "git show f7a8fc36:ConstructionTargets/CoefficientHomologyBiprodIso.lean | sha256sum"
+      "git show f7a8fc36:ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean | sha256sum"
+      "lake env lean /tmp/CoefficientCompactComplementPiecesComparison.lean"
+      "lake env lean ConstructionTargets/CoefficientCompactComplementPiecesComparison.lean"
+      "python3 placeholder/declaration audit"
+      "diff -u /tmp/review-pieces-fixture.log /tmp/review-pieces-path.log"],
+     :finding
+     "PASS: commit changes exactly ConstructionTargets/CoefficientCompactComplementPiecesComparison.lean; fixture SHA256 ad3e126a8fcb015891e0d8a0adbf4cdf4b271f28169aefa40bc34c61b7562765 and both dependency hashes match; all three required declarations occur once and compile without warnings; zero sorry/admit/axiom declarations; axioms are exactly propext, Classical.choice and Quot.sound; the forward map composes homology-of-biproduct with the forward componentwise range-to-subtype comparison, and the inverse uses the required reverse composite order; excluded downstream claims remain absent."},
     :commit "f7a8fc36df658f7c709b5d2977d0a56f07b7036f",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementPiecesComparison.lean"],
@@ -68916,7 +68934,7 @@
     :axiom-audit-count 3,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementPiecesComparison.lean"],
    :dag-node
@@ -69019,7 +69037,7 @@
      "Compiled exactly one missing middle-object comparison prerequisite. Homology of the actual chain-complex biproduct in the instantiated compact-complement Mayer-Vietoris sequence is identified with the biproduct of coefficient homologies of the literal left and right complement subtypes. The forward map is the canonical homology-biproduct comparison followed by the componentwise range comparison; the inverse composite is also explicit. Instantiated transported exactness and coefficient excision remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
