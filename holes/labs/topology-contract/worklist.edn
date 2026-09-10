@@ -68104,6 +68104,23 @@
      "Coefficient singular chains and homology of the actual topological subtype",
      :direction
      "The inverse range isomorphism is applied in the forward ambient-range-to-subtype direction, then coefficient chains and homology identify both resulting isomorphism arrows with the corresponding chain and homology maps."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789048346751-18710-7ece0b9a",
+     :commands
+     ["git show --stat --oneline 94726e208633af2e74d32e95f993c37fafb4ae6c"
+      "git diff-tree --no-commit-id --name-only -r 94726e208633af2e74d32e95f993c37fafb4ae6c"
+      "git show 94726e208633af2e74d32e95f993c37fafb4ae6c:ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean | sha256sum"
+      "sha256sum /tmp/CoefficientAmbientSubspaceRangeComparison.lean"
+      "git show 94726e208633af2e74d32e95f993c37fafb4ae6c:ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean | cmp -s /tmp/CoefficientAmbientSubspaceRangeComparison.lean"
+      "python3 read-only comment-stripped placeholder and four declaration-header SHA-256 audit"
+      "git show 94726e208633af2e74d32e95f993c37fafb4ae6c:ConstructionTargets/CoefficientCompactComplementCoverSequence.lean | sha256sum"
+      "lake env lean ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git status --short"],
+     :finding
+     "PASS: recorded commit has exact one-file scope and is byte-identical to the pinned fixture; compilation, standard-only axioms, zero placeholders, four frozen statement hashes, and the dependency hash reproduce. The inverse range isomorphism, coefficient chains, homology, and explicit hom/inv identities have the required ambient-range-to-subtype direction, with all later naturality, Mayer-Vietoris, excision, monicity, vanishing, and fundamental-class claims remaining out of scope."},
     :commit "94726e208633af2e74d32e95f993c37fafb4ae6c",
     :changed-paths
     ["ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean"],
@@ -68118,7 +68135,7 @@
     :axiom-audit-count 4,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean"],
    :dag-node
@@ -68228,7 +68245,7 @@
      "Compiled one missing coefficient comparison prerequisite. For every subspace A of a topological space and every commutative coefficient ring, the coefficient singular chains on the ambient range subcomplex are isomorphic to the coefficient singular chains of the actual subtype A; applying homology gives the corresponding isomorphism in every natural degree with both forward and inverse arrows identified as actual homology maps. This is the coefficient-general range comparison needed to conjugate the instantiated compact-complement sequence.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
