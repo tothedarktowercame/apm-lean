@@ -59039,8 +59039,52 @@
   {:consumer "t95J05",
    :stop-condition
    "GO requires complete frozen closure; otherwise STOP names the precise absent intrinsic measure normalization or area comparison. Infrastructure absence is not refutation.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "Determine and prove the numerical normalization of diameter-power Hausdorff measure on the literal Euclidean S3 subtype. The required frozen value is equivalent, via the compiled integral identity, to mass 3 = 2*pi^2. A comparison with volume.toSphere must establish its dimensional constant rather than assume equality. No normalized replacement measure, conditional final bridge, statement repair, consumer closure or campaign refutation was introduced.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789008311597-17688-d36af4e2"},
+    :outcome :stop,
+    :warnings
+    ["One inherited unnecessarySimpa warning in the frozen antipode definition, fixture line 30."],
+    :statement-hashes
+    {:literal-integral
+     "812e3fa603bcd6b9bd09181927a33747167d028feab2284a8a0a50fd440d1f66"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :placeholder-before 1,
+    :reason :intrinsic-measure-normalization-boundary,
+    :commands
+    [{:cmd "bb /tmp/t95j05-refill38-review.bb", :exit 0}
+     {:cmd "lake env lean /tmp/T95J05IntrinsicMassBoundary.lean",
+      :exit 0}
+     {:cmd "python3 /tmp/t95j05-intrinsic-mass-audit.py", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial inline bb dependency-review query",
+      :exit 1,
+      :correction
+      "Removed an unmatched closing parenthesis and reran successfully as /tmp/t95j05-refill38-review.bb."}
+     {:cmd
+      "Initial rg search including ConstructionTargets/*Hausdorff*",
+      :exit 2,
+      :correction
+      "The glob matched no files. Replaced it with the successful recursive pathlib source audit."}],
+    :refutation false,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T95J05IntrinsicMassBoundary.lean",
+     :sha256
+     "06334b16ae806e5164e6ca25c93aefbd36a9051efba001d9f52fea735586f7bc",
+     :role :boundary-diagnostic,
+     :placeholder-count 0},
+    :finding
+    "Compiled the literal frozen integral as minus one half of IntrinsicSphereSecondMoments.mass 3, reusing the banked intrinsic density moment. Frozen definitions and the proved prefix are preserved. The missing numerical assertion is mass 3 = 2*pi^2. Mathlib defines hausdorffMeasure d using diameter powers without a dimensional prefactor; its polar-coordinate API instead constructs volume.toSphere. No identification of these measures or numerical intrinsic mass theorem was found in the audited canonical and Mathlib sources. Consequently the usual sphere-area value cannot be substituted without proving the normalization comparison. This is an exact measure boundary and a normalization concern, not a compiled refutation.",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION / literal projective density integral",
