@@ -73074,6 +73074,19 @@
       "git diff-tree --no-commit-id --name-only -r e9dc0fcee4321bc15cee3c33ead1fe33dfdaed93",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789075997263-19547-24c45d0f",
+     :commands
+     ["lake env lean ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean"
+      "sha256sum /tmp/CoefficientCompactSupportPiecesToIntersection.lean ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean"
+      "python3 placeholder-and-six-declaration audit over ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean"
+      "git diff-tree --no-commit-id --name-only -r e9dc0fcee4321bc15cee3c33ead1fe33dfdaed93"
+      "git diff --exit-code e9dc0fcee4321bc15cee3c33ead1fe33dfdaed93 -- ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean"
+      "git show --check --oneline --stat e9dc0fcee4321bc15cee3c33ead1fe33dfdaed93"],
+     :finding
+     "PASS: independently reviewed recorded commit e9dc0fcee4321bc15cee3c33ead1fe33dfdaed93 authored by codex-6. Its sole changed path is the scoped module, byte-identical to fixture SHA256 604d7bb48ddd2ba7ae769e34c7c2210476b33745b754ad0a2581a52eb9279401; dependency SHA256 is d511cdea24b570aff04d8a47f5d53566a370539dd31bf252f49776ce13bf9ea6. Lean compiles without warnings; the two subset lemmas are axiom-free, categorical declarations use only propext, Classical.choice, and Quot.sound; placeholder count is zero; all six declaration hashes recompute exactly. Arrow directions and representations are correct: K-complement and L-complement include into (K intersection L)-complement, so identity pair maps descend from the two literal relative support complexes to the intersection-support complex. biprod.desc combines these as extendLeft minus extendRight, and the homology arrow applies the corresponding homology maps with the same sign. This is exactly the middle-to-right quotient-pair arrow; it does not claim zero composite, short exactness, a connecting morphism, homology exactness, localization monicity, vanishing, or a fundamental class."},
     :commit "e9dc0fcee4321bc15cee3c33ead1fe33dfdaed93",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean"],
@@ -73085,7 +73098,7 @@
     :finding
     "The exact fixture and recorded compact-support restriction-map dependency hash reproduce. All six requested declarations compile without warnings or placeholders; the subset lemmas are axiom-free and the categorical constructions use only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean"],
    :dag-node
@@ -73175,7 +73188,7 @@
      "Compiled exactly one direct quotient-pair prerequisite. The inclusions K complement into (K intersection L) complement and L complement into (K intersection L) complement induce genuine relative chain maps. Their signed biproduct descent gives the literal pieces-to-intersection-support arrow, and the corresponding homology arrow is defined without ordinary excision or the refuted supportConnecting map. The fixture does not yet prove the quotient short exact sequence, construct its connecting morphism, or establish any of the three required exactness segments.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
