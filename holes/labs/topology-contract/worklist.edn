@@ -74723,6 +74723,34 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require identification of each degree of intersectionToPiecesRelative with this explicit injective diagonal quotient map, plus the corresponding explicit middle exactness theorem.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSubmoduleInfQuotientDiagonal.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / submodule intersection-quotient diagonal injectivity",
+   :acceptance
+   {:fixture "/tmp/CoefficientSubmoduleInfQuotientDiagonal.lean",
+    :fixture-sha256
+    "0b71128dd726c121283c76ee328ea80a5a8de65a3b3d8a64cf8760b91a83544b",
+    :implementation
+    "Promote the exact fixture. Compile infQuotientDiagonal, infQuotientDiagonal_mk and infQuotientDiagonal_injective. This supplies the concrete module-theoretic injectivity fact required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: the diagonal map from the quotient by P inf Q into the product of the quotients by P and Q is injective. Verify CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion SHA256 c8a8d3e72d5f69e3f699ac297511f454bf93512432cc40938a25df59c8e3a349. Preserve arbitrary modules over arbitrary commutative rings. Require zero placeholders, no warnings and standard-only axioms. Do not claim identification with the categorical cokernel components, middle exactness, short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSubmoduleInfQuotientDiagonal.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :coefficient-submodule-inf-quotient-diagonal-implementation-refill51,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-subcomplex-relative-mayer-vietoris-degreewise-criterion-implementation-refill51],
+   :current-residual
+   "Identify each degree component of the categorical cokernel arrow intersectionToPiecesRelative with infQuotientDiagonal and transfer injectivity. Prove that the range of this diagonal equals the kernel of the signed map to the union quotient, apply shortComplex_shortExact_of_degreewise, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport through relativeComparisonIso to the literal compact-complement pairs.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
@@ -74732,71 +74760,58 @@
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require degreewise injectivity of intersectionToPiecesRelative and degreewise function exactness at the middle quotient biproduct; the compiled criterion then combines them with the banked terminal epimorphism to establish ShortExact.",
+      "Require identification of each degree of intersectionToPiecesRelative with this explicit injective diagonal quotient map, plus the corresponding explicit middle exactness theorem.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean"],
+      ["ConstructionTargets/CoefficientSubmoduleInfQuotientDiagonal.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / relative quotient Mayer-Vietoris degreewise short-exactness criterion",
+      "MANIFOLD FUNDAMENTAL CLASS / submodule intersection-quotient diagonal injectivity",
       :acceptance
-      {:fixture
-       "/tmp/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean",
+      {:fixture "/tmp/CoefficientSubmoduleInfQuotientDiagonal.lean",
        :fixture-sha256
-       "c8a8d3e72d5f69e3f699ac297511f454bf93512432cc40938a25df59c8e3a349",
+       "0b71128dd726c121283c76ee328ea80a5a8de65a3b3d8a64cf8760b91a83544b",
        :implementation
-       "Promote the exact fixture. Compile shortComplex_shortExact_of_degreewise. This supplies the precise reduction required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: degreewise injectivity of the first genuine quotient arrow and degreewise Function.Exact at the middle object, together with the reviewed terminal epimorphism, imply ShortExact for the chain-complex ShortComplex. Verify CoefficientSubcomplexRelativeMayerVietorisEpi SHA256 cfb50c4a8d0eb17c54f775c69d00ae8bf30406b5059d96364a65366c1ef1b7f0. Preserve arbitrary simplicial sets, arbitrary subcomplexes and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim the degreewise hypotheses, short exactness without them, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile infQuotientDiagonal, infQuotientDiagonal_mk and infQuotientDiagonal_injective. This supplies the concrete module-theoretic injectivity fact required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: the diagonal map from the quotient by P inf Q into the product of the quotients by P and Q is injective. Verify CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion SHA256 c8a8d3e72d5f69e3f699ac297511f454bf93512432cc40938a25df59c8e3a349. Preserve arbitrary modules over arbitrary commutative rings. Require zero placeholders, no warnings and standard-only axioms. Do not claim identification with the categorical cokernel components, middle exactness, short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSubmoduleInfQuotientDiagonal.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :coefficient-subcomplex-relative-mayer-vietoris-degreewise-criterion-implementation-refill51,
+      :coefficient-submodule-inf-quotient-diagonal-implementation-refill51,
       :kind :reusable-theorem,
       :depends-on
-      [:coefficient-subcomplex-relative-mayer-vietoris-epi-implementation-refill51],
+      [:coefficient-subcomplex-relative-mayer-vietoris-degreewise-criterion-implementation-refill51],
       :current-residual
-      "Prove the two concrete degreewise quotient-module facts: intersectionToPiecesRelative is injective and its range equals the kernel of piecesToUnionRelative. Apply shortComplex_shortExact_of_degreewise, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport the union quotient through relativeComparisonIso to the literal compact-complement pair.",
+      "Identify each degree component of the categorical cokernel arrow intersectionToPiecesRelative with infQuotientDiagonal and transfer injectivity. Prove that the range of this diagonal equals the kernel of the signed map to the union quotient, apply shortComplex_shortExact_of_degreewise, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport through relativeComparisonIso to the literal compact-complement pairs.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisEpi >/tmp/relative-mv-degreewise-dep.log 2>&1",
+       "lake build ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion >/tmp/relative-mv-diagonal-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean",
+       "lake env lean /tmp/CoefficientSubmoduleInfQuotientDiagonal.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisEpi.lean",
+       "sha256sum /tmp/CoefficientSubmoduleInfQuotientDiagonal.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-one-declaration audit over /tmp/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean",
+       "python3 comment-stripped placeholder-and-three-declaration audit over /tmp/CoefficientSubmoduleInfQuotientDiagonal.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean",
-       :exit 1,
-       :correction
-       "The first check found that the reviewed dependency object had not yet been built. Built ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisEpi before checking the fixture."}
-      {:cmd
-       "lake env lean /tmp/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean",
-       :exit 1,
-       :correction
-       "The initial proof used the wrong namespace for exact_of_degreewise_exact and expected the ShortComplex terminal epimorphism to unfold automatically. Qualified HomologicalComplex.exact_of_degreewise_exact and changed the terminal goal to the named piecesToUnionRelative map before instance synthesis."}],
      :changed-paths [],
      :fixture
-     {:path
-      "/tmp/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean",
+     {:path "/tmp/CoefficientSubmoduleInfQuotientDiagonal.lean",
       :sha256
-      "c8a8d3e72d5f69e3f699ac297511f454bf93512432cc40938a25df59c8e3a349",
+      "0b71128dd726c121283c76ee328ea80a5a8de65a3b3d8a64cf8760b91a83544b",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one short-exactness reduction prerequisite. The previously proved terminal epimorphism combines with degreewise injectivity of the first quotient arrow and degreewise function exactness at the middle object to yield ShortComplex.ShortExact. This isolates the remaining elementwise quotient-module calculation without asserting it, using supportConnecting, or invoking either false ordinary-excision premise.",
+     "Compiled exactly one algebraic injectivity prerequisite. For arbitrary submodules P and Q of an arbitrary module, the canonical diagonal map from M/(P inf Q) to M/P times M/Q is defined explicitly, its action on quotient representatives is recorded, and its kernel is proved trivial using ker_prod and ker_mkQ. This supplies the elementwise theorem underlying degreewise monicity of the first genuine relative Mayer-Vietoris arrow. No supportConnecting or ordinary-excision hypothesis is used.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -74827,7 +74842,8 @@
     :coefficient-subcomplex-relative-mayer-vietoris-arrows-implementation-refill51
     :coefficient-subcomplex-relative-mayer-vietoris-complex-implementation-refill51
     :coefficient-subcomplex-relative-mayer-vietoris-epi-implementation-refill51
-    :coefficient-subcomplex-relative-mayer-vietoris-degreewise-criterion-implementation-refill51],
+    :coefficient-subcomplex-relative-mayer-vietoris-degreewise-criterion-implementation-refill51
+    :coefficient-submodule-inf-quotient-diagonal-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
