@@ -11111,19 +11111,81 @@
    :stop-condition
    "Bank only the ordered-vertex cone and boundary identities. Do not claim affine realization, singular subdivision, homotopy to identity, small-chain comparison, excision or frozen closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientVertexCone.lean",
-      :sha256
-      "ad8c47fd37db295af2f29889168035d40eeffbb35e9bab0021cba09d1b404e9b"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientVertexCone.lean", :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Affine realization, recursive barycentric subdivision and the natural singular chain endomorphism remain in the parent probe. No singular subdivision, homotopy to identity, small-chain comparison, excision or frozen closure claimed.",
+    :gates
+    {:four-axiom-audits :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :integer-and-rational-examples :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 4,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 17 dependency warnings: SingularHomologyConcrete (1), SingularSubdivision (2), T02A06HemisphereCoordinates (6), T02A06HemisphereExcision (2), T02A06DiskRadialComparison (3), T02A06SphereShift (3). Fixture and canonical compilations were warning-free."],
+    :statement-hashes
+    {"vertexGenerator_boundary"
+     "5776589ae3981318c8386693f0958803223e59a5485e64a6405a9a712c2e52c7",
+     "vertexGenerator_vertexCone"
+     "564f2569787ecaa6fb24ffa159fe93f97935fe30431aac88482bd17a33b6d60e",
+     "vertexCone_boundary"
+     "7a088c15755931a8c3788a111ca40f8998435e99cb371d8c8a6c49f38fdd4512",
+     "vertexGenerator_cone_zero_boundary"
+     "01fb47483db1e0c56d27fbb0e8a4973271630c4cfef6248b3f77c3f24517071c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientVertexCone.lean", :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientVertexCone.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientVertexCone.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientVertexCone",
+      :exit 0}
+     {:cmd
+      "Python audit: exact promotion, fixture SHA256, four standard-only audits per compilation, both examples, warnings, placeholders and declaration hashes",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientVertexCone.lean /tmp/CoefficientVertexCone.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope verification and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct explicit-coefficient ordered-vertex cone identities\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope and clean checkout verification",
+      :exit 0}],
+    :repository-note
+    "Read DAG and closure experiments; this row has no dependencies. Only the authorized two files changed; ledger and frozen consumers untouched. Checkout clean.",
+    :diagnostic-history [],
+    :commit "9dffaa35d380c9cd92c7e75ae66b58ce9cc70f9f",
+    :changed-paths
+    ["ConstructionTargets/CoefficientVertexCone.lean"
+     "ConstructionTargets/CoefficientVertexCone.md"],
+    :fixture
+    {:path "/tmp/CoefficientVertexCone.lean",
+     :sha256
+     "ad8c47fd37db295af2f29889168035d40eeffbb35e9bab0021cba09d1b404e9b"},
+    :finding
+    "Exact fixture promoted, preserving coefficient-independent ordered-vertex geometry and direct ModuleCat R alternating-face proofs. The cone boundary identities, integer and rational examples, both compilations and the 8255-job build passed.",
+    :statement-hash-method
+    "SHA256 of declaration bytes beginning with theorem and ending immediately before the space preceding :=.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientVertexCone.lean"
     "ConstructionTargets/CoefficientVertexCone.md"],
