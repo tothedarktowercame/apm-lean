@@ -36064,8 +36064,100 @@
   {:consumer :t03J05,
    :stop-condition
    "Bank only the exact horizontal-or-vertical unit-step classification for consecutive vertices of canonical maximal product-simplex paths and its correspondence with IsHorizontal. Do not construct adjacent paths, pair faces, prove sign changes or cancellation, define chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the corner-swap adjacent path from the unit-step word, prove that it is involutive and preserves the deleted affine face, and prove its shuffle sign is opposite.",
+    :gates
+    {:canonical-compile :pass,
+     :natural-number-unit-increments :pass,
+     :whitespace :pass,
+     :fixture-hash :pass,
+     :axiom-audits 2,
+     :exact-scope :pass,
+     :placeholder-scan :pass,
+     :coordinatewise-monotonicity :pass,
+     :lake-build :pass,
+     :horizontal-predicate-equivalence :pass,
+     :coordinate-sum-at-both-vertices :pass,
+     :target-warning-scan :pass,
+     :commit-check :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :ledger-validation :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"horizontal_or_vertical_unit_step"
+     "af398c375f9bd80f93434623a0ab8396222006cb0f090417736999ad194be5ae",
+     "isHorizontal_iff_first_coordinate_succ"
+     "c9f4b4307947cd998dc0a8c33874a927eca01b4930fa8bbabd2dcfa38c327bec"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the dependency receipts",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint58-unit-steps/ProductSimplexUnitSteps.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint58-unit-steps/ProductSimplexUnitSteps.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexUnitSteps.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ProductSimplexUnitSteps",
+      :exit 0}
+     {:cmd
+      "Import the canonical target and reproduce standard-only axiom audits for horizontal_or_vertical_unit_step and isHorizontal_iff_first_coordinate_succ",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ProductSimplexUnitSteps.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace, fixture-hash, natural-coordinate theorem-shape and declaration-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; verify exact two-file scope; git diff --cached --check; git commit -m 'Classify maximal product simplex steps'",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat HEAD; recompute canonical source, documentation, commit and Git blob hashes; git status --short",
+      :exit 0}],
+    :canonical
+    {:path "ConstructionTargets/ProductSimplexUnitSteps.lean",
+     :sha256
+     "aaf9822a5fceb4e6291b7fee56d25972cefcae456c27cc190017403eb269d391",
+     :git-blob "69c82458d7cf8d8c73dbb2214109f5d55cff8dc4"},
+    :commit "18d326ebdbec53b42f7d1d383898117160ca5df5",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexUnitSteps.lean"
+     "ConstructionTargets/ProductSimplexUnitSteps.md"],
+    :dependency-warnings
+    [{:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 2960,
+      :kind :unused-tactic}
+     {:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 3580,
+      :kind :unnecessary-simpa}],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint58-unit-steps/ProductSimplexUnitSteps.lean",
+     :sha256
+     "ceb8964ed10aebe265252e9dd721f63c0387347d9fce018aa5689bb57594ed84",
+     :placeholder-count 0},
+    :finding
+    "Every consecutive edge of a canonical maximal product-simplex path is now classified as exactly one natural-number unit step: either the first coordinate increases by one and the second is fixed, or the second increases by one and the first is fixed. The proof uses coordinatewise monotonicity and maximalPath_coordinate_sum at both consecutive vertices. The second theorem identifies ProductSimplexShuffleParity.IsHorizontal exactly with the first-coordinate increment. No modular Fin addition, adjacent-path construction, face cancellation, sign change, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure result is introduced.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexUnitSteps.lean"
     "ConstructionTargets/ProductSimplexUnitSteps.md"],
