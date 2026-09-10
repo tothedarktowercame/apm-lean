@@ -46129,8 +46129,92 @@
   {:consumer :t03J05,
    :stop-condition
    "Promote only the previously tested evidence-shape-aware atomic fixture-transition validator and its focused tests. Retain checkpoint60 and supporting-path transition behavior, preserve every rejection and atomic-write invariant, and add exactly checkpoint67's reviewed-source evidence schema. Do not alter topology sources, apply checkpoint67's transition in this row, promote terminal counts or claim consumer closure.",
+   :evidence
+   {:residual
+    "Apply checkpoint67's primary fixture transition to its banked immutable artifact, then promote the terminal-count equations.",
+    :gates
+    {:focused-suite :pass,
+     :extra-label-rejection :pass,
+     :pre-atomic-write-whole-ledger-validation :pass,
+     :checkpoint60-transition-retained :pass,
+     :concrete-transition-tests :pass,
+     :wrong-path-rejection :pass,
+     :whitespace :pass,
+     :checkpoint66-supporting-transition-retained :pass,
+     :mismatched-value-rejection :pass,
+     :check-parens :pass,
+     :omitted-label-rejection :pass,
+     :pre-insertion-application :pass,
+     :commit :pass,
+     :checkpoint67-complete-schema :pass,
+     :unknown-schema-rejection :pass,
+     :checkpoint66-both-immutable-paths-before-edit :pass,
+     :both-ledgers :pass,
+     :clj-kondo :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms [],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "Inspect checkpoint66 live evidence fixture and verify both immutable artifact paths before editing",
+      :exit 0}
+     {:cmd
+      "clj-kondo --lint holes/labs/topology-contract/build_step.bb holes/labs/topology-contract/test_gate_receipts.bb",
+      :exit 0}
+     {:cmd
+      "emacs --batch -Q -l /home/joe/code/futon4/dev/check-parens.el -- holes/labs/topology-contract/build_step.bb holes/labs/topology-contract/test_gate_receipts.bb",
+      :exit 0}
+     {:cmd "bb holes/labs/topology-contract/test_gate_receipts.bb",
+      :exit 0}
+     {:cmd
+      "rg -n 'apply-completion-transition|validate-worklist!|atomic|spit|Files/move' holes/labs/topology-contract/build_step.bb",
+      :exit 0}
+     {:cmd "Python whitespace audit over both scoped files", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check; git diff --name-only", :exit 0}
+     {:cmd
+      "git commit -m 'Validate fixture transitions by evidence schema'",
+      :exit 0}
+     {:cmd
+      "git show --check --stat --oneline HEAD; git status --short",
+      :exit 0}
+     {:cmd
+      "sha256sum holes/labs/topology-contract/build_step.bb holes/labs/topology-contract/test_gate_receipts.bb",
+      :exit 0}],
+    :representation
+    {:source
+     "Completed rows with checkpoint60, checkpoint66-supporting or checkpoint67 evidence shapes and immutable artifact targets",
+     :target
+     "A typed atomic transition validated against the complete allowlisted evidence schema for the selected row",
+     :direction
+     "Exact state transition from each supported source evidence representation to its immutable-artifact target representation, changing only the selected allowlisted fixture path after exhaustive field and hash validation."},
+    :commit "1808d9fa32e546b11a86fdca1e5fcdf373134071",
+    :changed-paths
+    ["holes/labs/topology-contract/build_step.bb"
+     "holes/labs/topology-contract/test_gate_receipts.bb"],
+    :fixture
+    {:path "holes/labs/topology-contract/build_step.bb",
+     :sha256
+     "fbbab1f3167774d19d9ebd9204ca0bba5d9e9cbd5121f958d622cd2ab3cdef14",
+     :supporting-path
+     "holes/labs/topology-contract/test_gate_receipts.bb",
+     :supporting-sha256
+     "d0d4f8939d58e39346a7487711bc1a427cac0533890b4f8c72b1925fbd2ff0c2",
+     :assertions 85,
+     :failures 0,
+     :errors 0},
+    :finding
+    "The validator now selects an explicit allowlisted evidence schema while retaining default checkpoint60 primary and checkpoint66 supporting-path behavior. The checkpoint67 primary schema requires exact fixture SHA256, reviewed source and hash, predecessor path and hash, placeholder count, implementation commit, PASS review, declarations and statement hashes. Schema and request paths must agree, and preserve label sets must match exactly before every value is compared at its fixed ledger path. The 85-assertion suite covers all three concrete transition shapes plus unknown schemas, omitted and extra labels, mismatched values, wrong paths, rows, states, sources, targets and hashes. Transition application remains before replacement insertion, and whole-ledger validation remains before atomic move. No topology source or consumer file changed.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["holes/labs/topology-contract/build_step.bb"
     "holes/labs/topology-contract/test_gate_receipts.bb"],
