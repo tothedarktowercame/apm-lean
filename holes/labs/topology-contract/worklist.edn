@@ -71508,8 +71508,49 @@
   {:consumer "t00A03",
    :stop-condition
    "Require a relative finite-family Sard or transversality theorem that combines interior parameter surjectivity with separate finite endpoint coincidences, then prove compatibility through chart-transition maps.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use interior parameter surjectivity to establish regular values for each pairwise coincidence map while treating boundary parameter pairs separately. Small-parameter embedding stability and cross-chart transition compatibility remain.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:endpointWeight_pos
+     "4774e26827cd7416b8f2e73844e0a5066d35a924582746b97cc59fb0613c5092",
+     :endpointWeight_ne_zero
+     "b8903a500af43491d95ae2e79ff1c4ca425ae986d4e95edeb90d4848881b3471",
+     :weight_smul_surjective
+     "b2c985dc02761561a6ff824eccffe2d1c726c59b9b110182ffea8607f790c909",
+     :perturb_parameter_surjective
+     "26f2025cb4e735bb59a4e88286e88efebbf497e1bbb6f73ee21ee3be58e4301f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean /tmp/PlaneArcEndpointPerturbationInteriorParameter.lean ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-four-declaration audit over ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "31f8d2835254c55af15e135c2c07c8c7001a337e",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointPerturbationInteriorParameter.lean",
+     :sha256
+     "5220ea4ac53c6345fb6b467c7ba59e452385d5a42c0f2889bfe890cdc91b0fc7",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. At every interior unit-interval parameter the endpoint weight is positive and nonzero, scalar multiplication by it is surjective on the plane, and the perturbation displacement map is therefore surjective. The module compiles without warnings or placeholders, its dependency hash matches, and the commit changes exactly the scoped path. Two unrelated concurrently-created untracked ProductSimplex files remain untouched."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"],
    :dag-node
