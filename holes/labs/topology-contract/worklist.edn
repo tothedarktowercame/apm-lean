@@ -66865,8 +66865,133 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :evidence
+   {:baseline "fb6f9b9af1854e46fa6efa1eb305b3f30be955be",
+    :placeholder-delta 0,
+    :outcome :replan,
+    :disposition :replan,
+    :pin "14c0c663a8698df4745e2229e0a49411c0e84006",
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill49-measure.py", :exit 0}
+     {:cmd "python3 /tmp/topology-refill49-evidence.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill49-reviews.bb", :exit 0}
+     {:cmd "python3 /tmp/topology-refill49-tail.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill49-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill49-proposed-worklist.edn",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :infrastructure-packets
+    {:portfolio 4, :concurrent 3, :duplicates-found 0},
+    :replacement-items
+    [{:consumer "t98A01",
+      :stop-condition
+      "GO requires complete frozen closure; otherwise name the exact remaining deck, genus-invariance or Euler comparison boundary. Infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "COVERING CLASSIFICATION / frozen fivefold surface cover",
+      :acceptance
+      {:axioms :standard-only,
+       :frozen-file "problems/t98A01/lean/Main.lean",
+       :frozen-sha256
+       "a607069bdb7416a01a1e6846cb6dd8e3e8bf87b0f2b122ef4c1fb828d5167f25",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :probe
+       "Compile complete frozen Main retaining the actual fivefold torus map, regular deck action, universal polygon-surface cover assertion and all connected-sum conjuncts. Audit banked product coverings, AddCircle kernel cardinality and deck translations. Derive the actual five-element fibers and regularity; audit genus invariance and Euler multiplicativity for the literal polygon quotients without assuming either. Preserve genus-zero representation boundaries. Partial torus-cover uptake is not complete closure."},
+      :id :t98a01-frozen-fivefold-cover-closure-probe-refill49,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
+      :current-residual
+      "One placeholder contains both concrete regular-cover construction and universal genus/Euler comparison; product coverings are now banked.",
+      :other-consumers []}
+     {:consumer "t98A02",
+      :stop-condition
+      "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Audit concurrent coefficient and localization work first. For compact K and L in a Hausdorff space, construct the actual coefficient relative Mayer-Vietoris sequence for the open complements. Prove exactness of H_(n+1)(X,X minus (K intersection L)) to H_n(X,X minus (K union L)) to H_n(X,X minus K) direct-sum H_n(X,X minus L), with the actual restriction maps and signs, for arbitrary natural n and commutative-ring coefficients. Reuse coefficient excision and pair naturality; no assumed exact sequence, dimension vanishing, localization monicity or fundamental class. One compiled chain-level prerequisite is an admissible revision."},
+      :id :coefficient-compact-support-mayer-vietoris-probe-refill49,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
+      :current-residual
+      "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
+      :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+     {:consumer "t99J03",
+      :stop-condition
+      "GO requires constructed uniform margin, translated embeddings, containment and pairwise finiteness; REVISE requires one compiled geometric prerequisite.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE TRIANGULATION / translated embedded arcs inside chart targets",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For finitely many genuinely smooth plane curves with open interval-neighborhood extensions, whose closed-interval restrictions are embeddings with images in specified open plane sets, construct arbitrarily small individual translations retaining embeddings and containment in their respective open sets and giving finite parameter coincidences for every distinct pair. Derive one positive uniform translation margin from compact interval images and openness, rather than supplying a margin. Reuse PlaneArcFiniteSmallTranslations and prove translation embedding transport. Include empty and singleton families and endpoints. This common-plane theorem must not infer finite intersections after unrelated chart changes, preserve shared endpoints, or assert triangle coverage or triangulation."},
+      :id
+      :finite-translated-embedded-arcs-chart-containment-probe-refill49,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
+      :current-residual
+      "Simultaneous plane translations are reviewed; containment in prescribed neighborhoods and relative endpoint control remain separate.",
+      :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped complete-DAG consumers and distinguish closures, typed uptake, concurrent work and duplicates. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve t00A01 and repaired t94J08/t96J07 closures; ordinary/reduced S0 and integral dimension-one boundaries; all-degree local comparisons versus m+2 normalization; conditional polygon witnesses and genus-zero representation; null-winding non-refutation; Hausdorff normalization; t96J05 defect; t01J04/t94A06 applicability; resolved regularity conversion versus general-model Sard; transfer versus Euler multiplicativity; common-plane translations versus relative chartwise endpoint control. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t98a01-frozen-fivefold-cover-closure-probe-refill49
+       :coefficient-compact-support-mayer-vietoris-probe-refill49
+       :finite-translated-embedded-arcs-chart-containment-probe-refill49],
+      :current-residual
+      "Await three independently reviewed outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    "Pinned census: 59 DAG consumers named, 58 present, t93A05 missing; 25 closed, 33 open, 23 within two placeholders, 62 placeholders total. No consumer files changed; campaign and concurrent closure counts are zero for this interval. Construction modules increased 754→761: four portfolio modules and three concurrent graph-measure modules, with no duplicated functionality found. The three dependency reviews pass: two completed constructions and one local STOP. Actual transition-unit local constancy and simultaneous finite-family plane translations are now proved; arbitrary embedded-circle gluing still lacks its geometric comparison. Elect one frozen fivefold-cover adapter first, then compact-support coefficient exactness for six named consumers and contained translated arcs for five. Concurrent graph-area work is not duplicated.",
+    :review-outcomes {:pass 3, :fail 0, :implemented 2, :local-stop 1},
+    :artifacts
+    {:measure
+     {:path "/tmp/topology-refill49-measure.json",
+      :sha256
+      "42a65b871d613e7f20ef45e8d5ab9b91c77a2c965c7c04c5a53d5f9db2dadeec"},
+     :tail
+     {:path "/tmp/topology-refill49-tail.edn",
+      :sha256
+      "8fa53ee5388d2059a75a6e7fc2ce5bb9363c2419a0beebb55a3eef64118c57b7"}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -66880,6 +67005,99 @@
     :coefficient-chart-transition-unit-local-constancy-probe-refill48
     :finite-plane-arc-family-small-translations-probe-refill48
     :checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
+   :current-residual
+   "Await three independently reviewed outcomes, then rerank the complete DAG."}
+  {:consumer "t98A01",
+   :stop-condition
+   "GO requires complete frozen closure; otherwise name the exact remaining deck, genus-invariance or Euler comparison boundary. Infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "COVERING CLASSIFICATION / frozen fivefold surface cover",
+   :acceptance
+   {:axioms :standard-only,
+    :frozen-file "problems/t98A01/lean/Main.lean",
+    :frozen-sha256
+    "a607069bdb7416a01a1e6846cb6dd8e3e8bf87b0f2b122ef4c1fb828d5167f25",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :probe
+    "Compile complete frozen Main retaining the actual fivefold torus map, regular deck action, universal polygon-surface cover assertion and all connected-sum conjuncts. Audit banked product coverings, AddCircle kernel cardinality and deck translations. Derive the actual five-element fibers and regularity; audit genus invariance and Euler multiplicativity for the literal polygon quotients without assuming either. Preserve genus-zero representation boundaries. Partial torus-cover uptake is not complete closure."},
+   :id :t98a01-frozen-fivefold-cover-closure-probe-refill49,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families
+    :checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
+   :current-residual
+   "One placeholder contains both concrete regular-cover construction and universal genus/Euler comparison; product coverings are now banked.",
+   :other-consumers []}
+  {:consumer "t98A02",
+   :stop-condition
+   "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Audit concurrent coefficient and localization work first. For compact K and L in a Hausdorff space, construct the actual coefficient relative Mayer-Vietoris sequence for the open complements. Prove exactness of H_(n+1)(X,X minus (K intersection L)) to H_n(X,X minus (K union L)) to H_n(X,X minus K) direct-sum H_n(X,X minus L), with the actual restriction maps and signs, for arbitrary natural n and commutative-ring coefficients. Reuse coefficient excision and pair naturality; no assumed exact sequence, dimension vanishing, localization monicity or fundamental class. One compiled chain-level prerequisite is an admissible revision."},
+   :id :coefficient-compact-support-mayer-vietoris-probe-refill49,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families
+    :checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
+   :current-residual
+   "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t99J03",
+   :stop-condition
+   "GO requires constructed uniform margin, translated embeddings, containment and pairwise finiteness; REVISE requires one compiled geometric prerequisite.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SURFACE TRIANGULATION / translated embedded arcs inside chart targets",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For finitely many genuinely smooth plane curves with open interval-neighborhood extensions, whose closed-interval restrictions are embeddings with images in specified open plane sets, construct arbitrarily small individual translations retaining embeddings and containment in their respective open sets and giving finite parameter coincidences for every distinct pair. Derive one positive uniform translation margin from compact interval images and openness, rather than supplying a margin. Reuse PlaneArcFiniteSmallTranslations and prove translation embedding transport. Include empty and singleton families and endpoints. This common-plane theorem must not infer finite intersections after unrelated chart changes, preserve shared endpoints, or assert triangle coverage or triangulation."},
+   :id
+   :finite-translated-embedded-arcs-chart-containment-probe-refill49,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families
+    :checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
+   :current-residual
+   "Simultaneous plane translations are reviewed; containment in prescribed neighborhoods and relative endpoint control remain separate.",
+   :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped complete-DAG consumers and distinguish closures, typed uptake, concurrent work and duplicates. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve t00A01 and repaired t94J08/t96J07 closures; ordinary/reduced S0 and integral dimension-one boundaries; all-degree local comparisons versus m+2 normalization; conditional polygon witnesses and genus-zero representation; null-winding non-refutation; Hausdorff normalization; t96J05 defect; t01J04/t94A06 applicability; resolved regularity conversion versus general-model Sard; transfer versus Euler multiplicativity; common-plane translations versus relative chartwise endpoint control. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t98a01-frozen-fivefold-cover-closure-probe-refill49
+    :coefficient-compact-support-mayer-vietoris-probe-refill49
+    :finite-translated-embedded-arcs-chart-containment-probe-refill49
+    :checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
    :current-residual
    "Await three independently reviewed outcomes, then rerank the complete DAG."}],
  :consumer-baselines
