@@ -74906,8 +74906,62 @@
   {:consumer "t98A02",
    :stop-condition
    "Require specialization of this degreewise cokernel isomorphism to the intersection, left, right and union ambient inclusions, identification of their range submodules with the corresponding infimum and supremum, and compatibility of both genuine quotient arrows with the explicit module maps.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Specialize cokernelDegreeQuotientIso to the four ambient subcomplex-chain inclusions. Prove that their component ranges realize the intersection and supremum of the left and right ranges, and that the conjugated genuine arrows are infQuotientDiagonal and piecesToSupQuotient. Transfer injectivity and middle exactness, apply shortComplex_shortExact_of_degreewise, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport through relativeComparisonIso to the literal compact-complement pairs.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:cokernelDegreeQuotientIso
+     "5fdd3decf05f75cc9226410286ab36190077eee46d80d53ea655c7c36245df8c",
+     :cokernelDegreeQuotientIso_projection
+     "52aed135f81606e200a1313384cec76dc9e929e03006f7b43452dd869195e966"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientChainCokernelDegreeQuotient.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientChainCokernelDegreeQuotient.lean ConstructionTargets/CoefficientChainCokernelDegreeQuotient.lean ConstructionTargets/CoefficientSubmoduleRelativeMayerVietorisExact.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder-and-two-declaration audit over ConstructionTargets/CoefficientChainCokernelDegreeQuotient.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 3b3f14059b7f7b3ba7525b31ab120f34f1bb5faf",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 3b3f14059b7f7b3ba7525b31ab120f34f1bb5faf",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientChainCokernelDegreeQuotient.lean",
+      :exit 1,
+      :correction
+      "The initial promotion transcribed the categorical isomorphism-composition operator as ≪≅≫ rather than the fixture's ≪≫. Corrected the operator, restored exact fixture byte identity, and reran the compile successfully."}],
+    :representation
+    {:source
+     "A fixed degree of the categorical cokernel of a chain-complex morphism in ModuleCat over the coefficient ring",
+     :target
+     "The ordinary module quotient of the target degree module by the linear range of the corresponding component morphism",
+     :direction
+     "Canonical linear isomorphism from the source categorical chain-cokernel degree representation to the target range-quotient representation, with exact equality from the evaluated categorical cokernel projection to the ordinary quotient map after the isomorphism."},
+    :commit "3b3f14059b7f7b3ba7525b31ab120f34f1bb5faf",
+    :changed-paths
+    ["ConstructionTargets/CoefficientChainCokernelDegreeQuotient.lean"],
+    :fixture
+    {:path "/tmp/CoefficientChainCokernelDegreeQuotient.lean",
+     :sha256
+     "b1cc05c7878ba6eca524bafd8cc6e046c8c560e05221b0f6efaaaf25e9968d5d",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and reviewed explicit module-exactness dependency hashes reproduce. The canonical degreewise cokernel-to-range-quotient isomorphism and projection compatibility theorem compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientChainCokernelDegreeQuotient.lean"],
    :dag-node
