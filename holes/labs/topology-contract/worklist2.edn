@@ -31121,9 +31121,154 @@
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
-   "Do not identify raw hausdorffMeasure with volume at coefficient one, use μHE in place of the raw measure, cancel ENNReal scalars through zero or infinity, assume unit-ball volumes, sphere mass, cap assembly, equator nullity, polar-coordinate formulas or moment values. Prove only the dimension-two and dimension-three constants required by the named consumers, in a unique row-specific scratch directory.",
-   :phase :probe,
+   "Bank only the four exact open-unit-ball volume formulas. Do not claim an addHaarScalarFactor value, raw Hausdorff-to-volume equality, set-integral transport, sphere mass, cap assembly, equator nullity, polar-coordinate formula, moment value or consumer closure.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean"
+    "ConstructionTargets/EuclideanAndSupUnitBallVolumes.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: Euclidean L2 and finite-function sup unit-ball volumes in dimensions two and three",
+   :acceptance
+   {:namespace "ConstructionTargets.EuclideanAndSupUnitBallVolumes",
+    :implementation
+    "Promote the exact compiled fixture and document that the addHaarScalarFactor characterization remains the next normalization step.",
+    :hypotheses
+    "Use canonical volume on EuclideanSpace real (Fin 2), EuclideanSpace real (Fin 3), Fin 2 → real and Fin 3 → real with their actual repository metrics. No normalization or finiteness hypothesis is supplied.",
+    :declarations
+    ["E2"
+     "E3"
+     "euclidean_two"
+     "euclidean_three"
+     "sup_two"
+     "sup_three"],
+    :consumer-equation
+    "The L2 Euclidean unit-ball volumes are π in dimension two and 4π/3 in dimension three, while the finite-function sup-metric unit-ball volumes are 4 and 8.",
+    :consumer-residual
+    "Use these exact values to prove the addHaarScalarFactor ratios π/4 and π/6, then derive the corrected raw Hausdorff measure and restricted-lintegral formulas.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.EuclideanAndSupUnitBallVolumes."
+     "Reproduce four standard-only axiom audits."
+     "Verify the Euclidean formulas use the actual L2 ball-volume theorems."
+     "Verify the finite-function formulas use the actual sup-metric volume_pi_ball theorem."
+     "Confirm the four values are π, 4π/3, 4 and 8 with no assumed normalization."
+     "Confirm no addHaarScalarFactor, raw-measure transport, sphere, equator or moment theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :euclidean-and-sup-unit-ball-volumes-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2],
+   :current-residual
+   "The corrected raw Hausdorff normalization needs exact numerator and denominator unit-ball volumes before the missing Haar-scalar characterization can yield π/4 and π/6.",
+   :other-consumers [:t02A05 :t01J06 :t94A10]}
+  {:consumer :t95J05,
+   :stop-condition
+   "Do not identify raw hausdorffMeasure with volume at coefficient one, use μHE in place of the raw measure, cancel ENNReal scalars through zero or infinity, assume unit-ball volumes, sphere mass, cap assembly, equator nullity, polar-coordinate formulas or moment values. Prove only the dimension-two and dimension-three constants required by the named consumers, in a unique row-specific scratch directory.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Prove the characterization of addHaarScalarFactor for volume and raw Hausdorff measure using the compiled unit-ball values, then derive μH[2] = (4/π) • volume and μH[3] = (6/π) • volume and the required set-measure and restricted-lintegral rewrites.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t95J05,
+      :stop-condition
+      "Bank only the four exact open-unit-ball volume formulas. Do not claim an addHaarScalarFactor value, raw Hausdorff-to-volume equality, set-integral transport, sphere mass, cap assembly, equator nullity, polar-coordinate formula, moment value or consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean"
+       "ConstructionTargets/EuclideanAndSupUnitBallVolumes.md"],
+      :dag-node
+      "MANIFOLD INTEGRATION: Euclidean L2 and finite-function sup unit-ball volumes in dimensions two and three",
+      :acceptance
+      {:namespace "ConstructionTargets.EuclideanAndSupUnitBallVolumes",
+       :implementation
+       "Promote the exact compiled fixture and document that the addHaarScalarFactor characterization remains the next normalization step.",
+       :hypotheses
+       "Use canonical volume on EuclideanSpace real (Fin 2), EuclideanSpace real (Fin 3), Fin 2 → real and Fin 3 → real with their actual repository metrics. No normalization or finiteness hypothesis is supplied.",
+       :declarations
+       ["E2"
+        "E3"
+        "euclidean_two"
+        "euclidean_three"
+        "sup_two"
+        "sup_three"],
+       :consumer-equation
+       "The L2 Euclidean unit-ball volumes are π in dimension two and 4π/3 in dimension three, while the finite-function sup-metric unit-ball volumes are 4 and 8.",
+       :consumer-residual
+       "Use these exact values to prove the addHaarScalarFactor ratios π/4 and π/6, then derive the corrected raw Hausdorff measure and restricted-lintegral formulas.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.EuclideanAndSupUnitBallVolumes."
+        "Reproduce four standard-only axiom audits."
+        "Verify the Euclidean formulas use the actual L2 ball-volume theorems."
+        "Verify the finite-function formulas use the actual sup-metric volume_pi_ball theorem."
+        "Confirm the four values are π, 4π/3, 4 and 8 with no assumed normalization."
+        "Confirm no addHaarScalarFactor, raw-measure transport, sphere, equator or moment theorem is claimed."
+        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+      :id :euclidean-and-sup-unit-ball-volumes-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2],
+      :current-residual
+      "The corrected raw Hausdorff normalization needs exact numerator and denominator unit-ball volumes before the missing Haar-scalar characterization can yield π/4 and π/6.",
+      :other-consumers [:t02A05 :t01J06 :t94A10]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
+       :exit 0}
+      {:cmd
+       "Inspect Euclidean and product-space ball-volume APIs and addHaarScalarFactor characterization",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "Python comment-stripped placeholder, forbidden-declaration, whitespace and four standard-only axiom audits",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial unit-ball volume fixture compilation",
+       :exit 1,
+       :correction
+       "Qualified the dimension-two and dimension-three Euclidean ball lemmas with the EuclideanSpace namespace and replaced an unavailable qualified real-ball theorem with the finite-product volume_pi_ball theorem."}
+      {:cmd "Compilation after namespace corrections",
+       :exit 1,
+       :correction
+       "The simpa form simplified the supplied theorem before matching the numeric goal. Replaced it with an explicit rewrite by volume_pi_ball followed by numeric normalization; the corrected fixture compiles."}],
+     :changed-paths [],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean",
+      :sha256
+      "074b1ffd78e0d973b9ee76be14599993fa0e96512eb37cbb785d0bd67bd7a45f",
+      :placeholder-count 0},
+     :finding
+     "Exactly one complete compiled prerequisite is supplied. For the actual L2 metrics, the open unit-ball volumes in EuclideanSpace real (Fin 2) and EuclideanSpace real (Fin 3) are ENNReal.ofReal π and ENNReal.ofReal (π * 4 / 3). For the corresponding finite real function spaces with their sup metrics, the open unit-ball volumes are 4 and 8. These are precisely the numerator and denominator values required for the intended π/4 and π/6 addHaarScalarFactor calculations. The parent normalization probe is not GO because Mathlib's theorem identifying addHaarScalarFactor with this ratio remains proof_wanted; raw Hausdorff measure equalities and their set-integral transports cannot yet be derived without proving that characterization. No canonical source or ledger was edited.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: corrected raw Euclidean Hausdorff normalization in dimensions two and three",
@@ -31152,7 +31297,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2
-    :oriented-checkpoint49-euclidean-normalization-and-consumer-refill-repair1],
+    :oriented-checkpoint49-euclidean-normalization-and-consumer-refill-repair1
+    :euclidean-and-sup-unit-ball-volumes-1],
    :current-residual
    "The reviewed coefficient-one normalization probe is refuted: raw μH differs from volume by nontrivial factors. The four sphere-integration routes require formal proofs of the actual dimension-two and dimension-three factors before numerical cap integration.",
    :other-consumers [:t02A05 :t01J06 :t94A10]}
