@@ -62311,79 +62311,104 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Prove the actual normalized inclusion derivative range equals the tangent pairs with equal f and g derivatives. Empty incidence and zero-dimensional kernels remain included. Component coverage, orientations, homological comparisons and consumer closure remain subsequent.",
-     :outcome :revise,
+     "The requested normalized-atlas tangent packet is complete. Component coverage, orientations, homological comparisons and consumer closure remain subsequent.",
+     :dependency-review
+     {:outcome :pass,
+      :seat "codex-10",
+      :job "invoke-1789023481744-18088-5c48a3ed"},
+     :outcome :go,
      :warnings [],
      :statement-hashes
-     {:backward-injective
-      "b919a31b86ca2f70f2ef70153a29385596ecc62f1f1b3067b2cd51390db41bd6",
-      :derivative-equality
-      "a34083183369e31553cbe65fc4bda4e625ec84d2925c5ca09ffc7588bc8a535f",
-      :inclusion-injective
-      "8c0a10e90f28a23f93215b9d3ff85e54ed645ee852e2913216f416082f4cf693",
-      :normalized-injective
-      "8643fb0d1535de52181abbc9576b8a63ac7050a479f94160ceb2f3a82df5a817"},
-     :prerequisite
-     {:consumer "t00J02",
-      :stop-condition
-      "Require actual derivative identification and normalized-atlas injectivity; no supplied immersion or alternative atlas.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/ManifoldTargetIncidenceImmersion.lean"],
-      :dag-node "TRANSVERSE-PULLBACK / normalized incidence immersion",
-      :acceptance
-      {:fixture "/tmp/ManifoldTargetIncidenceImmersion.lean",
-       :fixture-sha256
-       "f3e5731b97600922ab8e6a49afba78a2aea5b9807500585772b4beed171dff5d",
-       :implementation
-       "Promote the exact fixture. Compile backward_injective, derivative_eq, inclusion_injective, Immersion and normalized_injective. Preserve exactly the banked chosen and normalized atlases, actual mfderivs, inherited topology, original product norm and normalized dimension. Retain the weaker hypotheses of backward_injective. Audit zero placeholders and standard-only axioms. Do not claim equalizer range or consumer closure.",
-       :commands
-       ["lake env lean ConstructionTargets/ManifoldTargetIncidenceImmersion.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :id :manifold-target-incidence-immersion-implementation-refill42,
-      :kind :reusable-theorem,
-      :depends-on
-      [:manifold-target-incidence-global-atlas-probe-refill41
-       :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
-      :current-residual
-      "Same-atlas derivative injectivity is compiled. Equalizer containment and dimension comparison for exact range equality remain.",
-      :other-consumers ["t02A07" "t94A06" "t97J05"]},
+     {:inclusionLinear
+      "4861ed275f0348ec48d353904967e3fba2ed93d05b958649779ce65c8d17f06e",
+      :differenceLinear
+      "9207cf015e7bf58f39da5bccbe1708cfb3cd106c44c3db888f4219b6027697ed",
+      :range_le
+      "60de8274102f388eccb023dd3c86ade1338bc94e615578cbe32bff92f2205845",
+      :difference_surjective
+      "a230231ccdd3b90f6c3558070e193a6a9c9867400ce023168b6ccf286a91f679",
+      :inclusion_range
+      "8faeed80626d21c0cf81278838acc2863b8a2a2cc0347ee11935c00ebbb5a7eb",
+      :tangent_equalizer
+      "e905d1be35ba19a6ee90f30a2bce3ca59997174d6522149b7fa063bd94b57818"},
+     :acceptance
+     {:implementation
+      "Promote the exact fixture. Compile inclusionLinear, differenceLinear, range_le, difference_surjective, inclusion_range and tangent_equalizer. Preserve exactly normalizedAtlas, actual mfderivs, original topology and product norm, normalized dimension and derived rank equality. Retain the weaker auxiliary surjectivity hypotheses. Audit zero placeholders and standard-only axioms.",
+      :commands
+      ["lake env lean ConstructionTargets/ManifoldTargetIncidenceTangent.lean"],
+      :axioms :standard-only,
+      :placeholder-before 0,
+      :placeholder-after 0},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.olean ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/ManifoldTargetIncidenceImmersion.olean ConstructionTargets/ManifoldTargetIncidenceImmersion.lean'",
        :exit 0}
       {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceImmersion.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceTangent.lean'",
        :exit 0}
-      {:cmd "python3 /tmp/manifold-incidence-immersion-audit.py",
+      {:cmd "python3 /tmp/manifold-target-incidence-tangent-audit.py",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/ManifoldTargetIncidenceImmersion.lean",
+     [{:cmd "lake env lean /tmp/ManifoldTargetIncidenceTangent.lean",
        :exit 1,
        :correction
-       "Compiled the missing banked global-atlas object into the private temporary directory."}
+       "Compiled the missing banked immersion object privately."}
+      {:cmd "Private-path tangent compilation, difference definition",
+       :exit 1,
+       :correction
+       "Annotated derivative maps with their common vector-space target."}
+      {:cmd "Private-path tangent compilation, containment",
+       :exit 1,
+       :correction
+       "Explicitly unfolded kernel membership and difference-map evaluation."}
+      {:cmd "Private-path tangent compilation, range equality",
+       :exit 1,
+       :correction
+       "Included transversality and installed the product tangent finite-dimensional instance."}
       {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceImmersion.lean'",
+       "Private-path tangent compilation, surjectivity simplification",
+       :exit 1,
+       :correction
+       "Replaced insufficient simplification of negation with an explicit calculation."}
+      {:cmd "Private-path tangent compilation, derivative subtraction",
+       :exit 1,
+       :correction
+       "Introduced explicitly typed continuous linear maps into F."}
+      {:cmd
+       "Private-path tangent compilation, generic negation rewrite",
+       :exit 1,
+       :correction
+       "Annotated the tangent input with its vector-space model."}
+      {:cmd
+       "Private-path tangent compilation, annotated negation rewrite",
+       :exit 1,
+       :correction "Supplied the map and input explicitly to map_neg."}
+      {:cmd
+       "Private-path tangent compilation, explicit map_neg rewrite",
+       :exit 1,
+       :correction
+       "Used congrArg and a typed calculation to handle definitionally equal tangent representations."}
+      {:cmd "Private-path tangent compilation, complete theorem",
        :exit 0,
        :correction
-       "Initial compilation reported unused assumptions in backward_injective. Explicitly omitted them; final compilation is warning-free."}],
+       "Removed unused section assumptions from difference_surjective; final compilation is warning-free."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/ManifoldTargetIncidenceImmersion.lean",
+     {:path "/tmp/ManifoldTargetIncidenceTangent.lean",
       :sha256
-      "f3e5731b97600922ab8e6a49afba78a2aea5b9807500585772b4beed171dff5d",
+      "9277d1a8a855482a51fd24fe1dcada62ab97fe94c7e5c6d5f2421be97bf2a244",
       :placeholder-count 0},
      :finding
-     "Compiled one same-atlas immersion prerequisite. The local forward/backward inverse identity proves backward derivative injectivity. The actual inclusion mfderiv equals the chosen backward parameterization's derivative. Dimension transport proves actual inclusion derivative injectivity for exactly normalizedAtlas. The tangent equalizer range remains uncompiled.",
+     "Compiled actual inclusion derivative injectivity and exact tangent equalizer range for precisely normalizedAtlas. Differentiating the incidence identity through both product projections proves range containment. Transversality proves surjectivity of the derivative difference; rank-nullity and banked inclusion injectivity give exact range equality. The inherited topology, original product norm and normalized sum-minus-target dimension are preserved. Empty incidence and zero-dimensional kernels require no exclusions.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/ManifoldTargetIncidenceTangent.lean"]},
      :seat "codex-12"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/ManifoldTargetIncidenceTangent.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / normalized incidence tangent equalizer",
    :acceptance
