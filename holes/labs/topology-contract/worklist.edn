@@ -72112,8 +72112,56 @@
   {:consumer "t00A03",
    :stop-condition
    "Require the ContDiffOn-to-DifferentiableAt specialization on the open extension domain and a relative parametric Sard theorem for the submersive total coincidence map away from the four endpoint pairs, yielding finite interior fibers for generic perturbation parameters.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Specialize totalDifference_contDiffOn to differentiability at points of the open extension domain and combine it with full derivative surjectivity to obtain submersivity away from endpoint pairs. Parametric Sard, finite-family simultaneity, retained embeddings and chart-transition transport remain.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:vectorInclusion
+     "8397773ef4fd91dc0ba1a5e12044c0b3e7a988bb3dfb43e15c3b391ff87e98dc",
+     :hasFDerivAt_insertVectors
+     "eeec92653ecdd9c812bdba6cdd2f5508053cc043386aff3f9d61e9cc80ab7f43",
+     :fullDerivative_comp_vectorInclusion
+     "6688a2e50b931316379a4a11f55d299d2433f9c71907621a4b1be4faeaacce85",
+     :fderiv_totalDifference_surjective_of_parameter
+     "2bfcbe4bf0f2c92c5d6b6a6286ff799a2f1189264e871fc8c8bf5c2874dfdd60",
+     :fderiv_totalDifference_surjective_of_left
+     "de9643d895e333694cfde4bc83cc996cc4107c67beb924d953347b88b5090f58",
+     :fderiv_totalDifference_surjective_of_right
+     "b7e84aa6b6e8cfc986089c6b4eec08d6a628de8da53875fc4abe58a7d8a62632"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/PlaneArcEndpointTotalDifferenceSubmersive.lean ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-six-declaration audit over ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 0e1ba319d69f8700ceb0fdd8914b31868d858d33",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 0e1ba319d69f8700ceb0fdd8914b31868d858d33",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "0e1ba319d69f8700ceb0fdd8914b31868d858d33",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointTotalDifferenceSubmersive.lean",
+     :sha256
+     "f18e50897c4cd22cf5105c5b189b391afc23d9954d01dc114d29eea632301deb",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and dependency pins reproduce. All six requested declarations compile without Lean warnings or placeholders using only standard axioms, and the commit changes exactly the scoped path. Pre-existing modifications to ProductSimplexWordPrefixCounts.lean and ProductSimplexWordPrefixCounts.md were left untouched."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean"],
    :dag-node
