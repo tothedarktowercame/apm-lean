@@ -70141,8 +70141,52 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the coefficient-general topological range-to-production-relative comparison and its compatibility with the compact-complement inclusions before transporting exactness; do not reuse the identically-zero supportConnecting composite or claim coefficient excision without its hypotheses.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Instantiate the comparison on the reviewed compact-complement range subcomplexes, transport its right relative cokernel to the literal nested complement pair, and prove coefficient excision and inclusion-naturality squares into the four requested relative pairs before transporting all three exactness statements.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:unionToRightRelative
+     "37c84165c04834c0fc38ee687707523a348608189aa5888f00c88357d04b0ac5",
+     :leftToUnion_unionToRightRelative
+     "4b2d1b392535a9533c763bbd71df970b2316ccd665b0d13720a897f6b17165a9",
+     :rightToUnion_unionToRightRelative
+     "06a8fcfcb5a2c0016a35122644736a3eaec7920aa8dfdb20e92e1548c9851a92",
+     :mayerVietorisToRightRelative
+     "b2454ad1203bdfe91d335b3f6ab5dd940d860a2cb6c7fc551ecccb0f8b9e1f91",
+     :relativeConnecting_naturality
+     "9a321e52963bc7b2f35830ddf06381faa558d20f5ee0b1b95af23a2f2efca1a5",
+     :unionToRelative_connecting_eq_neg_mayerVietoris
+     "ad87d23a047992c2aade0f06fe410073e196fd9b0244a5f8b9506b00dea3b82b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean ConstructionTargets/CoefficientCokernelComparison.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-six-declaration audit over ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean",
+      :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r HEAD", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "1a3323486cc03f16c5b547f9b272125f89814066",
+    :changed-paths
+    ["ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean"],
+    :fixture
+    {:path
+     "/tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+     :sha256
+     "da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact coefficient-general fixture. The pushout-induced union projection, its two piece formulas, the short-complex morphism with negative identity, connecting naturality and the signed connecting-map equality all compile without warnings or placeholders. The dependency hashes match their pinned values. Two unrelated pre-existing untracked documentation files remain untouched."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean"],
    :dag-node
