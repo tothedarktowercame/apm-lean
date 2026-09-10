@@ -28190,22 +28190,119 @@
    :stop-condition
    "Bank density continuity and derivative-perturbation bounds only. Do not claim global integral bounds, exact graph area, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
-      :sha256
-      "52879bd1fed15c508c3cf9e31cfb1ae8172fdf31414a3ccfe9cd655d438b7a2c"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Apply derivative proximity on every reviewed partition piece, integrate the density inequalities, sum the disjoint piece bounds, and use ENNRealMultiplicativeSqueeze. No global integral bound, exact graph area, numerical Hausdorff normalization, sphere mass, Stokes, periods or consumer closure is claimed.",
+    :scratch "/tmp/codex14-c1-density-i9muMX",
+    :gates
+    {:literal-withlp-two-density :pass,
+     :continuous-density :pass,
+     :build-jobs 2526,
+     :one-lipschitz-estimate :pass,
+     :borel-ennreal-measurability :pass,
+     :one-lower-bound :pass,
+     :epsilon-greater-than-one-lower-factor :pass,
+     :ennreal-multiplicative-bounds :pass,
+     :real-multiplicative-bounds :pass,
+     :dimension-two-three-functional-examples :pass,
+     :exact-two-file-scope :pass,
+     :square-root-identity :pass},
+    :axiom-audits 11,
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"continuous_ennrealDensity"
+     "cf7a405f8f470ae7f29f33cb71f5de3124e5714adddc3648b2fba134ec182bbc",
+     "density_sub_le"
+     "e9136240e1538ea4bc8161f754413a2174123450a2e0d5d9c9fe8508ebafffa6",
+     "abs_density_sub_le"
+     "62407e0657f664be16b67fccbfd2533cccb2310bd7cb6119c6cacea44d8b7374",
+     "functional_density_eq"
+     "97d8a2492860c0cfb7ef0975c5e881da9747eabf7d078c381704f0e6b8bcbe3d",
+     "dimension_three"
+     "f693be9343a9a3bb333a59f8442b1f72c707b98792d285f5e2ada7a45b5ab516",
+     "one_le_density"
+     "e34d2ee31df2d63fc93a83dc1debe2d28b7ed60b00eaa7f162a8ffcd5ae59369",
+     "continuous_density"
+     "4ac883a7cfc4b106f20356a18918063288a96316278f671dfc6f0b04227a50e1",
+     "density_sq"
+     "121012e1ea1ae33c5a8a5c40469c10079944f70a41657aeb2fef61f3aeb1deea",
+     "ofReal_multiplicative_bounds"
+     "2437e594efdbcc15ea682a76e2f295a5516cc75dddb018c6904b8fb9291c7df9",
+     "density_nonneg"
+     "c1f725ec7c19fa8e00165f2cfba1cd6b730c5f9ea6337a2d9652eebff224ab58",
+     "measurable_ennrealDensity"
+     "5420c32bed07c0c3568eeb7500fe1f1b12ae72461edef952c6337b41b6906907",
+     "dimension_two"
+     "4dd3c601eba45cc820da93b2016efad865ebae2183a9f2087c045504cedd32bb",
+     "density"
+     "01c41a98128e0dbee1e81cecf29f9bbece95afe5160bd241d8c6dd63bdebf6b3",
+     "density_lipschitz"
+     "b9c29a31155a790f5c98d8258a43e2ee124c37b3d4621e931ef29a7f19e9c307",
+     "density_eq_sqrt"
+     "a1a34ff15e6c89a92e1b6c6605d80e16067e833b0798c410bba2b54fadb24f91",
+     "multiplicative_bounds"
+     "07b135a6c895a9882b2b8e1e221765e5d6044e9ac14a6a95067aadd3f94cf832"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG and closure experiments; inspect both ledgers and two dependency PASS receipts",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s ConstructionTargets/C1GraphDensityControl.lean /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/C1GraphDensityControl.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.C1GraphDensityControl",
+      :exit 0}
+     {:cmd
+      "Python compile-log audit: eleven target reports, standard-only axioms, zero warnings and errors",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/C1GraphDensityControl.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder scan and sixteen statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check; git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd "git commit -m 'Control C1 graph density perturbations'",
+      :exit 0}
+     {:cmd "git diff --check 29b87ce4^ 29b87ce4", :exit 0}
+     {:cmd
+      "Python committed scope, fixture equality and clean scoped status verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :id :c1-graph-density-derivative-control-1,
+    :commit "29b87ce4d0458e4edb5d99bf3a3deec5dde985f7",
+    :changed-paths
+    ["ConstructionTargets/C1GraphDensityControl.lean"
+     "ConstructionTargets/C1GraphDensityControl.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
+     :sha256
+     "52879bd1fed15c508c3cf9e31cfb1ae8172fdf31414a3ccfe9cd655d438b7a2c",
+     :exact-promotion true,
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The actual L2 norm density equals sqrt(1+norm squared), is at least one and is 1-Lipschitz. Its ENNReal value is continuous and Borel measurable, and derivative perturbations give real and ENNReal multiplicative bounds even when epsilon exceeds one. Both ledgers and unrelated consumers remain untouched.",
+    :dependency-reviews
+    ["invoke-1789040285110-18495-d73b74cd"
+     "invoke-1789041921029-18539-2c450314"],
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/C1GraphDensityControl.lean"
     "ConstructionTargets/C1GraphDensityControl.md"],
