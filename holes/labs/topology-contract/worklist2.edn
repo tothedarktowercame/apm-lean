@@ -29656,6 +29656,24 @@
      {:cmd
       "git show --check --oneline efe4acb8 && git diff efe4acb8^ efe4acb8 --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789048862610-18720-8a087a32",
+     :commands
+     ["git show --stat efe4acb8"
+      "git diff-tree --no-commit-id --name-status -r efe4acb8"
+      "git diff --check efe4acb8^ efe4acb8"
+      "sha256sum fixture and canonical SphereCapGraphDensity.lean"
+      "cmp -s fixture canonical"
+      "lake env lean fixture"
+      "lake env lean ConstructionTargets/SphereCapGraphDensity.lean"
+      "lake build ConstructionTargets.SphereCapGraphDensity"
+      "Python proposition-only nine-statement hash and comment-stripped placeholder audit"
+      "rg forbidden declarations and trailing whitespace"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers"],
+     :finding
+     "PASS: exact two-file scope and fixture SHA256 verified; fixture, canonical target and 2545-job build pass; all nine statement hashes match, zero placeholders and forbidden declarations, and eight standard-only axiom audits reproduce. Derivative norm, squared-density, positivity, and reciprocal-height density equalities have the correct orientations for both cap signs. Isometry and Hausdorff transport remain explicitly downstream."},
     :dependency-uptake
     {:id :sphere-cap-height-fderivative-1,
      :commit "67eedcc383de0eeb1bce7b89d2c0e3be56af7bf3",
@@ -29672,7 +29690,7 @@
      :placeholder-count 0},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereCapGraphDensity.lean"
     "ConstructionTargets/SphereCapGraphDensity.md"],
@@ -29837,7 +29855,7 @@
      "Exactly one complete compiled analytic prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 sphere-integration routes. It proves exact norms for both cap-height derivatives and simplifies both reviewed L2 graph densities to 1/upper(x) throughout the open unit ball, including dimension-two and dimension-three examples. The parent comparison is not GO: the explicit L2-product-to-Euclidean coordinate isometry, strict-cap image equalities, subtype identifications and Hausdorff-measure transport remain unproved. No canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual unit-sphere caps as reviewed C1 L2 graphs",
