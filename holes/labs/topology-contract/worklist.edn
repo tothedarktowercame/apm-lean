@@ -60987,6 +60987,19 @@
       :exit 0}
      {:cmd "git diff --cached --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789016988278-17929-8ff1c36a",
+     :commands
+     ["git show e69c078acad42ca017e665ff68e238ad8aac6b62:ConstructionTargets/LocalTransverseExtensionChart.lean"
+      "Python pinned scope, fixture SHA256, byte equality, complete statement hash and placeholder audit"
+      "lake build ConstructionTargets.SardGenuineSmoothOpenDomainLocalization ConstructionTargets.RegularFiberFixedModelOverlaps ConstructionTargets.LocalTransverseDifference"
+      "lake env lean ConstructionTargets/LocalTransverseExtensionChart.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show d6188f86:holes/labs/topology-contract/worklist.edn)"
+      "git show --format= --check e69c078a"],
+     :finding
+     "Independent of author codex-6. Exact single-file scope and fixture 4b4d2bd2ad4ddc416e5f1f4b3e5ba106ba6db3806e3b2fa3ec542e0ccd5a7d6b verified; complete statement hash matches, zero placeholders. Dependencies build successfully (8444 jobs); Lean warning-free with standard-only axioms; validator 477 items OK; whitespace clean. Smooth extensions are constructed, not assumed. Neighborhood equality transfers center values and actual derivatives; transversality then yields center surjectivity and an actual center-covering extension-fiber chart with the ordinary product norm. No global extension transversality is asserted. Transfer to literal manifold incidence, overlaps and consumer closure remain unclaimed."},
     :commit "e69c078acad42ca017e665ff68e238ad8aac6b62",
     :changed-paths
     ["ConstructionTargets/LocalTransverseExtensionChart.lean"],
@@ -60996,7 +61009,7 @@
      "4b4d2bd2ad4ddc416e5f1f4b3e5ba106ba6db3806e3b2fa3ec542e0ccd5a7d6b"},
     :axiom-audit-declarations 1},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/LocalTransverseExtensionChart.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / local transverse extension fiber chart",
@@ -61079,7 +61092,7 @@
      "Compiled one local extension-and-chart prerequisite. Smooth maps on open neighborhoods admit separately constructed globally smooth extensions agreeing near their centers. Their difference vanishes at the incident center, and eventual equality transports the actual derivatives, proving surjectivity there from range-sum transversality. The banked regular-fiber constructor then supplies a FiberChart covering that center. Its source model permits the ordinary product norm; no product inner-product instance or norm replacement is needed. Global transversality of the extensions is neither assumed nor proved.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TRANSVERSE-PULLBACK / manifold-target local incidence charts",
