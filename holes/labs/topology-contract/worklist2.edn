@@ -21232,6 +21232,19 @@
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789024499075-18114-7e39d772",
+     :commands
+     ["Python pinned census SHA256, all consumer counts, module counts, changed-path attribution and frozen t94J08 statement-hash audit"
+      "bb recorded-row author, replacement-items, dependency-set and successor-checkpoint assertions"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show e426e617:holes/labs/topology-contract/worklist2.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show e426e617:holes/labs/topology-contract/worklist.edn)"
+      "git diff --check e426e617^ e426e617"
+      "git log --format='%h %s' 205dbfa7..d4bbe309 -- ConstructionTargets problems"],
+     :finding
+     "PASS e426e617; independent of author codex-13. Census hash and all 59 named consumers verified: 58 existing, 23 zero, 35 open, 25 near; placeholders 66->66, modules 711->719. Three portfolio and five concurrent packets correctly attributed. Frozen t94J08 source and both theorem hashes match. New reviewed antipodal computation justifies one repaired-positive-dimensional closure probe without retrying an unresolved boundary. Ordinary-S0 refutation and concurrent reservations preserved. Installed rows and successor checkpoint match; ledger-only transition; no closure credit claimed."},
     :replacement-items
     [{:consumer :t94J08,
       :stop-condition
@@ -21360,7 +21373,7 @@
      :method
      "Extract every named consumer from the complete DAG; strip block and line comments before counting executable sorry tokens in pinned baseline and head blobs."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: antipodal computation and frozen consumer eligibility",
@@ -21383,7 +21396,7 @@
    :stop-condition
    "Preserve every repaired frozen definition and theorem statement, including positive-dimensional hypotheses. Do not restore or claim the refuted ordinary-S0 branch, assume an orientation or sign, add placeholders, or modify unrelated consumers.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CONSUMER CLOSURE: exact repaired t94J08 antipodal degree and local-index negation",
