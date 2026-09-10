@@ -57837,63 +57837,60 @@
    :stop-condition
    "GO requires compiled actual global atlas, genuine-infinity manifold structure and smooth inclusion for the same atlas. REVISE requires exactly one compiled prerequisite; no consumer closure claim.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Next edge: actual inclusion mfderiv injectivity and equality of its range with the defining map's mfderiv kernel for this chosen atlas. Applicability remains self-model finite-dimensional real inner-product manifolds with complete source model. General models and consumer-specific orientation, boundary, duality and transversality obligations remain; no frozen consumer closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:selected-center
-      "14665e4c228dc411f932d2d13ae011f1c83948655bf40fd49f8d864cc1379e7e",
-      :chartAt-eq
-      "890348415dabce838e7ca3bfac3c4578a7e9e3b144c08c1ea9f6c20b5ea05b03",
-      :atlas-eq
-      "3cc52d97543cadba293302ccbfe8d351326d7a762f70ef30ae76b54d37da4ed4",
-      :selected-mem-atlas
-      "1f86af27c3bfa9d7bffc7ab78e492188048c78299a96420b117a400aa5e16ad0",
-      :isManifold
-      "46ce516df414d7438c10453b9367c4e74137a05f36dd8817725bf6a8964de156",
-      :exists-manifold
-      "fc93c0047862cc9195d73a343034d1e8e76d28dfdf0f9e2852cc3af6500e83cb",
-      :smooth-inclusion
-      "38635f95c8dbe1811566981615f4c8ca465c9781085314dae79633ab7e7a0f58"},
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture. Preserve the selected charts from ManifoldTargetRegularFiberCharts.exists_cover, inherited subtype topology, fixed Euclidean model and genuine-infinity smoothness. Compile the global chartedSpace, all chart and atlas specifications, isManifold, exists_manifold and smooth_inclusion. Audit zero placeholders and standard-only axioms. Preserve existing APIs; do not claim derivative injectivity, tangent kernel comparison or consumer closure.",
-      :axioms :standard-only,
-      :placeholder-before 0,
-      :placeholder-after 0},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean -o /tmp/manifold-chart-build/ConstructionTargets/ManifoldTargetRegularFiberCharts.olean ConstructionTargets/ManifoldTargetRegularFiberCharts.lean && lean /tmp/ManifoldTargetRegularFiberGlobalAtlas.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/manifold-target-atlas-audit.py", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/ManifoldTargetRegularFiberGlobalAtlas.lean",
-       :exit 1,
-       :correction
-       "The canonical prerequisite object was absent. Verified the temporary destination was not a symlink, compiled the unchanged prerequisite into the temporary object directory and successfully compiled the fixture using that directory."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/ManifoldTargetRegularFiberGlobalAtlas.lean",
-      :sha256
-      "aa1bbdc127092c509e8bb828d2474664ca691b3be9b575fd3de1001f72d73de1"},
-     :finding
-     "Compiled the complete global atlas and smooth-inclusion packet. The atlas is exactly the range of the selected covering charts, with proved center membership and chartAt specifications. Their actual smooth overlaps establish IsManifold infinity through Mathlib's atlas API. For this same chartedSpace, the backward parameterization formula and its proved smoothness establish ContMDiff infinity of subtype inclusion. No topology, compatibility, global extension regularity or inclusion smoothness is assumed. Empty fibers and zero-dimensional kernels are included.",
-     :dependency-reviews
-     [{:outcome :pass, :job "invoke-1789004805921-17573-6e1a03ea"}
-      {:outcome :pass,
-       :commit "c20972de0f36d273644ea424e28d49ff411cb029",
-       :job "invoke-1789004464076-17561-0878509f"}],
-     :implementation
-     {:scope
-      ["ConstructionTargets/ManifoldTargetRegularFiberGlobalAtlas.lean"]},
-     :seat "codex-12"}},
+   {:placeholder-delta 0,
+    :residual
+    "Actual inclusion derivative injectivity and tangent-kernel comparison remain. Applicability stays within self-model finite-dimensional real inner-product manifolds with complete source model. General models and consumer orientation, boundary, duality and transversality obligations remain; no consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:selected-center
+     "14665e4c228dc411f932d2d13ae011f1c83948655bf40fd49f8d864cc1379e7e",
+     :chartAt-eq
+     "890348415dabce838e7ca3bfac3c4578a7e9e3b144c08c1ea9f6c20b5ea05b03",
+     :atlas-eq
+     "3cc52d97543cadba293302ccbfe8d351326d7a762f70ef30ae76b54d37da4ed4",
+     :selected-mem-atlas
+     "1f86af27c3bfa9d7bffc7ab78e492188048c78299a96420b117a400aa5e16ad0",
+     :isManifold
+     "46ce516df414d7438c10453b9367c4e74137a05f36dd8817725bf6a8964de156",
+     :exists-manifold
+     "fc93c0047862cc9195d73a343034d1e8e76d28dfdf0f9e2852cc3af6500e83cb",
+     :smooth-inclusion
+     "38635f95c8dbe1811566981615f4c8ca465c9781085314dae79633ab7e7a0f58"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd "python3 /tmp/manifold-target-atlas-audit.py", :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ManifoldTargetRegularFiberCharts",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ManifoldTargetRegularFiberGlobalAtlas.lean ConstructionTargets/ManifoldTargetRegularFiberGlobalAtlas.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldTargetRegularFiberGlobalAtlas.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history [],
+    :commit "7dd6810529b01300cc375dbd5a30706e47aacaa5",
+    :changed-paths
+    ["ConstructionTargets/ManifoldTargetRegularFiberGlobalAtlas.lean"],
+    :fixture
+    {:path "/tmp/ManifoldTargetRegularFiberGlobalAtlas.lean",
+     :sha256
+     "aa1bbdc127092c509e8bb828d2474664ca691b3be9b575fd3de1001f72d73de1",
+     :placeholder-count 0},
+    :finding
+    "Exact fixture promoted. Global chartedSpace, atlas specifications, genuine-infinity manifold structure and same-atlas smooth inclusion compile warning-free. All seven printed declarations have standard-only axioms; zero placeholders. Existing APIs and consumers unchanged; worktree clean. Validator reports 448 items OK."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ManifoldTargetRegularFiberGlobalAtlas.lean"],
    :dag-node
