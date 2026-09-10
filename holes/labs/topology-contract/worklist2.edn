@@ -25207,21 +25207,113 @@
    :stop-condition
    "Bank actual chart-boundary construction and its nearby-point absolute homology comparison only. Do not claim equality with relative normalizations, transition-unit local constancy, orientation compatibility or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientChartBoundaryNeighborhood.lean",
-      :sha256
-      "00f467857529fd6d33f1ba79eee6f4aebdfa9d6c1ae7f5aafbb01c06a1e20d29"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/CoefficientChartBoundaryNeighborhood.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholders 0,
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Identify the constructed source and mapped boundary maps with relative local-homology normalizations through connecting naturality, radial normalization and neighborhood inclusion, then deduce equality of transition units at nearby points. Relative-normalization equality, transition-unit local constancy, orientation compatibility and consumer closure are not claimed. Ledgers and frozen consumers remain untouched.",
+    :gates
+    {:positive-radius-and-closed-ball-containment :pass,
+     :integer-rational-examples :pass,
+     :whitespace :pass,
+     :open-neighborhood-and-common-source-containment :pass,
+     :literal-scaled-sphere-boundary :pass,
+     :fixture-and-canonical-compilation :pass,
+     :eight-standard-only-audits :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :all-degree-compact-boundary-homology-comparison :pass,
+     :target-build :pass,
+     :actual-source-membership :pass,
+     :exact-fixture-promotion :pass,
+     :chart-transition-formula :pass,
+     :mapped-boundary-zero-avoidance :pass,
+     :strict-source-radius-bound :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 8,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation have zero warnings. Target build replays 22 dependency warnings and succeeds with 8302 jobs."],
+    :statement-hashes
+    {"radius_pos"
+     "0ded176947c42a2fb42dc8a203ec206793944ccbc66841717aaf100e6e7609c7",
+     "source_member"
+     "a98aa9eef9a33f0b7f7347d517adc6fca8046cdc1ab806c5b947a33b8854efab",
+     "mappedBoundary"
+     "cc8573230b100a8ac543b54260efcafeaf5d98eee974cf5fb8fc8063391fcf14",
+     "rational_example"
+     "6e630dd8d58ac72ee5f3645b38d295576f7d2c302c185f8e9e1e492e43616654",
+     "radius"
+     "ac9ad7354433135122b8e326a055bf44a4a10f22e01d4262f46334a25facece9",
+     "mapped_avoids"
+     "3259246e8cd2ea524509d64a1e1b16b19ac0f78c2803382f0d707f9c9ea1cbdf",
+     "sphereBoundary"
+     "0548a9f17b82dedc71e43d24531470e99f672434d93b5d6ba71246aa4b42a9ec",
+     "radius_subset"
+     "244784301916cbdcc6b305b4dba6a9045fe822c909a9df8fc611d09e17b68407",
+     "boundary_neighborhood"
+     "821fd4b5fe6e925471cb0535be52af386d01783ff1ef321371908d761e030f40",
+     "mapped_formula"
+     "91d9394cac0cdecedde938024ecfb1b1fc6d5994c20746c9c040c98ef4439045",
+     "radius_exists"
+     "fb41a80f26deced740085ea5429476b78e920ce67a066228d2b60e2e9ad0331e",
+     "sourceBoundary"
+     "1fd1416283b72a5544d99058db6dde281abdebe971769e077b54e0d80c86756d",
+     "integral_example"
+     "284076ca2aa07c7af3ef78a582b476ab88c6c9549484679f31885853012b54f8"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and both dependency PASS receipts from the ledgers",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientChartBoundaryNeighborhood.lean",
+      :exit 0}
+     {:cmd
+      "Python fixture hash verification and exact scoped promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientChartBoundaryNeighborhood.lean > /tmp/chartboundary-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientChartBoundaryNeighborhood.lean > /tmp/chartboundary-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientChartBoundaryNeighborhood > /tmp/chartboundary-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verification of eight standard-only audits in each compilation log and warning attribution",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientChartBoundaryNeighborhood.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and thirteen statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m \"Construct actual chart boundary and nearby-point homology neighborhood\"",
+      :exit 0}
+     {:cmd "git diff --check 5c23afeb^ 5c23afeb", :exit 0}
+     {:cmd
+      "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "5c23afeb2297af242b868b7495dc3c16275f9149",
+    :changed-paths
+    ["ConstructionTargets/CoefficientChartBoundaryNeighborhood.lean"
+     "ConstructionTargets/CoefficientChartBoundaryNeighborhood.md"],
+    :fixture
+    {:path "/tmp/CoefficientChartBoundaryNeighborhood.lean",
+     :sha256
+     "00f467857529fd6d33f1ba79eee6f4aebdfa9d6c1ae7f5aafbb01c06a1e20d29"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientChartBoundaryNeighborhood.lean"
     "ConstructionTargets/CoefficientChartBoundaryNeighborhood.md"],
