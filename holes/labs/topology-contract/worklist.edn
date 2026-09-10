@@ -73518,6 +73518,20 @@
       "git diff-tree --no-commit-id --name-only -r 9226251cc770ed06abbe9c895c1b144329dcb370",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789077717936-19606-7150ddff",
+     :commands
+     ["git show 9226251cc770ed06abbe9c895c1b144329dcb370:ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean"
+      "git diff-tree --no-commit-id --name-only -r 9226251cc770ed06abbe9c895c1b144329dcb370"
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean"
+      "sha256sum /tmp/CoefficientSubspaceUnionRestrictedOpenCover.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean ConstructionTargets/CoefficientSubspaceUnionCoverSmallComparison.lean"
+      "cmp -s /tmp/CoefficientSubspaceUnionRestrictedOpenCover.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean"
+      "git show --check --oneline --stat 9226251cc770ed06abbe9c895c1b144329dcb370"
+      "python3 declaration-hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: recorded commit changes exactly the scoped implementation file; fixture and implementation both hash 37775cbc97bc961d3ba54e356e94f33797c95d9afa5411bb75297fd81efca9f7 and are byte-identical; dependency hash is d1acad87fe47b8183949d4872eb840544fff743d92891c3ddf84b68dd2ea012d. Compilation succeeds without warnings, placeholders are zero, all four frozen declaration hashes reproduce, and printed axioms are standard-only. The Bool orientation is correct: true pulls back A and false pulls back B; openness uses subtype preimages, while coverage follows from subtype membership in A union B and remains valid with either member empty. No ambient-X cover or downstream homological claim is introduced."},
     :commit "9226251cc770ed06abbe9c895c1b144329dcb370",
     :changed-paths
     ["ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean"],
@@ -73529,7 +73543,7 @@
     :finding
     "The exact fixture and recorded cover-small comparison dependency hash reproduce. All four requested cover declarations compile without warnings or placeholders; unionCover_covers is axiom-free and the remaining facts use only standard axioms. The commit changes exactly the scoped path. Pre-existing untracked ProductSimplexStepWordReconstructed files were left untouched."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean"],
    :dag-node
@@ -73624,7 +73638,7 @@
      "Compiled exactly one open-cover prerequisite. The two subsets pull back along the union-subtype inclusion to a Boolean family whose members are open whenever the original subsets are open, and every point of the union subtype belongs to one member. This supplies the valid domain for the reviewed small-chain homology theorem. It does not assert that A and B cover all of X and therefore avoids the invalid ambient-cover inference behind the rejected ordinary-excision route.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
