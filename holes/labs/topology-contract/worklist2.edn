@@ -11672,8 +11672,63 @@
   {:consumer :t00A03,
    :stop-condition
    "Preserve literal complement components, the exact pants subtype, homological genus and topological embedding hypotheses. No assumed surface classification, collars, Euler additivity or boundary-incidence count.",
+   :evidence
+   {:placeholder-after 2,
+    :placeholder-delta 0,
+    :residual
+    "GeometryClaim and CountClaim remain unproved under the exact homological-genus, topological-embedding, essentiality, disjointness, nonparallelism and maximality hypotheses. No conditional or partial GO is supplied.",
+    :frozen-file "problems/t00A03/lean/Main.lean",
+    :dependency-review "invoke-1788999800964-17421-092dfde5",
+    :axiom-audits 3,
+    :outcome :stop,
+    :warnings [],
+    :statement-hashes
+    {:apm_t00A03_bridge_1
+     "4f095d2afa3a6f6af346c16dd0e737f7836b7e6769cee4fbc079bf20a7a1a8a5",
+     :apm_t00A03_bridge_2
+     "d6b7ab7a27f870241f7acfbaca81d70f063160724627148468c92bbe9b858656",
+     :apm_t00a03
+     "91564345805de42c87792eabe67a38b70940b4e5a80313140e7dece147e28549"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :placeholder-before 2,
+    :reason
+    "Two substantive obligations remain: classify every literal complementary component as the specified open pants subtype, and derive n=3g-3 from the frozen integral homological genus and actual cutting incidence. Existing openness, component partition and maximality lemmas supply neither classification nor the topological Euler/incidence theorem. No full adapter or admissible refutation compiled.",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum problems/t00A03/lean/Main.lean", :exit 0}
+     {:cmd
+      "Read frozen bridges and final theorem, DAG surface-classification boundary, closure stop rules and checkpoint18 dependency review",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T00A03Boundary.lean", :exit 0}
+     {:cmd
+      "Python audit: frozen and fixture hashes, three statement hashes, comment-stripped placeholder count and identical frozen prefix",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T00A03Boundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :campaign-termination false,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T00A03Boundary.lean",
+     :sha256
+     "a2e558416b95ff673e3763bdaf93e1e735815b2713a4bf64819bb97709e87246",
+     :role :typed-boundary-diagnostic},
+    :finding
+    "The compiled diagnostic preserves all frozen definitions and existing helper proofs verbatim. FrozenClaim reproduces the complete final proposition; exact_residual proves its equivalence to GeometryClaim and CountClaim with every original hypothesis retained. The literal norm and pants-membership equations confirm that the model uses the product max norm, not the Euclidean norm. No model replacement, smoothness of curves, collar, classification or incidence invariant is assumed.",
+    :statement-hash-method
+    "SHA256 of declaration text from theorem through the character before := by.",
+    :frozen-sha256
+    "e35f2b14e3fe3485840dacc50cf3feb9b00fd4e1f9b1203d068cee33bcbfa143",
+    :mathematical-refutation false,
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "SURFACE CUTTING: exact maximal-curve pants-decomposition consumer",
