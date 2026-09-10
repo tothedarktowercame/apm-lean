@@ -29736,22 +29736,117 @@
    :stop-condition
    "Bank only the exact upper and lower strict-cap set equalities in WithLp 2, including coordinate reconstruction. Do not claim a Euclidean coordinate isometry, Euclidean cap equality, subtype or Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean",
-      :sha256
-      "4db1d007386e6e607bfffe609d04029fe45ce3b633b10b48628238d74b50ce74"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct the explicit linear isometric equivalence from WithLp 2 (EuclideanSpace real (Fin d) times real) to EuclideanSpace real (Fin (d+1)), prove its coordinate formulas and literal Euclidean cap images, and transport C1GraphGlobalBounds.exact_area_value through it.",
+    :gates
+    {:canonical-compile :pass,
+     :whitespace :pass,
+     :dimension-two-both-signs :pass,
+     :upper-first-coordinate-domain :pass,
+     :fixture-hash :pass,
+     :axiom-audits 6,
+     :lower-signed-reconstruction :pass,
+     :exact-scope :pass,
+     :claim-boundary :pass,
+     :upper-signed-reconstruction :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :dimension-three-both-signs :pass,
+     :lower-set-equality :pass,
+     :upper-set-equality :pass,
+     :warning-scan :pass,
+     :upper-graph-to-cap :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :lower-graph-to-cap :pass,
+     :lower-first-coordinate-domain :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"lowerCap_snd"
+     "b920068c961b0814aed4e867e1039f1a5a25cd3ff55b5178e3b27062ba92be5e",
+     "upperCap"
+     "2f79c94632dc2aa2baa80826c41c7d6c0bf9ed19acb0741dce2793df9505e9e0",
+     "Ambient"
+     "9a240eed350eb620032068061584f0acc1a7d23f4663e05c877916a085205f7b",
+     "upperCap_snd"
+     "752527837db61320fc23b8983d73d870216f03b1578f2095f362a17b5995def4",
+     "lower_graph_eq_cap"
+     "7e2a374151333139d2e38e4ca2819fa743e90ddbd1bdec4bce6835889b2f2e3d",
+     "norm_eq_one_of_sq"
+     "a336b68df21958ba83ed2539364ebec2fc596265f13da52700247673524e4cf2",
+     "lowerCap_fst_mem"
+     "06cbd78068508334af245041fd0b46db3b8b2730a3d67e6b3beeb051379ec290",
+     "upper_graph_subset_cap"
+     "8e56437caa3aafaebb7bd2c020cb3411ead98619664b6e6b8533961f8786519a",
+     "lowerCap"
+     "0ff3121c7781902dcb399af05bac50fd2b6eb0ab8e46981621beb87f67c755de",
+     "upperCap_fst_mem"
+     "24d7c9ea407ac43b7afe4a4a964c8a7689b8b6f360a7ca482f6463d1212121db",
+     "upper_graph_eq_cap"
+     "2aade0be7f651b46ab9f495dffc22bd67887c35c9f7a4dda6f42ccc3a98b645f",
+     "lower_graph_subset_cap"
+     "ad18edb99d26802bd80de513bfc47d645f5bf681fcbfdd44c7a1a5d57e4dd204"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, build-loop design, both ledgers and reviewed dependency receipt",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean ConstructionTargets/SphereCapL2Image.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean ConstructionTargets/SphereCapL2Image.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean",
+      :exit 0}
+     {:cmd "lake env lean ConstructionTargets/SphereCapL2Image.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SphereCapL2Image", :exit 0}
+     {:cmd
+      "Audit six namespace-local standard-only axiom reports and zero warnings or errors",
+      :exit 0}
+     {:cmd
+      "Audit graph-to-cap inclusions via literal L2 unit norms and signs, cap-to-graph inclusions via strict first-coordinate bounds and signed square-root reconstruction, and both exact set equalities",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/SphereCapL2Image.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n '[[:blank:]]+$' ConstructionTargets/SphereCapL2Image.lean ConstructionTargets/SphereCapL2Image.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --cached --check and exact two-file staged-scope audit",
+      :exit 0}
+     {:cmd "git diff 96168319^ 96168319 --check", :exit 0}],
+    :dependency-uptake
+    {:id :sphere-cap-height-graph-density-1,
+     :commit "efe4acb81a42396ab2377e66333563433a71a9ab",
+     :review "invoke-1789048862610-18720-8a087a32"},
+    :commit "961683199fb4fe926bd527743a14b2366485d029",
+    :changed-paths
+    ["ConstructionTargets/SphereCapL2Image.lean"
+     "ConstructionTargets/SphereCapL2Image.md"],
+    :fixture
+    {:path "/tmp/codex13-checkpoint47-cap-image/SphereCapL2Image.lean",
+     :sha256
+     "4db1d007386e6e607bfffe609d04029fe45ce3b633b10b48628238d74b50ce74",
+     :placeholder-count 0},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereCapL2Image.lean"
     "ConstructionTargets/SphereCapL2Image.md"],
