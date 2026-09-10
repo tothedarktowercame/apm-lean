@@ -72473,80 +72473,34 @@
    :stop-condition
    "Require a compiled perturbation preserving prescribed endpoints and chartwise containment with finite pairwise intersections; do not infer cross-chart finiteness from unrelated plane translations.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "The desired relative interior coincidence fiber is now exactly the fixed-vector section of the total incidence zero locus. Construct the regular-preimage structure on that incidence locus and apply Sard to its vector projection to obtain generic finite sections; then adjoin the finite endpoint boundary, choose parameters simultaneously, retain embeddings and compare intersections through chart transitions.",
-     :outcome :revise,
-     :warnings [],
-     :prerequisite
-     {:consumer "t00A03",
-      :stop-condition
-      "Require a regular-preimage manifold construction for the total incidence zero locus and a genuine Sard theorem for its projection to perturbation-vector space, producing generic finite sections.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/PlaneArcEndpointIncidenceFiberSection.lean"],
-      :dag-node
-      "SURFACE TRIANGULATION / endpoint-relative incidence fiber section",
-      :acceptance
-      {:fixture "/tmp/PlaneArcEndpointIncidenceFiberSection.lean",
-       :fixture-sha256
-       "9fdd5f5167662c0ace5c5f3f18927a0193a859503b81750f12341d5446771a82",
-       :implementation
-       "Promote the exact fixture. Compile relativeCoincidenceFiber, incidenceZeroLocus, mem_incidenceZeroLocus_section_iff and relativeCoincidenceFiber_eq_incidence_section. This supplies the exact incidence-section representation required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before parameterized Sard. Verify PlaneArcEndpointInteriorCriticalLocusEmpty SHA256 e3fe65c7f0c754976ef323eb3c099456cba6a021296b7413dfccc1ffe5426322. Preserve arbitrary plane arcs, arbitrary open-domain sets and arbitrary fixed perturbation vectors. Require zero placeholders, no warnings and standard-only axioms. Do not claim a regular-preimage manifold, parameterized Sard, regular perturbation parameters, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
-       :commands
-       ["lake env lean ConstructionTargets/PlaneArcEndpointIncidenceFiberSection.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :representation
-      {:source
-       "The relative-interior parameter pairs where the two endpoint-preserving perturbed plane arcs coincide for fixed perturbation vectors",
-       :target
-       "The section at those fixed perturbation vectors of the total coincidence-map zero locus inside the reviewed relative interior domain",
-       :direction
-       "Prove exact equality from the source coincidence-fiber representation to the target fixed-vector incidence-section representation, with membership equivalence in both directions."},
-      :id
-      :plane-arc-endpoint-incidence-fiber-section-implementation-refill50,
-      :kind :representation-comparison,
-      :depends-on
-      [:plane-arc-endpoint-interior-critical-locus-empty-implementation-refill50],
-      :current-residual
-      "Equip the relative incidence zero locus with the regular-preimage geometry supplied by total-map submersivity and apply Sard to its projection onto paired perturbation vectors. Then translate finite sections through the compiled equality and finish boundary, family, embedding and chart-transition steps.",
-      :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake build ConstructionTargets.PlaneArcEndpointInteriorCriticalLocusEmpty >/tmp/interior-critical-dep.log 2>&1",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/PlaneArcEndpointIncidenceFiberSection.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/PlaneArcEndpointIncidenceFiberSection.lean ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean",
-       :exit 0}
-      {:cmd
-       "python3 comment-stripped placeholder-and-four-declaration audit over /tmp/PlaneArcEndpointIncidenceFiberSection.lean",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/PlaneArcEndpointIncidenceFiberSection.lean",
-       :exit 1,
-       :correction
-       "The initial membership proof used reflexivity before unfolding the totalDifference and pairDifference presentations and reassociating conjunctions. Unfolded both maps explicitly; the corrected section equality compiles without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/PlaneArcEndpointIncidenceFiberSection.lean",
-      :sha256
-      "9fdd5f5167662c0ace5c5f3f18927a0193a859503b81750f12341d5446771a82",
-      :placeholder-count 0},
-     :finding
-     "Compiled exactly one incidence-section prerequisite. The relative coincidence fiber for fixed perturbation vectors is identified exactly with the corresponding vector-parameter section of the total incidence zero locus on the reviewed relative interior domain. This supplies the set-level object whose projection must be treated by parameterized Sard and ensures that a future finite-section theorem yields finiteness of the actual interior coincidence set. No regular-preimage manifold structure, Sard projection theorem or finiteness conclusion is inferred from the equality alone.",
-     :seat "codex-12"}},
+   {:placeholder-delta 0,
+    :residual
+    "Supply a compact-with-boundary or manifold-with-corners parametric transversality theorem for the endpoint-weighted family, including isolation of coincidences near each prescribed endpoint pair; then prove generic finite fibers, simultaneous finite-family selection, embedding stability and cross-chart transport.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :reason
+    "The reviewed incidence zero locus is restricted to the parameter square minus the four endpoint-endpoint pairs, hence its fixed-vector fibers are subsets of a noncompact domain. Even after parameterized Sard makes such a fiber regular and zero-dimensional, discreteness on this punctured domain does not imply finiteness: infinitely many regular interior coincidences may accumulate at an excluded endpoint pair. The existing boundary result proves only that the four endpoint pairs themselves form a finite set; it does not provide a neighborhood of each endpoint pair free of other coincidences, boundary transversality, or compactness of the interior coincidence locus. Therefore the requested finite-intersection conclusion cannot be derived from the banked submersion and finite-boundary statements. A valid continuation requires a relative transversality theorem on the compact square with boundary or corners that controls accumulation near all four endpoint pairs, together with the incidence-projection Sard theorem. Repository search confirms that parametric transversality and the incidence-submanifold theorem remain explicitly unbuilt, and no endpoint or boundary transversality theorem exists among the PlaneArc targets.",
+    :commands
+    [{:cmd
+      "sha256sum ConstructionTargets/PlaneArcEndpointIncidenceFiberSection.lean ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"parametric.*Sard|parameterized.*Sard|regular.*fiber.*finite|incidence.*projection\" ConstructionTargets TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd
+      "rg -n \"endpoint.*transvers|boundary.*transvers|corner.*transvers\" ConstructionTargets/PlaneArc*",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git status --short", :exit 0}],
+    :changed-paths [],
+    :finding
+    "The exact section equality is sound, but its relative interior domain removes the four endpoint pairs. Ordinary Sard for the incidence projection would at most give a discrete interior fiber. The missing endpoint-neighborhood control is logically necessary before compactness can turn that discrete fiber into a finite set. The banked statement that the excluded boundary set has four points cannot rule out an infinite interior sequence converging to one of those points.",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
