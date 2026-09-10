@@ -61707,15 +61707,82 @@
   {:consumer "t00J02",
    :stop-condition
    "GO requires the chosen global atlas, specifications and same-atlas smooth inclusion. REVISE requires exactly one compiled prerequisite; no tangent or consumer closure claim.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Global manifold-target incidence atlas and same-atlas smooth inclusion are complete in the fixture. Actual inclusion derivative injectivity and tangent equalizer, component-coverage contracts, orientations and homological comparisons remain subsequent; no consumer closure is claimed.",
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {:normalizedAtlas
+      "0e098dd25beb4b950dae7892591f4aa09e788c6b2d1c5157326b908c86a62347",
+      :normalized-chartAt
+      "6c90fb4cc0ccfb3b189abf0de7d655c48f9eb394add2ae0ce247ab46dc8cdd6f",
+      :normalized-atlas
+      "654f29607aec0f4b13c0e29c8776772f6e8b6fda54eb28f2e2591df58184ca4e",
+      :normalized-chart-membership
+      "c274eb16354f76f4eea79a1c42316d16b4b8e9c19cc15d40b0a9d8dd483418d1",
+      :normalized-isManifold
+      "62cbd01d9e0d6e4ee27b82fa7c4f0f00416da5526c1af96a26154708afcf9a6a",
+      :normalized-smooth-inclusion
+      "bd52479abdbcd160f86470c2546c3bc54fea6dfae7e1fe5b656e1548fce81d01"},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/ManifoldTargetIncidenceSmoothCharts.olean ConstructionTargets/ManifoldTargetIncidenceSmoothCharts.lean'",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceGlobalAtlas.lean'",
+       :exit 0}
+      {:cmd "python3 /tmp/manifold-target-incidence-global-audit.py",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/ManifoldTargetIncidenceGlobalAtlas.lean",
+       :exit 1,
+       :correction
+       "Compiled the missing banked smooth-chart object into the private temporary directory."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceGlobalAtlas.lean'",
+       :exit 1,
+       :correction
+       "Removed the unavailable, unnecessary vector-incidence import; included the elementary dimension-transport definitions and proofs locally. Final fixture compiles without warnings."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/ManifoldTargetIncidenceGlobalAtlas.lean",
+      :sha256
+      "e3d12f117d5106fa50605de4b247a5b7de720a7cd2114b9b3247a11877f1ee71",
+      :placeholder-count 0},
+     :finding
+     "Compiled the complete global incidence-atlas packet. The constructed local cover supplies chosen charts, exact chartAt and atlas specifications, genuine-infinity IsManifold, and smooth inclusion from the actual backward parameterizations. Dimension transport preserves this same atlas and its properties at finrank E + finrank G - finrank F. Inherited topology, ordinary product norm, empty incidence and zero-dimensional kernels are preserved.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean"],
+      :acceptance
+      {:implementation
+       "Promote the exact fixture. Compile selected, selected_center, chartedSpace, chartAt_eq, atlas_eq, selected_mem_atlas, isManifold, exists_manifold, smooth_inclusion, dimension transport and all normalized atlas specifications. Require normalized_isManifold and normalized_smooth_inclusion for exactly normalizedAtlas. Preserve banked hypotheses and audit zero placeholders and standard-only axioms. Do not claim tangent geometry or consumer closure.",
+       :commands
+       ["lake env lean ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0}},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / manifold-target global incidence atlas",
    :acceptance
-   {:axioms :standard-only,
-    :probe
-    "Under exactly the banked self-model finite-dimensional manifold-target transversality hypotheses, construct ChartedSpace and IsManifold genuine infinity on literal inherited-topology incidence. Invoke ManifoldTargetIncidenceSmoothCharts constructed cover and proved overlaps through atlas APIs. Retain fixed Euclidean dimension finrank E+finrank G-finrank F. Prove chosen chartAt and atlas membership specifications and smooth subtype inclusion into the original product manifold from the actual backward parameterizations. No assumed atlas, compatibility or smooth inclusion, altered topology or globally transverse extension. Include empty incidence and zero-dimensional kernels."},
+   {:implementation
+    "Promote the exact fixture. Compile selected, selected_center, chartedSpace, chartAt_eq, atlas_eq, selected_mem_atlas, isManifold, exists_manifold, smooth_inclusion, dimension transport and all normalized atlas specifications. Require normalized_isManifold and normalized_smooth_inclusion for exactly normalizedAtlas. Preserve banked hypotheses and audit zero placeholders and standard-only axioms. Do not claim tangent geometry or consumer closure.",
+    :commands
+    ["lake env lean ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
    :id :manifold-target-incidence-global-atlas-probe-refill41,
    :kind :reusable-theorem,
    :depends-on
