@@ -26230,8 +26230,206 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:near-closure-eligibility
+    {:eligible-unreserved 0,
+     :boundaries
+     [{:consumers [:a97J08 :t00A03 :t94J09 :t97A01 :t99J03 :t95J06],
+       :boundary
+       "Controlled arc position, planar separation, polygon invariants and classification remain; plane-arc translation is reserved. Preserve the recorded homeomorphism-versus-diffeomorphism discrepancy."}
+      {:consumers [:t00J01],
+       :boundary
+       "Klein-product and exact fold-fiber obligations remain."}
+      {:consumers [:t00J02 :t03J05 :t96J06 :t98A02],
+       :boundary
+       "Global localization, orientation compatibility, intersection/duality and gluing remain; local-constancy ownership STOP and reserved normalization continuation are preserved."}
+      {:consumers [:t01A05],
+       :boundary
+       "Recorded connectedness specification defect remains."}
+      {:consumers [:t01A08],
+       :boundary
+       "Arbitrary-model chart-domain and within-derivative applicability remain."}
+      {:consumers [:t01J04 :t94A06],
+       :boundary
+       "Exact regular-preimage, half-space atlas and normal-translation applicability remain."}
+      {:consumers [:t02A05 :t95J05],
+       :boundary
+       "Actual intrinsic sphere mass remains uncomputed; linear Hausdorff distortion and nonlinear area transport are now separately identified missing constructions."}
+      {:consumers [:t02A08],
+       :boundary
+       "Actual arbitrary-integer sphere degree realization remains."}
+      {:consumers [:t03J02],
+       :boundary
+       "Generic collar/NDR geometry and quotient invariant comparisons remain."}
+      {:consumers [:t03J04],
+       :boundary
+       "Transfer does not establish arbitrary-dimensional torus homology, literal Euler sums or Euler multiplicativity."}
+      {:consumers [:t92J06 :t98A01],
+       :boundary
+       "Cover classification, monodromy, surface-cover realization and genus invariance remain."}
+      {:consumers [:t96J05],
+       :boundary
+       "Preserve the proved radial counterexample and separate analytic/smooth repair obligations."}]},
+    :concurrency
+    {:exclude
+     [:coefficient-moving-boundary-relative-normalization-probe-refill47
+      :plane-arc-small-translation-finite-intersections-probe-refill47],
+     :preserve-stops
+     [:oriented-checkpoint41-coefficient-transition-local-constancy-1
+      :oriented-checkpoint42-euclidean-graph-hausdorff-area-1],
+     :finding
+     "Chart-ball review supplies no authorization to duplicate its reserved continuation. Distinct row-specific scratch directories remain required."},
+    :residual
+    "One fresh linear geometric measure prerequisite and a matching successor are elected. The nonlinear graph-area and local-constancy STOPs remain unresolved. Neither ledger nor canonical source was edited.",
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read complete DAG, foundational-program note, closure policy, both ledgers and dependency review outcomes",
+      :exit 0}
+     {:cmd "python3 /tmp/codex13-checkpoint43-census.py", :exit 0}
+     {:cmd
+      "Inspect current reservations and independent chart-ball transport PASS",
+      :exit 0}
+     {:cmd
+      "Inspect Hausdorff isometry transport and additive-Haar linear determinant APIs",
+      :exit 0}
+     {:cmd "sha256sum /tmp/codex13-checkpoint43-census.json", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :replacement-items
+    [{:consumer :t02A05,
+      :stop-condition
+      "Do not assume a graph-area formula, measure-preserving range identification, Gram determinant value or numerical Hausdorff normalization. Do not replace the L2 metric with the ordinary product or function-space sup metric. Do not retry nonlinear area transport, infer sphere masses or claim consumer closure. Use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD INTEGRATION: exact linear Euclidean graph Hausdorff distortion",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Let E be EuclideanSpace real (Fin d), with d=2 or d=3, and let ell:E→L[real]real. Use the actual orthogonal L2 product E with real, or an explicitly constructed linear isometry to EuclideanSpace real (Fin (d+1)). Retain actual Borel and induced range structures.",
+       :probe
+       "Construct the injective linear graph map G(x)=(x,ell(x)) and its range subspace. Construct a linear isometry identifying the range with a d-dimensional Euclidean space, and use that actual identification to reduce Hausdorff image measure to a same-dimensional additive-Haar determinant calculation. Prove the resulting distortion is sqrt(1+norm(ell)^2), including ell=0, through an explicit Gram/determinant or equivalent singular-value computation. For every measurable s⊆E prove Hausdorff_d(G image s)=ENNReal.ofReal(sqrt(1+norm(ell)^2))*Hausdorff_d(s), preserving the diameter-power convention. Prove the corresponding intrinsic range-subtype measure equation. Compile d=2 and d=3 examples. GO requires the complete placeholder-free fixture; REVISE requires exactly one complete compiled missing linear geometric measure comparison; STOP names the exact independent missing construction.",
+       :consumer-equation
+       "The actual linear graph changes d-dimensional Euclidean Hausdorff measure by precisely sqrt(1+norm(ell)^2), with a constructed range identification and no suppressed normalization factor.",
+       :consumer-residual
+       "Develop nonlinear differentiable graph measure transport from the linear formula and local approximation, then sphere-chart assembly and Euclidean Hausdorff normalization before frozen sphere-integral closure. Stokes and period comparisons remain downstream.",
+       :gates
+       ["Compile complete fixture and record SHA256."
+        "Audit the actual L2 graph map, injectivity, range dimension and constructed range isometry."
+        "Verify the determinant or Gram computation, including zero ell."
+        "Verify the exact image and range-subtype Hausdorff measure equations on measurable sets."
+        "Confirm the proof uses actual isometry transport and same-dimensional Haar distortion without identifying Euclidean Hausdorff measure numerically with volume."
+        "Compile dimension-two and dimension-three examples and standard-only axiom audits."
+        "Recheck both ledgers, reservations and reviewed STOPs; run placeholder and forbidden-declaration scans."]},
+      :id :oriented-checkpoint43-linear-graph-hausdorff-distortion-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint43-graph-area-and-consumer-refill],
+      :current-residual
+      "The nonlinear graph-area STOP isolates an absent exact Hausdorff distortion formula for the injective linear graph map.",
+      :other-consumers [:t95J05 :t01J06 :t94A10]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: linear Hausdorff distortion and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id :oriented-checkpoint44-linear-area-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint43-linear-graph-hausdorff-distortion-1],
+      :current-residual
+      "Measure linear Hausdorff distortion separately from nonlinear area transport and numerical sphere normalization; rerank all consumers against concurrent outcomes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :measures
+    {:frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :typed-residual-after
+     "Signature audit separates injective linear graph Hausdorff distortion from nonlinear differentiable area transport. Neither comparison is proved. Existing same-space Haar Jacobian, general-codomain approximation and Lipschitz finiteness cannot be substituted for their conjunction.",
+     :frozen-closures 0,
+     :infrastructure-packets 0,
+     :corrected-closures 0,
+     :new-proved-refutations 0,
+     :concurrent-review
+     {:row :coefficient-chart-ball-transport-implementation-refill47,
+      :commit "7d1d361d8ca63cf4d71b5f942abf4f919dfc5cd9",
+      :review "invoke-1789035903404-18390-a907e443",
+      :outcome :pass,
+      :new-module-credit 0},
+     :review-outcomes
+     {:graph-area-stop-pass 1,
+      :previously-pending-concurrent-infrastructure-pass 1},
+     :typed-residual-before
+     "Exact graph-area measure comparison was absent."},
+    :ranking
+    [{:rank 0,
+      :program "Near-closure adapters",
+      :finding
+      "All 23 recounted; none has an unreserved closing route supported by new evidence. Concurrent t00A01 closure remains closed and receives no repeat credit."}
+     {:rank 1,
+      :program "Surface position and local point-variation",
+      :finding
+      "Broad shared reach, but their next bounded constructions are reserved; exclude them."}
+     {:rank 2,
+      :program "Intrinsic integration and Stokes",
+      :finding
+      "Elect linear graph Hausdorff distortion. t02A05 and t95J05 have exact measure seams; t01J06 and t94A10 are proposed downstream integration consumers, not immediate closures. The linear construction is simpler than nonlinear area transport."}
+     {:rank 3,
+      :program
+      "Regular-preimage, general-model Sard, global fundamental classes and cap/Thom",
+      :finding
+      "Broad reach remains, with larger independent atlas, orientation and global obligations; no new closing adapter is supported."}
+     {:rank 4,
+      :program
+      "Cover classification, collar/gluing, product homology/Kunneth and arbitrary-integer degree",
+      :finding
+      "Retain their exact missing constructions; current concurrent outcomes do not close these edges."}
+     {:rank 5,
+      :program "Banked uptake, corrected closures and refutations",
+      :finding
+      "Preserve frozen closures, repaired positive-dimensional t94J08 and its original S0 refutation/reduced-homology coverage, corrected t96J07 and the t96J05 refutation. Documentation and diagnostics receive no closure credit."}],
+    :finding
+    "No consumer bytes or infrastructure modules changed since checkpoint42. The graph-area probe produced a reviewed missing-foundation STOP, not a theorem or refutation. Concurrent chart-ball transport advanced from pending to independently reviewed, but its ambient normalization continuation remains reserved. No eligible unreserved closing adapter emerged. Elect the exact linear graph Hausdorff-distortion construction identified by the STOP; this is a prerequisite to the stopped nonlinear area theorem, not a retry or assumed area formula.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/codex13-checkpoint43-census.json",
+     :open 33,
+     :baseline "b8e903eff7a6f18cd1fdf5135dea0902a7446e52",
+     :existing 58,
+     :placeholder-after 62,
+     :zero-placeholder 25,
+     :placeholder-delta 0,
+     :within-two-placeholders 23,
+     :placeholder-before 62,
+     :head "1569ccdfe3f716644ee88f4d86131008274970bf",
+     :construction-modules-after 751,
+     :consumer-changed-paths [],
+     :construction-modules-before 751,
+     :sha256
+     "36fb68d396966d4757a95cf5f272c721abc4b3cc469985db77c849faf2e32ba3",
+     :named 59,
+     :missing ["t93A05"]}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: graph-area progress and renewed consumer eligibility",
@@ -26247,6 +26445,69 @@
     :oriented-checkpoint42-local-constancy-and-consumer-refill],
    :current-residual
    "Measure exact graph-area progress separately from numerical sphere normalization and frozen integral closure; rerank all consumers against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t02A05,
+   :stop-condition
+   "Do not assume a graph-area formula, measure-preserving range identification, Gram determinant value or numerical Hausdorff normalization. Do not replace the L2 metric with the ordinary product or function-space sup metric. Do not retry nonlinear area transport, infer sphere masses or claim consumer closure. Use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD INTEGRATION: exact linear Euclidean graph Hausdorff distortion",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Let E be EuclideanSpace real (Fin d), with d=2 or d=3, and let ell:E→L[real]real. Use the actual orthogonal L2 product E with real, or an explicitly constructed linear isometry to EuclideanSpace real (Fin (d+1)). Retain actual Borel and induced range structures.",
+    :probe
+    "Construct the injective linear graph map G(x)=(x,ell(x)) and its range subspace. Construct a linear isometry identifying the range with a d-dimensional Euclidean space, and use that actual identification to reduce Hausdorff image measure to a same-dimensional additive-Haar determinant calculation. Prove the resulting distortion is sqrt(1+norm(ell)^2), including ell=0, through an explicit Gram/determinant or equivalent singular-value computation. For every measurable s⊆E prove Hausdorff_d(G image s)=ENNReal.ofReal(sqrt(1+norm(ell)^2))*Hausdorff_d(s), preserving the diameter-power convention. Prove the corresponding intrinsic range-subtype measure equation. Compile d=2 and d=3 examples. GO requires the complete placeholder-free fixture; REVISE requires exactly one complete compiled missing linear geometric measure comparison; STOP names the exact independent missing construction.",
+    :consumer-equation
+    "The actual linear graph changes d-dimensional Euclidean Hausdorff measure by precisely sqrt(1+norm(ell)^2), with a constructed range identification and no suppressed normalization factor.",
+    :consumer-residual
+    "Develop nonlinear differentiable graph measure transport from the linear formula and local approximation, then sphere-chart assembly and Euclidean Hausdorff normalization before frozen sphere-integral closure. Stokes and period comparisons remain downstream.",
+    :gates
+    ["Compile complete fixture and record SHA256."
+     "Audit the actual L2 graph map, injectivity, range dimension and constructed range isometry."
+     "Verify the determinant or Gram computation, including zero ell."
+     "Verify the exact image and range-subtype Hausdorff measure equations on measurable sets."
+     "Confirm the proof uses actual isometry transport and same-dimensional Haar distortion without identifying Euclidean Hausdorff measure numerically with volume."
+     "Compile dimension-two and dimension-three examples and standard-only axiom audits."
+     "Recheck both ledgers, reservations and reviewed STOPs; run placeholder and forbidden-declaration scans."]},
+   :id :oriented-checkpoint43-linear-graph-hausdorff-distortion-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint43-graph-area-and-consumer-refill
+    :oriented-checkpoint43-graph-area-and-consumer-refill],
+   :current-residual
+   "The nonlinear graph-area STOP isolates an absent exact Hausdorff distortion formula for the injective linear graph map.",
+   :other-consumers [:t95J05 :t01J06 :t94A10]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: linear Hausdorff distortion and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint44-linear-area-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint43-linear-graph-hausdorff-distortion-1
+    :oriented-checkpoint43-graph-area-and-consumer-refill],
+   :current-residual
+   "Measure linear Hausdorff distortion separately from nonlinear area transport and numerical sphere normalization; rerank all consumers against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
