@@ -32928,6 +32928,25 @@
      {:cmd
       "git show --check --oneline f6c7344b; recompute committed SHA256, Git blob and four declaration-region hashes; git diff --check; git status --short",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789063122683-19100-6af0dbb3",
+     :commands
+     ["git show --stat --oneline f6c7344b21577f342bf2a84afe82bbd04e5d03bd"
+      "git show --check --oneline f6c7344b21577f342bf2a84afe82bbd04e5d03bd"
+      "git diff-tree --no-commit-id --name-only -r f6c7344b21577f342bf2a84afe82bbd04e5d03bd"
+      "git show f6c7344b:ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean | sha256sum"
+      "lake env lean ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean"
+      "lake build ConstructionTargets.SphereCapNullEquatorMeasureAssembly"
+      "rg forbidden declarations and placeholders across the exact two-file scope"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "Perl SHA256 recomputation of EA, sphere_measure, sphere_two_measure and sphere_three_measure declaration regions"
+      "git diff --name-only f6c7344b^ f6c7344b -- problems"
+      "git diff --check f6c7344b^ f6c7344b"],
+     :finding
+     "PASS: commit f6c7344b21577f342bf2a84afe82bbd04e5d03bd has exactly the declared Lean and Markdown files; fixture SHA256 bf7c2f94ed65c0c992120fb26d29b94cb3a53de2146b3f9680ed60ca76b50aad and all four recorded declaration hashes reproduce. Compilation and focused build pass with only propext, Classical.choice and Quot.sound. The theorem rewrites the literal sphere into the correctly associated measurable disjoint union, applies measure_union twice in the valid direction, removes only the proved zero equator, and rewrites both cap terms through SphereCapHausdorffTransport. Dimensions two and three remain symbolic; no frozen problem or placeholder count changed."},
     :commit "f6c7344b21577f342bf2a84afe82bbd04e5d03bd",
     :changed-paths
     ["ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean"
@@ -32946,7 +32965,7 @@
    :consumer-residual
    "Resolve the preserved raw Hausdorff normalization characterization and evaluate the dimension-specific reciprocal-height and coordinate-moment integrals required by t95J05, t02A05, t01J06 and t94A10.",
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean"
     "ConstructionTargets/SphereCapNullEquatorMeasureAssembly.md"],
@@ -33004,7 +33023,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: symbolic sphere-cap assembly and renewed consumer eligibility",
