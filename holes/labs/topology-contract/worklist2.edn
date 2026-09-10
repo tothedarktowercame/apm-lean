@@ -31253,6 +31253,23 @@
       :exit 0}
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789054828456-18879-f48520ab",
+     :commands
+     ["git show --format=fuller --stat 873fe5b900fc6afb4764de0cf4b0da05f0256776"
+      "git diff-tree --no-commit-id --name-status -r 873fe5b900fc6afb4764de0cf4b0da05f0256776"
+      "git diff --check 873fe5b900fc6afb4764de0cf4b0da05f0256776^ 873fe5b900fc6afb4764de0cf4b0da05f0256776"
+      "sha256sum fixture and ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean"
+      "cmp fixture against canonical prerequisite"
+      "lake env lean ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean"
+      "lake build ConstructionTargets.EuclideanAndSupUnitBallVolumes"
+      "rg addHaarScalarFactor APIs across pinned Mathlib MeasureTheory and Geometry sources"
+      "inspect pinned Mathlib raw Hausdorff ball API and proof_wanted characterization"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers from recorded commit"],
+     :finding
+     "PASS: commit 873fe5b9 is ledger-only and whitespace-clean. The prerequisite fixture and canonical source both reproduce SHA256 c99e1f91b71820c5188a90561c5b5de2a1b24a081a779984437d4030dde1accf, compare identically, compile, and build with only standard axioms. They prove the required L2 and sup unit-ball values with the correct numerator/denominator representations. The remaining implication requires identifying addHaarScalarFactor volume μH with their quotient; the sole matching pinned Mathlib declaration is proof_wanted, while available Haar uniqueness APIs determine only an unspecified scalar and no alternative API computes raw Hausdorff measure of the L2 Euclidean ball. Thus deriving μH[2] = (4/π) • volume or μH[3] = (6/π) • volume would require the missing characterization, and the STOP correctly avoids reversed scalar orientation or invalid ENNReal cancellation. Both recorded ledgers validate. No frozen consumer changed, so frozen statement hashes and placeholder recount are not applicable beyond the recorded zero delta."},
     :changed-paths [],
     :fixture
     {:path
@@ -31264,7 +31281,7 @@
     "STOP at an exact independent library boundary. The reviewed prerequisite supplies all four required ball volumes: π and 4π/3 for the L2 Euclidean unit balls, and 4 and 8 for the finite-function sup-metric unit balls. To obtain π/4 and π/6, one must identify addHaarScalarFactor volume μH with the quotient of those volumes. The sole matching Mathlib declaration, MeasureTheory.Measure.addHaarScalarFactor_hausdorffMeasure_eq, is marked proof_wanted. Haar uniqueness proves only that volume equals an unspecified scalar multiple of raw Hausdorff measure; it does not compute that scalar. No alternative theorem evaluates raw Hausdorff measure of an L2 Euclidean ball. Therefore the raw equalities μH[2] = (4/π) • volume and μH[3] = (6/π) • volume, and their restricted-lintegral consequences, cannot be proved from the current bank without implementing the missing scalar characterization. Assuming it, replacing μH by μHE, or cancelling an unspecified ENNReal scalar would violate the row invariants. This STOP reports an unavailable construction, not a refutation of the corrected normalization formulas.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: corrected raw Euclidean Hausdorff normalization in dimensions two and three",
@@ -31310,7 +31327,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: corrected raw Hausdorff normalization and renewed consumer eligibility",
