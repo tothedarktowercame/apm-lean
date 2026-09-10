@@ -22260,93 +22260,134 @@
    :stop-condition
    "No supplied neighborhood isomorphism, integral-to-R reinterpretation, assumed generator or chart construction. Preserve T1 and openness hypotheses. Do not claim overlap orientation coherence, global localization monicity, gluing or consumer closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Deleted-point manifold chart comparisons and overlap compatibility remain before global localization and consumer uptake.",
-     :axiom-audits 15,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:namespace "ConstructionTargets.CoefficientNeighborhoodLocal",
-      :implementation
-      "Promote the exact compiled fixture and document its explicit double-complement transport and actual neighborhood-inclusion maps.",
-      :declarations
-      ["deleted"
-       "localDeleted"
-       "inclusion"
-       "inclusionMap"
-       "excision_eq"
-       "complement_comparison"
-       "projection_degree"
-       "inclusion_isIso"
-       "inclusionIso"
-       "inclusionIso_hom"
-       "nestedInclusion"
-       "nestedMap"
-       "nested_comp"
-       "nested_homology"
-       "inverse_left"
-       "inverse_right"
-       "modelNormalization"
-       "model_forward"
-       "modelGenerator"
-       "generator_normalization"
-       "generator_image"
-       "integral_ball"
-       "rational_ball"],
-      :hypotheses
-      "R and X are Type 0; R is a commutative ring and X a topological space. Actual chain-map comparisons and nested composition require no openness or T1 assumption. The homology isomorphism requires T1Space X, IsOpen U and x∈U, and holds in every natural degree including zero. Euclidean normalization uses ambient dimension m+2, arbitrary open U containing zero, and ModuleCat.of R R coefficients.",
-      :consumer-equation
-      "Actual neighborhood inclusion induces an R-linear local-homology isomorphism. Its forward arrow is precisely homologyMap of the constructed subtype-cokernel map. Composing with the reviewed Euclidean model normalization constructs neighborhood coordinates and a generator whose actual inclusion image equals the ambient model generator.",
-      :consumer-residual
-      "Construct actual deleted-point manifold chart comparisons and overlap compatibility before global localization and t98A02 gluing. Neighborhood excision alone supplies no global conclusion.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientNeighborhoodLocal."
-       "Reproduce fifteen standard-only axiom audits and integer/rational ball examples."
-       "Audit actual subtype cokernels, degreewise projection, excision equality and explicit double-complement transport."
-       "Verify derived T1/openness excision hypotheses, all-degree forward map and both inverse laws."
-       "Verify actual nested-inclusion composition and induced homology equation."
-       "Verify Euclidean neighborhood normalization, generator normalization and actual generator-image equation."
-       "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."
-       "Preserve concurrent reservations and reviewed STOPs; do not claim chart construction, orientation coherence, global localization or frozen closure."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure rules, build-loop design, both ledgers and all four dependency PASS receipts; inspect actual neighborhood and coefficient-general excision APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientNeighborhoodLocal.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientNeighborhoodLocal.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientNeighborhoodLocal.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial neighborhood-local fixture compilation",
-       :exit 1,
-       :correction
-       "Replaced dependent rewriting across double-complement subtype objects with explicit heterogeneous map transport and congrArg transport of the IsIso proposition. Subsequent complete compilation succeeds without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientNeighborhoodLocal.lean",
-      :sha256
-      "546aef3db35bcfd4e880ff312626db1ea435717364b497d22bd0624455507de0"},
-     :finding
-     "The complete placeholder-free fixture constructs the actual R-linear neighborhood map and identifies it with excision after double-complement transport. Excision proves its homology isomorphism in every degree. Actual nested composition, forward maps and inverse laws compile. Euclidean neighborhood normalization and its generator are constructed from the reviewed ambient model, with an exact inclusion-image equation. No integral-to-R reinterpretation or supplied neighborhood isomorphism is used.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientNeighborhoodLocal.lean"
-       "ConstructionTargets/CoefficientNeighborhoodLocal.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Construct actual deleted-point manifold chart comparisons and overlap compatibility before global localization and t98A02 gluing. Neighborhood excision supplies no chart construction, orientation coherence, global localization monicity or frozen closure. Concurrent reservations and reviewed STOPs remain unchanged.",
+    :gates
+    {:integer-rational-examples :pass,
+     :nested-composition :pass,
+     :whitespace :pass,
+     :placeholders :pass,
+     :all-degree-forward-map :pass,
+     :inverse-laws :pass,
+     :degreewise-projection :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :two-file-scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :double-complement-transport :pass,
+     :model-normalization :pass,
+     :derived-excision-hypotheses :pass,
+     :fixture-compilation :pass,
+     :actual-subtype-cokernels :pass,
+     :generator-image :pass},
+    :axiom-audits 15,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation emitted no warnings. Build replayed 22 dependency warnings; none originated in this module."],
+    :statement-hashes
+    {:nestedInclusion
+     "ab7b508cf2bbfcda2f97c09d8ad07114a8da980d551f7f84254a495534503672",
+     :deleted
+     "cf7c10c25c2e4bf28464ac56e127b88dc3c0b0243d6bc1414a673690e3a1143d",
+     :integral_ball
+     "48d0632487ad0704d99e48529b5dcf7dad2f33add2219055ef72e811964b3c7c",
+     :inverse_right
+     "0615c0474311eb353fafc6bdca85a3629e90fa8554820a547f15d6723c82311b",
+     :nested_homology
+     "366acc19fd950c47539d363090266293398c231bad75abaefe0d1982f5a54f6f",
+     :generator_normalization
+     "3c16dcda510ae11ae6ce2943eaeb4b9ee951655dad58dda46178a9dc3c8df471",
+     :modelGenerator
+     "b92c3ccfb1d550bf37dc5dd1112c0f16b04361cff04e56604ad60c82bbb1cefd",
+     :modelNormalization
+     "89565e699b8548d0ec469df116d1104bd4a2f0ab5cd1bce2237bd964bb071ea5",
+     :inclusion_isIso
+     "33bc0af8a723f9d4bb877ab475fee1a271bdffdd64982aae6db88fc55fb57f12",
+     :projection_degree
+     "b95268fa8bfed8ecc7d26d41b0e04f25e139afa68a0e139a7145618df34ab0b4",
+     :generator_image
+     "2692fa85b4210f70c8a2aa568c7c1a4286fcd28618a4e7fbc625d5eb9523e97c",
+     :localDeleted
+     "78a8e1ead4f6b05c073d4cb15a33b4e5d5077b1eac4ab2ebe9a56518fd85adf5",
+     :inclusionIso_hom
+     "017fc23c601a5b8f2b19f65689743b9a7d717bbd8c47e8c86c4ba9976d744f84",
+     :rational_ball
+     "87c010d49f242f3f50d8082e9cd00c66fa772a137db7615d0efa1a922eac43b2",
+     :nestedMap
+     "8b4d698ddc55b4a123b440bf71e76c47a75d5addc8490b9f1c6548a820d8d5ff",
+     :inclusionMap
+     "226f091fbfb203055b992824921631f727cdf9699755934b176d0a0badbb81db",
+     :inclusionIso
+     "82017777d0ea82538c62f24980f45e8366c86d734cb1017c20e3b3f9f4eded84",
+     :nested_comp
+     "dfcdf672fc13df1ced16bbdca9fcc31387fddc52fe9440e97856113f35333acc",
+     :inverse_left
+     "c202cfff7438d6bc1da07a5d9cd749133df356adb703582dab39dde532f27864",
+     :inclusion
+     "9ae2a978f8676db66ba7144b1b253f5a2f4527a2bc6b8eae3f3a5050ec184937",
+     :excision_eq
+     "f9cd30d579ca0fca1483fdef157adc9edf394e6dcfe17738e5c6a65ff5068174",
+     :model_forward
+     "7329f815c60274e8bb36fdae8004f52e41f8477882499fc685ff4d9dc29cd95b",
+     :complement_comparison
+     "9c1b51f0cf6c4ff4fa2be03e365b1835da90aa30a3da4f137f41a0409dfef6c4"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure rules, both ledgers and four dependency PASS receipts; inspect actual subtype, excision and generator equations",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "Verify fixture SHA256 before byte-identical promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientNeighborhoodLocal.lean > /tmp/neighborhood-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientNeighborhoodLocal.lean > /tmp/neighborhood-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientNeighborhoodLocal > /tmp/neighborhood-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Validate fifteen standard-only audits in each direct compilation log, inspect build warnings and verify exact staged two-file scope",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientNeighborhoodLocal.lean ConstructionTargets/CoefficientNeighborhoodLocal.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python audit of fixture equality, zero placeholders and twenty-three declaration hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Construct coefficient-general neighborhood local excision'",
+      :exit 0}
+     {:cmd "git diff --check a80d438b^ a80d438b", :exit 0}
+     {:cmd
+      "Python verification of pinned commit scope, fixture equality and scoped cleanliness; git status --short",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "a80d438beb226fc6049065706e4f51444e0a2ad4",
+    :changed-paths
+    ["ConstructionTargets/CoefficientNeighborhoodLocal.lean"
+     "ConstructionTargets/CoefficientNeighborhoodLocal.md"],
+    :fixture
+    {:path "/tmp/CoefficientNeighborhoodLocal.lean",
+     :sha256
+     "546aef3db35bcfd4e880ff312626db1ea435717364b497d22bd0624455507de0",
+     :promotion :byte-identical},
+    :finding
+    "Promoted the exact fixture identifying actual neighborhood inclusion with coefficient-general excision through explicit double-complement transport. T1, openness and point-membership hypotheses derive an all-degree homology isomorphism with its exact forward map and inverse laws. Actual nested composition, Euclidean neighborhood normalization and the generator's ambient inclusion-image equation compile.",
+    :statement-hash-method
+    "SHA256 from declaration keyword to immediately before the space preceding :=.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientNeighborhoodLocal.lean"
     "ConstructionTargets/CoefficientNeighborhoodLocal.md"],
