@@ -29157,9 +29157,211 @@
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
-   "Do not assume a cap parameterization is measure-preserving, suppress subtype or ambient measure transport, include the equator without a proved null-boundary comparison, or assume numerical Euclidean Hausdorff normalization. Do not evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Exclude active compact-support, arc, orientation and surface work; use a unique row-specific scratch directory.",
-   :phase :probe,
+   "Bank only the open-ball height geometry, C1 regularity, signs and literal L2 unit-norm equations. Do not claim derivative or density formulas, an ambient coordinate isometry, cap-image equality, Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/SphereCapHeight.lean"
+    "ConstructionTargets/SphereCapHeight.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: C1 sphere-cap heights and literal L2 unit graphs",
+   :acceptance
+   {:hypotheses
+    "Use EuclideanSpace real (Fin d) and the open unit ball. The generic height lemmas hold for every natural d; the named consumer examples use d=2 and d=3. No derivative formula, isometry, measure or normalization hypothesis is supplied.",
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.SphereCapHeight."
+     "Reproduce eleven standard-only axiom audits and dimension-two and dimension-three examples for both signs."
+     "Audit open-ball membership, strict radicand positivity and square-root sign claims."
+     "Verify C1 regularity uses the smooth norm-square function and nonzero square-root radicand."
+     "Verify literal WithLp 2 upper and lower graph points have squared norm one."
+     "Confirm no derivative, isometry, measure, normalization, equator or moment result is claimed."
+     "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."],
+    :evidence
+    {:probe
+     {:outcome :go,
+      :seat "codex-13",
+      :fixture
+      {:path
+       "/tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean",
+       :sha256
+       "abc60c72fdfa1bdd211a99897ea929d0fd3c00c1de4b9af83431eb9e59d9e832"},
+      :commands
+      [{:cmd
+        "lake env lean /tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean",
+        :exit 0}],
+      :warnings [],
+      :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+    :consumer-residual
+    "Compute actual fderivatives and graph densities, construct the L2 coordinate isometry to EuclideanSpace real (Fin (d+1)), identify graph images with strict sphere caps and transport exact Hausdorff area.",
+    :axioms :standard-only,
+    :consumer-equation
+    "The functions x ↦ sqrt(1-norm(x)^2) and its negative are C1 on the open unit ball, have the correct strict signs, and their literal points WithLp.toLp 2 (x,height x) have squared norm one.",
+    :declarations
+    ["E"
+     "domain"
+     "upper"
+     "lower"
+     "norm_lt_one"
+     "radicand_pos"
+     "upper_sq"
+     "upper_pos"
+     "lower_neg"
+     "upper_contDiffOn"
+     "lower_contDiffOn"
+     "upper_norm_sq"
+     "lower_norm_sq"
+     "dimension_two_upper"
+     "dimension_two_lower"
+     "dimension_three_upper"
+     "dimension_three_lower"],
+    :namespace "ConstructionTargets.SphereCapHeight",
+    :implementation
+    "Promote the exact compiled fixture and document the remaining derivative, coordinate-isometry and Hausdorff-transport comparisons."},
+   :id :sphere-cap-height-c1-unit-graph-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1],
+   :current-residual
+   "The sphere-cap comparison first requires actual upper and lower height functions on the open unit ball, their C1 regularity, sign control and proof that their L2 graph points lie on the unit sphere.",
+   :other-consumers [:t02A05 :t01J06 :t94A10]}
+  {:consumer :t95J05,
+   :stop-condition
+   "Do not assume a cap parameterization is measure-preserving, suppress subtype or ambient measure transport, include the equator without a proved null-boundary comparison, or assume numerical Euclidean Hausdorff normalization. Do not evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Exclude active compact-support, arc, orientation and surface work; use a unique row-specific scratch directory.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Compute the upper and lower height fderivatives and graph densities, construct the explicit WithLp 2 to EuclideanSpace Fin (d+1) coordinate isometry, prove exact strict-cap image equalities, and transport C1GraphGlobalBounds.exact_area_value through that isometry.",
+     :axiom-audits 11,
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t95J05,
+      :stop-condition
+      "Bank only the open-ball height geometry, C1 regularity, signs and literal L2 unit-norm equations. Do not claim derivative or density formulas, an ambient coordinate isometry, cap-image equality, Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/SphereCapHeight.lean"
+       "ConstructionTargets/SphereCapHeight.md"],
+      :dag-node
+      "MANIFOLD INTEGRATION: C1 sphere-cap heights and literal L2 unit graphs",
+      :acceptance
+      {:hypotheses
+       "Use EuclideanSpace real (Fin d) and the open unit ball. The generic height lemmas hold for every natural d; the named consumer examples use d=2 and d=3. No derivative formula, isometry, measure or normalization hypothesis is supplied.",
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.SphereCapHeight."
+        "Reproduce eleven standard-only axiom audits and dimension-two and dimension-three examples for both signs."
+        "Audit open-ball membership, strict radicand positivity and square-root sign claims."
+        "Verify C1 regularity uses the smooth norm-square function and nonzero square-root radicand."
+        "Verify literal WithLp 2 upper and lower graph points have squared norm one."
+        "Confirm no derivative, isometry, measure, normalization, equator or moment result is claimed."
+        "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."],
+       :evidence
+       {:probe
+        {:outcome :go,
+         :seat "codex-13",
+         :fixture
+         {:path
+          "/tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean",
+          :sha256
+          "abc60c72fdfa1bdd211a99897ea929d0fd3c00c1de4b9af83431eb9e59d9e832"},
+         :commands
+         [{:cmd
+           "lake env lean /tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean",
+           :exit 0}],
+         :warnings [],
+         :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+       :consumer-residual
+       "Compute actual fderivatives and graph densities, construct the L2 coordinate isometry to EuclideanSpace real (Fin (d+1)), identify graph images with strict sphere caps and transport exact Hausdorff area.",
+       :axioms :standard-only,
+       :consumer-equation
+       "The functions x ↦ sqrt(1-norm(x)^2) and its negative are C1 on the open unit ball, have the correct strict signs, and their literal points WithLp.toLp 2 (x,height x) have squared norm one.",
+       :declarations
+       ["E"
+        "domain"
+        "upper"
+        "lower"
+        "norm_lt_one"
+        "radicand_pos"
+        "upper_sq"
+        "upper_pos"
+        "lower_neg"
+        "upper_contDiffOn"
+        "lower_contDiffOn"
+        "upper_norm_sq"
+        "lower_norm_sq"
+        "dimension_two_upper"
+        "dimension_two_lower"
+        "dimension_three_upper"
+        "dimension_three_lower"],
+       :namespace "ConstructionTargets.SphereCapHeight",
+       :implementation
+       "Promote the exact compiled fixture and document the remaining derivative, coordinate-isometry and Hausdorff-transport comparisons."},
+      :id :sphere-cap-height-c1-unit-graph-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1],
+      :current-residual
+      "The sphere-cap comparison first requires actual upper and lower height functions on the open unit ball, their C1 regularity, sign control and proof that their L2 graph points lie on the unit sphere.",
+      :other-consumers [:t02A05 :t01J06 :t94A10]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency PASS receipts",
+       :exit 0}
+      {:cmd
+       "Inspect C1GraphGlobalBounds, SphereCapGraph, InnerProductSpace calculus, square-root differentiation and Hausdorff isometry transport APIs",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "Python comment-stripped placeholder, whitespace and eleven standard-only axiom audits",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial sphere-cap height fixture compilation",
+       :exit 1,
+       :correction
+       "Used Real.sqrt_pos, replaced unsupported automatic differentiation of the norm with the reviewed smooth norm-square theorem, and exposed the WithLp coordinates before proving the unit-norm equations."}
+      {:cmd "Compilation after square-root and smoothness corrections",
+       :exit 1,
+       :correction
+       "Rewrote WithLp.toLp_fst and toLp_snd explicitly before simplifying the real absolute values. Final compilation succeeds without warnings."}
+      {:cmd "Initial Python fixture audit",
+       :exit 127,
+       :correction
+       "The audit command contained a malformed temporary expression and duplicate heredoc terminator. Replaced it with a direct read-only Python command; the successful audit reports zero placeholders, zero tabs, zero trailing whitespace and eleven axiom reports."}],
+     :changed-paths [],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean",
+      :sha256
+      "abc60c72fdfa1bdd211a99897ea929d0fd3c00c1de4b9af83431eb9e59d9e832",
+      :placeholder-count 0},
+     :finding
+     "Exactly one complete compiled geometric prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 sphere-integration routes. On the open unit ball of EuclideanSpace real (Fin d), the literal upper and lower height functions ±sqrt(1-norm(x)^2) have strictly positive radicand, the expected strict signs and ContDiffOn real 1 regularity. Their actual graph points in WithLp 2 of the Euclidean domain times real have squared norm one. Dimension-two and dimension-three specializations compile. The parent comparison is not GO: the explicit height fderivatives and densities, the L2-product-to-Euclidean coordinate isometry, exact cap-image equality and Hausdorff transport remain unproved. No equator, numerical normalization, sphere mass, moment, Stokes or consumer closure claim is made; current reservations, reviewed STOPs and refutations are preserved.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual unit-sphere caps as reviewed C1 L2 graphs",
@@ -29195,7 +29397,7 @@
    :depends-on
    [:oriented-checkpoint46-c1-graph-exact-hausdorff-area-1
     :oriented-checkpoint47-exact-graph-area-and-consumer-refill
-    :oriented-checkpoint47-exact-graph-area-and-consumer-refill],
+    :sphere-cap-height-c1-unit-graph-1],
    :current-residual
    "The exact scalar graph-area theorem is banked, but the literal upper and lower unit-sphere subsets have not been identified with its WithLp 2 graph representation and induced Hausdorff measures.",
    :other-consumers [:t02A05 :t01J06 :t94A10]}
