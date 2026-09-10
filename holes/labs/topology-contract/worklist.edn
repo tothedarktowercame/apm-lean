@@ -55841,6 +55841,20 @@
       :exit 1,
       :correction
       "Qualified CategoryTheory.Functor.map_id to avoid resolving the unrelated Functor.map_id; successful rerun recorded in commands."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788998346681-17375-3f53d7b1",
+     :commands
+     ["git show f29cda41"
+      "Independent pinned-source, exact-prefix and fixture-hash verification"
+      "python3 /tmp/t94j08-signed-audit.py"
+      "lake env lean /tmp/T94J08SignedBoundary.lean"
+      "Inspect cover-small projection comparison, connecting-map swap and sphere antipodal producers"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check f29cda41"],
+     :finding
+     "Independent review of codex-12 STOP passes. Fixture hash and frozen prefix match; consumer unchanged at two placeholders, diagnostic zero. Compilation reproduces standard axioms and three inherited warnings. Actual orientation, antipodal identification and induced involution are established, but do not determine the required sign. The remaining production sphere-shift comparison is distinguished from categorical connecting-map sign and projection naturality. Repaired positive-dimensional branch, historical S0 refutation and reduced-S0/local-index obligations remain separate; no closure or campaign refutation claimed. Ledger passes 430 items; no edits."},
     :campaign-refutation false,
     :commit nil,
     :changed-paths [],
@@ -55852,7 +55866,7 @@
     "Compiled the actual frozen positive-dimensional ModuleCat integral orientation, equality of the frozen antipodal map with SphereAntipodalHomology.sphereAntipodal, and involutivity of its actual induced homology map. All frozen definitions and existing helper proofs in the diagnostic prefix are byte-identical. Inspected the later production-pair, nested-subspace, range-cokernel and cover-small projection comparisons, not merely their historical predecessors. CoverSmallRelativeProjectionComparison supplies the projection equation, but identifying rightPairToAmbientRelative with the applicable relativeExcisionMap at Z=V complement and transporting through its positive-degree homology inverse remains. That comparison must connect MayerVietorisConnectingSwap.connecting_swap to the actual spherePositiveHomologyShift, yielding the negative antipodal recurrence, including the degree-one endpoint through the reduced zero-sphere difference. RelativePairNaturality supplies pair-map naturality; coefficient small-path chains do not supply this signed sphere-shift comparison. No complete frozen closure fixture was obtained.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "SPHERE ORIENTATION / signed antipodal action",
    :acceptance
