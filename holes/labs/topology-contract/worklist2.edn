@@ -39920,34 +39920,153 @@
   {:consumer :t03J05,
    :stop-condition
    "Construct only the explicit byte-preserving transition from checkpoint60's mutable canonical fixture path to a stable immutable predecessor artifact. Preserve its historical fixture hash, supporting hash, declarations, evidence commit and review outcome. Do not weaken validation, infer unrecorded Git-blob evidence, promote the recurrence source, prove topology results or claim consumer closure.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "After the immutable artifact is committed and the supervisor repoints checkpoint60 evidence to it, promote the reviewed additive prefix-successor recurrences at the canonical module path, then prove both word/path inverse laws.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the reviewed dependency receipts",
+       :exit 0}
+      {:cmd
+       "Inspect worklist_check.bb fixture validation, checkpoint60 evidence, the reviewed immutable-artifact STOP and repository evidence directories",
+       :exit 0}
+      {:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint64-artifact-transition-19509/predecessor.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint64-artifact-transition-19509/predecessor.lean",
+       :exit 0}
+      {:cmd
+       "git show d7ecc4b411b2f783f762da03ac598994100be9a1:ConstructionTargets/ProductSimplexWordPrefixCounts.lean | sha256sum",
+       :exit 0}
+      {:cmd
+       "git show d7ecc4b411b2f783f762da03ac598994100be9a1:ConstructionTargets/ProductSimplexWordPrefixCounts.lean | git hash-object --stdin",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb /tmp/codex13-checkpoint64-artifact-transition-19509/transition.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb /tmp/codex13-checkpoint64-artifact-transition-19509/transition.edn after appending mutation bytes to the scratch predecessor artifact",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb /tmp/codex13-checkpoint64-artifact-transition-19509/transition.edn while the scratch predecessor artifact is absent",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb /tmp/codex13-checkpoint64-artifact-transition-19509/wrong-hash-targeted.edn",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint64-artifact-transition-19509/successor.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint64-artifact-transition-19509/predecessor.lean /tmp/codex13-checkpoint64-artifact-transition-19509/successor.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint64-artifact-transition-19509/predecessor.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :representation
+     {:source
+      "Checkpoint60's completed-row evidence for the predecessor ProductSimplexWordPrefixCounts bytes at the mutable canonical path, identified by its recorded fixture and supporting SHA256 values",
+      :target
+      "A stable immutable artifact containing those exact predecessor bytes, with an explicit ledger transition retaining the completed row's hashes, evidence commit, declarations and review outcome",
+      :direction
+      "Exact byte-preserving relocation from the source mutable-path fixture representation to the target immutable-artifact representation, with historical evidence retained and the canonical path released for a separately validated additive successor."},
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint64-artifact-transition-19509/predecessor.lean",
+      :sha256
+      "e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187",
+      :git-blob-verification
+      "d52f2865d16e184c2a6aa13ccdc508e9765a9008",
+      :transition-ledger
+      "/tmp/codex13-checkpoint64-artifact-transition-19509/transition.edn",
+      :successor-path
+      "/tmp/codex13-checkpoint64-artifact-transition-19509/successor.lean",
+      :successor-sha256
+      "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
+      :placeholder-count 0},
+     :finding
+     "GO. The complete placeholder-free predecessor artifact compiles and is byte-identical to the source recovered from checkpoint60's evidence commit. Its SHA256 is e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187, and the independently derived Git blob is d52f2865d16e184c2a6aa13ccdc508e9765a9008. A scratch ledger transition changing only checkpoint60's fixture path validates with the existing checker; mutation, absence and a wrong recorded hash are rejected. The separately hashed reviewed successor also compiles at an independent path. No validator change, weakened invariant, recurrence promotion or topology theorem is required by this implementation.",
+     :implementation
+     {:scope
+      ["holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean"],
+      :acceptance
+      {:implementation
+       "Copy the compiled predecessor fixture byte-for-byte to the uniquely named repository evidence path. The supervisor transition must repoint checkpoint60's :evidence :fixture :path to that artifact while preserving its SHA256, supporting evidence, declarations, evidence commit and PASS review. Do not edit the canonical ProductSimplexWordPrefixCounts source or promote successor recurrences in this implementation.",
+       :transition
+       {:row
+        :oriented-checkpoint60-product-simplex-prefix-monotonicity-repair-1,
+        :from
+        "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+        :to
+        "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean",
+        :preserve
+        [:sha256
+         :supporting-path
+         :supporting-sha256
+         :placeholder-count
+         :statement-hashes
+         :commit
+         :review]},
+       :gates
+       ["Verify the recorded fixture SHA256 before copying."
+        "Verify the repository artifact is byte-identical to the fixture and to the source recovered from evidence commit d7ecc4b411b2f783f762da03ac598994100be9a1."
+        "Compile the repository artifact."
+        "Verify the derived Git blob is d52f2865d16e184c2a6aa13ccdc508e9765a9008 without representing it as pre-existing checkpoint60 evidence."
+        "Apply the explicit supervisor ledger transition and validate both ledgers."
+        "Reject altered, absent and wrongly hashed artifact bytes."
+        "Run placeholder, forbidden-declaration, whitespace and exact one-file scope checks."
+        "Commit only the scoped immutable artifact."]}},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean"],
    :dag-node
    "LEDGER REPRESENTATION: immutable predecessor artifact transition for canonical module extension",
    :acceptance
-   {:axioms :standard-only,
-    :hypotheses
-    "Use checkpoint60's recorded ProductSimplexWordPrefixCounts fixture evidence and recover its exact predecessor bytes from evidence commit d7ecc4b411b2f783f762da03ac598994100be9a1; the derived Git blob d52f2865d16e184c2a6aa13ccdc508e9765a9008 is verification input, not pre-existing ledger evidence.",
-    :route-step
-    "Supplies the immutable predecessor transition required before recurrence promotion on the t03J05, t96J06 and t97A04 routes.",
-    :probe
-    "Create a scratch immutable artifact containing exactly the checkpoint60 predecessor bytes. Construct and test an explicit scratch-ledger transition that moves the completed row's fixture reference from the mutable canonical path to that artifact while preserving the recorded SHA256, supporting evidence, declarations, evidence commit and review outcome. Verify the artifact compiles, both ledgers accept the transitioned evidence, the canonical path can independently hold the reviewed additive successor, and altered, missing or wrongly hashed predecessor artifacts are rejected. GO requires a complete tested fixture or patch. REVISE requires exactly one complete tested artifact-storage, transition-schema or validator prerequisite. STOP names an exact invariant conflict.",
-    :consumer-equation
-    "The immutable artifact contains exactly the bytes certified by checkpoint60, and an explicit ledger transition changes only their storage path while retaining all historical hashes and review evidence; the mutable canonical path may then carry a separately validated additive successor.",
-    :consumer-residual
-    "Apply the tested transition, promote the reviewed prefix-successor recurrences as the current canonical source, then prove both word/path inverse laws.",
+   {:implementation
+    "Copy the compiled predecessor fixture byte-for-byte to the uniquely named repository evidence path. The supervisor transition must repoint checkpoint60's :evidence :fixture :path to that artifact while preserving its SHA256, supporting evidence, declarations, evidence commit and PASS review. Do not edit the canonical ProductSimplexWordPrefixCounts source or promote successor recurrences in this implementation.",
+    :transition
+    {:row
+     :oriented-checkpoint60-product-simplex-prefix-monotonicity-repair-1,
+     :from "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+     :to
+     "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean",
+     :preserve
+     [:sha256
+      :supporting-path
+      :supporting-sha256
+      :placeholder-count
+      :statement-hashes
+      :commit
+      :review]},
     :gates
-    ["Recover predecessor bytes from the recorded evidence commit and verify derived blob d52f2865d16e184c2a6aa13ccdc508e9765a9008."
-     "Verify the immutable artifact SHA256 equals checkpoint60's recorded fixture SHA256."
-     "Preserve predecessor declarations, supporting evidence, evidence commit and review outcome."
-     "Require an explicit ledger transition from the old fixture path to the immutable artifact path."
-     "Retain exact scope and current-source validation."
-     "Reject altered, missing and wrongly hashed predecessor artifacts."
-     "Verify the reviewed additive successor can be validated separately at the canonical path."
-     "Run clj-kondo and futon4/dev/check-parens.el for Clojure changes."
-     "Run focused transition and validator tests and both ledger checks."
-     "Confirm no hash invariant is weakened and no topology theorem or closure is claimed."]},
+    ["Verify the recorded fixture SHA256 before copying."
+     "Verify the repository artifact is byte-identical to the fixture and to the source recovered from evidence commit d7ecc4b411b2f783f762da03ac598994100be9a1."
+     "Compile the repository artifact."
+     "Verify the derived Git blob is d52f2865d16e184c2a6aa13ccdc508e9765a9008 without representing it as pre-existing checkpoint60 evidence."
+     "Apply the explicit supervisor ledger transition and validate both ledgers."
+     "Reject altered, absent and wrongly hashed artifact bytes."
+     "Run placeholder, forbidden-declaration, whitespace and exact one-file scope checks."
+     "Commit only the scoped immutable artifact."]},
    :representation
    {:source
     "Checkpoint60's completed-row evidence for the predecessor ProductSimplexWordPrefixCounts bytes at the mutable canonical path, identified by its recorded fixture and supporting SHA256 values",
