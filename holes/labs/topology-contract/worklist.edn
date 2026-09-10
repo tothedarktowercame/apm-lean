@@ -61771,6 +61771,19 @@
       :exit 0,
       :correction
       "Prior successful script execution produced invalid truncated statement evidence. Superseded its first-:= extraction and all six previously reported normalized hashes with complete declaration-header hashes."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789020298315-18014-d3c2d4a7",
+     :commands
+     ["Independent Python audit of pinned fixture, 23 complete declaration headers, six recorded hashes and zero placeholders"
+      "git diff-tree --no-commit-id --name-only -r bce3268b"
+      "git show --check bce3268b"
+      "git diff --exit-code 7593f33c -- ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean"
+      "lake env lean ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show bce3268b:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "Evidence-only repair resolves the previous defect: all six recorded hashes now cover complete declaration types, including letI assignments and conclusions. Author codex-6 is independent. Implementation 7593f33c remains byte-identical to fixture SHA256 e3d12f117d5106fa50605de4b247a5b7de720a7cd2114b9b3247a11877f1ee71. Compilation warning-free with 23 standard-only axiom audits; zero placeholders; validator 483 items OK. Constructed chart cover and overlaps yield the chosen atlas; dimension transport preserves that same atlas and smooth inclusion into the original product. Inherited topology, empty incidence and zero-dimensional kernels remain supported. No tangent or consumer closure claimed; ledger untouched."},
     :commit "7593f33c5eda754661e5169a50fd3dd72ef5589e",
     :changed-paths [],
     :fixture
@@ -61783,7 +61796,7 @@
     "SHA256 of exact UTF-8 source from def/theorem keyword through the character before the space preceding the outer := or where. Outer delimiters match ' :=(?=\\n| by\\b| rfl\\b| h ▸)| where(?=\\n)', skipping embedded letI and named-argument assignments. Attributes and trailing separator whitespace are excluded.",
     :axiom-audit-declarations 23},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean"],
    :dag-node
@@ -61816,7 +61829,7 @@
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local missing infrastructure does not terminate the campaign.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
