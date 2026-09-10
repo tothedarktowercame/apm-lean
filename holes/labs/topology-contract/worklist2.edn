@@ -10871,6 +10871,20 @@
      {:path "/tmp/Checkpoint17Census.json",
       :sha256
       "d026998d818627ae27ecc6027659369c3ba2e842b8a70b58c1ee4c8109c9a901"}},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788998486774-17379-339dcbb5",
+     :commands
+     ["git show 27a4df6f:holes/labs/topology-contract/worklist2.edn"
+      "git show f29cda41:problems/t96J06/lean/Main.lean"
+      "python3 inline audit: census SHA256, all 59 consumer counts, module counts, changed paths, frozen t96J06 SHA256 and ledger-only scope"
+      "bb inline audit: exact replacement tail, successor policy, dependencies and pinned active rows in both ledgers"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 27a4df6f:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Independent review of codex-13 strategy receipt at 27a4df6f. Census hash matches: placeholders 68->68 and modules 646->650, with two portfolio and two concurrent modules. Frozen t96J06 hash matches; arbitrary compact subset and intrinsic half-space atlas are preserved without assumed smooth ambient inclusion. Subdivision requires an actual coefficient-general chain endomorphism; homotopy, smallness and excision remain downstream. Concurrent work excluded; exact three-row tail and successor policy verified. Strategy-only packet has no Lean fixture or new theorem hashes. Ledger untouched."},
     :replacement-items
     [{:consumer :t96J06,
       :stop-condition
@@ -10968,7 +10982,7 @@
     "The exact product-torus consumer remains at one placeholder: actual punctured-surface curves and the invariant under every frozen ambient embedding remain absent. CoefficientSmallPath and CoefficientSmallH0 now construct finite subordinate path boundaries and the inverse to the actual inclusion-induced H0 map over R, including empty and disconnected spaces. This removes the degree-zero absolute small-chain comparison boundary, but supplies neither positive-degree comparison nor relative excision. Concurrent smooth fiber inclusion and tangent-kernel comparison add two modules without changing a frozen consumer. Both ledgers were inspected: a97J08 already has a reviewed unresolved planar-separation STOP and is excluded. Elect t96J06 as the single fresh two-placeholder consumer audit, followed by the coefficient-general subdivision chain map. This shared chain construction has four named downstream consumers and reuses existing simplex geometry; broader fundamental-class, intersection, Kunneth, Stokes, surface-classification and covering-gluing programs require larger constructions. Active manifold-source fiber charts and the reserved antipodal and radial-refutation work are excluded.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact product-torus uptake and small-chain H0",
@@ -10990,7 +11004,7 @@
    :stop-condition
    "Preserve actual projectivization, arbitrary compact subset and its chosen half-space atlas. Do not assume a smooth ambient inclusion, fundamental class, intersection pairing or boundary null-homology.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "INTERSECTION: exact projective-product nonbounding consumer",
@@ -11022,7 +11036,7 @@
    :stop-condition
    "Construct the operator on actual ModuleCat R singular chains. No assumed chain map, coefficient-change theorem, subdivision homotopy or homology isomorphism.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION: explicit-coefficient barycentric chain endomorphism",
