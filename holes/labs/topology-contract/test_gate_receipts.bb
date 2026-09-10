@@ -109,6 +109,69 @@
    :from "mutable.lean" :to (.getAbsolutePath artifact)
    :preserve (assoc transition-preserve :sha256 hash)})
 
+(def checkpoint67-preserve
+  {:sha256 nil :reviewed-source "/tmp/reviewed.lean"
+   :reviewed-source-sha256 "reviewed-sha"
+   :predecessor-path "immutable-predecessor.lean"
+   :predecessor-sha256 "predecessor-sha" :placeholder-count 0
+   :commit "checkpoint67-commit" :review-outcome :pass
+   :declarations ["successor"]
+   :statement-hashes {"successor" "statement-sha"}})
+
+(defn checkpoint67-ledger [hash]
+  (let [ledger (transition-ledger hash)]
+    (-> ledger
+        (assoc-in [:items 0 :acceptance :declarations] ["successor"])
+        (assoc-in [:items 0 :evidence :fixture]
+                  {:path "mutable.lean" :sha256 hash
+                   :reviewed-source "/tmp/reviewed.lean"
+                   :reviewed-source-sha256 "reviewed-sha"
+                   :predecessor-path "immutable-predecessor.lean"
+                   :predecessor-sha256 "predecessor-sha"
+                   :placeholder-count 0})
+        (assoc-in [:items 0 :evidence :commit] "checkpoint67-commit")
+        (assoc-in [:items 0 :evidence :statement-hashes]
+                  {"successor" "statement-sha"}))))
+
+(defn checkpoint67-transition [artifact hash]
+  (assoc (completion-transition artifact hash)
+         :preserve-schema :checkpoint67-primary
+         :preserve (assoc checkpoint67-preserve :sha256 hash)))
+
+(deftest checkpoint67-preserve-schema-is-exact
+  (let [artifact (java.io.File/createTempFile "immutable-fixture" ".lean")
+        hash (first (.split (:out (sh/sh "sha256sum" (.getAbsolutePath artifact))) "\\s+"))
+        base (edn/read-string (slurp (io/file here "fixtures/done-receipt.edn")))
+        cases (concat
+               [{:label :success}
+                {:label :unknown-schema :change #(assoc % :preserve-schema :unknown)}
+                {:label :omitted-label :change #(update % :preserve dissoc :declarations)}
+                {:label :extra-label :change #(assoc-in % [:preserve :extra] true)}
+                {:label :wrong-path :change #(assoc % :path [:evidence :fixture :supporting-path])}]
+               (for [field (keys checkpoint67-preserve)]
+                 {:label (keyword (str "wrong-" (name field)))
+                  :change #(assoc-in % [:preserve field] ::wrong)}))]
+    (try
+      (doseq [{:keys [label change]} cases]
+        (let [ledger-file (java.io.File/createTempFile "transition-ledger" ".edn")
+              receipt-file (java.io.File/createTempFile "transition-receipt" ".edn")
+              ledger (checkpoint67-ledger hash)
+              transition ((or change identity) (checkpoint67-transition artifact hash))]
+          (try
+            (spit ledger-file (pr-str ledger))
+            (spit receipt-file (pr-str (assoc base :completion-transition transition)))
+            (let [result (sh/sh "bb" (str here "/build_step.bb") "apply-result"
+                                (.getAbsolutePath ledger-file) "edge"
+                                (.getAbsolutePath receipt-file))]
+              (is (= (if (= :success label) 0 1) (:exit result)) (name label))
+              (if (= :success label)
+                (is (= (.getAbsolutePath artifact)
+                       (get-in (edn/read-string (slurp ledger-file))
+                               [:items 0 :evidence :fixture :path])))
+                (is (= (pr-str ledger) (slurp ledger-file)) (name label))))
+            (finally (.delete ledger-file) (.delete receipt-file)))))
+      (finally (.delete artifact)))))
+
 (deftest completion-fixture-path-transition-is-atomic-and-typed
   (let [artifact (java.io.File/createTempFile "immutable-fixture" ".lean")
         hash (:out (sh/sh "sha256sum" (.getAbsolutePath artifact)))

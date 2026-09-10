@@ -124,21 +124,39 @@
          (some? (:next-consumer-residual receipt)))
     (assoc :residual (:next-consumer-residual receipt))))
 
-(def fixture-transition-preserve-paths
-  {[:evidence :fixture :path]
-   {:sha256 [:evidence :fixture :sha256]
+(def fixture-transition-preserve-schemas
+  {:checkpoint60-primary
+   {:path [:evidence :fixture :path]
+    :preserve {:sha256 [:evidence :fixture :sha256]
     :supporting-path [:evidence :fixture :supporting-path]
     :supporting-sha256 [:evidence :fixture :supporting-sha256]
     :placeholder-count [:evidence :fixture :placeholder-count]
     :commit [:evidence :commit]
-    :review-outcome [:evidence :review :outcome]}
-   [:evidence :fixture :supporting-path]
-   {:fixture-path [:evidence :fixture :path]
+    :review-outcome [:evidence :review :outcome]}}
+   :checkpoint66-supporting
+   {:path [:evidence :fixture :supporting-path]
+    :preserve {:fixture-path [:evidence :fixture :path]
     :sha256 [:evidence :fixture :sha256]
     :supporting-sha256 [:evidence :fixture :supporting-sha256]
     :placeholder-count [:evidence :fixture :placeholder-count]
     :commit [:evidence :commit]
-    :review-outcome [:evidence :review :outcome]}})
+    :review-outcome [:evidence :review :outcome]}}
+   :checkpoint67-primary
+   {:path [:evidence :fixture :path]
+    :preserve {:sha256 [:evidence :fixture :sha256]
+               :reviewed-source [:evidence :fixture :reviewed-source]
+               :reviewed-source-sha256 [:evidence :fixture :reviewed-source-sha256]
+               :predecessor-path [:evidence :fixture :predecessor-path]
+               :predecessor-sha256 [:evidence :fixture :predecessor-sha256]
+               :placeholder-count [:evidence :fixture :placeholder-count]
+               :commit [:evidence :commit]
+               :review-outcome [:evidence :review :outcome]
+               :declarations [:acceptance :declarations]
+               :statement-hashes [:evidence :statement-hashes]}}})
+
+(def default-fixture-transition-schema
+  {[:evidence :fixture :path] :checkpoint60-primary
+   [:evidence :fixture :supporting-path] :checkpoint66-supporting})
 
 (defn canonical-file [p]
   (let [f (io/file p)]
@@ -154,11 +172,18 @@
     (do
       (when-not (= :done-unreviewed outcome)
         (throw (ex-info "completion transition requires done-unreviewed outcome" {})))
-      (when-not (= #{:row :path :from :to :preserve} (set (keys transition)))
+      (when-not (or (= #{:row :path :from :to :preserve} (set (keys transition)))
+                    (= #{:row :path :from :to :preserve :preserve-schema}
+                       (set (keys transition))))
         (throw (ex-info "completion transition has unsupported fields" {})))
-      (let [preserve-paths (get fixture-transition-preserve-paths (:path transition))]
-        (when-not preserve-paths
-          (throw (ex-info "completion transition may change only an allowlisted fixture path" {})))
+      (let [schema-name (or (:preserve-schema transition)
+                            (get default-fixture-transition-schema (:path transition)))
+            schema (get fixture-transition-preserve-schemas schema-name)
+            preserve-paths (:preserve schema)]
+        (when-not schema
+          (throw (ex-info "completion transition has unknown preserve schema" {})))
+        (when-not (= (:path schema) (:path transition))
+          (throw (ex-info "completion transition schema does not allow requested path" {})))
         (when-not (= (set (keys preserve-paths)) (set (keys (:preserve transition))))
           (throw (ex-info "completion transition must preserve every required value" {})))
         (let [matches (keep-indexed #(when (= (:row transition) (:id %2)) %1) xs)]
