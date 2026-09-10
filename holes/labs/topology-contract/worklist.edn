@@ -67873,6 +67873,24 @@
      "The three direct coefficient homology maps induced by the corresponding nested-piece inclusions into X",
      :direction
      "One simultaneous conjunction of exact forward equalities from every transported composite to its direct nested inclusion map in each natural degree."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789047350877-18682-81062945",
+     :commands
+     ["git show --stat --oneline 3cae1240ea51de3bdb5d30f9248d9074b999eaaa"
+      "git diff-tree --no-commit-id --name-only -r 3cae1240ea51de3bdb5d30f9248d9074b999eaaa"
+      "git show 3cae1240ea51de3bdb5d30f9248d9074b999eaaa:ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean | sha256sum"
+      "git show 3cae1240ea51de3bdb5d30f9248d9074b999eaaa:ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean | cmp -s /tmp/CoefficientCompactComplementHomologySquareBundle.lean"
+      "lake build ConstructionTargets.CoefficientCompactComplementHomologySquares"
+      "git show 3cae1240ea51de3bdb5d30f9248d9074b999eaaa:ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean | lake env lean /dev/stdin"
+      "lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean"
+      "python3 read-only placeholder, homology-map-count, and declaration-header SHA-256 audit"
+      "git show 3cae1240:ConstructionTargets/CoefficientCompactComplementHomologySquares.lean | sha256sum"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git status --short"],
+     :finding
+     "PASS: recorded commit has exact one-file scope and is byte-identical to the pinned fixture; compilation, standard-only axiom audit, zero placeholders, six homology-map occurrences, dependency hash, and frozen statement hash reproduce. All three equalities have the required transported-composite-to-direct-inclusion forward orientation, with no claim beyond bundled naturality."},
     :commit "3cae1240ea51de3bdb5d30f9248d9074b999eaaa",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean"],
@@ -67888,7 +67906,7 @@
     :axiom-audit-count 1,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean"],
    :dag-node
@@ -67996,7 +68014,7 @@
      "Compiled one new bounded prerequisite that packages the three reviewed forward homology inclusion squares into one simultaneous theorem for the left, right and overlap complement pieces. This supplies a single typed naturality input for the signed Mayer-Vietoris conjugation. Exactness on the complement presentation and the final coefficient-excision transport remain unproved.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
