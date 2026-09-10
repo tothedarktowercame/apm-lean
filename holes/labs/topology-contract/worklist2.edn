@@ -31127,41 +31127,29 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Repair either the fixture namespace and its recorded SHA256 or the acceptance namespace and exact-promotion requirement before the four unit-ball volume formulas can be promoted coherently.",
-    :outcome :stop,
+    "Use the four exact values to prove addHaarScalarFactor ratios π/4 and π/6, then derive the corrected raw Hausdorff-measure and restricted-lintegral formulas without ENNReal cancellation.",
+    :outcome :done-unreviewed,
     :warnings [],
-    :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
-    :author "codex-14",
-    :reason :fixture-namespace-conflict,
+    :author "Joe Corneli <holtzermann17@gmail.com>",
     :commands
     [{:cmd
-      "sha256sum /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean && rg -n '^namespace ' /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean && lake env lean /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean",
-      :exit 0}
-     {:cmd "lake env lean /tmp/codex14-unit-ball-namespace-audit.lean",
-      :exit 1,
-      :expected-exit 1}
-     {:cmd
-      "git diff --exit-code -- ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean ConstructionTargets/EuclideanAndSupUnitBallVolumes.md && rg -n 'ConstructionTargets\\.EuclideanAndSupUnitBallVolumes|074b1ffd78e0d973b9ee76be14599993fa0e96512eb37cbb785d0bd67bd7a45f' holes/labs/topology-contract/worklist2.edn",
+      "Verified unique commit dc2c1c45 resolves to dc2c1c452ecf94b0d8f0273b7c78eb3878ba906e; its exact two paths, fixture blob, and SHA-256 match the original receipt.",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1789053964807-18855-cd94ce94",
-     :finding
-     "Recorded commit 3a2ae22188fa35329b2806f226493f542aeff73e cites fixture /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean at SHA256 074b1ffd78e0d973b9ee76be14599993fa0e96512eb37cbb785d0bd67bd7a45f with namespace EuclideanAndSupUnitBallVolumes, but that path now hashes c99e1f91b71820c5188a90561c5b5de2a1b24a081a779984437d4030dde1accf and declares namespace ConstructionTargets.EuclideanAndSupUnitBallVolumes; repair the row with immutable/reproducible fixture provenance and reassess the namespace-conflict STOP."},
-    :changed-paths [],
+    :commit "dc2c1c452ecf94b0d8f0273b7c78eb3878ba906e",
+    :changed-paths
+    ["ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean"
+     "ConstructionTargets/EuclideanAndSupUnitBallVolumes.md"],
     :fixture
-    {:path
-     "/tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean",
+    {:path "ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean",
      :sha256
-     "074b1ffd78e0d973b9ee76be14599993fa0e96512eb37cbb785d0bd67bd7a45f",
+     "c99e1f91b71820c5188a90561c5b5de2a1b24a081a779984437d4030dde1accf",
+     :git-commit "dc2c1c452ecf94b0d8f0273b7c78eb3878ba906e",
+     :git-blob "96284fd38f08f720150b3d33bf0a6b4b48ca3921",
      :placeholder-count 0},
-    :finding
-    "The unchanged row still requires exact promotion of fixture SHA256 074b1ffd78e0d973b9ee76be14599993fa0e96512eb37cbb785d0bd67bd7a45f under namespace ConstructionTargets.EuclideanAndSupUnitBallVolumes, but that exact fixture declares namespace EuclideanAndSupUnitBallVolumes. Its declarations therefore have unqualified names, while the required qualified declaration is unknown. Renaming or wrapping the namespace would cease to promote the exact fixture. The specification must repair the fixture and recorded hash or consistently revise the namespace/exact-promotion requirement. This is a specification boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean"
     "ConstructionTargets/EuclideanAndSupUnitBallVolumes.md"],
