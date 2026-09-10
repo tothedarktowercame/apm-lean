@@ -70270,6 +70270,22 @@
       "git diff --check -- ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789059347303-19023-a1943a4a",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r eb029b48d2c11fccbc63b878dceadf0c0e170f24"
+      "git show eb029b48d2c11fccbc63b878dceadf0c0e170f24:ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean | sha256sum"
+      "sha256sum /tmp/CoefficientNestedSubspaceIntersectionComparison.lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean ConstructionTargets/NestedSubspaceIntersectionComparison.lean"
+      "git diff --exit-code eb029b48d2c11fccbc63b878dceadf0c0e170f24 -- ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean"
+      "lake env lean ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean"
+      "Python comment-stripped placeholder and five complete-declaration SHA256 audit"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --check --oneline eb029b48d2c11fccbc63b878dceadf0c0e170f24"
+      "git diff --check"],
+     :finding
+     "Recorded commit has exact one-file scope and author codex-6 differs from reviewer codex-10. Canonical source and fixture are byte-identical at SHA256 7b7db522a204b44ce7cdcc9540def617abdce0e86cf10787286d69b99f24e1cd; dependency hashes da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906 and 83520e9b2dc97b42f4a9f9d1d945add9baca6843e2a83bebad07c9f2494419a9 match. Zero placeholders and all five recorded declaration hashes reproduce. Lean compiles without warnings with axioms propext, Classical.choice and Quot.sound. The canonical homeomorphism is applied forward from the literal intersection subtype to the nested subspace inside V; its chain and homology maps commute exactly with inclusion into V, and cokernel.mapIso yields the required forward relative-chain isomorphism. The file correctly does not claim the union production map, compact-complement specialization, coefficient excision, relative Mayer-Vietoris exactness, localization, vanishing, or a fundamental class; ledger and diff gates pass."},
     :commit "eb029b48d2c11fccbc63b878dceadf0c0e170f24",
     :changed-paths
     ["ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean"],
@@ -70281,7 +70297,7 @@
     :finding
     "Promoted the exact fixture. The coefficient chain and homology isomorphisms from the literal intersection to the nested subspace, both inclusion-compatibility squares and the induced relative-cokernel isomorphism compile without warnings or placeholders. Both dependency hashes match their pinned values. Two unrelated pre-existing untracked documentation files remain untouched."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean"],
    :dag-node
@@ -70392,7 +70408,7 @@
      "Compiled exactly one missing coefficient representation prerequisite. The literal intersection subtype and its nested-subspace presentation inside the right piece are identified on coefficient chains and homology, both inclusion squares commute, and the induced relative cokernels are isomorphic. The construction is coefficient-general and does not use the refuted zero supportConnecting map. The unrelated pre-existing untracked documentation files remain untouched.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
