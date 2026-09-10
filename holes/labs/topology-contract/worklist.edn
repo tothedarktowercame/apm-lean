@@ -68671,6 +68671,23 @@
      "Coefficient singular chains and homology of the actual ambient space X minus the intersection of K and L",
      :direction
      "Exact identification of the range supremum with the Boolean cover-small simplicial set, followed by the forward cover-small comparison isomorphism from the Mayer-Vietoris union term to the actual ambient complement."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789051423630-18790-fe417420",
+     :commands
+     ["git show 9064548f:holes/labs/topology-contract/worklist.edn"
+      "git show --stat --oneline be5e76e8"
+      "git show be5e76e8:ConstructionTargets/CoefficientCompactComplementUnionComparison.lean > /tmp/CoefficientCompactComplementUnionComparison.lean"
+      "sha256sum /tmp/CoefficientCompactComplementUnionComparison.lean"
+      "git show be5e76e8:ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean | sha256sum"
+      "git show be5e76e8:ConstructionTargets/CoefficientCompactComplementSmallComparison.lean | sha256sum"
+      "lake build ConstructionTargets.CoefficientPieceRangeBiproductComparison ConstructionTargets.CoefficientCompactComplementSmallComparison"
+      "lake env lean /tmp/CoefficientCompactComplementUnionComparison.lean"
+      "lake env lean ConstructionTargets/CoefficientCompactComplementUnionComparison.lean"
+      "python3 placeholder and declaration audit"],
+     :finding
+     "PASS: recorded commit changes exactly ConstructionTargets/CoefficientCompactComplementUnionComparison.lean; fixture SHA256 a91c06af52938916deb44ee2f9f45f3cd260969d75357268267f1ab539672de9 and dependency hashes match; all five required declarations occur once and compile without target warnings; zero sorry/admit/axiom declarations; standard axioms only; equality and chain/homology isomorphisms have the declared forward union-term-to-ambient-complement orientation, while excluded downstream claims remain absent."},
     :commit "be5e76e889609e795a839056cc2909b6ac442665",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementUnionComparison.lean"],
@@ -68685,7 +68702,7 @@
     :axiom-audit-count 5,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementUnionComparison.lean"],
    :dag-node
@@ -68794,7 +68811,7 @@
      "Compiled exactly one missing union-term comparison prerequisite. The supremum of the actual left and right compact-complement range subcomplexes equals the Boolean cover-small simplicial set. Coefficient chains on that supremum and their homology are thereby identified with coefficient singular chains and homology of the actual ambient complement, with explicit forward and inverse homology formulas in every degree. Conjugated exactness and coefficient excision remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
