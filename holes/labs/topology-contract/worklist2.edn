@@ -28551,6 +28551,8 @@
    "The exact graph-area proof needs actual countable-additivity equations for the reviewed graph partition and pointwise comparisons between selected and varying derivative densities.",
    :other-consumers [:t95J05 :t01J06 :t94A10]}
   {:consumer :t02A05,
+   :review-finding
+   "Deterministic statement-hash defect in recorded commit 128cdeb5c2f22aeca7704e3bb8c5bf88b4d142fc: the exact committed source and fixture agree, but all five frozen hashes recorded in worklist2.edn differ from recomputation. Actual hashes are sum_bounds=e58bff958471e9f1304d7714ec237a3efec8c0d4efddec2eb604acbc21023a6d, global_bounds=98bad6cad82ee562415fc7e9f133b82bd6349bedde6146cd462472507d6ca03b, set_integral_bounds=c52a5683e047610757019813babaede0230ce06b1c82308fc3707e826a58f8fc, zero_example=62d5cd9264b0dd4e082710a20de4c1c6c7d03e3118262511ee8e4ab9a1b1e7c6, infinite_example=3d891c1ff711a612bb9760af7ffc2ea6f27f6fe8afb669443af381357beca1bd. Recorded hashes begin 9e8ded43, 71f1cfd5, e22ad070, f3f0ce6a, and f63d96d9 respectively. Fixture SHA256, two-file scope, compilation, five standard-only audits, 2528-job build, placeholder count 312->312, ledger validation, theorem orientations, and ENNReal zero/infinity boundaries otherwise pass.",
    :stop-condition
    "Bank only measurable-set integration of pointwise ENNReal bounds and countable summation of scaled inequalities. Do not claim the C1 graph area formula, its per-piece geometric assembly, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
    :evidence
@@ -28622,6 +28624,12 @@
       :exit 0}
      {:cmd "git show --check --oneline HEAD && git diff --check",
       :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1789044044311-18594-0c829f63",
+     :finding
+     "Deterministic statement-hash defect in recorded commit 128cdeb5c2f22aeca7704e3bb8c5bf88b4d142fc: the exact committed source and fixture agree, but all five frozen hashes recorded in worklist2.edn differ from recomputation. Actual hashes are sum_bounds=e58bff958471e9f1304d7714ec237a3efec8c0d4efddec2eb604acbc21023a6d, global_bounds=98bad6cad82ee562415fc7e9f133b82bd6349bedde6146cd462472507d6ca03b, set_integral_bounds=c52a5683e047610757019813babaede0230ce06b1c82308fc3707e826a58f8fc, zero_example=62d5cd9264b0dd4e082710a20de4c1c6c7d03e3118262511ee8e4ab9a1b1e7c6, infinite_example=3d891c1ff711a612bb9760af7ffc2ea6f27f6fe8afb669443af381357beca1bd. Recorded hashes begin 9e8ded43, 71f1cfd5, e22ad070, f3f0ce6a, and f63d96d9 respectively. Fixture SHA256, two-file scope, compilation, five standard-only audits, 2528-job build, placeholder count 312->312, ledger validation, theorem orientations, and ENNReal zero/infinity boundaries otherwise pass."},
     :dependency-uptake
     {:id :c1-graph-countable-measure-decomposition-1,
      :commit "2c2bdae3dc99c457a4946f0b9d218a690dbe8e43",
@@ -28638,7 +28646,7 @@
      :placeholder-count 0},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/ENNRealCountableBounds.lean"
     "ConstructionTargets/ENNRealCountableBounds.md"],
