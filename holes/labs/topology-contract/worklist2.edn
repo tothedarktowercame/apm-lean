@@ -13483,8 +13483,74 @@
   {:consumer :t96J07,
    :stop-condition
    "Preserve the historical false-statement refutation and distinguish corrected closure from unchanged frozen closure. Documentation contributes no additional placeholder reduction.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Corrected t96J07 has zero placeholders. Its original statement remains refuted; no unchanged frozen closure or intrinsic projective differential comparison is claimed. Documentation adds no placeholder reduction.",
+    :dependency-review "invoke-1789002417270-17501-59e6c3e7",
+    :gates
+    {:concurrent-documentation-check :pass,
+     :placeholder-accounting :pass,
+     :dependency-review :pass,
+     :preserved-refutation :pass,
+     :statement-hashes :pass,
+     :exact-parenthesis-repair :pass,
+     :commit :pass,
+     :canonical-evidence :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:old
+     "73ea287c4fcc2f57d66253d4f3d13e1933715c77418a1d2c902a16bc2bd5c7fc",
+     :corrected
+     "4ac8e3368212f29658a06d810fc3043f0a7b3dd16c7fbb603a46fd3cf09ee195"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :classification :corrected-closure-documentation,
+    :author "codex-14",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "Read scoped documents, repair note and dependency PASS receipts",
+      :exit 0}
+     {:cmd
+      "Inspect git status, recent scoped-document history and ledger scope references for concurrent documentation ownership",
+      :exit 0}
+     {:cmd
+      "Python verify canonical Main against implementation commit, repair-note hash, old/corrected statement hashes, exact two-parenthesis change, preserved definitions/refutation and historical placeholders 1->0",
+      :exit 0}
+     {:cmd "Recheck scoped documents clean immediately before editing",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged two-file scope, review-reference and zero-placeholder audit; git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Record reviewed t96J07 corrected closure and historical refutation\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope audit pinned to 7ba06a9e and clean tracked checkout verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :axiom-evidence :reviewed-implementation,
+    :commit "7ba06a9ebac26ba95c30d53f10001ff175679f2b",
+    :changed-paths
+    ["TOPOLOGY-DEPENDENCY-DAG.md"
+     "docs/TN-topology-closure-experiments.md"],
+    :fixture
+    {:path "problems/t96J07/lean/Main.lean",
+     :sha256
+     "6eac671c9e7ac401f30c08e2c10643e00c1ee968599462285b9273adf8f345e6"},
+    :finding
+    "Updated both stale DAG entries and added a reviewed corrected-closure record. Recorded the implementation commit, independent PASS, exact two-parenthesis repair, historical 1->0 reduction and evidence hashes. Preserved the false-statement refutation, historical records and other unresolved defects. No Lean files or ledger changed.",
+    :statement-hash-method
+    "Declaration text from theorem apm_t96j07 : to immediately before the space preceding := by.",
+    :implementation-commit "6f475b3c40e2a2528a0efd7e17c89f8f1af904a7",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
