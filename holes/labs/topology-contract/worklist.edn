@@ -71198,76 +71198,32 @@
    :stop-condition
    "Require a genuine nonzero-capable relative Mayer-Vietoris connecting morphism and three proved exactness statements with actual quotient-pair arrows. Reject any construction factoring the pair boundary through its own subspace map.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "The correct relative-chain representation is compiled, but ordinary coefficient excision with A = K complement and Z = L requires L subset interior (K complement), which arbitrary compact K and L do not supply. Final exactness therefore remains at a genuine excision-hypothesis boundary; localization monicity still separately requires vanishing.",
-     :outcome :revise,
-     :warnings [],
-     :prerequisite
-     {:consumer "t98A02",
-      :stop-condition
-      "Require compactness-derived closedness of L and containment L subset interior (K complement), or the correctly ordered symmetric construction, before applying coefficient excision; do not infer this containment when K and L overlap.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean"],
-      :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / compact-complement nested excision relative chains",
-      :acceptance
-      {:fixture
-       "/tmp/CoefficientCompactComplementNestedExcisionChains.lean",
-       :fixture-sha256
-       "a0e5f58cb14e81a0c8212309a836cabcae1fff5472c66b8cfedc3e923538bcd3",
-       :implementation
-       "Promote the exact fixture. Compile nestedRightToExcised_mem and nestedRightRelativeChainsIso. This supplies the correctly oriented coefficient relative-chain comparison required before excision. Verify CoefficientCompactComplementPairHomeomorph SHA256 65749ac9db8e65421f640ce0bdf3b37332683276b89af56e8c786cf81dd38ca6 and CoefficientOverlapNormalization SHA256 9697585da59ffc70a8381b306297c6dbb027e0091ebb57d4219f725e707e525f. Preserve arbitrary topological X, arbitrary subsets K and L and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Explicitly use excisedSubspace (K complement) L; do not use the ambient-incompatible excisedSubspace (L complement) K presentation. Do not claim excision hypotheses, final arrow squares, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
-       :commands
-       ["lake env lean ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :representation
-      {:source
-       "Coefficient relative chains of the nested intersection inside the right compact-complement piece, representing the pair of L complement with the complement of K union L",
-       :target
-       "Coefficient relative chains of the standard excision source excisedSubspace (K complement) L inside L complement",
-       :direction
-       "Apply the forward right-piece homeomorphism from the nested ambient right piece to L complement and prove exact membership equivalence with excisedSubspace (K complement) L, inducing a forward coefficient relative-chain isomorphism."},
-      :id
-      :coefficient-compact-complement-nested-excision-chains-implementation-refill50,
-      :kind :representation-comparison,
-      :depends-on
-      [:coefficient-compact-complement-nested-excision-source-implementation-refill50
-       :coefficient-compact-complement-union-relative-formulas-implementation-refill50],
-      :current-residual
-      "Audit whether the standard excision hypotheses hold for A = K complement and Z = L. For arbitrary compact K and L, L subset interior (K complement) is generally false, so a different relative Mayer-Vietoris transport may be required before final exactness.",
-      :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/CoefficientCompactComplementNestedExcisionChains.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/CoefficientCompactComplementNestedExcisionChains.lean ConstructionTargets/CoefficientCompactComplementPairHomeomorph.lean ConstructionTargets/CoefficientOverlapNormalization.lean",
-       :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/CoefficientCompactComplementNestedExcisionChains.lean",
-       :exit 1,
-       :correction
-       "The first relative-chain lift exposed an orientation error in the preceding prose: the nested subset of the right piece is the excision source excisedSubspace (K complement) L, a subset of L complement, rather than excisedSubspace (L complement) K, a subset of K complement. Corrected the excision orientation and compiled the genuine pair homeomorphism."}],
-     :changed-paths [],
-     :fixture
-     {:path
-      "/tmp/CoefficientCompactComplementNestedExcisionChains.lean",
-      :sha256
-      "a0e5f58cb14e81a0c8212309a836cabcae1fff5472c66b8cfedc3e923538bcd3",
-      :placeholder-count 0},
-     :finding
-     "Compiled exactly one coefficient relative-chain comparison and corrected the excision orientation. The pair with ambient right piece L complement and nested subspace complement of K union L is identified with the standard excision source excisedSubspace (K complement) L. Thus coefficient excision uses A = K complement and Z = L to reach H(X, K complement). The earlier subset-only homeomorphism to excisedSubspace (L complement) K did not preserve the ambient pair and must not be used for relative chains.",
-     :seat "codex-12"}},
+   {:residual
+    "Construct a genuine direct quotient-pair Mayer-Vietoris sequence or prove a coefficient triad-excision comparison valid for arbitrary compact K and L; localization monicity still separately requires its vanishing theorem.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Quot.sound"],
+    :author "codex-12",
+    :reason
+    "The reviewed relative-chain presentation can use CoefficientExcision only with A = K complement and Z = L, which requires L to be contained in the interior of K complement. Arbitrary compact K and L in a Hausdorff space give closedness of L but do not give this containment: for X = real numbers and K = L = {0}, both sets are compact and the containment is false. The symmetric ordering likewise requires K to be contained in the interior of L complement. Thus ordinary coefficient excision cannot transport the sequence under the frozen hypotheses. This is an exact excision-hypothesis and representation boundary, not a refutation of relative Mayer-Vietoris; closure requires a direct relative chain sequence or a triad excision theorem adapted to these complement pairs.",
+    :commands
+    [{:cmd "lake env lean /tmp/CompactExcisionHypothesisBoundary.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CompactExcisionHypothesisBoundary.lean ConstructionTargets/CoefficientExcision.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :fixture
+    {:path "/tmp/CompactExcisionHypothesisBoundary.lean",
+     :sha256
+     "d9e35e84cbd1558abd6fd8876958235782821b61c029ce4a49599b33c0767d91",
+     :placeholder-count 0},
+    :finding
+    "The correctly oriented nested pair is the pair with ambient L complement and subspace complement of K union L, represented by excisedSubspace (K complement) L. CoefficientExcision therefore demands L subset interior (K complement). The compiled singleton counterexample proves compactness alone cannot discharge that premise, and exchanging K and L does not repair the route.",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
