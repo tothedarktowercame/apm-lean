@@ -72027,8 +72027,51 @@
   {:consumer "t00A03",
    :stop-condition
    "Require an explicit restriction map from paired perturbation-vector directions into the full total coincidence-map domain and prove that the full derivative composed with this restriction equals the compiled surjective parameter derivative; then apply a relative parametric Sard theorem away from the four endpoint pairs.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Embed paired-vector directions into the full total coincidence-map tangent domain and identify the derivative composite, then combine with the endpoint decomposition to prove total submersivity and apply relative parametric Sard.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:totalParameterLinear
+     "8edd47d815dcf8c3a87bd2a3018d569d7e994380482887aa3dbc96b7b4cbe953",
+     :hasFDerivAt_pairDifference_parameters
+     "883fc0003968e922c3e11cefb4cdef8beb3824304da1c5c3b8ae3bb73ac883eb",
+     :fderiv_pairDifference_parameters
+     "76dedd030da137718232a096d05f6b7cc3ed4071c488c380b4916226c897bbcf",
+     :fderiv_pairDifference_parameters_surjective_of_left
+     "0440e0a8e4fcffe02ba0ddcca43cb5024d5c1a51efd56670051ce1a61d96d95b",
+     :fderiv_pairDifference_parameters_surjective_of_right
+     "796de50aac799dd1ea9c0a4fb9cf2b6213b0b3c559a479dc0e3939bdb708e561"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean /tmp/PlaneArcEndpointTotalParameterSubmersive.lean ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-five-declaration audit over ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "e14bf550ae22e0d788c218fab4036a06660ca968",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointTotalParameterSubmersive.lean",
+     :sha256
+     "0b5955f85b1a0d73d995904b2a1512136237f4ab344ba3e93cba84a8c143e56a",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The paired perturbation-vector derivative is the sum of the left endpoint-weight map and negative right endpoint-weight map; its fderiv formula is explicit and it is surjective whenever either curve parameter is interior. The module compiles without warnings or placeholders, its dependency hash matches, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean"],
    :dag-node
