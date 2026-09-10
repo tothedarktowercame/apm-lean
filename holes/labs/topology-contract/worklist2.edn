@@ -36454,6 +36454,28 @@
      {:cmd
       "git show --check --oneline --stat HEAD; recompute canonical source, documentation, commit and Git blob hashes; git status --short",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789069514322-19302-88e58757",
+     :commands
+     ["git show --stat --oneline f1b09522e871c324701ce6e8823683f1526ac3f3"
+      "git show --check --oneline f1b09522e871c324701ce6e8823683f1526ac3f3"
+      "git show f1b09522e871c324701ce6e8823683f1526ac3f3:ConstructionTargets/ProductSimplexPathEndpoints.lean"
+      "sha256sum /tmp/codex13-checkpoint58-endpoints/ProductSimplexPathEndpoints.lean ConstructionTargets/ProductSimplexPathEndpoints.lean"
+      "git show f1b09522e871c324701ce6e8823683f1526ac3f3:ConstructionTargets/ProductSimplexPathEndpoints.lean | sha256sum"
+      "git hash-object ConstructionTargets/ProductSimplexPathEndpoints.lean"
+      "lake env lean /tmp/codex13-checkpoint58-endpoints/ProductSimplexPathEndpoints.lean"
+      "lake env lean ConstructionTargets/ProductSimplexPathEndpoints.lean"
+      "lake build ConstructionTargets.ProductSimplexPathEndpoints"
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ProductSimplexPathEndpoints.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git diff --name-only f1b09522^ f1b09522"
+      "git diff --check f1b09522^ f1b09522"
+      "rg --pcre2 -o '(?<![A-Za-z0-9_.])(sorry|admit)(?![A-Za-z0-9_.])|^[[:space:]]*((private|protected)[[:space:]]+)?axiom[[:space:]]' problems/{t03J05,t96J06,t97A04}/lean -g '*.lean'"],
+     :finding
+     "PASS: commit f1b09522 changes exactly ProductSimplexPathEndpoints.lean and its documentation. Fixture SHA256 f9dfb291301944b05f16014bf8039bd1e51f612aa8164cebd2510b26459850b3, canonical SHA256 d3c076336cb38b465afef58ac0a8af134affcd76ee7c3ca0b7b1ac7ef63156fe, Git blob d11f96a6c6283ad288fe16271f6e3faa30a0402c, and both declaration hashes reproduce. Compilation and build pass; axioms are propext, Classical.choice, and Quot.sound. Endpoint equalities are correctly oriented in prodStdSimplex.objEquiv, no reconstruction or cancellation claim crosses scope, implementation placeholders are zero, frozen counts remain 1/2/4, and both ledgers validate."},
     :canonical
     {:path "ConstructionTargets/ProductSimplexPathEndpoints.lean",
      :sha256
@@ -36480,7 +36502,7 @@
     "The canonical endpoint module proves exact equalities in the prodStdSimplex.objEquiv representation. grid_start evaluates maximalPath_coordinate_sum at time zero and forces both natural-number coordinates to zero. grid_end evaluates the terminal coordinate sum and combines it with both finite-coordinate isLt bounds to force the terminal coordinates to p and q. No word cardinality, reconstruction, corner swap, face pairing, sign change, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is introduced.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexPathEndpoints.lean"
     "ConstructionTargets/ProductSimplexPathEndpoints.md"],
@@ -36603,7 +36625,7 @@
      "Exactly one complete compiled combinatorial prerequisite is supplied. The fixture proves that every canonical maximal path begins at `(0,0)` and ends at `(p,q)`, using the banked coordinate-sum theorem and the finite coordinate bounds. These endpoint equalities are required to prove that the Boolean step word contains exactly p horizontal and q vertical letters before reconstructing a maximal path from a modified word. The parent cancellation theorem is not GO because word cardinalities, path reconstruction and adjacent-corner swapping remain uncompiled. No face pairing, sign cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded oriented cancellation of product-simplex shuffle faces",
