@@ -68279,8 +68279,73 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the actual coefficient chain and homology comparison from the infimum range term to the literal intersection subtype, with its forward map formula; no supplied equality or homology equivalence.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Prove compatibility of the intersection comparison with both piece inclusions, construct the biproduct comparison for the two pieces and the union comparison for the ambient term, then conjugate exactness and apply coefficient excision to the four requested pairs in X.",
+    :dependency-hashes
+    {:CoefficientAmbientSubspaceRangeNaturality
+     "a7f7ae638a11bc10b5c21c19310db71b922862e1aaf86708f0593869995cf66b",
+     :CoefficientCompactComplementCoverSequence
+     "1e1d651d3db679386223ff74964e1dc663a50dbfcb7e19a74a9358a7b8060234"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:intersectionChainsIso
+     "d3fdd92f0b6128118d0a6e1bb8134c2ec158ad859d0cce5d1045fa490a616ce9",
+     :intersectionHomologyIso
+     "1352fbad26484a31851659b8ff4e955cf3e25e780ad386b8f9854cbbd96feca4",
+     :infimumToIntersectionHomologyIso
+     "68f9d1d82565a3349d505085ee72bd75619ccfb201b72a618be30ebde1ddad21",
+     :infimumToIntersectionHomologyIso_hom
+     "fb28acf3ee93bfa8e3bd92b12c595f19078e75a9937c005727faacb31e2f5af7"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientIntersectionRangeComparison.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and four complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientIntersectionRangeComparison.lean ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean ConstructionTargets/CoefficientCompactComplementCoverSequence.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add coefficient intersection range comparison'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "Coefficient chains and homology of the infimum of two ambient subspace-range subcomplexes, the intersection term of the instantiated Mayer-Vietoris sequence",
+     :target
+     "Coefficient chains and homology of the literal topological intersection subtype",
+     :direction
+     "The inverse canonical intersection-range isomorphism followed by the forward ambient-range-to-subtype isomorphism gives an exact forward comparison from the Mayer-Vietoris infimum term to the actual intersection subtype."},
+    :commit "bc40d53b846909599ad54cd975b47f25ec585757",
+    :changed-paths
+    ["ConstructionTargets/CoefficientIntersectionRangeComparison.lean"],
+    :fixture
+    {:path "/tmp/CoefficientIntersectionRangeComparison.lean",
+     :sha256
+     "9280858720ad2cc52aeccd1a69f8e3135498d729e2053b77bdc5c9aeb0e7973f",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled the coefficient chain and homology comparison from the infimum range term to the literal intersection subtype, including its explicit forward homology-map formula for arbitrary X, A, B, coefficient ring and degree. No inclusion compatibility, Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 4,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientIntersectionRangeComparison.lean"],
    :dag-node
