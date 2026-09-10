@@ -74453,82 +74453,116 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require proof that the compiled quotient ShortComplex is short exact; then use its HomologySequence to construct the genuine connecting morphism and three exactness segments before specializing to compact complements.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / relative quotient Mayer-Vietoris short complex",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean",
+    :fixture-sha256
+    "9565e17710f26ade05147ca4ca4abaae145ee928450ac69c18683da9fe1a73cf",
+    :implementation
+    "Promote the exact fixture. Compile intersectionToLeftRelative_projection, intersectionToRightRelative_projection, leftToUnionRelative_projection, rightToUnionRelative_projection, relative_arrows_zero, shortComplex, shortComplex_f and shortComplex_g. This supplies the genuine quotient-chain ShortComplex required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05. Verify CoefficientSubcomplexRelativeMayerVietorisArrows SHA256 392dca8b05c875d0f15f7cdf817bbacd464d0f42e1c7f2bf7e6cf905974e0890. Preserve arbitrary simplicial sets, arbitrary subcomplexes and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :coefficient-subcomplex-relative-mayer-vietoris-complex-implementation-refill51,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-subcomplex-relative-mayer-vietoris-arrows-implementation-refill51],
+   :current-residual
+   "Prove shortComplex R P Q is short exact, using the degreewise quotient calculation for C/(P intersection Q), C/P plus C/Q and C/(P union Q). Then invoke HomologySequence and specialize P and Q to the two compact-complement ambient ranges.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Prove the signed quotient-arrow composite is zero, package the quotient sequence as a ShortComplex, and prove it short exact before invoking HomologySequence and transporting its terminal union quotient through relativeComparisonIso.",
+     "Establish degreewise short exactness of the compiled quotient ShortComplex. Its HomologySequence will then provide a nonzero-capable connecting morphism and three exactness segments, after which the terminal union quotient can be transported through relativeComparisonIso to the literal compact-complement pair.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require proof that the compiled signed quotient arrows have zero composite and form a short exact sequence; then construct the genuine connecting morphism and transport all three exactness segments to the literal complement pairs.",
+      "Require proof that the compiled quotient ShortComplex is short exact; then use its HomologySequence to construct the genuine connecting morphism and three exactness segments before specializing to compact complements.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisArrows.lean"],
+      ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / relative quotient Mayer-Vietoris arrows",
+      "MANIFOLD FUNDAMENTAL CLASS / relative quotient Mayer-Vietoris short complex",
       :acceptance
       {:fixture
-       "/tmp/CoefficientSubcomplexRelativeMayerVietorisArrows.lean",
+       "/tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean",
        :fixture-sha256
-       "392dca8b05c875d0f15f7cdf817bbacd464d0f42e1c7f2bf7e6cf905974e0890",
+       "9565e17710f26ade05147ca4ca4abaae145ee928450ac69c18683da9fe1a73cf",
        :implementation
-       "Promote the exact fixture. Compile C, intersectionC, leftC, rightC, unionC, intersectionAmbient, leftAmbient, rightAmbient, unionAmbient, intersectionToLeftRelative, intersectionToRightRelative, intersectionToPiecesRelative, leftToUnionRelative, rightToUnionRelative and piecesToUnionRelative. This supplies the two genuine quotient-chain arrows required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: C/(P intersection Q) maps diagonally to C/P plus C/Q, which maps by the signed difference to C/(P union Q). Verify CoefficientSubspaceUnionRelativeCokernelSquare SHA256 06d8f3ef9f20d106781745d4f748b39343095566ec9eeab61bdd43aa4634cfd9. Preserve arbitrary simplicial sets, arbitrary subcomplexes and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim zero composite, short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile intersectionToLeftRelative_projection, intersectionToRightRelative_projection, leftToUnionRelative_projection, rightToUnionRelative_projection, relative_arrows_zero, shortComplex, shortComplex_f and shortComplex_g. This supplies the genuine quotient-chain ShortComplex required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05. Verify CoefficientSubcomplexRelativeMayerVietorisArrows SHA256 392dca8b05c875d0f15f7cdf817bbacd464d0f42e1c7f2bf7e6cf905974e0890. Preserve arbitrary simplicial sets, arbitrary subcomplexes and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisArrows.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :coefficient-subcomplex-relative-mayer-vietoris-arrows-implementation-refill51,
+      :coefficient-subcomplex-relative-mayer-vietoris-complex-implementation-refill51,
       :kind :reusable-theorem,
       :depends-on
-      [:coefficient-subspace-union-relative-cokernel-square-implementation-refill51],
+      [:coefficient-subcomplex-relative-mayer-vietoris-arrows-implementation-refill51],
       :current-residual
-      "Prove piecesToUnionRelative after intersectionToPiecesRelative is zero using the four cokernel projection equations and signed cancellation; package the resulting ShortComplex and establish its short exactness. Then specialize P and Q to compact-complement subspace ranges and transport the union quotient through relativeComparisonIso.",
+      "Prove shortComplex R P Q is short exact, using the degreewise quotient calculation for C/(P intersection Q), C/P plus C/Q and C/(P union Q). Then invoke HomologySequence and specialize P and Q to the two compact-complement ambient ranges.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSubspaceUnionRelativeCokernelSquare >/tmp/relative-mv-arrows-dep.log 2>&1",
+       "lake build ConstructionTargets.CoefficientSubcomplexRelativeMayerVietorisArrows >/tmp/relative-mv-complex-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientSubcomplexRelativeMayerVietorisArrows.lean",
+       "lake env lean /tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientSubcomplexRelativeMayerVietorisArrows.lean ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
+       "sha256sum /tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisArrows.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-fifteen-declaration audit over /tmp/CoefficientSubcomplexRelativeMayerVietorisArrows.lean",
+       "python3 comment-stripped placeholder-and-eight-declaration audit over /tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientSubcomplexRelativeMayerVietorisArrows.lean",
+       "lake env lean /tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean",
        :exit 1,
        :correction
-       "The initial fixture left the ambient simplicial set implicit in the C abbreviation, preventing elaboration, and did not unfold the named ambient maps in the four cokernel squares. Made S explicit in C and unfolded each named map before the functoriality proof."}
+       "The initial projection proofs redundantly replayed the cokernel-square obligations, producing linter warnings, and the zero-composite proof associated the outer projection incorrectly. Replaced each projection proof by the defining cokernel.π_desc equation and normalized the composite after cancellation."}
       {:cmd
-       "lake env lean /tmp/CoefficientSubcomplexRelativeMayerVietorisArrows.lean",
+       "lake env lean /tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean",
        :exit 1,
        :correction
-       "The four cokernel-square obligations were oriented from the ambient inclusion to the factored composite, opposite the first functoriality calculation. Reversed each local equality before applying map_comp; the resulting arrows compile without warnings."}],
+       "After biproduct expansion, composition had to distribute over the sum before applying the projection equations. Added Preadditive.comp_add and explicit reassociation."}
+      {:cmd
+       "lake env lean /tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean",
+       :exit 1,
+       :correction
+       "The first reassociation left the second summand already left-associated, so a repeated inverse-associativity rewrite had no target. Removed that redundant rewrite; both paths then reduce to the same union projection with opposite signs."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/CoefficientSubcomplexRelativeMayerVietorisArrows.lean",
+      "/tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean",
       :sha256
-      "392dca8b05c875d0f15f7cdf817bbacd464d0f42e1c7f2bf7e6cf905974e0890",
+      "9565e17710f26ade05147ca4ca4abaae145ee928450ac69c18683da9fe1a73cf",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one algebraic relative Mayer-Vietoris prerequisite. For arbitrary simplicial subcomplexes P and Q, the fixture constructs the actual induced cokernel maps from C/(P intersection Q) to C/P and C/Q, combines them diagonally, constructs the induced maps from C/P and C/Q to C/(P union Q), and combines those with the required negative sign. These are genuine quotient-chain maps rather than the rejected zero supportConnecting definition. No exactness is inferred merely from their construction. Their zero composite, short exactness, homology connecting morphism and specialization to the literal compact-complement pairs remain.",
+     "Compiled exactly one relative Mayer-Vietoris sequence prerequisite. Each of the four induced quotient maps now has its literal cokernel-projection equation. Precomposing the signed two-arrow composite with the epimorphic intersection cokernel projection reduces the two summands to the same union cokernel projection with opposite signs, proving the composite is zero. The two genuine quotient arrows therefore form a named ShortComplex for arbitrary simplicial subcomplexes and arbitrary commutative-ring coefficients. Short exactness is not inferred from zero composition; it remains the next algebraic theorem. No supportConnecting or ordinary-excision hypothesis is used.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -74556,7 +74590,8 @@
     :coefficient-subspace-union-range-factorization-implementation-refill51
     :coefficient-subspace-union-range-homology-equivalence-implementation-refill51
     :coefficient-subspace-union-relative-cokernel-square-implementation-refill51
-    :coefficient-subcomplex-relative-mayer-vietoris-arrows-implementation-refill51],
+    :coefficient-subcomplex-relative-mayer-vietoris-arrows-implementation-refill51
+    :coefficient-subcomplex-relative-mayer-vietoris-complex-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
