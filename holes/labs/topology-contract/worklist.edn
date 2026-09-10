@@ -68055,8 +68055,70 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the coefficient chain and homology isomorphisms between an ambient range subcomplex and its actual topological subtype, with explicit forward and inverse map identities; no supplied comparison.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Prove coefficient naturality of the range comparison for the intersection, left, right and union inclusions; use those squares to conjugate the instantiated signed sequence, then transport its relative terms to the requested pairs in X by coefficient excision.",
+    :dependency-hashes
+    {:CoefficientCompactComplementCoverSequence
+     "1e1d651d3db679386223ff74964e1dc663a50dbfcb7e19a74a9358a7b8060234"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:rangeChainsIso
+     "bd6253fc0d575051de3c13a4db22ded8f72110ba00d6d4d4003f071f283fddfd",
+     :rangeHomologyIso
+     "1f05cd269bc18f8c229704c15597a63c9fbcb900fc5da272aa9db53a2bbb6253",
+     :rangeHomologyIso_hom
+     "8dbfb3850407a1b5629e1be1946959b30690b97e779e8019f9c42229739831cf",
+     :rangeHomologyIso_inv
+     "e5f228140281f2131011ec5ae916f3574486705fa8145fe638cd3051067d3aba"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and four complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientAmbientSubspaceRangeComparison.lean ConstructionTargets/CoefficientCompactComplementCoverSequence.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add coefficient ambient range comparison'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "Coefficient singular chains and homology of the ambient SSet range subcomplex determined by a topological subspace inclusion",
+     :target
+     "Coefficient singular chains and homology of the actual topological subtype",
+     :direction
+     "The inverse range isomorphism is applied in the forward ambient-range-to-subtype direction, then coefficient chains and homology identify both resulting isomorphism arrows with the corresponding chain and homology maps."},
+    :commit "94726e208633af2e74d32e95f993c37fafb4ae6c",
+    :changed-paths
+    ["ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean"],
+    :fixture
+    {:path "/tmp/CoefficientAmbientSubspaceRangeComparison.lean",
+     :sha256
+     "5072a4f2414c65eaa97d9b992fc1b09141e90ca0f120119eaebad092aa0d74d7",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled the coefficient chain and homology isomorphisms from an ambient SSet range subcomplex to its actual topological subtype, including explicit forward and inverse homology-map identities for arbitrary X, A, coefficient ring and degree. No inclusion naturality, Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 4,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean"],
    :dag-node
