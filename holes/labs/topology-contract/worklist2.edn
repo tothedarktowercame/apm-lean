@@ -21396,80 +21396,91 @@
    :stop-condition
    "Preserve every repaired frozen definition and theorem statement, including positive-dimensional hypotheses. Do not restore or claim the refuted ordinary-S0 branch, assume an orientation or sign, add placeholders, or modify unrelated consumers.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Ready for one-file implementation and independent review of repaired positive-dimensional t94J08 closure; no closure of the refuted ordinary-S0 statement is claimed.",
-     :fixture-placeholder-delta -2,
-     :axiom-audits 2,
-     :outcome :go,
-     :warnings
-     ["Fixture retains three existing simplification warnings from unchanged definitions and proofs."
-      "Completing the main proof exposes four unused frozen parameters: hm, hv, hp and hr. Their declarations are unchanged."
-      "Canonical baseline compilation still reports its two existing sorry declarations; the fixture has neither."
-      "Focused and full builds replay existing dependency/canary warnings; both succeed."],
-     :acceptance
-     {:placeholder-after 0,
-      :placeholder-delta -2,
-      :frozen-file "problems/t94J08/lean/Main.lean",
-      :gates
-      ["Verify fixture SHA256, frozen file SHA256 and both frozen statement hashes."
-       "Promote only problems/t94J08/lean/Main.lean; preserve all definitions and theorem statements."
-       "Compile fixture and canonical Main; verify zero executable placeholders and standard-only axioms for both frozen theorems."
-       "Run lake build ConstructionTargets.CoefficientSphereAntipodal and lake build after promotion."
-       "Reproduce exact source-preservation, forbidden-declaration, whitespace and one-file scope audits."
-       "Attribute inherited and newly exposed unused-parameter warnings without disabling linters."
-       "Commit the one-file implementation and require independent review before claiming canonical closure."
-       "Classify closure as the repaired positive-dimensional statement; retain the original S0 refutation and outstanding reduced-homology coverage."],
-      :consumer-residual
-      "No mathematical obligation remains in the fixture for the repaired positive-dimensional consumer. Canonical implementation, independent closure review and subsequent DAG documentation remain. The original ordinary-S0 statement remains refuted.",
-      :statement-hashes
-      {"apm_t94J08_bridge_1"
-       "ab33967d8dbb761550c195fe761230edcb32d901a3bd832fb2dec719668bba0b",
-       "apm_t94j08"
-       "93379cadb92f80df85619dc6f37cbe084d858199cdc3b3ca5513d2c854339038"},
-      :axioms :standard-only,
-      :placeholder-before 2,
-      :consumer-equation
-      "The exact repaired frozen antipodal degree theorem and its local-index-negation consequence are proved. The actual sphere types, integral homology objects and antipodal maps match the reviewed construction by definitional equality.",
-      :statement-hash-method
-      "SHA256 of the exact theorem declaration from theorem keyword through its type, excluding the terminating space-colon-equals-by proof delimiter.",
-      :frozen-sha256
-      "cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee",
-      :implementation
-      "Promote the exact complete Main fixture. It adds the CoefficientSphereAntipodal import, replaces the bridge placeholder with the constructed integral normalization and scalar equation, replaces the main proof's placeholder with the proved bridge, and adds the bridge axiom audit. Preserve all other source bytes."},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Python verification of frozen Main SHA256 and both theorem-statement hashes before fixture construction",
-       :exit 0}
-      {:cmd
-       "Read DAG, closure rules, build-loop design, both ledgers and both dependency PASS receipts",
-       :exit 0}
-      {:cmd "lake env lean /tmp/T94J08PositiveClosure.lean", :exit 0}
-      {:cmd
-       "Python exact source-preservation, theorem-hash, comment-stripped placeholder, forbidden-declaration and fixture SHA256 audit",
-       :exit 0}
-      {:cmd "lake env lean problems/t94J08/lean/Main.lean", :exit 0}
-      {:cmd
-       "lake build ConstructionTargets.CoefficientSphereAntipodal",
-       :exit 0}
-      {:cmd "lake build", :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history [],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/T94J08PositiveClosure.lean",
-      :sha256
-      "005a6a4d7d785eb3d9c90c54127b6ae6001a4ed481846959e19c4e98ab945ee5"},
-     :finding
-     "The complete exact Main fixture compiles on the first attempt with zero placeholders. Both frozen theorems have standard-only axiom audits. Exact reversal of the import, two proof replacements and added audit reproduces canonical Main byte-for-byte, verifying preservation of every definition and statement. The local-index proof is retained unchanged and consumes the newly proved antipodal bridge. Focused build passes 8292 jobs; full build passes 8245 jobs. Canonical Main remains unchanged during this read-only probe.",
-     :implementation {:scope ["problems/t94J08/lean/Main.lean"]},
-     :seat "codex-13"}},
+   {:placeholder-after 0,
+    :placeholder-delta -2,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "No mathematical proof obligation remains in the implemented repaired positive-dimensional consumer. Independent closure review and subsequent DAG documentation remain. The original ordinary-S0 statement remains refuted, and reduced-homology coverage remains outstanding; no closure of that refuted statement is claimed.",
+    :closure-classification :repaired-positive-dimensional-statement,
+    :gates
+    {:warning-attribution :pass,
+     :forbidden-declarations :pass,
+     :whitespace :pass,
+     :frozen-hash :pass,
+     :focused-build :pass,
+     :full-build :pass,
+     :fixture-hash :pass,
+     :statement-hashes :pass,
+     :canonical-compilation :pass,
+     :zero-placeholders :pass,
+     :exact-source-preservation :pass,
+     :independent-review :pending,
+     :fixture-compilation :pass,
+     :standard-only-theorem-audits :pass,
+     :one-file-scope :pass},
+    :axiom-audits 2,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and promoted Main each emit three inherited simplification warnings and four newly exposed unused-parameter warnings for hm, hv, hp and hr. All frozen declarations remain unchanged; no linters were disabled."
+     "Focused build replayed 20 dependency warnings; full build replayed 5 existing warnings. Both builds succeeded."],
+    :statement-hashes
+    {"apm_t94J08_bridge_1"
+     "ab33967d8dbb761550c195fe761230edcb32d901a3bd832fb2dec719668bba0b",
+     "apm_t94j08"
+     "93379cadb92f80df85619dc6f37cbe084d858199cdc3b3ca5513d2c854339038"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :placeholder-before 2,
+    :commands
+    [{:cmd
+      "Read DAG, closure rules, both ledgers and both dependency PASS receipts; inspect exact Main diff",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Python verification of frozen and fixture SHA256, both frozen theorem hashes, exact reversal of permitted source edits and placeholder counts 2 -> 0; promote exact fixture",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/T94J08PositiveClosure.lean > /tmp/t94close-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean problems/t94J08/lean/Main.lean > /tmp/t94close-main.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientSphereAntipodal > /tmp/t94close-focused.log 2>&1",
+      :exit 0}
+     {:cmd "lake build > /tmp/t94close-full.log 2>&1", :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' problems/t94J08/lean/Main.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python verification of both standard-only theorem audits, warning attribution, successful builds, fixture equality and one-file scope",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Complete repaired positive-dimensional t94J08 antipodal proofs'",
+      :exit 0}
+     {:cmd "git diff --check 69eb3d52^ 69eb3d52", :exit 0}
+     {:cmd
+      "Python verification of pinned one-file commit scope, fixture equality and scoped cleanliness; git status --short",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "69eb3d52d58a9189da8413b0f26bc09ddd90f035",
+    :changed-paths ["problems/t94J08/lean/Main.lean"],
+    :fixture
+    {:path "/tmp/T94J08PositiveClosure.lean",
+     :sha256
+     "005a6a4d7d785eb3d9c90c54127b6ae6001a4ed481846959e19c4e98ab945ee5",
+     :promotion :byte-identical},
+    :finding
+    "Promoted the complete exact Main fixture. The constructed integral normalization and scalar equation prove the frozen antipodal bridge; the unchanged local-index argument consumes that bridge. Both repaired frozen theorems compile with standard-only axioms and zero placeholders. Every frozen definition and theorem statement is preserved.",
+    :statement-hash-method
+    "SHA256 of each exact theorem declaration from theorem keyword through its type, excluding the terminating space-colon-equals-by proof delimiter.",
+    :frozen-sha256
+    "cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t94J08/lean/Main.lean"],
    :dag-node
    "CONSUMER CLOSURE: exact repaired t94J08 antipodal degree and local-index negation",
