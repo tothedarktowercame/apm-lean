@@ -11922,8 +11922,157 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["No retry of the unchanged reviewed consumer STOPs, including t00A03 and t96J06."
+     "Preserve all reviewed refutations, including t96J05, t01A05, t96J07 and the historical t94J08 ordinary-H0(S0) statement."
+     "Exclude active t95J04 and manifold-fiber global-atlas work and their reserved successor."
+     "Historical t94J09 arithmetic certificates do not prove quotient normalization or singular homology."
+     "No inferred orientation coherence or full subdivision, excision or sphere-table closure."],
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint19Census.py", :exit 0}
+     {:cmd
+      "Read current DAG classifications and documentation changes, foundational-program note, both ledgers and dependency reviews",
+      :exit 0}
+     {:cmd
+      "git log --oneline a53a617eb3023a9aa165c1d0d2fdf10d73a37993..HEAD",
+      :exit 0}
+     {:cmd "git show --stat --oneline f30f6ef1", :exit 0}
+     {:cmd "sha256sum problems/t94J09/lean/Main.lean", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :measurement
+    {:baseline "a53a617eb3023a9aa165c1d0d2fdf10d73a37993",
+     :placeholder-after 68,
+     :existing-consumers 58,
+     :missing-consumers [:t93A05],
+     :placeholder-delta 0,
+     :zero-placeholder-consumers 21,
+     :specification-repairs 0,
+     :open-consumers 37,
+     :placeholder-before 68,
+     :head "6d41ad7f0debdcf49241a36f98c2228d1741da43",
+     :named-consumers 59,
+     :near-closure-consumers 27,
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:modules-before 655,
+      :modules-after 656,
+      :portfolio 1,
+      :concurrent 0},
+     :portfolio-commit "ffb357f532bd183024c14cfe10bc04246beb9d33",
+     :review-outcomes
+     {:pants-stop-pass "invoke-1789000009107-17427-85cee1c6",
+      :affine-naturality-implementation-pass
+      "invoke-1789000469125-17439-a5a8c278"},
+     :census
+     {:path "/tmp/Checkpoint19Census.json",
+      :sha256
+      "05839150fafdffec042e0acb9771f3ac224b2e73468f8e468e050738a5881e72"},
+     :concurrent-refutation-preservation "f30f6ef1"},
+    :replacement-items
+    [{:consumer :t94J09,
+      :stop-condition
+      "Preserve both literal quotient relations, coefficient object and all homology degrees. No assumed polygon normalization, cellular comparison or homology table.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE CLASSIFICATION: exact fourteen-edge polygon consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t94J09/lean/Main.lean",
+       :stop-condition
+       "No partial GO, numerical classification substituted for a homeomorphism, silent quotient repair or unproved refutation.",
+       :gates
+       ["GO requires a complete zero-placeholder exact frozen fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+        "Propose implementation scope only after complete closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Read the entire frozen theorem and exact polygon relations. Test current canonical geometry against the historical missing disk-map witnesses, constructing the required continuous maps and relation compatibility rather than assuming a normalizing homeomorphism. Compute the actual integral singular homology in every demanded degree. Compile a complete temporary exact Main if possible; otherwise compile precise typed geometry and homology boundaries. A refutation requires a compiled counterexample to the complete frozen conclusion.",
+       :consumer-equation
+       "The actual polygon quotient is homeomorphic to the literal nonorientable genus-six model, with H0=Z, H1=Z^5 times ZMod 2 and zero homology in degrees at least two.",
+       :frozen-sha256
+       "7726693f11c45b961ddec5736361aae56b94476b84048f9be760a2db6c0c96a5"},
+      :id :oriented-checkpoint19-t94j09-exact-polygon-normalization-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint19-pants-and-affine-naturality-refill],
+      :current-residual
+      "One placeholder bundles the literal polygon quotient homeomorphism with N6 and its actual integral singular homology. Finite word, vertex, Euler and genus certificates are already proved.",
+      :other-consumers []}
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Construct the actual barycentric recursion and prove its affine-change equation. No supplied subdivision operator, assumed naturality, singular chain endomorphism or homology isomorphism.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SINGULAR-SUBDIVISION: coefficient-general barycentric affine-change compatibility",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a commutative ring R, construct recursive barycentric subdivision on actual ordered-vertex ModuleCat R chains using the reviewed cone. Reuse the temporary CoefficientSubdivisionBoundary diagnostic only after checking its exact declarations and audits. Prove its generator recursion and differential equation, then prove naturality under vertex functions preserving barycenters by deriving cone-map compatibility and the induction step. Specialize to affine maps of standard simplices using existing coefficient-independent barycenter geometry. Combine with reviewed affine realization naturality to prove the actual subdivided-face transport equation. Compile integer and rational standard-edge face examples. State universes explicitly.",
+       :consumer-equation
+       "Subdivision followed by the induced vertex map equals the induced vertex map followed by subdivision for affine simplex maps; after realization, subdividing a face agrees with the corresponding actual singular face followed by subdivision.",
+       :consumer-residual
+       "Assemble singular differential compatibility, naturality, degree-zero identity and the complete singular subdivision packet. Homotopy, smallness, positive-degree comparison and excision remain downstream.",
+       :gates
+       ["GO requires a complete placeholder-free compiled fixture constructing recursion and proving affine-change and subdivided-face equations."
+        "Record fixture SHA256, integer/rational examples and standard-only audits."
+        "REVISE only to exactly one compiled missing cone-map or barycenter prerequisite."],
+       :stop-condition
+       "Do not retry full excision or sphere homology. STOP with exact typed boundaries if the bounded affine-change construction cannot be completed."},
+      :id
+      :oriented-checkpoint19-coefficient-barycentric-affine-change-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint19-pants-and-affine-naturality-refill
+       :oriented-checkpoint18-coefficient-affine-realization-naturality-1
+       :coefficient-general-ordered-vertex-cone-1
+       :coefficient-general-affine-realization-1],
+      :current-residual
+      "The reviewed realization square is available. The temporary coefficient-general recursion commutes with the vertex differential but has no banked affine-change compatibility, still needed by MissingFaceTransport.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: polygon normalization and barycentric affine-change uptake",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+      :id :oriented-checkpoint20-polygon-and-barycentric-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint19-t94j09-exact-polygon-normalization-1
+       :oriented-checkpoint19-coefficient-barycentric-affine-change-1],
+      :current-residual
+      "Measure exact polygon outcome separately from barycentric affine-change infrastructure; attribute concurrent changes and preserve reviewed boundaries.",
+      :other-consumers []}],
+    :changed-paths [],
+    :finding
+    "Pants decomposition remains at two placeholders with separate classification and counting obligations. CoefficientAffineNaturality now proves actual vertex-map functoriality and realization naturality, including literal face maps; subdivision affine-change compatibility remains absent. Concurrent work preserved the existing t96J05 counterexample and updated its documentation, without changing Main, repairing its specification or adding a ConstructionTargets module. The other campaign reserves t95J04 image nullity and manifold-fiber global atlas/inclusion. Elect one fresh one-placeholder consumer audit, t94J09, whose historical source survey identifies concrete polygon maps and singular homology as unresolved; no matching dispatched t94J09 row was found in either ledger. Then elect coefficient-general barycentric affine-change compatibility, a bounded construction with four named downstream consumers. Broader surface classification, intersection, fundamental-class, Kunneth, integration and covering-gluing programs require larger constructions. Full subdivision and excision STOPs remain preserved.",
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact pants decomposition and affine naturality uptake",
@@ -11940,6 +12089,101 @@
     :oriented-checkpoint18-projective-boundary-and-subdivision-refill],
    :current-residual
    "Measure exact pants-decomposition outcome separately from affine-realization naturality; attribute concurrent changes and preserve reviewed boundaries.",
+   :other-consumers []}
+  {:consumer :t94J09,
+   :stop-condition
+   "Preserve both literal quotient relations, coefficient object and all homology degrees. No assumed polygon normalization, cellular comparison or homology table.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SURFACE CLASSIFICATION: exact fourteen-edge polygon consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t94J09/lean/Main.lean",
+    :stop-condition
+    "No partial GO, numerical classification substituted for a homeomorphism, silent quotient repair or unproved refutation.",
+    :gates
+    ["GO requires a complete zero-placeholder exact frozen fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+     "Propose implementation scope only after complete closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Read the entire frozen theorem and exact polygon relations. Test current canonical geometry against the historical missing disk-map witnesses, constructing the required continuous maps and relation compatibility rather than assuming a normalizing homeomorphism. Compute the actual integral singular homology in every demanded degree. Compile a complete temporary exact Main if possible; otherwise compile precise typed geometry and homology boundaries. A refutation requires a compiled counterexample to the complete frozen conclusion.",
+    :consumer-equation
+    "The actual polygon quotient is homeomorphic to the literal nonorientable genus-six model, with H0=Z, H1=Z^5 times ZMod 2 and zero homology in degrees at least two.",
+    :frozen-sha256
+    "7726693f11c45b961ddec5736361aae56b94476b84048f9be760a2db6c0c96a5"},
+   :id :oriented-checkpoint19-t94j09-exact-polygon-normalization-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint19-pants-and-affine-naturality-refill
+    :oriented-checkpoint19-pants-and-affine-naturality-refill],
+   :current-residual
+   "One placeholder bundles the literal polygon quotient homeomorphism with N6 and its actual integral singular homology. Finite word, vertex, Euler and genus certificates are already proved.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "Construct the actual barycentric recursion and prove its affine-change equation. No supplied subdivision operator, assumed naturality, singular chain endomorphism or homology isomorphism.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SINGULAR-SUBDIVISION: coefficient-general barycentric affine-change compatibility",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a commutative ring R, construct recursive barycentric subdivision on actual ordered-vertex ModuleCat R chains using the reviewed cone. Reuse the temporary CoefficientSubdivisionBoundary diagnostic only after checking its exact declarations and audits. Prove its generator recursion and differential equation, then prove naturality under vertex functions preserving barycenters by deriving cone-map compatibility and the induction step. Specialize to affine maps of standard simplices using existing coefficient-independent barycenter geometry. Combine with reviewed affine realization naturality to prove the actual subdivided-face transport equation. Compile integer and rational standard-edge face examples. State universes explicitly.",
+    :consumer-equation
+    "Subdivision followed by the induced vertex map equals the induced vertex map followed by subdivision for affine simplex maps; after realization, subdividing a face agrees with the corresponding actual singular face followed by subdivision.",
+    :consumer-residual
+    "Assemble singular differential compatibility, naturality, degree-zero identity and the complete singular subdivision packet. Homotopy, smallness, positive-degree comparison and excision remain downstream.",
+    :gates
+    ["GO requires a complete placeholder-free compiled fixture constructing recursion and proving affine-change and subdivided-face equations."
+     "Record fixture SHA256, integer/rational examples and standard-only audits."
+     "REVISE only to exactly one compiled missing cone-map or barycenter prerequisite."],
+    :stop-condition
+    "Do not retry full excision or sphere homology. STOP with exact typed boundaries if the bounded affine-change construction cannot be completed."},
+   :id :oriented-checkpoint19-coefficient-barycentric-affine-change-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint19-pants-and-affine-naturality-refill
+    :oriented-checkpoint18-coefficient-affine-realization-naturality-1
+    :coefficient-general-ordered-vertex-cone-1
+    :coefficient-general-affine-realization-1
+    :oriented-checkpoint19-pants-and-affine-naturality-refill],
+   :current-residual
+   "The reviewed realization square is available. The temporary coefficient-general recursion commutes with the vertex differential but has no banked affine-change compatibility, still needed by MissingFaceTransport.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: polygon normalization and barycentric affine-change uptake",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+   :id :oriented-checkpoint20-polygon-and-barycentric-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint19-t94j09-exact-polygon-normalization-1
+    :oriented-checkpoint19-coefficient-barycentric-affine-change-1
+    :oriented-checkpoint19-pants-and-affine-naturality-refill],
+   :current-residual
+   "Measure exact polygon outcome separately from barycentric affine-change infrastructure; attribute concurrent changes and preserve reviewed boundaries.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
