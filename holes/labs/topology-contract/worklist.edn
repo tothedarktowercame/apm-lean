@@ -63344,73 +63344,56 @@
    :stop-condition
    "GO requires same-atlas smooth projection, actual derivative formula and both directions of the regularity criterion. REVISE requires one compiled prerequisite.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "The requested same-atlas projection regularity packet is complete. Sard-based parameter conclusions, component coverage, orientations, homological comparisons and consumer closure remain subsequent.",
-     :dependency-review
-     {:outcome :pass,
-      :seat "codex-10",
-      :job "invoke-1789025648871-18146-cf15549c"},
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:projection
-      "e4426c7fcaa0131f73c3522fbedd9d53f06ffe06da1bccd27b6287820175e717",
-      :smooth
-      "72b61e637913d1ad5aada4f9cdc7034d7f78a1e0401e6a4907872df165155a92",
-      :derivative
-      "5da3c5110cd59b0634fc6596c1d05113648afb1c24d70ef4a40a04815c47304d",
-      :regularity_iff
-      "6592f6b543b1ec3e96c34a6094f6c9bb9764acce4475f17ec3779ff6f83153a4"},
-     :acceptance
-     {:implementation
-      "Promote the exact fixture. Compile projection, smooth, derivative and regularity_iff. Preserve exactly normalizedAtlas, actual mfderivs and derived equalizer-based surjectivity equivalence. Audit zero placeholders and standard-only axioms. Do not claim parameter density, component coverage, orientations or consumer closure.",
-      :commands
-      ["lake env lean ConstructionTargets/IncidenceParameterProjection.lean"],
-      :axioms :standard-only,
-      :placeholder-before 0,
-      :placeholder-after 0},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/ManifoldTargetIncidenceTangent.olean ConstructionTargets/ManifoldTargetIncidenceTangent.lean'",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/IncidenceParameterProjection.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/incidence-parameter-projection-audit.py",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/IncidenceParameterProjection.lean",
-       :exit 1,
-       :correction
-       "Compiled the missing banked tangent dependency privately."}
-      {:cmd
-       "Private-path IncidenceParameterProjection compilation, initial algebra",
-       :exit 1,
-       :correction
-       "Annotated the source tangent input and used linear-map additivity."}
-      {:cmd
-       "Private-path IncidenceParameterProjection compilation, annotated input",
-       :exit 1,
-       :correction
-       "Expressed transversality through explicitly typed vector-model linear maps before extracting coproduct witnesses. Final compilation succeeds without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/IncidenceParameterProjection.lean",
-      :sha256
-      "1554aa80a4375c6d5cdaaab6f11132950711d3974dd4b259874a8f63a3b396f8",
-      :placeholder-count 0},
-     :finding
-     "Constructed the smooth second projection on exactly normalizedAtlas. Its actual mfderiv is the second-coordinate linear projection composed with the banked actual inclusion derivative. The exact tangent equalizer and range-sum transversality prove both directions: this projection derivative is surjective precisely when the actual derivative of f is surjective. Original topology, product norm, normalized dimension and genuine infinity are preserved; empty incidence and zero-dimensional kernels require no exclusions.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/IncidenceParameterProjection.lean"]},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Same-atlas smooth projection, actual derivative formula and both directions of the equalizer-derived surjectivity criterion compile for exactly normalizedAtlas. Original topology, product norm, normalized dimension and genuine infinity are preserved. Sard-based parameter conclusions, component coverage, orientations, homological comparisons and consumer closure remain subsequent.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:projection
+     "e4426c7fcaa0131f73c3522fbedd9d53f06ffe06da1bccd27b6287820175e717",
+     :smooth
+     "72b61e637913d1ad5aada4f9cdc7034d7f78a1e0401e6a4907872df165155a92",
+     :derivative
+     "5da3c5110cd59b0634fc6596c1d05113648afb1c24d70ef4a40a04815c47304d",
+     :regularity_iff
+     "6592f6b543b1ec3e96c34a6094f6c9bb9764acce4475f17ec3779ff6f83153a4"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/IncidenceParameterProjection.lean", :exit 0}
+     {:cmd
+      "sed 's/;pathlib.Path.*;print(json.dumps(r))/;print(json.dumps(r))/' /tmp/incidence-parameter-projection-audit.py | python3",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.ManifoldTargetIncidenceTangent 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/IncidenceParameterProjection.lean ConstructionTargets/IncidenceParameterProjection.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/IncidenceParameterProjection.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "cc3261525c486f5926995c6e582362658e70c44b",
+    :changed-paths
+    ["ConstructionTargets/IncidenceParameterProjection.lean"],
+    :fixture
+    {:path "/tmp/IncidenceParameterProjection.lean",
+     :sha256
+     "1554aa80a4375c6d5cdaaab6f11132950711d3974dd4b259874a8f63a3b396f8"},
+    :axiom-audit-declarations 3},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/IncidenceParameterProjection.lean"],
    :dag-node
    "PARAMETRIC TRANSVERSALITY / actual incidence projection derivative",
