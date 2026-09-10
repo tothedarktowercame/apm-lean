@@ -18887,8 +18887,187 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:placeholder-delta 0,
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read DAG, foundational-program note, closure rules and standing portfolio policy",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint32Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint32Eligibility.bb", :exit 0}
+     {:cmd
+      "Inspect both ledgers, dependency reviews and concurrent refill41 reservations",
+      :exit 0}
+     {:cmd
+      "Verify Main consumes the sphere bridge and preserves its final statement",
+      :exit 0}
+     {:cmd
+      "Inspect actual coefficient pair maps and Mathlib connecting-map naturality API",
+      :exit 0}
+     {:cmd
+      "git log --format='%h %s' 886aa441..d4927bc3 -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :infrastructure-packets
+    {:modules-before 701,
+     :modules-after 702,
+     :portfolio 0,
+     :concurrent 1,
+     :branch-uptake-packets 1,
+     :concurrent-commit "ab87b24f"},
+    :replacement-items
+    [{:consumer :t94J08,
+      :stop-condition
+      "No supplied sequence morphism or naturality square, integral-to-R shortcut, signed sphere-action conclusion or consumer closure claim. Preserve arbitrary subsets and empty subspaces.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "RELATIVE HOMOLOGY: actual coefficient-general pair connecting-map naturality",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a Type 0 commutative ring R, spaces X,Y, arbitrary subsets A,B and continuous f:X→Y with MapsTo f A B, construct the morphism between CoefficientPairSequence.sequence R A and sequence R B whose components are exactly CoefficientRadialPair.subMap, absoluteMap and pairMap. Prove both short-complex squares using the actual inclusion and cokernel projection equations. Apply the inspected homology-sequence naturality theorem to prove connecting R A n followed by the restricted-map homology arrow equals the relative-map homology arrow in degree n+1 followed by connecting R B n, for every n including zero. Prove actual pair-map identity and composition equations and their induced homology equations. For contractible ambient spaces, derive the corresponding connecting-isomorphism naturality square from the exact forward maps, without assuming relative-map invertibility. Compile integer and rational examples, including an empty-subspace case. GO requires the complete placeholder-free actual-map fixture; REVISE requires exactly one compiled missing sequence-map prerequisite; STOP names independent foundations.",
+       :consumer-equation
+       "The actual pair connecting maps commute with continuous maps of pairs over R, with orientation H_(n+1)(X,A) to H_n(A), and the relative arrows are exactly the reviewed cokernel maps.",
+       :consumer-residual
+       "Signed hemisphere exchange, antipodal action and reduced-S0 normalization remain before t94J08 uptake. Degree realization, localization/gluing and nonbounding require their own geometric comparisons.",
+       :gates
+       ["Compile a complete placeholder-free fixture and record SHA256."
+        "Audit all three actual sequence-map components, both squares and the direction of connecting naturality."
+        "Verify identity/composition equations and contractible connecting-isomorphism compatibility."
+        "Record integer/rational examples, empty-subspace support and standard-only axiom audits."
+        "Do not assume pair naturality, relative invertibility, antipodal signs or orientation coherence."]},
+      :id
+      :oriented-checkpoint32-coefficient-pair-connecting-naturality-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill
+       :coefficient-general-actual-pair-homology-sequence-1
+       :coefficient-general-radial-relative-comparison-1],
+      :current-residual
+      "Actual R-linear pair maps and connecting morphisms are reviewed separately. Their naturality requires a constructed morphism of the actual subtype-inclusion short exact sequences with the correct cokernel component.",
+      :other-consumers [:t02A08 :t98A02 :t96J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: pair naturality and consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id :oriented-checkpoint33-pair-naturality-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint32-coefficient-pair-connecting-naturality-1
+       :oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill],
+      :current-residual
+      "Measure actual pair-map naturality separately from signed-action and consumer conclusions; reassess all reviewed boundaries and concurrent outcomes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :ranking
+    ["No newly eligible unassigned complete-consumer adapter. The sphere branch is already consumed; the remaining near-consumer boundaries persist."
+     "Exclude reserved surface triangulation, covering pullback, torus Euler and global incidence-atlas work, including rows awaiting their strategy review."
+     "Elect actual coefficient-general pair connecting-map naturality: four proposed consumers, existing actual pair maps and a generic homology-sequence naturality theorem, with one bounded construction of the required sequence morphism."
+     "Retain localization, cap/Thom, product homology, integration and signed sphere-action foundations. Pair-map naturality is a smaller ready comparison needed by the signed and relative-homology routes; it does not itself establish their conclusions."],
+    :near-consumer-boundaries
+    {:t00J02
+     "Fundamental classes and oriented homological comparison; incidence work reserved.",
+     :t03J02 "Generic collar/NDR and gluing comparison.",
+     :t92J06 "Actual graph-covering construction.",
+     :t95J06 "Hopf-surface torus homeomorphism.",
+     :t97A01 "Literal polygon invariants.",
+     :t94A06 "General-model smooth and dimension hypotheses.",
+     :a97J08 "Planar separation.",
+     :t01A05 "Actual covering fundamental-class degree equation.",
+     :t96J06 "Compact-manifold nonbounding and fundamental classes.",
+     :t00A03 "Literal pants decomposition and cutting count.",
+     :t01J04 "Analytic boundary-preimage atlas and countability.",
+     :t03J05 "Literal curves and intersection/nonhomotopy.",
+     :t94J09
+     "Actual polygon normalization and attaching-map homology computation.",
+     :t03J04
+     "Rational torus Euler computation and finite-cover transport; reserved.",
+     :t95J05 "Numerical Hausdorff mass normalization.",
+     :t00J01
+     "Klein-product manifold/top-homology and exact fold-fiber conjunction.",
+     :t99J03
+     "Constructed finite presentation and polygon normalization.",
+     :t01A08 "General-model projected regular preimage.",
+     :t00A01
+     "Target-natural actual two-open free-product comparison and basepoint extraction.",
+     :t98A02 "Localization and gluing.",
+     :t02A05 "Literal flux and measure comparison.",
+     :t96J05
+     "Attained regular radius and analytic literal-level atlas.",
+     :t98A01 "Genus invariance and Euler multiplicativity.",
+     :t02A08 "Signed all-integer sphere-degree realization.",
+     :t94J08
+     "Signed antipodal naturality and reduced degree-zero normalization."},
+    :finding
+    "The coefficient infrastructure now has observed frozen-branch uptake. Placeholder count remains unchanged because two independent t00J01 branches remain. Preserve original refutations, corrected t96J07 closure, reviewed polygon/classification STOPs and all concurrent reservations. Elect one actual pair-map naturality packet without retrying a stopped consumer or inferring orientation coherence.",
+    :typed-residual-change
+    {:consumer :t00J01,
+     :commit "589b09f99ce484739c6a1637de5f703c183c17a1",
+     :main-sha256
+     "037c040f55305ffb306cf5c68311b080b69194c103b44d8b5ac1ac8b9c40fb83",
+     :unchanged-final-statement-sha256
+     "a4694de420ca12c03f48bfabf5375e39fa325ebeff7872c9756546c3c9cbc4ca",
+     :before
+     "Klein-product, sphere-identity and fold-fiber conjunction.",
+     :after
+     "Only Klein-product and fold-fiber conjunction; Main explicitly uses apm_t00j01_sphere_identity_bridge.",
+     :classification :frozen-branch-uptake},
+    :review-outcomes
+    {:sphere-branch :pass,
+     :sphere-branch-review "invoke-1789018197839-17966-c23934ce",
+     :concurrent-local-charts :pass,
+     :concurrent-refill41 :awaiting-review,
+     :new-frozen-closures 0,
+     :new-corrected-closures 0,
+     :new-proved-refutations 0},
+    :reserved-concurrent
+    [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence
+     :t03j04-frozen-torus-euler-closure-probe-refill41
+     :compact-surface-finite-triangulation-probe-refill41
+     :literal-covering-pullback-probe-refill41
+     :manifold-target-incidence-global-atlas-probe-refill41
+     :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint32Census.json",
+     :open 35,
+     :baseline "886aa441d4e90cd0b61ff9921a222ef97faae4de",
+     :existing 58,
+     :placeholder-after 66,
+     :zero-placeholder 23,
+     :placeholder-before 66,
+     :head "d4927bc30d40921e7b003d6762dfef3ea24b6be2",
+     :sha256
+     "19ea0f6ab4a40b9cf30aa9299ba754a907459af70b7d2150311c0ad22c702cde",
+     :named 59,
+     :missing [:t93A05],
+     :within-two 25}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: sphere-identity branch uptake and remaining consumers",
@@ -18906,6 +19085,68 @@
     :oriented-checkpoint31-sphere-endpoints-and-consumer-refill],
    :current-residual
    "Verify whether the exact sphere branch is consumed by Main, measure its remaining typed obligation separately from placeholder count, and rerank all consumers.",
+   :other-consumers []}
+  {:consumer :t94J08,
+   :stop-condition
+   "No supplied sequence morphism or naturality square, integral-to-R shortcut, signed sphere-action conclusion or consumer closure claim. Preserve arbitrary subsets and empty subspaces.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "RELATIVE HOMOLOGY: actual coefficient-general pair connecting-map naturality",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a Type 0 commutative ring R, spaces X,Y, arbitrary subsets A,B and continuous f:X→Y with MapsTo f A B, construct the morphism between CoefficientPairSequence.sequence R A and sequence R B whose components are exactly CoefficientRadialPair.subMap, absoluteMap and pairMap. Prove both short-complex squares using the actual inclusion and cokernel projection equations. Apply the inspected homology-sequence naturality theorem to prove connecting R A n followed by the restricted-map homology arrow equals the relative-map homology arrow in degree n+1 followed by connecting R B n, for every n including zero. Prove actual pair-map identity and composition equations and their induced homology equations. For contractible ambient spaces, derive the corresponding connecting-isomorphism naturality square from the exact forward maps, without assuming relative-map invertibility. Compile integer and rational examples, including an empty-subspace case. GO requires the complete placeholder-free actual-map fixture; REVISE requires exactly one compiled missing sequence-map prerequisite; STOP names independent foundations.",
+    :consumer-equation
+    "The actual pair connecting maps commute with continuous maps of pairs over R, with orientation H_(n+1)(X,A) to H_n(A), and the relative arrows are exactly the reviewed cokernel maps.",
+    :consumer-residual
+    "Signed hemisphere exchange, antipodal action and reduced-S0 normalization remain before t94J08 uptake. Degree realization, localization/gluing and nonbounding require their own geometric comparisons.",
+    :gates
+    ["Compile a complete placeholder-free fixture and record SHA256."
+     "Audit all three actual sequence-map components, both squares and the direction of connecting naturality."
+     "Verify identity/composition equations and contractible connecting-isomorphism compatibility."
+     "Record integer/rational examples, empty-subspace support and standard-only axiom audits."
+     "Do not assume pair naturality, relative invertibility, antipodal signs or orientation coherence."]},
+   :id :oriented-checkpoint32-coefficient-pair-connecting-naturality-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill
+    :coefficient-general-actual-pair-homology-sequence-1
+    :coefficient-general-radial-relative-comparison-1
+    :oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill],
+   :current-residual
+   "Actual R-linear pair maps and connecting morphisms are reviewed separately. Their naturality requires a constructed morphism of the actual subtype-inclusion short exact sequences with the correct cokernel component.",
+   :other-consumers [:t02A08 :t98A02 :t96J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: pair naturality and consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint33-pair-naturality-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint32-coefficient-pair-connecting-naturality-1
+    :oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill
+    :oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill],
+   :current-residual
+   "Measure actual pair-map naturality separately from signed-action and consumer conclusions; reassess all reviewed boundaries and concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
