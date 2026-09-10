@@ -38994,8 +38994,73 @@
   {:consumer :t03J05,
    :stop-condition
    "Extend only ProductSimplexWordPrefixCounts with the exact one-step true/false recurrences for horizontalCount and verticalCount. Do not construct or compare maximal paths, prove word/path inverse laws, define corner swaps, cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:residual
+    "Repair the completed checkpoint60 fixture reference to an immutable preserved artifact, then promote the compiled successor-recurrence fixture unchanged and proceed to both word/path inverse laws.",
+    :outcome :stop,
+    :warnings [],
+    :statement-hashes
+    {"horizontalCount_succ_of_true"
+     "071f57b0fd7e5661daa02052127d5b2622c9c3a332a47f5db98f2fd2e1ebca72",
+     "horizontalCount_succ_of_false"
+     "c97f47c0160a7fc8b5dbbd49193f0b32f835fa9ad5534506029e64e73437c794",
+     "verticalCount_succ_of_true"
+     "f1a4f752e7efa70d2dc3024801d7d7ed976b4e073147b63e2ac77cb4290a0829",
+     "verticalCount_succ_of_false"
+     "d55bab2a608aa89806d362cbae9878b44af6e5cc88eb11a98b019e6838f701a4"},
+    :scope
+    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :reason :prior-canonical-fixture-hash-pins-extended-source,
+    :commands
+    [{:cmd
+      "readlink -f .lake/packages; inspect current ledger state and retained successor-recurrence fixture",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean ConstructionTargets/ProductSimplexWordPrefixCounts.md; lake env lean /tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean; lake env lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean; lake build ConstructionTargets.ProductSimplexWordPrefixCounts",
+      :exit 0}
+     {:cmd "lake env lean /tmp/codex14-prefix-successor-audit.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace, exact successor-prefix identity and four statement-hash audit over the retained fixture",
+      :exit 0}
+     {:cmd
+      "git restore -- ConstructionTargets/ProductSimplexWordPrefixCounts.lean ConstructionTargets/ProductSimplexWordPrefixCounts.md; git diff --check; git diff --exit-code; git status --short; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn; sha256sum /tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean; lake env lean /tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+      :exit 1,
+      :finding
+      "The first wordPrefix_succ proof left Fin index equality implicit, so omega could not derive k = i from equality of their values.",
+      :correction
+      "Used Fin.ext explicitly; the corrected retained fixture compiles."}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn after promoting the compiled fixture to the canonical source",
+      :exit 1,
+      :finding
+      "The checker reported that oriented-checkpoint60-product-simplex-prefix-monotonicity-repair-1 has a fixture hash mismatch at ConstructionTargets/ProductSimplexWordPrefixCounts.lean.",
+      :correction
+      "Restored the canonical files, after which both ledger checks returned zero. No ledger file was edited."}],
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean",
+     :sha256
+     "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
+     :placeholder-count 0},
+    :finding
+    "The supervisor’s intervening transition did not repair the mutable fixture reference. Both ledgers validate before the canonical extension, but worklist2 rejects the required source change because the completed checkpoint60 row pins ConstructionTargets/ProductSimplexWordPrefixCounts.lean at its former hash. The retained placeholder-free fixture proves wordPrefix i.succ equals insert i of wordPrefix i.castSucc and all four natural-number recurrences with standard-only axioms. Promoting it while preserving ledger coherence is impossible until the earlier fixture points to an immutable artifact. The canonical files were restored; an unrelated concurrent untracked PlaneArcEndpointTotalDifferenceSubmersive.lean file remains untouched.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
