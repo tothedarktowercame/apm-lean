@@ -11531,6 +11531,20 @@
      {:path "/tmp/Checkpoint18Census.json",
       :sha256
       "66d1877349f7d1c42a456ebd643e4f7d29d7400f1d744c1cf9700b3bba009653"}},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1788999800964-17421-092dfde5",
+     :commands
+     ["git show b6c6c698:holes/labs/topology-contract/worklist2.edn"
+      "git show a53a617e:problems/t00A03/lean/Main.lean"
+      "python3 inline audit: census SHA256, all 59 consumer counts, module counts, changed paths, frozen t00A03 SHA256 and ledger-only scope"
+      "bb inline audit: exact replacement tail, successor policy, dependencies and pinned active rows"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show b6c6c698:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Independent review of codex-13 strategy receipt at b6c6c698. Census and frozen hashes match; placeholders 68->68, modules 650->655 with correct portfolio/concurrent attribution. Pants probe preserves literal norm, homological genus and topological curve hypotheses. Affine naturality requires vertex map then target realization = source realization then singular map; subdivision compatibility remains downstream. No pinned active overlap; exact three-row tail and successor policy verified. Strategy-only packet has no Lean fixture or new theorem hashes. Ledger untouched."},
     :replacement-items
     [{:consumer :t00A03,
       :stop-condition
@@ -11636,7 +11650,7 @@
     "Neither primary consumer probe closed: t96J06 retains its intrinsic-boundary obstruction, and coefficient singular subdivision retains affine-face transport and singular differential compatibility. Two reviewed prerequisites now construct coefficient-general ordered-vertex cones and affine realization. The temporary recursion diagnostic is not a banked singular chain endomorphism. Concurrent chart extension, literal fiber transfer and manifold regular-fiber local charts account for three additional modules; the local-chart parent is done-unreviewed and remains reserved. No frozen file changed in the census interval. Elect t00A03 first as one fresh two-placeholder exact consumer audit, with no matching dispatched row found in either ledger. Next elect affine-realization naturality as a bounded shared comparison with four named downstream consumers. It constructs actual maps and a commuting square rather than retrying the full stopped subdivision packet. Broader classification, fundamental-class, intersection, Kunneth, Stokes and covering-gluing programs require larger constructions; active fiber work is excluded.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: projective nonbounding and coefficient subdivision uptake",
@@ -11659,7 +11673,7 @@
    :stop-condition
    "Preserve literal complement components, the exact pants subtype, homological genus and topological embedding hypotheses. No assumed surface classification, collars, Euler additivity or boundary-incidence count.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE CUTTING: exact maximal-curve pants-decomposition consumer",
@@ -11691,7 +11705,7 @@
    :stop-condition
    "Construct the actual coefficient-general vertex maps and naturality square. No supplied comparison equation, coefficient-change isomorphism or singular subdivision chain map.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION: explicit-coefficient affine realization naturality",
