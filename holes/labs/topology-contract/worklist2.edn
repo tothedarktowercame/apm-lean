@@ -31713,8 +31713,39 @@
   {:consumer :t95J05,
    :stop-condition
    "Bank only the exact append-zero sphere-image equality and ambient raw-Hausdorff nullity transport from the reviewed source-nullity theorem. Do not claim intrinsic subtype nullity, cap partition, numerical normalization, sphere mass, moments, Stokes or consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Promote namespace-correct LowerDimensionalSphereNullity and SphereEquatorEmbedding modules, then compile a namespace-correct image-nullity fixture that imports them and contains only equator, dropLast, appendZero_dropLast, image_sphere, equator_measure_eq_zero, equator_two_null and equator_three_null.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :reason :unpromoted-prerequisite-imports,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
+      :exit 0}
+     {:cmd
+      "rg -n 'sphere-equator-image-ambient-nullity-1|SphereEquatorImageNullity' holes/labs/topology-contract/worklist2.edn; inspect the nested probe fixture and diagnostic history",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean; sed -n '1,90p' /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean; lake env lean /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean; test ! -e ConstructionTargets/LowerDimensionalSphereNullity.lean; test ! -e ConstructionTargets/SphereEquatorEmbedding.lean; test ! -e ConstructionTargets/SphereEquatorImageNullity.lean; test ! -e ConstructionTargets/SphereEquatorImageNullity.md; git diff --exit-code -- ConstructionTargets/SphereEquatorImageNullity.lean ConstructionTargets/SphereEquatorImageNullity.md; git diff --check",
+      :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean",
+     :sha256
+     "41b5affc82871ddb64935e292e521c6879020ae9dbe3a0466128251f18f8036a",
+     :placeholder-count 0},
+    :finding
+    "The fixture matches SHA256 41b5affc82871ddb64935e292e521c6879020ae9dbe3a0466128251f18f8036a and compiles the image and ambient-nullity mathematics with standard-only axioms, but it does so by repeating appendZero and its coordinate theorems because the two required canonical prerequisite modules do not exist. The probe diagnostic history explicitly records this composition. The implementation acceptance instead requires importing ConstructionTargets.LowerDimensionalSphereNullity and ConstructionTargets.SphereEquatorEmbedding and extracting only the new declarations. Both prerequisites ended in reviewed namespace-conflict STOPs and remain absent. The combined fixture also declares the unqualified namespace SphereEquatorImageNullity rather than ConstructionTargets.SphereEquatorImageNullity. Promoting it would therefore repeat prerequisite declarations, violate the required import boundary, and miss the required namespace. Repair and promote both prerequisite fixtures first, then produce a namespace-correct fixture containing only the seven new declarations. This is a representation and dependency boundary, not a mathematical refutation.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereEquatorImageNullity.lean"
     "ConstructionTargets/SphereEquatorImageNullity.md"],
