@@ -62433,8 +62433,59 @@
   {:consumer "t03J04",
    :stop-condition
    "Require actual finite lift sums and their production projection identity; function-level fiber sums or assumed lift finiteness are insufficient.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Production singular-generator lift sums and their k-fold projection identity are compiled in every degree, including zero-sheet cases, with lift finiteness derived. Extension over chain groups and boundary commutation remain. No chain-map transfer or consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789021651883-18048-2ce7b12f"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:vertex
+     "8e7763931b8cb42f07723be035a3c71c617fd386a83932ba90b45f53e7b78af3",
+     :finiteLifts
+     "73095785dccf21d4ceeeef3b6d5116e0e50f64d9a7de42d53806145a9f07c967",
+     :transferSimplex
+     "44a03f26684ad35efe4db18047926ee740fa7aa97686964e37c94c829194608c",
+     :transferSimplex_projection
+     "633f272540fdd2638d93fdb45031ed8a7c3c9c50313def1a3d27e480ec82e38a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/CoveringSimplexTransfer.lean", :exit 0}
+     {:cmd
+      "Python read-only fixture audit: zero placeholders and four complete outer-delimited declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.CoveringLiftRestriction ConstructionTargets.CoveringDegree ConstructionTargets.SingularSubdivision 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/CoveringSimplexTransfer.lean ConstructionTargets/CoveringSimplexTransfer.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoveringSimplexTransfer.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "753cb1e75f7e271eefb3c49c27a5d6ee018d8ad1",
+    :changed-paths
+    ["ConstructionTargets/CoveringSimplexTransfer.lean"],
+    :fixture
+    {:path "/tmp/CoveringSimplexTransfer.lean",
+     :sha256
+     "782dcd0ddc7efc794b45eeef9281afd90ccd5fe78f52c891701a643114430a38"},
+    :axiom-audit-declarations 3},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoveringSimplexTransfer.lean"],
    :dag-node "COVER-DEGREE / production simplex lift sums",
    :acceptance
