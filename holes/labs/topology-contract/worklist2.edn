@@ -19103,96 +19103,116 @@
    :stop-condition
    "No supplied sequence morphism or naturality square, integral-to-R shortcut, signed sphere-action conclusion or consumer closure claim. Preserve arbitrary subsets and empty subspaces.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Signed hemisphere exchange, antipodal action and reduced-S0 normalization remain before t94J08 uptake; other consumers retain their geometric comparison obligations.",
-     :axiom-audits 18,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:namespace "ConstructionTargets.CoefficientPairNaturality",
-      :implementation
-      "Promote the exact compiled fixture and document its actual sequence components, connecting direction and remaining geometric obligations.",
-      :declarations
-      ["sequenceMap"
-       "component_sub"
-       "component_absolute"
-       "component_relative"
-       "inclusion_square"
-       "projection_square"
-       "connecting_naturality"
-       "absolute_id"
-       "absolute_comp"
-       "pair_id"
-       "pair_comp"
-       "homology_id"
-       "homology_comp"
-       "contractible_naturality"
-       "integral_empty"
-       "rational_empty"
-       "integral_naturality"
-       "rational_naturality"],
-      :hypotheses
-      "R and all spaces are Type 0. R is a commutative ring; subsets are arbitrary, including empty subsets. Maps require continuity and MapsTo only. Connecting naturality holds in every degree including zero. Contractible connecting-isomorphism compatibility requires both ambient spaces contractible and positive target degree; no relative-map invertibility is assumed.",
-      :consumer-equation
-      "connecting R A n followed by homologyMap of the actual restricted map equals homologyMap of the actual cokernel pair map in degree n+1 followed by connecting R B n.",
-      :consumer-residual
-      "Signed hemisphere exchange, antipodal action and reduced-S0 normalization remain before t94J08 uptake. Degree realization, localization/gluing and nonbounding require their own geometric comparisons.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientPairNaturality."
-       "Reproduce all eighteen standard-only axiom audits and integer/rational examples, including empty subsets."
-       "Audit all three sequence-map components, both squares, connecting direction, pair identity/composition and contractible compatibility."
-       "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure rules, both ledgers and dependency PASS receipts; inspect actual pair-map and homology-sequence APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientPairNaturality.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientPairNaturality.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientPairNaturality.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "git diff --no-index --check /dev/null /tmp/CoefficientPairNaturality.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial fixture compilation",
-       :exit 1,
-       :correction
-       "Made categorical composition proofs explicit and changed inferred-type example declarations to definitions."}
-      {:cmd "Second fixture compilation",
-       :exit 1,
-       :correction
-       "Replaced unsuccessful simplification of pair identity with explicit transport of the cokernel-projection equation."}
-      {:cmd "Fixture compilation after adding audits",
-       :exit 1,
-       :correction
-       "Changed the standalone documentation comment before axiom commands to an ordinary block comment; final compilation succeeds."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientPairNaturality.lean",
-      :sha256
-      "62ae88d6bc3fd4de0b065813b3e157da15d0cf75e5e8ee4ac2c5c09b046b9580"},
-     :finding
-     "Complete actual-map fixture compiled. The constructed short-complex morphism has exactly the reviewed restricted, absolute and cokernel components. Both squares are proved; homology-sequence naturality yields the correctly oriented connecting equation, including degree zero. Actual relative maps and their homology arrows satisfy identity and composition. Contractible connecting-isomorphism compatibility follows from the exact forward maps without relative invertibility. Integer and rational examples retain empty subspaces. No consumer closure or signed sphere action is claimed.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientPairNaturality.lean"
-       "ConstructionTargets/CoefficientPairNaturality.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Signed hemisphere exchange, antipodal action and reduced-S0 normalization remain before t94J08 uptake. Other consumers retain their geometric comparison obligations; no signed sphere action or consumer closure is claimed.",
+    :gates
+    {:whitespace :pass,
+     :fixture-hash :pass,
+     :scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :examples :pass,
+     :commit :pass,
+     :map-equations :pass,
+     :scans :pass,
+     :compilation :pass},
+    :axiom-audits 18,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Direct fixture and canonical compilations produced zero warnings. Build replayed 20 dependency warnings."],
+    :statement-hashes
+    {"homology_id"
+     "b6059383099038968170f35ab069a3cbf35f3caf4e770828aab30653815430d4",
+     "homology_comp"
+     "29de3b7c9b8fd3c0c81aa086ba1b176f93ad856ae0b9ac1eb93315b81a697f3b",
+     "component_absolute"
+     "13d1f770bffafbe3c0ed48b18c6cdc9f3b8fa41ba6a211a81d08e6e175688335",
+     "integral_naturality"
+     "d06606e9457d41fb398535660b3a025981c41dc9159092f3378ff38a5e758828",
+     "sequenceMap"
+     "5af5ec6443c87254a2c7724158b904396cafa3db1f62b5ac9cdebf8a452cf8d2",
+     "projection_square"
+     "3eda00b50eef6edba247b9a54fd96c897d3c7a16878bc1ed664fcffe3a899969",
+     "absolute_comp"
+     "e64e7b5574c9b9435bcca2471c109103a462614c484b093af59945cdf0fd9ece",
+     "pair_comp"
+     "6661031017876b35401b744e93853b3170e1f6a04409d22c4fac6fde66d7539e",
+     "component_relative"
+     "03eebb40b6019a40b701f551c600906307fd22cac23210f4c54d4d9eb3090a3e",
+     "inclusion_square"
+     "4f2b6e770d1f834bc60495f819b867e2a92c02d413a011d46442960b54c3aedc",
+     "pair_id"
+     "803151e581dc76c046a46813e082eeda5a3a927a2f078333bb1fd5c83fc87cb1",
+     "rational_naturality"
+     "4c384d8aeced06fe63f66f731895afe2c717b7ff3bb2825929064ada7dbc4dce",
+     "component_sub"
+     "6c1d28c79fb84e8838c602753ea4973d6358a0ac2821a0f670aff9706527c217",
+     "integral_empty"
+     "372586ee5b9c6fda27dec54ae94b3d7257f30d87fd8808bcd4fd7e74db2bff44",
+     "rational_empty"
+     "049afb1c8040d6f2e66844faee0955f7ecdeaa833b56834217fd10c5e5167357",
+     "connecting_naturality"
+     "8a415390373e35eca7994a35e7a0bcfaac1aeabf81f17f38c9288375712f169f",
+     "absolute_id"
+     "f14298b5f160cbd4c4a4ea38ed488792897e899db7b6a4b5d98aba42b58809c9",
+     "contractible_naturality"
+     "245395ed227e7ab9273d9a94cf5eec4b5b739bc3957fb3cf61affc5921f8e4c3"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientPairNaturality.lean", :exit 0}
+     {:cmd
+      "Read DAG, closure rules, both ledgers and dependency PASS receipts",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientPairNaturality.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientPairNaturality.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientPairNaturality",
+      :exit 0,
+      :jobs 8280}
+     {:cmd
+      "Validate eighteen standard-only audits in both compilation logs and integer/rational examples including empty subsets",
+      :exit 0}
+     {:cmd
+      "Audit three sequence components, both squares, connecting direction, identity/composition and contractible compatibility",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientPairNaturality.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Verify eighteen statement hashes and exact fixture promotion",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "Verify exact staged two-file scope", :exit 0}
+     {:cmd
+      "git commit -m 'Construct actual coefficient-general pair connecting naturality'",
+      :exit 0}
+     {:cmd "git diff --check 8a43bbde^ 8a43bbde", :exit 0}
+     {:cmd
+      "Verify committed scope, byte-identical fixture and clean workspace",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "8a43bbdecfed605f6a144eb28e4e74b635a5b253",
+    :changed-paths
+    ["ConstructionTargets/CoefficientPairNaturality.lean"
+     "ConstructionTargets/CoefficientPairNaturality.md"],
+    :fixture
+    {:path "/tmp/CoefficientPairNaturality.lean",
+     :sha256
+     "62ae88d6bc3fd4de0b065813b3e157da15d0cf75e5e8ee4ac2c5c09b046b9580",
+     :promoted-verbatim true},
+    :finding
+    "Promoted the exact constructed sequence morphism and connecting naturality equation, with actual restricted, absolute and cokernel components. Identity/composition and contractible connecting compatibility are proved without assuming relative invertibility.",
+    :statement-hash-method
+    "SHA256 of declaration text from theorem/def keyword to immediately before the space preceding :=.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientPairNaturality.lean"
     "ConstructionTargets/CoefficientPairNaturality.md"],
