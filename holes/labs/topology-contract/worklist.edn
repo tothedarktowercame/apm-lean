@@ -56580,6 +56580,19 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789001180573-17465-23c9c0aa",
+     :commands
+     ["git show 62d6817a673d5d0fbce70691e0808b85e31bdd63"
+      "Independent exact-promotion, scope, fixture/seven signature hashes and placeholder audit"
+      "lake env lean ConstructionTargets/ManifoldRegularFiberGlobalAtlas.lean"
+      "lake build ConstructionTargets.ManifoldRegularFiberCharts"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 62d6817a"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact single-file promotion and all hashes verified. Selected actual fiber charts establish the inherited-topology global atlas and genuine-infinity manifold structure. Smooth subtype inclusion uses that same atlas and target-chart restrictions of the backward parameterizations. Empty fibers and zero-dimensional kernels need no additional assumptions. Seven axiom audits pass standard-only; compilation warning-free, prerequisite build passes 8445 jobs. No consumer changes; derivative injectivity, tangent-kernel comparison and broader applicability remain unclaimed. Ledger passes 435 items; whitespace clean. No edits."},
     :commit "62d6817a673d5d0fbce70691e0808b85e31bdd63",
     :changed-paths
     ["ConstructionTargets/ManifoldRegularFiberGlobalAtlas.lean"],
@@ -56593,7 +56606,7 @@
     :statement-hash-method
     "SHA-256 from theorem keyword through signature, excluding proof assignment and trailing whitespace"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldRegularFiberGlobalAtlas.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / manifold-source global atlas and inclusion",
@@ -56628,7 +56641,7 @@
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
