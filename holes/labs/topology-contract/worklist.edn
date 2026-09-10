@@ -64446,8 +64446,84 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the proved distinguished-chart geometric identification and actual pair transport; no supplied homeomorphism equality.",
+   :evidence
+   {:dependency
+    {:path "ConstructionTargets/CoefficientOverlapNormalization.lean",
+     :sha256
+     "9697585da59ffc70a8381b306297c6dbb027e0091ebb57d4219f725e707e525f"},
+    :placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Exact distinguished-chart identification and actual deleted-pair transport compile in arbitrary natural homology degree with dimension m+2 explicit. Recovering CoefficientChartLocal.localIso from overlap normalization remains; no equality of normalization composites or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:target_pair_inverse_right
+     "6fbbd0fd0dc2d774d52f11fdef994f49b72253e9b9850c87b3a060638c41f10d",
+     :target_homology_forward
+     "3748eb95adc75a0c2926a089668672011894cd5802bbe92ae60e4a84f52433c4",
+     :inverse_pointed_eq
+     "df61c9e5097b6761bb71141d43e31cdde3f4e3fe05bfdc33ad4d3e5182cc2f33",
+     :targetHomeo
+     "acdfe845f0f88a459ef4a583f1c51d2d73fabf4f4f7499baa8c9aecd1788a6e2",
+     :targetPair
+     "35e7cfa073594aa166ce6389d447e874f15d3c791eb659298de0645d6e20e139",
+     :target_pair_inverse_left
+     "3320b3c3263696225a87bc0b5b85f6ddd1d25882dc02125c681e464576551b9b",
+     :restricted_eq
+     "0306730bd8d3795c3b08852c3a056e841d14924e951709ea09c46c2527de88d8",
+     :image_eq
+     "6af3ea50aec3103ec41460b34c61af1fb3224c55c686998423b3ba18d8b95944",
+     :targetHomologyIso
+     "4bbdccb01ebd44ca959480ee0825f7a586245184be32347b70d3bd3a7b98b04a",
+     :pointed_eq
+     "254ab3965a3ce37ad779d9b9bd4bd2bfa383b253d06abaa6b8a206811e96104b",
+     :target_value
+     "8f0dd52b236b9dd3c85aaf14b9a92e65dfba044fc2db0d1befbcb90e478c4b8a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CoefficientDistinguishedChart.lean ConstructionTargets/CoefficientOverlapNormalization.lean",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.CoefficientOverlapNormalization 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "Python read-only canonical-source audit: zero placeholders and complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/CoefficientDistinguishedChart.lean ConstructionTargets/CoefficientDistinguishedChart.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientDistinguishedChart.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Overlap construction on the full source of chartAt x, translated at x",
+     :target
+     "CoefficientChartLocal.pointedTarget and pointedChart at x",
+     :direction
+     "Target-set equality and equality from the transported overlap pointed homeomorphism to the distinguished pointedChart, inducing the forward deleted-pair isomorphism."},
+    :commit "385d575847d78cce76a75d8f18732265e2b1ca9a",
+    :changed-paths
+    ["ConstructionTargets/CoefficientDistinguishedChart.lean"],
+    :fixture
+    {:path "/tmp/CoefficientDistinguishedChart.lean",
+     :sha256
+     "284908c57e17da0e422f6c3d54daf1cb03588d8dcf6597dfad7893b490da2957"},
+    :axiom-audit-declarations 9},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoefficientDistinguishedChart.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / distinguished translated-chart identification",
