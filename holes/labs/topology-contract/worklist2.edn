@@ -44253,6 +44253,25 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789081265807-19733-8af3ff16",
+     :commands
+     ["git log --oneline -7"
+      "git show --stat --oneline b6a8061a"
+      "git show --format=fuller --no-ext-diff b6a8061a --"
+      "inspect reviewed t03j05 schema-preservation STOP and checkpoint66 completion evidence"
+      "git archive b6a8061a | tar -x -C <review-dir>"
+      "git diff-tree --no-commit-id --name-status -r b6a8061a"
+      "git diff-tree --check b6a8061a^ b6a8061a"
+      "sha256sum <archive>/holes/labs/topology-contract/build_step.bb <archive>/holes/labs/topology-contract/test_gate_receipts.bb"
+      "bb <archive>/holes/labs/topology-contract/test_gate_receipts.bb"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist2.edn"
+      "find <archive>/holes/labs/topology-contract/evidence for immutable build_step artifacts"],
+     :finding
+     "PASS: commit b6a8061aa641c300549a67681456bd531ca92b99 has exact worklist2-only scope and clean whitespace. Its STOP is deterministic and correctly oriented: completed checkpoint66 pins mutable build_step.bb at SHA256 ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b with supporting test SHA256 22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc, and no immutable checkpoint66 supervisor artifact exists. The committed supervisor remains at those hashes, its original suite passes 55 assertions with zero failures/errors, and both archived ledgers validate. The row correctly requires immutable preservation and atomic repointing before reapplying the tested schema patch; it makes no transition, theorem, orientation, placeholder, or closure claim."},
     :fixture
     {:path "holes/labs/topology-contract/build_step.bb",
      :sha256
@@ -44265,7 +44284,7 @@
     "Planning-only/blocked at a reviewed ledger-evidence boundary. The dependency implementation completed the evidence-shape-aware validator and passed 81 assertions, clj-kondo and check-parens, but mandatory worklist2 validation rejected its source change because completed row oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1 records the mutable holes/labs/topology-contract/build_step.bb path with SHA256 ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b. No immutable checkpoint66 build_step artifact exists. The implementation was restored; the canonical hashes reproduce, the original 55 assertions pass, and both ledgers validate. Reapplying the schema patch now would invalidate completed evidence.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: evidence-shape-aware atomic fixture-path transitions",
@@ -44318,7 +44337,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: typed atomic fixture transitions and renewed consumer eligibility",
