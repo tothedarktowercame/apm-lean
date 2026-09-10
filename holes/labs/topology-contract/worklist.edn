@@ -73338,6 +73338,19 @@
       "git diff-tree --no-commit-id --name-only -r 244970fb5699e2fda5bad9c0154be1bcacbe5842",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789077036684-19582-11e3940e",
+     :commands
+     ["lake env lean ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean"
+      "sha256sum /tmp/CoefficientSubspaceUnionRangeInclusion.lean ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean"
+      "python3 placeholder-and-six-declaration audit over ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean"
+      "git diff-tree --no-commit-id --name-only -r 244970fb5699e2fda5bad9c0154be1bcacbe5842"
+      "git diff --exit-code 244970fb5699e2fda5bad9c0154be1bcacbe5842 -- ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean"
+      "git show --check --oneline --stat 244970fb5699e2fda5bad9c0154be1bcacbe5842"],
+     :finding
+     "PASS: independently reviewed recorded commit 244970fb5699e2fda5bad9c0154be1bcacbe5842 authored by codex-6. Its sole changed path is the scoped module, byte-identical to fixture SHA256 f082c52703e6e08185349e06ffc2b91db4e535e9bece25395f5fb9c5d33f9fcb; dependency SHA256 is bf8cbfb5d6de7d6a2a6b9796a002b197b2432248878dcfaefc83f8274e045b2d. Lean compiles without warnings; the two set inclusions are axiom-free, the simplicial and chain constructions use only propext, Classical.choice, and Quot.sound; placeholder count is zero; all six declaration hashes recompute exactly. Direction and representation boundaries are correct: monotonicity sends each ambientSubspaceRange A and B into ambientSubspaceRange (A union B), their supremum therefore maps canonically into the union range, and unionRangeInclusion followed by the latter's ambient inclusion equals the original supremum inclusion. Applying the coefficient singular-chain functor preserves this commuting triangle with the same composition direction. The module does not identify the source with all chains in the union, nor claim a chain or homology isomorphism, short exactness, a connecting morphism, localization, vanishing, or a fundamental class."},
     :commit "244970fb5699e2fda5bad9c0154be1bcacbe5842",
     :changed-paths
     ["ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean"],
@@ -73349,7 +73362,7 @@
     :finding
     "The exact fixture and recorded relative-short-complex dependency hash reproduce. All six requested declarations compile without warnings or placeholders; the subset lemmas are axiom-free and the inclusion constructions and ambient commutation identities use only standard axioms. The commit changes exactly the scoped path. Pre-existing modifications to ProductSimplexWordPrefixCounts.lean and ProductSimplexWordPrefixCounts.md were left untouched."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean"],
    :dag-node
@@ -73443,7 +73456,7 @@
      "Compiled exactly one denominator-comparison prerequisite. The supremum of the two ambient subspace ranges maps canonically into the ambient range of their set-theoretic union, and composing this map with the union-range inclusion into ambient singular simplices is exactly the original supremum inclusion. Applying coefficient chains preserves that commuting triangle. This is the precise map whose homology equivalence for an open two-cover replaces the false assertion that every singular simplex in a union lies wholly in one member. The unrelated untracked holes/labs/topology-contract/worklist2.edn.tmp was left untouched.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
