@@ -73985,6 +73985,20 @@
      "Production coefficient singular chains on that topological subspace, followed by its chain inclusion into the ambient space",
      :direction
      "Canonical chain isomorphism from the source ambient-range representation to the target production-subspace representation, with exact equality after inclusion into ambient coefficient singular chains."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789079567890-19673-bec5c305",
+     :commands
+     ["git show 147dac5f7d46fb32efbdbf9fe13b99f8819a640b:ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean"
+      "git diff-tree --no-commit-id --name-only -r 147dac5f7d46fb32efbdbf9fe13b99f8819a640b"
+      "lake env lean ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean"
+      "sha256sum /tmp/CoefficientAmbientSubspaceRangeCompatibility.lean ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean"
+      "cmp -s /tmp/CoefficientAmbientSubspaceRangeCompatibility.lean ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean"
+      "git show --check --oneline --stat 147dac5f7d46fb32efbdbf9fe13b99f8819a640b"
+      "python3 two-declaration hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at 29ce41fd37107ede574576e64bdc7b326d30323fad499b7a4a6687b3237e29b6, and the restricted-range-isomorphism dependency reproduces fcdb8331d731c21de340aa41036f16dea032124fc2134786b0922ea3d236f5dd. Lean compilation succeeds without warnings, both frozen declaration hashes reproduce, placeholders are zero, and the printed theorem uses only standard axioms. The isomorphism is correctly oriented from coefficient chains on the categorical ambient range to production singular chains on the subspace, using the inverse of the source-to-range isomorphism. Its forward map followed by the actual subspace chain map equals the ambient range-subcomplex inclusion, so the representation boundary commutes in the required direction without claiming the union denominator is already a homology equivalence."},
     :commit "147dac5f7d46fb32efbdbf9fe13b99f8819a640b",
     :changed-paths
     ["ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean"],
@@ -73996,7 +74010,7 @@
     :finding
     "The exact fixture and recorded restricted-range-isomorphism dependency hash reproduce. Both requested coefficient-generic range declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean"],
    :dag-node
@@ -74110,7 +74124,7 @@
      "Compiled exactly one coefficient-generic representation prerequisite. The previously reviewed ambientSubspaceRangeChainsIso is specialized to integer chains, while the current route requires arbitrary commutative-ring coefficients. The fixture constructs the same canonical range presentation for ModuleCat R chains and proves that its forward map followed by the production subspace chain map is exactly the inclusion of the ambient range subcomplex. This permits the reviewed restricted-cover homology equivalence to be conjugated to unionRangeChainsInclusion without asserting that every simplex in a union lies in one cover member. Relative cokernel transport, short exactness, the genuine connecting morphism and the three homology exactness segments remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
