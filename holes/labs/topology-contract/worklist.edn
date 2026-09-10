@@ -62155,6 +62155,19 @@
       :exit 0}
      {:cmd "git diff --cached --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789024260479-18106-b01343a3",
+     :commands
+     ["git show 45a52ad7:ConstructionTargets/StandardTriangleEmbedding.lean"
+      "Independent Python pinned-fixture comparison, eleven complete declaration hashes and placeholder audit"
+      "lake env lean ConstructionTargets/StandardTriangleEmbedding.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show d9aefc9b:holes/labs/topology-contract/worklist.edn)"
+      "git diff-tree --no-commit-id --name-only -r 45a52ad7"
+      "git show --check 45a52ad7"],
+     :finding
+     "Author codex-6 is independent. Exact single-file promotion and fixture SHA256 8eac84f40a0fcba2925a02670f2cab15fae9634e568bec582e53b74d02d691f2 verified; eleven complete declaration hashes match; zero placeholders. Compilation warning-free with five standard-only axiom audits; validator passes 493 items. Explicit affine parametrization of the standard two-simplex is continuous, injective and a closed embedding with compact image. Positive barycentric coordinates map exactly to the stated open triangle containing zero. Ordinary product topology is preserved. Chart-target containment, manifold transfer, finite coverage and face-compatible triangulation remain unclaimed. Ledger untouched."},
     :commit "45a52ad71f5b91454d457126a2320dac46d33800",
     :changed-paths
     ["ConstructionTargets/StandardTriangleEmbedding.lean"],
@@ -62164,7 +62177,7 @@
      "8eac84f40a0fcba2925a02670f2cab15fae9634e568bec582e53b74d02d691f2"},
     :axiom-audit-declarations 5},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/StandardTriangleEmbedding.lean"],
    :dag-node
    "SURFACE TRIANGULATION / explicit affine simplex embedding",
@@ -62256,7 +62269,7 @@
      "Compiled one geometric prerequisite: an explicit affine embedding of the closed standard two-simplex into the ordinary real coordinate plane. Its image is compact. The image of strictly positive barycentric coordinates is exactly the open triangle defined by three strict affine inequalities and contains the origin. No embedding or image comparison is assumed.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "SURFACE TRIANGULATION / finite embedded triangle cover",
    :acceptance
