@@ -17252,8 +17252,186 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read complete DAG, foundational-program note, closure policy, both ledgers and dependency reviews",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint29Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint27Eligibility.bb", :exit 0}
+     {:cmd
+      "Inspect T02A06SphereShift and T02A06DiskRadialComparison geometric maps, coefficient representations and endpoint equations",
+      :exit 0}
+     {:cmd
+      "git log --format='%H %s' e8a6f02b..HEAD -- ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "No supplied sphere shift, radial relative homology isomorphism or coefficient-change shortcut. Preserve actual subspace cokernels and distinguish ordinary H0 from reduced H0. Do not claim the sphere table or frozen closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SPHERE SUSPENSION: coefficient-general hemisphere and radial comparison assembly",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a Type 0 commutative ring R, reuse the coefficient-independent hemisphere, stereographic and radial geometry in T02A06HemisphereExcision, T02A06DiskRadialComparison and T02A06SphereShift. Construct actual R-linear relative maps for the coordinate and halfDiskMap squares, proving their projection equations and map identifications. Derive their homology isomorphisms using reviewed homotopy equivalences and CoefficientCokernelComparison; instantiate CoefficientExcision with the proved closed-hemisphere hypotheses. Assemble the positive-target-degree sphere shift using CoefficientContractiblePair. Also construct sphere H1 to native-disk relative H1 and then its actual H0-kernel comparison. Prove the precise forward composite equations and both inverse laws. State universes and retain n=0 and empty boundary cases where the stated endpoints apply. Compile integer and rational specializations. REVISE requires exactly one complete compiled missing geometric relative-map comparison; STOP at independent unconstructed foundations.",
+       :consumer-equation
+       "Actual R-valued sphere homology shifts to boundary-sphere homology in positive target degrees, with a separate exact ordinary-H0 kernel description of sphere H1.",
+       :consumer-residual
+       "Compute the rational S2 H1/H2 endpoints and establish the normalization and naturality required for the named consumer; no frozen closure follows from suspension alone.",
+       :gates
+       ["GO requires a complete placeholder-free fixture constructing the geometric relative maps, suspension composite and H1 kernel endpoint."
+        "Record fixture SHA256, exact oriented forward maps, inverse laws, integer/rational examples and standard-only audits."
+        "Recheck both ledgers. Do not import an integral homology conclusion as R-linear or assume sphere homology or orientation coherence."]},
+      :representation
+      {:source
+       "Actual ModuleCat R singular homology H_(k+1) of ambientSphere n, for k positive.",
+       :target
+       "Actual ModuleCat R singular homology H_k of euclideanUnitSphere n; separately, H1 of ambientSphere n is compared with the kernel of the actual closed-disk boundary inclusion on H0.",
+       :direction
+       "Construct the sphere-to-boundary isomorphism in that direction by composing the absolute-to-relative projection, inverse excision, inverse coordinate and radial comparisons, and the disk-pair connecting map. The H1 endpoint runs from sphere H1 to the actual ordinary-H0 inclusion kernel."},
+      :id :oriented-checkpoint29-coefficient-geometric-sphere-shift-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint29-pair-sequence-and-consumer-refill
+       :oriented-checkpoint28-coefficient-contractible-pair-sequence-1
+       :oriented-checkpoint27-coefficient-actual-subspace-excision-1],
+      :current-residual
+      "Actual R-valued excision and contractible pair endpoints are reviewed. Hemisphere coordinates and the radial disk-pair map still need their actual R-linear relative-map comparisons and oriented composite.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: geometric sphere shift and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint30-geometric-sphere-shift-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint29-coefficient-geometric-sphere-shift-1
+       :oriented-checkpoint29-pair-sequence-and-consumer-refill],
+      :current-residual
+      "Measure sphere-shift infrastructure separately from consumer closure and reassess all reviewed boundaries and concurrent outcomes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :measures
+    {:placeholder-delta 0,
+     :frozen-closures 0,
+     :corrected-closures 0,
+     :new-refutations 0,
+     :infrastructure-packets
+     {:portfolio 2,
+      :concurrent 2,
+      :modules-before 685,
+      :modules-after 689},
+     :typed-residual-change
+     "The actual coefficient-general pair sequence and contractible endpoints are reviewed, including positive-degree vanishing, H0 inclusion monicity and relative-H1 kernel comparison. Sphere suspension now needs coefficient-general transport through the existing hemisphere, open-disk and radial maps. Concurrent chosen incidence charts are reviewed; the tangent packet is committed but awaiting review and final model normalization remains reserved.",
+     :review-outcomes
+     [{:row :coefficient-general-actual-pair-homology-sequence-1,
+       :outcome :pass,
+       :commit "e66d6787b182b899404ae0e7da2ec57089749c22",
+       :review "invoke-1789013011761-17810-2bf1e007"}
+      {:row
+       :oriented-checkpoint28-coefficient-contractible-pair-sequence-1,
+       :outcome :pass,
+       :commit "0a72159bc678d910de3b21550e9b772016dc507f",
+       :review "invoke-1789013564682-17820-9cca12d7",
+       :axiom-audits 17}
+      {:row :transverse-incidence-chosen-atlas-implementation-refill39,
+       :outcome :pass,
+       :commit "7587067571c0e30ada8f76bc2199ccb2450a1081"}
+      {:row :transverse-incidence-tangent-implementation-refill39,
+       :outcome :done-unreviewed,
+       :commit "82d876986a2e972df752b10321b458f2ea54569a"}]},
+    :ranking
+    ["No eligible unassigned near-closure adapter; exclude reserved incidence work and unchanged STOP boundaries."
+     "Coefficient-general geometric sphere suspension: four proposed consumers, with geometric maps, excision, homotopy invariance and pair endpoints now available; one coherent map-comparison assembly."
+     "Retain localization/cap/Thom, covering classification, surface classification, manifold integration, general-model regular preimages and product homology. Their broader consumer clusters do not yet supply a smaller ready closing construction; the new pair results do not discharge their recorded boundaries."],
+    :near-consumer-boundaries
+    {:t00J02 "Fundamental-class producer; incidence work reserved.",
+     :t03J02 "Generic collar/NDR and van Kampen.",
+     :t92J06 "Actual graph covering construction.",
+     :t95J06 "Hopf-surface torus homeomorphism.",
+     :t97A01 "Literal polygon invariants.",
+     :t94A06 "General-model smooth and dimension hypotheses.",
+     :a97J08 "Planar separation.",
+     :t01A05 "Actual covering fundamental-class degree equation.",
+     :t96J06
+     "Actual compact-manifold nonbounding and fundamental classes.",
+     :t00A03 "Literal pants homeomorphisms and cutting count.",
+     :t01J04 "Analytic boundary-preimage atlas and countability.",
+     :t03J05 "Literal curves and intersection/nonhomotopy.",
+     :t94J09 "Literal polygon homeomorphism and homology.",
+     :t03J04 "Actual torus Euler computation.",
+     :t95J05 "Numerical diameter-power Hausdorff mass.",
+     :t00J01
+     "Original refutations preserved; rational sphere computation and normalization remain.",
+     :t99J03 "Literal polygon classification.",
+     :t01A08 "General-model projected regular preimage.",
+     :t00A01
+     "Generic target-natural actual two-open free-product comparison and basepoint extraction; reviewed refill39 STOP.",
+     :t98A02 "Localization and gluing.",
+     :t02A05 "Literal flux and measure comparison.",
+     :t96J05
+     "Attained regular radius and analytic literal-level atlas; original refutation retained.",
+     :t98A01 "Genus invariance and Euler multiplicativity.",
+     :t02A08 "Signed all-integer degree realization.",
+     :t94J08
+     "Signed antipodal naturality and reduced degree-zero normalization."},
+    :finding
+    "No eligible unassigned near-closure adapter was found. Consumer files are unchanged. Preserve the reviewed connected-sum STOP, historical original refutations and the separately recorded corrected t96J07 closure. The pair-sequence packets discharge concrete coefficient-general equations but do not certify consumer uptake. Elect one geometric sphere-suspension assembly using the newly reviewed equations; do not duplicate reserved incidence work.",
+    :reserved-concurrent
+    [:transverse-incidence-tangent-implementation-refill39
+     :transverse-vector-incidence-atlas-tangent-probe-refill39
+     :checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint29Census.json",
+     :open 35,
+     :baseline "e8a6f02b523490edd2cb5ab63b03181d76d04e6c",
+     :existing 58,
+     :placeholder-after 66,
+     :zero-placeholder 23,
+     :placeholder-before 66,
+     :head "750c7e17a7baaf207e8fb4bc7bf5bd37fb189c2f",
+     :sha256
+     "8384612f222cc7adfa67b87f402a97fa4d9cf08a0ca28f81bb786806d9cf389d",
+     :named 59,
+     :missing [:t93A05],
+     :within-two 25}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: coefficient pair sequence and renewed consumer eligibility",
@@ -17270,6 +17448,74 @@
     :oriented-checkpoint28-actual-excision-and-consumer-refill],
    :current-residual
    "Measure pair-sequence infrastructure separately from consumer closure and reassess all reviewed boundaries and concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No supplied sphere shift, radial relative homology isomorphism or coefficient-change shortcut. Preserve actual subspace cokernels and distinguish ordinary H0 from reduced H0. Do not claim the sphere table or frozen closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SPHERE SUSPENSION: coefficient-general hemisphere and radial comparison assembly",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a Type 0 commutative ring R, reuse the coefficient-independent hemisphere, stereographic and radial geometry in T02A06HemisphereExcision, T02A06DiskRadialComparison and T02A06SphereShift. Construct actual R-linear relative maps for the coordinate and halfDiskMap squares, proving their projection equations and map identifications. Derive their homology isomorphisms using reviewed homotopy equivalences and CoefficientCokernelComparison; instantiate CoefficientExcision with the proved closed-hemisphere hypotheses. Assemble the positive-target-degree sphere shift using CoefficientContractiblePair. Also construct sphere H1 to native-disk relative H1 and then its actual H0-kernel comparison. Prove the precise forward composite equations and both inverse laws. State universes and retain n=0 and empty boundary cases where the stated endpoints apply. Compile integer and rational specializations. REVISE requires exactly one complete compiled missing geometric relative-map comparison; STOP at independent unconstructed foundations.",
+    :consumer-equation
+    "Actual R-valued sphere homology shifts to boundary-sphere homology in positive target degrees, with a separate exact ordinary-H0 kernel description of sphere H1.",
+    :consumer-residual
+    "Compute the rational S2 H1/H2 endpoints and establish the normalization and naturality required for the named consumer; no frozen closure follows from suspension alone.",
+    :gates
+    ["GO requires a complete placeholder-free fixture constructing the geometric relative maps, suspension composite and H1 kernel endpoint."
+     "Record fixture SHA256, exact oriented forward maps, inverse laws, integer/rational examples and standard-only audits."
+     "Recheck both ledgers. Do not import an integral homology conclusion as R-linear or assume sphere homology or orientation coherence."]},
+   :representation
+   {:source
+    "Actual ModuleCat R singular homology H_(k+1) of ambientSphere n, for k positive.",
+    :target
+    "Actual ModuleCat R singular homology H_k of euclideanUnitSphere n; separately, H1 of ambientSphere n is compared with the kernel of the actual closed-disk boundary inclusion on H0.",
+    :direction
+    "Construct the sphere-to-boundary isomorphism in that direction by composing the absolute-to-relative projection, inverse excision, inverse coordinate and radial comparisons, and the disk-pair connecting map. The H1 endpoint runs from sphere H1 to the actual ordinary-H0 inclusion kernel."},
+   :id :oriented-checkpoint29-coefficient-geometric-sphere-shift-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint29-pair-sequence-and-consumer-refill
+    :oriented-checkpoint28-coefficient-contractible-pair-sequence-1
+    :oriented-checkpoint27-coefficient-actual-subspace-excision-1
+    :oriented-checkpoint29-pair-sequence-and-consumer-refill],
+   :current-residual
+   "Actual R-valued excision and contractible pair endpoints are reviewed. Hemisphere coordinates and the radial disk-pair map still need their actual R-linear relative-map comparisons and oriented composite.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: geometric sphere shift and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint30-geometric-sphere-shift-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint29-coefficient-geometric-sphere-shift-1
+    :oriented-checkpoint29-pair-sequence-and-consumer-refill
+    :oriented-checkpoint29-pair-sequence-and-consumer-refill],
+   :current-residual
+   "Measure sphere-shift infrastructure separately from consumer closure and reassess all reviewed boundaries and concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
