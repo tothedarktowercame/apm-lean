@@ -17075,102 +17075,97 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Contractible-space homology and projection endpoints remain in the parent probe. Geometric sphere suspension and rational S2 H1/H2 remain downstream.",
-     :axiom-audits 10,
-     :outcome :revise,
+     "Transport the reviewed hemisphere and radial geometry over R and assemble sphere suspension. Rational S2 H1/H2, normalization and required naturality remain downstream; no sphere table or frozen closure is claimed.",
+     :axiom-audits 17,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t00J01-rational-sphere-homology,
-      :stop-condition
-      "Bank only the constructed pair sequence and comparisons with explicit vanishing hypotheses. Do not claim contractible vanishing, H0 monicity, sphere suspension or consumer closure.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/CoefficientPairSequence.lean",
-         :sha256
-         "ffec25e86774ae2004eaf819a94025a333de451ba0b4e61434004b2422cde28e"},
-        :commands
-        [{:cmd "lake env lean /tmp/CoefficientPairSequence.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientPairSequence.lean"
-       "ConstructionTargets/CoefficientPairSequence.md"],
-      :dag-node
-      "RELATIVE HOMOLOGY: coefficient-general actual pair sequence and conditional connecting comparisons",
-      :acceptance
-      {:namespace "ConstructionTargets.CoefficientPairSequence",
-       :implementation
-       "Promote the exact compiled fixture, retaining explicit vanishing hypotheses on the conditional algebraic comparisons.",
-       :declarations
-       ["sequence"
-        "shortExact"
-        "connecting"
-        "exact_subspace"
-        "exact_absolute"
-        "exact_relative"
-        "connectingIso"
-        "connectingIso_hom"
-        "relativeH1IsoKernel"
-        "relativeH1IsoKernel_projection"
-        "connecting_inverse_left"
-        "connecting_inverse_right"
-        "integral_disk_sequence"
-        "rational_disk_sequence"
-        "integral_disk_exact"
-        "rational_disk_exact"],
-       :hypotheses
-       "R and X are Type 0; R is a commutative ring, X a topological space and A an arbitrary subset. Chains use ModuleCat.of R R. Exactness requires no contractibility or nonemptiness. connectingIso explicitly requires ambient homology vanishing in adjacent degrees; relativeH1IsoKernel explicitly requires ambient H1 vanishing. Those hypotheses remain to be derived in the parent.",
-       :consumer-equation
-       "The actual pair connecting map gives the three exact homology segments; under explicit ambient vanishing it gives the stated connecting isomorphism and relative-H1 kernel comparison.",
-       :consumer-residual
-       "Derive contractible-space positive-degree vanishing over R, prove contractible-subspace H0 monicity and assemble the contractible projection and disk-pair endpoints.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientPairSequence."
-        "Reproduce all ten standard-only axiom audits and integer/rational disk-boundary exactness examples."
-        "Verify conditional vanishing hypotheses remain explicit and no contractible-space conclusion is claimed."
-        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-      :id :coefficient-general-actual-pair-homology-sequence-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint27-coefficient-actual-subspace-excision-1
-       :coefficient-general-cokernel-homology-comparison-1],
-      :current-residual
-      "The contractible pair calculation needs actual R-linear connecting morphisms and exactness for the reviewed subtype cokernel.",
-      :other-consumers [:t03J04 :t02A08 :t94J08]},
+     :acceptance
+     {:namespace "ConstructionTargets.CoefficientContractiblePair",
+      :implementation
+      "Promote the exact compiled fixture, reusing the reviewed CoefficientPairSequence rather than duplicating its exactness proofs.",
+      :declarations
+      ["singularHomology_map_eq_of_topCatHomotopy"
+       "singularHomologyIsoOfTopCatHomotopyEquivalence"
+       "singularHomologyIsoOfHomotopyEquiv"
+       "contractibleIsoPoint"
+       "higher_zero"
+       "contractibleSubspaceInclusion_homology_mono"
+       "singularPairProjection_degreeOne_isIso_of_contractible"
+       "contractibleConnectingIso"
+       "contractibleH1KernelIso"
+       "contractibleH1Kernel_projection"
+       "projection_isIso"
+       "projectionIso"
+       "projectionIso_hom"
+       "projection_inverse_left"
+       "projection_inverse_right"
+       "connecting_hom"
+       "connecting_left"
+       "connecting_right"
+       "integral_disk"
+       "rational_disk"
+       "integral_disk_endpoint"
+       "rational_disk_endpoint"
+       "ballBoundary"
+       "integral_native_ball"
+       "rational_native_ball"
+       "rational_native_endpoint"],
+      :hypotheses
+      "R and spaces are Type 0; R is a commutative ring. Actual singular chains have coefficient object ModuleCat.of R R. Connecting isomorphisms require contractible ambient X and positive target degree; relative-H1 kernel comparison requires contractible X and permits arbitrary, including empty, A. Projection isomorphisms require contractible A and positive degree. No additional connectivity or nonemptiness hypotheses are imposed. Disk dimensions include zero.",
+      :consumer-equation
+      "The actual R-linear connecting and projection maps give the contractible pair isomorphisms, and relative H1 has the stated actual-H0 kernel comparison.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientContractiblePair."
+       "Reproduce all seventeen standard-only axiom audits and integer/rational disk and native closed-ball examples."
+       "Audit the degree-one projection argument, derived H0 monicity, exact forward-map equations, inverse laws and H1 kernel-projection equation."
+       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Inspect pair-sequence APIs, both ledgers and all dependency PASS receipts",
+       "Inspect both ledgers, dependency PASS receipts, reviewed pair sequence and coefficient-general point homology API",
        :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientPairSequence.lean", :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientPairSequence.lean", :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientContractiblePair.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientContractiblePair.lean", :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientPairSequence.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientContractiblePair.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history [],
+     :diagnostic-history
+     [{:cmd "Initial contractible-homology fixture compilation",
+       :exit 1,
+       :correction
+       "Opened the monoidal-category notation namespace needed by categorical cylinder types."}
+      {:cmd "Initial temporary fixture append script",
+       :exit 1,
+       :correction
+       "Corrected Python indentation; the failed script made no file changes."}
+      {:cmd "Initial projection-isomorphism assembly compilation",
+       :exit 1,
+       :correction
+       "Passed the proved IsIso witness explicitly to asIso. Final forward-map and inverse-law proofs compile with standard axioms."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientPairSequence.lean",
+     {:path "/tmp/CoefficientContractiblePair.lean",
       :sha256
-      "ffec25e86774ae2004eaf819a94025a333de451ba0b4e61434004b2422cde28e"},
+      "6d5cf848e42cc394f2e66278169ec1cac106a5f96a4ddeddd260bc5dcc26ac82"},
      :finding
-     "Exactly one compiled pair-sequence prerequisite is supplied. It constructs the actual ModuleCat R subtype-inclusion short exact sequence, connecting morphism and three homology exactness statements. Explicit ambient-vanishing hypotheses yield the connecting isomorphism with exact forward map and both inverse laws, and the relative-H1 kernel comparison with its kernel-projection equation. Integer and rational disk-boundary exactness examples compile in every dimension and degree. Contractible-space vanishing and the contractible-subspace H0 monicity endpoint are not proved here; the parent is not GO.",
+     "Complete contractible pair endpoints compile over R. Coefficient-general homotopy invariance and the point calculation prove positive-degree vanishing. A constructed homotopy retraction proves contractible-subspace inclusion monicity in every homology degree, including H0. The reviewed actual pair sequence then supplies positive-degree connecting and projection isomorphisms, exact forward-map equations and both inverse laws. Relative H1 is identified with the kernel of the actual inclusion-induced H0 map, with its kernel-projection equation. Integer and rational disk-boundary and native closed-ball examples compile, retaining dimension zero and empty boundaries. No integral homology conclusion is reinterpreted as R-linear.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientContractiblePair.lean"
+       "ConstructionTargets/CoefficientContractiblePair.md"]},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientContractiblePair.lean"
+    "ConstructionTargets/CoefficientContractiblePair.md"],
    :dag-node
    "SPHERE SUSPENSION: coefficient-general actual pair connecting maps and contractible endpoints",
    :acceptance
