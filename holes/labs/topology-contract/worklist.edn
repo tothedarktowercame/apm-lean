@@ -67995,6 +67995,23 @@
      {:cmd "git commit -m 'Add compact complement cover sequence'",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789047867909-18696-55dd440c",
+     :commands
+     ["git show --stat --oneline 43debfff88738d59ef61a2a444ff18f7221d1728"
+      "git diff-tree --no-commit-id --name-only -r 43debfff88738d59ef61a2a444ff18f7221d1728"
+      "git show 43debfff88738d59ef61a2a444ff18f7221d1728:ConstructionTargets/CoefficientCompactComplementCoverSequence.lean | sha256sum"
+      "sha256sum /tmp/CoefficientCompactComplementCoverSequence.lean"
+      "git show 43debfff88738d59ef61a2a444ff18f7221d1728:ConstructionTargets/CoefficientCompactComplementCoverSequence.lean | cmp -s /tmp/CoefficientCompactComplementCoverSequence.lean"
+      "lake env lean ConstructionTargets/CoefficientCompactComplementCoverSequence.lean"
+      "python3 read-only comment-stripped placeholder and eight declaration-header SHA-256 audit"
+      "git show 43debfff88738d59ef61a2a444ff18f7221d1728:<each dependency> | sha256sum"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git status --short"],
+     :finding
+     "PASS: recorded commit has exact one-file scope and is byte-identical to the pinned fixture; compilation, standard-only axioms, zero placeholders, eight frozen statement hashes, and three dependency hashes reproduce. The intersection, pieces, and union exactness maps have the correct cyclic Mayer-Vietoris orientations, while conjugation, excision, monicity, vanishing, and fundamental-class claims remain outside the representation boundary."},
     :commit "43debfff88738d59ef61a2a444ff18f7221d1728",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementCoverSequence.lean"],
@@ -68009,7 +68026,7 @@
     :axiom-audit-count 3,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementCoverSequence.lean"],
    :dag-node
@@ -68104,7 +68121,7 @@
      "Compiled one actual compact-complement cover prerequisite. The left and right open pieces inside X minus (K intersection L) now instantiate the coefficient subcomplex Mayer-Vietoris short complex, its connecting morphism and exactness at the intersection, piece-sum and union terms in every natural degree. Conjugation through the reviewed complement homology squares and final coefficient excision remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
