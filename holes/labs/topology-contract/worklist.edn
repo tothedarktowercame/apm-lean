@@ -70626,6 +70626,19 @@
       "git diff --check -- ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789064101003-19126-3f068fe6",
+     :commands
+     ["git show --stat --oneline 5a605d1fd1674c7ffed5db84ea3d2137834c90b8"
+      "lake env lean ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"
+      "sha256sum ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean /tmp/CoefficientUnionToProductionRelativeComparison.lean ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean"
+      "cmp -s ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean /tmp/CoefficientUnionToProductionRelativeComparison.lean"
+      "python3 placeholder-and-three-declaration audit over ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"
+      "git diff --check 5a605d1f^ 5a605d1f -- ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
+     :finding
+     "Recorded commit 5a605d1fd1674c7ffed5db84ea3d2137834c90b8 changes exactly the permitted file and author codex-6 differs from reviewer codex-10. Source and corrected fixture are byte-identical at ea64a7591efc48a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71; dependency hashes reproduce as fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5 and da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906. Lean compiles without warnings; axioms are propext, Classical.choice, Quot.sound; placeholders are zero. Declaration hashes reproduce as ef6bc3510fb3e75ad63b71feb8f6b97d88bf3db35316a0545fba8aa3215b6525, e8a7863d215ddebad77efc1529e73fa7eccd5798fff1507ff84969dc50d38ea5, and 92a73c8704ade9709d7386a23ca844b4ec79ced45668d99a93d3acf699b7b6a9. The union map correctly composes the pushout-derived union-to-right cokernel morphism with the forward range-relative-to-production-pair isomorphism; the left composite is zero and the right composite is the forward ambient-range comparison followed by the production quotient projection. No compact-complement specialization, coefficient excision, transported exactness, localization, vanishing, or fundamental-class claim is added."},
     :commit "5a605d1fd1674c7ffed5db84ea3d2137834c90b8",
     :changed-paths
     ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
@@ -70642,7 +70655,7 @@
     :finding
     "Corrected the documented malformed fixture hash to the independently verified SHA256 and promoted the exact fixture. The coefficient union-to-production-relative map, its zero left-piece composite and its right-piece quotient-projection formula compile without warnings or placeholders. Both actual dependency files were independently hashed, and the final worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
    :dag-node
@@ -70764,7 +70777,7 @@
      "Compiled exactly one missing coefficient map prerequisite. The reviewed pushout projection is composed with the forward range-relative-to-production-pair isomorphism. The resulting union-to-production-relative map kills the left range exactly, while its restriction to the right range is exactly the forward right-range chain isomorphism followed by the production relative quotient projection. This construction is nonzero-capable and does not use the refuted zero supportConnecting map.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
