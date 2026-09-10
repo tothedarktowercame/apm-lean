@@ -22445,8 +22445,152 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint39Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint39Eligibility.bb", :exit 0}
+     {:cmd
+      "Read current DAG clusters, foundational-program note and closure rules; inspect both ledgers and dependency/concurrent receipts",
+      :exit 0}
+     {:cmd
+      "Inspect ChartPairRelativeHomologyTransport and Mathlib ChartedSpace source-membership and restricted-injectivity APIs",
+      :exit 0}
+     {:cmd
+      "git log --format='%h %s' d618605d..HEAD -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer :t98A02,
+      :stop-condition
+      "No supplied pointed chart homeomorphism, local orientation witness or local-homology isomorphism. Use actual chartAt restrictions and subtype cokernels. Do not infer overlap orientation coherence, global fundamental classes, localization monicity, gluing or frozen closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "LOCAL HOMOLOGY: actual deleted-point manifold chart and coefficient-general local generator",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a Type 0 commutative ring R, m : ℕ and a Type 0 Hausdorff space M with ChartedSpace (EuclideanSpace ℝ (Fin (m+2))) M, construct from chartAt at each x the actual homeomorphism between chart source and chart target. Prove source/target membership and the exact equivalence between deletion of x and deletion of its chart coordinate. Construct the induced R-linear maps of the actual subtype cokernel pairs, proving projection equations and inverse laws through actual pair-map composition. Construct translation of the chart coordinate to zero and the corresponding pointed target neighborhood. Combine the actual chart comparison, CoefficientNeighborhoodLocal inclusion isomorphisms and CoefficientModelLocal normalization to construct H_(m+2)(M,M minus x;R) isomorphic to ModuleCat.of R R. State the precise forward composite, both inverse laws and the constructed generator normalization. Include integer and rational Euclidean chart examples. GO requires the complete placeholder-free actual-chart fixture; REVISE requires exactly one complete compiled missing actual chart-pair comparison; STOP names independent foundations.",
+       :hypotheses
+       "R and M are Type 0. The model is a real Euclidean vector space of dimension m+2, not a general ModelWithCorners or a manifold with boundary. Retain Hausdorff hypotheses needed for neighborhood excision. No compactness, connectedness or orientation assumption is required for a single-point local calculation.",
+       :consumer-equation
+       "The actual chartAt deleted-point comparison and neighborhood inclusions construct an R-linear normalization of ambient manifold local homology at each point, with explicit generator and forward maps.",
+       :consumer-residual
+       "Prove overlap compatibility for an appropriate orientation structure, then construct global classes and localization before t98A02 gluing. A separately chosen generator at each point is not an orientation or a global fundamental class.",
+       :gates
+       ["Compile a complete fixture and record SHA256."
+        "Audit chartAt source/target restrictions, deleted-point equivalence and translation-to-zero geometry."
+        "Verify actual subtype-cokernel maps, projection equations and map inverse laws."
+        "Verify the exact ambient-local-to-model normalization composite and generator equation."
+        "Record integer/rational examples and standard-only axiom audits."
+        "Recheck both ledgers; preserve concurrent reservations and all reviewed consumer STOPs and refutations."]},
+      :id
+      :oriented-checkpoint39-coefficient-actual-chart-local-homology-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint39-neighborhood-excision-and-consumer-refill
+       :oriented-checkpoint38-coefficient-neighborhood-local-excision-1
+       :oriented-checkpoint37-coefficient-model-local-negation-1
+       :oriented-checkpoint32-coefficient-pair-connecting-naturality-1],
+      :current-residual
+      "Actual R-linear model and neighborhood local homology are reviewed. The chart source/target deleted-point comparison and its composite into ambient manifold local homology have not been constructed.",
+      :other-consumers [:t01A02 :t03J05 :t96J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: actual chart local homology and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint40-chart-local-homology-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint39-coefficient-actual-chart-local-homology-1],
+      :current-residual
+      "Measure actual chart construction separately from overlap orientation and global localization; rerank every consumer against concurrent outcomes.",
+      :other-consumers []}],
+    :attribution
+    {:portfolio "a80d438beb226fc6049065706e4f51444e0a2ad4",
+     :portfolio-review "invoke-1789026780758-18180-1ef8c3d8",
+     :concurrent-reviewed "4b689d83",
+     :concurrent-unreviewed "cc326152",
+     :reserved
+     [:incidence-parameter-projection-regularity-probe-refill43
+      :checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer]},
+    :changed-paths [],
+    :measures
+    {:baseline "d618605d2b2d96e20c65a2e350bad0adddc9a2b7",
+     :concurrent-infrastructure-packets 2,
+     :portfolio-infrastructure-packets 1,
+     :existing-consumers 58,
+     :missing-consumers [:t93A05],
+     :placeholder-delta 0,
+     :within-two-placeholders 24,
+     :zero-placeholder-consumers 24,
+     :placeholders-before 64,
+     :open-consumers 34,
+     :head "670245a25ac6e76404c3325c0611d0552a07dc64",
+     :named-consumers 59,
+     :construction-modules-after 726,
+     :placeholders-after 64,
+     :construction-modules-before 723,
+     :typed-residual-change
+     "Actual R-linear neighborhood inclusion is now invertible in every degree, with derived excision hypotheses, nested composition and constructed Euclidean neighborhood generators. Constructing the actual deleted-point chart comparison remains.",
+     :review-outcomes
+     {:portfolio-pass 1,
+      :concurrent-infrastructure-pass 1,
+      :concurrent-implementation-awaiting-review 1,
+      :surface-refinement-stop-pass 1,
+      :new-consumer-closures 0}},
+    :ranking
+    {:near-closure-boundaries
+     ["t01A08: arbitrary ModelWithCorners chart-domain and within-derivative transport remains after its reviewed regular-line STOP."
+      "t02A08: arbitrary-integer degree realization remains; antipodal action supplies only one family of maps."
+      "t98A02: chart compatibility, global localization and gluing remain."
+      "t00A01: exact connected-sum van Kampen comparison remains."
+      "t00J01: independent Klein-product and fold-fiber obligations remain."
+      "t03J02 and a97J08: collar or planar-separation geometry remains."
+      "Surface refinement: controlled embedded arcs, finite intersections and disk-face subdivision remain; finite triangle coverage supplies no boundary compatibility."
+      "t03J04: coefficient-general transfer is reviewed, but homology finiteness and Euler multiplicativity remain."
+      "Moment, intersection and nonbounding consumers retain their separate global foundations."],
+     :preserved-refutations
+     ["Original ordinary-S0 t94J08 remains refuted; repaired positive-dimensional closure stays credited once."
+      "t01A05 disconnected-cover defect and t96J05 radial-level refutation remain preserved."],
+     :foundation-choice
+     "Actual chart local homology is the next bounded milestone of the fundamental-class/localization program for t98A02, t01A02, t03J05 and t96J06. The inspected ChartedSpace API supplies chartAt source membership and restricted injectivity. Existing ChartPairRelativeHomologyTransport assumes a pair homeomorphism and does not construct the chart. Global localization, Kunneth, Stokes and classification require larger developments; incidence projection is reserved."},
+    :finding
+    "Elect one actual deleted-point manifold-chart construction. No remaining near-closure adapter has a newly resolved complete boundary. Reviewed coefficient-general model normalization and neighborhood inclusion now remove two specific prerequisites for chart uptake; they do not establish overlap coherence or global localization. Preserve the reviewed surface-refinement STOP and exclude concurrent incidence work.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint39Census.json",
+     :sha256
+     "ba90168203f912366d5c18c408e7b67284640128668a4383dd61629764c3bf85",
+     :script "/tmp/Checkpoint39Census.py",
+     :method
+     "Recount all DAG-named consumers from pinned Git blobs after stripping block and line comments."}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: neighborhood excision and renewed consumer eligibility",
@@ -22463,6 +22607,72 @@
     :oriented-checkpoint38-local-model-and-consumer-refill],
    :current-residual
    "Measure actual neighborhood transport separately from chart compatibility and global localization; rerank all consumers against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t98A02,
+   :stop-condition
+   "No supplied pointed chart homeomorphism, local orientation witness or local-homology isomorphism. Use actual chartAt restrictions and subtype cokernels. Do not infer overlap orientation coherence, global fundamental classes, localization monicity, gluing or frozen closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "LOCAL HOMOLOGY: actual deleted-point manifold chart and coefficient-general local generator",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a Type 0 commutative ring R, m : ℕ and a Type 0 Hausdorff space M with ChartedSpace (EuclideanSpace ℝ (Fin (m+2))) M, construct from chartAt at each x the actual homeomorphism between chart source and chart target. Prove source/target membership and the exact equivalence between deletion of x and deletion of its chart coordinate. Construct the induced R-linear maps of the actual subtype cokernel pairs, proving projection equations and inverse laws through actual pair-map composition. Construct translation of the chart coordinate to zero and the corresponding pointed target neighborhood. Combine the actual chart comparison, CoefficientNeighborhoodLocal inclusion isomorphisms and CoefficientModelLocal normalization to construct H_(m+2)(M,M minus x;R) isomorphic to ModuleCat.of R R. State the precise forward composite, both inverse laws and the constructed generator normalization. Include integer and rational Euclidean chart examples. GO requires the complete placeholder-free actual-chart fixture; REVISE requires exactly one complete compiled missing actual chart-pair comparison; STOP names independent foundations.",
+    :hypotheses
+    "R and M are Type 0. The model is a real Euclidean vector space of dimension m+2, not a general ModelWithCorners or a manifold with boundary. Retain Hausdorff hypotheses needed for neighborhood excision. No compactness, connectedness or orientation assumption is required for a single-point local calculation.",
+    :consumer-equation
+    "The actual chartAt deleted-point comparison and neighborhood inclusions construct an R-linear normalization of ambient manifold local homology at each point, with explicit generator and forward maps.",
+    :consumer-residual
+    "Prove overlap compatibility for an appropriate orientation structure, then construct global classes and localization before t98A02 gluing. A separately chosen generator at each point is not an orientation or a global fundamental class.",
+    :gates
+    ["Compile a complete fixture and record SHA256."
+     "Audit chartAt source/target restrictions, deleted-point equivalence and translation-to-zero geometry."
+     "Verify actual subtype-cokernel maps, projection equations and map inverse laws."
+     "Verify the exact ambient-local-to-model normalization composite and generator equation."
+     "Record integer/rational examples and standard-only axiom audits."
+     "Recheck both ledgers; preserve concurrent reservations and all reviewed consumer STOPs and refutations."]},
+   :id
+   :oriented-checkpoint39-coefficient-actual-chart-local-homology-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint39-neighborhood-excision-and-consumer-refill
+    :oriented-checkpoint38-coefficient-neighborhood-local-excision-1
+    :oriented-checkpoint37-coefficient-model-local-negation-1
+    :oriented-checkpoint32-coefficient-pair-connecting-naturality-1
+    :oriented-checkpoint39-neighborhood-excision-and-consumer-refill],
+   :current-residual
+   "Actual R-linear model and neighborhood local homology are reviewed. The chart source/target deleted-point comparison and its composite into ambient manifold local homology have not been constructed.",
+   :other-consumers [:t01A02 :t03J05 :t96J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: actual chart local homology and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint40-chart-local-homology-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint39-coefficient-actual-chart-local-homology-1
+    :oriented-checkpoint39-neighborhood-excision-and-consumer-refill],
+   :current-residual
+   "Measure actual chart construction separately from overlap orientation and global localization; rerank every consumer against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
