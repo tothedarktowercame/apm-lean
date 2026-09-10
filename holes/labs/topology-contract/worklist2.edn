@@ -36542,90 +36542,35 @@
    :stop-condition
    "Prove only the bounded oriented face classification and cancellation for maximal product-simplex paths in total degree at most four. Reuse the canonical path, parity and affine-realization modules. Do not define the linear singular-chain cross product, assume Eilenberg-Zilber or Kunneth, prove product fundamental classes or intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
    :evidence
-   {:probe
-    {:residual
-     "Use the endpoint equalities and local step semantics to prove that stepWord has exactly p true and q false letters, then reconstruct maximal paths from bounded words and define the adjacent corner swap.",
-     :outcome :revise,
-     :warnings [],
-     :prerequisite
-     {:consumer :t03J05,
-      :stop-condition
-      "Bank only the exact initial and terminal grid vertices of canonical maximal product-simplex paths. Do not prove word cardinalities, reconstruct paths, swap corners, pair faces, prove sign changes or cancellation, define chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/ProductSimplexPathEndpoints.lean"
-       "ConstructionTargets/ProductSimplexPathEndpoints.md"],
-      :dag-node
-      "PRODUCT HOMOLOGY: endpoint normalization of maximal product-simplex paths",
-      :acceptance
-      {:namespace "ConstructionTargets.ProductSimplexPathEndpoints",
-       :implementation
-       "Promote the compiled fixture as the endpoint normalization required by Boolean-word cardinality and reconstruction.",
-       :hypotheses
-       "Use arbitrary canonical maximal paths in Δ[p]⊗Δ[q] and the banked coordinate-sum theorem. No bounded-degree, coefficient or orientation hypothesis is required for the endpoint equalities.",
-       :declarations ["grid_start" "grid_end"],
-       :consumer-equation
-       "Every maximal product-simplex path starts at the lower-left vertex `(0,0)` and ends at the upper-right vertex `(p,q)`.",
-       :consumer-residual
-       "Prove the step word contains exactly p horizontal and q vertical letters, reconstruct its cumulative-coordinate maximal path, and implement the adjacent unlike-letter swap.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexPathEndpoints."
-        "Verify grid_start uses the coordinate sum at time zero."
-        "Verify grid_end uses the terminal coordinate sum and both Fin coordinate bounds."
-        "Verify both conclusions are exact equalities in the canonical prodStdSimplex.objEquiv representation."
-        "Reproduce standard-only axiom audits for both exported theorems."
-        "Confirm no word cardinality, reconstruction, corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
-        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :t03j05-product-simplex-path-endpoints-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint58-bounded-product-simplex-oriented-face-cancellation-1],
-      :current-residual
-      "The Boolean step word has local coordinate semantics, but reconstruction requires canonical proofs that every maximal path starts at `(0,0)` and ends at `(p,q)`.",
-      :other-consumers [:t96J06 :t97A04]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
-       :exit 0}
-      {:cmd
-       "Inspect canonical ProductSimplexMaximalPaths, ProductSimplexUnitSteps and ProductSimplexStepWord",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint58-endpoints/ProductSimplexPathEndpoints.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint58-endpoints/ProductSimplexPathEndpoints.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint58-endpoints/ProductSimplexPathEndpoints.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "Reproduce standard-only axiom audits for grid_start and grid_end",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}],
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint58-endpoints/ProductSimplexPathEndpoints.lean",
-      :sha256
-      "f9dfb291301944b05f16014bf8039bd1e51f612aa8164cebd2510b26459850b3",
-      :placeholder-count 0},
-     :finding
-     "Exactly one complete compiled combinatorial prerequisite is supplied. The fixture proves that every canonical maximal path begins at `(0,0)` and ends at `(p,q)`, using the banked coordinate-sum theorem and the finite coordinate bounds. These endpoint equalities are required to prove that the Boolean step word contains exactly p horizontal and q vertical letters before reconstructing a maximal path from a modified word. The parent cancellation theorem is not GO because word cardinalities, path reconstruction and adjacent-corner swapping remain uncompiled. No face pairing, sign cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
-     :seat "codex-13"}},
+   {:outcome :stop,
+    :seat "codex-13",
+    :reason :missing-balanced-step-word-maximal-path-equivalence,
+    :finding
+    "The banked endpoint and local-step theorems expose a maximal path as a Boolean word, but neither ConstructionTargets nor Mathlib supplies the inverse representation needed by this row. SSet.prodStdSimplex.objEquiv.invFun accepts an order homomorphism into the product simplex, not a Boolean word. Defining the adjacent corner swap therefore first requires constructing cumulative horizontal and vertical coordinates from a word of length p+q with exactly p true and q false letters, proving their bounds and monotonicity, proving maximal nondegeneracy and the coordinate-sum identity, and proving inverse laws with stepWord. Without that equivalence, swapping unlike consecutive letters cannot produce a canonical MaximalPath, so deleted-face equality, involutivity, opposite shuffle signs and bounded cancellation cannot yet be stated over the production representations. This is an exact representation boundary, not a mathematical refutation.",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
+      :exit 0}
+     {:cmd
+      "Inspect canonical ProductSimplexMaximalPaths, ProductSimplexShuffleParity, ProductSimplexAffineRealization, ProductSimplexUnitSteps, ProductSimplexStepWord and ProductSimplexPathEndpoints",
+      :exit 0}
+     {:cmd
+      "Search ConstructionTargets and Mathlib for step-word reconstruction, balanced Boolean-word equivalences, MaximalPath constructors, prodStdSimplex.objEquiv.invFun and maximal-nondegeneracy interfaces",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :residual
+    "Construct and compile the exact equivalence between canonical maximal product-simplex paths and Boolean words of length p+q containing exactly p horizontal and q vertical letters; then define the unlike-letter corner swap and resume oriented face cancellation.",
+    :author "codex-13",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded oriented cancellation of product-simplex shuffle faces",
