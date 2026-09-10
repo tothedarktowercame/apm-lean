@@ -23047,8 +23047,221 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:residual
+    "One bounded overlap-comparison probe elected. No ledger or DAG edits, consumer closure, orientation coherence or global localization claim.",
+    :outcome :replan,
+    :preserved-boundaries
+    {:t00J02
+     "Duality, transverse-preimage orientation and global localization remain; not selected first.",
+     :t03J02
+     "Arbitrary embedded null-homotopic attaching circles still lack the collar/NDR comparison; the quotient invariant computation is not supplied by its maps-out universal property.",
+     :t95J06 "Hopf/surface classification comparison remains.",
+     :t96J07
+     "Corrected closure remains distinct from its preserved original refutation.",
+     :t94A06
+     "Normal-translation applicability and transversality remain.",
+     :t96J06
+     "Projective nonbounding and its global homological comparisons remain.",
+     :t01J04
+     "Frozen neighborhood/preimage hypotheses do not supply the required regular-preimage construction.",
+     :t03J05
+     "Product-torus intersection and global geometric comparison remain.",
+     :t03J04 "Frozen Euler/surface comparison remains.",
+     :covering-consumers ["t01A05" "t92J06" "t98A01"],
+     :t95J05
+     "Intrinsic sphere/projective measure normalization remains.",
+     :t00J01
+     "Sphere identity branch is consumed; independent Klein-product and exact fold-fiber obligations remain.",
+     :t01A08
+     "General-model chart-domain and within-derivative applicability remain after the regularity conversion.",
+     :t98A02
+     "Pointwise local generators do not supply compatible orientation, global classes or gluing.",
+     :t02A05
+     "Reviewed flux diagnostic reduces both frozen conclusions to intrinsic unit-two-sphere Hausdorff mass equal to 4*pi. Neither that equality nor its negation is proved; preserve the normalization STOP.",
+     :t96J05
+     "Reviewed attained radial-level counterexample remains preserved.",
+     :surface-consumers ["a97J08" "t00A03" "t94J09" "t97A01" "t99J03"],
+     :surface-boundary
+     "Planar separation, controlled finite-position arcs and polygon/triangulation comparisons remain; active arc work excluded.",
+     :t02A08
+     "Actual all-integer degree realization remains; antipodal signs do not supply it.",
+     :covering-boundary
+     "Cover classification, connectedness/monodromy and exact surface-cover realization remain.",
+     :t94J08
+     "Repaired positive-dimensional closure remains at zero placeholders; original ordinary-S0 refutation and reduced-homology coverage remain distinct."},
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint40Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint40Eligibility.bb", :exit 0}
+     {:cmd
+      "Read DAG, closure experiments, foundational-program note, both ledgers, dependency reviews and current reservations",
+      :exit 0}
+     {:cmd
+      "Inspect t03J02 frozen Main and DAG collar/NDR boundary; inspect existing integral overlap and higher-chart constructions",
+      :exit 0}
+     {:cmd
+      "git log --format='%h %s' 670245a2..44c92947 -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd "sha256sum /tmp/Checkpoint40Census.json", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :replacement-items
+    [{:consumer :t98A02,
+      :stop-condition
+      "No supplied transition homeomorphism, commuting square or orientation compatibility. Do not infer that transition units equal one, are locally constant, or define an orientation. Exclude reserved all-degree/general-model chart transport and surface work.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "LOCAL ORIENTATION: actual coefficient-general overlap transition and normalization comparison",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "R is a Type 0 commutative ring; M is a Type 0 Hausdorff space charted on EuclideanSpace ℝ (Fin (m+2)). Use actual chartAt charts indexed by a and b and a point x lying in both sources. No orientation, compactness or connectedness is assumed.",
+       :probe
+       "Construct the actual common source neighborhood and the homeomorphism between its two chart-coordinate images, translating each image so that x maps to zero. Prove openness, distinguished-point membership, deleted-point equivalence and the actual point-set transition formula. Construct its coefficient-relative cokernel map and inverse, prove projection equations and compatibility with the two neighborhood inclusion maps. Normalize local homology at x using each chart by the reviewed neighborhood/model construction; recover CoefficientChartLocal.localIso when the chart index is x. Prove that the geometrically constructed overlap map induces the exact comparison of those two ambient normalizations. Extract the resulting unit of R, prove its scalar action and generator-change equation, and prove identity, inverse and triple-overlap cocycle equations through actual transition-map composition. Compile integer and rational examples. GO requires the complete placeholder-free actual-overlap fixture; REVISE requires exactly one compiled missing geometric overlap-pair comparison; STOP names independent foundations.",
+       :consumer-equation
+       "Actual overlap coordinate transport computes the change between two chart-based local-homology normalizations at the same point, with an explicitly constructed unit and correctly directed generator-change equation.",
+       :consumer-residual
+       "Prove the compatibility or local-constancy properties required by an appropriate orientation structure, then construct global classes and localization before t98A02 gluing. A transition cocycle alone does not trivialize the orientation obstruction.",
+       :gates
+       ["Compile complete fixture and record SHA256."
+        "Audit actual chart restrictions, common neighborhood, translated coordinate images and transition formula."
+        "Verify actual cokernel projection, inverse and neighborhood inclusion squares."
+        "Identify the geometric homology map with the normalization comparison; do not substitute detached isomorphism arithmetic."
+        "Verify unit action, generator change and identity/inverse/triple-overlap equations with explicit direction."
+        "Record integer/rational examples and standard-only axiom audits."
+        "Recheck both ledgers and preserve concurrent reservations, reviewed STOPs and refutations."]},
+      :id
+      :oriented-checkpoint40-coefficient-actual-overlap-transition-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint40-chart-local-homology-and-consumer-refill
+       :oriented-checkpoint39-coefficient-actual-chart-local-homology-1
+       :oriented-checkpoint38-coefficient-neighborhood-local-excision-1
+       :coefficient-general-actual-chart-pair-comparison-1],
+      :current-residual
+      "Pointwise chartAt local normalization is reviewed; its comparison across two actual chart neighborhoods containing the same point has not been constructed.",
+      :other-consumers [:t01A02 :t03J05 :t96J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: actual overlap transition and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint41-overlap-transition-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint40-coefficient-actual-overlap-transition-1
+       :oriented-checkpoint40-chart-local-homology-and-consumer-refill],
+      :current-residual
+      "Measure actual overlap comparison separately from orientation compatibility and global localization; rerank every consumer against concurrent outcomes.",
+      :other-consumers []}],
+    :attribution
+    {:frozen-branch-uptake 0,
+     :typed-residual-after
+     "Pointwise ambient local normalization constructed; actual overlap transition compatibility, orientation structure, global classes and localization remain.",
+     :new-refutations 0,
+     :frozen-closures 0,
+     :infrastructure-packets 2,
+     :corrected-closures 0,
+     :portfolio-infrastructure
+     [{:commit "6f7d4072f5919e08cd1ca6d68864f3f0d84cd7a5",
+       :module "CoefficientChartPair",
+       :review "invoke-1789027680609-18200-cd25c3a8"}
+      {:commit "c17b1ff4cd7551b2bf8af599968b4443be23c48c",
+       :module "CoefficientChartLocal",
+       :review "invoke-1789028227782-18210-db8df80a"}],
+     :review-outcomes
+     {:portfolio-pass 2,
+      :concurrent-reviewed-stop
+      ["t02a05-frozen-flux-closure-probe-refill44"],
+      :concurrent-revise
+      ["coefficient-manifold-local-chart-comparison-probe-refill44"]},
+     :typed-residual-before
+     "Actual chart source/target deleted-point comparison and ambient normalization absent."},
+    :changed-paths [],
+    :ranking
+    [{:rank 0,
+      :category :near-closure,
+      :eligible 0,
+      :reason
+      "Twenty-four consumers have one or two placeholders, but reviewed boundaries or missing geometric constructions prevent a closing adapter; t03J02 additionally checked directly."}
+     {:rank 1,
+      :category :reserved,
+      :consumers ["t99J03" "t00A03" "t01J01" "t91J05" "t94J09"],
+      :row :surface-embedded-arcs-finite-position-probe-refill44,
+      :reason "Five-consumer surface construction already reserved."}
+     {:rank 2,
+      :category :reserved,
+      :consumers ["t98A02" "t00J02" "t02A07" "t94A06" "t97J05"],
+      :rows
+      [:coefficient-chart-local-all-degrees-implementation-refill44
+       :coefficient-manifold-local-chart-comparison-probe-refill44],
+      :reason
+      "All-degree and general finite-dimensional chart transport already reserved; do not duplicate."}
+     {:rank 3,
+      :category :elected-foundation,
+      :consumers [:t98A02 :t01A02 :t03J05 :t96J06],
+      :reason
+      "Actual overlap transition comparison is the next bounded four-consumer edge after reviewed pointwise normalization."}
+     {:rank 4,
+      :category :deferred-foundations,
+      :programs
+      ["Regular-preimage and transversality"
+       "Fundamental classes and global localization"
+       "Cap/Thom/intersection"],
+      :reason
+      "Broad consumer reach, but larger independent geometric and global obligations than the elected overlap comparison."}
+     {:rank 5,
+      :category :deferred-foundations,
+      :programs
+      ["Closed gluing and generic van Kampen"
+       "Cover classification"
+       "Product homology/Kunneth"
+       "Intrinsic integration and Stokes"
+       "All-integer sphere degree realization"],
+      :reason
+      "Retain their exact unresolved boundaries; no newly reviewed input makes a closing adapter available."}],
+    :finding
+    "No eligible closing adapter was found. All named consumer counts are unchanged. Two reviewed infrastructure modules construct the actual chart-pair comparison and translated-chart ambient local normalization. This removes the actual chart construction from the local-homology residual, but establishes neither overlap orientation compatibility nor global localization. Concurrent all-degree/general-model chart work and surface-arc construction are reserved and excluded. Elect one actual overlap comparison before orientation-structure and global-class work.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint40Census.json",
+     :open 34,
+     :baseline "670245a25ac6e76404c3325c0611d0552a07dc64",
+     :existing 58,
+     :placeholder-after 64,
+     :zero-placeholder 24,
+     :placeholder-delta 0,
+     :within-two-placeholders 24,
+     :placeholder-before 64,
+     :head "44c9294744789f8f939a0574a99a3065ecce01d4",
+     :construction-modules-after 728,
+     :construction-modules-before 726,
+     :sha256
+     "5adc97422e711d2e47b4ba501bdc8a1e880792335e83717815213ca956b451f9",
+     :named 59,
+     :missing ["t93A05"]}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: actual chart local homology and renewed consumer eligibility",
@@ -23064,6 +23277,73 @@
     :oriented-checkpoint39-neighborhood-excision-and-consumer-refill],
    :current-residual
    "Measure actual chart construction separately from overlap orientation and global localization; rerank every consumer against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t98A02,
+   :stop-condition
+   "No supplied transition homeomorphism, commuting square or orientation compatibility. Do not infer that transition units equal one, are locally constant, or define an orientation. Exclude reserved all-degree/general-model chart transport and surface work.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "LOCAL ORIENTATION: actual coefficient-general overlap transition and normalization comparison",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "R is a Type 0 commutative ring; M is a Type 0 Hausdorff space charted on EuclideanSpace ℝ (Fin (m+2)). Use actual chartAt charts indexed by a and b and a point x lying in both sources. No orientation, compactness or connectedness is assumed.",
+    :probe
+    "Construct the actual common source neighborhood and the homeomorphism between its two chart-coordinate images, translating each image so that x maps to zero. Prove openness, distinguished-point membership, deleted-point equivalence and the actual point-set transition formula. Construct its coefficient-relative cokernel map and inverse, prove projection equations and compatibility with the two neighborhood inclusion maps. Normalize local homology at x using each chart by the reviewed neighborhood/model construction; recover CoefficientChartLocal.localIso when the chart index is x. Prove that the geometrically constructed overlap map induces the exact comparison of those two ambient normalizations. Extract the resulting unit of R, prove its scalar action and generator-change equation, and prove identity, inverse and triple-overlap cocycle equations through actual transition-map composition. Compile integer and rational examples. GO requires the complete placeholder-free actual-overlap fixture; REVISE requires exactly one compiled missing geometric overlap-pair comparison; STOP names independent foundations.",
+    :consumer-equation
+    "Actual overlap coordinate transport computes the change between two chart-based local-homology normalizations at the same point, with an explicitly constructed unit and correctly directed generator-change equation.",
+    :consumer-residual
+    "Prove the compatibility or local-constancy properties required by an appropriate orientation structure, then construct global classes and localization before t98A02 gluing. A transition cocycle alone does not trivialize the orientation obstruction.",
+    :gates
+    ["Compile complete fixture and record SHA256."
+     "Audit actual chart restrictions, common neighborhood, translated coordinate images and transition formula."
+     "Verify actual cokernel projection, inverse and neighborhood inclusion squares."
+     "Identify the geometric homology map with the normalization comparison; do not substitute detached isomorphism arithmetic."
+     "Verify unit action, generator change and identity/inverse/triple-overlap equations with explicit direction."
+     "Record integer/rational examples and standard-only axiom audits."
+     "Recheck both ledgers and preserve concurrent reservations, reviewed STOPs and refutations."]},
+   :id :oriented-checkpoint40-coefficient-actual-overlap-transition-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint40-chart-local-homology-and-consumer-refill
+    :oriented-checkpoint39-coefficient-actual-chart-local-homology-1
+    :oriented-checkpoint38-coefficient-neighborhood-local-excision-1
+    :coefficient-general-actual-chart-pair-comparison-1
+    :oriented-checkpoint40-chart-local-homology-and-consumer-refill],
+   :current-residual
+   "Pointwise chartAt local normalization is reviewed; its comparison across two actual chart neighborhoods containing the same point has not been constructed.",
+   :other-consumers [:t01A02 :t03J05 :t96J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: actual overlap transition and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint41-overlap-transition-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint40-coefficient-actual-overlap-transition-1
+    :oriented-checkpoint40-chart-local-homology-and-consumer-refill
+    :oriented-checkpoint40-chart-local-homology-and-consumer-refill],
+   :current-residual
+   "Measure actual overlap comparison separately from orientation compatibility and global localization; rerank every consumer against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
