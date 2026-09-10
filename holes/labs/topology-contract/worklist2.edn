@@ -11003,8 +11003,70 @@
   {:consumer :t96J06,
    :stop-condition
    "Preserve actual projectivization, arbitrary compact subset and its chosen half-space atlas. Do not assume a smooth ambient inclusion, fundamental class, intersection pairing or boundary null-homology.",
+   :evidence
+   {:placeholder-after 2,
+    :placeholder-delta 0,
+    :residual
+    "ExactObstruction remains: for every compact W in the literal RP2 product and every frozen three-dimensional half-space manifold atlas on W, its intrinsic boundary image differs from the coordinate RP1 product. No full closure or admissible refutation compiled.",
+    :frozen-file "problems/t96J06/lean/Main.lean",
+    :dependency-review "invoke-1788998486774-17379-339dcbb5",
+    :axiom-audits 4,
+    :outcome :stop,
+    :warnings
+    ["Three inherited simp/simpa lint warnings in the unchanged frozen prefix."],
+    :statement-hashes
+    {:apm_t96J06_bridge_1
+     "0861313dae9d88548a14555508ac865c4a49eaa8dd9a8fcc90afe8c2a22c43d5",
+     :apm_t96j06
+     "e33e69414c9b999538314241ffcf0bde3e066eb14862fd7d2d7f36ec48ce7804"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :placeholder-before 2,
+    :reason
+    "The exact intrinsic-boundary obstruction remains unconstructed. The available intersection API requires supplied transverse linear data and does not connect that data to singular homology. Closing this consumer requires both a mod-two boundary-class theorem applicable to the continuous subtype inclusion of every frozen compact manifold subset and a nonzero ambient homology-class calculation for the literal coordinate projective product. Neither follows from the coordinate incidence equations. Smoothness or local flatness of the ambient inclusion is not supplied and cannot be silently imposed.",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum problems/t96J06/lean/Main.lean", :exit 0}
+     {:cmd
+      "Read DAG intersection and product-homology nodes, closure stop rules, dependency review and pinned Intersection/SingularCapLowDegree/Bordism APIs",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T96J06Boundary.lean", :exit 0}
+     {:cmd
+      "Python corrected declaration-boundary audit: statement hashes, comment-stripped placeholder count, identical frozen prefix and fixture SHA256",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|^axiom |^opaque |^unsafe ' /tmp/T96J06Boundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial lake env lean /tmp/T96J06Boundary.lean",
+      :exit 1,
+      :correction
+      "Unfolded ExactObstruction and reduced the local atlas let before introducing the manifold hypothesis; the successful rerun has only standard axioms."}
+     {:cmd "Initial Python statement-hash audit",
+      :exit 1,
+      :correction
+      "Replaced a space-sensitive declaration lookup with a word-boundary regex to handle the newline after the bridge name."}],
+    :campaign-termination false,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T96J06Boundary.lean",
+     :sha256
+     "a342ff49e3fa5ca2f422ddace64f1af40ebe72b02eb092bf4b9907478ec92887",
+     :role :typed-boundary-diagnostic},
+    :finding
+    "The diagnostic preserves the frozen definitions and existing helper proofs verbatim. It proves that the complete nonbounding conclusion is equivalent to ExactObstruction, retaining every compact-subset and chosen half-space-atlas quantifier. It also proves the actual subtype inclusion is continuous and a topological embedding. The boundary-image compactness lemma explicitly takes compactness of the intrinsic boundary; it does not manufacture a fundamental class. No frozen theorem, intersection invariant or missing producer is assumed. Final existential assembly is logical; the substantive bridge remains absent. Mathlib Bordism supplies preliminary singular-manifold definitions, not the needed boundary-null-homology theorem.",
+    :statement-hash-method
+    "SHA256 of declaration text from theorem through the character before := by.",
+    :frozen-sha256
+    "1d8874db11a786b11d04b5af4f0375fa439c05d5ac1bdafacd9943a89e238a71",
+    :mathematical-refutation false,
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "INTERSECTION: exact projective-product nonbounding consumer",
