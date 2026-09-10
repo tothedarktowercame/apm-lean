@@ -37759,8 +37759,55 @@
   {:consumer :t03J05,
    :stop-condition
    "Extend only the banked Boolean prefix-count and balanced-word interfaces with monotonicity and terminal-total bounds. Do not reconstruct maximal paths, prove inverse laws, define corner swaps, pair or cancel faces, construct chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use these bounds to construct Fin-valued cumulative coordinates and the canonical maximal path, then prove the word/path inverse laws.",
+    :gates
+    {:fixture-path-and-hash :pass,
+     :canonical-compiles :pass,
+     :lake-build :pass,
+     :exact-scope :pass,
+     :commit-artifact :pass,
+     :working-tree-artifact-equality :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "pwd; git rev-parse HEAD; git show --stat --oneline --no-renames HEAD; sha256sum ConstructionTargets/ProductSimplexWordPrefixCounts.lean ConstructionTargets/ProductSimplexBalancedWords.lean; lake env lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean; lake env lean ConstructionTargets/ProductSimplexBalancedWords.lean; lake build ConstructionTargets.ProductSimplexWordPrefixCounts ConstructionTargets.ProductSimplexBalancedWords; git status --short",
+      :exit 0}
+     {:cmd
+      "git cat-file -t d7ecc4b411b2f783f762da03ac598994100be9a1; git show --format=fuller --stat --oneline d7ecc4b411b2f783f762da03ac598994100be9a1; git diff --exit-code d7ecc4b411b2f783f762da03ac598994100be9a1 -- ConstructionTargets/ProductSimplexWordPrefixCounts.lean ConstructionTargets/ProductSimplexWordPrefixCounts.md ConstructionTargets/ProductSimplexBalancedWords.lean ConstructionTargets/ProductSimplexBalancedWords.md",
+      :exit 0}],
+    :commit "d7ecc4b411b2f783f762da03ac598994100be9a1",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"
+     "ConstructionTargets/ProductSimplexBalancedWords.lean"
+     "ConstructionTargets/ProductSimplexBalancedWords.md"],
+    :dependency-warnings
+    [{:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 2960,
+      :kind :unused-tactic}
+     {:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 3580,
+      :kind :unnecessary-simpa}],
+    :fixture
+    {:path "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+     :sha256
+     "e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187",
+     :supporting-path
+     "ConstructionTargets/ProductSimplexBalancedWords.lean",
+     :supporting-sha256
+     "4b9bf06c446c0ff52bbe1d92f9a5b6a0e7238e19725a426d96ffcd7575d1b023",
+     :placeholder-count 0},
+    :finding
+    "Fresh execution verified both canonical source hashes, compiled both Lean files, completed the two-target Lake build, confirmed commit d7ecc4b411b2f783f762da03ac598994100be9a1 exists with exactly the four scoped files, and confirmed the current scoped artifacts are byte-identical to that commit. The current branch HEAD is a later ledger-transition commit, c5d456b33b71c512f90a3072172fed3616e98132.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"
