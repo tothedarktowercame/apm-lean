@@ -16903,20 +16903,111 @@
    :stop-condition
    "Bank only the constructed pair sequence and comparisons with explicit vanishing hypotheses. Do not claim contractible vanishing, H0 monicity, sphere suspension or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientPairSequence.lean",
-      :sha256
-      "ffec25e86774ae2004eaf819a94025a333de451ba0b4e61434004b2422cde28e"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientPairSequence.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Derive contractible-space positive-degree vanishing over R, prove contractible-subspace H0 monicity and assemble the contractible projection and disk-pair endpoints. No contractible vanishing, sphere suspension or consumer closure is claimed.",
+    :gates
+    {:fixture-hash :pass,
+     :scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :examples :pass,
+     :commit :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass,
+     :compilation :pass,
+     :explicit-vanishing-hypotheses :pass},
+    :axiom-audits 10,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Direct compilations produced zero warnings; build replayed 20 dependency warnings."
+     "An unrelated untracked TransverseIncidenceChosenAtlas.lean existed initially; it was excluded from this commit. Final workspace status was clean."],
+    :statement-hashes
+    {"rational_disk_exact"
+     "e1188a74ccb68a10c11c5482b7099d5cb8e33ebc7f82b1a7889d524e2809ee1c",
+     "rational_disk_sequence"
+     "3e40a031c3a672cc7dbfdaeb86bcaa5a1ea7ce910d3ab096a0c7806102212c0d",
+     "shortExact"
+     "8f6b8dc022112dc88f7c83344c64ba7b7c0286733a7594b0fa8e8a01caa56e9a",
+     "exact_subspace"
+     "c75b70c62596d8c535eccf7d1e5b7ca8e839bd01aef1666b9e610e3c903108af",
+     "connectingIso_hom"
+     "0277331bc42fb57f596a213bf73e4707fb9dd1a897228e3f1a9dc2a0e4afb91e",
+     "relativeH1IsoKernel"
+     "a70099cc1b52566a6c3fbc4ac769f4cded0ada4c6b19ea3f3f305e66cb083952",
+     "exact_relative"
+     "a9e8db62fc6e35a475dc9127c875b8ca2641e9c7ea6f2af67e3b9cf40bd29b2e",
+     "sequence"
+     "473e419f7b0bb3a04864e53218b63df9467ee9ae4ff680c5b234166a293534d2",
+     "connecting_inverse_right"
+     "c46f3e135cb6eb8f3c49425c1594377522d470014e5f722b14afada9d19fea50",
+     "integral_disk_exact"
+     "fd7e3fc0c838a3975587ce4bc74dae18ce8966fed56e3d38a2fc0879b18705ee",
+     "connecting_inverse_left"
+     "85d88b070461675a68daf203f932c2c2da94ed02f027f894a7ae1b1df9058175",
+     "connectingIso"
+     "6f19db183925c6e8d9d72296a0563ebaf1fcb3dfc6e8167879bfbf32eb1f7bd7",
+     "exact_absolute"
+     "e53e72f506111606b6757e70d838fad3f6d2625a6ab6e115d5912ce77b8f53b8",
+     "relativeH1IsoKernel_projection"
+     "db93e175e4468d0183eb8bf336b288e57610adb607d2b71125a6c98acc695e40",
+     "connecting"
+     "e5db2d3566173e17d91d73b4219d1c1ef72954e6daf8f450ebdc073443064246",
+     "integral_disk_sequence"
+     "88b87ef3acd78efed89f0410c4b8117cf445eb3d84169e62b04d38c829639f8d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientPairSequence.lean", :exit 0}
+     {:cmd "Read DAG, closure rules and dependency PASS receipts",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientPairSequence.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientPairSequence.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientPairSequence",
+      :exit 0,
+      :jobs 8277}
+     {:cmd
+      "Validate ten standard-only audits in both compilation logs, including integer/rational disk exactness examples",
+      :exit 0}
+     {:cmd
+      "Inspect explicit adjacent-degree vanishing and ambient H1 vanishing hypotheses",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientPairSequence.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Verify sixteen declaration hashes and exact fixture promotion",
+      :exit 0}
+     {:cmd "Verify exact staged two-file scope", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Construct coefficient-general actual pair homology sequence'",
+      :exit 0}
+     {:cmd
+      "Verify committed two-file scope, unchanged fixture and final workspace status",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "e66d6787b182b899404ae0e7da2ec57089749c22",
+    :changed-paths
+    ["ConstructionTargets/CoefficientPairSequence.lean"
+     "ConstructionTargets/CoefficientPairSequence.md"],
+    :fixture
+    {:path "/tmp/CoefficientPairSequence.lean",
+     :sha256
+     "ffec25e86774ae2004eaf819a94025a333de451ba0b4e61434004b2422cde28e",
+     :promoted-verbatim true},
+    :finding
+    "Promoted the exact actual pair-sequence fixture, three exact homology segments, conditional connecting isomorphism and relative-H1 kernel comparison. All vanishing hypotheses remain explicit.",
+    :statement-hash-method
+    "SHA256 of declaration text from theorem/def keyword to immediately before the space preceding :=.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientPairSequence.lean"
     "ConstructionTargets/CoefficientPairSequence.md"],
