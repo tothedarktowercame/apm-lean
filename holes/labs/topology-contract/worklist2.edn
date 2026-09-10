@@ -24109,20 +24109,128 @@
    :stop-condition
    "Bank the geometric chart-indexed comparison and its unit equations only. Do not duplicate reserved distinguished-chart recovery or claim explicit triple-overlap point-set composition, local constancy, orientation coherence or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientChartTransitionUnit.lean",
-      :sha256
-      "e3f94ec9e7e0dcd4438b5c84ff78bc1cce3bbc08b0c152b511fda16326f06d36"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientChartTransitionUnit.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholders 0,
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Distinguished-chart recovery remains separately reserved. Explicit triple-overlap point-set and pair-map composition, local constancy, orientation compatibility and global localization remain downstream. The proved cocycle concerns normalization comparisons and their units; no consumer closure is claimed. Ledgers and frozen consumers remain untouched.",
+    :gates
+    {:normalization-comparison-scope :pass,
+     :unit-inverse-construction :pass,
+     :integer-rational-examples :pass,
+     :generator-change-direction :pass,
+     :whitespace :pass,
+     :scalar-action :pass,
+     :fifteen-standard-only-audits :pass,
+     :actual-normalized-overlap-map :pass,
+     :fixture-and-canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :target-build :pass,
+     :identity-inverse-and-cocycle-equations :pass,
+     :exact-fixture-promotion :pass,
+     :both-restriction-identifications :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 15,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation have zero warnings. Target build replays 22 dependency warnings and succeeds with 8302 jobs."],
+    :statement-hashes
+    {"isoUnit_action"
+     "09d634562ec7c0c9fbca83e5ef0cc32d6ee8e1842ca7ecaadd8d51a97c40e821",
+     "integral_unit"
+     "bb5df10f8be9bb9c7abfe8bb84933ab5abe459d6b7c82ec467220e52ebe20dbf",
+     "unit_cocycle"
+     "a09f3613acebc8d9020afe524ef145834f9c2afd4cd75419b2e01f920a822c2a",
+     "comparison"
+     "c90ef846d7ca03b8ebefa903c44e3d08d2d871207fc865d436c85b016158f08d",
+     "left_restriction"
+     "a2cd1b4374578ac0f7a8ce609816cf9cec58abe6fdbf0e8059c381f84050e391",
+     "unit_inverse"
+     "7ad04255336721a165aac01be90a2b8a6b6bdf84325e534cfe6adc7aa30993e9",
+     "isoUnit"
+     "f3d86ee0e2154d02f153e8f262b363c4d6ba152b2b3936443c192a23f97817fd",
+     "geometric_unit"
+     "79ead5855799fbb23b82a80e7a2844135f0c399bc70b9989021d086b74b9373e",
+     "rational_unit"
+     "2bac00bc42274a476d73e19f12ec50b41f6baa770e34721e283fb381c58e1d2e",
+     "geometric_comparison"
+     "dcb0028df60d03d5bc54f0141054e2055c3ac1696d88561cb5a2259f04b76cb7",
+     "generator_change"
+     "5bd3be094a51a2d3964d465089cae2e8ada9d3d5211dd4a68f4b9f309e53ccc2",
+     "right_restriction"
+     "88434079705358de0e571340d98d64b82bd20415a146404c2033485fa45e9109",
+     "chartNormalization"
+     "fb1fa39ea3a3595a8b90603b169a1171c937f129a73b6a20ddeae72b76e5bf7f",
+     "unit_identity"
+     "976e3e107eae06dd5ed9fd6cd19ba24d5fa2c1e7f9ed5a5d45e1d27212158533",
+     "chartGenerator"
+     "d0ef9533967586fe63abafddd2ac5de568f9573c143506a25ac361a8b68e1509",
+     "scalar_action"
+     "2debab3691128b34d61010a99f20b35e98f5fb26cafd09f9bdc235219c5e4db8",
+     "linear_scalar"
+     "7c4dfec53825f269f05957454fe430d1096ca328c542cf7e45e6adb798ec886f",
+     "comparison_identity"
+     "5dea820e8108fbf80d813d0eb7948a92bfcd82f976a68003d4a9dc16ad8dbe87",
+     "comparison_cocycle"
+     "239ccc8c263a785c433be58719576bb9a869c99b2bd60a26d757139ece34f47c",
+     "comparison_inverse"
+     "d96e981c1bf39122441cbba3aa250f7df44dc69521b29d90160fe868e4118c50",
+     "transitionUnit"
+     "dcd17ab431aeb7ffc94d27dffa6ca646a793a59b2ebef0d7c995dfefb641aa72"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and both dependency PASS receipts from the ledgers",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientChartTransitionUnit.lean",
+      :exit 0}
+     {:cmd
+      "Python fixture hash verification and exact scoped promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientChartTransitionUnit.lean > /tmp/chartunit-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientChartTransitionUnit.lean > /tmp/chartunit-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientChartTransitionUnit > /tmp/chartunit-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verification of fifteen standard-only audits in each compilation log and warning attribution",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientChartTransitionUnit.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and twenty-one statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m \"Construct geometric chart transition units and comparison cocycles\"",
+      :exit 0}
+     {:cmd "git diff --check dd9752ee^ dd9752ee", :exit 0}
+     {:cmd
+      "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "dd9752ee9e4151dfe7d5b3e1211b700eec73471a",
+    :changed-paths
+    ["ConstructionTargets/CoefficientChartTransitionUnit.lean"
+     "ConstructionTargets/CoefficientChartTransitionUnit.md"],
+    :fixture
+    {:path "/tmp/CoefficientChartTransitionUnit.lean",
+     :sha256
+     "e3f94ec9e7e0dcd4438b5c84ff78bc1cce3bbc08b0c152b511fda16326f06d36"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientChartTransitionUnit.lean"
     "ConstructionTargets/CoefficientChartTransitionUnit.md"],
