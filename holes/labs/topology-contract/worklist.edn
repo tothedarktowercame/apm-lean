@@ -68736,6 +68736,39 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the canonical coefficient-module isomorphism from homology of a binary chain-complex biproduct to the biproduct of the two homology objects, with both arrow formulas; no supplied compact-complement exactness transport or excision.",
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/CoefficientHomologyBiprodIso.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / coefficient homology-biproduct comparison",
+   :acceptance
+   {:fixture "/tmp/CoefficientHomologyBiprodIso.lean",
+    :fixture-sha256
+    "5928c28ac7aea03bde12f13d2fd55695e3f5771ffefbc60477e2c04f97b44cc0",
+    :implementation
+    "Promote the exact fixture. Compile homologyBiprodIso, homologyBiprodIso_hom and homologyBiprodIso_inv. This supplies the missing middle-object representation on the compact-support placeholder route. Preserve arbitrary commutative-ring coefficients, arbitrary coefficient chain complexes and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim compact-complement arrow conjugation, relative Mayer-Vietoris exactness, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientHomologyBiprodIso.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "Coefficient homology of the binary biproduct of the two chain complexes appearing as the Mayer-Vietoris middle object",
+    :target
+    "The binary biproduct of the separate coefficient homology objects used by the actual piece comparison",
+    :direction
+    "Apply the additive homology functor's canonical forward binary-biproduct comparison, identifying its forward arrow as the lift of the two projection-induced homology maps and its inverse as the descent of the two injection-induced homology maps."},
+   :id :coefficient-homology-biproduct-iso-implementation-refill49,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-compact-complement-union-comparison-implementation-refill49],
+   :current-residual
+   "Compose the coefficient homology-biproduct isomorphism with the reviewed two-piece range comparison, then instantiate the three transported compact-complement exactness segments and identify their conjugated arrows before coefficient excision.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
    :evidence
    {:probe
@@ -68745,73 +68778,69 @@
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the actual equality of the two range-subcomplex supremum with the Boolean cover-small simplicial set and the resulting coefficient chain and homology isomorphisms to the ambient complement; no supplied exactness conjugation or excision.",
+      "Require the canonical coefficient-module isomorphism from homology of a binary chain-complex biproduct to the biproduct of the two homology objects, with both arrow formulas; no supplied compact-complement exactness transport or excision.",
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientCompactComplementUnionComparison.lean"],
+      :scope ["ConstructionTargets/CoefficientHomologyBiprodIso.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / coefficient compact-complement union comparison",
+      "MANIFOLD FUNDAMENTAL CLASS / coefficient homology-biproduct comparison",
       :acceptance
-      {:fixture
-       "/tmp/CoefficientCompactComplementUnionComparison.lean",
+      {:fixture "/tmp/CoefficientHomologyBiprodIso.lean",
        :fixture-sha256
-       "a91c06af52938916deb44ee2f9f45f3cd260969d75357268267f1ab539672de9",
+       "5928c28ac7aea03bde12f13d2fd55695e3f5771ffefbc60477e2c04f97b44cc0",
        :implementation
-       "Promote the exact fixture. Compile union_eq_coverSmall, unionChainsIso, unionHomologyIso, unionHomologyIso_hom and unionHomologyIso_inv. This supplies the union-term comparison on the compact-support placeholder route. Verify CoefficientPieceRangeBiproductComparison SHA256 e9ca8cac704c128859f2f872b753cd4d2687bb18dcd588fa179c7bb04d73c795 and CoefficientCompactComplementSmallComparison SHA256 e510ba7b8399a61480d380d5711d81530444577be01b81a1d6ee83808ac45708. Preserve compact K and L in a Hausdorff space, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile homologyBiprodIso, homologyBiprodIso_hom and homologyBiprodIso_inv. This supplies the missing middle-object representation on the compact-support placeholder route. Preserve arbitrary commutative-ring coefficients, arbitrary coefficient chain complexes and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim compact-complement arrow conjugation, relative Mayer-Vietoris exactness, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientCompactComplementUnionComparison.lean"],
+       ["lake env lean ConstructionTargets/CoefficientHomologyBiprodIso.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "Coefficient chains and homology of the supremum of the left and right ambient range subcomplexes in the instantiated Mayer-Vietoris sequence",
+       "Coefficient homology of the binary biproduct of the two chain complexes appearing as the Mayer-Vietoris middle object",
        :target
-       "Coefficient singular chains and homology of the actual ambient space X minus the intersection of K and L",
+       "The binary biproduct of the separate coefficient homology objects used by the actual piece comparison",
        :direction
-       "Identify the range supremum exactly with the Boolean cover-small simplicial set, then apply the forward cover-small comparison isomorphism to obtain chain and homology identifications from the Mayer-Vietoris union term to the actual ambient complement."},
-      :id
-      :coefficient-compact-complement-union-comparison-implementation-refill49,
+       "Apply the additive homology functor's canonical forward binary-biproduct comparison, identifying its forward arrow as the lift of the two projection-induced homology maps and its inverse as the descent of the two injection-induced homology maps."},
+      :id :coefficient-homology-biproduct-iso-implementation-refill49,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-piece-range-biproduct-comparison-implementation-refill49
-       :coefficient-compact-complement-small-comparison-implementation-refill49],
+      [:coefficient-compact-complement-union-comparison-implementation-refill49],
       :current-residual
-      "Conjugate the instantiated signed Mayer-Vietoris connecting morphism and both homology arrows through the intersection, piece-biproduct and union comparison isomorphisms, prove the three resulting exactness statements, then transport the relative terms to the requested pairs in X by coefficient excision.",
+      "Compose the coefficient homology-biproduct isomorphism with the reviewed two-piece range comparison, then instantiate the three transported compact-complement exactness segments and identify their conjugated arrows before coefficient excision.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd
-       "lake build ConstructionTargets.CoefficientPieceRangeBiproductComparison ConstructionTargets.CoefficientCompactComplementSmallComparison >/tmp/coefficient-union-deps.log",
+     [{:cmd "lake env lean /tmp/CoefficientHomologyBiprodIso.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientCompactComplementUnionComparison.lean",
+       "python3 placeholder-and-declaration audit over /tmp/CoefficientHomologyBiprodIso.lean",
        :exit 0}
       {:cmd
-       "python3 placeholder-declaration-warning audit over /tmp/CoefficientCompactComplementUnionComparison.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/CoefficientCompactComplementUnionComparison.lean ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean ConstructionTargets/CoefficientCompactComplementSmallComparison.lean",
+       "sha256sum /tmp/CoefficientHomologyBiprodIso.lean ConstructionTargets/CoefficientCompactComplementUnionComparison.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientCompactComplementUnionComparison.lean",
+       "lake env lean /tmp/CoefficientCompactComplementTransportedExactness.lean",
        :exit 1,
        :correction
-       "The Boolean-indexed supremum lists the true/right range before the false/left range. Replaced the incorrect definitional-equality proof with the exact supremum commutativity equality; final compilation has no warnings."}],
+       "The attempted transport correctly revealed that homology of the short-complex biproduct is not definitionally the biproduct of homologies. Isolated the required canonical coefficient homology-biproduct isomorphism instead of inserting an invalid coercion."}
+      {:cmd "lake env lean /tmp/CoefficientHomologyBiprodIso.lean",
+       :exit 1,
+       :correction
+       "Added the standard ModuleCat biproduct import required to expose the coefficient module category and its finite biproduct instances; the unchanged construction then compiled."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientCompactComplementUnionComparison.lean",
+     {:path "/tmp/CoefficientHomologyBiprodIso.lean",
       :sha256
-      "a91c06af52938916deb44ee2f9f45f3cd260969d75357268267f1ab539672de9",
+      "5928c28ac7aea03bde12f13d2fd55695e3f5771ffefbc60477e2c04f97b44cc0",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one missing union-term comparison prerequisite. The supremum of the actual left and right compact-complement range subcomplexes equals the Boolean cover-small simplicial set. Coefficient chains on that supremum and their homology are thereby identified with coefficient singular chains and homology of the actual ambient complement, with explicit forward and inverse homology formulas in every degree. Conjugated exactness and coefficient excision remain.",
+     "Attempting the three exactness transports exposed one precise missing representation: the Mayer-Vietoris middle object is homology of a chain-complex biproduct, whereas the reviewed piece comparison begins at the biproduct of the two homology objects. Compiled exactly that coefficient-general comparison, including the canonical forward lift and inverse descent formulas. Instantiated exactness and coefficient excision remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -68836,7 +68865,8 @@
     :coefficient-intersection-range-comparison-implementation-refill49
     :coefficient-intersection-range-naturality-implementation-refill49
     :coefficient-piece-range-biproduct-comparison-implementation-refill49
-    :coefficient-compact-complement-union-comparison-implementation-refill49],
+    :coefficient-compact-complement-union-comparison-implementation-refill49
+    :coefficient-homology-biproduct-iso-implementation-refill49],
    :current-residual
    "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
