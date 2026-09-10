@@ -56942,6 +56942,19 @@
       :exit 1,
       :correction
       "Compilation started before the dependency build completed and found the atlas olean absent. Waited for the successful build, then reran compilation successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789002254080-17496-cc6a0d7a",
+     :commands
+     ["git show 822296cada11aa7ea4fe97840543b092eb03f29b"
+      "Independent exact-promotion, scope, fixture/recorded signature hashes and placeholder audit"
+      "lake env lean ConstructionTargets/ManifoldRegularFiberTangentImage.lean"
+      "lake build ConstructionTargets.ManifoldRegularFiberGlobalAtlas"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 822296ca"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact single-file promotion and recorded hashes verified. Local inverse differentiation proves backward injectivity; coordinate agreement identifies actual inclusion mfderiv under the chosen atlas. Constant composition gives kernel containment, and injectivity plus rank-nullity proves equality with the original map's mfderiv kernel. All four declarations compile warning-free with standard axioms and zero placeholders; prerequisite build passes 8446 jobs. Consumers unchanged; general-model and consumer-specific obligations remain. Ledger passes 439 items; whitespace clean. No edits."},
     :commit "822296cada11aa7ea4fe97840543b092eb03f29b",
     :changed-paths
     ["ConstructionTargets/ManifoldRegularFiberTangentImage.lean"],
@@ -56953,7 +56966,7 @@
     :finding
     "Exact fixture promoted. All four declarations compile warning-free with standard-only axioms and zero placeholders. Inclusion derivative injectivity and exact kernel-range equality use the chosen atlas. Existing APIs and consumers unchanged; worktree clean. Validator reports 439 items OK."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ManifoldRegularFiberTangentImage.lean"],
    :dag-node
