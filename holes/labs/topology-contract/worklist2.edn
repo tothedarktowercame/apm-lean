@@ -42506,8 +42506,290 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      :exit 0}
+     {:cmd
+      "Recount every DAG-named frozen consumer with comments stripped and inspect current open, blocked, superseded and reviewed rows",
+      :exit 0}
+     {:cmd
+      "Inspect the reviewed word/path equivalence, its two banked prerequisites, the preserved oriented-cancellation STOP and existing corner-related ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "Compare b7fd0ec4b739612463f00f484e59438596b904bd..043c24a0 and attribute ConstructionTargets and frozen-problem changes",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :measures
+    {:baseline
+     {:commit "b7fd0ec4b739612463f00f484e59438596b904bd",
+      :description "Pre-checkpoint68 strategy head"},
+     :proved-refutations 0,
+     :frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :head
+     {:commit "043c24a0",
+      :description "Pre-checkpoint69 strategy head"},
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:before 856,
+      :after 863,
+      :portfolio
+      ["ConstructionTargets/ProductSimplexStepWordReconstructed.lean"
+       "ConstructionTargets/ProductSimplexPathWordBalance.lean"
+       "ConstructionTargets/ProductSimplexWordPathEquivalence.lean"],
+      :concurrent
+      ["ConstructionTargets/CoefficientSubspaceUnionCoverSmallComparison.lean"
+       "ConstructionTargets/CoefficientSubspaceUnionRestrictedCoverImage.lean"
+       "ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean"
+       "ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean"]},
+     :corrected-closures 0,
+     :review-outcomes
+     {:product-simplex-stepword-reconstructed
+      {:outcome :pass,
+       :disposition :banked,
+       :commit "4fc16429d1176790cf36b2b6d7f6188d159bcf59"},
+      :product-simplex-path-word-balance
+      {:outcome :pass,
+       :disposition :banked,
+       :commit "f6aa26fc6df06e0c926cfe4c0aea13ba9bc47333"},
+      :balanced-word-reconstructed-path-inverse-laws
+      {:outcome :pass, :disposition :banked, :commit "04409127"},
+      :bounded-oriented-face-cancellation
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-balanced-step-word-maximal-path-equivalence,
+       :disposition :boundary-partly-resolved},
+      :singular-cross-product
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-signed-product-simplex-shuffle-triangulation},
+      :finite-cover-rational-euler
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-finite-type-chain-level-covering-comparison},
+      :raw-hausdorff-normalization
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-addHaarScalarFactor-characterization}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholders 61}},
+    :finding
+    {:typed-residual-change
+     "The reviewed equivalence now identifies every BalancedWord p q with a canonical MaximalPath p q in both directions. The former inverse-law boundary on the t03J05, t96J06 and t97A04 routes is resolved. The next shared missing step is the adjacent-corner operation: swap two consecutive unequal Boolean letters, preserve balanced totals, transport the swap through wordPathEquiv, prove involutivity, and identify the affine face deleted at the exchanged corner. This is required before the preserved bounded-oriented-face-cancellation STOP can be retried. No near-closure consumer has a complete route, no frozen placeholder changed, and four unrelated coefficient modules plus the m03J03 edit are concurrent work.",
+     :routes
+     [{:consumer :a97J08,
+       :placeholders 1,
+       :route
+       "local degree and orientation -> consumer comparison -> adapter"}
+      {:consumer :t00A03,
+       :placeholders 2,
+       :route
+       "translations -> endpoint perturbation -> compatible faces -> triangulation"}
+      {:consumer :t00J01,
+       :placeholders 1,
+       :route
+       "circle fold -> Klein geometry -> homology bridge -> adapter"}
+      {:consumer :t00J02,
+       :placeholders 1,
+       :route
+       "relative Mayer-Vietoris -> excision -> localization and fundamental class"}
+      {:consumer :t01A02,
+       :placeholders 3,
+       :route "H2 degree -> Lefschetz -> conjunction"}
+      {:consumer :t01A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> cap/Thom comparison -> calculations"}
+      {:consumer :t01A05,
+       :placeholders 1,
+       :route
+       "compact-support Mayer-Vietoris -> localization -> adapter"}
+      {:consumer :t01A08,
+       :placeholders 1,
+       :route "regularity conversion -> Sard -> adapter"}
+      {:consumer :t01J01,
+       :placeholders 3,
+       :route
+       "translations -> endpoint control -> triangulation -> theorem"}
+      {:consumer :t01J04,
+       :placeholders 1,
+       :route
+       "regular preimage -> countability and atlas applicability -> theorem"}
+      {:consumer :t01J06,
+       :placeholders 3,
+       :route
+       "sphere moments -> normalization -> Stokes -> conjunction"}
+      {:consumer :t02A05,
+       :placeholders 2,
+       :route "S2 flux -> normalization -> integral and minimum"}
+      {:consumer :t02A07,
+       :placeholders 3,
+       :route
+       "compact-support Mayer-Vietoris -> localization -> fundamental class"}
+      {:consumer :t02A08,
+       :placeholders 1,
+       :route "local comparison -> normalization -> theorem"}
+      {:consumer :t03J02,
+       :placeholders 2,
+       :route
+       "null winding -> collar or Schoenflies -> gluing -> theorem"}
+      {:consumer :t03J04,
+       :placeholders 1,
+       :route
+       "torus homology -> finite-cover Euler comparison -> theorem"}
+      {:consumer :t03J05,
+       :placeholders 1,
+       :route
+       "banked word/path equivalence -> adjacent corner swaps -> oriented cancellation -> cross product -> intersection and nonhomotopy -> theorem"}
+      {:consumer :t91J05,
+       :placeholders 3,
+       :route
+       "translations -> endpoint control -> compatible faces -> result"}
+      {:consumer :t92J05,
+       :placeholders 3,
+       :route
+       "antipodal and genus-two bridges -> classification -> assembly"}
+      {:consumer :t92J06,
+       :placeholders 1,
+       :route "covering data -> quotient adapter -> theorem"}
+      {:consumer :t94A06,
+       :placeholders 1,
+       :route
+       "regular preimage and translation -> applicability -> adapter"}
+      {:consumer :t94A10,
+       :placeholders 3,
+       :route "S2 moments -> normalization -> nonexactness"}
+      {:consumer :t94J09,
+       :placeholders 1,
+       :route
+       "translations -> endpoint perturbation -> intersection adapter"}
+      {:consumer :t95J05,
+       :placeholders 1,
+       :route "S3 moment -> mass normalization -> integral uptake"}
+      {:consumer :t95J06,
+       :placeholders 2,
+       :route "torus quotient -> classification -> result"}
+      {:consumer :t96J06,
+       :placeholders 2,
+       :route
+       "fundamental class and banked word/path equivalence -> adjacent corner comparison -> oriented product comparison -> adapters"}
+      {:consumer :t97A01,
+       :placeholders 1,
+       :route
+       "cover transfer -> finite-cover Euler comparison -> theorem"}
+      {:consumer :t97A04,
+       :placeholders 4,
+       :route
+       "fundamental class and banked word/path equivalence -> adjacent corner comparison -> cross product -> Eilenberg-Zilber -> Kunneth -> intersections"}
+      {:consumer :t97J05,
+       :placeholders 5,
+       :route
+       "compact-support Mayer-Vietoris -> localization -> fundamental class -> assembly"}
+      {:consumer :t98A01,
+       :placeholders 1,
+       :route
+       "five-torsion -> polygon genus -> Euler comparison -> conjunction"}
+      {:consumer :t98A02,
+       :placeholders 1,
+       :route
+       "relative Mayer-Vietoris -> excision -> localization monicity -> fundamental class"}
+      {:consumer :t99J03,
+       :placeholders 1,
+       :route
+       "endpoint perturbation -> coverage -> compatible faces -> triangulation"}],
+     :deferred
+     ["Do not retry oriented cancellation until the adjacent-corner operation, involutivity and deleted-face equality are banked."
+      "Do not construct shuffle signs, chain sums or the singular cross product before oriented corner cancellation."
+      "Reviewed Euler and Hausdorff STOPs remain preserved; concurrent coefficient and frozen-problem work is excluded."]},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Construct only the adjacent unequal-letter swap on balanced words, its transport to canonical maximal paths through wordPathEquiv, involutivity, and equality of the affine faces obtained by deleting the exchanged corner. Do not assign shuffle signs, pair or cancel a chain sum, construct a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PRODUCT HOMOLOGY: adjacent balanced-word corner swaps and common deleted faces",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use banked BalancedWord p q, wordPathEquiv and canonical product-simplex coordinates. Restrict the downstream test matrix to p+q at most four; no coefficient or orientation hypothesis is required.",
+       :route-step
+       "Supplies the adjacent-corner construction immediately after the banked word/path equivalence on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes.",
+       :probe
+       "For an index i with consecutive unequal letters, define the Boolean word obtained by exchanging positions i and i+1, prove horizontal and vertical totals are preserved, and package the result as a BalancedWord. Transport it through wordPathEquiv to a canonical MaximalPath. Prove swapping twice returns the original word and path. Express the two path simplices in cumulative coordinates and prove that deleting the intermediate vertex at the exchanged corner gives the same affine face. Compile every p,q with p+q at most four. GO requires one complete placeholder-free fixture. REVISE requires exactly one complete compiled swap-preserves-balance, swap-involutive or common-deleted-face prerequisite. STOP names the exact independent representation or simplicial-face boundary.",
+       :consumer-equation
+       "Exchanging adjacent unequal horizontal and vertical letters preserves balanced totals, is involutive, and produces the other maximal product-simplex path incident to the same codimension-one affine face obtained by deleting the exchanged corner.",
+       :consumer-residual
+       "Define the shuffle sign, prove an adjacent swap reverses it, and combine the paired common-face equations into bounded oriented cancellation.",
+       :gates
+       ["Compile a complete fixture and record SHA256."
+        "Verify the swap changes exactly the two named adjacent unequal letters."
+        "Verify horizontal and vertical totals are preserved."
+        "Verify word-level and transported-path involutivity."
+        "Verify the two cumulative-coordinate paths have the same simplex face after deleting the exchanged corner."
+        "Compile all p,q with p+q at most four."
+        "Reproduce standard-only axiom audits."
+        "Confirm no shuffle-sign theorem, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+        "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and reservations."]},
+      :id
+      :oriented-checkpoint69-product-simplex-adjacent-corner-swap-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint69-product-simplex-word-path-inverses-and-consumer-refill-1],
+      :current-residual
+      "Balanced words and maximal paths are exactly equivalent, but no adjacent unequal-letter swap, involutivity law or common deleted-face equation has been constructed.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: product-simplex adjacent-corner swaps and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint70-product-simplex-adjacent-corners-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint69-product-simplex-adjacent-corner-swap-1],
+      :current-residual
+      "Measure adjacent-corner construction separately from shuffle signs, oriented cancellation, cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: product-simplex word/path inverse laws and renewed consumer eligibility",
@@ -42524,6 +42806,74 @@
     :oriented-checkpoint68-promoted-product-simplex-recurrences-and-consumer-refill-1],
    :current-residual
    "Measure the exact word/path equivalence separately from adjacent-corner construction, oriented cancellation, cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the adjacent unequal-letter swap on balanced words, its transport to canonical maximal paths through wordPathEquiv, involutivity, and equality of the affine faces obtained by deleting the exchanged corner. Do not assign shuffle signs, pair or cancel a chain sum, construct a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PRODUCT HOMOLOGY: adjacent balanced-word corner swaps and common deleted faces",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use banked BalancedWord p q, wordPathEquiv and canonical product-simplex coordinates. Restrict the downstream test matrix to p+q at most four; no coefficient or orientation hypothesis is required.",
+    :route-step
+    "Supplies the adjacent-corner construction immediately after the banked word/path equivalence on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes.",
+    :probe
+    "For an index i with consecutive unequal letters, define the Boolean word obtained by exchanging positions i and i+1, prove horizontal and vertical totals are preserved, and package the result as a BalancedWord. Transport it through wordPathEquiv to a canonical MaximalPath. Prove swapping twice returns the original word and path. Express the two path simplices in cumulative coordinates and prove that deleting the intermediate vertex at the exchanged corner gives the same affine face. Compile every p,q with p+q at most four. GO requires one complete placeholder-free fixture. REVISE requires exactly one complete compiled swap-preserves-balance, swap-involutive or common-deleted-face prerequisite. STOP names the exact independent representation or simplicial-face boundary.",
+    :consumer-equation
+    "Exchanging adjacent unequal horizontal and vertical letters preserves balanced totals, is involutive, and produces the other maximal product-simplex path incident to the same codimension-one affine face obtained by deleting the exchanged corner.",
+    :consumer-residual
+    "Define the shuffle sign, prove an adjacent swap reverses it, and combine the paired common-face equations into bounded oriented cancellation.",
+    :gates
+    ["Compile a complete fixture and record SHA256."
+     "Verify the swap changes exactly the two named adjacent unequal letters."
+     "Verify horizontal and vertical totals are preserved."
+     "Verify word-level and transported-path involutivity."
+     "Verify the two cumulative-coordinate paths have the same simplex face after deleting the exchanged corner."
+     "Compile all p,q with p+q at most four."
+     "Reproduce standard-only axiom audits."
+     "Confirm no shuffle-sign theorem, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+     "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and reservations."]},
+   :id :oriented-checkpoint69-product-simplex-adjacent-corner-swap-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint69-product-simplex-word-path-inverses-and-consumer-refill-1
+    :oriented-checkpoint69-product-simplex-word-path-inverses-and-consumer-refill-1],
+   :current-residual
+   "Balanced words and maximal paths are exactly equivalent, but no adjacent unequal-letter swap, involutivity law or common deleted-face equation has been constructed.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: product-simplex adjacent-corner swaps and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint70-product-simplex-adjacent-corners-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint69-product-simplex-adjacent-corner-swap-1
+    :oriented-checkpoint69-product-simplex-word-path-inverses-and-consumer-refill-1],
+   :current-residual
+   "Measure adjacent-corner construction separately from shuffle signs, oriented cancellation, cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
