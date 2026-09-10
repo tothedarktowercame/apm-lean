@@ -65779,58 +65779,59 @@
    :stop-condition
    "GO requires complete frozen closure; otherwise identify the exact remaining homotopy-equivalence or basepoint adapter. Infrastructure absence is not refutation.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "No mathematical residual remains for frozen t00A01 in the compiled fixture. Canonical promotion and independent review remain; canonical Main still has two placeholders.",
-     :fixture-placeholder-delta -2,
-     :outcome :go,
-     :warnings
-     ["Proof completion exposes unused frozen parameters hiA and hiB in the fundamental-group bridge and hM₁ and hM₂ in the final theorem. All remain unchanged."],
-     :statement-hashes
-     {:apm_t00A01_bridge_fundamentalGroup_coprod
-      "8f75974642ece5f2a28135325a06edd720241f58d27bc6b38caa4e70c7085a4c",
-      :apm_t00A01_bridge_connectedSum_isHomology3Sphere
-      "bcde6e6a16ccde2d20849e1e3c8118d9de8b4e5486f741902d18c8cb0c836be7",
-      :apm_t00a01
-      "b9ff87faa90c2b4c68259481a5c153959e7a1a0b41b4d1e8780ece917dde31b4"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/surface45:$LEAN_PATH lean -o /tmp/surface45/ConstructionTargets/TwoOpenFreeProductMapping.olean ConstructionTargets/TwoOpenFreeProductMapping.lean'",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/surface45:$LEAN_PATH lean /tmp/T00A01FrozenClosure.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/t00a01-frozen-closure-audit.py", :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/T00A01FrozenClosure.lean",
-       :exit 1,
-       :correction
-       "The reviewed TwoOpenFreeProductMapping source lacked a canonical compiled object. Compiled the unchanged dependency into the private temporary object directory; complete fixture compilation then succeeded."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/T00A01FrozenClosure.lean",
-      :sha256
-      "7456769760a13a7083cbd7449e2ff162cdf426aeff89483fb193c2d2e4172081",
-      :placeholder-count 0},
-     :finding
-     "Complete frozen Main compiles with both placeholders replaced. Path connectivity is derived from the supplied piece homotopy equivalences, and overlap simple connectivity from the supplied S2 homotopy equivalence. The reviewed actual-cover coproduct theorem is transported through the piece equivalences, puncture identifications and a path from the literal quotient basepoint. The existing homology proof and all three theorem statements remain unchanged; both final conjuncts are proved.",
-     :implementation
-     {:scope ["problems/t00A01/lean/Main.lean"],
-      :acceptance
-      {:frozen-sha256
-       "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
-       :implementation
-       "Promote the exact fixture. Preserve every frozen definition, hypothesis, theorem statement and the existing homology proof. Compile complete Main and audit both closed theorem axioms. Retain the four reported unused frozen parameters without suppressing their warnings.",
-       :commands ["lake env lean problems/t00A01/lean/Main.lean"],
-       :axioms :standard-only,
-       :placeholder-before 2,
-       :placeholder-after 0}},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta -2,
+    :hypotheses-preserved true,
+    :residual
+    "No mathematical residual for frozen t00A01. Independent review and supervisor certification remain.",
+    :homology-proof-preserved true,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Unused frozen parameters hiA and hiB in the fundamental-group bridge."
+     "Unused frozen parameters hM₁ and hM₂ in the final theorem. All four retained without warning suppression."],
+    :statement-hashes
+    {:apm_t00A01_bridge_fundamentalGroup_coprod
+     "8f75974642ece5f2a28135325a06edd720241f58d27bc6b38caa4e70c7085a4c",
+     :apm_t00A01_bridge_connectedSum_isHomology3Sphere
+     "bcde6e6a16ccde2d20849e1e3c8118d9de8b4e5486f741902d18c8cb0c836be7",
+     :apm_t00a01
+     "b9ff87faa90c2b4c68259481a5c153959e7a1a0b41b4d1e8780ece917dde31b4"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 2,
+    :commands
+    [{:cmd
+      "sha256sum problems/t00A01/lean/Main.lean /tmp/T00A01FrozenClosure.lean",
+      :exit 0}
+     {:cmd "python3 /tmp/t00a01-frozen-closure-audit.py", :exit 0}
+     {:cmd "lake build ConstructionTargets.TwoOpenFreeProductMapping",
+      :exit 0}
+     {:cmd "lake env lean problems/t00A01/lean/Main.lean", :exit 0}
+     {:cmd
+      "cmp /tmp/T00A01FrozenClosure.lean problems/t00A01/lean/Main.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :definitions-preserved true,
+    :commit "3612428cad65c85e6006c7488ea8eec4620a0181",
+    :changed-paths ["problems/t00A01/lean/Main.lean"],
+    :fixture
+    {:path "/tmp/T00A01FrozenClosure.lean",
+     :sha256
+     "7456769760a13a7083cbd7449e2ff162cdf426aeff89483fb193c2d2e4172081",
+     :exact-promotion true},
+    :finding
+    "Complete frozen t00A01 compiles with both placeholders replaced. Supplied homotopy equivalences yield connectivity and piece-group transport; actual-cover reconstruction and basepoint transport prove the coproduct conjunct. Existing homology proof supplies the second conjunct. Ledger untouched.",
+    :frozen-sha256
+    "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+    :axiom-audit-count 2,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t00A01/lean/Main.lean"],
    :dag-node "VAN KAMPEN / frozen homotopy-cover uptake",
    :acceptance
