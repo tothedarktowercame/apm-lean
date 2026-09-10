@@ -70420,8 +70420,43 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the composite coefficient isomorphism from the range-relative cokernel to production relative chains and the union-to-production-relative map with both piece formulas; no compact-support exactness or excision transport is supplied.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Compose this cokernel isomorphism with the reviewed coefficient literal-intersection-to-nested-pair isomorphism, then compose the result with the coefficient pushout union projection and prove its left-zero and right-quotient projection formulas.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:rangeRightRelativeCokernelIso
+     "acb9660cecd6a6110e55d3dea00d53365a39faf52eafebe3c7850b469d1502fc"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean /tmp/CoefficientRangeRightRelativeCokernelComparison.lean ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-declaration audit over ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "57c7a392951f647255c24bb88a333d4be04068ff",
+    :changed-paths
+    ["ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean"],
+    :fixture
+    {:path "/tmp/CoefficientRangeRightRelativeCokernelComparison.lean",
+     :sha256
+     "590d2bdf61c233a910f04d83e3a59a19cf6b8005e0df4ca144feec23ac255bc4",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The forward cokernel.mapIso from the range-intersection/right-range quotient to the literal intersection/right-subtype quotient compiles without warnings or placeholders, and the dependency hash matches its pinned value. Three unrelated pre-existing untracked files remain untouched."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean"],
    :dag-node
