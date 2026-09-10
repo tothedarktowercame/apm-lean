@@ -34374,8 +34374,11 @@
    :stop-condition
    "Construct an actual singular-chain cross product with the required boundary signs and induced-map naturality. Do not assume Eilenberg-Zilber, Kunneth, product fundamental classes, intersection nonvanishing, ambient nonhomotopy or consumer closure. Restrict coefficients and degrees to the three named consumers and use a unique row-specific scratch directory.",
    :evidence
-   {:outcome :stop,
-    :seat "codex-13",
+   {:residual
+    "Construct the bounded signed product-simplex shuffle operator for p+q≤4, including affine realization, face cancellation and two-variable postcomposition naturality; then extend it linearly to the integer and ZMod 2 production singular-chain complexes.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "codex-13",
     :reason
     "Neither Mathlib nor the banked ConstructionTargets modules contain a singular-chain cross product, Alexander-Whitney map, Eilenberg-Zilber shuffle map, or product-simplex triangulation. Mathlib's simplicial-set monoidal structure is categorical and does not produce a morphism from the tensor product of the production alternating-face singular complexes to singular chains on X×Y. The exact missing boundary is the signed shuffle triangulation of Δp×Δq: for p+q≤4, construct the affine product simplices indexed by (p,q)-shuffles, prove their codimension-one faces cancel with the correct signs, and prove compatibility with postcomposition in both variables. Without that construction there is no well-typed chain map on which to prove the requested Leibniz and naturality formulas. This is missing infrastructure, not a refutation of the cross-product theorem.",
     :commands
@@ -34406,14 +34409,27 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789066317851-19188-f9b96ac1",
+     :commands
+     ["git show --stat --oneline 0118e755"
+      "git show --check --oneline 0118e755"
+      "git show 0118e755:holes/labs/topology-contract/worklist2.edn | sed -n '34335,34470p'"
+      "git diff 0118e755^ 0118e755 -- holes/labs/topology-contract/worklist2.edn"
+      "rg -n -i 'crossProduct|cross_product|Eilenberg|Alexander.?Whitney|shuffleMap|shuffle_map' ConstructionTargets .lake/packages/mathlib/Mathlib/AlgebraicTopology"
+      "rg -n -i 'cross.product|Eilenberg|Alexander.?Whitney|product.*simplex|shuffle' ConstructionTargets/SingularHomologyConcrete.md ConstructionTargets/Intersection.md"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "rg --pcre2 -n '(?<![A-Za-z0-9_.])(sorry|admit)(?![A-Za-z0-9_.])|^[[:space:]]*((private|protected)[[:space:]]+)?axiom[[:space:]]' problems/{t03J05,t96J06,t97A04}/lean -g '*.lean'"],
+     :finding
+     "PASS: commit 0118e755 is an evidence-only ledger transition with no fixture or frozen statement hash applicable. The STOP precisely locates the absent signed product-simplex shuffle/face-cancellation construction before integer or ZMod 2 chain maps can be typed; theorem orientation and representation boundaries are sound, both ledgers validate, and affected frozen placeholder counts remain 1, 2, and 4."},
     :finding
     "The production singular chains are coproducts over continuous standard simplices with alternating face differentials. Existing tensor-complex modules manipulate abstract chain complexes after a tensor comparison is supplied; they do not construct the geometric map into chains on a product. Existing subdivision machinery realizes affine simplices and proves face compatibility for subdivision, but it contains no product-prism shuffle enumeration or signed cancellation theorem. Integer and ZMod 2 instances therefore fail at the same earlier representation boundary. No fixture, canonical source, consumer file or ledger was edited.",
-    :residual
-    "Construct the bounded signed product-simplex shuffle operator for p+q≤4, including affine realization, face cancellation and two-variable postcomposition naturality; then extend it linearly to the integer and ZMod 2 production singular-chain complexes.",
-    :author "codex-13",
-    :disposition :stop},
+    :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded singular cross-product chain interface",
@@ -34458,7 +34474,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: singular cross-product interface and renewed consumer eligibility",
