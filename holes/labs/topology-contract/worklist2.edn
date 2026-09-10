@@ -28570,35 +28570,43 @@
      :infinite-example :pass,
      :placeholder-scan :pass,
      :lake-build :pass,
+     :statement-hash-recomputation :pass,
      :fixture-compile :pass,
      :forbidden-declaration-scan :pass,
      :no-finiteness-or-cancellation :pass,
      :countable-factor-distribution :pass},
+    :repair
+    {:kind :receipt-metadata-only,
+     :review "invoke-1789044044311-18594-0c829f63",
+     :source-change false,
+     :ledger-change false,
+     :finding
+     "The original hashes incorrectly included proof bodies. Repository-convention hashes cover each theorem from the theorem keyword through the proposition, excluding := by and the proof. The committed source and fixture require no change."},
     :outcome :done-unreviewed,
     :warnings [],
     :statement-hashes
     {"sum_bounds"
-     "9e8ded4344c2f6d30a2620c8153bc062199c92c0bf62260e04e14f1db83f3404",
+     "e58bff958471e9f1304d7714ec237a3efec8c0d4efddec2eb604acbc21023a6d",
      "global_bounds"
-     "71f1cfd55041d30365a4c3c1cf2603220e853f34a67425aa639bb3cc565db962",
+     "98bad6cad82ee562415fc7e9f133b82bd6349bedde6146cd462472507d6ca03b",
      "set_integral_bounds"
-     "e22ad07009c97c8b2c0892b331b194e70bae821cf6caf0e4861d675c813f1ba6",
+     "c52a5683e047610757019813babaede0230ce06b1c82308fc3707e826a58f8fc",
      "zero_example"
-     "f3f0ce6a85fa099e776a243720b4c8612b560e4b24592f083ecec24ecde5bb88",
+     "62d5cd9264b0dd4e082710a20de4c1c6c7d03e3118262511ee8e4ab9a1b1e7c6",
      "infinite_example"
-     "f63d96d9d502a444b6ff81b9df26214034959eabcc27f48789d8bd66ca4cb003"},
+     "3d891c1ff711a612bb9760af7ffc2ea6f27f6fe8afb669443af381357beca1bd"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "Joe Corneli <holtzermann17@gmail.com>",
     :commands
     [{:cmd "readlink -f .lake/packages", :exit 0}
      {:cmd
-      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, build-loop design and reviewed dependency receipt",
-      :exit 0}
-     {:cmd
       "sha256sum /tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean ConstructionTargets/ENNRealCountableBounds.lean",
       :exit 0}
      {:cmd
       "cmp -s /tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean ConstructionTargets/ENNRealCountableBounds.lean",
+      :exit 0}
+     {:cmd
+      "git diff --exit-code 128cdeb5c2f22aeca7704e3bb8c5bf88b4d142fc -- ConstructionTargets/ENNRealCountableBounds.lean ConstructionTargets/ENNRealCountableBounds.md",
       :exit 0}
      {:cmd
       "lake env lean /tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean",
@@ -28609,7 +28617,10 @@
      {:cmd "lake build ConstructionTargets.ENNRealCountableBounds",
       :exit 0}
      {:cmd
-      "Audit five namespace-local standard-only axiom reports, set-lintegral monotonicity, ENNReal factor distribution, and zero/infinite examples",
+      "Python deterministic theorem-statement hash audit from theorem keyword through the proposition, excluding := by and proof body",
+      :exit 0}
+     {:cmd
+      "Audit five namespace-local standard-only axiom reports and zero warnings or errors",
       :exit 0}
      {:cmd
       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ENNRealCountableBounds.lean",
@@ -28619,21 +28630,16 @@
       "rg -n '[[:blank:]]+$' ConstructionTargets/ENNRealCountableBounds.lean ConstructionTargets/ENNRealCountableBounds.md",
       :exit 1,
       :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
      {:cmd
-      "git diff --cached --check && verify exact two-file staged scope",
-      :exit 0}
-     {:cmd "git show --check --oneline HEAD && git diff --check",
+      "git show --format= --name-only 128cdeb5c2f22aeca7704e3bb8c5bf88b4d142fc",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1789044044311-18594-0c829f63",
-     :finding
-     "Deterministic statement-hash defect in recorded commit 128cdeb5c2f22aeca7704e3bb8c5bf88b4d142fc: the exact committed source and fixture agree, but all five frozen hashes recorded in worklist2.edn differ from recomputation. Actual hashes are sum_bounds=e58bff958471e9f1304d7714ec237a3efec8c0d4efddec2eb604acbc21023a6d, global_bounds=98bad6cad82ee562415fc7e9f133b82bd6349bedde6146cd462472507d6ca03b, set_integral_bounds=c52a5683e047610757019813babaede0230ce06b1c82308fc3707e826a58f8fc, zero_example=62d5cd9264b0dd4e082710a20de4c1c6c7d03e3118262511ee8e4ab9a1b1e7c6, infinite_example=3d891c1ff711a612bb9760af7ffc2ea6f27f6fe8afb669443af381357beca1bd. Recorded hashes begin 9e8ded43, 71f1cfd5, e22ad070, f3f0ce6a, and f63d96d9 respectively. Fixture SHA256, two-file scope, compilation, five standard-only audits, 2528-job build, placeholder count 312->312, ledger validation, theorem orientations, and ENNReal zero/infinity boundaries otherwise pass."},
-    :dependency-uptake
-    {:id :c1-graph-countable-measure-decomposition-1,
-     :commit "2c2bdae3dc99c457a4946f0b9d218a690dbe8e43",
-     :review "invoke-1789043454658-18581-528827cf"},
+    :diagnostic-history
+    [{:cmd
+      "Initial statement-hash computation over complete theorem blocks",
+      :exit 0,
+      :correction
+      "Recomputed hashes over statement text only, ending immediately before := by, matching all five independently reviewed values."}],
     :commit "128cdeb5c2f22aeca7704e3bb8c5bf88b4d142fc",
     :changed-paths
     ["ConstructionTargets/ENNRealCountableBounds.lean"
@@ -28646,7 +28652,7 @@
      :placeholder-count 0},
     :seat "codex-14"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ENNRealCountableBounds.lean"
     "ConstructionTargets/ENNRealCountableBounds.md"],
