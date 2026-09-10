@@ -74454,8 +74454,63 @@
   {:consumer "t98A02",
    :stop-condition
    "Require proof that the compiled quotient ShortComplex is short exact; then use its HomologySequence to construct the genuine connecting morphism and three exactness segments before specializing to compact complements.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove shortComplex R P Q is short exact, using the degreewise quotient calculation for C/(P intersection Q), C/P plus C/Q and C/(P union Q). Then invoke HomologySequence and specialize P and Q to the two compact-complement ambient ranges.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:intersectionToLeftRelative_projection
+     "132e4cda3d571b28cba04573ac5d1cb79d90faba8fa75d9037d465bb4641f30c",
+     :intersectionToRightRelative_projection
+     "35299d04da2d4ce720f65de9c011b619f1954cf87ff0b1ba6fdf1a54f49e1457",
+     :leftToUnionRelative_projection
+     "9e8d411005effa747caf903d2165c9a187bf8bb7ff354650e02de9acd624cf38",
+     :rightToUnionRelative_projection
+     "7184cd66bbfc796376d8acc8ee42cc91909a20879a5e8f6a792f899d4eb07272",
+     :relative_arrows_zero
+     "95bd538dd5511ebc8fb830b42d0ad696a92fc35ea2a41919e3ad2c04a5f5654b",
+     :shortComplex
+     "ad3ca8f96f3e396f3fc4359166d5834f4084943858ae33f00c7474e1ae89f18d",
+     :shortComplex_f
+     "a7b4b909133772ab8d2c8d10e8658a53fca7bece7f77e10d855f0d56ca934063",
+     :shortComplex_g
+     "a7961786f34a3efb8fd4e400397d060a2599ed553ac60d0556c459b2e06b4f4d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisArrows.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder-and-eight-declaration audit over ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 852133cf11d866fe8b1eaa17db872cfc8e663fda",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 852133cf11d866fe8b1eaa17db872cfc8e663fda",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :commit "852133cf11d866fe8b1eaa17db872cfc8e663fda",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean"],
+    :fixture
+    {:path
+     "/tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean",
+     :sha256
+     "9565e17710f26ade05147ca4ca4abaae145ee928450ac69c18683da9fe1a73cf",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and reviewed arrow dependency hashes reproduce. All eight requested declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean"],
    :dag-node
