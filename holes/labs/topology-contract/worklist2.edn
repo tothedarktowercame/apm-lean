@@ -20679,20 +20679,115 @@
    :stop-condition
    "Bank coordinate-reflection conjugation only. Keep the negative-action hypothesis explicit in sign transport. Do not claim first-coordinate sign induction, an antipodal action theorem or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientCoordinateReflections.lean",
-      :sha256
-      "e85522027b7e02a970f1c7329d447861d6b770a63a516367fca1562938941aa4"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientCoordinateReflections.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Construct positive-dimensional top-homology coordinates, establish the first-coordinate reflection sign using the circle base and sphere-shift induction, then prove the product-to-negation equation and antipodal scalar action. No first-coordinate sign induction, antipodal action theorem or consumer closure is claimed.",
+    :gates
+    {:explicit-negative-action-hypothesis :pass,
+     :integer-rational-examples :pass,
+     :conjugation-direction :pass,
+     :whitespace :pass,
+     :placeholders :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :two-file-scope :pass,
+     :axioms :pass,
+     :actual-homeomorphisms :pass,
+     :build :pass,
+     :fixture-compilation :pass,
+     :inverse-permutation-convention :pass},
+    :axiom-audits 10,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation emitted no warnings. Build replayed 20 dependency warnings; none originated in this module."],
+    :statement-hashes
+    {:permutation
+     "91d9b2f60105681bd75a64955dbc900a1a987388aeff574c80acefe8162be3b1",
+     :rational_conjugation
+     "3546174fcf5fdbdb608e857621c939da3198e9f5bd1d8e630c547d20f8fce159",
+     :permutationMap
+     "8e9587af07356cdec859082be4e4464c14e239ebfadc8686dcc02def0009529d",
+     :transport_negative
+     "ba98087d34beab7c959aba9356e8496082cd068776361340b174f35c9c8c23f4",
+     :permutation_apply
+     "7b58a7de6e284d3374b7634789ede12e7d3d6ed742f7a22a4319cb18bfc1e44b",
+     :sphereHomeo
+     "ff9d2254b004ec5e9b155285550fcd4e436d1a989defe1236a48cbf1e91c28ea",
+     :reflection_apply
+     "207399c0554c63790eb7a50921756643f899d0867274169a3eced11e2eb52d2e",
+     :reflectionMap
+     "1d17b5aec4f281df521a1c2b9c51ac28a3e9104e6d4a40e9f60d93e99b09321d",
+     :conjugation
+     "ce9e8a327b3259de47bc706966f474001b844c8c1ae73719c03dbf5df230bcb7",
+     :permutation_inverse
+     "bc9f9708381917f918030f062b6f7443d4198e260a427095cd06748be5830dac",
+     :homology_permutation_inverse
+     "3a9b8bcffce12d4ab89db540f06cb501215ea76e8c20393531134054a297bf8a",
+     :homology_conjugation
+     "54b0543caa7071f5f80d7ae7a5e943fa6c695382353ba28749904309490d8bc2",
+     :H
+     "b2602c2adc1874cecb9b787001bc3a47c44f0df92416b17da3dd7501e6b95eaa",
+     :reflection
+     "52732398c6a5f3c569df5f992c6254a5c4a87275e7dc0103a6be2a6620c10697",
+     :integral_conjugation
+     "0bc6c3e223e235b06e532a66d2bc404dc8b161552a21d4f976abb2b824107f5d",
+     :transport_any_coordinate
+     "98a96996a0cfdb412fa0debf786c6085b68f55bc69e17a3b1efd2f83d39cf4a1"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure rules, both ledgers and dependency PASS receipt; inspect sphere homeomorphisms, conjugation direction and sign hypotheses",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "Verify fixture SHA256 before byte-identical promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientCoordinateReflections.lean > /tmp/coordref-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientCoordinateReflections.lean > /tmp/coordref-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientCoordinateReflections > /tmp/coordref-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Validate ten standard-only audits in each direct compilation log and inspect build warnings",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientCoordinateReflections.lean ConstructionTargets/CoefficientCoordinateReflections.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python audit of fixture equality, zero placeholders, sixteen declaration hashes and exact two-file scope",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Prove actual coordinate-reflection permutation conjugation'",
+      :exit 0}
+     {:cmd "git diff --check 62a0af3d^ 62a0af3d", :exit 0}
+     {:cmd
+      "Python verification of pinned commit scope, fixture equality and scoped cleanliness; git status --short",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "62a0af3d4b4b7b2cbe034858bbe8a3d969b9ebce",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCoordinateReflections.lean"
+     "ConstructionTargets/CoefficientCoordinateReflections.md"],
+    :fixture
+    {:path "/tmp/CoefficientCoordinateReflections.lean",
+     :sha256
+     "e85522027b7e02a970f1c7329d447861d6b770a63a516367fca1562938941aa4",
+     :promotion :byte-identical},
+    :finding
+    "Promoted the exact fixture constructing coordinate-reflection permutation conjugation on actual sphere homeomorphisms and singular homology. Permutations act by composition with the inverse permutation. Sign transport retains an explicit negative-action hypothesis for one reflection and assumes no scalar action for the conjugating permutation.",
+    :statement-hash-method
+    "SHA256 from declaration keyword to immediately before the space preceding :=; includes auxiliary abbreviation H.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCoordinateReflections.lean"
     "ConstructionTargets/CoefficientCoordinateReflections.md"],
