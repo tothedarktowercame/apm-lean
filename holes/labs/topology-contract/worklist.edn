@@ -63998,85 +63998,65 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Complete the lower-dimensional comparison without extending the m+2 normalization or conflating integral and arbitrary-coefficient representations. Orientation overlap coherence, global localization monicity and consumer closure remain subsequent.",
+     "Orientation overlap coherence, global localization monicity, fundamental-class construction and consumer closure remain subsequent.",
      :dependency-review
      {:outcome :pass,
       :seat "codex-10",
-      :job "invoke-1789028453363-18216-6af29383"},
-     :outcome :revise,
+      :job "invoke-1789028975907-18228-04205ae6"},
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer "t98A02",
-      :stop-condition
-      "Require constructed coordinate transport and actual comparison; no supplied atlas or homology isomorphism.",
-      :phase :implementation,
-      :state :open,
-      :scope ["ConstructionTargets/CoefficientFiniteModelChart.lean"],
-      :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / finite-dimensional model transport",
-      :acceptance
-      {:fixture "/tmp/CoefficientFiniteModelChart.lean",
-       :fixture-sha256
-       "b06c74755ff2f62e27aa8130b15232ffcde1866098a2dddc9e06fcbe2b105ec8",
-       :implementation
-       "Promote the exact fixture. Compile coordinates, euclideanAtlas, chart and atlas specifications, both coordinate-value formulas, comparison, actual_forward, inverse laws and generator_normalization. Preserve original topology, arbitrary natural homology degree and explicit finrank E=m+2. Reuse CoefficientChartLocalAllDegrees without duplication. Audit zero placeholders and standard-only axioms; do not claim lower-dimensional coefficient comparison or orientation coherence.",
-       :commands
-       ["lake env lean ConstructionTargets/CoefficientFiniteModelChart.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :representation
-      {:source
-       "Actual coefficient local homology of a Hausdorff manifold charted on finite-dimensional real normed E, with finrank E=m+2",
-       :target
-       "Actual coefficient local homology of Euclidean space of dimension m+2 at zero",
-       :direction
-       "Construct an isomorphism from manifold local homology to Euclidean-model local homology by proved coordinate conversion and the banked actual translated-chart comparison."},
-      :id :coefficient-finite-model-chart-implementation-refill44,
-      :kind :representation-comparison,
-      :depends-on
-      [:coefficient-chart-local-all-degrees-implementation-refill44],
-      :current-residual
-      "Higher-dimensional general-model transport is compiled. Lower-dimensional coefficient comparison remains distinct from the banked integral dimension-one local-index coverage.",
-      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]},
+     :acceptance
+     {:fixture "/tmp/CoefficientManifoldLocalComparison.lean",
+      :fixture-sha256
+      "55d0e68e12b3990986c8aef1a1021053965658d5e2ebe092a6ceec8eb365ad35",
+      :implementation
+      "Promote the exact fixture. Compile chart-pair and translation constructions, allComparison, low_forward, zero_eq, one_eq, higher_eq, both inverse laws, generator_normalization and generator_image. Preserve original topology, Type-0 commutative coefficients, all finite model dimensions and all natural homology degrees. Reuse the reviewed higher-dimensional comparison. Keep normalization restricted to m+2 and integral dimension-one coverage separate. Audit zero placeholders and standard-only axioms. No orientation coherence, fundamental class or consumer closure claim.",
+      :commands
+      ["lake env lean ConstructionTargets/CoefficientManifoldLocalComparison.lean"],
+      :axioms :standard-only,
+      :placeholder-before 0,
+      :placeholder-after 0},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean -o /tmp/finite-model44/ConstructionTargets/CoefficientChartLocalAllDegrees.olean ConstructionTargets/CoefficientChartLocalAllDegrees.lean",
+       "lake env bash -c 'LEAN_PATH=/tmp/finite-model44:$LEAN_PATH lean -o /tmp/finite-model44/ConstructionTargets/CoefficientFiniteModelChart.olean ConstructionTargets/CoefficientFiniteModelChart.lean'",
        :exit 0}
       {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/finite-model44:$LEAN_PATH lean /tmp/CoefficientFiniteModelChart.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/finite-model44:$LEAN_PATH lean /tmp/CoefficientManifoldLocalComparison.lean'",
        :exit 0}
-      {:cmd "python3 /tmp/coefficient-finite-model-chart-audit.py",
+      {:cmd
+       "python3 /tmp/coefficient-manifold-local-comparison-audit.py",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/CoefficientFiniteModelChart.lean",
+     [{:cmd
+       "lake env lean /tmp/CoefficientManifoldLocalComparison.lean",
        :exit 1,
        :correction
-       "The promoted all-degree dependency lacked a canonical object; compiled it privately."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/CoefficientChartLocalAllDegrees.olean ConstructionTargets/CoefficientChartLocalAllDegrees.lean'",
-       :exit 1,
-       :correction
-       "The older private namespace lacked CoefficientChartLocal; used a fresh private object directory."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/finite-model44:$LEAN_PATH lean /tmp/CoefficientFiniteModelChart.lean'",
-       :exit 1,
-       :correction
-       "Linked existing canonical dependency objects into the private namespace. Subsequent compilation succeeded; removed unused-section-variable and class-reducibility warnings before final validation."}],
+       "The promoted finite-model dependency lacked a canonical object. Compiled it privately; final fixture compilation succeeds."}],
+     :representation
+     {:source
+      "Actual coefficient relative singular homology of a Hausdorff finite-dimensional self-model real manifold and its deleted point",
+      :target
+      "Actual coefficient relative singular homology of the corresponding Euclidean model and its deleted origin",
+      :direction
+      "Construct an isomorphism from manifold local homology to Euclidean-model local homology through actual chart-pair maps and neighborhood inclusion, with the forward composite identified."},
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientFiniteModelChart.lean",
+     {:path "/tmp/CoefficientManifoldLocalComparison.lean",
       :sha256
-      "b06c74755ff2f62e27aa8130b15232ffcde1866098a2dddc9e06fcbe2b105ec8",
+      "55d0e68e12b3990986c8aef1a1021053965658d5e2ebe092a6ceec8eb365ad35",
       :placeholder-count 0},
      :finding
-     "Compiled one general finite-dimensional model transport prerequisite. Constructed linear coordinates induce an atlas on the unchanged manifold topology, with explicit atlas, chart, forward-value and inverse-value specifications. For finrank E=m+2, the fixture reuses the reviewed all-degree comparison, identifies its actual five-arrow forward composite, proves both inverse laws and transports normalization and generator. No concurrent chart construction is duplicated. The separately banked dimension-one generator uses integral AddCommGrpCat homology; it is not silently treated as an arbitrary-coefficient ModuleCat comparison.",
+     "Compiled the complete manifold-to-model local-homology comparison for every finite model dimension and every natural homology degree. Dimensions zero and one use constructed chart restrictions, deleted-pair maps, neighborhood excision and translation to zero. Higher dimensions reuse CoefficientFiniteModelChart. Forward composites and both inverse laws are identified. For dimension m+2, normalization and generator transport are proved. The banked integral dimension-one generator is separately imported and audited; no arbitrary-coefficient normalization is inferred from it.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientManifoldLocalComparison.lean"]},
      :seat "codex-12"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientManifoldLocalComparison.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / deleted-point chart comparison",
    :acceptance
