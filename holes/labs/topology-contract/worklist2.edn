@@ -14777,89 +14777,108 @@
    :stop-condition
    "No assumed subdivision smallness or homology isomorphism. Use actual R-linear chain elements and maps; do not substitute an integral chain theorem or restrict arbitrary coefficients to integer multiples of generators.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Positive-degree small-chain homology comparison, relative excision and sphere suspension remain before rational S2 H1/H2. No homology isomorphism or frozen consumer closure is claimed.",
-     :axiom-audits 8,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture and document actual-chain eventual factorization without claiming homology comparison.",
-      :namespace "ConstructionTargets.CoefficientEventualSmallness",
-      :declarations
-      ["vertexSubdivisionIterate"
-       "vertexRealization_comp_singularSubdivision"
-       "singularSubdivisionIterate"
-       "vertexRealization_comp_singularSubdivisionIterate"
-       "iteratedFiniteVertexSubdivision_realize"
-       "singularSubdivisionIterate_natural"
-       "singularGenerator_iteratedSubdivision_realize"
-       "generator_eventual"
-       "chain_factorization"
-       "eventual_factorization"
-       "subdivisionIterate"
-       "subdivisionIterate_f"
-       "actual_chain_eventual"
-       "integral_interval"
-       "rational_interval"],
-      :hypotheses
-      "R, X and the cover index type are Type 0. R is a commutative ring, X is a topological space, and the indexed subsets form an open cover. Chains and preimages belong to actual ModuleCat R chain objects with coefficient object ModuleCat.of R R. Every natural-number degree is included; no connectedness, nonemptiness or finite-cover assumption is imposed.",
-      :consumer-equation
-      "For every actual chain c in degree n, there exists N such that every k at least N admits an actual cover-small chain q whose inclusion equals the degree-n application of the k-fold subdivision chain map to c.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientEventualSmallness."
-       "Reproduce all eight standard-only axiom audits and both arbitrary-chain integer/rational interval-cover examples."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG representation requirements, closure stop rules, dependency reviews and coefficient-general realization, support and preservation APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientEventualSmallness.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientEventualSmallness.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientEventualSmallness.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "Initial lake env lean /tmp/CoefficientIterateRealization.lean",
-       :exit 1,
-       :correction
-       "Removed the explicit ring argument from a definition in an unfolding list; the standalone iterate fixture then compiled."}
-      {:cmd
-       "Initial lake env lean /tmp/CoefficientEventualSmallness.lean",
-       :exit 1,
-       :correction
-       "Removed a redundant completed-goal tactic and corrected finite attached-support reconstruction."}
-      {:cmd
-       "Second lake env lean /tmp/CoefficientEventualSmallness.lean",
-       :exit 1,
-       :correction
-       "Supplied the explicit summand to Finset.sum_attach. Subsequent complete compilation succeeds."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientEventualSmallness.lean",
-      :sha256
-      "58ac8aa7368bfb5e6d25f0bd6e9ac8cf8d56540ff6b59030b03f6723e99ef15e"},
-     :finding
-     "Complete actual-chain eventual factorization compiles. Constructed subdivision chain-map iterates agree with the degree recursion and finite geometric realization. Arbitrary R-valued coordinates give finite generator support; geometric subordinate support supplies generator lifts at a common exponent. Evaluating these lifts at their R coefficients and summing constructs the small-chain preimage. Reviewed preservation supplies preimages at every larger exponent. Integer and rational overlapping interval-cover examples cover arbitrary chains in every degree.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientEventualSmallness.lean"
-       "ConstructionTargets/CoefficientEventualSmallness.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Positive-degree small-chain homology comparison, relative excision and sphere suspension remain before rational S2 H1/H2. No homology isomorphism or frozen consumer closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :eight-standard-only-audits :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 8,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 20 existing dependency warnings; both direct compilations had zero warnings."],
+    :statement-hashes
+    {"singularSubdivisionIterate_natural"
+     "d8cb7e6f6a9537d92ebea54dd00632fefb15b7620c090d114000c6748b615665",
+     "vertexRealization_comp_singularSubdivisionIterate"
+     "865e23e68be7962c005d6950ab2e3a759c8f19ab6a422f4fcd17ee896bf9b2ce",
+     "vertexRealization_comp_singularSubdivision"
+     "0b682a82dbd78b50bb4609ff463039e9075f375eeb16ac984215a2f18717bb5c",
+     "actual_chain_eventual"
+     "9a79fcdb249947ab8f6f0e15c36c74e9e317e990da5af6b4500bf9404f7b8996",
+     "chain_factorization"
+     "2a0db2adedf1b717113fe892c5bab2a4c08aa2332a847350dba942481ccf9f55",
+     "iteratedFiniteVertexSubdivision_realize"
+     "c49525ec03f36fec10c947cf52bbf46be69d1cebfd672e0513bbaf4eae46267d",
+     "rational_interval"
+     "931cd443e2d09ff931fb13d172f7d3dcb1f0fc6967a539220519a1fcfdd029ba",
+     "subdivisionIterate"
+     "3ae858c128c8a701ad1720dac1eaed1bfd12a2449e093485ca44a04e258913b9",
+     "generator_eventual"
+     "4b03e2bddbba610661e128fd89925380133a5bb5b1d4a91bdf07b89ef8dab14a",
+     "singularGenerator_iteratedSubdivision_realize"
+     "36c8e3bc84fc4b91d4764c1b5f3818eb007e81814aa459f04e04a0a431d9d731",
+     "eventual_factorization"
+     "7918252abf0624d74ae0e5677769d97be076f841d26cb09c32c48a6aac895aff",
+     "integral_interval"
+     "f71f22c697497c2e7bc7a59247649ede271b4deefcfab03a180997550324ee3e",
+     "vertexSubdivisionIterate"
+     "0817571f5d533e19f26fbad966c4212d48d5602ec3d964e40a97a3a7c9889469",
+     "singularSubdivisionIterate"
+     "3c37dfe38f4803ec3832d8f4fd05d424531ec848a7fd9a749c1d2f65ccbb717d",
+     "subdivisionIterate_f"
+     "681b0a3fdb6e7c0b28103bb3000fc7212b06414b18c50636247ad00b9f66bda2"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure stop rules and all dependency PASS receipts",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientEventualSmallness.lean", :exit 0}
+     {:cmd "Python verify fixture SHA256 and promote exact fixture",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientEventualSmallness.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientEventualSmallness.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientEventualSmallness",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientEventualSmallness.lean /tmp/CoefficientEventualSmallness.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, eight standard-only audits per compilation, warning and fifteen declaration-hash audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope audit and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Prove eventual smallness for actual coefficient-general chains\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope audit pinned to 0f36d6c5 and clean tracked checkout verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "0f36d6c5f7c6fe1d99ded92e9888192dd4ac21ca",
+    :changed-paths
+    ["ConstructionTargets/CoefficientEventualSmallness.lean"
+     "ConstructionTargets/CoefficientEventualSmallness.md"],
+    :fixture
+    {:path "/tmp/CoefficientEventualSmallness.lean",
+     :sha256
+     "58ac8aa7368bfb5e6d25f0bd6e9ac8cf8d56540ff6b59030b03f6723e99ef15e"},
+    :finding
+    "Promoted the exact fixture and documented actual-chain eventual factorization. Constructed iterates agree with finite realization; arbitrary R-valued finite coordinates yield a common exponent and actual small-chain preimages. Preservation extends factorization to every larger exponent. Integer/rational examples cover arbitrary chains in every degree. Focused build passed with 8270 jobs.",
+    :statement-hash-method
+    "SHA256 of declaration text beginning with theorem or def, excluding preceding attributes, and ending immediately before the space preceding := or where; namespace ConstructionTargets.CoefficientEventualSmallness.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientEventualSmallness.lean"
     "ConstructionTargets/CoefficientEventualSmallness.md"],
