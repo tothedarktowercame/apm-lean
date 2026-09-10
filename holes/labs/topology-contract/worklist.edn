@@ -62103,8 +62103,68 @@
   {:consumer "t99J03",
    :stop-condition
    "Require the constructed affine embedding and all image specifications; no supplied embedding or triangle-image equality.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Constructed coordinate triangle embedding and all image specifications compile, preserving the standard simplex and ordinary product topology. Scaling and translation into chart targets, manifold transfer and finite interior coverage remain. No face-compatible triangulation or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:open_interior
+     "1dfc72a403fb6a24fa0abbbf4535acf4ceeaa2984ebaafb2433994658207095f",
+     :interior_image
+     "33d7bc25d61a4e478b3f0bbafef1e6b5d3d5ca693d87111bddce8f4e712c892d",
+     :isClosedEmbedding_parametrization
+     "c0229b7f4bc5ee68199169d50a032764d33422fc78fe7b835464e419cb27a6ad",
+     :center_mem
+     "f7cc38d5e070564735fb56954512d65423b444a7bcedfcdb3a01b0318f330f18",
+     :interiorParameters
+     "57097a135d1d64943da04b3195577acc9cdc6adb180c30a6168f3f84269481b3",
+     :triangleInterior
+     "86701172f66a4a637edd57f10d8abceb753b88a378e4e9cb6ae377821ef05940",
+     :parametrization
+     "968b6991ca144a95e716c52dd6dfe6d1493b9b74e6bcb20b2fa84c25f5139282",
+     :Simplex
+     "cfa5b75ca7d9b9a7a06ea6699d1b05e9b9a0f23031009677c12f759330035180",
+     :injective_parametrization
+     "5a47a82e2972cfcd8c45dc5abfd456905b74e984a32fe7bf10dd8438f31f4b62",
+     :continuous_parametrization
+     "c5f40d6188c41491ff8deed39f306feb9236f1d65b1c65bb1d07b6ec036bf379",
+     :compact_image
+     "6f1f93a477e51dd06e658331b9b18df52e0c9dab487efce92c411c1e8b253733"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/StandardTriangleEmbedding.lean", :exit 0}
+     {:cmd
+      "cmp /tmp/StandardTriangleEmbedding.lean ConstructionTargets/StandardTriangleEmbedding.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/StandardTriangleEmbedding.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only canonical-source audit: zero placeholders and complete declaration-header hashes",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "45a52ad71f5b91454d457126a2320dac46d33800",
+    :changed-paths
+    ["ConstructionTargets/StandardTriangleEmbedding.lean"],
+    :fixture
+    {:path "/tmp/StandardTriangleEmbedding.lean",
+     :sha256
+     "8eac84f40a0fcba2925a02670f2cab15fae9634e568bec582e53b74d02d691f2"},
+    :axiom-audit-declarations 5},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/StandardTriangleEmbedding.lean"],
    :dag-node
    "SURFACE TRIANGULATION / explicit affine simplex embedding",
