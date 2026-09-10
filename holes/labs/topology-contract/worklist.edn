@@ -68214,6 +68214,23 @@
      "The coefficient chain and homology maps obtained by first applying the ambient range inclusion and then identifying the target range with its actual subtype",
      :direction
      "Exact equality from the range-to-subtype forward composite to the ambient-range-inclusion composite, first on coefficient chains and then on homology in every natural degree."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789048922354-18722-7904546b",
+     :commands
+     ["git show --stat --oneline 1762c1497204368a3c78e29c8e5a65681126948f"
+      "git diff-tree --no-commit-id --name-only -r 1762c1497204368a3c78e29c8e5a65681126948f"
+      "git show 1762c1497204368a3c78e29c8e5a65681126948f:ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean | sha256sum"
+      "sha256sum /tmp/CoefficientAmbientSubspaceRangeNaturality.lean"
+      "git show 1762c1497204368a3c78e29c8e5a65681126948f:ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean | cmp -s /tmp/CoefficientAmbientSubspaceRangeNaturality.lean"
+      "python3 read-only comment-stripped placeholder and two declaration-header SHA-256 audit"
+      "git show 1762c1497204368a3c78e29c8e5a65681126948f:ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean | sha256sum"
+      "lake env lean ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git status --short"],
+     :finding
+     "PASS: recorded commit has exact one-file scope and is byte-identical to the pinned fixture; compilation, standard-only axioms, zero placeholders, two frozen statement hashes, and dependency hash reproduce. The chain and homology naturality squares both run from range-to-subtype identification followed by actual subtype inclusion to ambient-range inclusion followed by target identification, while later Mayer-Vietoris, excision, monicity, vanishing, and fundamental-class claims remain out of scope."},
     :commit "1762c1497204368a3c78e29c8e5a65681126948f",
     :changed-paths
     ["ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean"],
@@ -68228,7 +68245,7 @@
     :axiom-audit-count 2,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean"],
    :dag-node
@@ -68327,7 +68344,7 @@
      "Compiled the coefficient-general naturality prerequisite for the ambient-range comparison. For every actual inclusion A subset B, the forward coefficient chain comparison followed by the subtype inclusion equals the ambient-range inclusion followed by the target comparison; applying homology proves the same square in every natural degree. This supplies the exact arrow compatibility required to conjugate the compact-complement Mayer-Vietoris sequence.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
