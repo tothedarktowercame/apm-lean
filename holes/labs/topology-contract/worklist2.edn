@@ -29479,6 +29479,24 @@
       :exit 0,
       :correction
       "Reran the no-match scan against the three actual fixture, canonical and build logs; all were present and contained no warnings or errors."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789048138660-18702-99277621",
+     :commands
+     ["git show --stat 67eedcc3"
+      "git diff-tree --no-commit-id --name-status -r 67eedcc3"
+      "git diff --check 67eedcc3^ 67eedcc3"
+      "sha256sum fixture and canonical SphereCapHeightDerivative.lean"
+      "cmp -s fixture canonical"
+      "lake env lean fixture"
+      "lake env lean ConstructionTargets/SphereCapHeightDerivative.lean"
+      "lake build ConstructionTargets.SphereCapHeightDerivative"
+      "Python proposition-only 13-statement hash and comment-stripped placeholder audit"
+      "rg forbidden declarations and trailing whitespace"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers"],
+     :finding
+     "PASS: exact two-file scope and fixture SHA256 verified; fixture, canonical target and 2544-job build pass; all 13 statement hashes match, zero placeholders and forbidden declarations, and ten standard-only axiom audits reproduce. Upper differentiation has the correct negative norm-square derivative and positive square-root divisor; lower differentiation is its negation. Density, isometry, Hausdorff transport and normalization remain explicitly downstream."},
     :dependency-uptake
     {:id :sphere-cap-height-c1-unit-graph-1,
      :commit "40ed9a46b8d1cf310a63c9eb617b361e2210e668",
@@ -29495,7 +29513,7 @@
      :placeholder-count 0},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereCapHeightDerivative.lean"
     "ConstructionTargets/SphereCapHeightDerivative.md"],
@@ -29653,7 +29671,7 @@
      "Exactly one complete compiled analytic prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 sphere-integration routes. It computes the actual Frechet derivatives of both reviewed cap-height functions on the open unit ball, including explicit application formulas and dimension-two and dimension-three specializations. The parent comparison is not GO: derivative norms and graph densities, the explicit L2-product-to-Euclidean coordinate isometry, strict-cap image equalities and Hausdorff-measure transport remain unproved. No canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual unit-sphere caps as reviewed C1 L2 graphs",
