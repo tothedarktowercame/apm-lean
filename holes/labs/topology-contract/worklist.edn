@@ -62323,6 +62323,20 @@
       :exit 0}
      {:cmd "git diff --cached --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789024933179-18128-efeca2f0",
+     :commands
+     ["git show 3e20822e:ConstructionTargets/ChartTriangleEmbedding.lean"
+      "Independent Python pinned-fixture comparison, complete theorem hash and placeholder audit"
+      "lake build ConstructionTargets.ScaledTriangleNeighborhood"
+      "lake env lean ConstructionTargets/ChartTriangleEmbedding.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show c1e2f1c7:holes/labs/topology-contract/worklist.edn)"
+      "git diff-tree --no-commit-id --name-only -r 3e20822e"
+      "git show --check 3e20822e"],
+     :finding
+     "Author codex-6 is independent. Exact single-file promotion and fixture SHA256 d518cba79f8598c65949cd07e8dd50d8f346e3b740520cf0cfbce373a65e6d74 verified; complete theorem hash matches; zero placeholders. Dependency build passes 8241 jobs; compilation warning-free with standard-only axioms; validator passes 495 items. Positive scale and target containment are constructed before applying the inverse chart. Restricted continuity and injectivity establish the explicit composite as a closed embedding with compact image inside the chart source. Its interior image is open and contains the specified center. Weaker Hausdorff-space hypotheses are preserved; finite manifold coverage and compatible faces remain unclaimed. Ledger untouched."},
     :commit "3e20822e8672ac4e3dd9c2cf8fbcbd35bb782ed5",
     :changed-paths ["ConstructionTargets/ChartTriangleEmbedding.lean"],
     :fixture
@@ -62331,7 +62345,7 @@
      "d518cba79f8598c65949cd07e8dd50d8f346e3b740520cf0cfbce373a65e6d74"},
     :axiom-audit-declarations 1},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ChartTriangleEmbedding.lean"],
    :dag-node
    "SURFACE TRIANGULATION / embedded triangles through actual charts",
@@ -62422,7 +62436,7 @@
      "Compiled one geometric prerequisite transferring constructed triangles through an actual open partial homeomorphism to the plane. The positive scale is chosen inside its target. The inverse-chart composite is a closed embedding with compact image contained in the chart source; its positive-barycentric interior has open image containing the center. No embedding, containment or coverage is assumed.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "SURFACE TRIANGULATION / finite embedded triangle cover",
    :acceptance
