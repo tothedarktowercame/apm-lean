@@ -25046,20 +25046,106 @@
    :stop-condition
    "Bank compact-boundary separation, actual center-motion homotopy and coefficient homology equations only. Do not claim chart transition-unit constancy, a relative-normalization comparison, orientation compatibility or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientCompactBoundaryMotion.lean",
-      :sha256
-      "4b8c63cdeb80ca4d9b7574727409a864f88a83fff226525f6ce1ceb07a376e1e"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientCompactBoundaryMotion.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholders 0,
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Construct a compact sphere boundary inside an actual chart overlap, apply this result to its chart-transition image, and identify the resulting boundary maps with relative local-homology normalizations at distinct points. Transition-unit local constancy, relative-normalization comparison, orientation compatibility and consumer closure are not claimed. Ledgers and frozen consumers remain untouched.",
+    :gates
+    {:homotopy-continuity-and-endpoints :pass,
+     :integer-rational-examples :pass,
+     :whitespace :pass,
+     :all-degree-coefficient-homology-equality :pass,
+     :zero-avoidance :pass,
+     :fixture-and-canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :target-build :pass,
+     :exact-fixture-promotion :pass,
+     :radial-normalization-equation :pass,
+     :nine-standard-only-audits :pass,
+     :positive-uniform-gap-from-compactness :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 9,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation have zero warnings. Target build replays 22 dependency warnings and succeeds with 8282 jobs."],
+    :statement-hashes
+    {"separation"
+     "d08238eafa9263c41c60532fac6250289977bd925ae82ae93d8b7248d3578d93",
+     "new_center"
+     "34f1484d92e7b1aec3f0b8158e2f73bed6102627ed60867b8ee2a5e85308b7bf",
+     "radialBoundary"
+     "c454cb5adf3eb38098aa22e5f3f99a90c04254e2ec811463ae0a776a45711a0d",
+     "boundaryHomotopy"
+     "8da52a692abcbe00d4ab8226bf43029974142075f673b7669a3935b58e6c8fb4",
+     "rational_example"
+     "b22f7f018aed70cef3841a98a92aaa9bd7ac5df5ec3332a5cc9f4e9412adee2f",
+     "avoid"
+     "35d6317f6b43a1e3c3df855ec20d09f3c2bd39f0e473f70ad0f29902588bd327",
+     "boundaryMap"
+     "618f4350a5bfcfc07fdfbeefba0329cf914b19066c993d3ef6636da92a4e76a8",
+     "radial_homology_eq"
+     "171c39d1714ed5e237f80f616fb649e63e72a79fa7d8a60f1cef68f228679949",
+     "homology_eq"
+     "b96aa656ac11584bf447c700d58a9711b802aabee1363df046e8eb733ed7d155",
+     "local_homology_constancy"
+     "f00dd63a1060350e1635c1543ea7b9195c30d43f006f44061e72862964ce97de",
+     "integral_example"
+     "2144790d207fc5bfc0c6d6254d794bb83b841eb4d740df0a75fbb0b30ae2fdab"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and dependency PASS receipt from both ledgers",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientCompactBoundaryMotion.lean",
+      :exit 0}
+     {:cmd
+      "Python fixture hash verification and exact scoped promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientCompactBoundaryMotion.lean > /tmp/compactmotion-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactBoundaryMotion.lean > /tmp/compactmotion-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientCompactBoundaryMotion > /tmp/compactmotion-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verification of nine standard-only audits in each compilation log and warning attribution",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientCompactBoundaryMotion.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and eleven statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m \"Construct compact boundary center-motion homotopy\"",
+      :exit 0}
+     {:cmd "git diff --check 234a5bbd^ 234a5bbd", :exit 0}
+     {:cmd
+      "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "234a5bbd4d1ad4b9e98cbbcd82db20adfcaf1d61",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactBoundaryMotion.lean"
+     "ConstructionTargets/CoefficientCompactBoundaryMotion.md"],
+    :fixture
+    {:path "/tmp/CoefficientCompactBoundaryMotion.lean",
+     :sha256
+     "4b8c63cdeb80ca4d9b7574727409a864f88a83fff226525f6ce1ceb07a376e1e"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactBoundaryMotion.lean"
     "ConstructionTargets/CoefficientCompactBoundaryMotion.md"],
