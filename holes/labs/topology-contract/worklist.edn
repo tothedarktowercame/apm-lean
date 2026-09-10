@@ -67265,6 +67265,19 @@
       :exit 0}
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789043757418-18588-f9c73210",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 3f84f9e5be9b60d15005aad9ec84fa27fe503083"
+      "cmp /tmp/CoefficientCompactComplementGeometry.lean /tmp/CoefficientCompactComplementGeometry.review.lean"
+      "python3 <read-only fixture/placeholder/statement-hash audit>"
+      "lake build ConstructionTargets.CoefficientSubcomplexMayerVietoris"
+      "lake env lean /tmp/CoefficientCompactComplementGeometry.review.lean"
+      "git diff --check 3f84f9e5be9b60d15005aad9ec84fa27fe503083^ 3f84f9e5be9b60d15005aad9ec84fa27fe503083 -- ConstructionTargets/CoefficientCompactComplementGeometry.lean"],
+     :finding
+     "PASS: exact one-file promotion and both fixture/dependency hashes reproduce; seven frozen statements and zero placeholders reproduce; compilation is green with standard-only axioms; literal compact-complement cover directions, overlap identity, and subtype-map boundaries are correct."},
     :commit "3f84f9e5be9b60d15005aad9ec84fa27fe503083",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementGeometry.lean"],
@@ -67278,7 +67291,7 @@
     :axiom-audit-count 7,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementGeometry.lean"],
    :dag-node
@@ -67374,7 +67387,7 @@
      "The coefficient subcomplex Mayer-Vietoris sequence is banked, but the requested relative sequence still needs compact-complement geometry and transport through actual relative-pair maps and coefficient excision. Compiled exactly one geometric prerequisite: inside the complement of K intersection L, the complements of compact K and L form an actual open cover; their union is the whole ambient complement, their overlap is the inverse image of the complement of K union L, and the three canonical subtype maps retain their literal values. No localization monicity, vanishing theorem or fundamental class is claimed.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
