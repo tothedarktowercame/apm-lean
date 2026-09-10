@@ -67316,6 +67316,8 @@
    "Identify the resulting cover-small subcomplex terms with the relative pairs for complements of K intersection L, K union L, K and L, using actual arrows and coefficient excision.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
+   :review-finding
+   "Two frozen declaration-header pins are non-reproducible from the exact fixture: cover recorded b967af2f6e05d547bd24d9d5ecedd0845aa6fb9f32db374f40e105d3f6a56d5d but recomputes cb470b608544a2f83045ee8d5580d4f02e3c688c1840cb41963da7992ba72682; overlap recorded c64e6bd3fe586e90626fda9b97f39e83065d98c7be45ec3d89b3f25a49c1493a but recomputes 792209d3ca055df9ba2d9d96ec3d76ccdd3aa089bad98afa6923724d0ec74515. The same method reproduces the other seven hashes exactly.",
    :stop-condition
    "Require the instantiated open Boolean cover, overlap identification and actual absolute and relative cover-small homology comparisons; no supplied comparison isomorphism or Mayer-Vietoris exact sequence.",
    :evidence
@@ -67373,6 +67375,12 @@
       :exit 0}
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-10",
+     :job "invoke-1789044295360-18600-9a7445ef",
+     :finding
+     "Two frozen declaration-header pins are non-reproducible from the exact fixture: cover recorded b967af2f6e05d547bd24d9d5ecedd0845aa6fb9f32db374f40e105d3f6a56d5d but recomputes cb470b608544a2f83045ee8d5580d4f02e3c688c1840cb41963da7992ba72682; overlap recorded c64e6bd3fe586e90626fda9b97f39e83065d98c7be45ec3d89b3f25a49c1493a but recomputes 792209d3ca055df9ba2d9d96ec3d76ccdd3aa089bad98afa6923724d0ec74515. The same method reproduces the other seven hashes exactly."},
     :commit "62df0a41d2bae9d71b72d984aa95fdad3b402863",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementSmallComparison.lean"],
@@ -67386,7 +67394,7 @@
     :axiom-audit-count 6,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementSmallComparison.lean"],
    :dag-node
