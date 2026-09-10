@@ -32121,6 +32121,23 @@
       :exit 1,
       :correction
       "That manual LEAN_PATH omitted Mathlib package paths. Reused the already compiled reviewed supporting oleans and prepended the scratch directory to the complete LEAN_PATH reported by lake env; the main fixture then compiled successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789058914690-19012-77929a72",
+     :commands
+     ["git show --format=fuller --stat 9440c4b5610462e69b4ea5f204a15151acfcaf88"
+      "git diff-tree --no-commit-id --name-status -r 9440c4b5610462e69b4ea5f204a15151acfcaf88"
+      "git diff --check 9440c4b5610462e69b4ea5f204a15151acfcaf88^ 9440c4b5610462e69b4ea5f204a15151acfcaf88"
+      "sha256sum /tmp/codex13-checkpoint50-complete-equator/SphereEquatorComplete.lean"
+      "inspect namespaces and imports of the main fixture and five supporting fixtures"
+      "compile SphereEquatorComplete.lean with the recorded private scratch LEAN_PATH"
+      "reproduce eight standard-only axiom audits"
+      "verify absence of all six required canonical ConstructionTargets modules"
+      "placeholder, forbidden-declaration, warning, and whitespace scans"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers from recorded commit"],
+     :finding
+     "PASS: commit 9440c4b5 is ledger-only and whitespace-clean. The main fixture reproduces SHA256 a96251b7fbde45e657dd169aedaf1702a5da8924aaf0047a228b374544a45373, has zero placeholders, and compiles all eight declarations with only propext, Classical.choice, and Quot.sound when the five private support modules are prepended to LEAN_PATH. The assembly explicitly transports source nullity across Borel-instance coherence, then through the append-zero sphere-image equality to ambient equator nullity, through the subtype coercion isometry to intrinsic nullity, and exposes the exact d=2/d=3 cap partitions; the orientation is correct and no normalization or measure-sum claim is made. Exact promotion cannot satisfy acceptance because the main fixture imports five unqualified private modules that are absent from ConstructionTargets and declares SphereEquatorComplete rather than ConstructionTargets.SphereEquatorHausdorffNullity. All six canonical targets are absent. The recorded STOP therefore correctly identifies a dependency and representation boundary. Both ledgers validate; no frozen consumer changed, so frozen statement hashes and placeholder recount are not applicable."},
     :changed-paths [],
     :fixture
     {:path
@@ -32140,7 +32157,7 @@
    :consumer-residual
    "Resolve the preserved addHaarScalarFactor normalization boundary, then combine the reviewed cap-area formulas with equator nullity and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereEquatorHausdorffNullity.lean"
     "ConstructionTargets/SphereEquatorHausdorffNullity.md"],
@@ -32209,7 +32226,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: sphere-equator nullity and renewed consumer eligibility",
