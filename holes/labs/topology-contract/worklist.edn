@@ -64567,8 +64567,71 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the actual chain inclusion square and its derived homology and normalization identities; no supplied commuting square.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Actual target-side chain inclusion square, arbitrary-degree homology square and dimension-m+2 normalization square compile. Source-side transport comparison and equality with CoefficientChartLocal.localIso remain; no consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:inclusion_square
+     "09383d9367d849cdda4377346a87080bb25aeba46a559542395dfc19a15ba665",
+     :homology_square
+     "6c7656dcdfd89ec4de2c78d2c4cf03a7bdb6311cc5c70ad9d21f0a82f0476f5d",
+     :zero_mem
+     "bdc1e043165f4154f27ca9fff4370ab45249e35d456c8387461c68f12b080dc3",
+     :normalization_square
+     "9af7da41e052f6fe009a0ff2da12e711338c9e13f418a97ab403ab61c0e9c279"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CoefficientDistinguishedTargetNormalization.lean ConstructionTargets/CoefficientDistinguishedChart.lean ConstructionTargets/CoefficientOverlapNormalization.lean",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.CoefficientDistinguishedChart 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "Python read-only canonical-source audit: zero placeholders and complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/CoefficientDistinguishedTargetNormalization.lean ConstructionTargets/CoefficientDistinguishedTargetNormalization.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientDistinguishedTargetNormalization.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Actual deleted-point relative chains and homology of the distinguished overlap translated target",
+     :target
+     "Actual deleted-point relative chains and homology of CoefficientChartLocal.pointedTarget with model inclusions",
+     :direction
+     "Equality from target-pair transport followed by distinguished model inclusion to overlap model inclusion, inducing homology and higher-dimensional normalization squares."},
+    :commit "52e867b4c5fcac554b40e23580b96972d85be785",
+    :changed-paths
+    ["ConstructionTargets/CoefficientDistinguishedTargetNormalization.lean"],
+    :fixture
+    {:path "/tmp/CoefficientDistinguishedTargetNormalization.lean",
+     :sha256
+     "90d7e12d5dc68a5094553787b0f3d46f68d8c428b7fdef1c5932745a160b7295"},
+    :dependencies
+    {"ConstructionTargets/CoefficientDistinguishedChart.lean"
+     "284908c57e17da0e422f6c3d54daf1cb03588d8dcf6597dfad7893b490da2957",
+     "ConstructionTargets/CoefficientOverlapNormalization.lean"
+     "9697585da59ffc70a8381b306297c6dbb027e0091ebb57d4219f725e707e525f"},
+    :axiom-audit-declarations 3},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientDistinguishedTargetNormalization.lean"],
    :dag-node
