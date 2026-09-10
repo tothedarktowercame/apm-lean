@@ -541,6 +541,14 @@ method surveys are recorded in
 - regular-preimage orientations and a generic geometric/homological
   comparison make the direct transverse route available.
 
+Owner directive (2026-09-10): `t00J02` is the demonstration consumer for the
+fundamental-class and regular-preimage programs, not a permanently deferred
+row.  Every strategic checkpoint in either topology loop assesses both routes,
+reports which of their interfaces are banked (with commits) and which are
+missing, and elects a `t00J02` closure probe first as soon as either route is
+available.  Until then, foundations that supply a missing interface of the
+nearer route rank ahead of otherwise equal foundations.
+
 The experimental geometric-chain route is preserved as research evidence.
 Its conditional incidence structures and genus-two-specific calculations are
 not substitutes for those missing generic interfaces.

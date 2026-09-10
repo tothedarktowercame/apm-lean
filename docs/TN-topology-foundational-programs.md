@@ -25,7 +25,11 @@ First milestones:
    the top-homology localization map is monic in the required setting.
 
 Do not begin with `t00J02`.  Initial consumers should be a sphere or Euclidean
-model pair, followed by a punctured-manifold calculation.
+model pair, followed by a punctured-manifold calculation.  This is an ordering
+rule, not a standing exclusion: `t00J02` is this program's demonstration
+consumer, and once the interfaces named in the DAG's "t00J02 disposition" are
+banked, strategic checkpoints elect a `t00J02` closure probe first (owner
+directive, 2026-09-10).
 
 ## Manifold Sard and regular preimages
 
