@@ -73249,6 +73249,19 @@
       "git diff-tree --no-commit-id --name-only -r 840a213cd308425e8cf751d46b2a64f489d55176",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789076687010-19570-399565bd",
+     :commands
+     ["lake env lean ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean"
+      "sha256sum /tmp/CoefficientCompactSupportRelativeShortComplex.lean ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean"
+      "python3 placeholder-and-four-declaration audit over ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean"
+      "git diff-tree --no-commit-id --name-only -r 840a213cd308425e8cf751d46b2a64f489d55176"
+      "git diff --exit-code 840a213cd308425e8cf751d46b2a64f489d55176 -- ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean"
+      "git show --check --oneline --stat 840a213cd308425e8cf751d46b2a64f489d55176"],
+     :finding
+     "PASS: independently reviewed recorded commit 840a213cd308425e8cf751d46b2a64f489d55176 authored by codex-6. Its sole changed path is the scoped module, byte-identical to fixture SHA256 bf8cbfb5d6de7d6a2a6b9796a002b197b2432248878dcfaefc83f8274e045b2d; dependency SHA256 is 72954abe1c76ae051d5f7e1269318801dde886e60235787ea172c82449edf349. Lean compiles without warnings using only propext, Classical.choice, and Quot.sound; placeholder count is zero; all four declaration hashes recompute exactly. The packaging preserves the reviewed representation and arrow orientation: ShortComplex.mk takes restrictPiecesChain from the union-support relative complex to the K/L biproduct as f, piecesToIntersection from that biproduct to the intersection-support relative complex as g, and the previously proved relative_arrows_zero as the f≫g=0 witness. The projection lemmas are definitional equalities and shortComplex_zero exposes only the structure's zero-composite field. No ShortComplex.ShortExact instance, connecting morphism, homology exactness, localization, vanishing, or fundamental-class conclusion is asserted."},
     :commit "840a213cd308425e8cf751d46b2a64f489d55176",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean"],
@@ -73260,7 +73273,7 @@
     :finding
     "The exact fixture and recorded relative-arrow-complex dependency hash reproduce. The literal arrows package into a ShortComplex and all four requested declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean"],
    :dag-node
@@ -73349,7 +73362,7 @@
      "Compiled exactly one sequence-construction prerequisite. The diagonal union-support restriction map and signed pieces-to-intersection-support map, whose composite was already proved zero, now form an actual ShortComplex in the category of coefficient chain complexes. Its fields reduce exactly to the literal quotient-pair arrows. This is the object needed by Mathlib's homology connecting construction, but no short-exactness instance is asserted. Establishing that instance still requires the open-cover small-chain comparison and cannot use supportConnecting or the refuted ordinary-excision hypotheses.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
