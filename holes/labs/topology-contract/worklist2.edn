@@ -37781,6 +37781,29 @@
      {:cmd
       "git cat-file -t d7ecc4b411b2f783f762da03ac598994100be9a1; git show --format=fuller --stat --oneline d7ecc4b411b2f783f762da03ac598994100be9a1; git diff --exit-code d7ecc4b411b2f783f762da03ac598994100be9a1 -- ConstructionTargets/ProductSimplexWordPrefixCounts.lean ConstructionTargets/ProductSimplexWordPrefixCounts.md ConstructionTargets/ProductSimplexBalancedWords.lean ConstructionTargets/ProductSimplexBalancedWords.md",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789071665523-19384-fe8d044f",
+     :commands
+     ["git show --stat --oneline d7ecc4b4"
+      "git show --name-status --format=fuller d7ecc4b4"
+      "git diff d7ecc4b4^ d7ecc4b4 -- scoped Lean sources"
+      "git show d7ecc4b4:ConstructionTargets/ProductSimplexWordPrefixCounts.lean | sha256sum"
+      "git show d7ecc4b4:ConstructionTargets/ProductSimplexBalancedWords.lean | sha256sum"
+      "git diff --exit-code d7ecc4b4 -- four scoped artifacts"
+      "lake env lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+      "lake env lean ConstructionTargets/ProductSimplexBalancedWords.lean"
+      "lake build ConstructionTargets.ProductSimplexWordPrefixCounts ConstructionTargets.ProductSimplexBalancedWords"
+      "reproduce four #print axioms audits"
+      "scan both Lean targets for placeholders and forbidden declarations"
+      "git diff-tree --no-commit-id --name-status -r d7ecc4b4"
+      "git diff --check d7ecc4b4^ d7ecc4b4"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "recompute frozen hashes and placeholder counts for t03J05 t96J06 t97A04"],
+     :finding
+     "PASS: exact four-file repair scope. Recorded source hashes e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187 and 4b9bf06c446c0ff52bbe1d92f9a5b6a0e7238e19725a426d96ffcd7575d1b023 reproduce, and current scoped artifacts are byte-identical to commit d7ecc4b4. wordPrefix_mono is proved within the owning module; horizontalCount_mono and verticalCount_mono correctly map i<=j to count(i)<=count(j). BalancedWord bounds specialize monotonicity at Fin.last and rewrite using horizontal_total and vertical_total in the correct directions. Both targets compile, the focused build passes with only known dependency warnings, and all four audits report only propext, Classical.choice and Quot.sound. No reconstruction, inverse, cancellation or cross-product claim crosses the boundary. Frozen hashes are unchanged and placeholders remain 1/2/4; no statement hashes were recorded for this repair."},
     :commit "d7ecc4b411b2f783f762da03ac598994100be9a1",
     :changed-paths
     ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
@@ -37807,7 +37830,7 @@
     "Fresh execution verified both canonical source hashes, compiled both Lean files, completed the two-target Lake build, confirmed commit d7ecc4b411b2f783f762da03ac598994100be9a1 exists with exactly the four scoped files, and confirmed the current scoped artifacts are byte-identical to that commit. The current branch HEAD is a later ledger-transition commit, c5d456b33b71c512f90a3072172fed3616e98132.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"
@@ -37863,7 +37886,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: product-simplex prefix monotonicity and renewed consumer eligibility",
