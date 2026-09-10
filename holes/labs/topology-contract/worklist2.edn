@@ -43015,6 +43015,25 @@
      {:cmd
       "git diff --check; git diff --exit-code; git status --short",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789079651596-19675-e7049a58",
+     :commands
+     ["git show --stat --oneline 04cda1c3"
+      "git show --format=fuller --no-ext-diff 04cda1c3 -- holes/labs/topology-contract/worklist2.edn"
+      "git archive 04cda1c3 | tar -x -C /tmp/topology-terminal-stop-review-oaj4y3"
+      "git diff-tree --no-commit-id --name-status -r 04cda1c3"
+      "git show --check --oneline 04cda1c3"
+      "sha256sum additive terminal-count fixture and canonical predecessor"
+      "lake env lean /tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean"
+      "inspect both terminal-count theorem orientations"
+      "scan fixture for placeholders and forbidden declarations"
+      "bb worklist_check.bb on both archived ledgers"
+      "run scratch ledger mismatch check against additive fixture"
+      "recompute t03J05 t96J06 t97A04 hashes and placeholder counts"],
+     :finding
+     "PASS: commit 04cda1c3f606a9a5fa758b8ecc8477e997a38b47 has exact ledger-only scope and clean whitespace. This is a valid evidence-only STOP: the placeholder-free additive fixture exists, compiles with only propext, Classical.choice, and Quot.sound, and reproduces SHA256 f2d795b7b39602eb881503a501bef7e30cf25773b4cea4c4bda245b6dbc430ac, while the canonical predecessor remains SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08. The fixture statements have the required orientation: horizontalCount at Fin.last n equals the cardinality of all true positions, and verticalCount at Fin.last n equals the cardinality of all false positions. Checkpoint67 still records the mutable canonical path with the predecessor hash; a scratch substitution to the additive fixture deterministically makes worklist validation exit 1 with that row’s fixture-hash mismatch. Both unchanged ledgers validate, and no source commit or balance/path claim is recorded. The residual correctly requires an immutable checkpoint67 artifact plus atomic fixture-path transition before promotion. No statement hashes apply to this STOP. Frozen hashes remain db4071c33fa3b5fb6af0d5d7955bf431400fe7d2c4f8dbc759941f4bf6611af4, 1d8874db11a786b11d04b5af4f0375fa439c05d5ac1bdafacd9943a89e238a71, and 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with placeholder counts 1/2/4."},
     :changed-paths [],
     :fixture
     {:path
@@ -43030,7 +43049,7 @@
     "The complete placeholder-free additive fixture compiles and proves both requested terminal-count characterizations with standard-only axioms. Promotion is currently incompatible with the mandatory ledger gate: completed row oriented-checkpoint67-product-simplex-prefix-successor-recurrences-promotion-1 records ConstructionTargets/ProductSimplexWordPrefixCounts.lean itself as fixture path with SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08. Replacing that source with the reviewed additive fixture deterministically makes worklist2 validation fail with checkpoint67 fixture hash mismatch. The canonical source was restored byte-for-byte, both live ledgers validate, and the worktree is clean. This is a ledger-evidence representation boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
@@ -43167,7 +43186,7 @@
      "Exactly one complete compiled prerequisite is supplied with current execution evidence. Proving that the banked adjacent transposition preserves a BalancedWord requires identifying terminal horizontalCount and verticalCount with filters over all word positions. The underlying prefix finset is private and no exported theorem currently gives those identities. The fixture adds exactly the two required equations in their defining module. Balanced-word packaging, path transport, deleted-face equality, shuffle signs and cancellation remain unproved.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: adjacent balanced-word corner swaps and common deleted faces",
