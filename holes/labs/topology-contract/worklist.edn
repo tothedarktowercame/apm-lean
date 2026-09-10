@@ -64782,9 +64782,73 @@
   {:consumer "t99J03",
    :stop-condition
    "GO requires constructed nested embedded triangles, strict containment and inner coverage. REVISE requires exactly one compiled geometric prerequisite; no finite chart-cover wrapper alone.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Controlled boundary perturbations preserving this coverage, finite intersections, graph subdivision, disk faces and realization remain subsequent. No triangulation or consumer closure is claimed.",
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {:strict_nesting
+      "d9ebc56abd1032df016e0329ef4399c901d64070d7e7608dd361ba75a550dac1",
+      :geometry
+      "d3a940f91df6fc45dbb6c3448517f28589c5dd7ad5e75a2c065b4061189a5ed3",
+      :exists_nested
+      "5c099e9da9434d5795a897f182b21f155332d96de5bd9ce48eed14b585bccaca",
+      :chart_geometry
+      "8df19bd824fb32672deff31fe6f77d1ef8f23194369b7dc19eb8780802b0495f",
+      :local_nested
+      "673d42e600cb709e4f0ff791874dc045b12989c092a7ceba31ee99aa9abbbe88",
+      :finite_nested
+      "a6bede893b79a647408b2b6e39a93e15748af6f9c3add09080814dfaa2d827d0"},
+     :acceptance
+     {:implementation
+      "Promote the exact fixture. Compile shrink, shrink_positive, scaled_shrink, strict_nesting, geometry, exists_nested, triangle, Good, chart_geometry, local_nested and finite_nested. Preserve the constructed concentric radii r and r/2, positivity, actual inverse-chart formulas, both closed embeddings and compact images, source containment, open interiors, strict nesting, original chart-target containment and finite inner coverage. Retain the weaker hypotheses: any compact Hausdorff space charted on a finite-dimensional real normed space of finrank two. Require zero placeholders, no warnings and standard-only axioms. Do not claim perturbations, finite intersections, compatible faces or triangulation.",
+      :commands
+      ["lake env lean ConstructionTargets/SurfaceNestedTriangleCover.lean"],
+      :axioms :standard-only,
+      :placeholder-before 0,
+      :placeholder-after 0},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean -o /tmp/surface45/ConstructionTargets/CompactSurfaceTriangleCover.olean ConstructionTargets/CompactSurfaceTriangleCover.lean",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/surface45:$LEAN_PATH lean /tmp/SurfaceNestedTriangleCover.lean'",
+       :exit 0}
+      {:cmd "python3 /tmp/surface-nested-triangle-cover-audit.py",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/NestedCoordinateTriangles.lean",
+       :exit 1,
+       :correction
+       "Removed a dsimp invocation that made no progress in the barycentric sum proof. The corrected construction compiles."}
+      {:cmd "lake env lean /tmp/SurfaceNestedTriangleCover.lean",
+       :exit 1,
+       :correction
+       "Compiled the missing banked CompactSurfaceTriangleCover object into a private temporary directory."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/surface45:$LEAN_PATH lean /tmp/SurfaceNestedTriangleCover.lean'",
+       :exit 1,
+       :correction
+       "Corrected conjunction projections for openness and center membership in the finite-subcover argument and removed an unnecessary simpa. Final compilation succeeds without warnings."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/SurfaceNestedTriangleCover.lean",
+      :sha256
+      "4546c0a86867dbe4f201ebd5fc9b718a291c61c34ba45f49566e69b469504309",
+      :placeholder-count 0},
+     :finding
+     "Compiled the complete finite nested triangle cover. Explicit barycentric averaging produces the half-scale inner triangle and proves its closed image lies in the outer positive-barycentric interior. Both triangles are transported through actual inverse charts with proved closed embeddings, compact images and open interiors. The outer triangle remains in the original chart target. Compactness selects finitely many inner interiors covering the unchanged manifold topology.",
+     :implementation
+     {:scope ["ConstructionTargets/SurfaceNestedTriangleCover.lean"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/SurfaceNestedTriangleCover.lean"],
    :dag-node "SURFACE TRIANGULATION / nested triangle coverage margin",
    :acceptance
    {:axioms :standard-only,
