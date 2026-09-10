@@ -16300,8 +16300,186 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md and docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd "bb /tmp/Checkpoint27Ledger.bb", :exit 0}
+     {:cmd "python3 /tmp/Checkpoint27Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint27Eligibility.bb", :exit 0}
+     {:cmd
+      "Inspect SingularExcision source/target simplicial squares, subspace identifications and production excision-map equation",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "sha256sum /tmp/Checkpoint27Census.json", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "No assumed excision isomorphism, subspace transport square or coefficient-change shortcut. Do not silently replace actual subtype chains by ambient ranges. Do not claim sphere suspension or consumer closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "EXCISION: coefficient-general actual-subspace transport and canonical relative map",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a Type 0 commutative ring R, a Type 0 topological space X, subsets A and Z, IsClosed Z and Z contained in interior A, construct actual coefficient-general excision in every degree. Reuse coefficient-independent excisionCover, excisedSubspace, bicartesian subcomplex geometry and simplicial source/target transport equations. Construct the R-linear source and target cokernel identifications, apply CoefficientPushoutRelative and CoefficientRelativeSmall, and prove the resulting composite equals the actual cokernel.map induced by the subtype inclusions. Prove the cokernel-projection equation in every chain degree, construct the all-degree homology isomorphism with its exact forward map and both inverse laws, and handle empty subspaces without connectedness assumptions. Compile integer and rational interval-subspace examples. Do not reuse integral chain or homology conclusions as R-linear facts. REVISE requires exactly one complete compiled missing subspace-transport prerequisite; STOP if independent unconstructed foundations remain.",
+       :consumer-equation
+       "The canonical actual R-valued relative excision map induces an isomorphism in every homology degree.",
+       :consumer-residual
+       "Coefficient-general sphere suspension, rational sphere H1/H2 and their required naturality and normalization remain before consumer uptake.",
+       :gates
+       ["GO requires a complete placeholder-free compiled fixture with actual-subspace transports, the canonical excision-map equality and all-degree homology isomorphism."
+        "Record fixture SHA256, oriented projection and inverse equations, integer/rational examples and standard-only audits."
+        "Recheck both ledgers; preserve original consumer refutations and claim no sphere computation or frozen closure."]},
+      :representation
+      {:source
+       "Homology of the actual ModuleCat R cokernel for the inclusion of excisedSubspace A Z into the subtype Z-complement.",
+       :target
+       "Homology of the actual ModuleCat R cokernel for the subtype inclusion A into X.",
+       :direction
+       "Construct an isomorphism from the relative homology of the excised pair to the relative homology of (X,A), whose forward morphism is exactly the homology map of the cokernel square induced by the two subtype inclusions."},
+      :id
+      :oriented-checkpoint27-coefficient-actual-subspace-excision-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint27-pushout-relative-and-consumer-refill
+       :oriented-checkpoint26-coefficient-simplicial-pushout-relative-1
+       :oriented-checkpoint25-coefficient-relative-small-comparison-1],
+      :current-residual
+      "The R-linear simplicial pushout relative isomorphism and all-degree relative small-chain comparison are reviewed. Their source and target must be transported to actual subspaces, and the composite must be proved equal to the canonical excision cokernel map.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: actual coefficient excision and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+      :id :oriented-checkpoint28-actual-excision-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint27-coefficient-actual-subspace-excision-1
+       :oriented-checkpoint27-pushout-relative-and-consumer-refill],
+      :current-residual
+      "Measure actual-subspace excision separately from consumer closure, and reassess all reviewed boundaries and concurrent outcomes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :measures
+    {:placeholder-delta 0,
+     :frozen-closures 0,
+     :corrected-closures 0,
+     :new-refutations 0,
+     :infrastructure-packets
+     {:portfolio 1,
+      :concurrent 1,
+      :modules-before 681,
+      :modules-after 683},
+     :typed-residual-change
+     "The actual ModuleCat R simplicial chain functor now preserves pushouts, and its oriented relative cokernel map is a constructed chain isomorphism. Actual-subspace transport and identification with the excision map remain. Concurrent derivative transport resolves product self-model derivative and regularity equations; literal incidence atlas and tangent comparison remain.",
+     :review-outcomes
+     [{:row
+       :oriented-checkpoint26-coefficient-simplicial-pushout-relative-1,
+       :outcome :pass,
+       :commit "16723870b8f8bac73a04e6a8b053641ec47d221b",
+       :review "invoke-1789011229999-17769-3e064538",
+       :axiom-audits 8,
+       :inherited-build-warnings 20}
+      {:row :product-self-model-recharting-probe-refill38,
+       :outcome :pass,
+       :commit "afa7b6005988aaee5651332d5765a77ee1734c71",
+       :review "invoke-1789010916237-17763-021c47c7"}]},
+    :ranking
+    ["Reserve the already elected connected-sum near-closure adapter and incidence construction."
+     "Elect actual coefficient-general excision: four named downstream consumers and reviewed algebraic and geometric inputs, with one explicit remaining map-identification assembly."
+     "Retain localization/cap/Thom, generic covering classification, surface classification, manifold integration and remaining general-model regular-preimage programs; their unresolved constructions are broader or reserved, and the new pushout result does not discharge their consumer boundaries."],
+    :near-consumer-boundaries
+    {:t00J02
+     "Actual fundamental-class detection and geometric producer; incidence work reserved.",
+     :t03J02
+     "Generic collar/NDR and van Kampen for the frozen embedded circle.",
+     :t92J06 "Actual graph covering construction.",
+     :t95J06 "Actual Hopf-surface torus homeomorphism.",
+     :t97A01 "Literal polygon invariants.",
+     :t94A06 "General-model and finite-dimensional smooth hypotheses.",
+     :a97J08 "Planar separation.",
+     :t01A05
+     "Actual covering fundamental-class degree equation; connected repair remains unproved.",
+     :t96J06
+     "Actual compact-manifold nonbounding and fundamental-class comparison.",
+     :t00A03
+     "Literal pants-component homeomorphisms and cutting count.",
+     :t01J04 "Analytic boundary-preimage atlas and countability.",
+     :t03J05 "Literal curves, intersection and ambient nonhomotopy.",
+     :t94J09
+     "Literal fourteen-edge polygon homeomorphism and homology.",
+     :t03J04 "Actual torus Euler calculation.",
+     :t95J05
+     "Numerical diameter-power Hausdorff mass; no proved normalization comparison or refutation.",
+     :t00J01
+     "Original refutations preserved; rational sphere normalization remains downstream of excision and suspension.",
+     :t99J03 "Literal polygon classification.",
+     :t01A08
+     "General ModelWithCorners projected regular-preimage construction.",
+     :t00A01
+     "Actual-cover free-product bridge; reserved concurrent adapter.",
+     :t98A02 "Localization and gluing.",
+     :t02A05 "Literal flux and intrinsic measure comparison.",
+     :t96J05
+     "Attained regular radius and analytic literal-level atlas; original circle refutation preserved.",
+     :t98A01 "Genus invariance and Euler multiplicativity.",
+     :t02A08 "Signed all-integer degree realization.",
+     :t94J08
+     "Signed antipodal naturality and reduced degree-zero normalization."},
+    :finding
+    "No newly eligible unassigned near-closure adapter was found. The connected-sum adapter is already open in the other ledger and must not be duplicated. All named consumer counts are unchanged; the two added modules are infrastructure. Preserve the historical original refutations and the earlier corrected t96J07 closure separately. The new excision election follows discharged coefficient-general subdivision, small-chain comparison, relative comparison and pushout boundaries; it does not retry the original unresolved excision probe on unchanged evidence.",
+    :reserved-concurrent
+    [:t00a01-frozen-connected-sum-closure-probe-refill39
+     :transverse-vector-incidence-atlas-tangent-probe-refill39],
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint27Census.json",
+     :open 35,
+     :baseline "fa7cde09f171040201f9da44d4af6fc3999c7bf1",
+     :existing 58,
+     :placeholder-after 66,
+     :zero-placeholder 23,
+     :placeholder-before 66,
+     :head "989d88a8dda2c5c5b2c9815e4335922573ac887d",
+     :sha256
+     "445aa85b39740341e0ab45e3c4df90692945f88a190bfe4064dc383938dd08fe",
+     :named 59,
+     :missing [:t93A05],
+     :within-two 25}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: relative pushout construction and consumer eligibility",
@@ -16317,6 +16495,73 @@
     :oriented-checkpoint26-relative-comparison-and-consumer-refill],
    :current-residual
    "Measure the relative pushout construction separately from consumer closure and reassess all reviewed boundaries and concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No assumed excision isomorphism, subspace transport square or coefficient-change shortcut. Do not silently replace actual subtype chains by ambient ranges. Do not claim sphere suspension or consumer closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "EXCISION: coefficient-general actual-subspace transport and canonical relative map",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a Type 0 commutative ring R, a Type 0 topological space X, subsets A and Z, IsClosed Z and Z contained in interior A, construct actual coefficient-general excision in every degree. Reuse coefficient-independent excisionCover, excisedSubspace, bicartesian subcomplex geometry and simplicial source/target transport equations. Construct the R-linear source and target cokernel identifications, apply CoefficientPushoutRelative and CoefficientRelativeSmall, and prove the resulting composite equals the actual cokernel.map induced by the subtype inclusions. Prove the cokernel-projection equation in every chain degree, construct the all-degree homology isomorphism with its exact forward map and both inverse laws, and handle empty subspaces without connectedness assumptions. Compile integer and rational interval-subspace examples. Do not reuse integral chain or homology conclusions as R-linear facts. REVISE requires exactly one complete compiled missing subspace-transport prerequisite; STOP if independent unconstructed foundations remain.",
+    :consumer-equation
+    "The canonical actual R-valued relative excision map induces an isomorphism in every homology degree.",
+    :consumer-residual
+    "Coefficient-general sphere suspension, rational sphere H1/H2 and their required naturality and normalization remain before consumer uptake.",
+    :gates
+    ["GO requires a complete placeholder-free compiled fixture with actual-subspace transports, the canonical excision-map equality and all-degree homology isomorphism."
+     "Record fixture SHA256, oriented projection and inverse equations, integer/rational examples and standard-only audits."
+     "Recheck both ledgers; preserve original consumer refutations and claim no sphere computation or frozen closure."]},
+   :representation
+   {:source
+    "Homology of the actual ModuleCat R cokernel for the inclusion of excisedSubspace A Z into the subtype Z-complement.",
+    :target
+    "Homology of the actual ModuleCat R cokernel for the subtype inclusion A into X.",
+    :direction
+    "Construct an isomorphism from the relative homology of the excised pair to the relative homology of (X,A), whose forward morphism is exactly the homology map of the cokernel square induced by the two subtype inclusions."},
+   :id :oriented-checkpoint27-coefficient-actual-subspace-excision-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint27-pushout-relative-and-consumer-refill
+    :oriented-checkpoint26-coefficient-simplicial-pushout-relative-1
+    :oriented-checkpoint25-coefficient-relative-small-comparison-1
+    :oriented-checkpoint27-pushout-relative-and-consumer-refill],
+   :current-residual
+   "The R-linear simplicial pushout relative isomorphism and all-degree relative small-chain comparison are reviewed. Their source and target must be transported to actual subspaces, and the composite must be proved equal to the canonical excision cokernel map.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: actual coefficient excision and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint28-actual-excision-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint27-coefficient-actual-subspace-excision-1
+    :oriented-checkpoint27-pushout-relative-and-consumer-refill
+    :oriented-checkpoint27-pushout-relative-and-consumer-refill],
+   :current-residual
+   "Measure actual-subspace excision separately from consumer closure, and reassess all reviewed boundaries and concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
