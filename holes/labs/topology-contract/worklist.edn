@@ -56186,8 +56186,58 @@
   {:consumer "t96J05",
    :stop-condition
    "Require exact fixture preservation, standard-only compilation and an unchanged frozen Main. Documentation is neither consumer closure nor a specification repair.",
+   :evidence
+   {:consumer
+    {:id "t96J05",
+     :sha256
+     "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48",
+     :placeholder-before 1,
+     :placeholder-after 1},
+    :placeholder-delta 0,
+    :residual
+    "An explicit specification decision must address attained regular levels or permitted empty levels. No repair, consumer closure or campaign termination is claimed. Banked fiber geometry and other consumers' outstanding obligations remain separate.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:counterexample-signature-after-name
+     "58be35cf788f159da55b59e58c4938117881d04d8275c210fe983be202051545"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "Python fixture/frozen hash, identical definition-prefix and placeholder audit",
+      :exit 0}
+     {:cmd
+      "lake env lean holes/labs/topology-contract/evidence/t96j05-radial-level/Counterexample.lean",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/T96J05Counterexample.lean holes/labs/topology-contract/evidence/t96j05-radial-level/Counterexample.lean",
+      :exit 0}
+     {:cmd "sha256sum problems/t96J05/lean/Main.lean", :exit 0}
+     {:cmd "git diff --exit-code -- problems", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history [],
+    :commit "f30f6ef14a31b9e4bd34ac54963a45d4bf530b82",
+    :changed-paths
+    ["holes/labs/topology-contract/evidence/t96j05-radial-level/Counterexample.lean"
+     "holes/labs/topology-contract/evidence/t96j05-radial-level/BOUNDARY.md"
+     "TOPOLOGY-DEPENDENCY-DAG.md"
+     "docs/TN-topology-closure-experiments.md"],
+    :fixture
+    {:path
+     "holes/labs/topology-contract/evidence/t96j05-radial-level/Counterexample.lean",
+     :sha256
+     "5b874708cbb48d5809086f47de315a08d98c5d89e55f66d3f40582dedd47bcf8",
+     :placeholder-count 0},
+    :finding
+    "Preserved exact reviewed counterexample; compilation is warning-free and standard-only. Documented independent PASS and classified the current boundary as local SPEC-DEFECT. Frozen Main and older evidence remain unchanged. Worktree clean; validator reports 432 items OK."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["holes/labs/topology-contract/evidence/t96j05-radial-level/Counterexample.lean"
     "holes/labs/topology-contract/evidence/t96j05-radial-level/BOUNDARY.md"
