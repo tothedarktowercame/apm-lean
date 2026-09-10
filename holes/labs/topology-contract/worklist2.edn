@@ -43198,8 +43198,296 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      :exit 0}
+     {:cmd
+      "Recount every DAG-named frozen consumer with comments stripped and inspect current open, blocked, superseded and reviewed rows",
+      :exit 0}
+     {:cmd
+      "Inspect the reviewed terminal-count STOP, checkpoint67 recurrence-promotion fixture evidence, prior immutable-artifact transitions and atomic supervisor transition support",
+      :exit 0}
+     {:cmd
+      "Compare 043c24a0..646596a7 and attribute ConstructionTargets and frozen-problem changes",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :measures
+    {:baseline
+     {:commit "043c24a0",
+      :description "Pre-checkpoint69 strategy head"},
+     :proved-refutations 0,
+     :frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :head
+     {:commit "646596a7",
+      :description "Pre-checkpoint70 strategy head"},
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:before 863,
+      :after 867,
+      :portfolio
+      ["ConstructionTargets/ProductSimplexAdjacentWordSwap.lean"],
+      :concurrent
+      ["ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean"
+       "ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"
+       "ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean"]},
+     :corrected-closures 0,
+     :review-outcomes
+     {:product-simplex-adjacent-word-swap
+      {:outcome :pass, :disposition :banked},
+      :product-simplex-terminal-word-counts
+      {:outcome :stop,
+       :review :pass,
+       :reason :completed-checkpoint67-pins-mutable-canonical-fixture},
+      :product-simplex-adjacent-corner-swap
+      {:outcome :stop,
+       :reason
+       :reviewed-terminal-count-prerequisite-blocked-by-checkpoint67-canonical-fixture-pin},
+      :balanced-word-reconstructed-path-inverse-laws
+      {:outcome :pass, :disposition :banked, :commit "04409127"},
+      :bounded-oriented-face-cancellation
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-balanced-step-word-maximal-path-equivalence,
+       :disposition
+       :inverse-law-boundary-resolved-corner-boundary-open},
+      :singular-cross-product
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-signed-product-simplex-shuffle-triangulation},
+      :finite-cover-rational-euler
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-finite-type-chain-level-covering-comparison},
+      :raw-hausdorff-normalization
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-addHaarScalarFactor-characterization}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholders 61}},
+    :finding
+    {:typed-residual-change
+     "The generic adjacent Boolean-word transposition is banked, but the compiled terminal-count interface cannot be promoted because completed checkpoint67 pins ProductSimplexWordPrefixCounts at the mutable canonical path with predecessor SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08. The additive fixture SHA256 f2d795b7b39602eb881503a501bef7e30cf25773b4cea4c4bda245b6dbc430ac compiles, and its reviewed implementation STOP proves direct promotion breaks ledger validation. The exact next route step is therefore an immutable checkpoint67 predecessor artifact plus the already banked atomic fixture-path transition. No near-closure adapter has a complete route and no frozen placeholder changed.",
+     :routes
+     [{:consumer :a97J08,
+       :placeholders 1,
+       :route
+       "local degree and orientation -> consumer comparison -> adapter"}
+      {:consumer :t00A03,
+       :placeholders 2,
+       :route
+       "translations -> endpoint perturbation -> compatible faces -> triangulation"}
+      {:consumer :t00J01,
+       :placeholders 1,
+       :route
+       "circle fold -> Klein geometry -> homology bridge -> adapter"}
+      {:consumer :t00J02,
+       :placeholders 1,
+       :route
+       "relative Mayer-Vietoris -> excision -> localization and fundamental class"}
+      {:consumer :t01A02,
+       :placeholders 3,
+       :route "H2 degree -> Lefschetz -> conjunction"}
+      {:consumer :t01A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> cap/Thom comparison -> calculations"}
+      {:consumer :t01A05,
+       :placeholders 1,
+       :route
+       "compact-support Mayer-Vietoris -> localization -> adapter"}
+      {:consumer :t01A08,
+       :placeholders 1,
+       :route "regularity conversion -> Sard -> adapter"}
+      {:consumer :t01J01,
+       :placeholders 3,
+       :route
+       "translations -> endpoint control -> triangulation -> theorem"}
+      {:consumer :t01J04,
+       :placeholders 1,
+       :route
+       "regular preimage -> countability and atlas applicability -> theorem"}
+      {:consumer :t01J06,
+       :placeholders 3,
+       :route
+       "sphere moments -> normalization -> Stokes -> conjunction"}
+      {:consumer :t02A05,
+       :placeholders 2,
+       :route "S2 flux -> normalization -> integral and minimum"}
+      {:consumer :t02A07,
+       :placeholders 3,
+       :route
+       "compact-support Mayer-Vietoris -> localization -> fundamental class"}
+      {:consumer :t02A08,
+       :placeholders 1,
+       :route "local comparison -> normalization -> theorem"}
+      {:consumer :t03J02,
+       :placeholders 2,
+       :route
+       "null winding -> collar or Schoenflies -> gluing -> theorem"}
+      {:consumer :t03J04,
+       :placeholders 1,
+       :route
+       "torus homology -> finite-cover Euler comparison -> theorem"}
+      {:consumer :t03J05,
+       :placeholders 1,
+       :route
+       "banked word/path equivalence and generic swap -> checkpoint67 immutable evidence transition -> terminal-count promotion -> balanced path swap -> common deleted face -> oriented cancellation -> cross product -> intersection and nonhomotopy -> theorem"}
+      {:consumer :t91J05,
+       :placeholders 3,
+       :route
+       "translations -> endpoint control -> compatible faces -> result"}
+      {:consumer :t92J05,
+       :placeholders 3,
+       :route
+       "antipodal and genus-two bridges -> classification -> assembly"}
+      {:consumer :t92J06,
+       :placeholders 1,
+       :route "covering data -> quotient adapter -> theorem"}
+      {:consumer :t94A06,
+       :placeholders 1,
+       :route
+       "regular preimage and translation -> applicability -> adapter"}
+      {:consumer :t94A10,
+       :placeholders 3,
+       :route "S2 moments -> normalization -> nonexactness"}
+      {:consumer :t94J09,
+       :placeholders 1,
+       :route
+       "translations -> endpoint perturbation -> intersection adapter"}
+      {:consumer :t95J05,
+       :placeholders 1,
+       :route "S3 moment -> mass normalization -> integral uptake"}
+      {:consumer :t95J06,
+       :placeholders 2,
+       :route "torus quotient -> classification -> result"}
+      {:consumer :t96J06,
+       :placeholders 2,
+       :route
+       "fundamental class and banked word/path equivalence -> checkpoint67 immutable evidence transition -> terminal counts -> adjacent corner comparison -> oriented product comparison -> adapters"}
+      {:consumer :t97A01,
+       :placeholders 1,
+       :route
+       "cover transfer -> finite-cover Euler comparison -> theorem"}
+      {:consumer :t97A04,
+       :placeholders 4,
+       :route
+       "fundamental class and banked word/path equivalence -> checkpoint67 immutable evidence transition -> terminal counts -> adjacent corner comparison -> cross product -> Eilenberg-Zilber -> Kunneth -> intersections"}
+      {:consumer :t97J05,
+       :placeholders 5,
+       :route
+       "compact-support Mayer-Vietoris -> localization -> fundamental class -> assembly"}
+      {:consumer :t98A01,
+       :placeholders 1,
+       :route
+       "five-torsion -> polygon genus -> Euler comparison -> conjunction"}
+      {:consumer :t98A02,
+       :placeholders 1,
+       :route
+       "relative Mayer-Vietoris -> excision -> localization monicity -> fundamental class"}
+      {:consumer :t99J03,
+       :placeholders 1,
+       :route
+       "endpoint perturbation -> coverage -> compatible faces -> triangulation"}],
+     :deferred
+     ["Do not retry terminal-count promotion before checkpoint67 fixture evidence points to an immutable predecessor artifact."
+      "Do not resume balanced path swaps, deleted-face comparison or oriented cancellation before terminal counts are banked."
+      "Reviewed Euler and Hausdorff STOPs remain preserved; concurrent coefficient work is excluded."]},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Construct only the immutable predecessor artifact and explicit byte-preserving fixture-path transition for completed checkpoint67 recurrence promotion. Preserve its source bytes, fixture hash, declarations, statement hashes, evidence commit and PASS review. Do not weaken validation, alter topology declarations, promote terminal counts, define balanced swaps, compare faces, prove cancellation or claim consumer closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "LEDGER REPRESENTATION: immutable checkpoint67 recurrence artifact transition",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use completed row oriented-checkpoint67-product-simplex-prefix-successor-recurrences-promotion-1, its recorded ProductSimplexWordPrefixCounts fixture SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08, its evidence commit and the banked atomic supervisor fixture-path transition.",
+       :route-step
+       "Supplies the immutable checkpoint67 evidence transition required before terminal-count promotion on the t03J05, t96J06 and t97A04 routes.",
+       :probe
+       "Recover checkpoint67's exact predecessor bytes from its evidence commit, create a stable immutable repository artifact, and construct a scratch receipt transition changing only that completed row's evidence.fixture.path. Verify the artifact hash, preserved declarations and statement hashes, evidence commit and PASS review; verify both ledgers accept the transitioned evidence; verify altered, missing or wrongly hashed artifacts are rejected; and verify the additive terminal-count fixture can then occupy the canonical path independently. GO requires a complete tested artifact and transition fixture. REVISE requires exactly one complete tested artifact-storage or transition prerequisite. STOP names an exact invariant conflict.",
+       :consumer-equation
+       "Checkpoint67's reviewed recurrence source remains independently verifiable at an immutable artifact path, while the mutable canonical path is released for the separately reviewed terminal-count extension.",
+       :consumer-residual
+       "Apply the transition, promote the compiled terminal-count extension, then prove adjacent-swap balance preservation, balanced and path involutivity, and the common deleted face.",
+       :gates
+       ["Recover checkpoint67 predecessor bytes from its recorded evidence commit."
+        "Verify the immutable artifact SHA256 is exactly 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08."
+        "Preserve checkpoint67 declarations, statement hashes, evidence commit and PASS review."
+        "Use the banked atomic supervisor transition to change only evidence.fixture.path."
+        "Reject altered, missing and wrongly hashed artifacts or mismatched preserved evidence."
+        "Verify both transitioned ledgers and independent validation of the additive terminal-count fixture at the canonical path."
+        "Run focused transition tests, both ledger checks and whitespace checks."
+        "Confirm no hash invariant is weakened and no topology theorem or closure is claimed."]},
+      :representation
+      {:source
+       "Completed checkpoint67 evidence for the reviewed ProductSimplexWordPrefixCounts recurrence source at the mutable canonical path",
+       :target
+       "A stable immutable repository artifact containing exactly those checkpoint67 bytes with its completed-row fixture path atomically transitioned",
+       :direction
+       "Exact byte-preserving relocation from the source mutable canonical fixture representation to the target immutable-artifact representation, preserving every hash, declaration, evidence commit and review field except the validated fixture path."},
+      :id
+      :oriented-checkpoint70-immutable-checkpoint67-recurrence-artifact-transition-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint70-product-simplex-adjacent-corners-and-consumer-refill-1],
+      :current-residual
+      "The terminal-count extension compiles, but checkpoint67 pins the predecessor bytes at the mutable canonical path and must be transitioned to immutable evidence before promotion.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: immutable checkpoint67 recurrence evidence and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint71-immutable-checkpoint67-evidence-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint70-immutable-checkpoint67-recurrence-artifact-transition-1],
+      :current-residual
+      "Measure the checkpoint67 immutable evidence transition separately from terminal-count promotion, balanced corner construction, oriented cancellation, cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: product-simplex adjacent-corner swaps and renewed consumer eligibility",
@@ -43216,6 +43504,81 @@
     :oriented-checkpoint69-product-simplex-word-path-inverses-and-consumer-refill-1],
    :current-residual
    "Measure adjacent-corner construction separately from shuffle signs, oriented cancellation, cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the immutable predecessor artifact and explicit byte-preserving fixture-path transition for completed checkpoint67 recurrence promotion. Preserve its source bytes, fixture hash, declarations, statement hashes, evidence commit and PASS review. Do not weaken validation, alter topology declarations, promote terminal counts, define balanced swaps, compare faces, prove cancellation or claim consumer closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "LEDGER REPRESENTATION: immutable checkpoint67 recurrence artifact transition",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use completed row oriented-checkpoint67-product-simplex-prefix-successor-recurrences-promotion-1, its recorded ProductSimplexWordPrefixCounts fixture SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08, its evidence commit and the banked atomic supervisor fixture-path transition.",
+    :route-step
+    "Supplies the immutable checkpoint67 evidence transition required before terminal-count promotion on the t03J05, t96J06 and t97A04 routes.",
+    :probe
+    "Recover checkpoint67's exact predecessor bytes from its evidence commit, create a stable immutable repository artifact, and construct a scratch receipt transition changing only that completed row's evidence.fixture.path. Verify the artifact hash, preserved declarations and statement hashes, evidence commit and PASS review; verify both ledgers accept the transitioned evidence; verify altered, missing or wrongly hashed artifacts are rejected; and verify the additive terminal-count fixture can then occupy the canonical path independently. GO requires a complete tested artifact and transition fixture. REVISE requires exactly one complete tested artifact-storage or transition prerequisite. STOP names an exact invariant conflict.",
+    :consumer-equation
+    "Checkpoint67's reviewed recurrence source remains independently verifiable at an immutable artifact path, while the mutable canonical path is released for the separately reviewed terminal-count extension.",
+    :consumer-residual
+    "Apply the transition, promote the compiled terminal-count extension, then prove adjacent-swap balance preservation, balanced and path involutivity, and the common deleted face.",
+    :gates
+    ["Recover checkpoint67 predecessor bytes from its recorded evidence commit."
+     "Verify the immutable artifact SHA256 is exactly 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08."
+     "Preserve checkpoint67 declarations, statement hashes, evidence commit and PASS review."
+     "Use the banked atomic supervisor transition to change only evidence.fixture.path."
+     "Reject altered, missing and wrongly hashed artifacts or mismatched preserved evidence."
+     "Verify both transitioned ledgers and independent validation of the additive terminal-count fixture at the canonical path."
+     "Run focused transition tests, both ledger checks and whitespace checks."
+     "Confirm no hash invariant is weakened and no topology theorem or closure is claimed."]},
+   :representation
+   {:source
+    "Completed checkpoint67 evidence for the reviewed ProductSimplexWordPrefixCounts recurrence source at the mutable canonical path",
+    :target
+    "A stable immutable repository artifact containing exactly those checkpoint67 bytes with its completed-row fixture path atomically transitioned",
+    :direction
+    "Exact byte-preserving relocation from the source mutable canonical fixture representation to the target immutable-artifact representation, preserving every hash, declaration, evidence commit and review field except the validated fixture path."},
+   :id
+   :oriented-checkpoint70-immutable-checkpoint67-recurrence-artifact-transition-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint70-product-simplex-adjacent-corners-and-consumer-refill-1
+    :oriented-checkpoint70-product-simplex-adjacent-corners-and-consumer-refill-1],
+   :current-residual
+   "The terminal-count extension compiles, but checkpoint67 pins the predecessor bytes at the mutable canonical path and must be transitioned to immutable evidence before promotion.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: immutable checkpoint67 recurrence evidence and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint71-immutable-checkpoint67-evidence-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint70-immutable-checkpoint67-recurrence-artifact-transition-1
+    :oriented-checkpoint70-product-simplex-adjacent-corners-and-consumer-refill-1],
+   :current-residual
+   "Measure the checkpoint67 immutable evidence transition separately from terminal-count promotion, balanced corner construction, oriented cancellation, cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
