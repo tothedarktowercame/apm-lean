@@ -68278,6 +68278,42 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the actual coefficient chain and homology comparison from the infimum range term to the literal intersection subtype, with its forward map formula; no supplied equality or homology equivalence.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientIntersectionRangeComparison.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / coefficient intersection-range comparison",
+   :acceptance
+   {:fixture "/tmp/CoefficientIntersectionRangeComparison.lean",
+    :fixture-sha256
+    "9280858720ad2cc52aeccd1a69f8e3135498d729e2053b77bdc5c9aeb0e7973f",
+    :implementation
+    "Promote the exact fixture. Compile intersectionChainsIso, intersectionHomologyIso, infimumToIntersectionHomologyIso and infimumToIntersectionHomologyIso_hom. This supplies the literal-intersection representation step on the compact-support placeholder route. Preserve arbitrary topological X, arbitrary subsets A and B, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim inclusion compatibility, Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientIntersectionRangeComparison.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "Coefficient chains and homology of the infimum of two ambient subspace-range subcomplexes, which is the intersection term of the instantiated Mayer-Vietoris sequence",
+    :target
+    "Coefficient chains and homology of the literal topological intersection subtype",
+    :direction
+    "Apply the inverse of the canonical intersection-range isomorphism followed by the forward ambient-range-to-subtype isomorphism, obtaining an exact forward comparison from the Mayer-Vietoris infimum term to the actual intersection subtype."},
+   :id
+   :coefficient-intersection-range-comparison-implementation-refill49,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-ambient-subspace-range-naturality-implementation-refill49
+    :coefficient-compact-complement-cover-sequence-implementation-refill49],
+   :current-residual
+   "Prove compatibility of the intersection comparison with both piece inclusions, construct the biproduct comparison for the two pieces and the union comparison for the ambient term, then conjugate exactness and apply coefficient excision to the four requested pairs in X.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
    :evidence
    {:probe
@@ -68287,64 +68323,71 @@
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the coefficient chain and homology naturality squares for every actual subtype inclusion; no supplied commuting square.",
+      "Require the actual coefficient chain and homology comparison from the infimum range term to the literal intersection subtype, with its forward map formula; no supplied equality or homology equivalence.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean"],
+      ["ConstructionTargets/CoefficientIntersectionRangeComparison.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / coefficient ambient-range naturality",
+      "MANIFOLD FUNDAMENTAL CLASS / coefficient intersection-range comparison",
       :acceptance
-      {:fixture "/tmp/CoefficientAmbientSubspaceRangeNaturality.lean",
+      {:fixture "/tmp/CoefficientIntersectionRangeComparison.lean",
        :fixture-sha256
-       "a7f7ae638a11bc10b5c21c19310db71b922862e1aaf86708f0593869995cf66b",
+       "9280858720ad2cc52aeccd1a69f8e3135498d729e2053b77bdc5c9aeb0e7973f",
        :implementation
-       "Promote the exact fixture. Compile chain_square and homology_square. This supplies the actual-inclusion naturality route step required by the compact-support placeholder. Preserve arbitrary topological X, arbitrary inclusions A subset B, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile intersectionChainsIso, intersectionHomologyIso, infimumToIntersectionHomologyIso and infimumToIntersectionHomologyIso_hom. This supplies the literal-intersection representation step on the compact-support placeholder route. Preserve arbitrary topological X, arbitrary subsets A and B, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim inclusion compatibility, Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean"],
+       ["lake env lean ConstructionTargets/CoefficientIntersectionRangeComparison.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "The coefficient chain and homology maps obtained by first identifying an ambient range subcomplex with its actual subtype and then applying an actual subtype inclusion",
+       "Coefficient chains and homology of the infimum of two ambient subspace-range subcomplexes, which is the intersection term of the instantiated Mayer-Vietoris sequence",
        :target
-       "The coefficient chain and homology maps obtained by first applying the ambient range inclusion and then identifying the target range with its actual subtype",
+       "Coefficient chains and homology of the literal topological intersection subtype",
        :direction
-       "Prove exact equality from the range-to-subtype forward composite to the ambient-range-inclusion composite, first on coefficient chains and then on homology in every natural degree."},
+       "Apply the inverse of the canonical intersection-range isomorphism followed by the forward ambient-range-to-subtype isomorphism, obtaining an exact forward comparison from the Mayer-Vietoris infimum term to the actual intersection subtype."},
       :id
-      :coefficient-ambient-subspace-range-naturality-implementation-refill49,
+      :coefficient-intersection-range-comparison-implementation-refill49,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-ambient-subspace-range-comparison-implementation-refill49],
+      [:coefficient-ambient-subspace-range-naturality-implementation-refill49
+       :coefficient-compact-complement-cover-sequence-implementation-refill49],
       :current-residual
-      "Instantiate these naturality squares for the compact-complement intersection, left, right and union arrows; conjugate the signed sequence through the resulting range homology isomorphisms, then transport its relative terms to the four requested pairs in X by coefficient excision.",
+      "Prove compatibility of the intersection comparison with both piece inclusions, construct the biproduct comparison for the two pieces and the union comparison for the ambient term, then conjugate exactness and apply coefficient excision to the four requested pairs in X.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientAmbientSubspaceRangeComparison >/tmp/coefficient-range-build.log",
+       "lake build ConstructionTargets.CoefficientAmbientSubspaceRangeNaturality >/tmp/coefficient-range-naturality-build.log",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientAmbientSubspaceRangeNaturality.lean",
+       "lake env lean /tmp/CoefficientIntersectionRangeComparison.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientAmbientSubspaceRangeNaturality.lean ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean",
+       "sha256sum /tmp/CoefficientIntersectionRangeComparison.lean ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean",
        :exit 0}
       {:cmd
-       "python3 placeholder-and-declaration audit over /tmp/CoefficientAmbientSubspaceRangeNaturality.lean",
+       "python3 placeholder-and-declaration audit over /tmp/CoefficientIntersectionRangeComparison.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/CoefficientIntersectionRangeComparison.lean",
+       :exit 1,
+       :correction
+       "The newly promoted coefficient range-naturality dependency lacked its canonical object file. Built that unchanged dependency, then the fixture compiled successfully."}],
      :fixture
-     {:path "/tmp/CoefficientAmbientSubspaceRangeNaturality.lean",
+     {:path "/tmp/CoefficientIntersectionRangeComparison.lean",
       :sha256
-      "a7f7ae638a11bc10b5c21c19310db71b922862e1aaf86708f0593869995cf66b",
+      "9280858720ad2cc52aeccd1a69f8e3135498d729e2053b77bdc5c9aeb0e7973f",
       :placeholder-count 0},
      :finding
-     "Compiled the coefficient-general naturality prerequisite for the ambient-range comparison. For every actual inclusion A subset B, the forward coefficient chain comparison followed by the subtype inclusion equals the ambient-range inclusion followed by the target comparison; applying homology proves the same square in every natural degree. This supplies the exact arrow compatibility required to conjugate the compact-complement Mayer-Vietoris sequence.",
+     "Compiled the coefficient intersection-range comparison needed for the first compact-complement Mayer-Vietoris term. Coefficient chains and homology of the infimum of the two ambient range subcomplexes are identified with coefficient chains and homology of the literal topological intersection subtype. The forward infimum-to-intersection homology isomorphism and its exact composite formula compile in every natural degree.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -68365,7 +68408,8 @@
     :coefficient-compact-complement-homology-square-bundle-implementation-refill49
     :coefficient-compact-complement-cover-sequence-implementation-refill49
     :coefficient-ambient-subspace-range-comparison-implementation-refill49
-    :coefficient-ambient-subspace-range-naturality-implementation-refill49],
+    :coefficient-ambient-subspace-range-naturality-implementation-refill49
+    :coefficient-intersection-range-comparison-implementation-refill49],
    :current-residual
    "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
