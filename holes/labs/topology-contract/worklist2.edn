@@ -12207,81 +12207,92 @@
    :stop-condition
    "Construct the actual barycentric recursion and prove its affine-change equation. No supplied subdivision operator, assumed naturality, singular chain endomorphism or homology isomorphism.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Assemble singular differential compatibility, naturality, degree-zero identity and the complete singular subdivision packet. Homotopy, smallness, positive-degree comparison, excision and rational sphere H1/H2 remain downstream.",
-     :axiom-audits 8,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture and document the bounded result and downstream residual.",
-      :namespace
-      "ConstructionTargets.CoefficientBarycentricNaturality",
-      :declarations
-      ["vertexSubdivision"
-       "vertexGenerator_vertexSubdivision_zero"
-       "vertexGenerator_vertexSubdivision_succ"
-       "vertexSubdivision_comm_d"
-       "vertexMapDegree_cone"
-       "vertexSubdivision_natural"
-       "vertexSubdivision_affine_natural"
-       "singularPostcomposition_comp"
-       "subdividedFace_transport"
-       "degree"
-       "generator_degree"
-       "actual_subdivided_face"
-       "integral_edge_face"
-       "rational_edge_face"],
-      :hypotheses
-      "R and all spaces and vertex index types are Type 0. R is a commutative ring. Standard-simplex index types have Fintype. General vertex naturality requires the explicitly stated barycenter-preservation equation, proved for affine simplex maps. Singular postcomposition requires continuous maps.",
-      :consumer-equation
-      "Subdivision followed by the actual induced vertex map equals the vertex map followed by subdivision for affine simplex maps. After realization, the subdivided face equals the actual singular face generator followed by the constructed subdivision degree map.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientBarycentricNaturality."
-       "Reproduce all eight standard-only axiom audits and integer/rational standard-edge face examples."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientBarycentricNaturality.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/CoefficientBarycentricNaturality.lean /tmp/CoefficientSubdivisionBoundary.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientBarycentricNaturality.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "Initial lake env lean /tmp/CoefficientBarycentricNaturality.lean",
-       :exit 1,
-       :correction
-       "Removed the explicit ring argument from the dsimp unfolding list for singularPostcomposition."}
-      {:cmd "First compilation with actual-face examples",
-       :exit 1,
-       :correction
-       "Added explicit proposition types to the two example theorem declarations. Final compilation succeeds."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientBarycentricNaturality.lean",
-      :sha256
-      "551b41e6fb552150000bbedde369c9981b0d038afdb2fd5e4385d990a0c4cf7f"},
-     :finding
-     "Constructed coefficient-general barycentric recursion and proved its generator and differential equations. Cone-map compatibility gives naturality for barycenter-preserving vertex functions, specialized to affine simplex maps. The reviewed realization square then proves subdivided-face transport, including equality with the actual singular face generator followed by the constructed degree map. Integer and rational standard-edge examples cover both faces. No singular chain endomorphism or homology comparison is claimed.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientBarycentricNaturality.lean"
-       "ConstructionTargets/CoefficientBarycentricNaturality.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Assemble singular differential compatibility, naturality, degree-zero identity and the complete singular subdivision packet. Homotopy, smallness, positive-degree comparison, excision and rational sphere H1/H2 remain downstream; no frozen closure claimed.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :integer-and-rational-edge-face-examples :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :eight-axiom-audits :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 8,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 17 dependency warnings: SingularHomologyConcrete (1), SingularSubdivision (2), T02A06HemisphereCoordinates (6), T02A06HemisphereExcision (2), T02A06DiskRadialComparison (3), T02A06SphereShift (3). Fixture and canonical compilations were warning-free."],
+    :statement-hashes
+    {"vertexSubdivision_comm_d"
+     "6e718ef5b2a101f0fc1afb628c932910320c30e11b07cb58e33b6ea5fc58adb9",
+     "vertexMapDegree_cone"
+     "070ba5bf22d9a0ed68b91d689c35fc9bfa12540d767dc192021fb209b57e1a61",
+     "vertexSubdivision_natural"
+     "890657e7a1c307a599780396e523d41772cbd9837c576cc446abb238827b3fcb",
+     "vertexSubdivision_affine_natural"
+     "e86efde39353884ff20c3f62e64bda52f1d024544b659fefff5e3a3ee34fe776",
+     "subdividedFace_transport"
+     "ac8093166f5ab8adf7f6342a0e34fab9dce67f294778b34189600b90a7bad9d5",
+     "actual_subdivided_face"
+     "2d444a3a6c7c8d90f47938f0f5654de2c6dabb7a0a40cf3236b06b567d6cbcc4",
+     "integral_edge_face"
+     "ef47f74ec5774b0be3b8a907876c9f981323b37f21e7fb6cd1689e49f169a3cb",
+     "rational_edge_face"
+     "8f47e4323947e14651e0c91ba88d609fd60800a733c3772216ef59db7938a0c3"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientBarycentricNaturality.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientBarycentricNaturality.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientBarycentricNaturality.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientBarycentricNaturality",
+      :exit 0}
+     {:cmd
+      "Python audit: exact promotion, fixture SHA256, eight standard-only audits per compilation including both examples, warnings, placeholders and declaration hashes",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientBarycentricNaturality.lean /tmp/CoefficientBarycentricNaturality.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope verification and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct coefficient-general barycentric affine-change compatibility\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope and clean checkout verification",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and dependency evidence. Only the authorized two files changed; ledger and frozen consumers untouched. Checkout clean.",
+    :diagnostic-history [],
+    :commit "3f41ed7d65c5ebf382f57492c65e5fe1460676e2",
+    :changed-paths
+    ["ConstructionTargets/CoefficientBarycentricNaturality.lean"
+     "ConstructionTargets/CoefficientBarycentricNaturality.md"],
+    :fixture
+    {:path "/tmp/CoefficientBarycentricNaturality.lean",
+     :sha256
+     "551b41e6fb552150000bbedde369c9981b0d038afdb2fd5e4385d990a0c4cf7f"},
+    :finding
+    "Exact fixture promoted, preserving barycentric recursion, generator and differential equations, cone-map compatibility, affine-change naturality and actual subdivided-face transport. Both compilations, integer/rational edge examples and the 8258-job build passed.",
+    :statement-hash-method
+    "SHA256 of declaration bytes beginning with theorem and ending immediately before the space preceding :=.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientBarycentricNaturality.lean"
     "ConstructionTargets/CoefficientBarycentricNaturality.md"],
