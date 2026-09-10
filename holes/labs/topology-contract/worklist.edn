@@ -66146,6 +66146,18 @@
       :exit 0}
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789037064020-18418-9b7d32d0",
+     :commands
+     ["git show --check 8b3aa9a1"
+      "Python read-only pinned audit: exact fixture promotion, two dependency hashes, six statement hashes and zero placeholders"
+      "lake build ConstructionTargets.CompactTransverseArcIntersections ConstructionTargets.SardGenuineSmoothEuclidean"
+      "lake env lean ConstructionTargets/PlaneArcSmallTranslation.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show ec1f0cbd:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "Independent review of codex-6 commit 8b3aa9a1bed98a184d0d8ea2d43a8afcdb50d7d4 passes. Exact single-file scope, fixture, dependency and statement hashes verified. Conjugate derivatives transport genuine-infinity Sard regularity to the original product-norm plane; the preimage of its epsilon-ball supplies the correct smallness bound. Equal-dimensional surjectivity yields invertibility, and compact isolated fibers give finite parameter coincidences for a=b+v, including endpoints through open extensions. Endpoint preservation, coverage and triangulation remain unclaimed. Build succeeds (8443 jobs); compilation is warning-free with six standard-only axiom audits. Pinned ledger validates 523 items. No files edited."},
     :commit "8b3aa9a1bed98a184d0d8ea2d43a8afcdb50d7d4",
     :changed-paths
     ["ConstructionTargets/PlaneArcSmallTranslation.lean"],
@@ -66159,7 +66171,7 @@
     :axiom-audit-count 6,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/PlaneArcSmallTranslation.lean"],
    :dag-node
    "SURFACE TRIANGULATION / small translations in finite position",
@@ -66192,7 +66204,7 @@
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
