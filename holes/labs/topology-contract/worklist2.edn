@@ -14254,99 +14254,117 @@
    :stop-condition
    "Construct restrictions of the reviewed operators; do not supply preservation equations as assumptions or reinterpret an integral conclusion as R-linear. Do not claim eventual smallness, homology comparison, excision or sphere homology.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Eventual smallness of iterated subdivision, positive-degree small-chain comparison, relative excision and sphere suspension remain before rational S2 H1/H2.",
-     :axiom-audits 10,
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG representations, closure rules, dependency PASS receipts and small-chain APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientSmallPreservation.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientSmallPreservation.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSmallPreservation.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial restriction fixture compilation",
-       :exit 1,
-       :correction
-       "Removed proofs after congr had closed the goals and separated coproduct unfolding from rewriting."}
-      {:cmd "Second restriction fixture compilation",
-       :exit 1,
-       :correction "Removed an inapplicable associativity rewrite."}
-      {:cmd "Third restriction fixture compilation",
-       :exit 1,
-       :correction
-       "Made the coproduct family and parenthesized composition explicit before applying its generator equation."}
-      {:cmd "Fourth restriction fixture compilation",
-       :exit 1,
-       :correction
-       "Made the inclusion composition explicit and reduced to the coproduct map equation."}
-      {:cmd "Initial chain-map and homotopy assembly compilation",
-       :exit 1,
-       :correction
-       "Introduced the chain-shape relation binder, used chain-map extensionality without element extensionality, and closed the absolute degree-map definitional equality."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientSmallPreservation.lean",
-      :sha256
-      "34e1ff8e04ab92a58bd10885eda306555232290e02657d2d222608bb9225b08f"},
-     :finding
-     "Constructed subdivision and prism restrictions on actual coefficient-general cover-small chains. Finite-support factorization supplies generator lifts; coproduct descent supplies degree maps. Their actual inclusion equations imply differential compatibility and the subdivision-minus-identity prism equations. The constructed smallHomotopy runs from restricted subdivision to identity, with an explicit degree-zero equation and compatibility with the reviewed absolute homotopy. Integer and rational overlapping interval-cover examples compile.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientSmallPreservation.lean"
-       "ConstructionTargets/CoefficientSmallPreservation.md"],
-      :acceptance
-      {:namespace "ConstructionTargets.CoefficientSmallPreservation",
-       :implementation
-       "Promote the complete compiled fixture, preserving the existing small-chain complex, actual inclusion, reviewed absolute operators and support geometry.",
-       :declarations
-       ["subdivision_lift"
-        "prism_lift"
-        "subdivisionDegree"
-        "prismDegree"
-        "subdivision_inc"
-        "prism_inc"
-        "subdivision"
-        "subdivision_inclusion"
-        "subdivision_zero"
-        "prism_boundary_zero"
-        "prism_boundary_succ"
-        "components"
-        "components_succ"
-        "smallHomotopy"
-        "homotopy_inclusion"
-        "integral_interval_homotopy"
-        "integral_interval_inclusion"
-        "rational_interval_homotopy"
-        "rational_interval_inclusion"],
-       :hypotheses
-       "R, X and the family index type are Type 0. R is a commutative ring and X a topological space. U is an arbitrary indexed family of subsets; no openness, covering, nonemptiness or connectedness assumption is required. Chains use coefficient object ModuleCat.of R R.",
-       :consumer-equation
-       "Restricted subdivision and prism followed by the actual inclusion equal inclusion followed by their reviewed absolute operators. The restricted prism satisfies dT + Td = subdivision - identity, including degree zero, and constructs an actual Homotopy.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSmallPreservation."
-        "Reproduce all ten standard-only axiom audits and integer/rational interval homotopy and inclusion examples."
-        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."],
-       :stop-condition
-       "Do not claim eventual smallness, homology comparison, relative excision or sphere homology."}},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Eventual smallness of iterated subdivision, positive-degree small-chain comparison, relative excision and sphere suspension remain before rational S2 H1/H2. No eventual smallness, homology comparison, excision, sphere homology or frozen closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :ten-standard-only-audits :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 10,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 20 existing dependency warnings; both direct compilations had zero warnings."
+     "Read-only dependency query emitted a Python invalid-escape SyntaxWarning; query completed successfully."],
+    :statement-hashes
+    {"rational_interval_inclusion"
+     "a22a96aa6542bfd81e7ac85a337f41d10491867a5787163a3db54b525f5d9c77",
+     "subdivision_inc"
+     "95181ac2fb822aebad5f6c62aef397fc94c971741492c028d128c5e5110bf0b4",
+     "prism_boundary_zero"
+     "92644908622c9913d9a68a8fc40a8c48218d9306cb1b2413672ba385e50a0955",
+     "integral_interval_homotopy"
+     "c19b55bd8e0a03b060cddc76f5482f2b030f98d05efe6d8df5b890d17e2e1d68",
+     "components_succ"
+     "360e4ee23c5529eb5b617eee04479c5a064e52252da06055076da1a050173c3a",
+     "subdivision_inclusion"
+     "23f28e361eaa9eaa951d7b9a8fd5c74c241e78ca7e49e76054a4719ecf965d78",
+     "prism_lift"
+     "c5ed9db576711f84c0c4490970c5627e556a767687e559d2f6ac7f723dfe308c",
+     "prism_boundary_succ"
+     "b737fd359f6883e24e36e11e0b97f9b06f10f274f84b9dece2b5231fb021c0f8",
+     "subdivisionDegree"
+     "61e0597aef7878deded507fc2a187c1bafeb83916d6d5a1d187d13b31110169e",
+     "prism_inc"
+     "83b7d45c5d15e3d0d34ed20e7a3e4041acb92b87cfed6b568f92a33d3d595f02",
+     "homotopy_inclusion"
+     "3781d30b7324235db9cded56830dac0aa0dc30aab2f92e7797dd4514374257ae",
+     "prismDegree"
+     "1df9970e03e223d7269499180896860091dd85992849c4b2ebf94bccbc541911",
+     "smallHomotopy"
+     "614ec4e63c2525a9f44ee5090bfeeb7122a3ac0e06e4ecac8b8bf69824e9d1a9",
+     "components"
+     "d1290eb2dbcc00ee084115e8f69114b940b536e4c5e1d6a1b4c1ef8ae2fc62a5",
+     "integral_interval_inclusion"
+     "a09db0eada96816126af2b2619b3877e58897205523d136fa53be1439efb1bab",
+     "subdivision_zero"
+     "ee6a5dd25c210bb8149b8770f97aa980d350451ff9b69d3dd6f6064540cb243d",
+     "subdivision_lift"
+     "2ef4db514d5bcc04aa64272f8d8e3d01b099fe3ea7110a314c828ee8de7ae35f",
+     "rational_interval_homotopy"
+     "45d95828c6e33c917951dcbeac4aeab9a223eb0ee83bd504e4aceafc65867fab",
+     "subdivision"
+     "800ccc7eeaa462f65539cd04aea48752df1d83b5db1fc4159038acb5e141eb47"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure stop rules and all dependency PASS receipts",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientSmallPreservation.lean", :exit 0}
+     {:cmd "Python verify fixture SHA256 and promote exact fixture",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientSmallPreservation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientSmallPreservation.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientSmallPreservation",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientSmallPreservation.lean /tmp/CoefficientSmallPreservation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, ten standard-only audits per compilation, warning and nineteen declaration-hash audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope audit and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Restrict coefficient-general subdivision and prism to small chains\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope audit pinned to 4939bd7e and clean tracked checkout verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "4939bd7e057ced86a7c6ed89e736143261927f41",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSmallPreservation.lean"
+     "ConstructionTargets/CoefficientSmallPreservation.md"],
+    :fixture
+    {:path "/tmp/CoefficientSmallPreservation.lean",
+     :sha256
+     "34e1ff8e04ab92a58bd10885eda306555232290e02657d2d222608bb9225b08f"},
+    :finding
+    "Promoted the exact fixture and documented its hypotheses and limits. Constructed subdivision and prism restrictions on actual coefficient-general small chains, proved inclusion equations, and assembled the restricted subdivision-to-identity Homotopy including degree zero. Integer/rational interval homotopy and inclusion examples compile. Focused build passed with 8268 jobs.",
+    :statement-hash-method
+    "SHA256 of declaration text beginning with theorem or def, excluding preceding attributes, and ending immediately before the space preceding := or where; namespace ConstructionTargets.CoefficientSmallPreservation.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSmallPreservation.lean"
     "ConstructionTargets/CoefficientSmallPreservation.md"],
