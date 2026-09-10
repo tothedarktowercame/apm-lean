@@ -18364,109 +18364,115 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The disconnected boundary H0-map identification, circle H1 and S2 H2 remain in the parent probe. Frozen identity-map transport and trace evaluation, independent Klein-product and fold-fiber obligations, and general signed naturality remain downstream.",
-     :axiom-audits 10,
-     :outcome :revise,
+     "Frozen sphere-identity transport and trace evaluation remain before that branch is discharged. Independent Klein-product and fold-fiber obligations prevent full t00J01 closure; antipodal signs and general orientation naturality are not claimed.",
+     :axiom-audits 25,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t00J01-rational-sphere-homology,
-      :stop-condition
-      "Bank connected H0-map normalization and its S2 H1 application only. Do not claim the disconnected boundary codiagonal identification, circle H1, S2 H2, general signed naturality or frozen closure.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/CoefficientConnectedH0Map.lean",
-         :sha256
-         "d664b77de85b55eee08e1655625e99c3c37220907aac2033314da143a2d67c8f"},
-        :commands
-        [{:cmd "lake env lean /tmp/CoefficientConnectedH0Map.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientConnectedH0Map.lean"
-       "ConstructionTargets/CoefficientConnectedH0Map.md"],
-      :dag-node
-      "SPHERE ENDPOINTS: actual coefficient-general connected H0 maps and S2 H1 vanishing",
-      :acceptance
-      {:namespace "ConstructionTargets.CoefficientConnectedH0Map",
-       :implementation
-       "Promote the exact compiled fixture, retaining the actual inclusion-induced homology map and augmentation-coordinate equation.",
-       :declarations
-       ["mapIso"
-        "mapIso_hom"
-        "normalized_map"
-        "map_isIso"
-        "inclusion_isIso"
-        "inclusion_kernel_zero"
-        "diskTwo_inclusion_isIso"
-        "diskTwo_kernel_zero"
-        "sphereTwo_H1_zero"
-        "integral_sphereTwo_H1_zero"
-        "rational_sphereTwo_H1_zero"],
-       :hypotheses
-       "R and spaces are Type 0; R is a commutative ring. The generic map theorem requires path-connected source and target. The inclusion theorem requires path-connected ambient space and actual subtype. These hypotheses are proved for the two-dimensional closed disk and its boundary using the existing boundary homeomorphism and sphere geometry. No path-connectedness is asserted for the one-dimensional disk boundary.",
-       :consumer-equation
-       "The actual H0 map becomes identity under augmentation coordinates. The actual two-dimensional disk-boundary inclusion therefore has zero H0 kernel, yielding H1(S2;R)=0 through the reviewed sphere-to-kernel isomorphism.",
-       :consumer-residual
-       "Identify the actual one-dimensional disk-boundary H0 map with the codiagonal, apply the reviewed signed kernel normalization, and assemble circle H1 and S2 H2 with exact forward maps.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientConnectedH0Map."
-        "Reproduce ten standard-only axiom audits and integer/rational S2 H1 examples."
-        "Audit actual subtype inclusion, augmentation normalization and derived path-connectivity hypotheses."
-        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-      :id :coefficient-general-connected-h0-map-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint29-coefficient-geometric-sphere-shift-1],
-      :current-residual
-      "The sphere H1 endpoint needs the actual connected disk-boundary H0 inclusion proved invertible, rather than assuming degree-zero monicity.",
-      :other-consumers [:t03J04 :t02A08 :t94J08]},
+     :acceptance
+     {:namespace "ConstructionTargets.CoefficientSphereEndpoints",
+      :implementation
+      "Promote the exact compiled fixture, preserving actual homology maps, subtype inclusions and endpoint coordinate orientation.",
+      :declarations
+      ["boundaryHomeo"
+       "boundarySigmaIso"
+       "diskPointEquiv"
+       "diskIso"
+       "inclusion"
+       "sigma_coordinates"
+       "boolModuleIso"
+       "boolModule_sum"
+       "boundaryIso"
+       "inclusion_coordinates"
+       "boundaryKernelIso"
+       "boundaryKernelIso_hom"
+       "kernel_signed_projection"
+       "kernel_false"
+       "kernel_true"
+       "circleH1"
+       "circleH1_hom"
+       "sphereH2"
+       "sphereH2_hom"
+       "sphereH1"
+       "sphereH0"
+       "circle_inverse_left"
+       "circle_inverse_right"
+       "sphere_two_inverse_left"
+       "sphere_two_inverse_right"
+       "sphere_one_inverse_left"
+       "sphere_one_inverse_right"
+       "identity_coordinates"
+       "rationalS2H0"
+       "rationalS2H1"
+       "rationalS2H2"
+       "integralS1H1"
+       "integralS2H1"
+       "integralS2H2"
+       "rational_identity_zero"
+       "rational_identity_one"
+       "rational_identity_two"],
+      :hypotheses
+      "R is a Type 0 commutative ring. All spaces and actual ModuleCat R chains are Type 0. No field, domain or nontriviality hypothesis is imposed. Boundary coordinates send the negative disk endpoint to false and the positive endpoint to true. Ordinary H0 of the disconnected boundary retains both coordinates.",
+      :consumer-equation
+      "Actual H1(S1;R) and H2(S2;R) are isomorphic to R; actual H1(S2;R) is isomorphic to ModuleCat.of R (Fin 0 → R). Rational S2 H0, H1 and H2 identifications conjugate the actual identity-induced maps to identities.",
+      :consumer-residual
+      "Transport the rational identifications to the exact frozen sphere-identity branch and evaluate its traces. The full t00J01 theorem retains independent Klein-product and fold-fiber obligations; general signed naturality remains separate.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSphereEndpoints."
+       "Reproduce twenty-five standard-only axiom audits and all integer/rational examples."
+       "Audit actual boundary-inclusion codiagonal equation, signed kernel projection, forward composites and both inverse laws."
+       "Verify rational identity-map equations in degrees zero, one and two."
+       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure rules, dependency PASS receipts and actual H0-map APIs",
+       "Read DAG, closure rules, dependency PASS receipts and discrete H0, geometric boundary and kernel APIs",
        :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientConnectedH0Map.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientConnectedH0Map.lean", :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientConnectedH0Map.lean",
+       "lake env lean /tmp/CoefficientSphereEndpoints.lean > /tmp/CoefficientSphereEndpoints.log 2>&1",
+       :exit 0}
+      {:cmd
+       "Validate twenty-five standard-only axiom audits and absence of warnings and errors in the final compilation log",
+       :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientSphereEndpoints.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSphereEndpoints.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial connected-H0 fixture compilation",
+     [{:cmd "Initial endpoint fixture compilation",
        :exit 1,
        :correction
-       "Removed an unused map parameter from the coordinate isomorphism and corrected inferred-type example declarations."}
-      {:cmd "Second connected-H0 fixture compilation",
+       "Corrected the subtype-inclusion namespace, supplied the coproduct projection equation and explicit source map for kernel transport. The initial elaboration timeout disappeared without changing resource options."}
+      {:cmd "Second endpoint fixture compilation",
        :exit 1,
        :correction
-       "Replaced unsuccessful simplification of the coordinate equation with augmentation naturality."}
-      {:cmd "Third connected-H0 fixture compilation",
+       "Removed a redundant tactic and transported the composed-map equality with explicit congrArg and associativity."}
+      {:cmd "First extended endpoint compilation",
        :exit 1,
        :correction
-       "Used explicit congrArg transport of augmentation naturality instead of rewriting across elaborated categorical objects. Final compilation succeeds without warnings."}],
+       "Qualified CategoryTheory.Functor.map_id to avoid resolving the unrelated root Functor identity lemma. Subsequent and final compilations succeeded."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientConnectedH0Map.lean",
+     {:path "/tmp/CoefficientSphereEndpoints.lean",
       :sha256
-      "d664b77de85b55eee08e1655625e99c3c37220907aac2033314da143a2d67c8f"},
+      "115d7b73752f1ab988149c43021ca178a97b1a64c61120aaa9e6df6d07cac82c"},
      :finding
-     "Exactly one compiled H0-map prerequisite is supplied. Every continuous map between path-connected spaces induces the constructed augmentation-coordinate isomorphism on actual R-valued H0. Applying this to the actual two-dimensional disk-boundary inclusion proves its H0 kernel is zero; the reviewed sphere shift then proves H1(S2;R)=0. Integer and rational specializations compile. The disconnected one-dimensional boundary codiagonal identification, circle H1 and S2 H2 remain unassembled; the parent is not GO.",
+     "The complete fixture proves that the actual one-dimensional disk-boundary H0 inclusion is the codiagonal in constructed coordinates. Its categorical kernel generator has coordinates (r,-r), with explicit projection and forward-map equations. The reviewed sphere shift gives circle H1 and S2 H2; the reviewed connected-boundary calculation supplies S2 H1 vanishing. Integer and rational endpoint isomorphisms, inverse laws and rational identity-map equations compile. No integral conclusion is reinterpreted as R-linear.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientSphereEndpoints.lean"
+       "ConstructionTargets/CoefficientSphereEndpoints.md"]},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientSphereEndpoints.lean"
+    "ConstructionTargets/CoefficientSphereEndpoints.md"],
    :dag-node
    "SPHERE HOMOLOGY: coefficient-general low-dimensional endpoints and kernel normalization",
    :acceptance
