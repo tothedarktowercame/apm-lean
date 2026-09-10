@@ -65866,8 +65866,78 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the constructed chart-ball map, actual relative square and derived lifted normalization; no supplied commuting square or pair transport.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Identify coordinateMap with the banked pointed-chart pair transport followed by model inclusion, then derive ambient chart-normalization comparison. No transition-unit local constancy or consumer closure claimed.",
+    :dependency-hashes
+    {:CoefficientBallBoundaryLift
+     "d116bc9cdec7e777a7fbe22a205fb3aeab7658ce61d40584c9895337ce7aca01",
+     :CoefficientChartBoundaryNeighborhood
+     "00f467857529fd6d33f1ba79eee6f4aebdfa9d6c1ae7f5aafbb01c06a1e20d29"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:coordinate
+     "564bcffae31db208ce79deb497768637f33586237e99712c57bb726dac6f7f28",
+     :boundary_deleted
+     "4e3d54a03433b0a705225ec9d81404a776e55c7e24e2e270a91c07d7ecec4827",
+     :coordinates_deleted
+     "09c30e2a86191ae795e298106243ab183bc4f118f27531d12724307927c4669c",
+     :coordinate_composite
+     "1d98214b0133bd71e6d5de51e4ff64464f705f74937e3e1a23e3acc51d78f927",
+     :relative_square
+     "2088b99c0b707038b4134541c3146f7258aafa370db04d394aaea6abd17530e5",
+     :homology_square
+     "4166a3b0aca9f709aebb042c6a5366af3783e1829b0b994aa846c7a52adf7b74",
+     :lifted_normalization
+     "d05ae398e5df0404b656db4a1ad8e703684930dd72cafd25344ef2c906533ac7"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CoefficientChartBallTransport.lean ConstructionTargets/CoefficientBallBoundaryLift.lean ConstructionTargets/CoefficientChartBoundaryNeighborhood.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientBallBoundaryLift ConstructionTargets.CoefficientOverlapNormalization",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientChartBallTransport.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, pinned SHA256, comment-stripped zero placeholders and complete theorem-header hashes",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "Actual relative chains of the constructed closed chart ball and its fixed boundary",
+     :target
+     "Relative chains of the common chart source deleted at a nearby point, followed by the recentered Euclidean model pair",
+     :direction
+     "Prove equality from ball transport followed by actual chart-coordinate transport to the direct Euclidean recentering pair map; derive homology and lifted model-normalization equalities."},
+    :commit "7d1d361d8ca63cf4d71b5f942abf4f919dfc5cd9",
+    :changed-paths
+    ["ConstructionTargets/CoefficientChartBallTransport.lean"],
+    :fixture
+    {:path "/tmp/CoefficientChartBallTransport.lean",
+     :sha256
+     "5a7dc7170534b9bf72791848e751dadd1cc01a548780a520d9530d9a20706528",
+     :exact-promotion true},
+    :finding
+    "Exact fixture promoted. Constructed subtype maps, relative square, arbitrary-degree homology square and dimension-m+2 lifted normalization compile. Ledger untouched.",
+    :axiom-audit-count 7,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoefficientChartBallTransport.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / actual chart-ball relative transport",
