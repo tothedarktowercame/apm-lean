@@ -70067,8 +70067,43 @@
   {:consumer "t99J03",
    :stop-condition
    "GO requires the exact frozen triangulation theorem with its sole placeholder removed; otherwise REVISE with exactly one compiled endpoint-preserving or chart-compatibility prerequisite, or STOP at the exact geometric boundary. Do not infer endpoint preservation or retained coverage from translations.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "A future surface-classification program must first choose and construct a finite triangulation or polygonal decomposition from the manifold hypotheses, then prove cutting/normal-form and quotient-homeomorphism theorems and connect orientability and Euler invariance to the literal apm_t99J03_Surface encoding. The contained-translation result remains usable only inside such a program after actual arc and chart data exist.",
+    :outcome :stop,
+    :warnings
+    ["problems/t99J03/lean/Main.lean:120:8: declaration uses sorry"],
+    :disposition :stop,
+    :axioms :not-audited-because-placeholder-remains,
+    :author "codex-12",
+    :reason
+    "The contained-arc theorem cannot supply a frozen adapter or one nearest endpoint prerequisite because apm_t99j03 has no triangulation, arc-family, chart-selection, shared-endpoint, or coverage hypotheses to which PlaneArcContainedSmallTranslations can be applied. Its sole live goal is the full classification dichotomy for every compact connected smooth surface: existence of a homeomorphism to one of the literal polygon quotients, the orientable/nonorientable dichotomy, and uniqueness through a compatible homeomorphism-invariant Euler characteristic. Endpoint-preserving perturbation would still leave surface triangulation, cutting to a polygon, edge-word normalization, quotient-homeomorphism construction, orientability separation and Euler invariance as independent foundations. Repository search finds no packaged surface-classification or polygon-normal-form theorem. This is a route/applicability boundary, not a refutation of surface classification.",
+    :commands
+    [{:cmd
+      "python3 comment-stripped placeholder, frozen SHA256 and apm_t99j03 statement-hash audit over problems/t99J03/lean/Main.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t99J03/lean/Main.lean", :exit 0}
+     {:cmd
+      "rg -n \"surface classification|classification.*surface|triangulat.*surface|polygon.*normal.form|apm_t99J03_Surface\" ConstructionTargets .lake/packages/mathlib/Mathlib --glob '*.lean' --glob '*.md'",
+      :exit 0}
+     {:cmd
+      "rg -n \"PlaneArcContainedSmallTranslations|contained_family\" problems/t99J03/lean/Main.lean ConstructionTargets --glob '*.lean'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :changed-paths [],
+    :finding
+    "The frozen file compiles with its one existing placeholder. PlaneArcContainedSmallTranslations.contained_family is not imported or referenced by the consumer, and the consumer exposes no geometric arc data. Search hits for surface classification are commentary/program descriptions plus Mathlib's statement that dimension-two Poincare follows from surface classification; none implements the required theorem. The two unrelated pre-existing untracked documentation files were left untouched.",
+    :frozen
+    {:path "problems/t99J03/lean/Main.lean",
+     :sha256
+     "7ae7fd891041611e289a84b18eeec7c22e2464255e3e909f31ced868b41bc2f6",
+     :placeholder-count 1,
+     :statement-sha256
+     "2f28fac68a70ed22e43078a4957957bac9f3cdaa5fcc63d55d432e3a1695ce44"},
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SURFACE TRIANGULATION / frozen contained-arc uptake",
    :acceptance
