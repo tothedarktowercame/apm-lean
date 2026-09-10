@@ -42333,99 +42333,97 @@
     "Confirm no corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
     "Run placeholder, forbidden-declaration, warning, whitespace, exact two-file scope and both-ledger checks; commit the scoped implementation."],
    :evidence
-   {:probe
-    {:residual
-     "Transport unlike consecutive-letter swaps through wordPathEquiv, prove swap involutivity and deleted affine-face equality, then establish opposite shuffle signs and bounded oriented cancellation.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and dependency receipts",
-       :exit 0}
-      {:cmd
-       "Inspect ProductSimplexBalancedWords, ProductSimplexReconstructedPath, ProductSimplexStepWordReconstructed and ProductSimplexPathWordBalance",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint68-word-path-equivalence/WordPathEquivalence.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint68-word-path-equivalence/WordPathEquivalence.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint68-word-path-equivalence/WordPathEquivalence.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "Reproduce standard-only axiom audits for reconstructedPath_balancedStepWord and wordPathEquiv",
-       :exit 0}
-      {:cmd
-       "Compile all fifteen p,q examples with p+q at most four in the fixture",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/codex13-checkpoint68-word-path-equivalence/WordPathEquivalence.lean",
-       :exit 1,
-       :finding
-       "The first draft did not expose reconstructedPath's underlying reconstructedSimplex before applying objEquiv injectivity, referenced a nonexistent generated BalancedWord.ext theorem, and left examples outside a noncomputable section.",
-       :correction
-       "Changed the subtype value goal explicitly to reconstructedSimplex equality, proved the structure equality by cases and congruence using stepWord_reconstructedPath, and opened a noncomputable section."}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint68-word-path-equivalence/WordPathEquivalence.lean",
-       :exit 1,
-       :finding
-       "After product extensionality, the coordinate goals were already natural-number equalities, so applying Fin.ext introduced an incompatible extra coercion layer; the unnamed noncomputable section also required its own end.",
-       :correction
-       "Used horizontalCount_stepWord and verticalCount_stepWord directly and closed the unnamed section before the namespace; the final rerun compiled."}],
-     :representation
-     {:source
-      "Banked BalancedWord p q values reconstructed as canonical maximal paths by cumulative prefix counts",
-      :target
-      "Canonical MaximalPath p q values encoded as balanced Boolean step words by the banked stepWord map",
-      :direction
-      "Exact two-sided equivalence from the source balanced-word representation to the target canonical maximal-path representation via reconstructedPath, with balancedStepWord extraction as its inverse."},
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint68-word-path-equivalence/WordPathEquivalence.lean",
-      :sha256
-      "47fe5d02aa223ffee20b18fcde4a9b482b2afbe1e501d13a119c3281b330bf48",
-      :placeholder-count 0},
-     :finding
-     "The complete placeholder-free fixture proves the remaining reverse inverse law by exposing reconstructedPath's underlying simplex, applying prodStdSimplex.objEquiv injectivity, and recovering both cumulative coordinates from balancedStepWord. The banked forward inverse then packages reconstructedPath and balancedStepWord as an equivalence. All fifteen pairs with p+q at most four compile. No downstream orientation, cancellation, chain-level or consumer-closure result is claimed.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/ProductSimplexWordPathEquivalence.lean"
-       "ConstructionTargets/ProductSimplexWordPathEquivalence.md"],
-      :namespace
-      "ConstructionTargets.ProductSimplexWordPathEquivalence",
-      :declarations
-      ["reconstructedPath_balancedStepWord" "wordPathEquiv"],
-      :hypotheses
-      "Use banked BalancedWord p q, reconstructedPath, stepWord, balancedStepWord and the exact horizontal and vertical prefix-coordinate identities. No coefficient or orientation hypothesis is required; bounded examples cover every p,q with p+q at most four.",
-      :consumer-equation
-      "reconstructedPath (balancedStepWord z) = z, while the banked stepWord_reconstructedPath theorem gives the opposite composite; together they define BalancedWord p q ≃ MaximalPath p q.",
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexWordPathEquivalence."
-       "Verify the reverse law by extensional equality through prodStdSimplex.objEquiv and both prefix-coordinate identities."
-       "Verify the forward law uses the banked stepWord_reconstructedPath theorem."
-       "Package reconstructedPath and balancedStepWord as a two-sided equivalence."
-       "Compile all fifteen p,q cases with p+q at most four."
-       "Reproduce standard-only axiom audits for reconstructedPath_balancedStepWord and wordPathEquiv."
-       "Confirm no corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
-       "Run placeholder, forbidden-declaration, warning, whitespace, exact two-file scope and both-ledger checks; commit the scoped implementation."],
-      :axioms :standard-only},
-     :seat "codex-13"}},
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Transport unlike consecutive-letter swaps through wordPathEquiv, prove swap involutivity and deleted affine-face equality, then establish opposite shuffle signs and bounded oriented cancellation.",
+    :gates
+    {:canonical-compile :pass,
+     :fixture-sha256 :pass,
+     :whitespace :pass,
+     :axiom-audits :pass,
+     :forward-banked-inverse :pass,
+     :fifteen-bounded-cases :pass,
+     :reverse-objEquiv-extensionality :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :warning-audit :pass,
+     :commit :pass,
+     :both-ledgers :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :packaged-equivalence :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"reconstructedPath_balancedStepWord"
+     "a7b809be27cd8af17619be403d4492e668e3ffe1c1b12f85e111c646ac6ed46e",
+     "wordPathEquiv"
+     "008733be3f2652d582c07d1f50fecb8ac96d75c9b1c4c81f7e2d04aa51a12ec7"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/codex13-checkpoint68-word-path-equivalence/WordPathEquivalence.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint68-word-path-equivalence/WordPathEquivalence.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexWordPathEquivalence.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexWordPathEquivalence",
+      :exit 0}
+     {:cmd
+      "Python fixture-byte-identity, exact statement-hash, inverse-direction, fifteen-bounded-case, comment-stripped placeholder and whitespace audit",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|^\\s*(axiom|opaque|unsafe)\\b|^(def|theorem|structure|instance).*?(swap|cancel|chain|cross|Eilenberg|Kunneth|intersection|closure)' ConstructionTargets/ProductSimplexWordPathEquivalence.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --name-only", :exit 0}
+     {:cmd "git commit -m 'Equate balanced words and maximal paths'",
+      :exit 0}
+     {:cmd
+      "git show --check --stat --oneline HEAD; git status --short",
+      :exit 0}],
+    :representation
+    {:source
+     "Banked BalancedWord p q values reconstructed as canonical maximal paths by cumulative prefix counts",
+     :target
+     "Canonical MaximalPath p q values encoded as balanced Boolean step words by the banked stepWord map",
+     :direction
+     "Exact two-sided equivalence from the source balanced-word representation to the target canonical maximal-path representation via reconstructedPath, with balancedStepWord extraction as its inverse."},
+    :commit "0440912761f48619ccb148a3da08031c659fc9a7",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexWordPathEquivalence.lean"
+     "ConstructionTargets/ProductSimplexWordPathEquivalence.md"],
+    :dependency-warnings
+    ["ConstructionTargets/SingularSubdivision.lean:2960 unused tactic"
+     "ConstructionTargets/SingularSubdivision.lean:3580 unnecessary simpa"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint68-word-path-equivalence/WordPathEquivalence.lean",
+     :sha256
+     "47fe5d02aa223ffee20b18fcde4a9b482b2afbe1e501d13a119c3281b330bf48",
+     :canonical-path
+     "ConstructionTargets/ProductSimplexWordPathEquivalence.lean",
+     :canonical-sha256
+     "47fe5d02aa223ffee20b18fcde4a9b482b2afbe1e501d13a119c3281b330bf48",
+     :placeholder-count 0},
+    :finding
+    "The canonical module is byte-identical to the complete placeholder-free fixture. reconstructedPath_balancedStepWord exposes the reconstructed simplex, applies prodStdSimplex.objEquiv injectivity, and recovers both cumulative coordinates using horizontalCount_stepWord and verticalCount_stepWord. wordPathEquiv uses reconstructedPath and balancedStepWord as its two maps, the banked stepWord_reconstructedPath theorem for the forward inverse, and reconstructedPath_balancedStepWord for the reverse inverse. All fifteen pairs with p+q at most four compile. No corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure declaration was added.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexWordPathEquivalence.lean"
     "ConstructionTargets/ProductSimplexWordPathEquivalence.md"],
