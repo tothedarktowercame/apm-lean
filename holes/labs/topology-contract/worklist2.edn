@@ -23937,149 +23937,195 @@
    :other-consumers [:t01A02 :t03J05 :t96J06]}
   {:consumer :t98A02,
    :stop-condition
+   "Bank restriction independence only. Do not duplicate reserved distinguished-chart identification or claim its normalization recovery, transition units, cocycles, local constancy, orientation coherence or consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/CoefficientChartRestriction.lean",
+      :sha256
+      "ce756577f18f1ffee92ab6b2d8df00b8b2f905f401ee6a50855503ab8dbfa591"},
+     :commands
+     [{:cmd "lake env lean /tmp/CoefficientChartRestriction.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientChartRestriction.lean"
+    "ConstructionTargets/CoefficientChartRestriction.md"],
+   :dag-node
+   "LOCAL ORIENTATION: actual chart normalization independence under neighborhood restriction",
+   :acceptance
+   {:namespace "ConstructionTargets.CoefficientChartRestriction",
+    :implementation
+    "Promote the exact compiled fixture and document the geometric inputs to normalization and generator restriction.",
+    :declarations
+    ["normalization_natural"
+     "image_subset"
+     "coordinateInclusion"
+     "coordinate_square"
+     "ambient_square"
+     "imageMap"
+     "relative_square"
+     "homology_square"
+     "normalization_restriction"
+     "generator_restriction"
+     "image_projection"
+     "integral_restriction"
+     "rational_restriction"],
+    :hypotheses
+    "R is a Type 0 commutative ring. M is Type 0 and charted on EuclideanSpace ℝ (Fin (m+2)). U and V are open subsets of the same actual chart source, U is contained in V, and x belongs to U. Normalization equality retains T2Space M and degree m+2; map comparisons retain arbitrary natural degree.",
+    :consumer-equation
+    "Restricting an actual chart neighborhood from V to U leaves its constructed ambient local-homology normalization and generator unchanged, through the actual coordinate-image inclusion and relative neighborhood maps.",
+    :consumer-residual
+    "Recover CoefficientChartLocal.localIso using the separately reserved distinguished-chart identification, then construct transition units and prove generator-change and directed cocycle equations.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientChartRestriction."
+     "Reproduce ten standard-only axiom audits and integer/rational restriction examples."
+     "Audit translated image containment and actual coordinate/ambient inclusion squares."
+     "Verify the actual relative square, induced homology equation and degreewise cokernel projection."
+     "Verify normalization equality uses both the geometric ambient square and actual model-neighborhood inclusion equation."
+     "Verify equality of the constructed generators without an orientation assumption."
+     "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :coefficient-general-chart-normalization-restriction-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-general-geometric-overlap-normalization-1
+    :oriented-checkpoint38-coefficient-neighborhood-local-excision-1],
+   :current-residual
+   "Common-neighborhood normalization must agree with normalization using the larger chart neighborhood before chart-indexed transitions can satisfy the required cocycle equations.",
+   :other-consumers [:t01A02 :t03J05 :t96J06]}
+  {:consumer :t98A02,
+   :stop-condition
    "No supplied transition homeomorphism, commuting square or orientation compatibility. Do not infer that transition units equal one, are locally constant, or define an orientation. Exclude reserved all-degree/general-model chart transport and surface work.",
    :evidence
    {:probe
-    {:placeholder-delta 0,
+    {:concurrent-reservations
+     [:coefficient-distinguished-chart-implementation-refill45
+      :surface-nested-triangle-cover-margin-probe-refill45],
+     :placeholder-delta 0,
      :residual
-     "Actual ambient-map invertibility and geometric common-neighborhood normalization comparison are compiled. Restriction independence, distinguished-chart recovery and transition-unit/generator/cocycle equations remain in the parent. No orientation or global conclusion is claimed; reviewed STOPs, refutations and concurrent work remain untouched.",
-     :axiom-audits 18,
+     "Restriction independence is compiled. Distinguished-chart normalization recovery and transition-unit/generator-change/cocycle equations remain. Reserved work, reviewed STOPs and refutations are untouched; no orientation or global conclusion is claimed.",
+     :axiom-audits 10,
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t98A02,
       :stop-condition
-      "Bank ambient-map invertibility and common-neighborhood normalization comparison only. Do not claim restriction independence, distinguished-chart recovery, transition units, cocycles, local constancy, orientation coherence or consumer closure.",
+      "Bank restriction independence only. Do not duplicate reserved distinguished-chart identification or claim its normalization recovery, transition units, cocycles, local constancy, orientation coherence or consumer closure.",
       :evidence
       {:probe
        {:outcome :go,
         :seat "codex-13",
         :fixture
-        {:path "/tmp/CoefficientOverlapNormalization.lean",
+        {:path "/tmp/CoefficientChartRestriction.lean",
          :sha256
-         "b5e6347ae3cd4e02fd33fe8af788adb94516ecb5389b6b0f83eb9cb9030ed46c"},
+         "ce756577f18f1ffee92ab6b2d8df00b8b2f905f401ee6a50855503ab8dbfa591"},
         :commands
-        [{:cmd
-          "lake env lean /tmp/CoefficientOverlapNormalization.lean",
+        [{:cmd "lake env lean /tmp/CoefficientChartRestriction.lean",
           :exit 0}],
         :warnings [],
         :axioms ["propext" "Classical.choice" "Quot.sound"]}},
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientOverlapNormalization.lean"
-       "ConstructionTargets/CoefficientOverlapNormalization.md"],
+      ["ConstructionTargets/CoefficientChartRestriction.lean"
+       "ConstructionTargets/CoefficientChartRestriction.md"],
       :dag-node
-      "LOCAL ORIENTATION: geometric overlap normalization comparison",
+      "LOCAL ORIENTATION: actual chart normalization independence under neighborhood restriction",
       :acceptance
-      {:namespace
-       "ConstructionTargets.CoefficientOverlapNormalization",
+      {:namespace "ConstructionTargets.CoefficientChartRestriction",
        :implementation
-       "Promote the exact compiled fixture and document its common-neighborhood scope and remaining restriction-independence obligation.",
+       "Promote the exact compiled fixture and document the geometric inputs to normalization and generator restriction.",
        :declarations
-       ["pairHomeo"
-        "pointed_zero"
-        "pointed_iff"
-        "chartPair"
-        "ambient"
-        "ambient_mapsTo"
-        "ambientMap"
-        "factorization"
-        "ambientIso"
-        "ambient_forward"
-        "normalization"
-        "generator"
-        "generator_normalization"
-        "leftIso"
-        "rightIso"
-        "left_forward"
-        "right_forward"
-        "geometric_comparison"
-        "leftNormalization"
-        "rightNormalization"
-        "normalization_comparison"
-        "integral_comparison"
-        "rational_comparison"
-        "ambient_inverse_left"
-        "ambient_inverse_right"
-        "normalization_forward"],
+       ["normalization_natural"
+        "image_subset"
+        "coordinateInclusion"
+        "coordinate_square"
+        "ambient_square"
+        "imageMap"
+        "relative_square"
+        "homology_square"
+        "normalization_restriction"
+        "generator_restriction"
+        "image_projection"
+        "integral_restriction"
+        "rational_restriction"],
        :hypotheses
-       "R is a Type 0 commutative ring. M is Type 0, Hausdorff and charted on EuclideanSpace ℝ (Fin (m+2)). U is an open neighborhood of x contained in the actual chartAt source. The chart and pointed coordinate maps are constructed, not supplied. Ambient comparison retains every natural homology degree; normalization uses degree m+2.",
+       "R is a Type 0 commutative ring. M is Type 0 and charted on EuclideanSpace ℝ (Fin (m+2)). U and V are open subsets of the same actual chart source, U is contained in V, and x belongs to U. Normalization equality retains T2Space M and degree m+2; map comparisons retain arbitrary natural degree.",
        :consumer-equation
-       "The actual coordinate map from a translated chart neighborhood into M induces a local-homology isomorphism. For the actual common source, left normalization inverse followed by right normalization equals left model normalization inverse followed by actual transition homology followed by right model normalization.",
+       "Restricting an actual chart neighborhood from V to U leaves its constructed ambient local-homology normalization and generator unchanged, through the actual coordinate-image inclusion and relative neighborhood maps.",
        :consumer-residual
-       "Prove independence under restriction to a smaller neighborhood, recover CoefficientChartLocal.localIso for chart index x, and derive transition units, generator-change and directed cocycle equations.",
+       "Recover CoefficientChartLocal.localIso using the separately reserved distinguished-chart identification, then construct transition units and prove generator-change and directed cocycle equations.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientOverlapNormalization."
-        "Reproduce eighteen standard-only axiom audits and integer/rational comparison examples."
-        "Audit actual deleted-point chart-pair construction and factorization through neighborhood inclusion."
-        "Verify ambient forward-map equality and both inverse laws in every natural degree."
-        "Audit common-neighborhood geometric comparison and its exact normalization equation using the reviewed actual transition map."
-        "Verify normalization forward composite and constructed generator normalization."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientChartRestriction."
+        "Reproduce ten standard-only axiom audits and integer/rational restriction examples."
+        "Audit translated image containment and actual coordinate/ambient inclusion squares."
+        "Verify the actual relative square, induced homology equation and degreewise cokernel projection."
+        "Verify normalization equality uses both the geometric ambient square and actual model-neighborhood inclusion equation."
+        "Verify equality of the constructed generators without an orientation assumption."
         "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :coefficient-general-geometric-overlap-normalization-1,
+      :id :coefficient-general-chart-normalization-restriction-1,
       :kind :reusable-theorem,
       :depends-on
-      [:coefficient-general-relative-overlap-inclusion-square-1
-       :coefficient-general-geometric-overlap-pair-1
+      [:coefficient-general-geometric-overlap-normalization-1
        :oriented-checkpoint38-coefficient-neighborhood-local-excision-1],
       :current-residual
-      "The relative overlap square needs actual ambient-map invertibility and identification with the comparison of constructed normalizations.",
+      "Common-neighborhood normalization must agree with normalization using the larger chart neighborhood before chart-indexed transitions can satisfy the required cocycle equations.",
       :other-consumers [:t01A02 :t03J05 :t96J06]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure rules and build-loop design; inspect both ledgers, six dependency PASS receipts and concurrent reservations",
+       "Read DAG, closure rules and build-loop design; inspect both ledgers, seven dependency PASS receipts and distinguished-chart reservation",
        :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientOverlapNormalization.lean",
+      {:cmd "lake env lean /tmp/CoefficientChartRestriction.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientOverlapNormalization.lean",
-       :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientChartRestriction.lean", :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientOverlapNormalization.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientChartRestriction.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial normalization fixture compilation",
+     [{:cmd "Initial restriction fixture compilation",
        :exit 1,
        :correction
-       "Explicitly included the neighborhood-membership hypothesis in theorems whose types do not otherwise mention it."}
+       "Explicitly included the neighborhood containment hypothesis used in the image-subset proof."}
       {:cmd "Compilation after hypothesis inclusion",
        :exit 1,
        :correction
-       "Removed a redundant tactic and beta-reduced the transported homology equality before rewriting."}
-      {:cmd "Compilation of ambient forward equation",
+       "Identified a categorical reassociation failure in the normalization proof."}
+      {:cmd "Compilation using simplification for reassociation",
        :exit 1,
        :correction
-       "Reassociated the composition to expose the chart-pair inverse law."}
-      {:cmd "Compilation after reassociation",
+       "Simplification made no progress; replaced the attempted rewrite."}
+      {:cmd "Compilation using explicit reassociation",
        :exit 1,
        :correction
-       "Exposed the mapped inverse explicitly as HomologicalComplex.homologyMap before rewriting."}
-      {:cmd
-       "Compilation after adding overlap normalization comparison",
+       "Factored categorical cancellation into a generic lemma and applied it to the proved geometric homology square and model-inclusion equation."}
+      {:cmd "Compilation after adding projection and generator audits",
        :exit 1,
        :correction
-       "Completed the same mapped-inverse correction and identified a remaining definitional equality in the comparison."}
-      {:cmd "Compilation after mapped-inverse correction",
-       :exit 1,
-       :correction
-       "Closed the remaining comparison equality with rfl. Final audited compilation succeeds without warnings."}],
+       "Projection elaboration reached the default heartbeat limit. Explicitly supplied both deleted subsets and the coordinate inclusion. Final compilation succeeds at the unchanged limit."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientOverlapNormalization.lean",
+     {:path "/tmp/CoefficientChartRestriction.lean",
       :sha256
-      "b5e6347ae3cd4e02fd33fe8af788adb94516ecb5389b6b0f83eb9cb9030ed46c"},
+      "ce756577f18f1ffee92ab6b2d8df00b8b2f905f401ee6a50855503ab8dbfa591"},
      :finding
-     "Exactly one complete compiled overlap-normalization comparison prerequisite is supplied. Actual restricted-chart coordinate maps into M induce all-degree local-homology isomorphisms by explicit factorization through chart-pair transport and neighborhood inclusion. Their forward arrows are proved equal to the actual relative homology maps. On the common neighborhood, the comparison between the two constructed normalizations is exactly model normalization inverse, actual transition homology map, then model normalization. The parent is not GO: restriction independence, recovery of CoefficientChartLocal.localIso, and unit/generator-change/cocycle equations remain.",
+     "Exactly one complete compiled geometric restriction comparison is supplied. Nested actual chart neighborhoods induce inclusion of their translated coordinate images. The coordinate and ambient squares hold for the actual maps; pair-map composition gives the relative square and its homology equation. Combining these with the actual model-neighborhood inclusion equation proves equality of the two normalization isomorphisms and constructed generators. The parent is not GO: distinguished-chart recovery and transition-unit/generator-change/cocycle equations remain.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "LOCAL ORIENTATION: actual coefficient-general overlap transition and normalization comparison",
@@ -24110,7 +24156,8 @@
     :coefficient-general-actual-chart-pair-comparison-1
     :coefficient-general-geometric-overlap-pair-1
     :coefficient-general-relative-overlap-inclusion-square-1
-    :coefficient-general-geometric-overlap-normalization-1],
+    :coefficient-general-geometric-overlap-normalization-1
+    :coefficient-general-chart-normalization-restriction-1],
    :current-residual
    "Pointwise chartAt local normalization is reviewed; its comparison across two actual chart neighborhoods containing the same point has not been constructed.",
    :other-consumers [:t01A02 :t03J05 :t96J06]}
