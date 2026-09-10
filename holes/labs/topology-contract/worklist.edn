@@ -62201,75 +62201,114 @@
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
   {:consumer "t99J03",
    :stop-condition
+   "Require the constructed scale and all geometric specifications; no supplied containment or embedding.",
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/ScaledTriangleNeighborhood.lean"],
+   :dag-node
+   "SURFACE TRIANGULATION / scaled triangles inside coordinate neighborhoods",
+   :acceptance
+   {:fixture "/tmp/ScaledTriangleNeighborhood.lean",
+    :fixture-sha256
+    "8c4bf09cef6430b0b167f57db3139818ddbcd3a7568e4b9c0d6fff7bd0667e66",
+    :implementation
+    "Promote the exact fixture. Compile norm_parametrization, scaled and every exists_triangle conjunct. Preserve the constructed positive scale, affine formula, closed embedding, compact image, containment, open interior and center membership. Audit zero placeholders and standard-only axioms. Do not claim manifold chart transport, finite coverage or compatible faces.",
+    :commands
+    ["lake env lean ConstructionTargets/ScaledTriangleNeighborhood.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :scaled-triangle-neighborhood-implementation-refill42,
+   :kind :reusable-theorem,
+   :depends-on [:standard-triangle-embedding-implementation-refill42],
+   :current-residual
+   "Coordinate-neighborhood triangles are compiled. Transfer through actual manifold charts and extract finite interior coverage.",
+   :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+  {:consumer "t99J03",
+   :stop-condition
    "GO requires actual embedded triangles and interior coverage; REVISE requires exactly one compiled geometric prerequisite. A finite chart-cover wrapper alone is insufficient.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Construct scaled triangles inside actual chart targets, transfer their embeddings and open interiors to the manifold, and extract finite coverage. Compatible face intersections, global triangulation, classification and consumer closure remain subsequent.",
+     "Manifold chart transport and finite interior coverage remain. Compatible face intersections, realization, classification and consumer closure remain subsequent.",
+     :dependency-review
+     {:outcome :pass,
+      :seat "codex-10",
+      :job "invoke-1789024260479-18106-b01343a3"},
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {:embedding
-      "c0229b7f4bc5ee68199169d50a032764d33422fc78fe7b835464e419cb27a6ad",
-      :compact-image
-      "6f1f93a477e51dd06e658331b9b18df52e0c9dab487efce92c411c1e8b253733",
-      :interior-image
-      "33d7bc25d61a4e478b3f0bbafef1e6b5d3d5ca693d87111bddce8f4e712c892d",
-      :open-interior
-      "1dfc72a403fb6a24fa0abbbf4535acf4ceeaa2984ebaafb2433994658207095f",
-      :center
-      "f7cc38d5e070564735fb56954512d65423b444a7bcedfcdb3a01b0318f330f18"},
+     {:norm_parametrization
+      "ea807003c4cfeceb194dd73dac53402d0f0c063862284076654c0472ea3b422a",
+      :scaled
+      "2cdc82a4658e63c6c49b3f9e440b1a3c2a3aec5195242345b51221d414f488af",
+      :exists_triangle
+      "930a6e6bc3f121911678802021c5fe468ba22ad981a9423bbf90b0c0e437b8dc"},
      :prerequisite
      {:consumer "t99J03",
       :stop-condition
-      "Require the constructed affine embedding and all image specifications; no supplied embedding or triangle-image equality.",
+      "Require the constructed scale and all geometric specifications; no supplied containment or embedding.",
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/StandardTriangleEmbedding.lean"],
+      :scope ["ConstructionTargets/ScaledTriangleNeighborhood.lean"],
       :dag-node
-      "SURFACE TRIANGULATION / explicit affine simplex embedding",
+      "SURFACE TRIANGULATION / scaled triangles inside coordinate neighborhoods",
       :acceptance
-      {:fixture "/tmp/StandardTriangleEmbedding.lean",
+      {:fixture "/tmp/ScaledTriangleNeighborhood.lean",
        :fixture-sha256
-       "8eac84f40a0fcba2925a02670f2cab15fae9634e568bec582e53b74d02d691f2",
+       "8c4bf09cef6430b0b167f57db3139818ddbcd3a7568e4b9c0d6fff7bd0667e66",
        :implementation
-       "Promote the exact fixture. Compile parametrization, continuity, injectivity, closed embedding, compact image, exact positive-barycentric image formula, openness and center membership. Preserve the standard simplex and ordinary product topology. Audit zero placeholders and standard-only axioms. Do not claim chart-target containment, manifold embeddings, finite coverage or face-compatible triangulation.",
+       "Promote the exact fixture. Compile norm_parametrization, scaled and every exists_triangle conjunct. Preserve the constructed positive scale, affine formula, closed embedding, compact image, containment, open interior and center membership. Audit zero placeholders and standard-only axioms. Do not claim manifold chart transport, finite coverage or compatible faces.",
        :commands
-       ["lake env lean ConstructionTargets/StandardTriangleEmbedding.lean"],
+       ["lake env lean ConstructionTargets/ScaledTriangleNeighborhood.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
-      :id :standard-triangle-embedding-implementation-refill42,
+      :id :scaled-triangle-neighborhood-implementation-refill42,
       :kind :reusable-theorem,
       :depends-on
-      [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+      [:standard-triangle-embedding-implementation-refill42],
       :current-residual
-      "The coordinate triangle is compiled. Scaling and translation into chart targets, manifold transfer and finite interior coverage remain.",
+      "Coordinate-neighborhood triangles are compiled. Transfer through actual manifold charts and extract finite interior coverage.",
       :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/StandardTriangleEmbedding.lean",
+     [{:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/StandardTriangleEmbedding.olean ConstructionTargets/StandardTriangleEmbedding.lean'",
        :exit 0}
-      {:cmd "python3 /tmp/standard-triangle-embedding-audit.py",
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ScaledTriangleNeighborhood.lean'",
+       :exit 0}
+      {:cmd "python3 /tmp/scaled-triangle-neighborhood-audit.py",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/StandardTriangleEmbedding.lean",
+     [{:cmd
+       "rg -n 'exists.*(smul|mul)|smul.*subset' .lake/packages/mathlib/Mathlib/Topology/Algebra/Module/Compact.lean",
        :exit 1,
        :correction
-       "Opened the Topology namespace, proved continuity through explicit coordinate evaluations, and reduced finite-index expressions before linear arithmetic. Final compilation succeeds without warnings."}],
+       "No matching API; used an explicit norm bound and metric ball construction."}
+      {:cmd
+       "rg -n 'norm_prod|norm_le' .lake/packages/mathlib/Mathlib/Analysis/Normed/Group/Prod.lean",
+       :exit 2,
+       :correction
+       "Located product norm lemmas in Analysis/Normed/Group/Constructions.lean."}
+      {:cmd "lake env lean /tmp/ScaledTriangleNeighborhood.lean",
+       :exit 1,
+       :correction
+       "Compiled the missing banked standard-triangle dependency into the private object directory. Final compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/StandardTriangleEmbedding.lean",
+     {:path "/tmp/ScaledTriangleNeighborhood.lean",
       :sha256
-      "8eac84f40a0fcba2925a02670f2cab15fae9634e568bec582e53b74d02d691f2",
+      "8c4bf09cef6430b0b167f57db3139818ddbcd3a7568e4b9c0d6fff7bd0667e66",
       :placeholder-count 0},
      :finding
-     "Compiled one geometric prerequisite: an explicit affine embedding of the closed standard two-simplex into the ordinary real coordinate plane. Its image is compact. The image of strictly positive barycentric coordinates is exactly the open triangle defined by three strict affine inequalities and contains the origin. No embedding or image comparison is assumed.",
+     "Compiled one geometric prerequisite: every point of an open coordinate-plane set admits a positively scaled, translated standard triangle contained in that set. The constructed map is a closed embedding with compact image; its positive-barycentric interior has open image containing the requested point. Containment follows from a proved norm bound and a chosen open ball. Manifold chart transport and finite coverage remain uncompiled.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "SURFACE TRIANGULATION / finite embedded triangle cover",
    :acceptance
@@ -62280,7 +62319,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry
-    :standard-triangle-embedding-implementation-refill42],
+    :standard-triangle-embedding-implementation-refill42
+    :scaled-triangle-neighborhood-implementation-refill42],
    :current-residual
    "Finite triangulation STOP identifies missing compatible embedded faces. Construct local embedded triangles first; shared-face refinement and realization homeomorphism remain subsequent.",
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
