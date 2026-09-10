@@ -60864,8 +60864,55 @@
   {:consumer "t00J02",
    :stop-condition
    "Require every local_packet conjunct, with openness, center membership and derivative surjectivity derived rather than assumed.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Actual chart-coordinate domain openness, center membership, genuine-infinity smoothness, center vanishing and fderiv surjectivity are compiled without finite-dimensionality or completeness assumptions. Inner-product model transport, local regular-fiber charts and literal incidence transfer remain. No incidence atlas, overlaps or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:local_packet
+     "77939db6c7428b92ae31af9e6cb8ed8e36caf348b6137ad1357644a08227c7b0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/ManifoldTargetIncidenceDifference.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only fixture audit: comment-stripped placeholders and complete local_packet theorem-header SHA256",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.ManifoldTargetIncidenceCoordinateTransport ConstructionTargets.LocalTransverseDifference 2>&1 | tail -10",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ManifoldTargetIncidenceDifference.lean ConstructionTargets/ManifoldTargetIncidenceDifference.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldTargetIncidenceDifference.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "ec1c707a1cc5d8d86de9cf053c579d0578afd8ad",
+    :changed-paths
+    ["ConstructionTargets/ManifoldTargetIncidenceDifference.lean"],
+    :fixture
+    {:path "/tmp/ManifoldTargetIncidenceDifference.lean",
+     :sha256
+     "ce5b168dea2d6cb0c4da2e15c70928e400d796372d0bd6f5e637d4fd686402bf"},
+    :dependency-reviews
+    [{:outcome :pass, :job "invoke-1789016347773-17904-58f3d10e"}
+     {:outcome :pass, :job "invoke-1789016029555-17891-0ffb6ef5"}],
+    :axiom-audit-declarations 1},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ManifoldTargetIncidenceDifference.lean"],
    :dag-node
