@@ -65080,8 +65080,49 @@
   {:consumer "t03J04",
    :stop-condition
    "GO requires complete frozen closure; otherwise name the exact missing uniform torus computation or Euler comparison. Infrastructure absence is not refutation.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Preserve all frozen hypotheses, the proved nonzero field and surjectivity facts, and all three final conjuncts. Supply the uniform torus rational Euler computation and a valid target Euler argument, including its finiteness requirements. No compiled closing fixture or single sufficient prerequisite is claimed; continue the campaign.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :reason :missing-uniform-torus-homology-and-euler-comparison,
+    :commands
+    [{:cmd "python3 /tmp/t03j04-frozen-euler-audit.py", :exit 0}
+     {:cmd
+      "lake env lean -o /tmp/surface45/ConstructionTargets/CoefficientCoveringTransfer.olean ConstructionTargets/CoefficientCoveringTransfer.lean",
+      :exit 0}
+     {:cmd
+      "lake env bash -c 'LEAN_PATH=/tmp/surface45:$LEAN_PATH lean /tmp/T03J04TransferAudit.lean'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "rg -n 'Kunneth|Künneth|Euler|euler' .lake/packages/mathlib/Mathlib/AlgebraicTopology/SingularHomology --glob '*.lean'",
+      :exit 1,
+      :correction
+      "No matching declarations or text were found. The passing Python audit records this bounded search result explicitly."}
+     {:cmd "lake env lean /tmp/T03J04TransferAudit.lean",
+      :exit 1,
+      :correction
+      "The promoted transfer lacked a canonical compiled object. Compiled its unchanged source privately; the audit then passed."}],
+    :covering-audit
+    "Mathlib provides covering and evenly-covered-neighborhood constructors for continuous maps from compact Hausdorff spaces with local partial-homeomorphism witnesses. Their signatures were checked alongside the transfer. The exact frozen-map adapter establishing finite fibers and positive constant sheet count was not assembled here; even that adapter would leave both Euler obligations unresolved.",
+    :changed-paths [],
+    :finding
+    "The frozen closure crosses two unresolved homology constructions: a uniform rational computation for Fin n → Circle sufficient to evaluate its literal alternating finrank sum, and a comparison proving the target sum vanishes under the finite covering. Banked rational transfer compiles and proves projection-after-transfer equals k times identity in every degree, but this identity alone supplies neither Euler multiplicativity nor the required ranks. The particular boundary-torus integral calculation does not provide the arbitrary-dimensional rational computation. This is an infrastructure boundary, not a refutation.",
+    :frozen
+    {:path "problems/t03J04/lean/Main.lean",
+     :sha256
+     "b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41",
+     :placeholder-before 1,
+     :placeholder-after 1},
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "COVER-DEGREE / frozen rational Euler closure",
    :acceptance
