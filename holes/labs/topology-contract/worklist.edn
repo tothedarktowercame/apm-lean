@@ -63211,6 +63211,19 @@
       :exit 2,
       :correction
       "The module filename omits Probe; its actual import was located in SardGenuineSmoothOpenDomainLocalization.lean."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789025909241-18154-312349be",
+     :commands
+     ["Independent Python audit-artifact hash, four pinned source hashes, regularity-fixture hash and placeholder counts"
+      "lake env lean /tmp/T01A08RegularityAudit.lean"
+      "Inspection of frozen Main and banked manifold/open-domain Sard hypotheses"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show eaeeb5b7:holes/labs/topology-contract/worklist.edn)"
+      "git diff-tree --no-commit-id --name-only -r eaeeb5b7"
+      "git show --check eaeeb5b7"],
+     :finding
+     "PASS as STOP, not closure. Author codex-12 is independent; ledger-only scope verified. Audit and fixture hashes match; frozen Main SHA256 e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7 remains unchanged with one placeholder. Regularity conversions compile warning-free: frozen top-in-Nat-infinity is definitionally genuine infinity. Banked manifold Sard requires self-model charts and inner-product models; Euclidean localization requires an open vector-space domain. Neither directly supplies the frozen arbitrary ModelWithCorners chart-domain and within-derivative transport. No refutation or complete consumer fixture claimed. Validator passes 500 items; whitespace clean; ledger untouched."},
     :audit
     {:path "/tmp/t01a08-refill43-audit.json",
      :sha256
@@ -63230,7 +63243,7 @@
      :placeholder-after 1},
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "MANIFOLD SARD / frozen regular affine line",
    :acceptance
