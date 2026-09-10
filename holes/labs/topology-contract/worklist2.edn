@@ -24304,138 +24304,168 @@
    :stop-condition
    "No supplied transition homeomorphism, commuting square or orientation compatibility. Do not infer that transition units equal one, are locally constant, or define an orientation. Exclude reserved all-degree/general-model chart transport and surface work.",
    :evidence
-   {:probe
-    {:concurrent-reservations
-     [:surface-nested-triangle-cover-margin-probe-refill45],
-     :placeholder-delta 0,
-     :residual
-     "The bounded overlap-transition proof obligations are assembled. Orientation compatibility or local constancy, global classes, localization and t98A02 gluing remain downstream. No transition-unit triviality or consumer closure is claimed; reviewed STOPs and refutations are preserved.",
-     :axiom-audits 37,
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure experiments and build-loop design; inspect both ledgers, nine dependency PASS receipts and distinguished-normalization review",
-       :exit 0}
-      {:cmd
-       "lake env lean -o /tmp/overlap40/ConstructionTargets/CoefficientDistinguishedNormalization.olean ConstructionTargets/CoefficientDistinguishedNormalization.lean",
-       :exit 0}
-      {:cmd
-       "cp -as /home/joe/code/apm-lean/.lake/build/lib/lean/ConstructionTargets/. /tmp/overlap40/ConstructionTargets/",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/overlap40:$LEAN_PATH lean /tmp/CoefficientOverlapTransition.lean' > /tmp/CoefficientOverlapTransition.compile.log 2>&1",
-       :exit 0}
-      {:cmd
-       "Python fixture SHA256, declaration and forbidden-placeholder audit",
-       :exit 0}
-      {:cmd
-       "Python compile-log audit: 37 standard-only axiom audits, zero warnings and errors",
-       :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial direct fixture compilation",
-       :exit 1,
-       :correction
-       "The reviewed distinguished-normalization source lacked a compiled object. Compiled it into a temporary object directory."}
-      {:cmd "Initial compilation using temporary object directory",
-       :exit 1,
-       :correction
-       "The temporary ConstructionTargets namespace shadowed canonical objects. Added symlinks to existing canonical build artifacts in the temporary directory."}
-      {:cmd "Initial geometric-composition compilation",
-       :exit 1,
-       :correction
-       "Dependent MapsTo arguments prevented ordinary rewriting. Used congruence for composition and simplification for the identity map."}
-      {:cmd "Compilation after adding normalization comparison",
-       :exit 1,
-       :correction
-       "Explicitly included the openness hypothesis used by the geometric cocycle proof and removed an unused separation instance from the normalization-composition theorem."}
-      {:cmd "Compilation after adding geometric identity and inverse",
-       :exit 1,
-       :correction
-       "Corrected categorical identity simplification to match the right-associated composite. The final audited compilation succeeds."}],
-     :dependency-uptake
-     {:id :coefficient-overlap-ambient-normalization-probe-refill45,
-      :commit "3510365eedac863a7e69e71cefc9135cfd808f98",
-      :review "invoke-1789031537156-18288-dfb60dd1",
-      :path
-      "ConstructionTargets/CoefficientDistinguishedNormalization.lean",
-      :sha256
-      "514f0c1014720638f0cec1d327386e07e06b694c130dc0b73c1bd94134ebbfe4"},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientOverlapTransition.lean",
-      :sha256
-      "8d609d6360e921428fb06fc330a7419f39b6ae7da3fe5a3bcf910cac8d4a826d",
-      :placeholder-count 0},
-     :finding
-     "The complete overlap packet compiles. Actual coordinate transitions on a common open neighborhood compose pointwise, on deleted-point relative cokernels, and on homology. Their normalized maps recover chart-indexed comparisons by restriction independence. Unit identity, inverse and triple-overlap cocycle equations follow through these actual compositions. Scalar action and generator change have explicit direction. The independently reviewed distinguished-chart normalization is reused to recover CoefficientChartLocal.localIso. Integer and rational examples compile.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientOverlapTransition.lean"
-       "ConstructionTargets/CoefficientOverlapTransition.md"],
-      :additional-depends-on
-      [:coefficient-overlap-ambient-normalization-probe-refill45],
-      :acceptance
-      {:namespace "ConstructionTargets.CoefficientOverlapTransition",
-       :implementation
-       "Promote the exact compiled fixture and document the complete geometric composition route, reusing the reviewed distinguished-normalization dependency.",
-       :declarations
-       ["coordinateTransition"
-        "coordinate_composition"
-        "deleted_iff"
-        "relativeTransition"
-        "relative_composition"
-        "homology_composition"
-        "relative_identity"
-        "relative_inverse"
-        "projection"
-        "ambient_square"
-        "ambient_homology_square"
-        "coordinate_formula"
-        "common_transition"
-        "triple"
-        "triple_open"
-        "triple_composition"
-        "modelCoordinates"
-        "normalizedTransition"
-        "normalized_composition"
-        "normalized_identity"
-        "normalized_inverse"
-        "ambient_comparison"
-        "normalization_comparison"
-        "chart_comparison"
-        "geometric_unit_cocycle"
-        "geometric_unit_identity"
-        "geometric_unit_inverse"
-        "distinguished"
-        "normalized_scalar"
-        "geometric_generator_change"
-        "triple_unit_cocycle"
-        "integral_triple"
-        "rational_triple"
-        "integral_recovery"
-        "rational_recovery"],
-       :hypotheses
-       "R and M are Type 0; R is a commutative ring. M is charted on EuclideanSpace ℝ (Fin (m+2)). Actual transitions use an open neighborhood U containing x and contained in the relevant chart sources. Ambient normalization comparison retains T2Space M. Relative-map composition holds in every natural homology degree; normalization uses m+2. No orientation or nontriviality assumption is added.",
-       :consumer-equation
-       "The normalized actual transition acts by u_ab, generator_a = u_ab • generator_b, u_aa = 1, inverse(u_ab) = u_ba, and u_ab*u_bc = u_ac. These unit equations are derived through actual geometric transition composition. The distinguished chart normalization equals CoefficientChartLocal.localIso.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 and the reviewed distinguished-normalization dependency before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientOverlapTransition."
-        "Reproduce 37 standard-only axiom audits and integer/rational triple-overlap and distinguished-recovery examples."
-        "Audit actual chart restrictions, coordinate formula, deleted-point preservation, projection equation and common-transition identification."
-        "Verify point-set, relative-chain and all-degree homology composition, identity and inverse equations."
-        "Verify ambient inclusion squares, normalization comparison and restriction to full-chart normalizations."
-        "Verify unit identity, inverse and cocycle proofs pass through actual normalized geometric composition; audit scalar and generator-change direction."
-        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]}},
-     :seat "codex-13"}},
+   {:placeholders 0,
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Orientation compatibility or local constancy, global classes, localization and t98A02 gluing remain downstream. No transition-unit triviality or consumer closure is claimed. Reserved general-model chart and surface work, ledgers, frozen consumers and historical refutations remain untouched.",
+    :gates
+    {:deleted-point-preservation-and-projection :pass,
+     :ambient-inclusion-squares :pass,
+     :identity-and-inverse-equations :pass,
+     :whitespace :pass,
+     :geometric-relative-and-homology-composition :pass,
+     :fixture-and-canonical-compilation :pass,
+     :common-transition-identification :pass,
+     :scalar-and-generator-direction :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :target-build :pass,
+     :reviewed-dependency-verification :pass,
+     :normalization-and-full-chart-comparison :pass,
+     :exact-fixture-promotion :pass,
+     :geometric-unit-composition-route :pass,
+     :37-standard-only-audits :pass,
+     :integer-rational-triple-and-recovery-examples :pass,
+     :actual-chart-restrictions-and-coordinate-formula :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 37,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation have zero warnings. Dependency build succeeds with 8303 jobs; target build succeeds with 8306 jobs. Each build replays 22 dependency warnings."],
+    :statement-hashes
+    {"integral_recovery"
+     "36893be0fcb661080b8c76bdb8507ba9c69b562f045dddb2ff7ec8ceec9c99aa",
+     "coordinateTransition"
+     "9798a8423710709ae37ef1cc13faf839ad4e266457ebe32ceaacfdc159f3d710",
+     "rational_recovery"
+     "d8c67e1a098d2c6deaaa3957e3f65df6b778fcc497b77c1a7937d3932c93be07",
+     "distinguished"
+     "d8cca8012c5b01a968a9497f6d7cdebca6e05e0449283c07d45bb679b13d0e6f",
+     "integral_triple"
+     "357e389585ed41da1eb6d3319bf179e5bd1d7c85de36340184ce25e2a9e3a641",
+     "normalized_inverse"
+     "09da9dfb8ea80dda6afc95bbac1974a81622c091243ae6e8714c5d6bc9c341d3",
+     "deleted_iff"
+     "33a0f11eee652103a609778a898cacc3b561d0dcfbe2b00e1f4d0af3ec5d8f02",
+     "geometric_unit_inverse"
+     "ea1d2ba71a5d8bcdf63adbe19f06a9bf250907ca4fe83cce16332214dbfec2f9",
+     "normalized_composition"
+     "bca3c37eb0045bc39d14fc6a71af79e5fbea26a158e45d0e03b6a23410560d25",
+     "normalization_comparison"
+     "648792519b848e241a29bae21bd9d9c6d33ff9345286d35c9ee163db76360e38",
+     "coordinate_formula"
+     "35a03f42867a28c625ba28a2a91a090f75247fdb4ade2960f6f3f11f1af2381a",
+     "normalized_scalar"
+     "9a9b5c4747e72c2b8c4c57268ba3565e942ab8082f4f27e1f5773e7c2bdc4985",
+     "triple_open"
+     "cc4fc9e111df97ac64c322339f56835f0f87717cafd01791b70cd2f0628c0c32",
+     "normalized_identity"
+     "e18a5acce97a8ec0fabee64e7022c75f2f01a195efcc7f7f4262a076d8dc52d9",
+     "ambient_square"
+     "b2cb16b1fbe076aeeb99d0d5e1e429d51a41ccb54b22751d0a84c9a88a4844ef",
+     "triple_composition"
+     "708b2a9518a2182bb2416b06c905b2bf5a0ef8b7224b44a9e498b517d786670a",
+     "normalizedTransition"
+     "98403bb7d1f78a85336473452db898f3e30a3b3b022cbfeab67b6495b1d48ae7",
+     "rational_triple"
+     "c23e46f4b0e5ced6181529ab429f9d789a77c3b7382a353901d227cdf653c95b",
+     "geometric_unit_identity"
+     "688d24e46aefcdb07cf0eb2de613859b9509bf10907568eb9344505f3ca32acf",
+     "relativeTransition"
+     "ce476adf296dd4a2a233681d007708a6c3a93cab6b5a402a347367ac2902234b",
+     "geometric_generator_change"
+     "49536c3b34f9264c51948d26c51957ebf392ec88586b866131b950c9e53e803b",
+     "geometric_unit_cocycle"
+     "5fe5c1f0c082005f1c162768dc4dbb984e326aa04354f7f2b5b0491b91e9526d",
+     "relative_identity"
+     "e3331718212e612d0447cd6a035a647898408957ad7c4b546ea5b9d2598ef2f0",
+     "relative_composition"
+     "0c1a84f05605b7ded3f712b01e349d48dce679ab52cb28fa552d90617561f6ed",
+     "chart_comparison"
+     "3f1a1de761728af5c9489a4d215d649554b22bec19dd58fb47b130931fa73a83",
+     "projection"
+     "f7630bb4f0a5b63b111d269766ce70abc637fdd31b11b1aad284fe5295ab2c0f",
+     "common_transition"
+     "7912754c6bb5ce16f9cef31285f695b883dd344f5fe6a581f30a46680fdd86bf",
+     "modelCoordinates"
+     "e240ba91229beeae710737c57cb8ef62dcc2ed9639dedf68323e6ff2d2657289",
+     "relative_inverse"
+     "0b197f1acc4f9003fab75c84e0484f8983ba6f83fa0aec0ea44e46d6fb18ae57",
+     "triple_unit_cocycle"
+     "e0d145c58914c0cfb81aff756ca3e1094a7e4e7ea6db7f3b6869c30c1462ba70",
+     "triple"
+     "0223926e039e30af876b8e61d31d61488518a3ed99c88727468f0bf0fab5133a",
+     "homology_composition"
+     "3736de971b6af7d04446230d5e4ef4bda60cbb9e0a8bf05708f036b46598f659",
+     "ambient_homology_square"
+     "6f1fab19267e12e63e9534308d0b01c9e99c593628a6421f4e8ac2b5a6224bb3",
+     "ambient_comparison"
+     "c35a750b5119b9ee732f81966013000d443bd3a1c13009f49fd1672a7e7c3eee",
+     "coordinate_composition"
+     "d4a081fdf0c9806cf45825217efc16daeda3d72b07134d9070ebf271daaa1444"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and all dependency PASS receipts from both ledgers",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientOverlapTransition.lean ConstructionTargets/CoefficientDistinguishedNormalization.lean",
+      :exit 0}
+     {:cmd
+      "Python fixture hash and pinned distinguished-normalization source verification; exact scoped promotion",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientDistinguishedNormalization > /tmp/overlaptransition-dependency.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientOverlapTransition.lean > /tmp/overlaptransition-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientOverlapTransition.lean > /tmp/overlaptransition-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientOverlapTransition > /tmp/overlaptransition-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verification of 37 standard-only audits in each direct compilation log and build warning attribution",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientOverlapTransition.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and 35 statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m \"Assemble actual overlap transitions and geometric unit cocycles\"",
+      :exit 0}
+     {:cmd "git diff --check 3efa5cad^ 3efa5cad", :exit 0}
+     {:cmd
+      "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :dependency-uptake
+    {:commit "3510365eedac863a7e69e71cefc9135cfd808f98",
+     :review "invoke-1789031537156-18288-dfb60dd1",
+     :sha256
+     "514f0c1014720638f0cec1d327386e07e06b694c130dc0b73c1bd94134ebbfe4"},
+    :commit "3efa5cad095e40711f8843f92e8b8345a8316d1f",
+    :changed-paths
+    ["ConstructionTargets/CoefficientOverlapTransition.lean"
+     "ConstructionTargets/CoefficientOverlapTransition.md"],
+    :fixture
+    {:path "/tmp/CoefficientOverlapTransition.lean",
+     :sha256
+     "8d609d6360e921428fb06fc330a7419f39b6ae7da3fe5a3bcf910cac8d4a826d"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientOverlapTransition.lean"
     "ConstructionTargets/CoefficientOverlapTransition.md"],
