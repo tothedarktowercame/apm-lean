@@ -45616,9 +45616,117 @@
   {:consumer :t03J05,
    :stop-condition
    "Construct only a typed atomic transition for a completed row's evidence.fixture.supporting-path and apply it to checkpoint66's banked immutable test artifact. Preserve the immutable primary fixture path, both hashes, commit, review, scope and all other ledger data. Do not modify test_gate_receipts.bb, add general evidence mutation, alter topology sources, promote terminal counts or claim consumer closure.",
-   :phase :probe,
+   :gates
+   ["Verify the two scratch fixture hashes before promotion."
+    "Modify only holes/labs/topology-contract/build_step.bb."
+    "Retain the primary transition behavior and run the unchanged repository 55-assertion suite."
+    "Run the scratch 74-assertion suite against the promoted validator."
+    "Run clj-kondo and check-parens on the changed validator and scratch test fixture."
+    "Verify supporting artifact SHA256 and Git blob."
+    "Run both live ledger validators before completion."
+    "Commit the exact one-file scope."
+    "Return the exact completion-transition request so the supervisor changes only checkpoint66 evidence.fixture.supporting-path and validates the whole ledger before atomic write."],
+   :evidence
+   {:probe
+    {:residual
+     "Promote the previously tested evidence-shape-aware preservation schema now that checkpoint66's primary and supporting source paths can both be released.",
+     :outcome :go,
+     :warnings [],
+     :axioms [],
+     :commands
+     [{:cmd
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and dependency receipts; inspect the existing transition implementation and 55-assertion suite",
+       :exit 0}
+      {:cmd
+       "Copy build_step.bb, test_gate_receipts.bb, worklist_check.bb and test fixtures to /tmp/codex13-checkpoint74-supporting-transition; add only the typed supporting-path transition and focused tests in scratch",
+       :exit 0}
+      {:cmd
+       "clj-kondo --lint /tmp/codex13-checkpoint74-supporting-transition/build_step.bb /tmp/codex13-checkpoint74-supporting-transition/test_gate_receipts.bb",
+       :exit 0}
+      {:cmd
+       "emacs --batch -Q -l /home/joe/code/futon4/dev/check-parens.el -- /tmp/codex13-checkpoint74-supporting-transition/build_step.bb /tmp/codex13-checkpoint74-supporting-transition/test_gate_receipts.bb",
+       :exit 0}
+      {:cmd
+       "bb /tmp/codex13-checkpoint74-supporting-transition/test_gate_receipts.bb",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint74-supporting-transition/build_step.bb /tmp/codex13-checkpoint74-supporting-transition/test_gate_receipts.bb holes/labs/topology-contract/evidence/atomic-fixture-transitions/test_gate_receipts-checkpoint66-22fdfdab.bb",
+       :exit 0}
+      {:cmd
+       "git hash-object holes/labs/topology-contract/evidence/atomic-fixture-transitions/test_gate_receipts-checkpoint66-22fdfdab.bb",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "bb /tmp/codex13-checkpoint74-supporting-transition/test_gate_receipts.bb",
+       :exit 1,
+       :finding
+       "The first supporting-path test exposed that the existing source-path check still read fixture.path unconditionally.",
+       :correction
+       "Changed the scratch validator to read the transition's allowlisted path; the supporting transition then reached whole-ledger validation."}
+      {:cmd
+       "bb /tmp/codex13-checkpoint74-supporting-transition/test_gate_receipts.bb",
+       :exit 1,
+       :finding
+       "The positive test compared the entire ledger even though apply-result also records the ordinary receipt outcome on the active row.",
+       :correction
+       "Compared the completed checkpoint66-shaped historical row exactly after changing only supporting-path; the final suite passed 74 assertions."}],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint74-supporting-transition/build_step.bb",
+      :sha256
+      "d6b22186e2d391fb892a4c03ecad02d88a4621ff73170c19ac0685ecdfa7721e",
+      :supporting-path
+      "/tmp/codex13-checkpoint74-supporting-transition/test_gate_receipts.bb",
+      :supporting-sha256
+      "58fc0c21afe900ca2836621980970f7ae4800ecbe8eb8acdfe56b490857e1179",
+      :assertions 74,
+      :failures 0,
+      :errors 0},
+     :finding
+     "The complete scratch patch retains the existing primary fixture transition and its original 55 assertions, adds an allowlisted supporting-path schema, reads and writes exactly the requested allowlisted path, selects the primary or supporting hash according to that path, and preserves an exact schema-specific set of remaining evidence values. The new concrete tests accept the supporting transition and prove the historical completed row differs only at evidence.fixture.supporting-path. They reject wrong row, noncompleted state, wrong path, wrong source, absent target, omitted preserve fields, extra preserve fields and a wrong preserved value. The combined suite passes 74 assertions with zero failures or errors; lint and parenthesis checks pass. The immutable supporting artifact reproduces SHA256 22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc and Git blob 310a74aedd822169f193ffb0739d2e79738296f2. Both live ledgers validate and the repository remains unchanged.",
+     :implementation
+     {:scope ["holes/labs/topology-contract/build_step.bb"],
+      :implementation
+      "Promote only the tested validator change from the scratch build_step.bb. Keep the repository test_gate_receipts.bb byte-identical while checkpoint66 still pins it, and use the scratch copy as the focused executable test fixture. After committing build_step.bb, return the concrete supporting completion-transition so the supervisor atomically repoints checkpoint66 before dependent work opens.",
+      :completion-transition
+      {:row
+       :oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1,
+       :path [:evidence :fixture :supporting-path],
+       :from "holes/labs/topology-contract/test_gate_receipts.bb",
+       :to
+       "holes/labs/topology-contract/evidence/atomic-fixture-transitions/test_gate_receipts-checkpoint66-22fdfdab.bb",
+       :preserve
+       {:fixture-path
+        "holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb",
+        :sha256
+        "ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b",
+        :supporting-sha256
+        "22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc",
+        :placeholder-count nil,
+        :commit "f96d30c1129620704c9bfa11ca2afb0510f6cc02",
+        :review-outcome :pass}},
+      :gates
+      ["Verify the two scratch fixture hashes before promotion."
+       "Modify only holes/labs/topology-contract/build_step.bb."
+       "Retain the primary transition behavior and run the unchanged repository 55-assertion suite."
+       "Run the scratch 74-assertion suite against the promoted validator."
+       "Run clj-kondo and check-parens on the changed validator and scratch test fixture."
+       "Verify supporting artifact SHA256 and Git blob."
+       "Run both live ledger validators before completion."
+       "Commit the exact one-file scope."
+       "Return the exact completion-transition request so the supervisor changes only checkpoint66 evidence.fixture.supporting-path and validates the whole ledger before atomic write."]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["holes/labs/topology-contract/build_step.bb"],
    :dag-node
    "LEDGER REPRESENTATION: checkpoint66 supporting validator fixture transition",
    :acceptance
@@ -45656,6 +45764,25 @@
    :depends-on
    [:oriented-checkpoint74-checkpoint66-primary-transition-and-consumer-refill-1
     :oriented-checkpoint74-checkpoint66-primary-transition-and-consumer-refill-1],
+   :completion-transition
+   {:row
+    :oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1,
+    :path [:evidence :fixture :supporting-path],
+    :from "holes/labs/topology-contract/test_gate_receipts.bb",
+    :to
+    "holes/labs/topology-contract/evidence/atomic-fixture-transitions/test_gate_receipts-checkpoint66-22fdfdab.bb",
+    :preserve
+    {:fixture-path
+     "holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb",
+     :sha256
+     "ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b",
+     :supporting-sha256
+     "22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc",
+     :placeholder-count nil,
+     :commit "f96d30c1129620704c9bfa11ca2afb0510f6cc02",
+     :review-outcome :pass}},
+   :implementation
+   "Promote only the tested validator change from the scratch build_step.bb. Keep the repository test_gate_receipts.bb byte-identical while checkpoint66 still pins it, and use the scratch copy as the focused executable test fixture. After committing build_step.bb, return the concrete supporting completion-transition so the supervisor atomically repoints checkpoint66 before dependent work opens.",
    :current-residual
    "Checkpoint66's primary fixture is immutable, but supporting-path still pins mutable test_gate_receipts.bb and prevents its reviewed extension.",
    :other-consumers [:t96J06 :t97A04]}
