@@ -42402,6 +42402,27 @@
      "Canonical MaximalPath p q values encoded as balanced Boolean step words by the banked stepWord map",
      :direction
      "Exact two-sided equivalence from the source balanced-word representation to the target canonical maximal-path representation via reconstructedPath, with balancedStepWord extraction as its inverse."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789078508870-19634-a746c3fa",
+     :commands
+     ["git show --stat --oneline 04409127"
+      "git show --format=fuller --no-ext-diff 04409127"
+      "git archive 04409127 | tar -x -C /tmp/topology-equivalence-review-7kwRXa"
+      "git diff-tree --no-commit-id --name-status -r 04409127"
+      "git show --check --oneline 04409127"
+      "sha256sum archived canonical fixture and reviewed source fixture"
+      "cmp archived canonical fixture against reviewed source fixture"
+      "lake env lean archived ProductSimplexWordPathEquivalence.lean"
+      "lake build ConstructionTargets.ProductSimplexWordPathEquivalence"
+      "scan for placeholders, forbidden declarations, and deferred interfaces"
+      "bb worklist_check.bb on both archived ledgers"
+      "verify all fifteen p+q<=4 examples"
+      "recompute two recorded statement hashes"
+      "recompute t03J05 t96J06 t97A04 hashes and placeholder counts"],
+     :finding
+     "PASS: commit 0440912761f48619ccb148a3da08031c659fc9a7 has exact two-file scope and clean whitespace. The committed Lean module is byte-identical to the reviewed fixture at SHA256 47fe5d02aa223ffee20b18fcde4a9b482b2afbe1e501d13a119c3281b330bf48, compiles, builds, has zero placeholders or forbidden downstream declarations, and both ledgers validate. reconstructedPath_balancedStepWord has the required MaximalPath-facing orientation: it exposes reconstructedSimplex, applies prodStdSimplex.objEquiv injectivity, and recovers the first and second cumulative coordinates from horizontalCount_stepWord and verticalCount_stepWord. wordPathEquiv is correctly directed BalancedWord p q ≃ MaximalPath p q with reconstructedPath as toFun and balancedStepWord as invFun; its left inverse uses the banked stepWord_reconstructedPath law and its right inverse uses reconstructedPath_balancedStepWord. All fifteen pairs with p+q at most four are present and compile. Axiom audits report only propext, Classical.choice, and Quot.sound. Statement hashes reproduce as a7b809be27cd8af17619be403d4492e668e3ffe1c1b12f85e111c646ac6ed46e and 008733be3f2652d582c07d1f50fecb8ac96d75c9b1c4c81f7e2d04aa51a12ec7. Corner swaps, cancellation, cross products, and consumer closure remain outside the representation boundary. Frozen hashes remain db4071c33fa3b5fb6af0d5d7955bf431400fe7d2c4f8dbc759941f4bf6611af4, 1d8874db11a786b11d04b5af4f0375fa439c05d5ac1bdafacd9943a89e238a71, and 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with placeholder counts 1/2/4."},
     :commit "0440912761f48619ccb148a3da08031c659fc9a7",
     :changed-paths
     ["ConstructionTargets/ProductSimplexWordPathEquivalence.lean"
@@ -42423,7 +42444,7 @@
     "The canonical module is byte-identical to the complete placeholder-free fixture. reconstructedPath_balancedStepWord exposes the reconstructed simplex, applies prodStdSimplex.objEquiv injectivity, and recovers both cumulative coordinates using horizontalCount_stepWord and verticalCount_stepWord. wordPathEquiv uses reconstructedPath and balancedStepWord as its two maps, the banked stepWord_reconstructedPath theorem for the forward inverse, and reconstructedPath_balancedStepWord for the reverse inverse. All fifteen pairs with p+q at most four compile. No corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure declaration was added.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexWordPathEquivalence.lean"
     "ConstructionTargets/ProductSimplexWordPathEquivalence.md"],
@@ -42486,7 +42507,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: product-simplex word/path inverse laws and renewed consumer eligibility",
