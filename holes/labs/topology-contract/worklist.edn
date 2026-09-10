@@ -68617,6 +68617,42 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the actual equality of the two range-subcomplex supremum with the Boolean cover-small simplicial set and the resulting coefficient chain and homology isomorphisms to the ambient complement; no supplied exactness conjugation or excision.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientCompactComplementUnionComparison.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / coefficient compact-complement union comparison",
+   :acceptance
+   {:fixture "/tmp/CoefficientCompactComplementUnionComparison.lean",
+    :fixture-sha256
+    "a91c06af52938916deb44ee2f9f45f3cd260969d75357268267f1ab539672de9",
+    :implementation
+    "Promote the exact fixture. Compile union_eq_coverSmall, unionChainsIso, unionHomologyIso, unionHomologyIso_hom and unionHomologyIso_inv. This supplies the union-term comparison on the compact-support placeholder route. Verify CoefficientPieceRangeBiproductComparison SHA256 e9ca8cac704c128859f2f872b753cd4d2687bb18dcd588fa179c7bb04d73c795 and CoefficientCompactComplementSmallComparison SHA256 e510ba7b8399a61480d380d5711d81530444577be01b81a1d6ee83808ac45708. Preserve compact K and L in a Hausdorff space, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientCompactComplementUnionComparison.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "Coefficient chains and homology of the supremum of the left and right ambient range subcomplexes in the instantiated Mayer-Vietoris sequence",
+    :target
+    "Coefficient singular chains and homology of the actual ambient space X minus the intersection of K and L",
+    :direction
+    "Identify the range supremum exactly with the Boolean cover-small simplicial set, then apply the forward cover-small comparison isomorphism to obtain chain and homology identifications from the Mayer-Vietoris union term to the actual ambient complement."},
+   :id
+   :coefficient-compact-complement-union-comparison-implementation-refill49,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-piece-range-biproduct-comparison-implementation-refill49
+    :coefficient-compact-complement-small-comparison-implementation-refill49],
+   :current-residual
+   "Conjugate the instantiated signed Mayer-Vietoris connecting morphism and both homology arrows through the intersection, piece-biproduct and union comparison isomorphisms, prove the three resulting exactness statements, then transport the relative terms to the requested pairs in X by coefficient excision.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
    :evidence
    {:probe
@@ -68626,66 +68662,73 @@
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the actual coefficient homology isomorphism between the two range-subcomplex piece terms and the biproduct of the literal subtype terms, with forward and inverse projection formulas; no supplied union comparison, exactness conjugation or excision.",
+      "Require the actual equality of the two range-subcomplex supremum with the Boolean cover-small simplicial set and the resulting coefficient chain and homology isomorphisms to the ambient complement; no supplied exactness conjugation or excision.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean"],
+      ["ConstructionTargets/CoefficientCompactComplementUnionComparison.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / coefficient piece-range biproduct comparison",
+      "MANIFOLD FUNDAMENTAL CLASS / coefficient compact-complement union comparison",
       :acceptance
-      {:fixture "/tmp/CoefficientPieceRangeBiproductComparison.lean",
+      {:fixture
+       "/tmp/CoefficientCompactComplementUnionComparison.lean",
        :fixture-sha256
-       "e9ca8cac704c128859f2f872b753cd4d2687bb18dcd588fa179c7bb04d73c795",
+       "a91c06af52938916deb44ee2f9f45f3cd260969d75357268267f1ab539672de9",
        :implementation
-       "Promote the exact fixture. Compile pieceHomologyIso, pieceHomologyIso_hom_fst, pieceHomologyIso_hom_snd, pieceHomologyIso_inv_fst and pieceHomologyIso_inv_snd. This supplies the middle-term biproduct comparison on the compact-support placeholder route. Verify CoefficientIntersectionRangeNaturality SHA256 4619a45836530c6e5706d113a86132b8aa5fc6236e05221423e1ab72c6fe9f09. Preserve arbitrary topological X, arbitrary subsets A and B, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim the union comparison, Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile union_eq_coverSmall, unionChainsIso, unionHomologyIso, unionHomologyIso_hom and unionHomologyIso_inv. This supplies the union-term comparison on the compact-support placeholder route. Verify CoefficientPieceRangeBiproductComparison SHA256 e9ca8cac704c128859f2f872b753cd4d2687bb18dcd588fa179c7bb04d73c795 and CoefficientCompactComplementSmallComparison SHA256 e510ba7b8399a61480d380d5711d81530444577be01b81a1d6ee83808ac45708. Preserve compact K and L in a Hausdorff space, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean"],
+       ["lake env lean ConstructionTargets/CoefficientCompactComplementUnionComparison.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "The biproduct of coefficient homology groups of the left and right ambient range subcomplexes in the instantiated Mayer-Vietoris sequence",
+       "Coefficient chains and homology of the supremum of the left and right ambient range subcomplexes in the instantiated Mayer-Vietoris sequence",
        :target
-       "The biproduct of coefficient homology groups of the corresponding actual topological subtypes",
+       "Coefficient singular chains and homology of the actual ambient space X minus the intersection of K and L",
        :direction
-       "Apply the two forward ambient-range-to-subtype homology isomorphisms componentwise, producing an exact biproduct isomorphism whose forward and inverse arrows commute with both canonical projections."},
+       "Identify the range supremum exactly with the Boolean cover-small simplicial set, then apply the forward cover-small comparison isomorphism to obtain chain and homology identifications from the Mayer-Vietoris union term to the actual ambient complement."},
       :id
-      :coefficient-piece-range-biproduct-comparison-implementation-refill49,
+      :coefficient-compact-complement-union-comparison-implementation-refill49,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-intersection-range-naturality-implementation-refill49
-       :coefficient-ambient-subspace-range-comparison-implementation-refill49],
+      [:coefficient-piece-range-biproduct-comparison-implementation-refill49
+       :coefficient-compact-complement-small-comparison-implementation-refill49],
       :current-residual
-      "Construct the coefficient homology comparison for the union range term and actual ambient complement, then conjugate the instantiated signed Mayer-Vietoris exactness through the intersection, biproduct and union comparisons and transport the relative terms to the requested pairs in X by coefficient excision.",
+      "Conjugate the instantiated signed Mayer-Vietoris connecting morphism and both homology arrows through the intersection, piece-biproduct and union comparison isomorphisms, prove the three resulting exactness statements, then transport the relative terms to the requested pairs in X by coefficient excision.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientIntersectionRangeNaturality >/tmp/coefficient-intersection-naturality-build.log",
+       "lake build ConstructionTargets.CoefficientPieceRangeBiproductComparison ConstructionTargets.CoefficientCompactComplementSmallComparison >/tmp/coefficient-union-deps.log",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientPieceRangeBiproductComparison.lean",
+       "lake env lean /tmp/CoefficientCompactComplementUnionComparison.lean",
        :exit 0}
       {:cmd
-       "python3 placeholder-and-declaration audit over /tmp/CoefficientPieceRangeBiproductComparison.lean",
+       "python3 placeholder-declaration-warning audit over /tmp/CoefficientCompactComplementUnionComparison.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientPieceRangeBiproductComparison.lean ConstructionTargets/CoefficientIntersectionRangeNaturality.lean",
+       "sha256sum /tmp/CoefficientCompactComplementUnionComparison.lean ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean ConstructionTargets/CoefficientCompactComplementSmallComparison.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/CoefficientCompactComplementUnionComparison.lean",
+       :exit 1,
+       :correction
+       "The Boolean-indexed supremum lists the true/right range before the false/left range. Replaced the incorrect definitional-equality proof with the exact supremum commutativity equality; final compilation has no warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientPieceRangeBiproductComparison.lean",
+     {:path "/tmp/CoefficientCompactComplementUnionComparison.lean",
       :sha256
-      "e9ca8cac704c128859f2f872b753cd4d2687bb18dcd588fa179c7bb04d73c795",
+      "a91c06af52938916deb44ee2f9f45f3cd260969d75357268267f1ab539672de9",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one missing comparison prerequisite. The direct sum of the two ambient range-subcomplex homology groups is now isomorphic to the direct sum of the actual left and right topological-subtype homology groups. Both forward and inverse maps have proved first- and second-projection formulas in every natural degree. The union comparison, conjugated exactness and coefficient excision remain.",
+     "Compiled exactly one missing union-term comparison prerequisite. The supremum of the actual left and right compact-complement range subcomplexes equals the Boolean cover-small simplicial set. Coefficient chains on that supremum and their homology are thereby identified with coefficient singular chains and homology of the actual ambient complement, with explicit forward and inverse homology formulas in every degree. Conjugated exactness and coefficient excision remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -68709,7 +68752,8 @@
     :coefficient-ambient-subspace-range-naturality-implementation-refill49
     :coefficient-intersection-range-comparison-implementation-refill49
     :coefficient-intersection-range-naturality-implementation-refill49
-    :coefficient-piece-range-biproduct-comparison-implementation-refill49],
+    :coefficient-piece-range-biproduct-comparison-implementation-refill49
+    :coefficient-compact-complement-union-comparison-implementation-refill49],
    :current-residual
    "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
