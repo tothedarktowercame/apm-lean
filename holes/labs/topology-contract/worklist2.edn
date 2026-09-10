@@ -42980,8 +42980,57 @@
   {:consumer :t03J05,
    :stop-condition
    "Bank only the terminal characterizations of horizontalCount and verticalCount as cardinalities of the true-letter and false-letter filters over all word positions. Do not define swaps, package balanced words or paths, compare faces, assign signs, cancel chains, construct a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:residual
+    "Preserve checkpoint67's 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08 bytes as an immutable repository artifact and atomically repoint its completed-row fixture path there; then promote the compiled f2d795b7b39602eb881503a501bef7e30cf25773b4cea4c4bda245b6dbc430ac additive fixture and proceed to adjacent-swap balance preservation.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :reason :completed-checkpoint67-pins-mutable-canonical-fixture,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "Inspect checkpoint67 and checkpoint60 live evidence fixture paths and hashes in worklist2.edn",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "Temporarily promote the reviewed fixture, run bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn, and restore the canonical predecessor through an EXIT trap",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "sha256sum ConstructionTargets/ProductSimplexWordPrefixCounts.lean after restoration",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; git diff --exit-code; git status --short",
+      :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean",
+     :sha256
+     "f2d795b7b39602eb881503a501bef7e30cf25773b4cea4c4bda245b6dbc430ac",
+     :placeholder-count 0,
+     :predecessor-path
+     "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+     :predecessor-sha256
+     "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08"},
+    :finding
+    "The complete placeholder-free additive fixture compiles and proves both requested terminal-count characterizations with standard-only axioms. Promotion is currently incompatible with the mandatory ledger gate: completed row oriented-checkpoint67-product-simplex-prefix-successor-recurrences-promotion-1 records ConstructionTargets/ProductSimplexWordPrefixCounts.lean itself as fixture path with SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08. Replacing that source with the reviewed additive fixture deterministically makes worklist2 validation fail with checkpoint67 fixture hash mismatch. The canonical source was restored byte-for-byte, both live ledgers validate, and the worktree is clean. This is a ledger-evidence representation boundary, not a mathematical refutation.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
