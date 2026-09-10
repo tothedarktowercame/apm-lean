@@ -27485,22 +27485,104 @@
    :stop-condition
    "Bank local approximation balls and their graph bounds only. Do not claim countable disjointification, graph-image measurability, exact area equality, numerical sphere normalization or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint45-c1-partition/C1GraphLocalApproximation.lean",
-      :sha256
-      "558b8faca4c5dd128e8fa8db5bc4b1eb3e71ae14f881b5842299f15125fc199f"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/codex13-checkpoint45-c1-partition/C1GraphLocalApproximation.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Select countably many balls, disjointify measurably, and prove measurability, disjointness and exact coverage of actual graph images before exact variable-density equality. No numerical sphere normalization or consumer closure is claimed.",
+    :dependency-review "invoke-1789038655657-18457-4f4f4a2d",
+    :scratch "/tmp/codex14-c1-local-pxhv0r1i",
+    :gates
+    {:derivative-continuity-and-radius-construction :pass,
+     :ball-containment-center-membership-and-measurability :pass,
+     :convex-mean-value-residual :pass,
+     :actual-l2-subset-bounds :pass,
+     :arbitrary-zero-and-infinite-measures :pass,
+     :dimension-two-three-examples :pass,
+     :exact-two-file-scope :pass,
+     :build-jobs 2513},
+    :axiom-audits 11,
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"radius_pos"
+     "f2aa36a62da8348737b1d8bd35088ba3062fc842c61ae8bbb2d79beaeee6985f",
+     "ball_measurable"
+     "b4a061d90639ec76b844ae87f699b9d1aba96d6312f32ed7337ca68dae749ae3",
+     "derivative_bound"
+     "2c652df7b5c6a830b3cb04bd03ad0916f1658c8fa8bfef6722fd460b7511b44d",
+     "radius"
+     "ac9ad7354433135122b8e326a055bf44a4a10f22e01d4262f46334a25facece9",
+     "dimension_three"
+     "b0727eab14e302a6f1c61a8ed8f2e93e47b0934bec9f9ce08c280bbf827b42d9",
+     "center_member"
+     "b8116af386fa48278f782e521bf8fea63585199f3671c54bcd7750e0c56490ec",
+     "local_ball"
+     "e155d003dbdcefcf779b5581b2c134faa75dee6c2b41f17d083dea23bc023baf",
+     "residual_bound"
+     "64663c38b55e7ead2b24c07510a0359831ef651b0a9857d29560d521b76844fe",
+     "radius_subset"
+     "0a53f98642cae3635addb7a192c6476537082014a6f377bcc81ca556ae4e490c",
+     "dimension_two"
+     "9acea022e6df24b19f095606cb46b1bd691f57c9a40fb0b31e8a4fa6bcbe44b8",
+     "subset_bounds"
+     "2fc1361d3be49947017a09925c91d737df25d134f8dd4c4b468a94909cdefd92"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments, build-loop design and both ledgers; inspect GraphMetricComparison dependency PASS receipt",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "Python fixture SHA256 verification and exact promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint45-c1-partition/C1GraphLocalApproximation.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/C1GraphLocalApproximation.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.C1GraphLocalApproximation",
+      :exit 0}
+     {:cmd
+      "Python compile-log audit: eleven target reports, standard-only axioms, no warnings or errors",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/C1GraphLocalApproximation.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and eleven statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m 'Construct C1 local graph approximation balls'",
+      :exit 0}
+     {:cmd
+      "git diff --check 86ce47bd^ 86ce47bd; Python committed scope, fixture equality and clean scoped status verification",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "rg dependency row in worklist.edn",
+      :exit 1,
+      :correction
+      "The dependency resides in worklist2.edn; located and read its independent PASS receipt there."}],
+    :id :c1-graph-local-convex-approximation-1,
+    :commit "86ce47bdc7822a4e038b8ded58536541630c9366",
+    :changed-paths
+    ["ConstructionTargets/C1GraphLocalApproximation.lean"
+     "ConstructionTargets/C1GraphLocalApproximation.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint45-c1-partition/C1GraphLocalApproximation.lean",
+     :sha256
+     "558b8faca4c5dd128e8fa8db5bc4b1eb3e71ae14f881b5842299f15125fc199f",
+     :exact-promotion true,
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. Derivative continuity constructs positive approximation balls; the convex mean-value theorem supplies actual residual estimates, and reviewed graph bounds apply to arbitrary subsets. Both ledgers and unrelated consumers remain untouched.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/C1GraphLocalApproximation.lean"
     "ConstructionTargets/C1GraphLocalApproximation.md"],
