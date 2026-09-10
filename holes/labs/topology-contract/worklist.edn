@@ -60587,9 +60587,104 @@
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
   {:consumer "t00J02",
    :stop-condition
-   "GO requires actual literal-incidence local charts, coverage and overlaps. REVISE requires exactly one compiled prerequisite; no assumed compatibility or consumer closure.",
-   :phase :probe,
+   "Require the actual open-domain construction, incident-center coverage and proved local zero-fiber equality; no assumed incidence comparison.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/ManifoldTargetIncidenceLocalization.lean"],
+   :dag-node
+   "TRANSVERSE-PULLBACK / common target-chart incidence localization",
+   :acceptance
+   {:fixture "/tmp/ManifoldTargetIncidenceLocalization.lean",
+    :fixture-sha256
+    "8b52c3435e02a92d409a09fb40ca9ea641ea9a672f319031e3e8ec939a87a350",
+    :implementation
+    "Promote the exact fixture. Compile domain, domain_open, center_mem, coordinate_zero_iff and local_fiber_eq. Preserve the actual chartAt source, original topology and weaker hypotheses: continuity is required only for openness, and no finite-dimensionality or smoothness is required. Audit zero placeholders and standard-only axioms. Do not claim derivative transport, regularity, an incidence chart or consumer closure.",
+    :commands
+    ["lake env lean ConstructionTargets/ManifoldTargetIncidenceLocalization.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :manifold-target-incidence-localization-implementation-refill40,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+   :current-residual
+   "Common target-chart localization is compiled. Coordinate derivative transport, local transversality and actual incidence charts with smooth overlaps remain.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires actual literal-incidence local charts, coverage and overlaps. REVISE requires exactly one compiled prerequisite; no assumed compatibility or consumer closure.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Derive coordinate smoothness, actual derivative transport and local regularity; construct and transfer local vector-target incidence charts and prove coverage and smooth overlaps. Empty incidence and zero-dimensional models remain allowed. Global atlas and tangent assembly, component coverage, orientations and homological comparisons remain subsequent; no Producer or frozen consumer closure is claimed.",
+     :dependency-review
+     {:outcome :pass,
+      :seat "codex-10",
+      :job "invoke-1789014917549-17852-fe8c5dbf"},
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer "t00J02",
+      :stop-condition
+      "Require the actual open-domain construction, incident-center coverage and proved local zero-fiber equality; no assumed incidence comparison.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ManifoldTargetIncidenceLocalization.lean"],
+      :dag-node
+      "TRANSVERSE-PULLBACK / common target-chart incidence localization",
+      :acceptance
+      {:fixture "/tmp/ManifoldTargetIncidenceLocalization.lean",
+       :fixture-sha256
+       "8b52c3435e02a92d409a09fb40ca9ea641ea9a672f319031e3e8ec939a87a350",
+       :implementation
+       "Promote the exact fixture. Compile domain, domain_open, center_mem, coordinate_zero_iff and local_fiber_eq. Preserve the actual chartAt source, original topology and weaker hypotheses: continuity is required only for openness, and no finite-dimensionality or smoothness is required. Audit zero placeholders and standard-only axioms. Do not claim derivative transport, regularity, an incidence chart or consumer closure.",
+       :commands
+       ["lake env lean ConstructionTargets/ManifoldTargetIncidenceLocalization.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :id
+      :manifold-target-incidence-localization-implementation-refill40,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+      :current-residual
+      "Common target-chart localization is compiled. Coordinate derivative transport, local transversality and actual incidence charts with smooth overlaps remain.",
+      :other-consumers ["t02A07" "t94A06" "t97J05"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/ManifoldTargetIncidenceLocalization.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/ManifoldTargetIncidenceLocalization.lean",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/ManifoldTargetIncidenceLocalization.lean",
+       :exit 0,
+       :correction
+       "Initial compilation reported unused source-topology assumptions. Explicitly omitted them from center_mem and coordinate_zero_iff."}
+      {:cmd
+       "lake env lean /tmp/ManifoldTargetIncidenceLocalization.lean",
+       :exit 0,
+       :correction
+       "The subsequent compilation exposed the same redundant assumptions in local_fiber_eq. Omitted them; final compilation is warning-free."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/ManifoldTargetIncidenceLocalization.lean",
+      :sha256
+      "8b52c3435e02a92d409a09fb40ca9ea641ea9a672f319031e3e8ec939a87a350",
+      :placeholder-count 0},
+     :finding
+     "Compiled one common-target-chart localization prerequisite. The constructed domain requires both images to lie in the same actual chart source. It is open for continuous maps, contains every incident center, and on it the coordinate difference vanishes exactly when the original values agree, by chart injectivity. The corresponding restricted zero-fiber and incidence sets are equal. No fiber equivalence or incidence equality is assumed.",
+     :seat "codex-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "TRANSVERSE-PULLBACK / manifold-target local incidence charts",
@@ -60601,7 +60696,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas
-    :checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+    :manifold-target-incidence-localization-implementation-refill40],
    :current-residual
    "Vector-target incidence has a normalized global atlas and exact tangent equalizer. Common target-chart localization and local incidence chart transport remain for manifold targets.",
    :other-consumers ["t02A07" "t94A06" "t97J05"]}
