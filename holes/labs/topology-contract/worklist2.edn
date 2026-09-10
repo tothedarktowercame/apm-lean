@@ -16692,8 +16692,183 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read DAG, foundational-program note, closure policy and dependency receipts; inspect both ledgers",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint28Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint27Eligibility.bb", :exit 0}
+     {:cmd
+      "Inspect SphereHomology, T02A06SphereShift and T02A06DiskPairShift coefficient representations and next required equations",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "No supplied pair connecting isomorphism, contractible homology vanishing or degree-zero monicity. Do not treat ordinary H0 as reduced H0, silently omit empty boundaries or claim sphere suspension before geometric assembly.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SPHERE SUSPENSION: coefficient-general actual pair connecting maps and contractible endpoints",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a Type 0 commutative ring R, Type 0 topological space X and arbitrary subset A, construct the short exact sequence of the actual subtype chain inclusion and its categorical cokernel CoefficientRelativeSmall.relativeChains. Define the actual connecting morphisms on homology and prove the three pair exactness equations over ModuleCat R. Derive positive-degree vanishing for contractible spaces directly with coefficient object ModuleCat.of R R using homotopy invariance and the point calculation. For contractible X construct the relative-to-subspace connecting isomorphism in every positive target degree and identify relative H1 with the kernel of the actual inclusion-induced H0 map. For contractible A prove the actual absolute-to-relative projection is an isomorphism in every positive degree, including the H0 monicity endpoint. Prove exact forward-map equations and inverse laws; specialize to actual Euclidean closed-ball boundary subsets over integers and rationals. State universes and handle zero-dimensional balls and empty boundary subsets. Do not assume vanishing, pair exactness or an integral-to-R comparison. REVISE requires exactly one complete compiled missing pair-sequence or contractible-homology prerequisite; STOP if independent foundations remain.",
+       :consumer-equation
+       "The actual R-linear pair connecting and projection maps provide the contractible-space isomorphisms and H1 kernel endpoint required for sphere suspension.",
+       :consumer-residual
+       "Transport the reviewed hemisphere and radial geometry over R, assemble sphere suspension, then compute rational S2 H1/H2 with the required normalization and naturality.",
+       :gates
+       ["GO requires a complete placeholder-free compiled fixture with constructed pair maps, exactness, contractible endpoints and exact isomorphism equations."
+        "Record fixture SHA256, integer/rational disk-boundary examples and standard-only audits."
+        "Use actual ModuleCat R chains and categorical cokernels; no integral conclusion reinterpreted as R-linear."
+        "Recheck both ledgers and claim no sphere table or frozen closure."]},
+      :id
+      :oriented-checkpoint28-coefficient-contractible-pair-sequence-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint28-actual-excision-and-consumer-refill
+       :oriented-checkpoint27-coefficient-actual-subspace-excision-1
+       :coefficient-general-cokernel-homology-comparison-1],
+      :current-residual
+      "The actual R-valued relative cokernel and excision comparison are reviewed. The disk-pair and punctured-sphere exact-sequence calculations still use AddCommGrpCat and must be constructed directly over R.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: coefficient pair sequence and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+      :id :oriented-checkpoint29-pair-sequence-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint28-coefficient-contractible-pair-sequence-1
+       :oriented-checkpoint28-actual-excision-and-consumer-refill],
+      :current-residual
+      "Measure pair-sequence infrastructure separately from consumer closure and reassess all reviewed boundaries and concurrent outcomes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :measures
+    {:placeholder-delta 0,
+     :frozen-closures 0,
+     :corrected-closures 0,
+     :new-refutations 0,
+     :infrastructure-packets
+     {:portfolio 1,
+      :concurrent 1,
+      :modules-before 683,
+      :modules-after 685,
+      :concurrent-review-pending 1},
+     :typed-residual-change
+     "Actual coefficient-general excision is now proved for categorical cokernels of actual subtype inclusions, with the canonical forward map in every degree. The sphere route still needs coefficient-general pair connecting maps, contractible-space endpoint calculations and geometric suspension assembly. Concurrent incidence-manifold existence is implemented but awaiting review; chosen-chart and same-atlas tangent equations remain.",
+     :review-outcomes
+     [{:row
+       :oriented-checkpoint27-coefficient-actual-subspace-excision-1,
+       :outcome :pass,
+       :commit "5e52400d5d3b3bdc949cdfb044c9186123891664",
+       :review "invoke-1789012319312-17791-9d2bd335",
+       :axiom-audits 11,
+       :inherited-build-warnings 20}
+      {:row :t00a01-frozen-connected-sum-closure-probe-refill39,
+       :outcome :pass,
+       :disposition :stop,
+       :review "invoke-1789011729189-17781-021b0770",
+       :reason
+       "The target-natural arbitrary two-open pseudococone-to-free-product comparison, chosen-object extraction and frozen basepoint transport remain unassembled."}
+      {:row :transverse-incidence-manifold-implementation-refill39,
+       :outcome :done-unreviewed,
+       :commit "d56071ca6089d347fb5cb9ebe1cc5368005deae9"}]},
+    :ranking
+    ["No eligible unassigned final adapter; exclude concurrent incidence work and preserve the newly reviewed connected-sum STOP."
+     "Coefficient-general pair connecting maps and contractible endpoints: one coherent exact-sequence construction serving the four proposed sphere/homology consumers, with categorical cokernels and excision already reviewed."
+     "Retain general localization/cap/Thom, covering classification, surface cutting/classification, manifold integration, product homology and general-model regular-preimage programs. Their consumer lists do not by themselves supply a smaller ready construction or resolve the recorded consumer boundaries."],
+    :near-consumer-boundaries
+    {:t00J02
+     "Fundamental-class detection and producer; incidence work reserved.",
+     :t03J02
+     "Generic collar/NDR and van Kampen for the frozen embedded circle.",
+     :t92J06 "Actual graph covers.",
+     :t95J06 "Actual Hopf-surface torus homeomorphism.",
+     :t97A01 "Literal polygon invariants.",
+     :t94A06 "General-model smooth and dimension hypotheses.",
+     :a97J08 "Planar separation.",
+     :t01A05 "Actual covering fundamental-class degree equation.",
+     :t96J06
+     "Actual compact-manifold nonbounding and fundamental-class comparison.",
+     :t00A03
+     "Literal pants-component homeomorphisms and cutting count.",
+     :t01J04 "Analytic boundary-preimage atlas and countability.",
+     :t03J05 "Literal curves, intersection and ambient nonhomotopy.",
+     :t94J09
+     "Literal fourteen-edge polygon homeomorphism and homology.",
+     :t03J04 "Actual torus Euler computation.",
+     :t95J05
+     "Numerical diameter-power Hausdorff mass; no normalization comparison or proved refutation.",
+     :t00J01
+     "Original refutations preserved; rational sphere computations and normalization remain.",
+     :t99J03 "Literal polygon classification.",
+     :t01A08 "General-model projected regular-preimage construction.",
+     :t00A01
+     "Reviewed refill39 STOP: target-natural actual two-open free-product comparison and chosen-basepoint transport.",
+     :t98A02 "Localization and gluing.",
+     :t02A05 "Literal flux and intrinsic measure comparison.",
+     :t96J05
+     "Attained regular radius and analytic literal-level atlas; original refutation preserved.",
+     :t98A01 "Genus invariance and Euler multiplicativity.",
+     :t02A08 "Signed all-integer degree realization.",
+     :t94J08
+     "Signed antipodal naturality and reduced degree-zero normalization."},
+    :finding
+    "No newly eligible unassigned near-closure adapter was found. The newly reviewed connected-sum STOP must not be retried without its missing generic comparison. Excision resolves a shared coefficient-representation boundary but closes no consumer. Preserve original refutations, the earlier corrected t96J07 closure, and all unresolved STOPs. Elect one bounded coefficient-general pair-sequence step needed by sphere suspension; the existing disk-pair calculation is integral and cannot be imported as an R-linear conclusion.",
+    :reserved-concurrent
+    [:transverse-incidence-manifold-implementation-refill39
+     :transverse-vector-incidence-atlas-tangent-probe-refill39
+     :checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint28Census.json",
+     :open 35,
+     :baseline "989d88a8dda2c5c5b2c9815e4335922573ac887d",
+     :existing 58,
+     :placeholder-after 66,
+     :zero-placeholder 23,
+     :placeholder-before 66,
+     :head "e8a6f02b523490edd2cb5ab63b03181d76d04e6c",
+     :sha256
+     "e9d35a03d4695fe14e83f8395f1f1fbcddecd7f11436855a15e8cec958904886",
+     :named 59,
+     :missing [:t93A05],
+     :within-two 25}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: actual coefficient excision and renewed consumer eligibility",
@@ -16710,6 +16885,67 @@
     :oriented-checkpoint27-pushout-relative-and-consumer-refill],
    :current-residual
    "Measure actual-subspace excision separately from consumer closure, and reassess all reviewed boundaries and concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No supplied pair connecting isomorphism, contractible homology vanishing or degree-zero monicity. Do not treat ordinary H0 as reduced H0, silently omit empty boundaries or claim sphere suspension before geometric assembly.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SPHERE SUSPENSION: coefficient-general actual pair connecting maps and contractible endpoints",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a Type 0 commutative ring R, Type 0 topological space X and arbitrary subset A, construct the short exact sequence of the actual subtype chain inclusion and its categorical cokernel CoefficientRelativeSmall.relativeChains. Define the actual connecting morphisms on homology and prove the three pair exactness equations over ModuleCat R. Derive positive-degree vanishing for contractible spaces directly with coefficient object ModuleCat.of R R using homotopy invariance and the point calculation. For contractible X construct the relative-to-subspace connecting isomorphism in every positive target degree and identify relative H1 with the kernel of the actual inclusion-induced H0 map. For contractible A prove the actual absolute-to-relative projection is an isomorphism in every positive degree, including the H0 monicity endpoint. Prove exact forward-map equations and inverse laws; specialize to actual Euclidean closed-ball boundary subsets over integers and rationals. State universes and handle zero-dimensional balls and empty boundary subsets. Do not assume vanishing, pair exactness or an integral-to-R comparison. REVISE requires exactly one complete compiled missing pair-sequence or contractible-homology prerequisite; STOP if independent foundations remain.",
+    :consumer-equation
+    "The actual R-linear pair connecting and projection maps provide the contractible-space isomorphisms and H1 kernel endpoint required for sphere suspension.",
+    :consumer-residual
+    "Transport the reviewed hemisphere and radial geometry over R, assemble sphere suspension, then compute rational S2 H1/H2 with the required normalization and naturality.",
+    :gates
+    ["GO requires a complete placeholder-free compiled fixture with constructed pair maps, exactness, contractible endpoints and exact isomorphism equations."
+     "Record fixture SHA256, integer/rational disk-boundary examples and standard-only audits."
+     "Use actual ModuleCat R chains and categorical cokernels; no integral conclusion reinterpreted as R-linear."
+     "Recheck both ledgers and claim no sphere table or frozen closure."]},
+   :id :oriented-checkpoint28-coefficient-contractible-pair-sequence-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint28-actual-excision-and-consumer-refill
+    :oriented-checkpoint27-coefficient-actual-subspace-excision-1
+    :coefficient-general-cokernel-homology-comparison-1
+    :oriented-checkpoint28-actual-excision-and-consumer-refill],
+   :current-residual
+   "The actual R-valued relative cokernel and excision comparison are reviewed. The disk-pair and punctured-sphere exact-sequence calculations still use AddCommGrpCat and must be constructed directly over R.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: coefficient pair sequence and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint29-pair-sequence-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint28-coefficient-contractible-pair-sequence-1
+    :oriented-checkpoint28-actual-excision-and-consumer-refill
+    :oriented-checkpoint28-actual-excision-and-consumer-refill],
+   :current-residual
+   "Measure pair-sequence infrastructure separately from consumer closure and reassess all reviewed boundaries and concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
