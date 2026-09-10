@@ -24030,6 +24030,21 @@
       "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789030774279-18274-ea77eaab",
+     :commands
+     ["git show 8a65c6799993ac37ded3159abd82d26a2f6c7ac0 (Lean and documentation)"
+      "Python exact fixture SHA256/equality, two-file scope, 13 statement hashes and forbidden-declaration audit"
+      "Python comment-stripped problem placeholder census at parent and commit: Main.lean 278->278; all problem Lean files 314->314"
+      "lake env lean /tmp/CoefficientChartRestriction.lean"
+      "lake env lean ConstructionTargets/CoefficientChartRestriction.lean"
+      "lake build ConstructionTargets.CoefficientChartRestriction"
+      "git diff --check 8a65c679^ 8a65c679"
+      "bb holes/labs/topology-contract/worklist_check.bb on both recorded ledgers at e82392b6"],
+     :finding
+     "Independent of author codex-14. Exact fixture ce756577f18f1ffee92ab6b2d8df00b8b2f905f401ee6a50855503ab8dbfa591; all gates pass. Actual coordinate and ambient inclusion squares induce correctly directed relative and homology equations; model-neighborhood compatibility proves normalization and generator restriction. Distinguished-chart recovery, transition units, cocycles and orientation remain explicitly downstream."},
     :commit "8a65c6799993ac37ded3159abd82d26a2f6c7ac0",
     :changed-paths
     ["ConstructionTargets/CoefficientChartRestriction.lean"
@@ -24042,7 +24057,7 @@
     "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientChartRestriction.lean"
     "ConstructionTargets/CoefficientChartRestriction.md"],
@@ -24215,7 +24230,7 @@
      "Exactly one complete compiled geometric restriction comparison is supplied. Nested actual chart neighborhoods induce inclusion of their translated coordinate images. The coordinate and ambient squares hold for the actual maps; pair-map composition gives the relative square and its homology equation. Combining these with the actual model-neighborhood inclusion equation proves equality of the two normalization isomorphisms and constructed generators. The parent is not GO: distinguished-chart recovery and transition-unit/generator-change/cocycle equations remain.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "LOCAL ORIENTATION: actual coefficient-general overlap transition and normalization comparison",
