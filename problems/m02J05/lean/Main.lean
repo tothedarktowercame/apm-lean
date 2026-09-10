@@ -31,9 +31,19 @@ def apm_m02J05_K (α : ℝ → ℝ) : Set (ℝ →ₘ[volume] ℝ) :=
 def apm_m02J05_L (α : ℝ → ℝ) : Set (ℝ →ₘ[volume] ℝ) :=
   {u | ∃ c : ℝ, c ≠ 0 ∧ c • u ∈ apm_m02J05_K α}
 
-/-- The Luxemburg functional associated to `α`. -/
+/-- The Luxemburg functional associated to `α`.
+
+The sublevel set carries an explicit `IntegrableOn` conjunct. Without it the
+condition `∫ ... ≤ 1` is vacuous when the modular integral diverges: the
+real-valued Lebesgue integral of a nonnegative measurable function with
+infinite integral is `0` in Mathlib, so every small `c` would be admissible,
+the infimum would collapse to `0` for every `u`, and definiteness modulo
+a.e. equality would fail. With the integrability conjunct the set is the
+classical one: nonempty on `apm_m02J05_L α` by monotone convergence, and the
+Luxemburg gauge laws hold. -/
 noncomputable def apm_m02J05_lux (α : ℝ → ℝ) (u : ℝ →ₘ[volume] ℝ) : ℝ :=
   sInf {c : ℝ | 0 < c ∧
+    IntegrableOn (fun x ↦ apm_m02J05_young α (|u x| / c)) (Icc (0 : ℝ) 1) volume ∧
     ∫ x in Icc (0 : ℝ) 1, apm_m02J05_young α (|u x| / c) ∂volume ≤ 1}
 
 lemma apm_m02J05_young_zero (α : ℝ → ℝ) :
