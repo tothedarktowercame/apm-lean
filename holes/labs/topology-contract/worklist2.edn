@@ -32864,92 +32864,89 @@
     "Confirm no normalization, ENNReal cancellation, numerical sphere mass, moment, Stokes or consumer-closure result is introduced."
     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Symbolic whole-sphere assembly is complete. The independent raw Hausdorff normalization characterization and subsequent dimension-specific integral and moment evaluations remain.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint52-sphere-assembly/SphereCapNullEquatorMeasureAssembly.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint52-sphere-assembly/SphereCapNullEquatorMeasureAssembly.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint52-sphere-assembly/SphereCapNullEquatorMeasureAssembly.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "Python comment-stripped placeholder, forbidden-declaration, whitespace, warning and three standard-only axiom audits",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial symbolic sphere-measure fixture compilation",
-       :exit 1,
-       :correction
-       "Both canonical equator modules export definitionally equal declarations named equator, making the unqualified term ambiguous. Qualified the hypothesis with SphereCapEquatorPartition.equator; the canonical ambient-nullity theorem then matches definitionally and the fixture compiles."}
-      {:cmd "First combined final-audit script",
-       :exit 1,
-       :correction
-       "The axiom output is line-wrapped, so an assertion expecting the complete axiom list on one line failed. Counted the three Classical.choice audit entries while separately checking absence of warnings; the corrected audit succeeds."}],
-     :changed-paths [],
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint52-sphere-assembly/SphereCapNullEquatorMeasureAssembly.lean",
-      :sha256
-      "bf7c2f94ed65c0c992120fb26d29b94cb3a53de2146b3f9680ed60ca76b50aad",
-      :placeholder-count 0},
-     :finding
-     "A complete placeholder-free fixture proves the symbolic whole-sphere formulas. For arbitrary d it rewrites the literal sphere by the canonical cap partition, applies measure_union first to the disjoint union of both strict caps and the measurable equator, applies measure_union again to the disjoint strict caps, removes the equator using only the supplied ambient zero-measure equality, and rewrites both cap measures through the reviewed reciprocal-height formulas. Concrete d=2 and d=3 theorems use the canonical ambient equator-nullity results. Both cap terms remain explicit, so no ENNReal cancellation, finiteness, numerical normalization or integral evaluation occurs. All three declarations compile with standard-only axioms. No sphere mass, moment, Stokes or consumer-closure result is claimed; no canonical source or ledger was edited.",
-     :implementation
-     {:hypotheses
-      "Use raw hausdorffMeasure 2 on EuclideanSpace real (Fin 3) and raw hausdorffMeasure 3 on EuclideanSpace real (Fin 4), the canonical strict-cap formulas, measurable pairwise-disjoint partitions and ambient equator-nullity theorems. No normalization or finiteness hypothesis is supplied.",
-      :gates
-      ["Verify the recorded fixture SHA256 before implementation."
-       "Compile the fixture and canonical target; run lake build ConstructionTargets.SphereCapNullEquatorMeasureAssembly."
-       "Reproduce three standard-only axiom audits."
-       "Audit both measure_union applications against the canonical measurability and disjointness declarations."
-       "Verify the equator term is removed only by the supplied or canonical ambient-nullity equality."
-       "Verify both cap measures rewrite through SphereCapHausdorffTransport."
-       "Compile d=2 and d=3 formulas."
-       "Confirm no normalization, ENNReal cancellation, numerical sphere mass, moment, Stokes or consumer-closure result is introduced."
-       "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
-      :consumer-residual
-      "Resolve the preserved raw Hausdorff normalization characterization and evaluate the dimension-specific reciprocal-height and coordinate-moment integrals required by t95J05, t02A05, t01J06 and t94A10.",
-      :scope
-      ["ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean"
-       "ConstructionTargets/SphereCapNullEquatorMeasureAssembly.md"],
-      :axioms :standard-only,
-      :consumer-equation
-      "Raw Hausdorff measure of the literal S2 or S3 sphere equals the sum of its two reviewed strict-cap reciprocal-height lintegrals, with the equator removed by the proved ambient nullity theorem.",
-      :declarations
-      ["EA"
-       "sphere_measure"
-       "sphere_two_measure"
-       "sphere_three_measure"],
-      :namespace
-      "ConstructionTargets.SphereCapNullEquatorMeasureAssembly",
-      :implementation
-      "Promote the exact compiled fixture and document the two disjoint measurable-union rewrites and null-equator elimination."},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Resolve the preserved raw Hausdorff normalization characterization and evaluate the dimension-specific reciprocal-height and coordinate-moment integrals required by t95J05, t02A05, t01J06 and t94A10.",
+    :gates
+    {:canonical-compile :pass,
+     :whitespace :pass,
+     :equator-nullity :pass,
+     :cap-measure-rewrites :pass,
+     :fixture-hash :pass,
+     :dimension-three :pass,
+     :axiom-audits 3,
+     :dimension-two :pass,
+     :exact-scope :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :fixture-compile :pass,
+     :measure-union :pass,
+     :ledger-validation :pass,
+     :forbidden-claims :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"EA"
+     "1aeba3489b8f51b1fce88dee010e672265077a8f268a16216e417443cfbd1a23",
+     "sphere_measure"
+     "ba001cc226e96c533b3616c53248453a1f3844a3d16cc21412c5d7bc273f10be",
+     "sphere_two_measure"
+     "6acb911e75d5a03a50f877b0fde66d9fe47615959267ecd20c778773908478d8",
+     "sphere_three_measure"
+     "deeb64b05f9f661dd6dc1c14fff3ea3f42bb7c84d7f2c9e892943e48a8d4d72a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint52-sphere-assembly/SphereCapNullEquatorMeasureAssembly.lean; audit namespace, canonical imports, measure_union uses, ambient-nullity rewrite and strict-cap rewrites",
+      :exit 0}
+     {:cmd
+      "cp exact fixture to ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean; compare fixture and canonical SHA256 and bytes",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SphereCapNullEquatorMeasureAssembly",
+      :exit 0}
+     {:cmd
+      "Reproduce three standard-only axiom audits; verify both measure_union applications, null-equator elimination, both SphereCapHausdorffTransport rewrites, and d=2/d=3 formulas",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder and whitespace audit; forbidden-declaration scan over the exact Lean scope",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; stage exact two-file scope; git diff --cached --check; git commit -m 'Assemble sphere measure across null equator'",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline f6c7344b; recompute committed SHA256, Git blob and four declaration-region hashes; git diff --check; git status --short",
+      :exit 0}],
+    :commit "f6c7344b21577f342bf2a84afe82bbd04e5d03bd",
+    :changed-paths
+    ["ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean"
+     "ConstructionTargets/SphereCapNullEquatorMeasureAssembly.md"],
+    :fixture
+    {:path
+     "ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean",
+     :sha256
+     "bf7c2f94ed65c0c992120fb26d29b94cb3a53de2146b3f9680ed60ca76b50aad",
+     :git-commit "f6c7344b21577f342bf2a84afe82bbd04e5d03bd",
+     :git-blob "82e6647c073131b6eef0e5c3fd6514a4182a96a8",
+     :placeholder-count 0},
+    :finding
+    "The canonical theorem rewrites the literal sphere by the measurable pairwise-disjoint cap/equator partition, applies measure_union twice, removes only the proved zero equator term, and rewrites both strict-cap measures through the reviewed reciprocal-height formulas. Dimension-two and dimension-three formulas remain symbolic and require no finiteness, normalization, or ENNReal cancellation.",
+    :seat "codex-14"},
    :consumer-residual
    "Resolve the preserved raw Hausdorff normalization characterization and evaluate the dimension-specific reciprocal-height and coordinate-moment integrals required by t95J05, t02A05, t01J06 and t94A10.",
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean"
     "ConstructionTargets/SphereCapNullEquatorMeasureAssembly.md"],
