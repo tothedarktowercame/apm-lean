@@ -72321,6 +72321,19 @@
       "git diff-tree --no-commit-id --name-only -r 852f7dd333b1529af9343c43639ddf942f359d13",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789074230433-19472-c3c1a89e",
+     :commands
+     ["lake env lean ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean"
+      "sha256sum /tmp/PlaneArcEndpointInteriorCriticalLocusEmpty.lean ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"
+      "python3 placeholder-and-four-declaration audit over ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean"
+      "git diff-tree --no-commit-id --name-only -r 852f7dd333b1529af9343c43639ddf942f359d13"
+      "git diff --exit-code 852f7dd333b1529af9343c43639ddf942f359d13 -- ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean"
+      "git show --check --oneline --stat 852f7dd333b1529af9343c43639ddf942f359d13"],
+     :finding
+     "PASS: independently reviewed recorded commit 852f7dd333b1529af9343c43639ddf942f359d13 authored by codex-6. Its sole changed path is the scoped module, byte-identical to fixture SHA256 e3fe65c7f0c754976ef323eb3c099456cba6a021296b7413dfccc1ffe5426322; dependency SHA256 is 3e694e87a588cba2024c1b778cbd4940080b8686de43745cfb90703086471b4c. Lean compiles with only propext, Classical.choice, and Quot.sound; placeholder count is zero; all four declaration hashes recompute exactly. Definitions and theorem orientation are correct: relativeInteriorDomain requires both curve coordinates in their supplied smooth open neighborhoods and at least one coordinate in (0,1), while criticalLocus is exactly failure of surjectivity of the totalDifference derivative. The disjointness proof destructures those domain witnesses in the correct order and contradicts critical-locus membership using the reviewed relative-submersion theorem; the empty-intersection corollary has the matching orientation. This eliminates critical points only on that literal relative domain and does not claim parameterized Sard, regular perturbation parameters, finite fibers, embeddings, or chart compatibility."},
     :commit "852f7dd333b1529af9343c43639ddf942f359d13",
     :changed-paths
     ["ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean"],
@@ -72332,7 +72345,7 @@
     :finding
     "The exact fixture and recorded relative-submersion dependency hash reproduce. All four requested declarations compile without warnings or placeholders using only standard axioms, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean"],
    :dag-node
@@ -72422,7 +72435,7 @@
      "Compiled exactly one critical-locus prerequisite. The relative interior domain consists of total parameters whose curve coordinates lie in the supplied open extension domains and for which at least one curve parameter is interior. This domain is disjoint from the actual nonsurjective-derivative locus of the total coincidence map, so its intersection with that critical locus is empty. The next missing step is the genuine parameterized Sard or regular-fiber projection theorem converting this total-map submersion into generic finite fibers over perturbation-vector parameters; the banked ordinary Sard results do not directly provide that projection statement.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
