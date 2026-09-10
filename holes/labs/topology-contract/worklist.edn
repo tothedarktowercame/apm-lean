@@ -68169,8 +68169,66 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the coefficient chain and homology naturality squares for every actual subtype inclusion; no supplied commuting square.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Instantiate these naturality squares for the compact-complement intersection, left, right and union arrows; conjugate the signed sequence through the resulting range homology isomorphisms, then transport its relative terms to the four requested pairs in X by coefficient excision.",
+    :dependency-hashes
+    {:CoefficientAmbientSubspaceRangeComparison
+     "5072a4f2414c65eaa97d9b992fc1b09141e90ca0f120119eaebad092aa0d74d7"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:chain_square
+     "762d0b79ab3432bd56da29557c4c770570d3f5b82ff2d4afd218af6f302dc3a6",
+     :homology_square
+     "bea1555cbd7f70e2a043059fc2084bb49e61f819fb069f1ee40aff56c2a1d527"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and two complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientAmbientSubspaceRangeNaturality.lean ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add coefficient ambient range naturality'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "The coefficient chain and homology maps obtained by first identifying an ambient range subcomplex with its actual subtype and then applying an actual subtype inclusion",
+     :target
+     "The coefficient chain and homology maps obtained by first applying the ambient range inclusion and then identifying the target range with its actual subtype",
+     :direction
+     "Exact equality from the range-to-subtype forward composite to the ambient-range-inclusion composite, first on coefficient chains and then on homology in every natural degree."},
+    :commit "1762c1497204368a3c78e29c8e5a65681126948f",
+    :changed-paths
+    ["ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean"],
+    :fixture
+    {:path "/tmp/CoefficientAmbientSubspaceRangeNaturality.lean",
+     :sha256
+     "a7f7ae638a11bc10b5c21c19310db71b922862e1aaf86708f0593869995cf66b",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled the coefficient chain and homology naturality squares for every actual subtype inclusion A subset B, with arbitrary topological X, commutative-ring coefficients and natural degree. The proof constructs rather than assumes the commuting square. No Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 2,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean"],
    :dag-node
