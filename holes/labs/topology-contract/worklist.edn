@@ -66375,8 +66375,46 @@
   {:consumer "t03J02",
    :stop-condition
    "GO requires complete frozen closure; otherwise name the exact geometric cover, group-pushout or homology comparison boundary. Missing infrastructure is not refutation.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the geometric comparison for the frozen embedded-circle gluing, then identify its actual overlap maps with the supplied nullhomotopies and assemble the four-generator group presentation and all homology degrees. No complete closing fixture or single compiled prerequisite is claimed.",
+    :search-evidence
+    {:cmd
+     "rg -n 'cofibration|Cofibration|Schoenflies|Jordan curve|collar' .lake/packages/mathlib/Mathlib/Topology",
+     :exit 1,
+     :expected-exit 1,
+     :matches []},
+    :outcome :stop,
+    :warnings [],
+    :statement-hashes
+    {:apm_t03J02_bridge_1
+     "16fbc766f8d95a3347d5b6a7c7d053f9cacdf6dc8aa71f584f710561e81641d1",
+     :apm_t03J02_bridge_2
+     "4dd5b178b5737c36120684d86e5d65a36c320e87394c7545206ed9632ba4fb7b",
+     :apm_t03j02
+     "d3e5a755ef48c939b57445c166490a8561d7e5156e1b327e8221f637cf748dd1"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :reason :missing-closed-circle-gluing-homotopy-comparison,
+    :commands
+    [{:cmd "lake env lean /tmp/T03J02ApplicabilityAudit.lean", :exit 0}
+     {:cmd "python3 /tmp/t03j02-frozen-gluing-audit.py", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :finding
+    "The frozen quotient has a proved continuous maps-out universal property, but no audited construction supplies an actual open cover or homotopy-pushout comparison from its arbitrary embedded nullhomotopic circles. Existing radial collar constructions concern different explicit gluing geometry. Compiled signature checks confirm that banked groupoid descent and Mayer-Vietoris require an actual open cover. The generic coproduct theorem additionally requires simply connected overlap, so it cannot directly handle this circle overlap. After the geometric comparison, both nullhomotopies must be transported to the actual overlap legs to derive the group pushout and homology maps. Banked torus computations are available, but do not supply these comparisons. This is a local construction boundary, not a mathematical refutation or campaign termination.",
+    :frozen
+    {:path "problems/t03J02/lean/Main.lean",
+     :sha256
+     "377c8bf4a422fb5f9274c34c78b2cb3754a3293cadd5c664de12970de3bc7edf",
+     :placeholder-before 2,
+     :placeholder-after 2},
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "VAN KAMPEN / frozen null-circle torus gluing",
    :acceptance
