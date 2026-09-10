@@ -29831,6 +29831,24 @@
       "git diff --cached --check and exact two-file staged-scope audit",
       :exit 0}
      {:cmd "git diff 96168319^ 96168319 --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789049546822-18737-1db5ebe5",
+     :commands
+     ["git show --stat 96168319"
+      "git diff-tree --no-commit-id --name-status -r 96168319"
+      "git diff --check 96168319^ 96168319"
+      "sha256sum fixture and canonical SphereCapL2Image.lean"
+      "cmp -s fixture canonical"
+      "lake env lean fixture"
+      "lake env lean ConstructionTargets/SphereCapL2Image.lean"
+      "lake build ConstructionTargets.SphereCapL2Image"
+      "Python proposition-only 12-statement hash and comment-stripped placeholder audit"
+      "rg forbidden declarations and trailing whitespace"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers"],
+     :finding
+     "PASS: exact two-file scope and fixture SHA256 verified; fixture, canonical target and 2546-job build pass; all 12 statement hashes match, zero placeholders and forbidden declarations, and six standard-only axiom audits reproduce. Both native-L2 graph/cap set-equality directions correctly use unit norm, strict signs, strict first-coordinate bounds and signed square-root reconstruction. Euclidean isometry and Hausdorff transport remain downstream."},
     :dependency-uptake
     {:id :sphere-cap-height-graph-density-1,
      :commit "efe4acb81a42396ab2377e66333563433a71a9ab",
@@ -29846,7 +29864,7 @@
      :placeholder-count 0},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereCapL2Image.lean"
     "ConstructionTargets/SphereCapL2Image.md"],
@@ -30017,7 +30035,7 @@
      "Exactly one complete compiled representation prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 sphere-integration routes. In the reviewed WithLp 2 ambient space, it defines the strict positive and negative unit caps and proves exact equality with the upper and lower cap-height graphs. The reverse inclusions derive open-ball membership and recover the signed square root from the literal L2 unit-norm equation. The parent comparison is not GO: the linear isometric equivalence to EuclideanSpace real (Fin (d+1)), its coordinate formulas, the resulting literal Euclidean cap equality, subtype identifications and Hausdorff-measure transport remain unproved. No canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual unit-sphere caps as reviewed C1 L2 graphs",
