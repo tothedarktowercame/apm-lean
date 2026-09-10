@@ -32015,6 +32015,22 @@
      {:cmd
       "sha256sum /tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean; lake env lean /tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean; rg -n '^namespace |^example|WithLp\\.measurableSpace|LinearGraphMeasure\\.domainMeasurable|#print axioms' /tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean; test ! -e ConstructionTargets/HausdorffBorelInstanceCoherence.lean; test ! -e ConstructionTargets/HausdorffBorelInstanceCoherence.md; git diff --exit-code -- ConstructionTargets/HausdorffBorelInstanceCoherence.lean ConstructionTargets/HausdorffBorelInstanceCoherence.md; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789058301334-18992-e912bd47",
+     :commands
+     ["git show --format=fuller --stat 358ceb8dbdcf0ad9cfabaeeefcfbb43627c8062f"
+      "git diff-tree --no-commit-id --name-status -r 358ceb8dbdcf0ad9cfabaeeefcfbb43627c8062f"
+      "git diff --check 358ceb8dbdcf0ad9cfabaeeefcfbb43627c8062f^ 358ceb8dbdcf0ad9cfabaeeefcfbb43627c8062f"
+      "sha256sum /tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean"
+      "lake env lean /tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean"
+      "scan fixture for WithLp.measurableSpace, LinearGraphMeasure.domainMeasurable, and concrete examples"
+      "placeholder, forbidden-declaration, warning, and whitespace scans on the fixture"
+      "verify absence of ConstructionTargets/HausdorffBorelInstanceCoherence.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers from recorded commit"],
+     :finding
+     "PASS: commit 358ceb8d is ledger-only and whitespace-clean. The fixture reproduces SHA256 658162d3a85f5c8416d2f978801caf74349cba0af1a4548375e47fb72cbb16c8, has zero placeholders, and compiles. measurableSpace_eq_of_borel correctly composes the two explicit BorelSpace.measurable_eq proofs; hausdorffMeasure_apply_eq_of_borel then substitutes the measurable-space equality and relies only on proof irrelevance for the dependent Borel witness, without assuming measure equality. The first theorem is axiom-free and the second uses only propext, Classical.choice, and Quot.sound. Exact promotion nevertheless cannot satisfy acceptance: the fixture declares HausdorffBorelInstanceCoherence instead of ConstructionTargets.HausdorffBorelInstanceCoherence, and it contains neither the required WithLp.measurableSpace/LinearGraphMeasure.domainMeasurable examples nor any concrete examples at all. Adding them or renaming the namespace would change the pinned fixture. The recorded STOP therefore correctly identifies two specification boundaries. Both ledgers validate; no frozen consumer changed, so frozen statement hashes and placeholder recount are not applicable."},
     :changed-paths [],
     :fixture
     {:path
@@ -32026,7 +32042,7 @@
     "The recorded fixture matches SHA256 658162d3a85f5c8416d2f978801caf74349cba0af1a4548375e47fb72cbb16c8 and compiles both generic Borel-instance coherence theorems with standard-only axioms. Exact promotion cannot satisfy the row for two independent reasons. First, the fixture declares namespace HausdorffBorelInstanceCoherence rather than ConstructionTargets.HausdorffBorelInstanceCoherence. Second, the acceptance gate requires compiled examples using WithLp.measurableSpace and ConstructionTargets.LinearGraphMeasure.domainMeasurable on EuclideanSpace real (Fin 2) and Fin 3, but the exact fixture contains no examples and references neither instance. Renaming the namespace or adding those examples would change the exact fixture. Supply a corrected complete fixture with a new pinned digest, or consistently revise the namespace, exact-promotion requirement, and example gate. This is a specification boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/HausdorffBorelInstanceCoherence.lean"
     "ConstructionTargets/HausdorffBorelInstanceCoherence.md"],
@@ -32165,7 +32181,7 @@
      "The complete parent fixture cannot yet combine the reviewed source-sphere nullity with the reviewed append-zero Hausdorff transport because the two modules elaborate raw Hausdorff measure under distinct MeasurableSpace instances: WithLp.measurableSpace and ConstructionTargets.LinearGraphMeasure.domainMeasurable. Both instances equal the same Borel structure, but that equality must be transported through the dependent Measure type; direct substitution is ill-typed. Exactly one complete compiled prerequisite is supplied. It proves equality of any two measurable-space structures carrying BorelSpace instances for the same topology, then proves equality of raw Hausdorff-measure values for every dimension and set across those structures. This exposes the required instance change rather than hiding it. The measurable pairwise-disjoint cap partition, ambient equator transport and generic subtype transport remain banked separately. No normalization, measure sum, sphere mass, moment, Stokes or consumer-closure result is claimed; no canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: Hausdorff-null equators for the literal S2 and S3 cap decompositions",
