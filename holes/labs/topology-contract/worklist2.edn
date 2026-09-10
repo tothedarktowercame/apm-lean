@@ -13917,9 +13917,161 @@
    :other-consumers []}
   {:consumer :t00J01-rational-sphere-homology,
    :stop-condition
-   "Construct restrictions of the reviewed operators; do not supply preservation equations as assumptions or reinterpret an integral conclusion as R-linear. Do not claim eventual smallness, homology comparison, excision or sphere homology.",
-   :phase :probe,
+   "Bank only finite signed-chain realization and subordinate-support factorization. Do not claim identification with subdivision or prism, restricted homotopy, eventual smallness, homology comparison or excision.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/CoefficientFiniteRealization.lean",
+      :sha256
+      "de296b315978f3ddf6818d2c5e71a7eee15499bd75f74aaa0a9999d4660e8932"},
+     :commands
+     [{:cmd "lake env lean /tmp/CoefficientFiniteRealization.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientFiniteRealization.lean"
+    "ConstructionTargets/CoefficientFiniteRealization.md"],
+   :dag-node
+   "SINGULAR-SUBDIVISION: coefficient-general finite signed-chain realization and small-chain factorization",
+   :acceptance
+   {:namespace "ConstructionTargets.CoefficientFiniteRealization",
+    :implementation
+    "Promote the exact compiled fixture, preserving the coefficient-general chains and actual inclusion from CoefficientSmallPath.",
+    :declarations
+    ["finiteSingularChainRealize"
+     "finiteSingularChainRealize_single"
+     "finiteSingularChainRealize_add"
+     "finiteSingularChainRealize_factors"
+     "leftEdge"
+     "rightEdge"
+     "leftEdge_small"
+     "rightEdge_small"
+     "interval_factorization"
+     "integral_interval"
+     "rational_interval"],
+    :hypotheses
+    "R, X and the family index type are Type 0; R is a commutative ring and X a topological space. The family consists of arbitrary subsets, with no openness, covering, nonemptiness or connectedness assumption. Input finite formulas have integer weights; output morphisms are R-linear with source ModuleCat.of R R.",
+    :consumer-equation
+    "If every simplex in a finite signed formula is contained in a family member, its R-linear realization equals q followed by the actual cover-small inclusion for a constructed q.",
+    :consumer-residual
+    "Identify finite realizations with the reviewed subdivision and prism, construct their small-chain restrictions and assemble the inclusion-compatible restricted homotopy.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientFiniteRealization."
+     "Reproduce all five standard-only axiom audits and integer/rational interval examples."
+     "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+   :id :coefficient-general-finite-signed-realization-1,
+   :kind :reusable-theorem,
+   :depends-on [:coefficient-general-small-path-boundary-lift-1],
+   :current-residual
+   "The restriction construction needs finite signed simplex formulas realized over R and factored through the actual cover-small inclusion.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "Construct restrictions of the reviewed operators; do not supply preservation equations as assumptions or reinterpret an integral conclusion as R-linear. Do not claim eventual smallness, homology comparison, excision or sphere homology.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Operator-realization identification, actual small-chain restrictions and restricted homotopy remain in the parent probe. Eventual smallness, positive-degree comparison, excision and rational sphere H1/H2 remain downstream.",
+     :axiom-audits 5,
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Bank only finite signed-chain realization and subordinate-support factorization. Do not claim identification with subdivision or prism, restricted homotopy, eventual smallness, homology comparison or excision.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path "/tmp/CoefficientFiniteRealization.lean",
+         :sha256
+         "de296b315978f3ddf6818d2c5e71a7eee15499bd75f74aaa0a9999d4660e8932"},
+        :commands
+        [{:cmd "lake env lean /tmp/CoefficientFiniteRealization.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/CoefficientFiniteRealization.lean"
+       "ConstructionTargets/CoefficientFiniteRealization.md"],
+      :dag-node
+      "SINGULAR-SUBDIVISION: coefficient-general finite signed-chain realization and small-chain factorization",
+      :acceptance
+      {:namespace "ConstructionTargets.CoefficientFiniteRealization",
+       :implementation
+       "Promote the exact compiled fixture, preserving the coefficient-general chains and actual inclusion from CoefficientSmallPath.",
+       :declarations
+       ["finiteSingularChainRealize"
+        "finiteSingularChainRealize_single"
+        "finiteSingularChainRealize_add"
+        "finiteSingularChainRealize_factors"
+        "leftEdge"
+        "rightEdge"
+        "leftEdge_small"
+        "rightEdge_small"
+        "interval_factorization"
+        "integral_interval"
+        "rational_interval"],
+       :hypotheses
+       "R, X and the family index type are Type 0; R is a commutative ring and X a topological space. The family consists of arbitrary subsets, with no openness, covering, nonemptiness or connectedness assumption. Input finite formulas have integer weights; output morphisms are R-linear with source ModuleCat.of R R.",
+       :consumer-equation
+       "If every simplex in a finite signed formula is contained in a family member, its R-linear realization equals q followed by the actual cover-small inclusion for a constructed q.",
+       :consumer-residual
+       "Identify finite realizations with the reviewed subdivision and prism, construct their small-chain restrictions and assemble the inclusion-compatible restricted homotopy.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientFiniteRealization."
+        "Reproduce all five standard-only axiom audits and integer/rational interval examples."
+        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+      :id :coefficient-general-finite-signed-realization-1,
+      :kind :reusable-theorem,
+      :depends-on [:coefficient-general-small-path-boundary-lift-1],
+      :current-residual
+      "The restriction construction needs finite signed simplex formulas realized over R and factored through the actual cover-small inclusion.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG representations, closure rules, dependency PASS receipts and finite realization/small-chain APIs",
+       :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientFiniteRealization.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientFiniteRealization.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientFiniteRealization.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "First interval-example compilation",
+       :exit 1,
+       :correction
+       "Used explicit continuous coordinate evaluation, normalized the simplex coordinate bound and enabled classical support membership. The successful rerun required no resource-option changes."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientFiniteRealization.lean",
+      :sha256
+      "de296b315978f3ddf6818d2c5e71a7eee15499bd75f74aaa0a9999d4660e8932"},
+     :finding
+     "Exactly one compiled finite-support realization prerequisite is supplied. Finite signed simplex formulas are realized directly as R-linear maps into actual ModuleCat R singular chains. Subordinate support yields a constructed factorization through the actual coefficient-general small-chain inclusion. Integer and rational examples use two nonconstant half-edges in the overlapping interval cover. Integer weights encode combinatorial signs; no integral homology conclusion or coefficient-change theorem is used. Identification with the reviewed operators and restricted homotopy assembly remain; the parent is not GO.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION: coefficient-general preservation of cover-small chains",
@@ -13940,7 +14092,7 @@
    [:oriented-checkpoint22-radial-repair-and-subdivision-homotopy-refill
     :oriented-checkpoint21-coefficient-subdivision-homotopy-1
     :oriented-checkpoint16-coefficient-small-chain-h0-1
-    :oriented-checkpoint22-radial-repair-and-subdivision-homotopy-refill],
+    :coefficient-general-finite-signed-realization-1],
    :current-residual
    "Actual coefficient-general subdivision and its singular prism are reviewed. Their restrictions to the actual cover-small subcomplex, with inclusion equations, remain unconstructed.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
