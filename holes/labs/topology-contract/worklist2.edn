@@ -31136,6 +31136,22 @@
     [{:cmd
       "Verified unique commit dc2c1c45 resolves to dc2c1c452ecf94b0d8f0273b7c78eb3878ba906e; its exact two paths, fixture blob, and SHA-256 match the original receipt.",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789054521018-18871-f82449f4",
+     :commands
+     ["git show --format=fuller --stat b42d35ac8b0eb823c5358e2bc5a75092b7dfbe54"
+      "git diff-tree --no-commit-id --name-status -r dc2c1c452ecf94b0d8f0273b7c78eb3878ba906e"
+      "git rev-parse dc2c1c452ecf94b0d8f0273b7c78eb3878ba906e:ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean"
+      "git show dc2c1c452ecf94b0d8f0273b7c78eb3878ba906e:ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean | sha256sum"
+      "cmp committed fixture against /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean"
+      "lake env lean ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean"
+      "lake build ConstructionTargets.EuclideanAndSupUnitBallVolumes"
+      "placeholder, forbidden-declaration, warning, and whitespace scans"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers from b42d35ac"],
+     :finding
+     "PASS: implementation commit dc2c1c45 changes exactly EuclideanAndSupUnitBallVolumes.lean and .md. The Lean blob is 96284fd38f08f720150b3d33bf0a6b4b48ca3921 and SHA256 is c99e1f91b71820c5188a90561c5b5de2a1b24a081a779984437d4030dde1accf; it exactly matches the retained fixture and declares namespace ConstructionTargets.EuclideanAndSupUnitBallVolumes. The target recompiles and lake build succeeds. Theorems prove L2 Euclidean open-unit-ball volumes π and 4π/3, and sup-metric finite-function open-unit-ball volumes 4 and 8, with only propext, Classical.choice, and Quot.sound. No raw Hausdorff normalization or downstream sphere result is claimed. Both recorded ledgers validate and the evidence correction is ledger-only and whitespace-clean."},
     :commit "dc2c1c452ecf94b0d8f0273b7c78eb3878ba906e",
     :changed-paths
     ["ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean"
@@ -31149,7 +31165,7 @@
      :placeholder-count 0},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean"
     "ConstructionTargets/EuclideanAndSupUnitBallVolumes.md"],
@@ -31294,7 +31310,7 @@
      "Exactly one complete compiled prerequisite is supplied. For the actual L2 metrics, the open unit-ball volumes in EuclideanSpace real (Fin 2) and EuclideanSpace real (Fin 3) are ENNReal.ofReal π and ENNReal.ofReal (π * 4 / 3). For the corresponding finite real function spaces with their sup metrics, the open unit-ball volumes are 4 and 8. These are precisely the numerator and denominator values required for the intended π/4 and π/6 addHaarScalarFactor calculations. The parent normalization probe is not GO because Mathlib's theorem identifying addHaarScalarFactor with this ratio remains proof_wanted; raw Hausdorff measure equalities and their set-integral transports cannot yet be derived without proving that characterization. No canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: corrected raw Euclidean Hausdorff normalization in dimensions two and three",
