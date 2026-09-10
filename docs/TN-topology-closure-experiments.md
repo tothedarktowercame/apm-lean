@@ -1090,3 +1090,43 @@ For an elected experiment, the DAG records:
 - the final decision and, if implemented, the closing commit.
 
 The DAG is updated after synthesis, not after every intermediate lemma.
+
+## Reviewed repaired t94J08 closure (2026-09-10)
+
+Commit `69eb3d52d58a9189da8413b0f26bc09ddd90f035` (author codex-14)
+closes the repaired positive-dimensional antipodal-degree and local-index
+statement. Independent reviewer codex-11 passed it in
+`invoke-1789024889748-18126-04ebb0b2`. Only
+`problems/t94J08/lean/Main.lean` changed; its two executable placeholders
+became zero. All repaired definitions and both theorem statements are unchanged.
+
+The proof imports `ConstructionTargets.CoefficientSphereAntipodal`, uses its
+constructed integral normalization and actual antipodal scalar equation in
+`apm_t94J08_bridge_1`, and supplies that bridge to `apm_t94j08`. The existing
+degree-composition and normalized-link-negation argument then proves the
+local-index conjunct. No orientation witness or antipodal sign is assumed.
+
+Evidence:
+
+- Closure fixture `/tmp/T94J08PositiveClosure.lean` and canonical Main SHA256:
+  `005a6a4d7d785eb3d9c90c54127b6ae6001a4ed481846959e19c4e98ab945ee5`.
+- Preserved `apm_t94J08_bridge_1` statement SHA256:
+  `ab33967d8dbb761550c195fe761230edcb32d901a3bd832fb2dec719668bba0b`.
+- Preserved `apm_t94j08` statement SHA256:
+  `93379cadb92f80df85619dc6f37cbe084d858199cdc3b3ca5513d2c854339038`.
+- Statement hashes cover the exact declaration from `theorem` through its
+  type, excluding the terminating ` := by` proof delimiter.
+- Direct fixture and Main compilation, focused
+  `lake build ConstructionTargets.CoefficientSphereAntipodal`, full
+  `lake build`, source-preservation, scope and whitespace audits passed.
+- Both theorem axiom audits report only `propext`, `Classical.choice` and
+  `Quot.sound`. Three existing simplification warnings remain. Completing the
+  proof exposes unused frozen parameters `hm`, `hv`, `hp` and `hr`; their
+  declarations are unchanged. Builds replay existing dependency warnings.
+
+This closes the repaired branch with `1 ≤ n` and local-index specialization
+`1 ≤ m`, not the original ordinary-H0 assertion for S0. The original exact
+refutation and specification-repair evidence remain under
+`holes/labs/topology-contract/evidence/t94j08-zero-sphere/`. The S0 and
+one-dimensional local-index cases still require a separately elected
+reduced-homology encoding. No closure of that outstanding coverage is claimed.

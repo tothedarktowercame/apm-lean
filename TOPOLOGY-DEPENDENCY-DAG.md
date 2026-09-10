@@ -475,7 +475,7 @@ compiles independently of every final problem.
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | the generic product cover was already banked; reviewed `c5ada212` now closes the concrete `(ZMod 2)²` covering-group branch of `t01A02`; fivefold AddCircle kernel cardinality/deck packaging is next for `t98A01`; pullback and gluing remain separate |
 | Circle degree/lifting | closed `t91A08`, closed `t94J06`, closed `t97J06`, closed `t97A02`, closed `t97J08` | `t91A08` closed through the power-five winding obstruction and exact additive-circle transport at `02b4e476`; `t94J06` closed through path lifting/winding and the degree-four disk obstruction; `t97J06` closed via singular-homology noncontractibility; `t97J08` closes the smooth-lift/angle-integral chain at `0ad32428`; `t97A02` closed at `69fd2f35` through finite-H1 loop triviality, constructed component lifts and exact torus recombination (independent PASS `invoke-1788977263821-16745-f3b25cde`, placeholders `2 → 0`); further consumers require separate review |
 | Smooth circle lifts | closed `t97J08`; reusable smooth circle maps with continuous real lifts | generic local-inverse regularity `48eab2d3`, explicit `Circle.exp` specialization `12fd086d`, and normalized-loop specialization `55da22d8` are `BANKED`; frozen consumer closed at `0ad32428` |
-| Sphere orientation/homology | `t02A08`, `t94J08`, `t95J04`, `t98A02` | computations exist; naturality under concrete maps remains |
+| Sphere orientation/homology | closed repaired `t94J08`, closed `t95J04`; `t02A08`, `t98A02` | Actual coefficient-general antipodal action is banked and consumed by repaired positive-dimensional `t94J08` at `69eb3d52`. Arbitrary-integer degree realization and global localization/gluing remain separate. |
 | Stokes and moments | `t01J06`, `t02A05`, `t94A10`, `t95J05`, `t96J08`; closed `t98A05` | `t98A05` closed through explicit exterior-derivative, simplex-integral, and circle-period calculations; `t94A10` still needs global sphere-period/Stokes nonexactness; the remaining consumers require separate review |
 | Surface classification/gluing | `t00A03`, `t01J01`, `t91J05`, `t94J09`, `t99J03` | late `FOUNDATION`; do not reduce recursively yet |
 | Two-open van Kampen/descent | closed `t01J03` | the reviewed chain through `fca797fa` proves pointwise target naturality of the existing gluing-to-`SingleObj` mapping equivalence; `338011a6` reconstructs the source equivalence, `86d454aa` supplies compatible connectors, `a8974ed7` extracts the chosen-object group, and `7ddf3408` performs the frozen homeomorphism/basepoint transport and final assembly |
@@ -521,8 +521,8 @@ compiles independently of every final problem.
   passed by codex-10). On 2026-09-09 the owner-authorized specification repair
   re-freezes the ordinary-homology branch at `1 ≤ n`, and its local-index
   specialization at `1 ≤ m` (ambient dimension at least two). This branch
-  retains the existing positive-dimensional sphere orientation/naturality route;
-  it remains open with two placeholders. The S⁰ / one-dimensional local-index
+  is now closed at `69eb3d52` with zero placeholders, independently reviewed
+  PASS in `invoke-1789024889748-18126-04ebb0b2`. The S⁰ / one-dimensional local-index
   cases need a separately elected reduced-homology encoding. Neither that
   outstanding coverage nor the old refutation is erased or counted as closure.
   See `holes/labs/topology-contract/evidence/t94j08-zero-sphere/REPAIR.md`.
@@ -646,6 +646,7 @@ critical-value Sard.
 
 | Problem | Canonical closure | Audit result |
 |---|---|---|
+| `t94J08` (repaired positive-dimensional statement) | `69eb3d52d58a9189da8413b0f26bc09ddd90f035` | independent PASS `invoke-1789024889748-18126-04ebb0b2`; repaired definitions and both theorem statements preserved; placeholders `2 → 0`; standard-only axioms; original ordinary-S0 refutation and reduced-homology boundary retained |
 | `t95J04` | `a13852f35c671f0d40d4bbf58e832710563a4ef7` | independent PASS `invoke-1789000811470-17453-38632ef7`; all original definitions, lemma bodies and final statement preserved; placeholders `1 → 0`; warning-free, standard-only axioms |
 | `t92J07` | `b364803ac4e0c6b2d20d06d9c937f1f0a9892eb4` using the extracted manifold Sard theorem | independent PASS `invoke-1788994194142-17263-038c93a8`; frozen definitions and both statements unchanged; placeholders `2 → 0`; standard axioms and unused-`hm` warning only; zero-target branch retained |
 | `t93A04` | `a49c84764968d8286ff05d87e5d218018505f50c`; reusable extraction `337bdd48a1770df37cd2ed8cb48fea924f4203cd` | frozen definitions and statement preserved; placeholders `1 → 0`; independent PASS `invoke-1788993199960-17228-ce848168`; extraction PASS `invoke-1788993593682-17243-48fdadcf`, not a second closure; standard axioms and inherited unnecessarySimpa warning only |
@@ -1307,3 +1308,43 @@ to that reusable model; `5aecf0c3` and `efa4805e` compute every homology degree.
 The frozen theorem imports those targets and closes at `adcd54a2` with zero
 placeholders.  This is an observed consumer edge, not evidence for a generic
 closed-gluing theorem.
+
+## Reviewed repaired t94J08 closure (2026-09-10)
+
+Commit `69eb3d52d58a9189da8413b0f26bc09ddd90f035` (author codex-14)
+closes the repaired positive-dimensional antipodal-degree and local-index
+statement. Independent reviewer codex-11 passed it in
+`invoke-1789024889748-18126-04ebb0b2`. Only
+`problems/t94J08/lean/Main.lean` changed; its two executable placeholders
+became zero. All repaired definitions and both theorem statements are unchanged.
+
+The proof imports `ConstructionTargets.CoefficientSphereAntipodal`, uses its
+constructed integral normalization and actual antipodal scalar equation in
+`apm_t94J08_bridge_1`, and supplies that bridge to `apm_t94j08`. The existing
+degree-composition and normalized-link-negation argument then proves the
+local-index conjunct. No orientation witness or antipodal sign is assumed.
+
+Evidence:
+
+- Closure fixture `/tmp/T94J08PositiveClosure.lean` and canonical Main SHA256:
+  `005a6a4d7d785eb3d9c90c54127b6ae6001a4ed481846959e19c4e98ab945ee5`.
+- Preserved `apm_t94J08_bridge_1` statement SHA256:
+  `ab33967d8dbb761550c195fe761230edcb32d901a3bd832fb2dec719668bba0b`.
+- Preserved `apm_t94j08` statement SHA256:
+  `93379cadb92f80df85619dc6f37cbe084d858199cdc3b3ca5513d2c854339038`.
+- Statement hashes cover the exact declaration from `theorem` through its
+  type, excluding the terminating ` := by` proof delimiter.
+- Direct fixture and Main compilation, focused
+  `lake build ConstructionTargets.CoefficientSphereAntipodal`, full
+  `lake build`, source-preservation, scope and whitespace audits passed.
+- Both theorem axiom audits report only `propext`, `Classical.choice` and
+  `Quot.sound`. Three existing simplification warnings remain. Completing the
+  proof exposes unused frozen parameters `hm`, `hv`, `hp` and `hr`; their
+  declarations are unchanged. Builds replay existing dependency warnings.
+
+This closes the repaired branch with `1 ≤ n` and local-index specialization
+`1 ≤ m`, not the original ordinary-H0 assertion for S0. The original exact
+refutation and specification-repair evidence remain under
+`holes/labs/topology-contract/evidence/t94j08-zero-sphere/`. The S0 and
+one-dimensional local-index cases still require a separately elected
+reduced-homology encoding. No closure of that outstanding coverage is claimed.
