@@ -14930,8 +14930,188 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read complete DAG, foundational-program note, closure rules and both ledger dependency reviews",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint24Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint24Eligibility.bb", :exit 0}
+     {:cmd "bb /tmp/Checkpoint24Ledger.bb", :exit 0}
+     {:cmd
+      "git log --oneline b3fe65b7..HEAD -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped attribution of m02J04 change at the pinned revisions",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :changed-paths [],
+    :finding
+    {:baseline "b3fe65b7f774ca5ebb0120f79e42032400327abc",
+     :placeholder-delta 0,
+     :head "4f249ecd43a9650dfdf260320710fb3f8b5de29a",
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:modules-before 670,
+      :modules-after 674,
+      :portfolio 2,
+      :portfolio-commits
+      ["1e40c51ca8c3f07db1f3ecdbbd2505f1801ac183"
+       "0f36d6c5f7c6fe1d99ded92e9888192dd4ac21ca"],
+      :concurrent 2,
+      :concurrent-commits ["d775d408" "1d45605f"],
+      :concurrent-nontopology-change
+      "8b914a58 changes m02J04 from one placeholder to zero; excluded from named topology closure counts."},
+     :corrected-closures 0,
+     :ranking
+     "Compared the complete DAG: coefficient-general small-chain comparison has four named downstream consumers and now has its subdivision, homotopy, preservation and eventual-smallness inputs. It is a bounded next theorem. Localization, product homology, integration, covering classification and surface classification retain broader missing constructions; the current regular-preimage and integration probes are reserved elsewhere. Historical refutations and corrected t96J07 closure are retained without recounting.",
+     :typed-residual-change
+     "Arbitrary R-valued chain coordinates and eventual factorization through the actual cover-small inclusion are now reviewed. The next missing equation is that this inclusion induces an isomorphism on actual homology in positive degrees. Relative excision and sphere suspension remain downstream. Concurrent transverse difference regularity and kernel geometry do not resolve the product self-model atlas boundary.",
+     :review-outcomes
+     {:portfolio-pass 2,
+      :portfolio-stop 0,
+      :support-review "invoke-1789007651168-17676-fe37c755",
+      :eventual-smallness-review "invoke-1789008342628-17690-980f35e7",
+      :concurrent-transverse-stop-pass
+      "invoke-1789007974334-17681-98a01185",
+      :new-proved-refutations 0},
+     :reserved-concurrent
+     [:t95j05-frozen-hausdorff-integral-closure-probe-refill38
+      :product-self-model-recharting-probe-refill38
+      :null-winding-preimage-constant-loop-audit-probe-refill38],
+     :near-closure-election
+     {:eligible-unassigned 0,
+      :elected 0,
+      :reason
+      "The 25 near-closure consumers retain unresolved boundaries or refutations. The fresh t95J05 integral probe is already assigned in the other ledger. No unchanged STOP retry is elected.",
+      :boundaries
+      {:t00J02
+       "Fundamental-class detection and geometric representation; concurrent work reserved.",
+       :t03J02
+       "Generic collar/NDR and van Kampen boundary recorded in DAG.",
+       :t92J06 "Actual graph covering construction.",
+       :t95J06 "Actual Hopf-surface torus homeomorphism.",
+       :t97A01 "Polygon classification invariants.",
+       :t94A06 "General-model transversality hypotheses.",
+       :a97J08 "Planar separation.",
+       :t01A05 "Actual covering fundamental-class degree equation.",
+       :t96J06
+       "Projective-product nonbounding and fundamental-class geometry.",
+       :t00A03
+       "Literal pants-component homeomorphisms and cutting count.",
+       :t01J04 "Analytic boundary preimage atlas and countability.",
+       :t03J05 "Literal curves, intersection and ambient nonhomotopy.",
+       :t94J09 "Literal polygon homeomorphism and singular homology.",
+       :t03J04 "Actual torus Euler computation.",
+       :t95J05
+       "Hausdorff normalization and frozen integral assembly; concurrent probe reserved.",
+       :t00J01
+       "Coefficient-general positive-degree comparison, excision and sphere suspension; original counterexamples remain preserved.",
+       :t99J03 "Literal polygon classification.",
+       :t01A08 "General-model projected regular values.",
+       :t00A01 "Actual-cover free-product van Kampen.",
+       :t98A02 "Fundamental-class localization and gluing.",
+       :t02A05 "Literal flux and measure comparison.",
+       :t96J05
+       "Attained regular radius and analytic fixed-model fiber atlas after proposed repair.",
+       :t98A01 "Genus invariance and Euler multiplicativity.",
+       :t02A08 "Signed sphere homology action for every integer.",
+       :t94J08
+       "Signed antipodal naturality; reduced-S0 coverage remains separate."}},
+     :census
+     {:path "/tmp/Checkpoint24Census.json",
+      :open 35,
+      :existing 58,
+      :zero-placeholder 23,
+      :after 66,
+      :sha256
+      "e8b9a6b2ed3d40fb614ff5cd5822ec2f42e1843722dd974e5061e722db30bd83",
+      :named 59,
+      :missing [:t93A05],
+      :within-two 25,
+      :before 66}},
+    :replacement-items
+    [{:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Do not assume homology-map injectivity, surjectivity or an isomorphism. Do not import an integral conclusion as R-linear. Do not claim relative excision, sphere homology or frozen closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SINGULAR-SUBDIVISION: actual coefficient-general small-chain homology comparison",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a commutative ring R and an arbitrary indexed open cover, prove positive-degree surjectivity and injectivity of the actual cover-small inclusion on homology using reviewed coefficient-general subdivision, absolute and restricted homotopies, and actual_chain_eventual. Construct any required iterated homotopy rather than assuming it. Use arbitrary actual R-valued cycles and bounding chains. Combine with the reviewed degree-zero result to construct an isomorphism in every degree and prove its forward map is exactly the inclusion-induced homology map, with both inverse laws. State universes and preserve empty-space and arbitrary-cover-index support. Compile integer and rational interval-cover examples. REVISE requires exactly one compiled missing iterated-homotopy or cycle-transport prerequisite; STOP at independent foundations.",
+       :consumer-equation
+       "For every n, HomologicalComplex.homologyMap of CoefficientSmallPath.coverSmallInclusion R U is an isomorphism, constructed from the reviewed chain operators and eventual factorization.",
+       :consumer-residual
+       "Coefficient-general relative excision and sphere suspension remain before rational S2 H1/H2.",
+       :gates
+       ["GO requires a complete placeholder-free fixture proving actual homology-map bijectivity and constructing the all-degree isomorphism with its forward-map equation."
+        "Record fixture SHA256, integer/rational examples and standard-only audits."
+        "No assumed comparison theorem or coefficient-change shortcut."]},
+      :representation
+      {:source
+       "Homology of the actual cover-small ModuleCat R chain complex with coefficient object ModuleCat.of R R.",
+       :target
+       "Homology of the actual R-valued singular-chain complex of X.",
+       :direction
+       "Construct an isomorphism from cover-small homology to singular homology whose forward morphism is exactly HomologicalComplex.homologyMap of the actual coverSmallInclusion, in every degree."},
+      :id
+      :oriented-checkpoint24-coefficient-small-chain-homology-comparison-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint24-eventual-smallness-and-consumer-refill
+       :oriented-checkpoint23-coefficient-eventual-smallness-1
+       :oriented-checkpoint22-coefficient-small-chain-preservation-1
+       :oriented-checkpoint21-coefficient-subdivision-homotopy-1
+       :oriented-checkpoint16-coefficient-small-chain-h0-1],
+      :current-residual
+      "Reviewed actual-chain eventual smallness and inclusion-compatible restricted homotopy supply the geometric inputs; injectivity and surjectivity of the actual homology map remain unproved in positive degrees.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: coefficient homology comparison and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document the exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint25-small-chain-comparison-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint24-coefficient-small-chain-homology-comparison-1],
+      :current-residual
+      "Measure actual small-chain homology comparison separately from consumer closure and reassess all reviewed consumer boundaries and concurrent work.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: eventual smallness and renewed consumer eligibility",
@@ -14947,6 +15127,76 @@
     :oriented-checkpoint23-connected-cover-and-small-preservation-refill],
    :current-residual
    "Measure eventual-smallness infrastructure separately from consumer closure and recheck whether any reviewed consumer boundary has actually been discharged.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "Do not assume homology-map injectivity, surjectivity or an isomorphism. Do not import an integral conclusion as R-linear. Do not claim relative excision, sphere homology or frozen closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SINGULAR-SUBDIVISION: actual coefficient-general small-chain homology comparison",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a commutative ring R and an arbitrary indexed open cover, prove positive-degree surjectivity and injectivity of the actual cover-small inclusion on homology using reviewed coefficient-general subdivision, absolute and restricted homotopies, and actual_chain_eventual. Construct any required iterated homotopy rather than assuming it. Use arbitrary actual R-valued cycles and bounding chains. Combine with the reviewed degree-zero result to construct an isomorphism in every degree and prove its forward map is exactly the inclusion-induced homology map, with both inverse laws. State universes and preserve empty-space and arbitrary-cover-index support. Compile integer and rational interval-cover examples. REVISE requires exactly one compiled missing iterated-homotopy or cycle-transport prerequisite; STOP at independent foundations.",
+    :consumer-equation
+    "For every n, HomologicalComplex.homologyMap of CoefficientSmallPath.coverSmallInclusion R U is an isomorphism, constructed from the reviewed chain operators and eventual factorization.",
+    :consumer-residual
+    "Coefficient-general relative excision and sphere suspension remain before rational S2 H1/H2.",
+    :gates
+    ["GO requires a complete placeholder-free fixture proving actual homology-map bijectivity and constructing the all-degree isomorphism with its forward-map equation."
+     "Record fixture SHA256, integer/rational examples and standard-only audits."
+     "No assumed comparison theorem or coefficient-change shortcut."]},
+   :representation
+   {:source
+    "Homology of the actual cover-small ModuleCat R chain complex with coefficient object ModuleCat.of R R.",
+    :target
+    "Homology of the actual R-valued singular-chain complex of X.",
+    :direction
+    "Construct an isomorphism from cover-small homology to singular homology whose forward morphism is exactly HomologicalComplex.homologyMap of the actual coverSmallInclusion, in every degree."},
+   :id
+   :oriented-checkpoint24-coefficient-small-chain-homology-comparison-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint24-eventual-smallness-and-consumer-refill
+    :oriented-checkpoint23-coefficient-eventual-smallness-1
+    :oriented-checkpoint22-coefficient-small-chain-preservation-1
+    :oriented-checkpoint21-coefficient-subdivision-homotopy-1
+    :oriented-checkpoint16-coefficient-small-chain-h0-1
+    :oriented-checkpoint24-eventual-smallness-and-consumer-refill],
+   :current-residual
+   "Reviewed actual-chain eventual smallness and inclusion-compatible restricted homotopy supply the geometric inputs; injectivity and surjectivity of the actual homology map remain unproved in positive degrees.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: coefficient homology comparison and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document the exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint25-small-chain-comparison-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint24-coefficient-small-chain-homology-comparison-1
+    :oriented-checkpoint24-eventual-smallness-and-consumer-refill],
+   :current-residual
+   "Measure actual small-chain homology comparison separately from consumer closure and reassess all reviewed consumer boundaries and concurrent work.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
