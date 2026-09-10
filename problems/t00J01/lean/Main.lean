@@ -1,3 +1,4 @@
+import ConstructionTargets.CoefficientSphereEndpoints
 import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
@@ -135,6 +136,34 @@ lemma apm_t00j01_fold_pi_deriv_ne :
     1 + 2 * Real.cos Real.pi ≠ 0 := by
   norm_num
 
+
+lemma t00J01Identity_conjugate (k : ℕ) {V : ModuleCat ℚ}
+    (h : T00J01RationalHomology k apm_t00j01_S2 ≅ V) :
+    h.inv ≫ t00J01RationalHomologyMap k t00J01SphereIdentity ≫ h.hom = 𝟙 V := by
+  change h.inv ≫ ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+    (ModuleCat.of ℚ ℚ)).map (𝟙 (TopCat.of apm_t00j01_S2)) ≫ h.hom = _
+  rw [CategoryTheory.Functor.map_id, Category.id_comp, h.inv_hom_id]
+
+lemma t00J01Identity_lefschetz_value (L : ℚ)
+    (h : t00J01HasSphereLefschetzNumber t00J01SphereIdentity L) : L = 2 := by
+  obtain ⟨h0, h1, h2, h⟩ := h
+  rw [t00J01Identity_conjugate, t00J01Identity_conjugate, t00J01Identity_conjugate] at h
+  norm_num at h ⊢
+  exact h
+
+theorem apm_t00j01_sphere_identity_bridge :
+    t00J01HasSphereLefschetzNumber t00J01SphereIdentity 2 ∧
+      ¬t00J01HasSphereLefschetzNumber t00J01SphereIdentity 1 := by
+  constructor
+  · refine ⟨ConstructionTargets.CoefficientSphereEndpoints.rationalS2H0,
+      ConstructionTargets.CoefficientSphereEndpoints.rationalS2H1,
+      ConstructionTargets.CoefficientSphereEndpoints.rationalS2H2, ?_⟩
+    rw [t00J01Identity_conjugate, t00J01Identity_conjugate, t00J01Identity_conjugate]
+    norm_num
+  · intro h
+    have := t00J01Identity_lefschetz_value 1 h
+    norm_num at this
+
 theorem apm_t00j01 :
     (apm_t00j01_isThreeManifold apm_t00j01_nonorientable3 ∧
       Limits.IsZero (apm_t00j01_H 3 apm_t00j01_nonorientable3)) ∧
@@ -193,4 +222,15 @@ theorem apm_t00j01 :
   exclusion of critical roots. Together with `apm_t00j01_fold_continuous`,
   these contracts are exactly the frozen conjunction.
   -/
+  /- The sphere-identity branch is proved above. Only the Klein-product and
+     exact fold-fiber obligations remain. -/
+  suffices h :
+      (apm_t00j01_isThreeManifold apm_t00j01_nonorientable3 ∧
+        Limits.IsZero (apm_t00j01_H 3 apm_t00j01_nonorientable3)) ∧
+      (Continuous apm_t00j01_fold ∧
+        apm_t00j01_foldRegular (Circle.exp Real.pi) ∧
+        apm_t00j01_foldRegular 1 ∧
+        Nat.card {z : Circle // apm_t00j01_fold z = Circle.exp Real.pi} = 3 ∧
+        Nat.card {z : Circle // apm_t00j01_fold z = 1} = 1) by
+    exact ⟨h.1, apm_t00j01_sphere_identity_bridge, h.2⟩
   sorry
