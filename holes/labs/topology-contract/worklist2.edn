@@ -25381,21 +25381,118 @@
    :stop-condition
    "Bank scaled-boundary normalization and its actual homology inverse only. Do not claim the relative connecting comparison, transition-unit local constancy, orientation compatibility or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientScaledBoundaryNormalization.lean",
-      :sha256
-      "586c754b4afdb9d0d2a8598b484da1db69308fa4d036b3df1d9ce022b2f28dd7"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/CoefficientScaledBoundaryNormalization.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholders 0,
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Use actual pair connecting naturality and neighborhood-inclusion maps to identify the source and mapped boundary calculations with relative chart normalizations, then deduce nearby transition-unit equality. Relative connecting comparison, transition-unit local constancy, orientation compatibility and consumer closure are not claimed. Ledgers and frozen consumers remain untouched.",
+    :gates
+    {:positive-radius-and-strict-center-bound :pass,
+     :integer-rational-examples :pass,
+     :whitespace :pass,
+     :literal-scaled-and-recentered-formulas :pass,
+     :actual-forward-map-identification :pass,
+     :geometric-motion-and-positive-radial-scaling :pass,
+     :fixture-and-canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :all-degree-normalized-homology-identity :pass,
+     :target-build :pass,
+     :exact-fixture-promotion :pass,
+     :ten-standard-only-audits :pass,
+     :both-radial-inverse-equations :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 10,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation have zero warnings. Target build replays 22 dependency warnings and succeeds with 8303 jobs."],
+    :statement-hashes
+    {"forward_inverse"
+     "7f12987687a1f708885e7f049f9982535a2cca3d5595cf3b3fcd05b16814b4c0",
+     "recentered"
+     "63b9a2016b45e249aa991912b574a09bf52c2b850eb40e40d36aa01298d38217",
+     "gap"
+     "6e7fb7a3c6b1feb9ef70c4b4f11a635e2ba0b1439d1005fa0a817cbf2eb6e712",
+     "norm_scaled"
+     "0729f2d2ba975b1fd02251d265c3d43cb826407b217c1b975fe6023da4584889",
+     "radialIso"
+     "040ea6f586d0ccf54c416c56b6866696c83f729ff440c2216c86b47fc56c66bc",
+     "homology_identity"
+     "5552cd522952c44221c891cdf75fa154aa8bfc1ce9257bb9b4c5baa440ffadba",
+     "normalized_value"
+     "660d5807a24d7755456f014ab15b7b086a9e907bb5b85fd307e9afe8d53f2b2b",
+     "rational_example"
+     "85d1d5628cca9536d66983db4cbc729dd9cbc7552e13b9f8dec9d47797df60a4",
+     "inverse_right"
+     "0da379f45b9ee1568b296db78f077c4910e4e1fa1a604c89ea6ccf827325d2f1",
+     "avoids"
+     "007d39fdd8ab4aeea679110da90b620b01a61d0d219056416a7676cf01c0f5ad",
+     "centered_identity"
+     "9d216e6721ac35bf64aa0f6516f856c8ba0612027ee75eed3ce072f92981a59c",
+     "inverse_left"
+     "3b80a5350bb1db846422b45278108ce8f0cd20df821cd50864b4f56f01e941b9",
+     "normalized"
+     "e3ef10a811c0d4edfc8e81c1c4a094628a872978a5a66201ddb735fbfe3e058e",
+     "scaled"
+     "6360ef8d15419acbf008a425e85148270d13bc6ed64551f8c6bbfe207c1033c5",
+     "boundaryIso"
+     "fe7754cf14ad01e1e4fe63888bcd5e6eee100e53b385a81bd49c8dc49e736bf1",
+     "integral_example"
+     "2d183df8997c87faa9670b9da9e24e611c3b26e8606aef08d83f370f3048c8aa"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and both dependency PASS receipts from the ledgers",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientScaledBoundaryNormalization.lean",
+      :exit 0}
+     {:cmd
+      "Python fixture hash verification and exact scoped promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientScaledBoundaryNormalization.lean > /tmp/scaledboundary-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientScaledBoundaryNormalization.lean > /tmp/scaledboundary-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientScaledBoundaryNormalization > /tmp/scaledboundary-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verification of ten standard-only audits in each compilation log and warning attribution",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientScaledBoundaryNormalization.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and sixteen statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m \"Construct scaled boundary normalization and actual radial inverse\"",
+      :exit 0}
+     {:cmd "git diff --check e10459ce^ e10459ce", :exit 0}
+     {:cmd
+      "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "e10459ce658ef4ef9658cccf1f6ec1cc3e8d3600",
+    :changed-paths
+    ["ConstructionTargets/CoefficientScaledBoundaryNormalization.lean"
+     "ConstructionTargets/CoefficientScaledBoundaryNormalization.md"],
+    :fixture
+    {:path "/tmp/CoefficientScaledBoundaryNormalization.lean",
+     :sha256
+     "586c754b4afdb9d0d2a8598b484da1db69308fa4d036b3df1d9ce022b2f28dd7"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientScaledBoundaryNormalization.lean"
     "ConstructionTargets/CoefficientScaledBoundaryNormalization.md"],
