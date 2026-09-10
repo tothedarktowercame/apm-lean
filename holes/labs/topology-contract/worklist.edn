@@ -56286,8 +56286,142 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local specification defects require repair and coverage accounting, not termination.",
+   :evidence
+   {:evidence
+    {:measure
+     {:path "/tmp/topology-refill32-measure.json",
+      :sha256
+      "a46611087026c50d45423a3e036af8ef6fcd22535c9ac757b2f8f2001c788c6b"},
+     :reviews
+     {:path "/tmp/topology-refill32-reviews.edn",
+      :sha256
+      "601917bf2f2547dee6a6c80f0b6adfc3fb5f76146c6c48f38a1dc2d4bb70e4e6"},
+     :tail
+     {:path "/tmp/topology-refill32-tail.edn",
+      :sha256
+      "cd5541935492060ab4f622df9878d2e3de10bb361af4e2fa0dc2bfeaad57ec94"}},
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill32-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill32-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill32-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill32-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill32-measure.json /tmp/topology-refill32-reviews.edn /tmp/topology-refill32-tail.edn",
+      :exit 0}],
+    :measurement
+    {:baseline "8cd019d7432b87fe01625f927e7d1f0e4ed60f21",
+     :existing-consumers 58,
+     :missing-consumers ["t93A05"],
+     :placeholder-delta 0,
+     :zero-placeholder-consumers 21,
+     :placeholders-before 68,
+     :consumer-closures 0,
+     :open-consumers 37,
+     :head "3ee99c3b38d8715e633ee82ce75ef0798077e6f6",
+     :named-consumers 59,
+     :construction-modules-after 655,
+     :placeholders-after 68,
+     :documentation-and-evidence-packets 1,
+     :portfolio-infrastructure
+     ["ManifoldFiberChartExtension"
+      "OpenPartialHomeomorphFiberTransfer"
+      "ManifoldRegularFiberCharts"],
+     :construction-modules-before 649,
+     :within-two 27,
+     :concurrent-infrastructure
+     ["CoefficientAffineRealization"
+      "CoefficientSmallH0"
+      "CoefficientVertexCone"]},
+    :replacement-items
+    [{:consumer "t95J04",
+      :stop-condition
+      "GO requires full frozen closure. Otherwise identify the exact Hausdorff measure or chart transport boundary; coordinate nullity alone is not closure.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "DIMENSION-GAP MANIFOLD NULLITY / literal sphere Hausdorff measure",
+      :acceptance
+      {:frozen-file "problems/t95J04/lean/Main.lean",
+       :frozen-sha256
+       "8321b881ae48f14a9d5e711534aa208eabd66dcdc16055f5ce22e9b66ce4fc15",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile a complete placeholder-free frozen Main preserving every definition and statement. For every k<n and the supplied compact second-countable genuine-infinity smooth k-manifold, prove the literal n-dimensional Hausdorff measure of the image in the metric sphere is zero. Reuse dimension-gap chart nullity and nonsurjectivity producers; derive the actual chart-to-sphere Hausdorff null transport, including local Lipschitz or measure comparisons needed, rather than substituting coordinate Haar nullity. Reuse the proved missed-point contraction and all existing topological conjuncts. Include empty and zero-dimensional source cases. No assumed Hausdorff nullity, measure normalization, missed point or conditional final bridge."},
+      :id :t95j04-frozen-sphere-image-nullity-closure-probe-refill32,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts],
+      :current-residual
+      "One placeholder remains for exact sphere Hausdorff image nullity, nonsurjectivity and null-homotopy; all simple-connectivity and nonhomeomorphism conjuncts are proved."}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires compiled actual global manifold structures and smooth inclusion for the same atlas. REVISE requires exactly one compiled prerequisite; do not claim frozen consumer closure.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE/SUBMERSION / manifold-source global atlas and inclusion",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a genuine-infinity smooth self-model manifold modeled on a finite-dimensional complete real inner-product space E and a ContMDiff infinity map to a finite-dimensional real inner-product space F at a regular value, construct ChartedSpace and IsManifold genuine infinity on the literal fiber with its inherited topology and fixed Euclidean dimension finrank E minus finrank F. Use exactly ManifoldRegularFiberCharts.exists_cover and its proven smooth overlaps through Mathlib atlas APIs. Prove chosen chartAt and atlas membership specifications. For this same chosen atlas prove genuine-infinity ContMDiff of subtype inclusion into the original manifold, using the actual backward parameterizations. No supplied atlas, compatibility, smooth inclusion, changed topology or globally regular extension. Include empty fibers and zero-dimensional kernels. Preserve existing APIs and state applicability limits; do not claim derivative injectivity or kernel-range equality.",
+       :consumer-residual
+       "Global self-model manifold-source vector-target regular-fiber atlas and smooth inclusion only. Actual inclusion derivative injectivity and tangent kernel comparison, general models, manifold targets and consumer orientation/boundary/transversality obligations remain."},
+      :id
+      :manifold-regular-fiber-global-atlas-inclusion-probe-refill32,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts],
+      :current-residual
+      "ManifoldRegularFiberCharts supplies actual fixed-model charts, source coverage and smooth overlaps. Global atlas and smooth subtype inclusion remain.",
+      :other-consumers ["t02A07" "t94A06" "t01J04"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped placeholders across all DAG consumers. Compare typed residuals and reviewed outcomes, elect exactly one near-closure adapter first and shared foundations by reach and simplicity, and append a fresh dependent checkpoint. Preserve t96J05 local specification defect, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t95j04-frozen-sphere-image-nullity-closure-probe-refill32
+       :manifold-regular-fiber-global-atlas-inclusion-probe-refill32],
+      :current-residual
+      "Await both reviewed outcomes, then rerank the complete DAG and separate consumer closure from infrastructure and concurrent changes."}],
+    :changed-paths [],
+    :finding
+    "No consumer placeholder changed. Reviewed manifold-fiber work now constructs original-fiber charts, coverage and smooth overlaps, without globally regular extensions; global atlas and inclusion remain. Concurrent coefficient packets provide affine realization, vertex cones and H0 small-chain comparison, not positive-degree excision or consumer closure. The signed antipodal STOP remains an actual sphere-shift naturality boundary. Radial counterexample preservation is neither repair nor closure. Across the complete DAG, elect t95J04 first: all topological conjuncts are already proved, leaving exact Hausdorff image nullity and existing missed-point assembly. Then elect the bounded manifold-fiber atlas/inclusion construction serving four proposed consumers; it reuses completed local geometry, while fundamental-class, intersection, surface-classification and general gluing programs require larger constructions. Applicability to named consumers remains conditional on their separate model, boundary, orientation and transversality obligations. Preserve t96J05, t96J07 and t01A05 local defects, the historical ordinary-H0 S0 refutation, missing signed action, reduced-S0 degree and one-dimensional local-index coverage. Proposed ledger validates with 435 items; no canonical files changed.",
+    :review-outcomes
+    {:previous-checkpoint :pass,
+     :signed-antipodal {:probe :stop, :review :pass},
+     :chart-extension :pass,
+     :fiber-transfer :pass,
+     :manifold-fiber-charts :pass,
+     :radial-counterexample-preservation :pass},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -56302,7 +56436,80 @@
     :t96j05-local-radial-counterexample-preservation-refill31
     :checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
    :current-residual
-   "Await reviewed signed-antipodal adapter, manifold-source chart result and radial counterexample preservation; rerank the complete DAG."}],
+   "Await reviewed signed-antipodal adapter, manifold-source chart result and radial counterexample preservation; rerank the complete DAG."}
+  {:consumer "t95J04",
+   :stop-condition
+   "GO requires full frozen closure. Otherwise identify the exact Hausdorff measure or chart transport boundary; coordinate nullity alone is not closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "DIMENSION-GAP MANIFOLD NULLITY / literal sphere Hausdorff measure",
+   :acceptance
+   {:frozen-file "problems/t95J04/lean/Main.lean",
+    :frozen-sha256
+    "8321b881ae48f14a9d5e711534aa208eabd66dcdc16055f5ce22e9b66ce4fc15",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile a complete placeholder-free frozen Main preserving every definition and statement. For every k<n and the supplied compact second-countable genuine-infinity smooth k-manifold, prove the literal n-dimensional Hausdorff measure of the image in the metric sphere is zero. Reuse dimension-gap chart nullity and nonsurjectivity producers; derive the actual chart-to-sphere Hausdorff null transport, including local Lipschitz or measure comparisons needed, rather than substituting coordinate Haar nullity. Reuse the proved missed-point contraction and all existing topological conjuncts. Include empty and zero-dimensional source cases. No assumed Hausdorff nullity, measure normalization, missed point or conditional final bridge."},
+   :id :t95j04-frozen-sphere-image-nullity-closure-probe-refill32,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts
+    :checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts],
+   :current-residual
+   "One placeholder remains for exact sphere Hausdorff image nullity, nonsurjectivity and null-homotopy; all simple-connectivity and nonhomeomorphism conjuncts are proved."}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires compiled actual global manifold structures and smooth inclusion for the same atlas. REVISE requires exactly one compiled prerequisite; do not claim frozen consumer closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / manifold-source global atlas and inclusion",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a genuine-infinity smooth self-model manifold modeled on a finite-dimensional complete real inner-product space E and a ContMDiff infinity map to a finite-dimensional real inner-product space F at a regular value, construct ChartedSpace and IsManifold genuine infinity on the literal fiber with its inherited topology and fixed Euclidean dimension finrank E minus finrank F. Use exactly ManifoldRegularFiberCharts.exists_cover and its proven smooth overlaps through Mathlib atlas APIs. Prove chosen chartAt and atlas membership specifications. For this same chosen atlas prove genuine-infinity ContMDiff of subtype inclusion into the original manifold, using the actual backward parameterizations. No supplied atlas, compatibility, smooth inclusion, changed topology or globally regular extension. Include empty fibers and zero-dimensional kernels. Preserve existing APIs and state applicability limits; do not claim derivative injectivity or kernel-range equality.",
+    :consumer-residual
+    "Global self-model manifold-source vector-target regular-fiber atlas and smooth inclusion only. Actual inclusion derivative injectivity and tangent kernel comparison, general models, manifold targets and consumer orientation/boundary/transversality obligations remain."},
+   :id :manifold-regular-fiber-global-atlas-inclusion-probe-refill32,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts
+    :checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts],
+   :current-residual
+   "ManifoldRegularFiberCharts supplies actual fixed-model charts, source coverage and smooth overlaps. Global atlas and smooth subtype inclusion remain.",
+   :other-consumers ["t02A07" "t94A06" "t01J04"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped placeholders across all DAG consumers. Compare typed residuals and reviewed outcomes, elect exactly one near-closure adapter first and shared foundations by reach and simplicity, and append a fresh dependent checkpoint. Preserve t96J05 local specification defect, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t95j04-frozen-sphere-image-nullity-closure-probe-refill32
+    :manifold-regular-fiber-global-atlas-inclusion-probe-refill32
+    :checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts],
+   :current-residual
+   "Await both reviewed outcomes, then rerank the complete DAG and separate consumer closure from infrastructure and concurrent changes."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
