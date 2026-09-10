@@ -67626,6 +67626,19 @@
      "Coefficient singular chains and homology of X minus K, X minus L and X minus (K union L), with their inclusions into X",
      :direction
      "Apply the forward nested-to-original homeomorphisms to obtain chain and homology isomorphisms, and prove their forward maps followed by original inclusion equal the nested inclusion."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789045467630-18629-fbb38170",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r ac943e312adb50f2ed43f48a1d6a093d55877e34"
+      "cmp /tmp/CoefficientCompactComplementHomologyTransport.lean /tmp/CoefficientCompactComplementHomologyTransport.review.lean"
+      "python3 <fixture, comment-stripped placeholder, and fifteen declaration-header hash audit>"
+      "lake build ConstructionTargets.CoefficientCompactComplementPairHomeomorph"
+      "lake env lean /tmp/CoefficientCompactComplementHomologyTransport.review.lean"
+      "git show --check --oneline ac943e312adb50f2ed43f48a1d6a093d55877e34"],
+     :finding
+     "PASS: exact one-file fixture and dependency hashes reproduce; all fifteen declaration hashes and zero placeholders reproduce; compilation is green with standard-only axioms; the three chain/homology transports and inclusion compositions have the required forward nested-to-original direction."},
     :commit "ac943e312adb50f2ed43f48a1d6a093d55877e34",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean"],
@@ -67639,7 +67652,7 @@
     :axiom-audit-count 9,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean"],
    :dag-node
@@ -67754,7 +67767,7 @@
      "The three nested compact-complement homeomorphisms are banked. Compiled exactly one homological transport prerequisite: applying actual coefficient singular chains and homology produces isomorphisms from the nested left, right and overlap pieces to the original complements of K, L and K union L in every natural degree. The underlying continuous maps commute exactly with the literal inclusions into X. Signed Mayer-Vietoris conjugation, the ambient relative-pair comparison, localization monicity, dimension vanishing and fundamental classes remain unproved.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
