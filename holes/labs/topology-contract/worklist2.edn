@@ -28553,8 +28553,92 @@
   {:consumer :t02A05,
    :stop-condition
    "Bank only measurable-set integration of pointwise ENNReal bounds and countable summation of scaled inequalities. Do not claim the C1 graph area formula, its per-piece geometric assembly, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Instantiate the integration theorem with the reviewed derivative-density comparisons, combine it with C1GraphPartition.piece_bounds on each piece, normalize the factors, sum globally and apply ENNRealMultiplicativeSqueeze.",
+    :gates
+    {:canonical-compile :pass,
+     :whitespace :pass,
+     :set-lintegral-bounds :pass,
+     :zero-example :pass,
+     :fixture-hash :pass,
+     :axiom-audits 5,
+     :exact-scope :pass,
+     :infinite-example :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :no-finiteness-or-cancellation :pass,
+     :countable-factor-distribution :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"sum_bounds"
+     "9e8ded4344c2f6d30a2620c8153bc062199c92c0bf62260e04e14f1db83f3404",
+     "global_bounds"
+     "71f1cfd55041d30365a4c3c1cf2603220e853f34a67425aa639bb3cc565db962",
+     "set_integral_bounds"
+     "e22ad07009c97c8b2c0892b331b194e70bae821cf6caf0e4861d675c813f1ba6",
+     "zero_example"
+     "f3f0ce6a85fa099e776a243720b4c8612b560e4b24592f083ecec24ecde5bb88",
+     "infinite_example"
+     "f63d96d9d502a444b6ff81b9df26214034959eabcc27f48789d8bd66ca4cb003"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, build-loop design and reviewed dependency receipt",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean ConstructionTargets/ENNRealCountableBounds.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean ConstructionTargets/ENNRealCountableBounds.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ENNRealCountableBounds.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ENNRealCountableBounds",
+      :exit 0}
+     {:cmd
+      "Audit five namespace-local standard-only axiom reports, set-lintegral monotonicity, ENNReal factor distribution, and zero/infinite examples",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ENNRealCountableBounds.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n '[[:blank:]]+$' ConstructionTargets/ENNRealCountableBounds.lean ConstructionTargets/ENNRealCountableBounds.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --cached --check && verify exact two-file staged scope",
+      :exit 0}
+     {:cmd "git show --check --oneline HEAD && git diff --check",
+      :exit 0}],
+    :dependency-uptake
+    {:id :c1-graph-countable-measure-decomposition-1,
+     :commit "2c2bdae3dc99c457a4946f0b9d218a690dbe8e43",
+     :review "invoke-1789043454658-18581-528827cf"},
+    :commit "128cdeb5c2f22aeca7704e3bb8c5bf88b4d142fc",
+    :changed-paths
+    ["ConstructionTargets/ENNRealCountableBounds.lean"
+     "ConstructionTargets/ENNRealCountableBounds.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean",
+     :sha256
+     "0e26f5c06c5f672c7087d83f9fd619bd536b1b9a391cc70c26c71c9fbb78cda6",
+     :placeholder-count 0},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ENNRealCountableBounds.lean"
     "ConstructionTargets/ENNRealCountableBounds.md"],
