@@ -66883,6 +66883,19 @@
       :exit 0}
      {:cmd "git status --short", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789040075889-18488-d30d27c7",
+     :commands
+     ["git show --check e3955606"
+      "Python read-only pinned DAG audit: consumer hashes/counts, module attribution and both artifact hashes"
+      "Inspect pinned concurrent graph-measure documentation and residuals"
+      "bb read-only pinned reviews and tail/evidence/proposed/canonical comparison"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill49-proposed-worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show e3955606:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "Independent review of codex-12's ledger-only checkpoint passes. Artifact hashes match. Reproduced 59 named consumers, 58 existing, missing t93A05, 62 placeholders, 25 closed, 33 open and 23 within two; all consumer bytes unchanged. Modules increase 754→761: four portfolio and three concurrent graph-measure modules. Three pinned PASS reviews support two completed constructions and one local STOP. Four fresh replacement rows match evidence/proposed/canonical after supervisor normalization, with one final adapter first and a dependent checkpoint last. Fivefold-cover applicability, compact-support exactness, m+2 normalization and common-plane versus endpoint-preserving perturbation boundaries remain explicit. Both validators pass 533 items. No files edited."},
     :infrastructure-packets
     {:portfolio 4, :concurrent 3, :duplicates-found 0},
     :replacement-items
@@ -66991,7 +67004,7 @@
       "8fa53ee5388d2059a75a6e7fc2ce5bb9363c2419a0beebb55a3eef64118c57b7"}},
     :seat "codex-12"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -67011,7 +67024,7 @@
    :stop-condition
    "GO requires complete frozen closure; otherwise name the exact remaining deck, genus-invariance or Euler comparison boundary. Infrastructure absence is not refutation.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "COVERING CLASSIFICATION / frozen fivefold surface cover",
    :acceptance
@@ -67035,7 +67048,7 @@
    :stop-condition
    "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -67055,7 +67068,7 @@
    :stop-condition
    "GO requires constructed uniform margin, translated embeddings, containment and pairwise finiteness; REVISE requires one compiled geometric prerequisite.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / translated embedded arcs inside chart targets",
