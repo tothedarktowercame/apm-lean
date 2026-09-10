@@ -34373,8 +34373,47 @@
   {:consumer :t03J05,
    :stop-condition
    "Construct an actual singular-chain cross product with the required boundary signs and induced-map naturality. Do not assume Eilenberg-Zilber, Kunneth, product fundamental classes, intersection nonvanishing, ambient nonhomotopy or consumer closure. Restrict coefficients and degrees to the three named consumers and use a unique row-specific scratch directory.",
+   :evidence
+   {:outcome :stop,
+    :seat "codex-13",
+    :reason
+    "Neither Mathlib nor the banked ConstructionTargets modules contain a singular-chain cross product, Alexander-Whitney map, Eilenberg-Zilber shuffle map, or product-simplex triangulation. Mathlib's simplicial-set monoidal structure is categorical and does not produce a morphism from the tensor product of the production alternating-face singular complexes to singular chains on X×Y. The exact missing boundary is the signed shuffle triangulation of Δp×Δq: for p+q≤4, construct the affine product simplices indexed by (p,q)-shuffles, prove their codimension-one faces cancel with the correct signs, and prove compatibility with postcomposition in both variables. Without that construction there is no well-typed chain map on which to prove the requested Leibniz and naturality formulas. This is missing infrastructure, not a refutation of the cross-product theorem.",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
+      :exit 0}
+     {:cmd
+      "Search ConstructionTargets and Mathlib AlgebraicTopology sources for crossProduct, cross_product, Eilenberg, Alexander-Whitney, shuffleMap and shuffle_map",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Inspect Mathlib.AlgebraicTopology.SimplicialSet.Monoidal and HoFunctorMonoidal",
+      :exit 0}
+     {:cmd
+      "Inspect ConstructionTargets tensor, singular-subdivision, coefficient-singular-chain and product-homology modules",
+      :exit 0}
+     {:cmd
+      "Verify ConstructionTargets/SingularHomologyConcrete.md still lists singular-chain cross product and Eilenberg-Zilber/Alexander-Whitney comparison as unimplemented prerequisites",
+      :exit 0}
+     {:cmd
+      "Verify ConstructionTargets/Intersection.md still requires a separate nonzero cross-product theorem",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :finding
+    "The production singular chains are coproducts over continuous standard simplices with alternating face differentials. Existing tensor-complex modules manipulate abstract chain complexes after a tensor comparison is supplied; they do not construct the geometric map into chains on a product. Existing subdivision machinery realizes affine simplices and proves face compatibility for subdivision, but it contains no product-prism shuffle enumeration or signed cancellation theorem. Integer and ZMod 2 instances therefore fail at the same earlier representation boundary. No fixture, canonical source, consumer file or ledger was edited.",
+    :residual
+    "Construct the bounded signed product-simplex shuffle operator for p+q≤4, including affine realization, face cancellation and two-variable postcomposition naturality; then extend it linearly to the integer and ZMod 2 production singular-chain complexes.",
+    :author "codex-13",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded singular cross-product chain interface",
