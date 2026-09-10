@@ -66768,9 +66768,73 @@
   {:consumer "t99J03",
    :stop-condition
    "GO requires constructed simultaneous small translations and every pairwise finiteness conclusion; REVISE requires exactly one compiled prerequisite.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Finite plane families now admit simultaneous small translations with finite pairwise parameter coincidences. Translations may move endpoints. Chart containment, endpoint-preserving perturbation, retained triangle coverage, compatible faces and triangulation remain subsequent.",
+     :dependency-review
+     {:outcome :pass,
+      :seat "codex-10",
+      :job "invoke-1789037064020-18418-9b7d32d0"},
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {:exists_small_common_regular
+      "8be3152c7bffbf8db7e0c3bdcd041c8130e27a60e527fa70c9dcc038614ad445",
+      :finite_against_family
+      "03289435e762e5664e6f2e9ba4cf20830e2bddd6a353020ad724c05c0702b955",
+      :finite_swap
+      "ae333017e57c4e99e2c92d22215bfa88ffac91b509c0a938bcac08c5354dcc8b",
+      :finite_family_finset
+      "9812a2a50f709a57594eb11f32ac8ec898a5121dacb294352fee1f01e3f5cda5",
+      :finite_family
+      "cf0605d1c887dc7ef9b56d76350e39107d60de61113d3a72102b67a5816066f0"},
+     :acceptance
+     {:implementation
+      "Promote the exact fixture. Compile exists_small_common_regular, finite_against_family, finite_swap, finite_family_finset and finite_family. Verify PlaneArcSmallTranslation SHA256 ebc973d64d07bd8599abf8dcc91fcda16e72a055dd9b71b11fbe25546cf8089a. Preserve genuine smoothness on open neighborhoods containing the closed interval, arbitrary finite index types, strict individual translation bounds and all distinct-pair parameter-coincidence conclusions. Require zero placeholders, no warnings and standard-only axioms.",
+      :commands
+      ["lake env lean ConstructionTargets/PlaneArcFiniteSmallTranslations.lean"],
+      :axioms :standard-only,
+      :placeholder-before 0,
+      :placeholder-after 0},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean -o /tmp/chartball47/ConstructionTargets/PlaneArcSmallTranslation.olean ConstructionTargets/PlaneArcSmallTranslation.lean'",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/PlaneArcFiniteSmallTranslations.lean'",
+       :exit 0}
+      {:cmd
+       "python3 /tmp/plane-arc-finite-small-translations-audit.py",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/PlaneFiniteCommonRegularValue.lean",
+       :exit 1,
+       :correction
+       "The promoted dependency lacked a canonical object; compiled its unchanged source into the private temporary object directory."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/PlaneFiniteCommonRegularValue.lean'",
+       :exit 1,
+       :correction
+       "Replaced equality-pattern substitutions that eliminated the insertion index with explicit equality case splits and separate membership proofs. The complete fixture subsequently compiles."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/PlaneArcFiniteSmallTranslations.lean",
+      :sha256
+      "22aa45c5318d5cc59fd709d6ff0c3cb8b877297b1da83e338b2f10c9d07a7b7b",
+      :placeholder-count 0},
+     :finding
+     "Compiled simultaneous arbitrarily small translations for every finite family of genuinely smooth plane curves with open interval-neighborhood extensions. Finite-union Sard nullity constructs a common regular value for each insertion step. Finset induction preserves previously chosen translations and establishes finiteness for every distinct pair in both orders. Empty and singleton families and endpoint coincidences are included.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/PlaneArcFiniteSmallTranslations.lean"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/PlaneArcFiniteSmallTranslations.lean"],
    :dag-node "SURFACE TRIANGULATION / finite translated arc families",
    :acceptance
    {:axioms :standard-only,
