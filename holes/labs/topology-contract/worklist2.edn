@@ -13621,6 +13621,18 @@
       :exit 1,
       :correction
       "Removed an extra closing parenthesis and successfully reran the audit as /tmp/Checkpoint22Reviews.bb."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789005017633-17582-c5bb7574",
+     :commands
+     ["Python read-only pinned census recomputation, census SHA256, frozen t01A05 hash and scope audit"
+      "bb recorded replacement propagation and successor checkpoint equality audit"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 704de5e1:holes/labs/topology-contract/worklist2.edn)"
+      "git log --oneline ce00018a..51f3ad03 -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md"
+      "git diff --check"],
+     :finding
+     "Verified unchanged66 placeholders and five added modules, with correct portfolio/concurrent attribution. Connected-cover probe explicitly limits its proposed repair to two connectedness hypotheses, preserves the old refutation and requires actual fundamental-class map equations. Small-chain preservation requires constructed restrictions and inclusion-compatible homotopy, not assumed preservation or eventual smallness. Analytic radial STOP and concurrent reservations remain preserved; two work rows and identical successor checkpoint verified. No ledger edits."},
     :replacement-items
     [{:consumer :t01A05,
       :stop-condition
@@ -13758,7 +13770,7 @@
       :before 66}},
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: corrected radial-level uptake and subdivision homotopy",
@@ -13782,7 +13794,7 @@
    :stop-condition
    "Preserve the old refutation. Add only ConnectedSpace hypotheses for the base and total space in the general-cover clause. Do not assume fundamental-class localization, orientation compatibility or covering degree.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SPEC-DEFECT / COVER-DEGREE: connected finite-cover fundamental-class consumer",
@@ -13813,7 +13825,7 @@
    :stop-condition
    "Construct restrictions of the reviewed operators; do not supply preservation equations as assumptions or reinterpret an integral conclusion as R-linear. Do not claim eventual smallness, homology comparison, excision or sphere homology.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION: coefficient-general preservation of cover-small chains",
