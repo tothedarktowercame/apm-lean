@@ -59991,8 +59991,59 @@
   {:consumer "t00J02",
    :stop-condition
    "Require actual derivative factorization, injectivity and exact tangent equalizer range for the banked chosen atlas; no supplied immersion or kernel identity.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Same-atlas derivative factorization, injectivity and exact tangent equalizer range are compiled. Explicit Euclidean model-index normalization and final packet assembly remain. No consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789012983449-17808-f794442d"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:zero_derivative
+     "e3a35c18b1dca7a5830606f8636cbb48f7e3f0286881c733534c079c070f264b",
+     :inclusionLinear
+     "1ec9453379ef2e08f05fe6ba68d21267180c5fc1b4abd62209712e0713fbb2fa",
+     :inclusion_injective
+     "037c0ba0fcce05c45ff21fcfe86dd8141a4925c2a3099984abfb74059a7f3047",
+     :inclusion_range
+     "68724c62efd1718d68798ccb9b515a82278b39bca30570b6eb0eb7ed61fd2cb8",
+     :mem_inclusion_range
+     "940e2479d90fc7b3e9440586849ac8ce5c9c4b4ff1b52c1225bd850751edc331"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "python3 /tmp/transverse-incidence-tangent-audit.py",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.TransverseIncidenceChosenAtlas ConstructionTargets.ManifoldRegularFiberTangentImage ConstructionTargets.TransverseDifferenceKernel 2>&1 | tail -18",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/TransverseIncidenceTangent.lean ConstructionTargets/TransverseIncidenceTangent.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/TransverseIncidenceTangent.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "82d876986a2e972df752b10321b458f2ea54569a",
+    :changed-paths
+    ["ConstructionTargets/TransverseIncidenceTangent.lean"],
+    :fixture
+    {:path "/tmp/TransverseIncidenceTangent.lean",
+     :sha256
+     "94e87ed09a9b09030cd28f37d4a8d4638e5aaa203ff04cbf29197ec6fe247654"},
+    :axiom-audit-declarations 5},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TransverseIncidenceTangent.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / chosen incidence inclusion tangent equalizer",
