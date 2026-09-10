@@ -73889,6 +73889,20 @@
      "Coefficient chains on the union-generated ambient subcomplex inside singular simplices of X",
      :direction
      "Canonical chain isomorphism from the source restricted cover-small representation to the target union-generated range representation, with exact equality after inclusion into ambient coefficient chains."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789079140431-19655-c925c189",
+     :commands
+     ["git show d13d400e64c2989dae771140a258b0c9fff68d41:ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean"
+      "git diff-tree --no-commit-id --name-only -r d13d400e64c2989dae771140a258b0c9fff68d41"
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean"
+      "sha256sum /tmp/CoefficientSubspaceUnionRestrictedRangeIso.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"
+      "cmp -s /tmp/CoefficientSubspaceUnionRestrictedRangeIso.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean"
+      "git show --check --oneline --stat d13d400e64c2989dae771140a258b0c9fff68d41"
+      "python3 five-declaration hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at fcdb8331d731c21de340aa41036f16dea032124fc2134786b0922ea3d236f5dd, and the ambient-range dependency reproduces d76c938f7ec14ae8d60627ae40c38f6c4fec3fb2cb55915b99af210871568d02. Lean compilation succeeds without warnings, all five frozen declaration hashes reproduce, placeholdersd placeholders are zero, and printed axioms are standard-only. The canonical simplicial and coefficient-chain isomorphisms point from restricted cover-small objects to the union-generated ambient range. The equality-derived range coercion has the correct orientation, and both compatibility theorems state that the forward isomorphism followed by ambient inclusion equals the original direct ambient map. No surjectivity onto all ambient chains or downstream homology/relative conclusion is asserted."},
     :commit "d13d400e64c2989dae771140a258b0c9fff68d41",
     :changed-paths
     ["ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean"],
@@ -73900,7 +73914,7 @@
     :finding
     "The exact fixture and recorded restricted-ambient-range dependency hash reproduce. All five requested declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean"],
    :dag-node
@@ -74013,7 +74027,7 @@
      "Compiled exactly one chain-level representation prerequisite. The restricted-cover ambient map is monic, so its canonical map to its categorical range is an isomorphism. Composing this with the reviewed equality between that range and the union-generated subcomplex gives a simplicial isomorphism and hence a coefficient-chain isomorphism. Its forward map followed by the union-generated ambient inclusion is exactly the original restricted-cover ambient map. No production union simplex is assumed subordinate to one member.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
