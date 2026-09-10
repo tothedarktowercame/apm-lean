@@ -12685,9 +12685,92 @@
   {:consumer :t00J01-rational-sphere-homology,
    :stop-condition
    "No assumed chain-map differential equation, coefficient-change theorem, homotopy or small-chain isomorphism. Do not retry excision or the sphere table.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Coefficient-general homotopy to identity, preservation and eventual smallness, positive-degree small-chain comparison, relative excision and sphere suspension remain before rational S2 H1/H2. No frozen consumer closure is claimed.",
+     :axiom-audits 11,
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture and document its coefficient representation, dependencies and downstream residual.",
+      :namespace "ConstructionTargets.CoefficientSingularSubdivision",
+      :declarations
+      ["singularSubdivisionDegree_comm_d"
+       "singularSubdivision"
+       "singularSubdivision_natural"
+       "standardVertexRealization_postcomposition"
+       "singularSubdivisionDegree_zero"
+       "naturality"
+       "generator_formula"
+       "edge_formula"
+       "edge_boundary"
+       "integral_edge_formula"
+       "integral_edge_boundary"
+       "rational_edge_formula"
+       "rational_edge_boundary"],
+      :hypotheses
+      "R and all topological spaces are Type 0; R is a commutative ring. Chains use singularChainComplexFunctor (ModuleCat R) with coefficient object ModuleCat.of R R. Naturality takes arbitrary continuous maps; no nonemptiness or connectedness assumptions.",
+      :consumer-equation
+      "The actual coefficient-general subdivision degree maps assemble into a natural singular chain endomorphism, equal to identity in degree zero and given on generators by barycentric subdivision.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSingularSubdivision."
+       "Reproduce all eleven standard-only axiom audits and integer/rational standard-edge formulas and boundary examples."
+       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientSingularSubdivision.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientSingularSubdivision.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSingularSubdivision.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "First compilation with explicit edge formula",
+       :exit 1,
+       :correction
+       "Reassociated the generator composite before rewriting its boundary."}
+      {:cmd "Second edge-formula compilation",
+       :exit 1,
+       :correction
+       "Normalized natural-number indices before expanding the two-term finite sum."}
+      {:cmd "Third edge-formula compilation",
+       :exit 1,
+       :correction
+       "Distributed composition over the final signed sum and removed an unused simplification argument."}
+      {:cmd "First integer/rational example compilation",
+       :exit 1,
+       :correction
+       "Replaced every remaining ring parameter in the specialized proposition types. Final compilation succeeds without warnings."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientSingularSubdivision.lean",
+      :sha256
+      "829767b13270ce19a15269b2cad9775dd2d5178ef8a715c8e124b26c84c3af16"},
+     :finding
+     "Constructed the chain endomorphism from the reviewed coefficient-general degree maps. Differential compatibility uses the vertex differential, realization chain map and proved subdivided-face transport. Proved degree-zero identity, simplex-generator formula and continuous-map naturality both degreewise and as chain maps. The explicit signed two-edge formula and unchanged endpoint boundary compile over integers and rationals. Existing recursion and affine-change constructions are reused.",
+     :dependency-reviews
+     ["invoke-1789001810392-17486-588a490f"
+      "invoke-1789001467985-17474-faea7287"],
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientSingularSubdivision.lean"
+       "ConstructionTargets/CoefficientSingularSubdivision.md"]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientSingularSubdivision.lean"
+    "ConstructionTargets/CoefficientSingularSubdivision.md"],
    :dag-node
    "SINGULAR-SUBDIVISION: actual coefficient-general singular chain endomorphism assembly",
    :acceptance
