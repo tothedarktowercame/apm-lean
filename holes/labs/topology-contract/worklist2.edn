@@ -36384,8 +36384,103 @@
   {:consumer :t03J05,
    :stop-condition
    "Bank only the exact initial and terminal grid vertices of canonical maximal product-simplex paths. Do not prove word cardinalities, reconstruct paths, swap corners, pair faces, prove sign changes or cancellation, define chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove the step word contains exactly p horizontal and q vertical letters, reconstruct its cumulative-coordinate maximal path, and implement the adjacent unlike-letter swap.",
+    :gates
+    {:canonical-compile :pass,
+     :whitespace :pass,
+     :fixture-hash :pass,
+     :canonical-end-equality :pass,
+     :first-coordinate-bound :pass,
+     :axiom-audits 2,
+     :exact-scope :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :second-coordinate-bound :pass,
+     :target-warning-scan :pass,
+     :terminal-coordinate-sum :pass,
+     :commit-check :pass,
+     :fixture-compile :pass,
+     :canonical-start-equality :pass,
+     :forbidden-declaration-scan :pass,
+     :time-zero-coordinate-sum :pass,
+     :ledger-validation :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"grid_start"
+     "342851480c54d7fb623150bb14f4da56e3f6c85741341cf5ce6738895e1b4006",
+     "grid_end"
+     "fee26fcc3e98e347da063d31172a2a3198a219726799c24604395d4fe8620889"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the dependency receipts",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint58-endpoints/ProductSimplexPathEndpoints.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint58-endpoints/ProductSimplexPathEndpoints.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexPathEndpoints.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexPathEndpoints",
+      :exit 0}
+     {:cmd
+      "Import the canonical target and reproduce standard-only axiom audits for grid_start and grid_end",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ProductSimplexPathEndpoints.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace, fixture-hash, endpoint-proof-shape and declaration-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; verify exact two-file scope; git diff --cached --check; git commit -m 'Normalize product simplex path endpoints'",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat HEAD; recompute canonical source, documentation, commit and Git blob hashes; git status --short",
+      :exit 0}],
+    :canonical
+    {:path "ConstructionTargets/ProductSimplexPathEndpoints.lean",
+     :sha256
+     "d3c076336cb38b465afef58ac0a8af134affcd76ee7c3ca0b7b1ac7ef63156fe",
+     :git-blob "d11f96a6c6283ad288fe16271f6e3faa30a0402c"},
+    :commit "f1b09522e871c324701ce6e8823683f1526ac3f3",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexPathEndpoints.lean"
+     "ConstructionTargets/ProductSimplexPathEndpoints.md"],
+    :dependency-warnings
+    [{:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 2960,
+      :kind :unused-tactic}
+     {:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 3580,
+      :kind :unnecessary-simpa}],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint58-endpoints/ProductSimplexPathEndpoints.lean",
+     :sha256
+     "f9dfb291301944b05f16014bf8039bd1e51f612aa8164cebd2510b26459850b3",
+     :placeholder-count 0},
+    :finding
+    "The canonical endpoint module proves exact equalities in the prodStdSimplex.objEquiv representation. grid_start evaluates maximalPath_coordinate_sum at time zero and forces both natural-number coordinates to zero. grid_end evaluates the terminal coordinate sum and combines it with both finite-coordinate isLt bounds to force the terminal coordinates to p and q. No word cardinality, reconstruction, corner swap, face pairing, sign change, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is introduced.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexPathEndpoints.lean"
     "ConstructionTargets/ProductSimplexPathEndpoints.md"],
