@@ -68969,8 +68969,82 @@
   {:consumer "t98A02",
    :stop-condition
    "Require all three instantiated compact-complement Mayer-Vietoris segments transported through the actual overlap, piece and ambient comparison isomorphisms, with proved exactness; no supplied arrow identification or coefficient excision.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Identify the three transported connecting and inclusion arrows with the actual maps on the literal complement presentation, then compare the ambient-complement relative presentation with H(X,X minus K), H(X,X minus L), H(X,X minus (K union L)) and H(X,X minus (K intersection L)) through actual coefficient-excision maps.",
+    :dependency-hashes
+    {:CoefficientCompactComplementPiecesComparison
+     "ad3e126a8fcb015891e0d8a0adbf4cdf4b271f28169aefa40bc34c61b7562765",
+     :CoefficientCompactComplementUnionComparison
+     "a91c06af52938916deb44ee2f9f45f3cd260969d75357268267f1ab539672de9",
+     :CoefficientIntersectionRangeComparison
+     "9280858720ad2cc52aeccd1a69f8e3135498d729e2053b77bdc5c9aeb0e7973f",
+     :CoefficientCompactComplementCoverSequence
+     "1e1d651d3db679386223ff74964e1dc663a50dbfcb7e19a74a9358a7b8060234"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:intersectionSource
+     "4336c1307fe81c14292558c52fcb086fb37f810e870e23f40517efa124ed137a",
+     :piecesPresentation
+     "32129a3b3f7e458188eb1a2190cc387b7423c5b57d5cf76f5b0d02858db4ae0a",
+     :unionSource
+     "fe26ce7bf6bff72e2adfda38663e8191de897f5411a00b894f3ee27382d8d071",
+     :unionPresentation
+     "016c0fa72edfbacb99c5689cf6bb7e93cebfeb05bdf7a144e1af32e24a42fa45",
+     :piecesPresentation_exact
+     "569e61ad92302a4c882913aeb1800394e2f7ab1483d537c8d1849fe7af83a080",
+     :intersectionPresentation
+     "395087788b7ce6668733ff7de11100f59a87c0111ddf12d7d7777e87b1621049",
+     :piecesSource
+     "230375b6ab4036df9a919c7713e1d0a501240f80fa223c4fa68e577053a665d3",
+     :intersectionPresentation_exact
+     "1996424e87383633d19459ea9748f87ae900eba476e22d8a6a2e544b9199954d",
+     :unionPresentation_exact
+     "3f5ba734c7505ea0a554414b7a17433ff2a457602df9b5fc3f9afe9b4c0169da"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementTransportedExactness.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and nine complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientCompactComplementTransportedExactness.lean ConstructionTargets/CoefficientCompactComplementPiecesComparison.lean ConstructionTargets/CoefficientCompactComplementUnionComparison.lean ConstructionTargets/CoefficientIntersectionRangeComparison.lean ConstructionTargets/CoefficientCompactComplementCoverSequence.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git diff --exit-code betaal-- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add transported compact complement exactness'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "58841cffded9388713a8de72de8ddbb29c5c5348",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementTransportedExactness.lean"],
+    :fixture
+    {:path
+     "/tmp/CoefficientCompactComplementTransportedExactness.lean",
+     :sha256
+     "483bbc412f4f5c9914b1d0f1b3772f18235bb4b1ef28dff90258d0a551e9022a",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled the three instantiated compact-complement Mayer-Vietoris source segments, their transport through the actual intersection, piece and union comparison isomorphisms, and all three resulting exactness theorems. The construction preserves compact K and L in a Hausdorff space, arbitrary commutative-ring coefficients and every degree. No final arrow identification, coefficient excision, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 3,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementTransportedExactness.lean"],
    :dag-node
