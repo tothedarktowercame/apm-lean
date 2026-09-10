@@ -12106,8 +12106,64 @@
   {:consumer :t94J09,
    :stop-condition
    "Preserve both literal quotient relations, coefficient object and all homology degrees. No assumed polygon normalization, cellular comparison or homology table.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "Nonempty (PolygonSurface ≃ₜ N6), actual H0≅Z, actual H1≅Z^5×ZMod 2, and vanishing in every degree at least two remain unproved. No complete closure or admissible refutation compiled.",
+    :frozen-file "problems/t94J09/lean/Main.lean",
+    :dependency-review "invoke-1789000705972-17447-7729e02c",
+    :axiom-audits 2,
+    :outcome :stop,
+    :warnings [],
+    :statement-hashes
+    {:apm_t94j09
+     "25aaa4ffed71e36a39b7b5cca655ccd0828c2b647061ded7cbc0186a629ad101"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :placeholder-before 1,
+    :reason
+    "Two independent constructions remain: a homeomorphism between the literal fourteen-edge quotient and N6, and the demanded integral singular-homology calculation of the source quotient. The existing quotient eliminators can assemble a homeomorphism from relation-respecting disk maps with inverse identities, but those maps are not constructed. Production singular Mayer-Vietoris is banked; the missing input is applicable polygon geometry and term computations, not the existence of that sequence.",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "cat problems/t94J09/lean/Main.lean", :exit 0}
+     {:cmd
+      "Read DAG surface-classification boundary, closure stop rules, dependency review, Surfaces and production Mayer-Vietoris APIs",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T94J09Boundary.lean", :exit 0}
+     {:cmd "sha256sum /tmp/T94J09Boundary.lean", :exit 0}
+     {:cmd
+      "Python audit: frozen/statement hashes, comment-stripped placeholder count and identical frozen prefix",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T94J09Boundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial lake env lean /tmp/T94J09Boundary.lean",
+      :exit 1,
+      :correction
+      "Replaced order-sensitive simplification with explicit conjunction elimination and reconstruction using the five frozen certificates. Final compilation is warning-free."}],
+    :campaign-termination false,
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T94J09Boundary.lean",
+     :sha256
+     "2cd8229be8f94c250e5bed9b928c49d07ddbf6878e64510169ca4e8da3657dd6",
+     :role :typed-boundary-diagnostic},
+    :finding
+    "The compiled diagnostic preserves every frozen definition and helper proof. exact_residual removes only the five already-proved finite certificates, retaining the literal homeomorphism and all homology degrees. DiskMapWitnesses records the exact sufficient disk-map conditions, and disk_maps_suffice checks their orientation against the existing assembler without asserting that witnesses exist. No numerical genus certificate is treated as quotient classification, and no cellular calculation is substituted for actual singular homology.",
+    :statement-hash-method
+    "SHA256 of declaration text from theorem through the character before := by.",
+    :frozen-sha256
+    "7726693f11c45b961ddec5736361aae56b94476b84048f9be760a2db6c0c96a5",
+    :mathematical-refutation false,
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "SURFACE CLASSIFICATION: exact fourteen-edge polygon consumer",
