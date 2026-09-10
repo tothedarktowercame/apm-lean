@@ -17464,9 +17464,202 @@
    :other-consumers []}
   {:consumer :t00J01-rational-sphere-homology,
    :stop-condition
-   "No supplied sphere shift, radial relative homology isomorphism or coefficient-change shortcut. Preserve actual subspace cokernels and distinguish ordinary H0 from reduced H0. Do not claim the sphere table or frozen closure.",
-   :phase :probe,
+   "Bank the actual radial pair comparison only. Do not claim hemisphere comparison, sphere suspension, a sphere table or frozen closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/CoefficientRadialPair.lean",
+      :sha256
+      "c11a2ec7239b672a0ae6a6037c2d764fa6d2c7b3c60717b33fb05d0c644ad838"},
+     :commands
+     [{:cmd "lake env lean /tmp/CoefficientRadialPair.lean", :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientRadialPair.lean"
+    "ConstructionTargets/CoefficientRadialPair.md"],
+   :dag-node
+   "SPHERE SUSPENSION: coefficient-general radial disk-pair comparison",
+   :acceptance
+   {:namespace "ConstructionTargets.CoefficientRadialPair",
+    :implementation
+    "Promote the exact compiled fixture, reusing coefficient-independent radial homotopy equivalences and the reviewed coefficient-general homotopy and cokernel comparison theorems.",
+    :declarations
+    ["absoluteMap"
+     "subMap"
+     "square"
+     "pairMap"
+     "projection"
+     "projection_degree"
+     "homotopyIso_hom"
+     "radial_absolute_isIso"
+     "radial_subspace_isIso"
+     "radialIso"
+     "radialIso_hom"
+     "inverse_left"
+     "inverse_right"
+     "integral_radial"
+     "rational_radial"],
+    :hypotheses
+    "R and spaces are Type 0; R is a commutative ring. Generic pair maps require only continuity and MapsTo. Radial comparison holds for every natural-number dimension and homology degree, including zero; no nonemptiness assumption is added to boundary subsets. Chains use ModuleCat.of R R.",
+    :consumer-equation
+    "The actual halfDiskMap-induced relative homology map is an isomorphism in every degree, with exact forward-map and projection equations.",
+    :consumer-residual
+    "Construct the hemisphere-coordinate relative comparison, instantiate actual excision and assemble the sphere shift and H1 kernel endpoint.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientRadialPair."
+     "Reproduce all nine standard-only axiom audits and integer/rational radial examples."
+     "Audit actual subtype cokernels, projection equations, exact forward map and both inverse laws."
+     "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+   :representation
+   {:source
+    "Homology of the actual ModuleCat R relative cokernel of the closed-disk boundary inclusion.",
+    :target
+    "Homology of the actual ModuleCat R relative cokernel of the punctured-open-disk inclusion.",
+    :direction
+    "Construct an isomorphism from closed-disk boundary-pair homology to punctured-open-disk-pair homology whose forward arrow is exactly homologyMap of the cokernel map induced by halfDiskMap and its restriction."},
+   :id :coefficient-general-radial-relative-comparison-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint28-coefficient-contractible-pair-sequence-1
+    :coefficient-general-cokernel-homology-comparison-1],
+   :current-residual
+   "Sphere suspension requires the radial pair comparison directly over R with its actual forward map.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No supplied sphere shift, radial relative homology isomorphism or coefficient-change shortcut. Preserve actual subspace cokernels and distinguish ordinary H0 from reduced H0. Do not claim the sphere table or frozen closure.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Hemisphere-coordinate comparison and sphere-shift assembly remain in the parent. Rational S2 H1/H2, normalization and required naturality remain downstream.",
+     :axiom-audits 9,
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Bank the actual radial pair comparison only. Do not claim hemisphere comparison, sphere suspension, a sphere table or frozen closure.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path "/tmp/CoefficientRadialPair.lean",
+         :sha256
+         "c11a2ec7239b672a0ae6a6037c2d764fa6d2c7b3c60717b33fb05d0c644ad838"},
+        :commands
+        [{:cmd "lake env lean /tmp/CoefficientRadialPair.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/CoefficientRadialPair.lean"
+       "ConstructionTargets/CoefficientRadialPair.md"],
+      :dag-node
+      "SPHERE SUSPENSION: coefficient-general radial disk-pair comparison",
+      :acceptance
+      {:namespace "ConstructionTargets.CoefficientRadialPair",
+       :implementation
+       "Promote the exact compiled fixture, reusing coefficient-independent radial homotopy equivalences and the reviewed coefficient-general homotopy and cokernel comparison theorems.",
+       :declarations
+       ["absoluteMap"
+        "subMap"
+        "square"
+        "pairMap"
+        "projection"
+        "projection_degree"
+        "homotopyIso_hom"
+        "radial_absolute_isIso"
+        "radial_subspace_isIso"
+        "radialIso"
+        "radialIso_hom"
+        "inverse_left"
+        "inverse_right"
+        "integral_radial"
+        "rational_radial"],
+       :hypotheses
+       "R and spaces are Type 0; R is a commutative ring. Generic pair maps require only continuity and MapsTo. Radial comparison holds for every natural-number dimension and homology degree, including zero; no nonemptiness assumption is added to boundary subsets. Chains use ModuleCat.of R R.",
+       :consumer-equation
+       "The actual halfDiskMap-induced relative homology map is an isomorphism in every degree, with exact forward-map and projection equations.",
+       :consumer-residual
+       "Construct the hemisphere-coordinate relative comparison, instantiate actual excision and assemble the sphere shift and H1 kernel endpoint.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientRadialPair."
+        "Reproduce all nine standard-only axiom audits and integer/rational radial examples."
+        "Audit actual subtype cokernels, projection equations, exact forward map and both inverse laws."
+        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+      :representation
+      {:source
+       "Homology of the actual ModuleCat R relative cokernel of the closed-disk boundary inclusion.",
+       :target
+       "Homology of the actual ModuleCat R relative cokernel of the punctured-open-disk inclusion.",
+       :direction
+       "Construct an isomorphism from closed-disk boundary-pair homology to punctured-open-disk-pair homology whose forward arrow is exactly homologyMap of the cokernel map induced by halfDiskMap and its restriction."},
+      :id :coefficient-general-radial-relative-comparison-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint28-coefficient-contractible-pair-sequence-1
+       :coefficient-general-cokernel-homology-comparison-1],
+      :current-residual
+      "Sphere suspension requires the radial pair comparison directly over R with its actual forward map.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Inspect hemisphere and radial geometry, both ledgers and dependency PASS receipts",
+       :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientRadialPair.lean", :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientRadialPair.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientRadialPair.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial radial fixture compilation",
+       :exit 1,
+       :correction
+       "Removed a redundant tactic and made categorical map and monicity arguments explicit."}
+      {:cmd "Second radial fixture compilation",
+       :exit 1,
+       :correction
+       "Specified the boundary-homeomorphism source and target and both horizontal maps."}
+      {:cmd "Third radial fixture compilation",
+       :exit 1,
+       :correction
+       "Used the explicit functor composition equality by transport instead of rewriting."}
+      {:cmd "Fourth radial fixture compilation",
+       :exit 1,
+       :correction
+       "Replaced an underdetermined homeomorphism instance annotation."}
+      {:cmd "Fifth radial fixture compilation",
+       :exit 1,
+       :correction
+       "Kept the boundary homeomorphism bundled as an explicitly typed TopCat isomorphism. Final compilation succeeds with standard axioms and no warnings."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientRadialPair.lean",
+      :sha256
+      "c11a2ec7239b672a0ae6a6037c2d764fa6d2c7b3c60717b33fb05d0c644ad838"},
+     :finding
+     "Exactly one complete compiled geometric relative-map prerequisite is supplied. The fixture constructs actual R-linear pair maps between subtype cokernels and proves their projection equations in every chain degree. The reviewed half-disk and boundary homotopy equivalences prove that the actual halfDiskMap induces a relative homology isomorphism in every degree. Its forward map is exactly the constructed cokernel-induced homology map, with both inverse laws. Integer and rational specializations include dimension and degree zero. Hemisphere-coordinate comparison and the sphere-shift composite remain unassembled; the parent is not GO.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "SPHERE SUSPENSION: coefficient-general hemisphere and radial comparison assembly",
@@ -17495,7 +17688,7 @@
    [:oriented-checkpoint29-pair-sequence-and-consumer-refill
     :oriented-checkpoint28-coefficient-contractible-pair-sequence-1
     :oriented-checkpoint27-coefficient-actual-subspace-excision-1
-    :oriented-checkpoint29-pair-sequence-and-consumer-refill],
+    :coefficient-general-radial-relative-comparison-1],
    :current-residual
    "Actual R-valued excision and contractible pair endpoints are reviewed. Hemisphere coordinates and the radial disk-pair map still need their actual R-linear relative-map comparisons and oriented composite.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
