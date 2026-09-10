@@ -71381,6 +71381,19 @@
       "git diff --check -- ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789069904379-19317-f5a50fd2",
+     :commands
+     ["git diff --name-only 703bc8a6^ 703bc8a6"
+      "git diff --exit-code 703bc8a6258c8c6943076d96afcbb22f5996e11e -- ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"
+      "lake env lean ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"
+      "sha256sum ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean /tmp/PlaneArcEndpointPerturbationContainment.lean ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean"
+      "python3 placeholder-and-three-declaration audit"
+      "git diff --check 703bc8a6^ 703bc8a6 -- ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"],
+     :finding
+     "Exact one-file scope; fixture and dependency hashes match; Lean compiles with only propext, Classical.choice, and Quot.sound; zero placeholders; all three frozen statement hashes reproduce. The unit-interval weight and distance bounds correctly yield forward membership in the supplied metric thickening under the strict norm margin, without overclaiming embedding, finite intersections, or chart compatibility."},
     :commit "703bc8a6258c8c6943076d96afcbb22f5996e11e",
     :changed-paths
     ["ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"],
@@ -71392,7 +71405,7 @@
     :finding
     "Promoted the exact fixture. On the unit interval the endpoint weight has absolute value at most one, so endpoint-weighted perturbation moves each arc point by at most the perturbation-vector norm and remains in any supplied metric thickening when that norm is below the margin. The module compiles without warnings or placeholders, its dependency hash matches, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"],
    :dag-node
@@ -71486,7 +71499,7 @@
      "The promoted endpoint-relative perturbation compiles at its recorded hash. Compiled exactly one next prerequisite: on the unit interval its scalar weight has absolute value at most one, so the perturbed point lies within norm v of the original point. Consequently any perturbation vector smaller than a previously established thickening margin keeps the entire arc inside its prescribed open plane target. This supplies the chart-containment estimate without claiming embedding stability, finite coincidences or cross-chart transport.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
