@@ -31834,6 +31834,22 @@
      {:cmd
       "sha256sum /tmp/codex13-checkpoint50-subtype-nullity/HausdorffSubtypeNullity.lean; lake env lean /tmp/codex13-checkpoint50-subtype-nullity/HausdorffSubtypeNullity.lean; rg -n '^namespace |#print axioms|theorem subtype_' /tmp/codex13-checkpoint50-subtype-nullity/HausdorffSubtypeNullity.lean; test ! -e ConstructionTargets/HausdorffSubtypeNullity.lean; test ! -e ConstructionTargets/HausdorffSubtypeNullity.md; git diff --exit-code -- ConstructionTargets/HausdorffSubtypeNullity.lean ConstructionTargets/HausdorffSubtypeNullity.md; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789057178564-18961-3e911de8",
+     :commands
+     ["git show --format=fuller --stat f48ff9900c4c328729a1740c53f7637594a3c4df"
+      "git diff-tree --no-commit-id --name-status -r f48ff9900c4c328729a1740c53f7637594a3c4df"
+      "git diff --check f48ff9900c4c328729a1740c53f7637594a3c4df^ f48ff9900c4c328729a1740c53f7637594a3c4df"
+      "sha256sum /tmp/codex13-checkpoint50-subtype-nullity/HausdorffSubtypeNullity.lean"
+      "lake env lean /tmp/codex13-checkpoint50-subtype-nullity/HausdorffSubtypeNullity.lean"
+      "placeholder, forbidden-declaration, and whitespace scans on the fixture"
+      "verify absence of ConstructionTargets/HausdorffSubtypeNullity.lean and .md"
+      "inspect subtype_univ_measure and subtype_univ_null theorem orientations"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers from recorded commit"],
+     :finding
+     "PASS: commit f48ff990 is ledger-only and whitespace-clean. The fixture reproduces SHA256 347846695ecaca6f5698ca59508ad4bc1f73607954bb9d383322da315c18d746, has zero placeholders, compiles without warnings, and uses only propext, Classical.choice, and Quot.sound. subtype_univ_measure correctly applies the subtype coercion isometry and reverses the image equality to obtain intrinsic Set.univ measure equals ambient carrier measure; subtype_univ_null then rewrites only with that equality and the supplied ambient nullity. The d=2 in E3 and d=3 in E4 examples compile. The fixture declares HausdorffSubtypeNullity, while exact promotion requires ConstructionTargets.HausdorffSubtypeNullity, and no canonical target exists; renaming would change the frozen fixture. The recorded STOP therefore correctly identifies a specification boundary. Both ledgers validate; no frozen consumer changed, so frozen statement hashes and placeholder recount are not applicable."},
     :changed-paths [],
     :fixture
     {:path
@@ -31845,7 +31861,7 @@
     "The reviewed fixture matches SHA256 347846695ecaca6f5698ca59508ad4bc1f73607954bb9d383322da315c18d746 and compiles the generic subtype Hausdorff-measure equality, nullity transport, and both Euclidean examples with standard-only axioms. It declares namespace HausdorffSubtypeNullity, while this implementation row requires exact fixture promotion under ConstructionTargets.HausdorffSubtypeNullity. The compiled declarations therefore have the wrong qualified names. Renaming or wrapping would change the exact fixture. Repair the fixture namespace and recorded digest, or consistently revise the acceptance namespace and exact-promotion requirement. This is a specification boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/HausdorffSubtypeNullity.lean"
     "ConstructionTargets/HausdorffSubtypeNullity.md"],
@@ -31974,7 +31990,7 @@
      "Exactly one complete compiled subtype-transport prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 routes. For any subset of a Borel emetric space, it proves that the raw d-dimensional Hausdorff measure of the entire induced subtype equals the ambient raw Hausdorff measure of the carrier. The proof uses isometry_subtype_coe and Isometry.hausdorffMeasure_image in the required direction. It then derives intrinsic subtype nullity from ambient nullity without normalization or scalar cancellation. Concrete applications for subsets of EuclideanSpace real (Fin 3) at d=2 and EuclideanSpace real (Fin 4) at d=3 compile. The parent probe is not GO because the measurable exact partition of each literal sphere into strict upper cap, strict lower cap and equator remains unproved. No sphere mass, cap-area sum, moment, Stokes or consumer-closure theorem is claimed; no canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: Hausdorff-null equators for the literal S2 and S3 cap decompositions",
