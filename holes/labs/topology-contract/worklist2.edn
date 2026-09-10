@@ -25379,126 +25379,197 @@
    :other-consumers [:t01A02 :t03J05 :t96J06]}
   {:consumer :t98A02,
    :stop-condition
+   "Bank scaled-boundary normalization and its actual homology inverse only. Do not claim the relative connecting comparison, transition-unit local constancy, orientation compatibility or consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/CoefficientScaledBoundaryNormalization.lean",
+      :sha256
+      "586c754b4afdb9d0d2a8598b484da1db69308fa4d036b3df1d9ce022b2f28dd7"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/CoefficientScaledBoundaryNormalization.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientScaledBoundaryNormalization.lean"
+    "ConstructionTargets/CoefficientScaledBoundaryNormalization.md"],
+   :dag-node
+   "LOCAL ORIENTATION: scaled recentered sphere boundary and actual radial inverse",
+   :acceptance
+   {:namespace
+    "ConstructionTargets.CoefficientScaledBoundaryNormalization",
+    :implementation
+    "Promote the exact compiled fixture and document how the chart-neighborhood radius and strict source-coordinate bound instantiate it.",
+    :declarations
+    ["scaled"
+     "norm_scaled"
+     "gap"
+     "avoids"
+     "recentered"
+     "normalized"
+     "normalized_value"
+     "centered_identity"
+     "homology_identity"
+     "radialIso"
+     "forward_inverse"
+     "boundaryIso"
+     "inverse_right"
+     "inverse_left"
+     "integral_example"
+     "rational_example"],
+    :hypotheses
+    "E is a Type 0 real normed vector space. R is a Type 0 commutative ring. Require r>0 and norm(p)<r. Equations hold in every natural homology degree without finite-dimensionality, nontriviality or orientation assumptions. No ordinary-S0 rank-one assertion is made.",
+    :consumer-equation
+    "The actual normalized map z ↦ normalize(r*z-p) induces identity. The actual recentered map from the unit sphere to the punctured space induces an isomorphism with inverse induced by radial normalization.",
+    :consumer-residual
+    "Use the actual pair connecting naturality and neighborhood-inclusion maps to identify the source and mapped boundary calculations with the relative chart normalizations. Then deduce nearby transition-unit equality.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientScaledBoundaryNormalization."
+     "Reproduce ten standard-only axiom audits and integer/rational examples."
+     "Audit radius positivity, strict center bound, literal scaled boundary and recentered normalization formula."
+     "Verify the normalized homology identity uses the proved geometric boundary motion and positive radial scaling."
+     "Verify the actual forward-map identification and both radial inverse equations in every natural degree."
+     "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :coefficient-general-scaled-boundary-radial-normalization-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-general-compact-boundary-center-motion-1
+    :coefficient-general-actual-chart-boundary-neighborhood-1],
+   :current-residual
+   "The constructed chart boundary has arbitrary positive radius; its recentering at nearby points needs an actual normalized homology identity and invertible source-boundary map.",
+   :other-consumers [:t01A02 :t03J05 :t96J06]}
+  {:consumer :t98A02,
+   :stop-condition
    "Do not assume local constancy, a continuous unit-valued map, an orientation, or compatible generators. Do not infer that units equal one or construct global classes. Exclude reserved Euler, surface and vertex-coproduct work; reuse reviewed triple-overlap composition.",
    :evidence
    {:probe
     {:concurrent-reservations
-     [:compact-transverse-arc-intersection-finiteness-probe-refill46
-      :generic-two-open-vertex-coproduct-comparison-probe-refill46],
+     [:compact-transverse-arc-intersection-finiteness-probe-refill46],
      :placeholder-delta 0,
      :residual
-     "Actual chart-boundary construction and its nearby-point homology comparison are compiled. Boundary-to-relative-normalization identification and transition-unit local constancy remain in the parent. Reviewed STOPs, refutations and concurrent reservations are preserved; no orientation or global conclusion is claimed.",
-     :axiom-audits 8,
+     "Scaled source-boundary normalization and invertibility are compiled. Actual boundary-to-relative-normalization identification and transition-unit local constancy remain. Reviewed STOPs, refutations and concurrent work are preserved; no orientation or global conclusion is claimed.",
+     :axiom-audits 10,
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t98A02,
       :stop-condition
-      "Bank actual chart-boundary construction and its nearby-point absolute homology comparison only. Do not claim equality with relative normalizations, transition-unit local constancy, orientation compatibility or consumer closure.",
+      "Bank scaled-boundary normalization and its actual homology inverse only. Do not claim the relative connecting comparison, transition-unit local constancy, orientation compatibility or consumer closure.",
       :evidence
       {:probe
        {:outcome :go,
         :seat "codex-13",
         :fixture
-        {:path "/tmp/CoefficientChartBoundaryNeighborhood.lean",
+        {:path "/tmp/CoefficientScaledBoundaryNormalization.lean",
          :sha256
-         "00f467857529fd6d33f1ba79eee6f4aebdfa9d6c1ae7f5aafbb01c06a1e20d29"},
+         "586c754b4afdb9d0d2a8598b484da1db69308fa4d036b3df1d9ce022b2f28dd7"},
         :commands
         [{:cmd
-          "lake env lean /tmp/CoefficientChartBoundaryNeighborhood.lean",
+          "lake env lean /tmp/CoefficientScaledBoundaryNormalization.lean",
           :exit 0}],
         :warnings [],
         :axioms ["propext" "Classical.choice" "Quot.sound"]}},
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientChartBoundaryNeighborhood.lean"
-       "ConstructionTargets/CoefficientChartBoundaryNeighborhood.md"],
+      ["ConstructionTargets/CoefficientScaledBoundaryNormalization.lean"
+       "ConstructionTargets/CoefficientScaledBoundaryNormalization.md"],
       :dag-node
-      "LOCAL ORIENTATION: actual chart-overlap sphere boundary and nearby-point homology comparison",
+      "LOCAL ORIENTATION: scaled recentered sphere boundary and actual radial inverse",
       :acceptance
       {:namespace
-       "ConstructionTargets.CoefficientChartBoundaryNeighborhood",
+       "ConstructionTargets.CoefficientScaledBoundaryNormalization",
        :implementation
-       "Promote the exact compiled fixture and document the remaining boundary-to-relative-normalization comparison.",
+       "Promote the exact compiled fixture and document how the chart-neighborhood radius and strict source-coordinate bound instantiate it.",
        :declarations
-       ["radius_exists"
-        "radius"
-        "radius_pos"
-        "radius_subset"
-        "sphereBoundary"
-        "mappedBoundary"
-        "mapped_avoids"
-        "sourceBoundary"
-        "source_member"
-        "mapped_formula"
-        "boundary_neighborhood"
+       ["scaled"
+        "norm_scaled"
+        "gap"
+        "avoids"
+        "recentered"
+        "normalized"
+        "normalized_value"
+        "centered_identity"
+        "homology_identity"
+        "radialIso"
+        "forward_inverse"
+        "boundaryIso"
+        "inverse_right"
+        "inverse_left"
         "integral_example"
         "rational_example"],
        :hypotheses
-       "R and M are Type 0; R is a commutative ring. M is charted on EuclideanSpace ℝ (Fin (m+2)), and x belongs to both actual chart sources. This geometric prerequisite needs no separation assumption on M; the parent retains Hausdorff hypotheses for relative neighborhood excision. No radius, boundary map, orientation or compatible local generator is supplied.",
+       "E is a Type 0 real normed vector space. R is a Type 0 commutative ring. Require r>0 and norm(p)<r. Equations hold in every natural homology degree without finite-dimensionality, nontriviality or orientation assumptions. No ordinary-S0 rank-one assertion is made.",
        :consumer-equation
-       "A positive-radius sphere is constructed inside the translated common chart domain. On a constructed open neighborhood V of x, contained in the common source, nearby source coordinates lie inside that sphere and the actual mapped-boundary maps recentered at chart-b coordinates induce equal R-valued homology maps in every natural degree.",
+       "The actual normalized map z ↦ normalize(r*z-p) induces identity. The actual recentered map from the unit sphere to the punctured space induces an isomorphism with inverse induced by radial normalization.",
        :consumer-residual
-       "Identify the constructed source and mapped boundary maps with the relative local-homology normalizations through connecting naturality, radial normalization and neighborhood inclusion. Then deduce equality of transition units at nearby points.",
+       "Use the actual pair connecting naturality and neighborhood-inclusion maps to identify the source and mapped boundary calculations with the relative chart normalizations. Then deduce nearby transition-unit equality.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientChartBoundaryNeighborhood."
-        "Reproduce eight standard-only axiom audits and integer/rational actual-chart examples."
-        "Audit constructed radius positivity, closed-ball containment and literal scaled unit-sphere boundary."
-        "Verify actual source membership, chart-transition formula and mapped-boundary zero avoidance."
-        "Verify openness and membership of V, containment in both chart sources and the strict source-radius bound."
-        "Verify the nearby-point coefficient homology equality uses the constructed compact-boundary motion, in every natural degree."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientScaledBoundaryNormalization."
+        "Reproduce ten standard-only axiom audits and integer/rational examples."
+        "Audit radius positivity, strict center bound, literal scaled boundary and recentered normalization formula."
+        "Verify the normalized homology identity uses the proved geometric boundary motion and positive radial scaling."
+        "Verify the actual forward-map identification and both radial inverse equations in every natural degree."
         "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :coefficient-general-actual-chart-boundary-neighborhood-1,
+      :id :coefficient-general-scaled-boundary-radial-normalization-1,
       :kind :reusable-theorem,
       :depends-on
       [:coefficient-general-compact-boundary-center-motion-1
-       :oriented-checkpoint40-coefficient-actual-overlap-transition-1],
+       :coefficient-general-actual-chart-boundary-neighborhood-1],
       :current-residual
-      "The compact-boundary motion theorem needs a constructed sphere boundary inside the actual chart overlap and a neighborhood of admissible moving points.",
+      "The constructed chart boundary has arbitrary positive radius; its recentering at nearby points needs an actual normalized homology identity and invertible source-boundary map.",
       :other-consumers [:t01A02 :t03J05 :t96J06]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure experiments and build-loop design; inspect both ledgers, four dependency PASS receipts and current reservations",
+       "Read DAG, closure experiments and build-loop design; inspect both ledgers, five dependency PASS receipts and current reservations",
        :exit 0}
       {:cmd
-       "Inspect actual overlap coordinate maps, deleted-point preservation and compact-boundary motion APIs",
+       "Inspect actual model normalization, pair connecting naturality and scaled-boundary radial normalization APIs",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientChartBoundaryNeighborhood.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientChartBoundaryNeighborhood.lean",
+       "lake env lean /tmp/CoefficientScaledBoundaryNormalization.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientChartBoundaryNeighborhood.lean",
+       "sha256sum /tmp/CoefficientScaledBoundaryNormalization.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientScaledBoundaryNormalization.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial chart-boundary fixture compilation",
+     [{:cmd "Initial scaled-boundary normalization compilation",
        :exit 1,
        :correction
-       "Explicitly included overlap membership in the radius-existence theorem and exposed metric ball membership before applying the radius inequality."}
-      {:cmd "Compilation after radius correction",
-       :exit 1,
+       "Closed the reflexive radius inequality explicitly and corrected the direction of the zero-versus-positive-radius contradiction."}
+      {:cmd "Intermediate corrected compilation",
+       :exit 0,
        :correction
-       "Rewrote closed-ball membership using distance to zero before simplifying the norm of the scaled sphere point. Final extended compilation succeeds without warnings."}],
+       "Replaced unnecessary simpa with simp to remove its warning; added explicit inverse-law audits. Final compilation is warning-free."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientChartBoundaryNeighborhood.lean",
+     {:path "/tmp/CoefficientScaledBoundaryNormalization.lean",
       :sha256
-      "00f467857529fd6d33f1ba79eee6f4aebdfa9d6c1ae7f5aafbb01c06a1e20d29",
+      "586c754b4afdb9d0d2a8598b484da1db69308fa4d036b3df1d9ce022b2f28dd7",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled actual-chart point-variation prerequisite is supplied. Openness constructs a positive-radius closed ball inside the translated overlap. Its sphere gives an actual boundary in the common chart source, whose image under the chart transition avoids zero. Compact-boundary motion constructs an open neighborhood of x on which the recentered mapped-boundary homology maps agree in every natural degree. Nearby source coordinates also remain strictly inside the constructed sphere. The parent is not GO: identifying these boundary maps with the relative chart normalizations remains.",
+     "Exactly one complete compiled source-boundary normalization prerequisite is supplied. For every positive radius r and center p with norm less than r, the actual map z ↦ normalize(r*z-p) induces identity on coefficient homology. The recentered boundary map z ↦ r*z-p induces an isomorphism whose inverse is the actual radial map, with both inverse equations proved. The parent is not GO: the boundary maps still need identification with the actual relative connecting and chart-normalization composites.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "LOCAL ORIENTATION: local constancy of actual chart transition units",
@@ -25526,7 +25597,8 @@
     :oriented-checkpoint40-coefficient-actual-overlap-transition-1
     :coefficient-general-moving-sphere-center-homotopy-1
     :coefficient-general-compact-boundary-center-motion-1
-    :coefficient-general-actual-chart-boundary-neighborhood-1],
+    :coefficient-general-actual-chart-boundary-neighborhood-1
+    :coefficient-general-scaled-boundary-radial-normalization-1],
    :current-residual
    "Actual transition units and their geometric cocycle are reviewed, but no equality of transition units at nearby distinct points has been proved.",
    :other-consumers [:t01A02 :t03J05 :t96J06]}
