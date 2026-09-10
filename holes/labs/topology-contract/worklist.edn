@@ -59121,9 +59121,115 @@
    "One placeholder. Intrinsic finiteness and density moment relative to sphere mass are banked; numerical Hausdorff mass and frozen assembly remain."}
   {:consumer "t00J02",
    :stop-condition
-   "GO requires the complete explicit recharting and actual derivative transport packet. REVISE requires exactly one compiled prerequisite. Do not claim an incidence atlas or consumer closure.",
-   :phase :probe,
+   "Require the exact actual ChartedSpace construction and all specifications; retaining the old chart carrier is insufficient.",
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/ChartedSpaceModelTransport.lean"],
+   :dag-node "TRANSVERSE-PULLBACK / actual chart-carrier transport",
+   :acceptance
+   {:fixture "/tmp/ChartedSpaceModelTransport.lean",
+    :fixture-sha256
+    "d6753f7626585b57947d20a13b99ec171c2100ac5d2c4d15ba28d83a7b98d7a7",
+    :implementation
+    "Promote the exact fixture. Compile the chart and charted-space constructors, six coordinate and atlas specifications, product specialization and dimension theorem. Preserve existing topology, ordinary product norm and weaker hypotheses. Audit zero placeholders and standard-only axioms. Do not claim IsManifold, smooth identity maps, derivative transport or an incidence atlas.",
+    :commands
+    ["lake env lean ConstructionTargets/ChartedSpaceModelTransport.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :charted-space-model-transport-implementation-refill38,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
+   :current-residual
+   "Actual chart-carrier transport is compiled; smooth compatibility and derivative transport for this chosen atlas remain.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires the complete explicit recharting and actual derivative transport packet. REVISE requires exactly one compiled prerequisite. Do not claim an incidence atlas or consumer closure.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Prove genuine-infinity overlap compatibility and IsManifold for this chosen recharted atlas, then identity-map smoothness, actual mfderiv formulas and inverse identities. Transport difference-map smoothness and regularity through those identities. Empty manifolds and zero-dimensional factors remain included. Incidence atlas assembly and oriented homological obligations remain subsequent; no consumer closure is claimed.",
+     :dependency-review
+     {:outcome :pass, :job "invoke-1789008311597-17688-d36af4e2"},
+     :outcome :revise,
+     :warnings [],
+     :statement-hashes
+     {:chartedSpace
+      "81042aa5bd7e869c1e18deb3385e19e65cae1d9c082148b32bb0f8c7b133e63a",
+      :forward
+      "3ba5bb321980bfc3f08df9cdbdfb3a1697984c6147151c8cfc9decd577d20313",
+      :backward
+      "49580fb855a62cb2de1cc9e47b05aae867c2b2974a4e880e28f699c612ee21cd",
+      :source
+      "bf768515b2550c672aff492fa805490f3d8996cf66088999047902242eabe98e",
+      :product
+      "b69190848185d145c538ba19a6f8e9045adfb7b676491441f041f08f7cb91af3",
+      :chart
+      "a9a52c21a73216780e5c7a80c9f063097b875740f40a145215661c0d9be9e04e",
+      :dimension
+      "39fd1afae65ab266b2cc6e586caceb9a072cda624efff132164b938e3cc07f2d",
+      :chartAt-eq
+      "af9d3cb8512753235361c485873306f5623dd19bedcf0ff87afcc16584f28a90",
+      :atlas-eq
+      "3d4789a19e3186a8dd204f4361cb4071caa60dadbe672336cd69ec68388559e0",
+      :target
+      "2daf5f975f8472447de6f574be94af14c7a58c71a8df2a522a55bb3fabc06614"},
+     :prerequisite
+     {:consumer "t00J02",
+      :stop-condition
+      "Require the exact actual ChartedSpace construction and all specifications; retaining the old chart carrier is insufficient.",
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/ChartedSpaceModelTransport.lean"],
+      :dag-node "TRANSVERSE-PULLBACK / actual chart-carrier transport",
+      :acceptance
+      {:fixture "/tmp/ChartedSpaceModelTransport.lean",
+       :fixture-sha256
+       "d6753f7626585b57947d20a13b99ec171c2100ac5d2c4d15ba28d83a7b98d7a7",
+       :implementation
+       "Promote the exact fixture. Compile the chart and charted-space constructors, six coordinate and atlas specifications, product specialization and dimension theorem. Preserve existing topology, ordinary product norm and weaker hypotheses. Audit zero placeholders and standard-only axioms. Do not claim IsManifold, smooth identity maps, derivative transport or an incidence atlas.",
+       :commands
+       ["lake env lean ConstructionTargets/ChartedSpaceModelTransport.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :id :charted-space-model-transport-implementation-refill38,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
+      :current-residual
+      "Actual chart-carrier transport is compiled; smooth compatibility and derivative transport for this chosen atlas remain.",
+      :other-consumers ["t02A07" "t94A06" "t97J05"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "bb /tmp/t95j05-refill38-review.bb", :exit 0}
+      {:cmd "lake env lean /tmp/ChartedSpaceModelTransport.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/charted-space-model-transport-audit.py",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/ChartedSpaceModelTransport.lean",
+       :exit 1,
+       :correction
+       "Replaced the unavailable homeomorphism image lemma with an explicit witness proof, corrected finrank theorem application and removed linter warnings."}
+      {:cmd "lake env lean /tmp/ChartedSpaceModelTransport.lean",
+       :exit 1,
+       :correction
+       "Corrected the target-intersection order and explicitly installed prodChartedSpace for the ordinary product carrier. Final compilation succeeds."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/ChartedSpaceModelTransport.lean",
+      :sha256
+      "d6753f7626585b57947d20a13b99ec171c2100ac5d2c4d15ba28d83a7b98d7a7",
+      :placeholder-count 0},
+     :finding
+     "Compiled one prerequisite that changes the chart carrier itself. A homeomorphism H to K constructs actual K-valued open partial homeomorphism charts and a ChartedSpace K M on the existing topology. Chosen chartAt, atlas, source, target and both coordinate formulas are proved. Specializing to the canonical WithLp 2 product equivalence constructs ChartedSpace (WithLp 2 (E × G)) (M × N), and its model dimension is finrank E plus finrank G. Smooth compatibility, identity-map smoothness and actual derivative transport are not yet compiled.",
+     :seat "codex-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TRANSVERSE-PULLBACK / product self-model recharting",
    :acceptance
@@ -59136,7 +59242,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-38-after-duality-and-transverse-product
-    :checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
+    :charted-space-model-transport-implementation-refill38],
    :current-residual
    "Reviewed STOP identifies the mismatch between the ordinary product chart carrier and the inner-product self-model required by the banked regular-fiber constructor.",
    :other-consumers ["t02A07" "t94A06" "t97J05"]}
