@@ -37147,8 +37147,112 @@
   {:consumer :t03J05,
    :stop-condition
    "Bank only the balanced Boolean-word representation using the canonical exported terminal prefix counts and its terminal partition identity. Do not prove prefix monotonicity, construct cumulative-coordinate paths, prove inverse laws, define corner swaps, pair or cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Expose prefix-count monotonicity, use balanced totals to bound cumulative coordinates by p and q, construct the canonical maximal path, and prove the word/path inverse laws.",
+    :gates
+    {:canonical-compile :pass,
+     :whitespace :pass,
+     :terminal-partition-rewrite :pass,
+     :fixture-hash :pass,
+     :axiom-audits 1,
+     :exact-word-domain :pass,
+     :exact-scope :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :target-warning-scan :pass,
+     :exported-horizontal-total :pass,
+     :commit-check :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :exported-vertical-total :pass,
+     :ledger-validation :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"BalancedWord"
+     "b8464d4581d1be1919d81c8510baf4f9efd03abb2317de310c5a5df837d69281",
+     "BalancedWord.toWord"
+     "69c12035e5be2c561ea85113dc210d0cdeec2d947d62e362337057e42ad4ebef",
+     "BalancedWord.horizontal_total"
+     "b7d3ca0ca6edc6d3ec4af94849cac5f909b152d2eb41b17090aa77555ff2a12c",
+     "BalancedWord.vertical_total"
+     "50ab97bf7c53d9db147d5af6871c5303fbf872ebd78d8404954a967fad7215b3",
+     "terminal_partition"
+     "35c1484d78d222a93eed4a9821a266de4cbe7678c6b8616088423ef6a659176a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the dependency receipts",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint59-balanced-words/ProductSimplexBalancedWords.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint59-balanced-words/ProductSimplexBalancedWords.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexBalancedWords.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexBalancedWords",
+      :exit 0}
+     {:cmd
+      "Import the canonical target and reproduce the standard-only axiom audit for terminal_partition",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ProductSimplexBalancedWords.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace, fixture-hash, balanced-word-shape and declaration-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; verify exact two-file scope; git diff --cached --check; git commit -m 'Package balanced product simplex words'",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat HEAD; recompute canonical source, documentation, commit and Git blob hashes; git status --short",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "First staged exact-scope assertion",
+      :exit 1,
+      :correction
+      "The expected-path string accidentally included the word `uncertain`. Removed it and reran the exact staged two-file scope and cached whitespace checks successfully before committing."}],
+    :canonical
+    {:path "ConstructionTargets/ProductSimplexBalancedWords.lean",
+     :sha256
+     "edf6ee940cb390d50c5dc524341673c84f8af0de459d6dc6bb22c1cf3d070a90",
+     :git-blob "778a77d4adc43b5efccc13e429e580c51c338484"},
+    :commit "ac025ca73d61da7b334bc6f9588ac5251abe282e",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexBalancedWords.lean"
+     "ConstructionTargets/ProductSimplexBalancedWords.md"],
+    :dependency-warnings
+    [{:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 2960,
+      :kind :unused-tactic}
+     {:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 3580,
+      :kind :unnecessary-simpa}],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint59-balanced-words/ProductSimplexBalancedWords.lean",
+     :sha256
+     "ff64e9c0e7987025abf20897387c4840b07bb76a76de5a366ded62db1028dd72",
+     :placeholder-count 0},
+    :finding
+    "BalancedWord p q stores a Boolean function on exactly Fin (p+q), together with equalities stating that the exported terminal horizontalCount and verticalCount are p and q. Its function coercion is BalancedWord.toWord. terminal_partition follows solely by rewriting with horizontal_total and vertical_total. No prefix monotonicity, cumulative path, inverse law, corner swap, face pairing or cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure result is introduced.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexBalancedWords.lean"
     "ConstructionTargets/ProductSimplexBalancedWords.md"],
