@@ -68847,8 +68847,76 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the actual coefficient homology isomorphism from the Mayer-Vietoris chain-biproduct middle term to the biproduct of the literal left and right complement-subtype homologies, with both composite formulas; no supplied transported exactness or excision.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Instantiate the three transported compact-complement exactness segments using the reviewed intersection, middle-object and union isomorphisms; identify their conjugated connecting and inclusion arrows, then transport the relative terms to the requested pairs in X by coefficient excision.",
+    :dependency-hashes
+    {:CoefficientHomologyBiprodIso
+     "5928c28ac7aea03bde12f13d2fd55695e3f5771ffefbc60477e2c04f97b44cc0",
+     :CoefficientPieceRangeBiproductComparison
+     "e9ca8cac704c128859f2f872b753cd4d2687bb18dcd588fa179c7bb04d73c795"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:piecesHomologyIso
+     "966f533b8cc52e60a5e9a5f9590957b7383651e7d41a63723249eb0a4dec1060",
+     :piecesHomologyIso_hom
+     "d6b222692c394f85d42bf897cdb8f77455759f42a78110c59b958621f40e8b3c",
+     :piecesHomologyIso_inv
+     "a8a9cd387158c8cd9b98ad2e5545949e1df4a56d9d1e06aef44cb2f311fabf3b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementPiecesComparison.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and three complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientCompactComplementPiecesComparison.lean ConstructionTargets/CoefficientHomologyBiprodIso.lean ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add compact complement pieces comparison'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "Python audit and gates command containing duplicated && token",
+      :exit 2,
+      :correction
+      "Removed the duplicated shell conjunction and reran the complete audit and gate command successfully."}],
+    :representation
+    {:source
+     "Coefficient homology of the actual binary chain-complex object used as the middle term of the instantiated compact-complement Mayer-Vietoris sequence",
+     :target
+     "The biproduct of coefficient singular homologies of the literal left and right compact-complement subtypes",
+     :direction
+     "The forward canonical homology-of-biproduct comparison is followed by the forward componentwise ambient-range-to-subtype comparison, while the inverse uses the reverse composite order."},
+    :commit "f7a8fc36df658f7c709b5d2977d0a56f07b7036f",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementPiecesComparison.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactComplementPiecesComparison.lean",
+     :sha256
+     "ad3e126a8fcb015891e0d8a0adbf4cdf4b271f28169aefa40bc34c61b7562765",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled the actual coefficient-homology isomorphism from the compact-complement Mayer-Vietoris chain-biproduct middle term to the biproduct of literal left and right complement-subtype homologies. Both forward and inverse composite formulas are explicit for arbitrary X, K, L, coefficient ring and degree. No transported exactness, coefficient excision, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 3,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementPiecesComparison.lean"],
    :dag-node
