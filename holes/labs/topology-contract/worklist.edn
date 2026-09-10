@@ -65272,62 +65272,58 @@
    :stop-condition
    "GO requires derived derivative, local isolation and finite parameter coincidences; REVISE requires one compiled prerequisite. Do not claim a finite-position triangle cover.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Controlled endpoint-preserving position adjustment establishing the derivative hypotheses remains. No finite-position triangle cover, shared faces, triangulation or consumer closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:difference_derivative
-      "6969581378b956e9f3d4f3e042bc7a3a3743b9bd241cce37a85b993d2461b117",
-      :actual_derivative
-      "013ae86d2eee5c195915dfab955ae2001a1a4edfab23e0fd6e6413dc2234596f",
-      :isolated
-      "99f927f961d6f77a95eaba0c799ace6c672a190e18b53f98e59ea98195987746",
-      :compact_fiber_finite
-      "ab5a4f580247dfb131af35bcba171e5e17b36fa2ee97d589c721e6523d5c1aa7",
-      :finite_coincidences
-      "58a9320ea9f54fff81cdc3a42533ddcfd1d186ec656a0ac8082ddeaca9d2e3ee"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean /tmp/CompactTransverseArcIntersections.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/compact-transverse-arc-audit.py", :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/ArcCheck.lean",
-       :exit 1,
-       :correction
-       "Two guessed ContinuousOn closed-set API names were unavailable; used continuousOn_iff_isClosed."}
-      {:cmd
-       "lake env lean /tmp/CompactTransverseArcIntersections.lean",
-       :exit 1,
-       :correction
-       "Removed the unavailable and unnecessary Mathlib.Topology.Instances.Real import. The remaining imports supply the required instances; final compilation succeeds."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CompactTransverseArcIntersections.lean",
-      :sha256
-      "d68193212c479c551ab8aa838a088841d8bf5480e3ffc4c09f6765efed07b739",
-      :placeholder-count 0},
-     :finding
-     "Compiled the complete conditional finiteness packet. The difference derivative is derived from both curve derivatives and identified with the actual fderiv. Invertibility yields local isolation through the inverse-function theorem; continuity makes the coincidence fiber compact, and derived discreteness makes it finite. Open neighborhood extensions include endpoint coincidences. Existing regular-fiber and compact-discrete APIs were audited.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CompactTransverseArcIntersections.lean"],
-      :acceptance
-      {:implementation
-       "Promote the exact fixture. Compile difference_derivative, actual_derivative, isolated, compact_fiber_finite and finite_coincidences. Preserve C1 regularity on open neighborhoods containing the closed interval and invertibility of the actual difference derivative at every coincidence. Require zero placeholders, no warnings and standard-only axioms. This conditional theorem does not construct perturbations or establish transversality for the triangle cover.",
-       :commands
-       ["lake env lean ConstructionTargets/CompactTransverseArcIntersections.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0}},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Controlled endpoint-preserving position adjustment establishing the derivative hypotheses remains. No finite-position triangle cover, compatible faces, triangulation or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:difference_derivative
+     "6969581378b956e9f3d4f3e042bc7a3a3743b9bd241cce37a85b993d2461b117",
+     :actual_derivative
+     "013ae86d2eee5c195915dfab955ae2001a1a4edfab23e0fd6e6413dc2234596f",
+     :isolated
+     "99f927f961d6f77a95eaba0c799ace6c672a190e18b53f98e59ea98195987746",
+     :compact_fiber_finite
+     "ab5a4f580247dfb131af35bcba171e5e17b36fa2ee97d589c721e6523d5c1aa7",
+     :finite_coincidences
+     "58a9320ea9f54fff81cdc3a42533ddcfd1d186ec656a0ac8082ddeaca9d2e3ee"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/CompactTransverseArcIntersections.lean",
+      :exit 0}
+     {:cmd "python3 /tmp/compact-transverse-arc-audit.py", :exit 0}
+     {:cmd
+      "cmp /tmp/CompactTransverseArcIntersections.lean ConstructionTargets/CompactTransverseArcIntersections.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CompactTransverseArcIntersections.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "0f8248aa09e2cf9df2246f22b963ce10a101271b",
+    :changed-paths
+    ["ConstructionTargets/CompactTransverseArcIntersections.lean"],
+    :fixture
+    {:path "/tmp/CompactTransverseArcIntersections.lean",
+     :sha256
+     "d68193212c479c551ab8aa838a088841d8bf5480e3ffc4c09f6765efed07b739",
+     :exact-promotion true},
+    :finding
+    "Exact fixture promoted. Derived difference derivative and actual fderiv identification compile. Invertibility yields local isolation; compactness and discreteness yield finite parameter coincidences. C1 open-neighborhood hypotheses include endpoints. Ledger untouched.",
+    :axiom-audit-count 5,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CompactTransverseArcIntersections.lean"],
    :dag-node
