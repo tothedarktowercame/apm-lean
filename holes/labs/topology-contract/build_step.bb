@@ -123,6 +123,54 @@
          (nil? (:residual receipt))
          (some? (:next-consumer-residual receipt)))
     (assoc :residual (:next-consumer-residual receipt))))
+
+(def fixture-transition-preserve-paths
+  {:sha256 [:evidence :fixture :sha256]
+   :supporting-path [:evidence :fixture :supporting-path]
+   :supporting-sha256 [:evidence :fixture :supporting-sha256]
+   :placeholder-count [:evidence :fixture :placeholder-count]
+   :commit [:evidence :commit]
+   :review-outcome [:evidence :review :outcome]})
+
+(defn canonical-file [p]
+  (let [f (io/file p)]
+    (if (.isAbsolute f) f (io/file (:canonical-root data) p))))
+
+(defn sha256-file [f]
+  (when (.isFile f)
+    (let [{:keys [exit out]} (shell/sh "sha256sum" (.getPath f))]
+      (when (zero? exit) (first (str/split out #"\s+"))))))
+
+(defn apply-completion-transition [xs receipt outcome]
+  (if-let [transition (:completion-transition receipt)]
+    (do
+      (when-not (= :done-unreviewed outcome)
+        (throw (ex-info "completion transition requires done-unreviewed outcome" {})))
+      (when-not (= #{:row :path :from :to :preserve} (set (keys transition)))
+        (throw (ex-info "completion transition has unsupported fields" {})))
+      (when-not (= [:evidence :fixture :path] (:path transition))
+        (throw (ex-info "completion transition may change only evidence fixture path" {})))
+      (when-not (= (set (keys fixture-transition-preserve-paths))
+                   (set (keys (:preserve transition))))
+        (throw (ex-info "completion transition must preserve every required value" {})))
+      (let [matches (keep-indexed #(when (= (:row transition) (:id %2)) %1) xs)]
+        (when-not (= 1 (count matches))
+          (throw (ex-info "completion transition must identify exactly one row" {})))
+        (let [index (first matches) row (nth xs index)
+              fixture (get-in row [:evidence :fixture])
+              target (canonical-file (:to transition))]
+          (when-not (#{:done :done-unreviewed} (:state row))
+            (throw (ex-info "completion transition target row is not completed" {})))
+          (when-not (= (:from transition) (:path fixture))
+            (throw (ex-info "completion transition source path mismatch" {})))
+          (doseq [[label path] fixture-transition-preserve-paths]
+            (when-not (= (get-in row path) (get-in transition [:preserve label]))
+              (throw (ex-info "completion transition preserved value mismatch"
+                              {:field label}))))
+          (when-not (= (:sha256 fixture) (sha256-file target))
+            (throw (ex-info "completion transition target missing or hash mismatch" {})))
+          (assoc xs index (assoc-in row [:evidence :fixture :path] (:to transition))))))
+    xs))
 (defn validate-inserted-row! [row allowed-ids]
   (doseq [dependency (:depends-on row)]
     (when-not (allowed-ids dependency)
@@ -313,7 +361,8 @@
                 (doseq [row rows]
                   (validate-inserted-row! row allowed-ids)))
       nil)
-    (let [new-items
+    (let [items (apply-completion-transition items receipt outcome)
+          new-items
           (case outcome
             ;; A row's :id is the ledger's referential integrity: other rows
             ;; name it in :depends-on. (merge % implementation) let a GO
