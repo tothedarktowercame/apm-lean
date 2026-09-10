@@ -60817,6 +60817,19 @@
       :exit 0}
      {:cmd "git diff --cached --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789016347773-17904-58f3d10e",
+     :commands
+     ["git show 61b2f309247354b812375a42f1696f65856cd3bf:ConstructionTargets/LocalTransverseDifference.lean"
+      "Python pinned scope, fixture SHA256, byte equality, four statement hashes and placeholder audit"
+      "lake build ConstructionTargets.TransverseLinearPair"
+      "lake env lean ConstructionTargets/LocalTransverseDifference.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 3b8f1971:holes/labs/topology-contract/worklist.edn)"
+      "git show --format= --check 61b2f309"],
+     :finding
+     "Independent of author codex-6. Exact single-file scope and fixture 87e8aac0eddbedbb5d1f2f47adde51ad2a11099072ce40e5e34cbb637ced07c3 verified; four statement hashes match, zero placeholders. Dependency build succeeds (1023 jobs); Lean warning-free with three standard-only axiom audits; validator 475 items OK; whitespace clean. Smoothness retains the product domain. Actual fderiv is Df(v.1)-Dg(v.2); range-sum transversality yields surjectivity using the correctly signed witness (a,-b). Only normed-space and stated differentiability hypotheses are required, with no finite-dimensionality or completeness added. Coordinate specialization, local fibers, incidence charts and overlaps remain unclaimed."},
     :commit "61b2f309247354b812375a42f1696f65856cd3bf",
     :changed-paths
     ["ConstructionTargets/LocalTransverseDifference.lean"],
@@ -60826,7 +60839,7 @@
      "87e8aac0eddbedbb5d1f2f47adde51ad2a11099072ce40e5e34cbb637ced07c3"},
     :axiom-audit-declarations 3},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/LocalTransverseDifference.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / local coordinate difference regularity",
@@ -60914,7 +60927,7 @@
      "Compiled one local difference-map prerequisite for normed real vector spaces. Smoothness of f and g on U and V gives genuine-infinity smoothness of f(x)-g(y) on U×V. At differentiability points its actual fderiv sends (v,w) to Df(v)-Dg(w). Range-sum transversality proves surjectivity by the banked linear coproduct theorem and negating the second input. No global smoothness or global regularity is required.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TRANSVERSE-PULLBACK / manifold-target local incidence charts",
