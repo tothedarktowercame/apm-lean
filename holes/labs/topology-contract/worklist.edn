@@ -56640,8 +56640,165 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
+   :evidence
+   {:evidence
+    {:measure
+     {:path "/tmp/topology-refill33-measure.json",
+      :sha256
+      "dfdc352da490b6d735b5ec7af256ebe85315e48ae0105e282279084f275a62b4"},
+     :reviews
+     {:path "/tmp/topology-refill33-reviews.edn",
+      :sha256
+      "bd5e872eeb2f528cccb94efd4c146b9e4efeb5a3285d5e86ba96841c2bc02f36"},
+     :tail
+     {:path "/tmp/topology-refill33-tail.edn",
+      :sha256
+      "941bfa4a0c842500c592e98b9a93ac7032c2ee2f398de8ee0d7af7413687b641"}},
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill33-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill33-reviews.bb", :exit 0}
+     {:cmd
+      "git diff --name-status 3ee99c3b38d8715e633ee82ce75ef0798077e6f6 HEAD -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill33-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill33-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill33-measure.json /tmp/topology-refill33-reviews.edn /tmp/topology-refill33-tail.edn",
+      :exit 0}],
+    :measurement
+    {:baseline "3ee99c3b38d8715e633ee82ce75ef0798077e6f6",
+     :concurrent-consumer-closures [],
+     :existing-consumers 58,
+     :missing-consumers ["t93A05"],
+     :placeholder-delta -1,
+     :zero-placeholder-consumers 22,
+     :placeholders-before 68,
+     :portfolio-consumer-closures ["t95J04"],
+     :open-consumers 36,
+     :head "d90de0216c7d3e2490366872f8eacdd48a06c592",
+     :named-consumers 59,
+     :construction-modules-after 657,
+     :placeholders-after 67,
+     :portfolio-infrastructure ["ManifoldRegularFiberGlobalAtlas"],
+     :construction-modules-before 655,
+     :within-two 26,
+     :concurrent-infrastructure ["CoefficientAffineNaturality"]},
+    :replacement-items
+    [{:consumer "t01J04",
+      :stop-condition
+      "GO requires full frozen closure; otherwise name the countability, radius-selection or actual boundary-chart obstruction. Local specification defects do not refute the campaign.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE/SUBMERSION / closed neighborhood manifold with boundary",
+      :acceptance
+      {:frozen-file "problems/t01J04/lean/Main.lean",
+       :frozen-sha256
+       "45809d8373c2342cf817e88713ac2cae3fe14318bb38539977a0847950af2c8b",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile complete placeholder-free frozen Main preserving all hypotheses, smooth-order expressions and the exact half-space/zero-dimensional predicate. Audit whether simultaneous regular-radius selection follows without SecondCountableTopology X; do not add it or assume countable source coverage. Derive the neighborhood and closure containment from the frozen target hypotheses and construct actual inherited-topology charts on the closed preimage, including boundary charts, using banked geometry where applicable. Include empty preimages and zero-dimensional cases. No assumed regular radius, half-space atlas, smooth extension or conditional final bridge. If the frozen hypotheses fail, compile and preserve the exact local counterexample; otherwise name the missing theorem precisely."},
+      :id
+      :t01j04-frozen-closed-neighborhood-preimage-closure-probe-refill33,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
+      :current-residual
+      "One placeholder: shrink an arbitrary target neighborhood so its closed preimage has the literal manifold-with-boundary structure. Frozen source has no second-countability assumption."}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires both actual derivative injectivity and exact kernel-range equality compiled for the chosen atlas. REVISE requires one compiled prerequisite. No consumer closure claim.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE/SUBMERSION / manifold-source inclusion tangent image",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a genuine-infinity smooth self-model manifold modeled on a finite-dimensional complete real inner-product space E and a ContMDiff infinity map into a finite-dimensional real inner-product space F at a regular value, use exactly ManifoldRegularFiberGlobalAtlas.chartedSpace. Prove injectivity of the actual mfderiv of subtype inclusion at every fiber point and equality of its linear-map range with the kernel of the original map's mfderiv at that point. Derive coordinate derivative transport from the selected charts, forward/backward formulas and local inverse laws. Reuse smooth inclusion and finite-dimensional rank-nullity; no supplied immersion, derivative identity, tangent comparison or different atlas. Include empty fibers and zero-dimensional kernels. Preserve existing APIs and explicitly state self-model/vector-target applicability limits.",
+       :consumer-residual
+       "Embedded self-model manifold-source regular-fiber tangent geometry only. General models, target manifolds and consumer orientation, duality, boundary and transversality obligations remain."},
+      :id :manifold-regular-fiber-tangent-image-probe-refill33,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
+      :current-residual
+      "The actual global manifold-fiber atlas and smooth inclusion are banked. Injectivity and kernel-range equality for that inclusion's mfderiv remain.",
+      :other-consumers ["t02A07" "t94A06" "t01J04"]}
+     {:consumer "t95J04",
+      :stop-condition
+      "Require exact reviewed provenance and consistent current closure status; preserve other consumers and outstanding representation/specification boundaries.",
+      :phase :implementation,
+      :state :blocked,
+      :scope
+      ["TOPOLOGY-DEPENDENCY-DAG.md"
+       "docs/TN-topology-closure-experiments.md"],
+      :dag-node
+      "DIMENSION-GAP MANIFOLD NULLITY / reviewed consumer closure record",
+      :acceptance
+      {:implementation
+       "Record the reviewed complete t95J04 closure at a13852f35c671f0d40d4bbf58e832710563a4ef7 and PASS invoke-1789000811470-17453-38632ef7. Verify fixture and statement hashes against canonical Main, record 1-to-0 placeholders and standard-only warning-free compilation from the reviewed receipts. Update stale current-status entries while preserving historical STOP evidence. Distinguish embedded open-domain helper from a separately extracted reusable module. Change only these two documents; no extra closure or placeholder reduction is attributed to documentation.",
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :id :t95j04-reviewed-closure-documentation-refill33,
+      :kind :documentation,
+      :depends-on
+      [:checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
+      :current-residual
+      "Reviewed closure a13852f3 is canonical, but DAG entries still describe t95J04 as partial and exact Hausdorff nullity as absent."}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local counterexamples and infrastructure absence do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped placeholders across all DAG consumers; compare typed residuals, reviews and portfolio versus concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, and append a fresh dependent checkpoint. Preserve local specification defects including t96J05 and any new t01J04 evidence, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t01j04-frozen-closed-neighborhood-preimage-closure-probe-refill33
+       :manifold-regular-fiber-tangent-image-probe-refill33
+       :t95j04-reviewed-closure-documentation-refill33],
+      :current-residual
+      "Await reviewed neighborhood-preimage, tangent-image and closure-documentation outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    "Reviewed t95J04 closure removes its final placeholder through literal sphere Hausdorff nullity, nonsurjectivity and the preserved contraction; all frozen conjuncts are now proved. The reviewed manifold-fiber packet advances actual local charts to a global atlas and smooth inclusion for that same atlas; derivative injectivity and kernel-range equality remain. Concurrent affine naturality supplies coefficient-explicit chain-map equations, not subdivision, excision or consumer closure. The complete DAG still contains 36 open consumers. Elect exactly one near-closure adapter, t01J04, to test the newly available geometry against its literal boundary predicate and missing second-countability hypothesis. Then elect the bounded tangent comparison serving four proposed consumers: it directly reuses the completed atlas and inverse-coordinate geometry, while surface classification, fundamental classes, intersection theory and generic gluing require larger constructions. Add documentation to correct stale t95J04 current-status entries. Retain t96J05, t96J07 and t01A05 local specification evidence, signed antipodal naturality, the historical ordinary-H0 S0 refutation, reduced-S0 degree and one-dimensional local-index coverage. No local defect terminates the campaign. Proposed ledger validates with 439 items; canonical files remain unchanged.",
+    :review-outcomes
+    {:previous-checkpoint :pass,
+     :t95j04
+     {:outcome :pass,
+      :commit "a13852f35c671f0d40d4bbf58e832710563a4ef7",
+      :job "invoke-1789000811470-17453-38632ef7"},
+     :manifold-fiber-atlas
+     {:outcome :pass,
+      :commit "62d6817a673d5d0fbce70691e0808b85e31bdd63",
+      :job "invoke-1789001180573-17465-23c9c0aa"},
+     :portfolio-stops 0},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -56655,7 +56812,104 @@
     :manifold-regular-fiber-global-atlas-inclusion-probe-refill32
     :checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts],
    :current-residual
-   "Await both reviewed outcomes, then rerank the complete DAG and separate consumer closure from infrastructure and concurrent changes."}],
+   "Await both reviewed outcomes, then rerank the complete DAG and separate consumer closure from infrastructure and concurrent changes."}
+  {:consumer "t01J04",
+   :stop-condition
+   "GO requires full frozen closure; otherwise name the countability, radius-selection or actual boundary-chart obstruction. Local specification defects do not refute the campaign.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / closed neighborhood manifold with boundary",
+   :acceptance
+   {:frozen-file "problems/t01J04/lean/Main.lean",
+    :frozen-sha256
+    "45809d8373c2342cf817e88713ac2cae3fe14318bb38539977a0847950af2c8b",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile complete placeholder-free frozen Main preserving all hypotheses, smooth-order expressions and the exact half-space/zero-dimensional predicate. Audit whether simultaneous regular-radius selection follows without SecondCountableTopology X; do not add it or assume countable source coverage. Derive the neighborhood and closure containment from the frozen target hypotheses and construct actual inherited-topology charts on the closed preimage, including boundary charts, using banked geometry where applicable. Include empty preimages and zero-dimensional cases. No assumed regular radius, half-space atlas, smooth extension or conditional final bridge. If the frozen hypotheses fail, compile and preserve the exact local counterexample; otherwise name the missing theorem precisely."},
+   :id
+   :t01j04-frozen-closed-neighborhood-preimage-closure-probe-refill33,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas
+    :checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
+   :current-residual
+   "One placeholder: shrink an arbitrary target neighborhood so its closed preimage has the literal manifold-with-boundary structure. Frozen source has no second-countability assumption."}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires both actual derivative injectivity and exact kernel-range equality compiled for the chosen atlas. REVISE requires one compiled prerequisite. No consumer closure claim.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / manifold-source inclusion tangent image",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a genuine-infinity smooth self-model manifold modeled on a finite-dimensional complete real inner-product space E and a ContMDiff infinity map into a finite-dimensional real inner-product space F at a regular value, use exactly ManifoldRegularFiberGlobalAtlas.chartedSpace. Prove injectivity of the actual mfderiv of subtype inclusion at every fiber point and equality of its linear-map range with the kernel of the original map's mfderiv at that point. Derive coordinate derivative transport from the selected charts, forward/backward formulas and local inverse laws. Reuse smooth inclusion and finite-dimensional rank-nullity; no supplied immersion, derivative identity, tangent comparison or different atlas. Include empty fibers and zero-dimensional kernels. Preserve existing APIs and explicitly state self-model/vector-target applicability limits.",
+    :consumer-residual
+    "Embedded self-model manifold-source regular-fiber tangent geometry only. General models, target manifolds and consumer orientation, duality, boundary and transversality obligations remain."},
+   :id :manifold-regular-fiber-tangent-image-probe-refill33,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas
+    :checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
+   :current-residual
+   "The actual global manifold-fiber atlas and smooth inclusion are banked. Injectivity and kernel-range equality for that inclusion's mfderiv remain.",
+   :other-consumers ["t02A07" "t94A06" "t01J04"]}
+  {:consumer "t95J04",
+   :stop-condition
+   "Require exact reviewed provenance and consistent current closure status; preserve other consumers and outstanding representation/specification boundaries.",
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["TOPOLOGY-DEPENDENCY-DAG.md"
+    "docs/TN-topology-closure-experiments.md"],
+   :dag-node
+   "DIMENSION-GAP MANIFOLD NULLITY / reviewed consumer closure record",
+   :acceptance
+   {:implementation
+    "Record the reviewed complete t95J04 closure at a13852f35c671f0d40d4bbf58e832710563a4ef7 and PASS invoke-1789000811470-17453-38632ef7. Verify fixture and statement hashes against canonical Main, record 1-to-0 placeholders and standard-only warning-free compilation from the reviewed receipts. Update stale current-status entries while preserving historical STOP evidence. Distinguish embedded open-domain helper from a separately extracted reusable module. Change only these two documents; no extra closure or placeholder reduction is attributed to documentation.",
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :t95j04-reviewed-closure-documentation-refill33,
+   :kind :documentation,
+   :depends-on
+   [:checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas
+    :checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
+   :current-residual
+   "Reviewed closure a13852f3 is canonical, but DAG entries still describe t95J04 as partial and exact Hausdorff nullity as absent."}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local counterexamples and infrastructure absence do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped placeholders across all DAG consumers; compare typed residuals, reviews and portfolio versus concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, and append a fresh dependent checkpoint. Preserve local specification defects including t96J05 and any new t01J04 evidence, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t01j04-frozen-closed-neighborhood-preimage-closure-probe-refill33
+    :manifold-regular-fiber-tangent-image-probe-refill33
+    :t95j04-reviewed-closure-documentation-refill33
+    :checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
+   :current-residual
+   "Await reviewed neighborhood-preimage, tangent-image and closure-documentation outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
