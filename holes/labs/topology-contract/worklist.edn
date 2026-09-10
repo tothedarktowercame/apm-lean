@@ -63995,66 +63995,79 @@
    :stop-condition
    "GO requires constructed pair maps and actual homology comparison; REVISE requires one compiled prerequisite. Do not duplicate concurrent coefficient chart work or claim a fundamental class.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Orientation overlap coherence, global localization monicity, fundamental-class construction and consumer closure remain subsequent.",
-     :dependency-review
-     {:outcome :pass,
-      :seat "codex-10",
-      :job "invoke-1789028975907-18228-04205ae6"},
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:fixture "/tmp/CoefficientManifoldLocalComparison.lean",
-      :fixture-sha256
-      "55d0e68e12b3990986c8aef1a1021053965658d5e2ebe092a6ceec8eb365ad35",
-      :implementation
-      "Promote the exact fixture. Compile chart-pair and translation constructions, allComparison, low_forward, zero_eq, one_eq, higher_eq, both inverse laws, generator_normalization and generator_image. Preserve original topology, Type-0 commutative coefficients, all finite model dimensions and all natural homology degrees. Reuse the reviewed higher-dimensional comparison. Keep normalization restricted to m+2 and integral dimension-one coverage separate. Audit zero placeholders and standard-only axioms. No orientation coherence, fundamental class or consumer closure claim.",
-      :commands
-      ["lake env lean ConstructionTargets/CoefficientManifoldLocalComparison.lean"],
-      :axioms :standard-only,
-      :placeholder-before 0,
-      :placeholder-after 0},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/finite-model44:$LEAN_PATH lean -o /tmp/finite-model44/ConstructionTargets/CoefficientFiniteModelChart.olean ConstructionTargets/CoefficientFiniteModelChart.lean'",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/finite-model44:$LEAN_PATH lean /tmp/CoefficientManifoldLocalComparison.lean'",
-       :exit 0}
-      {:cmd
-       "python3 /tmp/coefficient-manifold-local-comparison-audit.py",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/CoefficientManifoldLocalComparison.lean",
-       :exit 1,
-       :correction
-       "The promoted finite-model dependency lacked a canonical object. Compiled it privately; final fixture compilation succeeds."}],
-     :representation
-     {:source
-      "Actual coefficient relative singular homology of a Hausdorff finite-dimensional self-model real manifold and its deleted point",
-      :target
-      "Actual coefficient relative singular homology of the corresponding Euclidean model and its deleted origin",
-      :direction
-      "Construct an isomorphism from manifold local homology to Euclidean-model local homology through actual chart-pair maps and neighborhood inclusion, with the forward composite identified."},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientManifoldLocalComparison.lean",
-      :sha256
-      "55d0e68e12b3990986c8aef1a1021053965658d5e2ebe092a6ceec8eb365ad35",
-      :placeholder-count 0},
-     :finding
-     "Compiled the complete manifold-to-model local-homology comparison for every finite model dimension and every natural homology degree. Dimensions zero and one use constructed chart restrictions, deleted-pair maps, neighborhood excision and translation to zero. Higher dimensions reuse CoefficientFiniteModelChart. Forward composites and both inverse laws are identified. For dimension m+2, normalization and generator transport are proved. The banked integral dimension-one generator is separately imported and audited; no arbitrary-coefficient normalization is inferred from it.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientManifoldLocalComparison.lean"]},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Actual comparison covers all finite model dimensions and natural homology degrees with original topology and Type-0 commutative coefficients preserved. Higher-dimensional comparison is reused; normalization remains restricted to m+2 and integral dimension-one generator coverage stays separate. Orientation coherence, global localization monicity, fundamental classes and consumer closure remain subsequent.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:comparison
+     "f9f343fcad6c0b228e9f330e8cc4ae64f4506a8e6f4691144d006f4f83f181ed",
+     :higher_eq
+     "6e62853d520920ca0bd58a70f990814a64e1f5e8d64ff05af02ae5be9c164033",
+     :all_inverse_left
+     "93cddd8c8f5b540b8391c18748ddccaeb454587ca95d3b75dd6927dd52b3d430",
+     :all_inverse_right
+     "87c8228976c21925f95160744bcc95d063497bf4cb6fc08089dd558553285de8",
+     :generator_normalization
+     "8d048b554edb58b6c2742ecf110968f94ebeeb8e0ad50bbbcc70fc2f32305a4b",
+     :zero_eq
+     "77421830fd0b539a5a1779d9120e87bc0e05c86e0568beba0ff3d5aa4ebd5fac",
+     :generator_image
+     "a34524bfa61e54910950dccbab107866dbe0b8367a8910711e43b63d96b0efd6",
+     :low_forward
+     "f4732722fa3e06cb3c3e183319cd75f595d0b34b5985c55480234d5d47382383",
+     :one_eq
+     "8064463c1eb55fbc226ea205ff8b69305b9625420d3e9c756fce1d5a65611952",
+     :allComparison
+     "8ecabc5ade8e6d3d0fe2a2c33c17f2682be96dbc8953995213a2c9dd5c8ffcf9"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/CoefficientManifoldLocalComparison.lean",
+      :exit 0}
+     {:cmd
+      "sed 's/^Path.*;print(json.dumps(a))/print(json.dumps(a))/' /tmp/coefficient-manifold-local-comparison-audit.py | python3",
+      :exit 0}
+     {:cmd
+      "Python read-only complete comparison and allComparison declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.CoefficientFiniteModelChart 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/CoefficientManifoldLocalComparison.lean ConstructionTargets/CoefficientManifoldLocalComparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientManifoldLocalComparison.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Actual coefficient relative singular homology of a Hausdorff finite-dimensional self-model manifold and its deleted point",
+     :target
+     "Actual coefficient relative singular homology of the corresponding Euclidean model and its deleted origin",
+     :direction
+     "Isomorphism from manifold local homology to Euclidean-model local homology through constructed chart-pair maps and neighborhood inclusion, with the forward composite identified."},
+    :commit "8cd96d529989af0cabe673ddcb8737a2680a674e",
+    :changed-paths
+    ["ConstructionTargets/CoefficientManifoldLocalComparison.lean"],
+    :fixture
+    {:path "/tmp/CoefficientManifoldLocalComparison.lean",
+     :sha256
+     "55d0e68e12b3990986c8aef1a1021053965658d5e2ebe092a6ceec8eb365ad35"},
+    :axiom-audit-declarations 11},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientManifoldLocalComparison.lean"],
    :dag-node
