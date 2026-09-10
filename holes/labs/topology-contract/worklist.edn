@@ -74815,8 +74815,56 @@
   {:consumer "t98A02",
    :stop-condition
    "Require exact degreewise identification of the categorical cokernel objects and arrows with this explicit submodule-quotient sequence; then transfer injectivity and middle exactness to the compiled chain ShortComplex.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct degreewise linear equivalences from the categorical cokernels of the four subcomplex-chain inclusions to quotients of the ambient degree module by their ranges, and prove that the genuine quotient arrows correspond to infQuotientDiagonal and piecesToSupQuotient. Transfer injectivity and middle exactness, apply shortComplex_shortExact_of_degreewise, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport through relativeComparisonIso to the literal compact-complement pairs.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:leftToSupQuotient
+     "9209941fa52f3d339e084d663859d03094a513ad4596f58162df697a335c8abb",
+     :rightToSupQuotient
+     "62aa3928532dca22c38955d26d8bf55e1e3b34377d0d66f64a06733d092ab166",
+     :piecesToSupQuotient
+     "e95bf52c550c18b4cb633d33463530fd84c5749ee9ca1ffe6269d7765b93b237",
+     :piecesToSupQuotient_mk
+     "437c282132b4f42f34d65a640d85ae822b43037b01b85ebc74b0cd8248967bea",
+     :infQuotientDiagonal_piecesToSupQuotient_exact
+     "b6b8c029037b9cb9bf7028aca61b22b6d967f1991bcbd07aafb705630bee3c8d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubmoduleRelativeMayerVietorisExact.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubmoduleRelativeMayerVietorisExact.lean ConstructionTargets/CoefficientSubmoduleRelativeMayerVietorisExact.lean ConstructionTargets/CoefficientSubmoduleInfQuotientDiagonal.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder-and-five-declaration audit over ConstructionTargets/CoefficientSubmoduleRelativeMayerVietorisExact.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat bfddd436e89461979d46f19c1a60e49f42df72b1",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r bfddd436e89461979d46f19c1a60e49f42df72b1",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :commit "bfddd436e89461979d46f19c1a60e49f42df72b1",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubmoduleRelativeMayerVietorisExact.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubmoduleRelativeMayerVietorisExact.lean",
+     :sha256
+     "5c396593f1db7886c792e3d136bcce9ef4f47fdcbe01566c18675f9da0487f4c",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and reviewed infimum-quotient diagonal dependency hashes reproduce. The two quotient maps, signed product map, representative formula, and middle Function.Exact theorem compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubmoduleRelativeMayerVietorisExact.lean"],
    :dag-node
