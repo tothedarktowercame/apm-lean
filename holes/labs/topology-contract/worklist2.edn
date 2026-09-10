@@ -27075,131 +27075,138 @@
    :stop-condition
    "Do not assume a nonlinear area formula, supplied graph equivalence, measure inequality or numerical normalization. Retain the actual L2 graph metric. Do not retry full differentiable area assembly, infer sphere masses or claim consumer closure. Use a unique row-specific scratch directory.",
    :evidence
-   {:probe
-    {:concurrent-reservations
-     [:coefficient-second-chart-boundary-motion-implementation-refill48
-      :finite-plane-arc-family-small-translations-probe-refill48],
-     :placeholder-delta 0,
-     :residual
-     "Partition differentiable graphs into measurable approximation pieces and prove exact density equality. Sphere-chart assembly and numerical Euclidean Hausdorff normalization remain before frozen sphere-integral closure. Reviewed STOPs, refutations and concurrent work are preserved; no consumer closure is claimed.",
-     :axiom-audits 20,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:namespace "ConstructionTargets.GraphMetricComparison",
-      :implementation
-      "Promote the exact compiled fixture and document its explicit residual hypothesis, actual L2 graph correspondence and ENNReal measure bounds.",
-      :declarations
-      ["point"
-       "Graph"
-       "equivalence"
-       "point_recover"
-       "first_bound"
-       "difference_error"
-       "upper"
-       "lower"
-       "forward_lipschitz"
-       "inverse_lipschitz"
-       "homeomorphism"
-       "graph_image"
-       "forward_source"
-       "inverse_source"
-       "subtype_measure"
-       "measure_upper"
-       "measure_inverse"
-       "measure_lower"
-       "linear_measure"
-       "bounds"
-       "empty_graph"
-       "zero_error"
-       "zero_functional"
-       "dimension_two"
-       "dimension_three"],
-      :hypotheses
-      "Any natural dimension d; actual EuclideanSpace real (Fin d) and WithLp 2 ambient product. Assume 0<=epsilon<1 and the explicit two-point residual estimate on s. No measurability, openness, differentiability, finite-measure or nonzero-functional assumption is needed.",
-      :consumer-equation
-      "Actual nonlinear graph Hausdorff d-measure lies between ofReal(1-epsilon)^d*ofReal(sqrt(1+norm(ell)^2))*H_d(s) and ofReal(1+epsilon)^d*ofReal(sqrt(1+norm(ell)^2))*H_d(s).",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.GraphMetricComparison."
-       "Reproduce twenty standard-only axiom audits."
-       "Audit actual L2 graph subtypes, coordinate-preserving equivalence, inverse laws and constructed homeomorphism."
-       "Verify both metric estimates follow from the explicit residual estimate."
-       "Verify subtype Hausdorff identification and both actual Lipschitz image-measure inequalities."
-       "Verify lower-bound scalar identity uses only the positive finite error factor and makes no cancellation assumption about measures."
-       "Verify substitution of the reviewed LinearGraphDensity image equation."
-       "Compile empty-set, zero-error, zero-functional and dimension-two/three examples."
-       "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure experiments and build-loop design; inspect both ledgers and dependency PASS receipts",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint44-uniform-graph/GraphMetricComparison.lean > /tmp/codex13-checkpoint44-uniform-graph/compile.log",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint44-uniform-graph/GraphMetricComparison.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint44-uniform-graph/GraphMetricComparison.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "Python audit of twenty axiom reports, comment-stripped placeholders and fixture whitespace",
-       :exit 0}
-      {:cmd
-       "Recheck both EDN ledgers, current reservations and dependency reviews",
-       :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial metric fixture compilation",
-       :exit 1,
-       :correction
-       "Corrected functional-application spacing and the norm-triangle argument order."}
-      {:cmd "Compilation after initial metric correction",
-       :exit 1,
-       :correction
-       "Specified the exact norm subtraction whose order needed reversing."}
-      {:cmd "Compilation after adding Lipschitz maps",
-       :exit 1,
-       :correction
-       "Proved inverse-factor positivity explicitly and rewrote reciprocal multiplication as division."}
-      {:cmd "Compilation after adding measure transport",
-       :exit 1,
-       :correction
-       "Used Set.image_univ_of_surjective for the actual equivalences."}
-      {:cmd "Compilation after image identification correction",
-       :exit 1,
-       :correction
-       "Converted NNReal coefficients explicitly to ENNReal.ofReal."}
-      {:cmd "Complete bounds compilation",
-       :exit 0,
-       :correction
-       "Replaced deprecated mul_le_mul_left' with mul_le_mul_right to eliminate its warning."}
-      {:cmd "Compilation after adding examples and audits",
-       :exit 1,
-       :correction
-       "Simplified both zero-error factors before applying antisymmetry. Final audited compilation succeeds without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint44-uniform-graph/GraphMetricComparison.lean",
-      :sha256
-      "6b58f18ef2b8e95e6b8a1b3b82fba13ff770c16950a4cbf0202a6cf542a21779",
-      :placeholder-count 0},
-     :finding
-     "Complete placeholder-free fixture supplies the actual graph homeomorphism, both Lipschitz bounds, intrinsic-to-ambient Hausdorff identification and the requested two-sided density bounds for arbitrary sets. Empty sets, zero error, zero functional and dimensions two and three compile. Infinite measures require no special case or unsafe cancellation.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/GraphMetricComparison.lean"
-       "ConstructionTargets/GraphMetricComparison.md"]},
-     :seat "codex-13"}},
+   {:concurrent-reservations-preserved
+    [:coefficient-second-chart-boundary-motion-implementation-refill48
+     :finite-plane-arc-family-small-translations-probe-refill48],
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Partition differentiable graphs into measurable approximation pieces and prove exact density equality; sphere-chart assembly and numerical Euclidean Hausdorff normalization remain downstream. No consumer closure, sphere mass, Stokes or period conclusion is claimed.",
+    :scratch "/tmp/codex14-checkpoint44-uniform-graph-ccy63s0z",
+    :gates
+    {:build-jobs 2446,
+     :empty-zero-error-zero-functional-dimension-two-three :pass,
+     :actual-lipschitz-measure-inequalities :pass,
+     :subtype-hausdorff-identification :pass,
+     :finite-scalar-reciprocal-without-measure-cancellation :pass,
+     :reviewed-linear-density-substitution :pass,
+     :inverse-laws-and-homeomorphism :pass,
+     :residual-derived-metric-bounds :pass,
+     :actual-l2-correspondence :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 20,
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"measure_upper"
+     "427cfac0e92c0cefabf00012125360b55e8c3e09fa4622452fe6cb9f08585ea9",
+     "point_recover"
+     "02f614b705f3edcce2be4714f7b94b1aa741826fcf5e8abfd2891589d85d5964",
+     "upper"
+     "e411fbb5d6106be84e05ac2471190cf0df136c646984e9c76dff089a7887e187",
+     "zero_error"
+     "149965478fbb5daf2df05e7c52dfe6e4ed7448701ca76606462712bf0654afd4",
+     "subtype_measure"
+     "8194b88142bf924722ed6e2c350c4ab2993c267160298086531238b48025a551",
+     "inverse_lipschitz"
+     "6e600fa634fd825a69b5aa368d764d0c875522ad6e92436c543799c35f7c2370",
+     "graph_image"
+     "d3447ff3779335fb7183418c20410b418140a55b32aa13e750752ac418188dbb",
+     "dimension_three"
+     "9110cf58840af12bafdfa75484be54f0fd85a46f89fe79b93c33935053b5747a",
+     "Graph"
+     "5c196fe89ff771a603487d1b9d8a416ebdace86e0c4c76559515c8c898e69906",
+     "forward_source"
+     "957edb310c251e0b1297624ee95c5b48825646fa2ace073cb0d9fbdde75eb877",
+     "homeomorphism"
+     "fdedd3ba46fe3c9b5ed21943c12127d41649516b26cb48c2e1b7b41f628e856c",
+     "inverse_source"
+     "be81fd51e52c1c03118c68779cc7b3d1f4d93caabfde56e94ea608368829dac4",
+     "measure_lower"
+     "fe012769523b9bd0a4ed0a9aea03ff154cc7ff41fa5d597b8e7359d964708189",
+     "equivalence"
+     "efe034871e6e8bf3b322fa35c762ecd027d3304669e5d53f94807dc66a1393b2",
+     "lower"
+     "f126d3dfa3b7ebdc60eb5595295425ddaf395ebb1f08e7f0f9b5382696adec63",
+     "bounds"
+     "a1f36f7d7b660cd2394a1997c5c3dfb6422c205ea257efd1a84660ef33c31169",
+     "dimension_two"
+     "e0ac7e9e54c3fa2c6cc0284139ee2c0c65ad9ae4b61d09467fbe678bdebf573e",
+     "measure_inverse"
+     "44014e19a3efc5a5adf57f385b9acb2f03411e308898fd103556870cb043e636",
+     "difference_error"
+     "9e44bb965138e789bacbb49fc62b541f44d8133dac901caf4e3189734504c03a",
+     "first_bound"
+     "91a00c249a001ea79b925a655069300c57be4922d369bf82f48e8ef5baa02558",
+     "empty_graph"
+     "fd4aa0d3480c62df72827dc66436f6cd13e989672e15a242d02ee87154f21f99",
+     "forward_lipschitz"
+     "672f506dddc9515268805b6bb61c02240b3355fbdde621fca1dce10e24520eb3",
+     "linear_measure"
+     "5f8b99e187c363f923553e48347a665afb335a632b022e88be8184aee9e48e3e",
+     "point"
+     "744e0564b68c39665c0eb356be78424a16a752de310ebb5dc39e672eb6db2674",
+     "zero_functional"
+     "060dc2a80d5b92d0f3ed843e7b1dda4c1ef98fa866e6f4e0f67ae601ab45a335"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments, build-loop design, both ledgers and dependency PASS receipts; inspect concurrent reservations",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "Python fixture SHA256 verification and exact promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint44-uniform-graph/GraphMetricComparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/GraphMetricComparison.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.GraphMetricComparison",
+      :exit 0}
+     {:cmd
+      "Python namespace-filtered compile-log audit: twenty target audits, standard-only dependency audits, no warnings or errors",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/GraphMetricComparison.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and twenty-five declaration statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m 'Construct uniform L2 graph Hausdorff bounds'",
+      :exit 0}
+     {:cmd "git diff --check f882696c^ f882696c", :exit 0}
+     {:cmd
+      "Python committed two-file scope, committed fixture equality and clean scoped status verification",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "Initial compile-log audit requiring exactly twenty reports in every log",
+      :exit 1,
+      :correction
+      "Lake also replayed twenty-seven dependency reports. Filtered target reports by namespace, verified twenty target reports, and separately checked all forty-seven build reports use only standard axioms. No compilation failed."}],
+    :id :oriented-checkpoint44-uniform-graph-hausdorff-bounds-1,
+    :commit "f882696c8da80267fff63443a43247be0f355c80",
+    :changed-paths
+    ["ConstructionTargets/GraphMetricComparison.lean"
+     "ConstructionTargets/GraphMetricComparison.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint44-uniform-graph/GraphMetricComparison.lean",
+     :sha256
+     "6b58f18ef2b8e95e6b8a1b3b82fba13ff770c16950a4cbf0202a6cf542a21779",
+     :exact-promotion true,
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture and documented its explicit residual hypothesis, constructed L2 graph homeomorphism and two-sided ENNReal Hausdorff bounds for arbitrary sets. Both ledgers, frozen consumers and reviewed STOPs remain untouched.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/GraphMetricComparison.lean"
     "ConstructionTargets/GraphMetricComparison.md"],
