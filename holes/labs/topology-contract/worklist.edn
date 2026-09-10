@@ -59990,81 +59990,148 @@
    :other-consumers ["t02A07" "t94A06" "t97J05"]}
   {:consumer "t00J02",
    :stop-condition
+   "Require actual derivative factorization, injectivity and exact tangent equalizer range for the banked chosen atlas; no supplied immersion or kernel identity.",
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/TransverseIncidenceTangent.lean"],
+   :dag-node
+   "TRANSVERSE-PULLBACK / chosen incidence inclusion tangent equalizer",
+   :acceptance
+   {:fixture "/tmp/TransverseIncidenceTangent.lean",
+    :fixture-sha256
+    "94e87ed09a9b09030cd28f37d4a8d4638e5aaa203ff04cbf29197ec6fe247654",
+    :implementation
+    "Promote the exact fixture. Compile zero_derivative, inclusionLinear, inclusion_injective, inclusion_range and mem_inclusion_range. Preserve exactly chosenAtlas, actual mfderivs, inherited topology, original product norm and derived transversality regularity. Audit zero placeholders and standard-only axioms. Do not claim explicit model-index normalization or consumer closure.",
+    :commands
+    ["lake env lean ConstructionTargets/TransverseIncidenceTangent.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :transverse-incidence-tangent-implementation-refill39,
+   :kind :reusable-theorem,
+   :depends-on
+   [:transverse-incidence-chosen-atlas-implementation-refill39],
+   :current-residual
+   "Same-atlas tangent geometry is compiled. Explicit Euclidean model-index normalization and final packet assembly remain.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer "t00J02",
+   :stop-condition
    "GO requires the complete literal incidence atlas and inclusion tangent packet. REVISE requires exactly one compiled prerequisite. No Producer or consumer closure claim.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Apply the banked zero-fiber tangent geometry and product identity derivative to prove injectivity and the exact equalizer range for chosenAtlas. Normalize the chosen model expression to the requested explicit sum-minus-target dimension while preserving these specifications. Empty incidence and zero-dimensional kernels remain included. Target-manifold localization, component coverage, orientations and homological comparisons remain separate; no Producer or frozen consumer closure is claimed.",
+     "Normalize the chosen Euclidean model index from finrank (WithLp 2 (A × B)) minus finrank V to finrank A plus finrank B minus finrank V, retaining chartAt, atlas, smooth inclusion and tangent specifications. Empty incidence and zero-dimensional kernels remain included. Target-manifold localization, component coverage, orientation and homological obligations remain separate; no Producer or frozen consumer closure is claimed.",
      :dependency-review
      {:outcome :pass,
-      :commit "d56071ca6089d347fb5cb9ebe1cc5368005deae9",
-      :job "invoke-1789012418278-17793-70ad6890"},
+      :commit "7587067571c0e30ada8f76bc2199ccb2450a1081",
+      :job "invoke-1789012983449-17808-f794442d"},
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {:chosen-atlas
-      "a76c88e2bc8cb0f6e18ded7e272dbdf295a1810e28a22d5f42b295c822248407",
-      :chartAt
-      "aaf3f640bfe8510ee084c9dbdc9ccb35242ee6283ac0b82410dd33c615b4fa28",
-      :atlas
-      "1611d1e3983a53b79ceedb7a17fab55b34927e1920713ddf0dd5bef5994a4e05",
-      :isManifold
-      "5b0dcf201e7f75702ee6df37911b0085a638e9aa31ff2c45fabf0fd7763ef47c",
-      :smooth-inclusion
-      "109d9b876272e6b3e98f64daf23e71ae79af1155993d7d4ea054e7cce530317c",
-      :inclusion-derivative
-      "b17ca4c17f609819cc0bf6fab5f96771787f4b032effc818cf2e561967f6a878"},
+     {:zero-derivative
+      "e3a35c18b1dca7a5830606f8636cbb48f7e3f0286881c733534c079c070f264b",
+      :injective
+      "037c0ba0fcce05c45ff21fcfe86dd8141a4925c2a3099984abfb74059a7f3047",
+      :inclusionLinear
+      "1ec9453379ef2e08f05fe6ba68d21267180c5fc1b4abd62209712e0713fbb2fa",
+      :range
+      "68724c62efd1718d68798ccb9b515a82278b39bca30570b6eb0eb7ed61fd2cb8",
+      :equalizer
+      "940e2479d90fc7b3e9440586849ac8ce5c9c4b4ff1b52c1225bd850751edc331"},
      :prerequisite
      {:consumer "t00J02",
       :stop-condition
-      "Require the constructed chosen atlas and actual derivative transport with all specifications; an existential atlas alone is insufficient.",
+      "Require actual derivative factorization, injectivity and exact tangent equalizer range for the banked chosen atlas; no supplied immersion or kernel identity.",
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/TransverseIncidenceChosenAtlas.lean"],
+      :scope ["ConstructionTargets/TransverseIncidenceTangent.lean"],
       :dag-node
-      "TRANSVERSE-PULLBACK / chosen incidence atlas and derivative transport",
+      "TRANSVERSE-PULLBACK / chosen incidence inclusion tangent equalizer",
       :acceptance
-      {:fixture "/tmp/TransverseIncidenceChosenAtlas.lean",
+      {:fixture "/tmp/TransverseIncidenceTangent.lean",
        :fixture-sha256
-       "1bac3145ded3ba6fcd4cc412903b489c471728395f587963fe41db981bb1ced1",
+       "94e87ed09a9b09030cd28f37d4a8d4638e5aaa203ff04cbf29197ec6fe247654",
        :implementation
-       "Promote the exact fixture, including generic predicate-atlas transport and its actual incidence specialization. Compile all constructors, chart and atlas specifications, manifold and smooth-inclusion proofs, actual inclusion derivative transport and model dimension theorem. Preserve the banked zero-fiber atlas, inherited topology, original product norm and genuine infinity. Audit zero placeholders and standard-only axioms. Do not claim inclusion derivative injectivity or tangent equalizer range equality. The chosen model retains the zero-fiber dimension expression; its finrank is proved equal to finrank A plus finrank B minus finrank V.",
+       "Promote the exact fixture. Compile zero_derivative, inclusionLinear, inclusion_injective, inclusion_range and mem_inclusion_range. Preserve exactly chosenAtlas, actual mfderivs, inherited topology, original product norm and derived transversality regularity. Audit zero placeholders and standard-only axioms. Do not claim explicit model-index normalization or consumer closure.",
        :commands
-       ["lake env lean ConstructionTargets/TransverseIncidenceChosenAtlas.lean"],
+       ["lake env lean ConstructionTargets/TransverseIncidenceTangent.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
-      :id :transverse-incidence-chosen-atlas-implementation-refill39,
+      :id :transverse-incidence-tangent-implementation-refill39,
       :kind :reusable-theorem,
       :depends-on
-      [:transverse-incidence-manifold-implementation-refill39],
+      [:transverse-incidence-chosen-atlas-implementation-refill39],
       :current-residual
-      "Chosen incidence charts and actual inclusion derivative transport are compiled. Same-atlas injectivity, tangent equalizer range and final model-expression normalization remain.",
+      "Same-atlas tangent geometry is compiled. Explicit Euclidean model-index normalization and final packet assembly remain.",
       :other-consumers ["t02A07" "t94A06" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/TransverseIncidenceChosenAtlas.lean",
+     [{:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-tangent-build:$LEAN_PATH lean -o /tmp/incidence-tangent-build/ConstructionTargets/TransverseIncidenceChosenAtlas.olean ConstructionTargets/TransverseIncidenceChosenAtlas.lean'",
        :exit 0}
-      {:cmd "python3 /tmp/transverse-incidence-chosen-audit.py",
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-tangent-build:$LEAN_PATH lean -o /tmp/incidence-tangent-build/ConstructionTargets/ManifoldRegularFiberTangentImage.olean ConstructionTargets/ManifoldRegularFiberTangentImage.lean'",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-tangent-build:$LEAN_PATH lean -o /tmp/incidence-tangent-build/ConstructionTargets/TransverseDifferenceKernel.olean ConstructionTargets/TransverseDifferenceKernel.lean'",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-tangent-build:$LEAN_PATH lean /tmp/TransverseIncidenceTangent.lean'",
+       :exit 0}
+      {:cmd "python3 /tmp/transverse-incidence-tangent-audit.py",
        :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/PredicateSubtypeAtlasTransport.lean",
+     [{:cmd "lake env lean /tmp/TransverseIncidenceTangent.lean",
        :exit 1,
        :correction
-       "Explicitly installed prodChartedSpace when comparing the original product model with its self-model spelling. The renamed final fixture compiles without warnings."}],
+       "Compiled the missing chosen-atlas dependency into a private object directory."}
+      {:cmd
+       "Private-path tangent compilation before dependency completion",
+       :exit 1,
+       :correction
+       "Compiled the missing tangent-image and kernel dependency objects privately."}
+      {:cmd
+       "Private-path tangent compilation, initial range statement",
+       :exit 1,
+       :correction "Investigated unresolved tangent-space instances."}
+      {:cmd "Private-path tangent compilation, explicit scalar",
+       :exit 1,
+       :correction
+       "Scalar annotation alone did not resolve elaboration."}
+      {:cmd
+       "Private-path tangent compilation, continuous-linear-map annotation",
+       :exit 1,
+       :correction "The inline annotation remained insufficient."}
+      {:cmd "Private-path tangent compilation, explicit range modules",
+       :exit 1,
+       :correction
+       "Inspected the exact range signature and model instances."}
+      {:cmd
+       "rg search of nonexistent Mathlib/LinearAlgebra/Range.lean",
+       :exit 2,
+       :correction "Inspected LinearMap.range through Lean instead."}
+      {:cmd
+       "Private-path tangent compilation, explicit semilinear parameters",
+       :exit 1,
+       :correction
+       "Isolated the actual mfderiv in the typed inclusionLinear definition."}
+      {:cmd "Private-path tangent compilation, rank-nullity assembly",
+       :exit 1,
+       :correction
+       "Removed an unresolved redundant tangent-space instance and applied finrank_range_of_inj to inclusionLinear explicitly. Final compilation succeeds."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/TransverseIncidenceChosenAtlas.lean",
+     {:path "/tmp/TransverseIncidenceTangent.lean",
       :sha256
-      "1bac3145ded3ba6fcd4cc412903b489c471728395f587963fe41db981bb1ced1",
+      "94e87ed09a9b09030cd28f37d4a8d4638e5aaa203ff04cbf29197ec6fe247654",
       :placeholder-count 0},
      :finding
-     "Compiled one chosen-atlas prerequisite. Predicate equality transports the actual banked zero-fiber ChartedSpace to literal incidence, with exact chartAt, atlas-image and coordinate formulas. The constructed atlas is genuinely smooth, its inclusion into the original product manifold is genuinely smooth, and its actual inclusion mfderiv equals the original-product inclusion mfderiv on the zero fiber. The incidence predicate equality is derived from sub_eq_zero. No atlas, regularity or derivative comparison is assumed in the incidence specialization.",
+     "Compiled one tangent prerequisite for exactly chosenAtlas. The original-product inclusion derivative factors through the recharted zero-fiber inclusion derivative and the canonical WithLp continuous linear equivalence. Banked zero-fiber injectivity therefore proves actual incidence inclusion derivative injectivity. Constant composition gives range containment in the difference derivative kernel; rank-nullity proves equality. Kernel membership then gives exactly Df(v)=Dg(w). inclusionLinear is a definition of the actual mfderiv, not an assumed comparison.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TRANSVERSE-PULLBACK / literal incidence atlas and tangent equalizer",
@@ -60079,7 +60146,8 @@
    :depends-on
    [:checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit
     :transverse-incidence-manifold-implementation-refill39
-    :transverse-incidence-chosen-atlas-implementation-refill39],
+    :transverse-incidence-chosen-atlas-implementation-refill39
+    :transverse-incidence-tangent-implementation-refill39],
    :current-residual
    "Product self-model recharting and actual derivative/regularity transport are banked. Literal incidence atlas transport and its same-atlas inclusion tangent geometry remain.",
    :other-consumers ["t02A07" "t94A06" "t97J05"]}
