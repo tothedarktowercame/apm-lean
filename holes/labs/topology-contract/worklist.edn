@@ -58579,8 +58579,54 @@
   {:consumer "t00J02",
    :stop-condition
    "Require the exact smoothness, derivative formula, derived regularity and zero-fiber equality without supplied derivative or regularity assumptions.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Literal fiber-product atlas transport and inclusion tangent comparison remain. No fiber-product atlas, duality or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:smooth
+     "9bcf00059b931f5b20880e377daf7dafd90730b36ab68b9021eebef6d927f3cf",
+     :derivative
+     "f0950b0df00db0a01674fa79a371ffab2259f07999a5dc0e7039cb0f6343029d",
+     :regular
+     "3aa20d57593819077cc84deaa84358f3490397fb0f6a122a26332b7dbe97d76c",
+     :fiber-eq
+     "2fbd08a1c825169ae40317983cdec1a8fa783231e4b4a451542904bcf4585487"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "Python fixture hash, forbidden-token and statement-hash audit",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/TransverseDifferenceRegularity.lean ConstructionTargets/TransverseDifferenceRegularity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/TransverseDifferenceRegularity.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history [],
+    :commit "d775d4083df884f250a89e5ac7e5137748f12cde",
+    :changed-paths
+    ["ConstructionTargets/TransverseDifferenceRegularity.lean"],
+    :fixture
+    {:path "/tmp/TransverseDifferenceRegularity.lean",
+     :sha256
+     "eeb58cab302c436d07544eaef32444fcd66e7fa04be199eb1ee20ef028533a1b",
+     :placeholder-count 0},
+    :finding
+    "Exact fixture promoted. Smoothness, actual product-model derivative formula, transversality-derived regularity and zero-fiber equality compile warning-free with standard-only axioms and zero placeholders. No finite-dimensionality assumptions added. Existing APIs and consumers unchanged; worktree clean. Validator reports 455 items OK."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TransverseDifferenceRegularity.lean"],
    :dag-node "TRANSVERSE-PULLBACK / difference-map regularity",
    :acceptance
