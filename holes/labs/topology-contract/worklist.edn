@@ -72495,12 +72495,23 @@
       :exit 1,
       :expected-exit 1}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789074760579-19497-3c32096f",
+     :commands
+     ["sha256sum ConstructionTargets/PlaneArcEndpointIncidenceFiberSection.lean ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean"
+      "rg -n \"parametric.*Sard|parameterized.*Sard|regular.*fiber.*finite|incidence.*projection\" ConstructionTargets TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md"
+      "rg -n \"endpoint.*transvers|boundary.*transvers|corner.*transvers\" ConstructionTargets/PlaneArc* # expected exit 1"
+      "git status --short"],
+     :finding
+     "PASS: independently reviewed the read-only STOP probe authored by codex-12. This row has empty scope, no commit, no fixture, and no frozen declaration hashes; placeholder delta is correctly zero, so commit/fixture/statement recompilation gates are inapplicable. The two cited dependency digests reproduce as 9fdd5f5167662c0ace5c5f3f18927a0193a859503b81750f12341d5446771a82 and e3fe65c7f0c754976ef323eb3c099456cba6a021296b7413dfccc1ffe5426322. Repository searches confirm that parameterized Sard/incidence-submanifold work remains explicitly unbuilt and that no PlaneArc endpoint-, boundary-, or corner-transversality theorem exists. The STOP reasoning is mathematically sound: the reviewed section lies in the square with four endpoint pairs removed; regular zero-dimensionality would yield discreteness there, but a discrete subset of this noncompact punctured domain may be infinite and accumulate at an excluded corner. Finiteness of the four excluded points does not provide endpoint-neighborhood exclusion or compactness of the interior fiber. The stated repair—compact-with-boundary/corners parametric transversality plus endpoint accumulation control—is therefore exact and does not overclaim finite intersections, retained coverage, compatible faces, or triangulation."},
     :changed-paths [],
     :finding
     "The exact section equality is sound, but its relative interior domain removes the four endpoint pairs. Ordinary Sard for the incidence projection would at most give a discrete interior fiber. The missing endpoint-neighborhood control is logically necessary before compactness can turn that discrete fiber into a finite set. The banked statement that the excluded boundary set has four points cannot rule out an infinite interior sequence converging to one of those points.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
