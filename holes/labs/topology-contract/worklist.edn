@@ -71539,6 +71539,19 @@
       "git diff --check -- ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789070495996-19342-638f744d",
+     :commands
+     ["git diff --name-only 31f8d283^ 31f8d283"
+      "git diff --exit-code 31f8d2835254c55af15e135c2c07c8c7001a337e -- ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"
+      "lake env lean ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"
+      "sha256sum ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean /tmp/PlaneArcEndpointPerturbationInteriorParameter.lean ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean"
+      "python3 placeholder-and-four-declaration audit"
+      "git diff --check 31f8d283^ 31f8d283 -- ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"],
+     :finding
+     "Exact one-file scope; fixture and dependency hashes match; Lean compiles with only propext, Classical.choice, and Quot.sound; zero placeholders; all four frozen hashes reproduce. For every strictly interior parameter the weight is positive and nonzero, scalar multiplication by it is surjective, and the perturbation displacement is surjective, with endpoints and stronger transversality claims correctly excluded."},
     :commit "31f8d2835254c55af15e135c2c07c8c7001a337e",
     :changed-paths
     ["ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"],
@@ -71550,7 +71563,7 @@
     :finding
     "Promoted the exact fixture. At every interior unit-interval parameter the endpoint weight is positive and nonzero, scalar multiplication by it is surjective on the plane, and the perturbation displacement map is therefore surjective. The module compiles without warnings or placeholders, its dependency hash matches, and the commit changes exactly the scoped path. Two unrelated concurrently-created untracked ProductSimplex files remain untouched."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"],
    :dag-node
@@ -71645,7 +71658,7 @@
      "Compiled exactly one relative-transversality prerequisite. The endpoint weight t(1-t) is positive and nonzero for every interior parameter t in (0,1). Hence varying the plane perturbation vector moves the perturbed point surjectively in every plane direction at each interior parameter, while the already reviewed endpoint equations keep t=0 and t=1 fixed. This proves the parameter-direction input needed for an interior regular-value argument without claiming that endpoint coincidences, embedding stability or unrelated chart transitions are already controlled.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
