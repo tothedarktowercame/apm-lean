@@ -62202,8 +62202,55 @@
   {:consumer "t99J03",
    :stop-condition
    "Require the constructed scale and all geometric specifications; no supplied containment or embedding.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Constructed positive-scale affine triangles satisfy closed embedding, compact image, neighborhood containment, open interior and center membership. Transfer through actual manifold charts and finite interior coverage remain; no compatible faces or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:norm_parametrization
+     "ea807003c4cfeceb194dd73dac53402d0f0c063862284076654c0472ea3b422a",
+     :scaled
+     "2cdc82a4658e63c6c49b3f9e440b1a3c2a3aec5195242345b51221d414f488af",
+     :exists_triangle
+     "930a6e6bc3f121911678802021c5fe468ba22ad981a9423bbf90b0c0e437b8dc"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/ScaledTriangleNeighborhood.lean", :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.StandardTriangleEmbedding 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "Python read-only canonical-source audit: zero placeholders and complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ScaledTriangleNeighborhood.lean ConstructionTargets/ScaledTriangleNeighborhood.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ScaledTriangleNeighborhood.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "dfe31bd074dedf6fab48fa0e87badbc0d79fea42",
+    :changed-paths
+    ["ConstructionTargets/ScaledTriangleNeighborhood.lean"],
+    :fixture
+    {:path "/tmp/ScaledTriangleNeighborhood.lean",
+     :sha256
+     "8c4bf09cef6430b0b167f57db3139818ddbcd3a7568e4b9c0d6fff7bd0667e66"},
+    :axiom-audit-declarations 2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ScaledTriangleNeighborhood.lean"],
    :dag-node
    "SURFACE TRIANGULATION / scaled triangles inside coordinate neighborhoods",
