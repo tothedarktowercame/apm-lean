@@ -57022,6 +57022,18 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789002485978-17503-4bf96279",
+     :commands
+     ["git show f57ce4659db7de171ae3e99bdb187c2a742c298e"
+      "Independent git-object scope, fixture SHA256, frozen statement hash and placeholder audit"
+      "Inspect recorded closure review and historical STOP preservation"
+      "git show --format= --check f57ce4659db7de171ae3e99bdb187c2a742c298e"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Author codex-6 differs from reviewer. Exactly two scoped documents changed. Canonical and fixture hashes reproduce; frozen statement unchanged; underlying closure 1-to-0 placeholders verified. Warning-free standard-axiom provenance matches recorded PASS. Literal sphere measure transport and embedded-versus-extracted helper distinction are accurate. Historical experiments and other consumers' boundaries preserved; documentation adds no closure or placeholder reduction. Whitespace clean; 439 ledger items validate. No edits."},
     :axiom-evidence
     "Reviewed warning-free consumer compilation; no Lean changes in this documentation row.",
     :commit "f57ce4659db7de171ae3e99bdb187c2a742c298e",
@@ -57035,7 +57047,7 @@
     :finding
     "Recorded closure a13852f35c671f0d40d4bbf58e832710563a4ef7 and independent PASS invoke-1789000811470-17453-38632ef7, including its 1-to-0 placeholder change. Updated current status and closed-results table, retained historical STOP/partial evidence, and distinguished the embedded Hausdorff helper from separate extraction. Only scoped documents changed; worktree clean. Validator reports 439 items OK."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
@@ -57065,7 +57077,7 @@
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local counterexamples and infrastructure absence do not terminate the campaign.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
