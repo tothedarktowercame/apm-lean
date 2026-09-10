@@ -32652,6 +32652,8 @@
    "The complete private fixture compiles, but its six unqualified support modules and parent namespace cannot be imported or promoted as canonical ConstructionTargets declarations.",
    :other-consumers [:t02A05 :t01J06 :t94A10]}
   {:consumer :portfolio,
+   :hypotheses
+   "Use only d=2 and d=3, raw d-dimensional Hausdorff measure, literal unit spheres and Fin.last-zero equators. No normalization or finite sphere-measure hypothesis is supplied.",
    :checkpoint
    {:after-problems 1,
     :may-supersede-future true,
@@ -32662,9 +32664,142 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
-   :phase :strategy,
+   :gates
+   ["Verify all seven recorded fixture hashes before implementation."
+    "Promote every fixture under its exact ConstructionTargets namespace and canonical import path."
+    "Compile each support target and run lake build ConstructionTargets.SphereEquatorHausdorffNullity."
+    "Reproduce twenty-six standard-only axiom audits."
+    "Verify explicit Borel-instance transport precedes append-zero Hausdorff transport."
+    "Verify ambient and intrinsic nullity and exact measurable pairwise-disjoint partitions for d=2 and d=3."
+    "Confirm no normalization, cap-measure sum, sphere mass, moment, Stokes or consumer-closure result is introduced."
+    "Run placeholder, forbidden-declaration, warning, whitespace and exact fourteen-file scope checks; commit the scoped implementation."],
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Canonical sphere-equator nullity and partition infrastructure is ready for exact promotion. The independent raw Hausdorff normalization boundary and subsequent numerical moment evaluation remain.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "sha256sum /tmp/codex13-checkpoint51-canonical-equator-v2/ConstructionTargets/*.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean -R /tmp/codex13-checkpoint51-canonical-equator-v2 /tmp/codex13-checkpoint51-canonical-equator-v2/ConstructionTargets/SphereEquatorHausdorffNullity.lean",
+       :exit 0}
+      {:cmd
+       "Python parent warning and eight standard-only axiom audit",
+       :exit 0}
+      {:cmd
+       "Previously completed bundle-wide comment-stripped placeholder, forbidden-declaration, whitespace, warning and twenty-six standard-only axiom audits",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :changed-paths [],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint51-canonical-equator-v2/ConstructionTargets/SphereEquatorHausdorffNullity.lean",
+      :sha256
+      "adfc616be95fb0c54dc3975e93b6d2291db9c20b48d09c04d35288def3a1ad1e",
+      :placeholder-count 0,
+      :bundle
+      [{:path
+        "/tmp/codex13-checkpoint51-canonical-equator-v2/ConstructionTargets/LowerDimensionalSphereNullity.lean",
+        :sha256
+        "b36f03dc967baee615f30099735edefd8d89b244885a99bf6de6f7f34726cda8"}
+       {:path
+        "/tmp/codex13-checkpoint51-canonical-equator-v2/ConstructionTargets/SphereEquatorEmbedding.lean",
+        :sha256
+        "14e4a70ee5aa25710865a263cf75717d11b6ce2e551751f1779f8af45a0516b9"}
+       {:path
+        "/tmp/codex13-checkpoint51-canonical-equator-v2/ConstructionTargets/SphereEquatorImageNullity.lean",
+        :sha256
+        "7cb74b648d8bac568fecdaa42265131a1a3f5da1caf5bcc83ec7a6f2a53c33c7"}
+       {:path
+        "/tmp/codex13-checkpoint51-canonical-equator-v2/ConstructionTargets/HausdorffSubtypeNullity.lean",
+        :sha256
+        "a8246b0495b080d478e9f003d644f254e11d2f07823b0fde97de9dba3858e580"}
+       {:path
+        "/tmp/codex13-checkpoint51-canonical-equator-v2/ConstructionTargets/SphereCapEquatorPartition.lean",
+        :sha256
+        "db7d2e676e86b6cb207ce7ac24a01d90b2064a45029ff8a1255de4a5a10e6e83"}
+       {:path
+        "/tmp/codex13-checkpoint51-canonical-equator-v2/ConstructionTargets/HausdorffBorelInstanceCoherence.lean",
+        :sha256
+        "5eb9f6b449ac78e40b99f8b7ad009174caa6f0a0b8f3210a6fd5bc1f277898b9"}]},
+     :finding
+     "The seven recorded fixture hashes reproduce. All support files use their required ConstructionTargets namespaces, and the parent resolves them by canonical imports with the ordinary Lake environment and no LEAN_PATH override. The parent recompiles all eight declarations without warnings using only propext, Classical.choice and Quot.sound. It explicitly transports lower-dimensional sphere nullity across the Borel measurable-space instances, then through the append-zero isometry to ambient equator nullity and through the subtype coercion isometry to intrinsic nullity; the exact measurable pairwise-disjoint cap partitions are retained for d=2 and d=3. Both ledgers validate. No normalization, cap-measure sum, sphere mass, moment, Stokes or consumer-closure result is claimed, and no canonical source or ledger was edited.",
+     :implementation
+     {:hypotheses
+      "Use only d=2 and d=3, raw d-dimensional Hausdorff measure, literal unit spheres and Fin.last-zero equators. No normalization or finite sphere-measure hypothesis is supplied.",
+      :gates
+      ["Verify all seven recorded fixture hashes before implementation."
+       "Promote every fixture under its exact ConstructionTargets namespace and canonical import path."
+       "Compile each support target and run lake build ConstructionTargets.SphereEquatorHausdorffNullity."
+       "Reproduce twenty-six standard-only axiom audits."
+       "Verify explicit Borel-instance transport precedes append-zero Hausdorff transport."
+       "Verify ambient and intrinsic nullity and exact measurable pairwise-disjoint partitions for d=2 and d=3."
+       "Confirm no normalization, cap-measure sum, sphere mass, moment, Stokes or consumer-closure result is introduced."
+       "Run placeholder, forbidden-declaration, warning, whitespace and exact fourteen-file scope checks; commit the scoped implementation."],
+      :consumer-residual
+      "Resolve the preserved raw Hausdorff normalization boundary, then combine the cap formulas with these canonical null-equator partitions and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
+      :scope
+      ["ConstructionTargets/LowerDimensionalSphereNullity.lean"
+       "ConstructionTargets/LowerDimensionalSphereNullity.md"
+       "ConstructionTargets/SphereEquatorEmbedding.lean"
+       "ConstructionTargets/SphereEquatorEmbedding.md"
+       "ConstructionTargets/SphereEquatorImageNullity.lean"
+       "ConstructionTargets/SphereEquatorImageNullity.md"
+       "ConstructionTargets/HausdorffSubtypeNullity.lean"
+       "ConstructionTargets/HausdorffSubtypeNullity.md"
+       "ConstructionTargets/SphereCapEquatorPartition.lean"
+       "ConstructionTargets/SphereCapEquatorPartition.md"
+       "ConstructionTargets/HausdorffBorelInstanceCoherence.lean"
+       "ConstructionTargets/HausdorffBorelInstanceCoherence.md"
+       "ConstructionTargets/SphereEquatorHausdorffNullity.lean"
+       "ConstructionTargets/SphereEquatorHausdorffNullity.md"],
+      :axioms :standard-only,
+      :consumer-equation
+      "Importable canonical ConstructionTargets modules prove that the literal S2 and S3 Fin.last equators are ambiently and intrinsically raw-Hausdorff-null and that each sphere is the measurable pairwise-disjoint union of its two strict caps and equator.",
+      :declarations
+      ["source_two_null"
+       "source_three_null"
+       "equator_two_ambient_null"
+       "equator_three_ambient_null"
+       "equator_two_intrinsic_null"
+       "equator_three_intrinsic_null"
+       "sphere_two_partition"
+       "sphere_three_partition"],
+      :namespace "ConstructionTargets.SphereEquatorHausdorffNullity",
+      :implementation
+      "Promote the seven exact namespace-correct Lean fixtures at their recorded hashes and add companion documentation describing the theorem boundaries and explicit Borel-instance transport."},
+     :seat "codex-13"}},
+   :consumer-residual
+   "Resolve the preserved raw Hausdorff normalization boundary, then combine the cap formulas with these canonical null-equator partitions and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/LowerDimensionalSphereNullity.lean"
+    "ConstructionTargets/LowerDimensionalSphereNullity.md"
+    "ConstructionTargets/SphereEquatorEmbedding.lean"
+    "ConstructionTargets/SphereEquatorEmbedding.md"
+    "ConstructionTargets/SphereEquatorImageNullity.lean"
+    "ConstructionTargets/SphereEquatorImageNullity.md"
+    "ConstructionTargets/HausdorffSubtypeNullity.lean"
+    "ConstructionTargets/HausdorffSubtypeNullity.md"
+    "ConstructionTargets/SphereCapEquatorPartition.lean"
+    "ConstructionTargets/SphereCapEquatorPartition.md"
+    "ConstructionTargets/HausdorffBorelInstanceCoherence.lean"
+    "ConstructionTargets/HausdorffBorelInstanceCoherence.md"
+    "ConstructionTargets/SphereEquatorHausdorffNullity.lean"
+    "ConstructionTargets/SphereEquatorHausdorffNullity.md"],
    :dag-node
    "PORTFOLIO POLICY: canonical sphere-equator repair and renewed consumer eligibility",
    :acceptance
@@ -32672,12 +32807,27 @@
     "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
     :stop-condition
     "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :axioms :standard-only,
    :id
    :oriented-checkpoint52-sphere-equator-canonical-repair-and-consumer-refill-1,
    :kind :strategy-checkpoint,
+   :consumer-equation
+   "Importable canonical ConstructionTargets modules prove that the literal S2 and S3 Fin.last equators are ambiently and intrinsically raw-Hausdorff-null and that each sphere is the measurable pairwise-disjoint union of its two strict caps and equator.",
+   :declarations
+   ["source_two_null"
+    "source_three_null"
+    "equator_two_ambient_null"
+    "equator_three_ambient_null"
+    "equator_two_intrinsic_null"
+    "equator_three_intrinsic_null"
+    "sphere_two_partition"
+    "sphere_three_partition"],
    :depends-on
    [:oriented-checkpoint51-sphere-equator-canonical-module-repair-1
     :oriented-checkpoint51-sphere-equator-nullity-and-consumer-refill-1],
+   :namespace "ConstructionTargets.SphereEquatorHausdorffNullity",
+   :implementation
+   "Promote the seven exact namespace-correct Lean fixtures at their recorded hashes and add companion documentation describing the theorem boundaries and explicit Borel-instance transport.",
    :current-residual
    "Measure canonical equator-module promotion separately from the blocked raw normalization, cap summation, moment evaluation and frozen closure; rerank every open consumer route against concurrent outcomes.",
    :other-consumers []}
