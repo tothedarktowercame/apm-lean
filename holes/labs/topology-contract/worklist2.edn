@@ -39468,8 +39468,40 @@
   {:consumer :t03J05,
    :stop-condition
    "Construct only an invariant-preserving comparison between immutable historical evidence for a canonical module and its reviewed additive successor. Preserve every historical fixture, statement hash, source blob and review outcome. Do not waive hash validation, mutate historical evidence without an explicit transition, duplicate ProductSimplexWordPrefixCounts, or claim recurrence promotion until both ledgers validate.",
+   :evidence
+   {:outcome :stop,
+    :seat "codex-13",
+    :reason
+    :ledger-schema-has-no-immutable-artifact-or-version-lineage,
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
+      :exit 0}
+     {:cmd
+      "Audit worklist_check.bb completed-row fixture, commit, scope and hash validation",
+      :exit 0}
+     {:cmd
+      "Search both ledgers and the validator for predecessor, successor, source-version, artifact, lineage or supersession fields",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/ProductSimplexWordPrefixCounts.lean /tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :finding
+    "The requested comparison cannot be represented by the current ledger schema. For every completed non-scheduling row, worklist_check.bb reads exactly one :evidence :fixture map and requires its recorded SHA256 to equal file-sha of that fixture's current filesystem path. It has no immutable-artifact store, predecessor/successor lineage, source-version field or additive-extension relation. The checkpoint60 predecessor fixture is the canonical path ConstructionTargets/ProductSimplexWordPrefixCounts.lean with SHA256 e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187, while the reviewed additive successor fixture has SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08. One mutable path cannot simultaneously have both byte hashes. Statement hashes recorded elsewhere do not participate in validator acceptance and therefore cannot preserve the predecessor invariant. Repointing historical evidence, skipping the old hash check or copying the module under a new name would respectively mutate evidence, weaken validation or duplicate the representation, all forbidden. This is an exact ledger-representation boundary, not a topology refutation.",
+    :residual
+    "Add an immutable artifact or Git-blob-backed fixture representation plus an explicit predecessor-to-successor lineage schema and validator rules; only then can the reviewed successor recurrences be promoted without invalidating checkpoint60.",
+    :author "codex-13",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: immutable predecessor evidence and additive canonical-module successor",
