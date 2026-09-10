@@ -31993,62 +31993,97 @@
    :other-consumers [:t02A05 :t01J06 :t94A10]}
   {:consumer :t95J05,
    :stop-condition
+   "Bank only measurable-space equality and raw Hausdorff set-value equality across two Borel instances on the same topology. Do not claim equator nullity, cap partition, normalization, sphere mass, moments, Stokes or consumer closure.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/HausdorffBorelInstanceCoherence.lean"
+    "ConstructionTargets/HausdorffBorelInstanceCoherence.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: raw Hausdorff coherence across equal Borel measurable-space instances",
+   :acceptance
+   {:namespace "ConstructionTargets.HausdorffBorelInstanceCoherence",
+    :implementation
+    "Promote the exact compiled fixture and document why explicit transport across Borel measurable-space instances is required by the sphere-equator chain.",
+    :hypotheses
+    "Use one topological space with two explicit MeasurableSpace structures and explicit BorelSpace witnesses; for Hausdorff transport also use its actual EMetricSpace topology. No normalization, finiteness or nullity hypothesis is supplied.",
+    :declarations
+    ["measurableSpace_eq_of_borel"
+     "hausdorffMeasure_apply_eq_of_borel"],
+    :consumer-equation
+    "Any two measurable-space structures proved equal to the Borel structure are equal, and raw Hausdorff measure has equal values on every set when elaborated under either structure.",
+    :consumer-residual
+    "Transport LowerDimensionalSphereNullity.sphere_two_null and sphere_three_null to the coordinate-module measurable instances, then finish ambient and intrinsic literal-equator nullity and the parent partition package.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.HausdorffBorelInstanceCoherence."
+     "Reproduce both standard-only axiom audits."
+     "Verify measurableSpace_eq_of_borel composes the two explicit BorelSpace.measurable_eq proofs."
+     "Verify hausdorffMeasure_apply_eq_of_borel transports both the measurable-space structure and dependent BorelSpace witness without assuming measure equality."
+     "Compile examples using WithLp.measurableSpace and ConstructionTargets.LinearGraphMeasure.domainMeasurable on EuclideanSpace real (Fin 2) and Fin 3."
+     "Confirm no equator, partition, normalization, sphere-mass or moment theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :hausdorff-borel-measurable-instance-coherence-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:lower-dimensional-sphere-raw-hausdorff-nullity-1
+    :sphere-equator-image-ambient-nullity-1],
+   :current-residual
+   "The reviewed source-nullity and coordinate-image modules use propositionally equal but definitionally distinct Borel measurable-space instances, preventing their dependent Measure-valued statements from composing directly.",
+   :other-consumers [:t02A05 :t01J06 :t94A10]}
+  {:consumer :t95J05,
+   :stop-condition
    "Do not use the blocked raw Hausdorff normalization, assume that a lower-dimensional coordinate hyperplane is null, infer intrinsic nullity from ambient nullity without an actual subtype isometry, assemble caps, evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Prove only d=2 and d=3 and use a unique row-specific scratch directory.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Instantiate the banked generic subtype-nullity theorem for both literal equators and combine those intrinsic-nullity results with the ambient-nullity and partition declarations in one complete parent fixture.",
+     "Use the Borel-instance Hausdorff-value equality to transport the banked lower-dimensional sphere nullity into the measurable-space instance used by SphereEquatorImageNullity, then derive concrete ambient and intrinsic equator nullity and combine them with the banked partitions in one complete parent fixture.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t95J05,
       :stop-condition
-      "Bank only measurability, pairwise disjointness and exact sphere union for the strict upper cap, strict lower cap and Fin.last-zero equator. Do not sum measures, claim sphere mass, use numerical normalization, evaluate moments, invoke Stokes or claim consumer closure.",
+      "Bank only measurable-space equality and raw Hausdorff set-value equality across two Borel instances on the same topology. Do not claim equator nullity, cap partition, normalization, sphere mass, moments, Stokes or consumer closure.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SphereCapEquatorPartition.lean"
-       "ConstructionTargets/SphereCapEquatorPartition.md"],
+      ["ConstructionTargets/HausdorffBorelInstanceCoherence.lean"
+       "ConstructionTargets/HausdorffBorelInstanceCoherence.md"],
       :dag-node
-      "MANIFOLD INTEGRATION: measurable strict-cap and equator partition",
+      "MANIFOLD INTEGRATION: raw Hausdorff coherence across equal Borel measurable-space instances",
       :acceptance
-      {:namespace "ConstructionTargets.SphereCapEquatorPartition",
+      {:namespace
+       "ConstructionTargets.HausdorffBorelInstanceCoherence",
        :implementation
-       "Promote the exact compiled fixture and document that concrete intrinsic-equator nullity instantiation remains before the parent comparison closes.",
+       "Promote the exact compiled fixture and document why explicit transport across Borel measurable-space instances is required by the sphere-equator chain.",
        :hypotheses
-       "Use the literal strict caps from SphereCapEuclideanImage and the Fin.last-zero equator in EuclideanSpace real (Fin (d+1)). The set lemmas are dimension-generic because the named d=2 and d=3 instances use the same order trichotomy. No measure normalization or finiteness hypothesis is supplied.",
+       "Use one topological space with two explicit MeasurableSpace structures and explicit BorelSpace witnesses; for Hausdorff transport also use its actual EMetricSpace topology. No normalization, finiteness or nullity hypothesis is supplied.",
        :declarations
-       ["EA"
-        "equator"
-        "measurable_strictUpperCap"
-        "measurable_strictLowerCap"
-        "measurable_equator"
-        "disjoint_upper_lower"
-        "disjoint_upper_equator"
-        "disjoint_lower_equator"
-        "sphere_partition"],
+       ["measurableSpace_eq_of_borel"
+        "hausdorffMeasure_apply_eq_of_borel"],
        :consumer-equation
-       "For d=2 and d=3, the literal strict upper cap, strict lower cap and last-coordinate-zero equator are measurable, pairwise disjoint, and their union equals the literal unit sphere.",
+       "Any two measurable-space structures proved equal to the Borel structure are equal, and raw Hausdorff measure has equal values on every set when elaborated under either structure.",
        :consumer-residual
-       "Instantiate HausdorffSubtypeNullity.subtype_univ_null with the reviewed ambient equator-nullity theorems, then expose ambient nullity, intrinsic nullity and the exact partition as the completed sphere-equator comparison.",
+       "Transport LowerDimensionalSphereNullity.sphere_two_null and sphere_three_null to the coordinate-module measurable instances, then finish ambient and intrinsic literal-equator nullity and the parent partition package.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.SphereCapEquatorPartition."
-        "Reproduce seven standard-only axiom audits and d=2 and d=3 partition examples."
-        "Audit all predicates against SphereCapEuclideanImage and the literal Fin.last-zero equator."
-        "Verify measurability of all three pieces."
-        "Verify all three pairwise-disjointness theorems and exact sphere union."
-        "Confirm no measure addition, normalization, sphere-mass, moment, Stokes or consumer-closure claim is introduced."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.HausdorffBorelInstanceCoherence."
+        "Reproduce both standard-only axiom audits."
+        "Verify measurableSpace_eq_of_borel composes the two explicit BorelSpace.measurable_eq proofs."
+        "Verify hausdorffMeasure_apply_eq_of_borel transports both the measurable-space structure and dependent BorelSpace witness without assuming measure equality."
+        "Compile examples using WithLp.measurableSpace and ConstructionTargets.LinearGraphMeasure.domainMeasurable on EuclideanSpace real (Fin 2) and Fin 3."
+        "Confirm no equator, partition, normalization, sphere-mass or moment theorem is claimed."
         "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :sphere-cap-equator-measurable-partition-1,
+      :id :hausdorff-borel-measurable-instance-coherence-1,
       :kind :reusable-theorem,
       :depends-on
-      [:sphere-equator-image-ambient-nullity-1
-       :hausdorff-subtype-nullity-transport-1],
+      [:lower-dimensional-sphere-raw-hausdorff-nullity-1
+       :sphere-equator-image-ambient-nullity-1],
       :current-residual
-      "Ambient equator nullity and generic intrinsic subtype transport are banked, but exact measurable decomposition of each literal sphere into its two strict caps and equator must be available before final assembly.",
+      "The reviewed source-nullity and coordinate-image modules use propositionally equal but definitionally distinct Borel measurable-space instances, preventing their dependent Measure-valued statements from composing directly.",
       :other-consumers [:t02A05 :t01J06 :t94A10]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
@@ -32057,17 +32092,17 @@
        "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint50-cap-partition/SphereCapEquatorPartition.lean",
+       "lake env lean /tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/codex13-checkpoint50-cap-partition/SphereCapEquatorPartition.lean",
+       "sha256sum /tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint50-cap-partition/SphereCapEquatorPartition.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "Python comment-stripped placeholder, forbidden-declaration, whitespace, warning and seven standard-only axiom audits",
+       "Python comment-stripped placeholder, forbidden-declaration, whitespace, warning and two standard-only axiom audits",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -32078,22 +32113,28 @@
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial sphere-cap equator-partition fixture compilation",
+     [{:cmd
+       "Initial complete sphere-equator assembly fixture compilation",
        :exit 1,
        :correction
-       "Replaced the unavailable measurableSet_sphere name with isClosed_sphere.measurableSet and corrected the nested-union reverse-inclusion case split. The corrected fixture compiles without warnings."}],
+       "The banked source-sphere nullity uses WithLp.measurableSpace, while the coordinate-isometry import installs ConstructionTargets.LinearGraphMeasure.domainMeasurable. Although both are Borel structures, the dependent Measure types are not definitionally equal, so Lean correctly rejected direct substitution. Isolated the missing Borel-instance coherence theorem instead of suppressing the transport."}
+      {:cmd
+       "Initial Hausdorff Borel-instance coherence fixture compilation",
+       :exit 1,
+       :correction
+       "Separated the topological measurable-space equality theorem from the emetric Hausdorff theorem so each BorelSpace proof refers to the topology induced by the relevant EMetricSpace. The corrected fixture compiles without warnings."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint50-cap-partition/SphereCapEquatorPartition.lean",
+      "/tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean",
       :sha256
-      "491f30b9213d04597a1d8e483ab0457d0033e2c102c2fa5512b49f0c30918a01",
+      "658162d3a85f5c8416d2f978801caf74349cba0af1a4548375e47fb72cbb16c8",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 routes. It defines the literal Fin.last-zero equator alongside the reviewed strict upper and lower caps, proves all three sets measurable, proves every pair disjoint, and proves their exact union is the literal unit sphere. Dimension-two and dimension-three instances compile. The parent probe is not GO because the generic subtype-nullity theorem must still be instantiated with the banked ambient-nullity results for these literal equators and exposed together with the partition as the final comparison package. No measure sum, numerical normalization, sphere mass, moment, Stokes or consumer-closure theorem is claimed; no canonical source or ledger was edited.",
+     "The complete parent fixture cannot yet combine the reviewed source-sphere nullity with the reviewed append-zero Hausdorff transport because the two modules elaborate raw Hausdorff measure under distinct MeasurableSpace instances: WithLp.measurableSpace and ConstructionTargets.LinearGraphMeasure.domainMeasurable. Both instances equal the same Borel structure, but that equality must be transported through the dependent Measure type; direct substitution is ill-typed. Exactly one complete compiled prerequisite is supplied. It proves equality of any two measurable-space structures carrying BorelSpace instances for the same topology, then proves equality of raw Hausdorff-measure values for every dimension and set across those structures. This exposes the required instance change rather than hiding it. The measurable pairwise-disjoint cap partition, ambient equator transport and generic subtype transport remain banked separately. No normalization, measure sum, sphere mass, moment, Stokes or consumer-closure result is claimed; no canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: Hausdorff-null equators for the literal S2 and S3 cap decompositions",
@@ -32127,7 +32168,8 @@
     :sphere-equator-append-zero-isometric-embedding-1
     :sphere-equator-image-ambient-nullity-1
     :hausdorff-subtype-nullity-transport-1
-    :sphere-cap-equator-measurable-partition-1],
+    :sphere-cap-equator-measurable-partition-1
+    :hausdorff-borel-measurable-instance-coherence-1],
    :current-residual
    "The two strict cap area formulas are banked, but assembling them into whole-sphere formulas requires proving that the literal last-coordinate equator is d-dimensional Hausdorff-null in dimensions two and three.",
    :other-consumers [:t02A05 :t01J06 :t94A10]}
