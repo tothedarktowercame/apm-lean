@@ -62373,71 +62373,73 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Specialization to the stated manifold model and finite interior coverage remain. Compatible faces, realization, classification and consumer closure remain subsequent.",
+     "The requested finite embedded-triangle interior cover is complete. Compatible face intersections, realization homeomorphism, global triangulation, classification and consumer closure remain subsequent.",
      :dependency-review
      {:outcome :pass,
       :seat "codex-10",
-      :job "invoke-1789024599031-18116-20e605c0"},
-     :outcome :revise,
+      :job "invoke-1789024933179-18128-efeca2f0"},
+     :outcome :go,
      :warnings [],
      :statement-hashes
-     {:exists_chart_triangle
-      "d075c275211498183971332c6c8639cfb7d85ff91933e78d5b3bcefe4a2d02a8"},
-     :prerequisite
-     {:consumer "t99J03",
-      :stop-condition
-      "Require constructed inverse-chart triangles and every geometric specification; no supplied embedding or interior coverage.",
-      :phase :implementation,
-      :state :open,
-      :scope ["ConstructionTargets/ChartTriangleEmbedding.lean"],
-      :dag-node
-      "SURFACE TRIANGULATION / embedded triangles through actual charts",
-      :acceptance
-      {:fixture "/tmp/ChartTriangleEmbedding.lean",
-       :fixture-sha256
-       "d518cba79f8598c65949cd07e8dd50d8f346e3b740520cf0cfbce373a65e6d74",
-       :implementation
-       "Promote the exact fixture. Compile every exists_chart_triangle conjunct: positive scale, coordinate target containment, inverse-chart closed embedding, compact image, source containment, open interior and center membership. Preserve the explicit inverse-chart composite and weaker Hausdorff-space hypotheses. Audit zero placeholders and standard-only axioms. Do not claim finite manifold coverage or compatible faces.",
-       :commands
-       ["lake env lean ConstructionTargets/ChartTriangleEmbedding.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :id :chart-triangle-embedding-implementation-refill42,
-      :kind :reusable-theorem,
-      :depends-on
-      [:scaled-triangle-neighborhood-implementation-refill42],
-      :current-residual
-      "Local chart triangle transport is compiled. Specialize to the stated two-dimensional manifold model and extract finite interior coverage.",
-      :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]},
+     {:planeEquiv
+      "674139d200e72ceffd6203a50b89ca80f932bd6e572486acaff7b3bb83b204b4",
+      :planeChart
+      "9197ce1da1e887fdf67c4d4c3ddb7f814ac6628f9f77c96ab7be74526b92f190",
+      :original_chart_target
+      "67afcb5d2b1cb3129bdce60300538c7ca38e7853c79d35304c3ce85452b5a8cb",
+      :parametrization_formula
+      "ba5580ef65df22f8d9b7e39fe02627ae38debffebb83dbcb2ee4f340eb16d849",
+      :exists_finite_cover
+      "c53275b57d425bef06d0189d03d8d2e4f45a33c6376e2e2e6826a2c05d37a201"},
+     :acceptance
+     {:implementation
+      "Promote the exact fixture. Compile planeEquiv, planeChart, original_chart_target, parametrization_formula and every exists_finite_cover conjunct. Preserve constructed positive scales, original chart formulas and restrictions, closed embeddings, compact images, open interiors and finite coverage. Retain the weaker proved hypotheses. Audit zero placeholders and standard-only axioms. Do not claim compatible faces, triangulation or classification.",
+      :commands
+      ["lake env lean ConstructionTargets/CompactSurfaceTriangleCover.lean"],
+      :axioms :standard-only,
+      :placeholder-before 0,
+      :placeholder-after 0},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/ScaledTriangleNeighborhood.olean ConstructionTargets/ScaledTriangleNeighborhood.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/ChartTriangleEmbedding.olean ConstructionTargets/ChartTriangleEmbedding.lean'",
        :exit 0}
       {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ChartTriangleEmbedding.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/CompactSurfaceTriangleCover.lean'",
        :exit 0}
-      {:cmd "python3 /tmp/chart-triangle-embedding-audit.py", :exit 0}
+      {:cmd "python3 /tmp/compact-surface-triangle-cover-audit.py",
+       :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "rg -n 'isOpen.*image|continuousOn|injOn' .lake/packages/mathlib/Mathlib/Topology/PartialHomeomorph/Defs.lean",
-       :exit 2,
+       "Private-path CompactSurfaceTriangleCover compilation, initial coverage proof",
+       :exit 1,
        :correction
-       "Located the API under Topology/OpenPartialHomeomorph."}],
+       "Expanded the local cover definition and removed an unused simplification argument."}
+      {:cmd
+       "Private-path CompactSurfaceTriangleCover compilation, expanded coverage proof",
+       :exit 1,
+       :correction
+       "Explicitly extracted both indexed-union witnesses to construct the finite-cover witness."}
+      {:cmd
+       "Private-path CompactSurfaceTriangleCover compilation, original-chart specifications",
+       :exit 0,
+       :correction
+       "Removed unused Hausdorff and compactness assumptions from the two auxiliary chart specifications. Final compilation is warning-free."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/ChartTriangleEmbedding.lean",
+     {:path "/tmp/CompactSurfaceTriangleCover.lean",
       :sha256
-      "d518cba79f8598c65949cd07e8dd50d8f346e3b740520cf0cfbce373a65e6d74",
+      "ce99dd4ec3f2a00f2f3530a42e2693c6a3f2fe081a7634254d48ccded4d3e3b3",
       :placeholder-count 0},
      :finding
-     "Compiled one geometric prerequisite transferring constructed triangles through an actual open partial homeomorphism to the plane. The positive scale is chosen inside its target. The inverse-chart composite is a closed embedding with compact image contained in the chart source; its positive-barycentric interior has open image containing the center. No embedding, containment or coverage is assumed.",
+     "Constructed a finite family of actual embedded standard triangles whose open positive-barycentric interiors cover the space. The theorem holds under weaker hypotheses: a compact Hausdorff space charted over a finite-dimensional real normed model of finrank two. A constructed continuous linear equivalence gives plane coordinates; positive scales and chart restrictions come from the banked geometric construction. Each embedding has compact image inside its original chart source. Separate compiled specifications give the explicit original-chart parametrization and affine triangle containment in the original chart target. Thus the requested connected genuine-infinity surface case is included.",
+     :implementation
+     {:scope ["ConstructionTargets/CompactSurfaceTriangleCover.lean"]},
      :seat "codex-12"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/CompactSurfaceTriangleCover.lean"],
    :dag-node "SURFACE TRIANGULATION / finite embedded triangle cover",
    :acceptance
    {:axioms :standard-only,
