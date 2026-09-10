@@ -40150,6 +40150,25 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789075727366-19534-dc5b6cea",
+     :commands
+     ["git show --stat --oneline 066de05a2d931efbc8239b1a3910be45d36e6710"
+      "git show --format=fuller 066de05a2d931efbc8239b1a3910be45d36e6710 -- holes/labs/topology-contract/worklist2.edn"
+      "sed checkpoint60 live fixture evidence from worklist2.edn"
+      "git diff-tree --no-commit-id --name-status -r 066de05a"
+      "git diff --check 066de05a^ 066de05a"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "sha256sum immutable predecessor artifact reviewed successor fixture and canonical predecessor"
+      "rg superseded and replacement promotion/checkpoint IDs in worklist2.edn"
+      "rg immutable artifact path in /tmp/codex14-checkpoint64-transition-ZJuh0G/transition.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/codex14-checkpoint64-transition-ZJuh0G/transition.edn"
+      "comment-stripped placeholder and SHA256 audit for t03J05 t96J06 t97A04"],
+     :finding
+     "PASS: codex-13 authored the replacement; codex-11 independently reviewed it. Commit scope is exactly worklist2.edn. The row now accurately records checkpoint60's live fixture path as still mutable and provides a supervisor-owned pre-replan transition to the committed immutable artifact while preserving SHA256 e1da7ae4..., supporting hash 4b9bf06c..., evidence commit d7ecc4b4, placeholder count zero and PASS review. The retained scratch transitioned ledger validates. The corrected promotion-2 row is blocked and requires the live transition plus both-ledger validation before source edits; the premature promotion-1 and its successor are superseded. Predecessor artifact/canonical hashes remain e1da7ae4..., successor fixture remains 7db40149..., and true-horizontal/false-vertical orientation is unchanged. Both live ledgers and whitespace pass. Frozen consumers remain 1/2/4 placeholders with hashes db4071c3..., 1d8874db..., and 79ca8541.... The supervisor must apply and commit the recorded pre-replan fixture-path transition before opening promotion-2."},
     :replacement-items
     [{:consumer :t03J05,
       :stop-condition
@@ -40430,7 +40449,7 @@
       "Reviewed Euler and Hausdorff STOPs remain preserved; concurrent arc, coefficient and torsion work is excluded."]},
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: immutable predecessor artifacts and renewed consumer eligibility",
@@ -40452,7 +40471,7 @@
    :stop-condition
    "Promote only the already reviewed four successor recurrences into ProductSimplexWordPrefixCounts and document them. Begin only after checkpoint60's live fixture path has been committed as the immutable predecessor artifact. Preserve all predecessor declarations. Do not construct or compare maximal paths, prove word/path inverse laws, define corner swaps, cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
