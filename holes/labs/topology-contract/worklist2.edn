@@ -30870,6 +30870,21 @@
       :exit 1,
       :correction
       "Explicit real casts did not resolve the internal addHaarScalarFactor elaboration. The final fixture confines itself to the public μHE API; source inspection records the exact raw-measure boundary."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789052946048-18823-e427ca14",
+     :commands
+     ["git show --format=fuller --stat 7228883abd91c22231fa923ce41b25b24a06b549"
+      "git diff-tree --no-commit-id --name-status -r 7228883abd91c22231fa923ce41b25b24a06b549"
+      "git diff --check 7228883abd91c22231fa923ce41b25b24a06b549^ 7228883abd91c22231fa923ce41b25b24a06b549"
+      "sha256sum /tmp/codex13-checkpoint48-normalization-boundary-2/EuclideanRawHausdorffBoundary.lean"
+      "lake env lean /tmp/codex13-checkpoint48-normalization-boundary-2/EuclideanRawHausdorffBoundary.lean"
+      "placeholder, forbidden-declaration, and trailing-whitespace scans on the fixture"
+      "inspect pinned Mathlib Geometry/Euclidean/Volume/Measure.lean definitions and normalization boundary"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers from recorded commit"],
+     :finding
+     "PASS: recorded commit is ledger-only and the fixture SHA256 reproduces as 7689f1bf0a2ca52681dcad157260e7f415f6ee7f9cd8715324c8026db222eb14 with zero placeholders. The fixture recompiles and all six declarations use only propext, Classical.choice, and Quot.sound. Mathlib defines normalized μHE as addHaarScalarFactor volume μH • μH and proves μHE equals volume; its documented raw normalization factor is π/4 in dimension two and π/6 in dimension three, so coefficient-one raw hausdorffMeasure-to-volume rewriting has the wrong orientation and would omit reciprocal factors 4/π and 6/π. STOP therefore satisfies the row condition. Both recorded ledgers validate; no frozen file changed, so frozen statement hashes and consumer placeholder recount are not applicable beyond the recorded zero delta."},
     :fixture
     {:path
      "/tmp/codex13-checkpoint48-normalization-boundary-2/EuclideanRawHausdorffBoundary.lean",
@@ -30880,7 +30895,7 @@
     "STOP: the requested coefficient-one equalities between raw hausdorffMeasure d and volume on EuclideanSpace are false under the active diameter-power convention. Mathlib defines μHE[d] as addHaarScalarFactor volume μH[d] • μH[d] specifically so that μHE[d] equals volume. Its documented intended scalar is the Euclidean-unit-ball volume divided by the sup-metric unit-ball volume, giving π/4 in dimension two and π/6 in dimension three, rather than one. The theorem computing that scalar, MeasureTheory.Measure.addHaarScalarFactor_hausdorffMeasure_eq, is presently proof_wanted. The placeholder-free fixture proves the available μHE equalities and their exact set-measure and restricted-lintegral rewrites for dimensions two and three. Rewriting the reviewed raw-Hausdorff cap formulas directly to volume without the reciprocal scalar would suppress a nontrivial normalization factor and violate the row invariant.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact Euclidean Hausdorff-to-volume normalization in dimensions two and three",
@@ -30925,7 +30940,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: Euclidean Hausdorff normalization and renewed consumer eligibility",
