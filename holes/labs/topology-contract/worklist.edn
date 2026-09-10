@@ -70757,6 +70757,8 @@
    "Correct the dependency SHA256 field to fa77b7018a16c83a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71 only if it matches the verified command output; otherwise refuse admission.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
+   :review-finding
+   "Deterministic ledger defect: the recorded statement hash for unionToProductionRelative is ef6bc3510fb3e75ad63b304750bef3696b361885f20aabea27626557e5dae675, but recomputing the exact declaration block with its trailing newline from recorded commit 5a605d1fd1674c7ffed5db84ea3d2137834c90b8 yields ef6bc3510fb3e75ad63b71feb8f6b97d88bf3db35316a0545fba8aa3215b6525. Fixture, target, and dependency hashes otherwise reproduce; the target compiles with standard axioms and exact one-file scope. Correct this frozen statement hash before admission.",
    :stop-condition
    "After promotion, require compact-complement specialization and transport of all three exactness statements through valid coefficient excision.",
    :evidence
@@ -70791,6 +70793,12 @@
       "git diff-tree --no-commit-id --name-only -r 5a605d1fd1674c7ffed5db84ea3d2137834c90b8",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-10",
+     :job "invoke-1789064951707-19153-fe0588e0",
+     :finding
+     "Deterministic ledger defect: the recorded statement hash for unionToProductionRelative is ef6bc3510fb3e75ad63b304750bef3696b361885f20aabea27626557e5dae675, but recomputing the exact declaration block with its trailing newline from recorded commit 5a605d1fd1674c7ffed5db84ea3d2137834c90b8 yields ef6bc3510fb3e75ad63b71feb8f6b97d88bf3db35316a0545fba8aa3215b6525. Fixture, target, and dependency hashes otherwise reproduce; the target compiles with standard axioms and exact one-file scope. Correct this frozen statement hash before admission."},
     :commit "5a605d1fd1674c7ffed5db84ea3d2137834c90b8",
     :changed-paths
     ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
@@ -70802,7 +70810,7 @@
     :finding
     "The corrected dependency pins exactly match the command output. The exact fixture had already been promoted by scoped commit 5a605d1fd1674c7ffed5db84ea3d2137834c90b8; all acceptance gates were rerun rather than manufacturing a no-op commit. The union-to-production-relative map and both piece formulas compile without warnings or placeholders, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
    :dag-node
