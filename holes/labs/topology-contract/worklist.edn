@@ -56453,20 +56453,86 @@
   {:consumer "t95J04",
    :stop-condition
    "GO requires full frozen closure. Otherwise identify the exact Hausdorff measure or chart transport boundary; coordinate nullity alone is not closure.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-after 0,
+     :placeholder-delta -1,
+     :residual
+     "No mathematical residual remains in this frozen consumer fixture. Canonical promotion and independent review remain; canonical Main is unchanged at one placeholder.",
+     :dependency-review
+     {:checkpoint
+      :checkpoint-full-dag-refill-32-after-antipodal-and-manifold-fiber-charts,
+      :outcome :pass,
+      :job "invoke-1789000395829-17437-9754f4df"},
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {:apm_t95j04
+      "4411a00266690b8196b64d48fd645c39ad27e922eb3fb8d6d2f62da64ba5f2db"},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :placeholder-before 1,
+     :commands
+     [{:cmd "lake env lean /tmp/OpenDomainHausdorffNullity.lean",
+       :exit 0}
+      {:cmd "lake env lean /tmp/T95J04FullClosure.lean", :exit 0}
+      {:cmd "python3 /tmp/t95j04-closure-audit.py", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/OpenDomainHausdorffNullity.lean",
+       :exit 1,
+       :correction
+       "Added target measurable/Borel instances and number notation scopes; corrected the neighborhood-within equality. Successful rerun uses only standard axioms."}
+      {:cmd
+       "Read checkpoint review and search sphere and aggregation declarations",
+       :exit 1,
+       :correction
+       "Checkpoint review returned PASS; trailing searches had no matches. Subsequent source inspection located contMDiff_coe_sphere and the aggregation producer."}
+      {:cmd "lake env lean /tmp/T95J04FullClosure.lean",
+       :exit 1,
+       :correction
+       "Specified the sphere inclusion theorem's ambient space and dimension and replaced the nonexistent Set.image_range lemma with a proved set equality."}
+      {:cmd "lake env lean /tmp/T95J04FullClosure.lean",
+       :exit 1,
+       :correction
+       "Derived and installed the sphere inclusion theorem's finrank Fact instance explicitly. Final full compilation succeeds."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/T95J04FullClosure.lean",
+      :sha256
+      "81a52f4f97d8d47874c34dd610c8ed500f11e873439b1276b3ca08348e0f6ea6"},
+     :finding
+     "The complete frozen consumer compiles without placeholders or warnings. A proved open-domain C1 lemma bounds Hausdorff dimension of each image using locally Lipschitz maps and source finrank. Actual source-chart representatives of the smooth ambient sphere inclusion satisfy this lemma. Existing countable local-nullity aggregation proves ambient Hausdorff image nullity; the sphere subtype inclusion is an isometry, giving exactly the frozen sphere measure. Existing dimension-gap coordinate nullity supplies nonsurjectivity, and the frozen missed-point contraction supplies null-homotopy. All other conjuncts reuse their original proofs. No measure normalization, chart nullity, missed point or additional source nonemptiness is assumed. Empty and zero-dimensional sources are included.",
+     :implementation
+     {:scope ["problems/t95J04/lean/Main.lean"],
+      :acceptance
+      {:fixture "/tmp/T95J04FullClosure.lean",
+       :fixture-sha256
+       "81a52f4f97d8d47874c34dd610c8ed500f11e873439b1276b3ca08348e0f6ea6",
+       :frozen-sha256
+       "8321b881ae48f14a9d5e711534aa208eabd66dcdc16055f5ce22e9b66ce4fc15",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :implementation
+       "Promote the exact complete fixture to frozen Main. Preserve all original definitions, lemma bodies and final statement. Compile Main, audit placeholders and print final theorem axioms; retain literal sphere Hausdorff nullity.",
+       :commands ["lake env lean problems/t95J04/lean/Main.lean"]}},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["problems/t95J04/lean/Main.lean"],
    :dag-node
    "DIMENSION-GAP MANIFOLD NULLITY / literal sphere Hausdorff measure",
    :acceptance
-   {:frozen-file "problems/t95J04/lean/Main.lean",
+   {:fixture "/tmp/T95J04FullClosure.lean",
+    :fixture-sha256
+    "81a52f4f97d8d47874c34dd610c8ed500f11e873439b1276b3ca08348e0f6ea6",
     :frozen-sha256
     "8321b881ae48f14a9d5e711534aa208eabd66dcdc16055f5ce22e9b66ce4fc15",
     :placeholder-before 1,
     :placeholder-after 0,
     :axioms :standard-only,
-    :probe
-    "Compile a complete placeholder-free frozen Main preserving every definition and statement. For every k<n and the supplied compact second-countable genuine-infinity smooth k-manifold, prove the literal n-dimensional Hausdorff measure of the image in the metric sphere is zero. Reuse dimension-gap chart nullity and nonsurjectivity producers; derive the actual chart-to-sphere Hausdorff null transport, including local Lipschitz or measure comparisons needed, rather than substituting coordinate Haar nullity. Reuse the proved missed-point contraction and all existing topological conjuncts. Include empty and zero-dimensional source cases. No assumed Hausdorff nullity, measure normalization, missed point or conditional final bridge."},
+    :implementation
+    "Promote the exact complete fixture to frozen Main. Preserve all original definitions, lemma bodies and final statement. Compile Main, audit placeholders and print final theorem axioms; retain literal sphere Hausdorff nullity.",
+    :commands ["lake env lean problems/t95J04/lean/Main.lean"]},
    :id :t95j04-frozen-sphere-image-nullity-closure-probe-refill32,
    :kind :final-adapter,
    :depends-on
