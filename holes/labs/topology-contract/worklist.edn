@@ -70332,8 +70332,45 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the induced coefficient relative-cokernel isomorphism and the union-to-production-relative map after this chain square; no relative exactness or compact-support excision is supplied.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use this square to induce the relative-cokernel isomorphism from the range intersection/right-piece quotient to the literal nested pair, then compose the reviewed pushout projection with that isomorphism and prove its left-zero and right-projection formulas.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:rangeIntersectionChainsIso
+     "2ba5e20d0d0d667628f34a5a5a5cd0bbc8ec5cb388c2e690ad1395b22224d528",
+     :rangeIntersectionToRight_chain_square
+     "fbaf209458d5a6a1be5aac4ca5972716cfe71ff2ef5ee070c94814e59e145464"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean /tmp/CoefficientRangeIntersectionToRightComparison.lean ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean ConstructionTargets/CoefficientIntersectionRangeNaturality.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-two-declaration audit over ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "2c02b06338376092afdf0c2c32f8c02fa9a9c9bf",
+    :changed-paths
+    ["ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean"],
+    :fixture
+    {:path "/tmp/CoefficientRangeIntersectionToRightComparison.lean",
+     :sha256
+     "2cc6c862b9c7d9a74815fb1418e7b995b0bc3c1de545be9fcdbca4e4e799b2e8",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The coefficient chain isomorphism from the Mayer-Vietoris range intersection to the literal intersection and its exact compatibility square with inclusion into the right subtype compile without warnings or placeholders. Both dependency hashes match their pinned values. Two unrelated pre-existing untracked documentation files remain untouched."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean"],
    :dag-node
