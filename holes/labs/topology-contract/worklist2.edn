@@ -36063,9 +36063,149 @@
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
-   "Prove only the bounded oriented face classification and cancellation for maximal product-simplex paths in total degree at most four. Reuse the canonical path, parity and affine-realization modules. Do not define the linear singular-chain cross product, assume Eilenberg-Zilber or Kunneth, prove product fundamental classes or intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
-   :phase :probe,
+   "Bank only the exact horizontal-or-vertical unit-step classification for consecutive vertices of canonical maximal product-simplex paths and its correspondence with IsHorizontal. Do not construct adjacent paths, pair faces, prove sign changes or cancellation, define chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/ProductSimplexUnitSteps.lean"
+    "ConstructionTargets/ProductSimplexUnitSteps.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: unit-step classification for maximal product-simplex paths",
+   :acceptance
+   {:namespace "ConstructionTargets.ProductSimplexUnitSteps",
+    :implementation
+    "Promote the compiled fixture as the exact local step classification needed to define corner swaps on canonical maximal paths.",
+    :hypotheses
+    "Use arbitrary canonical maximal paths in Δ[p]⊗Δ[q]. The proof uses only coordinate monotonicity and the canonical coordinate-sum theorem; downstream cancellation remains restricted to p+q at most four.",
+    :declarations
+    ["horizontal_or_vertical_unit_step"
+     "isHorizontal_iff_first_coordinate_succ"],
+    :consumer-equation
+    "For every consecutive pair of vertices in a maximal product-simplex path, exactly one coordinate increases by one while the other remains fixed; IsHorizontal holds exactly in the first-coordinate-increment case.",
+    :consumer-residual
+    "Construct the corner-swap adjacent path from the unit-step word, prove that it is involutive and preserves the deleted affine face, and prove its shuffle sign is opposite.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexUnitSteps."
+     "Verify the disjunction states natural-number unit increments and cannot use modular Fin addition."
+     "Verify the proof uses coordinatewise monotonicity and maximalPath_coordinate_sum at both consecutive vertices."
+     "Verify IsHorizontal is equivalent to the horizontal unit-step disjunct."
+     "Reproduce standard-only axiom audits for both exported theorems."
+     "Confirm no adjacent-path construction, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :t03j05-product-simplex-unit-step-classification-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint58-affine-product-simplex-and-consumer-refill-1],
+   :current-residual
+   "Maximal paths have coordinate sums and parity, but no canonical theorem yet states that each consecutive edge is exactly one horizontal or vertical unit step, which is required before defining the adjacent corner swap.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :t03J05,
+   :stop-condition
+   "Prove only the bounded oriented face classification and cancellation for maximal product-simplex paths in total degree at most four. Reuse the canonical path, parity and affine-realization modules. Do not define the linear singular-chain cross product, assume Eilenberg-Zilber or Kunneth, prove product fundamental classes or intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
+   :evidence
+   {:probe
+    {:residual
+     "Use the unit-step dichotomy to define the adjacent path obtained by swapping a horizontal-vertical corner, prove deletion-face equality and involutivity, then prove that the inversion signs are opposite.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t03J05,
+      :stop-condition
+      "Bank only the exact horizontal-or-vertical unit-step classification for consecutive vertices of canonical maximal product-simplex paths and its correspondence with IsHorizontal. Do not construct adjacent paths, pair faces, prove sign changes or cancellation, define chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProductSimplexUnitSteps.lean"
+       "ConstructionTargets/ProductSimplexUnitSteps.md"],
+      :dag-node
+      "PRODUCT HOMOLOGY: unit-step classification for maximal product-simplex paths",
+      :acceptance
+      {:namespace "ConstructionTargets.ProductSimplexUnitSteps",
+       :implementation
+       "Promote the compiled fixture as the exact local step classification needed to define corner swaps on canonical maximal paths.",
+       :hypotheses
+       "Use arbitrary canonical maximal paths in Δ[p]⊗Δ[q]. The proof uses only coordinate monotonicity and the canonical coordinate-sum theorem; downstream cancellation remains restricted to p+q at most four.",
+       :declarations
+       ["horizontal_or_vertical_unit_step"
+        "isHorizontal_iff_first_coordinate_succ"],
+       :consumer-equation
+       "For every consecutive pair of vertices in a maximal product-simplex path, exactly one coordinate increases by one while the other remains fixed; IsHorizontal holds exactly in the first-coordinate-increment case.",
+       :consumer-residual
+       "Construct the corner-swap adjacent path from the unit-step word, prove that it is involutive and preserves the deleted affine face, and prove its shuffle sign is opposite.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexUnitSteps."
+        "Verify the disjunction states natural-number unit increments and cannot use modular Fin addition."
+        "Verify the proof uses coordinatewise monotonicity and maximalPath_coordinate_sum at both consecutive vertices."
+        "Verify IsHorizontal is equivalent to the horizontal unit-step disjunct."
+        "Reproduce standard-only axiom audits for both exported theorems."
+        "Confirm no adjacent-path construction, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
+        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+      :id :t03j05-product-simplex-unit-step-classification-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint58-bounded-product-simplex-oriented-face-cancellation-1],
+      :current-residual
+      "Maximal paths have coordinate sums and parity, but no canonical theorem yet states that each consecutive edge is exactly one horizontal or vertical unit step, which is required before defining the adjacent corner swap.",
+      :other-consumers [:t96J06 :t97A04]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
+       :exit 0}
+      {:cmd
+       "Inspect canonical ProductSimplexMaximalPaths, ProductSimplexShuffleParity and ProductSimplexAffineRealization",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint58-unit-steps/ProductSimplexUnitSteps.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint58-unit-steps/ProductSimplexUnitSteps.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint58-unit-steps/ProductSimplexUnitSteps.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "Reproduce standard-only axiom audits for horizontal_or_vertical_unit_step and isHorizontal_iff_first_coordinate_succ",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/codex13-checkpoint58-unit-steps/ProductSimplexUnitSteps.lean",
+       :exit 1,
+       :finding
+       "The first draft tried to simplify a nonexistent Fin.coe_succ lemma and left second-coordinate addition in Fin, where it was interpreted modulo q+1.",
+       :correction
+       "Stated explicit natural-number coordinate-sum equalities and coerced both second-coordinate equations to natural numbers."}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint58-unit-steps/ProductSimplexUnitSteps.lean",
+       :exit 1,
+       :finding
+       "The intermediate draft still stated the vertical increment with Fin addition, so omega correctly admitted modular counterexamples.",
+       :correction
+       "Moved the coercion outside the second coordinate before adding one; the final arithmetic proof compiled."}],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint58-unit-steps/ProductSimplexUnitSteps.lean",
+      :sha256
+      "ceb8964ed10aebe265252e9dd721f63c0387347d9fce018aa5689bb57594ed84",
+      :placeholder-count 0},
+     :finding
+     "Exactly one complete compiled combinatorial prerequisite is supplied. The fixture proves that every consecutive edge of a canonical maximal product-simplex path is exactly one horizontal unit step or one vertical unit step, using coordinate monotonicity and the banked coordinate-sum-equals-time theorem. It also identifies the existing IsHorizontal predicate exactly with incrementing the first coordinate by one. The parent cancellation theorem is not GO because constructing the adjacent path requires this unit-step classification before swapping a horizontal-vertical corner and proving its parity change. No adjacent-path operation, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded oriented cancellation of product-simplex shuffle faces",
@@ -36095,7 +36235,8 @@
    :oriented-checkpoint58-bounded-product-simplex-oriented-face-cancellation-1,
    :kind :reusable-theorem,
    :depends-on
-   [:oriented-checkpoint58-affine-product-simplex-and-consumer-refill-1],
+   [:oriented-checkpoint58-affine-product-simplex-and-consumer-refill-1
+    :t03j05-product-simplex-unit-step-classification-1],
    :current-residual
    "Maximal paths, integer shuffle parity and face-compatible affine realizations are banked, but their interior faces have not been paired and cancelled and their surviving exterior faces have not been identified with the Leibniz terms.",
    :other-consumers [:t96J06 :t97A04]}
