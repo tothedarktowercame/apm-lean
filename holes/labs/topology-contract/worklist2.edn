@@ -12906,6 +12906,18 @@
      {:path "/tmp/Checkpoint21Census.json",
       :sha256
       "f57ccb9ac833ac5b61e778b627ffa3aed7fcab55d4e36c0ce18c56069c0993a7"}},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789003157409-17522-76b9a7c4",
+     :commands
+     ["Python read-only pinned census recomputation, census SHA256, frozen t96J05 hash and recorded scope audit"
+      "bb recorded replacement propagation and successor checkpoint equality audit"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show cdba4522:holes/labs/topology-contract/worklist2.edn)"
+      "git log --oneline 76e1612d..ce00018a -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md"
+      "git diff --check"],
+     :finding
+     "Verified census and attribution: placeholders67->66 solely from corrected t96J07 closure, no unchanged-statement closure; modules658->660 from singular subdivision and concurrent tangent-image work. Three fresh work rows and identical successor checkpoint propagate correctly. Proposed radial repair preserves the original refutation and requires attained regular-value, smooth-order and literal-atlas proofs. Homotopy requires actual coefficient-general maps and degree equations; documentation claims no extra reduction. Concurrent reservations and unresolved STOPs remain preserved. No ledger edits."},
     :replacement-items
     [{:consumer :t96J05,
       :stop-condition
@@ -13023,7 +13035,7 @@
     "The axis repair closes the corrected t96J07 theorem while retaining its old refutation; this alone accounts for the placeholder reduction. Actual coefficient-general singular subdivision is now a natural chain endomorphism with degree-zero identity, but its homotopy remains absent. Concurrent tangent-image work proves inclusion derivative injectivity and kernel-range equality for the chosen manifold-fiber atlas. Concurrent t01J04 remains STOP; t95J04 documentation records an earlier closure and contributes no new reduction. Elect exactly one near-closure adapter first: a standing-authorized t96J05 repair adding explicit nonconstant radius, retaining the inhabited-level conclusion and all prior hypotheses. This is a new corrected statement, not a retry of the refuted original. The reviewed global fiber atlas supplies new construction evidence, but the probe must still establish attained regular-value selection, smooth-order compatibility and literal model transport. Then elect coefficient-general subdivision homotopy, serving four named consumers through one coherent chain construction. Other whole-DAG programs in surface classification, fundamental classes, intersection, product homology, integration and covering gluing require larger constructions; the comparable manifold-target fiber packet is concurrently reserved. Finally record t96J07 corrected closure in the stale DAG documentation.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: corrected axis characterization and actual singular subdivision uptake",
@@ -13046,7 +13058,7 @@
    :stop-condition
    "Preserve the original refutation and inhabited literal radial-level conclusion. Add only explicit nonconstant radius; no assumed regular value, extra countability hypothesis, supplied atlas or silent smooth-order restriction.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SPEC-DEFECT / REGULAR-PREIMAGE: nonconstant-radius repair and complete literal radial-level consumer",
@@ -13077,7 +13089,7 @@
    :stop-condition
    "No supplied chain homotopy, contraction identity, coefficient-change isomorphism or small-chain comparison. Do not claim smallness, excision or sphere homology.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION: coefficient-general chain homotopy to identity",
@@ -13105,7 +13117,7 @@
    :stop-condition
    "Preserve the historical false-statement refutation and distinguish corrected closure from unchanged frozen closure. Documentation contributes no additional placeholder reduction.",
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
