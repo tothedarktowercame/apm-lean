@@ -70236,89 +70236,120 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the coefficient-general union-range-to-production-relative map and both piece formulas after this nested-pair identification; no compact-support exactness or excision transport is supplied yet.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / coefficient nested-subspace relative comparison",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientNestedSubspaceIntersectionComparison.lean",
+    :fixture-sha256
+    "7b7db522a204b44ce7cdcc9540def617abdce0e86cf10787286d69b99f24e1cd",
+    :implementation
+    "Promote the exact fixture. Compile intersectionNestedChainsIso, intersectionNested_chain_square, intersectionNestedHomologyIso, intersectionNested_homology_square and intersectionNestedRelativeChainsIso. This supplies the coefficient-general literal-intersection-to-nested-pair representation required on the compact-support placeholder route. Verify CoefficientPairConnectingMayerVietorisComparison SHA256 da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906 and NestedSubspaceIntersectionComparison SHA256 83520e9b2dc97b42f4a9f9d1d945add9baca6843e2a83bebad07c9f2494419a9. Preserve arbitrary topological X, arbitrary subsets U and V, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim the union-to-relative production map, compact-complement specialization, coefficient excision into X, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "Coefficient singular chains, homology and the relative cokernel for the literal intersection subtype U intersection V included directly into V",
+    :target
+    "Coefficient singular chains, homology and relative chains for the nested subspace of V consisting of points whose underlying X-value lies in U",
+    :direction
+    "Apply the canonical intersection-to-nested-subspace homeomorphism in the forward literal-intersection-to-nested direction, prove exact equality of its chain and homology composites with the two inclusions into V, and induce an exact forward isomorphism between the corresponding relative cokernels."},
+   :id
+   :coefficient-nested-subspace-intersection-comparison-implementation-refill50,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50],
+   :current-residual
+   "Use this coefficient nested-pair isomorphism to transport the reviewed union-to-right-relative pushout map into production relative chains, prove its left-zero and right-projection formulas, then instantiate it on compact complements and apply coefficient excision with actual naturality squares.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative Mayer-Vietoris connecting morphism and three proved exactness statements with actual quotient-pair arrows. Reject any construction factoring the pair boundary through its own subspace map.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Topological specialization remains: compare the range relative cokernel with the literal nested complement pair, then use valid coefficient excision and pair naturality to obtain the four relative terms and all three exactness statements. No localization monicity follows without the separate vanishing theorem.",
+     "Construct the coefficient union-range-to-production-relative map by composing the reviewed pushout projection with this relative-chain isomorphism, prove both piece restrictions, and only then specialize to compact complements and transport through valid coefficient excision. Localization monicity still requires its separate vanishing theorem.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the coefficient-general topological range-to-production-relative comparison and its compatibility with the compact-complement inclusions before transporting exactness; do not reuse the identically-zero supportConnecting composite or claim coefficient excision without its hypotheses.",
+      "Require the coefficient-general union-range-to-production-relative map and both piece formulas after this nested-pair identification; no compact-support exactness or excision transport is supplied yet.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean"],
+      ["ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / coefficient Mayer-Vietoris to relative-pair connecting comparison",
+      "MANIFOLD FUNDAMENTAL CLASS / coefficient nested-subspace relative comparison",
       :acceptance
       {:fixture
-       "/tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+       "/tmp/CoefficientNestedSubspaceIntersectionComparison.lean",
        :fixture-sha256
-       "da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906",
+       "7b7db522a204b44ce7cdcc9540def617abdce0e86cf10787286d69b99f24e1cd",
        :implementation
-       "Promote the exact fixture. Compile unionToRightRelative, leftToUnion_unionToRightRelative, rightToUnion_unionToRightRelative, mayerVietorisToRightRelative, relativeConnecting_naturality and unionToRelative_connecting_eq_neg_mayerVietoris. This supplies the genuine coefficient chain-level connecting comparison required by the compact-support placeholder route: the union-to-relative projection, its two piece formulas, the short-complex morphism with forced negative identity on the intersection term, and the resulting signed connecting-map equality. Verify CoefficientSubcomplexMayerVietoris SHA256 bed519ae21e3a1bad02abf9775eb734bcec6bb3c4e8f41a98cec894be2cf71e9 and CoefficientCokernelComparison SHA256 eaa11a983fd6cbd117026568e4eddd48be7911686d61513dc1ab2b2794f490ce. Preserve arbitrary simplicial sets, arbitrary subcomplexes, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim compact-complement specialization, coefficient excision into X, all three final relative exactness statements, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile intersectionNestedChainsIso, intersectionNested_chain_square, intersectionNestedHomologyIso, intersectionNested_homology_square and intersectionNestedRelativeChainsIso. This supplies the coefficient-general literal-intersection-to-nested-pair representation required on the compact-support placeholder route. Verify CoefficientPairConnectingMayerVietorisComparison SHA256 da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906 and NestedSubspaceIntersectionComparison SHA256 83520e9b2dc97b42f4a9f9d1d945add9baca6843e2a83bebad07c9f2494419a9. Preserve arbitrary topological X, arbitrary subsets U and V, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim the union-to-relative production map, compact-complement specialization, coefficient excision into X, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean"],
+       ["lake env lean ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "The coefficient Mayer-Vietoris short exact sequence for two simplicial subcomplexes, including its signed intersection-to-biproduct arrow and absolute union connecting morphism",
+       "Coefficient singular chains, homology and the relative cokernel for the literal intersection subtype U intersection V included directly into V",
        :target
-       "The coefficient relative cokernel short exact sequence for the intersection included in the right subcomplex",
+       "Coefficient singular chains, homology and relative chains for the nested subspace of V consisting of points whose underlying X-value lies in U",
        :direction
-       "Construct an exact forward morphism of short complexes from the Mayer-Vietoris presentation to the relative-cokernel presentation, using negative identity on the intersection term, second projection on the piece biproduct and the pushout-induced union projection; derive exact equality from the projected relative connecting morphism to the negative Mayer-Vietoris connecting morphism in every natural degree."},
+       "Apply the canonical intersection-to-nested-subspace homeomorphism in the forward literal-intersection-to-nested direction, prove exact equality of its chain and homology composites with the two inclusions into V, and induce an exact forward isomorphism between the corresponding relative cokernels."},
       :id
-      :coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50,
+      :coefficient-nested-subspace-intersection-comparison-implementation-refill50,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-relative-mayer-vietoris-chain-sequence-probe-refill50],
+      [:coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50],
       :current-residual
-      "Instantiate the coefficient comparison on the reviewed compact-complement range subcomplexes, transport its right relative cokernel to the literal nested complement pair, and prove the coefficient excision/naturality squares into the four requested relative pairs in X before transporting all three exactness statements.",
+      "Use this coefficient nested-pair isomorphism to transport the reviewed union-to-right-relative pushout map into production relative chains, prove its left-zero and right-projection formulas, then instantiate it on compact complements and apply coefficient excision with actual naturality squares.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSubcomplexMayerVietoris >/tmp/coefficient-pair-mv-dep.log",
+       "lake build ConstructionTargets.CoefficientPairConnectingMayerVietorisComparison >/tmp/coefficient-pair-connecting-build.log",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+       "lake env lean /tmp/CoefficientNestedSubspaceIntersectionComparison.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientPairConnectingMayerVietorisComparison.lean ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean ConstructionTargets/CoefficientCokernelComparison.lean",
+       "sha256sum /tmp/CoefficientNestedSubspaceIntersectionComparison.lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean ConstructionTargets/NestedSubspaceIntersectionComparison.lean",
        :exit 0}
       {:cmd
-       "python3 placeholder-and-six-declaration audit over /tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+       "python3 placeholder-and-five-declaration audit over /tmp/CoefficientNestedSubspaceIntersectionComparison.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+       "lake env lean /tmp/CoefficientNestedSubspaceIntersectionComparison.lean",
        :exit 1,
        :correction
-       "The first mechanical coefficient generalization left the coefficient chain functor's R argument implicit and retained integral cokernel-short-complex names. Made the coefficient parameter explicit and selected the coefficient cokernel construction."}
-      {:cmd
-       "lake env lean /tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
-       :exit 1,
-       :correction
-       "Two short-complex proof fields still unfolded the integral definitions. Replaced them with the coefficient short-complex definitions; the final fixture compiles without warnings or placeholders."}],
+       "The newly promoted CoefficientPairConnectingMayerVietorisComparison dependency lacked its canonical object file. Built that unchanged dependency and reran the fixture successfully."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+      "/tmp/CoefficientNestedSubspaceIntersectionComparison.lean",
       :sha256
-      "da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906",
+      "7b7db522a204b44ce7cdcc9540def617abdce0e86cf10787286d69b99f24e1cd",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one prerequisite that is nonzero-capable and coefficient-general. The pushout-induced union map kills the left piece and restricts on the right piece to the relative quotient projection. Together with negative identity and the second biproduct projection it forms an actual morphism from the coefficient Mayer-Vietoris short complex to the relative cokernel short complex. Connecting-map naturality proves that the relative boundary after the union projection is exactly the negative Mayer-Vietoris boundary. The two unrelated pre-existing untracked documentation files were left untouched.",
+     "Compiled exactly one missing coefficient representation prerequisite. The literal intersection subtype and its nested-subspace presentation inside the right piece are identified on coefficient chains and homology, both inclusion squares commute, and the induced relative cokernels are isomorphic. The construction is coefficient-general and does not use the refuted zero supportConnecting map. The unrelated pre-existing untracked documentation files remain untouched.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
@@ -70331,7 +70362,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs
-    :coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50],
+    :coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50
+    :coefficient-nested-subspace-intersection-comparison-implementation-refill50],
    :current-residual
    "The absolute complement sequence and many comparison maps are reviewed, but the named relative connecting map is zero. A genuine relative chain sequence or proved excision conjugation is required.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
