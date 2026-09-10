@@ -57488,70 +57488,52 @@
    :stop-condition
    "GO requires actual literal-fiber charts, coverage and smooth overlaps compiled. REVISE requires exactly one compiled prerequisite. State applicability limits without claiming consumer closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Next edge: global atlas and smooth inclusion for these manifold-to-manifold fiber charts, followed by actual inclusion derivative injectivity and kernel-range comparison. Applicability is self-model finite-dimensional real inner-product manifolds with complete source model. General models and consumer-specific orientation, boundary, duality and transversality obligations remain; no consumer closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:exists-chart
-      "bd15891feb7c184831d6eb19edba837c35ad6d804a76620cef38ec38929c78f3",
-      :overlap-smooth
-      "49e22138f5e9081e1c16b603fc9bdd8026c66cddf154ead056694b8aa24b174a",
-      :exists-cover
-      "1fa0d39509b16fd94f89ee1436f2d507fe048da7c823e410f9b39b41fa59adcc"},
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture. Preserve inherited subtype topology, genuine infinity, fixed Euclidean dimension, exact coordinate formulas and existing APIs. Compile exists_chart, overlap_smooth and exists_cover; audit zero placeholders and standard-only axioms. Do not claim global atlas, inclusion or tangent geometry.",
-      :axioms :standard-only,
-      :placeholder-before 0,
-      :placeholder-after 0},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean -o /tmp/manifold-chart-build/ConstructionTargets/ManifoldTargetFiberChartExtension.olean ConstructionTargets/ManifoldTargetFiberChartExtension.lean && lean -o /tmp/manifold-chart-build/ConstructionTargets/FiberPredicateTransfer.olean ConstructionTargets/FiberPredicateTransfer.lean'",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldTargetRegularFiberCharts.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/manifold-target-charts-audit.py", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/ManifoldTargetRegularFiberCharts.lean",
-       :exit 1,
-       :correction
-       "Missing prerequisite object; compiled canonical prerequisite sources into the temporary object directory without modifying canonical sources."}
-      {:cmd
-       "cat /tmp/ManifoldTargetRegularFiberCharts.lean; ls -l /tmp/manifold-chart-build/ConstructionTargets/{ManifoldTargetFiberChartExtension,FiberPredicateTransfer}.olean",
-       :exit 2,
-       :correction
-       "Confirmed both temporary object destinations were absent before compiling them."}
-      {:cmd
-       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldTargetRegularFiberCharts.lean'",
-       :exit 1,
-       :correction
-       "Specified F explicitly in FiberChart applications because the manifold target no longer determines its coordinate model. Final compilation succeeds."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/ManifoldTargetRegularFiberCharts.lean",
-      :sha256
-      "bcb627d6faf071b85bbaefade01265c831b31ef494544f554a1ca8a4b146cc22"},
-     :finding
-     "Complete compiled literal-fiber chart packet. exists_chart composes predicate transfer on the proved chart-pair agreement neighborhood with the constructed extension-fiber chart. It proves center membership, exact source and forward/backward formulas, and smooth ambient parameterizations. overlap_smooth derives genuine-infinity transitions on their actual overlap domains from those parameterizations. exists_cover constructs covering charts for every regular fiber without global extension regularity. Empty fibers and zero-dimensional kernels are included.",
-     :dependency-reviews
-     [{:outcome :pass, :job "invoke-1789002983822-17518-0a09fccc"}
-      {:outcome :pass,
-       :commit "87eec33a44aa52ae296a1a6575c6f3b5f6421624",
-       :job "invoke-1789003530847-17536-dd9a0b14"}
-      {:outcome :pass,
-       :commit "638aeee0b5d9bf53664d2db05a4a47efbd6a9e8a",
-       :job "invoke-1789003883788-17549-d1260d19"}],
-     :implementation
-     {:scope
-      ["ConstructionTargets/ManifoldTargetRegularFiberCharts.lean"]},
-     :seat "codex-12"}},
+   {:placeholder-delta 0,
+    :residual
+    "Global atlas, smooth inclusion and actual inclusion tangent geometry remain. Applicability is self-model finite-dimensional real inner-product manifolds with complete source model. General models and consumer orientation, boundary, duality and transversality obligations remain; no consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:exists-chart
+     "bd15891feb7c184831d6eb19edba837c35ad6d804a76620cef38ec38929c78f3",
+     :overlap-smooth
+     "49e22138f5e9081e1c16b603fc9bdd8026c66cddf154ead056694b8aa24b174a",
+     :exists-cover
+     "1fa0d39509b16fd94f89ee1436f2d507fe048da7c823e410f9b39b41fa59adcc"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd "python3 /tmp/manifold-target-charts-audit.py", :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ManifoldTargetFiberChartExtension ConstructionTargets.FiberPredicateTransfer",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ManifoldTargetRegularFiberCharts.lean ConstructionTargets/ManifoldTargetRegularFiberCharts.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldTargetRegularFiberCharts.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history [],
+    :commit "c20972de0f36d273644ea424e28d49ff411cb029",
+    :changed-paths
+    ["ConstructionTargets/ManifoldTargetRegularFiberCharts.lean"],
+    :fixture
+    {:path "/tmp/ManifoldTargetRegularFiberCharts.lean",
+     :sha256
+     "bcb627d6faf071b85bbaefade01265c831b31ef494544f554a1ca8a4b146cc22",
+     :placeholder-count 0},
+    :finding
+    "Exact fixture promoted. Actual literal-fiber charts, coverage and genuine-infinity overlaps compile warning-free with standard-only axioms and zero placeholders. Inherited topology, fixed Euclidean dimension and restricted coordinate formulas are preserved. Existing APIs and consumers unchanged; worktree clean. Validator reports 444 items OK."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ManifoldTargetRegularFiberCharts.lean"],
    :dag-node
