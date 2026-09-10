@@ -67061,6 +67061,19 @@
       :exit 1,
       :correction
       "Corrected an unmatched delimiter in the exploratory lookup; the recorded file-based rerun succeeds."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789040437700-18500-177fd2e3",
+     :commands
+     ["git show --check e90e523c"
+      "Python read-only pinned audit: frozen SHA256, complete theorem hash, one placeholder and audit-fixture hash"
+      "lake env lean /tmp/T98A01CoverAudit.lean"
+      "rg audit for five-torsion cardinality, genus invariance and covering Euler multiplicativity"
+      "bb /tmp/t98a01-dependency-review.bb"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show e90e523c:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "Independent review of codex-12's ledger-only STOP passes. Frozen SHA256 and theorem hash match; the single placeholder remains unchanged. The audit compiles the actual torus covering, fiber equivalence with the five-torsion kernel and fiber-transitive deck homeomorphisms, but correctly stops before claiming numerical fiber cardinality five. Searches confirm no audited genus-invariance or finite-cover Euler-multiplicativity theorem for the literal polygon surfaces. Connected-sum arithmetic does not provide those topological comparisons, and the genus-zero representation boundary is preserved. This is a local construction boundary, not a refutation or campaign termination. Audit reports three standard-only axiom checks; pinned ledger validates 533 items. No files edited."},
     :changed-paths [],
     :finding
     "Compiled the actual torus covering, explicit fiber-transitive deck homeomorphisms, and an equivalence of every fiber with the five-torsion subgroup of UnitAddCircle. The numerical cardinality-five evaluation remains unproved in this probe. Independently, the frozen universal assertion requires genus invariance under homeomorphism and covering Euler multiplicativity for the literal polygon quotients. Banked connected-sum arithmetic supplies neither topological comparison. Genus zero must retain its literal quotient representation. These are local construction boundaries, not a refutation or campaign termination.",
@@ -67072,7 +67085,7 @@
      :placeholder-after 1},
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "COVERING CLASSIFICATION / frozen fivefold surface cover",
    :acceptance
