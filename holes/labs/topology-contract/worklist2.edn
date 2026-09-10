@@ -38554,18 +38554,15 @@
    {:residual
     "Extend ProductSimplexWordPrefixCounts with the four true/false successor recurrences, then prove stepWord(reconstructedPath w)=w and the reverse path reconstruction equality.",
     :outcome :stop,
+    :warnings [],
+    :scope [],
     :disposition :stop,
-    :author "codex-13",
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
     :reason :missing-prefix-count-successor-recurrences,
     :commands
     [{:cmd
-      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
-      :exit 0}
-     {:cmd
-      "Inspect canonical ProductSimplexWordPrefixCounts, ProductSimplexBalancedWords, ProductSimplexCumulativeOrderHom, ProductSimplexReconstructedPath and ProductSimplexStepWord",
-      :exit 0}
-     {:cmd
-      "rg -n \"horizontalCount.*succ|verticalCount.*succ|reconstructedPath.*stepWord|stepWord.*reconstructed\" ConstructionTargets .lake/packages/mathlib/Mathlib",
+      "rg -n \"theorem (horizontalCount|verticalCount).*succ|reconstructedPath.*stepWord|stepWord.*reconstructed\" ConstructionTargets .lake/packages/mathlib/Mathlib",
       :exit 1,
       :expected-exit 1}
      {:cmd
@@ -38577,19 +38574,23 @@
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
       :exit 0}
-     {:cmd "git diff --check", :exit 0}
-     {:cmd "git diff --exit-code", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1789072742596-19422-f7d6105e",
-     :finding
-     "Recorded search evidence is deterministically false: `rg -n \"horizontalCount.*succ|verticalCount.*succ|reconstructedPath.*stepWord|stepWord.*reconstructed\" ConstructionTargets .lake/packages/mathlib/Mathlib` exits 0, not expected exit 1, matching ProductSimplexCumulativeOrderHom.lean lines 11-12 because horizontalCount/verticalCount precede `Nat.lt_succ_of_le`. Repair the evidence with a declaration-specific search such as `rg -n \"theorem (horizontalCount|verticalCount).*succ|reconstructedPath.*stepWord|stepWord.*reconstructed\" ...`, verify its actual exit, and record that command. Scope, builds, ledgers, frozen hashes and 1/2/4 placeholder counts otherwise pass."},
+     {:cmd
+      "git diff --check; git diff --exit-code; git status --short",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "rg -n \"horizontalCount.*succ|verticalCount.*succ|reconstructedPath.*stepWord|stepWord.*reconstructed\" ConstructionTargets .lake/packages/mathlib/Mathlib",
+      :exit 0,
+      :finding
+      "The broad expression matched ProductSimplexCumulativeOrderHom.lean because horizontalCount and verticalCount occur before Nat.lt_succ_of_le; it did not establish that successor-recurrence declarations exist.",
+      :correction
+      "Replaced it with the declaration-specific theorem search recorded in commands. That search returned no matches with actual and expected exit 1."}],
+    :changed-paths [],
     :finding
-    "The cumulative order homomorphism and reconstructed maximal path are banked, but neither word/path inverse law can be proved from the exported interface. Recovering stepWord at index i requires the exact one-step equations horizontalCount(w,i.succ)=horizontalCount(w,i.castSucc)+1 when w(i)=true and equality when w(i)=false, with the complementary equations for verticalCount. ProductSimplexWordPrefixCounts exports partition, bounds and monotonicity only; these facts do not determine which coordinate changes at one step. Its underlying wordPrefix Finset remains private, so the required insert/delete calculation must be proved in that owning module. Reconstructing the private prefix representation downstream would duplicate the implementation and violate the no-workaround invariant. This is an exact exported combinatorial boundary, not a mathematical refutation.",
-    :seat "codex-13"},
+    "The corrected declaration-specific search confirms that neither ConstructionTargets nor Mathlib exports horizontalCount or verticalCount successor-recurrence theorems, and no reconstructedPath/stepWord inverse theorem exists. Recovering stepWord at index i requires four exact one-step equations: horizontalCount increases by one for true and stays fixed for false, while verticalCount stays fixed for true and increases by one for false. The private wordPrefix implementation prevents proving these downstream without duplicating its representation. The banked reconstructed path still builds successfully, both ledgers validate, and the worktree is clean. This is an exported combinatorial boundary, not a mathematical refutation.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: cumulative balanced words as canonical maximal product-simplex paths",
