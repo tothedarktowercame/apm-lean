@@ -59303,90 +59303,70 @@
    :stop-condition
    "GO requires the complete explicit recharting and actual derivative transport packet. REVISE requires exactly one compiled prerequisite. Do not claim an incidence atlas or consumer closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Apply regular-fiber geometry in this constructed product self model, then transport its atlas and inclusion to the inherited-topology literal incidence subtype. Prove inclusion derivative injectivity and the tangent equalizer range in the original product model. Target-manifold localization, orientations and homological obligations remain subsequent; no incidence atlas or frozen consumer closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:derivative-inverse
-      "ed3a5f1fe5802bad6136f731cbd098353d20916b8e093c4bd3c9987c64be4598",
-      :map-derivative
-      "766a17d11ec53898ebe77143cc7bbc57d43309debe420ecacdd8e39a2b5375db",
-      :derivative-backward
-      "f15cd03ed04d04f6330ad5787c63cdd1ffca0d6bad284dcb4926d4e24e1a5ddf",
-      :derivative-forward
-      "c05b102e5fa328d2fc12f288170a03a1569ccbf0cef9bad5fba01a9099498266",
-      :product-identity-derivative
-      "2324d99351585374392b45114fc09fe6f00486ddcd633324689ebc019c82fb03",
-      :product-identity-smooth
-      "14fa09be1d1d320f4d3ac9c94ed3c0331cf660517c267fb911474dd6e012063d",
-      :difference-smooth
-      "78bbeda5a4acfc481e100c98ea946d1cafd4c1703b7ea68a56788e3217800179",
-      :difference-regular
-      "dd798afa38864cf5bd5d586797669a3802d3880bf87b3f36b77e3ab8ae2f4bec",
-      :product-original-manifold
-      "8efc21b1cc43561d8e4a824b152de1a19e2d105f1311724bae2c1d2e2a185418",
-      :difference-derivative
-      "3de37cd705fc84a27a1b0d8bf5961155be3a7c83e41699f408f8d7e1f42bba61",
-      :map-surjective
-      "bef7bee47a30278d048dd8baac02e17759cbceb69a814a4ec34f7646f83e4951",
-      :map-smooth
-      "a86d17a0dfa85e47a49b3d971ccbfb24018f2c2962aa3ac37686538a4973f399"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/rechart-build:$LEAN_PATH lean -o /tmp/rechart-build/ConstructionTargets/ChartedSpaceModelSmoothTransport.olean ConstructionTargets/ChartedSpaceModelSmoothTransport.lean'",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/rechart-build:$LEAN_PATH lean /tmp/ChartedSpaceModelDerivativeTransport.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/charted-space-model-derivative-audit.py",
-       :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "Private-path ChartedSpaceModelDerivativeTransport compilation, inverse identities",
-       :exit 1,
-       :correction
-       "Reduced the continuous-linear-map compositions explicitly to the equivalence inverse laws and removed an unnecessarySimpa warning."}
-      {:cmd
-       "Private-path ChartedSpaceModelDerivativeTransport compilation, difference-map import",
-       :exit 1,
-       :correction
-       "The private namespace lacked the banked TransverseDifferenceRegularity object. Linked available canonical objects into the private directory; final compilation succeeds."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/ChartedSpaceModelDerivativeTransport.lean",
-      :sha256
-      "181beeca62bfcb3c47ea3ade97b829174afe8e5531df1f146ef1dd96ff35a8cc",
-      :placeholder-count 0},
-     :finding
-     "The complete recharting packet compiles using the two banked constructors. For their exact chosen atlas, the forward identity mfderiv is the canonical continuous linear equivalence and the backward mfderiv is its inverse; both composition identities are proved. Coordinate formulas and local chart inverse laws derive these derivatives. The chain rule then proves smoothness, the actual derivative formula and surjectivity transport for vector-valued maps. Explicit product specializations prove both identity maps smooth with the required derivatives, and derive difference-map smoothness and zero regularity from range-sum transversality. The imported banked APIs supply chartAt, atlas, source/target specifications, IsManifold infinity and the model dimension sum. Existing topology and ordinary product norms are retained. The proofs include empty manifolds and zero-dimensional factors and require no supplied derivative or regularity comparison.",
-     :dependency-reviews
-     [{:outcome :pass,
-       :commit "ab99abe095db8d5d4d0a783b732bd8dc461408a7",
-       :job "invoke-1789009295089-17720-ac66ef2d"}
-      {:outcome :pass,
-       :commit "94c20be8f8066c470a0d1426f0886addcb2ea7a7",
-       :job "invoke-1789010174692-17744-17adc0cc"}],
-     :implementation
-     {:scope
-      ["ConstructionTargets/ChartedSpaceModelDerivativeTransport.lean"],
-      :acceptance
-      {:fixture "/tmp/ChartedSpaceModelDerivativeTransport.lean",
-       :fixture-sha256
-       "181beeca62bfcb3c47ea3ade97b829174afe8e5531df1f146ef1dd96ff35a8cc",
-       :implementation
-       "Promote the exact fixture and compile all twelve declarations. Preserve the actual banked chartedSpace and productChartedSpace, genuine infinity, canonical WithLp equivalence, explicit derivative directions and transversality-derived regularity. Retain weaker hypotheses where proved. Audit zero placeholders and standard-only axioms. Do not claim a literal incidence atlas, inclusion tangent comparison or consumer closure.",
-       :commands
-       ["lake env lean ConstructionTargets/ChartedSpaceModelDerivativeTransport.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0}},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Literal incidence atlas transport and inclusion derivative injectivity/tangent equalizer range in the original product model remain. Target-manifold localization, orientation and homological obligations remain subsequent. No incidence atlas or frozen consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:derivative-inverse
+     "ed3a5f1fe5802bad6136f731cbd098353d20916b8e093c4bd3c9987c64be4598",
+     :map-derivative
+     "766a17d11ec53898ebe77143cc7bbc57d43309debe420ecacdd8e39a2b5375db",
+     :derivative-backward
+     "f15cd03ed04d04f6330ad5787c63cdd1ffca0d6bad284dcb4926d4e24e1a5ddf",
+     :derivative-forward
+     "c05b102e5fa328d2fc12f288170a03a1569ccbf0cef9bad5fba01a9099498266",
+     :product-identity-derivative
+     "2324d99351585374392b45114fc09fe6f00486ddcd633324689ebc019c82fb03",
+     :product-identity-smooth
+     "14fa09be1d1d320f4d3ac9c94ed3c0331cf660517c267fb911474dd6e012063d",
+     :difference-smooth
+     "78bbeda5a4acfc481e100c98ea946d1cafd4c1703b7ea68a56788e3217800179",
+     :difference-regular
+     "dd798afa38864cf5bd5d586797669a3802d3880bf87b3f36b77e3ab8ae2f4bec",
+     :product-original-manifold
+     "8efc21b1cc43561d8e4a824b152de1a19e2d105f1311724bae2c1d2e2a185418",
+     :difference-derivative
+     "3de37cd705fc84a27a1b0d8bf5961155be3a7c83e41699f408f8d7e1f42bba61",
+     :map-surjective
+     "bef7bee47a30278d048dd8baac02e17759cbceb69a814a4ec34f7646f83e4951",
+     :map-smooth
+     "a86d17a0dfa85e47a49b3d971ccbfb24018f2c2962aa3ac37686538a4973f399"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "python3 /tmp/charted-space-model-derivative-audit.py",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ChartedSpaceModelSmoothTransport",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ChartedSpaceModelDerivativeTransport.lean ConstructionTargets/ChartedSpaceModelDerivativeTransport.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ChartedSpaceModelDerivativeTransport.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "afa7b6005988aaee5651332d5765a77ee1734c71",
+    :changed-paths
+    ["ConstructionTargets/ChartedSpaceModelDerivativeTransport.lean"],
+    :fixture
+    {:path "/tmp/ChartedSpaceModelDerivativeTransport.lean",
+     :sha256
+     "181beeca62bfcb3c47ea3ade97b829174afe8e5531df1f146ef1dd96ff35a8cc"},
+    :axiom-audit-declarations 12},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ChartedSpaceModelDerivativeTransport.lean"],
    :dag-node "TRANSVERSE-PULLBACK / product self-model recharting",
