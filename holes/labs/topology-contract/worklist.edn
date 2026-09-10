@@ -69437,8 +69437,62 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the actual relative compact-support connecting morphism and its literal composite formula; no supplied comparison with the transported complement arrow, sign square, coefficient excision or exactness.",
+   :evidence
+   {:concurrent-untracked-paths
+    ["docs/statement-construction-backlog-2026-09-10.json"
+     "docs/statement-construction-roundup-2026-09-10.md"],
+    :placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Prove that supportConnecting and restrictPieces form the coefficient relative Mayer-Vietoris arrows obtained from the transported complement presentation, with the required sign, then transport all three exactness statements through the actual coefficient-excision comparisons.",
+    :dependency-hashes
+    {:CoefficientCompactSupportRestrictionNaturality
+     "78c21c6f8b359cd3ba3dce8ed47a2d12ce0a1f1366b5f05b0d61ec3fb1e938ae"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:supportConnecting
+     "c5ffec212b0672d7a498cbe3777dcdf994118c9bec8319e3b2ba65d7da7406cb",
+     :supportConnecting_formula
+     "c9975eb6d071d2b0582d9e7a766056dfa7194dcab0584d0ad8ca967205b4efb6"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactSupportConnecting.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and two complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientCompactSupportConnecting.lean ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add compact support connecting morphism'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "4338a703c6e2a7c4dcb028650c964fbd34e00495",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactSupportConnecting.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactSupportConnecting.lean",
+     :sha256
+     "494601c742dbce3412b811fce3c578ce2d9f1ab068e7c44b525aeffdca9902b7",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled the actual relative compact-support connecting morphism from the intersection-support relative group to the union-support relative group, together with its literal boundary–subspace–projection composite formula. Arbitrary X, K, L, commutative-ring coefficients and degree are preserved; concurrent untracked documentation was left untouched. No comparison with the transported absolute-complement arrow, sign convention, coefficient excision, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 2,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactSupportConnecting.lean"],
    :dag-node
