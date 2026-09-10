@@ -72287,8 +72287,52 @@
   {:consumer "t00A03",
    :stop-condition
    "Require a genuine parameterized Sard or regular-fiber projection theorem for the zero locus of the total coincidence map, producing perturbation-vector parameters with finite interior fibers; ordinary critical-value Sard for the total map alone does not establish this.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the incidence zero locus on the relative interior domain, obtain its regular-preimage manifold structure from the compiled submersion, and apply Sard to its projection onto the perturbation-vector space. Then convert regular zero-dimensional compact fibers to finite sets and handle finite-family simultaneity, embeddings and chart transitions.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:relativeInteriorDomain
+     "74f19e40efcaebd9e153ffc4d163cc674e5ef10b635368f447407a1e8b8879d0",
+     :criticalLocus
+     "58521cc07005eaaa3ea9d598cdbd8260e20cf5a434014210d1c0121dbf41b121",
+     :relativeInteriorDomain_disjoint_criticalLocus
+     "4326d942738b982114fbeea6ad9925071d7ca287b0a14c1c062c18ab7ba63e73",
+     :relativeInteriorDomain_inter_criticalLocus_eq_empty
+     "726ad15e32f5e45873967a687d981ffa98747f1a86abe8d93a08842fe3bdbb10"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/PlaneArcEndpointInteriorCriticalLocusEmpty.lean ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-four-declaration audit over ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 852f7dd333b1529af9343c43639ddf942f359d13",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 852f7dd333b1529af9343c43639ddf942f359d13",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "852f7dd333b1529af9343c43639ddf942f359d13",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointInteriorCriticalLocusEmpty.lean",
+     :sha256
+     "e3fe65c7f0c754976ef323eb3c099456cba6a021296b7413dfccc1ffe5426322",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded relative-submersion dependency hash reproduce. All four requested declarations compile without warnings or placeholders using only standard axioms, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean"],
    :dag-node
