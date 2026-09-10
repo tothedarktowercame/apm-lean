@@ -73948,8 +73948,55 @@
   {:consumer "t98A02",
    :stop-condition
    "Require transport of the union-subspace cover-small homology isomorphism through this coefficient-generic range presentation and the reviewed restricted-cover range isomorphism, proving that unionRangeChainsInclusion induces homology isomorphisms in every degree.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Compose the reviewed restrictedUnionRangeChainsIso with this coefficient ambient-subspace range isomorphism and the compiled unionCoverHomologyIso. Prove that the resulting forward homology isomorphism is homologyMap unionRangeChainsInclusion, then use the denominator commuting square to induce the relative cokernel comparison.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:ambientSubspaceRangeChainsIso
+     "1820c1ad225c2993e4ca85a4b9b7bded5f02391755e12a3b823230f71adc36c4",
+     :ambientSubspaceRangeChainsIso_hom_comp_subspaceMap
+     "74239d25d70a15ed980c369d28115d0272d3573bd01066121adadd95b94c0328"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientAmbientSubspaceRangeCompatibility.lean ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-two-declaration audit over ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 147dac5f7d46fb32efbdbf9fe13b99f8819a640b",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 147dac5f7d46fb32efbdbf9fe13b99f8819a640b",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "Coefficient chains on the categorical range of the singular-simplicial inclusion of a topological subspace",
+     :target
+     "Production coefficient singular chains on that topological subspace, followed by its chain inclusion into the ambient space",
+     :direction
+     "Canonical chain isomorphism from the source ambient-range representation to the target production-subspace representation, with exact equality after inclusion into ambient coefficient singular chains."},
+    :commit "147dac5f7d46fb32efbdbf9fe13b99f8819a640b",
+    :changed-paths
+    ["ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean"],
+    :fixture
+    {:path "/tmp/CoefficientAmbientSubspaceRangeCompatibility.lean",
+     :sha256
+     "29ce41fd37107ede574576e64bdc7b326d30323fad499b7a4a6687b3237e29b6",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded restricted-range-isomorphism dependency hash reproduce. Both requested coefficient-generic range declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean"],
    :dag-node
