@@ -45695,6 +45695,31 @@
      "The same completed evidence with both primary and supporting fixtures at their banked immutable artifact paths",
      :direction
      "Exact single-path state transition from the source supporting-evidence representation to the target immutable supporting-artifact representation, changing only evidence.fixture.supporting-path after complete value and hash validation."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789083038392-19793-91a0fce3",
+     :commands
+     ["git log --oneline -9"
+      "inspect recorded implementation evidence and completion-transition in worklist2.edn"
+      "git show --stat --oneline f519c26f"
+      "git show --format=fuller --no-ext-diff f519c26f --"
+      "git archive f519c26f | tar -x -C <review-dir>"
+      "git diff-tree --no-commit-id --name-status -r f519c26f"
+      "git diff-tree --check f519c26f^ f519c26f"
+      "sha256sum <archived-build-step> <immutable-supporting-artifact>"
+      "git hash-object <immutable-supporting-artifact>"
+      "clj-kondo --lint <archived-build-step>"
+      "emacs --batch -Q -l /home/joe/code/futon4/dev/check-parens.el -- <archived-build-step>"
+      "bb <archive>/holes/labs/topology-contract/test_gate_receipts.bb"
+      "sha256sum /tmp/codex13-checkpoint74-supporting-transition/test_gate_receipts.bb"
+      "bb /tmp/codex13-checkpoint74-supporting-transition/test_gate_receipts.bb"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist2.edn"
+      "archive 21a6b9e6 and its parent, then structurally compare checkpoint66 rows with only fixture.supporting-path masked"
+      "git diff-tree --check 21a6b9e6^ 21a6b9e6"],
+     :finding
+     "PASS: commit f519c26ff101985fada0a868bae6c4990d1dd4f4 has exact one-file build_step.bb scope and clean whitespace. It retains the original primary fixture transition schema and adds only a separately allowlisted evidence.fixture.supporting-path schema with exact preserve-label validation, source matching, supporting-hash target validation, completed-row restriction, pre-insertion application and whole-ledger prewrite validation. The unchanged repository suite passes 55 assertions; the reviewed expanded suite passes 74 assertions including malformed-request rejection; lint and parentheses pass. The supporting artifact reproduces SHA256 22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc and Git blob 310a74aedd822169f193ffb0739d2e79738296f2. Supervisor commit 21a6b9e6 changes checkpoint66 only from mutable supporting path holes/labs/topology-contract/test_gate_receipts.bb to its immutable artifact; masking that path makes the before/after rows identical. Primary path, both hashes, nil placeholder-count, implementation commit and PASS review are preserved. Both ledgers validate; no topology source, theorem orientation, frozen statement, consumer source, or placeholder count changed."},
     :commit "f519c26ff101985fada0a868bae6c4990d1dd4f4",
     :changed-paths ["holes/labs/topology-contract/build_step.bb"],
     :fixture
@@ -45731,7 +45756,7 @@
       :review-outcome :pass}},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["holes/labs/topology-contract/build_step.bb"],
    :dag-node
    "LEDGER REPRESENTATION: checkpoint66 supporting validator fixture transition",
@@ -45804,7 +45829,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: checkpoint66 supporting transition and renewed consumer eligibility",
