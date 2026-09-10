@@ -14257,123 +14257,137 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Actual small-chain restriction and inclusion-compatible homotopy assembly remain. Eventual smallness, positive-degree comparison, relative excision and rational sphere H1/H2 remain downstream.",
-     :axiom-audits 7,
-     :outcome :revise,
+     "Eventual smallness of iterated subdivision, positive-degree small-chain comparison, relative excision and sphere suspension remain before rational S2 H1/H2.",
+     :axiom-audits 10,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t00J01-rational-sphere-homology,
-      :stop-condition
-      "Bank operator-realization equations only. Do not claim constructed small-chain restrictions, restricted homotopy, eventual smallness, homology comparison or excision.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/CoefficientFiniteOperators.lean",
-         :sha256
-         "cfe5ab726fdc46212ff59c922057fb8f97b077305150dffbbf8ca5daf48a2852"},
-        :commands
-        [{:cmd "lake env lean /tmp/CoefficientFiniteOperators.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientFiniteOperators.lean"
-       "ConstructionTargets/CoefficientFiniteOperators.md"],
-      :dag-node
-      "SINGULAR-SUBDIVISION: finite signed formulas realize to coefficient-general operators",
-      :acceptance
-      {:namespace "ConstructionTargets.CoefficientFiniteOperators",
-       :implementation
-       "Promote the exact compiled fixture, reusing existing finite combinatorial chains and reviewed coefficient-general cone, subdivision, prism and affine realization.",
-       :declarations
-       ["realize"
-        "realize_single"
-        "realize_zero"
-        "realize_add"
-        "realize_finset_sum"
-        "realize_zsmul"
-        "realize_neg"
-        "realize_sub"
-        "realize_bind"
-        "realize_cone"
-        "realize_boundary"
-        "finiteVertexSubdivision_realize"
-        "finiteVertexPrism_realize"
-        "postcomposeFiniteVertexChain_realize"
-        "subdivision_realize"
-        "prism_realize"
-        "integral_subdivision_edge"
-        "integral_prism_edge"
-        "rational_subdivision_edge"
-        "rational_prism_edge"],
-       :hypotheses
-       "R, vertex types, spaces and simplex index types are Type 0. R is a commutative ring; simplex index types have Fintype and spaces have TopologicalSpace. Finite formulas carry integer signs, while realized arrows have source ModuleCat.of R R and target actual ModuleCat R chains. No coefficient-change theorem or integral homology conclusion is used.",
-       :consumer-equation
-       "Realization of each finite postcomposed subdivision or prism formula equals the actual singular simplex generator followed by the reviewed R-linear operator.",
-       :consumer-residual
-       "Apply reviewed subordinate-support factorization to construct the small-chain restrictions, prove actual inclusion equations and assemble the restricted homotopy.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientFiniteOperators."
-        "Reproduce all seven standard-only axiom audits and all four integer/rational standard-edge equations."
-        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-      :id :coefficient-general-finite-operator-realization-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:coefficient-general-finite-signed-realization-1
-       :oriented-checkpoint21-coefficient-subdivision-homotopy-1],
-      :current-residual
-      "Subordinate-support factorization must apply to the reviewed operators through proved realization equations.",
-      :other-consumers [:t03J04 :t02A08 :t94J08]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG representations, closure rules, reviewed finite-realization dependency and finite operator APIs",
+       "Read DAG representations, closure rules, dependency PASS receipts and small-chain APIs",
        :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientFiniteOperators.lean",
+      {:cmd "lake env lean /tmp/CoefficientSmallPreservation.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientFiniteOperators.lean", :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientSmallPreservation.lean",
+       :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientFiniteOperators.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSmallPreservation.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "First singular operator-realization compilation",
+     [{:cmd "Initial restriction fixture compilation",
        :exit 1,
        :correction
-       "Closed the remaining standard-vertex definitional equality in the prism comparison with rfl. Final compilation succeeds without warnings or resource-option changes."}],
+       "Removed proofs after congr had closed the goals and separated coproduct unfolding from rewriting."}
+      {:cmd "Second restriction fixture compilation",
+       :exit 1,
+       :correction "Removed an inapplicable associativity rewrite."}
+      {:cmd "Third restriction fixture compilation",
+       :exit 1,
+       :correction
+       "Made the coproduct family and parenthesized composition explicit before applying its generator equation."}
+      {:cmd "Fourth restriction fixture compilation",
+       :exit 1,
+       :correction
+       "Made the inclusion composition explicit and reduced to the coproduct map equation."}
+      {:cmd "Initial chain-map and homotopy assembly compilation",
+       :exit 1,
+       :correction
+       "Introduced the chain-shape relation binder, used chain-map extensionality without element extensionality, and closed the absolute degree-map definitional equality."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientFiniteOperators.lean",
+     {:path "/tmp/CoefficientSmallPreservation.lean",
       :sha256
-      "cfe5ab726fdc46212ff59c922057fb8f97b077305150dffbbf8ca5daf48a2852"},
+      "34e1ff8e04ab92a58bd10885eda306555232290e02657d2d222608bb9225b08f"},
      :finding
-     "Exactly one compiled finite-support operator-realization prerequisite is supplied. The existing finite signed vertex subdivision and prism realize to the reviewed coefficient-general vertex operators. Affine realization and singular postcomposition then identify their finite formulas with the actual R-linear singular subdivision and prism on every simplex generator. Integer and rational standard-edge equations compile. Small-chain restrictions and their homotopy remain unassembled; the parent is not GO.",
+     "Constructed subdivision and prism restrictions on actual coefficient-general cover-small chains. Finite-support factorization supplies generator lifts; coproduct descent supplies degree maps. Their actual inclusion equations imply differential compatibility and the subdivision-minus-identity prism equations. The constructed smallHomotopy runs from restricted subdivision to identity, with an explicit degree-zero equation and compatibility with the reviewed absolute homotopy. Integer and rational overlapping interval-cover examples compile.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientSmallPreservation.lean"
+       "ConstructionTargets/CoefficientSmallPreservation.md"],
+      :acceptance
+      {:namespace "ConstructionTargets.CoefficientSmallPreservation",
+       :implementation
+       "Promote the complete compiled fixture, preserving the existing small-chain complex, actual inclusion, reviewed absolute operators and support geometry.",
+       :declarations
+       ["subdivision_lift"
+        "prism_lift"
+        "subdivisionDegree"
+        "prismDegree"
+        "subdivision_inc"
+        "prism_inc"
+        "subdivision"
+        "subdivision_inclusion"
+        "subdivision_zero"
+        "prism_boundary_zero"
+        "prism_boundary_succ"
+        "components"
+        "components_succ"
+        "smallHomotopy"
+        "homotopy_inclusion"
+        "integral_interval_homotopy"
+        "integral_interval_inclusion"
+        "rational_interval_homotopy"
+        "rational_interval_inclusion"],
+       :hypotheses
+       "R, X and the family index type are Type 0. R is a commutative ring and X a topological space. U is an arbitrary indexed family of subsets; no openness, covering, nonemptiness or connectedness assumption is required. Chains use coefficient object ModuleCat.of R R.",
+       :consumer-equation
+       "Restricted subdivision and prism followed by the actual inclusion equal inclusion followed by their reviewed absolute operators. The restricted prism satisfies dT + Td = subdivision - identity, including degree zero, and constructs an actual Homotopy.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSmallPreservation."
+        "Reproduce all ten standard-only axiom audits and integer/rational interval homotopy and inclusion examples."
+        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."],
+       :stop-condition
+       "Do not claim eventual smallness, homology comparison, relative excision or sphere homology."}},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientSmallPreservation.lean"
+    "ConstructionTargets/CoefficientSmallPreservation.md"],
    :dag-node
    "SINGULAR-SUBDIVISION: coefficient-general preservation of cover-small chains",
    :acceptance
-   {:axioms :standard-only,
-    :probe
-    "For a commutative ring R and an indexed family of subsets of X, construct coefficient-general subdivision and prism restrictions on the existing coverSmallSSet chains. Reuse CoefficientSmallPath.coverSmallChains and its actual inclusion, CoefficientSingularSubdivision and CoefficientSingularPrism. Generalize the finite-support realization and factorization proofs as needed, reusing coefficient-independent simplex range geometry. Prove that each restricted operator followed by inclusion equals inclusion followed by the reviewed absolute operator in every degree. Assemble the restricted subdivision chain map and its Homotopy to identity, verifying the inclusion compatibility and zero-degree equation. State universes and handle empty spaces and arbitrary index types without assuming a cover when preservation alone does not require it. Compile integer and rational overlapping interval-cover examples. REVISE requires exactly one compiled missing finite-support realization prerequisite; STOP if independent foundations remain.",
+   {:namespace "ConstructionTargets.CoefficientSmallPreservation",
+    :implementation
+    "Promote the complete compiled fixture, preserving the existing small-chain complex, actual inclusion, reviewed absolute operators and support geometry.",
+    :declarations
+    ["subdivision_lift"
+     "prism_lift"
+     "subdivisionDegree"
+     "prismDegree"
+     "subdivision_inc"
+     "prism_inc"
+     "subdivision"
+     "subdivision_inclusion"
+     "subdivision_zero"
+     "prism_boundary_zero"
+     "prism_boundary_succ"
+     "components"
+     "components_succ"
+     "smallHomotopy"
+     "homotopy_inclusion"
+     "integral_interval_homotopy"
+     "integral_interval_inclusion"
+     "rational_interval_homotopy"
+     "rational_interval_inclusion"],
+    :hypotheses
+    "R, X and the family index type are Type 0. R is a commutative ring and X a topological space. U is an arbitrary indexed family of subsets; no openness, covering, nonemptiness or connectedness assumption is required. Chains use coefficient object ModuleCat.of R R.",
     :consumer-equation
-    "The reviewed R-valued subdivision and prism preserve cover-small chains, and their constructed restrictions satisfy the same subdivision-minus-identity homotopy equation with the actual inclusion.",
-    :consumer-residual
-    "Eventual smallness of iterated subdivision, positive-degree small-chain comparison, relative excision and sphere suspension remain before rational S2 H1/H2.",
+    "Restricted subdivision and prism followed by the actual inclusion equal inclusion followed by their reviewed absolute operators. The restricted prism satisfies dT + Td = subdivision - identity, including degree zero, and constructs an actual Homotopy.",
+    :axioms :standard-only,
     :gates
-    ["GO requires a complete placeholder-free fixture with constructed restrictions, actual inclusion equations and restricted homotopy in every degree."
-     "Record fixture SHA256, integer/rational examples and standard-only audits."]},
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSmallPreservation."
+     "Reproduce all ten standard-only axiom audits and integer/rational interval homotopy and inclusion examples."
+     "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."],
+    :stop-condition
+    "Do not claim eventual smallness, homology comparison, relative excision or sphere homology."},
    :id :oriented-checkpoint22-coefficient-small-chain-preservation-1,
    :kind :reusable-theorem,
    :depends-on
