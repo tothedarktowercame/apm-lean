@@ -59705,8 +59705,48 @@
   {:consumer "t00A01",
    :stop-condition
    "GO requires complete frozen closure. Otherwise STOP identifies the exact missing chosen-object, basepoint or coproduct comparison; infrastructure absence is not refutation.",
+   :evidence
+   {:placeholder-after 2,
+    :placeholder-delta 0,
+    :residual
+    "Fundamental-group coproduct bridge and final conjunction remain. The proved homology bridge is unchanged. No complete frozen fixture or new compiled prerequisite was produced; no consumer closure or campaign termination is claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789011251802-17771-84f161ab"},
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :author "codex-12",
+    :placeholder-before 2,
+    :reason
+    "Missing generic target-natural two-open pseudococone-to-free-product comparison for the frozen standard cover.",
+    :commands
+    [{:cmd "lake env lean /tmp/T00A01Refill39APIAudit.lean", :exit 0}
+     {:cmd "sha256sum problems/t00A01/lean/Main.lean", :exit 0}
+     {:cmd
+      "sha256sum /tmp/T00A01Refill39APIAudit.lean /tmp/t00a01-refill39-source-audit.json",
+      :exit 0}
+     {:cmd
+      "cat holes/labs/topology-contract/runs/jobs/invoke-1789011251802-17771-84f161ab.receipt.edn",
+      :exit 0}
+     {:cmd "git diff -- problems/t00A01/lean/Main.lean", :exit 0}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :finding
+    "Compatible connector existence, connected-groupoid SingleObj equivalences, point-span free-product representations and generic target-natural source reconstruction are banked. The assembled mapping equivalence inspected is specialized to GenericWedge, and twice-spiral group extraction requires PointedCoordinateBases for its particular gluing. Neither supplies the arbitrary standard-cover comparison required here. The exact missing assembly is, for path-connected U,V with simply connected overlap and w in U intersect V, a target-natural equivalence (FundamentalGroupoid X ⥤ C) ≌ (SingleObj (Monoid.Coprod (FundamentalGroup U w.left) (FundamentalGroup V w.right)) ⥤ C), derived from the actual inclusion span. Its reconstruction and chosen-object extraction must then be transported through the supplied piece homotopy equivalences to a,b and through hπA,hπB. No such comparison or compatibility premise was assumed. This is an infrastructure boundary, not a refutation.",
+    :frozen-sha256
+    "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+    :artifacts
+    [{:path "/tmp/T00A01Refill39APIAudit.lean",
+      :sha256
+      "6903b35dd6e70053d76e770bb1e5c29a7f8c87e438e2d65102798f6bbdbcb082",
+      :role
+      "Compiled API type audit only; no closure theorem or prerequisite claimed."}
+     {:path "/tmp/t00a01-refill39-source-audit.json",
+      :sha256
+      "57d828da3d4614490d7fa564a9bf7586b667c1496c93ef40cc69fb95d2530a43"}],
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "TWO-OPEN VAN KAMPEN / frozen connected-sum fundamental group",
