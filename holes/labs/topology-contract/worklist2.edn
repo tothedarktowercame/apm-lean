@@ -36218,8 +36218,108 @@
   {:consumer :t03J05,
    :stop-condition
    "Bank only the Boolean step-word representation of canonical maximal product-simplex paths and its exact local coordinate semantics. Do not reconstruct paths from words, swap corners, pair faces, prove sign changes or cancellation, define chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Define bounded words with exactly p true and q false letters, reconstruct their cumulative-coordinate maximal paths, prove the word/path inverse laws, and implement the adjacent unlike-letter swap.",
+    :gates
+    {:canonical-compile :pass,
+     :false-equivalence :pass,
+     :natural-coordinate-true-semantics :pass,
+     :whitespace :pass,
+     :unit-step-dichotomy-use :pass,
+     :fixture-hash :pass,
+     :axiom-audits 4,
+     :natural-coordinate-false-semantics :pass,
+     :exact-scope :pass,
+     :canonical-IsHorizontal-definition :pass,
+     :true-equivalence :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :target-warning-scan :pass,
+     :commit-check :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :ledger-validation :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"stepWord"
+     "56f8f03c535ac1bbcdcc1de598ddb7ccad96decb1ab436109a4aef378f684138",
+     "stepWord_eq_true_iff"
+     "6cded5901cc29d800a284eb1c5fc6eecea9382ce64effbb90486e1dd869e9223",
+     "stepWord_eq_false_iff"
+     "e9f33b33505d8c21eb1ab61f93f2de14e0548654d459b988f44e222f816b82c0",
+     "stepWord_true_coordinates"
+     "95372a715984be66f5d091855b99476ccda1fe5d1849d76ff2d23fc3856c891a",
+     "stepWord_false_coordinates"
+     "e535e85a21085c94487a7d7355f375bbfcd3bc3008d84566c994627f6e372962"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the dependency receipts",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint58-unit-steps/ProductSimplexStepWord.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint58-unit-steps/ProductSimplexStepWord.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexStepWord.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ProductSimplexStepWord",
+      :exit 0}
+     {:cmd
+      "Import the canonical target and reproduce standard-only axiom audits for stepWord_eq_true_iff, stepWord_eq_false_iff, stepWord_true_coordinates and stepWord_false_coordinates",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ProductSimplexStepWord.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace, fixture-hash, Boolean-semantics and declaration-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; verify exact two-file scope; git diff --cached --check; git commit -m 'Encode product simplex step words'",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat HEAD; recompute canonical source, documentation, commit and Git blob hashes; git status --short",
+      :exit 0}],
+    :canonical
+    {:path "ConstructionTargets/ProductSimplexStepWord.lean",
+     :sha256
+     "4b9235e5500f3ed2329c60d8d036ea187c57881c84fa62bed6de37e8f2874e61",
+     :git-blob "a2b16a79aac24b6053c2852b2b74f32301a3cc54"},
+    :commit "5be0ec792c680a98dd4dc32f27f89544893ce631",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexStepWord.lean"
+     "ConstructionTargets/ProductSimplexStepWord.md"],
+    :dependency-warnings
+    [{:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 2960,
+      :kind :unused-tactic}
+     {:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 3580,
+      :kind :unnecessary-simpa}],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint58-unit-steps/ProductSimplexStepWord.lean",
+     :sha256
+     "51912d8f99508f968d442c9b8ead6ddf2b3a2606a054918438df6fe82a380887",
+     :placeholder-count 0},
+    :finding
+    "Each canonical maximal product-simplex path now determines a Boolean word using exactly ProductSimplexShuffleParity.IsHorizontal. True and false are characterized in both directions. The coordinate theorems use the banked unit-step dichotomy and state in natural numbers that true advances only the first coordinate by one while false advances only the second. No path reconstruction, corner swap, face pairing, sign change, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure result is introduced.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexStepWord.lean"
     "ConstructionTargets/ProductSimplexStepWord.md"],
