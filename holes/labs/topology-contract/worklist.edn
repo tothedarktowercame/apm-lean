@@ -73484,8 +73484,52 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the coefficient cover-small homology equivalence for this union-subspace cover and an exact comparison with the ambient union-range inclusion, then induce the relative cokernel isomorphism.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Apply CoefficientSmallComparison to unionCover on the union subtype, identify its cover-small chains with the reviewed union-generated range representation in X, and prove unionRangeChainsInclusion induces an isomorphism on homology. Then use the ambient commuting square for the relative cokernel comparison.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:unionCover
+     "aaa04ffb355f6fa728856ab71c1969ecf47abc20f6e001c8aa6686a37ebd58cf",
+     :unionCover_open
+     "6baf500157ab39adabed590d0bea5c65af79a6d7a8a835d3943e2c14314d585d",
+     :unionCover_covers
+     "30391fd78e171ef7824b9e724636dae5e0b2c1a199924d6dcd7efefa22ba38c7",
+     :unionCover_iUnion
+     "da11dbf3530aa9fdd6e8b8d4e004ab368be3875bc738cdc9b6a14dcadbfc28c3"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubspaceUnionRestrictedOpenCover.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean ConstructionTargets/CoefficientSubspaceUnionCoverSmallComparison.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-four-declaration audit over ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 9226251cc770ed06abbe9c895c1b144329dcb370",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 9226251cc770ed06abbe9c895c1b144329dcb370",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "9226251cc770ed06abbe9c895c1b144329dcb370",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubspaceUnionRestrictedOpenCover.lean",
+     :sha256
+     "37775cbc97bc961d3ba54e356e94f33797c95d9afa5411bb75297fd81efca9f7",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded cover-small comparison dependency hash reproduce. All four requested cover declarations compile without warnings or placeholders; unionCover_covers is axiom-free and the remaining facts use only standard axioms. The commit changes exactly the scoped path. Pre-existing untracked ProductSimplexStepWordReconstructed files were left untouched."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean"],
    :dag-node
