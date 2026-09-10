@@ -63529,8 +63529,133 @@
      :review-outcomes]},
    :stop-condition
    "End only when all campaign consumers are closed or an exact campaign-level refutation is established; local gaps do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill44-measure.py", :exit 0}
+     {:cmd "python3 /tmp/topology-refill44-attribution.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill44-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill44-proposed-worklist.edn",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :measurement
+    {:head "1336224bcc770c7814961101c8629f1b868d2a83",
+     :baseline "0e16695e8869af92afdf382365c1f2c5e05fbf52",
+     :path "/tmp/topology-refill44-measure.json",
+     :sha256
+     "9e5c69fcb15ed86d205313b0f9d053dc9214aa46de8c7a3951cd194e231166c1",
+     :placeholder-delta 0,
+     :portfolio-modules 2,
+     :concurrent-modules 2,
+     :new-duplicates 0},
+    :tail
+    {:path "/tmp/topology-refill44-tail.edn",
+     :sha256
+     "2345589790bbabf214ded8863dde7f5c29343998984d3efb69ec7dbc497ab040"},
+    :replacement-items
+    [{:consumer "t02A05",
+      :stop-condition
+      "GO requires complete frozen closure; otherwise identify the exact missing integration comparison or proved normalization defect. Infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "MANIFOLD INTEGRATION / frozen sphere flux",
+      :acceptance
+      {:frozen-file "problems/t02A05/lean/Main.lean",
+       :frozen-sha256
+       "fb006cf7fd68026fa20f517e58e4f6b3bbf1c34fce2f3ee42064f5e7b3cc89d5",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile complete frozen Main preserving the custom outward sphere integral and every optimization conjunct. Audit current radial integration, sphere moments and the exact diameter-power Hausdorff normalization. Derive the literal flux formula from the frozen tangent projections and form, without assuming Stokes, measure normalization or the final integral value. Reuse the proved quadratic minimum. If the numerical normalization is incompatible, prove and name that exact boundary; do not infer it from a convention alone."},
+      :id :t02a05-frozen-flux-closure-probe-refill44,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
+      :current-residual
+      "Two placeholders encode the flux bridge and final assembly. The quadratic optimization is proved; literal integral normalization and evaluation remain."}
+     {:consumer "t98A02",
+      :stop-condition
+      "GO requires constructed pair maps and actual homology comparison; REVISE requires one compiled prerequisite. Do not duplicate concurrent coefficient chart work or claim a fundamental class.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD FUNDAMENTAL CLASS / deleted-point chart comparison",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Construct the actual deleted-point chart-pair comparison for a Hausdorff self-model finite-dimensional real manifold. Audit CoefficientModelLocal, CoefficientNeighborhoodLocal, existing integral chart-pair transports and concurrent chart work before adding anything. Use actual chart restrictions, translation to zero and proved neighborhood excision; identify forward arrows and inverse laws in every available degree. For model dimensions at least two, transport the banked normalization and generator. Preserve one-dimensional coverage through the separately banked local-index APIs rather than extending a dimension-at-least-two theorem silently. No supplied pair homeomorphism or local homology isomorphism. Orientation overlap coherence and global localization monicity remain subsequent."},
+      :representation
+      {:source
+       "Actual coefficient relative singular homology of a self-model manifold and its complement of a point",
+       :target
+       "Actual coefficient relative singular homology of the corresponding Euclidean model and its deleted origin",
+       :direction
+       "Construct an isomorphism from manifold local homology to model local homology through actual chart-pair maps and neighborhood inclusion; identify the forward composite."},
+      :id :coefficient-manifold-local-chart-comparison-probe-refill44,
+      :kind :representation-comparison,
+      :depends-on
+      [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
+      :current-residual
+      "Model and neighborhood local homology are now banked concurrently. Actual manifold chart-pair comparison is the next bounded edge before orientation coherence.",
+      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+     {:consumer "t99J03",
+      :stop-condition
+      "GO requires the constructed controlled arc family and finite intersections; REVISE requires exactly one compiled geometric prerequisite; otherwise name the precise perturbation or arc-construction boundary without campaign termination.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE TRIANGULATION / embedded arcs in finite position",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Construct replacement boundary arcs for the banked finite embedded triangle cover with proved embeddings, containment in the required chart neighborhoods, retained interior coverage and finitely many intersections. Prove the position adjustment instead of assuming transversality or finiteness; account for endpoints and preserve required shared endpoints. Audit smooth arc perturbation and relative transversality APIs. Do not treat arbitrary smooth chart boundaries as having finite intersections. Graph subdivision, disk complementary faces and realization remain subsequent."},
+      :id :surface-embedded-arcs-finite-position-probe-refill44,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
+      :current-residual
+      "The reviewed compatible-face STOP isolates controlled embedded arcs and finite intersections before graph and disk-face construction.",
+      :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped consumers over the complete DAG and distinguish closures, partial uptake, duplicate infrastructure and concurrent work. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve t94J08 repaired closure and positive-dimensional signed antipodal action, ordinary/reduced S0 and one-dimensional local-index boundaries, conditional polygon witnesses and genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff normalization concerns, t96J05 defect, t01J04/t94A06 applicability limits, t01A08 general-model Sard boundary with regularity conversion resolved, and t96J07 historical refutation versus corrected closure. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t02a05-frozen-flux-closure-probe-refill44
+       :coefficient-manifold-local-chart-comparison-probe-refill44
+       :surface-embedded-arcs-finite-position-probe-refill44],
+      :current-residual
+      "Await three independently reviewed outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    "Pinned complete-DAG census remains 59 names, 58 files, missing t93A05, 24 zero-placeholder consumers, 34 open consumers, 24 within two placeholders and 64 total placeholders. No consumer bytes changed and no portfolio or concurrent consumer closed. Modules increased 722→726: two reviewed portfolio packets, coefficient-general transfer and incidence projection regularity, plus two concurrent local-homology modules. Four reviews PASS, comprising two STOP boundaries and two completed infrastructure packets. The t01A08 regularity conversion is resolved; its general-model Sard boundary remains. Surface refinement still needs controlled arcs and finite intersections. Reranking elects the two-placeholder t02A05 flux adapter first, then two five-consumer foundations: actual local-homology chart comparison, preferred for its newly available neighborhood API, followed by controlled embedded arcs. Existing signed antipodal, repaired t94J08 and t96J07 closures remain distinct from ordinary/reduced S0 and one-dimensional local-index obligations. Conditional polygon witnesses, genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff normalization concerns, t96J05 defect and t01J04/t94A06 applicability limits remain preserved.",
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -63546,7 +63671,104 @@
     :finite-cover-rational-transfer-probe-refill43
     :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
    :current-residual
-   "Await four independently reviewed outcomes, then rerank the complete DAG."}],
+   "Await four independently reviewed outcomes, then rerank the complete DAG."}
+  {:consumer "t02A05",
+   :stop-condition
+   "GO requires complete frozen closure; otherwise identify the exact missing integration comparison or proved normalization defect. Infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "MANIFOLD INTEGRATION / frozen sphere flux",
+   :acceptance
+   {:frozen-file "problems/t02A05/lean/Main.lean",
+    :frozen-sha256
+    "fb006cf7fd68026fa20f517e58e4f6b3bbf1c34fce2f3ee42064f5e7b3cc89d5",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile complete frozen Main preserving the custom outward sphere integral and every optimization conjunct. Audit current radial integration, sphere moments and the exact diameter-power Hausdorff normalization. Derive the literal flux formula from the frozen tangent projections and form, without assuming Stokes, measure normalization or the final integral value. Reuse the proved quadratic minimum. If the numerical normalization is incompatible, prove and name that exact boundary; do not infer it from a convention alone."},
+   :id :t02a05-frozen-flux-closure-probe-refill44,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer
+    :checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
+   :current-residual
+   "Two placeholders encode the flux bridge and final assembly. The quadratic optimization is proved; literal integral normalization and evaluation remain."}
+  {:consumer "t98A02",
+   :stop-condition
+   "GO requires constructed pair maps and actual homology comparison; REVISE requires one compiled prerequisite. Do not duplicate concurrent coefficient chart work or claim a fundamental class.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / deleted-point chart comparison",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Construct the actual deleted-point chart-pair comparison for a Hausdorff self-model finite-dimensional real manifold. Audit CoefficientModelLocal, CoefficientNeighborhoodLocal, existing integral chart-pair transports and concurrent chart work before adding anything. Use actual chart restrictions, translation to zero and proved neighborhood excision; identify forward arrows and inverse laws in every available degree. For model dimensions at least two, transport the banked normalization and generator. Preserve one-dimensional coverage through the separately banked local-index APIs rather than extending a dimension-at-least-two theorem silently. No supplied pair homeomorphism or local homology isomorphism. Orientation overlap coherence and global localization monicity remain subsequent."},
+   :representation
+   {:source
+    "Actual coefficient relative singular homology of a self-model manifold and its complement of a point",
+    :target
+    "Actual coefficient relative singular homology of the corresponding Euclidean model and its deleted origin",
+    :direction
+    "Construct an isomorphism from manifold local homology to model local homology through actual chart-pair maps and neighborhood inclusion; identify the forward composite."},
+   :id :coefficient-manifold-local-chart-comparison-probe-refill44,
+   :kind :representation-comparison,
+   :depends-on
+   [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer
+    :checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
+   :current-residual
+   "Model and neighborhood local homology are now banked concurrently. Actual manifold chart-pair comparison is the next bounded edge before orientation coherence.",
+   :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+  {:consumer "t99J03",
+   :stop-condition
+   "GO requires the constructed controlled arc family and finite intersections; REVISE requires exactly one compiled geometric prerequisite; otherwise name the precise perturbation or arc-construction boundary without campaign termination.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SURFACE TRIANGULATION / embedded arcs in finite position",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Construct replacement boundary arcs for the banked finite embedded triangle cover with proved embeddings, containment in the required chart neighborhoods, retained interior coverage and finitely many intersections. Prove the position adjustment instead of assuming transversality or finiteness; account for endpoints and preserve required shared endpoints. Audit smooth arc perturbation and relative transversality APIs. Do not treat arbitrary smooth chart boundaries as having finite intersections. Graph subdivision, disk complementary faces and realization remain subsequent."},
+   :id :surface-embedded-arcs-finite-position-probe-refill44,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer
+    :checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
+   :current-residual
+   "The reviewed compatible-face STOP isolates controlled embedded arcs and finite intersections before graph and disk-face construction.",
+   :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped consumers over the complete DAG and distinguish closures, partial uptake, duplicate infrastructure and concurrent work. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve t94J08 repaired closure and positive-dimensional signed antipodal action, ordinary/reduced S0 and one-dimensional local-index boundaries, conditional polygon witnesses and genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff normalization concerns, t96J05 defect, t01J04/t94A06 applicability limits, t01A08 general-model Sard boundary with regularity conversion resolved, and t96J07 historical refutation versus corrected closure. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id :checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t02a05-frozen-flux-closure-probe-refill44
+    :coefficient-manifold-local-chart-comparison-probe-refill44
+    :surface-embedded-arcs-finite-position-probe-refill44
+    :checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
+   :current-residual
+   "Await three independently reviewed outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
