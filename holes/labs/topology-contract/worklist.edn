@@ -75009,8 +75009,69 @@
   {:consumer "t98A02",
    :stop-condition
    "Require identification of the intersection and union component ranges with the infimum and supremum of the left and right component ranges, followed by compatibility of the two genuine categorical quotient arrows with the explicit diagonal and signed quotient maps.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove in each degree that the intersection inclusion range is the infimum and the union inclusion range is the supremum of the left and right inclusion ranges. Use the four projection equations to identify the conjugated genuine arrows with infQuotientDiagonal and piecesToSupQuotient, transfer injectivity and middle exactness, apply shortComplex_shortExact_of_degreewise, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport through relativeComparisonIso to the literal compact-complement pairs.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:intersectionDegreeIso
+     "ecd94dfd23fae5e63bf84585e5c4e8d896258077f231eddc0904425b13fa4a0f",
+     :leftDegreeIso
+     "e7407dd46ed43c4a3feabb7c582de98b07caf2f12ff0e1c317a06c4f3a8eac15",
+     :rightDegreeIso
+     "6fc33fbd893c93f444232d73e8152928fec7e6fe5ee4efa12f724de9bc588854",
+     :unionDegreeIso
+     "114fb09a62ecf1ab8fd5b02b5850f23ce8df24afcc0ab847bec92918c216154b",
+     :intersectionDegreeIso_projection
+     "53e8ce3c106ba1dc83c9501d8e927d026f7e199f59e083925553d497a7e41887",
+     :leftDegreeIso_projection
+     "d93cc94b078e8fb1845a8448bc4d4230b42042d3aab86fe96ead2edd34d98a35",
+     :rightDegreeIso_projection
+     "7cc4b175f71d2c065ff2c5317a440983dac0060a2443fe8e68354fb1a7333204",
+     :unionDegreeIso_projection
+     "2a6d036e2373512b55d1847673386807327329a1765a89ef990fe33492a35da6"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubcomplexRelativeDegreeQuotients.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean ConstructionTargets/CoefficientChainCokernelDegreeQuotient.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder-and-eight-declaration audit over ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat ce46abadf3f0e538b37243e4b60f0770b7dc3998",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r ce46abadf3f0e538b37243e4b60f0770b7dc3998",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "The degree components of the four categorical relative cokernels for the intersection, left, right and union ambient subcomplex-chain inclusions",
+     :target
+     "The four ordinary quotients of the ambient coefficient-chain degree module by the respective component-map range submodules",
+     :direction
+     "Canonical linear isomorphisms from each source categorical relative-cokernel degree representation to its target range-quotient representation, with exact equality from every evaluated categorical cokernel projection to the corresponding ordinary quotient map."},
+    :commit "ce46abadf3f0e538b37243e4b60f0770b7dc3998",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubcomplexRelativeDegreeQuotients.lean",
+     :sha256
+     "fbc78c211bdafed1ef1b8f169274aa0ceec3eb9d5fc60b979d8e0d443c0964c8",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and reviewed generic cokernel-degree quotient dependency hashes reproduce. The four specialized degreewise quotient isomorphisms and all four categorical-projection compatibility theorems compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean"],
    :dag-node
