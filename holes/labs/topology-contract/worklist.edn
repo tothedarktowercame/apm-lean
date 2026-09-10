@@ -59509,8 +59509,172 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill39-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill39-reviews.bb", :exit 0}
+     {:cmd
+      "git diff --name-status 5e01f134527a2121217b673ffb08455c97832300..18bedae49dbfa97a8da4f66beafadc60ac08f077 -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "Python pinned m02J04 comment-stripped census and concurrent-status audit",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill39-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill39-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill39-measure.json /tmp/topology-refill39-reviews.edn /tmp/topology-refill39-tail.edn",
+      :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer "t00A01",
+      :stop-condition
+      "GO requires complete frozen closure. Otherwise STOP identifies the exact missing chosen-object, basepoint or coproduct comparison; infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "TWO-OPEN VAN KAMPEN / frozen connected-sum fundamental group",
+      :acceptance
+      {:frozen-file "problems/t00A01/lean/Main.lean",
+       :frozen-sha256
+       "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile complete frozen Main preserving all definitions and hypotheses. Close the actual FundamentalGroup-to-Monoid.Coprod bridge for the literal quotient using the supplied two-open standard cover, homotopy equivalences of its pieces, and S2 overlap. Reuse banked two-open fundamental-groupoid descent, chosen-object group extraction, homotopy invariance and basepoint transport; derive every required connectivity and compatibility condition. Combine it with the already proved homology-sphere bridge to close the final theorem. No supplied van Kampen comparison, group coproduct isomorphism, connector compatibility or conditional final bridge. Audit exact basepoints and literal Monoid.Coprod representation; do not replace the quotient or strengthen the hypotheses."},
+      :id :t00a01-frozen-connected-sum-closure-probe-refill39,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
+      :current-residual
+      "Two placeholders: the fundamental-group coproduct bridge and final conjunction. The singular-homology bridge is already proved."}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires the complete literal incidence atlas and inclusion tangent packet. REVISE requires exactly one compiled prerequisite. No Producer or consumer closure claim.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "TRANSVERSE-PULLBACK / literal incidence atlas and tangent equalizer",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For genuine-infinity smooth maps f:M→V and g:N→V with finite-dimensional complete real inner-product self models E and G and finite-dimensional real inner-product target V, assume the actual derivative ranges sum to top at every incident pair. Use exactly ChartedSpaceModelTransport.productChartedSpace, ChartedSpaceModelSmoothTransport.product_isManifold and the banked difference_smooth, difference_derivative and difference_regular transport. Apply ManifoldRegularFiberGlobalAtlas and ManifoldRegularFiberTangentImage in that constructed self model. Transport the actual zero-fiber atlas to the inherited-topology literal subtype {p:M*N // f p.1=g p.2}; derive the subtype homeomorphism from sub_eq_zero, preserving the original product topology and norm. Construct ChartedSpace and IsManifold infinity with fixed Euclidean dimension finrank E+finrank G-finrank V, and prove chartAt and atlas specifications. For this same atlas prove smooth inclusion into the original product manifold, actual inclusion mfderiv injectivity, and range exactly the tangent pairs (v,w) with Df(v)=Dg(w). Use the banked identity derivative formulas and kernel characterization; no supplied fiber equivalence, atlas, smooth inclusion or tangent comparison. Include empty incidence and zero-dimensional kernels. Preserve existing APIs.",
+       :consumer-residual
+       "Literal vector-target transverse incidence geometry only. Target-manifold localization, valid component-coverage contracts, orientations and homological comparisons remain; the trivial null-winding predicate cannot supply duality."},
+      :id :transverse-vector-incidence-atlas-tangent-probe-refill39,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
+      :current-residual
+      "Product self-model recharting and actual derivative/regularity transport are banked. Literal incidence atlas transport and its same-atlas inclusion tangent geometry remain.",
+      :other-consumers ["t02A07" "t94A06" "t97J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped placeholders across all DAG consumers and distinguish closures, infrastructure, specification evidence and concurrent changes. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve proved null-winding predicate triviality without inferring Producer or frozen Main refutation; retain t95J05 diameter-power Hausdorff normalization concern, t96J05 local defect, t01J04/t94A06 applicability boundaries, t96J07 old refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t00a01-frozen-connected-sum-closure-probe-refill39
+       :transverse-vector-incidence-atlas-tangent-probe-refill39],
+      :current-residual
+      "Await reviewed connected-sum adapter and literal incidence geometry outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    {:baseline "5e01f134527a2121217b673ffb08455c97832300",
+     :placeholder-delta 0,
+     :concurrent-untracked
+     ["ConstructionTargets/CoefficientPushoutRelative.lean"
+      "ConstructionTargets/CoefficientPushoutRelative.md"],
+     :coverage
+     "Preserve t95J05 normalization concern without a refutation claim; null-winding predicate triviality without Producer or frozen Main refutation; t96J05 local defect; t01J04/t94A06 applicability boundaries; t96J07 old refutation separately from corrected closure; signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage.",
+     :concurrent-consumer-change
+     {:consumer "m02J04",
+      :before 1,
+      :after 0,
+      :in-dag-census false,
+      :reviewed-closure-claimed false},
+     :head "18bedae49dbfa97a8da4f66beafadc60ac08f077",
+     :infrastructure-packets
+     {:modules-before 673,
+      :modules-after 682,
+      :portfolio
+      ["ChartedSpaceModelTransport"
+       "ChartedSpaceModelSmoothTransport"
+       "ChartedSpaceModelDerivativeTransport"
+       "NullWindingPreimageTriviality"],
+      :concurrent
+      ["CoefficientCokernelComparison"
+       "CoefficientEventualSmallness"
+       "CoefficientIteratedHomotopy"
+       "CoefficientRelativeSmall"
+       "CoefficientSmallComparison"],
+      :concurrent-module-documentation 5,
+      :portfolio-consumer-closures 0,
+      :dag-consumer-file-changes 0},
+     :ranking
+     "Exactly one near-closure adapter first: t00A01 has two placeholders, with its homology bridge already proved and the supplied two-open cover exposing a concrete route through banked groupoid descent and chosen-object extraction. Complete frozen closure must be tested, not inferred. Other near-closure candidates retain reviewed normalization, degree-naturality, polygon classification, general-model Sard, boundary-chart, planar-separation, Euler or localization obligations. Among shared foundations, literal transverse incidence geometry serves four named consumers and now has the required product recharting and derivative transport. This bounded assembly precedes broader oriented localization, Poincare/Thom comparison, generic gluing, Kunneth and surface classification. The proved weak-predicate triviality must remain separate from geometric progress.",
+     :validation
+     "Three fresh rows; exactly one final adapter first; final checkpoint depends on both work rows. Proposed ledger validates 465 items. Concurrent untracked files were untouched and excluded from pinned measurements.",
+     :typed-residual-change
+     "Product self-model recharting now includes actual charts, smooth compatibility, identity derivative formulas and difference-map regularity transport. Literal incidence atlas and inclusion tangent assembly remain. The exact null-winding predicate is now proved universally true for actual integral H1; this is representation evidence, not a Producer or frozen Main refutation. The t95J05 integral is reduced to negative half intrinsic sphere mass, but numerical diameter-power Hausdorff normalization remains unproved.",
+     :review-outcomes
+     {:integral
+      {:outcome :stop,
+       :review :pass,
+       :job "invoke-1789008552252-17697-5e6feba7"},
+      :recharting
+      {:review :pass,
+       :commit "afa7b6005988aaee5651332d5765a77ee1734c71",
+       :job "invoke-1789010916237-17763-021c47c7"},
+      :null-winding
+      {:review :pass,
+       :commit "0f3d11b9bcc54dda5419df74b6d8e726c81136c8",
+       :job "invoke-1789008850671-17710-0133905c"}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing ["t93A05"],
+      :zero-placeholder 23,
+      :open 35,
+      :within-two 25,
+      :before 66,
+      :after 66}},
+    :artifacts
+    [{:path "/tmp/topology-refill39-measure.json",
+      :sha256
+      "8fffb7f7a573e9d7568201d0d789da72efa296785ac813193df9189f063b66e1"}
+     {:path "/tmp/topology-refill39-reviews.edn",
+      :sha256
+      "23d12eb62a94aa93eb6b121938aab8e5c493335187a2f2866088fc981e924433"}
+     {:path "/tmp/topology-refill39-tail.edn",
+      :sha256
+      "b794a268b09859c269299e0245981a7874c1be2653f5b31d9ad33b4b99ec92e8"}],
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -59525,7 +59689,80 @@
     :null-winding-preimage-constant-loop-audit-probe-refill38
     :checkpoint-full-dag-refill-38-after-duality-and-transverse-product],
    :current-residual
-   "Await reviewed integral, recharting and representation-audit outcomes, then rerank the complete DAG."}],
+   "Await reviewed integral, recharting and representation-audit outcomes, then rerank the complete DAG."}
+  {:consumer "t00A01",
+   :stop-condition
+   "GO requires complete frozen closure. Otherwise STOP identifies the exact missing chosen-object, basepoint or coproduct comparison; infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TWO-OPEN VAN KAMPEN / frozen connected-sum fundamental group",
+   :acceptance
+   {:frozen-file "problems/t00A01/lean/Main.lean",
+    :frozen-sha256
+    "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile complete frozen Main preserving all definitions and hypotheses. Close the actual FundamentalGroup-to-Monoid.Coprod bridge for the literal quotient using the supplied two-open standard cover, homotopy equivalences of its pieces, and S2 overlap. Reuse banked two-open fundamental-groupoid descent, chosen-object group extraction, homotopy invariance and basepoint transport; derive every required connectivity and compatibility condition. Combine it with the already proved homology-sphere bridge to close the final theorem. No supplied van Kampen comparison, group coproduct isomorphism, connector compatibility or conditional final bridge. Audit exact basepoints and literal Monoid.Coprod representation; do not replace the quotient or strengthen the hypotheses."},
+   :id :t00a01-frozen-connected-sum-closure-probe-refill39,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit
+    :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
+   :current-residual
+   "Two placeholders: the fundamental-group coproduct bridge and final conjunction. The singular-homology bridge is already proved."}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires the complete literal incidence atlas and inclusion tangent packet. REVISE requires exactly one compiled prerequisite. No Producer or consumer closure claim.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TRANSVERSE-PULLBACK / literal incidence atlas and tangent equalizer",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For genuine-infinity smooth maps f:M→V and g:N→V with finite-dimensional complete real inner-product self models E and G and finite-dimensional real inner-product target V, assume the actual derivative ranges sum to top at every incident pair. Use exactly ChartedSpaceModelTransport.productChartedSpace, ChartedSpaceModelSmoothTransport.product_isManifold and the banked difference_smooth, difference_derivative and difference_regular transport. Apply ManifoldRegularFiberGlobalAtlas and ManifoldRegularFiberTangentImage in that constructed self model. Transport the actual zero-fiber atlas to the inherited-topology literal subtype {p:M*N // f p.1=g p.2}; derive the subtype homeomorphism from sub_eq_zero, preserving the original product topology and norm. Construct ChartedSpace and IsManifold infinity with fixed Euclidean dimension finrank E+finrank G-finrank V, and prove chartAt and atlas specifications. For this same atlas prove smooth inclusion into the original product manifold, actual inclusion mfderiv injectivity, and range exactly the tangent pairs (v,w) with Df(v)=Dg(w). Use the banked identity derivative formulas and kernel characterization; no supplied fiber equivalence, atlas, smooth inclusion or tangent comparison. Include empty incidence and zero-dimensional kernels. Preserve existing APIs.",
+    :consumer-residual
+    "Literal vector-target transverse incidence geometry only. Target-manifold localization, valid component-coverage contracts, orientations and homological comparisons remain; the trivial null-winding predicate cannot supply duality."},
+   :id :transverse-vector-incidence-atlas-tangent-probe-refill39,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit
+    :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
+   :current-residual
+   "Product self-model recharting and actual derivative/regularity transport are banked. Literal incidence atlas transport and its same-atlas inclusion tangent geometry remain.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped placeholders across all DAG consumers and distinguish closures, infrastructure, specification evidence and concurrent changes. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve proved null-winding predicate triviality without inferring Producer or frozen Main refutation; retain t95J05 diameter-power Hausdorff normalization concern, t96J05 local defect, t01J04/t94A06 applicability boundaries, t96J07 old refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t00a01-frozen-connected-sum-closure-probe-refill39
+    :transverse-vector-incidence-atlas-tangent-probe-refill39
+    :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
+   :current-residual
+   "Await reviewed connected-sum adapter and literal incidence geometry outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
