@@ -465,13 +465,13 @@ compiles independently of every final problem.
 | Cluster | Representative consumers | Current disposition |
 |---|---|---|
 | Critical-value manifold Sard | closed `t93A04`, closed `t92J07`; `t01A08`, `t01J04`, `t96J05` have separate uptake records | Genuine-smooth Euclidean and manifold-to-vector Sard are `BANKED`; `t93A04` closed at `a49c8476`, with exact reusable extraction `337bdd48`; `t92J07` closed at `b364803a` by predicate equality and countable common-value assembly. Historical missing-infrastructure STOP evidence is retained. General-model/target-manifold transport and regular-preimage geometry remain separate. |
-| Dimension-gap manifold nullity | closed `t94J05`; nonsurjectivity part of `t95J04` | generic coordinate-nullity and nonsurjectivity chain is `BANKED`; exact Hausdorff nullity in `t95J04` remains separate |
+| Dimension-gap manifold nullity | closed `t94J05`, closed `t95J04` | coordinate-nullity chain is `BANKED`; `a13852f3` closes literal sphere Hausdorff nullity, nonsurjectivity and null-homotopy in `t95J04`; its open-domain Hausdorff helper is embedded in Main, not a separately extracted module |
 | Regular/transverse preimages | `t00J02`, `t02A07`, `t94A06`, `t97J05` | `FOUNDATION`; begin with boundaryless regular-preimage geometry |
 | Fundamental classes/localization | `t00J02`, `t98A02`, `t00A04`, `t01A05` | `FOUNDATION`; `t00A01` instead assumes its punctured pieces are homology balls and needs MV/van Kampen |
 | Intersection theory | `t00J02`, `t03J05`, `t93A05`, `t96J06` | depends on fundamental classes and cap/Thom comparison |
 | Closed gluing to open-cover MV | closed `t96A03` and `t01J03`; `t03J02` remains | production intersection-range comparison is banked; t96A03 supplies explicit sphere-equator geometry; t01J03 supplies an explicit collared two-open cover and complete twice-spiral computation; a generic collar/cofibration comparison remains `FOUNDATION` for consumers such as t03J02 |
 | Product homology/Kunneth | `t96J06`, `t97A04` | `FOUNDATION`; tensor complexes exist, but singular Eilenberg--Zilber and integral Kunneth do not.  `t95J04` no longer consumes this missing foundation: `54fe6115` handles the two `S⁶` comparisons by retracts, and `e24d442b`--`10cfb866` handle `S² × S⁴ ≄ S³ × S³` through one concrete production Mayer--Vietoris segment |
-| Simply-connected spheres/products | partial `t95J04`; duplicated sphere proof in `t02A06` | `BANKED` at `45304f7d`: generic products preserve `SimplyConnectedSpace`, and concrete Euclidean `Sⁿ` is simply connected for `2 ≤ n`; all three `t95J04` simple-connectivity conjuncts compile |
+| Simply-connected spheres/products | closed `t95J04`; duplicated sphere proof in `t02A06` | `BANKED` at `45304f7d`: generic products preserve `SimplyConnectedSpace`, and concrete Euclidean `Sⁿ` is simply connected for `2 ≤ n`; all three conjuncts are retained in the complete `t95J04` closure `a13852f3` |
 | Covering constructors | `t01A02`, `t01A04`, `t92J06`, `t98A01` | the generic product cover was already banked; reviewed `c5ada212` now closes the concrete `(ZMod 2)²` covering-group branch of `t01A02`; fivefold AddCircle kernel cardinality/deck packaging is next for `t98A01`; pullback and gluing remain separate |
 | Circle degree/lifting | closed `t91A08`, closed `t94J06`, closed `t97J06`, closed `t97A02`, closed `t97J08` | `t91A08` closed through the power-five winding obstruction and exact additive-circle transport at `02b4e476`; `t94J06` closed through path lifting/winding and the degree-four disk obstruction; `t97J06` closed via singular-homology noncontractibility; `t97J08` closes the smooth-lift/angle-integral chain at `0ad32428`; `t97A02` closed at `69fd2f35` through finite-H1 loop triviality, constructed component lifts and exact torus recombination (independent PASS `invoke-1788977263821-16745-f3b25cde`, placeholders `2 → 0`); further consumers require separate review |
 | Smooth circle lifts | closed `t97J08`; reusable smooth circle maps with continuous real lifts | generic local-inverse regularity `48eab2d3`, explicit `Circle.exp` specialization `12fd086d`, and normalized-loop specialization `55da22d8` are `BANKED`; frozen consumer closed at `0ad32428` |
@@ -622,8 +622,9 @@ critical-value Sard.
 - Direct first consumer: `t94J05`, closed in `3348f833`.  It uses
   nonsurjectivity of a smooth two-dimensional-to-three-dimensional manifold
   map and the previously compiled missed-point contraction.
-- Partial consumer: the nonsurjectivity component of `t95J04`; its exact
-  ambient Hausdorff-measure statement still needs a measure-comparison theorem.
+- Closed consumer: `t95J04` at `a13852f3`. This chain supplies nonsurjectivity;
+  local Lipschitz Hausdorff-dimension estimates, countable chart aggregation
+  and the sphere inclusion isometry separately prove its literal measure claim.
 - Not consumers of this branch: `t93A04`, `t01A08`, `t01J04`, and `t96J05`.
   They need regular values of maps without a strict source/target dimension
   gap, hence the separate critical-value Sard program.  `t01J04` additionally
@@ -633,6 +634,7 @@ critical-value Sard.
 
 | Problem | Canonical closure | Audit result |
 |---|---|---|
+| `t95J04` | `a13852f35c671f0d40d4bbf58e832710563a4ef7` | independent PASS `invoke-1789000811470-17453-38632ef7`; all original definitions, lemma bodies and final statement preserved; placeholders `1 → 0`; warning-free, standard-only axioms |
 | `t92J07` | `b364803ac4e0c6b2d20d06d9c937f1f0a9892eb4` using the extracted manifold Sard theorem | independent PASS `invoke-1788994194142-17263-038c93a8`; frozen definitions and both statements unchanged; placeholders `2 → 0`; standard axioms and unused-`hm` warning only; zero-target branch retained |
 | `t93A04` | `a49c84764968d8286ff05d87e5d218018505f50c`; reusable extraction `337bdd48a1770df37cd2ed8cb48fea924f4203cd` | frozen definitions and statement preserved; placeholders `1 → 0`; independent PASS `invoke-1788993199960-17228-ce848168`; extraction PASS `invoke-1788993593682-17243-48fdadcf`, not a second closure; standard axioms and inherited unnecessarySimpa warning only |
 | `t01A03` | `8ef14798` | no executable placeholders; only standard axioms |
@@ -655,7 +657,6 @@ Bounded partial closures, which do not belong in the closed-problem table:
 
 | Problem | Canonical partial closure | Remaining frozen obligation |
 |---|---|---|
-| `t95J04` | `54fe6115` compiles the two `S⁶` comparisons; `45304f7d` compiles all three simple-connectivity conjuncts; the reviewed MV chain `e24d442b`, `6b59e2e6`, `f8feca24`, `10cfb866` compiles `S² × S⁴ ≄ S³ × S³` without Kunneth or Eilenberg--Zilber | one placeholder remains only for Sard/nullity/non-surjectivity/null-homotopy; statement unchanged |
 | `t01A02` | `c5ada212` imports the banked genuine product-cover theorem and compiles the coordinatewise `(ZMod 2)²` action, invariance, freeness, and fiber transitivity | three placeholders remain: H₂ degree/nonsurjectivity, Lefschetz fixed point, and final assembly; covering-group bridge statement unchanged |
 | `t92J05` | `c55d5089` compiles uniform sphere-group subsingletonity and uniform circle-group equivalences at arbitrary basepoints | three placeholders remain: the RP²/antipodal bridge, genus-two classification bridge, and final assembly; whole problem remains open |
 
@@ -671,9 +672,8 @@ Current audited classification beyond these closures:
   imports and uses the production MV API and representation adapters.  The
   whole problem remains `FOUNDATION`/API-stopped because its independent van
   Kampen bridge is absent; the final conjunction remains unwired until that
-  bridge exists.  `t95J04` also remains `FOUNDATION`, although its two
-  comparisons with `S⁶` are now compiled at `54fe6115` by the independent
-  retract argument.
+  bridge exists. `t95J04` is now closed at `a13852f3`; its earlier retract,
+  simple-connectivity and MV proofs are retained unchanged.
 - `t01J03` is `CLOSED` at `7ddf3408`.  Its reviewed chain derives the source
   groupoid equivalence from pointwise target-change squares, constructs the
   required connector systems, extracts the chosen-basepoint fundamental
@@ -887,6 +887,35 @@ This construction does not elect either remaining `t95J04` foundation.
    refutation or the current status: reviewed closure `a49c8476` subsequently
    discharged the frozen consumer using genuine-smooth Sard and actual chart
    criticality transport. See the closure evidence below.
+
+### Reviewed t95J04 closure evidence (2026-09-10)
+
+Canonical commit `a13852f35c671f0d40d4bbf58e832710563a4ef7` and independent
+codex-10 PASS `invoke-1789000811470-17453-38632ef7` certify complete frozen
+closure, with placeholders `1 → 0`, no warnings, and only `propext`,
+`Classical.choice` and `Quot.sound`. Original definitions, lemma bodies and
+the final statement are preserved. Verified canonical Main/fixture SHA-256:
+`81a52f4f97d8d47874c34dd610c8ed500f11e873439b1276b3ca08348e0f6ea6`;
+frozen pre-closure SHA-256:
+`8321b881ae48f14a9d5e711534aa208eabd66dcdc16055f5ce22e9b66ce4fc15`;
+unchanged `apm_t95j04` statement SHA-256:
+`4411a00266690b8196b64d48fd645c39ad27e922eb3fb8d6d2f62da64ba5f2db`.
+
+Actual chart representatives give local Lipschitz Hausdorff-dimension bounds;
+countable aggregation and the sphere subtype isometry give the literal sphere
+Hausdorff nullity. Separate coordinate nullity gives nonsurjectivity, and the
+preserved missed-point contraction gives null-homotopy. Empty and
+zero-dimensional sources require no extra assumptions.
+`ConstructionTargets.OpenDomainHausdorffNullity.image_null` is embedded in
+the consumer file, not a separately extracted reusable module.
+
+Earlier partial results remain provenance: `54fe6115` (two sphere/product
+comparisons), `45304f7d` (simple connectivity), and `e24d442b`, `6b59e2e6`,
+`f8feca24`, `10cfb866` (MV product comparison). Historical STOP and partial
+entries record their then-current boundaries, not the present closed status.
+Other consumers' product foundations, representation and specification
+boundaries remain open. This documentation changes no Lean file and counts
+neither a second closure nor another placeholder reduction.
 
 ### Reviewed t92J07 closure evidence (2026-09-09)
 

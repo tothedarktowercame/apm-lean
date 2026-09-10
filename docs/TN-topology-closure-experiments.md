@@ -169,6 +169,28 @@ distinct owned file.
 
 ## Initial portfolio
 
+Current-status correction (2026-09-10): `t95J04` is completely closed at
+`a13852f35c671f0d40d4bbf58e832710563a4ef7`, independently passed by codex-10
+in `invoke-1789000811470-17453-38632ef7`. The historical STOP and partial
+experiments below are preserved as provenance, not current obligations.
+Canonical Main matches fixture SHA-256
+`81a52f4f97d8d47874c34dd610c8ed500f11e873439b1276b3ca08348e0f6ea6`;
+the pre-closure frozen hash was
+`8321b881ae48f14a9d5e711534aa208eabd66dcdc16055f5ce22e9b66ce4fc15`.
+The unchanged final statement hash is
+`4411a00266690b8196b64d48fd645c39ad27e922eb3fb8d6d2f62da64ba5f2db`.
+Reviewed compilation is warning-free with only `propext`, `Classical.choice`
+and `Quot.sound`; placeholders fell `1 → 0` in that implementation.
+
+Local Lipschitz chart estimates and countable aggregation prove ambient
+Hausdorff nullity, then subtype isometry supplies the literal sphere measure.
+Coordinate nullity and the preserved contraction complete nonsurjectivity
+and null-homotopy. All original definitions, helper proofs and final statement
+are retained. The open-domain Hausdorff helper is embedded in Main, not a
+separately extracted module. Documentation itself has delta zero and adds no
+closure. Other consumers' foundations, representation gaps and local
+specification defects are unaffected.
+
 The first run contains four experiments:
 
 1. **Uptake audit.** Re-evaluate the six experimental closures in Queue A and
