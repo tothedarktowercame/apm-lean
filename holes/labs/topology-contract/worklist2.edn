@@ -33349,6 +33349,7 @@
     :gates
     {:canonical-compile :pass,
      :forward-underlying-point :pass,
+     :statement-hash-repair :pass,
      :whitespace :pass,
      :inverse-underlying-point :pass,
      :positive-radius-equivalence :pass,
@@ -33374,7 +33375,7 @@
      "squaredFiberEquivRadialLevel"
      "a60b6acb5e7f0217673102211a69dc5dff726265a8de46ed023398445a349436",
      "squaredFiberEquivRadialLevel_apply"
-     "039e6ccbe8db11c8727d0305896c3c6480394a ballot0391ccf3b80adae66db2c614ec",
+     "039e6ccbe8db11c8727d0305896c3c6480394a0391ccf3b80adae66db2c614ec",
      "squaredFiberEquivRadialLevel_symm_apply"
      "5feccc353935f1ce3007782b49ab911a7eea6508a5093d59453921af4ce5a8c3"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
@@ -33407,14 +33408,8 @@
       "git diff --check; stage exact two-file scope; git diff --cached --check; git commit -m 'Relate squared and literal radial fibers'",
       :exit 0}
      {:cmd
-      "git show --check --oneline 964e34dd; recompute committed SHA256, Git blob and seven declaration-region hashes; git diff --check; git status --short",
+      "Recompute the committed squaredFiberEquivRadialLevel_apply declaration region including @[simp] and trailing newline; verify exact SHA256 039e6ccbe8db11c8727d0305896c3c6480394a0391ccf3b80adae66db2c614ec; verify committed source SHA256, Git blob, commit check and clean diff",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1789063847539-19114-1f0f2caf",
-     :finding
-     "Recorded commit d0a4f11e stores the squaredFiberEquivRadialLevel_apply statement hash as malformed text containing ` ballot`. Recomputing the committed declaration region, including its @[simp] attribute and trailing newline, gives 039e6ccbe8db11c8727d0305896c3c6480394a0391ccf3b80adae66db2c614ec. Replace the malformed value with this exact 64-hex SHA256 and regenerate the transition."},
     :commit "964e34ddaca4357c77878f60a36838bc49576d55",
     :changed-paths
     ["ConstructionTargets/RadialSquaredFiber.lean"
@@ -33427,10 +33422,10 @@
      :git-blob "8e33fe5700f759d4ec0a0c59ec31ad5b801d711b",
      :placeholder-count 0},
     :finding
-    "At every positive radius, the squared-norm equality fiber and literal norm radial-level subtype are canonically equivalent by identity on their underlying embedded-subset points. The reverse norm implication uses positivity of the radius and nonnegativity of the norm. No manifold structures, regular-value claim, frozen-statement edit, or corrected closure is included.",
+    "The implementation and commit are unchanged. The malformed transition value was replaced with the exact recomputed 64-hex SHA256 for the full attributed squaredFiberEquivRadialLevel_apply declaration region.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/RadialSquaredFiber.lean"
     "ConstructionTargets/RadialSquaredFiber.md"],
