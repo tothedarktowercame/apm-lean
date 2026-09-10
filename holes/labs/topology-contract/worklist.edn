@@ -73036,8 +73036,56 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the remaining short-exact quotient-chain construction and genuine connecting morphism after compiling the literal relative arrow from the K- and L-support pair terms to the intersection-support pair term.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the complementary literal restriction arrow, prove the signed composite is zero, and obtain a short exact sequence by comparing the union-generated denominator with the actual open-union subspace through the reviewed small-chain equivalence. Then derive the genuine connecting morphism and all three exactness segments.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:leftComplement_subset_intersectionComplement
+     "e089bccf9d415acf6ec6f982b5a1f267d7ed79721f342d74add89bd67f2c774c",
+     :rightComplement_subset_intersectionComplement
+     "cdd2a0953b0a9841a9b87c1069f15b8ba56306fdd05e84f4f1b0fc32af6938d8",
+     :extendLeft
+     "40df17080907840501955da3e494384527efadea8db4e9d5141acab026738123",
+     :extendRight
+     "4fd6bf7b115f3920139f0ef8a2dd4de9713b3bce3f72bb32a98dcf77ee8623c9",
+     :piecesToIntersection
+     "35788ae752ec057fe65037567266a5df0877ba4688822b49939ce8697eecd4c6",
+     :piecesToIntersectionHomology
+     "ea5654efa7fd395711a46978d8f7d17cded078ed52397f1ae6c03d0ba2a32ea3"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientCompactSupportPiecesToIntersection.lean ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-six-declaration audit over ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat e9dc0fcee4321bc15cee3c33ead1fe33dfdaed93",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r e9dc0fcee4321bc15cee3c33ead1fe33dfdaed93",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "e9dc0fcee4321bc15cee3c33ead1fe33dfdaed93",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactSupportPiecesToIntersection.lean",
+     :sha256
+     "604d7bb48ddd2ba7ae769e34c7c2210476b33745b754ad0a2581a52eb9279401",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded compact-support restriction-map dependency hash reproduce. All six requested declarations compile without warnings or placeholders; the subset lemmas are axiom-free and the categorical constructions use only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean"],
    :dag-node
