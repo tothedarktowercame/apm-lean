@@ -32688,6 +32688,22 @@
       :exit 1,
       :correction
       "The shell validations completed successfully, but a JavaScript output-variable typo failed the orchestration wrapper. Reran the same validations with the corrected wrapper; every command exited zero."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789062844593-19094-ff0b6513",
+     :commands
+     ["git show --stat --oneline 206df72f"
+      "git show --check --oneline 206df72f"
+      "git show 206df72f:holes/labs/topology-contract/worklist2.edn | sed -n '32680,32930p'"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git diff --name-only 206df72f^ 206df72f"
+      "git diff --check 206df72f^ 206df72f"
+      "git diff --name-only d05ce6c35063947fca7ab4b5d18cc423b2b455e2 53cf91da555baf4e881618c537bbaa951841d18f"
+      "Count active-checkpoint occurrences in the materialized assembly row"],
+     :finding
+     "PASS: commit 206df72f is an exact ledger-only repair and both worklists validate. The elected symbolic assembly row depends on checkpoint52 exactly once, consumes the reviewed canonical equator bundle and strict-cap comparison in the correct forward direction, removes only the proved null equator, retains both ENNReal cap terms without cancellation, and neither assumes nor retries raw Hausdorff normalization. Named-consumer census remains 59 named, 58 existing, 33 open, 25 zero-placeholder, 23 within two, and 62 total placeholders; concurrent statement materialization does not alter that census."},
     :replacement-items
     [{:consumer :t95J05,
       :stop-condition
@@ -32814,7 +32830,7 @@
     "The route census is unchanged: 59 DAG-named consumers, 58 existing files, t93A05 missing, 33 open files, 25 zero-placeholder files and 62 comment-stripped placeholders. t95J05(1), t02A05(2), t01J06(3) and t94A10(3) have canonical strict-cap area and null-equator partition infrastructure; their next shared unblocked step is symbolic whole-sphere measure assembly, followed by the preserved blocked raw Hausdorff normalization and coordinate moments. t01J06 additionally needs its Stokes bridge, and t94A10 needs closedness and nonexactness assembly. t98A02(1), t00J02(1), t01A05(1), t02A07(3) and t97J05(5) remain on the active compact-complement Mayer-Vietoris, relative-cokernel, localization, duality and gluing route; t01A05 also retains its connectedness specification defect. t99J03(1), t00A03(2), t01J01(3), t91J05(3) and t94J09(1) remain on the active endpoint-preserving chartwise arc route. t01A02(3) needs H2 degree and nonsurjectivity, Lefschetz and final assembly. t01A04(4), t92J06(1) and t98A01(1) need covering or classification, genus invariance and Euler multiplicativity. t00J01(1) needs Klein-product and fold-fiber geometry. t01A08(1) needs arbitrary-model chart-domain and within-derivative applicability. t01J04(1) and t94A06(1) need regular-preimage, half-space-atlas and normal-translation applicability. t02A08(1) needs an arbitrary-integer sphere map and its homology action. t03J02(2) and t97A01(1) retain collar, cofibration and closed-circle gluing boundaries. t03J04(1) needs rational torus homology and finite-cover Euler comparison. t03J05(1), t96J06(2) and t97A04(4) retain fundamental-class, cap/Thom, Eilenberg-Zilber and integral Kunneth comparisons. t92J05(3) needs RP2 antipodal and genus-two bridges plus final assembly. t95J06(2) needs its concrete torus homeomorphism route. t96J05(1) retains the proved radial counterexample and needs a corrected statement. a97J08(1) remains an uptake route whose geometric producer is incomplete. No near-closure consumer has a complete route, so no final adapter is eligible. Symbolic cap-plus-null-equator measure assembly remains the simplest shared eligible step across four open consumers. The review found only a duplicated dependency caused by both the replacement item and materializer supplying the active checkpoint edge. The corrected work row omits that explicit edge while preserving every mathematical dependency. Concurrent compact-support, arc and statement-construction work remains excluded; unrelated infrastructure is deferred.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: canonical sphere-equator repair and renewed consumer eligibility",
@@ -32836,7 +32852,7 @@
    :stop-condition
    "Do not assume or retry the blocked raw Hausdorff normalization, cancel infinite ENNReal values, evaluate the reciprocal-height integrals, infer numerical sphere masses or moments, invoke Stokes or claim consumer closure. Use only d=2 and d=3 in a unique row-specific scratch directory.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: symbolic whole-sphere measure from strict caps and null equator",
