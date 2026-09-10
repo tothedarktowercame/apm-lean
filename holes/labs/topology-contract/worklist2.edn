@@ -30103,22 +30103,122 @@
    :stop-condition
    "Bank only the exact Euclidean strict-cap image equalities. Do not claim ambient or subtype Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean",
-      :sha256
-      "3ba7ec708a5b18ae2c1cc924256157c3b5e4309d7c044740c8ff4f4eb24f340f"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Prove preservation of the actual d-dimensional Hausdorff measure under coordinateIsometry, establish every required intrinsic-subtype versus ambient-set measure identity, and combine those results with C1GraphGlobalBounds.exact_area_value and the reviewed reciprocal-height density.",
+    :gates
+    {:canonical-compile :pass,
+     :upper-forward-image :pass,
+     :upper-graph-image :pass,
+     :whitespace :pass,
+     :dimension-two-both-signs :pass,
+     :upper-reverse-image :pass,
+     :lower-reverse-image :pass,
+     :fixture-hash :pass,
+     :axiom-audits 6,
+     :lower-graph-image :pass,
+     :exact-scope :pass,
+     :lower-forward-image :pass,
+     :claim-boundary :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :dimension-three-both-signs :pass,
+     :representation-direction :pass,
+     :literal-sphere-predicate :pass,
+     :last-coordinate-signs :pass,
+     :warning-scan :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"strictUpperCap"
+     "2972c456854631810a300bd510b2e746e5a53ead007a4b329ab4aea39d8bdd1f",
+     "image_lowerGraph"
+     "13eaa103552f5835a3706e0f5a46454bea1e7d6abced20a27ec0c6b14a601b0c",
+     "image_lowerCap"
+     "213a0c82cadb5a83b0c2b8e74d2e13a744de14fdb50d797883ffeab52e16839c",
+     "image_upperGraph"
+     "f88ba7b3c6874aa702c93adb1ea9522b4723c3e9fe627163ed14ac9aa08f5e8f",
+     "EA"
+     "aa8e72cb43606706d48aa869bf2110f85a1d9c1ed8fe20142df02bce0f042b50",
+     "strictLowerCap"
+     "88466f24a09d940d0f165f48d2fb399b243984e6924403268d8ca5b7566aa230",
+     "mem_sphere_zero_one_iff"
+     "4ad23af70ef46182b97fb732d39249d4dcfc73453f93d6d026aea0a518d221f8",
+     "image_upperCap"
+     "127a3a6f2f80bf621750fe4ff1a482e6531931c2f850487590c0e28815a1e115",
+     "symm_last"
+     "f752886ee09b4131407d39e5d932c002c6f984dfdb355c3d32ba603dc9f4f849"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, build-loop design, both ledgers and reviewed dependency receipt",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean ConstructionTargets/SphereCapEuclideanImage.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean ConstructionTargets/SphereCapEuclideanImage.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SphereCapEuclideanImage.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SphereCapEuclideanImage",
+      :exit 0}
+     {:cmd
+      "Audit six namespace-local standard-only axiom reports and zero warnings or errors",
+      :exit 0}
+     {:cmd
+      "Audit literal Metric.sphere and Fin.last predicates, forward cap-image inclusions by norm and last-coordinate preservation, reverse inclusions via coordinateIsometry.symm, and graph-image equalities via SphereCapL2Image",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/SphereCapEuclideanImage.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n '[[:blank:]]+$' ConstructionTargets/SphereCapEuclideanImage.lean ConstructionTargets/SphereCapEuclideanImage.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --cached --check and exact two-file staged-scope audit",
+      :exit 0}
+     {:cmd "git diff 13533147^ 13533147 --check", :exit 0}],
+    :representation
+    {:source
+     "The upper and lower cap-height graphs, equivalently the strict unit caps, in WithLp 2 (EuclideanSpace real (Fin d) times real)",
+     :target
+     "The literal subsets of Metric.sphere 0 1 in EuclideanSpace real (Fin (d+1)) selected by positive or negative Fin.last coordinate",
+     :direction
+     "Exact equality from the source L2 graph and cap images under the reviewed coordinate isometry to the target literal Euclidean strict sphere-cap subsets, with reverse membership reconstructed through the isometry inverse."},
+    :dependency-uptake
+    {:id :sphere-cap-l2-euclidean-coordinate-isometry-1,
+     :commit "7b50fe637df7b9a0c65f6c754f017798a17e31e5",
+     :review "invoke-1789050107497-18746-768d2abf"},
+    :commit "135331478746614d16fd277d3712750c3e155ae1",
+    :changed-paths
+    ["ConstructionTargets/SphereCapEuclideanImage.lean"
+     "ConstructionTargets/SphereCapEuclideanImage.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean",
+     :sha256
+     "3ba7ec708a5b18ae2c1cc924256157c3b5e4309d7c044740c8ff4f4eb24f340f",
+     :placeholder-count 0},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereCapEuclideanImage.lean"
     "ConstructionTargets/SphereCapEuclideanImage.md"],
