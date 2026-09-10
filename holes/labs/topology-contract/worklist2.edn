@@ -38662,7 +38662,8 @@
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
    {:outcome :replan,
-    :seat "codex-13",
+    :disposition :replan,
+    :author "codex-13",
     :commands
     [{:cmd
       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
@@ -38688,6 +38689,98 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789073082597-19435-62291c20",
+     :commands
+     ["git show --stat --oneline 123645c5631da17a686146ca9daa6e7ba8d936e6"
+      "git show --format=fuller 123645c5631da17a686146ca9daa6e7ba8d936e6 -- holes/labs/topology-contract/worklist2.edn"
+      "git diff-tree --no-commit-id --name-status -r 123645c5631da17a686146ca9daa6e7ba8d936e6"
+      "git diff --check 123645c5^ 123645c5"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "rg -n \"theorem (horizontalCount|verticalCount).*succ|reconstructedPath.*stepWord|stepWord.*reconstructed\" ConstructionTargets .lake/packages/mathlib/Mathlib # exit 1"
+      "lake build ConstructionTargets.ProductSimplexCumulativeOrderHom ConstructionTargets.ProductSimplexReconstructedPath"
+      "git diff --name-status d6c015678ea7915e766fc8024249a1023d0728e1 d9a31ad139da6f40e10f39107eed6947b623b978 -- ConstructionTargets problems"
+      "git ls-tree module recount at both source pins"
+      "comment-stripped placeholder recount and sha256 for problems/t03J05/lean/Main.lean problems/t96J06/lean/Main.lean problems/t97A04/lean/Main.lean"],
+     :finding
+     "PASS: codex-13 authored the recorded replan; review is independent. Commit scope is exactly worklist2.edn. Baseline/head pins resolve, ConstructionTargets count reproduces 841 to 846, and the range adds the two attributed product-simplex modules plus three concurrent arc modules with zero frozen-problem changes. The missing API boundary is exact: no exported successor recurrences or word/path inverse laws exist, while private wordPrefix owns the necessary insertion argument. The elected equations correctly increment horizontalCount on true and verticalCount on false, holding the complementary count fixed. Builds and both ledger checks pass. Frozen consumer counts remain 1/2/4 with hashes db4071c3..., 1d8874db..., and 79ca8541.... No fixture or frozen statement hash applies."},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Extend only ProductSimplexWordPrefixCounts with the exact one-step true/false recurrences for horizontalCount and verticalCount. Do not construct or compare maximal paths, prove word/path inverse laws, define corner swaps, cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+       "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+      :dag-node
+      "PRODUCT HOMOLOGY: successor recurrences for Boolean step-word prefix counts",
+      :acceptance
+      {:hypotheses
+       "Use arbitrary Boolean words on Fin n and indices i : Fin n. No balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+       :gates
+       ["Compile the modified canonical target and run lake build ConstructionTargets.ProductSimplexWordPrefixCounts."
+        "Verify the successor prefix is exactly the predecessor prefix with index i inserted."
+        "Verify all four true/false recurrence equations."
+        "Verify natural-number equality without modular Fin arithmetic."
+        "Reproduce standard-only axiom audits for all four theorems."
+        "Confirm no path comparison, inverse law, corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
+       :consumer-residual
+       "Use these recurrences with reconstructedPath_objEquiv and the banked stepWord coordinate characterization to prove both word/path inverse laws.",
+       :axioms :standard-only,
+       :consumer-equation
+       "Across the step indexed by i, horizontalCount increases by one exactly when w i is true and otherwise stays fixed; verticalCount increases by one exactly when w i is false and otherwise stays fixed.",
+       :declarations
+       ["horizontalCount_succ_of_true"
+        "horizontalCount_succ_of_false"
+        "verticalCount_succ_of_true"
+        "verticalCount_succ_of_false"],
+       :namespace "ConstructionTargets.ProductSimplexWordPrefixCounts",
+       :route-step
+       "Resolves the inverse-law boundary on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes, immediately before proving stepWord and reconstructedPath are inverse.",
+       :implementation
+       "Prove the four successor recurrences inside the module that owns private wordPrefix, using the exact insertion of index i between prefixes i.castSucc and i.succ."},
+      :id
+      :oriented-checkpoint62-product-simplex-prefix-successor-recurrences-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint62-cumulative-product-simplex-paths-and-consumer-refill-1],
+      :current-residual
+      "Prefix counts are monotone and bounded, but their exported interface does not identify the exact coordinate increment contributed by the next Boolean letter.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: product-simplex prefix recurrences and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint63-product-simplex-prefix-recurrences-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint62-product-simplex-prefix-successor-recurrences-1],
+      :current-residual
+      "Measure prefix recurrence progress separately from word/path inverse laws, oriented cancellation, singular-cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
     :measures
     {:baseline
      {:commit "d6c015678ea7915e766fc8024249a1023d0728e1",
@@ -38878,84 +38971,9 @@
       "Reviewed finite-cover Euler and Hausdorff-normalization STOPs remain preserved."
       "Concurrent arc, coefficient and five-torsion work is excluded."
       "Eilenberg-Zilber, Kunneth, intersections and adapters await preceding route steps."]},
-    :replacement-items
-    [{:consumer :t03J05,
-      :stop-condition
-      "Extend only ProductSimplexWordPrefixCounts with the exact one-step true/false recurrences for horizontalCount and verticalCount. Do not construct or compare maximal paths, prove word/path inverse laws, define corner swaps, cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
-       "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
-      :dag-node
-      "PRODUCT HOMOLOGY: successor recurrences for Boolean step-word prefix counts",
-      :acceptance
-      {:hypotheses
-       "Use arbitrary Boolean words on Fin n and indices i : Fin n. No balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
-       :gates
-       ["Compile the modified canonical target and run lake build ConstructionTargets.ProductSimplexWordPrefixCounts."
-        "Verify the successor prefix is exactly the predecessor prefix with index i inserted."
-        "Verify all four true/false recurrence equations."
-        "Verify natural-number equality without modular Fin arithmetic."
-        "Reproduce standard-only axiom audits for all four theorems."
-        "Confirm no path comparison, inverse law, corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
-        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
-       :consumer-residual
-       "Use these recurrences with reconstructedPath_objEquiv and the banked stepWord coordinate characterization to prove both word/path inverse laws.",
-       :axioms :standard-only,
-       :consumer-equation
-       "Across the step indexed by i, horizontalCount increases by one exactly when w i is true and otherwise stays fixed; verticalCount increases by one exactly when w i is false and otherwise stays fixed.",
-       :declarations
-       ["horizontalCount_succ_of_true"
-        "horizontalCount_succ_of_false"
-        "verticalCount_succ_of_true"
-        "verticalCount_succ_of_false"],
-       :namespace "ConstructionTargets.ProductSimplexWordPrefixCounts",
-       :route-step
-       "Resolves the inverse-law boundary on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes, immediately before proving stepWord and reconstructedPath are inverse.",
-       :implementation
-       "Prove the four successor recurrences inside the module that owns private wordPrefix, using the exact insertion of index i between prefixes i.castSucc and i.succ."},
-      :id
-      :oriented-checkpoint62-product-simplex-prefix-successor-recurrences-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint62-cumulative-product-simplex-paths-and-consumer-refill-1],
-      :current-residual
-      "Prefix counts are monotone and bounded, but their exported interface does not identify the exact coordinate increment contributed by the next Boolean letter.",
-      :other-consumers [:t96J06 :t97A04]}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 1,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :stop-condition
-      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
-      :phase :strategy,
-      :state :open,
-      :scope [],
-      :dag-node
-      "PORTFOLIO POLICY: product-simplex prefix recurrences and renewed consumer eligibility",
-      :acceptance
-      {:strategy
-       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
-       :stop-condition
-       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
-      :id
-      :oriented-checkpoint63-product-simplex-prefix-recurrences-and-consumer-refill-1,
-      :kind :strategy-checkpoint,
-      :depends-on
-      [:oriented-checkpoint62-product-simplex-prefix-successor-recurrences-1],
-      :current-residual
-      "Measure prefix recurrence progress separately from word/path inverse laws, oriented cancellation, singular-cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
-      :other-consumers []}],
-    :author "codex-13",
-    :disposition :replan},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: cumulative product-simplex paths and renewed consumer eligibility",
@@ -38977,7 +38995,7 @@
    :stop-condition
    "Extend only ProductSimplexWordPrefixCounts with the exact one-step true/false recurrences for horizontalCount and verticalCount. Do not construct or compare maximal paths, prove word/path inverse laws, define corner swaps, cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
