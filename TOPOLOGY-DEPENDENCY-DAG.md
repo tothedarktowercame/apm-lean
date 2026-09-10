@@ -504,6 +504,11 @@ compiles independently of every final problem.
   closure or an intrinsic projective-derivative comparison. See
   `problems/t96J07/STATEMENT-REPAIR.md` and the corrected-closure record in
   `docs/TN-topology-closure-experiments.md`.
+  Refill35 reverified canonical Main against the repair commit and its
+  codex-11 PASS receipt. The intrinsic projective-derivative comparison is
+  still absent: closure covers the encoded algebraic statement only.
+  This verification preserves the existing closure record and adds no closure
+  or placeholder reduction.
 - The experimental ledger's claimed `t01A05` connectedness repair is not on
   canonical master.  Canonical `apm_t01a05` still lacks `ConnectedSpace`
   assumptions for both base and cover, so the disconnected-manifold

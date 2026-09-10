@@ -70,7 +70,7 @@ That is a successful scheduling result.
 
 ## Reviewed corrected closure: t96J07
 
-Commit `6f475b3c40e2a2528a0efd7e17c89f8f1af904a7`, independently passed in
+Commit `6f475b3c40e2a2528a0efd7e17c89f8f1af904a7`, independently passed by codex-11 in
 `invoke-1789002417270-17501-59e6c3e7`, repairs and proves the encoded axis
 characterization. Exactly two added statement parentheses change
 `(x ≠ 0 → P x) ↔ Q x` to `x ≠ 0 → (P x ↔ Q x)` beneath the universal
@@ -102,6 +102,12 @@ Statement hashes cover the declaration from `theorem apm_t96j07 :` to
 immediately before ` := by`. The repair note retains the before/after syntax
 and historical probe evidence. Other unresolved specification defects and
 historical experiment records remain in force.
+
+Refill35 verification reproduced canonical Main against that exact commit,
+both statement hashes, the repair-note hash and the verbatim
+definition/refutation prefix. The closure record was already present and is
+retained, not counted again. An intrinsic projective-derivative comparison
+remains absent; the defined algebraic indices alone do not supply it.
 
 ## Reviewed local counterexample: t96J05
 
