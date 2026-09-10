@@ -73569,76 +73569,100 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require an exact chain comparison between the restricted union-subspace cover-small complex and the ambient-X union-generated range complex, then conjugate this homology isomorphism to the compiled union-range inclusion and induce the relative cokernel comparison.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / union-subspace cover-small homology equivalence",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientSubspaceUnionRestrictedSmallHomology.lean",
+    :fixture-sha256
+    "bdcbd90d92e9fd35c83cc8c0fee41f5f81c0b93982af0d6c37af35e1f4135fe0",
+    :implementation
+    "Promote the exact fixture. Compile unionCoverHomologyIso, unionCoverHomologyIso_hom and unionCover_homologyMap_isIso. This supplies the all-degree coefficient homology equivalence required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes: for two open subsets, cover-small chains on their correctly restricted Boolean cover compute production singular homology of the union subtype. Verify CoefficientSubspaceUnionRestrictedOpenCover SHA256 37775cbc97bc961d3ba54e356e94f33797c95d9afa5411bb75297fd81efca9f7. Preserve arbitrary topological spaces, arbitrary commutative-ring coefficients, every homological degree and empty cover members. Require zero placeholders, no warnings and standard-only axioms. Do not claim identification with the ambient-X union-generated range complex, relative short exactness, a connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :coefficient-subspace-union-restricted-small-homology-implementation-refill51,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-subspace-union-restricted-open-cover-implementation-refill51],
+   :current-residual
+   "Compare the restricted-cover small chains on the union subtype with the union-generated ambient range chains, using the subspace-range chain isomorphism and the compiled ambient inclusion triangle. This will prove the denominator inclusion is a homology equivalence and enable the relative cokernel comparison.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The correct open Boolean cover of the union subspace now compiles, including empty-member cases. Its cover-small homology equivalence must be compared with the ambient union-generated range inclusion; the induced relative cokernel isomorphism, short exactness, genuine connecting morphism and three exactness segments remain.",
+     "The correct union-subspace cover-small homology equivalence now compiles for arbitrary coefficients and degrees. An exact comparison with the ambient-X union-generated range complex is still needed before obtaining the denominator homology equivalence, relative cokernel transport, genuine connecting morphism and three exactness segments.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the coefficient cover-small homology equivalence for this union-subspace cover and an exact comparison with the ambient union-range inclusion, then induce the relative cokernel isomorphism.",
+      "Require an exact chain comparison between the restricted union-subspace cover-small complex and the ambient-X union-generated range complex, then conjugate this homology isomorphism to the compiled union-range inclusion and induce the relative cokernel comparison.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean"],
+      ["ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / open Boolean cover of the union subspace",
+      "MANIFOLD FUNDAMENTAL CLASS / union-subspace cover-small homology equivalence",
       :acceptance
       {:fixture
-       "/tmp/CoefficientSubspaceUnionRestrictedOpenCover.lean",
+       "/tmp/CoefficientSubspaceUnionRestrictedSmallHomology.lean",
        :fixture-sha256
-       "37775cbc97bc961d3ba54e356e94f33797c95d9afa5411bb75297fd81efca9f7",
+       "bdcbd90d92e9fd35c83cc8c0fee41f5f81c0b93982af0d6c37af35e1f4135fe0",
        :implementation
-       "Promote the exact fixture. Compile unionCover, unionCover_open, unionCover_covers and unionCover_iUnion. This supplies the correct open-cover hypotheses required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes: arbitrary open subsets A and B restrict to an open Boolean cover of their union subtype. Verify CoefficientSubspaceUnionCoverSmallComparison SHA256 d1acad87fe47b8183949d4872eb840544fff743d92891c3ddf84b68dd2ea012d. Preserve arbitrary topological spaces and allow either cover member to be empty. Require zero placeholders, no warnings and standard-only axioms. Do not claim an ambient-X cover, a chain isomorphism from small chains to all production chains, relative short exactness, a connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile unionCoverHomologyIso, unionCoverHomologyIso_hom and unionCover_homologyMap_isIso. This supplies the all-degree coefficient homology equivalence required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes: for two open subsets, cover-small chains on their correctly restricted Boolean cover compute production singular homology of the union subtype. Verify CoefficientSubspaceUnionRestrictedOpenCover SHA256 37775cbc97bc961d3ba54e356e94f33797c95d9afa5411bb75297fd81efca9f7. Preserve arbitrary topological spaces, arbitrary commutative-ring coefficients, every homological degree and empty cover members. Require zero placeholders, no warnings and standard-only axioms. Do not claim identification with the ambient-X union-generated range complex, relative short exactness, a connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :coefficient-subspace-union-restricted-open-cover-implementation-refill51,
+      :coefficient-subspace-union-restricted-small-homology-implementation-refill51,
       :kind :reusable-theorem,
       :depends-on
-      [:coefficient-subspace-union-cover-small-comparison-implementation-refill51],
+      [:coefficient-subspace-union-restricted-open-cover-implementation-refill51],
       :current-residual
-      "Apply CoefficientSmallComparison to unionCover on the union subtype, identify its cover-small chains with the reviewed union-generated range representation in X, and prove unionRangeChainsInclusion induces an isomorphism on homology. Then use the ambient commuting square for the relative cokernel comparison.",
+      "Compare the restricted-cover small chains on the union subtype with the union-generated ambient range chains, using the subspace-range chain isomorphism and the compiled ambient inclusion triangle. This will prove the denominator inclusion is a homology equivalence and enable the relative cokernel comparison.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSubspaceUnionCoverSmallComparison >/tmp/union-restricted-cover-dep.log 2>&1",
+       "lake build ConstructionTargets.CoefficientSubspaceUnionRestrictedOpenCover >/tmp/union-restricted-small-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientSubspaceUnionRestrictedOpenCover.lean",
+       "lake env lean /tmp/CoefficientSubspaceUnionRestrictedSmallHomology.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientSubspaceUnionRestrictedOpenCover.lean ConstructionTargets/CoefficientSubspaceUnionCoverSmallComparison.lean",
+       "sha256sum /tmp/CoefficientSubspaceUnionRestrictedSmallHomology.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-four-declaration audit over /tmp/CoefficientSubspaceUnionRestrictedOpenCover.lean",
+       "python3 comment-stripped placeholder-and-three-declaration audit over /tmp/CoefficientSubspaceUnionRestrictedSmallHomology.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/CoefficientSubspaceUnionRestrictedOpenCover.lean",
-       :exit 0,
-       :correction
-       "The exploratory compile reported an unused TopologicalSpace section variable on the set-theoretic covering theorem. Added explicit omit annotations to the covering and union-equality declarations and reran the final acceptance compile without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientSubspaceUnionRestrictedOpenCover.lean",
+     {:path
+      "/tmp/CoefficientSubspaceUnionRestrictedSmallHomology.lean",
       :sha256
-      "37775cbc97bc961d3ba54e356e94f33797c95d9afa5411bb75297fd81efca9f7",
+      "bdcbd90d92e9fd35c83cc8c0fee41f5f81c0b93982af0d6c37af35e1f4135fe0",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one open-cover prerequisite. The two subsets pull back along the union-subtype inclusion to a Boolean family whose members are open whenever the original subsets are open, and every point of the union subtype belongs to one member. This supplies the valid domain for the reviewed small-chain homology theorem. It does not assert that A and B cover all of X and therefore avoids the invalid ambient-cover inference behind the rejected ordinary-excision route.",
+     "Compiled exactly one valid small-chain homology prerequisite. The Boolean cover restricted to A union B is open and covers its ambient union subtype, so the reviewed coefficient small-chain theorem gives an isomorphism in every degree from its cover-small homology to production singular homology of A union B. The forward isomorphism is exactly the homology map of the cover-small inclusion. This theorem is applied on the union subtype and makes no false claim that A and B cover the original ambient space X.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -73657,7 +73681,8 @@
     :coefficient-compact-support-relative-short-complex-implementation-refill51
     :coefficient-subspace-union-range-inclusion-implementation-refill51
     :coefficient-subspace-union-cover-small-comparison-implementation-refill51
-    :coefficient-subspace-union-restricted-open-cover-implementation-refill51],
+    :coefficient-subspace-union-restricted-open-cover-implementation-refill51
+    :coefficient-subspace-union-restricted-small-homology-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
