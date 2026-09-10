@@ -32504,6 +32504,23 @@
      {:cmd
       "git show --check --oneline 824fd16f; recompute seven committed SHA256 values, Git blob IDs and eight parent declaration-region hashes; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789060305633-19054-1bd41621",
+     :commands
+     ["git show --stat --oneline 824fd16f7073bd4e764619d4840f4afc9df87d70"
+      "git show --check --oneline 824fd16f7073bd4e764619d4840f4afc9df87d70"
+      "git diff-tree --no-commit-id --name-only -r 824fd16f7073bd4e764619d4840f4afc9df87d70"
+      "git show 824fd16f:ConstructionTargets/<fixture>.lean | sha256sum for all seven fixtures"
+      "lake env lean ConstructionTargets/<fixture>.lean for all seven fixtures"
+      "lake build ConstructionTargets.SphereEquatorHausdorffNullity"
+      "rg forbidden declarations and placeholders across fourteen scoped files"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "Perl SHA256 recomputation of all eight parent theorem declaration regions"],
+     :finding
+     "PASS: commit 824fd16f7073bd4e764619d4840f4afc9df87d70 has the exact declared fourteen-file scope; all seven recorded fixture SHA256 values and all eight frozen declaration-region hashes reproduce; placeholder count is zero; direct compilation and the 2762-job focused build pass with only propext, Classical.choice and Quot.sound. The forward representation chain explicitly transports Borel-instance source nullity through append-zero to ambient equators, through subtype coercion to intrinsic nullity, and preserves measurable pairwise-disjoint sphere partitions in dimensions two and three. No frozen problem file changed."},
     :commit "824fd16f7073bd4e764619d4840f4afc9df87d70",
     :changed-paths
     ["ConstructionTargets/HausdorffBorelInstanceCoherence.lean"
@@ -32559,7 +32576,7 @@
    :consumer-residual
    "Resolve the preserved raw Hausdorff normalization boundary, then combine the cap formulas with these canonical null-equator partitions and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/LowerDimensionalSphereNullity.lean"
     "ConstructionTargets/LowerDimensionalSphereNullity.md"
@@ -32646,7 +32663,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: canonical sphere-equator repair and renewed consumer eligibility",
