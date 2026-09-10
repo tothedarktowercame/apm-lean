@@ -30532,6 +30532,24 @@
      "The reviewed C1GraphGlobalBounds graph-density integrals for u mapped to plus or minus sqrt(1-norm(u)^2) over the open unit ball in EuclideanSpace real (Fin d)",
      :direction
      "Exact equality from each target L2 graph-density integral through the constructed coordinate-isometry image and ambient Hausdorff transport to the source literal Euclidean cap subset and its intrinsic subtype Hausdorff measure."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789051712983-18794-a47427d5",
+     :commands
+     ["git show --stat 453d67d0"
+      "git diff-tree --no-commit-id --name-status -r 453d67d0"
+      "git diff --check 453d67d0^ 453d67d0"
+      "sha256sum fixture and canonical SphereCapC1GraphAreaComparison.lean"
+      "cmp -s fixture canonical"
+      "lake env lean fixture"
+      "lake env lean ConstructionTargets/SphereCapC1GraphAreaComparison.lean"
+      "lake build ConstructionTargets.SphereCapC1GraphAreaComparison"
+      "Python proposition-only three-statement hash and comment-stripped placeholder audit"
+      "rg forbidden declarations and trailing whitespace"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers"],
+     :finding
+     "PASS: exact two-file scope and fixture SHA256 verified; fixture, canonical target and 2550-job build pass; all three statement hashes match, zero placeholders and forbidden declarations, and three standard-only axiom audits reproduce. The subtype coercion isometry gives intrinsic-univ equals ambient-set Hausdorff measure in the correct direction, and both cap formulas reuse the reviewed ambient transport chain. Equator, normalization, moments and frozen-consumer closure remain downstream."},
     :dependency-uptake
     {:id :sphere-cap-ambient-hausdorff-transport-1,
      :commit "c316c65efbb69cf31b5ea009a1d6d3950b2ee94f",
@@ -30548,7 +30566,7 @@
      :placeholder-count 0},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereCapC1GraphAreaComparison.lean"
     "ConstructionTargets/SphereCapC1GraphAreaComparison.md"],
@@ -30610,7 +30628,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: sphere-cap area comparison and renewed consumer eligibility",
