@@ -11243,20 +11243,82 @@
    :stop-condition
    "Bank affine realization and its generator and differential equations only. Do not claim subdivision, naturality of subdivision, homotopy, small-chain comparison, excision or frozen closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientAffineRealization.lean",
-      :sha256
-      "99f50d47774a00c930c11d7c81336f8a6e6eae7cd29a9f7e6828d37d8bd91575"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientAffineRealization.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Recursive barycentric subdivision and the actual singular subdivision endomorphism with naturality remain in the parent probe. No subdivision, homotopy, small-chain comparison, excision or frozen closure claimed.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :three-axiom-audits :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass,
+     :integer-and-rational-specializations :pass},
+    :axiom-audits 3,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 17 dependency warnings: SingularHomologyConcrete (1), SingularSubdivision (2), T02A06HemisphereCoordinates (6), T02A06HemisphereExcision (2), T02A06DiskRadialComparison (3), T02A06SphereShift (3). Fixture and canonical compilations were warning-free."],
+    :statement-hashes
+    {"affineGenerator_boundary"
+     "30027496e3e44823216e2730ead15cec1dcd4c8fcb9c09b25900da50be8fc8a6",
+     "vertexGenerator_vertexRealizationDegree"
+     "cfc4f380acc459559368675cf181e8ef1addf2f0f52f85efec956a69246273d4",
+     "vertexRealization"
+     "263e425e8311910b177838e7499d7eefa5c6d4c9c82094ab69f5d70934ad6627"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientAffineRealization.lean", :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientAffineRealization.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientAffineRealization.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientAffineRealization",
+      :exit 0}
+     {:cmd
+      "Python audit: exact promotion, fixture SHA256, three standard-only audits per compilation, both specializations, warnings, placeholders and declaration hashes",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientAffineRealization.lean /tmp/CoefficientAffineRealization.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope verification and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct explicit-coefficient affine realization chain map\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope and clean checkout verification",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure experiments and dependency PASS invoke-1788999046112-17397-6b6616fe. Only the authorized two files changed; ledger and frozen consumers untouched. Checkout clean.",
+    :diagnostic-history [],
+    :commit "25313dd9526f1f63a11fb05b4c74023a82c973b2",
+    :changed-paths
+    ["ConstructionTargets/CoefficientAffineRealization.lean"
+     "ConstructionTargets/CoefficientAffineRealization.md"],
+    :dependency-commit "9dffaa35d380c9cd92c7e75ae66b58ce9cc70f9f",
+    :fixture
+    {:path "/tmp/CoefficientAffineRealization.lean",
+     :sha256
+     "99f50d47774a00c930c11d7c81336f8a6e6eae7cd29a9f7e6828d37d8bd91575"},
+    :finding
+    "Exact fixture promoted, preserving the actual coefficient object, coproduct descent, affine generator equation and differential compatibility. Both specializations, both compilations and the 8256-job build passed.",
+    :statement-hash-method
+    "SHA256 of declaration bytes beginning with def or theorem and ending immediately before the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientAffineRealization.lean"
     "ConstructionTargets/CoefficientAffineRealization.md"],
