@@ -31920,6 +31920,22 @@
      {:cmd
       "lake env lean /tmp/codex13-checkpoint50-cap-partition/SphereCapEquatorPartition.lean; test ! -e ConstructionTargets/SphereCapEquatorPartition.lean; test ! -e ConstructionTargets/SphereCapEquatorPartition.md; git diff --exit-code -- ConstructionTargets/SphereCapEquatorPartition.lean ConstructionTargets/SphereCapEquatorPartition.md; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789057612692-18976-9038b3fa",
+     :commands
+     ["git show --format=fuller --stat f3e41e26c48fb9badcc1b233c88a9ea06edf0383"
+      "git diff-tree --no-commit-id --name-status -r f3e41e26c48fb9badcc1b233c88a9ea06edf0383"
+      "git diff --check f3e41e26c48fb9badcc1b233c88a9ea06edf0383^ f3e41e26c48fb9badcc1b233c88a9ea06edf0383"
+      "sha256sum /tmp/codex13-checkpoint50-cap-partition/SphereCapEquatorPartition.lean"
+      "lake env lean /tmp/codex13-checkpoint50-cap-partition/SphereCapEquatorPartition.lean"
+      "placeholder, forbidden-declaration, warning, and whitespace scans on the fixture"
+      "verify absence of ConstructionTargets/SphereCapEquatorPartition.lean"
+      "inspect literal predicates against committed SphereCapEuclideanImage"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers from recorded commit"],
+     :finding
+     "PASS: commit f3e41e26 is ledger-only and whitespace-clean. The fixture reproduces SHA256 491f30b9213d04597a1d8e483ab0457d0033e2c102c2fa5512b49f0c30918a01, has zero placeholders, compiles without warnings, and all seven audited theorems use only propext, Classical.choice, and Quot.sound. Its equator exactly uses the literal sphere and Fin.last=0 predicate; the upper and lower caps are the committed SphereCapEuclideanImage predicates. All three sets are measurable, every pair is disjoint, and order trichotomy proves the exact nested-union sphere partition, with d=2 and d=3 examples. No measure-sum or downstream normalization claim is introduced. The fixture declares SphereCapEquatorPartition, while exact promotion requires ConstructionTargets.SphereCapEquatorPartition, and no canonical target exists; renaming would change the frozen fixture. The recorded STOP therefore correctly identifies a specification boundary. Both ledgers validate; no frozen consumer changed, so frozen statement hashes and placeholder recount are not applicable."},
     :changed-paths [],
     :fixture
     {:path
@@ -31931,7 +31947,7 @@
     "The reviewed fixture matches SHA256 491f30b9213d04597a1d8e483ab0457d0033e2c102c2fa5512b49f0c30918a01 and independently compiles all three measurability results, all three pairwise-disjointness results, the exact sphere union, and the d=2 and d=3 examples with standard-only axioms. It imports the banked SphereCapEuclideanImage module and does not require the stopped nullity modules for these set-theoretic results. However, it declares namespace SphereCapEquatorPartition, while exact promotion requires ConstructionTargets.SphereCapEquatorPartition. Renaming or wrapping would change the exact fixture. Repair the fixture namespace and recorded digest, or consistently revise the acceptance namespace and exact-promotion requirement. This is a specification boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereCapEquatorPartition.lean"
     "ConstructionTargets/SphereCapEquatorPartition.md"],
@@ -32077,7 +32093,7 @@
      "Exactly one complete compiled prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 routes. It defines the literal Fin.last-zero equator alongside the reviewed strict upper and lower caps, proves all three sets measurable, proves every pair disjoint, and proves their exact union is the literal unit sphere. Dimension-two and dimension-three instances compile. The parent probe is not GO because the generic subtype-nullity theorem must still be instantiated with the banked ambient-nullity results for these literal equators and exposed together with the partition as the final comparison package. No measure sum, numerical normalization, sphere mass, moment, Stokes or consumer-closure theorem is claimed; no canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: Hausdorff-null equators for the literal S2 and S3 cap decompositions",
