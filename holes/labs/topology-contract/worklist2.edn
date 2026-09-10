@@ -40591,7 +40591,8 @@
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
    {:outcome :replan,
-    :seat "codex-13",
+    :disposition :replan,
+    :author "codex-13",
     :commands
     [{:cmd
       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
@@ -40619,6 +40620,118 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789076115560-19552-53ea9df4",
+     :commands
+     ["git show --stat --oneline 20e1dce3"
+      "git show --format=fuller --no-ext-diff 20e1dce3 -- holes/labs/topology-contract/worklist2.edn"
+      "git archive 20e1dce3 | tar -x -C /tmp/topology-review-WOa6aQ"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-review-WOa6aQ/holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-review-WOa6aQ/holes/labs/topology-contract/worklist2.edn"
+      "git diff-tree --no-commit-id --name-only -r 20e1dce3"
+      "git show --check --oneline 20e1dce3"
+      "sha256sum immutable checkpoint60 artifact and canonical/supporting fixtures"
+      "recompute t03J05 t96J06 t97A04 hashes and placeholder counts"
+      "inspect checkpoint60 evidence and replacement dependency graph"],
+     :finding
+     "PASS: recorded commit 20e1dce36c264b28b60950e442870cb63a622e37 has exact ledger-only scope; both ledgers validate and whitespace checks pass. The strategy correctly records recurrence promotion as reviewed STOP because checkpoint60 remains pinned to the canonical path, preserves the immutable artifact boundary, and elects a bounded atomic supervisor fixture-path transition before dependent work. Artifact and canonical SHA256 reproduce as e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187; supporting SHA256 reproduces as 4b9bf06c446c0ff52bbe1d92f9a5b6a0e7238e19725a426d96ffcd7575d1b023. Frozen consumer hashes remain db4071c33fa3b5fb6af0d5d7955bf431400fe7d2c4f8dbc759941f4bf6611af4, 1d8874db11a786b11d04b5af4f0375fa439c05d5ac1bdafacd9943a89e238a71, and 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with placeholder counts 1/2/4. No theorem-orientation claim crosses the representation boundary and no recurrence promotion or consumer closure is claimed."},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Implement only validated atomic supervisor application of an explicitly recorded historical fixture-path transition. Do not permit arbitrary ledger mutation, change fixture hashes, supporting evidence, commits, reviews, scopes or row states through this operation; do not promote recurrence theorems or claim topology closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["holes/labs/topology-contract/build_step.bb"
+       "holes/labs/topology-contract/test_gate_receipts.bb"],
+      :dag-node
+      "LEDGER REPRESENTATION: atomic supervisor application of reviewed fixture-path transitions",
+      :acceptance
+      {:implementation
+       "Add a narrowly typed receipt transition handled by build_step.bb before replacement-row insertion. It must locate exactly one completed row, require the current fixture path to equal :from, require every named preserved value to match, require :to to be an existing regular file with the recorded fixture SHA256, replace only [:evidence :fixture :path], validate the complete resulting ledger, and write it atomically together with the ordinary receipt transition. The completion receipt must request the concrete checkpoint60 transition so the updated supervisor applies it immediately.",
+       :hypotheses
+       "Use the reviewed checkpoint60 ProductSimplexWordPrefixCounts transition as the required concrete case. The source fixture path is ConstructionTargets/ProductSimplexWordPrefixCounts.lean; the target is holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean; SHA256, supporting source, evidence commit, placeholder count and PASS review are fixed.",
+       :consumer-equation
+       "A supervisor-applied transition changes exactly one completed row's fixture path from the asserted predecessor path to an existing byte-identical immutable artifact while every other ledger value is preserved and the entire post-transition ledger validates before atomic replacement.",
+       :consumer-residual
+       "With checkpoint60's live fixture path committed to the immutable artifact, promote the already reviewed prefix-successor recurrence fixture, then prove both word/path inverse laws.",
+       :route-step
+       "Supplies the missing supervisor operation on the t03J05, t96J06 and t97A04 routes immediately before recurrence promotion.",
+       :axioms :standard-only,
+       :completion-transition
+       {:row
+        :oriented-checkpoint60-product-simplex-prefix-monotonicity-repair-1,
+        :path [:evidence :fixture :path],
+        :from
+        "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+        :to
+        "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean",
+        :preserve
+        {:sha256
+         "e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187",
+         :supporting-path
+         "ConstructionTargets/ProductSimplexBalancedWords.lean",
+         :supporting-sha256
+         "4b9bf06c446c0ff52bbe1d92f9a5b6a0e7238e19725a426d96ffcd7575d1b023",
+         :placeholder-count 0,
+         :commit "d7ecc4b411b2f783f762da03ac598994100be9a1",
+         :review-outcome :pass}},
+       :gates
+       ["Test successful application to a scratch copy of the current ledger and verify only checkpoint60's fixture path changes."
+        "Reject an unknown row, non-completed row, wrong :from path, absent target, target hash mismatch and every incorrect preserved value."
+        "Reject transition requests that name any path other than [:evidence :fixture :path]."
+        "Verify transition application precedes replacement-row insertion and post-transition validation precedes atomic ledger write."
+        "Verify receipts without the transition field retain existing behavior."
+        "Run clj-kondo on both changed Clojure files and futon4/dev/check-parens.el on both files."
+        "Run focused receipt-gate tests, both live ledger checks and scratch post-transition ledger validation."
+        "Run whitespace and exact two-file scope checks; commit the scoped implementation."
+        "Confirm no hash, scope, review, dependency or atomic-write invariant is weakened and no topology theorem or closure is claimed."]},
+      :representation
+      {:source
+       "A reviewed receipt request identifying one completed row's current fixture path, replacement immutable artifact path and exact preserved evidence values",
+       :target
+       "The validated post-transition ledger in which only that row's evidence.fixture.path has changed and all other data is identical",
+       :direction
+       "Exact single-path state transition from the source ledger representation to the target ledger representation, applied by the supervisor before dependent rows open and committed only after whole-ledger validation."},
+      :id
+      :oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint66-promoted-product-simplex-recurrences-and-consumer-refill-2],
+      :current-residual
+      "The immutable artifact and reviewed transition data exist, but build_step.bb does not apply the transition field, leaving checkpoint60 pinned to the mutable canonical path.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: applied fixture-path transition and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint67-applied-fixture-path-transition-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1],
+      :current-residual
+      "Measure the applied checkpoint60 fixture-path transition separately from recurrence promotion, inverse laws, oriented cancellation, cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
     :measures
     {:baseline
      {:commit "66f72962cd4e7ec6031998fefa8847d9d32c8915",
@@ -40815,105 +40928,9 @@
       "Do not reimplement the reviewed recurrence theorems."
       "Word/path inverse laws, oriented cancellation and cross-product assembly remain behind recurrence promotion."
       "Reviewed Euler and Hausdorff STOPs remain preserved; concurrent arc, coefficient and torsion work is excluded."]},
-    :replacement-items
-    [{:consumer :t03J05,
-      :stop-condition
-      "Implement only validated atomic supervisor application of an explicitly recorded historical fixture-path transition. Do not permit arbitrary ledger mutation, change fixture hashes, supporting evidence, commits, reviews, scopes or row states through this operation; do not promote recurrence theorems or claim topology closure.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["holes/labs/topology-contract/build_step.bb"
-       "holes/labs/topology-contract/test_gate_receipts.bb"],
-      :dag-node
-      "LEDGER REPRESENTATION: atomic supervisor application of reviewed fixture-path transitions",
-      :acceptance
-      {:implementation
-       "Add a narrowly typed receipt transition handled by build_step.bb before replacement-row insertion. It must locate exactly one completed row, require the current fixture path to equal :from, require every named preserved value to match, require :to to be an existing regular file with the recorded fixture SHA256, replace only [:evidence :fixture :path], validate the complete resulting ledger, and write it atomically together with the ordinary receipt transition. The completion receipt must request the concrete checkpoint60 transition so the updated supervisor applies it immediately.",
-       :hypotheses
-       "Use the reviewed checkpoint60 ProductSimplexWordPrefixCounts transition as the required concrete case. The source fixture path is ConstructionTargets/ProductSimplexWordPrefixCounts.lean; the target is holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean; SHA256, supporting source, evidence commit, placeholder count and PASS review are fixed.",
-       :consumer-equation
-       "A supervisor-applied transition changes exactly one completed row's fixture path from the asserted predecessor path to an existing byte-identical immutable artifact while every other ledger value is preserved and the entire post-transition ledger validates before atomic replacement.",
-       :consumer-residual
-       "With checkpoint60's live fixture path committed to the immutable artifact, promote the already reviewed prefix-successor recurrence fixture, then prove both word/path inverse laws.",
-       :route-step
-       "Supplies the missing supervisor operation on the t03J05, t96J06 and t97A04 routes immediately before recurrence promotion.",
-       :axioms :standard-only,
-       :completion-transition
-       {:row
-        :oriented-checkpoint60-product-simplex-prefix-monotonicity-repair-1,
-        :path [:evidence :fixture :path],
-        :from
-        "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
-        :to
-        "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean",
-        :preserve
-        {:sha256
-         "e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187",
-         :supporting-path
-         "ConstructionTargets/ProductSimplexBalancedWords.lean",
-         :supporting-sha256
-         "4b9bf06c446c0ff52bbe1d92f9a5b6a0e7238e19725a426d96ffcd7575d1b023",
-         :placeholder-count 0,
-         :commit "d7ecc4b411b2f783f762da03ac598994100be9a1",
-         :review-outcome :pass}},
-       :gates
-       ["Test successful application to a scratch copy of the current ledger and verify only checkpoint60's fixture path changes."
-        "Reject an unknown row, non-completed row, wrong :from path, absent target, target hash mismatch and every incorrect preserved value."
-        "Reject transition requests that name any path other than [:evidence :fixture :path]."
-        "Verify transition application precedes replacement-row insertion and post-transition validation precedes atomic ledger write."
-        "Verify receipts without the transition field retain existing behavior."
-        "Run clj-kondo on both changed Clojure files and futon4/dev/check-parens.el on both files."
-        "Run focused receipt-gate tests, both live ledger checks and scratch post-transition ledger validation."
-        "Run whitespace and exact two-file scope checks; commit the scoped implementation."
-        "Confirm no hash, scope, review, dependency or atomic-write invariant is weakened and no topology theorem or closure is claimed."]},
-      :representation
-      {:source
-       "A reviewed receipt request identifying one completed row's current fixture path, replacement immutable artifact path and exact preserved evidence values",
-       :target
-       "The validated post-transition ledger in which only that row's evidence.fixture.path has changed and all other data is identical",
-       :direction
-       "Exact single-path state transition from the source ledger representation to the target ledger representation, applied by the supervisor before dependent rows open and committed only after whole-ledger validation."},
-      :id
-      :oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1,
-      :kind :representation-comparison,
-      :depends-on
-      [:oriented-checkpoint66-promoted-product-simplex-recurrences-and-consumer-refill-2],
-      :current-residual
-      "The immutable artifact and reviewed transition data exist, but build_step.bb does not apply the transition field, leaving checkpoint60 pinned to the mutable canonical path.",
-      :other-consumers [:t96J06 :t97A04]}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 1,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :stop-condition
-      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
-      :phase :strategy,
-      :state :open,
-      :scope [],
-      :dag-node
-      "PORTFOLIO POLICY: applied fixture-path transition and renewed consumer eligibility",
-      :acceptance
-      {:strategy
-       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
-       :stop-condition
-       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
-      :id
-      :oriented-checkpoint67-applied-fixture-path-transition-and-consumer-refill-1,
-      :kind :strategy-checkpoint,
-      :depends-on
-      [:oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1],
-      :current-residual
-      "Measure the applied checkpoint60 fixture-path transition separately from recurrence promotion, inverse laws, oriented cancellation, cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
-      :other-consumers []}],
-    :author "codex-13",
-    :disposition :replan},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: promoted product-simplex recurrences and renewed consumer eligibility",
@@ -40935,7 +40952,7 @@
    :stop-condition
    "Implement only validated atomic supervisor application of an explicitly recorded historical fixture-path transition. Do not permit arbitrary ledger mutation, change fixture hashes, supporting evidence, commits, reviews, scopes or row states through this operation; do not promote recurrence theorems or claim topology closure.",
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope
    ["holes/labs/topology-contract/build_step.bb"
     "holes/labs/topology-contract/test_gate_receipts.bb"],
