@@ -67023,8 +67023,56 @@
   {:consumer "t98A01",
    :stop-condition
    "GO requires complete frozen closure; otherwise name the exact remaining deck, genus-invariance or Euler comparison boundary. Infrastructure absence is not refutation.",
+   :evidence
+   {:audit-fixture
+    {:path "/tmp/T98A01CoverAudit.lean",
+     :sha256
+     "98aa7a28fd7af0a8787c23fdb3d1dc05dcfbf27a289913667bc409605cc8ca6c",
+     :complete-closure false},
+    :placeholder-delta 0,
+    :residual
+    "Evaluate the five-torsion cardinality, then establish genus invariance and Euler multiplicativity for the actual polygon surfaces before assembling every frozen conjunct. No complete closing fixture or prerequisite implementation is proposed.",
+    :outcome :stop,
+    :warnings [],
+    :statement-hashes
+    {:apm_t98a01
+     "fc072537b7c63c8dc4bdf56861e8446181a6dc62812a235af612e09525710105"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :reason :missing-polygon-genus-and-cover-euler-comparison,
+    :commands
+    [{:cmd "lake env lean /tmp/T98A01CoverAudit.lean", :exit 0}
+     {:cmd "python3 /tmp/t98a01-frozen-audit.py", :exit 0}
+     {:cmd "bb /tmp/t98a01-dependency-review.bb", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/T98A01CoverAudit.lean",
+      :exit 1,
+      :correction
+      "Replaced unavailable Homeomorph.isCoveringMap with the nsmul-one covering, unfolded the second coordinate explicitly, and removed an unused simp argument."}
+     {:cmd
+      "rg -n 'isCoveringMap.*(id|homeomorph)|IsHomeomorph.*isCoveringMap' .lake/packages/mathlib/Mathlib/Topology/Covering/Basic.lean",
+      :exit 1,
+      :expected-exit 1,
+      :correction
+      "No matching declaration; used the available AddCircle covering constructor."}
+     {:cmd "bb -e dependency-review lookup",
+      :exit 1,
+      :correction
+      "Corrected an unmatched delimiter in the exploratory lookup; the recorded file-based rerun succeeds."}],
+    :changed-paths [],
+    :finding
+    "Compiled the actual torus covering, explicit fiber-transitive deck homeomorphisms, and an equivalence of every fiber with the five-torsion subgroup of UnitAddCircle. The numerical cardinality-five evaluation remains unproved in this probe. Independently, the frozen universal assertion requires genus invariance under homeomorphism and covering Euler multiplicativity for the literal polygon quotients. Banked connected-sum arithmetic supplies neither topological comparison. Genus zero must retain its literal quotient representation. These are local construction boundaries, not a refutation or campaign termination.",
+    :frozen
+    {:path "problems/t98A01/lean/Main.lean",
+     :sha256
+     "a607069bdb7416a01a1e6846cb6dd8e3e8bf87b0f2b122ef4c1fb828d5167f25",
+     :placeholder-before 1,
+     :placeholder-after 1},
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "COVERING CLASSIFICATION / frozen fivefold surface cover",
    :acceptance
