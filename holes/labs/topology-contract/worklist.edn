@@ -74497,6 +74497,20 @@
       :exit 0}
      {:cmd "git status --short", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789082113578-19761-a08ea26c",
+     :commands
+     ["git show 852133cf11d866fe8b1eaa17db872cfc8e663fda:ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean"
+      "git diff-tree --no-commit-id --name-only -r 852133cf11d866fe8b1eaa17db872cfc8e663fda"
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean"
+      "sha256sum /tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisArrows.lean"
+      "cmp -s /tmp/CoefficientSubcomplexRelativeMayerVietorisComplex.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean"
+      "git show --check --oneline --stat 852133cf11d866fe8b1eaa17db872cfc8e663fda"
+      "python3 eight-declaration hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at 9565e17710f26ade05147ca4ca4abaae145ee928450ac69c18683da9fe1a73cf, and the quotient-arrow dependency reproduces 392dca8b05c875d0f15f7cdf817bbacd464d0f42e1c7f2bf7e6cf905974e0890. Lean compilation succeeds without warnings, all eight frozen declaration hashes reproduce, placeholders are zero, and printed axioms are standard-only. The four projection identities have the correct inclusion-induced cokernel orientation. After precomposition with the epimorphic source cokernel projection, the diagonal followed by signed difference reduces to the same union projection plus its negative, proving exactly the zero composite. The ShortComplex uses those arrows in the intended order, while making no short-exactness claim."},
     :commit "852133cf11d866fe8b1eaa17db872cfc8e663fda",
     :changed-paths
     ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean"],
@@ -74510,7 +74524,7 @@
     "The exact fixture and reviewed arrow dependency hashes reproduce. All eight requested declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean"],
    :dag-node
@@ -74617,7 +74631,7 @@
      "Compiled exactly one relative Mayer-Vietoris sequence prerequisite. Each of the four induced quotient maps now has its literal cokernel-projection equation. Precomposing the signed two-arrow composite with the epimorphic intersection cokernel projection reduces the two summands to the same union cokernel projection with opposite signs, proving the composite is zero. The two genuine quotient arrows therefore form a named ShortComplex for arbitrary simplicial subcomplexes and arbitrary commutative-ring coefficients. Short exactness is not inferred from zero composition; it remains the next algebraic theorem. No supportConnecting or ordinary-excision hypothesis is used.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
