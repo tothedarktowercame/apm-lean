@@ -64678,83 +64678,71 @@
    :stop-condition
    "GO requires actual ambient invertibility and normalization comparison; REVISE requires one compiled prerequisite. Do not duplicate concurrent work or claim a fundamental class.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Orientation overlap coherence and global localization monicity remain subsequent. Existing lower-dimensional comparisons and separate integral dimension-one local-index coverage are preserved; the m+2 normalization is not extended to dimension one. No fundamental class or consumer closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:transport
-      "157d9ab8049e58091113cb97d57bd953c0dc3116f49026bead0ee63fc0679dbd",
-      :chart_square
-      "1608593daef5a9189f1f1ec62c18e038eb20dbdc54279237021807fa446c6712",
-      :distinguished
-      "17009871257df54e7f4fd3c2d2674f1c19edbff335c7f7a2ea56b41910d9d8db",
-      :distinguished_forward
-      "1304badbdc7c56111d8c21bbeac372653a2951ad7103aa0ff7113f2289dc82a1"},
-     :acceptance
-     {:implementation
-      "Promote the exact fixture. Compile transport, chart_square, distinguished and distinguished_forward. Preserve arbitrary natural degree for transport and chart_square, and explicit dimension m+2 for normalization. Reuse the existing ambient isomorphisms and overlap comparison without duplication. Verify the three dependency hashes recorded by the audit. Require zero placeholders, no warnings and standard-only axioms. Do not claim orientation compatibility, global localization monicity or a fundamental class.",
-      :commands
-      ["lake env lean ConstructionTargets/CoefficientDistinguishedNormalization.lean"],
-      :axioms :standard-only,
-      :placeholder-before 0,
-      :placeholder-after 0},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean -o /tmp/distinguished45/ConstructionTargets/CoefficientDistinguishedTargetNormalization.olean ConstructionTargets/CoefficientDistinguishedTargetNormalization.lean",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/distinguished45:$LEAN_PATH lean /tmp/CoefficientDistinguishedNormalization.lean'",
-       :exit 0}
-      {:cmd
-       "python3 /tmp/coefficient-distinguished-normalization-audit.py",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/distinguished45:$LEAN_PATH lean /tmp/CoefficientDistinguishedNormalization.lean'",
-       :exit 1,
-       :correction
-       "The dependency object compilation was still running. Waited for its successful completion before retrying."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/distinguished45:$LEAN_PATH lean /tmp/CoefficientDistinguishedNormalization.lean'",
-       :exit 1,
-       :correction
-       "Supplied the derived deleted-set equivalence explicitly and removed an unused simp argument."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/distinguished45:$LEAN_PATH lean /tmp/CoefficientDistinguishedNormalization.lean'",
-       :exit 1,
-       :correction
-       "Ordinary rewriting did not identify the definitionally equal mapIso forward map."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/distinguished45:$LEAN_PATH lean /tmp/CoefficientDistinguishedNormalization.lean'",
-       :exit 1,
-       :correction
-       "Wildcard elaborating rewrite exceeded the default heartbeat limit. Replaced it with an explicitly typed congrArg composite; final compilation succeeds at the default limit."}],
-     :representation
-     {:source
-      "Actual overlap chart-pair homology maps and their ambient normalization at the distinguished chart",
-      :target
-      "CoefficientChartLocal source and target transports and its localIso normalization",
-      :direction
-      "Prove equality from the overlap chart map followed by target transport to the distinguished chart homology composite, then equality from the full overlap normalization to CoefficientChartLocal.localIso."},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientDistinguishedNormalization.lean",
-      :sha256
-      "514f0c1014720638f0cec1d327386e07e06b694c130dc0b73c1bd94134ebbfe4",
-      :placeholder-count 0},
-     :finding
-     "Compiled the remaining distinguished-chart normalization equality. A proved deleted-set transport identity identifies the actual chart homology composite in every natural degree. Combining it with the banked target normalization square proves that the overlap normalization at the full distinguished chart source equals CoefficientChartLocal.localIso. Concurrent ambient invertibility, actual forward maps, inverse laws and overlap normalization comparison are reused and axiom-audited.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientDistinguishedNormalization.lean"]},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Actual arbitrary-degree chart transport and full distinguished normalization equality compile, reusing existing ambient invertibility and overlap comparison. Normalization remains restricted to m+2. Orientation coherence, global localization monicity, fundamental classes and consumer closure remain subsequent; lower-dimensional comparisons and separate integral dimension-one coverage are preserved.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:transport
+     "157d9ab8049e58091113cb97d57bd953c0dc3116f49026bead0ee63fc0679dbd",
+     :chart_square
+     "1608593daef5a9189f1f1ec62c18e038eb20dbdc54279237021807fa446c6712",
+     :distinguished
+     "17009871257df54e7f4fd3c2d2674f1c19edbff335c7f7a2ea56b41910d9d8db",
+     :distinguished_forward
+     "1304badbdc7c56111d8c21bbeac372653a2951ad7103aa0ff7113f2289dc82a1"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/CoefficientDistinguishedNormalization.lean",
+      :exit 0}
+     {:cmd
+      "python3 /tmp/coefficient-distinguished-normalization-audit.py",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.CoefficientDistinguishedTargetNormalization 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/CoefficientDistinguishedNormalization.lean ConstructionTargets/CoefficientDistinguishedNormalization.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientDistinguishedNormalization.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Actual overlap chart-pair homology maps and ambient normalization at the distinguished chart",
+     :target
+     "CoefficientChartLocal source and target transports and localIso normalization",
+     :direction
+     "Equality from overlap chart transport followed by target transport to the distinguished chart homology composite, then equality from full overlap normalization to CoefficientChartLocal.localIso."},
+    :commit "3510365eedac863a7e69e71cefc9135cfd808f98",
+    :changed-paths
+    ["ConstructionTargets/CoefficientDistinguishedNormalization.lean"],
+    :fixture
+    {:path "/tmp/CoefficientDistinguishedNormalization.lean",
+     :sha256
+     "514f0c1014720638f0cec1d327386e07e06b694c130dc0b73c1bd94134ebbfe4"},
+    :dependencies
+    {"CoefficientDistinguishedTargetNormalization"
+     "90d7e12d5dc68a5094553787b0f3d46f68d8c428b7fdef1c5932745a160b7295",
+     "CoefficientDistinguishedChart"
+     "284908c57e17da0e422f6c3d54daf1cb03588d8dcf6597dfad7893b490da2957",
+     "CoefficientOverlapNormalization"
+     "9697585da59ffc70a8381b306297c6dbb027e0091ebb57d4219f725e707e525f"},
+    :axiom-audit-declarations 11},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientDistinguishedNormalization.lean"],
    :dag-node
