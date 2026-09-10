@@ -34936,55 +34936,104 @@
    :other-consumers [:t96J06 :t97A04]}
   {:consumer :t03J05,
    :stop-condition
+   "Bank only the integer inversion-count sign on maximal product-simplex lattice paths and its ZMod 2 reduction. Do not pair faces, construct affine realizations, define singular chains or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/ProductSimplexShuffleParity.lean"
+    "ConstructionTargets/ProductSimplexShuffleParity.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: inversion parity of maximal product-simplex paths",
+   :acceptance
+   {:namespace "ConstructionTargets.ProductSimplexShuffleParity",
+    :implementation
+    "Promote the compiled fixture as the orientation-sign layer on ConstructionTargets.ProductSimplexMaximalPaths.",
+    :hypotheses
+    "Use maximal nondegenerate simplices of Δ[p]×Δ[q]. Define the sign over integers by the parity of vertical-before-horizontal inversion pairs; expose its reduction over ZMod 2. Downstream applications remain restricted to total degree at most four.",
+    :declarations
+    ["IsHorizontal"
+     "inversionPairs"
+     "shuffleSign"
+     "shuffleSign_mul_self"
+     "shuffleSign_ne_zero"
+     "shuffleSign_mod_two"],
+    :consumer-equation
+    "Each maximal product-simplex lattice path has integer sign (-1) raised to its vertical-before-horizontal inversion count; this sign squares to one, is nonzero, and becomes one over ZMod 2.",
+    :consumer-residual
+    "Construct the involutive pairing of maximal paths sharing each interior face, prove paired signs are opposite, and connect the surviving exterior faces to the Leibniz sign before affine realization.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexShuffleParity."
+     "Verify IsHorizontal compares consecutive first coordinates of the promoted maximal path."
+     "Verify inversionPairs counts exactly vertical-before-horizontal ordered step pairs."
+     "Verify shuffleSign is the integer power (-1)^inversion-count."
+     "Verify the sign squares to one, is nonzero and reduces to one in ZMod 2."
+     "Reproduce standard-only axiom audits for all three exported sign theorems."
+     "Confirm no face pairing, affine realization, chain cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :t03j05-product-simplex-shuffle-parity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint56-singular-cross-product-and-consumer-refill-1
+    :t03j05-product-simplex-maximal-lattice-path-interface-1],
+   :current-residual
+   "The unsigned maximal-path representation is canonical, but the project lacks the integer inversion-count sign and its mod-2 specialization required to state oriented face cancellation.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :t03J05,
+   :stop-condition
    "Construct only the finite signed-shuffle product-simplex data needed in total degrees at most four. Do not assume or claim a singular-chain cross product, Eilenberg-Zilber, Kunneth, product fundamental classes, intersection nonvanishing, ambient nonhomotopy or consumer closure. Use a unique row-specific scratch directory.",
    :evidence
    {:probe
     {:residual
-     "Define parity on the maximal lattice paths, pair and cancel their interior faces with the correct signs, and realize their vertices as affine singular simplices in the product.",
+     "Pair maximal paths contributing the same interior face and prove that their inversion-count signs are opposite; then realize the bounded path vertices as affine singular simplices.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t03J05,
       :stop-condition
-      "Expose only the maximal nondegenerate product-simplex lattice-path representation and its face deletion law. Do not define signs, affine realizations, singular chains, a cross product, Eilenberg-Zilber, Kunneth, intersection results or consumer closure.",
+      "Bank only the integer inversion-count sign on maximal product-simplex lattice paths and its ZMod 2 reduction. Do not pair faces, construct affine realizations, define singular chains or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/ProductSimplexMaximalPaths.lean"
-       "ConstructionTargets/ProductSimplexMaximalPaths.md"],
+      ["ConstructionTargets/ProductSimplexShuffleParity.lean"
+       "ConstructionTargets/ProductSimplexShuffleParity.md"],
       :dag-node
-      "PRODUCT HOMOLOGY: maximal product-simplex lattice-path interface",
+      "PRODUCT HOMOLOGY: inversion parity of maximal product-simplex paths",
       :acceptance
-      {:namespace "ConstructionTargets.ProductSimplexMaximalPaths",
+      {:namespace "ConstructionTargets.ProductSimplexShuffleParity",
        :implementation
-       "Promote the compiled fixture as the exact unsigned combinatorial interface from Mathlib's simplicial product of standard simplices to the bounded signed-shuffle construction.",
+       "Promote the compiled fixture as the orientation-sign layer on ConstructionTargets.ProductSimplexMaximalPaths.",
        :hypotheses
-       "Use arbitrary natural p and q only for the existing maximal nondegenerate simplex representation; downstream use remains restricted to p+q at most four. No coefficient, orientation or topological realization hypothesis is needed.",
+       "Use maximal nondegenerate simplices of Δ[p]×Δ[q]. Define the sign over integers by the parity of vertical-before-horizontal inversion pairs; expose its reduction over ZMod 2. Downstream applications remain restricted to total degree at most four.",
        :declarations
-       ["MaximalPath"
-        "mem_maximalPath_iff"
-        "maximalPath_coordinate_sum"
-        "face_objEquiv"],
+       ["IsHorizontal"
+        "inversionPairs"
+        "shuffleSign"
+        "shuffleSign_mul_self"
+        "shuffleSign_ne_zero"
+        "shuffleSign_mod_two"],
        :consumer-equation
-       "A maximal nondegenerate simplex of Δ[p]×Δ[q] is a monotone lattice path whose two coordinates sum to its time index, and taking its ith simplicial face deletes exactly the ith path vertex.",
+       "Each maximal product-simplex lattice path has integer sign (-1) raised to its vertical-before-horizontal inversion count; this sign squares to one, is nonzero, and becomes one over ZMod 2.",
        :consumer-residual
-       "Add integer shuffle parity, oriented interior-face pairing and affine realization for total degree at most four, then assemble the bounded signed-shuffle chain.",
+       "Construct the involutive pairing of maximal paths sharing each interior face, prove paired signs are opposite, and connect the surviving exterior faces to the Leibniz sign before affine realization.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexMaximalPaths."
-        "Verify mem_maximalPath_iff is the exact maximal nondegeneracy characterization from ProdStdSimplex."
-        "Verify maximalPath_coordinate_sum has the product-coordinate sum on the left and the time index on the right."
-        "Verify face_objEquiv deletes the selected vertex through Fin.succAbove."
-        "Reproduce standard-only axiom audits for all three exported theorems."
-        "Confirm no sign, affine realization, chain cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure result is claimed."
+        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexShuffleParity."
+        "Verify IsHorizontal compares consecutive first coordinates of the promoted maximal path."
+        "Verify inversionPairs counts exactly vertical-before-horizontal ordered step pairs."
+        "Verify shuffleSign is the integer power (-1)^inversion-count."
+        "Verify the sign squares to one, is nonzero and reduces to one in ZMod 2."
+        "Reproduce standard-only axiom audits for all three exported sign theorems."
+        "Confirm no face pairing, affine realization, chain cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
         "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :t03j05-product-simplex-maximal-lattice-path-interface-1,
+      :id :t03j05-product-simplex-shuffle-parity-1,
       :kind :reusable-theorem,
       :depends-on
       [:oriented-checkpoint56-bounded-product-simplex-signed-shuffles-1],
       :current-residual
-      "Mathlib classifies maximal nondegenerate simplices in the simplicial product, but the project has no canonical interface exposing their lattice-path coordinate equation and face deletion formula to the signed-shuffle construction.",
+      "The unsigned maximal-path representation is canonical, but the project lacks the integer inversion-count sign and its mod-2 specialization required to state oriented face cancellation.",
       :other-consumers [:t96J06 :t97A04]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
@@ -34992,20 +35041,20 @@
        "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
        :exit 0}
       {:cmd
-       "Search ConstructionTargets and Mathlib for product-simplex triangulations, finite shuffles, affine simplex realization and oriented-face APIs",
+       "Verify the promoted ConstructionTargets.ProductSimplexMaximalPaths interface and search Mathlib for inversion-count, permutation-sign and parity APIs",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+       "lake env lean /tmp/codex13-checkpoint56-shuffle-parity/ProductSimplexShuffleParity.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+       "sha256sum /tmp/codex13-checkpoint56-shuffle-parity/ProductSimplexShuffleParity.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint56-shuffle-parity/ProductSimplexShuffleParity.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "Reproduce standard-only axiom audits for mem_maximalPath_iff, maximalPath_coordinate_sum and face_objEquiv",
+       "Reproduce standard-only axiom audits for shuffleSign_mul_self, shuffleSign_ne_zero and shuffleSign_mod_two",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -35017,30 +35066,37 @@
       {:cmd "git diff --exit-code", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+       "lake env lean /tmp/codex13-checkpoint56-shuffle-parity/ProductSimplexShuffleParity.lean",
        :exit 1,
        :finding
-       "The first draft supplied an explicit universe argument to an abbreviation whose universe was inferred and reversed the coordinate-sum equality.",
+       "The first draft supplied an explicit universe argument to MaximalPath although its universe is inferred, preventing elaboration and downstream proofs.",
        :correction
-       "Expanded the subtype at its use site and oriented the equality from the product coordinates to the time index."}
+       "Expanded the maximal-path subtype at each declaration."}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+       "lake env lean /tmp/codex13-checkpoint56-shuffle-parity/ProductSimplexShuffleParity.lean",
        :exit 1,
        :finding
-       "The corrected subtype draft still applied symmetry after congrArg Fin.val, producing the reverse of the required natural-number equality.",
+       "The second draft left classical decidability unavailable inside the inversion-pair filter and did not mark the dependent sign definition noncomputable.",
        :correction
-       "Used congrArg Fin.val in its original direction; the final rerun compiled."}],
+       "Constructed inversionPairs in a classical block and marked shuffleSign noncomputable."}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint56-shuffle-parity/ProductSimplexShuffleParity.lean",
+       :exit 1,
+       :finding
+       "The third draft attempted to rewrite the same shuffleSign definition twice after the first rewrite had unfolded both occurrences.",
+       :correction
+       "Used one simplification step with shuffleSign and the reverse mul_pow identity; the final rerun compiled."}],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+      "/tmp/codex13-checkpoint56-shuffle-parity/ProductSimplexShuffleParity.lean",
       :sha256
-      "bf49a2ac0ea48a6b868d2f7aaff2963c125746bfdc559096625a9fd95e962761",
+      "275101b3ed483f767c88d9d08acc3f1226c8bdfde1d2ffe4ae6054de6d910c4d",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled prerequisite is supplied. Mathlib's ProdStdSimplex already represents maximal nondegenerate simplices of Δ[p]×Δ[q] as monotone lattice paths and proves that simplicial faces delete the selected path vertex. The fixture exposes that representation, proves the coordinate-sum-equals-time characterization and records the exact face formula. The parent signed-shuffle goal is not GO because this unsigned path interface still lacks shuffle parity, oriented interior-face pairing and affine realization into the topological standard-simplex product. No singular-chain cross product, Eilenberg-Zilber, Kunneth or consumer closure is claimed.",
+     "Exactly one complete compiled prerequisite is supplied. Using the promoted maximal-lattice-path interface, the fixture defines horizontal steps, the finite set of vertical-before-horizontal inversion pairs and the associated integer shuffle sign. It proves that the sign is a unit with square one and that every sign reduces to one over ZMod 2. The parent signed-shuffle fixture is not GO because oriented interior-face pairing and affine realization remain uncompiled. No singular-chain cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded signed-shuffle triangulation of products of standard simplices",
@@ -35071,7 +35127,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:oriented-checkpoint56-singular-cross-product-and-consumer-refill-1
-    :t03j05-product-simplex-maximal-lattice-path-interface-1],
+    :t03j05-product-simplex-maximal-lattice-path-interface-1
+    :t03j05-product-simplex-shuffle-parity-1],
    :current-residual
    "The requested singular-chain cross product cannot be defined from current imports because no banked construction triangulates a product of standard simplices with the signed boundary and naturality identities.",
    :other-consumers [:t96J06 :t97A04]}
