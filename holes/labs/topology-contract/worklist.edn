@@ -63688,8 +63688,41 @@
   {:consumer "t02A05",
    :stop-condition
    "GO requires complete frozen closure; otherwise identify the exact missing integration comparison or proved normalization defect. Infrastructure absence is not refutation.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Determine the actual intrinsic two-sphere Hausdorff mass through a proved normalization comparison or direct evaluation. A convention alone establishes neither the frozen formula nor a normalization defect. Campaign continues.",
+    :outcome :stop,
+    :warnings
+    ["Existing unnecessarySimpa warnings at diagnostic lines 116 and 148."],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :reason
+    "Exact unresolved normalization boundary: the total intrinsic diameter-power Hausdorff mass of the literal unit two-sphere must equal 4*pi. Neither that equality nor its negation has been proved here; this is not a refutation.",
+    :commands
+    [{:cmd "lake env lean /tmp/T02A05IntrinsicMassBoundary.lean",
+      :exit 0}
+     {:cmd "sha256sum problems/t02A05/lean/Main.lean", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T02A05IntrinsicMassBoundary.lean",
+     :sha256
+     "b9500e16a9f452af10481d834a994565905b0af94aa417479173f13b991d43bb",
+     :placeholder-count 0,
+     :role :boundary-diagnostic},
+    :finding
+    "Recompiled the existing placeholder-free diagnostic deriving the literal tangent-projection flux as M2*(11/15+(c0-1)^2+(c1-2)^2). It proves both the frozen bridge and the complete optimization conjunction equivalent, for omega satisfying isOmega, to M2=4*pi. Projection expansion, sphere translation and intrinsic moments therefore reduce the remaining obligation precisely to numerical mass normalization. RadialIntegrationR3 computes volume integrals but supplies no unconditional comparison with this intrinsic sphere measure. No new prerequisite or consumer closure is claimed.",
+    :frozen
+    {:path "problems/t02A05/lean/Main.lean",
+     :sha256
+     "fb006cf7fd68026fa20f517e58e4f6b3bbf1c34fce2f3ee42064f5e7b3cc89d5",
+     :placeholder-before 2,
+     :placeholder-after 2},
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "MANIFOLD INTEGRATION / frozen sphere flux",
    :acceptance
