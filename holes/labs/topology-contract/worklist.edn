@@ -58663,8 +58663,53 @@
   {:consumer "t00J02",
    :stop-condition
    "Require the actual derivative-kernel characterization and derived dimension formula; no supplied kernel identity or dimension assumption.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Product-model and literal incidence atlas transport remain. No incidence atlas, inclusion derivative theorem or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:mem-kernel
+     "6075e58cfd8e6b0612db5cd69edead7433b1aaa30cefad6749a4de5b12255238",
+     :kernel-dimension
+     "791888c7aa870cd5cdb0daa53650f32402cc1373cb5ea2bc57813976c7f5f0a8"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "Python fixture hash, forbidden-token and statement-hash audit",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.TransverseDifferenceRegularity",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/TransverseDifferenceKernel.lean ConstructionTargets/TransverseDifferenceKernel.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/TransverseDifferenceKernel.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history [],
+    :commit "1d45605fb372cb48d047f52b37f4be24dd8472b1",
+    :changed-paths
+    ["ConstructionTargets/TransverseDifferenceKernel.lean"],
+    :fixture
+    {:path "/tmp/TransverseDifferenceKernel.lean",
+     :sha256
+     "9a50b4fe1ffe16a7cc83de9e430a5581531ae03603439bf5897bc1ad5918913a",
+     :placeholder-count 0},
+    :finding
+    "Exact fixture promoted. Both declarations compile warning-free with standard-only axioms and zero placeholders. Actual product-model mfderiv, transversality-derived regularity and weaker hypotheses are preserved. Existing APIs and consumers unchanged; worktree clean. Validator reports 456 items OK."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TransverseDifferenceKernel.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / actual difference kernel and dimension",
