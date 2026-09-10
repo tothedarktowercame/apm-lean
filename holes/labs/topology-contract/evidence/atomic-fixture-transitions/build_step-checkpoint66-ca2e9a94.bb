@@ -1,0 +1,583 @@
+#!/usr/bin/env bb
+(require '[clojure.edn :as edn]
+         '[clojure.string :as str]
+         '[clojure.set :as set]
+         '[clojure.java.shell :as shell]
+         '[clojure.pprint :as pprint]
+         '[clojure.walk :as walk]
+         '[clojure.java.io :as io])
+
+(def here (.getParent (.getAbsoluteFile (java.io.File. *file*))))
+(def cmd (first *command-line-args*))
+(def path (or (second *command-line-args*) (str here "/worklist.edn")))
+(def data (edn/read-string (slurp path)))
+(def items (:items data))
+(def ids (map :id items))
+(def by-id (into {} (map (juxt :id identity) items)))
+(def priority {:uptake 0 :final-adapter 1 :representation-comparison 2
+               :reusable-theorem 3 :consumer-closure 4 :documentation 5})
+(defn owner-blocked? [idx dependency seen]
+  (when-not (seen dependency)
+    (let [item (idx dependency)]
+      (or (= :needs-owner (:state item))
+          (and (= :blocked (:state item))
+               (some #(owner-blocked? idx % (conj seen dependency))
+                     (:depends-on item)))))))
+(defn dependency-ready? [dependent dependency]
+  (let [state (:state (by-id dependency))]
+    (or (= :done state)
+        (and (= :strategy-checkpoint (:kind dependent))
+             (owner-blocked? by-id dependency #{})))))
+(defn eligible? [i]
+  (and (#{:open :repair} (:state i))
+       (every? #(dependency-ready? i %) (:depends-on i))))
+(defn selected []
+  (first (sort-by (juxt #(or (:campaign-priority %) 100)
+                             #(get priority (:kind %) 99)
+                             #(count (:scope %))
+                             #(name (:id %)))
+                  (filter eligible? items))))
+(defn commit-exists? [root sha]
+  (zero? (:exit (shell/sh "git" "cat-file" "-e" (str sha "^{commit}") :dir root))))
+(defn replay! []
+  (when-not (= :topology/replay-v1 (:schema data))
+    (throw (ex-info "not a topology replay" {:path path})))
+  (loop [done #{} xs items]
+    (when-let [i (first xs)]
+      (when-not (every? done (:depends-on i))
+        (throw (ex-info "replay dependency not complete" {:id (:id i) :depends-on (:depends-on i)})))
+      (doseq [sha (concat (when-let [x (:commit i)] [x]) (:commits i))]
+        (when-not (commit-exists? "/home/joe/code/apm-lean" sha)
+          (throw (ex-info "replay commit absent" {:id (:id i) :sha sha}))))
+      (println (format "%-29s %-8s %s" (name (:id i)) (name (:result i))
+                       (str/join "," (concat (when-let [x (:commit i)] [x]) (:commits i)))))
+      (recur (conj done (:id i)) (next xs))))
+  (println "replay: CLOSED" (name (:campaign data))
+           (str (:baseline-placeholders data) "->" (:final-placeholders data))))
+(defn write-ledger! [x]
+  (let [tmp (io/file (str path ".tmp"))]
+    (spit tmp (with-out-str (pprint/pprint x)))
+    ;; Validate BEFORE the atomic move, so no receipt can ever write a ledger
+    ;; that worklist_check refuses.
+    ;;
+    ;; The same invalid ledger has now been produced by two different receipt
+    ;; types, each time on a :strategy-checkpoint row:
+    ;;   2026-09-02  `applied fail`  -> :checkpoint-full-dag-refill-1
+    ;;   2026-09-10  `applied go`    -> :oriented-checkpoint52-...-refill-1
+    ;; Both left "strategy checkpoint lacks :phase :strategy or checkpoint
+    ;; policy". The first was fixed by patching the :fail branch (2f41fd67);
+    ;; :go then walked into the identical state because GO forces
+    ;; :phase :implementation. Patching outcome by outcome only moves the hole.
+    ;; The ledger's invariants live in worklist_check.bb, so the one place that
+    ;; writes the ledger now asks it first.
+    ;;
+    ;; It also closes a worse gap: the loop commits the ledger BEFORE its own
+    ;; validate() runs, so on 2026-09-10 the invalid state was committed to git
+    ;; (3efbe0b9) and needed hand repair. A rejected receipt now leaves the
+    ;; ledger untouched; the loop's invalid-receipt path clears the in-flight
+    ;; pointer and the row is redispatched from its prior, valid state.
+    (let [{:keys [exit err out]} (shell/sh "bb" (str here "/worklist_check.bb") (str tmp))]
+      (when-not (zero? exit)
+        (.delete tmp)
+        (throw (ex-info (str "receipt would invalidate the ledger: "
+                             (str/trim (str/replace (str err out) #"^topology-worklist:\s*" "")))
+                        {}))))
+    (java.nio.file.Files/move (.toPath tmp) (.toPath (io/file path))
+      (into-array java.nio.file.CopyOption
+                  [java.nio.file.StandardCopyOption/REPLACE_EXISTING
+                   java.nio.file.StandardCopyOption/ATOMIC_MOVE]))))
+(defn replace-item [xs id f]
+  (mapv #(if (= id (:id %)) (f %) %) xs))
+(defn normalize-prerequisite [asking-row prerequisite]
+  ;; A prerequisite cannot depend on the row that is waiting for it. Agents
+  ;; occasionally describe provenance by putting the asking probe in P's
+  ;; :depends-on; after REVISE adds the reverse edge this becomes a cycle and
+  ;; leaves an :open row with an incomplete dependency. Preserve the actual
+  ;; scheduling constraint by splicing in the asking row's prior dependencies.
+  (let [asking-id (:id asking-row)
+        prior (:depends-on asking-row)]
+    (update prerequisite :depends-on
+            #(vec (distinct (mapcat (fn [dependency]
+                                      (if (= asking-id dependency)
+                                        prior
+                                        [dependency]))
+                                    (or % [])))))))
+(defn unblock-ready [xs]
+  (let [idx (into {} (map (juxt :id identity) xs))]
+    (mapv #(if (and (= :blocked (:state %))
+                    (every? (fn [d]
+                              (let [state (:state (idx d))]
+                                (or (= :done state)
+                                    (and (= :strategy-checkpoint (:kind %))
+                                         (owner-blocked? idx d #{})))))
+                            (:depends-on %)))
+             (assoc % :state :open)
+             %) xs)))
+(defn normalize-receipt [receipt]
+  ;; Implementation packets are asked to report the "next consumer residual",
+  ;; and older receipts conventionally named the same datum :residual.  Keep
+  ;; the producer's explicit field for audit, but present the canonical ledger
+  ;; key to validation and downstream readers.
+  (cond-> receipt
+    (and (= :done-unreviewed (:outcome receipt))
+         (nil? (:residual receipt))
+         (some? (:next-consumer-residual receipt)))
+    (assoc :residual (:next-consumer-residual receipt))))
+
+(def fixture-transition-preserve-paths
+  {:sha256 [:evidence :fixture :sha256]
+   :supporting-path [:evidence :fixture :supporting-path]
+   :supporting-sha256 [:evidence :fixture :supporting-sha256]
+   :placeholder-count [:evidence :fixture :placeholder-count]
+   :commit [:evidence :commit]
+   :review-outcome [:evidence :review :outcome]})
+
+(defn canonical-file [p]
+  (let [f (io/file p)]
+    (if (.isAbsolute f) f (io/file (:canonical-root data) p))))
+
+(defn sha256-file [f]
+  (when (.isFile f)
+    (let [{:keys [exit out]} (shell/sh "sha256sum" (.getPath f))]
+      (when (zero? exit) (first (str/split out #"\s+"))))))
+
+(defn apply-completion-transition [xs receipt outcome]
+  (if-let [transition (:completion-transition receipt)]
+    (do
+      (when-not (= :done-unreviewed outcome)
+        (throw (ex-info "completion transition requires done-unreviewed outcome" {})))
+      (when-not (= #{:row :path :from :to :preserve} (set (keys transition)))
+        (throw (ex-info "completion transition has unsupported fields" {})))
+      (when-not (= [:evidence :fixture :path] (:path transition))
+        (throw (ex-info "completion transition may change only evidence fixture path" {})))
+      (when-not (= (set (keys fixture-transition-preserve-paths))
+                   (set (keys (:preserve transition))))
+        (throw (ex-info "completion transition must preserve every required value" {})))
+      (let [matches (keep-indexed #(when (= (:row transition) (:id %2)) %1) xs)]
+        (when-not (= 1 (count matches))
+          (throw (ex-info "completion transition must identify exactly one row" {})))
+        (let [index (first matches) row (nth xs index)
+              fixture (get-in row [:evidence :fixture])
+              target (canonical-file (:to transition))]
+          (when-not (#{:done :done-unreviewed} (:state row))
+            (throw (ex-info "completion transition target row is not completed" {})))
+          (when-not (= (:from transition) (:path fixture))
+            (throw (ex-info "completion transition source path mismatch" {})))
+          (doseq [[label path] fixture-transition-preserve-paths]
+            (when-not (= (get-in row path) (get-in transition [:preserve label]))
+              (throw (ex-info "completion transition preserved value mismatch"
+                              {:field label}))))
+          (when-not (= (:sha256 fixture) (sha256-file target))
+            (throw (ex-info "completion transition target missing or hash mismatch" {})))
+          (assoc xs index (assoc-in row [:evidence :fixture :path] (:to transition))))))
+    xs))
+(defn validate-inserted-row! [row allowed-ids]
+  (doseq [dependency (:depends-on row)]
+    (when-not (allowed-ids dependency)
+      (throw (ex-info "inserted row has unknown dependency"
+                      {:id (:id row) :dependency dependency}))))
+  (when (= :representation-comparison (:kind row))
+    (doseq [[label paths]
+            [[:source-representation [[:representation :source]
+                                      [:source-representation]]]
+             [:target-representation [[:representation :target]
+                                      [:target-representation]]]
+             [:orientation [[:representation :direction] [:orientation]]]]]
+      (when-not (some #(not (str/blank? (str (get-in row %)))) paths)
+        (throw (ex-info "representation comparison row lacks required field"
+                        {:id (:id row) :field label}))))))
+;; Need-driven admission (Joe, 2026-09-10). A strategy checkpoint may elect
+;; only work that an open frozen problem needs: every non-documentation row it
+;; inserts must name a frozen problem that still has placeholders, and a
+;; reusable theorem must name two. topo2 was seeded as an "independent
+;; foundation campaign" and elected rows whose only consumers were labels such
+;; as :circle-fundamental-class; the ledger validator accepted any consumer
+;; name, so nothing tied that work to a problem. TOPOLOGY_PROBLEMS_ROOT lets
+;; the tests use fixture problems whose state never changes.
+(def problems-root
+  (or (System/getenv "TOPOLOGY_PROBLEMS_ROOT")
+      (str (or (:canonical-root data) (.getCanonicalPath (io/file here "../../.."))) "/problems")))
+(def problem-dirs (delay (set (.list (io/file problems-root)))))
+(defn problem-of
+  "The frozen problem a consumer names: its own id, or the id prefix of a
+   label such as :t02A05-moment-reduction. nil when it names no problem."
+  [consumer]
+  (let [s (str/replace (str consumer) #"^:" "")
+        by-lower (into {} (map (juxt str/lower-case identity) @problem-dirs))]
+    (or (@problem-dirs s)
+        (some->> (re-find #"^[a-z]+\d\d[aj]\d\d" (str/lower-case s)) by-lower))))
+(defn strip-lean [^String s]
+  (let [n (count s) sb (StringBuilder.)]
+    (loop [i 0]
+      (if (>= i n)
+        (str sb)
+        (let [c (.charAt s i) nx (when (< (inc i) n) (.charAt s (inc i)))]
+          (cond
+            (and (= c \-) (= nx \-)) (recur (or (str/index-of s "\n" i) n))
+            (and (= c \/) (= nx \-))
+            (recur (loop [k (+ i 2) depth 1]
+                     (cond (zero? depth) k
+                           (>= k n) n
+                           (str/starts-with? (subs s k (min n (+ k 2))) "/-") (recur (+ k 2) (inc depth))
+                           (str/starts-with? (subs s k (min n (+ k 2))) "-/") (recur (+ k 2) (dec depth))
+                           :else (recur (inc k) depth))))
+            (and (= c \') (= nx \") (< (+ i 2) n) (= (.charAt s (+ i 2)) \')) (recur (+ i 3))
+            (= c \") (recur (loop [k (inc i)]
+                              (cond (>= k n) n
+                                    (= (.charAt s k) \\) (recur (+ k 2))
+                                    (= (.charAt s k) \") (inc k)
+                                    :else (recur (inc k)))))
+            :else (do (.append sb c) (recur (inc i)))))))))
+(defn placeholder-count
+  "sorry/admit/axiom outside comments and strings in the problem's Lean
+   files; nil when the problem has no Lean file."
+  [problem]
+  (let [fs (->> (file-seq (io/file problems-root problem "lean"))
+                (filter #(str/ends-with? (.getName %) ".lean")))]
+    (when (seq fs)
+      (reduce + (for [f fs :let [code (strip-lean (slurp f))]]
+                  (+ (count (re-seq #"(?<![\w.])(?:sorry|admit)(?![\w.])" code))
+                     (count (re-seq #"(?m)^[ \t]*(?:private[ \t]+|protected[ \t]+)?axiom[ \t]" code))))))))
+(defn open-problems
+  "Distinct frozen problems named by the row that still have placeholders."
+  [row]
+  (->> (cons (:consumer row) (:other-consumers row))
+       (keep problem-of) distinct
+       (filter #(some-> (placeholder-count %) pos?))
+       set))
+(defn need-violation
+  "Why a strategy-elected work row is not needed to close an open problem, or nil."
+  [row]
+  (let [open (open-problems row)]
+    (cond
+      (empty? open)
+      {:id (:id row) :consumers (vec (cons (:consumer row) (:other-consumers row)))
+       :reason "names no open frozen problem; infrastructure is elected only when an open problem needs it"}
+      (and (= :reusable-theorem (:kind row)) (not (:bounded-exception row)) (< (count open) 2))
+      {:id (:id row) :open-problems (vec open)
+       :reason "reusable theorem needed by fewer than two open problems; elect it as that problem's adapter or record a :bounded-exception"})))
+(defn apply-result! []
+  (let [id (keyword (nth *command-line-args* 2 ""))
+        receipt-path (nth *command-line-args* 3 "")
+        receipt (normalize-receipt (edn/read-string (slurp receipt-path)))
+        item (by-id id)
+        outcome (:outcome receipt)]
+    (when-not item (throw (ex-info "unknown result row" {:id id})))
+    ;; Completed evidence must satisfy the same gate rule as worklist_check.
+    ;; Reject before writing; a failed exploratory command is not a passing
+    ;; gate merely because a later command succeeded.
+    (when (#{:done-unreviewed :stop :replan :pass} outcome)
+      ;; Review receipts also use command-description strings: their PASS
+      ;; finding attests reproduction, unlike implementation gate records.
+      ;; Preserve those descriptions without inventing exit codes. Structured
+      ;; review gate records still must match their expected exits.
+      (when-let [failed (seq (filter #(and (not (and (= :pass outcome) (string? %)))
+                                          (not= (get % :expected-exit 0) (:exit %)))
+                                    (:commands receipt)))]
+        (throw (ex-info "receipt records an unexpected gate exit"
+                        {:id id :commands failed}))))
+    (case outcome
+      :go (when-not (and (get-in receipt [:fixture :path])
+                         (get-in receipt [:fixture :sha256])
+                         (seq (:commands receipt))
+                         (vector? (get-in receipt [:implementation :scope])))
+            (throw (ex-info "GO receipt lacks fixture or commands" {:receipt receipt})))
+      :revise nil
+      :stop (when-not (:reason receipt)
+              (throw (ex-info "STOP receipt lacks reason" {:receipt receipt})))
+      :replan (let [rs (:replacement-items receipt)
+                    work (butlast rs)
+                    checkpoint (last rs)
+                    work-ids (set (map :id work))
+                    reusable-valid?
+                    (fn [row]
+                      (or (not= :reusable-theorem (:kind row))
+                          (<= 2 (count (set (conj (set (:other-consumers row))
+                                                  (:consumer row)))))
+                          (:bounded-exception row)))]
+                (when-not (and (:seat receipt) (seq (:commands receipt)) (:finding receipt)
+                               (vector? rs) (<= 2 (count rs) 6)
+                               (every? reusable-valid? work)
+                               (= :strategy-checkpoint (:kind checkpoint))
+                               (= :strategy (:phase checkpoint))
+                               (set/subset? work-ids (set (:depends-on checkpoint))))
+                  (throw (ex-info "REPLAN needs 1-5 work rows followed by their next checkpoint"
+                                  {:receipt receipt})))
+                (when-let [v (seq (keep need-violation
+                                        (remove #(= :documentation (:kind %)) work)))]
+                  (throw (ex-info "REPLAN elects work that no open frozen problem needs"
+                                  {:violations (vec v)}))))
+      :done-unreviewed
+      (do
+        (doseq [k [:author :commit :fixture :changed-paths :commands :residual]]
+          (when-not (get receipt k)
+            (throw (ex-info "implementation receipt lacks field" {:field k}))))
+        ;; Refuse a completion before it can replace the row's evidence when
+        ;; its commits do not implement that row's exact scope.  Include prior
+        ;; commits for a genuine repair, matching worklist_check's union rule.
+        (let [prior (concat (get-in item [:evidence :commits])
+                            (when-let [c (get-in item [:evidence :commit])] [c]))
+              commits (vec (distinct (remove nil?
+                                             (concat prior
+                                                     [(:commit receipt)]
+                                                     (:commits receipt)))))]
+          (doseq [c commits]
+            (when-not (commit-exists? (:canonical-root data) c)
+              (throw (ex-info "implementation evidence commit absent"
+                              {:id id :commit c}))))
+          (let [paths (reduce into #{}
+                              (map #(->> (shell/sh "git" "show" "--pretty="
+                                                     "--name-only" %
+                                                     :dir (:canonical-root data))
+                                         :out str/split-lines
+                                         (remove str/blank?) set)
+                                   commits))]
+            (when-not (= (set (:scope item)) paths)
+              (throw (ex-info "implementation commit paths differ from exact scope"
+                              {:id id :scope (set (:scope item))
+                               :commit-paths paths :commits commits}))))))
+      :pass (doseq [k [:seat :commands :finding]]
+              (when-not (get receipt k)
+                (throw (ex-info "PASS receipt lacks field" {:field k}))))
+      :fail (doseq [k [:seat :finding]]
+              (when-not (get receipt k)
+                (throw (ex-info "FAIL receipt lacks field" {:field k}))))
+      (throw (ex-info "unknown receipt outcome" {:outcome outcome})))
+    (case outcome
+      ;; Only validate a prerequisite that is actually being INSERTED. When it
+      ;; already exists, the :revise branch below takes the `existing` path and
+      ;; merges nothing from the receipt's copy -- it only adds the dependency
+      ;; edge -- so validating that copy rejects a receipt over fields the
+      ;; ledger will never read. On 2026-09-08 a re-dispatched probe returned a
+      ;; second revise naming a prerequisite that had meanwhile been inserted
+      ;; and given its orientation; the receipt still carried the older copy
+      ;; without one, and the loop stopped over a row that was already correct.
+      :revise (when-not (by-id (:id (:prerequisite receipt)))
+                (validate-inserted-row!
+                 (normalize-prerequisite (by-id id) (:prerequisite receipt))
+                 (set ids)))
+      :replan (let [rows (:replacement-items receipt)
+                    allowed-ids (into (set ids) (map :id rows))]
+                (doseq [row rows]
+                  (validate-inserted-row! row allowed-ids)))
+      nil)
+    (let [items (apply-completion-transition items receipt outcome)
+          new-items
+          (case outcome
+            ;; A row's :id is the ledger's referential integrity: other rows
+            ;; name it in :depends-on. (merge % implementation) let a GO
+            ;; receipt supply its own :id and so RENAME the row -- on
+            ;; 2026-09-06 codex-1's GO renamed
+            ;; critical-value-sard-local-rank-normal-form-probe-2 to
+            ;; ...-implementation-2 and reset :depends-on to [], which left
+            ;; critical-value-sard-rank-source-induction-probe-2 pointing at an
+            ;; id that no longer existed. worklist_check.bb correctly refused
+            ;; the ledger ("unknown dependency") and the supervisor stopped for
+            ;; 13 hours. The implementation payload supplies scope and
+            ;; acceptance; it does not get to re-identify the row it is
+            ;; implementing.
+            :go (replace-item items id
+                              #(-> (merge % (dissoc (:implementation receipt)
+                                                    :id :depends-on))
+                                   (assoc :state :open :phase :implementation)
+                                   (assoc-in [:evidence :probe] receipt)
+                                   (cond-> (:id (:implementation receipt))
+                                     (assoc-in [:evidence :requested-id]
+                                               (:id (:implementation receipt))))))
+            ;; REVISE means "I need prerequisite P before I can continue".
+            ;; If P is ALREADY in the ledger that is a dependency, not a new
+            ;; row: on 2026-09-07 a probe asked for
+            ;; :critical-value-sard-implicit-function-residual-flatness-1,
+            ;; which was already :done with a passing review, and this inserted
+            ;; a second identical copy at :open. worklist_check refused the
+            ;; ledger ("duplicate item ids") and the supervisor stopped. The
+            ;; :replan branch below has always checked for exactly this; this
+            ;; branch did not.
+            ;;
+            ;; A prerequisite that is already :done blocks nothing, so the
+            ;; asking row stays runnable; one still in flight blocks it as
+            ;; before. Either way the dependency is recorded once.
+            :revise (let [p (normalize-prerequisite (by-id id)
+                                                     (:prerequisite receipt))]
+                      (when-not (and (map? p) (:id p))
+                        (throw (ex-info "REVISE lacks prerequisite item" {:receipt receipt})))
+                      (let [existing (by-id (:id p))
+                            note (fn [row]
+                                   (-> row
+                                       (update :depends-on
+                                               #(vec (distinct (conj (or % []) (:id p)))))
+                                       (assoc-in [:evidence :probe] receipt)))]
+                        (if existing
+                          (vec (mapv #(if (= id (:id %))
+                                        (cond-> (note %)
+                                          (not= :done (:state existing))
+                                          (assoc :state :blocked))
+                                        %)
+                                     items))
+                          (vec (mapcat #(if (= id (:id %))
+                                          [(merge {:state :open :phase :probe :depends-on []}
+                                                  p)
+                                           (-> % (assoc :state :blocked) note)]
+                                          [%]) items)))))
+            :stop (replace-item items id #(-> % (assoc :state :done-unreviewed)
+                                                 (assoc :evidence (assoc receipt
+                                                                   :author (:seat receipt)
+                                                                   :disposition :stop))))
+            :replan (let [supersede (set (:supersede receipt))
+                          replacement-ids (map :id (:replacement-items receipt))
+                          conflicts (keep by-id replacement-ids)
+                          _ (when (some #(not= :superseded (:state %)) conflicts)
+                              (throw (ex-info "replacement id already exists"
+                                              {:ids (map :id conflicts)})))
+                          replacement-id-set (set replacement-ids)
+                          prepared (->> items
+                                        (remove #(replacement-id-set (:id %)))
+                                        (mapv #(if (supersede (:id %))
+                                                 (assoc % :state :superseded)
+                                                 %)))
+                          replacements (mapv #(-> %
+                                                    (update :depends-on (fnil conj []) id)
+                                                    (assoc :state :blocked))
+                                              (:replacement-items receipt))]
+                      (vec (mapcat #(if (= id (:id %))
+                                      (into [(-> % (assoc :state :done-unreviewed)
+                                                    (assoc :evidence (assoc receipt
+                                                                      :author (:seat receipt)
+                                                                      :disposition :replan)))]
+                                            replacements)
+                                      [%]) prepared)))
+            ;; A REPAIRED row is completed more than once, and this used to
+            ;; replace :evidence wholesale, so the repair's receipt discarded
+            ;; the implementation's commit. worklist_check then compared one
+            ;; commit's paths against the row's whole scope and the supervisor
+            ;; stopped: on 2026-09-07
+            ;; :critical-value-sard-projected-implicit-function-packaging-1
+            ;; recorded only its repair b0686676 (.lean) against a two-path
+            ;; scope, and the run halted at row 60 of 70 until a human recorded
+            ;; f6654435 by hand.
+            ;;
+            ;; Accumulate instead. Prior commits carry forward into :commits,
+            ;; which the checker unions against scope, so the ledger records
+            ;; the row's whole history without anyone noticing in time. A row
+            ;; completed once still carries :commit alone, which is what the
+            ;; other rows use.
+            :done-unreviewed
+            (replace-item
+             items id
+             (fn [it]
+               ;; History first, then the row's last recorded commit: the
+               ;; union check does not care about order, but the ledger is read
+               ;; by people and should run chronologically.
+               (let [prior (concat (get-in it [:evidence :commits])
+                                   (when-let [c (get-in it [:evidence :commit])] [c]))
+                     all (vec (distinct (remove nil?
+                                                (concat prior
+                                                        (when-let [c (:commit receipt)] [c])
+                                                        (:commits receipt)))))]
+                 (-> it
+                     (assoc :state :done-unreviewed)
+                     (assoc :evidence (cond-> receipt
+                                        (< 1 (count all)) (assoc :commits all)))))))
+            :pass (replace-item items id #(-> %
+                                                (assoc :state
+                                                       (if (and (= :strategy-checkpoint (:kind %))
+                                                                (= :stop (get-in % [:evidence :outcome])))
+                                                         :needs-owner
+                                                         :done))
+                                                (assoc-in [:evidence :review] receipt)))
+            :fail (if (= :strategy-checkpoint (:kind item))
+                    (let [rejected-ids (set (map :id
+                                                 (get-in item [:evidence :replacement-items])))]
+                      (mapv #(cond
+                               (= id (:id %))
+                               (-> % (assoc :state :repair :phase :strategy)
+                                     (assoc :review-finding (:finding receipt))
+                                     (assoc-in [:evidence :review] receipt))
+
+                               (rejected-ids (:id %))
+                               (assoc % :state :superseded)
+
+                               :else %)
+                            items))
+                    (replace-item items id #(-> % (assoc :state :repair :phase :implementation)
+                                                  (assoc :review-finding (:finding receipt))
+                                                  (assoc-in [:evidence :review] receipt))))
+            (throw (ex-info "unknown receipt outcome" {:outcome outcome})))]
+      (write-ledger! (assoc data :items (unblock-ready new-items)))
+      (println "applied" (name outcome) "to" (name id)))))
+
+(defn repair-dependencies! []
+  (let [id (keyword (nth *command-line-args* 2 ""))
+        replacements (partition-all 2 (drop 3 *command-line-args*))
+        item (by-id id)]
+    (when-not item (throw (ex-info "unknown repair row" {:id id})))
+    (when-not (and (seq replacements)
+                   (every? #(= 2 (count %)) replacements))
+      (throw (ex-info "dependency repair needs OLD NEW pairs" {:id id})))
+    (let [pairs (mapv (fn [[old new]] [(keyword old) (keyword new)]) replacements)
+          dependencies (set (:depends-on item))]
+      (doseq [[old new] pairs]
+        (when-not (dependencies old)
+          (throw (ex-info "repair source dependency absent"
+                          {:id id :dependency old})))
+        (when-not (by-id new)
+          (throw (ex-info "repair target dependency unknown"
+                          {:id id :dependency new}))))
+      (let [replacement-map (into {} pairs)
+            repaired (update item :depends-on
+                             #(mapv (fn [dependency]
+                                      (get replacement-map dependency dependency)) %))]
+        (write-ledger! (assoc data :items (replace-item items id (constantly repaired))))
+        (println "repaired dependencies for" (name id))))))
+
+(defn repair-fixture-hash! []
+  (let [fixture-path (nth *command-line-args* 2 "")
+        old-hash (nth *command-line-args* 3 "")
+        new-hash (nth *command-line-args* 4 "")
+        replacements (atom 0)
+        repaired (walk/postwalk
+                  (fn [x]
+                    (if (and (map? x)
+                             (= fixture-path (:path x))
+                             (= old-hash (:sha256 x)))
+                      (do (swap! replacements inc) (assoc x :sha256 new-hash))
+                      x))
+                  data)]
+    (when-not (= 1 @replacements)
+      (throw (ex-info "fixture hash repair needs exactly one matching fixture"
+                      {:path fixture-path :old-hash old-hash
+                       :matches @replacements})))
+    (write-ledger! repaired)
+    (println "repaired fixture hash for" fixture-path)))
+
+;; A refusal has to arrive as a sentence. build_step.bb's failures reach the
+;; operator through topology-build-loop.sh's `die "invalid receipt ...: $out"`
+;; and then through the supervisor's last_stop_reason, which keeps the FIRST
+;; line -- and babashka's first line is "----- Error ----------". On
+;; 2026-09-08 the real complaint ("representation comparison row lacks
+;; required field", :field :orientation) sat twelve lines down inside a stack
+;; trace, so the stop read "invalid receipt from <job>: ----- Error -----" and
+;; three repair attempts were spent before anyone saw what was wrong.
+(defn- die! [^Throwable t]
+  (binding [*out* *err*]
+    (let [data (ex-data t)]
+      (println (str (.getMessage t)
+                    (when (seq data) (str " " (pr-str data)))))))
+  (System/exit 1))
+
+(try
+(case cmd
+  "next-open" (println (or (some-> (selected) :id name) "NONE"))
+  "unreviewed" (println (str/join " " (map (comp name :id)
+                                               (filter #(= :done-unreviewed (:state %)) items))))
+  "counts" (println (pr-str (frequencies (map :state items))))
+  "row" (let [id (keyword (nth *command-line-args* 2 ""))]
+          (if-let [i (by-id id)] (prn i) (System/exit 2)))
+  "apply-result" (apply-result!)
+  "repair-dependencies" (repair-dependencies!)
+  "repair-fixture-hash" (repair-fixture-hash!)
+  "replay" (replay!)
+  (do (binding [*out* *err*]
+        (println "usage: build_step.bb next-open|unreviewed|counts|row|apply-result|repair-dependencies|repair-fixture-hash|replay [ledger] [args...]"))
+      (System/exit 2)))
+(catch clojure.lang.ExceptionInfo t (die! t)))
