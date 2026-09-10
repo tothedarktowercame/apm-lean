@@ -31209,108 +31209,62 @@
    :stop-condition
    "Do not identify raw hausdorffMeasure with volume at coefficient one, use μHE in place of the raw measure, cancel ENNReal scalars through zero or infinity, assume unit-ball volumes, sphere mass, cap assembly, equator nullity, polar-coordinate formulas or moment values. Prove only the dimension-two and dimension-three constants required by the named consumers, in a unique row-specific scratch directory.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Prove the characterization of addHaarScalarFactor for volume and raw Hausdorff measure using the compiled unit-ball values, then derive μH[2] = (4/π) • volume and μH[3] = (6/π) • volume and the required set-measure and restricted-lintegral rewrites.",
-     :outcome :revise,
-     :warnings [],
-     :prerequisite
-     {:consumer :t95J05,
-      :stop-condition
-      "Bank only the four exact open-unit-ball volume formulas. Do not claim an addHaarScalarFactor value, raw Hausdorff-to-volume equality, set-integral transport, sphere mass, cap assembly, equator nullity, polar-coordinate formula, moment value or consumer closure.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean"
-       "ConstructionTargets/EuclideanAndSupUnitBallVolumes.md"],
-      :dag-node
-      "MANIFOLD INTEGRATION: Euclidean L2 and finite-function sup unit-ball volumes in dimensions two and three",
-      :acceptance
-      {:namespace "ConstructionTargets.EuclideanAndSupUnitBallVolumes",
-       :implementation
-       "Promote the exact compiled fixture and document that the addHaarScalarFactor characterization remains the next normalization step.",
-       :hypotheses
-       "Use canonical volume on EuclideanSpace real (Fin 2), EuclideanSpace real (Fin 3), Fin 2 → real and Fin 3 → real with their actual repository metrics. No normalization or finiteness hypothesis is supplied.",
-       :declarations
-       ["E2"
-        "E3"
-        "euclidean_two"
-        "euclidean_three"
-        "sup_two"
-        "sup_three"],
-       :consumer-equation
-       "The L2 Euclidean unit-ball volumes are π in dimension two and 4π/3 in dimension three, while the finite-function sup-metric unit-ball volumes are 4 and 8.",
-       :consumer-residual
-       "Use these exact values to prove the addHaarScalarFactor ratios π/4 and π/6, then derive the corrected raw Hausdorff measure and restricted-lintegral formulas.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.EuclideanAndSupUnitBallVolumes."
-        "Reproduce four standard-only axiom audits."
-        "Verify the Euclidean formulas use the actual L2 ball-volume theorems."
-        "Verify the finite-function formulas use the actual sup-metric volume_pi_ball theorem."
-        "Confirm the four values are π, 4π/3, 4 and 8 with no assumed normalization."
-        "Confirm no addHaarScalarFactor, raw-measure transport, sphere, equator or moment theorem is claimed."
-        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :euclidean-and-sup-unit-ball-volumes-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2],
-      :current-residual
-      "The corrected raw Hausdorff normalization needs exact numerator and denominator unit-ball volumes before the missing Haar-scalar characterization can yield π/4 and π/6.",
-      :other-consumers [:t02A05 :t01J06 :t94A10]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
-       :exit 0}
-      {:cmd
-       "Inspect Euclidean and product-space ball-volume APIs and addHaarScalarFactor characterization",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "Python comment-stripped placeholder, forbidden-declaration, whitespace and four standard-only axiom audits",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial unit-ball volume fixture compilation",
-       :exit 1,
-       :correction
-       "Qualified the dimension-two and dimension-three Euclidean ball lemmas with the EuclideanSpace namespace and replaced an unavailable qualified real-ball theorem with the finite-product volume_pi_ball theorem."}
-      {:cmd "Compilation after namespace corrections",
-       :exit 1,
-       :correction
-       "The simpa form simplified the supplied theorem before matching the numeric goal. Replaced it with an explicit rewrite by volume_pi_ball followed by numeric normalization; the corrected fixture compiles."}],
-     :changed-paths [],
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean",
-      :sha256
-      "c99e1f91b71820c5188a90561c5b5de2a1b24a081a779984437d4030dde1accf",
-      :placeholder-count 0},
-     :finding
-     "Exactly one complete compiled prerequisite is supplied. For the actual L2 metrics, the open unit-ball volumes in EuclideanSpace real (Fin 2) and EuclideanSpace real (Fin 3) are ENNReal.ofReal π and ENNReal.ofReal (π * 4 / 3). For the corresponding finite real function spaces with their sup metrics, the open unit-ball volumes are 4 and 8. These are precisely the numerator and denominator values required for the intended π/4 and π/6 addHaarScalarFactor calculations. The parent normalization probe is not GO because Mathlib's theorem identifying addHaarScalarFactor with this ratio remains proof_wanted; raw Hausdorff measure equalities and their set-integral transports cannot yet be derived without proving that characterization. No canonical source or ledger was edited.",
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Implement the missing addHaarScalarFactor characterization by comparing the raw Hausdorff construction under the identity between the L2 Euclidean and sup-metric coordinate models. Once that theorem is banked, substitute the reviewed unit-ball values to derive π/4 and π/6, invert the finite nonzero scalars, and prove the raw measure and restricted-lintegral formulas.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :reason :missing-add-haar-scalar-characterization,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
+      :exit 0}
+     {:cmd
+      "Inspect addHaarScalarFactor uniqueness APIs, raw Hausdorff ball APIs and the banked EuclideanAndSupUnitBallVolumes prerequisite",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/EuclideanAndSupUnitBallVolumes.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.EuclideanAndSupUnitBallVolumes",
+      :exit 0}
+     {:cmd
+      "rg -n \"proof_wanted MeasureTheory.Measure.addHaarScalarFactor_hausdorffMeasure_eq\" .lake/packages/mathlib/Mathlib/Geometry/Euclidean/Volume/Measure.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"hausdorffMeasure.*EuclideanSpace.*ball|hausdorffMeasure.*ball.*EuclideanSpace\" .lake/packages/mathlib/Mathlib",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint49-unit-balls/EuclideanAndSupUnitBallVolumes.lean",
+     :sha256
+     "c99e1f91b71820c5188a90561c5b5de2a1b24a081a779984437d4030dde1accf",
+     :placeholder-count 0},
+    :finding
+    "STOP at an exact independent library boundary. The reviewed prerequisite supplies all four required ball volumes: π and 4π/3 for the L2 Euclidean unit balls, and 4 and 8 for the finite-function sup-metric unit balls. To obtain π/4 and π/6, one must identify addHaarScalarFactor volume μH with the quotient of those volumes. The sole matching Mathlib declaration, MeasureTheory.Measure.addHaarScalarFactor_hausdorffMeasure_eq, is marked proof_wanted. Haar uniqueness proves only that volume equals an unspecified scalar multiple of raw Hausdorff measure; it does not compute that scalar. No alternative theorem evaluates raw Hausdorff measure of an L2 Euclidean ball. Therefore the raw equalities μH[2] = (4/π) • volume and μH[3] = (6/π) • volume, and their restricted-lintegral consequences, cannot be proved from the current bank without implementing the missing scalar characterization. Assuming it, replacing μH by μHE, or cancelling an unspecified ENNReal scalar would violate the row invariants. This STOP reports an unavailable construction, not a refutation of the corrected normalization formulas.",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: corrected raw Euclidean Hausdorff normalization in dimensions two and three",
