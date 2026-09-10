@@ -66449,8 +66449,72 @@
   {:consumer "t98A02",
    :stop-condition
    "Require constructed second-chart maps, proved boundary avoidance and actual connecting and normalization equations; no supplied commuting square.",
+   :evidence
+   {:dependency
+    {:path
+     "ConstructionTargets/CoefficientChartBallNormalization.lean",
+     :sha256
+     "1e5daa85369856ec864f5fd7abc4c8f511585490c0ead0367ddfff6f5788cd61"},
+    :placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Identify the composite with ambient second-chart normalization, apply boundary-motion homotopy, then derive transition-unit equality. No local constancy or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:second_deleted
+     "20ae7ad6f9a0cd515ab37a8700618343bd034f49ce34037b9d5338a2a267b870",
+     :sphere_value
+     "f43638366b23635845005f8911985d0ce9e05d5f9013b2e2bcc35aa66fe8f205",
+     :connecting
+     "4ea6c94c347562571efd465ea54b605e1b6b5255d58dd91e2901f04b7fbaa627",
+     :normalized_connecting
+     "474dbc1eb4203f4a54df76be687f15cd1618ff71cd0358e3c5409c794aae9180"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CoefficientSecondChartBoundary.lean ConstructionTargets/CoefficientChartBallNormalization.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientChartBallNormalization",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientSecondChartBoundary.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and complete theorem-header hashes",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "The fixed ball-boundary relative lift mapped through the actual second chart at a nearby point",
+     :target
+     "The actual mapped sphere boundary recentered at that point and its Euclidean model normalization",
+     :direction
+     "Prove equality from the fixed lift followed by second-chart relative homology and connecting to the recentered boundary homology map; derive the directed model-normalization composite."},
+    :commit "bd4a32af71ac87b15ef685642519c89948d48d84",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSecondChartBoundary.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSecondChartBoundary.lean",
+     :sha256
+     "9275703052f90de380e636b3b9262f72ca6fb20b8286857a788fb9395a2b6a20",
+     :exact-promotion true},
+    :finding
+    "Exact fixture promoted. Constructed second-chart subtype maps, boundary avoidance, sphere-value formula and connecting and normalization equations compile with commutative-ring coefficients, nearby-point hypotheses and explicit dimension m+2 preserved. Ledger untouched.",
+    :axiom-audit-count 4,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoefficientSecondChartBoundary.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / second-chart boundary connecting comparison",
