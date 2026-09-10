@@ -73126,8 +73126,56 @@
   {:consumer "t98A02",
    :stop-condition
    "Require exactness of the compiled two-arrow relative chain complex after comparing its final quotient with the open-union small-chain quotient; then construct the genuine connecting morphism and derive all three homology exactness segments.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove degreewise kernel-image equality and the required surjectivity after replacing the actual union-subspace denominator by the reviewed open-cover small-chain denominator. Then obtain the nonzero-capable connecting morphism from the resulting short exact sequence and transport its three exactness segments to the literal relative homology arrows.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:unionComplement_subset_intersectionComplement
+     "42c9db86aaa639ec2f17c88f56ddf0d41d2432267c48aeb167f09d79ca9d9467",
+     :directExtend
+     "7860492fdd68613bbc0c980854815f82a07f0698e946659bc862fdefc933a2dc",
+     :restrictLeft_extendLeft
+     "7d530a01d0d6d7100506ea441fb27649181e16450061012086e9501730704d74",
+     :restrictRight_extendRight
+     "30acbc650568d73f811f8b2e9eca3633a444e7fc48601e06c64883f303bd81d4",
+     :restrictPiecesChain
+     "c92c7bb7025d0d66f35890e47c48cce9e10f0d66d5dc943a003b5cdd16c89383",
+     :relative_arrows_zero
+     "57d6c3e7cc09b309ffc064300dfd85b7b8207133f2e8f9dadff7cee195aed059"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientCompactSupportRelativeArrowComplex.lean ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-six-declaration audit over ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat bba7fd50c75e0efe09f8bd5ef2fade96d1014b6f",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r bba7fd50c75e0efe09f8bd5ef2fade96d1014b6f",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "bba7fd50c75e0efe09f8bd5ef2fade96d1014b6f",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactSupportRelativeArrowComplex.lean",
+     :sha256
+     "72954abe1c76ae051d5f7e1269318801dde886e60235787ea172c82449edf349",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded pieces-to-intersection dependency hash reproduce. All six requested declarations compile without warnings or placeholders; the subset lemma is axiom-free and the chain-complex constructions and zero-composite proof use only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean"],
    :dag-node
