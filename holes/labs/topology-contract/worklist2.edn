@@ -30101,6 +30101,75 @@
    :other-consumers [:t02A05 :t01J06 :t94A10]}
   {:consumer :t95J05,
    :stop-condition
+   "Bank only the exact Euclidean strict-cap image equalities. Do not claim ambient or subtype Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean",
+      :sha256
+      "3ba7ec708a5b18ae2c1cc924256157c3b5e4309d7c044740c8ff4f4eb24f340f"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SphereCapEuclideanImage.lean"
+    "ConstructionTargets/SphereCapEuclideanImage.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: exact Euclidean images of strict sphere-cap graphs",
+   :acceptance
+   {:namespace "ConstructionTargets.SphereCapEuclideanImage",
+    :implementation
+    "Promote the exact compiled fixture and document how its set equalities feed the remaining Hausdorff and subtype measure transport.",
+    :hypotheses
+    "Use the reviewed coordinate isometry for EuclideanSpace real (Fin d), WithLp 2 of its product with real, and EuclideanSpace real (Fin (d+1)). Results hold for every natural d; named consumer examples use d=2 and d=3. No measure or normalization hypothesis is supplied.",
+    :declarations
+    ["EA"
+     "strictUpperCap"
+     "strictLowerCap"
+     "mem_sphere_zero_one_iff"
+     "symm_last"
+     "image_upperCap"
+     "image_lowerCap"
+     "image_upperGraph"
+     "image_lowerGraph"],
+    :consumer-equation
+    "The coordinate isometry image of each native strict L2 cap, and therefore of each reviewed upper or lower graph over the open unit ball, equals the corresponding literal strict cap of the Euclidean unit sphere.",
+    :consumer-residual
+    "Prove preservation of the actual d-dimensional Hausdorff measure under coordinateIsometry, establish every required intrinsic-subtype versus ambient-set measure identity, and combine those results with C1GraphGlobalBounds.exact_area_value and the reviewed reciprocal-height density.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.SphereCapEuclideanImage."
+     "Reproduce six standard-only axiom audits and dimension-two and dimension-three examples for both signs."
+     "Audit the literal Metric.sphere definitions and Fin.last sign conditions."
+     "Verify both forward cap-image inclusions using norm preservation and the last-coordinate formula."
+     "Verify both reverse inclusions using the explicit isometry inverse."
+     "Verify exact upper and lower graph-image equalities reuse SphereCapL2Image."
+     "Confirm no measure transport, normalization, equator or moment result is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :representation
+   {:source
+    "The upper and lower cap-height graphs, equivalently the strict unit caps, in WithLp 2 (EuclideanSpace real (Fin d) times real)",
+    :target
+    "The literal subsets of Metric.sphere 0 1 in EuclideanSpace real (Fin (d+1)) selected by positive or negative Fin.last coordinate",
+    :direction
+    "Exact equality from the source L2 graph and cap images under the reviewed coordinate isometry to the target literal Euclidean strict sphere-cap subsets, with reverse membership reconstructed through the isometry inverse."},
+   :id :sphere-cap-euclidean-strict-image-1,
+   :kind :representation-comparison,
+   :depends-on [:sphere-cap-l2-euclidean-coordinate-isometry-1],
+   :current-residual
+   "The explicit coordinate isometry is banked, but its native L2 strict caps and graph images must be identified with literal strict subsets of the Euclidean unit sphere.",
+   :other-consumers [:t02A05 :t01J06 :t94A10]}
+  {:consumer :t95J05,
+   :stop-condition
    "Do not assume a cap parameterization is measure-preserving, suppress subtype or ambient measure transport, include the equator without a proved null-boundary comparison, or assume numerical Euclidean Hausdorff normalization. Do not evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Exclude active compact-support, arc, orientation and surface work; use a unique row-specific scratch directory.",
    :evidence
    {:probe
@@ -30110,72 +30179,72 @@
      :prerequisite
      {:consumer :t95J05,
       :stop-condition
-      "Bank only the explicit linear isometric equivalence, its inverse and coordinate formulas. Do not claim Euclidean cap-image equality, subtype or Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
+      "Bank only the exact Euclidean strict-cap image equalities. Do not claim ambient or subtype Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
       :evidence
       {:probe
        {:outcome :go,
         :seat "codex-13",
         :fixture
         {:path
-         "/tmp/codex13-checkpoint47-coordinate/SphereCapCoordinateIsometry.lean",
+         "/tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean",
          :sha256
-         "8f9aa55ce85dd856e4e6e0fd3a6866cb17f16df7b20e48cb0b08a61b6fb99074"},
+         "3ba7ec708a5b18ae2c1cc924256157c3b5e4309d7c044740c8ff4f4eb24f340f"},
         :commands
         [{:cmd
-          "lake env lean /tmp/codex13-checkpoint47-coordinate/SphereCapCoordinateIsometry.lean",
+          "lake env lean /tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean",
           :exit 0}],
         :warnings [],
         :axioms ["propext" "Classical.choice" "Quot.sound"]}},
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SphereCapCoordinateIsometry.lean"
-       "ConstructionTargets/SphereCapCoordinateIsometry.md"],
+      ["ConstructionTargets/SphereCapEuclideanImage.lean"
+       "ConstructionTargets/SphereCapEuclideanImage.md"],
       :dag-node
-      "MANIFOLD INTEGRATION: explicit L2 graph-to-Euclidean coordinate isometry",
+      "MANIFOLD INTEGRATION: exact Euclidean images of strict sphere-cap graphs",
       :acceptance
-      {:namespace "ConstructionTargets.SphereCapCoordinateIsometry",
+      {:namespace "ConstructionTargets.SphereCapEuclideanImage",
        :implementation
-       "Promote the exact compiled fixture and document how its coordinate formulas transport the reviewed native L2 cap equality to literal Euclidean caps.",
+       "Promote the exact compiled fixture and document how its set equalities feed the remaining Hausdorff and subtype measure transport.",
        :hypotheses
-       "Use EuclideanSpace real (Fin d), WithLp 2 of its product with real, and EuclideanSpace real (Fin (d+1)). The construction holds for every natural d; named consumer instances use d=2 and d=3. No measure or normalization hypothesis is supplied.",
+       "Use the reviewed coordinate isometry for EuclideanSpace real (Fin d), WithLp 2 of its product with real, and EuclideanSpace real (Fin (d+1)). Results hold for every natural d; named consumer examples use d=2 and d=3. No measure or normalization hypothesis is supplied.",
        :declarations
-       ["EuclideanAmbient"
-        "coordinateLinearEquiv"
-        "coordinateLinearEquiv_apply"
-        "coordinateLinearEquiv_castSucc"
-        "coordinateLinearEquiv_last"
-        "coordinateLinearEquiv_norm"
-        "coordinateIsometry"
-        "coordinateIsometry_apply"
-        "coordinateIsometry_castSucc"
-        "coordinateIsometry_last"],
+       ["EA"
+        "strictUpperCap"
+        "strictLowerCap"
+        "mem_sphere_zero_one_iff"
+        "symm_last"
+        "image_upperCap"
+        "image_lowerCap"
+        "image_upperGraph"
+        "image_lowerGraph"],
        :consumer-equation
-       "The append-last-coordinate map is a linear isometric equivalence: coordinateIsometry d z at i.castSucc equals z.fst i, its value at Fin.last d equals z.snd, and its norm equals the native L2 product norm.",
+       "The coordinate isometry image of each native strict L2 cap, and therefore of each reviewed upper or lower graph over the open unit ball, equals the corresponding literal strict cap of the Euclidean unit sphere.",
        :consumer-residual
-       "Prove that coordinateIsometry maps upperCap and lowerCap exactly onto the corresponding literal strict subsets of Metric.sphere 0 1, establish subtype and ambient Hausdorff identifications, and transport C1GraphGlobalBounds.exact_area_value.",
+       "Prove preservation of the actual d-dimensional Hausdorff measure under coordinateIsometry, establish every required intrinsic-subtype versus ambient-set measure identity, and combine those results with C1GraphGlobalBounds.exact_area_value and the reviewed reciprocal-height density.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.SphereCapCoordinateIsometry."
-        "Reproduce five standard-only axiom audits and dimension-two and dimension-three instances."
-        "Audit the explicit forward and inverse coordinate maps, linearity and both inverse laws."
-        "Verify Fin.castSucc and Fin.last coordinate formulas."
-        "Verify exact L2 norm preservation using Fin.sum_univ_castSucc and both norm-square identities."
-        "Confirm no cap-image, measure transport, normalization, equator or moment result is claimed."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.SphereCapEuclideanImage."
+        "Reproduce six standard-only axiom audits and dimension-two and dimension-three examples for both signs."
+        "Audit the literal Metric.sphere definitions and Fin.last sign conditions."
+        "Verify both forward cap-image inclusions using norm preservation and the last-coordinate formula."
+        "Verify both reverse inclusions using the explicit isometry inverse."
+        "Verify exact upper and lower graph-image equalities reuse SphereCapL2Image."
+        "Confirm no measure transport, normalization, equator or moment result is claimed."
         "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
       :representation
       {:source
-       "WithLp 2 (EuclideanSpace real (Fin d) times real), with the first component representing the graph source and the second component representing height",
+       "The upper and lower cap-height graphs, equivalently the strict unit caps, in WithLp 2 (EuclideanSpace real (Fin d) times real)",
        :target
-       "EuclideanSpace real (Fin (d+1)), with source coordinates at Fin.castSucc and height at Fin.last d",
+       "The literal subsets of Metric.sphere 0 1 in EuclideanSpace real (Fin (d+1)) selected by positive or negative Fin.last coordinate",
        :direction
-       "Exact linear isometric equivalence from the source L2 product representation to the target appended-coordinate Euclidean representation, with a proved inverse and coordinate equalities in both directions."},
-      :id :sphere-cap-l2-euclidean-coordinate-isometry-1,
+       "Exact equality from the source L2 graph and cap images under the reviewed coordinate isometry to the target literal Euclidean strict sphere-cap subsets, with reverse membership reconstructed through the isometry inverse."},
+      :id :sphere-cap-euclidean-strict-image-1,
       :kind :representation-comparison,
-      :depends-on [:sphere-cap-l2-strict-image-1],
+      :depends-on [:sphere-cap-l2-euclidean-coordinate-isometry-1],
       :current-residual
-      "The native L2 strict-cap equality must be transported to the literal EuclideanSpace real (Fin (d+1)) sphere through an explicit coordinate isometry.",
+      "The explicit coordinate isometry is banked, but its native L2 strict caps and graph images must be identified with literal strict subsets of the Euclidean unit sphere.",
       :other-consumers [:t02A05 :t01J06 :t94A10]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
@@ -30184,20 +30253,20 @@
        "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
        :exit 0}
       {:cmd
-       "Inspect SphereCapL2Image, PiL2, ProdL2, Fin.lastCases and linear-isometry APIs",
+       "Inspect SphereCapL2Image, SphereCapCoordinateIsometry, Metric.sphere membership and image APIs",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint47-coordinate/SphereCapCoordinateIsometry.lean",
+       "lake env lean /tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/codex13-checkpoint47-coordinate/SphereCapCoordinateIsometry.lean",
+       "sha256sum /tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint47-coordinate/SphereCapCoordinateIsometry.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "Python comment-stripped placeholder, whitespace, warning and five standard-only axiom audits",
+       "Python comment-stripped placeholder, whitespace, warning and six standard-only axiom audits",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -30207,22 +30276,22 @@
        :exit 0}
       {:cmd "git diff --exit-code && git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial coordinate-isometry fixture compilation",
+     [{:cmd "Initial Euclidean cap-image fixture compilation",
        :exit 1,
        :correction
-       "The norm-square calculation initially split Fin (d+1) at its first coordinate. Replaced Fin.sum_univ_succ with Fin.sum_univ_castSucc so the decomposition matches the constructed last-coordinate map. The corrected fixture compiles without warnings."}],
+       "Corrected the inverse-coordinate projection syntax, rewrote the last coordinate with the proved coordinateIsometry_last theorem, and removed an unused sphere-membership simp argument. The corrected fixture compiles without warnings."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint47-coordinate/SphereCapCoordinateIsometry.lean",
+      "/tmp/codex13-checkpoint47-euclidean-cap/SphereCapEuclideanImage.lean",
       :sha256
-      "8f9aa55ce85dd856e4e6e0fd3a6866cb17f16df7b20e48cb0b08a61b6fb99074",
+      "3ba7ec708a5b18ae2c1cc924256157c3b5e4309d7c044740c8ff4f4eb24f340f",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled representation prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 sphere-integration routes. It constructs an explicit linear isometric equivalence from WithLp 2 (EuclideanSpace real (Fin d) times real) to EuclideanSpace real (Fin (d+1)). The first d coordinates recover the graph source and the last coordinate recovers the height; the inverse uses Fin.castSucc and Fin.last. Exact norm preservation is proved from the two L2 norm-square formulas, and d=2 and d=3 instances compile. The parent comparison is not GO: the isometry images of the native strict caps must still be identified with literal Euclidean sphere caps, followed by subtype and Hausdorff-measure transport. No canonical source or ledger was edited.",
+     "Exactly one complete compiled representation prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 sphere-integration routes. It defines the literal strict upper and lower caps inside Metric.sphere 0 1 in EuclideanSpace real (Fin (d+1)) and proves that the reviewed coordinate isometry maps the native L2 upper and lower caps, and hence the actual cap-height graphs, exactly onto those Euclidean subsets. Both directions use the proved inverse, norm preservation and last-coordinate formula; d=2 and d=3 examples compile. The parent comparison is not GO: ambient Hausdorff-measure preservation, subtype-to-ambient measure identification and the final substitution into C1GraphGlobalBounds.exact_area_value remain unproved. No canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual unit-sphere caps as reviewed C1 L2 graphs",
@@ -30262,7 +30331,8 @@
     :sphere-cap-height-fderivative-1
     :sphere-cap-height-graph-density-1
     :sphere-cap-l2-strict-image-1
-    :sphere-cap-l2-euclidean-coordinate-isometry-1],
+    :sphere-cap-l2-euclidean-coordinate-isometry-1
+    :sphere-cap-euclidean-strict-image-1],
    :current-residual
    "The exact scalar graph-area theorem is banked, but the literal upper and lower unit-sphere subsets have not been identified with its WithLp 2 graph representation and induced Hausdorff measures.",
    :other-consumers [:t02A05 :t01J06 :t94A10]}
