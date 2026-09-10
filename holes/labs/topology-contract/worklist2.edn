@@ -17466,19 +17466,115 @@
    :stop-condition
    "Bank the actual radial pair comparison only. Do not claim hemisphere comparison, sphere suspension, a sphere table or frozen closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientRadialPair.lean",
-      :sha256
-      "c11a2ec7239b672a0ae6a6037c2d764fa6d2c7b3c60717b33fb05d0c644ad838"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientRadialPair.lean", :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct the hemisphere-coordinate relative comparison, instantiate actual excision and assemble the sphere shift and H1 kernel endpoint. No hemisphere comparison, sphere suspension, sphere table or frozen closure is claimed.",
+    :gates
+    {:fixture-hash :pass,
+     :scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :examples :pass,
+     :commit :pass,
+     :map-equations :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass,
+     :compilation :pass},
+    :axiom-audits 9,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Direct fixture and canonical compilations produced zero warnings. Lake build replayed 20 dependency warnings."],
+    :statement-hashes
+    {"projection_degree"
+     "3924157c22800fc2f67be66cd6b5b85ff9aeb537f2ec5f999d28c1039be024f3",
+     "radialIso"
+     "d0819382fe3404e4a709c1ac100c3335a5db42c396b7b329cb430e4d4d2b8588",
+     "absoluteMap"
+     "9a4cf4ec5a141dd6d53e7d5996170f99e27a657f5ab74fff948b0a3e11d351cd",
+     "pairMap"
+     "babf8810d9254df2974d295d9e5f023065f3c59d576959b3ee289bd8aae47306",
+     "inverse_right"
+     "890d97ae06f44830608067facfff35647c2a100b09a8f53426262c113b190743",
+     "radial_subspace_isIso"
+     "616962985bd2bbc4f30d3908cf7de637086d468cb44c8677256e5833959c16fe",
+     "radial_absolute_isIso"
+     "9a487e985ef20a1d7fc77ea306a04a59948fd7c7b2da6f65c6f223f34a397890",
+     "subMap"
+     "114e1cf522c2b0500c525c2554fce7515919c38cefef22f726f3c24a7e2523b6",
+     "radialIso_hom"
+     "5e5652c46bf9a76106ed0ad3b43f3540b3b078668c302f4b1c602a50adf0554d",
+     "inverse_left"
+     "38be31cc7ed243744b624d4c5f15fb361e1cfd0ed15cae1e5c1525c61b6f490b",
+     "square"
+     "45ec599e276289f6a3e20121cfe7494ae9bfa9bb2a7bfbf56ecc53cfcbeccc19",
+     "projection"
+     "fc7dd1321ee17a568a4972b74d751fd7cac47602ec4b9fa0146e46609650586e",
+     "homotopyIso_hom"
+     "c1b31f382f5fcee575d0eddb14a7a0d002057570716d30977a784546172e5c3c",
+     "integral_radial"
+     "f0d00e14b218b1892e76716a0c153f197d3ffe67d86315d31c18a5993354faf3",
+     "rational_radial"
+     "352dd9419f9b9b0272980063c33e851a7c501d2ac4be41a90113e0a9f9ca4110"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientRadialPair.lean", :exit 0}
+     {:cmd "Read DAG, closure rules and dependency PASS receipts",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientRadialPair.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientRadialPair.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientRadialPair",
+      :exit 0,
+      :jobs 8279}
+     {:cmd
+      "Validate nine standard-only audits in both compilation logs, including integer/rational radial examples",
+      :exit 0}
+     {:cmd
+      "Inspect actual subtype cokernels, projection equations, exact forward map and inverse laws",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientRadialPair.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Verify fifteen declaration hashes and byte-identical fixture promotion",
+      :exit 0}
+     {:cmd "Verify exact staged two-file scope", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Construct coefficient-general radial relative comparison'",
+      :exit 0}
+     {:cmd
+      "Verify committed scope, fixture equality and clean workspace",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Homology of the actual ModuleCat R cokernel of the closed-disk boundary inclusion.",
+     :target
+     "Homology of the actual ModuleCat R cokernel of the punctured-open-disk inclusion.",
+     :direction
+     "Constructed isomorphism from closed-disk boundary-pair homology to punctured-open-disk-pair homology whose forward arrow is exactly homologyMap of the cokernel map induced by halfDiskMap and its restriction."},
+    :commit "0b805b3d8a900604fb887e3b2b075ddcd95c57d7",
+    :changed-paths
+    ["ConstructionTargets/CoefficientRadialPair.lean"
+     "ConstructionTargets/CoefficientRadialPair.md"],
+    :fixture
+    {:path "/tmp/CoefficientRadialPair.lean",
+     :sha256
+     "c11a2ec7239b672a0ae6a6037c2d764fa6d2c7b3c60717b33fb05d0c644ad838",
+     :promoted-verbatim true},
+    :finding
+    "Promoted the exact radial pair comparison over R, preserving actual subtype cokernels, the halfDiskMap-induced forward arrow, projection equations and both inverse laws in every dimension and degree, including zero.",
+    :statement-hash-method
+    "SHA256 of declaration text from theorem/def keyword to immediately before the space preceding :=.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientRadialPair.lean"
     "ConstructionTargets/CoefficientRadialPair.md"],
