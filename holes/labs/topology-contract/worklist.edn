@@ -67940,6 +67940,36 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the actual left/right compact-complement range subcomplexes, connecting morphism and all three exactness statements; no supplied exact sequence or excision.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientCompactComplementCoverSequence.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / instantiated compact-complement coefficient sequence",
+   :acceptance
+   {:fixture "/tmp/CoefficientCompactComplementCoverSequence.lean",
+    :fixture-sha256
+    "1e1d651d3db679386223ff74964e1dc663a50dbfcb7e19a74a9358a7b8060234",
+    :implementation
+    "Promote the exact fixture. Compile ambientSSet, leftRange, rightRange, shortComplex, connecting, exact_intersection, exact_pieces and exact_union. This supplies the compact-support placeholder route step that instantiates the signed coefficient Mayer-Vietoris sequence on the actual complement cover. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim conjugation to flattened complements, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientCompactComplementCoverSequence.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :coefficient-compact-complement-cover-sequence-implementation-refill49,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-subcomplex-mayer-vietoris-implementation-refill49
+    :coefficient-compact-complement-geometry-implementation-refill49
+    :coefficient-compact-complement-homology-square-bundle-implementation-refill49],
+   :current-residual
+   "Conjugate this instantiated sequence through the bundled left, right and overlap homology squares and the ambient cover-small comparison, then identify the four resulting relative terms in X through actual coefficient-excision maps.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
    :evidence
    {:probe
@@ -67949,72 +67979,65 @@
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the simultaneous left, right and overlap forward homology equalities; no supplied naturality square or exactness.",
+      "Require the actual left/right compact-complement range subcomplexes, connecting morphism and all three exactness statements; no supplied exact sequence or excision.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean"],
+      ["ConstructionTargets/CoefficientCompactComplementCoverSequence.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / bundled compact-complement homology naturality",
+      "MANIFOLD FUNDAMENTAL CLASS / instantiated compact-complement coefficient sequence",
       :acceptance
-      {:fixture
-       "/tmp/CoefficientCompactComplementHomologySquareBundle.lean",
+      {:fixture "/tmp/CoefficientCompactComplementCoverSequence.lean",
        :fixture-sha256
-       "dfb2a7cead7ce630e8e96382f27d2ff64cfbc515668b256477669a41ac614be4",
+       "1e1d651d3db679386223ff74964e1dc663a50dbfcb7e19a74a9358a7b8060234",
        :implementation
-       "Promote the exact fixture and compile homology_square_bundle. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients, every natural homology degree and all three literal forward inclusion arrows. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris exactness, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile ambientSSet, leftRange, rightRange, shortComplex, connecting, exact_intersection, exact_pieces and exact_union. This supplies the compact-support placeholder route step that instantiates the signed coefficient Mayer-Vietoris sequence on the actual complement cover. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim conjugation to flattened complements, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean"],
+       ["lake env lean ConstructionTargets/CoefficientCompactComplementCoverSequence.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
-      :representation
-      {:source
-       "The three homeomorphism-induced coefficient homology maps for the nested left, right and overlap complement pieces, each followed by its original-complement inclusion into X",
-       :target
-       "The three direct coefficient homology maps induced by the corresponding nested-piece inclusions into X",
-       :direction
-       "Prove one simultaneous conjunction of exact forward equalities from every transported composite to its direct nested inclusion map in each natural degree."},
       :id
-      :coefficient-compact-complement-homology-square-bundle-implementation-refill49,
-      :kind :representation-comparison,
+      :coefficient-compact-complement-cover-sequence-implementation-refill49,
+      :kind :reusable-theorem,
       :depends-on
-      [:coefficient-compact-complement-homology-squares-implementation-refill49],
+      [:coefficient-subcomplex-mayer-vietoris-implementation-refill49
+       :coefficient-compact-complement-geometry-implementation-refill49
+       :coefficient-compact-complement-homology-square-bundle-implementation-refill49],
       :current-residual
-      "Use the bundled naturality theorem to conjugate the signed subcomplex Mayer-Vietoris arrows and connecting morphism, prove exactness on the complement presentation, then transport its relative terms to the four requested pairs by coefficient excision.",
+      "Conjugate this instantiated sequence through the bundled left, right and overlap homology squares and the ambient cover-small comparison, then identify the four resulting relative terms in X through actual coefficient-excision maps.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientCompactComplementHomologySquares",
+       "lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientCompactComplementHomologySquareBundle.lean",
+       "lake env lean /tmp/CoefficientCompactComplementCoverSequence.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientCompactComplementHomologySquareBundle.lean ConstructionTargets/CoefficientCompactComplementHomologySquares.lean",
+       "sha256sum /tmp/CoefficientCompactComplementCoverSequence.lean ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean",
        :exit 0}
       {:cmd
-       "python3 placeholder-and-homology-map audit over /tmp/CoefficientCompactComplementHomologySquareBundle.lean",
+       "python3 placeholder-and-declaration audit over /tmp/CoefficientCompactComplementCoverSequence.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientCompactComplementHomologySquareBundle.lean",
+       "lake env lean /tmp/CoefficientCompactComplementCoverSequence.lean",
        :exit 1,
        :correction
-       "The newly promoted CoefficientCompactComplementHomologySquares dependency lacked its canonical object file. Built that unchanged dependency, then the fixture compiled successfully."}],
+       "Lean required explicit result types for the three theorem declarations. Added the literal ShortComplex exactness propositions from the banked coefficient sequence; final compilation succeeds."}],
      :fixture
-     {:path
-      "/tmp/CoefficientCompactComplementHomologySquareBundle.lean",
+     {:path "/tmp/CoefficientCompactComplementCoverSequence.lean",
       :sha256
-      "dfb2a7cead7ce630e8e96382f27d2ff64cfbc515668b256477669a41ac614be4",
+      "1e1d651d3db679386223ff74964e1dc663a50dbfcb7e19a74a9358a7b8060234",
       :placeholder-count 0},
      :finding
-     "Compiled one new bounded prerequisite that packages the three reviewed forward homology inclusion squares into one simultaneous theorem for the left, right and overlap complement pieces. This supplies a single typed naturality input for the signed Mayer-Vietoris conjugation. Exactness on the complement presentation and the final coefficient-excision transport remain unproved.",
+     "Compiled one actual compact-complement cover prerequisite. The left and right open pieces inside X minus (K intersection L) now instantiate the coefficient subcomplex Mayer-Vietoris short complex, its connecting morphism and exactness at the intersection, piece-sum and union terms in every natural degree. Conjugation through the reviewed complement homology squares and final coefficient excision remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -68032,7 +68055,8 @@
     :coefficient-compact-complement-pair-homeomorph-implementation-refill49
     :coefficient-compact-complement-homology-transport-implementation-refill49
     :coefficient-compact-complement-homology-squares-implementation-refill49
-    :coefficient-compact-complement-homology-square-bundle-implementation-refill49],
+    :coefficient-compact-complement-homology-square-bundle-implementation-refill49
+    :coefficient-compact-complement-cover-sequence-implementation-refill49],
    :current-residual
    "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
