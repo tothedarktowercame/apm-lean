@@ -15455,7 +15455,8 @@
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
    {:outcome :replan,
-    :seat "codex-13",
+    :disposition :replan,
+    :author "codex-13",
     :commands
     [{:cmd
       "Read DAG clusters, foundational-program note, closure rules and both ledgers",
@@ -15477,63 +15478,19 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
-    :changed-paths [],
-    :finding
-    {:baseline "4f249ecd43a9650dfdf260320710fb3f8b5de29a",
-     :placeholder-delta 0,
-     :head "94d4381150f666cb6b88a7f031cce3b9a7d7d2f5",
-     :frozen-closures 0,
-     :infrastructure-packets
-     {:modules-before 674,
-      :modules-after 678,
-      :portfolio 2,
-      :portfolio-commits
-      ["42e4bb083eec774f433dd1d223d89c4c3d4a5f37"
-       "ad9d15f31e8b970d705d3b46f4c0482f69d5aca5"],
-      :concurrent 2,
-      :concurrent-commits
-      ["0f3d11b9bcc54dda5419df74b6d8e726c81136c8"
-       "ab99abe095db8d5d4d0a783b732bd8dc461408a7"],
-      :consumer-files-changed []},
-     :corrected-closures 0,
-     :ranking
-     "Compared the whole DAG. Relative small-chain quotient comparison serves four named downstream consumers and now has reviewed absolute comparison on X and every subspace A. The inspected cokernel-square proof is currently AddCommGrpCat-specific and must be proved over ModuleCat R. This bounded comparison precedes excision. Localization, product homology, covering classification, integration and surface classification retain broader constructions; product recharting is concurrently assigned. No owner-authorization stop or orientation inference is used.",
-     :typed-residual-change
-     "Actual cover-small inclusion now induces the constructed all-degree ModuleCat R homology isomorphism, with exact forward map and inverse laws. Relative quotient comparison and excision remain absent. Concurrent chart-carrier transport does not yet supply smooth compatibility or derivative transport. Concurrent null-winding predicate triviality does not supply a Producer or frozen-consumer refutation.",
-     :review-outcomes
-     {:portfolio-pass 2,
-      :portfolio-stop 0,
-      :iterated-homotopy-review "invoke-1789008929184-17712-ee5ae71e",
-      :small-comparison-review "invoke-1789009495871-17725-e087a06b",
-      :concurrent-null-winding-pass
-      "invoke-1789008850671-17710-0133905c",
-      :concurrent-chart-transport-pass
-      "invoke-1789009295089-17720-ac66ef2d",
-      :concurrent-integral-stop-pass
-      "invoke-1789008552252-17697-5e6feba7",
-      :new-proved-refutations 0},
-     :reserved-concurrent
-     [:product-self-model-recharting-probe-refill38
-      :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
-     :near-closure-election
-     {:eligible-unassigned 0,
-      :elected 0,
-      :reason
-      "Recounted all 25 near-closure consumers. Their recorded boundaries remain unresolved; 24 have ledger STOP records and t03J02 has the explicit DAG collar/NDR and van Kampen boundary. The latest t95J05 probe reduces its literal integral to negative half the intrinsic sphere mass, but mass 3 = 2*pi^2 remains unproved for the actual Hausdorff normalization. No unchanged adapter retry is elected.",
-      :preserved-boundaries
-      "Planar separation; actual-cover van Kampen; literal pants and polygon classification; covering fundamental-class degree; general-model and analytic preimage geometry; flux and Hausdorff normalization; signed sphere-map homology action; torus Euler and geometric intersection; graph covering classification; Hopf-surface homeomorphism; attained analytic radial levels; projective-product nonbounding; genus/Euler multiplicativity; fundamental-class localization. Historical refutations and the earlier corrected t96J07 closure remain preserved."},
-     :census
-     {:path "/tmp/Checkpoint25Census.json",
-      :open 35,
-      :existing 58,
-      :zero-placeholder 23,
-      :after 66,
-      :sha256
-      "3f436e27b63c8e4fee763e3ae8615adcc25828e84e7bb2c8b3cb7d75456db058",
-      :named 59,
-      :missing [:t93A05],
-      :within-two 25,
-      :before 66}},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789009732035-17732-be0b4aa1",
+     :commands
+     ["Python read-only pinned Checkpoint25Census.json SHA256, consumer counts, module counts and changed-path attribution"
+      "bb recorded-ledger author, near-closure boundaries, replacement propagation and successor checkpoint audit"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show e3a60ef2:holes/labs/topology-contract/worklist.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show e3a60ef2:holes/labs/topology-contract/worklist2.edn)"
+      "git log --oneline 4f249ecd..94d43811 -- ConstructionTargets problems"
+      "git diff --check e3a60ef2^ e3a60ef2"],
+     :finding
+     "Independent review of ledger-only transition e3a60ef2, author codex-13. Census SHA256 3f436e27b63c8e4fee763e3ae8615adcc25828e84e7bb2c8b3cb7d75456db058 verified. All 59 named consumers reproduced: 58 existing, 23 zero-placeholder, 35 open, 25 near; placeholders 66->66, modules 674->678. Two portfolio and two concurrent modules correctly attributed; no consumer files changed. STOP boundaries and concurrent assignments preserved. One relative-comparison probe requires actual subtype maps, monicity, categorical cokernels over R and the exact induced forward homology map; no AddCommGrpCat shortcut or excision claim. Replacement propagation, identical successor checkpoint and both ledger validators pass. Ledger untouched."},
     :replacement-items
     [{:consumer :t00J01-rational-sphere-homology,
       :stop-condition
@@ -15600,10 +15557,66 @@
       :current-residual
       "Measure relative comparison separately from consumer closure, and reassess all reviewed boundaries and concurrent outcomes.",
       :other-consumers []}],
-    :author "codex-13",
-    :disposition :replan},
+    :changed-paths [],
+    :finding
+    {:baseline "4f249ecd43a9650dfdf260320710fb3f8b5de29a",
+     :placeholder-delta 0,
+     :head "94d4381150f666cb6b88a7f031cce3b9a7d7d2f5",
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:modules-before 674,
+      :modules-after 678,
+      :portfolio 2,
+      :portfolio-commits
+      ["42e4bb083eec774f433dd1d223d89c4c3d4a5f37"
+       "ad9d15f31e8b970d705d3b46f4c0482f69d5aca5"],
+      :concurrent 2,
+      :concurrent-commits
+      ["0f3d11b9bcc54dda5419df74b6d8e726c81136c8"
+       "ab99abe095db8d5d4d0a783b732bd8dc461408a7"],
+      :consumer-files-changed []},
+     :corrected-closures 0,
+     :ranking
+     "Compared the whole DAG. Relative small-chain quotient comparison serves four named downstream consumers and now has reviewed absolute comparison on X and every subspace A. The inspected cokernel-square proof is currently AddCommGrpCat-specific and must be proved over ModuleCat R. This bounded comparison precedes excision. Localization, product homology, covering classification, integration and surface classification retain broader constructions; product recharting is concurrently assigned. No owner-authorization stop or orientation inference is used.",
+     :typed-residual-change
+     "Actual cover-small inclusion now induces the constructed all-degree ModuleCat R homology isomorphism, with exact forward map and inverse laws. Relative quotient comparison and excision remain absent. Concurrent chart-carrier transport does not yet supply smooth compatibility or derivative transport. Concurrent null-winding predicate triviality does not supply a Producer or frozen-consumer refutation.",
+     :review-outcomes
+     {:portfolio-pass 2,
+      :portfolio-stop 0,
+      :iterated-homotopy-review "invoke-1789008929184-17712-ee5ae71e",
+      :small-comparison-review "invoke-1789009495871-17725-e087a06b",
+      :concurrent-null-winding-pass
+      "invoke-1789008850671-17710-0133905c",
+      :concurrent-chart-transport-pass
+      "invoke-1789009295089-17720-ac66ef2d",
+      :concurrent-integral-stop-pass
+      "invoke-1789008552252-17697-5e6feba7",
+      :new-proved-refutations 0},
+     :reserved-concurrent
+     [:product-self-model-recharting-probe-refill38
+      :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
+     :near-closure-election
+     {:eligible-unassigned 0,
+      :elected 0,
+      :reason
+      "Recounted all 25 near-closure consumers. Their recorded boundaries remain unresolved; 24 have ledger STOP records and t03J02 has the explicit DAG collar/NDR and van Kampen boundary. The latest t95J05 probe reduces its literal integral to negative half the intrinsic sphere mass, but mass 3 = 2*pi^2 remains unproved for the actual Hausdorff normalization. No unchanged adapter retry is elected.",
+      :preserved-boundaries
+      "Planar separation; actual-cover van Kampen; literal pants and polygon classification; covering fundamental-class degree; general-model and analytic preimage geometry; flux and Hausdorff normalization; signed sphere-map homology action; torus Euler and geometric intersection; graph covering classification; Hopf-surface homeomorphism; attained analytic radial levels; projective-product nonbounding; genus/Euler multiplicativity; fundamental-class localization. Historical refutations and the earlier corrected t96J07 closure remain preserved."},
+     :census
+     {:path "/tmp/Checkpoint25Census.json",
+      :open 35,
+      :existing 58,
+      :zero-placeholder 23,
+      :after 66,
+      :sha256
+      "3f436e27b63c8e4fee763e3ae8615adcc25828e84e7bb2c8b3cb7d75456db058",
+      :named 59,
+      :missing [:t93A05],
+      :within-two 25,
+      :before 66}},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: coefficient homology comparison and renewed consumer eligibility",
@@ -15625,7 +15638,7 @@
    :stop-condition
    "Do not assume the relative comparison or horizontal monicity. Do not reinterpret AddCommGrpCat results as ModuleCat R facts. Do not claim excision, sphere suspension or frozen closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "RELATIVE SINGULAR CHAINS: coefficient-general relative small-chain comparison",
