@@ -70790,6 +70790,19 @@
       "git diff-tree --no-commit-id --name-only -r 5a605d1fd1674c7ffed5db84ea3d2137834c90b8",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789065165010-19162-b38e66b4",
+     :commands
+     ["git show fb32cb44907bab9d21e70f22b19669a3a953a674 -- holes/labs/topology-contract/worklist.edn"
+      "python3 trailing-newline declaration-block SHA256 and placeholder audit over ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"
+      "lake env lean ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"
+      "sha256sum /tmp/CoefficientUnionToProductionRelativeComparison.lean ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean"
+      "git diff-tree --no-commit-id --name-only -r 5a605d1fd1674c7ffed5db84ea3d2137834c90b8"
+      "git show --check --oneline --stat 5a605d1fd1674c7ffed5db84ea3d2137834c90b8"],
+     :finding
+     "Author codex-6 differs from reviewer codex-10. The corrected receipt now records the exact trailing-newline declaration hashes ef6bc3510fb3e75ad63b71feb8f6b97d88bf3db35316a0545fba8aa3215b6525, e8a7863d215ddebad77efc1529e73fa7eccd5798fff1507ff84969dc50d38ea5, and 92a73c8704ade9709d7386a23ca844b4ec79ced45668d99a93d3acf699b7b6a9. Recorded commit 5a605d1fd1674c7ffed5db84ea3d2137834c90b8 changes exactly the permitted target. Source and fixture are byte-identical at ea64a7591efc48a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71; dependency hashes reproduce as fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5 and da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906. Lean compiles without warnings with axioms propext, Classical.choice and Quot.sound; placeholders remain zero. The forward pushout-to-range-relative map, forward production-pair isomorphism, zero left-piece formula, and forward right-piece quotient formula retain the reviewed orientations and representation boundaries. No compact-complement, excision, exactness, localization, vanishing, or fundamental-class claim is added."},
     :commit "5a605d1fd1674c7ffed5db84ea3d2137834c90b8",
     :changed-paths
     ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
@@ -70801,7 +70814,7 @@
     :finding
     "Corrected the receipt-only unionToProductionRelative statement hash to the reviewer-reproduced trailing-newline SHA256 ef6bc3510fb3e75ad63b71feb8f6b97d88bf3db35316a0545fba8aa3215b6525. The source, exact fixture, dependency hashes, standard axioms, one-file commit scope and clean worktree all reproduce; no source modification or new commit was required."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
    :dag-node
@@ -70901,7 +70914,7 @@
      "Revalidated exactly one compiled coefficient map prerequisite and read all hashes directly from sha256sum. The union-to-production-relative map kills the left range exactly, while its right-range restriction is the forward right-range chain isomorphism followed by the production relative quotient projection. The construction is nonzero-capable and does not use the refuted zero supportConnecting map.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
