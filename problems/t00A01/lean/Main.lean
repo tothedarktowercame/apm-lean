@@ -1,3 +1,5 @@
+import ConstructionTargets.TwoOpenFreeProductMapping
+import ConstructionTargets.SimplyConnectedSphereProducts
 import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
@@ -175,6 +177,23 @@ def apm_t00A01_hasStandardCover
     Nonempty (ContinuousMap.HomotopyEquiv ↥V B) ∧
     Nonempty (ContinuousMap.HomotopyEquiv ↥(U ∩ V) apm_t00A01_Sphere2)
 
+
+private theorem apm_t00A01_pathConnected_of_hequiv {X Y : Type}
+    [TopologicalSpace X] [TopologicalSpace Y] [PathConnectedSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) : PathConnectedSpace X where
+  nonempty := Nonempty.map e.invFun inferInstance
+  joined x y := ⟨(e.left_inv.some.evalAt x).symm.trans
+    (((PathConnectedSpace.somePath (e.toFun x) (e.toFun y)).map e.invFun.continuous).trans
+      (e.left_inv.some.evalAt y))⟩
+
+private def apm_t00A01_group_of_hequiv {X Y : Type}
+    [TopologicalSpace X] [TopologicalSpace Y] [PathConnectedSpace Y]
+    (e : ContinuousMap.HomotopyEquiv X Y) (x : X) (y : Y) :
+    FundamentalGroup X x ≃* FundamentalGroup Y y :=
+  ((FundamentalGroupoidFunctor.equivOfHomotopyEquiv e).fullyFaithfulFunctor.mulEquivEnd
+    (FundamentalGroupoid.mk x)).trans
+    (FundamentalGroup.fundamentalGroupMulEquivOfPath (PathConnectedSpace.somePath (e.toFun x) y))
+
 /-- Why this unblocks `apm_t00a01`: this is the Seifert--van Kampen
 comparison for the supplied standard cover, with the harmless
 change-of-basepoint and the two given puncture-group identifications already
@@ -195,7 +214,29 @@ theorem apm_t00A01_bridge_fundamentalGroup_coprod
       (FundamentalGroup (apm_t00A01_connectedSum iA iB)
           (apm_t00A01_basepoint iA iB a) ≃*
         Monoid.Coprod (FundamentalGroup M₁ m₁) (FundamentalGroup M₂ m₂)) := by
-  sorry
+  classical
+  letI : PathConnectedSpace A := hconnA
+  letI : PathConnectedSpace B := hconnB
+  letI : SimplyConnectedSpace apm_t00A01_Sphere2 :=
+    ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected 2 (by omega)
+  obtain ⟨U, V, hU, hV, hUV, ⟨eU⟩, ⟨eV⟩, ⟨eI⟩⟩ := hcover
+  letI : PathConnectedSpace U := apm_t00A01_pathConnected_of_hequiv eU
+  letI : PathConnectedSpace V := apm_t00A01_pathConnected_of_hequiv eV
+  letI : SimplyConnectedSpace (U ∩ V : Set (apm_t00A01_connectedSum iA iB)) :=
+    eI.simplyConnectedSpace
+  let w : (U ∩ V : Set (apm_t00A01_connectedSum iA iB)) := Classical.choice inferInstance
+  letI : PathConnectedSpace (apm_t00A01_connectedSum iA iB) := by
+    rw [pathConnectedSpace_iff_univ, ← hUV]
+    exact (isPathConnected_iff_pathConnectedSpace.mpr inferInstance).union
+      (isPathConnected_iff_pathConnectedSpace.mpr inferInstance) ⟨w.val, w.property⟩
+  obtain ⟨eA⟩ := hπA
+  obtain ⟨eB⟩ := hπB
+  exact ⟨(FundamentalGroup.fundamentalGroupMulEquivOfPath
+    (PathConnectedSpace.somePath (apm_t00A01_basepoint iA iB a) w.val)).trans
+    ((ConstructionTargets.TwoOpenFreeProductMapping.groupEquivalence hU hV hUV w).trans
+      (MulEquiv.coprodCongr
+        ((apm_t00A01_group_of_hequiv eU ⟨w.val,w.property.1⟩ a).trans eA)
+        ((apm_t00A01_group_of_hequiv eV ⟨w.val,w.property.2⟩ b).trans eB)))⟩
 
 /-- Why this unblocks `apm_t00a01`: this is the singular-homology
 Mayer--Vietoris calculation for two homology balls glued along the supplied
@@ -460,4 +501,9 @@ theorem apm_t00a01
   invariant-preservation layer—Seifert--van Kampen and singular
   Mayer--Vietoris—and remains honestly open.
   -/
-  sorry
+  exact ⟨apm_t00A01_bridge_fundamentalGroup_coprod M₁ M₂ A B m₁ m₂ a b
+    iA iB hπA hπB hconnA hconnB hiA hiB hcover,
+    apm_t00A01_bridge_connectedSum_isHomology3Sphere A B iA iB hA hB hcover⟩
+
+#print axioms apm_t00A01_bridge_fundamentalGroup_coprod
+#print axioms apm_t00a01
