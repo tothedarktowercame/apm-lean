@@ -71589,76 +71589,103 @@
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
   {:consumer "t00A03",
    :stop-condition
+   "Require a relative Sard theorem for the full pairwise coincidence map on the compact parameter square with its four endpoint pairs handled separately, followed by one simultaneous finite-family parameter selection and explicit chart-transition comparison.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"],
+   :dag-node
+   "SURFACE TRIANGULATION / endpoint-relative pairwise coincidence parameter surjectivity",
+   :acceptance
+   {:fixture "/tmp/PlaneArcEndpointPairParameterSurjectivity.lean",
+    :fixture-sha256
+    "8657ea839db4ff9b7fb78d3eece0d2b4937de4be199d2967435b9e89b9fb64a7",
+    :implementation
+    "Promote the exact fixture. Compile pairDifference, pairDifference_vary_left_surjective and pairDifference_vary_right_surjective. This supplies the pairwise interior parameter-surjectivity step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes: whenever either arc parameter is interior, one corresponding perturbation-vector coordinate moves the coincidence difference surjectively through the plane. Verify PlaneArcEndpointPerturbationInteriorParameter SHA256 5220ea4ac53c6345fb6b467c7ba59e452385d5a42c0f2889bfe890cdc91b0fc7. Preserve arbitrary pairs of plane arcs and arbitrary fixed perturbation data for the other curve. Require zero placeholders, no warnings and standard-only axioms. Do not claim endpoint-endpoint separation, regular-value existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+    :commands
+    ["lake env lean ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50,
+   :kind :reusable-theorem,
+   :depends-on
+   [:plane-arc-endpoint-perturbation-interior-parameter-implementation-refill50],
+   :current-residual
+   "Apply Sard to the pairwise total coincidence maps using the compiled left/right parameter directions away from endpoint-endpoint pairs; prove the four fixed endpoint pairs form the complete boundary residual. Then choose parameters simultaneously, retain embeddings, and transport intersections through chart transitions.",
+   :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
+  {:consumer "t00A03",
+   :stop-condition
    "Require a compiled perturbation preserving prescribed endpoints and chartwise containment with finite pairwise intersections; do not infer cross-chart finiteness from unrelated plane translations.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Endpoint preservation, uniform chart containment and interior parameter surjectivity compile; relative finite-family regular-value selection, boundary-coincidence control, embedding stability and cross-chart comparison remain.",
+     "Pairwise parameter surjectivity away from endpoint-endpoint pairs compiles; relative regular-value selection, fixed endpoint-pair accounting, finite-family simultaneity, embedding stability and cross-chart comparison remain.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t00A03",
       :stop-condition
-      "Require a relative finite-family Sard or transversality theorem that combines interior parameter surjectivity with separate finite endpoint coincidences, then prove compatibility through chart-transition maps.",
+      "Require a relative Sard theorem for the full pairwise coincidence map on the compact parameter square with its four endpoint pairs handled separately, followed by one simultaneous finite-family parameter selection and explicit chart-transition comparison.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"],
+      ["ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"],
       :dag-node
-      "SURFACE TRIANGULATION / endpoint-relative perturbation interior parameter surjectivity",
+      "SURFACE TRIANGULATION / endpoint-relative pairwise coincidence parameter surjectivity",
       :acceptance
-      {:fixture
-       "/tmp/PlaneArcEndpointPerturbationInteriorParameter.lean",
+      {:fixture "/tmp/PlaneArcEndpointPairParameterSurjectivity.lean",
        :fixture-sha256
-       "5220ea4ac53c6345fb6b467c7ba59e452385d5a42c0f2889bfe890cdc91b0fc7",
+       "8657ea839db4ff9b7fb78d3eece0d2b4937de4be199d2967435b9e89b9fb64a7",
        :implementation
-       "Promote the exact fixture. Compile endpointWeight_pos, endpointWeight_ne_zero, weight_smul_surjective and perturb_parameter_surjective. This supplies the interior parameter-surjectivity step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before applying a relative regular-value argument. Verify PlaneArcEndpointPerturbationFamilyContainment SHA256 9776248fc44f9976d4dd7a94a3386f13d0f7d782d33397334f4e4c00ee3e7f0d. Preserve every interior unit-interval parameter and arbitrary smooth plane arcs. Require zero placeholders, no warnings and standard-only axioms. Do not claim endpoint-coincidence finiteness, embedding preservation, finite-family parameter selection, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+       "Promote the exact fixture. Compile pairDifference, pairDifference_vary_left_surjective and pairDifference_vary_right_surjective. This supplies the pairwise interior parameter-surjectivity step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes: whenever either arc parameter is interior, one corresponding perturbation-vector coordinate moves the coincidence difference surjectively through the plane. Verify PlaneArcEndpointPerturbationInteriorParameter SHA256 5220ea4ac53c6345fb6b467c7ba59e452385d5a42c0f2889bfe890cdc91b0fc7. Preserve arbitrary pairs of plane arcs and arbitrary fixed perturbation data for the other curve. Require zero placeholders, no warnings and standard-only axioms. Do not claim endpoint-endpoint separation, regular-value existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
        :commands
-       ["lake env lean ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"],
+       ["lake env lean ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :plane-arc-endpoint-perturbation-interior-parameter-implementation-refill50,
+      :plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50,
       :kind :reusable-theorem,
       :depends-on
-      [:plane-arc-endpoint-perturbation-family-containment-implementation-refill50],
+      [:plane-arc-endpoint-perturbation-interior-parameter-implementation-refill50],
       :current-residual
-      "Use the compiled interior parameter surjectivity to establish regular values for each pairwise coincidence map while treating boundary parameter pairs separately. Small-parameter embedding stability and cross-chart surface-intersection comparison remain.",
+      "Apply Sard to the pairwise total coincidence maps using the compiled left/right parameter directions away from endpoint-endpoint pairs; prove the four fixed endpoint pairs form the complete boundary residual. Then choose parameters simultaneously, retain embeddings, and transport intersections through chart transitions.",
       :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.PlaneArcEndpointPerturbationFamilyContainment >/tmp/endpoint-family-dep.log 2>&1",
+       "lake build ConstructionTargets.PlaneArcEndpointPerturbationInteriorParameter >/tmp/endpoint-interior-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/PlaneArcEndpointPerturbationInteriorParameter.lean",
+       "lake env lean /tmp/PlaneArcEndpointPairParameterSurjectivity.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/PlaneArcEndpointPerturbationInteriorParameter.lean ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean",
+       "sha256sum /tmp/PlaneArcEndpointPairParameterSurjectivity.lean ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-three-declaration audit over /tmp/PlaneArcEndpointPerturbationInteriorParameter.lean",
+       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/PlaneArcEndpointPairParameterSurjectivity.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/PlaneArcEndpointPerturbationInteriorParameter.lean",
+       "lake env lean /tmp/PlaneArcEndpointPairParameterSurjectivity.lean",
        :exit 1,
        :correction
-       "The first surjectivity proof attempted a reversed scalar-action rewrite before exposing the function application. Changed the goal to the explicit nested scalar action and applied smul_smul with the nonzero endpoint weight."}],
+       "The first proof tried to unfold pairDifference through rw and then rewrite an equality before its additive cancellation was exposed. Unfolded the definition explicitly and transported the parameter-surjectivity equation by adding the fixed base point."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/PlaneArcEndpointPerturbationInteriorParameter.lean",
+     {:path "/tmp/PlaneArcEndpointPairParameterSurjectivity.lean",
       :sha256
-      "5220ea4ac53c6345fb6b467c7ba59e452385d5a42c0f2889bfe890cdc91b0fc7",
+      "8657ea839db4ff9b7fb78d3eece0d2b4937de4be199d2967435b9e89b9fb64a7",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one relative-transversality prerequisite. The endpoint weight t(1-t) is positive and nonzero for every interior parameter t in (0,1). Hence varying the plane perturbation vector moves the perturbed point surjectively in every plane direction at each interior parameter, while the already reviewed endpoint equations keep t=0 and t=1 fixed. This proves the parameter-direction input needed for an interior regular-value argument without claiming that endpoint coincidences, embedding stability or unrelated chart transitions are already controlled.",
+     "Compiled exactly one pairwise regular-value prerequisite. For the difference of two endpoint-preserving perturbed arcs, varying the left perturbation vector is surjective whenever the left curve parameter lies in the open interval; symmetrically, varying the right vector is surjective whenever the right parameter is interior. Thus every coincidence parameter pair outside the four endpoint-endpoint pairs has a surjective available perturbation direction. The four fixed endpoint pairs, finite-family simultaneous parameter choice, embedding stability and chart-transition transport remain separate.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
@@ -71673,7 +71700,8 @@
     :plane-arc-endpoint-preserving-perturbation-implementation-refill50
     :plane-arc-endpoint-perturbation-containment-implementation-refill50
     :plane-arc-endpoint-perturbation-family-containment-implementation-refill50
-    :plane-arc-endpoint-perturbation-interior-parameter-implementation-refill50],
+    :plane-arc-endpoint-perturbation-interior-parameter-implementation-refill50
+    :plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50],
    :current-residual
    "Common-plane translations preserve embeddings and containment but move endpoints and do not compare curves transported through unrelated charts.",
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
