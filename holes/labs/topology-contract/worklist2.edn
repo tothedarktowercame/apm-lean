@@ -41611,7 +41611,8 @@
     ["ConstructionTargets/SingularSubdivision.lean:2960 unused tactic"
      "ConstructionTargets/SingularSubdivision.lean:3580 unnecessary simpa"],
     :fixture
-    {:path "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+    {:path
+     "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
      :sha256
      "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
      :reviewed-source
@@ -46590,76 +46591,109 @@
    :stop-condition
    "Apply only checkpoint67's primary immutable fixture-path transition through the banked checkpoint67-primary evidence schema. Preserve its reviewed source, predecessor evidence, declarations, statement hashes, implementation commit and PASS review. Do not alter validator code, topology sources, terminal counts, adjacent swaps or consumer files.",
    :evidence
-   {:probe
-    {:residual
-     "Promote the compiled terminal horizontal and vertical count characterizations into the released canonical source.",
-     :outcome :go,
-     :warnings [],
-     :axioms [],
-     :commands
-     [{:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb /tmp/codex13-checkpoint76-checkpoint67-transition/worklist2.edn",
-       :exit 0}
-      {:cmd
-       "sha256sum transition fixtures and immutable checkpoint67 artifact",
-       :exit 0}
-      {:cmd "bb holes/labs/topology-contract/test_gate_receipts.bb",
-       :exit 0}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd
-       "Parse this exact receipt map with clojure.edn/read-string",
-       :exit 0}],
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint76-checkpoint67-transition/build_step.bb",
+   {:residual
+    "Promote the already compiled terminal horizontal and vertical count characterizations into the released canonical source.",
+    :gates
+    {:empty-scope-commit :pass,
+     :all-preserved-values :pass,
+     :empty-tree-identity :pass,
+     :only-fixture-path-changes :pass,
+     :receipt-edn-parse :pass,
+     :immutable-artifact-sha256 :pass,
+     :malformed-request-tests :pass,
+     :whole-scratch-ledger :pass,
+     :both-live-ledgers :pass,
+     :checkpoint67-primary-schema :pass,
+     :live-85-assertion-suite :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms [],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum transition fixture and immutable checkpoint67 artifact",
+      :exit 0}
+     {:cmd "bb holes/labs/topology-contract/test_gate_receipts.bb",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/codex13-checkpoint76-checkpoint67-transition/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; git diff --exit-code; git status --short",
+      :exit 0}
+     {:cmd
+      "git commit --allow-empty -m 'Record checkpoint67 recurrence fixture transition'",
+      :exit 0}
+     {:cmd "Verify empty commit tree identity and zero changed paths",
+      :exit 0}
+     {:cmd "Parse exact receipt map with clojure.edn/read-string",
+      :exit 0}],
+    :representation
+    {:source
+     "Checkpoint67 completed recurrence evidence whose fixture path names the mutable canonical ProductSimplexWordPrefixCounts source",
+     :target
+     "The same completed evidence whose fixture path names the banked immutable checkpoint67 recurrence artifact",
+     :direction
+     "Exact single-path state transition from the source reviewed recurrence representation to the target immutable-artifact representation, preserving every other evidence, declaration, statement-hash and review value."},
+    :commit "eed1d2ffc7e80b2e616247a9bf5ca4b22ad6afea",
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint76-checkpoint67-transition/build_step.bb",
+     :sha256
+     "a582981574894a4df06a1c6e62fc3309c794583af503a411f3adfd987cd02ccc",
+     :target-path
+     "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
+     :target-sha256
+     "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
+     :assertions 2},
+    :finding
+    "Fresh execution confirms the exact checkpoint67-primary transition validates an isolated current ledger and changes only evidence.fixture.path. The live validator suite passes 85 assertions, the immutable artifact hash matches, and both live ledgers remain valid. The evidence commit is empty and names no paths.",
+    :completion-transition
+    {:row
+     :oriented-checkpoint67-product-simplex-prefix-successor-recurrences-promotion-1,
+     :path [:evidence :fixture :path],
+     :from "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+     :to
+     "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
+     :preserve-schema :checkpoint67-primary,
+     :preserve
+     {:reviewed-source
+      "/tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean",
+      :predecessor-path
+      "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean",
+      :review-outcome :pass,
+      :predecessor-sha256
+      "e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187",
+      :statement-hashes
+      {"horizontalCount_succ_of_true"
+       "dba9b7d35c3a540add7af1c9f75f0af089b1ea47af8faba3cb6868359322a634",
+       "horizontalCount_succ_of_false"
+       "e0f8f658abdf42087be2aa8dadbea2d86984388dad900b5ae3c97d7fa655502f",
+       "verticalCount_succ_of_true"
+       "931fb3732f715e810006be1d47928e348dee81e6692de7da78ca167db2983c07",
+       "verticalCount_succ_of_false"
+       "fc8885425ec369aa465b7062d1d61f50925e84c41502993dfbf2b82791be26ab"},
+      :placeholder-count 0,
+      :commit "30f261b66c5ed95ef136addb5cda9ab1a1ab491d",
+      :reviewed-source-sha256
+      "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
       :sha256
-      "a582981574894a4df06a1c6e62fc3309c794583af503a411f3adfd987cd02ccc"},
-     :finding
-     "The exact checkpoint67-primary request was executed through the banked transition function on an isolated current ledger copy. Whole-ledger validation passed, two structural assertions proved that only evidence.fixture.path changed, and the live focused suite passed 85 assertions with zero failures or errors. The immutable artifact reproduces its recorded SHA256.",
-     :implementation
-     {:scope [],
-      :implementation
-      "Submit a done-unreviewed receipt with an exact empty-scope evidence commit and this tested completion transition; the supervisor validates the complete resulting ledger before atomic write.",
-      :completion-transition
-      {:row
-       :oriented-checkpoint67-product-simplex-prefix-successor-recurrences-promotion-1,
-       :path [:evidence :fixture :path],
-       :from "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
-       :to
-       "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
-       :preserve-schema :checkpoint67-primary,
-       :preserve
-       {:reviewed-source
-        "/tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean",
-        :predecessor-path
-        "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean",
-        :review-outcome :pass,
-        :predecessor-sha256
-        "e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187",
-        :statement-hashes
-        {"horizontalCount_succ_of_true"
-         "dba9b7d35c3a540add7af1c9f75f0af089b1ea47af8faba3cb6868359322a634",
-         "horizontalCount_succ_of_false"
-         "e0f8f658abdf42087be2aa8dadbea2d86984388dad900b5ae3c97d7fa655502f",
-         "verticalCount_succ_of_true"
-         "931fb3732f715e810006be1d47928e348dee81e6692de7da78ca167db2983c07",
-         "verticalCount_succ_of_false"
-         "fc8885425ec369aa465b7062d1d61f50925e84c41502993dfbf2b82791be26ab"},
-        :placeholder-count 0,
-        :commit "30f261b66c5ed95ef136addb5cda9ab1a1ab491d",
-        :reviewed-source-sha256
-        "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
-        :sha256
-        "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
-        :declarations
-        ["horizontalCount_succ_of_true"
-         "horizontalCount_succ_of_false"
-         "verticalCount_succ_of_true"
-         "verticalCount_succ_of_false"]}}},
-     :seat "codex-13"}},
+      "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
+      :declarations
+      ["horizontalCount_succ_of_true"
+       "horizontalCount_succ_of_false"
+       "verticalCount_succ_of_true"
+       "verticalCount_succ_of_false"]}},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: atomic checkpoint67 recurrence fixture transition",
