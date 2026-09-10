@@ -71619,6 +71619,19 @@
       "git diff --check -- ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789070822166-19354-b0d4adb8",
+     :commands
+     ["git diff --name-only 9ee5f84a^ 9ee5f84a"
+      "git diff --exit-code 9ee5f84ae9996cf40f0d511ebd356f67f2256585 -- ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"
+      "lake env lean ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"
+      "sha256sum ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean /tmp/PlaneArcEndpointPairParameterSurjectivity.lean ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"
+      "python3 placeholder-and-three-declaration audit"
+      "git diff --check 9ee5f84a^ 9ee5f84a -- ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"],
+     :finding
+     "Exact one-file scope; fixture and dependency hashes match; Lean compiles with standard axioms; zero placeholders; all three frozen declaration hashes reproduce. The pairDifference orientation is left minus right, and varying either corresponding perturbation coordinate is surjective whenever that curve's parameter is interior, while the other curve remains arbitrary and fixed; no endpoint or transversality result is overclaimed."},
     :commit "9ee5f84ae9996cf40f0d511ebd356f67f2256585",
     :changed-paths
     ["ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"],
@@ -71630,7 +71643,7 @@
     :finding
     "Promoted the exact fixture. Whenever either arc parameter is interior, varying its corresponding perturbation vector moves the pairwise coincidence difference surjectively through the plane, with arbitrary fixed data for the other arc. The module compiles without warnings or placeholders, its dependency hash matches, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"],
    :dag-node
@@ -71724,7 +71737,7 @@
      "Compiled exactly one pairwise regular-value prerequisite. For the difference of two endpoint-preserving perturbed arcs, varying the left perturbation vector is surjective whenever the left curve parameter lies in the open interval; symmetrically, varying the right vector is surjective whenever the right parameter is interior. Thus every coincidence parameter pair outside the four endpoint-endpoint pairs has a surjective available perturbation direction. The four fixed endpoint pairs, finite-family simultaneous parameter choice, embedding stability and chart-transition transport remain separate.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
