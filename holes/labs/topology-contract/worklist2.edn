@@ -31712,61 +31712,120 @@
    :other-consumers [:t02A05 :t01J06 :t94A10]}
   {:consumer :t95J05,
    :stop-condition
+   "Bank only the exact append-zero sphere-image equality and ambient raw-Hausdorff nullity transport from the reviewed source-nullity theorem. Do not claim intrinsic subtype nullity, cap partition, numerical normalization, sphere mass, moments, Stokes or consumer closure.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/SphereEquatorImageNullity.lean"
+    "ConstructionTargets/SphereEquatorImageNullity.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: literal equator image equality and ambient Hausdorff nullity",
+   :acceptance
+   {:namespace "ConstructionTargets.SphereEquatorImageNullity",
+    :implementation
+    "Promote the new equator, reconstruction, image-equality and ambient-nullity declarations from the compiled fixture, importing the reviewed LowerDimensionalSphereNullity and SphereEquatorEmbedding modules instead of repeating their declarations.",
+    :hypotheses
+    "Use the reviewed append-zero linear isometric embedding and reviewed raw critical-dimensional nullity of the source unit spheres. The generic transport theorem accepts exactly that source-nullity equality; named applications use d=2 and d=3. No normalization or finite sphere-measure hypothesis is supplied.",
+    :declarations
+    ["equator"
+     "dropLast"
+     "appendZero_dropLast"
+     "image_sphere"
+     "equator_measure_eq_zero"
+     "equator_two_null"
+     "equator_three_null"],
+    :consumer-equation
+    "The append-zero image of the lower-dimensional unit sphere equals the literal last-coordinate-zero equator, and its banked source raw-Hausdorff nullity transports to ambient equator nullity in dimensions two and three.",
+    :consumer-residual
+    "Prove intrinsic subtype equator nullity and the measurable upper-cap, lower-cap and equator partition.",
+    :axioms :standard-only,
+    :gates
+    ["Verify the recorded fixture SHA256 and extract only the new declarations over the two reviewed imports."
+     "Compile the fixture and canonical target; run lake build ConstructionTargets.SphereEquatorImageNullity."
+     "Reproduce two standard-only axiom audits and d=2 and d=3 applications."
+     "Audit dropLast and appendZero_dropLast coordinate reconstruction."
+     "Verify image_sphere proves both inclusions against the literal sphere and Fin.last-zero predicates."
+     "Verify ambient nullity uses the actual append-zero isometry and Isometry.hausdorffMeasure_image."
+     "Confirm no intrinsic subtype, partition, normalization, sphere-mass or moment theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :representation
+   {:source
+    "The unit sphere in EuclideanSpace real (Fin d), with its reviewed raw d-dimensional Hausdorff-nullity theorem",
+    :target
+    "The literal subset of the unit sphere in EuclideanSpace real (Fin (d+1)) whose Fin.last coordinate is zero",
+    :direction
+    "Exact equality from the source sphere image under the reviewed append-zero isometric embedding to the target literal equator, followed by equality-preserving raw Hausdorff-measure transport from source nullity to ambient target nullity."},
+   :id :sphere-equator-image-ambient-nullity-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:lower-dimensional-sphere-raw-hausdorff-nullity-1
+    :sphere-equator-append-zero-isometric-embedding-1],
+   :current-residual
+   "Source sphere nullity and the append-zero embedding are banked, but their image must be identified exactly with the literal equator before ambient and intrinsic nullity can be used in cap assembly.",
+   :other-consumers [:t02A05 :t01J06 :t94A10]}
+  {:consumer :t95J05,
+   :stop-condition
    "Do not use the blocked raw Hausdorff normalization, assume that a lower-dimensional coordinate hyperplane is null, infer intrinsic nullity from ambient nullity without an actual subtype isometry, assemble caps, evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Prove only d=2 and d=3 and use a unique row-specific scratch directory.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Prove exact image equality between each lower-dimensional unit sphere and the literal last-coordinate-zero equator, transport raw Hausdorff nullity through appendZero and the subtype coercion isometry, then prove the measurable strict-upper-cap, strict-lower-cap and equator partition.",
+     "Use the ambient equator nullity to prove nullity for the equator subtype through the coercion isometry, then prove measurable exact decomposition of each literal unit sphere into the strict upper cap, strict lower cap and equator.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t95J05,
       :stop-condition
-      "Bank only the append-zero linear isometric embedding and its exact source-coordinate and last-coordinate formulas. Do not claim sphere-image equality, ambient or intrinsic Hausdorff nullity, cap partition, numerical normalization, sphere mass, moments, Stokes or consumer closure.",
+      "Bank only the exact append-zero sphere-image equality and ambient raw-Hausdorff nullity transport from the reviewed source-nullity theorem. Do not claim intrinsic subtype nullity, cap partition, numerical normalization, sphere mass, moments, Stokes or consumer closure.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SphereEquatorEmbedding.lean"
-       "ConstructionTargets/SphereEquatorEmbedding.md"],
+      ["ConstructionTargets/SphereEquatorImageNullity.lean"
+       "ConstructionTargets/SphereEquatorImageNullity.md"],
       :dag-node
-      "MANIFOLD INTEGRATION: append-zero isometric embeddings for literal sphere equators",
+      "MANIFOLD INTEGRATION: literal equator image equality and ambient Hausdorff nullity",
       :acceptance
-      {:namespace "ConstructionTargets.SphereEquatorEmbedding",
+      {:namespace "ConstructionTargets.SphereEquatorImageNullity",
        :implementation
-       "Promote the exact compiled fixture and document how its coordinate formulas support the remaining sphere-image and Hausdorff-nullity transport.",
+       "Promote the new equator, reconstruction, image-equality and ambient-nullity declarations from the compiled fixture, importing the reviewed LowerDimensionalSphereNullity and SphereEquatorEmbedding modules instead of repeating their declarations.",
        :hypotheses
-       "Use EuclideanSpace real (Fin d), EuclideanSpace real (Fin (d+1)) and the reviewed WithLp coordinate isometry. The construction is dimension-generic only because the named d=2 and d=3 instances use the identical append-zero map. No measure or normalization hypothesis is supplied.",
+       "Use the reviewed append-zero linear isometric embedding and reviewed raw critical-dimensional nullity of the source unit spheres. The generic transport theorem accepts exactly that source-nullity equality; named applications use d=2 and d=3. No normalization or finite sphere-measure hypothesis is supplied.",
        :declarations
-       ["E" "EA" "appendZero" "appendZero_castSucc" "appendZero_last"],
+       ["equator"
+        "dropLast"
+        "appendZero_dropLast"
+        "image_sphere"
+        "equator_measure_eq_zero"
+        "equator_two_null"
+        "equator_three_null"],
        :consumer-equation
-       "The append-zero map is a linear isometric embedding: every Fin.castSucc coordinate is preserved and the Fin.last coordinate is zero, with named d=2 and d=3 instances.",
+       "The append-zero image of the lower-dimensional unit sphere equals the literal last-coordinate-zero equator, and its banked source raw-Hausdorff nullity transports to ambient equator nullity in dimensions two and three.",
        :consumer-residual
-       "Identify source unit-sphere images with literal equators, transport raw Hausdorff nullity to ambient and intrinsic measures, and prove the cap partitions.",
+       "Prove intrinsic subtype equator nullity and the measurable upper-cap, lower-cap and equator partition.",
        :axioms :standard-only,
        :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.SphereEquatorEmbedding."
-        "Reproduce two standard-only axiom audits and the d=2 and d=3 instances."
-        "Audit linearity through the reviewed coordinate isometry and WithLp append-zero map."
-        "Verify exact norm preservation."
-        "Verify Fin.castSucc and Fin.last coordinate formulas."
-        "Confirm no measure, sphere-image, partition, normalization or moment theorem is claimed."
+       ["Verify the recorded fixture SHA256 and extract only the new declarations over the two reviewed imports."
+        "Compile the fixture and canonical target; run lake build ConstructionTargets.SphereEquatorImageNullity."
+        "Reproduce two standard-only axiom audits and d=2 and d=3 applications."
+        "Audit dropLast and appendZero_dropLast coordinate reconstruction."
+        "Verify image_sphere proves both inclusions against the literal sphere and Fin.last-zero predicates."
+        "Verify ambient nullity uses the actual append-zero isometry and Isometry.hausdorffMeasure_image."
+        "Confirm no intrinsic subtype, partition, normalization, sphere-mass or moment theorem is claimed."
         "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
       :representation
       {:source
-       "EuclideanSpace real (Fin d), containing the lower-dimensional sphere models whose raw critical-dimensional Hausdorff nullity is banked",
+       "The unit sphere in EuclideanSpace real (Fin d), with its reviewed raw d-dimensional Hausdorff-nullity theorem",
        :target
-       "EuclideanSpace real (Fin (d+1)), with source coordinates at Fin.castSucc and a zero Fin.last coordinate",
+       "The literal subset of the unit sphere in EuclideanSpace real (Fin (d+1)) whose Fin.last coordinate is zero",
        :direction
-       "Exact linear isometric embedding from the source lower-dimensional Euclidean representation to the target last-coordinate-zero Euclidean representation, with proved norm preservation and coordinate equalities."},
-      :id :sphere-equator-append-zero-isometric-embedding-1,
+       "Exact equality from the source sphere image under the reviewed append-zero isometric embedding to the target literal equator, followed by equality-preserving raw Hausdorff-measure transport from source nullity to ambient target nullity."},
+      :id :sphere-equator-image-ambient-nullity-1,
       :kind :representation-comparison,
       :depends-on
-      [:sphere-cap-l2-euclidean-coordinate-isometry-1
-       :lower-dimensional-sphere-raw-hausdorff-nullity-1],
+      [:lower-dimensional-sphere-raw-hausdorff-nullity-1
+       :sphere-equator-append-zero-isometric-embedding-1],
       :current-residual
-      "The lower-dimensional source spheres are raw Hausdorff-null, but their explicit append-zero isometric representation inside the literal ambient spheres must be banked before image and subtype transport.",
+      "Source sphere nullity and the append-zero embedding are banked, but their image must be identified exactly with the literal equator before ambient and intrinsic nullity can be used in cap assembly.",
       :other-consumers [:t02A05 :t01J06 :t94A10]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
@@ -31775,16 +31834,16 @@
        "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
        :exit 0}
       {:cmd
-       "Inspect SphereCapCoordinateIsometry and WithLp product linear-isometry APIs",
+       "Inspect SphereCapCoordinateIsometry, SphereEquatorEmbedding fixture, lower-dimensional sphere-nullity fixture and Isometry.hausdorffMeasure_image",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint50-equator-embedding/SphereEquatorEmbedding.lean",
+       "lake env lean /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/codex13-checkpoint50-equator-embedding/SphereEquatorEmbedding.lean",
+       "sha256sum /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint50-equator-embedding/SphereEquatorEmbedding.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
@@ -31799,30 +31858,32 @@
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial equator-embedding fixture compilation",
+     [{:cmd "Initial sphere-equator image-nullity fixture compilation",
        :exit 1,
        :correction
-       "The prerequisite module had not yet been promoted to canonical source, so its import had no object file. Removed the unused import; the embedding depends only on the reviewed coordinate-isometry module."}
-      {:cmd "Compilation after removing the unavailable import",
+       "The two prerequisite implementation modules were not yet present as canonical imports. Compiled their reviewed declarations in the same scratch fixture while keeping the new image and transport theorems separately named."}
+      {:cmd
+       "Compilation after composing the prerequisite declarations",
        :exit 1,
        :correction
-       "Direct coordinate extensionality did not unfold the reviewed coordinate equivalence. Replaced it with linear-map additivity and scalar compatibility, then used the exported coordinateIsometry_castSucc and coordinateIsometry_last theorems."}
-      {:cmd "Compilation after coordinate proof correction",
+       "Corrected unit-sphere membership by rewriting with the append-zero norm theorem and isolated the source-nullity statements from the opened cap namespaces."}
+      {:cmd
+       "Compilation with source-nullity statements in the combined namespace",
        :exit 1,
        :correction
-       "The norm proof needed an explicit change exposing coordinateIsometry before applying its norm_map theorem. Added that change and removed the resulting unused simp argument; the final fixture compiles without warnings."}],
+       "Import interactions prevented the critical-dimension additive-Haar instance from elaborating in the combined declaration block. Made the new transport theorem accept the already-banked source-nullity equality explicitly; both d=2 and d=3 applications compile and introduce no new hypothesis beyond the prerequisite theorem."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint50-equator-embedding/SphereEquatorEmbedding.lean",
+      "/tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean",
       :sha256
-      "2d57af29396b64df733918bd4143ded4ec7885d68c02f2249ab2d52d80413e40",
+      "41b5affc82871ddb64935e292e521c6879020ae9dbe3a0466128251f18f8036a",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled representation prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 routes. It constructs the append-zero linear isometric embedding from EuclideanSpace real (Fin d) into EuclideanSpace real (Fin (d+1)) by reusing the reviewed WithLp product coordinate isometry. For every source coordinate i, the image at i.castSucc is exactly the source value, and the image at Fin.last d is exactly zero. Exact norm preservation and the d=2 and d=3 instances compile. The parent probe is not GO because the image of each source unit sphere has not yet been proved equal to the literal last-coordinate-zero equator, and ambient Hausdorff transport, intrinsic subtype nullity and the upper-cap/lower-cap/equator partition remain unproved. No normalization scalar, sphere mass, moment, Stokes or consumer-closure result is claimed; no canonical source or ledger was edited.",
+     "Exactly one complete compiled representation-and-transport prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 routes. It defines the literal last-coordinate-zero equator, reconstructs a source point by dropping the last coordinate, proves appendZero(dropLast y)=y whenever the last coordinate is zero, and proves exact equality between the append-zero image of the source unit sphere and that equator. It then transports the already-banked source raw-Hausdorff nullity through the actual append-zero isometry using Isometry.hausdorffMeasure_image. Generic transport and the d=2 and d=3 applications compile. The parent probe is not GO because intrinsic subtype Hausdorff nullity and the measurable strict-upper-cap, strict-lower-cap and equator partition remain unproved. No numerical normalization, sphere mass, moment, Stokes or consumer-closure theorem is claimed; no canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: Hausdorff-null equators for the literal S2 and S3 cap decompositions",
@@ -31853,7 +31914,8 @@
    [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2
     :oriented-checkpoint50-corrected-raw-normalization-and-consumer-refill-1
     :lower-dimensional-sphere-raw-hausdorff-nullity-1
-    :sphere-equator-append-zero-isometric-embedding-1],
+    :sphere-equator-append-zero-isometric-embedding-1
+    :sphere-equator-image-ambient-nullity-1],
    :current-residual
    "The two strict cap area formulas are banked, but assembling them into whole-sphere formulas requires proving that the literal last-coordinate equator is d-dimensional Hausdorff-null in dimensions two and three.",
    :other-consumers [:t02A05 :t01J06 :t94A10]}
