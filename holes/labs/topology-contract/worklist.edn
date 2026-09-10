@@ -65159,65 +65159,80 @@
    :stop-condition
    "GO requires actual triple-overlap map composition and derived relative/homology identities; REVISE requires one compiled prerequisite. No orientation or fundamental-class claim.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Local constancy, orientation compatibility and global localization remain subsequent. Existing lower-dimensional comparisons remain unchanged; the m+2 normalization is not extended to dimension one. No fundamental class or consumer closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:transition_comp
-      "ee6243cae832ed96adf69552c9106ea0d148d9533b2f022cbefc59b9594c08d4",
-      :pair_forward
-      "faae42c25d788aed4f5abdade68d92d0e288c8cb5d42a0eab5e95725e96ff5e0",
-      :actual_relative_comp
-      "3fe3a4c22fca87354cf4b046bdf275469442f0c67fe70c8d6d718600cedbd2a2",
-      :homology_comp
-      "8c4cc5d4ffd752043810700a199a71cbd8a9a5a9d8b99cdb6b6784cedadfd678",
-      :geometric_comparison
-      "a2495d2a75c4989dea8c9dd012bd5a5d6ad109b82d60e6ed23bc21dd3500abeb",
-      :geometric_unit
-      "3597397b99bfce3e24c1479fc73d3307edbe1c786f65d0b08648a5f871562809"},
-     :acceptance
-     {:implementation
-      "Promote the exact fixture. Compile the common triple neighborhood and restricted charts, transition_value, transition_comp, mapsTo, pair_forward, pair_comp, actual_relative_comp, homology_comp, restriction, normalized_pair, geometric_comparison and geometric_unit. Preserve arbitrary natural homology degree and explicit model dimension m+2 for normalization. Verify CoefficientChartRestriction SHA256 ce756577f18f1ffee92ab6b2d8df00b8b2f905f401ee6a50855503ab8dbfa591 and CoefficientChartTransitionUnit SHA256 e3f94ec9e7e0dcd4438b5c84ff78bc1cce3bbc08b0c152b511fda16326f06d36. Require zero placeholders, no warnings and standard-only axioms. Do not claim local constancy, orientation compatibility or fundamental classes.",
-      :commands
-      ["lake env lean ConstructionTargets/CoefficientTripleOverlap.lean"],
-      :axioms :standard-only,
-      :placeholder-before 0,
-      :placeholder-after 0},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientTripleOverlap.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/coefficient-triple-overlap-audit.py",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/CoefficientTripleOverlap.lean",
-       :exit 1,
-       :correction
-       "Made the definitionally equal pointed chart explicit before simplifying its inverse identity in the deleted-set preservation proof. Final compilation succeeds without warnings."}],
-     :representation
-     {:source
-      "Actual translated charts on the common intersection of three chart sources, with deleted-point relative chains and homology",
-      :target
-      "The direct transition and the banked normalized chart comparison and transition unit",
-      :direction
-      "Prove equality from transition i-to-j followed by j-to-k to direct i-to-k, transport it to actual relative chains and homology, and identify normalized transitions with the existing comparison and unit."},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientTripleOverlap.lean",
-      :sha256
-      "ec82d3746115e71abdc7ce8ba2bb8f14ea11d09d2cce89f4ca55f4dc7ffd34de",
-      :placeholder-count 0},
-     :finding
-     "Compiled actual triple-overlap geometry and its relative-chain and homology composition identities. The common neighborhood is the intersection of three actual chart sources; transitions use their restricted translated charts and have explicit coordinate formulas. Their pair maps are identified with actual relative-chain maps. Neighborhood restriction then identifies the normalized geometric maps with the banked chart comparisons, and evaluation at one identifies the existing transition units. The algebraic unit cocycle is reused without duplication.",
-     :implementation
-     {:scope ["ConstructionTargets/CoefficientTripleOverlap.lean"]},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Actual triple-overlap geometry, relative-chain composition and arbitrary-degree homology composition compile and connect to existing normalized comparisons and units. Normalization remains restricted to m+2. Local constancy, orientation compatibility, global localization, fundamental classes and consumer closure remain subsequent.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:restriction
+     "2788e97a3a6d3dd56e58a743162e790d3eeed37803c3a5a90be68c9365201b7e",
+     :pair_forward
+     "faae42c25d788aed4f5abdade68d92d0e288c8cb5d42a0eab5e95725e96ff5e0",
+     :actual_relative_comp
+     "3fe3a4c22fca87354cf4b046bdf275469442f0c67fe70c8d6d718600cedbd2a2",
+     :geometric_comparison
+     "a2495d2a75c4989dea8c9dd012bd5a5d6ad109b82d60e6ed23bc21dd3500abeb",
+     :pair_comp
+     "14530c9440595f9f4849756b03ed29801fc73c26c864743d546ada90827c42f0",
+     :geometric_unit
+     "3597397b99bfce3e24c1479fc73d3307edbe1c786f65d0b08648a5f871562809",
+     :homology_comp
+     "8c4cc5d4ffd752043810700a199a71cbd8a9a5a9d8b99cdb6b6784cedadfd678",
+     :transition_comp
+     "ee6243cae832ed96adf69552c9106ea0d148d9533b2f022cbefc59b9594c08d4",
+     :transition_value
+     "0e96f5944f69d2dd3f37280d10f4046c89a877f4e312738189219bf887251e79",
+     :normalized_pair
+     "20af04ed89e2db73b9a72e88cb2204b5a3c422c3a1a4aa99faea55206cc0fa81"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CoefficientTripleOverlap.lean ConstructionTargets/CoefficientChartRestriction.lean ConstructionTargets/CoefficientChartTransitionUnit.lean",
+      :exit 0}
+     {:cmd "python3 /tmp/coefficient-triple-overlap-audit.py", :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.CoefficientChartTransitionUnit 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/CoefficientTripleOverlap.lean ConstructionTargets/CoefficientTripleOverlap.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientTripleOverlap.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Actual translated charts restricted to the common triple intersection, with deleted-point relative chains and homology",
+     :target
+     "Direct transition and banked normalized chart comparison and transition unit",
+     :direction
+     "Equality from i-to-j followed by j-to-k to direct i-to-k, transported to actual relative chains and homology and identified with normalized comparisons and units."},
+    :commit "a4977876b1ebb365bc8d06208da4fc7f18ca2228",
+    :changed-paths
+    ["ConstructionTargets/CoefficientTripleOverlap.lean"],
+    :fixture
+    {:path "/tmp/CoefficientTripleOverlap.lean",
+     :sha256
+     "ec82d3746115e71abdc7ce8ba2bb8f14ea11d09d2cce89f4ca55f4dc7ffd34de"},
+    :dependencies
+    {"CoefficientChartRestriction"
+     "ce756577f18f1ffee92ab6b2d8df00b8b2f905f401ee6a50855503ab8dbfa591",
+     "CoefficientChartTransitionUnit"
+     "e3f94ec9e7e0dcd4438b5c84ff78bc1cce3bbc08b0c152b511fda16326f06d36"},
+    :axiom-audit-declarations 11},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoefficientTripleOverlap.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / actual triple-overlap composition",
