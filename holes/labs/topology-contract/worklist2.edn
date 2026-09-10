@@ -36542,11 +36542,12 @@
    :stop-condition
    "Prove only the bounded oriented face classification and cancellation for maximal product-simplex paths in total degree at most four. Reuse the canonical path, parity and affine-realization modules. Do not define the linear singular-chain cross product, assume Eilenberg-Zilber or Kunneth, prove product fundamental classes or intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
    :evidence
-   {:outcome :stop,
-    :seat "codex-13",
+   {:residual
+    "Construct and compile the exact equivalence between canonical maximal product-simplex paths and Boolean words of length p+q containing exactly p horizontal and q vertical letters; then define the unlike-letter corner swap and resume oriented face cancellation.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "codex-13",
     :reason :missing-balanced-step-word-maximal-path-equivalence,
-    :finding
-    "The banked endpoint and local-step theorems expose a maximal path as a Boolean word, but neither ConstructionTargets nor Mathlib supplies the inverse representation needed by this row. SSet.prodStdSimplex.objEquiv.invFun accepts an order homomorphism into the product simplex, not a Boolean word. Defining the adjacent corner swap therefore first requires constructing cumulative horizontal and vertical coordinates from a word of length p+q with exactly p true and q false letters, proving their bounds and monotonicity, proving maximal nondegeneracy and the coordinate-sum identity, and proving inverse laws with stepWord. Without that equivalence, swapping unlike consecutive letters cannot produce a canonical MaximalPath, so deleted-face equality, involutivity, opposite shuffle signs and bounded cancellation cannot yet be stated over the production representations. This is an exact representation boundary, not a mathematical refutation.",
     :commands
     [{:cmd
       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
@@ -36565,12 +36566,28 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
-    :residual
-    "Construct and compile the exact equivalence between canonical maximal product-simplex paths and Boolean words of length p+q containing exactly p horizontal and q vertical letters; then define the unlike-letter corner swap and resume oriented face cancellation.",
-    :author "codex-13",
-    :disposition :stop},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789069684093-19309-2d0ea4eb",
+     :commands
+     ["git show --stat --oneline a00e312e"
+      "git show a00e312e -- holes/labs/topology-contract/worklist2.edn"
+      "git diff-tree --no-commit-id --name-only -r a00e312e"
+      "rg -n -i balanced-word-and-path-reconstruction ConstructionTargets .lake/packages/mathlib/Mathlib"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "lake build ConstructionTargets.ProductSimplexMaximalPaths ConstructionTargets.ProductSimplexShuffleParity ConstructionTargets.ProductSimplexAffineRealization ConstructionTargets.ProductSimplexUnitSteps ConstructionTargets.ProductSimplexStepWord ConstructionTargets.ProductSimplexPathEndpoints"
+      "sha256sum frozen consumer files from commit a00e312e"
+      "recount placeholders for t03J05 t96J06 t97A04"
+      "git diff --check a00e312e^ a00e312e"],
+     :finding
+     "PASS: recorded commit has exact ledger-only scope and a valid evidence-only STOP. The canonical representation accepts an order homomorphism through prodStdSimplex.objEquiv.invFun, while repository-wide inspection found no inverse equivalence from balanced Boolean step words to canonical nondegenerate maximal paths and no adjacent corner-swap constructor. Thus face pairing and sign cancellation cannot yet be expressed over production representations. Dependencies are reviewed, focused builds and both ledger validators pass, frozen hashes are unchanged, and placeholder counts remain 1/2/4. No fixture or statement hash applies."},
+    :finding
+    "The banked endpoint and local-step theorems expose a maximal path as a Boolean word, but neither ConstructionTargets nor Mathlib supplies the inverse representation needed by this row. SSet.prodStdSimplex.objEquiv.invFun accepts an order homomorphism into the product simplex, not a Boolean word. Defining the adjacent corner swap therefore first requires constructing cumulative horizontal and vertical coordinates from a word of length p+q with exactly p true and q false letters, proving their bounds and monotonicity, proving maximal nondegeneracy and the coordinate-sum identity, and proving inverse laws with stepWord. Without that equivalence, swapping unlike consecutive letters cannot produce a canonical MaximalPath, so deleted-face equality, involutivity, opposite shuffle signs and bounded cancellation cannot yet be stated over the production representations. This is an exact representation boundary, not a mathematical refutation.",
+    :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded oriented cancellation of product-simplex shuffle faces",
@@ -36619,7 +36636,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: oriented product-simplex face cancellation and renewed consumer eligibility",
