@@ -33340,8 +33340,89 @@
   {:consumer :t96J05,
    :stop-condition
    "Bank only the exact positive-radius equivalence between the squared-norm equality fiber and the literal norm radial-level subtype. Do not transport manifold structures, claim a regular value, modify the frozen statement, or claim corrected closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Transport ManifoldRegularFiberGlobalAtlas across this equivalence, simplify its scalar-target fixed model to EuclideanSpace real (Fin (m-1)), and finish the corrected t96J05 theorem.",
+    :gates
+    {:canonical-compile :pass,
+     :forward-underlying-point :pass,
+     :whitespace :pass,
+     :inverse-underlying-point :pass,
+     :positive-radius-equivalence :pass,
+     :fixture-hash :pass,
+     :axiom-audits 3,
+     :exact-scope :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :fixture-compile :pass,
+     :ledger-validation :pass,
+     :forbidden-claims :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"E"
+     "8cb6527b4c1673daf203a139232ff254006ec28fcc230e35c441d96c2c696579",
+     "radialLevel"
+     "493280690e3fc86f06503bc0c95d11ed629a9594386f34b77f1adda4cc7aaec5",
+     "squaredFiber"
+     "f0d05bed3fac5bca4f0af7899ea785dea9aba133832ffd1a645588a4d93f514b",
+     "norm_sq_eq_sq_iff"
+     "720e1a64b0038095d4329b51e00c8055faa517276703d572d77d7d7abbdb3ec5",
+     "squaredFiberEquivRadialLevel"
+     "a60b6acb5e7f0217673102211a69dc5dff726265a8de46ed023398445a349436",
+     "squaredFiberEquivRadialLevel_apply"
+     "039e6ccbe8db11c8727d0305896c3c6480394a ballot0391ccf3b80adae66db2c614ec",
+     "squaredFiberEquivRadialLevel_symm_apply"
+     "5feccc353935f1ce3007782b49ab911a7eea6508a5093d59453921af4ce5a8c3"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and dependency receipts",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint53-radial-correction/RadialSquaredFiber.lean; inspect the positive-radius proof and identity-on-points equivalence",
+      :exit 0}
+     {:cmd
+      "Copy the exact fixture to ConstructionTargets/RadialSquaredFiber.lean; compare fixture and canonical SHA256 and bytes",
+      :exit 0}
+     {:cmd "lake env lean ConstructionTargets/RadialSquaredFiber.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.RadialSquaredFiber",
+      :exit 0}
+     {:cmd
+      "Reproduce three standard-only axiom audits; verify norm_sq_eq_sq_iff uses radius positivity and norm nonnegativity; verify both equivalence maps preserve the underlying point definitionally",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder and whitespace audit; forbidden-declaration scan over the exact Lean scope",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; stage exact two-file scope; git diff --cached --check; git commit -m 'Relate squared and literal radial fibers'",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline 964e34dd; recompute committed SHA256, Git blob and seven declaration-region hashes; git diff --check; git status --short",
+      :exit 0}],
+    :commit "964e34ddaca4357c77878f60a36838bc49576d55",
+    :changed-paths
+    ["ConstructionTargets/RadialSquaredFiber.lean"
+     "ConstructionTargets/RadialSquaredFiber.md"],
+    :fixture
+    {:path "ConstructionTargets/RadialSquaredFiber.lean",
+     :sha256
+     "0670c4d1caed7969dbec19c5f24175eda9b3c11ff3ab88cd782450d3cb0c519f",
+     :git-commit "964e34ddaca4357c77878f60a36838bc49576d55",
+     :git-blob "8e33fe5700f759d4ec0a0c59ec31ad5b801d711b",
+     :placeholder-count 0},
+    :finding
+    "At every positive radius, the squared-norm equality fiber and literal norm radial-level subtype are canonically equivalent by identity on their underlying embedded-subset points. The reverse norm implication uses positivity of the radius and nonnegativity of the norm. No manifold structures, regular-value claim, frozen-statement edit, or corrected closure is included.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/RadialSquaredFiber.lean"
     "ConstructionTargets/RadialSquaredFiber.md"],
