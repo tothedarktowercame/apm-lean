@@ -72232,6 +72232,19 @@
       "git diff-tree --no-commit-id --name-only -r 70273e34d0914627c3b8368882a275a6401ecf92",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789073911306-19461-f5d2a626",
+     :commands
+     ["lake env lean ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"
+      "sha256sum /tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean"
+      "python3 placeholder-and-two-declaration audit over ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"
+      "git diff-tree --no-commit-id --name-only -r 70273e34d0914627c3b8368882a275a6401ecf92"
+      "git diff --exit-code 70273e34d0914627c3b8368882a275a6401ecf92 -- ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"
+      "git show --check --oneline --stat 70273e34d0914627c3b8368882a275a6401ecf92"],
+     :finding
+     "PASS: independently reviewed recorded commit 70273e34d0914627c3b8368882a275a6401ecf92 authored by codex-6. Its sole changed path is the scoped module, byte-identical to fixture SHA256 3e694e87a588cba2024c1b778cbd4940080b8686de43745cfb90703086471b4c; dependency SHA256 is f18e50897c4cd22cf5105c5b189b391afc23d9954d01dc114d29eea632301deb. Lean compiles with only propext, Classical.choice, and Quot.sound; placeholder count is zero; both declaration hashes recompute exactly. The domain boundary is correct: ContDiffOn on U and V is converted to DifferentiableAt only after proving membership in the open product (U×V)×univ. The surjectivity theorem retains those neighborhood hypotheses and splits the disjunction exactly, applying the reviewed left derivative result when t is interior and the right result when s is interior. Thus it proves derivative surjectivity wherever at least one coordinate is interior, which excludes precisely the four endpoint pairs on the closed parameter square, without claiming Sard genericity, finite fibers, embedding preservation, or chart compatibility."},
     :commit "70273e34d0914627c3b8368882a275a6401ecf92",
     :changed-paths
     ["ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"],
@@ -72244,7 +72257,7 @@
     :finding
     "The exact fixture and recorded PlaneArcEndpointTotalDifferenceSubmersive dependency hash reproduce. Both requested declarations compile without warnings or placeholders using only standard axioms, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"],
    :dag-node
@@ -72339,7 +72352,7 @@
      "Compiled exactly one relative-submersion prerequisite. Smoothness on the actual open extension domains now yields differentiability at every total parameter whose curve coordinates lie in those domains. Combining this with the reviewed full-derivative theorem proves derivative surjectivity whenever either curve parameter is interior. This states the required submersivity input on the coincidence square outside the four endpoint pairs while retaining the supplied local ContDiffOn hypotheses. Parametric Sard, finite interior fibers, simultaneous finite-family selection, embedding stability and chart-transition comparison remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
