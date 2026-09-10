@@ -36131,6 +36131,28 @@
      {:cmd
       "git show --check --oneline --stat HEAD; recompute canonical source, documentation, commit and Git blob hashes; git status --short",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789068831260-19280-87ecf0cb",
+     :commands
+     ["git show --stat --oneline 18d326ebdbec53b42f7d1d383898117160ca5df5"
+      "git show --check --oneline 18d326ebdbec53b42f7d1d383898117160ca5df5"
+      "git show 18d326ebdbec53b42f7d1d383898117160ca5df5:ConstructionTargets/ProductSimplexUnitSteps.lean"
+      "sha256sum /tmp/codex13-checkpoint58-unit-steps/ProductSimplexUnitSteps.lean ConstructionTargets/ProductSimplexUnitSteps.lean"
+      "git show 18d326ebdbec53b42f7d1d383898117160ca5df5:ConstructionTargets/ProductSimplexUnitSteps.lean | sha256sum"
+      "git hash-object ConstructionTargets/ProductSimplexUnitSteps.lean"
+      "lake env lean /tmp/codex13-checkpoint58-unit-steps/ProductSimplexUnitSteps.lean"
+      "lake env lean ConstructionTargets/ProductSimplexUnitSteps.lean"
+      "lake build ConstructionTargets.ProductSimplexUnitSteps"
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ProductSimplexUnitSteps.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git diff --name-only 18d326eb^ 18d326eb"
+      "git diff --check 18d326eb^ 18d326eb"
+      "rg --pcre2 -o '(?<![A-Za-z0-9_.])(sorry|admit)(?![A-Za-z0-9_.])|^[[:space:]]*((private|protected)[[:space:]]+)?axiom[[:space:]]' problems/{t03J05,t96J06,t97A04}/lean -g '*.lean'"],
+     :finding
+     "PASS: commit 18d326eb changes exactly ProductSimplexUnitSteps.lean and its documentation. Fixture SHA256 ceb8964ed10aebe265252e9dd721f63c0387347d9fce018aa5689bb57594ed84, canonical SHA256 aaf9822a5fceb4e6291b7fee56d25972cefcae456c27cc190017403eb269d391, Git blob 69c82458d7cf8d8c73dbb2214109f5d55cff8dc4, and both declaration hashes reproduce. Compilation and build pass; axioms are propext, Classical.choice, and Quot.sound. The disjunction uses ordinary natural-number +1 increments, follows from coordinatewise monotonicity and coordinate sums at both vertices, and orients IsHorizontal exactly toward first-coordinate succession. No adjacent-path or cancellation claim crosses scope; implementation placeholders are zero, frozen counts remain 1/2/4, and both ledgers validate."},
     :canonical
     {:path "ConstructionTargets/ProductSimplexUnitSteps.lean",
      :sha256
@@ -36157,7 +36179,7 @@
     "Every consecutive edge of a canonical maximal product-simplex path is now classified as exactly one natural-number unit step: either the first coordinate increases by one and the second is fixed, or the second increases by one and the first is fixed. The proof uses coordinatewise monotonicity and maximalPath_coordinate_sum at both consecutive vertices. The second theorem identifies ProductSimplexShuffleParity.IsHorizontal exactly with the first-coordinate increment. No modular Fin addition, adjacent-path construction, face cancellation, sign change, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure result is introduced.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexUnitSteps.lean"
     "ConstructionTargets/ProductSimplexUnitSteps.md"],
@@ -36297,7 +36319,7 @@
      "Exactly one complete compiled combinatorial prerequisite is supplied. The fixture proves that every consecutive edge of a canonical maximal product-simplex path is exactly one horizontal unit step or one vertical unit step, using coordinate monotonicity and the banked coordinate-sum-equals-time theorem. It also identifies the existing IsHorizontal predicate exactly with incrementing the first coordinate by one. The parent cancellation theorem is not GO because constructing the adjacent path requires this unit-step classification before swapping a horizontal-vertical corner and proving its parity change. No adjacent-path operation, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded oriented cancellation of product-simplex shuffle faces",
