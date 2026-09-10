@@ -57252,8 +57252,34 @@
   {:consumer "t94A06",
    :stop-condition
    "GO requires full frozen closure. Otherwise name the exact dimension, model or measure-transport boundary. Do not confuse failure of finite-dimensional Sard applicability with a compiled refutation.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "Missing critical-value nullity for the projected map under the exact arbitrary-normed-model hypotheses, followed by parameter-measure transport under negation and the literal derivative range-plus-axis-span comparison. No complete consumer fixture or frozen-statement counterexample was compiled. This is failure of applicability of the current finite-dimensional Sard route, not a mathematical refutation or campaign termination. Frozen Main remains unchanged.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789002983822-17518-0a09fccc"},
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :placeholder-before 1,
+    :reason :dimension-and-model-hypothesis-boundary,
+    :commands
+    [{:cmd "lake env lean /tmp/T94A06Boundary.lean", :exit 0}
+     {:cmd "python3 /tmp/t94a06-boundary-audit.py", :exit 0}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T94A06Boundary.lean",
+     :sha256
+     "98211ee4b86fcdaeadd34c6ea086d3baa956fb0a559b2184f51a91301dd059db"},
+    :finding
+    "The diagnostic preserves all frozen definitions and existing lemmas and proves the literal axis-preimage identity: the translated image lies on the z-axis exactly when its first-two-coordinate projection equals the negative parameter. Frozen slice smoothness and derivative translation invariance compile with standard axioms. The available manifold Sard theorem requires a finite-dimensional complete real inner-product self-model source. Frozen Main supplies an arbitrary normed E and ModelWithCorners I, with no finite-dimensionality, completeness, inner-product or boundarylessness assumptions. Second countability of X does not supply those missing model hypotheses. Even a finite-dimensional specialization would still require justified smoothness and criticality transport on the actual model range; an open self-model chart domain cannot be assumed.",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "CRITICAL-VALUE MANIFOLD SARD / literal almost-everywhere normal translation",
