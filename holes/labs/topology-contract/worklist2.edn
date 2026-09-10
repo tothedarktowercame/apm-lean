@@ -14625,9 +14625,181 @@
    :other-consumers []}
   {:consumer :t00J01-rational-sphere-homology,
    :stop-condition
-   "No assumed subdivision smallness or homology isomorphism. Use actual R-linear chain elements and maps; do not substitute an integral chain theorem or restrict arbitrary coefficients to integer multiples of generators.",
-   :phase :probe,
+   "Bank only the coordinate equivalence and finite reconstruction. Do not claim iterate realization, eventual smallness, homology comparison or excision.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/CoefficientChainSupport.lean",
+      :sha256
+      "925af120ead4db53582b302b9975249e0a32364a595a82f99bb619b11a3e3cc8"},
+     :commands
+     [{:cmd "lake env lean /tmp/CoefficientChainSupport.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientChainSupport.lean"
+    "ConstructionTargets/CoefficientChainSupport.md"],
+   :dag-node
+   "SINGULAR-SUBDIVISION: arbitrary coefficient finite support on actual singular chains",
+   :acceptance
+   {:implementation
+    "Promote the exact compiled fixture and document arbitrary coefficient reconstruction.",
+    :namespace "ConstructionTargets.CoefficientChainSupport",
+    :declarations
+    ["coordinates"
+     "coordinates_generator"
+     "inverse_single"
+     "finite_expansion"
+     "exists_finite_expansion"
+     "integral_interval_edge"
+     "rational_interval_edge"],
+    :hypotheses
+    "R and X are Type 0; R is a commutative ring and X is a topological space. Every natural-number degree is supported. No nonemptiness, connectedness or cover hypothesis is imposed. Coefficients range over all of R.",
+    :consumer-equation
+    "Every actual singular chain equals the finite sum of its simplex generators evaluated at its R-valued coordinates.",
+    :consumer-residual
+    "Prove iterate-realization compatibility, apply geometric subordinate support at a common exponent, and use preservation to obtain actual preimages for every larger exponent.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientChainSupport."
+     "Reproduce four standard-only axiom audits and integer/rational interval-edge examples, including rational coefficient 1/2."
+     "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+   :representation
+   {:source
+    "The actual degree-n singular-chain object with coefficient object ModuleCat.of R R.",
+    :target
+    "Finitely supported functions from actual singular n-simplices to arbitrary coefficients in R.",
+    :direction
+    "Construct an R-linear equivalence from the actual chain object to finitely supported coefficients, and prove inverse reconstruction by evaluating simplex generators at those coefficients."},
+   :id :coefficient-general-actual-chain-finite-support-1,
+   :kind :representation-comparison,
+   :depends-on [:coefficient-general-finite-signed-realization-1],
+   :current-residual
+   "Eventual smallness needs finite generator support for arbitrary actual R-valued chain elements, beyond integer-weighted combinatorial formulas.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No assumed subdivision smallness or homology isomorphism. Use actual R-linear chain elements and maps; do not substitute an integral chain theorem or restrict arbitrary coefficients to integer multiples of generators.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Actual-chain eventual factorization remains in the parent probe. Positive-degree small-chain homology comparison, relative excision and rational sphere H1/H2 remain downstream.",
+     :axiom-audits 4,
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Bank only the coordinate equivalence and finite reconstruction. Do not claim iterate realization, eventual smallness, homology comparison or excision.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path "/tmp/CoefficientChainSupport.lean",
+         :sha256
+         "925af120ead4db53582b302b9975249e0a32364a595a82f99bb619b11a3e3cc8"},
+        :commands
+        [{:cmd "lake env lean /tmp/CoefficientChainSupport.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/CoefficientChainSupport.lean"
+       "ConstructionTargets/CoefficientChainSupport.md"],
+      :dag-node
+      "SINGULAR-SUBDIVISION: arbitrary coefficient finite support on actual singular chains",
+      :acceptance
+      {:implementation
+       "Promote the exact compiled fixture and document arbitrary coefficient reconstruction.",
+       :namespace "ConstructionTargets.CoefficientChainSupport",
+       :declarations
+       ["coordinates"
+        "coordinates_generator"
+        "inverse_single"
+        "finite_expansion"
+        "exists_finite_expansion"
+        "integral_interval_edge"
+        "rational_interval_edge"],
+       :hypotheses
+       "R and X are Type 0; R is a commutative ring and X is a topological space. Every natural-number degree is supported. No nonemptiness, connectedness or cover hypothesis is imposed. Coefficients range over all of R.",
+       :consumer-equation
+       "Every actual singular chain equals the finite sum of its simplex generators evaluated at its R-valued coordinates.",
+       :consumer-residual
+       "Prove iterate-realization compatibility, apply geometric subordinate support at a common exponent, and use preservation to obtain actual preimages for every larger exponent.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientChainSupport."
+        "Reproduce four standard-only axiom audits and integer/rational interval-edge examples, including rational coefficient 1/2."
+        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+      :representation
+      {:source
+       "The actual degree-n singular-chain object with coefficient object ModuleCat.of R R.",
+       :target
+       "Finitely supported functions from actual singular n-simplices to arbitrary coefficients in R.",
+       :direction
+       "Construct an R-linear equivalence from the actual chain object to finitely supported coefficients, and prove inverse reconstruction by evaluating simplex generators at those coefficients."},
+      :id :coefficient-general-actual-chain-finite-support-1,
+      :kind :representation-comparison,
+      :depends-on [:coefficient-general-finite-signed-realization-1],
+      :current-residual
+      "Eventual smallness needs finite generator support for arbitrary actual R-valued chain elements, beyond integer-weighted combinatorial formulas.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG representation requirements, closure stop rules, build-loop definitions and dependency PASS receipts in worklist2.edn",
+       :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientChainSupport.lean", :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientChainSupport.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientChainSupport.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial support-fixture compilation",
+       :exit 1,
+       :correction
+       "Added classical decidable equality to the coordinate construction."}
+      {:cmd "Second support-fixture compilation",
+       :exit 1,
+       :correction
+       "Exposed the coproduct morphism application and proved reconstruction using the inverse linear equivalence."}
+      {:cmd "Third support-fixture compilation",
+       :exit 1,
+       :correction
+       "Added classical decidable equality to generator evaluation."}
+      {:cmd "Fourth support-fixture compilation",
+       :exit 1,
+       :correction
+       "Specified the ModuleCat coproduct family explicitly."}
+      {:cmd "First interval-example compilation",
+       :exit 1,
+       :correction
+       "Converted continuous interval edges to actual singular simplices with singularSimplexOfContinuousMap. Final standalone compilation succeeds."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientChainSupport.lean",
+      :sha256
+      "925af120ead4db53582b302b9975249e0a32364a595a82f99bb619b11a3e3cc8"},
+     :finding
+     "Exactly one compiled finite-support prerequisite is supplied. A constructed R-linear equivalence identifies the actual ModuleCat R singular-chain object with finitely supported simplex coefficients in R. Generator evaluation and reconstruction prove finite expansion for every actual chain, including arbitrary nonintegral rational coefficients. Integer and rational interval-edge examples compile. Eventual factorization is not yet proved; no parent GO is claimed.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION: actual coefficient-general eventual smallness",
@@ -14649,7 +14821,7 @@
    [:oriented-checkpoint23-connected-cover-and-small-preservation-refill
     :oriented-checkpoint22-coefficient-small-chain-preservation-1
     :coefficient-general-finite-operator-realization-1
-    :oriented-checkpoint23-connected-cover-and-small-preservation-refill],
+    :coefficient-general-actual-chain-finite-support-1],
    :current-residual
    "Actual subdivision and prism preserve cover-small chains. Iterated subdivision of an arbitrary actual R-valued finite chain still needs a constructed factorization through the cover-small inclusion.",
    :other-consumers [:t03J04 :t02A08 :t94J08]}
