@@ -19589,6 +19589,20 @@
       :exit 1,
       :correction
       "An unrelated atlas file appeared concurrently. Inspected status and reran pinned commit scope, fixture equality and scoped cleanliness checks successfully; preserved the unrelated file."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789020052717-18006-6c0280cc",
+     :commands
+     ["lake env lean /tmp/CoefficientBoundaryReflection.lean"
+      "lake env lean ConstructionTargets/CoefficientBoundaryReflection.lean"
+      "lake build ConstructionTargets.CoefficientBoundaryReflection"
+      "git diff --check 6f66faff^ 6f66faff"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 0aee62d2:holes/labs/topology-contract/worklist2.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 0aee62d2:holes/labs/topology-contract/worklist.edn)"
+      "Read-only Python audit of fixture SHA256, 21 statement hashes, exact committed scope, forbidden declarations and placeholder counts"],
+     :finding
+     "Commit 6f66faffa3b127bf4f4b2bcb480d32a81b3c1579 independently verified. Fixture SHA256 fc75fd9984c2e5a887a507e8e58feb221e46ba5b83fa2b52b0bdd38d5cad164d matches. Actual negation and restricted H0 map conjugate to Boolean coordinate exchange under boundaryIso; inclusion and cokernel-projection equations are correct. Thirteen standard-only audits and integer/rational examples pass. All gates pass; frozen sources unchanged; placeholders 312->312. Kernel sign, relative-H1 sign and higher-sphere action remain downstream. No ledger edits."},
     :commit "6f66faffa3b127bf4f4b2bcb480d32a81b3c1579",
     :changed-paths
     ["ConstructionTargets/CoefficientBoundaryReflection.lean"
@@ -19604,7 +19618,7 @@
     "SHA256 from declaration keyword to immediately before the whitespace preceding := or where.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientBoundaryReflection.lean"
     "ConstructionTargets/CoefficientBoundaryReflection.md"],
@@ -19785,7 +19799,7 @@
      "Exactly one complete compiled boundary-map prerequisite is supplied. It constructs actual disk negation and its restricted and relative maps, proves boundary coordinate exchange geometrically, and derives the exact R-linear H0 conjugation through the reviewed boundaryIso. Inclusion compatibility and the cokernel-projection equation in every degree are proved. Integer and rational examples compile. The actual kernel action and relative-H1 sign remain unproved in this fixture; the parent is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SPHERE ORIENTATION: coefficient-general actual one-dimensional disk-reflection sign",
