@@ -22827,144 +22827,150 @@
    "No supplied pointed chart homeomorphism, local orientation witness or local-homology isomorphism. Use actual chartAt restrictions and subtype cokernels. Do not infer overlap orientation coherence, global fundamental classes, localization monicity, gluing or frozen closure.",
    :evidence
    {:probe
-    {:placeholder-delta 0,
+    {:concurrent-reservations
+     ["t02a05-frozen-flux-closure-probe-refill44 was done-unreviewed when inspected; untouched."],
+     :placeholder-delta 0,
      :residual
-     "Translation to zero and the exact ambient-local-to-model composite remain in the parent. Overlap compatibility, global classes, localization and t98A02 gluing remain downstream. Reviewed STOPs and refutations are unchanged.",
-     :axiom-audits 16,
-     :outcome :revise,
+     "No construction remains in this probe packet. Independent implementation and review remain. Overlap orientation coherence, global fundamental classes, localization monicity, gluing and frozen consumer closure are not claimed; reviewed STOPs and refutations remain preserved.",
+     :axiom-audits 20,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t98A02,
-      :stop-condition
-      "Bank the actual chart-pair comparison only. Do not claim translation-to-zero normalization, ambient local generators, overlap orientation coherence, global localization or consumer closure.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/CoefficientChartPair.lean",
-         :sha256
-         "e93b27eddddbbd8d6929545edaf2a055175f42f3563fe374fb58e89148de4676"},
-        :commands
-        [{:cmd "lake env lean /tmp/CoefficientChartPair.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientChartPair.lean"
-       "ConstructionTargets/CoefficientChartPair.md"],
-      :dag-node
-      "LOCAL HOMOLOGY: actual coefficient-general chartAt deleted-point pair comparison",
-      :acceptance
-      {:namespace "ConstructionTargets.CoefficientChartPair",
-       :implementation
-       "Promote the exact compiled fixture and document the remaining translation and ambient-neighborhood composite.",
-       :declarations
-       ["homeoMap"
-        "deletedMap"
-        "deletedInverse"
-        "pair_inverse_right"
-        "pair_inverse_left"
-        "pairIso"
-        "homologyIso"
-        "chartHomeo"
-        "sourcePoint"
-        "chart_deleted_iff"
-        "chartPairIso"
-        "chartHomologyIso"
-        "source_member"
-        "target_member"
-        "chart_value"
-        "source_deleted"
-        "target_deleted"
-        "chart_projection"
-        "chart_inverse_projection"
-        "chart_forward"
-        "chart_inverse_left"
-        "chart_inverse_right"
-        "integral_chart"
-        "rational_chart"],
-       :hypotheses
-       "R and all spaces are Type 0; R is a commutative ring. Actual chart constructions use ChartedSpace (EuclideanSpace ℝ (Fin d)) M. This chart-pair comparison works in all natural dimensions and degrees without a separation hypothesis; the parent ambient-neighborhood excision retains its Hausdorff hypothesis. No chart homeomorphism, orientation or local-homology isomorphism is supplied.",
-       :consumer-equation
-       "The actual chartAt source-target homeomorphism induces an isomorphism of the deleted-point subtype-cokernel chain complexes and their R-linear homology, with exact forward map, projection equations and inverse laws.",
-       :consumer-residual
-       "Construct translation of the actual chart coordinate to zero, then compose this chart comparison with neighborhood inclusion isomorphisms and CoefficientModelLocal normalization to construct the ambient local generator.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientChartPair."
-        "Reproduce sixteen standard-only axiom audits and integer/rational Euclidean chart examples."
-        "Audit chartAt restrictions, point membership, actual coordinate evaluation and both deleted-subset equalities."
-        "Audit both degreewise projection equations, actual pair-map inverse laws and induced homology forward/inverse equations."
-        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :coefficient-general-actual-chart-pair-comparison-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint38-coefficient-neighborhood-local-excision-1
-       :oriented-checkpoint32-coefficient-pair-connecting-naturality-1],
-      :current-residual
-      "Ambient manifold local normalization requires the actual chartAt source-target comparison on deleted-point subtype cokernels.",
-      :other-consumers [:t01A02 :t03J05 :t96J06]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read topology DAG, closure experiments and build-loop design; inspect both ledgers and four dependency PASS receipts",
+       "Read topology DAG, closure experiments and build-loop design; inspect both ledgers and five dependency PASS receipts",
        :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientChartPair.lean", :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientChartPair.lean", :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientChartLocal.lean", :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientChartLocal.lean", :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientChartPair.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientChartLocal.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial chart-pair fixture compilation",
+     [{:cmd
+       "Compilation after adding forward, generator and projection audits",
        :exit 1,
        :correction
-       "Exposed the inverse homeomorphism application and used its inverse law to prove deleted-point preservation; removed an unused binder."}
-      {:cmd "Compilation after adding chart projection audits",
+       "Supplied explicit deleted subsets and continuous map in the projection theorem; removed an unused simplification argument."}
+      {:cmd
+       "Compilation after adding translated chart pair-composition equation",
        :exit 1,
        :correction
-       "Supplied explicit MapsTo proofs for both projection equations."}
-      {:cmd "Compilation with inferred projection arguments",
-       :exit 1,
-       :correction
-       "Qualified CoefficientRadialPair.projection_degree and explicitly supplied both deleted subsets and continuous maps. Final compilation succeeds without warnings."}],
+       "Implicit elaboration reached the unchanged default heartbeat limit. Unfolded deletedMap and explicitly rewrote by pair_comp. Final compilation succeeds at the original limit."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientChartPair.lean",
+     {:path "/tmp/CoefficientChartLocal.lean",
       :sha256
-      "e93b27eddddbbd8d6929545edaf2a055175f42f3563fe374fb58e89148de4676"},
+      "ae0f436d51a3141e8b2ddc32119aa2d6afcddf3b3f19013be3e9156c7f2ae6cd"},
      :finding
-     "Exactly one complete compiled actual chart-pair prerequisite is supplied. chartAt constructs the source-target homeomorphism without a supplied chart equivalence. Actual deleted-point cokernel maps satisfy both projection equations and inverse laws through pair-map composition. Explicit subset equalities identify deletion of the source and target subtype points with ambient-coordinate deletion. Integer and rational Euclidean chart examples compile in every homology degree. The parent is not GO: translation to zero and assembly of ambient local normalization remain.",
+     "The complete actual-chart fixture compiles without placeholders or warnings. The actual chartAt restriction is followed by translation subtracting its distinguished coordinate. The translated target is proved open and contains zero. Actual deleted-point cokernel maps satisfy projection, composition and inverse equations. Explicit deleted-subset equality transports connect the inverse source-neighborhood inclusion, translated chart homology map, pointed target inclusion and reviewed model normalization. This constructs ambient local homology isomorphic to R, with exact forward composite, inverse laws and generator normalization. Integer and rational Euclidean chart examples compile.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientChartLocal.lean"
+       "ConstructionTargets/CoefficientChartLocal.md"],
+      :acceptance
+      {:namespace "ConstructionTargets.CoefficientChartLocal",
+       :implementation
+       "Promote the exact compiled fixture and document the ordered normalization composite and its pointwise scope.",
+       :declarations
+       ["E"
+        "coordinate"
+        "pointedTarget"
+        "pointed_open"
+        "pointed_zero"
+        "translateTarget"
+        "pointedChart"
+        "pointed_value"
+        "pointed_base"
+        "H"
+        "sourceTransport"
+        "pointed_deleted"
+        "targetTransport"
+        "localIso"
+        "forward_composite"
+        "inverse_left"
+        "inverse_right"
+        "generator"
+        "generator_normalization"
+        "integral_chart"
+        "rational_chart"
+        "pointed_projection"
+        "pointed_pair_inverse_right"
+        "pointed_pair_inverse_left"
+        "pointed_inverse_projection"
+        "pointed_pair_composite"],
+       :hypotheses
+       "R is a Type 0 commutative ring; M is Type 0 with a topology and ChartedSpace (EuclideanSpace ℝ (Fin (m+2))) M. Ambient local normalization retains T2Space M. No compactness, connectedness, orientation, supplied pointed chart equivalence or supplied local class is assumed.",
+       :consumer-equation
+       "The actual chartAt and neighborhood inclusions construct H_(m+2)(M,M minus x;R) isomorphic to ModuleCat.of R R, with explicit translated-chart forward composite and a constructed generator mapping to one.",
+       :consumer-residual
+       "Overlap compatibility for an appropriate orientation structure, global classes and localization remain before t98A02 gluing. Separately constructed pointwise generators do not establish an orientation or fundamental class.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientChartLocal."
+        "Reproduce twenty standard-only axiom audits and integer/rational Euclidean chart examples."
+        "Audit actual chart restrictions, translation y minus chart coordinate, translated target openness and zero membership."
+        "Audit deleted-subset equality transports, both actual projection equations, pair composition and pair inverse laws."
+        "Audit the exact ambient-local-to-model forward composite, normalization inverse laws and constructed generator equation."
+        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]}},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientChartLocal.lean"
+    "ConstructionTargets/CoefficientChartLocal.md"],
    :dag-node
    "LOCAL HOMOLOGY: actual deleted-point manifold chart and coefficient-general local generator",
    :acceptance
-   {:axioms :standard-only,
-    :probe
-    "For a Type 0 commutative ring R, m : ℕ and a Type 0 Hausdorff space M with ChartedSpace (EuclideanSpace ℝ (Fin (m+2))) M, construct from chartAt at each x the actual homeomorphism between chart source and chart target. Prove source/target membership and the exact equivalence between deletion of x and deletion of its chart coordinate. Construct the induced R-linear maps of the actual subtype cokernel pairs, proving projection equations and inverse laws through actual pair-map composition. Construct translation of the chart coordinate to zero and the corresponding pointed target neighborhood. Combine the actual chart comparison, CoefficientNeighborhoodLocal inclusion isomorphisms and CoefficientModelLocal normalization to construct H_(m+2)(M,M minus x;R) isomorphic to ModuleCat.of R R. State the precise forward composite, both inverse laws and the constructed generator normalization. Include integer and rational Euclidean chart examples. GO requires the complete placeholder-free actual-chart fixture; REVISE requires exactly one complete compiled missing actual chart-pair comparison; STOP names independent foundations.",
+   {:namespace "ConstructionTargets.CoefficientChartLocal",
+    :implementation
+    "Promote the exact compiled fixture and document the ordered normalization composite and its pointwise scope.",
+    :declarations
+    ["E"
+     "coordinate"
+     "pointedTarget"
+     "pointed_open"
+     "pointed_zero"
+     "translateTarget"
+     "pointedChart"
+     "pointed_value"
+     "pointed_base"
+     "H"
+     "sourceTransport"
+     "pointed_deleted"
+     "targetTransport"
+     "localIso"
+     "forward_composite"
+     "inverse_left"
+     "inverse_right"
+     "generator"
+     "generator_normalization"
+     "integral_chart"
+     "rational_chart"
+     "pointed_projection"
+     "pointed_pair_inverse_right"
+     "pointed_pair_inverse_left"
+     "pointed_inverse_projection"
+     "pointed_pair_composite"],
     :hypotheses
-    "R and M are Type 0. The model is a real Euclidean vector space of dimension m+2, not a general ModelWithCorners or a manifold with boundary. Retain Hausdorff hypotheses needed for neighborhood excision. No compactness, connectedness or orientation assumption is required for a single-point local calculation.",
+    "R is a Type 0 commutative ring; M is Type 0 with a topology and ChartedSpace (EuclideanSpace ℝ (Fin (m+2))) M. Ambient local normalization retains T2Space M. No compactness, connectedness, orientation, supplied pointed chart equivalence or supplied local class is assumed.",
     :consumer-equation
-    "The actual chartAt deleted-point comparison and neighborhood inclusions construct an R-linear normalization of ambient manifold local homology at each point, with explicit generator and forward maps.",
+    "The actual chartAt and neighborhood inclusions construct H_(m+2)(M,M minus x;R) isomorphic to ModuleCat.of R R, with explicit translated-chart forward composite and a constructed generator mapping to one.",
     :consumer-residual
-    "Prove overlap compatibility for an appropriate orientation structure, then construct global classes and localization before t98A02 gluing. A separately chosen generator at each point is not an orientation or a global fundamental class.",
+    "Overlap compatibility for an appropriate orientation structure, global classes and localization remain before t98A02 gluing. Separately constructed pointwise generators do not establish an orientation or fundamental class.",
+    :axioms :standard-only,
     :gates
-    ["Compile a complete fixture and record SHA256."
-     "Audit chartAt source/target restrictions, deleted-point equivalence and translation-to-zero geometry."
-     "Verify actual subtype-cokernel maps, projection equations and map inverse laws."
-     "Verify the exact ambient-local-to-model normalization composite and generator equation."
-     "Record integer/rational examples and standard-only axiom audits."
-     "Recheck both ledgers; preserve concurrent reservations and all reviewed consumer STOPs and refutations."]},
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientChartLocal."
+     "Reproduce twenty standard-only axiom audits and integer/rational Euclidean chart examples."
+     "Audit actual chart restrictions, translation y minus chart coordinate, translated target openness and zero membership."
+     "Audit deleted-subset equality transports, both actual projection equations, pair composition and pair inverse laws."
+     "Audit the exact ambient-local-to-model forward composite, normalization inverse laws and constructed generator equation."
+     "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
    :id
    :oriented-checkpoint39-coefficient-actual-chart-local-homology-1,
    :kind :reusable-theorem,
