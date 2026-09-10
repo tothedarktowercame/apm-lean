@@ -74181,6 +74181,20 @@
       :exit 127,
       :correction
       "An accidental shell token was issued while preparing the post-commit gate. It did not mutate the workspace; the full post-commit compile, hash, scope and status command was then run successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789080734167-19713-2f65ac56",
+     :commands
+     ["git show 1bcb7f51f48bacca0965ab71062829b94a7f1d28:ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean"
+      "git diff-tree --no-commit-id --name-only -r 1bcb7f51f48bacca0965ab71062829b94a7f1d28"
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean"
+      "sha256sum /tmp/CoefficientSubspaceUnionRangeHomologyEquivalence.lean ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean ConstructionTargets/CoefficientSubspaceUnionRangeFactorization.lean"
+      "cmp -s /tmp/CoefficientSubspaceUnionRangeHomologyEquivalence.lean ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean"
+      "git show --check --oneline --stat 1bcb7f51f48bacca0965ab71062829b94a7f1d28"
+      "python3 declaration-hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at 80423f25787938b99cb5dcee9a60810f6254783b17907fcae31d523cac56d762, and the repaired range-factorization dependency reproduces 3aa64ffc5e174f5f434b4d759fa6bd46e94d7765eec00d2a528aae44ad10385c. Lean compilation succeeds without warnings, the frozen declaration hash reproduces, placeholders are zero, and printed axioms are standard-only. The theorem assigns IsIso to the homology map of the literal unionRangeChainsInclusion in every degree. It transports the valid restricted-cover result through the exact three-factor chain identity; the two outer inverse isomorphisms and middle cover-small homology equivalence are composed in the correct orientation. It does not upgrade this to a chain isomorphism or assert any relative cokernel or Mayer-Vietoris result."},
     :commit "1bcb7f51f48bacca0965ab71062829b94a7f1d28",
     :changed-paths
     ["ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean"],
@@ -74193,7 +74207,7 @@
     :finding
     "The exact fixture and recorded repaired factorization dependency hash reproduce. The requested all-degree homology-equivalence theorem compiles without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean"],
    :dag-node
@@ -74284,7 +74298,7 @@
      "Compiled exactly one denominator homology prerequisite. Applying homology functoriality to the reviewed exact chain factorization expresses homologyMap unionRangeChainsInclusion as a composite of the inverses of two chain-isomorphism maps and the valid open-cover small-chain homology map. All three factors are isomorphisms, so the literal denominator inclusion induces an isomorphism in every degree for arbitrary open A and B, including empty members. This proves no chain-level surjectivity and uses neither supportConnecting nor either false ordinary-excision premise. Relative cokernel transport, short exactness, the genuine connecting morphism and three exactness segments remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
