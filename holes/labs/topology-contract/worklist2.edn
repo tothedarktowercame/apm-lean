@@ -21209,8 +21209,158 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint36Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint36Eligibility.bb", :exit 0}
+     {:cmd
+      "Read complete DAG consumer inventory and queues, foundational-program note, closure rules, both ledgers and dependency/concurrent review receipts",
+      :exit 0}
+     {:cmd
+      "Inspect problems/t94J08/lean/Main.lean and its two exact residual proof locations",
+      :exit 0}
+     {:cmd
+      "git log --format='%h %s' 205dbfa7..HEAD -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd "sha256sum problems/t94J08/lean/Main.lean", :exit 0}
+     {:cmd
+      "Python frozen theorem-declaration SHA256 and census-summary audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer :t94J08,
+      :stop-condition
+      "Preserve every repaired frozen definition and theorem statement, including positive-dimensional hypotheses. Do not restore or claim the refuted ordinary-S0 branch, assume an orientation or sign, add placeholders, or modify unrelated consumers.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "CONSUMER CLOSURE: exact repaired t94J08 antipodal degree and local-index negation",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t94J08/lean/Main.lean",
+       :gates
+       ["Verify frozen file and both theorem-statement hashes before constructing the fixture."
+        "Compile the complete exact Main fixture with zero executable placeholders and record SHA256."
+        "Audit actual sphere types, antipodal-map equality, induced integral maps and existential orientation witnesses."
+        "Reproduce standard-only axiom audits for both frozen theorems and verify all definitions and statements remain unchanged."
+        "Specify implementation scope as problems/t94J08/lean/Main.lean only, with placeholder delta -2."
+        "Require direct Main compilation, relevant dependency build, full build for the closure claim, whitespace checks and independent review."
+        "Classify success as closure of the repaired positive-dimensional statement; preserve the original S0 refutation and outstanding reduced-homology coverage."],
+       :consumer-residual
+       "No proof obligation remains in the repaired positive-dimensional consumer after successful uptake; independent review and DAG closure documentation remain. The original ordinary-S0 statement remains refuted.",
+       :statement-hashes
+       {"apm_t94J08_bridge_1"
+        "ab33967d8dbb761550c195fe761230edcb32d901a3bd832fb2dec719668bba0b",
+        "apm_t94j08"
+        "93379cadb92f80df85619dc6f37cbe084d858199cdc3b3ca5513d2c854339038"},
+       :axioms :standard-only,
+       :placeholder-before 2,
+       :probe
+       "Compile a complete zero-placeholder copy of the exact frozen Main. Import CoefficientSphereAntipodal, identify its literal antipodal map with t94J08Antipodal and its integral homology with T94J08TopHomology. For n at least one, use the constructed normalization and scalar_equation to prove apm_t94J08_bridge_1. Use that proved bridge for the main theorem's hantipodal family and retain the existing degree-composition and normalized-link proof of the local-index conjunct. Prove both exact frozen theorems without new hypotheses. GO requires the complete compiled Main fixture, hashes and a one-file implementation scope; otherwise name the precise remaining transport boundary.",
+       :consumer-equation
+       "The repaired frozen antipodal map has degree (-1)^(n+1) for n at least one, and negating the vector field multiplies its specified local index by (-1)^(m+1).",
+       :statement-hash-method
+       "SHA256 of each exact theorem declaration from theorem keyword through its type, excluding the terminating space-colon-equals-by proof delimiter.",
+       :frozen-sha256
+       "cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee"},
+      :id :oriented-checkpoint36-t94j08-positive-antipodal-closure-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint36-antipodal-computation-and-consumer-refill
+       :oriented-checkpoint35-coefficient-positive-sphere-antipodal-1],
+      :current-residual
+      "Both frozen placeholders need the reviewed integral positive-dimensional orientation and antipodal scalar equation; the remaining local-index proof is already assembled.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: repaired t94J08 uptake and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id :oriented-checkpoint37-t94j08-uptake-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint36-t94j08-positive-antipodal-closure-1],
+      :current-residual
+      "Verify exact repaired consumer uptake and placeholder changes, distinguish it from the original S0 refutation, and rerank the complete DAG against concurrent outcomes.",
+      :other-consumers []}],
+    :attribution
+    {:portfolio ["62a0af3d" "4e856007" "9e835292"],
+     :concurrent
+     ["cdd6e410" "164692ff" "c5d0be94" "b831e401" "45a52ad7"],
+     :reserved
+     [:compact-surface-embedded-triangle-cover-probe-refill42
+      :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer]},
+    :changed-paths [],
+    :measures
+    {:baseline "205dbfa759f72baf2354106d20c31531f0fe1c55",
+     :concurrent-infrastructure-packets 5,
+     :portfolio-infrastructure-packets 3,
+     :existing-consumers 58,
+     :missing-consumers [:t93A05],
+     :placeholder-delta 0,
+     :within-two-placeholders 25,
+     :zero-placeholder-consumers 23,
+     :placeholders-before 66,
+     :open-consumers 35,
+     :head "d4bbe3097b2e9575b1d3effea46f6b2697abcb8b",
+     :named-consumers 59,
+     :construction-modules-after 719,
+     :placeholders-after 66,
+     :construction-modules-before 711,
+     :typed-residual-change
+     "t94J08 previously lacked positive top-homology coordinates and signed antipodal action. Both are now reviewed; only exact frozen transport and reuse in its two proof locations remain.",
+     :review-outcomes
+     {:portfolio-implementation-pass 3,
+      :concurrent-implementation-pass 5,
+      :consumer-closures 0,
+      :preserved-stop
+      "t02A08 arbitrary-integer degree realization remains unconstructed; the new antipodal computation supplies only one signed map, not every integer degree."},
+     :frozen-consumer-changes []},
+    :ranking
+    {:first
+     "t94J08: two placeholders, newly reviewed exact mathematical input, existing local-index assembly, no active duplicate.",
+     :other-near-closure-boundaries
+     ["t00A01 retains the frozen connected-sum van Kampen boundary."
+      "t00J01 retains independent Klein-product and fold-fiber obligations after sphere-identity branch uptake."
+      "t02A08 requires actual sphere maps realizing every integer degree."
+      "t03J02 requires geometric collar/Jordan-Schoenflies input for arbitrary embedded-circle gluing."
+      "t01A05 retains its disconnected-cover specification defect; t96J05 retains its reviewed radial-level refutation."
+      "Surface classification and embedded-triangle coverage remain separate, with triangle coverage reserved by the concurrent ledger."
+      "Fundamental classes/localization, product homology, Stokes, covering classification and intersection comparison remain shared foundations and rank below this eligible closing adapter."]},
+    :finding
+    "Elect exactly one near-closure adapter: repaired positive-dimensional t94J08. Its two placeholders require the orientation and actual antipodal scalar equation now supplied by reviewed CoefficientSphereAntipodal; its local-index conjunct is already assembled through degree composition and normalized-link negation. This new computation resolves the previously recorded positive-dimensional homology boundary, so the election is not an unresolved STOP retry. Preserve the original ordinary-S0 refutation. No consumer closure has occurred during this interval.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint36Census.json",
+     :sha256
+     "1dada408574940b4395a8e0c7945564c30fc2bd7a6883d8e70472dd94eb2aff6",
+     :script "/tmp/Checkpoint36Census.py",
+     :method
+     "Extract every named consumer from the complete DAG; strip block and line comments before counting executable sorry tokens in pinned baseline and head blobs."}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: antipodal computation and frozen consumer eligibility",
@@ -21228,6 +21378,80 @@
     :oriented-checkpoint35-orthogonal-comparison-and-consumer-refill],
    :current-residual
    "Measure the actual signed computation separately from frozen uptake and rerank every consumer against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t94J08,
+   :stop-condition
+   "Preserve every repaired frozen definition and theorem statement, including positive-dimensional hypotheses. Do not restore or claim the refuted ordinary-S0 branch, assume an orientation or sign, add placeholders, or modify unrelated consumers.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CONSUMER CLOSURE: exact repaired t94J08 antipodal degree and local-index negation",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t94J08/lean/Main.lean",
+    :gates
+    ["Verify frozen file and both theorem-statement hashes before constructing the fixture."
+     "Compile the complete exact Main fixture with zero executable placeholders and record SHA256."
+     "Audit actual sphere types, antipodal-map equality, induced integral maps and existential orientation witnesses."
+     "Reproduce standard-only axiom audits for both frozen theorems and verify all definitions and statements remain unchanged."
+     "Specify implementation scope as problems/t94J08/lean/Main.lean only, with placeholder delta -2."
+     "Require direct Main compilation, relevant dependency build, full build for the closure claim, whitespace checks and independent review."
+     "Classify success as closure of the repaired positive-dimensional statement; preserve the original S0 refutation and outstanding reduced-homology coverage."],
+    :consumer-residual
+    "No proof obligation remains in the repaired positive-dimensional consumer after successful uptake; independent review and DAG closure documentation remain. The original ordinary-S0 statement remains refuted.",
+    :statement-hashes
+    {"apm_t94J08_bridge_1"
+     "ab33967d8dbb761550c195fe761230edcb32d901a3bd832fb2dec719668bba0b",
+     "apm_t94j08"
+     "93379cadb92f80df85619dc6f37cbe084d858199cdc3b3ca5513d2c854339038"},
+    :axioms :standard-only,
+    :placeholder-before 2,
+    :probe
+    "Compile a complete zero-placeholder copy of the exact frozen Main. Import CoefficientSphereAntipodal, identify its literal antipodal map with t94J08Antipodal and its integral homology with T94J08TopHomology. For n at least one, use the constructed normalization and scalar_equation to prove apm_t94J08_bridge_1. Use that proved bridge for the main theorem's hantipodal family and retain the existing degree-composition and normalized-link proof of the local-index conjunct. Prove both exact frozen theorems without new hypotheses. GO requires the complete compiled Main fixture, hashes and a one-file implementation scope; otherwise name the precise remaining transport boundary.",
+    :consumer-equation
+    "The repaired frozen antipodal map has degree (-1)^(n+1) for n at least one, and negating the vector field multiplies its specified local index by (-1)^(m+1).",
+    :statement-hash-method
+    "SHA256 of each exact theorem declaration from theorem keyword through its type, excluding the terminating space-colon-equals-by proof delimiter.",
+    :frozen-sha256
+    "cd3836746caa7a4f0aa3a9590ea78145227b2d63bfa0b22a596bdd2b7c02aeee"},
+   :id :oriented-checkpoint36-t94j08-positive-antipodal-closure-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint36-antipodal-computation-and-consumer-refill
+    :oriented-checkpoint35-coefficient-positive-sphere-antipodal-1
+    :oriented-checkpoint36-antipodal-computation-and-consumer-refill],
+   :current-residual
+   "Both frozen placeholders need the reviewed integral positive-dimensional orientation and antipodal scalar equation; the remaining local-index proof is already assembled.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: repaired t94J08 uptake and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint37-t94j08-uptake-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint36-t94j08-positive-antipodal-closure-1
+    :oriented-checkpoint36-antipodal-computation-and-consumer-refill],
+   :current-residual
+   "Verify exact repaired consumer uptake and placeholder changes, distinguish it from the original S0 refutation, and rerank the complete DAG against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
