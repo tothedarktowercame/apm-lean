@@ -33510,82 +33510,87 @@
     "Reproduce standard-only axiom audits and require no warnings."
     "Run placeholder, forbidden-declaration, whitespace, exact-scope and both-ledger checks; commit the scoped correction."],
    :evidence
-   {:probe
-    {:placeholder-delta -1,
-     :residual
-     "Implement the corrected theorem in the frozen Main file, replacing its sole placeholder and documenting the explicit regular-value statement repair.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:frozen-before
-      "4394da1c84c6e143f3b8e244912c2e0372f01d3893d5e0a019ad2cdc20f30760",
-      :corrected-fixture
-      "327eaf31434c8af95109bb022f729fbe60a77de49557675198b63321176ba314"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and dependency receipts",
-       :exit 0}
-      {:cmd
-       "Inspect ConstructionTargets.RadialSquaredFiber, ManifoldRegularFiberGlobalAtlas, ManifoldRegularFiberCharts, ChartedSpaceModelTransport, ChartedSpaceModelSmoothTransport and PredicateSubtypeAtlasTransport",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "Reproduce the standard-only axiom audit for corrected",
-       :exit 0}
-      {:cmd
-       "Python SHA256 audit of the frozen and corrected theorem statements",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}],
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean",
-      :sha256
-      "a38dbeb208d66f777a1c7f713e3bcddef4977c8d1f13de584f53d47c8fffa7aa",
-      :placeholder-count 0},
-     :finding
-     "A complete zero-placeholder corrected theorem compiles. It retains the embedded positive-dimensional submanifold, nonemptiness and connectedness data and adds explicit positive radius, inhabited literal radial level, smooth squared-norm restriction and derivative-surjectivity data on that squared-norm fiber. ManifoldRegularFiberGlobalAtlas supplies the fiber atlas. ContinuousLinearEquiv.ofFinrankEq and ChartedSpaceModelTransport identify its fixed model with EuclideanSpace real (Fin (m-1)). PredicateSubtypeAtlasTransport then moves the atlas and IsManifold proof across the banked exact equality between the squared-norm fiber and the literal norm-level subtype. The original centered-circle counterexample remains valid against the former unconditional theorem and does not satisfy the new regular-value hypothesis.",
-     :implementation
-     {:placeholder-after 0,
-      :fixture-sha256
-      "a38dbeb208d66f777a1c7f713e3bcddef4977c8d1f13de584f53d47c8fffa7aa",
-      :statement-repair
-      "Add explicit positive attained regular-value data for the squared-norm restriction. Preserve the old hypotheses and literal radialLevel conclusion, and record that the former unconditional statement is refuted by the reviewed centered circle.",
-      :gates
-      ["Verify the canonical RadialSquaredFiber source and fixture hashes."
-       "Apply the corrected statement repair only in problems/t96J05/lean/Main.lean."
-       "Compile the frozen Main with zero placeholders."
-       "Verify the positive radius and literal level inhabitant are retained."
-       "Verify the regular-fiber atlas is transported through the actual squared-fiber equivalence."
-       "Verify the fixed model is transported through a genuine continuous linear equivalence to EuclideanSpace real (Fin (m-1))."
-       "Reproduce standard-only axiom audits and require no warnings."
-       "Run placeholder, forbidden-declaration, whitespace, exact-scope and both-ledger checks; commit the scoped correction."],
-      :scope ["problems/t96J05/lean/Main.lean"],
-      :placeholder-before 1,
-      :consumer-equation
-      "Given r>0, an inhabitant of the literal radial level, smoothness of the squared-norm restriction and surjectivity of its manifold derivative throughout the squared-norm fiber, the literal radial level admits the required EuclideanSpace real (Fin (m-1)) atlas and manifold structure.",
-      :fixture
-      "/tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean",
-      :declarations ["apm_t96j05"],
-      :namespace "root frozen consumer namespace"},
-     :seat "codex-13"}},
+   {:placeholder-after 0,
+    :placeholder-delta -1,
+    :residual
+    "Independent review may now record corrected closure of t96J05 while preserving the centered-circle refutation of the former unconditional statement.",
+    :gates
+    {:canonical-compile :pass,
+     :whitespace :pass,
+     :squared-fiber-equivalence :pass,
+     :fixture-hash :pass,
+     :axiom-audits 4,
+     :exact-scope :pass,
+     :placeholder-scan :pass,
+     :radial-bridge-hash :pass,
+     :continuous-linear-model-equivalence :pass,
+     :corrected-statement :pass,
+     :literal-level-inhabitant :pass,
+     :warning-scan :pass,
+     :commit-check :pass,
+     :forbidden-declaration-scan :pass,
+     :positive-radius :pass,
+     :ledger-validation :pass,
+     :predicate-subtype-transport :pass,
+     :global-regular-fiber-atlas :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:frozen-before
+     "4394da1c84c6e143f3b8e244912c2e0372f01d3893d5e0a019ad2cdc20f30760",
+     :corrected-fixture
+     "327eaf31434c8af95109bb022f729fbe60a77de49557675198b63321176ba314",
+     :canonical-corrected
+     "f36c0706fcf299d879d89455d9f3dbf226467ebcd6b4bf74964b7d925f30a67d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :placeholder-before 1,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean ConstructionTargets/RadialSquaredFiber.lean problems/t96J05/lean/Main.lean",
+      :exit 0}
+     {:cmd "lake env lean problems/t96J05/lean/Main.lean", :exit 0}
+     {:cmd
+      "Create unique scratch audit copy; reproduce four standard-only axiom audits",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace, fixture-hash, statement-hash and proof-route audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; verify exact one-file scope; git diff --cached --check; git commit -m 'Correct t96J05 radial regular level theorem'",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat HEAD; recompute commit, blob, canonical file SHA256 and corrected statement SHA256; git diff --check; git status --short",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "First adapted frozen-file compilation",
+      :exit 1,
+      :correction
+      "The frozen smooth-level predicate requested analytic top regularity while the reviewed fixture and global regular-fiber atlas supply smooth infinity regularity. Aligned the predicate with the corrected fixture and replaced the deprecated norm_single lemma; the final file then compiled without warnings."}],
+    :canonical
+    {:path "problems/t96J05/lean/Main.lean",
+     :sha256
+     "73dcf8110f27c8fc76ac2e11e13bdcdbd18e7f51b3b08d2dbd6573ed5ff232f9",
+     :git-blob "35c0b842ead73b4c737f499c55e12913355841d9"},
+    :commit "d108464309970781792e6c723950db304ec1db15",
+    :changed-paths ["problems/t96J05/lean/Main.lean"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean",
+     :sha256
+     "a38dbeb208d66f777a1c7f713e3bcddef4977c8d1f13de584f53d47c8fffa7aa",
+     :placeholder-count 0},
+    :finding
+    "The sole placeholder is replaced by the reviewed corrected theorem. It retains the original embedded-manifold, dimension, nonemptiness and connectedness hypotheses and adds an explicit positive radius, an inhabitant of the literal radial level, smoothness of the squared-norm restriction and derivative surjectivity throughout its squared fiber. The proof uses ManifoldRegularFiberGlobalAtlas, transports the fixed model through ContinuousLinearEquiv.ofFinrankEq, and moves the resulting atlas across the exact squared-fiber-to-literal-level predicate equality. The statement-repair note preserves the centered-circle refutation of the former unconditional theorem.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t96J05/lean/Main.lean"],
    :dag-node
    "SPEC-DEFECT: corrected positive regular radial-level theorem",
