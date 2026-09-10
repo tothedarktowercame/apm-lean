@@ -60085,118 +60085,70 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Normalize the chosen Euclidean model index from finrank (WithLp 2 (A × B)) minus finrank V to finrank A plus finrank B minus finrank V, retaining chartAt, atlas, smooth inclusion and tangent specifications. Empty incidence and zero-dimensional kernels remain included. Target-manifold localization, component coverage, orientation and homological obligations remain separate; no Producer or frozen consumer closure is claimed.",
+     "Ready for bounded implementation of the complete vector-target incidence geometry packet. Target-manifold localization, valid component coverage, orientations and homological comparisons remain separate. No Producer or frozen consumer closure is claimed.",
      :dependency-review
      {:outcome :pass,
-      :commit "7587067571c0e30ada8f76bc2199ccb2450a1081",
-      :job "invoke-1789012983449-17808-f794442d"},
-     :outcome :revise,
+      :commit "82d876986a2e972df752b10321b458f2ea54569a",
+      :job "invoke-1789013712888-17826-d6497535"},
+     :outcome :go,
      :warnings [],
      :statement-hashes
-     {:zero-derivative
-      "e3a35c18b1dca7a5830606f8636cbb48f7e3f0286881c733534c079c070f264b",
-      :injective
-      "037c0ba0fcce05c45ff21fcfe86dd8141a4925c2a3099984abfb74059a7f3047",
-      :inclusionLinear
-      "1ec9453379ef2e08f05fe6ba68d21267180c5fc1b4abd62209712e0713fbb2fa",
-      :range
-      "68724c62efd1718d68798ccb9b515a82278b39bca30570b6eb0eb7ed61fd2cb8",
-      :equalizer
-      "940e2479d90fc7b3e9440586849ac8ce5c9c4b4ff1b52c1225bd850751edc331"},
-     :prerequisite
-     {:consumer "t00J02",
-      :stop-condition
-      "Require actual derivative factorization, injectivity and exact tangent equalizer range for the banked chosen atlas; no supplied immersion or kernel identity.",
-      :phase :implementation,
-      :state :open,
-      :scope ["ConstructionTargets/TransverseIncidenceTangent.lean"],
-      :dag-node
-      "TRANSVERSE-PULLBACK / chosen incidence inclusion tangent equalizer",
-      :acceptance
-      {:fixture "/tmp/TransverseIncidenceTangent.lean",
-       :fixture-sha256
-       "94e87ed09a9b09030cd28f37d4a8d4638e5aaa203ff04cbf29197ec6fe247654",
-       :implementation
-       "Promote the exact fixture. Compile zero_derivative, inclusionLinear, inclusion_injective, inclusion_range and mem_inclusion_range. Preserve exactly chosenAtlas, actual mfderivs, inherited topology, original product norm and derived transversality regularity. Audit zero placeholders and standard-only axioms. Do not claim explicit model-index normalization or consumer closure.",
-       :commands
-       ["lake env lean ConstructionTargets/TransverseIncidenceTangent.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :id :transverse-incidence-tangent-implementation-refill39,
-      :kind :reusable-theorem,
-      :depends-on
-      [:transverse-incidence-chosen-atlas-implementation-refill39],
-      :current-residual
-      "Same-atlas tangent geometry is compiled. Explicit Euclidean model-index normalization and final packet assembly remain.",
-      :other-consumers ["t02A07" "t94A06" "t97J05"]},
+     {:chartedSpace
+      "452a3c8e107d3744638b0eca04074e57757500285d1be70ff6f8c69febd51666",
+      :chartAt
+      "7cb503fe50f1e473f99f60f47fa19efc265f8ef575eeedcaee2f8980fb740d10",
+      :atlas
+      "8d59c977b335d2472a6d39f516164a81af6667e35c6b09502c4ff4af6c06d00d",
+      :isManifold
+      "2fd6ef1581e70625585f00ac6ff58523ca7d7f0a855fefb925a3ff06391d38aa",
+      :smooth-inclusion
+      "3330e201a996250b85f7f07a9d9bb916f24fc4cbf1206ea3e57b3b195ba0dbd0",
+      :injectivity
+      "aae5b93d1c2615918a6e57cd4bbaf59aabcca94236e2c161ab35feba7a07f362",
+      :actual-range
+      "9750ee91f6b06fc6b8dd250e09243a0d7a056757b0990ba69ff0ac2cdb5af9f0"},
+     :acceptance
+     {:fixture-sha256
+      "87f64ce17d5aa08aecffdb25ce6c798f1ae5b8a564e48c595cbedb265f3759b9",
+      :implementation
+      "Promote the exact fixture. Compile all twenty declarations, preserving the explicit normalized Euclidean model, transported chosen atlas, chart specifications, genuine infinity, smooth inclusion and actual tangent equalizer theorem. Audit zero placeholders and standard-only axioms. Retain empty incidence and zero-dimensional kernels. Preserve existing APIs and state vector-target self-model applicability limits; do not claim oriented duality or frozen consumer closure.",
+      :commands
+      ["lake env lean ConstructionTargets/TransverseIncidenceGeometry.lean"],
+      :placeholder-before 0,
+      :placeholder-after 0,
+      :axioms :standard-only},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-tangent-build:$LEAN_PATH lean -o /tmp/incidence-tangent-build/ConstructionTargets/TransverseIncidenceChosenAtlas.olean ConstructionTargets/TransverseIncidenceChosenAtlas.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-tangent-build:$LEAN_PATH lean -o /tmp/incidence-tangent-build/ConstructionTargets/TransverseIncidenceTangent.olean ConstructionTargets/TransverseIncidenceTangent.lean'",
        :exit 0}
       {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-tangent-build:$LEAN_PATH lean -o /tmp/incidence-tangent-build/ConstructionTargets/ManifoldRegularFiberTangentImage.olean ConstructionTargets/ManifoldRegularFiberTangentImage.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-tangent-build:$LEAN_PATH lean /tmp/TransverseIncidenceGeometry.lean'",
        :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-tangent-build:$LEAN_PATH lean -o /tmp/incidence-tangent-build/ConstructionTargets/TransverseDifferenceKernel.olean ConstructionTargets/TransverseDifferenceKernel.lean'",
+      {:cmd "python3 /tmp/transverse-incidence-geometry-audit.py",
        :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-tangent-build:$LEAN_PATH lean /tmp/TransverseIncidenceTangent.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/transverse-incidence-tangent-audit.py",
-       :exit 0}],
+      {:cmd "git status --short", :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/TransverseIncidenceTangent.lean",
+     [{:cmd
+       "Private-path TransverseIncidenceGeometry compilation, initial geometry definition",
        :exit 1,
        :correction
-       "Compiled the missing chosen-atlas dependency into a private object directory."}
-      {:cmd
-       "Private-path tangent compilation before dependency completion",
-       :exit 1,
-       :correction
-       "Compiled the missing tangent-image and kernel dependency objects privately."}
-      {:cmd
-       "Private-path tangent compilation, initial range statement",
-       :exit 1,
-       :correction "Investigated unresolved tangent-space instances."}
-      {:cmd "Private-path tangent compilation, explicit scalar",
-       :exit 1,
-       :correction
-       "Scalar annotation alone did not resolve elaboration."}
-      {:cmd
-       "Private-path tangent compilation, continuous-linear-map annotation",
-       :exit 1,
-       :correction "The inline annotation remained insufficient."}
-      {:cmd "Private-path tangent compilation, explicit range modules",
-       :exit 1,
-       :correction
-       "Inspected the exact range signature and model instances."}
-      {:cmd
-       "rg search of nonexistent Mathlib/LinearAlgebra/Range.lean",
-       :exit 2,
-       :correction "Inspected LinearMap.range through Lean instead."}
-      {:cmd
-       "Private-path tangent compilation, explicit semilinear parameters",
-       :exit 1,
-       :correction
-       "Isolated the actual mfderiv in the typed inclusionLinear definition."}
-      {:cmd "Private-path tangent compilation, rank-nullity assembly",
-       :exit 1,
-       :correction
-       "Removed an unresolved redundant tangent-space instance and applied finrank_range_of_inj to inclusionLinear explicitly. Final compilation succeeds."}],
+       "Specified the source model parameters explicitly in derivativeAt and Geometry applications. Final compilation succeeds without warnings."}],
+     :audit "/tmp/transverse-incidence-geometry-audit.json",
      :changed-paths [],
      :fixture
-     {:path "/tmp/TransverseIncidenceTangent.lean",
+     {:path "/tmp/TransverseIncidenceGeometry.lean",
       :sha256
-      "94e87ed09a9b09030cd28f37d4a8d4638e5aaa203ff04cbf29197ec6fe247654",
+      "87f64ce17d5aa08aecffdb25ce6c798f1ae5b8a564e48c595cbedb265f3759b9",
       :placeholder-count 0},
      :finding
-     "Compiled one tangent prerequisite for exactly chosenAtlas. The original-product inclusion derivative factors through the recharted zero-fiber inclusion derivative and the canonical WithLp continuous linear equivalence. Banked zero-fiber injectivity therefore proves actual incidence inclusion derivative injectivity. Constant composition gives range containment in the difference derivative kernel; rank-nullity proves equality. Kernel membership then gives exactly Df(v)=Dg(w). inclusionLinear is a definition of the actual mfderiv, not an assumed comparison.",
+     "Complete literal-incidence geometry packet compiled. The constructed ChartedSpace uses EuclideanSpace ℝ (Fin (finrank A + finrank B - finrank V)) on the inherited-topology incidence subtype. Dimension equality transports exactly the banked chosen atlas and its geometry. Explicit chartAt, atlas-image, atlas-membership and center-coverage specifications compile. For this same normalized atlas, genuine-infinity manifold structure, smooth inclusion into the original product manifold, actual mfderiv injectivity and exact tangent equalizer range all compile. actual_range states directly that the range of the inclusion mfderiv consists precisely of pairs satisfying Df(v)=Dg(w). No topology, norm, hypotheses or existing APIs were changed.",
+     :implementation
+     {:scope ["ConstructionTargets/TransverseIncidenceGeometry.lean"]},
      :seat "codex-12"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TransverseIncidenceGeometry.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / literal incidence atlas and tangent equalizer",
    :acceptance
