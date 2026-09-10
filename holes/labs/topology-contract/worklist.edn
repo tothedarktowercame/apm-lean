@@ -68331,6 +68331,18 @@
      "Coefficient chains and homology of the literal topological intersection subtype",
      :direction
      "The inverse canonical intersection-range isomorphism followed by the forward ambient-range-to-subtype isomorphism gives an exact forward comparison from the Mayer-Vietoris infimum term to the actual intersection subtype."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789049273974-18733-73698c15",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r bc40d53b"
+      "git show bc40d53b:ConstructionTargets/CoefficientIntersectionRangeComparison.lean | sha256sum"
+      "lake env lean ConstructionTargets/CoefficientIntersectionRangeComparison.lean"
+      "sha256sum ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean ConstructionTargets/CoefficientCompactComplementCoverSequence.lean"
+      "python3 comment-stripped declaration-header SHA256 and placeholder audit"],
+     :finding
+     "PASS: exact one-file scope and fixture hash reproduced; four statement hashes and both dependency hashes match; zero placeholders; compilation is warning-free with standard-only axioms; the infimum-to-literal-intersection comparison and hom formula have the required forward orientation and do not cross the stated representation/claim boundaries."},
     :commit "bc40d53b846909599ad54cd975b47f25ec585757",
     :changed-paths
     ["ConstructionTargets/CoefficientIntersectionRangeComparison.lean"],
@@ -68345,7 +68357,7 @@
     :axiom-audit-count 4,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientIntersectionRangeComparison.lean"],
    :dag-node
@@ -68452,7 +68464,7 @@
      "Compiled the coefficient intersection-range comparison needed for the first compact-complement Mayer-Vietoris term. Coefficient chains and homology of the infimum of the two ambient range subcomplexes are identified with coefficient chains and homology of the literal topological intersection subtype. The forward infimum-to-intersection homology isomorphism and its exact composite formula compile in every natural degree.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
