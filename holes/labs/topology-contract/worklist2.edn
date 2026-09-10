@@ -26662,161 +26662,135 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Actual L2 graph range and determinant-valued Hausdorff transport are compiled. The required square-root distortion evaluation remains in the parent. Concurrent boundary-normalization and plane-arc work, reviewed STOPs and refutations are preserved; no canonical source or ledger was edited.",
-     :axiom-audits 10,
-     :outcome :revise,
+     "The requested linear Hausdorff distortion is complete. Nonlinear graph-area transport and numerical sphere normalization remain unresolved downstream. Concurrent work and reviewed STOPs/refutations are preserved; no frozen consumer closure or orientation conclusion is claimed.",
+     :axiom-audits 17,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t02A05,
-      :stop-condition
-      "Bank the actual range and determinant measure comparison only. Do not claim the determinant equals sqrt(1+norm(ell)^2), even for zero ell, or infer nonlinear area transport, sphere normalization or consumer closure.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path
-         "/tmp/codex13-checkpoint43-linear-graph/LinearGraphMeasure.lean",
-         :sha256
-         "9f9be05c41ec8cc25a059a8cfe4b9b2b51843cc62b0fd720b0019251aa3cf15e"},
-        :commands
-        [{:cmd
-          "lake env lean /tmp/codex13-checkpoint43-linear-graph/LinearGraphMeasure.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/LinearGraphMeasure.lean"
-       "ConstructionTargets/LinearGraphMeasure.md"],
-      :dag-node
-      "MANIFOLD INTEGRATION: actual linear graph range and Hausdorff determinant comparison",
-      :acceptance
-      {:namespace "ConstructionTargets.LinearGraphMeasure",
-       :implementation
-       "Promote the exact compiled fixture and document the constructed determinant factor and its remaining evaluation.",
-       :declarations
-       ["E"
-        "Ambient"
-        "domainMeasurable"
-        "domainBorel"
-        "ambientMeasurable"
-        "ambientBorel"
-        "graph"
-        "graph_value"
-        "graph_injective"
-        "range"
-        "range_dimension"
-        "rangeIsometry"
-        "rangeMap"
-        "coordinateMap"
-        "coordinate_injective"
-        "distortion"
-        "distortion_pos"
-        "range_measure"
-        "image_measure"
-        "dimension_two"
-        "dimension_three"],
-       :hypotheses
-       "d is any natural dimension; ell is a real continuous linear functional on EuclideanSpace real (Fin d). The ambient space is WithLp 2 of the Euclidean space and real, with explicit Borel structures and the induced range structure. Measure equations hold for every set, without a measurability assumption. Zero ell is included without a separate hypothesis, but its determinant factor is not explicitly evaluated.",
-       :consumer-equation
-       "Hausdorff d-measure of the actual graph image and of its intrinsic range image equals ENNReal.ofReal(abs(det(coordinateMap))) times Hausdorff d-measure of the source set. coordinateMap is constructed by graph range restriction followed by the constructed range isometry.",
-       :consumer-residual
-       "Compute the constructed absolute determinant as sqrt(1+norm(ell)^2), including ell=0. Nonlinear area transport and numerical sphere normalization remain downstream.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.LinearGraphMeasure."
-        "Reproduce ten standard-only axiom audits and dimension-two and dimension-three examples."
-        "Audit the actual WithLp 2 graph formula, injectivity and range dimension."
-        "Verify the range isometry is constructed from an orthonormal basis and the proved dimension equality."
-        "Verify positivity of the actual determinant factor."
-        "Audit intrinsic range and ambient image Hausdorff equations through actual isometry transport and same-dimensional Haar distortion."
-        "Confirm no numerical Hausdorff-to-volume normalization or graph-density value is assumed."
-        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :linear-graph-range-hausdorff-determinant-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint43-graph-area-and-consumer-refill],
-      :current-residual
-      "The exact linear graph distortion requires a constructed range isometry and reduction to a determinant before its scalar evaluation.",
-      :other-consumers [:t95J05 :t01J06 :t94A10]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure experiments and build-loop design; inspect both ledgers and checkpoint43 review",
+       "Read DAG, closure experiments and build-loop design; inspect both ledgers and reviewed LinearGraphMeasure dependency",
        :exit 0}
       {:cmd
-       "Inspect L2 product, orthonormal-basis, Hausdorff isometry and additive-Haar determinant APIs",
+       "Inspect Gram matrix, rank-one determinant, L2 inner-product and orthonormal-basis dual-norm APIs",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint43-linear-graph/LinearGraphMeasure.lean",
+       "lake env lean /tmp/codex13-checkpoint43-graph-density/LinearGraphDensity.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/codex13-checkpoint43-linear-graph/LinearGraphMeasure.lean",
+       "sha256sum /tmp/codex13-checkpoint43-graph-density/LinearGraphDensity.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint43-linear-graph/LinearGraphMeasure.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint43-graph-density/LinearGraphDensity.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Search guessed LinearAlgebra/LinearMap/Basic.lean path",
-       :exit 2,
-       :correction
-       "The path did not exist; used the actual determinant and orthonormal-basis sources."}
-      {:cmd "Initial linear graph measure compilation",
+     [{:cmd "Initial graph-density compilation",
        :exit 1,
        :correction
-       "Installed explicit Borel measurable structures and replaced the guessed determinant lemma with the kernel criterion."}
-      {:cmd "Compilation after Borel and determinant corrections",
+       "Corrected inner-product preservation qualification, orthonormal-basis inner-product API, coordinate-matrix identification and dotProduct namespace."}
+      {:cmd "Compilation after initial API corrections",
        :exit 1,
        :correction
-       "Qualified the Haar image theorem and supplied the Hausdorff Haar instance explicitly."}
-      {:cmd "Compilation with implicit Haar-instance carrier",
+       "Fully qualified LinearIsometryEquiv.inner_map_map and proved the coordinate-matrix identification entrywise."}
+      {:cmd "Compilation after explicit Gram identification",
        :exit 1,
        :correction
-       "Elaboration reached the default heartbeat limit; specified the Euclidean carrier explicitly without changing the limit."}
-      {:cmd "Compilation with explicit carrier",
-       :exit 1,
-       :correction
-       "Rewriting the dimension also rewrote the carrier. Replaced that rewrite with simplification of the existing fixed-carrier instance. Final compilation and audited rerun succeed without warnings."}],
+       "Reduced the real scalar inner product explicitly and corrected multiplication order. Complete and audited reruns succeed without warnings."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint43-linear-graph/LinearGraphMeasure.lean",
+      "/tmp/codex13-checkpoint43-graph-density/LinearGraphDensity.lean",
       :sha256
-      "9f9be05c41ec8cc25a059a8cfe4b9b2b51843cc62b0fd720b0019251aa3cf15e",
+      "729e0334f324ce77a9f5369547d7631c4c03362b5c4a8fa34b80aa28afc242ff",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled linear geometric measure prerequisite is supplied. The graph is constructed in WithLp 2 (EuclideanSpace real (Fin d) × real). Its injectivity gives the actual range dimension; a reindexed orthonormal basis constructs the range isometry. This reduces both intrinsic range measure and ambient graph image measure to the absolute determinant of a constructed endomorphism of the original Euclidean space. The determinant factor is proved positive. The parent is not GO: its evaluation as sqrt(1+norm(ell)^2) remains unproved.",
+     "The complete linear graph Hausdorff-distortion fixture compiles. It reuses the reviewed actual L2 graph and constructed range isometry, proves the coordinate-map inner-product equation, identifies its Gram matrix with identity plus the functional-coefficient outer product, and computes its determinant using the rank-one determinant lemma and orthonormal-basis dual-norm identity. Thus the constructed absolute determinant is exactly sqrt(1+norm(ell)^2). Both ambient graph-image and intrinsic range-subtype Hausdorff equations follow. Zero-functional distortion is explicitly one. The result holds in every natural dimension and for every set, including the required dimension-two and dimension-three examples.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/LinearGraphDensity.lean"
+       "ConstructionTargets/LinearGraphDensity.md"],
+      :acceptance
+      {:namespace "ConstructionTargets.LinearGraphDensity",
+       :implementation
+       "Promote the exact compiled fixture and document the linear scope and remaining nonlinear area and numerical-normalization obligations.",
+       :declarations
+       ["basis"
+        "coefficients"
+        "matrix"
+        "inner_coordinate"
+        "gram_equation"
+        "matrix_gram"
+        "determinant_square"
+        "distortion_eq"
+        "image_measure"
+        "range_measure"
+        "zero_distortion"
+        "dimension_two"
+        "dimension_three"],
+       :hypotheses
+       "d is any natural dimension and ell is a real continuous linear functional on EuclideanSpace real (Fin d). Reuse LinearGraphMeasure's actual WithLp 2 graph, Borel structures, range and constructed range isometry. Both measure equations hold for arbitrary sets; no nonzero-functional, positive-dimension or measurability assumption is added.",
+       :consumer-equation
+       "Hausdorff d-measure of the actual graph image, and of its intrinsic range image, equals ENNReal.ofReal(sqrt(1+norm(ell)^2)) times source Hausdorff d-measure. The scalar is proved equal to the determinant factor of the reviewed coordinate map, and equals one when ell=0.",
+       :consumer-residual
+       "Nonlinear differentiable graph area transport, sphere-chart measure assembly and Euclidean Hausdorff numerical normalization remain before frozen sphere-integral closure. No Stokes or period conclusion follows.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.LinearGraphDensity."
+        "Reproduce seventeen standard-only axiom audits, including the seven reviewed geometric and measure inputs."
+        "Audit actual coordinate-map inner products through the constructed range isometry and L2 graph."
+        "Verify Gram identity, transpose-product identification, rank-one determinant calculation and dual-norm identity."
+        "Verify exact square-root distortion and explicit zero-functional value."
+        "Verify ambient image and intrinsic range-subtype Hausdorff equations and dimension-two/three examples."
+        "Confirm no nonlinear area formula, numerical Hausdorff-to-volume normalization or supplied isometry is assumed."
+        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]}},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/LinearGraphDensity.lean"
+    "ConstructionTargets/LinearGraphDensity.md"],
    :dag-node
    "MANIFOLD INTEGRATION: exact linear Euclidean graph Hausdorff distortion",
    :acceptance
-   {:axioms :standard-only,
+   {:namespace "ConstructionTargets.LinearGraphDensity",
+    :implementation
+    "Promote the exact compiled fixture and document the linear scope and remaining nonlinear area and numerical-normalization obligations.",
+    :declarations
+    ["basis"
+     "coefficients"
+     "matrix"
+     "inner_coordinate"
+     "gram_equation"
+     "matrix_gram"
+     "determinant_square"
+     "distortion_eq"
+     "image_measure"
+     "range_measure"
+     "zero_distortion"
+     "dimension_two"
+     "dimension_three"],
     :hypotheses
-    "Let E be EuclideanSpace real (Fin d), with d=2 or d=3, and let ell:E→L[real]real. Use the actual orthogonal L2 product E with real, or an explicitly constructed linear isometry to EuclideanSpace real (Fin (d+1)). Retain actual Borel and induced range structures.",
-    :probe
-    "Construct the injective linear graph map G(x)=(x,ell(x)) and its range subspace. Construct a linear isometry identifying the range with a d-dimensional Euclidean space, and use that actual identification to reduce Hausdorff image measure to a same-dimensional additive-Haar determinant calculation. Prove the resulting distortion is sqrt(1+norm(ell)^2), including ell=0, through an explicit Gram/determinant or equivalent singular-value computation. For every measurable s⊆E prove Hausdorff_d(G image s)=ENNReal.ofReal(sqrt(1+norm(ell)^2))*Hausdorff_d(s), preserving the diameter-power convention. Prove the corresponding intrinsic range-subtype measure equation. Compile d=2 and d=3 examples. GO requires the complete placeholder-free fixture; REVISE requires exactly one complete compiled missing linear geometric measure comparison; STOP names the exact independent missing construction.",
+    "d is any natural dimension and ell is a real continuous linear functional on EuclideanSpace real (Fin d). Reuse LinearGraphMeasure's actual WithLp 2 graph, Borel structures, range and constructed range isometry. Both measure equations hold for arbitrary sets; no nonzero-functional, positive-dimension or measurability assumption is added.",
     :consumer-equation
-    "The actual linear graph changes d-dimensional Euclidean Hausdorff measure by precisely sqrt(1+norm(ell)^2), with a constructed range identification and no suppressed normalization factor.",
+    "Hausdorff d-measure of the actual graph image, and of its intrinsic range image, equals ENNReal.ofReal(sqrt(1+norm(ell)^2)) times source Hausdorff d-measure. The scalar is proved equal to the determinant factor of the reviewed coordinate map, and equals one when ell=0.",
     :consumer-residual
-    "Develop nonlinear differentiable graph measure transport from the linear formula and local approximation, then sphere-chart assembly and Euclidean Hausdorff normalization before frozen sphere-integral closure. Stokes and period comparisons remain downstream.",
+    "Nonlinear differentiable graph area transport, sphere-chart measure assembly and Euclidean Hausdorff numerical normalization remain before frozen sphere-integral closure. No Stokes or period conclusion follows.",
+    :axioms :standard-only,
     :gates
-    ["Compile complete fixture and record SHA256."
-     "Audit the actual L2 graph map, injectivity, range dimension and constructed range isometry."
-     "Verify the determinant or Gram computation, including zero ell."
-     "Verify the exact image and range-subtype Hausdorff measure equations on measurable sets."
-     "Confirm the proof uses actual isometry transport and same-dimensional Haar distortion without identifying Euclidean Hausdorff measure numerically with volume."
-     "Compile dimension-two and dimension-three examples and standard-only axiom audits."
-     "Recheck both ledgers, reservations and reviewed STOPs; run placeholder and forbidden-declaration scans."]},
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.LinearGraphDensity."
+     "Reproduce seventeen standard-only axiom audits, including the seven reviewed geometric and measure inputs."
+     "Audit actual coordinate-map inner products through the constructed range isometry and L2 graph."
+     "Verify Gram identity, transpose-product identification, rank-one determinant calculation and dual-norm identity."
+     "Verify exact square-root distortion and explicit zero-functional value."
+     "Verify ambient image and intrinsic range-subtype Hausdorff equations and dimension-two/three examples."
+     "Confirm no nonlinear area formula, numerical Hausdorff-to-volume normalization or supplied isometry is assumed."
+     "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
    :id :oriented-checkpoint43-linear-graph-hausdorff-distortion-1,
    :kind :reusable-theorem,
    :depends-on
