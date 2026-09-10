@@ -42026,9 +42026,144 @@
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
-   "Construct only the exact two inverse laws between banked BalancedWord values and canonical MaximalPath values using reconstructedPath and stepWord. Do not define corner swaps, pair or cancel faces, prove shuffle-sign changes, construct chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
-   :phase :probe,
+   "Bank only the inverse law stating that stepWord reads every original letter from reconstructedPath. Do not define balanced-word extraction from an arbitrary path, prove reconstruction after extraction, package the full equivalence, define corner swaps, pair or cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/ProductSimplexStepWordReconstructed.lean"
+    "ConstructionTargets/ProductSimplexStepWordReconstructed.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: stepWord recovers a reconstructed balanced word",
+   :acceptance
+   {:hypotheses
+    "Use banked BalancedWord p q, cumulativeOrderHom, reconstructedPath, stepWord, reconstructed objEquiv coordinates and horizontal-count successor recurrences. No coefficient, orientation or bounded-degree hypothesis is required.",
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexStepWordReconstructed."
+     "Verify the proof is pointwise in every Fin (p+q) letter."
+     "Verify true letters use horizontalCount_succ_of_true and false letters contradict horizontalCount_succ_of_false through the reconstructed cumulative first coordinate."
+     "Verify the path step is interpreted through stepWord_eq_true_iff, stepWord_eq_false_iff and isHorizontal_iff_first_coordinate_succ."
+     "Reproduce the standard-only axiom audit for stepWord_reconstructedPath."
+     "Confirm no arbitrary-path balanced extraction, reverse inverse law, packaged equivalence, corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
+    :consumer-residual
+    "Construct the balanced word extracted from an arbitrary canonical MaximalPath and prove reconstructedPath of that extracted word equals the original path; then package the two maps as an equivalence.",
+    :axioms :standard-only,
+    :consumer-equation
+    "For every balanced word w, stepWord (reconstructedPath w) equals w.toWord extensionally.",
+    :declarations ["stepWord_reconstructedPath"],
+    :namespace
+    "ConstructionTargets.ProductSimplexStepWordReconstructed",
+    :route-step
+    "Supplies one inverse law on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes, immediately before the reverse inverse law and adjacent-corner construction.",
+    :implementation
+    "Promote the compiled fixture as the balanced-word-to-path-to-word inverse law."},
+   :id :t03j05-product-simplex-stepword-reconstructed-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint68-promoted-product-simplex-recurrences-and-consumer-refill-1],
+   :current-residual
+   "The cumulative reconstruction and exact count recurrences are banked, but the forward composite had not been proved equal to the original Boolean word.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the exact two inverse laws between banked BalancedWord values and canonical MaximalPath values using reconstructedPath and stepWord. Do not define corner swaps, pair or cancel faces, prove shuffle-sign changes, construct chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
+   :evidence
+   {:probe
+    {:residual
+     "Construct balanced stepWord extraction for arbitrary canonical maximal paths and prove reconstruction after extraction is the identity; then package the two maps as an equivalence.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t03J05,
+      :stop-condition
+      "Bank only the inverse law stating that stepWord reads every original letter from reconstructedPath. Do not define balanced-word extraction from an arbitrary path, prove reconstruction after extraction, package the full equivalence, define corner swaps, pair or cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProductSimplexStepWordReconstructed.lean"
+       "ConstructionTargets/ProductSimplexStepWordReconstructed.md"],
+      :dag-node
+      "PRODUCT HOMOLOGY: stepWord recovers a reconstructed balanced word",
+      :acceptance
+      {:hypotheses
+       "Use banked BalancedWord p q, cumulativeOrderHom, reconstructedPath, stepWord, reconstructed objEquiv coordinates and horizontal-count successor recurrences. No coefficient, orientation or bounded-degree hypothesis is required.",
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexStepWordReconstructed."
+        "Verify the proof is pointwise in every Fin (p+q) letter."
+        "Verify true letters use horizontalCount_succ_of_true and false letters contradict horizontalCount_succ_of_false through the reconstructed cumulative first coordinate."
+        "Verify the path step is interpreted through stepWord_eq_true_iff, stepWord_eq_false_iff and isHorizontal_iff_first_coordinate_succ."
+        "Reproduce the standard-only axiom audit for stepWord_reconstructedPath."
+        "Confirm no arbitrary-path balanced extraction, reverse inverse law, packaged equivalence, corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
+        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
+       :consumer-residual
+       "Construct the balanced word extracted from an arbitrary canonical MaximalPath and prove reconstructedPath of that extracted word equals the original path; then package the two maps as an equivalence.",
+       :axioms :standard-only,
+       :consumer-equation
+       "For every balanced word w, stepWord (reconstructedPath w) equals w.toWord extensionally.",
+       :declarations ["stepWord_reconstructedPath"],
+       :namespace
+       "ConstructionTargets.ProductSimplexStepWordReconstructed",
+       :route-step
+       "Supplies one inverse law on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes, immediately before the reverse inverse law and adjacent-corner construction.",
+       :implementation
+       "Promote the compiled fixture as the balanced-word-to-path-to-word inverse law."},
+      :id :t03j05-product-simplex-stepword-reconstructed-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint68-balanced-word-reconstructed-path-inverse-laws-1],
+      :current-residual
+      "The cumulative reconstruction and exact count recurrences are banked, but the forward composite had not been proved equal to the original Boolean word.",
+      :other-consumers [:t96J06 :t97A04]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
+       :exit 0}
+      {:cmd
+       "Inspect ProductSimplexBalancedWords, ProductSimplexStepWord, ProductSimplexReconstructedPath, ProductSimplexCumulativeOrderHom, ProductSimplexWordPrefixCounts, ProductSimplexPathEndpoints and ProductSimplexMaximalPaths",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint68-stepword-reconstructed/StepWordReconstructed.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint68-stepword-reconstructed/StepWordReconstructed.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint68-stepword-reconstructed/StepWordReconstructed.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "Reproduce the standard-only axiom audit for stepWord_reconstructedPath",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/codex13-checkpoint68-stepword-reconstructed/StepWordReconstructed.lean",
+       :exit 1,
+       :finding
+       "The first draft supplied an explicit universe argument to reconstructedPath even though that declaration's universe is inferred from its expected result type.",
+       :correction
+       "Removed the unsupported named universe argument and allowed stepWord's expected type to infer the universe; the final rerun compiled without warnings."}],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint68-stepword-reconstructed/StepWordReconstructed.lean",
+      :sha256
+      "476654e50d5510303ecb04a511e43f3c52c649bc5e0131e6da760b34420fffca",
+      :placeholder-count 0},
+     :finding
+     "Exactly one complete compiled prerequisite is supplied. The fixture proves letterwise that reading stepWord from reconstructedPath returns the original BalancedWord function: true letters use the promoted horizontal successor recurrence, while a false letter rules out a horizontal reconstructed step because its horizontal count is unchanged. The parent equivalence is not GO because balanced extraction from an arbitrary MaximalPath and the reverse reconstruction inverse law remain uncompiled. No corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: reconstructed balanced words and maximal paths are inverse",
@@ -42066,7 +42201,7 @@
    :kind :representation-comparison,
    :depends-on
    [:oriented-checkpoint68-promoted-product-simplex-recurrences-and-consumer-refill-1
-    :oriented-checkpoint68-promoted-product-simplex-recurrences-and-consumer-refill-1],
+    :t03j05-product-simplex-stepword-reconstructed-1],
    :current-residual
    "All constructions and one-step count equations are banked, but neither composite between BalancedWord and MaximalPath has been proved equal to the identity.",
    :other-consumers [:t96J06 :t97A04]}
