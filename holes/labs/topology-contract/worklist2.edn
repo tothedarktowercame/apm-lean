@@ -16138,85 +16138,110 @@
    :stop-condition
    "Do not assume chain-level pushout preservation or the cokernel isomorphism. Do not reinterpret the integral construction as R-linear. Do not claim actual-subspace excision, sphere suspension or frozen closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Transport the geometric excision subcomplex square to actual subspaces and combine with CoefficientRelativeSmall. Actual-subspace excision, sphere suspension and rational S2 H1/H2 remain downstream; no frozen closure is claimed.",
-     :axiom-audits 8,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture and document the four map directions and projection equation.",
-      :namespace "ConstructionTargets.CoefficientPushoutRelative",
-      :declarations
-      ["chains"
-       "preserves_pushouts"
-       "relativeMap"
-       "relativeMap_isIso"
-       "relativeIso"
-       "relativeIso_hom"
-       "projection"
-       "projection_degree"
-       "inverse_left"
-       "inverse_right"
-       "unionSquare"
-       "unionRelativeIso"
-       "union_projection"
-       "integral_union"
-       "rational_union"],
-      :hypotheses
-      "R is a Type 0 commutative ring; simplicial sets have Type 0 degrees. The actual chain functor uses ModuleCat.of R R. The generic construction takes a simplicial pushout square, not an assumed chain pushout. The union specialization constructs that square from arbitrary simplicial subcomplexes P and Q, without nonemptiness assumptions.",
-      :consumer-equation
-      "The induced relative cokernel map is a chain-complex isomorphism. Source projection followed by its forward map equals C_R(Y to Z) followed by target projection, in every degree. For subcomplexes this identifies C_R(Q)/C_R(P intersection Q) with C_R(P union Q)/C_R(P).",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientPushoutRelative."
-       "Reproduce eight standard-only axiom audits and integer/rational union specializations."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure rules, dependency PASS receipts and simplicial pushout/cokernel APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientPushoutRelative.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientPushoutRelative.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientPushoutRelative.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "Initial lake env lean /tmp/CoefficientPushoutRelative.lean",
-       :exit 1,
-       :correction
-       "Replaced nonexistent subcomplex inclusion names with the existing public coefficient-independent declarations. This also removed the associated elaboration timeout; final compilation succeeds without resource-option changes."}],
-     :representation
-     {:source
-      "Actual ModuleCat R chain cokernel of W to Y in a simplicial pushout W to X, W to Y, X to Z, Y to Z.",
-      :target
-      "Actual ModuleCat R chain cokernel of X to Z in the same pushout.",
-      :direction
-      "Construct a chain-complex isomorphism from coker(C_R(W to Y)) to coker(C_R(X to Z)), with forward arrow exactly cokernel.map induced by C_R(W to X) and C_R(Y to Z)."},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientPushoutRelative.lean",
-      :sha256
-      "5f010dfdf556e1586cdf7772c474389124455500744cfe46d56b51325f4abb19"},
-     :finding
-     "Complete coefficient-general simplicial pushout relative-chain construction compiles. Pushout preservation is proved for the actual R-valued chain functor using degreewise colimits and the coefficient-object coproduct adjunction. The induced cokernel map is proved invertible. Its exact forward map, both inverse laws and the cokernel-projection equation in every degree are established. The union/intersection specialization and integer/rational examples compile without importing an integral conclusion as R-linear.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientPushoutRelative.lean"
-       "ConstructionTargets/CoefficientPushoutRelative.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Transport the geometric excision subcomplex square to actual subspaces and combine with CoefficientRelativeSmall. Actual-subspace excision, sphere suspension and rational S2 H1/H2 remain downstream; no frozen closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :fixture-hash :pass,
+     :axiom-audits :pass,
+     :fixture-and-canonical-compilation :pass,
+     :scope :pass,
+     :target-build :pass,
+     :commit :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass},
+    :axiom-audits 8,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Direct fixture and canonical compilations: zero warnings. Lake build replayed 20 dependency warnings."],
+    :statement-hashes
+    {"relativeMap"
+     "f5da676c2fc59097081ccbb0551554f53c844c4be59aaab1f7cf3d051d045988",
+     "rational_union"
+     "27f5ab0d3a4942454df4b7d3c4070565fee3f335bd99013aeee99c3dd2a973d5",
+     "projection_degree"
+     "a964c722eb0beedfcb23c29fc5fd9f9679e8b430834a0df75521699fe4d6e377",
+     "unionRelativeIso"
+     "1da246407dc6d22612d47155bf9d7f00c7209177b327e8ed6ded69d653e47939",
+     "unionSquare"
+     "b1b54534e6e4d6cc00f24c45d385a1c7618fc6ca9a613e6b54d2da9216e83dda",
+     "relativeIso"
+     "ca392cd4afe1a7a0806b7e23216eb9b9d30172dfb33287cfe3ffe22a1e1fe1db",
+     "integral_union"
+     "89aefedd3564549084a2b7ff6c38217126444bf4b873c92c54dd395c1f256576",
+     "inverse_right"
+     "6c30732a8532fcc2ba793782eacbe0a3777ed6daced3bc4201ba5bdf55664cd0",
+     "relativeIso_hom"
+     "354e010db4da8c3a93677f78bf07e72ba9b3e09ba77ae8e922a9ba6bcaaa104c",
+     "chains"
+     "0673aea4cc75c4745680101dcde323cf6371551294b22acd82a7f98af6c9b8ec",
+     "inverse_left"
+     "27ebfd671f063ae1cfc4711d82ee3b419ef73c4ffb71ab2a0023e1bbf5e9181b",
+     "relativeMap_isIso"
+     "360b48db532afc57d86068dabc980f9f7095ffe8e0082f17ee0cd62359b25fae",
+     "projection"
+     "00f32e996e945c51ddf7651f3ba4e4505c3807623a68b9020a08c8b34b4eb650",
+     "union_projection"
+     "043a7225de8f8b949ce13ef012b44b7d04c99777df72e9ab959487a1ef377a1a",
+     "preserves_pushouts"
+     "a5e4b4711df6b2e785a37197c87cba5887252f40ceee8d2ac7ca65f2c5638829"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Verify fixture SHA256 and read DAG, closure rules and dependency PASS receipts",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientPushoutRelative.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientPushoutRelative.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientPushoutRelative",
+      :exit 0,
+      :jobs 8275}
+     {:cmd
+      "Validate eight whitespace-normalized standard-only axiom audits in both compilation logs, including integer/rational union specializations",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientPushoutRelative.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "Verify exact staged two-file scope", :exit 0}
+     {:cmd
+      "git commit -m 'Construct coefficient-general pushout relative chain isomorphism'",
+      :exit 0}
+     {:cmd
+      "Verify committed two-file scope, byte-identical fixture promotion and clean workspace",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial compilation-log axiom parser",
+      :exit 1,
+      :correction
+      "Split axiom names on commas and strip whitespace to accommodate multiline Lean output. Corrected audit passes for both logs."}],
+    :representation
+    {:source "Actual ModuleCat R chain cokernel of W to Y.",
+     :target "Actual ModuleCat R chain cokernel of X to Z.",
+     :direction
+     "Constructed chain-complex isomorphism from source to target, with forward arrow exactly cokernel.map induced by W to X and Y to Z."},
+    :commit "16723870b8f8bac73a04e6a8b053641ec47d221b",
+    :changed-paths
+    ["ConstructionTargets/CoefficientPushoutRelative.lean"
+     "ConstructionTargets/CoefficientPushoutRelative.md"],
+    :fixture
+    {:path "/tmp/CoefficientPushoutRelative.lean",
+     :sha256
+     "5f010dfdf556e1586cdf7772c474389124455500744cfe46d56b51325f4abb19",
+     :promoted-verbatim true},
+    :finding
+    "Promoted the exact fixture proving coefficient-general pushout preservation, the induced relative cokernel isomorphism, both inverse identities and projection equations in every degree. Documented all four arrows and the union/intersection specialization.",
+    :statement-hash-method
+    "SHA256 of declaration text from theorem/def/abbrev/instance keyword to immediately before the space preceding :=.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientPushoutRelative.lean"
     "ConstructionTargets/CoefficientPushoutRelative.md"],
