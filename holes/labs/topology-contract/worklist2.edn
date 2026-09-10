@@ -15963,7 +15963,8 @@
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
    {:outcome :replan,
-    :seat "codex-13",
+    :disposition :replan,
+    :author "codex-13",
     :commands
     [{:cmd
       "Read DAG clusters, foundational-program election rules, closure stop rules and both ledgers",
@@ -15985,57 +15986,19 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
-    :changed-paths [],
-    :finding
-    {:baseline "94d4381150f666cb6b88a7f031cce3b9a7d7d2f5",
-     :placeholder-delta 0,
-     :head "fa7cde09f171040201f9da44d4af6fc3999c7bf1",
-     :frozen-closures 0,
-     :infrastructure-packets
-     {:modules-before 678,
-      :modules-after 681,
-      :portfolio 2,
-      :portfolio-commits
-      ["4e98d2ec29709dbe236bdf37d44241c09ced6741"
-       "568d4a99f0c68ff1783418b7c7fe89ab2bb5e8dc"],
-      :concurrent 1,
-      :concurrent-commits ["94c20be8f8066c470a0d1426f0886addcb2ea7a7"],
-      :consumer-files-changed []},
-     :corrected-closures 0,
-     :ranking
-     "Compared the whole DAG. The coefficient-general simplicial pushout-to-relative-cokernel construction serves four named consumers and is a bounded next excision input, using inspected free-chain colimit and categorical cokernel APIs. Localization, product homology, integration, covering classification and surface classification retain broader missing constructions; regular-preimage model transport is concurrently assigned. No orientation coherence or integral-to-R identification is inferred.",
-     :typed-residual-change
-     "The actual restricted-cover map, monicity and relative cokernel homology comparison are now reviewed over R. Excision still needs the coefficient-general chain pushout/cokernel identification and actual-subspace assembly. Concurrent chosen-atlas smooth compatibility is reviewed, while product derivative and regularity transport remain assigned elsewhere.",
-     :review-outcomes
-     {:portfolio-pass 2,
-      :portfolio-stop 0,
-      :cokernel-review "invoke-1789010115230-17742-ed1a544c",
-      :relative-review "invoke-1789010544196-17752-38d86e88",
-      :concurrent-smooth-transport-pass
-      "invoke-1789010174692-17744-17adc0cc",
-      :new-proved-refutations 0},
-     :reserved-concurrent
-     [:product-self-model-recharting-probe-refill38
-      :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
-     :near-closure-election
-     {:eligible-unassigned 0,
-      :elected 0,
-      :reason
-      "All 25 near-closure consumers retain unresolved reviewed boundaries; 24 have ledger STOP records and t03J02 has the explicit DAG collar/NDR and van Kampen boundary. Relative coefficient comparison does not complete any frozen consumer. No unchanged STOP retry is elected.",
-      :preserved-boundaries
-      "Planar separation; actual-cover van Kampen; literal pants and polygon classification; covering fundamental-class degree; general-model and analytic preimage geometry; flux and Hausdorff normalization; signed sphere-map homology action; torus Euler and geometric intersection; graph covering classification; Hopf-surface homeomorphism; attained analytic radial levels; projective-product nonbounding; genus/Euler multiplicativity; fundamental-class localization. Original refutations and the prior corrected t96J07 closure remain preserved."},
-     :census
-     {:path "/tmp/Checkpoint26Census.json",
-      :open 35,
-      :existing 58,
-      :zero-placeholder 23,
-      :after 66,
-      :sha256
-      "a81963cba5a3a84c82b4e11d6178b1767448e7cd657024e7b38c06fd26018162",
-      :named 59,
-      :missing [:t93A05],
-      :within-two 25,
-      :before 66}},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789010763365-17758-7b026b00",
+     :commands
+     ["Python read-only pinned Checkpoint26Census.json SHA256, consumer counts, module counts and changed-path attribution"
+      "bb recorded-ledger author, near-closure STOP boundaries, replacement propagation and successor checkpoint audit"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 83b80229:holes/labs/topology-contract/worklist.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 83b80229:holes/labs/topology-contract/worklist2.edn)"
+      "git log --oneline 94d43811..fa7cde09 -- ConstructionTargets problems"
+      "git diff --check 83b80229^ 83b80229"],
+     :finding
+     "Independent review of ledger-only transition 83b80229, author codex-13. Census SHA256 a81963cba5a3a84c82b4e11d6178b1767448e7cd657024e7b38c06fd26018162 verified. All 59 named consumers reproduced: 58 existing, 23 zero-placeholder, 35 open, 25 near; placeholders 66->66, modules 678->681. Two portfolio modules and one concurrent module correctly attributed; no consumer changes. Unresolved STOP boundaries and concurrent assignments preserved. Proposed comparison correctly runs from coker(C_R(W->Y)) to coker(C_R(X->Z)), induced by W->X and Y->Z, and requires proved pushout preservation and projection equations. No integral-to-R shortcut or geometric excision claim. Replacement propagation, identical successor checkpoint and both ledger validators pass. Ledger untouched."},
     :replacement-items
     [{:consumer :t00J01-rational-sphere-homology,
       :stop-condition
@@ -16101,10 +16064,60 @@
       :current-residual
       "Measure the relative pushout construction separately from consumer closure and reassess all reviewed boundaries and concurrent outcomes.",
       :other-consumers []}],
-    :author "codex-13",
-    :disposition :replan},
+    :changed-paths [],
+    :finding
+    {:baseline "94d4381150f666cb6b88a7f031cce3b9a7d7d2f5",
+     :placeholder-delta 0,
+     :head "fa7cde09f171040201f9da44d4af6fc3999c7bf1",
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:modules-before 678,
+      :modules-after 681,
+      :portfolio 2,
+      :portfolio-commits
+      ["4e98d2ec29709dbe236bdf37d44241c09ced6741"
+       "568d4a99f0c68ff1783418b7c7fe89ab2bb5e8dc"],
+      :concurrent 1,
+      :concurrent-commits ["94c20be8f8066c470a0d1426f0886addcb2ea7a7"],
+      :consumer-files-changed []},
+     :corrected-closures 0,
+     :ranking
+     "Compared the whole DAG. The coefficient-general simplicial pushout-to-relative-cokernel construction serves four named consumers and is a bounded next excision input, using inspected free-chain colimit and categorical cokernel APIs. Localization, product homology, integration, covering classification and surface classification retain broader missing constructions; regular-preimage model transport is concurrently assigned. No orientation coherence or integral-to-R identification is inferred.",
+     :typed-residual-change
+     "The actual restricted-cover map, monicity and relative cokernel homology comparison are now reviewed over R. Excision still needs the coefficient-general chain pushout/cokernel identification and actual-subspace assembly. Concurrent chosen-atlas smooth compatibility is reviewed, while product derivative and regularity transport remain assigned elsewhere.",
+     :review-outcomes
+     {:portfolio-pass 2,
+      :portfolio-stop 0,
+      :cokernel-review "invoke-1789010115230-17742-ed1a544c",
+      :relative-review "invoke-1789010544196-17752-38d86e88",
+      :concurrent-smooth-transport-pass
+      "invoke-1789010174692-17744-17adc0cc",
+      :new-proved-refutations 0},
+     :reserved-concurrent
+     [:product-self-model-recharting-probe-refill38
+      :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
+     :near-closure-election
+     {:eligible-unassigned 0,
+      :elected 0,
+      :reason
+      "All 25 near-closure consumers retain unresolved reviewed boundaries; 24 have ledger STOP records and t03J02 has the explicit DAG collar/NDR and van Kampen boundary. Relative coefficient comparison does not complete any frozen consumer. No unchanged STOP retry is elected.",
+      :preserved-boundaries
+      "Planar separation; actual-cover van Kampen; literal pants and polygon classification; covering fundamental-class degree; general-model and analytic preimage geometry; flux and Hausdorff normalization; signed sphere-map homology action; torus Euler and geometric intersection; graph covering classification; Hopf-surface homeomorphism; attained analytic radial levels; projective-product nonbounding; genus/Euler multiplicativity; fundamental-class localization. Original refutations and the prior corrected t96J07 closure remain preserved."},
+     :census
+     {:path "/tmp/Checkpoint26Census.json",
+      :open 35,
+      :existing 58,
+      :zero-placeholder 23,
+      :after 66,
+      :sha256
+      "a81963cba5a3a84c82b4e11d6178b1767448e7cd657024e7b38c06fd26018162",
+      :named 59,
+      :missing [:t93A05],
+      :within-two 25,
+      :before 66}},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: relative coefficient comparison and consumer eligibility",
@@ -16125,7 +16138,7 @@
    :stop-condition
    "Do not assume chain-level pushout preservation or the cokernel isomorphism. Do not reinterpret the integral construction as R-linear. Do not claim actual-subspace excision, sphere suspension or frozen closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "EXCISION: coefficient-general simplicial pushout relative-chain isomorphism",
