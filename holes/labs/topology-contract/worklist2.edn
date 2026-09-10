@@ -38992,6 +38992,8 @@
    "Measure cumulative word/path equivalence separately from oriented cancellation, singular-cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t03J05,
+   :review-finding
+   "Deterministic evidence defect in commit 1e432b41ffa18b94b13380c03319635c9ad31a57: all four recorded statement hashes fail exact recomputation. The exact theorem-through-type slices excluding the terminating ` := by` hash to horizontalCount_succ_of_true=dba9b7d35c3a540add7af1c9f75f0af089b1ea47af8faba3cb6868359322a634, horizontalCount_succ_of_false=e0f8f658abdf42087be2aa8dadbea2d86984388dad900b5ae3c97d7fa655502f, verticalCount_succ_of_true=931fb3732f715e810006be1d47928e348dee81e6692de7da78ca167db2983c07, and verticalCount_succ_of_false=fc8885425ec369aa465b7062d1d61f50925e84c41502993dfbf2b82791be26ab; none matches the ledger values. Repair the four evidence hashes. The retained fixture SHA256, zero-placeholder scan, theorem orientations, standard-only axiom audit, compile/build gates, mutable-canonical-fixture blocker, ledger checks, and ledger-only transition scope otherwise reproduce.",
    :stop-condition
    "Extend only ProductSimplexWordPrefixCounts with the exact one-step true/false recurrences for horizontalCount and verticalCount. Do not construct or compare maximal paths, prove word/path inverse laws, define corner swaps, cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
    :evidence
@@ -39049,6 +39051,12 @@
       "The checker reported that oriented-checkpoint60-product-simplex-prefix-monotonicity-repair-1 has a fixture hash mismatch at ConstructionTargets/ProductSimplexWordPrefixCounts.lean.",
       :correction
       "Restored the canonical files, after which both ledger checks returned zero. No ledger file was edited."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1789073542982-19449-db4d6daf",
+     :finding
+     "Deterministic evidence defect in commit 1e432b41ffa18b94b13380c03319635c9ad31a57: all four recorded statement hashes fail exact recomputation. The exact theorem-through-type slices excluding the terminating ` := by` hash to horizontalCount_succ_of_true=dba9b7d35c3a540add7af1c9f75f0af089b1ea47af8faba3cb6868359322a634, horizontalCount_succ_of_false=e0f8f658abdf42087be2aa8dadbea2d86984388dad900b5ae3c97d7fa655502f, verticalCount_succ_of_true=931fb3732f715e810006be1d47928e348dee81e6692de7da78ca167db2983c07, and verticalCount_succ_of_false=fc8885425ec369aa465b7062d1d61f50925e84c41502993dfbf2b82791be26ab; none matches the ledger values. Repair the four evidence hashes. The retained fixture SHA256, zero-placeholder scan, theorem orientations, standard-only axiom audit, compile/build gates, mutable-canonical-fixture blocker, ledger checks, and ledger-only transition scope otherwise reproduce."},
     :changed-paths [],
     :fixture
     {:path
@@ -39060,7 +39068,7 @@
     "The supervisor’s intervening transition did not repair the mutable fixture reference. Both ledgers validate before the canonical extension, but worklist2 rejects the required source change because the completed checkpoint60 row pins ConstructionTargets/ProductSimplexWordPrefixCounts.lean at its former hash. The retained placeholder-free fixture proves wordPrefix i.succ equals insert i of wordPrefix i.castSucc and all four natural-number recurrences with standard-only axioms. Promoting it while preserving ledger coherence is impossible until the earlier fixture points to an immutable artifact. The canonical files were restored; an unrelated concurrent untracked PlaneArcEndpointTotalDifferenceSubmersive.lean file remains untouched.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
