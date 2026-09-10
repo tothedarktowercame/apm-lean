@@ -41510,8 +41510,102 @@
   {:consumer :t03J05,
    :stop-condition
    "Promote only the already reviewed four successor recurrences into ProductSimplexWordPrefixCounts and document them. Preserve all predecessor declarations and the live immutable checkpoint60 fixture evidence. Do not construct or compare maximal paths, prove word/path inverse laws, define corner swaps, cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Use the promoted recurrences with reconstructedPath_objEquiv and the banked stepWord coordinate characterization to prove both word/path inverse laws.",
+    :gates
+    {:canonical-compile :pass,
+     :whitespace :pass,
+     :both-ledgers-after-edit :pass,
+     :both-ledgers-before-edit :pass,
+     :predecessor-byte-identity :pass,
+     :four-natural-number-recurrences :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :warning-audit :pass,
+     :commit :pass,
+     :fixture-hashes :pass,
+     :successor-prefix-insertion :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :axiom-audit :pass,
+     :exact-two-file-scope :pass,
+     :immutable-predecessor-path :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"horizontalCount_succ_of_true"
+     "dba9b7d35c3a540add7af1c9f75f0af089b1ea47af8faba3cb6868359322a634",
+     "horizontalCount_succ_of_false"
+     "e0f8f658abdf42087be2aa8dadbea2d86984388dad900b5ae3c97d7fa655502f",
+     "verticalCount_succ_of_true"
+     "931fb3732f715e810006be1d47928e348dee81e6692de7da78ca167db2983c07",
+     "verticalCount_succ_of_false"
+     "fc8885425ec369aa465b7062d1d61f50925e84c41502993dfbf2b82791be26ab"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "Verify checkpoint60 live evidence.fixture.path, run both ledger checks, hash immutable predecessor and reviewed successor fixture",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexWordPrefixCounts",
+      :exit 0}
+     {:cmd "lake env lean /tmp/codex14-prefix-successor-audit.lean",
+      :exit 0}
+     {:cmd
+      "Python byte-identity, placeholder, forbidden-declaration, whitespace, successor-prefix identity and exact statement-hash audit",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|^\\s*(axiom|opaque|unsafe)\\b|reconstructedPath|stepWord|corner|cancel|chain sum|cross product|Eilenberg|Kunneth|intersection|closure' ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --name-only", :exit 0}
+     {:cmd
+      "git commit -m 'Promote prefix count successor recurrences'",
+      :exit 0}
+     {:cmd
+      "git show --check --stat --oneline HEAD; git status --short",
+      :exit 0}],
+    :commit "30f261b66c5ed95ef136addb5cda9ab1a1ab491d",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+    :dependency-warnings
+    ["ConstructionTargets/SingularSubdivision.lean:2960 unused tactic"
+     "ConstructionTargets/SingularSubdivision.lean:3580 unnecessary simpa"],
+    :fixture
+    {:path "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+     :sha256
+     "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
+     :reviewed-source
+     "/tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean",
+     :reviewed-source-sha256
+     "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
+     :predecessor-path
+     "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean",
+     :predecessor-sha256
+     "e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187",
+     :placeholder-count 0},
+    :finding
+    "Checkpoint60 points to the immutable predecessor artifact. The canonical module now matches the reviewed successor fixture exactly; deleting only the private successor-prefix lemma and four recurrence blocks reproduces the predecessor artifact byte-for-byte. All four natural-number recurrence theorems compile with standard-only axioms, both ledgers validate, and the commit changes exactly the two scoped files.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
