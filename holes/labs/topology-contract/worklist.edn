@@ -67161,6 +67161,18 @@
       :exit 0}
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789041429779-18532-6e63ddc8",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r cda8ab7b673f47073772a2ecea21f16067feb448"
+      "python3 /tmp/coefficient-subcomplex-mv-review-audit.py"
+      "lake build ConstructionTargets.CoefficientPushoutRelative"
+      "lake env lean /tmp/CoefficientSubcomplexMayerVietoris.review.lean"
+      "git diff --check cda8ab7b673f47073772a2ecea21f16067feb448^ cda8ab7b673f47073772a2ecea21f16067feb448 -- ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean"],
+     :finding
+     "PASS: independent review of recorded commit cda8ab7b; exact one-file scope, fixture and dependency hashes, zero placeholders, all eight frozen statement hashes, standard-only axioms, compilation, signed map orientations, and subcomplex representation boundaries reproduced."},
     :commit "cda8ab7b673f47073772a2ecea21f16067feb448",
     :changed-paths
     ["ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean"],
@@ -67174,7 +67186,7 @@
     :axiom-audit-count 8,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean"],
    :dag-node
@@ -67281,7 +67293,7 @@
      "Compiled exactly one prerequisite: the coefficient-general Mayer-Vietoris short exact sequence for two simplicial subcomplexes. Free singular chains over any commutative ring preserve the intersection/union pushout; the signed chain complex is short exact and supplies its connecting morphism and exactness at the intersection, pieces and union homology terms in every natural degree. Compact-complement geometry and transport through coefficient excision remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
