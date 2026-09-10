@@ -71352,8 +71352,47 @@
   {:consumer "t00A03",
    :stop-condition
    "Require relative finite-family transversality for the endpoint-weighted perturbations and compatibility through chart-transition maps; this containment estimate alone does not imply either.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Combine this estimate with compact image margins for chart containment, prove small-parameter embedding stability and a relative finite-family regular-value theorem, then establish cross-chart surface intersections through transition maps.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:abs_endpointWeight_le_one
+     "6bd9f5a737d671b06944571f177404df4611d8dc9af0685aee752a73a5a7a47a",
+     :dist_perturb_le_norm
+     "669db6423d53f5a2131496b0f096d67d87caad56048016e9cd28e8e7f144d785",
+     :perturb_mem_thickening
+     "3db5b4f33d2935a8a6a678e50ec3e01c9575528a4f4a79d951fcdddb42ad0c50"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean /tmp/PlaneArcEndpointPerturbationContainment.lean ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-three-declaration audit over ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "703bc8a6258c8c6943076d96afcbb22f5996e11e",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointPerturbationContainment.lean",
+     :sha256
+     "8922598bc50353b2ee99ab5299f85d3c6c0f8f13f3a4ae01b9867a7086acdd59",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. On the unit interval the endpoint weight has absolute value at most one, so endpoint-weighted perturbation moves each arc point by at most the perturbation-vector norm and remains in any supplied metric thickening when that norm is below the margin. The module compiles without warnings or placeholders, its dependency hash matches, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"],
    :dag-node
