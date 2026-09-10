@@ -73214,81 +73214,98 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require a proof that the literal relative short complex is short exact, using the open-cover small-chain denominator comparison rather than ordinary excision; then apply its homology sequence to obtain the genuine connecting morphism and three exactness segments.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / literal relative short-complex packaging",
+   :acceptance
+   {:fixture "/tmp/CoefficientCompactSupportRelativeShortComplex.lean",
+    :fixture-sha256
+    "bf8cbfb5d6de7d6a2a6b9796a002b197b2432248878dcfaefc83f8274e045b2d",
+    :implementation
+    "Promote the exact fixture. Compile shortComplex, shortComplex_f, shortComplex_g and shortComplex_zero. This packages the reviewed literal quotient-pair arrows into the ShortComplex of chain complexes required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes before proving short exactness and invoking the homology connecting construction. Verify CoefficientCompactSupportRelativeArrowComplex SHA256 72954abe1c76ae051d5f7e1269318801dde886e60235787ea172c82449edf349. Preserve arbitrary subsets and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim short exactness, a connecting morphism, homology exactness, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :coefficient-compact-support-relative-short-complex-implementation-refill51,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-compact-support-relative-arrow-complex-implementation-refill51],
+   :current-residual
+   "Prove that the packaged short complex is degreewise short exact after replacing the final actual-union denominator by the valid open-cover small-chain model. Its HomologySequence will then supply a nonzero-capable connecting map and the three required exactness segments.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Both literal relative chain arrows and their zero composite now compile. Establish short exactness through the union-generated small-chain denominator, compare it with the actual complement of K intersection L using the open cover, and derive the genuine connecting map and all three exactness statements.",
+     "The literal relative chain sequence is now packaged as a ShortComplex. Degreewise short exactness through the open-cover small-chain model, followed by the genuine connecting morphism and all three homology exactness statements, remains.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require exactness of the compiled two-arrow relative chain complex after comparing its final quotient with the open-union small-chain quotient; then construct the genuine connecting morphism and derive all three homology exactness segments.",
+      "Require a proof that the literal relative short complex is short exact, using the open-cover small-chain denominator comparison rather than ordinary excision; then apply its homology sequence to obtain the genuine connecting morphism and three exactness segments.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean"],
+      ["ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / literal relative arrow complex",
+      "MANIFOLD FUNDAMENTAL CLASS / literal relative short-complex packaging",
       :acceptance
       {:fixture
-       "/tmp/CoefficientCompactSupportRelativeArrowComplex.lean",
+       "/tmp/CoefficientCompactSupportRelativeShortComplex.lean",
        :fixture-sha256
-       "72954abe1c76ae051d5f7e1269318801dde886e60235787ea172c82449edf349",
+       "bf8cbfb5d6de7d6a2a6b9796a002b197b2432248878dcfaefc83f8274e045b2d",
        :implementation
-       "Promote the exact fixture. Compile unionComplement_subset_intersectionComplement, directExtend, restrictLeft_extendLeft, restrictRight_extendRight, restrictPiecesChain and relative_arrows_zero. This supplies the literal two-arrow quotient-pair complex required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes: the union-support relative complex maps diagonally to the K- and L-support biproduct, the signed biproduct maps to the intersection-support relative complex, and their composite is zero by pair-map functoriality and cancellation. Verify CoefficientCompactSupportPiecesToIntersection SHA256 604d7bb48ddd2ba7ae769e34c7c2210476b33745b754ad0a2581a52eb9279401. Preserve arbitrary subsets and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim short exactness, a connecting morphism, three homology exactness segments, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile shortComplex, shortComplex_f, shortComplex_g and shortComplex_zero. This packages the reviewed literal quotient-pair arrows into the ShortComplex of chain complexes required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes before proving short exactness and invoking the homology connecting construction. Verify CoefficientCompactSupportRelativeArrowComplex SHA256 72954abe1c76ae051d5f7e1269318801dde886e60235787ea172c82449edf349. Preserve arbitrary subsets and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim short exactness, a connecting morphism, homology exactness, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean"],
+       ["lake env lean ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :coefficient-compact-support-relative-arrow-complex-implementation-refill51,
+      :coefficient-compact-support-relative-short-complex-implementation-refill51,
       :kind :reusable-theorem,
       :depends-on
-      [:coefficient-compact-support-pieces-to-intersection-implementation-refill51],
+      [:coefficient-compact-support-relative-arrow-complex-implementation-refill51],
       :current-residual
-      "Prove degreewise kernel-image equality and the required surjectivity after replacing the actual union-subspace denominator by the reviewed open-cover small-chain denominator. Then obtain the nonzero-capable connecting morphism from the resulting short exact sequence and transport its three exactness segments to the literal relative homology arrows.",
+      "Prove that the packaged short complex is degreewise short exact after replacing the final actual-union denominator by the valid open-cover small-chain model. Its HomologySequence will then supply a nonzero-capable connecting map and the three required exactness segments.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientCompactSupportPiecesToIntersection >/tmp/relative-arrow-dep.log 2>&1",
+       "lake build ConstructionTargets.CoefficientCompactSupportRelativeArrowComplex >/tmp/relative-short-complex-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientCompactSupportRelativeArrowComplex.lean",
+       "lake env lean /tmp/CoefficientCompactSupportRelativeShortComplex.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientCompactSupportRelativeArrowComplex.lean ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean",
+       "sha256sum /tmp/CoefficientCompactSupportRelativeShortComplex.lean ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-six-declaration audit over /tmp/CoefficientCompactSupportRelativeArrowComplex.lean",
+       "python3 comment-stripped placeholder-and-four-declaration audit over /tmp/CoefficientCompactSupportRelativeShortComplex.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/CoefficientCompactSupportRelativeArrowComplex.lean",
-       :exit 1,
-       :correction
-       "The first proof attempted to rewrite pair_comp before unfolding the named restriction and extension maps and referenced a nonexistent qualified biproduct lemma. Replaced both composition proofs with explicit pair_comp specializations and reduced the biproduct composite directly."}
-      {:cmd
-       "lake env lean /tmp/CoefficientCompactSupportRelativeArrowComplex.lean",
-       :exit 1,
-       :correction
-       "The second proof used the unqualified comp_neg name. Replaced it with Preadditive.comp_neg; the corrected fixture compiles without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientCompactSupportRelativeArrowComplex.lean",
+     {:path "/tmp/CoefficientCompactSupportRelativeShortComplex.lean",
       :sha256
-      "72954abe1c76ae051d5f7e1269318801dde886e60235787ea172c82449edf349",
+      "bf8cbfb5d6de7d6a2a6b9796a002b197b2432248878dcfaefc83f8274e045b2d",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one direct-sequence prerequisite. Pair-map functoriality identifies both paths from the union-support quotient to the intersection-support quotient with the same direct inclusion map. The diagonal first arrow followed by the signed second arrow is therefore zero by additive cancellation. This establishes a genuine literal quotient-pair chain complex and does not use supportConnecting or either false ordinary-excision premise. Exactness and the connecting morphism still require the degreewise quotient calculation together with the valid open-cover small-chain comparison.",
+     "Compiled exactly one sequence-construction prerequisite. The diagonal union-support restriction map and signed pieces-to-intersection-support map, whose composite was already proved zero, now form an actual ShortComplex in the category of coefficient chain complexes. Its fields reduce exactly to the literal quotient-pair arrows. This is the object needed by Mathlib's homology connecting construction, but no short-exactness instance is asserted. Establishing that instance still requires the open-cover small-chain comparison and cannot use supportConnecting or the refuted ordinary-excision hypotheses.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -73303,7 +73320,8 @@
    [:checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion
     :coefficient-relative-mayer-vietoris-chain-sequence-probe-refill50
     :coefficient-compact-support-pieces-to-intersection-implementation-refill51
-    :coefficient-compact-support-relative-arrow-complex-implementation-refill51],
+    :coefficient-compact-support-relative-arrow-complex-implementation-refill51
+    :coefficient-compact-support-relative-short-complex-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
