@@ -60952,8 +60952,51 @@
   {:consumer "t00J02",
    :stop-condition
    "Require constructed smooth extensions and an actual center-covering fiber chart; no supplied extension, derivative comparison or chart.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Constructed smooth extensions agree near the center; their actual derivatives inherit transversality, yielding a center-covering extension-fiber chart with the ordinary product norm. Specialization and transfer to literal manifold incidence remain. No global extension transversality, incidence overlaps or consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789016687412-17913-1d2ec9ff"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:exists_chart
+     "f95a70f4748a4a4947f74672e9bc2e8b11c62d662d84929a31aec09350aa9516"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/LocalTransverseExtensionChart.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only fixture audit: comment-stripped placeholders and complete exists_chart theorem-header SHA256",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/LocalTransverseExtensionChart.lean ConstructionTargets/LocalTransverseExtensionChart.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/LocalTransverseExtensionChart.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "e69c078acad42ca017e665ff68e238ad8aac6b62",
+    :changed-paths
+    ["ConstructionTargets/LocalTransverseExtensionChart.lean"],
+    :fixture
+    {:path "/tmp/LocalTransverseExtensionChart.lean",
+     :sha256
+     "4b4d2bd2ad4ddc416e5f1f4b3e5ba106ba6db3806e3b2fa3ec542e0ccd5a7d6b"},
+    :axiom-audit-declarations 1},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/LocalTransverseExtensionChart.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / local transverse extension fiber chart",
