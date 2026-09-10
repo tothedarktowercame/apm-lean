@@ -63305,9 +63305,78 @@
   {:consumer "t03J04",
    :stop-condition
    "GO requires actual rational chain and induced homology identities; REVISE requires exactly one compiled prerequisite. Euler multiplicativity and consumer closure remain subsequent.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "The requested rational chain and homology transfer packet is complete. Homology finiteness, Euler multiplicativity, torus Euler computation and consumer closure remain subsequent.",
+     :dependency-review
+     {:outcome :pass,
+      :seat "codex-10",
+      :job "invoke-1789025648871-18146-cf15549c"},
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {:transfer
+      "b0019eeb426542d4dce642a8430090d671ccbb1cce1bf9cb3bd745a617e98aca",
+      :degree_boundary
+      "0d545903fbbcb98c09160cb97ae7bc2cf58dcb531f546a1b5ced5d12e6589ca8",
+      :transfer_projection
+      "d9c169b3c6c88c31e9aac6d60067f3660ea1e44cc8991d11be73db73257a1217",
+      :homology_projection
+      "1cb9aa6a40dc837c124e533c107026dbe37bfec41b5399d567913b44f849985c",
+      :rational_homology_projection
+      "99e3b80aca39ee5f1d07f5a6fe94c4e859cef49eb7591e1c6d53966ab3416645"},
+     :acceptance
+     {:implementation
+      "Promote the exact fixture. Compile simplex sums, degreewise transfer, lift reindexing, all boundary identities, transfer, transfer_projection, homology_projection and rational_homology_projection. Preserve actual ModuleCat singular chains and homology, derived lift finiteness, arbitrary commutative coefficients and zero-sheet cases. Audit zero placeholders and standard-only axioms. Do not infer finite homology dimensions or Euler multiplicativity.",
+      :commands
+      ["lake env lean ConstructionTargets/CoefficientCoveringTransfer.lean"],
+      :axioms :standard-only,
+      :placeholder-before 0,
+      :placeholder-after 0},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/CoefficientCoveringTransfer.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/coefficient-covering-transfer-audit.py",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/CoefficientCoveringTransfer.lean",
+       :exit 1,
+       :correction
+       "Installed the standard-simplex connectivity instances and removed a stray parameter from an unfold command."}
+      {:cmd "lake env lean /tmp/CoefficientCoveringTransfer.lean",
+       :exit 1,
+       :correction "Qualified HomologicalComplex.homologyFunctor."}
+      {:cmd "lake env lean /tmp/CoefficientCoveringTransfer.lean",
+       :exit 1,
+       :correction
+       "Applied additive-functor preservation of natural scalar multiplication explicitly."}
+      {:cmd "lake env lean /tmp/CoefficientCoveringTransfer.lean",
+       :exit 1,
+       :correction
+       "Qualified CategoryTheory.Functor.map_id to avoid the root Functor identifier."}
+      {:cmd "lake env lean /tmp/CoefficientCoveringTransfer.lean",
+       :exit 1,
+       :correction
+       "Closed the remaining definitionally equal homology-object identity with rfl. Final compilation succeeds without warnings."}],
+     :audit "/tmp/coefficient-covering-transfer-audit.json",
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientCoveringTransfer.lean",
+      :sha256
+      "0ebb3c67616b4dbaab425bb991a38dd514371308d97af5b646bf15729d311e42",
+      :placeholder-count 0},
+     :finding
+     "Constructed transfer directly on actual ModuleCat singular chains over any commutative ring, including rational coefficients. Banked lift finiteness and restriction bijections give finite generator sums and all-degree boundary commutation. Projection after transfer equals k times identity on chains and on actual singular homology. The rational homology specialization compiles explicitly. No coefficient-extension comparison is assumed; k=0 is included.",
+     :implementation
+     {:scope ["ConstructionTargets/CoefficientCoveringTransfer.lean"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/CoefficientCoveringTransfer.lean"],
    :dag-node "COVER-DEGREE / rational singular-chain transfer",
    :acceptance
    {:axioms :standard-only,
