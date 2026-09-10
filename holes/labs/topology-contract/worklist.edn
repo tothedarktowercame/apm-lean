@@ -71507,76 +71507,104 @@
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
   {:consumer "t00A03",
    :stop-condition
+   "Require a relative finite-family Sard or transversality theorem that combines interior parameter surjectivity with separate finite endpoint coincidences, then prove compatibility through chart-transition maps.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"],
+   :dag-node
+   "SURFACE TRIANGULATION / endpoint-relative perturbation interior parameter surjectivity",
+   :acceptance
+   {:fixture "/tmp/PlaneArcEndpointPerturbationInteriorParameter.lean",
+    :fixture-sha256
+    "5220ea4ac53c6345fb6b467c7ba59e452385d5a42c0f2889bfe890cdc91b0fc7",
+    :implementation
+    "Promote the exact fixture. Compile endpointWeight_pos, endpointWeight_ne_zero, weight_smul_surjective and perturb_parameter_surjective. This supplies the interior parameter-surjectivity step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before applying a relative regular-value argument. Verify PlaneArcEndpointPerturbationFamilyContainment SHA256 9776248fc44f9976d4dd7a94a3386f13d0f7d782d33397334f4e4c00ee3e7f0d. Preserve every interior unit-interval parameter and arbitrary smooth plane arcs. Require zero placeholders, no warnings and standard-only axioms. Do not claim endpoint-coincidence finiteness, embedding preservation, finite-family parameter selection, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+    :commands
+    ["lake env lean ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :plane-arc-endpoint-perturbation-interior-parameter-implementation-refill50,
+   :kind :reusable-theorem,
+   :depends-on
+   [:plane-arc-endpoint-perturbation-family-containment-implementation-refill50],
+   :current-residual
+   "Use the compiled interior parameter surjectivity to establish regular values for each pairwise coincidence map while treating boundary parameter pairs separately. Small-parameter embedding stability and cross-chart surface-intersection comparison remain.",
+   :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
+  {:consumer "t00A03",
+   :stop-condition
    "Require a compiled perturbation preserving prescribed endpoints and chartwise containment with finite pairwise intersections; do not infer cross-chart finiteness from unrelated plane translations.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Uniform finite-family endpoint preservation and chart containment compile; embedding stability, relative finite-family transversality and cross-chart surface-intersection comparison remain.",
+     "Endpoint preservation, uniform chart containment and interior parameter surjectivity compile; relative finite-family regular-value selection, boundary-coincidence control, embedding stability and cross-chart comparison remain.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t00A03",
       :stop-condition
-      "Require small-parameter embedding stability and a relative finite-family transversality theorem for endpoint-weighted perturbations, followed by transition-map comparison for arcs assigned to different charts.",
+      "Require a relative finite-family Sard or transversality theorem that combines interior parameter surjectivity with separate finite endpoint coincidences, then prove compatibility through chart-transition maps.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean"],
+      ["ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"],
       :dag-node
-      "SURFACE TRIANGULATION / finite endpoint-preserving family chart containment",
+      "SURFACE TRIANGULATION / endpoint-relative perturbation interior parameter surjectivity",
       :acceptance
       {:fixture
-       "/tmp/PlaneArcEndpointPerturbationFamilyContainment.lean",
+       "/tmp/PlaneArcEndpointPerturbationInteriorParameter.lean",
        :fixture-sha256
-       "9776248fc44f9976d4dd7a94a3386f13d0f7d782d33397334f4e4c00ee3e7f0d",
+       "5220ea4ac53c6345fb6b467c7ba59e452385d5a42c0f2889bfe890cdc91b0fc7",
        :implementation
-       "Promote the exact fixture. Compile exists_common_radius. This supplies the shared finite-family chart-containment step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes: one positive radius keeps every endpoint-preserving perturbation inside its prescribed open plane target. Verify PlaneArcEndpointPerturbationContainment SHA256 8922598bc50353b2ee99ab5299f85d3c6c0f8f13f3a4ae01b9867a7086acdd59. Preserve arbitrary finite index types, including empty and singleton types, arbitrary smooth arcs on neighborhoods of the unit interval, and arbitrary open target families containing their images. Require zero placeholders, no warnings and standard-only axioms. Do not claim embedding preservation, finite pairwise intersections, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+       "Promote the exact fixture. Compile endpointWeight_pos, endpointWeight_ne_zero, weight_smul_surjective and perturb_parameter_surjective. This supplies the interior parameter-surjectivity step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before applying a relative regular-value argument. Verify PlaneArcEndpointPerturbationFamilyContainment SHA256 9776248fc44f9976d4dd7a94a3386f13d0f7d782d33397334f4e4c00ee3e7f0d. Preserve every interior unit-interval parameter and arbitrary smooth plane arcs. Require zero placeholders, no warnings and standard-only axioms. Do not claim endpoint-coincidence finiteness, embedding preservation, finite-family parameter selection, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
        :commands
-       ["lake env lean ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean"],
+       ["lake env lean ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :plane-arc-endpoint-perturbation-family-containment-implementation-refill50,
+      :plane-arc-endpoint-perturbation-interior-parameter-implementation-refill50,
       :kind :reusable-theorem,
       :depends-on
-      [:plane-arc-endpoint-perturbation-containment-implementation-refill50],
+      [:plane-arc-endpoint-perturbation-family-containment-implementation-refill50],
       :current-residual
-      "Chart-target containment is now available uniformly for the finite family. Prove that sufficiently small endpoint-weighted perturbations remain embeddings and admit parameters with finite pairwise surface intersections; unrelated chart coordinates still require explicit transition-map compatibility.",
+      "Use the compiled interior parameter surjectivity to establish regular values for each pairwise coincidence map while treating boundary parameter pairs separately. Small-parameter embedding stability and cross-chart surface-intersection comparison remain.",
       :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.PlaneArcEndpointPerturbationContainment >/tmp/endpoint-containment-dep.log 2>&1",
+       "lake build ConstructionTargets.PlaneArcEndpointPerturbationFamilyContainment >/tmp/endpoint-family-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/PlaneArcEndpointPerturbationFamilyContainment.lean",
+       "lake env lean /tmp/PlaneArcEndpointPerturbationInteriorParameter.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/PlaneArcEndpointPerturbationFamilyContainment.lean ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean",
+       "sha256sum /tmp/PlaneArcEndpointPerturbationInteriorParameter.lean ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-declaration audit over /tmp/PlaneArcEndpointPerturbationFamilyContainment.lean",
+       "python3 comment-stripped placeholder-and-three-declaration audit over /tmp/PlaneArcEndpointPerturbationInteriorParameter.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/PlaneArcEndpointPerturbationFamilyContainment.lean",
-       :exit 0,
+       "lake env lean /tmp/PlaneArcEndpointPerturbationInteriorParameter.lean",
+       :exit 1,
        :correction
-       "The exploratory compile reported one unused hU parameter. Removed that unnecessary parameter and reran the final acceptance compile without warnings."}],
+       "The first surjectivity proof attempted a reversed scalar-action rewrite before exposing the function application. Changed the goal to the explicit nested scalar action and applied smul_smul with the nonzero endpoint weight."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/PlaneArcEndpointPerturbationFamilyContainment.lean",
+     {:path "/tmp/PlaneArcEndpointPerturbationInteriorParameter.lean",
       :sha256
-      "9776248fc44f9976d4dd7a94a3386f13d0f7d782d33397334f4e4c00ee3e7f0d",
+      "5220ea4ac53c6345fb6b467c7ba59e452385d5a42c0f2889bfe890cdc91b0fc7",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one finite-family containment prerequisite. Compactness of every original arc image and openness of every chart target produce one positive radius shared by the finite family. Every endpoint-weighted perturbation whose vector norm is below that radius remains in its assigned target for all unit-interval parameters. The proof uses Fintype.ofFinite and therefore preserves empty and singleton index cases. It does not claim embedding stability, finite coincidences or comparison through different surface charts.",
+     "Compiled exactly one relative-transversality prerequisite. The endpoint weight t(1-t) is positive and nonzero for every interior parameter t in (0,1). Hence varying the plane perturbation vector moves the perturbed point surjectively in every plane direction at each interior parameter, while the already reviewed endpoint equations keep t=0 and t=1 fixed. This proves the parameter-direction input needed for an interior regular-value argument without claiming that endpoint coincidences, embedding stability or unrelated chart transitions are already controlled.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
@@ -71590,7 +71618,8 @@
    [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs
     :plane-arc-endpoint-preserving-perturbation-implementation-refill50
     :plane-arc-endpoint-perturbation-containment-implementation-refill50
-    :plane-arc-endpoint-perturbation-family-containment-implementation-refill50],
+    :plane-arc-endpoint-perturbation-family-containment-implementation-refill50
+    :plane-arc-endpoint-perturbation-interior-parameter-implementation-refill50],
    :current-residual
    "Common-plane translations preserve embeddings and containment but move endpoints and do not compare curves transported through unrelated charts.",
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
