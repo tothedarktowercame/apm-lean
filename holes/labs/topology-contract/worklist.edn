@@ -65595,8 +65595,157 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :evidence
+   {:baseline "f699206d8890866401b060cfb71c9049d5ca6c43",
+    :outcome :replan,
+    :warnings [],
+    :disposition :replan,
+    :pin "a23c64509baaf333a173f818ba8efa99c9759f57",
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill47-measure.py", :exit 0}
+     {:cmd "python3 /tmp/topology-refill47-enrich.py", :exit 0}
+     {:cmd "bb /tmp/refill47-reviews.bb", :exit 0}
+     {:cmd "python3 /tmp/topology-refill47-tail.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill47-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill47-proposed-worklist.edn",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer "t00A01",
+      :stop-condition
+      "GO requires complete frozen closure; otherwise identify the exact remaining homotopy-equivalence or basepoint adapter. Infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "VAN KAMPEN / frozen homotopy-cover uptake",
+      :acceptance
+      {:axioms :standard-only,
+       :frozen-file "problems/t00A01/lean/Main.lean",
+       :frozen-sha256
+       "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :probe
+       "Compile complete frozen Main using reviewed TwoOpenFreeProductMapping. Derive path connectivity of the actual pieces and simple connectivity and nonemptiness of the overlap from the supplied homotopy equivalences. Transport the union overlap basepoint to the literal quotient basepoint, transport both piece groups through the supplied homotopy equivalences and puncture identifications, and retain the proved homology branch and both final conjuncts. Preserve all frozen hypotheses and definitions; no supplied group comparison, paths or additional connectivity assumptions."},
+      :id :t00a01-frozen-cover-coproduct-closure-probe-refill47,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
+      :current-residual
+      "The generic actual-cover comparison is reviewed. Two placeholders remain for its frozen specialization and final assembly.",
+      :other-consumers []}
+     {:consumer "t98A02",
+      :stop-condition
+      "GO requires actual relative connecting and normalization comparison; REVISE requires exactly one compiled prerequisite. Do not duplicate concurrent boundary or triple-overlap work.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD FUNDAMENTAL CLASS / moving boundary relative normalization",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Audit concurrent CoefficientChartBoundaryNeighborhood, CoefficientCompactBoundaryMotion, CoefficientScaledBoundaryNormalization and CoefficientOverlapTransition before adding anything. Construct actual deleted-pair connecting naturality and neighborhood-inclusion comparisons identifying the scaled recentered sphere boundary with the local chart normalization at each nearby point. Prove exact forward arrows in dimension m+2; reuse the banked boundary homotopies and radial inverse laws. Do not assume the connecting square or normalization equality. Preserve arbitrary-degree boundary homology and all-dimensional local comparisons without extending the m+2 normalization. Nearby transition-unit equality, orientation and global localization remain subsequent."},
+      :representation
+      {:source
+       "Actual coefficient homology maps of a scaled sphere boundary recentered at nearby chart points",
+       :target
+       "The banked deleted-point relative chart normalizations in dimension m+2",
+       :direction
+       "Identify the boundary map followed by the inverse relative connecting isomorphism with the actual neighborhood-to-local-homology map, then derive equality of the directed normalization composites."},
+      :id
+      :coefficient-moving-boundary-relative-normalization-probe-refill47,
+      :kind :representation-comparison,
+      :depends-on
+      [:checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
+      :current-residual
+      "Concurrent geometry constructs a common sphere boundary and nearby centers; comparison with actual relative chart normalizations remains.",
+      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+     {:consumer "t99J03",
+      :stop-condition
+      "GO requires a constructed arbitrarily small translation and derived finite coincidences; REVISE requires one compiled prerequisite. Do not claim fixed endpoints, coverage preservation or triangulation.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE TRIANGULATION / small translations in finite position",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For two genuinely smooth plane curves on open neighborhoods of the closed unit interval and every positive epsilon, construct a translation vector of norm less than epsilon such that the first curve and translated second curve have finitely many parameter coincidences in the closed square. Use banked open-domain Euclidean Sard on the actual difference map, positive measure of an open ball, equal-dimensional surjectivity-to-invertibility and CompactTransverseArcIntersections. Derive the derivative and translation identities, including necessary product-norm or coordinate transport to Sard. Include endpoints through neighborhood extensions. No assumed regular value, transversality or finite intersection. This translation moves endpoints and does not provide relative endpoint-preserving perturbation or a finite-position triangle cover."},
+      :id
+      :plane-arc-small-translation-finite-intersections-probe-refill47,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
+      :current-residual
+      "Conditional finite intersections are reviewed; a regular-value translation is the next bounded construction before relative arc adjustment.",
+      :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped consumers across the complete DAG. Separate campaign and concurrent closures, typed uptake and duplicated functionality. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve repaired t94J08 and t96J07 versus historical defects; positive-dimensional antipodal action versus ordinary/reduced S0 and integral dimension-one local index; arbitrary-dimensional local comparison versus m+2 normalization; conditional polygon witnesses and genus-zero boundary; null-winding triviality without Producer/Main refutation; Hausdorff mass normalization; t96J05 defect; t01J04/t94A06 applicability; resolved t01A08 regularity conversion versus general-model Sard; transfer identities versus Euler multiplicativity; and small translations versus endpoint-preserving perturbations. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t00a01-frozen-cover-coproduct-closure-probe-refill47
+       :coefficient-moving-boundary-relative-normalization-probe-refill47
+       :plane-arc-small-translation-finite-intersections-probe-refill47],
+      :current-residual
+      "Await three independently reviewed outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :measures
+    {:reviewed-local-stops 1,
+     :infrastructure-before 740,
+     :existing-consumers 58,
+     :missing-consumers ["t93A05"],
+     :placeholders 64,
+     :placeholder-delta 0,
+     :review-pass 4,
+     :infrastructure-after 749,
+     :concurrent-closures 0,
+     :zero-placeholder-consumers 24,
+     :open-consumers 34,
+     :overlapping-functionality-pairs 1,
+     :named-consumers 59,
+     :campaign-closures 0,
+     :consumer-changed-paths [],
+     :portfolio-modules 4,
+     :within-two 24,
+     :reviewed-completed-packets 3,
+     :concurrent-modules 5},
+    :finding
+    "No consumer bytes or placeholder counts changed. Reviewed portfolio work constructed generic actual-cover coproduct reconstruction, actual triple-overlap composition and conditional compact transverse intersection finiteness. The reviewed Euler STOP retains the missing uniform rational torus computation and target Euler comparison; transfer alone does not supply them. Concurrent boundary-motion, chart-neighborhood and scaled-boundary modules advance local normalization geometry. Concurrent CoefficientOverlapTransition overlaps CoefficientTripleOverlap's geometric composition functionality; this is recorded separately from additional progress. Elect t00A01 first: the reviewed generic coproduct theorem now leaves its frozen homotopy-cover and basepoint specialization plus final assembly. Then elect two five-consumer foundations, prioritizing the relative boundary normalization comparison using concurrent geometry, followed by a constructed arbitrarily small regular-value translation of plane arcs. Other near-closure consumers retain independent degree-realization, general-model Sard, sphere-mass, polygon/classification, global localization, product-homology or specification boundaries. No local STOP terminates the campaign.",
+    :artifacts
+    {:measurement
+     {:path "/tmp/topology-refill47-measure.json",
+      :sha256
+      "7b47839093100721689c67e37592bf924176af69b4718b29a2b6108360a35867"},
+     :tail
+     {:path "/tmp/topology-refill47-tail.edn",
+      :sha256
+      "f509e9955130fd9aca8b0b41da645722cef35c0d6e0e7c9293fe36482a826256"}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -65612,7 +65761,108 @@
     :generic-two-open-vertex-coproduct-comparison-probe-refill46
     :checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
    :current-residual
-   "Await four independently reviewed outcomes, then rerank the complete DAG."}],
+   "Await four independently reviewed outcomes, then rerank the complete DAG."}
+  {:consumer "t00A01",
+   :stop-condition
+   "GO requires complete frozen closure; otherwise identify the exact remaining homotopy-equivalence or basepoint adapter. Infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "VAN KAMPEN / frozen homotopy-cover uptake",
+   :acceptance
+   {:axioms :standard-only,
+    :frozen-file "problems/t00A01/lean/Main.lean",
+    :frozen-sha256
+    "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :probe
+    "Compile complete frozen Main using reviewed TwoOpenFreeProductMapping. Derive path connectivity of the actual pieces and simple connectivity and nonemptiness of the overlap from the supplied homotopy equivalences. Transport the union overlap basepoint to the literal quotient basepoint, transport both piece groups through the supplied homotopy equivalences and puncture identifications, and retain the proved homology branch and both final conjuncts. Preserve all frozen hypotheses and definitions; no supplied group comparison, paths or additional connectivity assumptions."},
+   :id :t00a01-frozen-cover-coproduct-closure-probe-refill47,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex
+    :checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
+   :current-residual
+   "The generic actual-cover comparison is reviewed. Two placeholders remain for its frozen specialization and final assembly.",
+   :other-consumers []}
+  {:consumer "t98A02",
+   :stop-condition
+   "GO requires actual relative connecting and normalization comparison; REVISE requires exactly one compiled prerequisite. Do not duplicate concurrent boundary or triple-overlap work.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / moving boundary relative normalization",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Audit concurrent CoefficientChartBoundaryNeighborhood, CoefficientCompactBoundaryMotion, CoefficientScaledBoundaryNormalization and CoefficientOverlapTransition before adding anything. Construct actual deleted-pair connecting naturality and neighborhood-inclusion comparisons identifying the scaled recentered sphere boundary with the local chart normalization at each nearby point. Prove exact forward arrows in dimension m+2; reuse the banked boundary homotopies and radial inverse laws. Do not assume the connecting square or normalization equality. Preserve arbitrary-degree boundary homology and all-dimensional local comparisons without extending the m+2 normalization. Nearby transition-unit equality, orientation and global localization remain subsequent."},
+   :representation
+   {:source
+    "Actual coefficient homology maps of a scaled sphere boundary recentered at nearby chart points",
+    :target
+    "The banked deleted-point relative chart normalizations in dimension m+2",
+    :direction
+    "Identify the boundary map followed by the inverse relative connecting isomorphism with the actual neighborhood-to-local-homology map, then derive equality of the directed normalization composites."},
+   :id
+   :coefficient-moving-boundary-relative-normalization-probe-refill47,
+   :kind :representation-comparison,
+   :depends-on
+   [:checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex
+    :checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
+   :current-residual
+   "Concurrent geometry constructs a common sphere boundary and nearby centers; comparison with actual relative chart normalizations remains.",
+   :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+  {:consumer "t99J03",
+   :stop-condition
+   "GO requires a constructed arbitrarily small translation and derived finite coincidences; REVISE requires one compiled prerequisite. Do not claim fixed endpoints, coverage preservation or triangulation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SURFACE TRIANGULATION / small translations in finite position",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For two genuinely smooth plane curves on open neighborhoods of the closed unit interval and every positive epsilon, construct a translation vector of norm less than epsilon such that the first curve and translated second curve have finitely many parameter coincidences in the closed square. Use banked open-domain Euclidean Sard on the actual difference map, positive measure of an open ball, equal-dimensional surjectivity-to-invertibility and CompactTransverseArcIntersections. Derive the derivative and translation identities, including necessary product-norm or coordinate transport to Sard. Include endpoints through neighborhood extensions. No assumed regular value, transversality or finite intersection. This translation moves endpoints and does not provide relative endpoint-preserving perturbation or a finite-position triangle cover."},
+   :id
+   :plane-arc-small-translation-finite-intersections-probe-refill47,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex
+    :checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
+   :current-residual
+   "Conditional finite intersections are reviewed; a regular-value translation is the next bounded construction before relative arc adjustment.",
+   :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped consumers across the complete DAG. Separate campaign and concurrent closures, typed uptake and duplicated functionality. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve repaired t94J08 and t96J07 versus historical defects; positive-dimensional antipodal action versus ordinary/reduced S0 and integral dimension-one local index; arbitrary-dimensional local comparison versus m+2 normalization; conditional polygon witnesses and genus-zero boundary; null-winding triviality without Producer/Main refutation; Hausdorff mass normalization; t96J05 defect; t01J04/t94A06 applicability; resolved t01A08 regularity conversion versus general-model Sard; transfer identities versus Euler multiplicativity; and small translations versus endpoint-preserving perturbations. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t00a01-frozen-cover-coproduct-closure-probe-refill47
+    :coefficient-moving-boundary-relative-normalization-probe-refill47
+    :plane-arc-small-translation-finite-intersections-probe-refill47
+    :checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
+   :current-residual
+   "Await three independently reviewed outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
