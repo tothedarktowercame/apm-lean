@@ -57076,8 +57076,151 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local counterexamples and infrastructure absence do not terminate the campaign.",
+   :evidence
+   {:evidence
+    {:measure
+     {:path "/tmp/topology-refill34-measure.json",
+      :sha256
+      "48d68ff4e8806fada74779f1199a0138b415e07d3dcd3d283a093b628b04e7d1"},
+     :reviews
+     {:path "/tmp/topology-refill34-reviews.edn",
+      :sha256
+      "570878a0941801e60cf276ce2f4967c0a3bf3fdf64e24e827e07bc559a80a523"},
+     :tail
+     {:path "/tmp/topology-refill34-tail.edn",
+      :sha256
+      "9abe007646d13e6d6e4db0e21e4de62083be8d5181e9ac785d4013e3b165766a"}},
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill34-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill34-reviews.bb", :exit 0}
+     {:cmd
+      "git diff --name-status d90de0216c7d3e2490366872f8eacdd48a06c592 HEAD -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill34-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill34-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill34-measure.json /tmp/topology-refill34-reviews.edn /tmp/topology-refill34-tail.edn",
+      :exit 0}],
+    :measurement
+    {:baseline "d90de0216c7d3e2490366872f8eacdd48a06c592",
+     :existing-consumers 58,
+     :missing-consumers ["t93A05"],
+     :portfolio-documentation-packets 1,
+     :placeholder-delta -1,
+     :zero-placeholder-consumers 23,
+     :placeholders-before 67,
+     :portfolio-consumer-closures [],
+     :open-consumers 35,
+     :head "a9639d2efd3577244b5b86275703bce76c5f55b3",
+     :named-consumers 59,
+     :construction-modules-after 659,
+     :placeholders-after 66,
+     :portfolio-infrastructure ["ManifoldRegularFiberTangentImage"],
+     :construction-modules-before 657,
+     :within-two 25,
+     :concurrent-corrected-closures ["t96J07"],
+     :concurrent-infrastructure ["CoefficientBarycentricNaturality"],
+     :portfolio-placeholder-delta 0},
+    :replacement-items
+    [{:consumer "t94A06",
+      :stop-condition
+      "GO requires full frozen closure. Otherwise name the exact dimension, model or measure-transport boundary. Do not confuse failure of finite-dimensional Sard applicability with a compiled refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "CRITICAL-VALUE MANIFOLD SARD / literal almost-everywhere normal translation",
+      :acceptance
+      {:frozen-file "problems/t94A06/lean/Main.lean",
+       :frozen-sha256
+       "1e98306fb2201eb5c390bebab3f74348cb03b3306cd2e44b0df13d8f2d01f8b2",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile complete placeholder-free frozen Main preserving all definitions and hypotheses. Audit the absence of FiniteDimensional real E and the arbitrary ModelWithCorners before invoking finite-dimensional Sard; do not add finite dimensionality, completeness, inner-product structure or boundarylessness. For an applicable route, derive the actual critical-value and parameter-measure transport under negation of the first-two-coordinate projection, and close the exact mfderiv range-plus-axis-span predicate using the banked translation identities. No assumed nullity, regular value, derivative comparison or conditional final bridge. If the hypotheses do not support the route, identify the exact dimension/model boundary; any claim of local refutation requires a compiled counterexample to the frozen statement."},
+      :id :t94a06-frozen-normal-translation-closure-probe-refill34,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image],
+      :current-residual
+      "One placeholder: almost every literal normal-plane translate is transverse to the z-axis. Frozen source has an arbitrary normed model and no finite-dimensionality hypothesis."}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires actual literal-fiber charts, coverage and smooth overlaps compiled. REVISE requires exactly one compiled prerequisite. State applicability limits without claiming consumer closure.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE/SUBMERSION / manifold-target fiber chart transport",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a genuine-infinity ContMDiff map between self-model manifolds modeled on finite-dimensional complete real inner-product E and F and a regular value c, construct actual OpenPartialHomeomorph charts on the inherited-topology literal fiber f=c into Euclidean dimension finrank E minus finrank F, with source coverage and genuine-infinity smooth overlaps. Restrict to the actual source and target chart domains around x and c, derive representative smoothness and center surjectivity from mfderiv and invertible chart derivatives, and use existing cutoff-extension and local regular-fiber producers. Transport back only on proved agreement neighborhoods; do not require the extension to be globally regular. Prove exact fiber identification using target-chart injectivity on its source. No assumed fiber equivalence, derivative transport, chart, coverage or overlap compatibility. Include empty fibers and zero-dimensional kernels. Reuse existing implicit-function geometry and preserve APIs.",
+       :consumer-residual
+       "Local self-model manifold-to-manifold regular-fiber charts and overlaps only. Global atlas/inclusion/tangent assembly, general models and consumer-specific orientation, boundary, duality and transversality obligations remain."},
+      :id :regular-fiber-manifold-target-local-charts-probe-refill34,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image],
+      :current-residual
+      "Self-model manifold-to-vector fibers have global atlases and inclusion tangent geometry. Target-manifold chart transport on the literal fiber remains.",
+      :other-consumers ["t02A07" "t01J04" "t94A06"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned executable consumer placeholders and compare typed residuals, reviews and portfolio versus concurrent changes. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve t96J05 local specification defect, t01J04 route boundary, historical t96J07 refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t94a06-frozen-normal-translation-closure-probe-refill34
+       :regular-fiber-manifold-target-local-charts-probe-refill34],
+      :current-residual
+      "Await reviewed translation-adapter and target-fiber-chart outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    "Portfolio consumer placeholders did not change. The reviewed tangent packet proves actual chosen-atlas inclusion injectivity and equality of its derivative range with the original mfderiv kernel. t01J04 remains at the missing-countability and closed-preimage half-space-chart boundaries; its diagnostic is not a frozen-statement refutation. Documentation records the earlier t95J04 closure without additional reduction. The measured reduction belongs entirely to concurrent t96J07 specification repair and proof: preserve the old zero-vector refutation and distinguish corrected closure from proof of the old statement. Concurrent barycentric naturality advances coefficient-explicit subdivision degree maps but does not yet supply the complete singular chain endomorphism, excision or homology comparison. Across the complete DAG, elect exactly one near-closure adapter, t94A06, with explicit audit of its absent finite-dimensionality and arbitrary model; do not silently specialize it. Then elect manifold-target local fiber charts, a bounded extension of banked geometry with four proposed downstream consumers, before larger fundamental-class, intersection, surface-classification and generic-gluing programs. General-model and consumer-specific obligations remain separate. Preserve t96J05 and t01A05 defects, t01J04 route evidence, signed antipodal naturality, historical ordinary-H0 S0 refutation, reduced-S0 degree and one-dimensional local-index coverage. Proposed ledger validates with 442 items; no canonical edits.",
+    :review-outcomes
+    {:previous-checkpoint :pass,
+     :t01j04
+     {:probe :stop,
+      :review :pass,
+      :job "invoke-1789001701181-17482-a7bed4c8"},
+     :tangent-image
+     {:review :pass,
+      :commit "822296cada11aa7ea4fe97840543b092eb03f29b",
+      :job "invoke-1789002254080-17496-cc6a0d7a"},
+     :t95j04-documentation
+     {:review :pass,
+      :commit "f57ce4659db7de171ae3e99bdb187c2a742c298e",
+      :job "invoke-1789002485978-17503-4bf96279"},
+     :concurrent-t96j07
+     {:review :pass,
+      :commit "6f475b3c40e2a2528a0efd7e17c89f8f1af904a7",
+      :job "invoke-1789002417270-17501-59e6c3e7"}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -57092,7 +57235,80 @@
     :t95j04-reviewed-closure-documentation-refill33
     :checkpoint-full-dag-refill-33-after-sphere-nullity-and-manifold-fiber-atlas],
    :current-residual
-   "Await reviewed neighborhood-preimage, tangent-image and closure-documentation outcomes, then rerank the complete DAG."}],
+   "Await reviewed neighborhood-preimage, tangent-image and closure-documentation outcomes, then rerank the complete DAG."}
+  {:consumer "t94A06",
+   :stop-condition
+   "GO requires full frozen closure. Otherwise name the exact dimension, model or measure-transport boundary. Do not confuse failure of finite-dimensional Sard applicability with a compiled refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CRITICAL-VALUE MANIFOLD SARD / literal almost-everywhere normal translation",
+   :acceptance
+   {:frozen-file "problems/t94A06/lean/Main.lean",
+    :frozen-sha256
+    "1e98306fb2201eb5c390bebab3f74348cb03b3306cd2e44b0df13d8f2d01f8b2",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile complete placeholder-free frozen Main preserving all definitions and hypotheses. Audit the absence of FiniteDimensional real E and the arbitrary ModelWithCorners before invoking finite-dimensional Sard; do not add finite dimensionality, completeness, inner-product structure or boundarylessness. For an applicable route, derive the actual critical-value and parameter-measure transport under negation of the first-two-coordinate projection, and close the exact mfderiv range-plus-axis-span predicate using the banked translation identities. No assumed nullity, regular value, derivative comparison or conditional final bridge. If the hypotheses do not support the route, identify the exact dimension/model boundary; any claim of local refutation requires a compiled counterexample to the frozen statement."},
+   :id :t94a06-frozen-normal-translation-closure-probe-refill34,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image
+    :checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image],
+   :current-residual
+   "One placeholder: almost every literal normal-plane translate is transverse to the z-axis. Frozen source has an arbitrary normed model and no finite-dimensionality hypothesis."}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires actual literal-fiber charts, coverage and smooth overlaps compiled. REVISE requires exactly one compiled prerequisite. State applicability limits without claiming consumer closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / manifold-target fiber chart transport",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a genuine-infinity ContMDiff map between self-model manifolds modeled on finite-dimensional complete real inner-product E and F and a regular value c, construct actual OpenPartialHomeomorph charts on the inherited-topology literal fiber f=c into Euclidean dimension finrank E minus finrank F, with source coverage and genuine-infinity smooth overlaps. Restrict to the actual source and target chart domains around x and c, derive representative smoothness and center surjectivity from mfderiv and invertible chart derivatives, and use existing cutoff-extension and local regular-fiber producers. Transport back only on proved agreement neighborhoods; do not require the extension to be globally regular. Prove exact fiber identification using target-chart injectivity on its source. No assumed fiber equivalence, derivative transport, chart, coverage or overlap compatibility. Include empty fibers and zero-dimensional kernels. Reuse existing implicit-function geometry and preserve APIs.",
+    :consumer-residual
+    "Local self-model manifold-to-manifold regular-fiber charts and overlaps only. Global atlas/inclusion/tangent assembly, general models and consumer-specific orientation, boundary, duality and transversality obligations remain."},
+   :id :regular-fiber-manifold-target-local-charts-probe-refill34,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image
+    :checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image],
+   :current-residual
+   "Self-model manifold-to-vector fibers have global atlases and inclusion tangent geometry. Target-manifold chart transport on the literal fiber remains.",
+   :other-consumers ["t02A07" "t01J04" "t94A06"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned executable consumer placeholders and compare typed residuals, reviews and portfolio versus concurrent changes. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve t96J05 local specification defect, t01J04 route boundary, historical t96J07 refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t94a06-frozen-normal-translation-closure-probe-refill34
+    :regular-fiber-manifold-target-local-charts-probe-refill34
+    :checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image],
+   :current-residual
+   "Await reviewed translation-adapter and target-fiber-chart outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
