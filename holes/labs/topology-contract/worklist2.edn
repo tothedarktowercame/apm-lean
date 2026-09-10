@@ -19839,8 +19839,197 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:placeholder-delta 0,
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read DAG, foundational-program note, closure rules and standing portfolio policy",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint34Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint34Eligibility.bb", :exit 0}
+     {:cmd
+      "Inspect both ledgers, dependency PASS receipts and concurrent refill42 reservations",
+      :exit 0}
+     {:cmd
+      "Inspect CoefficientSphereShift and hemisphere-coordinate geometry",
+      :exit 0}
+     {:cmd
+      "git log --format='%h %s' 0187f9b1..2470cc2f -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :infrastructure-packets
+    {:modules-before 703,
+     :modules-after 707,
+     :portfolio 2,
+     :concurrent 2,
+     :portfolio-commits ["6f66faff" "d9f48550"],
+     :concurrent-commits ["f57572c7" "7593f33c"],
+     :new-branch-uptake 0},
+    :replacement-items
+    [{:consumer :t94J08,
+      :stop-condition
+      "No supplied geometric commuting squares, sphere equivariance or signed sphere-action theorem. Do not conflate height-preserving orthogonal maps with hemisphere exchange. Preserve actual subtype cokernels and ordinary-H0 endpoints.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SPHERE ORIENTATION: actual orthogonal equivariance of sphere-to-disk comparison",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a Type 0 commutative ring R and a real linear isometry equivalence Q of EuclideanSpace R-real (Fin n), construct its continuous actions on the actual closed disk, open disk, their boundary and punctured subspaces. Construct the ambient sphere action by applying Q to the first n coordinates and fixing the final height coordinate. Prove preservation of the north-pole complement and closed lower hemisphere. Prove the actual radial, hemisphere-coordinate and excision-inclusion squares directly from their geometric definitions. Use the reviewed actual pair maps, their composition equations and cokernel-projection equations to prove that CoefficientSphereShift.sphereToDiskIso intertwines the induced ambient sphere map and actual disk-pair map in every positive homology degree. State the exact forward and inverse intertwining equations. Derive the corresponding sphereShift naturality equation in positive target degree through CoefficientPairNaturality and the boundary homeomorphism. Retain n=0 wherever these statements apply. Compile integer and rational specializations and the n=1 negation specialization identifying its disk action with CoefficientBoundaryReflection.reflection. GO requires the complete actual-map fixture; REVISE requires exactly one compiled missing geometric equivariance prerequisite; STOP names independent foundations.",
+       :consumer-equation
+       "For the height-preserving extension of Q, its sphere homology map followed by sphereToDiskIso.hom equals sphereToDiskIso.hom followed by the actual Q-induced disk-pair homology map; the positive-degree sphere shift likewise intertwines the actual boundary action.",
+       :consumer-residual
+       "Use the comparison to transport reflection signs, then establish the coordinate-permutation or hemisphere-exchange comparisons needed for full antipodal action. All-integer degree realization, localization/gluing and nonbounding retain independent obligations.",
+       :gates
+       ["Compile a complete placeholder-free fixture and record SHA256."
+        "Audit the real linear-isometry input separately from the arbitrary coefficient ring R."
+        "Construct all geometric maps and commuting squares; audit actual cokernel components and oriented forward/inverse equations."
+        "Record integer/rational examples, n=1 reflection identification and standard-only axiom audits."
+        "Recheck both ledgers; do not assume determinant signs, antipodal action or orientation coherence."]},
+      :id
+      :oriented-checkpoint34-coefficient-orthogonal-sphere-comparison-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint34-disk-reflection-and-consumer-refill
+       :oriented-checkpoint33-coefficient-disk-reflection-sign-1
+       :oriented-checkpoint32-coefficient-pair-connecting-naturality-1
+       :oriented-checkpoint29-coefficient-geometric-sphere-shift-1],
+      :current-residual
+      "The actual disk-reflection sign is reviewed. The sphere-to-disk isomorphism is an explicit composite, but its equivariance under orthogonal maps of the first coordinates has not been proved.",
+      :other-consumers [:t02A08 :t98A02 :t96J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: orthogonal sphere comparison and consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint35-orthogonal-comparison-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint34-coefficient-orthogonal-sphere-comparison-1
+       :oriented-checkpoint34-disk-reflection-and-consumer-refill],
+      :current-residual
+      "Measure geometric equivariance separately from signed-action and consumer conclusions, and rerank the complete DAG against concurrent outcomes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :ranking
+    ["No newly eligible unassigned complete-consumer adapter was identified among the 25 near consumers. Generic covering pullback and the incidence atlas do not discharge their remaining frozen obligations."
+     "Exclude all refill42 reservations, including the pending strategy review and its degree-realization adapter, embedded triangles, incidence tangent geometry and finite-cover chain transfer."
+     "Elect actual orthogonal equivariance of the sphere-to-disk comparison: four proposed consumer paths, with reviewed geometric isomorphisms and actual pair naturality already available. This is the missing comparison needed to transport the proved disk sign."
+     "Global localization, product homology, cap/Thom, integration and compact-surface classification remain broader foundations. Their reviewed boundaries persist; no stopped consumer is retried or conditional producer substituted."],
+    :near-consumer-boundaries
+    {:t00J02
+     "Fundamental classes and geometric homological comparison.",
+     :t03J02 "Generic collar/NDR and gluing comparison.",
+     :t92J06
+     "Actual graph-covering construction; generic pullback alone does not construct it.",
+     :t95J06 "Hopf-surface torus homeomorphism.",
+     :t97A01 "Literal polygon invariants.",
+     :t94A06 "General-model smoothness and dimension hypotheses.",
+     :a97J08 "Planar separation.",
+     :t01A05
+     "Covering fundamental-class equation and unresolved disconnected orientation defect.",
+     :t96J06 "Compact-manifold nonbounding and fundamental classes.",
+     :t00A03 "Literal pants decomposition and cutting count.",
+     :t01J04 "Analytic boundary-preimage atlas and countability.",
+     :t03J05 "Literal curves and intersection/nonhomotopy.",
+     :t94J09
+     "Actual polygon normalization and attaching-map homology.",
+     :t03J04
+     "Uniform rational torus Euler calculation and finite-cover Euler comparison; reviewed STOP retained.",
+     :t95J05 "Numerical Hausdorff mass normalization.",
+     :t00J01
+     "Klein-product manifold/top-homology and exact fold fibers.",
+     :t99J03
+     "Compatible finite triangulation and realization homeomorphism, then polygon normalization; reviewed STOP retained.",
+     :t01A08 "General-model projected regular preimage.",
+     :t00A01
+     "Actual two-open free-product comparison and basepoint extraction.",
+     :t98A02 "Localization and gluing.",
+     :t02A05 "Literal flux and measure comparison.",
+     :t96J05
+     "Preserved radial-level refutation; attained regular-level specification unresolved.",
+     :t98A01 "Genus invariance and Euler multiplicativity.",
+     :t02A08
+     "All-integer degree realization; newly reserved concurrent probe.",
+     :t94J08
+     "Higher-dimensional signed sphere action and frozen transport; ordinary-S0 refutation retained."},
+    :finding
+    "Two reviewed reflection modules and two concurrent modules were added without changing any consumer file or placeholder count. The concrete disk sign is now proved, but no sphere sign follows without geometric equivariance. Preserve earlier frozen-branch uptake, corrected closure, original refutations and unresolved STOPs as distinct outcomes. Elect one bounded comparison and a matching successor.",
+    :typed-residual-change
+    {:before
+     "Actual disk-boundary coordinate exchange, its kernel action and relative-H1 reflection sign remained unproved over R.",
+     :after
+     "Actual boundary H0 exchange and actual relative-H1 minus-identity action are reviewed, including kernel projection, connecting naturality and exact normalization. Transport of this sign through the geometric sphere comparison remains absent.",
+     :consumer-files-changed false,
+     :t00J01
+     "Previous sphere-identity branch uptake remains; its single placeholder still contains only the Klein-product and fold-fiber obligations."},
+    :review-outcomes
+    {:boundary-review "invoke-1789020052717-18006-6c0280cc",
+     :covering-review "invoke-1789019806128-18002-428b6fd6",
+     :disk-reflection :pass,
+     :concurrent-refill42 :awaiting-review,
+     :atlas-review "invoke-1789020298315-18014-d3c2d4a7",
+     :new-corrected-closures 0,
+     :concurrent-global-atlas :pass-after-evidence-repair,
+     :disk-review "invoke-1789020562597-18020-f848ebae",
+     :boundary-reflection :pass,
+     :new-proved-refutations 0,
+     :new-frozen-closures 0,
+     :concurrent-covering-pullback :pass},
+    :reserved-concurrent
+    [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry
+     :t02a08-frozen-integer-degree-closure-probe-refill42
+     :compact-surface-embedded-triangle-cover-probe-refill42
+     :manifold-target-incidence-tangent-probe-refill42
+     :finite-cover-singular-chain-transfer-probe-refill42
+     :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer],
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint34Census.json",
+     :open 35,
+     :baseline "0187f9b18df22b540ed5515fa8b49a057d140777",
+     :existing 58,
+     :placeholder-after 66,
+     :zero-placeholder 23,
+     :placeholder-before 66,
+     :head "2470cc2f2a270a5ac22f86ef867ae27b480a78ca",
+     :sha256
+     "6b89b81fda51c45142ccdd7a697c4ea59a003240f8d896ba626a03c787352e46",
+     :named 59,
+     :missing [:t93A05],
+     :within-two 25}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: disk-reflection sign and renewed consumer eligibility",
@@ -19857,6 +20046,71 @@
     :oriented-checkpoint33-pair-naturality-and-consumer-refill],
    :current-residual
    "Measure actual reflection-sign progress separately from higher-dimensional sphere action and consumer closure; reassess the complete DAG and concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t94J08,
+   :stop-condition
+   "No supplied geometric commuting squares, sphere equivariance or signed sphere-action theorem. Do not conflate height-preserving orthogonal maps with hemisphere exchange. Preserve actual subtype cokernels and ordinary-H0 endpoints.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SPHERE ORIENTATION: actual orthogonal equivariance of sphere-to-disk comparison",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a Type 0 commutative ring R and a real linear isometry equivalence Q of EuclideanSpace R-real (Fin n), construct its continuous actions on the actual closed disk, open disk, their boundary and punctured subspaces. Construct the ambient sphere action by applying Q to the first n coordinates and fixing the final height coordinate. Prove preservation of the north-pole complement and closed lower hemisphere. Prove the actual radial, hemisphere-coordinate and excision-inclusion squares directly from their geometric definitions. Use the reviewed actual pair maps, their composition equations and cokernel-projection equations to prove that CoefficientSphereShift.sphereToDiskIso intertwines the induced ambient sphere map and actual disk-pair map in every positive homology degree. State the exact forward and inverse intertwining equations. Derive the corresponding sphereShift naturality equation in positive target degree through CoefficientPairNaturality and the boundary homeomorphism. Retain n=0 wherever these statements apply. Compile integer and rational specializations and the n=1 negation specialization identifying its disk action with CoefficientBoundaryReflection.reflection. GO requires the complete actual-map fixture; REVISE requires exactly one compiled missing geometric equivariance prerequisite; STOP names independent foundations.",
+    :consumer-equation
+    "For the height-preserving extension of Q, its sphere homology map followed by sphereToDiskIso.hom equals sphereToDiskIso.hom followed by the actual Q-induced disk-pair homology map; the positive-degree sphere shift likewise intertwines the actual boundary action.",
+    :consumer-residual
+    "Use the comparison to transport reflection signs, then establish the coordinate-permutation or hemisphere-exchange comparisons needed for full antipodal action. All-integer degree realization, localization/gluing and nonbounding retain independent obligations.",
+    :gates
+    ["Compile a complete placeholder-free fixture and record SHA256."
+     "Audit the real linear-isometry input separately from the arbitrary coefficient ring R."
+     "Construct all geometric maps and commuting squares; audit actual cokernel components and oriented forward/inverse equations."
+     "Record integer/rational examples, n=1 reflection identification and standard-only axiom audits."
+     "Recheck both ledgers; do not assume determinant signs, antipodal action or orientation coherence."]},
+   :id
+   :oriented-checkpoint34-coefficient-orthogonal-sphere-comparison-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint34-disk-reflection-and-consumer-refill
+    :oriented-checkpoint33-coefficient-disk-reflection-sign-1
+    :oriented-checkpoint32-coefficient-pair-connecting-naturality-1
+    :oriented-checkpoint29-coefficient-geometric-sphere-shift-1
+    :oriented-checkpoint34-disk-reflection-and-consumer-refill],
+   :current-residual
+   "The actual disk-reflection sign is reviewed. The sphere-to-disk isomorphism is an explicit composite, but its equivariance under orthogonal maps of the first coordinates has not been proved.",
+   :other-consumers [:t02A08 :t98A02 :t96J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: orthogonal sphere comparison and consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint35-orthogonal-comparison-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint34-coefficient-orthogonal-sphere-comparison-1
+    :oriented-checkpoint34-disk-reflection-and-consumer-refill
+    :oriented-checkpoint34-disk-reflection-and-consumer-refill],
+   :current-residual
+   "Measure geometric equivariance separately from signed-action and consumer conclusions, and rerank the complete DAG against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
