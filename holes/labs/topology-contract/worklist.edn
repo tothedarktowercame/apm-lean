@@ -66220,6 +66220,19 @@
       :exit 0}
      {:cmd "git status --short", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789037381567-18426-0ec00da5",
+     :commands
+     ["git show --check a031b36d"
+      "Python read-only pinned DAG audit: consumer hashes/counts, module attribution and artifact hashes"
+      "Inspect pinned LinearGraphMeasure representation and residual"
+      "bb read-only pinned reviews and tail/evidence/proposed/canonical comparison"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill48-proposed-worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show a031b36d:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "Independent review of codex-12's ledger-only checkpoint passes. Both artifact hashes match. Reproduced 59 named consumers, 58 existing, missing t93A05, 62 placeholders, 25 closed, 33 open and 23 within two. Only t00A01 changes, closing two placeholders under a pinned PASS review. Modules increase 749→754: three portfolio and two concurrent. Three pinned PASS reviews support the completed packets. Four fresh replacement rows match evidence/proposed/canonical after supervisor normalization, with one final adapter first and a dependent checkpoint last. Circle-overlap geometry, m+2 normalization, determinant evaluation and endpoint-preserving perturbation boundaries remain explicit. Both validators pass 527 items. No files edited."},
     :replacement-items
     [{:consumer "t03J02",
       :stop-condition
@@ -66343,7 +66356,7 @@
       "456b7e6f17094c2574dbf8186ddc0bf8e16bfdfa509058e1fb425bb8b3d85566"}},
     :seat "codex-12"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -66363,7 +66376,7 @@
    :stop-condition
    "GO requires complete frozen closure; otherwise name the exact geometric cover, group-pushout or homology comparison boundary. Missing infrastructure is not refutation.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "VAN KAMPEN / frozen null-circle torus gluing",
    :acceptance
@@ -66387,7 +66400,7 @@
    :stop-condition
    "GO requires equality of the actual transition units at every point of a constructed neighborhood; REVISE requires exactly one compiled prerequisite. No global orientation or fundamental-class claim.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / nearby transition-unit equality",
@@ -66408,7 +66421,7 @@
    :stop-condition
    "GO requires constructed simultaneous small translations and every pairwise finiteness conclusion; REVISE requires exactly one compiled prerequisite.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "SURFACE TRIANGULATION / finite translated arc families",
    :acceptance
