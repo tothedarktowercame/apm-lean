@@ -39586,8 +39586,7 @@
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
    {:outcome :replan,
-    :disposition :replan,
-    :author "codex-13",
+    :seat "codex-13",
     :commands
     [{:cmd
       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
@@ -39596,13 +39595,13 @@
       "Recount every DAG-named frozen consumer with comments stripped and inspect current open, blocked and reviewed rows",
       :exit 0}
      {:cmd
-      "Inspect the reviewed ledger-schema STOP, worklist_check.bb fixture validation and existing :git-blob evidence",
+      "Inspect the reviewed ledger-schema STOP, checkpoint60 ProductSimplexWordPrefixCounts evidence and existing immutable-artifact transitions",
       :exit 0}
      {:cmd
-      "Search both ledgers for immutable git-blob evidence already recorded on completed canonical modules",
+      "Verify checkpoint60 records no :git-blob and derive the predecessor blob with git show d7ecc4b411b2f783f762da03ac598994100be9a1:ConstructionTargets/ProductSimplexWordPrefixCounts.lean | git hash-object --stdin",
       :exit 0}
      {:cmd
-      "Compare 0758f2e1..5e73730304bb1841509bde7878100c15802bc34f and attribute ConstructionTargets and frozen-problem changes",
+      "Compare 0758f2e109b8e8ee28d5791596941730b988883d..5e73730304bb1841509bde7878100c15802bc34f and attribute ConstructionTargets and frozen-problem changes",
       :exit 0}
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -39612,87 +39611,6 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1789074693601-19495-5ab52faa",
-     :finding
-     "Deterministic defects in commit 2875e50dad781eba9921d6d412a61bb8bcd57372: (1) the finding and replacement hypothesis claim completed checkpoint60 already records Git-blob evidence for ProductSimplexWordPrefixCounts, but its evidence fixture contains only path/sha256/supporting-path/supporting-sha256/placeholder-count and no :git-blob, and the row has no :git-blobs map. The actual source blob at d7ecc4b411b2f783f762da03ac598994100be9a1 is d52f2865d16e184c2a6aa13ccdc508e9765a9008. Repair the elected probe to derive and explicitly transition/add this blob evidence before testing blob-backed validation, or use the already reviewed immutable-artifact-path transition. (2) :review-outcomes records the superseded reason :ledger-schema-has-no-immutable-artifact-or-version-lineage, whereas the reviewed replacement STOP reason is :required-artifact-and-transition-outside-empty-scope. Correct that outcome attribution. Scope, 849-to-851 concurrent-module count, ledger gates and whitespace otherwise reproduce."},
-    :replacement-items
-    [{:consumer :t03J05,
-      :stop-condition
-      "Construct only the validator comparison between recorded immutable Git blobs and historical fixture hashes for completed canonical modules. Do not disable current-source validation globally, accept unreachable or unscoped blobs, mutate historical evidence, promote the recurrence fixture, prove topology results or claim consumer closure.",
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "LEDGER REPRESENTATION: Git-blob-backed validation of historical canonical fixtures",
-      :acceptance
-      {:axioms :standard-only,
-       :hypotheses
-       "Use completed rows that already record :fixture {:path ... :sha256 ... :git-blob ...}, with checkpoint60 ProductSimplexWordPrefixCounts as the required concrete case.",
-       :route-step
-       "Supplies the immutable predecessor validation needed before the reviewed recurrence successor can be promoted on the t03J05, t96J06 and t97A04 routes.",
-       :probe
-       "Define and test validator semantics under which a completed historical fixture with :git-blob is checked by reading that blob, verifying its SHA256, verifying the blob occurs at the fixture path in one of the row evidence commits, and verifying exact scope as before. Rows without :git-blob retain current filesystem hash validation. Test the checkpoint60 predecessor against the current repository, reject a wrong blob, wrong path, unreachable commit and changed predecessor content, and run both ledgers. GO requires a complete tested fixture or patch. REVISE requires exactly one complete tested Git-object, commit-path or schema prerequisite. STOP names an exact invariant conflict.",
-       :consumer-equation
-       "Historical fixture evidence is verified against its immutable recorded Git blob at the scoped path and evidence commit, while current-source fixtures without a blob remain verified against the filesystem.",
-       :consumer-residual
-       "Promote the reviewed additive recurrence source as its own current version, validate its new source and declaration hashes, then prove both word/path inverse laws.",
-       :gates
-       ["Verify blob object existence and type."
-        "Verify blob SHA256 equals the recorded fixture SHA256."
-        "Verify the blob is located at the fixture path in an evidence commit belonging to the row."
-        "Preserve exact commit-scope validation."
-        "Retain filesystem validation for fixtures without :git-blob."
-        "Reject wrong blob, path, commit and predecessor bytes."
-        "Run clj-kondo and futon4/dev/check-parens.el for Clojure changes."
-        "Run focused validator tests and both ledger checks."
-        "Confirm no hash invariant is bypassed and no topology theorem or closure is claimed."]},
-      :representation
-      {:source
-       "A completed row's historical fixture bytes identified by its recorded SHA256, Git blob, scoped path and evidence commit",
-       :target
-       "The validator's immutable Git-object representation of those same bytes at that path in that commit",
-       :direction
-       "Exact byte equality from the source recorded historical-fixture representation to the target Git-blob content representation, with commit-tree path membership and scope preserved."},
-      :id
-      :oriented-checkpoint64-git-blob-backed-historical-fixture-validation-1,
-      :kind :representation-comparison,
-      :depends-on
-      [:oriented-checkpoint64-ledger-safe-extensions-and-consumer-refill-1],
-      :current-residual
-      "Completed rows record immutable Git blobs, but worklist_check.bb ignores them and compares every fixture hash only with the current mutable filesystem path.",
-      :other-consumers [:t96J06 :t97A04]}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 1,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :stop-condition
-      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
-      :phase :strategy,
-      :state :open,
-      :scope [],
-      :dag-node
-      "PORTFOLIO POLICY: immutable fixture validation and renewed consumer eligibility",
-      :acceptance
-      {:strategy
-       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
-       :stop-condition
-       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
-      :id
-      :oriented-checkpoint65-immutable-fixtures-and-consumer-refill-1,
-      :kind :strategy-checkpoint,
-      :depends-on
-      [:oriented-checkpoint64-git-blob-backed-historical-fixture-validation-1],
-      :current-residual
-      "Measure immutable fixture validation separately from recurrence promotion, inverse laws, oriented cancellation, cross-product assembly, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
-      :other-consumers []}],
     :measures
     {:baseline
      {:commit "0758f2e109b8e8ee28d5791596941730b988883d",
@@ -39716,8 +39634,7 @@
      {:ledger-safe-canonical-module-extension
       {:outcome :stop,
        :review :pass,
-       :reason
-       :ledger-schema-has-no-immutable-artifact-or-version-lineage},
+       :reason :required-artifact-and-transition-outside-empty-scope},
       :product-simplex-prefix-successor-recurrences
       {:outcome :stop,
        :review :pass,
@@ -39756,7 +39673,7 @@
       :placeholders 61}},
     :finding
     {:typed-residual-change
-     "The reviewed schema probe proves that the current validator cannot represent two historical byte hashes at one mutable path. The complete DAG and ledger inspection exposes a smaller existing route than inventing a new artifact system: completed implementation evidence already records :git-blob values for canonical sources, including ProductSimplexWordPrefixCounts. The validator currently ignores them. Validating historical fixture SHA256 against the recorded immutable Git blob, while requiring that blob to be the scoped path in an evidence commit, preserves the predecessor exactly; the additive successor can then be validated as the current source by its own row. This is the simplest needed representation step for t03J05, t96J06 and t97A04. No near-closure adapter has a complete route and no frozen placeholder changed.",
+     "The reviewed STOP establishes that recurrence promotion needs an immutable predecessor artifact and an explicit ledger transition outside the probe's empty scope. Checkpoint60 does not record :git-blob evidence: its fixture records path, SHA256, supporting path, supporting SHA256 and placeholder count only. The predecessor source is recoverable at evidence commit d7ecc4b411b2f783f762da03ac598994100be9a1, where its Git blob is d52f2865d16e184c2a6aa13ccdc508e9765a9008. The next probe therefore uses the already reviewed immutable-artifact-path design: preserve those exact predecessor bytes and hashes at a stable artifact path, test an explicit evidence transition, and leave the canonical module path available for the reviewed additive successor. No near-closure adapter has a complete route and no frozen placeholder changed.",
      :routes
      [{:consumer :a97J08,
        :placeholders 1,
@@ -39821,7 +39738,7 @@
       {:consumer :t03J05,
        :placeholders 1,
        :route
-       "reconstructed paths -> Git-blob-backed predecessor validation -> recurrence promotion -> inverse laws -> oriented cancellation -> cross product -> intersection and nonhomotopy -> theorem"}
+       "reconstructed paths -> immutable predecessor artifact transition -> recurrence promotion -> inverse laws -> oriented cancellation -> cross product -> intersection and nonhomotopy -> theorem"}
       {:consumer :t91J05,
        :placeholders 3,
        :route
@@ -39853,7 +39770,7 @@
       {:consumer :t96J06,
        :placeholders 2,
        :route
-       "fundamental class -> Git-blob validation -> recurrence promotion -> inverse laws -> oriented product comparison -> adapters"}
+       "fundamental class -> immutable predecessor artifact transition -> recurrence promotion -> inverse laws -> oriented product comparison -> adapters"}
       {:consumer :t97A01,
        :placeholders 1,
        :route
@@ -39861,7 +39778,7 @@
       {:consumer :t97A04,
        :placeholders 4,
        :route
-       "fundamental class -> Git-blob validation -> recurrence promotion -> inverse laws -> cross product -> Eilenberg-Zilber -> Kunneth -> intersections"}
+       "fundamental class -> immutable predecessor artifact transition -> recurrence promotion -> inverse laws -> cross product -> Eilenberg-Zilber -> Kunneth -> intersections"}
       {:consumer :t97J05,
        :placeholders 5,
        :route
@@ -39879,13 +39796,90 @@
        :route
        "endpoint perturbation -> coverage -> compatible faces -> triangulation"}],
      :deferred
-     ["A general artifact store and version-lineage system is deferred because existing Git blobs can supply the exact immutable predecessor representation."
-      "Do not retry recurrence promotion before immutable predecessor validation is banked."
-      "Inverse laws, oriented cancellation and cross product remain behind recurrence promotion."
+     ["Git-blob-backed validation is deferred until a row explicitly adds such evidence; checkpoint60 does not currently contain it."
+      "Do not retry recurrence promotion before the immutable predecessor artifact transition is banked."
+      "Inverse laws, oriented cancellation and cross-product assembly remain behind recurrence promotion."
       "Reviewed Euler and Hausdorff STOPs remain preserved; concurrent arc, coefficient and torsion work is excluded."]},
-    :seat "codex-13"},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Construct only the explicit byte-preserving transition from checkpoint60's mutable canonical fixture path to a stable immutable predecessor artifact. Preserve its historical fixture hash, supporting hash, declarations, evidence commit and review outcome. Do not weaken validation, infer unrecorded Git-blob evidence, promote the recurrence source, prove topology results or claim consumer closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "LEDGER REPRESENTATION: immutable predecessor artifact transition for canonical module extension",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use checkpoint60's recorded ProductSimplexWordPrefixCounts fixture evidence and recover its exact predecessor bytes from evidence commit d7ecc4b411b2f783f762da03ac598994100be9a1; the derived Git blob d52f2865d16e184c2a6aa13ccdc508e9765a9008 is verification input, not pre-existing ledger evidence.",
+       :route-step
+       "Supplies the immutable predecessor transition required before recurrence promotion on the t03J05, t96J06 and t97A04 routes.",
+       :probe
+       "Create a scratch immutable artifact containing exactly the checkpoint60 predecessor bytes. Construct and test an explicit scratch-ledger transition that moves the completed row's fixture reference from the mutable canonical path to that artifact while preserving the recorded SHA256, supporting evidence, declarations, evidence commit and review outcome. Verify the artifact compiles, both ledgers accept the transitioned evidence, the canonical path can independently hold the reviewed additive successor, and altered, missing or wrongly hashed predecessor artifacts are rejected. GO requires a complete tested fixture or patch. REVISE requires exactly one complete tested artifact-storage, transition-schema or validator prerequisite. STOP names an exact invariant conflict.",
+       :consumer-equation
+       "The immutable artifact contains exactly the bytes certified by checkpoint60, and an explicit ledger transition changes only their storage path while retaining all historical hashes and review evidence; the mutable canonical path may then carry a separately validated additive successor.",
+       :consumer-residual
+       "Apply the tested transition, promote the reviewed prefix-successor recurrences as the current canonical source, then prove both word/path inverse laws.",
+       :gates
+       ["Recover predecessor bytes from the recorded evidence commit and verify derived blob d52f2865d16e184c2a6aa13ccdc508e9765a9008."
+        "Verify the immutable artifact SHA256 equals checkpoint60's recorded fixture SHA256."
+        "Preserve predecessor declarations, supporting evidence, evidence commit and review outcome."
+        "Require an explicit ledger transition from the old fixture path to the immutable artifact path."
+        "Retain exact scope and current-source validation."
+        "Reject altered, missing and wrongly hashed predecessor artifacts."
+        "Verify the reviewed additive successor can be validated separately at the canonical path."
+        "Run clj-kondo and futon4/dev/check-parens.el for Clojure changes."
+        "Run focused transition and validator tests and both ledger checks."
+        "Confirm no hash invariant is weakened and no topology theorem or closure is claimed."]},
+      :representation
+      {:source
+       "Checkpoint60's completed-row evidence for the predecessor ProductSimplexWordPrefixCounts bytes at the mutable canonical path, identified by its recorded fixture and supporting SHA256 values",
+       :target
+       "A stable immutable artifact containing those exact predecessor bytes, with an explicit ledger transition retaining the completed row's hashes, evidence commit, declarations and review outcome",
+       :direction
+       "Exact byte-preserving relocation from the source mutable-path fixture representation to the target immutable-artifact representation, with historical evidence retained and the canonical path released for a separately validated additive successor."},
+      :id
+      :oriented-checkpoint64-immutable-predecessor-artifact-transition-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint64-ledger-safe-extensions-and-consumer-refill-1],
+      :current-residual
+      "The predecessor bytes are recoverable and hashable, but checkpoint60 has neither Git-blob evidence nor an immutable artifact path, and the reviewed STOP requires both an artifact and an explicit transition outside the prior empty scope.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: immutable predecessor artifacts and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint65-immutable-predecessor-artifacts-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint64-immutable-predecessor-artifact-transition-1],
+      :current-residual
+      "Measure the explicit immutable predecessor artifact transition separately from recurrence promotion, inverse laws, oriented cancellation, cross-product assembly, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: ledger-safe canonical extensions and renewed consumer eligibility",
@@ -39902,6 +39896,83 @@
     :oriented-checkpoint63-product-simplex-prefix-recurrences-and-consumer-refill-1],
    :current-residual
    "Measure resolution of the canonical-module hash conflict separately from recurrence promotion, inverse laws, oriented cancellation, cross-product assembly, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the explicit byte-preserving transition from checkpoint60's mutable canonical fixture path to a stable immutable predecessor artifact. Preserve its historical fixture hash, supporting hash, declarations, evidence commit and review outcome. Do not weaken validation, infer unrecorded Git-blob evidence, promote the recurrence source, prove topology results or claim consumer closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "LEDGER REPRESENTATION: immutable predecessor artifact transition for canonical module extension",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use checkpoint60's recorded ProductSimplexWordPrefixCounts fixture evidence and recover its exact predecessor bytes from evidence commit d7ecc4b411b2f783f762da03ac598994100be9a1; the derived Git blob d52f2865d16e184c2a6aa13ccdc508e9765a9008 is verification input, not pre-existing ledger evidence.",
+    :route-step
+    "Supplies the immutable predecessor transition required before recurrence promotion on the t03J05, t96J06 and t97A04 routes.",
+    :probe
+    "Create a scratch immutable artifact containing exactly the checkpoint60 predecessor bytes. Construct and test an explicit scratch-ledger transition that moves the completed row's fixture reference from the mutable canonical path to that artifact while preserving the recorded SHA256, supporting evidence, declarations, evidence commit and review outcome. Verify the artifact compiles, both ledgers accept the transitioned evidence, the canonical path can independently hold the reviewed additive successor, and altered, missing or wrongly hashed predecessor artifacts are rejected. GO requires a complete tested fixture or patch. REVISE requires exactly one complete tested artifact-storage, transition-schema or validator prerequisite. STOP names an exact invariant conflict.",
+    :consumer-equation
+    "The immutable artifact contains exactly the bytes certified by checkpoint60, and an explicit ledger transition changes only their storage path while retaining all historical hashes and review evidence; the mutable canonical path may then carry a separately validated additive successor.",
+    :consumer-residual
+    "Apply the tested transition, promote the reviewed prefix-successor recurrences as the current canonical source, then prove both word/path inverse laws.",
+    :gates
+    ["Recover predecessor bytes from the recorded evidence commit and verify derived blob d52f2865d16e184c2a6aa13ccdc508e9765a9008."
+     "Verify the immutable artifact SHA256 equals checkpoint60's recorded fixture SHA256."
+     "Preserve predecessor declarations, supporting evidence, evidence commit and review outcome."
+     "Require an explicit ledger transition from the old fixture path to the immutable artifact path."
+     "Retain exact scope and current-source validation."
+     "Reject altered, missing and wrongly hashed predecessor artifacts."
+     "Verify the reviewed additive successor can be validated separately at the canonical path."
+     "Run clj-kondo and futon4/dev/check-parens.el for Clojure changes."
+     "Run focused transition and validator tests and both ledger checks."
+     "Confirm no hash invariant is weakened and no topology theorem or closure is claimed."]},
+   :representation
+   {:source
+    "Checkpoint60's completed-row evidence for the predecessor ProductSimplexWordPrefixCounts bytes at the mutable canonical path, identified by its recorded fixture and supporting SHA256 values",
+    :target
+    "A stable immutable artifact containing those exact predecessor bytes, with an explicit ledger transition retaining the completed row's hashes, evidence commit, declarations and review outcome",
+    :direction
+    "Exact byte-preserving relocation from the source mutable-path fixture representation to the target immutable-artifact representation, with historical evidence retained and the canonical path released for a separately validated additive successor."},
+   :id
+   :oriented-checkpoint64-immutable-predecessor-artifact-transition-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint64-ledger-safe-extensions-and-consumer-refill-1
+    :oriented-checkpoint64-ledger-safe-extensions-and-consumer-refill-1],
+   :current-residual
+   "The predecessor bytes are recoverable and hashable, but checkpoint60 has neither Git-blob evidence nor an immutable artifact path, and the reviewed STOP requires both an artifact and an explicit transition outside the prior empty scope.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: immutable predecessor artifacts and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint65-immutable-predecessor-artifacts-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint64-immutable-predecessor-artifact-transition-1
+    :oriented-checkpoint64-ledger-safe-extensions-and-consumer-refill-1],
+   :current-residual
+   "Measure the explicit immutable predecessor artifact transition separately from recurrence promotion, inverse laws, oriented cancellation, cross-product assembly, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
