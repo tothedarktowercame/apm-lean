@@ -34473,8 +34473,278 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      :exit 0}
+     {:cmd
+      "Recount every DAG-named frozen consumer with comments stripped and inspect current open, blocked and done-unreviewed rows",
+      :exit 0}
+     {:cmd
+      "Inspect the reviewed bounded singular-cross-product STOP and search ConstructionTargets and Mathlib for product-simplex triangulations, signed shuffles, Alexander-Whitney and Eilenberg-Zilber interfaces",
+      :exit 0}
+     {:cmd
+      "Compare 3c81a7b02548363d4829d2e67fd2f2e698b1948a..98bf24c1d554ef822c96c59feb806aaec28ce94d and attribute ConstructionTargets and frozen-problem changes",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :measures
+    {:baseline
+     {:commit "3c81a7b02548363d4829d2e67fd2f2e698b1948a",
+      :description
+      "Accepted checkpoint55 singular-cross-product election"},
+     :proved-refutations 0,
+     :frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :head
+     {:commit "98bf24c1d554ef822c96c59feb806aaec28ce94d",
+      :description "Pre-checkpoint56 strategy head"},
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:before 818,
+      :after 823,
+      :portfolio [],
+      :concurrent
+      ["ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean"]},
+     :corrected-closures 0,
+     :review-outcomes
+     {:bounded-singular-cross-product
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-signed-product-simplex-shuffle-triangulation},
+      :finite-cover-rational-euler
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-finite-type-chain-level-covering-comparison},
+      :raw-hausdorff-normalization
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-addHaarScalarFactor-characterization},
+      :coefficient-compact-complement-route
+      {:disposition
+       "Concurrent route progress; excluded from election."}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholders 61}},
+    :finding
+    {:typed-residual-change
+     "The bounded singular-cross-product probe reached a reviewed non-refuting representation boundary. Mathlib and the bank contain no product-simplex triangulation, singular cross product, Alexander-Whitney map or Eilenberg-Zilber comparison from which the requested chain operation can be assembled. The exact first missing step is the finite signed-shuffle triangulation of Delta p times Delta q for p+q at most four, including affine realization, face cancellation with the Leibniz sign and two-variable naturality. This prerequisite is shared by t03J05, t96J06 and t97A04 and is narrower than retrying the blocked cross-product row. No frozen problem or placeholder changed.",
+     :routes
+     [{:consumer :a97J08,
+       :placeholders 1,
+       :route
+       "banked local degree and orientation -> consumer comparison -> adapter"}
+      {:consumer :t00A03,
+       :placeholders 2,
+       :route
+       "contained translations -> active endpoint-preserving chartwise perturbation -> compatible faces -> triangulation"}
+      {:consumer :t00J01,
+       :placeholders 1,
+       :route
+       "circle-fold evidence -> Klein-product and fold-fiber geometry -> homology bridge -> adapter"}
+      {:consumer :t00J02,
+       :placeholders 1,
+       :route
+       "active relative Mayer-Vietoris comparisons -> excision -> localization and fundamental class"}
+      {:consumer :t01A02,
+       :placeholders 3,
+       :route
+       "H2 degree and nonsurjectivity -> Lefschetz -> conjunction"}
+      {:consumer :t01A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> cap/Thom and intersection comparison -> calculations"}
+      {:consumer :t01A05,
+       :placeholders 1,
+       :route
+       "active compact-support Mayer-Vietoris -> localization, preserving connectedness defect -> adapter"}
+      {:consumer :t01A08,
+       :placeholders 1,
+       :route "regularity conversion -> general-model Sard -> adapter"}
+      {:consumer :t01J01,
+       :placeholders 3,
+       :route
+       "contained translations -> active endpoint control -> compatible triangulation -> theorem"}
+      {:consumer :t01J04,
+       :placeholders 1,
+       :route
+       "regular-preimage geometry -> countability and half-space-atlas applicability -> theorem"}
+      {:consumer :t01J06,
+       :placeholders 3,
+       :route
+       "sphere assembly and moments -> blocked normalization -> Stokes bridge -> conjunction"}
+      {:consumer :t02A05,
+       :placeholders 2,
+       :route
+       "S2 assembly and flux reduction -> blocked normalization -> integral and minimum"}
+      {:consumer :t02A07,
+       :placeholders 3,
+       :route
+       "active compact-support Mayer-Vietoris -> localization -> local comparison and fundamental class"}
+      {:consumer :t02A08,
+       :placeholders 1,
+       :route "local comparison -> m+2 normalization -> theorem"}
+      {:consumer :t03J02,
+       :placeholders 2,
+       :route
+       "null-winding -> embedded-circle collar or Jordan-Schoenflies -> gluing -> theorem"}
+      {:consumer :t03J04,
+       :placeholders 1,
+       :route
+       "rational torus homology -> reviewed finite-type covering Euler boundary -> theorem"}
+      {:consumer :t03J05,
+       :placeholders 1,
+       :route
+       "punctured genus-two curves -> signed product-simplex shuffles -> singular cross product -> mod-2 intersection and ambient nonhomotopy -> theorem"}
+      {:consumer :t91J05,
+       :placeholders 3,
+       :route
+       "contained translations -> active endpoint control -> compatible faces -> result"}
+      {:consumer :t92J05,
+       :placeholders 3,
+       :route
+       "RP2 antipodal and genus-two bridges -> classification -> assembly"}
+      {:consumer :t92J06,
+       :placeholders 1,
+       :route
+       "covering data -> action and quotient adapter -> theorem"}
+      {:consumer :t94A06,
+       :placeholders 1,
+       :route
+       "regular-preimage and normal translation -> model applicability -> adapter"}
+      {:consumer :t94A10,
+       :placeholders 3,
+       :route
+       "S2 assembly and moments -> blocked normalization -> closedness and nonexactness"}
+      {:consumer :t94J09,
+       :placeholders 1,
+       :route
+       "contained translations -> active endpoint-preserving perturbation -> intersection adapter"}
+      {:consumer :t95J05,
+       :placeholders 1,
+       :route
+       "S3 assembly and density moment -> blocked mass normalization -> integral uptake"}
+      {:consumer :t95J06,
+       :placeholders 2,
+       :route "torus free-action quotient -> classification -> result"}
+      {:consumer :t96J06,
+       :placeholders 2,
+       :route
+       "fundamental class and cap/Thom comparison -> signed product-simplex shuffles and singular product comparison -> adapters"}
+      {:consumer :t97A01,
+       :placeholders 1,
+       :route
+       "cover transfer -> reviewed finite-type Euler boundary -> theorem"}
+      {:consumer :t97A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> signed product-simplex shuffles and singular cross product -> bounded Eilenberg-Zilber -> integral Kunneth -> intersection calculations"}
+      {:consumer :t97J05,
+       :placeholders 5,
+       :route
+       "active compact-support Mayer-Vietoris -> localization and global fundamental class -> assembly"}
+      {:consumer :t98A01,
+       :placeholders 1,
+       :route
+       "active five-torsion -> polygon genus -> reviewed finite-type Euler boundary -> conjunction"}
+      {:consumer :t98A02,
+       :placeholders 1,
+       :route
+       "active relative Mayer-Vietoris and excision -> localization monicity -> fundamental class"}
+      {:consumer :t99J03,
+       :placeholders 1,
+       :route
+       "active endpoint-preserving perturbation -> coverage and compatible faces -> triangulation"}],
+     :deferred
+     ["The reviewed singular-cross-product STOP is not retried before its signed-shuffle prerequisite."
+      "The reviewed finite-cover Euler and Hausdorff-normalization STOPs are preserved."
+      "Active coefficient, arc and five-torsion work is excluded."
+      "The linear chain cross product, Eilenberg-Zilber equivalence, Kunneth comparison, intersection calculations and consumer adapters remain deferred until the bounded signed-shuffle construction is banked."]},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Construct only the finite signed-shuffle product-simplex data needed in total degrees at most four. Do not assume or claim a singular-chain cross product, Eilenberg-Zilber, Kunneth, product fundamental classes, intersection nonvanishing, ambient nonhomotopy or consumer closure. Use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PRODUCT HOMOLOGY: bounded signed-shuffle triangulation of products of standard simplices",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use pairs of standard simplices of dimensions p and q with p+q at most four and the integer shuffle signs whose reductions supply the ZMod 2 cases. No unbounded-degree or general simplicial-set construction is required.",
+       :route-step
+       "Supplies the exact missing signed product-simplex prerequisite on the sole t03J05 placeholder route, both t96J06 placeholder routes and the four t97A04 placeholder routes, immediately before construction of their singular-chain cross product.",
+       :probe
+       "Search the banked simplex, affine-map and finite-permutation APIs first. Define the finite (p,q)-shuffle family for p+q at most four, its sign, and the associated affine maps from the standard (p+q)-simplex into the product of the standard p- and q-simplices. Prove coverage with compatible oriented faces, pair cancellation of interior faces, the surviving boundary formula with the required Leibniz sign, and naturality of the realized product simplex under maps in both factors. Compile integer and ZMod 2 specializations. GO requires one complete placeholder-free fixture. REVISE requires exactly one complete compiled missing finite-shuffle enumeration, affine-simplex realization or oriented-face prerequisite. STOP names the exact independent combinatorial or representation boundary.",
+       :consumer-equation
+       "The signed sum of the realized (p,q)-shuffle simplices triangulating a product simplex has boundary equal to the signed sum of the two exterior product faces, with sign (-1)^p on the second family, and its realization is natural in both factors.",
+       :consumer-residual
+       "Extend the generator construction linearly to integer and ZMod 2 singular chains, prove the chain-level Leibniz and naturality formulas, and resume the bounded singular-cross-product interface.",
+       :gates
+       ["Compile a complete fixture and record SHA256."
+        "Audit the finite shuffle enumeration for every pair p,q with p+q at most four."
+        "Verify integer shuffle signs and their ZMod 2 reductions."
+        "Verify every affine realization lands in the product simplex."
+        "Verify cancellation of paired interior faces and both surviving exterior-face families with the correct Leibniz sign."
+        "Verify naturality in both factors."
+        "Reproduce standard-only axiom audits."
+        "Confirm no chain-level cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
+        "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and concurrent reservations."]},
+      :id
+      :oriented-checkpoint56-bounded-product-simplex-signed-shuffles-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "The requested singular-chain cross product cannot be defined from current imports because no banked construction triangulates a product of standard simplices with the signed boundary and naturality identities.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: bounded product-simplex shuffles and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint57-product-simplex-shuffles-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint56-bounded-product-simplex-signed-shuffles-1],
+      :current-residual
+      "Measure bounded signed-shuffle progress separately from the preserved singular-cross-product, Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: singular cross-product interface and renewed consumer eligibility",
@@ -34491,6 +34761,74 @@
     :oriented-checkpoint55-finite-cover-euler-and-consumer-refill-1],
    :current-residual
    "Measure bounded singular cross-product progress separately from preserved Euler and Hausdorff STOPs, concurrent work and frozen uptake; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the finite signed-shuffle product-simplex data needed in total degrees at most four. Do not assume or claim a singular-chain cross product, Eilenberg-Zilber, Kunneth, product fundamental classes, intersection nonvanishing, ambient nonhomotopy or consumer closure. Use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PRODUCT HOMOLOGY: bounded signed-shuffle triangulation of products of standard simplices",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use pairs of standard simplices of dimensions p and q with p+q at most four and the integer shuffle signs whose reductions supply the ZMod 2 cases. No unbounded-degree or general simplicial-set construction is required.",
+    :route-step
+    "Supplies the exact missing signed product-simplex prerequisite on the sole t03J05 placeholder route, both t96J06 placeholder routes and the four t97A04 placeholder routes, immediately before construction of their singular-chain cross product.",
+    :probe
+    "Search the banked simplex, affine-map and finite-permutation APIs first. Define the finite (p,q)-shuffle family for p+q at most four, its sign, and the associated affine maps from the standard (p+q)-simplex into the product of the standard p- and q-simplices. Prove coverage with compatible oriented faces, pair cancellation of interior faces, the surviving boundary formula with the required Leibniz sign, and naturality of the realized product simplex under maps in both factors. Compile integer and ZMod 2 specializations. GO requires one complete placeholder-free fixture. REVISE requires exactly one complete compiled missing finite-shuffle enumeration, affine-simplex realization or oriented-face prerequisite. STOP names the exact independent combinatorial or representation boundary.",
+    :consumer-equation
+    "The signed sum of the realized (p,q)-shuffle simplices triangulating a product simplex has boundary equal to the signed sum of the two exterior product faces, with sign (-1)^p on the second family, and its realization is natural in both factors.",
+    :consumer-residual
+    "Extend the generator construction linearly to integer and ZMod 2 singular chains, prove the chain-level Leibniz and naturality formulas, and resume the bounded singular-cross-product interface.",
+    :gates
+    ["Compile a complete fixture and record SHA256."
+     "Audit the finite shuffle enumeration for every pair p,q with p+q at most four."
+     "Verify integer shuffle signs and their ZMod 2 reductions."
+     "Verify every affine realization lands in the product simplex."
+     "Verify cancellation of paired interior faces and both surviving exterior-face families with the correct Leibniz sign."
+     "Verify naturality in both factors."
+     "Reproduce standard-only axiom audits."
+     "Confirm no chain-level cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
+     "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and concurrent reservations."]},
+   :id
+   :oriented-checkpoint56-bounded-product-simplex-signed-shuffles-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint56-singular-cross-product-and-consumer-refill-1],
+   :current-residual
+   "The requested singular-chain cross product cannot be defined from current imports because no banked construction triangulates a product of standard simplices with the signed boundary and naturality identities.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: bounded product-simplex shuffles and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint57-product-simplex-shuffles-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint56-bounded-product-simplex-signed-shuffles-1
+    :oriented-checkpoint56-singular-cross-product-and-consumer-refill-1],
+   :current-residual
+   "Measure bounded signed-shuffle progress separately from the preserved singular-cross-product, Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
