@@ -67761,6 +67761,21 @@
      "The direct coefficient chain and homology maps of the nested-piece inclusions into X",
      :direction
      "Exact equality from each transported forward composite to its direct nested inclusion map, first on chains and then on homology in every natural degree."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789046330570-18652-3e9a1559",
+     :commands
+     ["git diff --name-status 0a90313e^ 0a90313e"
+      "git diff --name-status 0a90313e HEAD -- ConstructionTargets problems"
+      "sha256sum /tmp/CoefficientCompactComplementHomologySquares.lean ConstructionTargets/CoefficientCompactComplementHomologySquares.lean ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean"
+      "git show 0a90313e:ConstructionTargets/CoefficientCompactComplementHomologySquares.lean | sha256sum"
+      "lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquares.lean"
+      "statement-header SHA256 audit over fixture and recorded commit blob"
+      "git diff --check 0a90313e^ 0a90313e"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "PASS: single-file scope; fixture hash f7ece409aa802bf09740d18ec252def76d2a2e75ace12002d1e135d49fecba6f and dependency hash fcab197c86e857e788128298cedc9cf0de41255c0961dbbabb983388b804e2b7 verified; promoted source is the recorded proof-only timeout repair with all six frozen statement hashes identical to the fixture, literal forward chain/homology composites preserved, 800000 heartbeat bound retained, zero placeholders/warnings, and standard-only axioms propext/Classical.choice/Quot.sound."},
     :commit "0a90313e36e84b71d08bcf289a3465f1bdd4780d",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementHomologySquares.lean"],
@@ -67777,7 +67792,7 @@
     :axiom-audit-count 6,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementHomologySquares.lean"],
    :dag-node
@@ -67891,7 +67906,7 @@
      "The coefficient chain and homology isomorphisms for all three compact-complement pieces are banked. Compiled exactly one naturality prerequisite: the forward homeomorphism-induced chain maps followed by the original-complement inclusions equal the nested inclusions for the left, right and overlap pieces, and the corresponding homology-map squares commute in every natural degree. Signed Mayer-Vietoris conjugation, relative ambient excision, localization monicity, dimension vanishing and fundamental classes remain unproved.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
