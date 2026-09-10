@@ -30444,84 +30444,111 @@
    :stop-condition
    "Do not assume a cap parameterization is measure-preserving, suppress subtype or ambient measure transport, include the equator without a proved null-boundary comparison, or assume numerical Euclidean Hausdorff normalization. Do not evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Exclude active compact-support, arc, orientation and surface work; use a unique row-specific scratch directory.",
    :evidence
-   {:probe
-    {:residual
-     "Prove the equator has zero d-dimensional Hausdorff measure, assemble the two strict caps into the whole sphere, determine the Euclidean Hausdorff-to-volume normalization, and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and every dependency receipt",
-       :exit 0}
-      {:cmd
-       "Audit the complete banked chain from SphereCapHeight through SphereCapHausdorffTransport, including L2 graph geometry, derivatives, densities, coordinate isometry, Euclidean images and Hausdorff transport",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint47-complete/SphereCapC1GraphAreaComparison.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint47-complete/SphereCapC1GraphAreaComparison.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint47-complete/SphereCapC1GraphAreaComparison.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "Python comment-stripped placeholder, whitespace, warning and three final standard-only axiom audits",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0}
-      {:cmd "git diff --exit-code && git diff --check", :exit 0}],
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint47-complete/SphereCapC1GraphAreaComparison.lean",
-      :sha256
-      "1cbfe21bc63aba31127042244156109b5d069564d6f18c17ca64cb58f45e7cdc",
-      :placeholder-count 0},
-     :finding
-     "The complete placeholder-free parent fixture compiles. The reviewed chain now constructs the upper and lower C1 cap heights, their exact Frechet derivatives and reciprocal-height graph densities; identifies their native WithLp 2 graphs with strict unit caps; constructs the explicit append-last-coordinate linear isometry to EuclideanSpace real (Fin (d+1)); proves exact equality with literal strict Euclidean sphere caps; transports ambient d-dimensional Hausdorff measure through the isometry; and identifies each cap subtype's Hausdorff measure with the ambient measure of its underlying set. Both signs compile for d=2 and d=3 with standard-only axioms. Equator nullity, whole-sphere cap assembly, numerical Euclidean Hausdorff normalization, sphere moments and frozen consumer closure remain downstream.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/SphereCapC1GraphAreaComparison.lean"
-       "ConstructionTargets/SphereCapC1GraphAreaComparison.md"],
-      :namespace "ConstructionTargets.SphereCapC1GraphAreaComparison",
-      :depends-on [:sphere-cap-ambient-hausdorff-transport-1],
-      :representation
-      {:source
-       "The intrinsic subtype Hausdorff measures of the literal upper and lower strict caps of Metric.sphere 0 1 in EuclideanSpace real (Fin (d+1))",
-       :target
-       "The reviewed C1GraphGlobalBounds graph-density integrals for u mapped to plus or minus sqrt(1-norm(u)^2) over the open unit ball in EuclideanSpace real (Fin d)",
-       :direction
-       "Exact equality from each target L2 graph-density integral through the constructed coordinate-isometry image and ambient Hausdorff transport to the source literal Euclidean cap subset and its intrinsic subtype Hausdorff measure."},
-      :acceptance
-      {:declarations
-       ["subtype_measure"
-        "intrinsic_upper_strictCap_measure"
-        "intrinsic_lower_strictCap_measure"],
-       :consumer-equation
-       "For d=2 and d=3, the intrinsic and ambient d-dimensional Hausdorff measures of each literal strict upper or lower Euclidean unit-sphere cap equal the set lintegral over the open unit ball of ENNReal.ofReal (1/upper(x)), obtained from the actual L2 graph and explicit coordinate isometry.",
-       :consumer-residual
-       "Equator nullity, cap assembly, numerical Euclidean Hausdorff normalization and coordinate-moment evaluation remain before the named frozen sphere-integral consumers can close.",
-       :axioms :standard-only,
-       :gates
-       ["Verify the recorded fixture SHA256."
-        "Compile the fixture and canonical target; run lake build ConstructionTargets.SphereCapC1GraphAreaComparison."
-        "Audit the imported derivative, density, graph-image, coordinate-isometry and ambient Hausdorff theorems rather than reconstructing them."
-        "Verify subtype_measure uses the actual subtype coercion isometry and proves equality with ambient Hausdorff measure of the underlying set."
-        "Verify both intrinsic strict-cap formulas rewrite through SphereCapHausdorffTransport."
-        "Compile upper and lower cap examples in dimensions two and three."
-        "Reproduce three final standard-only axiom audits and audit the imported dependency declarations."
-        "Confirm no equator, whole-sphere mass, numerical normalization, moment, Stokes, period or consumer-closure result is claimed."
-        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]}},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Prove the equator has zero d-dimensional Hausdorff measure, assemble the two strict caps into the whole sphere, determine the Euclidean Hausdorff-to-volume normalization, and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
+    :gates
+    {:canonical-compile :pass,
+     :intrinsic-upper-formula :pass,
+     :whitespace :pass,
+     :dimension-two-both-signs :pass,
+     :imported-chain-uptake :pass,
+     :intrinsic-to-ambient-direction :pass,
+     :fixture-hash :pass,
+     :axiom-audits 3,
+     :exact-scope :pass,
+     :claim-boundary :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :dimension-three-both-signs :pass,
+     :intrinsic-lower-formula :pass,
+     :subtype-coercion-isometry :pass,
+     :representation-direction :pass,
+     :warning-scan :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"subtype_measure"
+     "bbeb4fb8e0fd047d6a9d035f3cc89ac4ce5c119c6ec8e79205845afd509a8d08",
+     "intrinsic_upper_strictCap_measure"
+     "78cf54eb880586f199b7c364f17952153617210b2b1a96e6197af93be31b646d",
+     "intrinsic_lower_strictCap_measure"
+     "f67498aed445624d6097b8b190b58db32e89501b8d2de5c55cb5fa29d8ec8ae8"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, build-loop design, both ledgers and every reviewed dependency receipt",
+      :exit 0}
+     {:cmd
+      "shasum /tmp/codex13-checkpoint47-complete/SphereCapC1GraphAreaComparison.lean ConstructionTargets/SphereCapC1GraphAreaComparison.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint47-complete/SphereCapC1GraphAreaComparison.lean ConstructionTargets/SphereCapC1GraphAreaComparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint47-complete/SphereCapC1GraphAreaComparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SphereCapC1GraphAreaComparison.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SphereCapC1GraphAreaComparison",
+      :exit 0}
+     {:cmd
+      "Audit three namespace-local standard-only axiom reports and zero warnings or errors",
+      :exit 0}
+     {:cmd
+      "Audit imported derivative, density, native graph-image, coordinate-isometry, Euclidean graph-image and ambient Hausdorff declarations",
+      :exit 0}
+     {:cmd
+      "Audit subtype_measure through the actual subtype coercion isometry and both intrinsic formulas through SphereCapHausdorffTransport",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/SphereCapC1GraphAreaComparison.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n '[[:blank:]]+$' ConstructionTargets/SphereCapC1GraphAreaComparison.lean ConstructionTargets/SphereCapC1GraphAreaComparison.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --cached --check and exact two-file staged-scope audit",
+      :exit 0}
+     {:cmd "git diff 453d67d0^ 453d67d0 --check", :exit 0}],
+    :representation
+    {:source
+     "The intrinsic subtype Hausdorff measures of the literal upper and lower strict caps of Metric.sphere 0 1 in EuclideanSpace real (Fin (d+1))",
+     :target
+     "The reviewed C1GraphGlobalBounds graph-density integrals for u mapped to plus or minus sqrt(1-norm(u)^2) over the open unit ball in EuclideanSpace real (Fin d)",
+     :direction
+     "Exact equality from each target L2 graph-density integral through the constructed coordinate-isometry image and ambient Hausdorff transport to the source literal Euclidean cap subset and its intrinsic subtype Hausdorff measure."},
+    :dependency-uptake
+    {:id :sphere-cap-ambient-hausdorff-transport-1,
+     :commit "c316c65efbb69cf31b5ea009a1d6d3950b2ee94f",
+     :review "invoke-1789051251258-18784-c3fc0c91"},
+    :commit "453d67d084e3f9dc3cfe29a349f6f285f3ef418c",
+    :changed-paths
+    ["ConstructionTargets/SphereCapC1GraphAreaComparison.lean"
+     "ConstructionTargets/SphereCapC1GraphAreaComparison.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint47-complete/SphereCapC1GraphAreaComparison.lean",
+     :sha256
+     "1cbfe21bc63aba31127042244156109b5d069564d6f18c17ca64cb58f45e7cdc",
+     :placeholder-count 0},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereCapC1GraphAreaComparison.lean"
     "ConstructionTargets/SphereCapC1GraphAreaComparison.md"],
