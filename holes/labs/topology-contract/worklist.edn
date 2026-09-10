@@ -60209,8 +60209,182 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["Constant loops prove the literal null-winding predicate trivial; this supplies neither component coverage nor a compiled Producer or frozen Main refutation."
+     "t95J05 retains the diameter-power Hausdorff normalization concern, without a compiled refutation."
+     "t96J05 retains its local defect; t01J04 and t94A06 retain their applicability limits."
+     "t96J07 historical refutation and corrected closure remain distinct."
+     "Signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage remain separate obligations."
+     "The literal genus-zero polygon quotient must not be identified with S2 without proof."],
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill40-measure.py", :exit 0}
+     {:cmd
+      "bb /tmp/topology-refill40-reviews.bb > /tmp/topology-refill40-reviews.edn",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill40-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill40-proposed-worklist.edn",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill40-proposed-worklist.edn",
+      :exit 1,
+      :correction
+      "The temporary proposal initially marked dependent rows open before their dependencies completed. Validation now uses blocked states for the prospective rows against the current ledger; the supervisor controls activation. No canonical ledger was edited."}
+     {:cmd
+      "python3 JSON inspection of /tmp/topology-refill40-measure.json",
+      :exit 1,
+      :correction
+      "Redirecting the measurement script's stdout onto its own JSON output corrupted the temporary artifact. Reran the script without redirection and regenerated valid JSON."}],
+    :measurement
+    {:baseline "18bedae49dbfa97a8da4f66beafadc60ac08f077",
+     :concurrent-infrastructure-packets 5,
+     :concurrent-consumer-closures 0,
+     :placeholder-after 66,
+     :portfolio-infrastructure-packets 4,
+     :missing-consumers ["t93A05"],
+     :portfolio-documentation-packets 0,
+     :placeholder-delta 0,
+     :within-two-placeholders 25,
+     :zero-placeholder-consumers 23,
+     :consumer-closures 0,
+     :portfolio-specification-evidence-packets 0,
+     :open-consumers 35,
+     :placeholder-before 66,
+     :head "6bf816149d1683a9403b375a87a0def75870bf5a",
+     :named-consumers 59,
+     :construction-modules-after 691,
+     :construction-modules-before 682,
+     :sha256
+     "968f68513e2f64739e516c4f7eb8187bc1d17e2ace547b948b64de9ec81ee1fb",
+     :artifact "/tmp/topology-refill40-measure.json",
+     :concurrent-documentation-packets 5,
+     :available-consumers 58},
+    :replacement-items
+    [{:consumer "t94J09",
+      :stop-condition
+      "GO requires the complete frozen consumer. Otherwise STOP names the exact missing polygon attachment, chain comparison or induced boundary-map calculation; infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE HOMOLOGY / frozen nonorientable genus-six polygon",
+      :acceptance
+      {:frozen-file "problems/t94J09/lean/Main.lean",
+       :frozen-sha256
+       "7726693f11c45b961ddec5736361aae56b94476b84048f9be760a2db6c0c96a5",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile complete placeholder-free frozen Main preserving every definition and conjunct. Reuse the banked actual polygon-quotient homeomorphism and finite certificates. Derive actual integral singular H0=Z, H1=Z^5 times ZMod 2 and vanishing in all degrees at least two for the literal nonorientable genus-six quotient. Audit the current integral and coefficient-general excision, pair-sequence and radial-pair APIs for a genuine attaching-map computation. No assumed surface homology table, cellular comparison, boundary matrix, quotient comparison or conditional final bridge. Arithmetic Euler data alone is insufficient."},
+      :id :t94j09-frozen-polygon-homology-closure-probe-refill40,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+      :current-residual
+      "One placeholder remains for the quotient homeomorphism and integral homology conjunction; the quotient homeomorphism is separately banked and the literal homology computation remains."}
+     {:consumer "t99J03",
+      :stop-condition
+      "No assumed classification, triangulation or quotient homeomorphism. Report a precise foundation boundary if no complete fixture or single compiled prerequisite exists; no owner gate or campaign termination.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE CUTTING/CLASSIFICATION / compact surface polygon presentation",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Probe the standing-authorized surface-classification foundation. For a nonempty compact connected Hausdorff genuine-infinity self-model real two-manifold, construct a homeomorphism to the literal S2 or to Surfaces.Surface o g with positive g. Audit existing triangulation, finite polygon, cutting, collar and quotient APIs. Derive the required finite presentation and quotient identification; do not assume a triangulation, polygon presentation, classification theorem or homeomorphism. Keep the spherical case explicit: do not identify Surfaces.Surface true 0 with S2 without proof or modify the existing quotient definition. GO requires the complete representation theorem; REVISE requires exactly one compiled prerequisite, otherwise name the precise mathematical or representation boundary. Consumer-specific genus detection, curve cutting, finite-cover classification and homology calculations remain separate."},
+      :representation
+      {:source
+       "A nonempty compact connected Hausdorff surface with a self-model Euclidean two-dimensional manifold structure",
+       :target
+       "The literal Euclidean two-sphere or a positive-genus orientable/nonorientable polygon quotient ConstructionTargets.Surfaces.Surface",
+       :direction
+       "Construct a homeomorphism from the source surface to one of the target models; no classification or homology equivalence is assumed."},
+      :id :compact-surface-polygon-presentation-probe-refill40,
+      :kind :representation-comparison,
+      :depends-on
+      [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+      :current-residual
+      "The five-consumer surface-classification cluster lacks a constructed finite polygon presentation of an arbitrary compact surface. Consumer uptake additionally needs genus invariants and curve/cover comparisons.",
+      :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires actual literal-incidence local charts, coverage and overlaps. REVISE requires exactly one compiled prerequisite; no assumed compatibility or consumer closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TRANSVERSE-PULLBACK / manifold-target local incidence charts",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For genuine-infinity smooth maps f:M→P and g:N→P between self-model manifolds with finite-dimensional complete real inner-product source models E,G and finite-dimensional complete real inner-product target model F, assume actual mfderiv ranges sum to top at every incident pair. Construct actual OpenPartialHomeomorph charts on the inherited-topology literal incidence subtype into Euclidean dimension finrank E+finrank G-finrank F, with center coverage and genuine-infinity smooth overlaps. Restrict both maps to a common target-chart source and the actual source-chart domains; derive coordinate derivative transport and transversality. Reuse TransverseIncidenceGeometry and banked chart-pair cutoff/fiber transport where applicable, proving local equality by target-chart injectivity. Do not assume derivative comparisons, local regularity, fiber equivalence, charts or overlaps; an extension need not be globally transverse. Include empty incidence and zero-dimensional kernels. Global atlas/inclusion/tangent assembly and oriented homological comparisons remain subsequent."},
+      :id :manifold-target-incidence-local-charts-probe-refill40,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+      :current-residual
+      "Vector-target incidence has a normalized global atlas and exact tangent equalizer. Common target-chart localization and local incidence chart transport remain for manifold targets.",
+      :other-consumers ["t02A07" "t94A06" "t97J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount all pinned DAG consumer placeholders with comments stripped; distinguish closures, infrastructure, specification evidence and concurrent changes. Rerank the complete DAG with exactly one near-closure adapter first, followed by shared foundations by reach and simplicity. Preserve null-winding triviality without Producer/Main refutation, Hausdorff normalization concerns, t96J05 defect, t01J04/t94A06 applicability limits, t96J07 historical refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Keep the literal polygon genus-zero boundary explicit. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t94j09-frozen-polygon-homology-closure-probe-refill40
+       :compact-surface-polygon-presentation-probe-refill40
+       :manifold-target-incidence-local-charts-probe-refill40],
+      :current-residual
+      "Await three reviewed portfolio outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    "No DAG consumer placeholders changed. Four reviewed portfolio modules now supply literal vector-target incidence geometry: constructed charts and atlas specifications, genuine-infinity smooth inclusion into the original product manifold, actual inclusion derivative injectivity and exact tangent equalizer range, with the explicit sum-minus-target Euclidean dimension. The connected-sum consumer retains two placeholders: generic target-natural two-open descent must still be assembled into the literal Monoid.Coprod comparison with chosen-object and basepoint transport. Existing connector and group-extraction APIs are present; their absence is not the boundary. Concurrent additions comprise five coefficient-homology modules and their documentation, not consumer closures. Elect t94J09 first because its single remaining conjunction has the quotient comparison and finite calculations banked, leaving a concrete integral homology computation to probe. Across the full DAG, next elect the five-consumer surface-classification foundation, then the four-consumer manifold-target local-incidence construction. These reach counts describe proposed downstream applicability, not immediate closures. The latter is a bounded extension of reviewed geometry; independent orientation, localization, covering and homological comparisons remain open.",
+    :review-outcomes
+    {:connected-sum
+     {:outcome :stop,
+      :review :pass,
+      :job "invoke-1789011729189-17781-021b0770"},
+     :incidence-manifold
+     {:review :pass,
+      :commit "d56071ca6089d347fb5cb9ebe1cc5368005deae9"},
+     :incidence-chosen-atlas
+     {:review :pass,
+      :commit "7587067571c0e30ada8f76bc2199ccb2450a1081"},
+     :incidence-tangent
+     {:review :pass,
+      :commit "82d876986a2e972df752b10321b458f2ea54569a"},
+     :incidence-geometry
+     {:review :pass,
+      :commit "970a6b8be94bdc7b73f529283e1db607aea176ba",
+      :job "invoke-1789014236309-17840-920a2707"}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -60224,7 +60398,106 @@
     :transverse-vector-incidence-atlas-tangent-probe-refill39
     :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
    :current-residual
-   "Await reviewed connected-sum adapter and literal incidence geometry outcomes, then rerank the complete DAG."}],
+   "Await reviewed connected-sum adapter and literal incidence geometry outcomes, then rerank the complete DAG."}
+  {:consumer "t94J09",
+   :stop-condition
+   "GO requires the complete frozen consumer. Otherwise STOP names the exact missing polygon attachment, chain comparison or induced boundary-map calculation; infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SURFACE HOMOLOGY / frozen nonorientable genus-six polygon",
+   :acceptance
+   {:frozen-file "problems/t94J09/lean/Main.lean",
+    :frozen-sha256
+    "7726693f11c45b961ddec5736361aae56b94476b84048f9be760a2db6c0c96a5",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile complete placeholder-free frozen Main preserving every definition and conjunct. Reuse the banked actual polygon-quotient homeomorphism and finite certificates. Derive actual integral singular H0=Z, H1=Z^5 times ZMod 2 and vanishing in all degrees at least two for the literal nonorientable genus-six quotient. Audit the current integral and coefficient-general excision, pair-sequence and radial-pair APIs for a genuine attaching-map computation. No assumed surface homology table, cellular comparison, boundary matrix, quotient comparison or conditional final bridge. Arithmetic Euler data alone is insufficient."},
+   :id :t94j09-frozen-polygon-homology-closure-probe-refill40,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas
+    :checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+   :current-residual
+   "One placeholder remains for the quotient homeomorphism and integral homology conjunction; the quotient homeomorphism is separately banked and the literal homology computation remains."}
+  {:consumer "t99J03",
+   :stop-condition
+   "No assumed classification, triangulation or quotient homeomorphism. Report a precise foundation boundary if no complete fixture or single compiled prerequisite exists; no owner gate or campaign termination.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SURFACE CUTTING/CLASSIFICATION / compact surface polygon presentation",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Probe the standing-authorized surface-classification foundation. For a nonempty compact connected Hausdorff genuine-infinity self-model real two-manifold, construct a homeomorphism to the literal S2 or to Surfaces.Surface o g with positive g. Audit existing triangulation, finite polygon, cutting, collar and quotient APIs. Derive the required finite presentation and quotient identification; do not assume a triangulation, polygon presentation, classification theorem or homeomorphism. Keep the spherical case explicit: do not identify Surfaces.Surface true 0 with S2 without proof or modify the existing quotient definition. GO requires the complete representation theorem; REVISE requires exactly one compiled prerequisite, otherwise name the precise mathematical or representation boundary. Consumer-specific genus detection, curve cutting, finite-cover classification and homology calculations remain separate."},
+   :representation
+   {:source
+    "A nonempty compact connected Hausdorff surface with a self-model Euclidean two-dimensional manifold structure",
+    :target
+    "The literal Euclidean two-sphere or a positive-genus orientable/nonorientable polygon quotient ConstructionTargets.Surfaces.Surface",
+    :direction
+    "Construct a homeomorphism from the source surface to one of the target models; no classification or homology equivalence is assumed."},
+   :id :compact-surface-polygon-presentation-probe-refill40,
+   :kind :representation-comparison,
+   :depends-on
+   [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas
+    :checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+   :current-residual
+   "The five-consumer surface-classification cluster lacks a constructed finite polygon presentation of an arbitrary compact surface. Consumer uptake additionally needs genus invariants and curve/cover comparisons.",
+   :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires actual literal-incidence local charts, coverage and overlaps. REVISE requires exactly one compiled prerequisite; no assumed compatibility or consumer closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TRANSVERSE-PULLBACK / manifold-target local incidence charts",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For genuine-infinity smooth maps f:M→P and g:N→P between self-model manifolds with finite-dimensional complete real inner-product source models E,G and finite-dimensional complete real inner-product target model F, assume actual mfderiv ranges sum to top at every incident pair. Construct actual OpenPartialHomeomorph charts on the inherited-topology literal incidence subtype into Euclidean dimension finrank E+finrank G-finrank F, with center coverage and genuine-infinity smooth overlaps. Restrict both maps to a common target-chart source and the actual source-chart domains; derive coordinate derivative transport and transversality. Reuse TransverseIncidenceGeometry and banked chart-pair cutoff/fiber transport where applicable, proving local equality by target-chart injectivity. Do not assume derivative comparisons, local regularity, fiber equivalence, charts or overlaps; an extension need not be globally transverse. Include empty incidence and zero-dimensional kernels. Global atlas/inclusion/tangent assembly and oriented homological comparisons remain subsequent."},
+   :id :manifold-target-incidence-local-charts-probe-refill40,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas
+    :checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+   :current-residual
+   "Vector-target incidence has a normalized global atlas and exact tangent equalizer. Common target-chart localization and local incidence chart transport remain for manifold targets.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount all pinned DAG consumer placeholders with comments stripped; distinguish closures, infrastructure, specification evidence and concurrent changes. Rerank the complete DAG with exactly one near-closure adapter first, followed by shared foundations by reach and simplicity. Preserve null-winding triviality without Producer/Main refutation, Hausdorff normalization concerns, t96J05 defect, t01J04/t94A06 applicability limits, t96J07 historical refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Keep the literal polygon genus-zero boundary explicit. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t94j09-frozen-polygon-homology-closure-probe-refill40
+    :compact-surface-polygon-presentation-probe-refill40
+    :manifold-target-incidence-local-charts-probe-refill40
+    :checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
+   :current-residual
+   "Await three reviewed portfolio outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
