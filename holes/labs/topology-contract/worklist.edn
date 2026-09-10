@@ -69570,6 +69570,20 @@
       :exit 1,
       :correction
       "Direct rewriting by delta_comp did not unfold the named connecting and inclusion aliases. Constructed the literal short complex carrying delta_comp and used its zero field; final compilation succeeds."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789057018457-18954-285204d0",
+     :commands
+     ["sha256sum /tmp/CoefficientCompactSupportConnectingZero.lean"
+      "sha256sum ConstructionTargets/CoefficientCompactSupportConnecting.lean"
+      "lake env lean /tmp/CoefficientCompactSupportConnectingZero.lean"
+      "Python read-only audit: recompute supportConnecting_eq_zero complete declaration-header SHA256 and comment-stripped placeholder count"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git status --short"
+      "git diff --check"],
+     :finding
+     "Read-only probe has exact declared empty scope and no recorded implementation commit; fixture SHA256 ca0a770e66cdcd6c6b7c9d94fa84b7141f7b427b003a02881b1a55b7766803ae and dependency SHA256 494601c742dbce3412b811fce3c578ce2d9f1ab068e7c44b525aeffdca9902b7 match; diagnostic declaration header SHA256 is a6da97d0b69fbaae708177319f320fa588c29b9b8c014a9290771e32cb6c2db9; zero placeholders; Lean compiles without warnings with only standard axioms; supportConnecting is correctly refuted as identically zero via the pair-sequence boundary/subspace composite, so STOP and the stated chain-level-or-excision repair route are deterministic and representation-boundary-correct."},
     :changed-paths [],
     :fixture
     {:path "/tmp/CoefficientCompactSupportConnectingZero.lean",
@@ -69580,7 +69594,7 @@
     "Compiler-checked supportConnecting_eq_zero for arbitrary topological X, subsets K and L, commutative-ring coefficients and every natural degree. The dependency source hash is 494601c742dbce3412b811fce3c578ce2d9f1ab068e7c44b525aeffdca9902b7. The working tree contains only two unrelated pre-existing untracked documentation files.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
