@@ -23295,20 +23295,156 @@
    :stop-condition
    "Bank geometric overlap-pair construction only. Do not claim relative neighborhood-inclusion compatibility, normalization-change units, cocycle equations, local constancy, orientation coherence or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientOverlapPair.lean",
-      :sha256
-      "864eee4fa5de60a5154e583a815cf24df5ac85bff9b110de26e52d1fbd982708"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientOverlapPair.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholders 0,
+    :placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Independent review remains. Lift the ambient square to relative neighborhood-inclusion maps, compare chart normalizations, and derive transition units, generator-change and directed cocycle equations. No local constancy, orientation coherence or consumer closure is claimed. Ledgers and frozen consumers are untouched.",
+    :gates
+    {:actual-chart-restrictions :pass,
+     :fixture-preservation :pass,
+     :translated-image-openness-and-zero :pass,
+     :integer-rational-examples :pass,
+     :homology-forward-map :pass,
+     :whitespace :pass,
+     :standard-only-axioms :pass,
+     :transition-formula-and-deleted-subsets :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :geometric-and-absolute-chain-squares :pass,
+     :target-build :pass,
+     :projection-equations :pass,
+     :pair-inverse-laws :pass,
+     :exact-two-file-scope :pass,
+     :compilation :pass},
+    :axiom-audits 19,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation: zero warnings. Target build replays 22 dependency warnings; succeeds with 8298 jobs."],
+    :statement-hashes
+    {"transition_value"
+     "9797f3644074451ecb70bf351da6a171ca393b3ac9b01260e3e2ce342e852d4e",
+     "left_image_zero"
+     "0f087950bc46e4efea045e505aee39822c4b847df09870a40fa18be534afad09",
+     "right"
+     "cea71783ace347acf58b4cfb70da2e27aed4e9722f3254b5c11601b4f329af11",
+     "pair_inverse_left"
+     "696c11e79e0e479c894cbe454c9b61b002306ce66132c13f6e7b499fa3ca7e34",
+     "translate"
+     "8d353a762cfcdb4fffd055d0c35721d39161fbacb7e1a386e58c07046de64815",
+     "image"
+     "cd42c01c784728d49b5d7bab12fedef9c83f222829b2962daa4e997a092e8837",
+     "right_image_zero"
+     "c708ca45ea5e304bea5b91e2f5fa5d99947866e6f731700a9ac768512d7e6d3f",
+     "integral_overlap"
+     "51693e2760de78a969c9c6ecc6dca0dd2f668570ecfe281088e61d2d0a5189a9",
+     "right_zero"
+     "b0c295ff5cc75cf527356dd654cfc21fff8da2a1be6a65cd260890c11c0f0f8b",
+     "coordinates"
+     "db980d3fdba8b9669de591af6d3acb3f99289fe83f0e2f61d2be0396172c5b80",
+     "restricted_source"
+     "898158d1238bed2e319ba21eab8fa820a4b68a35590586f5769edc2fee85d78a",
+     "ambient_square"
+     "a6db116117ee13df3edc6742f9950e096848ac12cfbfe5d2fb8a8a2f5191ea98",
+     "pair_inverse_right"
+     "cd2a8f77e9c4b7bae8b146f0818bf432504a532b7dafa98f0d8cecb06421935f",
+     "rational_overlap"
+     "bb7d6a5587da68e56afd954cf08f0e0d773adf5cfa9ad736e3b13a365c98434a",
+     "left_zero"
+     "e9023c20cb59b66ad042918d8d7f5f71ffba8f9b508db02ea9e1271a76654fe4",
+     "E"
+     "a764ebcc02f6828182673955aac50c92631ad2bc1fe015ae80378605b1e71b8f",
+     "ambient_chain_square"
+     "d1c08558f320f196c844fde80196b0f3598b8ca2b687c7ad0e34f631ec852abd",
+     "image_open"
+     "f455951b2d42fa0d0e3c21a14f78fb126b26ec2a0dac30921e83e24a26764e6c",
+     "common_open"
+     "697694c50b97f2d3eb57170a8b6ad1539148b3b7a2019f1df6b10e8b6810acc2",
+     "pair"
+     "49ea571682ca655b12187696cea599d49cbcf61f037208ebfd0fc2c09875e060",
+     "projection"
+     "83c748b670c149dc64582eb60fa34edd52294bd3fef9f3e857f9bdd75d32c0f5",
+     "inverse_projection"
+     "62edae7392188451c5fce5393ee286fbc129784da540d123db091fed4851cdda",
+     "transition_square"
+     "45dd0c3558835236098b7270ec2f6e61a0f46ca4c3df15db28a311c35ab367dd",
+     "leftAmbient"
+     "8ed5d0da36c0b6006546441bcff645ccb69ad5cd2e4413efdbcb2d6948ab5810",
+     "restricted"
+     "83ae921ee6fee6c30b24de75a63f48c641255e88f0612f1429b4855745c7b69d",
+     "pointed_value"
+     "ce8c647029dcacb13fcb72974276af0f2b51f389947a178723d9d49cf0cd923d",
+     "left_deleted"
+     "57de71d11e475a560b1cedc23b8fb4f546ed691fce21ebdad37627ebeea2ebcf",
+     "homology"
+     "d8fcc2555cf8b46cce88b0c52805f7447aad494f7ef7616896a4ae56a10738c4",
+     "pointed"
+     "411a3d4f23b6fc8d40fec4cfa84d828a51a576a08f9d5959e1475d5d4928a483",
+     "rightAmbient"
+     "3696907eaa720d27a3926f682db2ff7981c2e636586a37677588021b99cad015",
+     "right_deleted"
+     "8b16442218b23a1ba4b8ec9097ba7ddc5a984254e3a3a255827614845cf6f67d",
+     "homology_forward"
+     "9cf60e6512b3f899366a0d756e0401ea10d139bdbbe30b3b0cf33a6cc763e7f2",
+     "transition"
+     "ffbd4957961c2b6528849db0f57d30722a0092711f490a894906909a9c7115c6",
+     "left"
+     "8d00f1fc0f29310130fa23f5f7785c4ebb653867d3043f08a87f042446002402",
+     "common"
+     "4e99891b76806a4e915e40427cc97ca953bbd67c791916eb589db55d697b5a80"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and dependency PASS receipts",
+      :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientOverlapPair.lean", :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Python verified fixture hash and promoted exact bytes within two-file scope",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientOverlapPair.lean > /tmp/overlappair-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientOverlapPair.lean > /tmp/overlappair-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientOverlapPair > /tmp/overlappair-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verified nineteen standard-only audits in both compilation logs and absence of direct warnings/errors",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientOverlapPair.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder and 35 declaration-statement hash audit",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope audit", :exit 0}
+     {:cmd
+      "git commit -m \"Construct actual coefficient-general translated overlap pairs\"",
+      :exit 0}
+     {:cmd "git diff --check c9ca1f19^ c9ca1f19", :exit 0}
+     {:cmd
+      "Python committed two-file scope, exact fixture bytes and clean scoped paths audit",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "c9ca1f19065f0c079760f8c6f9227c5d6c248945",
+    :changed-paths
+    ["ConstructionTargets/CoefficientOverlapPair.lean"
+     "ConstructionTargets/CoefficientOverlapPair.md"],
+    :fixture
+    {:path "/tmp/CoefficientOverlapPair.lean",
+     :sha256
+     "864eee4fa5de60a5154e583a815cf24df5ac85bff9b110de26e52d1fbd982708"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through the statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientOverlapPair.lean"
     "ConstructionTargets/CoefficientOverlapPair.md"],
