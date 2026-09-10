@@ -191,4 +191,3 @@ theorem rational_identity_two : rationalS2H2.inv â‰« (CoefficientRadialPair.F â„
 #print axioms rational_identity_one
 #print axioms rational_identity_two
 end ConstructionTargets.CoefficientSphereEndpoints
-
