@@ -64566,77 +64566,125 @@
    :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the actual chain inclusion square and its derived homology and normalization identities; no supplied commuting square.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientDistinguishedTargetNormalization.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / distinguished target normalization square",
+   :acceptance
+   {:fixture "/tmp/CoefficientDistinguishedTargetNormalization.lean",
+    :fixture-sha256
+    "90d7e12d5dc68a5094553787b0f3d46f68d8c428b7fdef1c5932745a160b7295",
+    :implementation
+    "Promote the exact fixture. Compile inclusion_square, homology_square, zero_mem and normalization_square. Preserve actual relative-chain maps, arbitrary natural homology degree, and explicit dimension m+2 for normalization. Verify CoefficientDistinguishedChart SHA256 284908c57e17da0e422f6c3d54daf1cb03588d8dcf6597dfad7893b490da2957 and CoefficientOverlapNormalization SHA256 9697585da59ffc70a8381b306297c6dbb027e0091ebb57d4219f725e707e525f. Audit zero placeholders and standard-only axioms. Do not claim the source-side comparison or equality with CoefficientChartLocal.localIso.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientDistinguishedTargetNormalization.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "Actual deleted-point relative chains and homology of the distinguished overlap translated target",
+    :target
+    "Actual deleted-point relative chains and homology of CoefficientChartLocal.pointedTarget, with their model inclusions",
+    :direction
+    "Prove equality from target-pair transport followed by distinguished model inclusion to overlap model inclusion; derive the corresponding homology and higher-dimensional normalization squares."},
+   :id
+   :coefficient-distinguished-target-normalization-implementation-refill45,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-distinguished-chart-implementation-refill45],
+   :current-residual
+   "Compare the distinguished source-pair transport with CoefficientChartLocal source and target transports, then prove equality of the full normalization composites.",
+   :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "GO requires actual ambient invertibility and normalization comparison; REVISE requires one compiled prerequisite. Do not duplicate concurrent work or claim a fundamental class.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Distinguished-chart normalization equality remains. Existing all-dimensional local comparisons and separate integral dimension-one coverage are unchanged. Orientation coherence, global localization monicity and fundamental classes remain subsequent.",
+     "Full distinguished-chart normalization equality remains. Lower-dimensional comparison coverage is unchanged; no higher-dimensional normalization is extended to dimension one. Orientation coherence, global localization monicity and fundamental classes remain subsequent.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the proved distinguished-chart geometric identification and actual pair transport; no supplied homeomorphism equality.",
+      "Require the actual chain inclusion square and its derived homology and normalization identities; no supplied commuting square.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientDistinguishedChart.lean"],
+      ["ConstructionTargets/CoefficientDistinguishedTargetNormalization.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / distinguished translated-chart identification",
+      "MANIFOLD FUNDAMENTAL CLASS / distinguished target normalization square",
       :acceptance
-      {:fixture "/tmp/CoefficientDistinguishedChart.lean",
+      {:fixture
+       "/tmp/CoefficientDistinguishedTargetNormalization.lean",
        :fixture-sha256
-       "284908c57e17da0e422f6c3d54daf1cb03588d8dcf6597dfad7893b490da2957",
+       "90d7e12d5dc68a5094553787b0f3d46f68d8c428b7fdef1c5932745a160b7295",
        :implementation
-       "Promote the exact fixture. Compile restricted_eq, image_eq, pointed_eq, inverse_pointed_eq, target_value, targetPair, both pair inverse laws, targetHomologyIso and target_homology_forward. Preserve actual subtype maps, arbitrary natural homology degree and explicit dimension m+2. Verify CoefficientOverlapNormalization SHA256 9697585da59ffc70a8381b306297c6dbb027e0091ebb57d4219f725e707e525f. Do not duplicate its ambient invertibility or claim equality of normalization composites.",
+       "Promote the exact fixture. Compile inclusion_square, homology_square, zero_mem and normalization_square. Preserve actual relative-chain maps, arbitrary natural homology degree, and explicit dimension m+2 for normalization. Verify CoefficientDistinguishedChart SHA256 284908c57e17da0e422f6c3d54daf1cb03588d8dcf6597dfad7893b490da2957 and CoefficientOverlapNormalization SHA256 9697585da59ffc70a8381b306297c6dbb027e0091ebb57d4219f725e707e525f. Audit zero placeholders and standard-only axioms. Do not claim the source-side comparison or equality with CoefficientChartLocal.localIso.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientDistinguishedChart.lean"],
+       ["lake env lean ConstructionTargets/CoefficientDistinguishedTargetNormalization.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "The overlap construction restricted to the full source of chartAt x, translated at x",
+       "Actual deleted-point relative chains and homology of the distinguished overlap translated target",
        :target
-       "CoefficientChartLocal.pointedTarget and pointedChart at x",
+       "Actual deleted-point relative chains and homology of CoefficientChartLocal.pointedTarget, with their model inclusions",
        :direction
-       "Prove target-set equality and equality from the overlap pointed homeomorphism, transported along that equality, to the distinguished pointedChart; construct the corresponding forward deleted-pair isomorphism."},
-      :id :coefficient-distinguished-chart-implementation-refill45,
+       "Prove equality from target-pair transport followed by distinguished model inclusion to overlap model inclusion; derive the corresponding homology and higher-dimensional normalization squares."},
+      :id
+      :coefficient-distinguished-target-normalization-implementation-refill45,
       :kind :representation-comparison,
       :depends-on
-      [:checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs],
+      [:coefficient-distinguished-chart-implementation-refill45],
       :current-residual
-      "Use this exact chart identification to recover CoefficientChartLocal.localIso from the overlap normalization, preserving directed forward arrows.",
+      "Compare the distinguished source-pair transport with CoefficientChartLocal source and target transports, then prove equality of the full normalization composites.",
       :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/CoefficientDistinguishedChart.lean",
+     [{:cmd
+       "lake env lean -o /tmp/distinguished45/ConstructionTargets/CoefficientDistinguishedChart.olean ConstructionTargets/CoefficientDistinguishedChart.lean",
        :exit 0}
-      {:cmd "git status --short", :exit 0}
       {:cmd
-       "git log -1 --format='%H %s' -- ConstructionTargets/CoefficientOverlapNormalization.lean",
-       :exit 0}],
+       "lake env bash -c 'LEAN_PATH=/tmp/distinguished45:$LEAN_PATH lean /tmp/CoefficientDistinguishedTargetNormalization.lean'",
+       :exit 0}
+      {:cmd
+       "python3 /tmp/coefficient-distinguished-target-normalization-audit.py",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/CoefficientDistinguishedChart.lean",
+     [{:cmd
+       "lake env lean /tmp/CoefficientDistinguishedNormalization.lean",
        :exit 1,
        :correction
-       "The attempted open-source subset-interior field was unavailable."}
-      {:cmd "lake env lean /tmp/CoefficientDistinguishedChart.lean",
+       "Compiled the missing promoted dependency into a private temporary object directory."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/distinguished45:$LEAN_PATH lean /tmp/CoefficientDistinguishedNormalization.lean'",
        :exit 1,
        :correction
-       "Inspection showed restr_eq_of_source_subset requires ordinary subset inclusion; replaced the unnecessary interior rewrite with Set.Subset.rfl. Final compilation succeeds."}],
+       "The full normalization comparison left source transport and association goals unresolved; it is not proposed for promotion. Isolated the target normalization square as one prerequisite."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/distinguished45:$LEAN_PATH lean /tmp/CoefficientDistinguishedTargetNormalization.lean'",
+       :exit 1,
+       :correction
+       "Used elaborating rewrite for definitionally equal homology compositions and closed the remaining definitional equality with rfl. Final compilation succeeds."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientDistinguishedChart.lean",
+     {:path "/tmp/CoefficientDistinguishedTargetNormalization.lean",
       :sha256
-      "284908c57e17da0e422f6c3d54daf1cb03588d8dcf6597dfad7893b490da2957",
+      "90d7e12d5dc68a5094553787b0f3d46f68d8c428b7fdef1c5932745a160b7295",
       :placeholder-count 0},
      :finding
-     "Concurrent CoefficientOverlapNormalization at 237dcad73487fe524354edb74123fe837d5cb962 already constructs ambient invertibility and overlap normalization comparison; these were reused, not duplicated. Compiled one prerequisite identifying the distinguished-chart geometry: restriction to its own source equals the original chart, translated target equals pointedTarget, and the transported pointed homeomorphism and inverse equal CoefficientChartLocal's maps. The actual deleted-pair isomorphism, inverse laws and induced homology forward map compile. Equality with CoefficientChartLocal.localIso remains.",
+     "Compiled one prerequisite: the distinguished target-pair transport commutes with actual model inclusion on relative chains, hence on homology in every natural degree. In dimension m+2 this transport intertwines the banked model normalizations. Concurrent ambient invertibility and overlap normalization constructions are reused. Equality with CoefficientChartLocal.localIso remains unproved.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / ambient overlap normalization comparison",
@@ -64655,7 +64703,8 @@
    :kind :representation-comparison,
    :depends-on
    [:checkpoint-full-dag-refill-45-after-flux-local-charts-and-arcs
-    :coefficient-distinguished-chart-implementation-refill45],
+    :coefficient-distinguished-chart-implementation-refill45
+    :coefficient-distinguished-target-normalization-implementation-refill45],
    :current-residual
    "Concurrent CoefficientOverlapPair and CoefficientOverlapRelative construct actual relative transition squares. Ambient-map invertibility and normalization compatibility remain.",
    :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
