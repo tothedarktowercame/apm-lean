@@ -61127,83 +61127,85 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Expose smooth ambient forward and backward parameterizations for the constructed charts and use them to prove genuine-infinity smooth overlaps. Existential topological chart coverage alone is not GO for this row. Empty incidence and zero-dimensional kernels remain allowed. Global atlas and tangent assembly, orientations and homological comparisons remain subsequent; no consumer closure is claimed.",
+     "Local manifold-target incidence charts, coverage and smooth overlaps are complete for the stated self models, including empty incidence and zero-dimensional kernels. Global ChartedSpace/IsManifold assembly, same-atlas inclusion and tangent geometry, component-coverage contracts, orientations and homological comparisons remain subsequent. No Producer or frozen consumer closure is claimed.",
      :dependency-review
      {:outcome :pass,
       :seat "codex-10",
-      :job "invoke-1789016988278-17929-8ff1c36a"},
-     :outcome :revise,
+      :job "invoke-1789017392906-17946-80d7f5f2"},
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer "t00J02",
-      :stop-condition
-      "Require constructed actual incidence charts and center coverage in both dimension presentations; no supplied chart or fiber equivalence.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/ManifoldTargetIncidenceChartExistence.lean"],
-      :dag-node
-      "TRANSVERSE-PULLBACK / actual literal incidence chart existence",
-      :acceptance
-      {:fixture "/tmp/ManifoldTargetIncidenceChartExistence.lean",
-       :fixture-sha256
-       "0ce28194344825aa7276a03f933859e1662ca62c1d0e21fd615b26f8e684fc1c",
-       :implementation
-       "Promote the exact fixture. Compile exists_chart and exists_chart_normalized with zero placeholders and standard-only axioms. Preserve literal incidence, inherited topology, actual product charts, derived predicate comparison, constructed extension-fiber charts and center coverage. Preserve the explicit sum-minus-target dimension in exists_chart_normalized and the weaker target hypotheses. Do not claim smooth overlaps, a global atlas or consumer closure.",
-       :commands
-       ["lake env lean ConstructionTargets/ManifoldTargetIncidenceChartExistence.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :id
-      :manifold-target-incidence-chart-existence-implementation-refill40,
-      :kind :reusable-theorem,
-      :depends-on
-      [:local-transverse-extension-chart-implementation-refill40],
-      :current-residual
-      "Actual literal-incidence charts with normalized dimension and center coverage are compiled. Smooth coordinate specifications and overlap compatibility remain.",
-      :other-consumers ["t02A07" "t94A06" "t97J05"]},
+     :statement-hashes
+     {:exists-chart
+      "fe0ce87f12af6a94cc84d66cdf2f97cac725ce4047e1439dccbbad627210bc09",
+      :overlap-smooth
+      "3aaff9b9686406ecbe15386e548d5c9a0de0d913ba9013aa58f9c6b8d3b39f71",
+      :exists-cover
+      "ca7e48cad47b93c7dc56091a95fb1609c5347aebcd1a5c88eedf6600d661a46b",
+      :exists-cover-normalized
+      "4d761e70a3986adb2ba61a7ca93a209ae7cc7590fe630885f7f55132f402dafc"},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/LocalTransverseExtensionChart.olean ConstructionTargets/LocalTransverseExtensionChart.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceSmoothCharts.lean'",
        :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceChartExistence.lean'",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/ManifoldTargetIncidenceChartExistence.lean",
+      {:cmd "python3 /tmp/manifold-target-incidence-smooth-audit.py",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceChartExistence.lean'",
-       :exit 1,
+       "rg -n 'contMDiffOn.*prod|prod.*contMDiffOn' .lake/packages/mathlib/Mathlib/Geometry/Manifold/ContMDiff/Prod.lean",
+       :exit 2,
        :correction
-       "Compiled the missing banked extension-chart dependency into the private object directory."}
+       "Located chart smoothness in ContMDiff/Atlas.lean; the searched Prod.lean path does not exist."}
       {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceChartExistence.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceSmoothCharts.lean'",
        :exit 1,
        :correction
-       "Replaced insufficient dimension simplification with an explicitly typed finrank-product equality and rewrite. Final compilation succeeds without warnings."}],
+       "Specified the product chart center and annotated the backward-map target restriction."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceSmoothCharts.lean'",
+       :exit 1,
+       :correction
+       "Explicitly installed the coordinate vector space's self ChartedSpace so the chart calculus theorems use the intended instance."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceSmoothCharts.lean'",
+       :exit 0,
+       :correction
+       "Removed redundant section assumptions from overlap_smooth. Final compilation is warning-free."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/ManifoldTargetIncidenceChartExistence.lean",
+     {:path "/tmp/ManifoldTargetIncidenceSmoothCharts.lean",
       :sha256
-      "0ce28194344825aa7276a03f933859e1662ca62c1d0e21fd615b26f8e684fc1c",
+      "839a4b4b07543f26c78c98572431028db0a3066a19392ffda66ab6ae9428f912",
       :placeholder-count 0},
      :finding
-     "Compiled one actual incidence-chart prerequisite. At every transverse incident pair, constructed coordinate extensions agree on open neighborhoods inside the source-coordinate domains. Target-chart injectivity proves the restricted extension-zero predicate equivalent to literal incidence. FiberPredicateTransfer through the actual product source chart, followed by the constructed regular-fiber chart, gives an OpenPartialHomeomorph on the inherited-topology incidence subtype containing the center. A second theorem normalizes its Euclidean dimension to finrank E + finrank G - finrank F. Smooth overlaps are not yet proved.",
+     "Compiled the complete local incidence-chart packet. IncidenceChart records an actual OpenPartialHomeomorph on literal incidence, its ambient source, forward and backward coordinate formulas, and genuine-infinity smoothness of both ambient parameterizations. exists_chart constructs this data from the actual source charts, common target chart, derived coordinate transversality, local extensions and predicate transfer. overlap_smooth proves compatibility by composing those parameterizations. exists_cover constructs a center-covering family; exists_cover_normalized supplies the requested Euclidean dimension finrank E + finrank G - finrank F with smooth overlaps. The inherited topology and ordinary product norm are preserved. No global extension transversality, chart or compatibility is assumed.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/ManifoldTargetIncidenceSmoothCharts.lean"],
+      :acceptance
+      {:implementation
+       "Promote the exact fixture. Compile IncidenceChart, exists_chart, overlap_smooth, exists_cover and exists_cover_normalized. Preserve the actual incidence subtype, ambient coordinate specifications, constructed chart coverage, genuine-infinity overlaps and explicit sum-minus-target dimension. Preserve existing APIs and the weaker target hypotheses. Audit zero placeholders and standard-only axioms. No global atlas, inclusion tangent theorem or consumer closure is claimed.",
+       :commands
+       ["lake env lean ConstructionTargets/ManifoldTargetIncidenceSmoothCharts.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0}},
      :seat "codex-12"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/ManifoldTargetIncidenceSmoothCharts.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / manifold-target local incidence charts",
    :acceptance
-   {:axioms :standard-only,
-    :probe
-    "For genuine-infinity smooth maps f:M→P and g:N→P between self-model manifolds with finite-dimensional complete real inner-product source models E,G and finite-dimensional complete real inner-product target model F, assume actual mfderiv ranges sum to top at every incident pair. Construct actual OpenPartialHomeomorph charts on the inherited-topology literal incidence subtype into Euclidean dimension finrank E+finrank G-finrank F, with center coverage and genuine-infinity smooth overlaps. Restrict both maps to a common target-chart source and the actual source-chart domains; derive coordinate derivative transport and transversality. Reuse TransverseIncidenceGeometry and banked chart-pair cutoff/fiber transport where applicable, proving local equality by target-chart injectivity. Do not assume derivative comparisons, local regularity, fiber equivalence, charts or overlaps; an extension need not be globally transverse. Include empty incidence and zero-dimensional kernels. Global atlas/inclusion/tangent assembly and oriented homological comparisons remain subsequent."},
+   {:implementation
+    "Promote the exact fixture. Compile IncidenceChart, exists_chart, overlap_smooth, exists_cover and exists_cover_normalized. Preserve the actual incidence subtype, ambient coordinate specifications, constructed chart coverage, genuine-infinity overlaps and explicit sum-minus-target dimension. Preserve existing APIs and the weaker target hypotheses. Audit zero placeholders and standard-only axioms. No global atlas, inclusion tangent theorem or consumer closure is claimed.",
+    :commands
+    ["lake env lean ConstructionTargets/ManifoldTargetIncidenceSmoothCharts.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
    :id :manifold-target-incidence-local-charts-probe-refill40,
    :kind :reusable-theorem,
    :depends-on
