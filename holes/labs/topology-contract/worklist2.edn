@@ -12147,6 +12147,18 @@
       :exit 1,
       :correction
       "Replaced order-sensitive simplification with explicit conjunction elimination and reconstruction using the five frozen certificates. Final compilation is warning-free."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789000922001-17458-82a8ccc2",
+     :commands
+     ["git show a1c9365d:holes/labs/topology-contract/worklist2.edn"
+      "lake env lean /tmp/T94J09Boundary.lean"
+      "Python read-only audit: fixture/frozen/declaration hashes, exact frozen prefix and claim, placeholders, forbidden scan and scope"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show a1c9365d:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --check"],
+     :finding
+     "Verified accurate STOP: exact_residual removes only five proved finite certificates; literal quotient homeomorphism and all integral singular-homology conclusions remain. Disk-map sufficiency has the correct relation and inverse orientations without asserting witness existence. Two standard-only audits; hashes match; placeholders 1->1; no source or ledger edits by reviewer."},
     :campaign-termination false,
     :changed-paths [],
     :fixture
@@ -12163,7 +12175,7 @@
     :mathematical-refutation false,
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "SURFACE CLASSIFICATION: exact fourteen-edge polygon consumer",
