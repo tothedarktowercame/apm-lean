@@ -15889,6 +15889,19 @@
      "Homology of the actual cokernel of singular postcomposition by subtype inclusion A into X over ModuleCat R.",
      :direction
      "Construct an isomorphism from relative cover-small homology to relative singular homology whose forward arrow equals homologyMap of the cokernel map induced by the two actual small-chain inclusions."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789010544196-17752-38d86e88",
+     :commands
+     ["lake env lean /tmp/CoefficientRelativeSmall.lean"
+      "lake env lean ConstructionTargets/CoefficientRelativeSmall.lean"
+      "lake build ConstructionTargets.CoefficientRelativeSmall"
+      "Python recorded-commit fixture SHA256, exact promotion, twenty statement hashes, scope, forbidden scan and placeholder census"
+      "git diff --check 568d4a99^ 568d4a99"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show d06c3fed:holes/labs/topology-contract/worklist2.edn)"],
+     :finding
+     "Independent review of 568d4a99f0c68ff1783418b7c7fe89ab2bb5e8dc, author codex-14. Fixture SHA256 8d748371a567aff62b8214d511fb6275fd24832a9544540d21fb5d39c1bbfd79 verified. Restricted cover uses the actual subtype preimage; chain-map generator, differential, inclusion-square and monicity proofs are constructed over ModuleCat R. Absolute comparison on X and A yields all-degree relative comparison between actual categorical cokernels. Forward map is exactly homologyMap of relativeMap; both inverse laws hold. Arbitrary subsets need not be open; no connectedness, nonemptiness or finite-cover assumption. Nine standard-only audits and integer/rational interval-subtype examples pass. Build 8274 jobs; twenty statement hashes verified; frozen placeholders 312->312. No excision or frozen-closure claim; ledger untouched."},
     :commit "568d4a99f0c68ff1783418b7c7fe89ab2bb5e8dc",
     :changed-paths
     ["ConstructionTargets/CoefficientRelativeSmall.lean"
@@ -15903,7 +15916,7 @@
     "SHA256 of declaration text beginning with theorem, def, abbrev or instance and ending immediately before the space preceding := or where; namespace ConstructionTargets.CoefficientRelativeSmall.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientRelativeSmall.lean"
     "ConstructionTargets/CoefficientRelativeSmall.md"],
@@ -15949,7 +15962,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: relative coefficient comparison and consumer eligibility",
