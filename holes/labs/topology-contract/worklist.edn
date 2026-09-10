@@ -70758,18 +70758,55 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "After promotion, require compact-complement specialization and transport of all three exactness statements through valid coefficient excision.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / coefficient union-to-production-relative comparison",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientUnionToProductionRelativeComparison.lean",
+    :fixture-sha256
+    "ea64a7591efc48a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71",
+    :implementation
+    "Promote the exact fixture. Compile unionToProductionRelative, leftToUnion_unionToProductionRelative and rightToUnion_unionToProductionRelative. This supplies the coefficient union-to-production-relative map and both piece formulas required by the compact-support placeholder route. Verify CoefficientRangeRightToProductionPairComparison SHA256 fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5 and CoefficientPairConnectingMayerVietorisComparison SHA256 da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906. Preserve arbitrary topological X, arbitrary subsets U and V and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim compact-complement specialization, coefficient excision, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "Coefficient chains on the supremum of the two ambient range subcomplexes, equipped with the reviewed Mayer-Vietoris pushout projection to the range-right relative cokernel",
+    :target
+    "Production coefficient relative chains for the nested intersection inside the right topological piece",
+    :direction
+    "Compose the reviewed pushout projection with the forward range-right-relative-to-production-pair isomorphism, obtaining an exact forward map whose left-piece composite is zero and whose right-piece composite is the forward right-range chain isomorphism followed by the production quotient projection."},
+   :id
+   :coefficient-union-to-production-relative-comparison-implementation-refill50-hash-corrected,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-range-right-to-production-pair-comparison-implementation-refill50
+    :coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50],
+   :current-residual
+   "Specialize the genuine union-to-production-relative map to compact complements, identify the requested relative arrows, and transport all three exactness statements through coefficient excision.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative Mayer-Vietoris connecting morphism and three proved exactness statements with actual quotient-pair arrows. Reject any construction factoring the pair boundary through its own subspace map.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The fixture hash is corrected, but the dependency pin must match the verified command output before implementation.",
+     "Compact-complement specialization and the three coefficient-excision exactness transports remain. Localization monicity still requires the separate vanishing theorem.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require exact dependency pin correction before promotion; compact-complement specialization and the three coefficient-excision exactness transports remain.",
+      "After promotion, require compact-complement specialization and transport of all three exactness statements through valid coefficient excision.",
       :phase :implementation,
       :state :open,
       :scope
@@ -70782,7 +70819,7 @@
        :fixture-sha256
        "ea64a7591efc48a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71",
        :implementation
-       "Promote the exact fixture. Compile unionToProductionRelative, leftToUnion_unionToProductionRelative and rightToUnion_unionToProductionRelative. This supplies the coefficient union-to-production-relative map and both piece formulas required by the compact-support placeholder route. Verify CoefficientRangeRightToProductionPairComparison SHA256 fa77b7018a16c83a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71 is not the dependency hash; use the exact dependency SHA256 fa77b7018a16c83a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71 only after comparing it with the command output.",
+       "Promote the exact fixture. Compile unionToProductionRelative, leftToUnion_unionToProductionRelative and rightToUnion_unionToProductionRelative. This supplies the coefficient union-to-production-relative map and both piece formulas required by the compact-support placeholder route. Verify CoefficientRangeRightToProductionPairComparison SHA256 fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5 and CoefficientPairConnectingMayerVietorisComparison SHA256 da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906. Preserve arbitrary topological X, arbitrary subsets U and V and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim compact-complement specialization, coefficient excision, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
        :commands
        ["lake env lean ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
        :axioms :standard-only,
@@ -70796,27 +70833,21 @@
        :direction
        "Compose the reviewed pushout projection with the forward range-right-relative-to-production-pair isomorphism, obtaining an exact forward map whose left-piece composite is zero and whose right-piece composite is the forward right-range chain isomorphism followed by the production quotient projection."},
       :id
-      :coefficient-union-to-production-relative-comparison-implementation-refill50-corrected,
+      :coefficient-union-to-production-relative-comparison-implementation-refill50-hash-corrected,
       :kind :representation-comparison,
       :depends-on
       [:coefficient-range-right-to-production-pair-comparison-implementation-refill50
        :coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50],
       :current-residual
-      "Correct the dependency SHA256 field to fa77b7018a16c83a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71 only if it matches the verified command output; otherwise refuse admission.",
+      "Specialize the genuine union-to-production-relative map to compact complements, identify the requested relative arrows, and transport all three exactness statements through coefficient excision.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientRangeRightToProductionPairComparison >/tmp/coefficient-union-production-dep.log",
+       "sha256sum /tmp/CoefficientUnionToProductionRelativeComparison.lean ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean",
        :exit 0}
       {:cmd
        "lake env lean /tmp/CoefficientUnionToProductionRelativeComparison.lean",
-       :exit 0}
-      {:cmd
-       "python3 comment-stripped placeholder and three-declaration audit over /tmp/CoefficientUnionToProductionRelativeComparison.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/CoefficientUnionToProductionRelativeComparison.lean ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :changed-paths [],
@@ -70826,10 +70857,10 @@
       "ea64a7591efc48a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71",
       :placeholder-count 0},
      :finding
-     "Revalidated exactly one compiled coefficient map prerequisite with corrected hashes. The reviewed pushout projection is composed with the forward range-relative-to-production-pair isomorphism. The resulting union-to-production-relative map kills the left range exactly, while its restriction to the right range is exactly the forward right-range chain isomorphism followed by the production relative quotient projection. The fixture is nonzero-capable and does not use the refuted zero supportConnecting map.",
+     "Revalidated exactly one compiled coefficient map prerequisite and read all hashes directly from sha256sum. The union-to-production-relative map kills the left range exactly, while its right-range restriction is the forward right-range chain isomorphism followed by the production relative quotient projection. The construction is nonzero-capable and does not use the refuted zero supportConnecting map.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
@@ -70848,7 +70879,8 @@
     :coefficient-range-right-relative-cokernel-comparison-implementation-refill50
     :coefficient-range-right-to-production-pair-comparison-implementation-refill50
     :coefficient-union-to-production-relative-comparison-implementation-refill50
-    :coefficient-union-to-production-relative-comparison-implementation-refill50-corrected],
+    :coefficient-union-to-production-relative-comparison-implementation-refill50-corrected
+    :coefficient-union-to-production-relative-comparison-implementation-refill50-hash-corrected],
    :current-residual
    "The absolute complement sequence and many comparison maps are reviewed, but the named relative connecting map is zero. A genuine relative chain sequence or proved excision conjugation is required.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
