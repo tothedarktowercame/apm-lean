@@ -65982,74 +65982,76 @@
    :stop-condition
    "GO requires actual relative connecting and normalization comparison; REVISE requires exactly one compiled prerequisite. Do not duplicate concurrent boundary or triple-overlap work.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Nearby transition-unit equality, orientation compatibility, global localization and consumer closure remain subsequent. All-dimensional local comparison coverage is preserved; normalization remains restricted to dimension m+2.",
-     :dependency-review
-     {:outcome :pass,
-      :seat "codex-10",
-      :job "invoke-1789035903404-18390-a907e443"},
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean -o /tmp/chartball47/ConstructionTargets/CoefficientChartBallTransport.olean ConstructionTargets/CoefficientChartBallTransport.lean",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientChartBallNormalization.lean'",
-       :exit 0}
-      {:cmd
-       "python3 /tmp/coefficient-chart-ball-normalization-audit.py",
-       :exit 0}
-      {:cmd
-       "sha256sum ConstructionTargets/CoefficientChartBallTransport.lean",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/CoefficientChartBallNormalization.lean",
-       :exit 1,
-       :correction
-       "Compiled the promoted dependency into a private temporary object directory because its canonical object was absent."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientChartBallNormalization.lean'",
-       :exit 1,
-       :correction
-       "Closed the homology factorization's definitional equality and used elaborating reassociation."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientChartBallNormalization.lean'",
-       :exit 1,
-       :correction
-       "Expanded normalization and ambientIso to expose the neighborhood-inclusion inverse."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientChartBallNormalization.lean'",
-       :exit 1,
-       :correction
-       "Used elaborating inverse cancellation across definitionally equal homology presentations. Final compilation succeeds without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientChartBallNormalization.lean",
-      :sha256
-      "1e5daa85369856ec864f5fd7abc4c8f511585490c0ead0367ddfff6f5788cd61",
-      :placeholder-count 0},
-     :finding
-     "Compiled the full ambient chart-normalization comparison. The actual coordinate pair map factors through pointed-chart transport and model inclusion, yielding the all-degree homology square. Neighborhood-excision inverse laws identify its model normalization with the banked ambient chart normalization. The constructed ball-boundary lift therefore has the required normalization at every point of a constructed open neighborhood. Existing connecting naturality, boundary homotopies and radial inverse laws are reused.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientChartBallNormalization.lean"],
-      :acceptance
-      {:implementation
-       "Promote the exact fixture. Compile coordinate_factorization, coordinate_homology, inclusion_normalization, ambient_normalization and nearby_normalization. Verify CoefficientChartBallTransport SHA256 5a7dc7170534b9bf72791848e751dadd1cc01a548780a520d9530d9a20706528. Preserve actual pair maps, arbitrary natural homology degree, Hausdorff ambient hypotheses and explicit dimension m+2 for normalization. Require zero placeholders, no warnings and standard-only axioms. Do not claim transition-unit local constancy, orientation compatibility or global localization.",
-       :commands
-       ["lake env lean ConstructionTargets/CoefficientChartBallNormalization.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0}},
-     :seat "codex-12"}},
+   {:dependency
+    {:path "ConstructionTargets/CoefficientChartBallTransport.lean",
+     :sha256
+     "5a7dc7170534b9bf72791848e751dadd1cc01a548780a520d9530d9a20706528",
+     :review :pass},
+    :placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Nearby transition-unit equality, orientation compatibility, global localization and consumer closure remain subsequent. No lower-dimensional normalization extension claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:coordinate_factorization
+     "c848f6b07a968538e19d14863acd18c052487e1f4a7ac575af293881f704a64d",
+     :coordinate_homology
+     "2c9df0f92be6b102c0ced03c6577c209d5401ff86a74bfde1ef1f0b0e7f004cf",
+     :inclusion_normalization
+     "538f443c96a66e55f69187688d115cc05390e2e6cfbc1f91e472bb95496a58ae",
+     :ambient_normalization
+     "fb0d320135f92a36f6109eb8418296b63baaa5dbbf25cd3eb0805b5103024d6e",
+     :nearby_normalization
+     "8c14d50d2b6ec769cdc54c9a72c1eca794b3df4474d13c35391c86c2b476422d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CoefficientChartBallNormalization.lean ConstructionTargets/CoefficientChartBallTransport.lean",
+      :exit 0}
+     {:cmd
+      "python3 /tmp/coefficient-chart-ball-normalization-audit.py",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/CoefficientChartBallNormalization.lean ConstructionTargets/CoefficientChartBallNormalization.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientChartBallTransport",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientChartBallNormalization.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "Actual coefficient homology maps of a scaled sphere boundary recentered at nearby chart points",
+     :target
+     "The banked deleted-point relative chart normalizations in dimension m+2",
+     :direction
+     "Identify the boundary map followed by the inverse relative connecting isomorphism with the actual neighborhood-to-local-homology map, then derive equality of the directed normalization composites."},
+    :commit "1dea549a487aa6baefdc1787eaaa3fa85a7ef098",
+    :changed-paths
+    ["ConstructionTargets/CoefficientChartBallNormalization.lean"],
+    :fixture
+    {:path "/tmp/CoefficientChartBallNormalization.lean",
+     :sha256
+     "1e5daa85369856ec864f5fd7abc4c8f511585490c0ead0367ddfff6f5788cd61",
+     :exact-promotion true},
+    :finding
+    "Exact fixture promoted. Actual coordinate pair factorization and arbitrary-degree homology square compile; neighborhood-excision inverse laws yield ambient and nearby normalization identities. Hausdorff hypotheses and dimension-m+2 normalization are preserved. Ledger untouched.",
+    :axiom-audit-count 5,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientChartBallNormalization.lean"],
    :dag-node
