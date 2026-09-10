@@ -34937,8 +34937,109 @@
   {:consumer :t03J05,
    :stop-condition
    "Bank only the integer inversion-count sign on maximal product-simplex lattice paths and its ZMod 2 reduction. Do not pair faces, construct affine realizations, define singular chains or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the involutive pairing of maximal paths sharing each interior face, prove paired signs are opposite, and connect the surviving exterior faces to the Leibniz sign before affine realization.",
+    :gates
+    {:canonical-compile :pass,
+     :integer-power-sign :pass,
+     :whitespace :pass,
+     :fixture-hash :pass,
+     :horizontal-step-definition :pass,
+     :axiom-audits 3,
+     :exact-scope :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :inversion-pair-definition :pass,
+     :sign-square :pass,
+     :zmod-two-reduction :pass,
+     :warning-scan :pass,
+     :commit-check :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :sign-nonzero :pass,
+     :ledger-validation :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"IsHorizontal"
+     "349fdfa813108cc5ecd5f4f265ade6c1143c428c0bb13519e53ab307b5469b54",
+     "inversionPairs"
+     "b617f150492bee3163bf98c51ae12d77dbe5abb1ed1367d9501d1d6877ee8396",
+     "shuffleSign"
+     "d56f73a9a5ca4b67a53370d9e37dd3a4ab5da1852a69c92652198a10b3266913",
+     "shuffleSign_mul_self"
+     "8f2a4f385ae7eab2d3ff48cdd61d06e7b28c2ee45c024e1fa53e1e5a7366aa19",
+     "shuffleSign_ne_zero"
+     "5d649e4d7591dd096ce3283b16ab1aebf1de0c58bf52731f36e0cae012a3bff7",
+     "shuffleSign_mod_two"
+     "a19cd5d89d31753e3bf91c63bf1d05c2149a3fadce93c09da05d62c5a657129f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the dependency receipts",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint56-shuffle-parity/ProductSimplexShuffleParity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint56-shuffle-parity/ProductSimplexShuffleParity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexShuffleParity.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexShuffleParity",
+      :exit 0}
+     {:cmd
+      "Import the canonical target and reproduce standard-only axiom audits for shuffleSign_mul_self, shuffleSign_ne_zero and shuffleSign_mod_two",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ProductSimplexShuffleParity.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace, fixture-hash, combinatorial-definition and declaration-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; verify exact two-file scope; git diff --cached --check; git commit -m 'Define product simplex shuffle parity'",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat HEAD; recompute canonical source, documentation, commit and Git blob hashes; git status --short",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "First combined final-audit script",
+      :exit 1,
+      :correction
+      "The declaration-region regular expression omitted the at-sign in simp attributes and therefore failed to locate shuffleSign_mul_self after all compiler and axiom checks had passed. Corrected the audit expression and reran the complete source audit successfully."}],
+    :canonical
+    {:path "ConstructionTargets/ProductSimplexShuffleParity.lean",
+     :sha256
+     "b0cfc0dd847a3b2f689b3c24fdf95117182e928452b1fcd37ba8c4a7ff9dd72a",
+     :git-blob "13eefb504436ea94d8e2d80b7dd5f7621e8473a7"},
+    :commit "9c578542697f21a0221c1ed3813ca5e6e56c848a",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexShuffleParity.lean"
+     "ConstructionTargets/ProductSimplexShuffleParity.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint56-shuffle-parity/ProductSimplexShuffleParity.lean",
+     :sha256
+     "275101b3ed483f767c88d9d08acc3f1226c8bdfde1d2ffe4ae6054de6d910c4d",
+     :placeholder-count 0},
+    :finding
+    "The promoted module defines a horizontal step by strict increase of consecutive first coordinates, filters exactly the ordered vertical-before-horizontal step pairs, and defines the integer shuffle sign as minus one raised to that inversion count. Its three exported theorems prove that the sign squares to one, is nonzero, and reduces to one in ZMod 2. No face pairing, affine realization, singular chain, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure result is introduced.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexShuffleParity.lean"
     "ConstructionTargets/ProductSimplexShuffleParity.md"],
