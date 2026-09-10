@@ -24875,20 +24875,112 @@
    :stop-condition
    "Bank the moving-center boundary homotopy and its actual coefficient homology equations only. Do not claim arbitrary-chart transition local constancy, relative localization isomorphisms, orientation compatibility or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientMovingSphereCenter.lean",
-      :sha256
-      "39cbabeb13c100817d70e6c1fa61a084cda2311d210eba60e854202762ae79fe"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientMovingSphereCenter.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholders 0,
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Compare the moving boundary through an actual chart transition and identify these homology equations with relative normalizations at distinct points before proving transition-unit local constancy. Relative localization isomorphisms, orientation compatibility and consumer closure are not claimed. Unrelated triple-overlap work, ledgers and frozen consumers remain untouched.",
+    :gates
+    {:integer-rational-examples :pass,
+     :strict-unit-ball-bound :pass,
+     :literal-recentered-formula :pass,
+     :whitespace :pass,
+     :radial-normalization-identity :pass,
+     :zero-avoidance :pass,
+     :fixture-and-canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :target-build :pass,
+     :joint-center-continuity :pass,
+     :exact-fixture-promotion :pass,
+     :nine-standard-only-audits :pass,
+     :actual-homotopy-endpoints :pass,
+     :all-degree-coefficient-homology-equations :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 9,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation have zero warnings. Target build replays 22 dependency warnings and succeeds with 8281 jobs."],
+    :statement-hashes
+    {"shiftedInclusion"
+     "a179f50c0e6f821029daccda2a50cfbef62d54bdadfe2fb5d5c0520a7ce172d9",
+     "recenteredSphere"
+     "74c363b38660011d907bfc8a0a03dfa179d4228c8dcf606a2ac97648472d8d78",
+     "centerFamily"
+     "5cd8ff8777e84fed61788e7f0a810da85bc905661af567c7ac1bea101bfa6219",
+     "rational_example"
+     "0a5d9ded21446ac68ffdcf56af48ee29af354899047dcc30ea7ae37b6c2848ae",
+     "homology_shift"
+     "741d86c1be92a42e0bbdab0bd7cb4f3d1bea204d6034ea4d95517a684637bf9d",
+     "avoid_zero"
+     "933cebdce35e9ec03da88e5e1bae9e5bf801c0a5946a296d4f9c0e20902fc8fc",
+     "recentered_value"
+     "a3768585348cf760f5d9b198e8e7e587c7e5cd721b69ecbc508c1c867e662d46",
+     "shiftHomotopy"
+     "8607d4d1862af856c2ce34bb2f96bd4f92eada0aee65cf74a9b88e9c313e9cc8",
+     "homology_recentered"
+     "aa5c65285866705720e84abc1f37fc0865451c9ddf5679484741e98e17ac0415",
+     "betweenCenters"
+     "86e2e720b82e2bf36a1f6531e255d15e389a43b0438d0e029ba97f31ce7d0086",
+     "homology_betweenCenters"
+     "4c319000619f1289a1c3771fdb4812111163032f955a03731f43c5c5b5ba5e7a",
+     "centerFamily_value"
+     "f795b55e04ef7c89af3349e3383a62e2132d1df5dfb850e68ba5afc8ec507485",
+     "integral_example"
+     "5e5f1d35018f138d6ed531dafe59e19a13048671e294b26775b439ef16b70a27"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and both dependency PASS receipts from the ledgers",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientMovingSphereCenter.lean",
+      :exit 0}
+     {:cmd
+      "Python fixture hash verification and exact scoped promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientMovingSphereCenter.lean > /tmp/movingcenter-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientMovingSphereCenter.lean > /tmp/movingcenter-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientMovingSphereCenter > /tmp/movingcenter-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verification of nine standard-only audits in each compilation log and warning attribution",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientMovingSphereCenter.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and thirteen statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m \"Construct moving-center sphere homotopy and coefficient homology equations\"",
+      :exit 0}
+     {:cmd "git diff --check 871330d2^ 871330d2", :exit 0}
+     {:cmd
+      "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "871330d204d7123544de83b01a08f03ee4799a74",
+    :changed-paths
+    ["ConstructionTargets/CoefficientMovingSphereCenter.lean"
+     "ConstructionTargets/CoefficientMovingSphereCenter.md"],
+    :fixture
+    {:path "/tmp/CoefficientMovingSphereCenter.lean",
+     :sha256
+     "39cbabeb13c100817d70e6c1fa61a084cda2311d210eba60e854202762ae79fe"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientMovingSphereCenter.lean"
     "ConstructionTargets/CoefficientMovingSphereCenter.md"],
