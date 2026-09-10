@@ -30820,8 +30820,67 @@
   {:consumer :t95J05,
    :stop-condition
    "Do not assume a normalization constant, sphere mass, cap assembly, equator nullity, polar-coordinate formula or moment value. Use only d=2 and d=3 at the generality required by the named consumers. Do not infer consumer closure; use a unique row-specific scratch directory.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Either change the sphere-cap route consistently to normalized Euclidean Hausdorff measure μHE, including the earlier graph-area and subtype transport statements, or prove the missing raw normalization constants and retain the resulting factors 4/π in dimension two and 6/π in dimension three. Equator nullity, cap assembly and moment evaluation remain subsequent steps.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :reason :raw-hausdorff-normalization-mismatch,
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
+      :exit 0}
+     {:cmd
+      "Inspect Mathlib.Geometry.Euclidean.Volume.Measure raw and normalized Hausdorff APIs",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint48-normalization-boundary-2/EuclideanRawHausdorffBoundary.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint48-normalization-boundary-2/EuclideanRawHausdorffBoundary.lean",
+      :exit 0}
+     {:cmd
+      "rg -n \"proof_wanted MeasureTheory.Measure.addHaarScalarFactor_hausdorffMeasure_eq\" .lake/packages/mathlib/Mathlib/Geometry/Euclidean/Volume/Measure.lean",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace and six standard-only axiom audits",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial combined fixture orchestration",
+      :exit 1,
+      :correction
+      "The command was rejected before execution because it contained a prohibited recursive removal. Used a fresh unique scratch directory without removal."}
+     {:cmd "Initial raw-Hausdorff relation fixture compilation",
+      :exit 1,
+      :correction
+      "Directly restating the internal scalar expression caused dimension-coercion and typeclass elaboration failures. Removed those failed declarations and compiled the public normalized-measure equalities and their set and restricted-lintegral consequences."}
+     {:cmd "Second raw-Hausdorff relation fixture compilation",
+      :exit 1,
+      :correction
+      "Explicit real casts did not resolve the internal addHaarScalarFactor elaboration. The final fixture confines itself to the public μHE API; source inspection records the exact raw-measure boundary."}],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint48-normalization-boundary-2/EuclideanRawHausdorffBoundary.lean",
+     :sha256
+     "7689f1bf0a2ca52681dcad157260e7f415f6ee7f9cd8715324c8026db222eb14",
+     :placeholder-count 0},
+    :finding
+    "STOP: the requested coefficient-one equalities between raw hausdorffMeasure d and volume on EuclideanSpace are false under the active diameter-power convention. Mathlib defines μHE[d] as addHaarScalarFactor volume μH[d] • μH[d] specifically so that μHE[d] equals volume. Its documented intended scalar is the Euclidean-unit-ball volume divided by the sup-metric unit-ball volume, giving π/4 in dimension two and π/6 in dimension three, rather than one. The theorem computing that scalar, MeasureTheory.Measure.addHaarScalarFactor_hausdorffMeasure_eq, is presently proof_wanted. The placeholder-free fixture proves the available μHE equalities and their exact set-measure and restricted-lintegral rewrites for dimensions two and three. Rewriting the reviewed raw-Hausdorff cap formulas directly to volume without the reciprocal scalar would suppress a nontrivial normalization factor and violate the row invariant.",
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact Euclidean Hausdorff-to-volume normalization in dimensions two and three",
