@@ -23721,20 +23721,145 @@
    :stop-condition
    "Bank ambient-map invertibility and common-neighborhood normalization comparison only. Do not claim restriction independence, distinguished-chart recovery, transition units, cocycles, local constancy, orientation coherence or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientOverlapNormalization.lean",
-      :sha256
-      "b5e6347ae3cd4e02fd33fe8af788adb94516ecb5389b6b0f83eb9cb9030ed46c"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientOverlapNormalization.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:canonical-sha256
+    "9697585da59ffc70a8381b306297c6dbb027e0091ebb57d4219f725e707e525f",
+    :placeholders 0,
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Prove restriction independence, recover CoefficientChartLocal.localIso for chart index x, then derive transition units, generator-change and directed cocycle equations. Local constancy, orientation coherence and consumer closure are not claimed. Ledgers and frozen consumers remain untouched.",
+    :gates
+    {:integer-rational-examples :pass,
+     :eighteen-standard-only-audits :pass,
+     :whitespace :pass,
+     :normalization-forward-and-generator :pass,
+     :fixture-hash :pass,
+     :actual-transition-normalization-equation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :target-build :pass,
+     :actual-chart-pair-and-factorization :pass,
+     :all-degree-ambient-forward-and-inverse-laws :pass,
+     :common-neighborhood-geometric-comparison :pass,
+     :exact-two-file-scope :pass,
+     :compilation :pass},
+    :axiom-audits 18,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation have zero warnings. Target build replays 22 dependency warnings and succeeds with 8300 jobs."],
+    :statement-hashes
+    {"factorization"
+     "c9b8599262a46be9ad9d132864f1adbd285ef0328167bb0810fbff4ebeebc8f2",
+     "normalization_forward"
+     "ba3fa396aae164a27df399c829af30761b597b7c8a47402db505509457a16f03",
+     "ambient_mapsTo"
+     "c7bf844e3ec0e0c4ffc8923cc750b98b9d3e7dbf71786271948df01e1a99b2cc",
+     "rightIso"
+     "092feb2c4b1fc1f7ff8980cd68e037092bf493419602d35625840f7689b0e57e",
+     "pointed_zero"
+     "490a05c7a313a551293f2dac9758c1bc8160af3487139bdc24edf5fd71116252",
+     "rational_comparison"
+     "ef5c87de3ee6bb10e5a331f9da1c1dec18d8ec11f9e270dcca1d124b6cc0a214",
+     "normalization_comparison"
+     "814bb4f6a0e068b148e74729415817644066c903b08f5df6e99cb531243b7f14",
+     "ambient_forward"
+     "f9abf6f4d2657fc44c6b582dcf85878da4536f8ff91c258045df30f093094b29",
+     "ambient_inverse_left"
+     "bc04a5821689896e224f8b1d2a5c1aa94fbe7e3fc0020044fc30b11bbb184525",
+     "right_forward"
+     "7904bad0cf33872fa0e5391b5b79e9bf9b5c94e0ccbc5c28349c91026fe91a55",
+     "ambient"
+     "7e6c9787d9a3335c32902daac2626c50027ddf9d99704cf98b34807b1751caa9",
+     "ambientMap"
+     "ba9582d8d68f74a95eb09e3e4f8d4124947604a1beecc58ed97b18ff5517eae0",
+     "integral_comparison"
+     "ce571ecdc4dc2f66d7bbb510a16af995d0e13ba14e2b754f0d623fdea07865ab",
+     "geometric_comparison"
+     "503e27ebaa2dff45ca7bd68968a221aaf35727da86d67030da5ff4ede1b7db80",
+     "pairHomeo"
+     "4e6c367e4e6a4796a3784149de546c55e99613999ec903f90ecb1ff8daf9d072",
+     "pointed_iff"
+     "ce1d55130710302710f7f7d8f96b8a5e93f1afcc43e847f66ad497b7368984bb",
+     "rightNormalization"
+     "a0100f248154f71e224ffdc48ce075a5f08d24d0fd4a0e3052ea1a4402f1b7bf",
+     "left_forward"
+     "8f0348f19e097746bf12dee422c3823ef0765a0fa1206df4e5762ebe6a6c6b47",
+     "leftNormalization"
+     "e5e9d56913e31be68f9145e2993db0b5ba5e6e17df2bd1a0bcd18fdad9717f67",
+     "normalization"
+     "c9a21f1bceef8cd983a91211dd02fda901b619148a1e1bc3f628d4231722ae80",
+     "ambient_inverse_right"
+     "3467450108504b300cec71a2d77f602c29a99c525c57ac2208aae25a190c3510",
+     "generator"
+     "baeb851a06b3a8db3e6679eb39defcfef416468bae48017c5f02d36f901299b7",
+     "generator_normalization"
+     "158f67c97d9baf4267b6967641f58267c80b93db5563158c09b075cac9ca4990",
+     "ambientIso"
+     "081b12c5dddf506cc4f7600c2d7730119260d42081b952f68433f5e4dcf10a3f",
+     "leftIso"
+     "1899508b45b5905cbe331ed275c885cd1dab940162b36b3ae5424520fc7953ae",
+     "chartPair"
+     "b46c37a6da20184ed6ae4de677bc3563ce2e19312c2bedd2472d95c95efd973a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :fixture-deviation
+    "Removed only the extra EOF blank line to satisfy the whitespace gate; all declarations and proofs are byte-preserved.",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and three dependency PASS receipts from both ledgers",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientOverlapNormalization.lean",
+      :exit 0}
+     {:cmd
+      "Python fixture hash verification and scoped promotion with one EOF newline removed",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientOverlapNormalization.lean > /tmp/overlapnormalization-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientOverlapNormalization.lean > /tmp/overlapnormalization-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientOverlapNormalization > /tmp/overlapnormalization-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verification of eighteen standard-only audits in each compilation log and warning attribution",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientOverlapNormalization.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact EOF-only difference, comment-stripped placeholder scan and twenty-six statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m \"Construct common-neighborhood overlap normalization comparison\"",
+      :exit 0}
+     {:cmd "git diff --check 237dcad7^ 237dcad7", :exit 0}
+     {:cmd
+      "Python committed two-file scope, EOF-only fixture difference and clean scoped paths verification",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "git diff --no-index --check /dev/null /tmp/CoefficientOverlapNormalization.lean",
+      :exit 3,
+      :correction
+      "Reported new blank line at EOF, line 153. Removed that single blank line in canonical promotion; subsequent staged and committed whitespace checks pass."}],
+    :commit "237dcad73487fe524354edb74123fe837d5cb962",
+    :changed-paths
+    ["ConstructionTargets/CoefficientOverlapNormalization.lean"
+     "ConstructionTargets/CoefficientOverlapNormalization.md"],
+    :fixture
+    {:path "/tmp/CoefficientOverlapNormalization.lean",
+     :sha256
+     "b5e6347ae3cd4e02fd33fe8af788adb94516ecb5389b6b0f83eb9cb9030ed46c"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientOverlapNormalization.lean"
     "ConstructionTargets/CoefficientOverlapNormalization.md"],
