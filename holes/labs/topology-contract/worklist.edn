@@ -62370,75 +62370,58 @@
    :stop-condition
    "GO requires actual embedded triangles and interior coverage; REVISE requires exactly one compiled geometric prerequisite. A finite chart-cover wrapper alone is insufficient.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "The requested finite embedded-triangle interior cover is complete. Compatible face intersections, realization homeomorphism, global triangulation, classification and consumer closure remain subsequent.",
-     :dependency-review
-     {:outcome :pass,
-      :seat "codex-10",
-      :job "invoke-1789024933179-18128-efeca2f0"},
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:planeEquiv
-      "674139d200e72ceffd6203a50b89ca80f932bd6e572486acaff7b3bb83b204b4",
-      :planeChart
-      "9197ce1da1e887fdf67c4d4c3ddb7f814ac6628f9f77c96ab7be74526b92f190",
-      :original_chart_target
-      "67afcb5d2b1cb3129bdce60300538c7ca38e7853c79d35304c3ce85452b5a8cb",
-      :parametrization_formula
-      "ba5580ef65df22f8d9b7e39fe02627ae38debffebb83dbcb2ee4f340eb16d849",
-      :exists_finite_cover
-      "c53275b57d425bef06d0189d03d8d2e4f45a33c6376e2e2e6826a2c05d37a201"},
-     :acceptance
-     {:implementation
-      "Promote the exact fixture. Compile planeEquiv, planeChart, original_chart_target, parametrization_formula and every exists_finite_cover conjunct. Preserve constructed positive scales, original chart formulas and restrictions, closed embeddings, compact images, open interiors and finite coverage. Retain the weaker proved hypotheses. Audit zero placeholders and standard-only axioms. Do not claim compatible faces, triangulation or classification.",
-      :commands
-      ["lake env lean ConstructionTargets/CompactSurfaceTriangleCover.lean"],
-      :axioms :standard-only,
-      :placeholder-before 0,
-      :placeholder-after 0},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/ChartTriangleEmbedding.olean ConstructionTargets/ChartTriangleEmbedding.lean'",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/CompactSurfaceTriangleCover.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/compact-surface-triangle-cover-audit.py",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "Private-path CompactSurfaceTriangleCover compilation, initial coverage proof",
-       :exit 1,
-       :correction
-       "Expanded the local cover definition and removed an unused simplification argument."}
-      {:cmd
-       "Private-path CompactSurfaceTriangleCover compilation, expanded coverage proof",
-       :exit 1,
-       :correction
-       "Explicitly extracted both indexed-union witnesses to construct the finite-cover witness."}
-      {:cmd
-       "Private-path CompactSurfaceTriangleCover compilation, original-chart specifications",
-       :exit 0,
-       :correction
-       "Removed unused Hausdorff and compactness assumptions from the two auxiliary chart specifications. Final compilation is warning-free."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CompactSurfaceTriangleCover.lean",
-      :sha256
-      "ce99dd4ec3f2a00f2f3530a42e2693c6a3f2fe081a7634254d48ccded4d3e3b3",
-      :placeholder-count 0},
-     :finding
-     "Constructed a finite family of actual embedded standard triangles whose open positive-barycentric interiors cover the space. The theorem holds under weaker hypotheses: a compact Hausdorff space charted over a finite-dimensional real normed model of finrank two. A constructed continuous linear equivalence gives plane coordinates; positive scales and chart restrictions come from the banked geometric construction. Each embedding has compact image inside its original chart source. Separate compiled specifications give the explicit original-chart parametrization and affine triangle containment in the original chart target. Thus the requested connected genuine-infinity surface case is included.",
-     :implementation
-     {:scope ["ConstructionTargets/CompactSurfaceTriangleCover.lean"]},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Constructed finite embedded-triangle interior coverage compiles with positive scales, original-chart formulas and restrictions, closed embeddings and compact images under the weaker compact Hausdorff charted-space hypotheses. Compatible faces, realization homeomorphism, triangulation, classification and consumer closure remain subsequent.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:planeEquiv
+     "674139d200e72ceffd6203a50b89ca80f932bd6e572486acaff7b3bb83b204b4",
+     :planeChart
+     "9197ce1da1e887fdf67c4d4c3ddb7f814ac6628f9f77c96ab7be74526b92f190",
+     :original_chart_target
+     "67afcb5d2b1cb3129bdce60300538c7ca38e7853c79d35304c3ce85452b5a8cb",
+     :parametrization_formula
+     "ba5580ef65df22f8d9b7e39fe02627ae38debffebb83dbcb2ee4f340eb16d849",
+     :exists_finite_cover
+     "c53275b57d425bef06d0189d03d8d2e4f45a33c6376e2e2e6826a2c05d37a201"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/CompactSurfaceTriangleCover.lean", :exit 0}
+     {:cmd
+      "sed 's/^pathlib.Path.*;print(json.dumps(r))/print(json.dumps(r))/' /tmp/compact-surface-triangle-cover-audit.py | python3",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.ChartTriangleEmbedding 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/CompactSurfaceTriangleCover.lean ConstructionTargets/CompactSurfaceTriangleCover.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CompactSurfaceTriangleCover.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "dce382db8ea5b6c8dee5c8b18f3b0fc6338108f7",
+    :changed-paths
+    ["ConstructionTargets/CompactSurfaceTriangleCover.lean"],
+    :fixture
+    {:path "/tmp/CompactSurfaceTriangleCover.lean",
+     :sha256
+     "ce99dd4ec3f2a00f2f3530a42e2693c6a3f2fe081a7634254d48ccded4d3e3b3"},
+    :axiom-audit-declarations 3},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CompactSurfaceTriangleCover.lean"],
    :dag-node "SURFACE TRIANGULATION / finite embedded triangle cover",
    :acceptance
