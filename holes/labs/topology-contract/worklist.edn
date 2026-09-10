@@ -71826,6 +71826,19 @@
      {:cmd
       "sha256sum ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean /tmp/PlaneArcEndpointTotalCoincidenceSmooth.lean ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789071831600-19391-a6fbb271",
+     :commands
+     ["git diff --name-only 69139ad4^ 69139ad4"
+      "git diff --exit-code 69139ad4bd6cfe6d85e68840f6b5bf4370a1548d -- ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"
+      "lake env lean ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"
+      "sha256sum ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean /tmp/PlaneArcEndpointTotalCoincidenceSmooth.lean ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"
+      "python3 placeholder audit"
+      "git diff --check 69139ad4^ 69139ad4 -- ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"],
+     :finding
+     "Exact one-file scope; fixture and dependency hashes match; Lean compiles with only propext, Classical.choice, and Quot.sound; zero placeholders. The total coincidence difference is correctly oriented as the left perturbed arc minus the right perturbed arc and is smooth over both supplied curve neighborhoods and the full two-vector parameter space. No statement hashes were recorded and no derivative, Sard, finiteness, or embedding claim is made."},
     :commit "69139ad4bd6cfe6d85e68840f6b5bf4370a1548d",
     :changed-paths
     ["ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"],
@@ -71837,7 +71850,7 @@
     :finding
     "Promoted the exact fixture. The total coincidence difference depends smoothly on both curve parameters and both endpoint-preserving perturbation vectors over arbitrary supplied open extension domains. The module compiles without warnings or placeholders and its dependency hash matches."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"],
    :dag-node
@@ -71933,7 +71946,7 @@
      "Compiled exactly one analytic prerequisite for relative Sard. The total coincidence difference map, with variables consisting of both curve parameters and both plane perturbation vectors, is smooth on the product of the two actual open extension domains with the unrestricted vector-parameter space. This retains the consumer's ContDiffOn hypotheses rather than replacing them with global smoothness. Together with the reviewed interior parameter surjectivity and finite boundary residual, it supplies the smooth total map required for a parametric regular-value argument, but does not itself produce a good parameter or finite fiber.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
