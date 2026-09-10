@@ -5,7 +5,9 @@ import Mathlib
 
 ## Statement repairs
 
-None.
+The nonzero-vector implication now encloses the axis equivalence explicitly.
+The old parsed clause and its zero-vector refutation are retained below.
+This repairs the statement; it is not a proof of the old frozen theorem.
 
 ## Encoding note
 
@@ -45,26 +47,61 @@ lemma apm_t96j07_not_fixed_axis_clause :
 
 theorem apm_t96j07 :
     (∀ x : apm_t96j07_V, x ≠ 0 →
-      apm_t96j07_projectivelyEq x (apm_t96j07_A x) ↔
-        ∃ i : Fin 4, apm_t96j07_projectivelyEq x (apm_t96j07_axis i)) ∧
+      (apm_t96j07_projectivelyEq x (apm_t96j07_A x) ↔
+        ∃ i : Fin 4, apm_t96j07_projectivelyEq x (apm_t96j07_axis i))) ∧
     apm_t96j07_localIndex 0 = -1 ∧
     apm_t96j07_localIndex 1 = 1 ∧
     apm_t96j07_localIndex 2 = -1 ∧
     apm_t96j07_localIndex 3 = 1 ∧
     (∑ i : Fin 4, apm_t96j07_localIndex i) = 0 := by
-  -- Boundary: the frozen clause parses as
-  -- `∀ x, (x ≠ 0 → projectivelyEq x (A x)) ↔ ∃ i, projectivelyEq x (axis i)`.
-  -- At `x = 0` its left side is vacuously true, while its right side is false
-  -- because `axis i ≠ 0` but every nonzero scalar multiple of `0` is `0`.
-  -- Thus the statement is false.  The intended route (coordinate cancellation
-  -- using `mul_right_cancel₀`, followed by determinant evaluation with
-  -- `norm_num`) applies only after parenthesizing the equivalence under `x ≠ 0`.
-  -- Closer hop 1 verifies the defect inside Lean:
-  -- `apm_t96j07_not_fixed_axis_clause` proves the negation of the first
-  -- conjunct exactly as parsed, by specializing at the zero vector and
-  -- evaluating the alleged axis equality at its distinguished coordinate.
-  -- `LEMMA-INDEX.md`, `ConstructionTargets/`, sibling artifacts, and git
-  -- history contain no alternate encoding or convention that changes this
-  -- contradiction. The protocol freezes the statement, so it cannot be
-  -- repaired by moving the implication inside the quantified proposition.
-  sorry
+  constructor
+  · intro x hx
+    constructor
+    · rintro ⟨c, hc, he⟩
+      obtain ⟨i, hi⟩ : ∃ i, x i ≠ 0 := by
+        by_contra h
+        apply hx
+        funext i
+        simpa using not_exists.mp h i
+      have hci : (i.val + 1 : ℝ) = c := by
+        apply mul_right_cancel₀ hi
+        exact congrFun he i
+      have hz : ∀ j, j ≠ i → x j = 0 := by
+        intro j hji
+        have hj := congrFun he j
+        change (j.val + 1 : ℝ) * x j = c * x j at hj
+        rw [← hci] at hj
+        have hne : (j.val + 1 : ℝ) ≠ (i.val + 1 : ℝ) := by
+          intro h
+          have : j.val = i.val := by exact_mod_cast (add_right_cancel h)
+          exact hji (Fin.ext this)
+        exact (mul_eq_mul_right_iff.mp hj).resolve_left hne
+      refine ⟨i, (x i)⁻¹, inv_ne_zero hi, ?_⟩
+      funext j
+      by_cases hji : j = i
+      · subst j
+        simp [apm_t96j07_axis, hi]
+      · simp [apm_t96j07_axis, hji, hz j hji]
+    · rintro ⟨i, c, hc, he⟩
+      refine ⟨(i.val + 1 : ℝ), by positivity, ?_⟩
+      funext j
+      by_cases hji : j = i
+      · subst j
+        rfl
+      · have hj := congrFun he j
+        have hz : x j = 0 := by
+          have : c * x j = 0 := by simpa [apm_t96j07_axis, hji] using hj.symm
+          exact (mul_eq_zero.mp this).resolve_left hc
+        simp [apm_t96j07_A, hz]
+  · have h0 : (Finset.univ : Finset (Fin 4)).erase 0 = {1, 2, 3} := by decide
+    have h1 : (Finset.univ : Finset (Fin 4)).erase 1 = {0, 2, 3} := by decide
+    have h2 : (Finset.univ : Finset (Fin 4)).erase 2 = {0, 1, 3} := by decide
+    have h3 : (Finset.univ : Finset (Fin 4)).erase 3 = {0, 1, 2} := by decide
+    norm_num [apm_t96j07_localIndex, apm_t96j07_localDeterminant,
+      Fin.sum_univ_succ, show (Fin.succ (2 : Fin 3)) = (3 : Fin 4) from rfl, h0, h1, h2, h3, Finset.prod_insert,
+      show (0 : Fin 4) ≠ 1 by decide, show (0 : Fin 4) ≠ 2 by decide,
+      show (0 : Fin 4) ≠ 3 by decide, show (1 : Fin 4) ≠ 2 by decide,
+      show (1 : Fin 4) ≠ 3 by decide, show (2 : Fin 4) ≠ 3 by decide]
+
+#print axioms apm_t96j07_not_fixed_axis_clause
+#print axioms apm_t96j07
