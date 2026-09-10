@@ -15638,20 +15638,99 @@
    :stop-condition
    "Bank only the generic cokernel comparison with explicit square, monicity and absolute-isomorphism hypotheses. Do not claim those hypotheses for the geometric restricted-cover square or claim excision.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientCokernelComparison.lean",
-      :sha256
-      "eaa11a983fd6cbd117026568e4eddd48be7911686d61513dc1ab2b2794f490ce"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientCokernelComparison.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct the restricted-cover chain map, prove generator and inclusion equations and horizontal monicity, then apply reviewed absolute small-chain comparison on X and A. Geometric hypotheses and excision remain unproved by this packet; no frozen closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :five-standard-only-audits :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 5,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 20 existing dependency warnings; both direct compilations had zero warnings."],
+    :statement-hashes
+    {"comparisonIso_hom"
+     "95181054d730af5c23cd8adeab7a32885968e6801b2033aba4d7a1ca78c09667",
+     "comparisonIso"
+     "bd69b95394c1844221439f8b30213b79bfac663096a8c959e04d743dcb4a5d9d",
+     "rational_identity_example"
+     "f5bf6741294ed06ea9362e3cc529e3f6f6446de39611601a6d939354d436c91f",
+     "cokernelShortComplex_shortExact"
+     "423d28c3adbe74d3875877326520af91b9c28229d82e7382ec6bd7a9b4eca6c7",
+     "inverse_right"
+     "6bd07cb1e050b7b50036f97cbde115373c6af6d487153549b55e533f9249a397",
+     "cokernelShortComplex"
+     "5fdcadb4951dca24f1e3ae1347734570bd03813e6f8860bb6cdac036eaed8c2f",
+     "inverse_left"
+     "c999f0aa0838122384dcc7e3f76b1e5d40a19c92f110fe069ed6296d879c2049",
+     "integral_identity_example"
+     "bef174a11a48ceeb42059f7f67b208adea40236c929dadf04c791ceafe8f7a79",
+     "cokernelSquare_homologyMap_isIso"
+     "8e4ece8a20c4ba96802c784f7db2f1b1227006ec8afb26fa2c8e2facab243678",
+     "cokernelSquareMap"
+     "3acd73d1e88ba786cecf52842e3613dfabd639efb7d07e728295454e09d974eb"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure stop rules and small-comparison dependency PASS receipt",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientCokernelComparison.lean",
+      :exit 0}
+     {:cmd "Python verify fixture SHA256 and promote exact fixture",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientCokernelComparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientCokernelComparison.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientCokernelComparison",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientCokernelComparison.lean /tmp/CoefficientCokernelComparison.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, five standard-only audits per compilation, warning and ten declaration-hash audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope audit and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct coefficient-general cokernel homology comparison\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope audit pinned to 4e98d2ec and clean tracked checkout verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "4e98d2ec29709dbe236bdf37d44241c09ced6741",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCokernelComparison.lean"
+     "ConstructionTargets/CoefficientCokernelComparison.md"],
+    :fixture
+    {:path "/tmp/CoefficientCokernelComparison.lean",
+     :sha256
+     "eaa11a983fd6cbd117026568e4eddd48be7911686d61513dc1ab2b2794f490ce"},
+    :finding
+    "Promoted the exact fixture and documented explicit commuting-square, horizontal-monicity and absolute-homology-isomorphism hypotheses. Constructed the actual cokernel comparison isomorphism with its exact forward-map equation and both inverse laws. Integer/rational identity-square examples compile. Focused build passed with 8273 jobs.",
+    :statement-hash-method
+    "SHA256 of declaration text beginning with theorem or def, excluding preceding noncomputable modifiers, and ending immediately before the space preceding := or where; namespace ConstructionTargets.CoefficientCokernelComparison.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCokernelComparison.lean"
     "ConstructionTargets/CoefficientCokernelComparison.md"],
