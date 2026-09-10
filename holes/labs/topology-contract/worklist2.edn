@@ -25563,20 +25563,118 @@
    :stop-condition
    "Bank the fixed ball-boundary relative lift and its recentering normalization only. Do not claim nonlinear chart transport, transition-unit local constancy, orientation compatibility or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientBallBoundaryLift.lean",
-      :sha256
-      "d116bc9cdec7e777a7fbe22a205fb3aeab7658ce61d40584c9895337ce7aca01"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientBallBoundaryLift.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholders 0,
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Transport the fixed ball and boundary through the actual chart overlap, identify the mapped relative class with chart normalizations, and apply compact-boundary motion to deduce nearby transition-unit equality. Nonlinear chart transport, transition-unit local constancy, orientation compatibility and consumer closure are not claimed. Ledgers and frozen consumers remain untouched.",
+    :gates
+    {:connecting-naturality-and-inverse-law :pass,
+     :actual-recentering-MapsTo :pass,
+     :integer-rational-examples :pass,
+     :whitespace :pass,
+     :positive-radius-contractibility :pass,
+     :boundary-composite :pass,
+     :lift-independent-of-moving-point :pass,
+     :cokernel-projection :pass,
+     :fixture-and-canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :model-normalization-via-radial-inverse :pass,
+     :target-build :pass,
+     :exact-fixture-promotion :pass,
+     :ten-standard-only-audits :pass,
+     :literal-boundary-and-scaled-sphere :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 10,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation have zero warnings. Target build replays 22 dependency warnings and succeeds with 8304 jobs."],
+    :statement-hashes
+    {"relativeMap"
+     "1bcfe75c74a72e07ad6ca3c1dbb4a303781bb058448d0315d5ca4c5fdadd6390",
+     "Ball"
+     "acd0359aa459e65beddcefe3978627925028593a68779f5f0f223047f19f9ae9",
+     "lift"
+     "ff524015d5ec87c7ff21501efa44e86f6c2ee30c5fa59bcb6b3465e8213a121b",
+     "rational_example"
+     "9ff8868313ae209135c7b626b052a99e27b2f3ea1ecc9db09d3bea7084794bd2",
+     "recenter_mapsTo"
+     "c7918a701ad09abc6eac99159ac598bc4c8e416747d5f2acc57d40bd7cc64d59",
+     "E"
+     "a764ebcc02f6828182673955aac50c92631ad2bc1fe015ae80378605b1e71b8f",
+     "boundaryMap"
+     "24c8cb627286328d3c6d8844e0e5c800a43433256aeb1f9a9ad70509410f0d08",
+     "boundary"
+     "647e6e9780fc8615668ab1e152198535bdcb80db0f0de566929d9f35262ff837",
+     "boundary_composite"
+     "dc4275e877f0d91b5bf2b1f24aab91b829b989178a4910bb8b0dff6b1a17881a",
+     "recenter"
+     "085252f742d02c5fe04719a42a3b5ca888196fa37168b4edbadbe90bf5214fb4",
+     "projection"
+     "ee40f3a658e053037bafe898ee8cecdfc6c1e2ec3564b94c99aaaa194f6b68fd",
+     "normalization"
+     "774c4fc36199d44221ce8709fe8843a122dde7623276042e127ccdad92e0d7c3",
+     "sphere"
+     "9703b76a74698962d5f466aa4b76d53250ba51ae52e388cb931bb1e574964e12",
+     "connecting_equation"
+     "368947352f1c6e724eed4864bf9f9464ef31feea5062d1bb48ebf4e215fa2546",
+     "ballContractible"
+     "1133ecae003522f77df1923b7d0da3ec7d9d9731d853d7ee0004a02a0ce052ff",
+     "integral_example"
+     "8d99403892f1c2be185bfc1dc910722d28ff2e714018b415da9c1cc872978e87"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and both dependency PASS receipts from the ledgers",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientBallBoundaryLift.lean", :exit 0}
+     {:cmd
+      "Python fixture hash verification and exact scoped promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientBallBoundaryLift.lean > /tmp/balllift-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientBallBoundaryLift.lean > /tmp/balllift-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientBallBoundaryLift > /tmp/balllift-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verification of ten standard-only audits in each compilation log and warning attribution",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientBallBoundaryLift.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and sixteen statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m \"Construct fixed ball-boundary relative lift and recentering normalization\"",
+      :exit 0}
+     {:cmd "git diff --check 76299a8f^ 76299a8f", :exit 0}
+     {:cmd
+      "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "76299a8f91a9bc6a992a92e28c0678f40a884411",
+    :changed-paths
+    ["ConstructionTargets/CoefficientBallBoundaryLift.lean"
+     "ConstructionTargets/CoefficientBallBoundaryLift.md"],
+    :fixture
+    {:path "/tmp/CoefficientBallBoundaryLift.lean",
+     :sha256
+     "d116bc9cdec7e777a7fbe22a205fb3aeab7658ce61d40584c9895337ce7aca01"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientBallBoundaryLift.lean"
     "ConstructionTargets/CoefficientBallBoundaryLift.md"],
