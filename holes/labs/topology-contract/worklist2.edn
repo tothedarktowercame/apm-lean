@@ -30941,7 +30941,8 @@
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
    {:outcome :replan,
-    :seat "codex-13",
+    :disposition :replan,
+    :author "codex-13",
     :commands
     [{:cmd
       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
@@ -30966,6 +30967,21 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789053345071-18836-899b5877",
+     :commands
+     ["git show --format=fuller --stat 796e1936787e07398829a37e1c142c5796fb771f"
+      "git diff-tree --no-commit-id --name-status -r 796e1936787e07398829a37e1c142c5796fb771f"
+      "git diff --check 796e1936787e07398829a37e1c142c5796fb771f^ 796e1936787e07398829a37e1c142c5796fb771f"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers from recorded commit"
+      "git ls-tree ConstructionTargets Lean census at 2ffa003e and 48731fa1"
+      "git diff --name-status 2ffa003e..48731fa1 over ConstructionTargets and frozen consumers"
+      "Python comment-stripped census of all DAG-named frozen consumers at 48731fa1"
+      "Inspect committed SphereCapC1GraphAreaComparison raw-measure orientation and pinned Mathlib euclideanHausdorffMeasure definitions"],
+     :finding
+     "PASS: commit 796e1936 changes only worklist2.edn and is whitespace-clean. Both recorded ledgers validate. Infrastructure reproduces 790 to 791 with only CoefficientCompactComplementPiecesComparison.lean added concurrently; no frozen consumer changed. The census reproduces 59 named, 58 existing, t93A05 missing, 33 open, 25 zero-placeholder, 23 within two, and 62 placeholders. The reviewed cap theorem uses raw hausdorffMeasure, while Mathlib defines μHE as addHaarScalarFactor volume μH • μH and documents factors π/4 and π/6 in dimensions two and three; consequently the elected corrected orientation μH[2] = (4/π) • volume and μH[3] = (6/π) • volume is correct. The new work row is shared exactly by t95J05, t02A05, t01J06, and t94A10, excludes the refuted coefficient-one retry, and materializes without duplicate dependencies. No fixture or frozen-statement hash applies to this strategy-only transition."},
     :replacement-items
     [{:consumer :t95J05,
       :stop-condition
@@ -31083,10 +31099,9 @@
       :placeholder-after 62}},
     :finding
     "The exact 59-consumer census remains 62 comment-stripped placeholders across 33 open files; 25 existing consumers have zero placeholders and t93A05 is missing. No frozen file changed. Routes: t95J05(1) needs banked intrinsic strict S3 cap area -> corrected raw μH3=(6/π)volume normalization -> equator-null cap assembly -> square and fourth-coordinate moments -> frozen integral. t02A05(2) needs banked coefficient/projection reductions and strict S2 cap area -> corrected raw μH2=(4/π)volume normalization -> equator assembly -> centered moments -> frozen integral and minimum. t01J06(3) needs the same corrected S2 period route -> manifold Stokes bridge -> final conjunction. t94A10(3) needs the same corrected S2 period route -> closedness and nonexactness assembly. The reviewed STOP refutes only coefficient-one normalization; it does not refute these four consumers, and retrying that statement is excluded. t98A02(1), t00J02(1), t01A05(1), t02A07(3) and t97J05(5) remain on the compact-complement Mayer-Vietoris, localization, duality and gluing route; t00A04 is already zero-placeholder, t01A05 also retains its connectedness specification defect, and current compact-complement work is excluded. t99J03(1), t00A03(2), t01J01(3), t91J05(3) and t94J09(1) remain on the active translated-arc route through prescribed-chart containment, endpoint control and later polygon or classification steps. t01A02(3) needs H2 degree and nonsurjectivity, Lefschetz and final assembly. t01A04(4), t92J06(1) and t98A01(1) need covering construction or classification, genus invariance and Euler multiplicativity; t98A01's reviewed STOP is preserved. t00J01(1) needs Klein-product and exact fold-fiber geometry. t01A08(1) needs arbitrary-model chart-domain and within-derivative applicability. t01J04(1) and t94A06(1) need regular-preimage, half-space-atlas and normal-translation applicability. t02A08(1) needs an arbitrary-integer sphere map and its homology action. t03J02(2) and t97A01(1) retain the collar, cofibration and closed-circle gluing boundary. t03J04(1) needs rational torus homology and finite-cover Euler comparison. t03J05(1), t96J06(2) and t97A04(4) retain fundamental-class, cap/Thom, Eilenberg-Zilber and integral Kunneth comparisons. t92J05(3) needs the RP2 antipodal bridge, genus-two classification bridge and final assembly. t95J06(2) needs its concrete torus homeomorphism route. t96J05(1) retains the proved radial counterexample and needs a corrected statement. a97J08(1) remains an uptake route whose geometric producer is incomplete. No closure route is complete. The corrected raw normalization is a bounded shared step on four open routes and is simpler than equator-null assembly or moment evaluation, so it is elected once. Infrastructure unrelated to an open route is deferred.",
-    :author "codex-13",
-    :disposition :replan},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: Euclidean Hausdorff normalization and renewed consumer eligibility",
@@ -31108,7 +31123,7 @@
    :stop-condition
    "Do not identify raw hausdorffMeasure with volume at coefficient one, use μHE in place of the raw measure, cancel ENNReal scalars through zero or infinity, assume unit-ball volumes, sphere mass, cap assembly, equator nullity, polar-coordinate formulas or moment values. Prove only the dimension-two and dimension-three constants required by the named consumers, in a unique row-specific scratch directory.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: corrected raw Euclidean Hausdorff normalization in dimensions two and three",
