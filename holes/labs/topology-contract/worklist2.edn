@@ -44100,9 +44100,132 @@
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
-   "Implement only a typed extension of atomic completion-transition preservation that can validate checkpoint67's actual reviewed-source evidence fields while retaining the existing checkpoint60 behavior and every rejection invariant. Do not permit arbitrary ledger mutation, omit preserved fields, weaken target hashing, alter topology sources, promote terminal counts or claim consumer closure.",
-   :phase :probe,
+   "Bank only schema-driven validation of exact preserved ledger paths and values for completion transitions. Do not apply fixture-path mutations, change atomic-write ordering, alter topology sources, promote terminal counts or claim consumer closure.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["holes/labs/topology-contract/build_step.bb"
+    "holes/labs/topology-contract/test_gate_receipts.bb"],
+   :dag-node
+   "LEDGER REPRESENTATION: exact schema-driven preserved-value validation",
+   :acceptance
+   {:implementation
+    "Replace the single hardcoded preserve-path map with an allowlisted evidence-shape selector and exact schema-driven validator, retaining the existing checkpoint60 schema and adding checkpoint67's reviewed-source schema.",
+    :hypotheses
+    "Use checkpoint60's supporting-source evidence and checkpoint67's reviewed-source plus predecessor and statement-hash evidence as the only supported schemas.",
+    :consumer-equation
+    "For the selected allowlisted evidence shape, the preserve request contains exactly every required label and each expected value equals the completed row value at its fixed ledger path.",
+    :consumer-residual
+    "Integrate the validator into atomic completion-transition application and test concrete checkpoint60 and checkpoint67 transitions, then apply checkpoint67's fixture-path transition.",
+    :route-step
+    "Supplies exact evidence-shape validation needed by the checkpoint67 atomic transition on the t03J05, t96J06 and t97A04 routes.",
+    :gates
+    ["Retain the current checkpoint60 preserve schema unchanged."
+     "Add an allowlisted checkpoint67 schema covering fixture SHA256, reviewed-source and hash, predecessor path and hash, placeholder count, commit, review outcome and statement hashes."
+     "Reject unknown schema names, omitted labels, extra labels and mismatched values."
+     "Run focused positive and negative tests."
+     "Run clj-kondo and check-parens on both scoped files."
+     "Run both ledger validators, whitespace and exact two-file scope checks; commit the scoped implementation."
+     "Confirm no transition mutation or topology theorem is added by this prerequisite."]},
+   :representation
+   {:source
+    "An allowlisted completed-row evidence shape and a preserve request",
+    :target
+    "Exact validated equality between every requested preserved value and its fixed ledger path",
+    :direction
+    "Exact fieldwise equality from the source preserve-request representation to the target completed-row evidence representation, requiring identical label sets and values."},
+   :id :t03j05-schema-driven-fixture-transition-preservation-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint71-immutable-checkpoint67-evidence-and-consumer-refill-1],
+   :current-residual
+   "The atomic transition uses one hardcoded checkpoint60 preserve map and lacks a reusable exact validator for checkpoint67's evidence shape.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :t03J05,
+   :stop-condition
+   "Implement only a typed extension of atomic completion-transition preservation that can validate checkpoint67's actual reviewed-source evidence fields while retaining the existing checkpoint60 behavior and every rejection invariant. Do not permit arbitrary ledger mutation, omit preserved fields, weaken target hashing, alter topology sources, promote terminal counts or claim consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "codex-13",
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint71-preserve-paths/preserve_paths.bb",
+      :sha256
+      "94c8ff29fe6183944bf9e9390c791573f0d9172d934eecf765bd8155a8f5f227",
+      :assertions 4},
+     :commands
+     [{:cmd
+       "Inspect fixture-transition-preserve-paths and apply-completion-transition in holes/labs/topology-contract/build_step.bb",
+       :exit 0}
+      {:cmd
+       "bb /tmp/codex13-checkpoint71-preserve-paths/preserve_paths.bb",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint71-preserve-paths/preserve_paths.bb",
+       :exit 0}
+      {:cmd
+       "clj-kondo --lint /tmp/codex13-checkpoint71-preserve-paths/preserve_paths.bb",
+       :exit 0}
+      {:cmd
+       "emacs --batch -Q -l /home/joe/code/futon4/dev/check-parens.el -- /tmp/codex13-checkpoint71-preserve-paths/preserve_paths.bb",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}],
+     :warnings [],
+     :finding
+     "Exactly one complete tested prerequisite is supplied. The scratch fixture implements schema-driven preserved-value validation: the preserve map must have exactly the schema's labels, and every label is compared at its explicitly allowlisted ledger path. The checkpoint67 evidence shape includes fixture SHA256, reviewed source and hash, predecessor path and hash, placeholder count, implementation commit, PASS review and statement hashes. Tests accept the complete matching shape and reject an omitted field, an extra field and a wrong value. Lint and parenthesis checks pass. Integration into atomic transition application, retention of checkpoint60 tests and concrete scratch-ledger transitions remain outside this prerequisite.",
+     :prerequisite
+     {:consumer :t03J05,
+      :stop-condition
+      "Bank only schema-driven validation of exact preserved ledger paths and values for completion transitions. Do not apply fixture-path mutations, change atomic-write ordering, alter topology sources, promote terminal counts or claim consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["holes/labs/topology-contract/build_step.bb"
+       "holes/labs/topology-contract/test_gate_receipts.bb"],
+      :dag-node
+      "LEDGER REPRESENTATION: exact schema-driven preserved-value validation",
+      :acceptance
+      {:implementation
+       "Replace the single hardcoded preserve-path map with an allowlisted evidence-shape selector and exact schema-driven validator, retaining the existing checkpoint60 schema and adding checkpoint67's reviewed-source schema.",
+       :hypotheses
+       "Use checkpoint60's supporting-source evidence and checkpoint67's reviewed-source plus predecessor and statement-hash evidence as the only supported schemas.",
+       :consumer-equation
+       "For the selected allowlisted evidence shape, the preserve request contains exactly every required label and each expected value equals the completed row value at its fixed ledger path.",
+       :consumer-residual
+       "Integrate the validator into atomic completion-transition application and test concrete checkpoint60 and checkpoint67 transitions, then apply checkpoint67's fixture-path transition.",
+       :route-step
+       "Supplies exact evidence-shape validation needed by the checkpoint67 atomic transition on the t03J05, t96J06 and t97A04 routes.",
+       :gates
+       ["Retain the current checkpoint60 preserve schema unchanged."
+        "Add an allowlisted checkpoint67 schema covering fixture SHA256, reviewed-source and hash, predecessor path and hash, placeholder count, commit, review outcome and statement hashes."
+        "Reject unknown schema names, omitted labels, extra labels and mismatched values."
+        "Run focused positive and negative tests."
+        "Run clj-kondo and check-parens on both scoped files."
+        "Run both ledger validators, whitespace and exact two-file scope checks; commit the scoped implementation."
+        "Confirm no transition mutation or topology theorem is added by this prerequisite."]},
+      :representation
+      {:source
+       "An allowlisted completed-row evidence shape and a preserve request",
+       :target
+       "Exact validated equality between every requested preserved value and its fixed ledger path",
+       :direction
+       "Exact fieldwise equality from the source preserve-request representation to the target completed-row evidence representation, requiring identical label sets and values."},
+      :id :t03j05-schema-driven-fixture-transition-preservation-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint71-immutable-checkpoint67-evidence-and-consumer-refill-1],
+      :current-residual
+      "The atomic transition uses one hardcoded checkpoint60 preserve map and lacks a reusable exact validator for checkpoint67's evidence shape.",
+      :other-consumers [:t96J06 :t97A04]},
+     :residual
+     "After banking schema-driven preservation, integrate it into atomic fixture-path transitions, retain checkpoint60 behavior, test checkpoint67 end-to-end and apply its transition."}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: evidence-shape-aware atomic fixture-path transitions",
@@ -44139,7 +44262,7 @@
    :kind :representation-comparison,
    :depends-on
    [:oriented-checkpoint71-immutable-checkpoint67-evidence-and-consumer-refill-1
-    :oriented-checkpoint71-immutable-checkpoint67-evidence-and-consumer-refill-1],
+    :t03j05-schema-driven-fixture-transition-preservation-1],
    :current-residual
    "The atomic transition validator accepts only checkpoint60's supporting-source evidence shape and cannot validate checkpoint67's reviewed-source and predecessor evidence without a typed schema extension.",
    :other-consumers [:t96J06 :t97A04]}
