@@ -41,6 +41,9 @@ MAX_REPAIRS="${TOPOLOGY_MAX_REPAIRS:-3}"
 REPAIR_TIMEOUT="${TOPOLOGY_REPAIR_TIMEOUT:-1800}"
 ESCALATE_TO="${TOPOLOGY_ESCALATE_TO:-claude-7}"
 MAX_ESCALATIONS="${TOPOLOGY_MAX_ESCALATIONS:-2}"
+# How long the loop must run before its previous faults are considered
+# unrelated to the next one. See the budget reset in the main loop.
+BUDGET_RESET_SECONDS="${TOPOLOGY_BUDGET_RESET_SECONDS:-1200}"
 ESCALATION_TIMEOUT="${TOPOLOGY_ESCALATION_TIMEOUT:-3600}"
 ESCALATION_POLL="${TOPOLOGY_ESCALATION_POLL:-60}"
 
@@ -203,9 +206,34 @@ repairs=0
 escalations=0
 while true; do
   slog "starting loop (repairs used $repairs/$MAX_REPAIRS)"
+  loop_started="$(date +%s)"
   env MAX_ITER="${MAX_ITER:-1000}" DIRTY_WAIT_SECONDS="${DIRTY_WAIT_SECONDS:-900}" \
       "$HERE/topology-build-loop.sh"
   rc=$?
+  loop_ran=$(( $(date +%s) - loop_started ))
+
+  # The repair budget was monotonic for the supervisor's whole lifetime, and
+  # these processes stay up for many hours. So a budget spent on unrelated
+  # faults could condemn a fault that happened long afterwards: on 2026-09-10
+  # the budget hit 3/3 at 15:35, the loop then ran HEALTHILY for 68 minutes,
+  # and a transient truncated receipt at 16:43 was escalated to a Claude seat
+  # immediately rather than getting a cheap automated repair. That escalation
+  # is the most expensive path in the system -- it spends a different, scarcer
+  # provider's quota than the one the loop runs on.
+  #
+  # A loop that ran a long time before stopping has demonstrated recovery, so
+  # its earlier faults are no longer evidence about this one. Reset the budget.
+  #
+  # This deliberately does NOT weaken the rule below that repairs stay
+  # exhausted after an escalation: that case is a loop stopping again
+  # IMMEDIATELY, which is a short run and so does not reach this threshold.
+  if [ "$loop_ran" -ge "$BUDGET_RESET_SECONDS" ]; then
+    if [ "$repairs" -ne 0 ] || [ "$escalations" -ne 0 ]; then
+      slog "loop ran ${loop_ran}s before stopping; resetting budget (repairs $repairs->0, escalations $escalations->0)"
+      repairs=0
+      escalations=0
+    fi
+  fi
   [ "$rc" = 0 ] && { slog "loop exited cleanly (rc=0); supervisor done"; exit 0; }
 
   reason="$(last_stop_reason)"
