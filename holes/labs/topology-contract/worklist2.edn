@@ -35107,12 +35107,13 @@
    :stop-condition
    "Construct only the finite signed-shuffle product-simplex data needed in total degrees at most four. Do not assume or claim a singular-chain cross product, Eilenberg-Zilber, Kunneth, product fundamental classes, intersection nonvanishing, ambient nonhomotopy or consumer closure. Use a unique row-specific scratch directory.",
    :evidence
-   {:outcome :stop,
-    :seat "codex-13",
+   {:residual
+    "Provide an exact comparison from each maximal simplicial product path to its continuous affine simplex in the product of topological standard simplices, oriented from the lattice-path vertex representation to the production singular-simplex representation, and prove that simplicial vertex deletion becomes production face precomposition. Then oriented path pairing can establish the signed boundary formula.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "codex-13",
     :reason
     :missing-simplicial-product-to-affine-singular-product-realization,
-    :finding
-    "The unsigned maximal-path and inversion-parity prerequisites are now canonical, but the requested signed singular-simplex triangulation still crosses an exact unimplemented representation boundary. Mathlib's ProdStdSimplex describes Δ[p] ⊗ Δ[q] inside simplicial sets and exposes its nondegenerate lattice paths and simplicial faces. ConstructionTargets.SingularSubdivision realizes an ordered vertex family only as a continuous affine map from a topological standard simplex into one topological standard simplex. Neither Mathlib nor ConstructionTargets supplies a comparison from a maximal simplicial-set product path to a continuous affine simplex in stdSimplex ℝ (Fin (p+1)) × stdSimplex ℝ (Fin (q+1)), nor a theorem identifying deleted lattice-path vertices with the production singular-chain boundary faces. Without that comparison, the oriented interior-face cancellation and surviving Leibniz faces cannot be stated in the actual singular-chain representation. This is a missing representation theorem, not a refutation of the signed-shuffle construction.",
     :commands
     [{:cmd
       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
@@ -35141,12 +35142,30 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
-    :residual
-    "Provide an exact comparison from each maximal simplicial product path to its continuous affine simplex in the product of topological standard simplices, oriented from the lattice-path vertex representation to the production singular-simplex representation, and prove that simplicial vertex deletion becomes production face precomposition. Then oriented path pairing can establish the signed boundary formula.",
-    :author "codex-13",
-    :disposition :stop},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789067420786-19229-059e84f5",
+     :commands
+     ["git show --stat --oneline cb550fdf"
+      "git show --check --oneline cb550fdf"
+      "git diff cb550fdf^ cb550fdf -- holes/labs/topology-contract/worklist2.edn"
+      "git show cb550fdf:holes/labs/topology-contract/worklist2.edn | sed -n '35105,35230p'"
+      "rg -n 'def affineSimplex|def affineGenerator|theorem affineGenerator_boundary|def vertexRealizationDegree' ConstructionTargets/SingularSubdivision.lean"
+      "rg -n 'ProductSimplex(MaximalPaths|ShuffleParity)|prodStdSimplex.*affine|affine.*prodStdSimplex|affine.*product.*stdSimplex|stdSimplex.*×.*stdSimplex' ConstructionTargets .lake/packages/mathlib/Mathlib -g '*.lean'"
+      "sed -n '20,48p' ConstructionTargets/SingularSubdivision.lean"
+      "sed -n '195,285p' ConstructionTargets/SingularSubdivision.lean"
+      "sed -n '625,650p' ConstructionTargets/SingularSubdivision.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "rg --pcre2 -o '(?<![A-Za-z0-9_.])(sorry|admit)(?![A-Za-z0-9_.])|^[[:space:]]*((private|protected)[[:space:]]+)?axiom[[:space:]]' problems/{t03J05,t96J06,t97A04}/lean -g '*.lean'"],
+     :finding
+     "PASS: commit cb550fdf changes only worklist2.edn and records an exact non-refuting representation STOP. The maximal-path and parity prerequisites remain banked, but no existing declaration transports simplicial product paths to continuous affine simplices in the product target while identifying vertex deletion with production face precomposition. The residual is oriented from lattice-path data to production singular simplices, preserves the later (-1)^p boundary obligation, and claims no cross product or stronger result. Both ledgers validate; no fixture or frozen statement hash applies; frozen consumer placeholders remain 1/2/4."},
+    :finding
+    "The unsigned maximal-path and inversion-parity prerequisites are now canonical, but the requested signed singular-simplex triangulation still crosses an exact unimplemented representation boundary. Mathlib's ProdStdSimplex describes Δ[p] ⊗ Δ[q] inside simplicial sets and exposes its nondegenerate lattice paths and simplicial faces. ConstructionTargets.SingularSubdivision realizes an ordered vertex family only as a continuous affine map from a topological standard simplex into one topological standard simplex. Neither Mathlib nor ConstructionTargets supplies a comparison from a maximal simplicial-set product path to a continuous affine simplex in stdSimplex ℝ (Fin (p+1)) × stdSimplex ℝ (Fin (q+1)), nor a theorem identifying deleted lattice-path vertices with the production singular-chain boundary faces. Without that comparison, the oriented interior-face cancellation and surviving Leibniz faces cannot be stated in the actual singular-chain representation. This is a missing representation theorem, not a refutation of the signed-shuffle construction.",
+    :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded signed-shuffle triangulation of products of standard simplices",
@@ -35194,7 +35213,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: bounded product-simplex shuffles and renewed consumer eligibility",
