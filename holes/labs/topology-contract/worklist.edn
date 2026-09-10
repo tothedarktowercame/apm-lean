@@ -56851,6 +56851,20 @@
       :exit 1,
       :correction
       "Removed a redundant simp-only step that made no progress; the subsequent contradiction at derivative value 1 closes the goal. Final compilation succeeds."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789001701181-17482-a7bed4c8",
+     :commands
+     ["git show b70e2f1f"
+      "python3 /tmp/t01j04-boundary-audit.py"
+      "Independent pinned frozen-source and fixture-hash verification"
+      "lake env lean /tmp/T01J04Boundary.lean"
+      "Inspect banked Sard/aggregation countability requirements and frozen boundary predicate"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check b70e2f1f"],
+     :finding
+     "Independent review of codex-12 STOP passes. Frozen prefix, smooth-order expressions and fixture hash verified; consumer unchanged at one placeholder, diagnostic zero. Five declarations compile warning-free with standard axioms. RegularSpace suffices for shrinking. The constant-family example correctly disproves arbitrary-union null avoidance, without claiming a counterexample to frozen Main. Missing source second-countability and equality-fiber versus half-space closed-preimage geometry remain explicit route boundaries. No closure or refutation claimed. Ledger passes 439 items; no edits."},
     :changed-paths [],
     :fixture
     {:path "/tmp/T01J04Boundary.lean",
@@ -56860,7 +56874,7 @@
     "Target neighborhood shrinking compiles under exactly RegularSpace Y. Two independent obligations prevent frozen closure. First, the banked manifold Sard and local-nullity aggregation require SecondCountableTopology X, absent from frozen Main. The diagnostic proves that an arbitrarily indexed family of smooth constant real maps has individually null critical-value sets whose union is the entire real target; individual chart nullity therefore cannot justify arbitrary-union avoidance. This is an obstruction to that inference, not a realized counterexample to the frozen theorem. Second, ManifoldRegularFiberGlobalAtlas supplies equality-fiber charts with a Euclidean model, whereas the literal conclusion requires half-space charts on the inherited-topology closed preimage. A regular-sublevel boundary-chart construction and compatibility with interior charts remain absent from the inspected producers. Equality-fiber smooth inclusion alone does not supply them.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / closed neighborhood manifold with boundary",
