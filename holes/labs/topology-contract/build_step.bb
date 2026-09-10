@@ -57,6 +57,31 @@
 (defn write-ledger! [x]
   (let [tmp (io/file (str path ".tmp"))]
     (spit tmp (with-out-str (pprint/pprint x)))
+    ;; Validate BEFORE the atomic move, so no receipt can ever write a ledger
+    ;; that worklist_check refuses.
+    ;;
+    ;; The same invalid ledger has now been produced by two different receipt
+    ;; types, each time on a :strategy-checkpoint row:
+    ;;   2026-09-02  `applied fail`  -> :checkpoint-full-dag-refill-1
+    ;;   2026-09-10  `applied go`    -> :oriented-checkpoint52-...-refill-1
+    ;; Both left "strategy checkpoint lacks :phase :strategy or checkpoint
+    ;; policy". The first was fixed by patching the :fail branch (2f41fd67);
+    ;; :go then walked into the identical state because GO forces
+    ;; :phase :implementation. Patching outcome by outcome only moves the hole.
+    ;; The ledger's invariants live in worklist_check.bb, so the one place that
+    ;; writes the ledger now asks it first.
+    ;;
+    ;; It also closes a worse gap: the loop commits the ledger BEFORE its own
+    ;; validate() runs, so on 2026-09-10 the invalid state was committed to git
+    ;; (3efbe0b9) and needed hand repair. A rejected receipt now leaves the
+    ;; ledger untouched; the loop's invalid-receipt path clears the in-flight
+    ;; pointer and the row is redispatched from its prior, valid state.
+    (let [{:keys [exit err out]} (shell/sh "bb" (str here "/worklist_check.bb") (str tmp))]
+      (when-not (zero? exit)
+        (.delete tmp)
+        (throw (ex-info (str "receipt would invalidate the ledger: "
+                             (str/trim (str/replace (str err out) #"^topology-worklist:\s*" "")))
+                        {}))))
     (java.nio.file.Files/move (.toPath tmp) (.toPath (io/file path))
       (into-array java.nio.file.CopyOption
                   [java.nio.file.StandardCopyOption/REPLACE_EXISTING

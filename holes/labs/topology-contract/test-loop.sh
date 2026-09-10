@@ -109,4 +109,19 @@ grep -A12 '^apply_job_result()' "$HERE/topology-build-loop.sh" \
   | grep -q 'clear "$INFLIGHT"'
 
 grep -q 'queued|delivering|running|accepted' "$HERE/topology-build-loop.sh"
+# A GO on a :strategy-checkpoint would force :phase :implementation, which the
+# ledger forbids (2026-09-10, oriented-checkpoint52). write-ledger! validates
+# before its move, so the receipt is refused and the ledger is left untouched.
+checkpoint_go="$(mktemp)"
+cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint_go"
+checkpoint_go_before="$(sha256sum "$checkpoint_go" | cut -d' ' -f1)"
+if out="$(bb "$HERE/build_step.bb" apply-result "$checkpoint_go" checkpoint "$HERE/fixtures/go-receipt.edn" 2>&1)"; then
+  echo "expected GO-on-strategy-checkpoint rejection" >&2
+  exit 1
+fi
+grep -q 'would invalidate the ledger' <<<"$out"
+[ "$(sha256sum "$checkpoint_go" | cut -d' ' -f1)" = "$checkpoint_go_before" ]
+[ ! -e "$checkpoint_go.tmp" ]
+rm -f "$checkpoint_go"
+
 echo "topology-loop tests: PASS"

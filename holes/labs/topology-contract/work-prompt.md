@@ -21,6 +21,11 @@ Every inserted row must satisfy the full ledger schema and use a new id. An
 ordinary replan may not return an empty tail. Do not edit the DAG or ledger
 directly.
 
+GO and REVISE are probe outcomes. A `:phase :strategy` row answers with
+`:replan`, or with a STOP that names a genuine refutation. A GO on a strategy
+row is refused before it reaches the ledger: GO moves a row to
+implementation, and a strategy checkpoint cannot be one.
+
 A row with `:kind :representation-comparison` must additionally state all
 THREE parts of the comparison, or admission rejects it and the loop stops:
 
