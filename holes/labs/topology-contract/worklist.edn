@@ -63755,9 +63755,106 @@
    "Two placeholders encode the flux bridge and final assembly. The quadratic optimization is proved; literal integral normalization and evaluation remain."}
   {:consumer "t98A02",
    :stop-condition
-   "GO requires constructed pair maps and actual homology comparison; REVISE requires one compiled prerequisite. Do not duplicate concurrent coefficient chart work or claim a fundamental class.",
-   :phase :probe,
+   "Require the actual all-degree comparison and normalization factorization; no supplied local isomorphism or duplicate translated-chart construction.",
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/CoefficientChartLocalAllDegrees.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / all-degree ambient chart comparison",
+   :acceptance
+   {:fixture "/tmp/CoefficientChartLocalAllDegrees.lean",
+    :fixture-sha256
+    "f0d088185ac88fc6b9b7baa1ab91f99c006c280f079e706208e73493c32dbeea",
+    :implementation
+    "Promote the exact fixture, reusing concurrent CoefficientChartLocal without duplication. Compile comparison, forward, both inverse laws, normalization_factorization and generator_image. Preserve arbitrary natural homology degree, explicit dimension m+2 and actual relative-chain maps. Verify the CoefficientChartLocal dependency SHA256 ae0f436d51a3141e8b2ddc32119aa2d6afcddf3b3f19013be3e9156c7f2ae6cd. Do not extend normalization to dimension one or claim orientation coherence, fundamental classes or consumer closure.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientChartLocalAllDegrees.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "Actual coefficient local homology of a Hausdorff manifold charted on Euclidean space of dimension m+2",
+    :target
+    "Actual coefficient relative homology of Euclidean space of dimension m+2 and its deleted origin",
+    :direction
+    "Construct an isomorphism from manifold local homology to model local homology via inverse neighborhood inclusion, actual translated chart pair transport and model-neighborhood inclusion."},
+   :id :coefficient-chart-local-all-degrees-implementation-refill44,
+   :kind :representation-comparison,
+   :depends-on
+   [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
+   :current-residual
+   "General finite-dimensional self-model transport remains; preserve dimension-one coverage through the separately banked local-index APIs.",
+   :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
+   "GO requires constructed pair maps and actual homology comparison; REVISE requires one compiled prerequisite. Do not duplicate concurrent coefficient chart work or claim a fundamental class.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Complete general finite-dimensional model transport and audit lower-dimensional coverage without extending the m+2 normalization silently. Orientation overlap coherence and global localization monicity remain subsequent.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer "t98A02",
+      :stop-condition
+      "Require the actual all-degree comparison and normalization factorization; no supplied local isomorphism or duplicate translated-chart construction.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/CoefficientChartLocalAllDegrees.lean"],
+      :dag-node
+      "MANIFOLD FUNDAMENTAL CLASS / all-degree ambient chart comparison",
+      :acceptance
+      {:fixture "/tmp/CoefficientChartLocalAllDegrees.lean",
+       :fixture-sha256
+       "f0d088185ac88fc6b9b7baa1ab91f99c006c280f079e706208e73493c32dbeea",
+       :implementation
+       "Promote the exact fixture, reusing concurrent CoefficientChartLocal without duplication. Compile comparison, forward, both inverse laws, normalization_factorization and generator_image. Preserve arbitrary natural homology degree, explicit dimension m+2 and actual relative-chain maps. Verify the CoefficientChartLocal dependency SHA256 ae0f436d51a3141e8b2ddc32119aa2d6afcddf3b3f19013be3e9156c7f2ae6cd. Do not extend normalization to dimension one or claim orientation coherence, fundamental classes or consumer closure.",
+       :commands
+       ["lake env lean ConstructionTargets/CoefficientChartLocalAllDegrees.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :representation
+      {:source
+       "Actual coefficient local homology of a Hausdorff manifold charted on Euclidean space of dimension m+2",
+       :target
+       "Actual coefficient relative homology of Euclidean space of dimension m+2 and its deleted origin",
+       :direction
+       "Construct an isomorphism from manifold local homology to model local homology via inverse neighborhood inclusion, actual translated chart pair transport and model-neighborhood inclusion."},
+      :id :coefficient-chart-local-all-degrees-implementation-refill44,
+      :kind :representation-comparison,
+      :depends-on
+      [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
+      :current-residual
+      "General finite-dimensional self-model transport remains; preserve dimension-one coverage through the separately banked local-index APIs.",
+      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/CoefficientChartLocalAllDegrees.lean",
+       :exit 0}
+      {:cmd
+       "python3 /tmp/coefficient-chart-local-all-degrees-audit.py",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/CoefficientAmbientChartLocal.lean",
+       :exit 1,
+       :correction
+       "An implicit model type at zero defaulted to Nat; explicit Euclidean typing corrected compilation. This exploratory assembly was subsequently superseded when concurrent CoefficientChartLocal appeared; it is not proposed for promotion."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientChartLocalAllDegrees.lean",
+      :sha256
+      "f0d088185ac88fc6b9b7baa1ab91f99c006c280f079e706208e73493c32dbeea",
+      :placeholder-count 0},
+     :finding
+     "Compiled one all-degree comparison prerequisite reusing concurrent CoefficientChartLocal, committed at c17b1ff4. The constructed manifold-to-Euclidean-model isomorphism identifies its actual forward composite and both inverse laws in every natural homology degree, including zero. In top degree it factors the existing normalization and sends its generator to the banked model generator. The fixture retains model dimension m+2 explicitly; general finite-dimensional model transport and lower-dimensional coverage are not claimed.",
+     :seat "codex-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / deleted-point chart comparison",
@@ -63776,7 +63873,7 @@
    :kind :representation-comparison,
    :depends-on
    [:checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer
-    :checkpoint-full-dag-refill-44-after-regular-line-and-face-projection-transfer],
+    :coefficient-chart-local-all-degrees-implementation-refill44],
    :current-residual
    "Model and neighborhood local homology are now banked concurrently. Actual manifold chart-pair comparison is the next bounded edge before orientation coherence.",
    :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
