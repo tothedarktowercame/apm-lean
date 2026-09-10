@@ -71590,8 +71590,47 @@
   {:consumer "t00A03",
    :stop-condition
    "Require a relative Sard theorem for the full pairwise coincidence map on the compact parameter square with its four endpoint pairs handled separately, followed by one simultaneous finite-family parameter selection and explicit chart-transition comparison.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Apply a relative Sard theorem to the total pairwise coincidence maps, handle the four endpoint pairs separately, select parameters simultaneously for the finite family, retain embeddings, and prove cross-chart transition compatibility.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:pairDifference
+     "d435c007ad980d874e0dfddbc8cb3073f72e3bb5b96c27f725f560f2718540aa",
+     :pairDifference_vary_left_surjective
+     "7366c7d0a8fac114b5925365176349e05a2895c15aadd61f8e931986c3978d66",
+     :pairDifference_vary_right_surjective
+     "245f8c16c6c87a4f51439fbec04ccded73365ce4bce8b992756e59ed4e20ca0c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean /tmp/PlaneArcEndpointPairParameterSurjectivity.lean ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-three-declaration audit over ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "9ee5f84ae9996cf40f0d511ebd356f67f2256585",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointPairParameterSurjectivity.lean",
+     :sha256
+     "8657ea839db4ff9b7fb78d3eece0d2b4937de4be199d2967435b9e89b9fb64a7",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. Whenever either arc parameter is interior, varying its corresponding perturbation vector moves the pairwise coincidence difference surjectively through the plane, with arbitrary fixed data for the other arc. The module compiles without warnings or placeholders, its dependency hash matches, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"],
    :dag-node
