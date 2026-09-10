@@ -20163,6 +20163,20 @@
       "Python verification of pinned commit scope, fixture equality and scoped cleanliness; git status --short",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789021275220-18040-7b65d452",
+     :commands
+     ["lake env lean /tmp/CoefficientOrthogonalRadial.lean"
+      "lake env lean ConstructionTargets/CoefficientOrthogonalRadial.lean"
+      "lake build ConstructionTargets.CoefficientOrthogonalRadial"
+      "git diff --check cbd921f6^ cbd921f6"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 89d92780:holes/labs/topology-contract/worklist2.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 89d92780:holes/labs/topology-contract/worklist.edn)"
+      "Read-only Python audit of fixture SHA256, 19 statement hashes, exact scope, forbidden declarations and placeholder counts"],
+     :finding
+     "Commit cbd921f6177307b5341ec6e9a66aa7830d4ec154 independently verified. Fixture SHA256 31cf135ff217e502e6e51acb81d6ee20e5a69a093c768cbd6b83e53ed9fc0193 matches. Actual geometric and cokernel maps, radial forward/inverse equations and boundary compatibility are correct. Thirteen standard-only audits, integer/rational examples, dimension-zero example and n=1 negation identification pass. All gates pass; placeholders 312->312; frozen sources unchanged. Hemisphere and sphere equivariance remain downstream. No ledger edits."},
     :commit "cbd921f6177307b5341ec6e9a66aa7830d4ec154",
     :changed-paths
     ["ConstructionTargets/CoefficientOrthogonalRadial.lean"
@@ -20178,7 +20192,7 @@
     "SHA256 from declaration keyword to immediately before the space preceding := or where.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientOrthogonalRadial.lean"
     "ConstructionTargets/CoefficientOrthogonalRadial.md"],
@@ -20342,7 +20356,7 @@
      "Exactly one complete compiled geometric-equivariance prerequisite is supplied. Actual orthogonal actions preserve the closed-disk boundary and punctured open disk. The radial and boundary-homeomorphism squares are proved geometrically. Actual pair-map composition yields the cokernel square and radial homology equivariance, with its inverse equation in every degree. Integer, rational and zero-dimensional examples compile; one-dimensional negation agrees with the reviewed reflection. Ambient sphere and hemisphere-coordinate equivariance remain unconstructed; the parent is not GO.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SPHERE ORIENTATION: actual orthogonal equivariance of sphere-to-disk comparison",
