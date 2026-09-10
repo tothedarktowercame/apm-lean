@@ -71266,8 +71266,53 @@
   {:consumer "t00A03",
    :stop-condition
    "Require a relative finite-family regular-value or transversality theorem for perturbations vanishing at both endpoints, followed by chart-transition compatibility; constant translations cannot supply either condition.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use the endpoint-vanishing perturbation family to prove embedding and chart-target stability for sufficiently small parameters, then establish finite surface intersections through transition maps on chart overlaps. Retained coverage, compatible faces and triangulation remain separate.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:endpointWeight_zero
+     "913e9a2f8bb7be1842097f816791afed84ba48dd2c3acb459ccb3a91b49d87eb",
+     :endpointWeight_one
+     "07de062b702c6b3c229988e15f43ea3e8e8785419b929a09f5cc7d36860cf5a6",
+     :perturb_zero
+     "9ed07767f9fec552b74e968109665a01a5e60efdfa7e40736250f2521e975e90",
+     :perturb_one
+     "19f89ae70c01842d09d64fb1122a0b533f86ffb176c66a6ab31860df87c6483d",
+     :endpointWeight_contDiff
+     "955163ab593280b5031bbc76ed01e0e7cddbb7ff6aa7bc0e59ba3c5e90cac611",
+     :perturb_contDiffOn
+     "4c08df7ef9046b6822fc3e2cfd8ecaf5ab3ea6c072f7a89bff66f30bf5ac7b6a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean /tmp/PlaneArcEndpointPreservingPerturbation.lean ConstructionTargets/PlaneArcContainedSmallTranslations.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-six-declaration audit over ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "a48c938d1b7f1e58a8bd1603de4836274ed78714",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointPreservingPerturbation.lean",
+     :sha256
+     "649ca302421e4f3244162507530541a591a9ea44466f7cd54e8d2cc9d6ffa6a9",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The polynomial endpoint weight vanishes at zero and one, so the perturbation fixes both endpoints exactly; the weight is smooth and preserves ContDiffOn smoothness of arbitrary plane arcs. The module compiles without warnings or placeholders, its dependency hash matches, the commit changes exactly the scoped path, and the worktree is clean. No embedding, containment or transversality claim is made."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean"],
    :dag-node
