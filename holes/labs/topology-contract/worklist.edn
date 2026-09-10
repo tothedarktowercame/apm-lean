@@ -59306,136 +59306,101 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Derive the actual identity-map mfderivs and inverse identities for these chosen charts, then transport the difference map's smoothness and surjectivity to the product self model. Empty manifolds and zero-dimensional factors remain included. Literal incidence atlas assembly, inclusion tangent comparison and oriented homological obligations remain subsequent; no consumer closure.",
-     :dependency-review
-     {:outcome :pass,
-      :commit "ab99abe095db8d5d4d0a783b732bd8dc461408a7",
-      :job "invoke-1789009295089-17720-ac66ef2d"},
-     :outcome :revise,
+     "Apply regular-fiber geometry in this constructed product self model, then transport its atlas and inclusion to the inherited-topology literal incidence subtype. Prove inclusion derivative injectivity and the tangent equalizer range in the original product model. Target-manifold localization, orientations and homological obligations remain subsequent; no incidence atlas or frozen consumer closure is claimed.",
+     :outcome :go,
      :warnings [],
      :statement-hashes
-     {:overlap
-      "0912aeedcd535dc6e704fc7a7b353f7d06841dff3c1ad6c98a9e30e3abaa0235",
-      :isManifold
-      "0fd234f9e65eadf8a2c927bff73945b107cfbb751a5461d38916a227541976dc",
-      :smooth-forward
-      "ea0df8cc915f571071b4ef6239c7a00fbb58dbc82d9f123319580204750616fa",
-      :smooth-backward
-      "4431101e3ae4cedd1e134bbcbdd925f2abcaa57743d52b46cae9832f0f802ac9",
-      :product-isManifold
-      "72c1cf4792a1dd597b18917598c54282ede5202fdd687140374ab7d27b07715f"},
-     :prerequisite
-     {:consumer "t00J02",
-      :stop-condition
-      "Require all five declarations for the actual banked chartedSpace; no supplied compatibility or alternative atlas.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/ChartedSpaceModelSmoothTransport.lean"],
-      :dag-node
-      "TRANSVERSE-PULLBACK / smooth compatibility of transported charts",
-      :acceptance
-      {:fixture "/tmp/ChartedSpaceModelSmoothTransport.lean",
-       :fixture-sha256
-       "f87686a01159dbbfd0ea09669f9b5b5806b43f4ce39a890609fc4d91222f485c",
-       :implementation
-       "Promote the exact fixture. Compile overlap, isManifold, smooth_id_forward, smooth_id_backward and product_isManifold. Preserve the chosen banked atlas, genuine infinity, existing topology and norms, and the weaker hypotheses of the generic transport results. Audit zero placeholders and standard-only axioms. Do not claim actual derivative transport, difference-map regularity in the new model, an incidence atlas or consumer closure.",
-       :commands
-       ["lake env lean ConstructionTargets/ChartedSpaceModelSmoothTransport.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :id
-      :charted-space-model-smooth-transport-implementation-refill38,
-      :kind :reusable-theorem,
-      :depends-on
-      [:charted-space-model-transport-implementation-refill38],
-      :current-residual
-      "Smooth compatibility and both smooth identity maps are compiled for the chosen atlas; actual mfderiv formulas and regularity transport remain.",
-      :other-consumers ["t02A07" "t94A06" "t97J05"]},
+     {:derivative-inverse
+      "ed3a5f1fe5802bad6136f731cbd098353d20916b8e093c4bd3c9987c64be4598",
+      :map-derivative
+      "766a17d11ec53898ebe77143cc7bbc57d43309debe420ecacdd8e39a2b5375db",
+      :derivative-backward
+      "f15cd03ed04d04f6330ad5787c63cdd1ffca0d6bad284dcb4926d4e24e1a5ddf",
+      :derivative-forward
+      "c05b102e5fa328d2fc12f288170a03a1569ccbf0cef9bad5fba01a9099498266",
+      :product-identity-derivative
+      "2324d99351585374392b45114fc09fe6f00486ddcd633324689ebc019c82fb03",
+      :product-identity-smooth
+      "14fa09be1d1d320f4d3ac9c94ed3c0331cf660517c267fb911474dd6e012063d",
+      :difference-smooth
+      "78bbeda5a4acfc481e100c98ea946d1cafd4c1703b7ea68a56788e3217800179",
+      :difference-regular
+      "dd798afa38864cf5bd5d586797669a3802d3880bf87b3f36b77e3ab8ae2f4bec",
+      :product-original-manifold
+      "8efc21b1cc43561d8e4a824b152de1a19e2d105f1311724bae2c1d2e2a185418",
+      :difference-derivative
+      "3de37cd705fc84a27a1b0d8bf5961155be3a7c83e41699f408f8d7e1f42bba61",
+      :map-surjective
+      "bef7bee47a30278d048dd8baac02e17759cbceb69a814a4ec34f7646f83e4951",
+      :map-smooth
+      "a86d17a0dfa85e47a49b3d971ccbfb24018f2c2962aa3ac37686538a4973f399"},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env bash -c 'lean -o /tmp/rechart-build/ConstructionTargets/ChartedSpaceModelTransport.olean ConstructionTargets/ChartedSpaceModelTransport.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/rechart-build:$LEAN_PATH lean -o /tmp/rechart-build/ConstructionTargets/ChartedSpaceModelSmoothTransport.olean ConstructionTargets/ChartedSpaceModelSmoothTransport.lean'",
        :exit 0}
       {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/rechart-build:$LEAN_PATH lean /tmp/ChartedSpaceModelSmoothTransport.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/rechart-build:$LEAN_PATH lean /tmp/ChartedSpaceModelDerivativeTransport.lean'",
        :exit 0}
-      {:cmd "python3 /tmp/charted-space-model-smooth-audit.py",
+      {:cmd "python3 /tmp/charted-space-model-derivative-audit.py",
        :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/ChartedSpaceModelSmoothTransport.lean",
+     [{:cmd
+       "Private-path ChartedSpaceModelDerivativeTransport compilation, inverse identities",
        :exit 1,
        :correction
-       "The banked dependency had no canonical object file. Compiled its exact source into a private temporary object directory."}
+       "Reduced the continuous-linear-map compositions explicitly to the equivalence inverse laws and removed an unnecessarySimpa warning."}
       {:cmd
-       "Private dependency compilation followed by ChartedSpaceModelSmoothTransport compilation",
+       "Private-path ChartedSpaceModelDerivativeTransport compilation, difference-map import",
        :exit 1,
        :correction
-       "Simplified the original overlap domain before composition."}
-      {:cmd
-       "Private-path ChartedSpaceModelSmoothTransport compilation, overlap retry",
-       :exit 1,
-       :correction
-       "Discharged the self-model range and preimage clauses using mfld_simps."}
-      {:cmd
-       "Private-path ChartedSpaceModelSmoothTransport compilation, forward identity",
-       :exit 1,
-       :correction
-       "Installed the proved recharted IsManifold instance."}
-      {:cmd
-       "Private-path ChartedSpaceModelSmoothTransport compilation, forward chart simplification",
-       :exit 1,
-       :correction
-       "Rewrote the chosen chart explicitly with the banked chartAt_eq specification."}
-      {:cmd
-       "Private-path ChartedSpaceModelSmoothTransport compilation, product specialization",
-       :exit 1,
-       :correction
-       "Made the original product model comparison explicit."}
-      {:cmd
-       "Private-path ChartedSpaceModelSmoothTransport compilation, product change tactic",
-       :exit 1,
-       :correction
-       "Product and self models require propositional equality rather than definitional reduction."}
-      {:cmd
-       "Private-path ChartedSpaceModelSmoothTransport compilation, product extensionality",
-       :exit 1,
-       :correction
-       "Separated product variables from the generic normed-space section and corrected model simplification."}
-      {:cmd
-       "Private-path ChartedSpaceModelSmoothTransport compilation, isolated product variables",
-       :exit 1,
-       :correction
-       "Used the existing modelWithCornersSelf_prod theorem instead of reconstructing model equality."}
-      {:cmd
-       "rg search of nonexistent Mathlib/Geometry/Manifold/Instances/Prod.lean",
-       :exit 2,
-       :correction "Located IsManifold.prod in IsManifold/Basic.lean."}
-      {:cmd
-       "Private-path ChartedSpaceModelSmoothTransport compilation, explicit product instance",
-       :exit 1,
-       :correction
-       "Supplied both manifold type arguments to IsManifold.prod. Final compilation succeeds."}],
+       "The private namespace lacked the banked TransverseDifferenceRegularity object. Linked available canonical objects into the private directory; final compilation succeeds."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/ChartedSpaceModelSmoothTransport.lean",
+     {:path "/tmp/ChartedSpaceModelDerivativeTransport.lean",
       :sha256
-      "f87686a01159dbbfd0ea09669f9b5b5806b43f4ce39a890609fc4d91222f485c",
+      "181beeca62bfcb3c47ea3ade97b829174afe8e5531df1f146ef1dd96ff35a8cc",
       :placeholder-count 0},
      :finding
-     "Compiled one smooth-recharting prerequisite for exactly the banked chartedSpace. Continuous-linear conjugation proves genuine-infinity overlaps and IsManifold. Both identity maps between the original and recharted self-model structures are genuinely smooth. The product specialization proves IsManifold infinity for exactly ChartedSpaceModelTransport.productChartedSpace, using the original product manifold and the canonical WithLp equivalence. No topology or norm instance is replaced. Actual derivative formulas and difference-map regularity transport remain uncompiled.",
+     "The complete recharting packet compiles using the two banked constructors. For their exact chosen atlas, the forward identity mfderiv is the canonical continuous linear equivalence and the backward mfderiv is its inverse; both composition identities are proved. Coordinate formulas and local chart inverse laws derive these derivatives. The chain rule then proves smoothness, the actual derivative formula and surjectivity transport for vector-valued maps. Explicit product specializations prove both identity maps smooth with the required derivatives, and derive difference-map smoothness and zero regularity from range-sum transversality. The imported banked APIs supply chartAt, atlas, source/target specifications, IsManifold infinity and the model dimension sum. Existing topology and ordinary product norms are retained. The proofs include empty manifolds and zero-dimensional factors and require no supplied derivative or regularity comparison.",
+     :dependency-reviews
+     [{:outcome :pass,
+       :commit "ab99abe095db8d5d4d0a783b732bd8dc461408a7",
+       :job "invoke-1789009295089-17720-ac66ef2d"}
+      {:outcome :pass,
+       :commit "94c20be8f8066c470a0d1426f0886addcb2ea7a7",
+       :job "invoke-1789010174692-17744-17adc0cc"}],
+     :implementation
+     {:scope
+      ["ConstructionTargets/ChartedSpaceModelDerivativeTransport.lean"],
+      :acceptance
+      {:fixture "/tmp/ChartedSpaceModelDerivativeTransport.lean",
+       :fixture-sha256
+       "181beeca62bfcb3c47ea3ade97b829174afe8e5531df1f146ef1dd96ff35a8cc",
+       :implementation
+       "Promote the exact fixture and compile all twelve declarations. Preserve the actual banked chartedSpace and productChartedSpace, genuine infinity, canonical WithLp equivalence, explicit derivative directions and transversality-derived regularity. Retain weaker hypotheses where proved. Audit zero placeholders and standard-only axioms. Do not claim a literal incidence atlas, inclusion tangent comparison or consumer closure.",
+       :commands
+       ["lake env lean ConstructionTargets/ChartedSpaceModelDerivativeTransport.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0}},
      :seat "codex-12"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/ChartedSpaceModelDerivativeTransport.lean"],
    :dag-node "TRANSVERSE-PULLBACK / product self-model recharting",
    :acceptance
-   {:axioms :standard-only,
-    :probe
-    "For self-model genuine-infinity manifolds M and N modeled on finite-dimensional complete real inner-product E and G, construct an explicit ChartedSpace (WithLp 2 (E*G)) (M*N) and IsManifold of its self model, retaining the existing topology and ordinary product norm. Construct chartAt and atlas specifications by composing original product charts with the canonical continuous linear equivalence. Prove the identity maps between the original product-model manifold and this recharted self-model manifold are genuinely smooth and derive their actual mfderiv formulas and inverse identities. For the banked transverse difference map derive smoothness and surjectivity transport to this self model, and prove the model finrank is finrank E plus finrank G. No supplied charts, compatibility, derivative comparison or altered norm instances. The existing transContinuousLinearEquiv construction retaining chart carrier E*G alone is insufficient. Include zero-dimensional factors and empty manifolds; preserve existing APIs.",
-    :consumer-residual
-    "Self-model product recharting and derivative transport only. Applying regular-fiber geometry and transporting its atlas and inclusion to literal incidence remain, followed by target-manifold and oriented homological obligations."},
+   {:fixture "/tmp/ChartedSpaceModelDerivativeTransport.lean",
+    :fixture-sha256
+    "181beeca62bfcb3c47ea3ade97b829174afe8e5531df1f146ef1dd96ff35a8cc",
+    :implementation
+    "Promote the exact fixture and compile all twelve declarations. Preserve the actual banked chartedSpace and productChartedSpace, genuine infinity, canonical WithLp equivalence, explicit derivative directions and transversality-derived regularity. Retain weaker hypotheses where proved. Audit zero placeholders and standard-only axioms. Do not claim a literal incidence atlas, inclusion tangent comparison or consumer closure.",
+    :commands
+    ["lake env lean ConstructionTargets/ChartedSpaceModelDerivativeTransport.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
    :id :product-self-model-recharting-probe-refill38,
    :kind :reusable-theorem,
    :depends-on
