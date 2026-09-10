@@ -28640,6 +28640,19 @@
       :exit 0,
       :correction
       "Recomputed hashes over statement text only, ending immediately before := by, matching all five independently reviewed values."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789044412287-18602-4ed9f793",
+     :commands
+     ["lake env lean /tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean"
+      "lake env lean ConstructionTargets/ENNRealCountableBounds.lean"
+      "lake build ConstructionTargets.ENNRealCountableBounds"
+      "git diff --check 128cdeb5^ 128cdeb5"
+      "Python exact fixture, scope, repaired statement hashes and placeholder audit"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers at 29be3f50"],
+     :finding
+     "Independent rereview of commit 128cdeb5c2f22aeca7704e3bb8c5bf88b4d142fc passes after metadata-only repair. All five recorded hashes now exactly match canonical statement-only recomputation. Exact two-file scope and fixture SHA256 0e26f5c06c5f672c7087d83f9fd619bd536b1b9a391cc70c26c71c9fbb78cda6 verified. Fixture, canonical target and 2528-job build pass without warnings; five axiom audits are standard-only. Countable factor distribution and set-lintegral monotonicity have the correct orientations and handle zero and infinity without summability, finiteness, cancellation or real conversion. Zero target placeholders; problem count unchanged at 312. Geometric assembly and exact graph area remain downstream. Ledgers untouched."},
     :commit "128cdeb5c2f22aeca7704e3bb8c5bf88b4d142fc",
     :changed-paths
     ["ConstructionTargets/ENNRealCountableBounds.lean"
@@ -28652,7 +28665,7 @@
      :placeholder-count 0},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ENNRealCountableBounds.lean"
     "ConstructionTargets/ENNRealCountableBounds.md"],
@@ -28819,7 +28832,7 @@
      "Exactly one complete compiled analytic summation prerequisite is supplied on the open t02A05 route and the shared t95J05, t01J06 and t94A10 routes. It integrates pointwise lower and upper ENNReal bounds over an actual measurable set and sums scaled inequalities over arbitrary countable families. Both operations permit zero and infinite values and use no cancellation, finiteness assumption or conversion to real numbers. Together with the reviewed graph and density decomposition, it reduces the parent to proving the per-piece combined factors from C1GraphPartition.piece_bounds and the derivative-density comparisons, then applying ENNRealMultiplicativeSqueeze. The parent is not GO because that geometric-algebraic assembly has not yet been compiled. No canonical source or ledger was edited; current reservations, reviewed STOPs and refutations are preserved.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact C1 graph Hausdorff area from measurable approximation partitions",
