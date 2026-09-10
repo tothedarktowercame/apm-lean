@@ -74640,8 +74640,49 @@
   {:consumer "t98A02",
    :stop-condition
    "Require degreewise injectivity of intersectionToPiecesRelative and degreewise function exactness at the middle quotient biproduct; the compiled criterion then combines them with the banked terminal epimorphism to establish ShortExact.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove the two concrete degreewise quotient-module facts: intersectionToPiecesRelative is injective and its range equals the kernel of piecesToUnionRelative. Apply shortComplex_shortExact_of_degreewise, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport the union quotient through relativeComparisonIso to the literal compact-complement pair.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:shortComplex_shortExact_of_degreewise
+     "95a3684511f3b8199708357843afe58e1a169b79764b73fb44099454fd0bece5"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisEpi.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder-and-one-declaration audit over ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 397dec34c786c7820e0c3b993b99babe24163e13",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 397dec34c786c7820e0c3b993b99babe24163e13",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :commit "397dec34c786c7820e0c3b993b99babe24163e13",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean"],
+    :fixture
+    {:path
+     "/tmp/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean",
+     :sha256
+     "c8a8d3e72d5f69e3f699ac297511f454bf93512432cc40938a25df59c8e3a349",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and reviewed terminal-epimorphism dependency hashes reproduce. The requested degreewise criterion compiles without warnings or placeholders using only standard axioms. It reduces ShortExact precisely to degreewise injectivity and Function.Exact while reusing the banked terminal epimorphism. The commit changes exactly the scoped path and the worktree is clean.",
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean"],
    :dag-node
