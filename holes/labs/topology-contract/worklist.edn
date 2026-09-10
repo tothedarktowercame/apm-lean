@@ -71351,77 +71351,103 @@
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
   {:consumer "t00A03",
    :stop-condition
+   "Require relative finite-family transversality for the endpoint-weighted perturbations and compatibility through chart-transition maps; this containment estimate alone does not imply either.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"],
+   :dag-node
+   "SURFACE TRIANGULATION / endpoint-preserving perturbation containment estimate",
+   :acceptance
+   {:fixture "/tmp/PlaneArcEndpointPerturbationContainment.lean",
+    :fixture-sha256
+    "8922598bc50353b2ee99ab5299f85d3c6c0f8f13f3a4ae01b9867a7086acdd59",
+    :implementation
+    "Promote the exact fixture. Compile abs_endpointWeight_le_one, dist_perturb_le_norm and perturb_mem_thickening. This supplies the small-parameter chart-target containment step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes after endpoint preservation. Verify PlaneArcEndpointPreservingPerturbation SHA256 649ca302421e4f3244162507530541a591a9ea44466f7cd54e8d2cc9d6ffa6a9. Preserve arbitrary plane arcs, arbitrary perturbation vectors, every unit-interval parameter and arbitrary target subsets with a supplied thickening margin. Require zero placeholders, no warnings and standard-only axioms. Do not claim embedding preservation, finite pairwise intersections, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+    :commands
+    ["lake env lean ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :plane-arc-endpoint-perturbation-containment-implementation-refill50,
+   :kind :reusable-theorem,
+   :depends-on
+   [:plane-arc-endpoint-preserving-perturbation-implementation-refill50],
+   :current-residual
+   "Combine the endpoint-relative perturbation with compact image margins for chart containment, then prove small-parameter embedding stability and a relative finite-family regular-value theorem. Cross-chart surface intersections still require transition-map comparison.",
+   :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
+  {:consumer "t00A03",
+   :stop-condition
    "Require a compiled perturbation preserving prescribed endpoints and chartwise containment with finite pairwise intersections; do not infer cross-chart finiteness from unrelated plane translations.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Endpoint preservation now has a compiled construction; relative finite-family transversality, small-parameter embedding and containment, and cross-chart surface-intersection comparison remain.",
+     "Endpoint preservation and the pointwise containment estimate compile; small-parameter embedding stability, relative finite-family transversality and cross-chart surface-intersection comparison remain.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t00A03",
       :stop-condition
-      "Require a relative finite-family regular-value or transversality theorem for perturbations vanishing at both endpoints, followed by chart-transition compatibility; constant translations cannot supply either condition.",
+      "Require relative finite-family transversality for the endpoint-weighted perturbations and compatibility through chart-transition maps; this containment estimate alone does not imply either.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean"],
+      ["ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"],
       :dag-node
-      "SURFACE TRIANGULATION / endpoint-preserving plane-arc perturbation",
+      "SURFACE TRIANGULATION / endpoint-preserving perturbation containment estimate",
       :acceptance
-      {:fixture "/tmp/PlaneArcEndpointPreservingPerturbation.lean",
+      {:fixture "/tmp/PlaneArcEndpointPerturbationContainment.lean",
        :fixture-sha256
-       "649ca302421e4f3244162507530541a591a9ea44466f7cd54e8d2cc9d6ffa6a9",
+       "8922598bc50353b2ee99ab5299f85d3c6c0f8f13f3a4ae01b9867a7086acdd59",
        :implementation
-       "Promote the exact fixture. Compile endpointWeight_zero, endpointWeight_one, perturb_zero, perturb_one, endpointWeight_contDiff and perturb_contDiffOn. This supplies the endpoint-preserving perturbation-family step needed by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before relative transversality can be attempted. Verify PlaneArcContainedSmallTranslations SHA256 994efb3aa0e7abf565800fdc3156089d584a6743baf7daf1ad20bca1fa00242e. Preserve arbitrary smooth plane arcs, arbitrary perturbation vectors and exact equality at both endpoints. Require zero placeholders, no warnings and standard-only axioms. Do not claim embedding preservation, chart containment, finite pairwise intersections, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+       "Promote the exact fixture. Compile abs_endpointWeight_le_one, dist_perturb_le_norm and perturb_mem_thickening. This supplies the small-parameter chart-target containment step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes after endpoint preservation. Verify PlaneArcEndpointPreservingPerturbation SHA256 649ca302421e4f3244162507530541a591a9ea44466f7cd54e8d2cc9d6ffa6a9. Preserve arbitrary plane arcs, arbitrary perturbation vectors, every unit-interval parameter and arbitrary target subsets with a supplied thickening margin. Require zero placeholders, no warnings and standard-only axioms. Do not claim embedding preservation, finite pairwise intersections, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
        :commands
-       ["lake env lean ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean"],
+       ["lake env lean ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :plane-arc-endpoint-preserving-perturbation-implementation-refill50,
+      :plane-arc-endpoint-perturbation-containment-implementation-refill50,
       :kind :reusable-theorem,
       :depends-on
-      [:finite-chartwise-endpoint-preserving-arcs-probe-refill50],
+      [:plane-arc-endpoint-preserving-perturbation-implementation-refill50],
       :current-residual
-      "Use the endpoint-vanishing perturbation family to prove embedding and chart-target stability for sufficiently small parameters, then establish finite surface intersections through transition maps on chart overlaps. Retained coverage, compatible faces and triangulation remain separate.",
+      "Combine the endpoint-relative perturbation with compact image margins for chart containment, then prove small-parameter embedding stability and a relative finite-family regular-value theorem. Cross-chart surface intersections still require transition-map comparison.",
       :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "readlink -f .lake/packages && test -L .lake/packages",
+     [{:cmd
+       "lake build ConstructionTargets.PlaneArcEndpointPreservingPerturbation >/tmp/endpoint-relative-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake build ConstructionTargets.PlaneArcContainedSmallTranslations >/tmp/endpoint-arc-dep.log 2>&1",
+       "lake env lean /tmp/PlaneArcEndpointPerturbationContainment.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/PlaneArcEndpointPreservingPerturbation.lean",
+       "sha256sum /tmp/PlaneArcEndpointPerturbationContainment.lean ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/PlaneArcEndpointPreservingPerturbation.lean ConstructionTargets/PlaneArcContainedSmallTranslations.lean",
-       :exit 0}
-      {:cmd
-       "python3 comment-stripped placeholder-and-three-declaration audit over /tmp/PlaneArcEndpointPreservingPerturbation.lean",
+       "python3 comment-stripped placeholder-and-three-declaration audit over /tmp/PlaneArcEndpointPerturbationContainment.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/PlaneArcEndpointPreservingPerturbation.lean",
+       "lake env lean /tmp/PlaneArcEndpointPerturbationContainment.lean",
        :exit 1,
        :correction
-       "The initial regularity proof asked fun_prop to unfold the named endpointWeight definition automatically. Unfolded endpointWeight explicitly and reran the fixture successfully without placeholders or warnings."}],
+       "The first distance proof selected an inapplicable translation-invariance rewrite, and the initial product-bound invocation used the wrong argument order. Rewrote distance as the norm of the difference and bounded t(1-t) by t and then one on the unit interval."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/PlaneArcEndpointPreservingPerturbation.lean",
+     {:path "/tmp/PlaneArcEndpointPerturbationContainment.lean",
       :sha256
-      "649ca302421e4f3244162507530541a591a9ea44466f7cd54e8d2cc9d6ffa6a9",
+      "8922598bc50353b2ee99ab5299f85d3c6c0f8f13f3a4ae01b9867a7086acdd59",
       :placeholder-count 0},
      :finding
-     "The reviewed constant translations cannot preserve prescribed endpoints unless their translation vectors vanish, and they compare coincidences only in one common plane. Compiled exactly one nearest prerequisite: the relative perturbation a(t) + t(1-t)v is smooth whenever a is smooth and agrees exactly with a at t=0 and t=1. It handles every vector, including v=0, so empty and singleton family cases remain available downstream. This fixture does not claim embedding stability, containment, finite intersections, or compatibility between unrelated charts. The two unrelated pre-existing untracked ProductSimplexStepWord files were left untouched.",
+     "The promoted endpoint-relative perturbation compiles at its recorded hash. Compiled exactly one next prerequisite: on the unit interval its scalar weight has absolute value at most one, so the perturbed point lies within norm v of the original point. Consequently any perturbation vector smaller than a previously established thickening margin keeps the entire arc inside its prescribed open plane target. This supplies the chart-containment estimate without claiming embedding stability, finite coincidences or cross-chart transport.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
@@ -71433,7 +71459,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs
-    :plane-arc-endpoint-preserving-perturbation-implementation-refill50],
+    :plane-arc-endpoint-preserving-perturbation-implementation-refill50
+    :plane-arc-endpoint-perturbation-containment-implementation-refill50],
    :current-residual
    "Common-plane translations preserve embeddings and containment but move endpoints and do not compare curves transported through unrelated charts.",
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
