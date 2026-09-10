@@ -69212,8 +69212,71 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the actual identity-induced relative pair maps from the union-support term to the K- and L-support terms, their biproduct map and both projection identities; no supplied sign comparison, relative connecting morphism or exactness.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Construct the relative compact-support connecting morphism from H_(n+1)(X,X minus (K intersection L)) to H_n(X,X minus (K union L)); prove the signed comparison between restrictPieces and the transported overlap-to-pieces arrow using coefficient pair naturality and excision, then transport exactness to the four requested relative terms.",
+    :dependency-hashes
+    {:CoefficientCompactComplementTransportedArrows
+     "c0b86527a652fcb4e131ef24eb9b342a69190bf0d6ef9ee62eee118f6cba2e77",
+     :CoefficientRadialPair
+     "c11a2ec7239b672a0ae6a6037c2d764fa6d2c7b3c60717b33fb05d0c644ad838"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:unionComplement_subset_leftComplement
+     "2fb8ddfad9c603b9aa9119fa109bd88eca335b3015bfccb4220716200e62c6c1",
+     :unionComplement_subset_rightComplement
+     "e6f36b283b45873688095ee7ff7c6f629bb79f870501cd16ac59953806740c74",
+     :restrictLeft
+     "6848500f3a78a8b335aeaebb220d56f7af050b08242c1aa16ca270023635dd26",
+     :restrictRight
+     "5aa2d019ca0164377c3683ba9427699d4d2c8cf13f28400b00f118baa8d5c303",
+     :restrictPieces
+     "f90f1d4ef2b8ebbe46ca77587bc4a95f964c76e689be2ecf971a57958794805c",
+     :restrictPieces_fst
+     "3b139e71e0bb588db119f8f46bb0dbd31ae84e691aaa6e4853f73de8f255386b",
+     :restrictPieces_snd
+     "d927d88e6debac7fad4bb41366c41c9c3e43b2a74f9c5da42ca243eb6006b5fc"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and seven complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientCompactSupportRestrictionMaps.lean ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean ConstructionTargets/CoefficientRadialPair.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add compact support restriction maps'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "be68fdd59a2fd2f9a77f73f2c488a27347834d8a",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactSupportRestrictionMaps.lean",
+     :sha256
+     "d511cdea24b570aff04d8a47f5d53566a370539dd31bf252f49776ce13bf9ea6",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled the actual identity-induced relative pair maps from the union-support term to the K- and L-support terms, their biproduct lift and both projection identities. The construction preserves arbitrary X, K, L, commutative-ring coefficients and every degree. No sign comparison, equality with the transported complement arrow, relative connecting morphism, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 7,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean"],
    :dag-node
