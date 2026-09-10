@@ -17277,6 +17277,19 @@
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789013807702-17828-019a010e",
+     :commands
+     ["Python read-only pinned Checkpoint29Census.json SHA256, consumer counts, module counts and changed-path attribution"
+      "bb recorded-ledger author, near-consumer boundaries, concurrent reservations, replacement propagation and successor checkpoint audit"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 8e04c6e4:holes/labs/topology-contract/worklist.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 8e04c6e4:holes/labs/topology-contract/worklist2.edn)"
+      "git log --oneline e8a6f02b..750c7e17 -- ConstructionTargets problems"
+      "git diff --check 8e04c6e4^ 8e04c6e4"],
+     :finding
+     "Independent review of ledger-only transition 8e04c6e4, author codex-13. Census SHA256 8384612f222cc7adfa67b87f402a97fa4d9cf08a0ca28f81bb786806d9cf389d verified. All 59 named consumers reproduced: 58 existing, 23 zero-placeholder, 35 open, 25 near; placeholders 66->66, modules 685->689. Two portfolio and two concurrent modules correctly attributed; no consumer changes. Sphere-shift election requires actual R-linear coordinate/radial comparisons and an oriented composite from sphere homology to boundary homology, with positive target degree and a separate H1 ordinary-H0 kernel endpoint. No integral-to-R shortcut, assumed orientation coherence or frozen closure. Concurrent incidence work and STOP boundaries preserved. Replacement propagation, identical successor checkpoint and both validators pass. Ledger untouched."},
     :replacement-items
     [{:consumer :t00J01-rational-sphere-homology,
       :stop-condition
@@ -17431,7 +17444,7 @@
      :missing [:t93A05],
      :within-two 25}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: coefficient pair sequence and renewed consumer eligibility",
@@ -17453,7 +17466,7 @@
    :stop-condition
    "No supplied sphere shift, radial relative homology isomorphism or coefficient-change shortcut. Preserve actual subspace cokernels and distinguish ordinary H0 from reduced H0. Do not claim the sphere table or frozen closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SPHERE SUSPENSION: coefficient-general hemisphere and radial comparison assembly",
