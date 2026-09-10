@@ -63756,8 +63756,74 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the actual all-degree comparison and normalization factorization; no supplied local isomorphism or duplicate translated-chart construction.",
+   :evidence
+   {:dependency
+    {:path "ConstructionTargets/CoefficientChartLocal.lean",
+     :sha256
+     "ae0f436d51a3141e8b2ddc32119aa2d6afcddf3b3f19013be3e9156c7f2ae6cd"},
+    :placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "All-degree comparison, actual forward maps, inverse laws, normalization factorization and generator image compile without duplicating CoefficientChartLocal. General finite-dimensional model transport remains. Dimension-one coverage stays separate; no orientation coherence, fundamental classes or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:comparison
+     "5ea193a68a97f0410df44de9792cb00ac92d486fd9f69f33fa120b9e5fc6f90a",
+     :forward
+     "6e369e8180395cfac274611ea78c7a4940831d71e16a7046d4458d047824abc1",
+     :inverse_left
+     "0f363040f61c6bc613926f408102071c7c1e1f68536111c182a513e994781274",
+     :inverse_right
+     "adb183861c637357ad13bf89987d5c8e24b6393bb15661b245daa79da2f62847",
+     :normalization_factorization
+     "f5805aa8128ede69a345a0fc667c07c7be26004d9b527782896301d69c207a4b",
+     :generator_image
+     "9317293af80549af7ebc3c8c929f02dc0e42ea51375320b5868a4f3c6d937fde"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CoefficientChartLocalAllDegrees.lean ConstructionTargets/CoefficientChartLocal.lean",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.CoefficientChartLocal 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "Python read-only canonical-source audit: zero placeholders and complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/CoefficientChartLocalAllDegrees.lean ConstructionTargets/CoefficientChartLocalAllDegrees.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientChartLocalAllDegrees.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Actual coefficient local homology of a Hausdorff manifold charted on Euclidean space of dimension m+2",
+     :target
+     "Actual coefficient relative homology of Euclidean space of dimension m+2 and its deleted origin",
+     :direction
+     "Isomorphism from manifold local homology to model local homology via inverse neighborhood inclusion, existing translated chart pair transport and model-neighborhood inclusion."},
+    :commit "e002d6ed1469f41a889adc808e3896c42d987a1e",
+    :changed-paths
+    ["ConstructionTargets/CoefficientChartLocalAllDegrees.lean"],
+    :fixture
+    {:path "/tmp/CoefficientChartLocalAllDegrees.lean",
+     :sha256
+     "f0d088185ac88fc6b9b7baa1ab91f99c006c280f079e706208e73493c32dbeea"},
+    :axiom-audit-declarations 6},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoefficientChartLocalAllDegrees.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / all-degree ambient chart comparison",
