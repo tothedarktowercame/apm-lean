@@ -67687,8 +67687,97 @@
   {:consumer "t98A02",
    :stop-condition
    "Require all three coefficient chain inclusion squares and their derived homology squares with exact forward arrows; no supplied naturality square or exactness.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Use these three naturality squares to conjugate the signed subcomplex Mayer-Vietoris maps and connecting morphism, then transport the relative ambient-complement presentation to the requested pairs in X by coefficient excision.",
+    :dependency-hashes
+    {:CoefficientCompactComplementHomologyTransport
+     "fcab197c86e857e788128298cedc9cf0de41255c0961dbbabb983388b804e2b7"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:left_chain_square
+     "c6c213ed663fec789057c6c189e07d2480733231163cd218094373db3987cb49",
+     :right_chain_square
+     "55add5d64fa7c340511a92b83e969c97a51730b24b3af009ff5e0fc82baca804",
+     :overlap_chain_square
+     "54ad8f9e4ab0e61e89d9ac98acec355f7519552698c4d588b02b2416de5a4195",
+     :left_homology_square
+     "af5c5a85e37c68567c2e00c68e728926ffd4bad2f94f70b78629669f1c87be20",
+     :right_homology_square
+     "c7e74504ea4180782a5d77dbf6c63722074bcf80a2d4339942c2783f3c8ca3eb",
+     :overlap_homology_square
+     "be2908f4b943f3c0029cca2c6974ffcef6109356762d1dd49a0417837d8f0b5c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquares.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: comment-stripped zero placeholders, retained 800000 heartbeat bound and six complete declaration-header hashes matching the fixture",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientCompactComplementHomologySquares.lean ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add compact complement homology squares'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "lake build ConstructionTargets.CoefficientCompactComplementHomologyTransport && lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquares.lean",
+      :exit 1,
+      :correction
+      "The dependency built, but all three fixture chain-square proofs reproducibly exhausted the retained 800000-heartbeat bound during whole-goal definitional equality."}
+     {:cmd
+      "lake env lean /tmp/CoefficientCompactComplementHomologySquares.lean",
+      :exit 1,
+      :correction
+      "Confirmed the same deterministic timeout in the untouched fixture, ruling out canonical-path sensitivity."}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquares.lean",
+      :exit 1,
+      :correction
+      "The first proof-only repair reached the intended categorical compositions but the banked inclusion lemmas used a syntactically different TopCat presentation."}
+     {:cmd
+      "python3 /tmp/coefficient-compact-complement-homology-squares-audit.py",
+      :exit 2,
+      :correction
+      "The temporary audit script was no longer present; reran its checks inline read-only."}],
+    :representation
+    {:source
+     "Homeomorphism-induced coefficient chain and homology maps from the nested complement pieces, followed by the original-complement inclusions into X",
+     :target
+     "The direct coefficient chain and homology maps of the nested-piece inclusions into X",
+     :direction
+     "Exact equality from each transported forward composite to its direct nested inclusion map, first on chains and then on homology in every natural degree."},
+    :commit "0a90313e36e84b71d08bcf289a3465f1bdd4780d",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementHomologySquares.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactComplementHomologySquares.lean",
+     :sha256
+     "f7ece409aa802bf09740d18ec252def76d2a2e75ace12002d1e135d49fecba6f",
+     :placeholder-count 0,
+     :exact-promotion false,
+     :repair
+     "The exact fixture reproducibly exceeded its retained 800000-heartbeat bound after canonical dependency compilation. Preserved all declarations and replaced only the three expensive whole-goal change steps with explicit definitional equality rewrites; final source SHA256 d05fbae98ce3d7c3fe41492b0bf552691d75ed36a363a6813ff6623834ee87d5."},
+    :finding
+    "Compiled all three coefficient chain inclusion squares and their derived homology squares with the exact forward arrows, unchanged theorem headers and the required 800000 heartbeat bound. The proof-only elaboration repair avoids expanding each entire singular-chain goal. No Mayer-Vietoris exactness, excision, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 6,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementHomologySquares.lean"],
    :dag-node
