@@ -31616,8 +31616,43 @@
   {:consumer :t95J05,
    :stop-condition
    "Bank only the append-zero linear isometric embedding and its exact source-coordinate and last-coordinate formulas. Do not claim sphere-image equality, ambient or intrinsic Hausdorff nullity, cap partition, numerical normalization, sphere mass, moments, Stokes or consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Repair and immutably pin the fixture namespace before promoting the append-zero embedding; sphere-image equality, ambient and intrinsic Hausdorff transport, and cap partitions remain downstream.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :reason :fixture-namespace-conflict,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/build_step.bb row holes/labs/topology-contract/worklist2.edn lower-dimensional-sphere-raw-hausdorff-nullity-1; bb holes/labs/topology-contract/build_step.bb row holes/labs/topology-contract/worklist2.edn sphere-equator-append-zero-isometric-embedding-1",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint50-equator-embedding/SphereEquatorEmbedding.lean; lake env lean /tmp/codex13-checkpoint50-equator-embedding/SphereEquatorEmbedding.lean; rg -n '^namespace |#print axioms|def appendZero|theorem appendZero' /tmp/codex13-checkpoint50-equator-embedding/SphereEquatorEmbedding.lean; test ! -e ConstructionTargets/SphereEquatorEmbedding.lean; test ! -e ConstructionTargets/SphereEquatorEmbedding.md; git diff --exit-code -- ConstructionTargets/SphereEquatorEmbedding.lean ConstructionTargets/SphereEquatorEmbedding.md; git diff --check",
+      :exit 0}
+     {:cmd
+      "cp /tmp/codex13-checkpoint50-equator-embedding/SphereEquatorEmbedding.lean /tmp/codex14-equator-embedding-namespace-audit.lean; append checks for SphereEquatorEmbedding.appendZero and ConstructionTargets.SphereEquatorEmbedding.appendZero; lake env lean /tmp/codex14-equator-embedding-namespace-audit.lean",
+      :exit 1,
+      :expected-exit 1}],
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint50-equator-embedding/SphereEquatorEmbedding.lean",
+     :sha256
+     "2d57af29396b64df733918bd4143ded4ec7885d68c02f2249ab2d52d80413e40",
+     :placeholder-count 0},
+    :finding
+    "The reviewed fixture exists, matches SHA256 2d57af29396b64df733918bd4143ded4ec7885d68c02f2249ab2d52d80413e40, and compiles the append-zero linear isometric embedding and both coordinate formulas with standard-only axioms. It declares namespace SphereEquatorEmbedding, while the implementation row requires exact promotion under ConstructionTargets.SphereEquatorEmbedding. A direct audit confirms SphereEquatorEmbedding.appendZero exists and ConstructionTargets.SphereEquatorEmbedding.appendZero is unknown. Renaming or wrapping would change the exact fixture. Repair the fixture namespace and recorded digest, or consistently revise the acceptance namespace and exact-promotion requirement. This is a specification boundary, not a mathematical refutation.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereEquatorEmbedding.lean"
     "ConstructionTargets/SphereEquatorEmbedding.md"],
