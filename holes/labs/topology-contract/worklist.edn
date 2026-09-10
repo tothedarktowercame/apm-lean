@@ -68557,6 +68557,18 @@
      "The biproduct of coefficient homology groups of the corresponding actual topological subtypes",
      :direction
      "The two forward ambient-range-to-subtype homology isomorphisms are applied componentwise, producing an exact biproduct isomorphism whose forward and inverse arrows commute with both canonical projections."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789051014784-18775-c27a00d1",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 1fdef2d9"
+      "git show 1fdef2d9:ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean | sha256sum"
+      "lake env lean ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean"
+      "sha256sum ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean ConstructionTargets/CoefficientIntersectionRangeNaturality.lean /tmp/CoefficientPieceRangeBiproductComparison.lean"
+      "python3 comment-stripped declaration-header SHA256 and placeholder audit"],
+     :finding
+     "PASS: exact one-file scope and fixture promotion reproduced; dependency hash and five statement hashes match; zero placeholders; compilation is warning-free with standard-only axioms; the componentwise range-to-subtype biproduct isomorphism and all four forward/inverse projection formulas have the required orientation without claiming union comparison, Mayer-Vietoris conjugation, excision, localization, vanishing, or a fundamental class."},
     :commit "1fdef2d915925a128afb1235a2a16b699a22e87d",
     :changed-paths
     ["ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean"],
@@ -68571,7 +68583,7 @@
     :axiom-audit-count 5,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean"],
    :dag-node
@@ -68673,7 +68685,7 @@
      "Compiled exactly one missing comparison prerequisite. The direct sum of the two ambient range-subcomplex homology groups is now isomorphic to the direct sum of the actual left and right topological-subtype homology groups. Both forward and inverse maps have proved first- and second-projection formulas in every natural degree. The union comparison, conjugated exactness and coefficient excision remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
