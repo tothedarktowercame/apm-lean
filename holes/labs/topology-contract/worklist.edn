@@ -60082,72 +60082,90 @@
    :stop-condition
    "GO requires the complete literal incidence atlas and inclusion tangent packet. REVISE requires exactly one compiled prerequisite. No Producer or consumer closure claim.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Ready for bounded implementation of the complete vector-target incidence geometry packet. Target-manifold localization, valid component coverage, orientations and homological comparisons remain separate. No Producer or frozen consumer closure is claimed.",
-     :dependency-review
-     {:outcome :pass,
-      :commit "82d876986a2e972df752b10321b458f2ea54569a",
-      :job "invoke-1789013712888-17826-d6497535"},
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:chartedSpace
-      "452a3c8e107d3744638b0eca04074e57757500285d1be70ff6f8c69febd51666",
-      :chartAt
-      "7cb503fe50f1e473f99f60f47fa19efc265f8ef575eeedcaee2f8980fb740d10",
-      :atlas
-      "8d59c977b335d2472a6d39f516164a81af6667e35c6b09502c4ff4af6c06d00d",
-      :isManifold
-      "2fd6ef1581e70625585f00ac6ff58523ca7d7f0a855fefb925a3ff06391d38aa",
-      :smooth-inclusion
-      "3330e201a996250b85f7f07a9d9bb916f24fc4cbf1206ea3e57b3b195ba0dbd0",
-      :injectivity
-      "aae5b93d1c2615918a6e57cd4bbaf59aabcca94236e2c161ab35feba7a07f362",
-      :actual-range
-      "9750ee91f6b06fc6b8dd250e09243a0d7a056757b0990ba69ff0ac2cdb5af9f0"},
-     :acceptance
-     {:fixture-sha256
-      "87f64ce17d5aa08aecffdb25ce6c798f1ae5b8a564e48c595cbedb265f3759b9",
-      :implementation
-      "Promote the exact fixture. Compile all twenty declarations, preserving the explicit normalized Euclidean model, transported chosen atlas, chart specifications, genuine infinity, smooth inclusion and actual tangent equalizer theorem. Audit zero placeholders and standard-only axioms. Retain empty incidence and zero-dimensional kernels. Preserve existing APIs and state vector-target self-model applicability limits; do not claim oriented duality or frozen consumer closure.",
-      :commands
-      ["lake env lean ConstructionTargets/TransverseIncidenceGeometry.lean"],
-      :placeholder-before 0,
-      :placeholder-after 0,
-      :axioms :standard-only},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-tangent-build:$LEAN_PATH lean -o /tmp/incidence-tangent-build/ConstructionTargets/TransverseIncidenceTangent.olean ConstructionTargets/TransverseIncidenceTangent.lean'",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-tangent-build:$LEAN_PATH lean /tmp/TransverseIncidenceGeometry.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/transverse-incidence-geometry-audit.py",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "Private-path TransverseIncidenceGeometry compilation, initial geometry definition",
-       :exit 1,
-       :correction
-       "Specified the source model parameters explicitly in derivativeAt and Geometry applications. Final compilation succeeds without warnings."}],
-     :audit "/tmp/transverse-incidence-geometry-audit.json",
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/TransverseIncidenceGeometry.lean",
-      :sha256
-      "87f64ce17d5aa08aecffdb25ce6c798f1ae5b8a564e48c595cbedb265f3759b9",
-      :placeholder-count 0},
-     :finding
-     "Complete literal-incidence geometry packet compiled. The constructed ChartedSpace uses EuclideanSpace ℝ (Fin (finrank A + finrank B - finrank V)) on the inherited-topology incidence subtype. Dimension equality transports exactly the banked chosen atlas and its geometry. Explicit chartAt, atlas-image, atlas-membership and center-coverage specifications compile. For this same normalized atlas, genuine-infinity manifold structure, smooth inclusion into the original product manifold, actual mfderiv injectivity and exact tangent equalizer range all compile. actual_range states directly that the range of the inclusion mfderiv consists precisely of pairs satisfying Df(v)=Dg(w). No topology, norm, hypotheses or existing APIs were changed.",
-     :implementation
-     {:scope ["ConstructionTargets/TransverseIncidenceGeometry.lean"]},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :compiled-declarations 20,
+    :residual
+    "Complete normalized incidence atlas and same-atlas tangent geometry for finite-dimensional inner-product vector targets and complete inner-product self-model sources, including empty incidence and zero-dimensional kernels. Target-manifold localization, valid component coverage, orientations and homological comparisons remain. No Producer or frozen consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789013712888-17826-d6497535"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:chart_center
+     "5d4ba5f3f7a4d1b643c531eccf97316db3d38924c5f073d623dd6213bfb668dc",
+     :cast_atlas
+     "570ef0352796e453df30c3bd0727773d3779d67ce3db0f933aae65bf4252d341",
+     :chartedSpace
+     "452a3c8e107d3744638b0eca04074e57757500285d1be70ff6f8c69febd51666",
+     :castChart
+     "6378452265a26cbf0ead8bbe1de2fd910c0fd1c1cd1450234dee66b085d43259",
+     :smooth_inclusion
+     "3330e201a996250b85f7f07a9d9bb916f24fc4cbf1206ea3e57b3b195ba0dbd0",
+     :index_eq
+     "3a31b702951ae66932245fa42988a2815f636944b39c65dbebe76d105666f1a6",
+     :inclusion_range
+     "48896a171fe6c446d7d1f2f1010a101efe09e2fbd67093c747b2d50939afd050",
+     :actual_range
+     "9750ee91f6b06fc6b8dd250e09243a0d7a056757b0990ba69ff0ac2cdb5af9f0",
+     :mem_inclusion_range
+     "ce1e0e4fbd5599997bd0158140a2c16c1ebe61db95ba8339f059d344e47481f8",
+     :Geometry
+     "117c7a142bc0835749bee31ca3960cdae9b386ba12aa809bb41df9bd3ad0c710",
+     :atlas_eq
+     "8d59c977b335d2472a6d39f516164a81af6667e35c6b09502c4ff4af6c06d00d",
+     :geometry
+     "5cec8f51dd5b55e4a795130586c566527a90d26b8c85fee750fc62689a2ce15d",
+     :cast_property
+     "96ed697a409a6cecf2d06da4e637c50e972a41f2261c49fa7d6b591b0b5e11b3",
+     :cast_chartAt
+     "d498364ed8b9a2496a41a35be453f5766f21218c012a962918509a06f6f905c3",
+     :inclusion_injective
+     "aae5b93d1c2615918a6e57cd4bbaf59aabcca94236e2c161ab35feba7a07f362",
+     :isManifold
+     "2fd6ef1581e70625585f00ac6ff58523ca7d7f0a855fefb925a3ff06391d38aa",
+     :chartAt_eq
+     "7cb503fe50f1e473f99f60f47fa19efc265f8ef575eeedcaee2f8980fb740d10",
+     :castAtlas
+     "a4ac7b932636d8fed9943a7799d462d54f6ad234259be6907cdce02f3dc279c8",
+     :derivativeAt
+     "a2f318239b21357a77cdf95e641c6469af94d534c1ea17aefa931e00c5db0e89",
+     :chart_mem
+     "5fdc1799f2b38782c48b4abd00480c8e29d9a535e932688b1d0bcc625f8141b3"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sed '/^Path.*write_text/d' /tmp/transverse-incidence-geometry-audit.py | python3",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.TransverseIncidenceTangent 2>&1 | tail -10",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/TransverseIncidenceGeometry.lean ConstructionTargets/TransverseIncidenceGeometry.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/TransverseIncidenceGeometry.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "970a6b8be94bdc7b73f529283e1db607aea176ba",
+    :changed-paths
+    ["ConstructionTargets/TransverseIncidenceGeometry.lean"],
+    :fixture
+    {:path "/tmp/TransverseIncidenceGeometry.lean",
+     :sha256
+     "87f64ce17d5aa08aecffdb25ce6c798f1ae5b8a564e48c595cbedb265f3759b9"},
+    :axiom-audit-declarations 12},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TransverseIncidenceGeometry.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / literal incidence atlas and tangent equalizer",
