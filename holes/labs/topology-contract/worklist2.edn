@@ -43525,8 +43525,98 @@
   {:consumer :t03J05,
    :stop-condition
    "Bank only the immutable repository artifact containing checkpoint67's exact ProductSimplexWordPrefixCounts recurrence bytes. Do not edit ledger evidence, modify the canonical source, promote terminal counts, define balanced swaps, compare faces, prove cancellation or claim consumer closure.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Atomically repoint checkpoint67 evidence.fixture.path from the mutable canonical source to this immutable artifact while preserving every other evidence and review field.",
+    :gates
+    {:scratch-fixture-sha256 :pass,
+     :exact-one-file-scope :pass,
+     :whitespace :pass,
+     :stable-artifact-byte-identity :pass,
+     :evidence-commit-byte-identity :pass,
+     :artifact-compile :pass,
+     :placeholder-scan :pass,
+     :git-blob-identity :pass,
+     :canonical-source-unchanged :pass,
+     :commit :pass,
+     :sha256-identity :pass,
+     :both-ledgers :pass,
+     :forbidden-declaration-scan :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "git show 30f261b66c5ed95ef136addb5cda9ab1a1ab491d:ConstructionTargets/ProductSimplexWordPrefixCounts.lean > /tmp/codex14-checkpoint67-recovered.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex14-checkpoint67-recovered.lean /tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd "git hash-object /tmp/codex14-checkpoint67-recovered.lean",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/codex14-checkpoint67-recovered.lean holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
+      :exit 0}
+     {:cmd
+      "git hash-object holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration and whitespace audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; git status --short; sha256sum ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "git commit -m 'Preserve checkpoint67 prefix counts artifact'",
+      :exit 0}
+     {:cmd
+      "git show --check --stat --oneline HEAD; git status --short",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "Run final artifact audits from mistyped working directory /homee",
+      :exit 1,
+      :finding
+      "The working directory did not exist, so no command started and no repository state changed.",
+      :correction
+      "Reran the complete audit from /home/joe/code/apm-lean; it exited zero."}],
+    :representation
+    {:source
+     "Checkpoint67 ProductSimplexWordPrefixCounts bytes recovered from evidence commit 30f261b66c5ed95ef136addb5cda9ab1a1ab491d",
+     :target
+     "A stable repository evidence artifact containing those exact bytes",
+     :direction
+     "Exact byte equality from the source evidence-commit representation to the target immutable-artifact representation, preserving SHA256 and Git blob identity."},
+    :commit "ae9e682b646af5e72f987c2db9d2f9e4bf27ecde",
+    :changed-paths
+    ["holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean"],
+    :fixture
+    {:path
+     "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
+     :sha256
+     "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
+     :git-blob "88377d544abc36a0e20a2164ff9600814ddd6261",
+     :source-commit "30f261b66c5ed95ef136addb5cda9ab1a1ab491d",
+     :placeholder-count 0},
+    :finding
+    "The committed artifact is byte-identical to the source recovered from checkpoint67's evidence commit and to the reviewed scratch recurrence fixture. It independently reproduces SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08 and Git blob 88377d544abc36a0e20a2164ff9600814ddd6261, compiles without placeholders or forbidden declarations, and changes exactly the one scoped artifact. No ledger evidence, canonical source, theorem statement or consumer problem was changed.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean"],
    :dag-node
