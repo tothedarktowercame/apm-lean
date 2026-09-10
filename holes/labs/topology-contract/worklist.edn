@@ -71745,8 +71745,33 @@
   {:consumer "t00A03",
    :stop-condition
    "Require a relative Sard theorem producing finite interior coincidence fibers for the endpoint-weighted family, followed by simultaneous finite-family parameter selection, embedding stability and explicit chart-transition comparison.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove generic finiteness of the interior coincidence locus via relative Sard, then adjoin this finite boundary residual; simultaneous parameter selection, embedding stability and chart-transition compatibility remain.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean /tmp/PlaneArcEndpointPairBoundaryFinite.lean ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean",
+      :exit 0}],
+    :commit "282edb7ab67ca7cfcb6d0952c88a3c8e48b51536",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointPairBoundaryFinite.lean",
+     :sha256
+     "2315052450b3c2cf2773a9e272fc1e8fcc6c32b44a24091ada1e98cff0d9f784",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The non-interior boundary is contained in the product of the two-point endpoint set, is finite, and adjoining it to any finite interior residual preserves finiteness. The module compiles without warnings or placeholders and its dependency hash matches."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"],
    :dag-node
