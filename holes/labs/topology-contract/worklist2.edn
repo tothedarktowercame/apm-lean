@@ -38218,8 +38218,109 @@
   {:consumer :t03J05,
    :stop-condition
    "Bank only the Fin-valued cumulative grid vertex, its order homomorphism, coordinate projections and coordinate-sum theorem for balanced Boolean words. Do not invoke prodStdSimplex.objEquiv.invFun, construct a simplex or MaximalPath, prove nondegeneracy or inverse laws, define corner swaps, cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:source-hashes
+    {"ConstructionTargets/ProductSimplexCumulativeOrderHom.lean"
+     "27ca63d0289a65205a22908ada4ee092c6bdfa946b431d581106ececd486bd2a",
+     "ConstructionTargets/ProductSimplexCumulativeOrderHom.md"
+     "9816f1b37b4348537ca3aeed66eebf8e85252a0bc65cce9c8df9c7cc976fb9a3"},
+    :placeholder-delta 0,
+    :residual
+    "Apply prodStdSimplex.objEquiv.invFun to cumulativeOrderHom, prove maximal nondegeneracy from the coordinate-sum identity, package the MaximalPath and prove both word/path inverse laws.",
+    :gates
+    {:canonical-compile :pass,
+     :bounded-grid-coordinates :pass,
+     :whitespace :pass,
+     :target-warnings :pass,
+     :fixture-hash :pass,
+     :axiom-audits 3,
+     :fixture-byte-equality :pass,
+     :exact-scope :pass,
+     :placeholder-scan :pass,
+     :coordinatewise-monotonicity :pass,
+     :lake-build :pass,
+     :commit :pass,
+     :coordinate-sum :pass,
+     :coordinate-projections :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :ledger-validation :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"gridVertex"
+     "6c4d37579c4b0e9518dd52a4ea84c9e4ded654c35826b6bac8dbfc0795158d73",
+     "cumulativeOrderHom"
+     "0f9740982fb0c01ada1c21b21d93093969605303548fd507106798d7d2ff783a",
+     "cumulativeOrderHom_fst"
+     "815338145bacde9187e7ef6e274356923797122c3d89ce9f806540582186263c",
+     "cumulativeOrderHom_snd"
+     "b8383e8bc29cdeccb157fdb7829587e12c2cc546586e8af9506570f2b27a78a4",
+     "cumulativeOrderHom_coordinate_sum"
+     "0af932939a93f7d02316b3016aab8c8b3e1f000f349b3c2b60dcf89f51d265d1"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "readlink -f .lake/packages; read required DAG, design, experiment and dependency-receipt sources; inspect canonical prefix-count and balanced-word interfaces",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint61-cumulative-orderhom/ProductSimplexCumulativeOrderHom.lean; inspect exact fixture",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint61-cumulative-orderhom/ProductSimplexCumulativeOrderHom.lean ConstructionTargets/ProductSimplexCumulativeOrderHom.lean; sha256sum fixture, canonical Lean source and documentation",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint61-cumulative-orderhom/ProductSimplexCumulativeOrderHom.lean; lake env lean ConstructionTargets/ProductSimplexCumulativeOrderHom.lean; lake build ConstructionTargets.ProductSimplexCumulativeOrderHom",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ProductSimplexCumulativeOrderHom.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace, declaration-presence and statement-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; stage exact two-file scope; git diff --cached --check; git commit -m 'Add cumulative product simplex grid path'",
+      :exit 0}
+     {:cmd
+      "git show --check --stat --oneline c6071983; recompute canonical hashes and Git blobs; git status --short",
+      :exit 0}],
+    :commit "c607198359bdbcd8908fdc441a0e4f8a69407880",
+    :git-blobs
+    {"ConstructionTargets/ProductSimplexCumulativeOrderHom.lean"
+     "9d8dba611acbef5deec0172e1b6a783c5bebf7ac",
+     "ConstructionTargets/ProductSimplexCumulativeOrderHom.md"
+     "529a9b76d28ffa064cfbb9d8c721c0ab0235f91a"},
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexCumulativeOrderHom.lean"
+     "ConstructionTargets/ProductSimplexCumulativeOrderHom.md"],
+    :dependency-warnings
+    [{:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 2960,
+      :kind :unused-tactic}
+     {:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 3580,
+      :kind :unnecessary-simpa}],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint61-cumulative-orderhom/ProductSimplexCumulativeOrderHom.lean",
+     :sha256
+     "27ca63d0289a65205a22908ada4ee092c6bdfa946b431d581106ececd486bd2a",
+     :canonical-path
+     "ConstructionTargets/ProductSimplexCumulativeOrderHom.lean",
+     :canonical-sha256
+     "27ca63d0289a65205a22908ada4ee092c6bdfa946b431d581106ececd486bd2a",
+     :git-blob "9d8dba611acbef5deec0172e1b6a783c5bebf7ac",
+     :placeholder-count 0},
+    :finding
+    "The exact recorded fixture is promoted canonically. gridVertex uses the exported horizontal and vertical prefix counts with their balanced terminal bounds to produce Fin-valued coordinates. cumulativeOrderHom proves coordinatewise monotonicity using the exported count monotonicity theorems. Its projection theorems are definitional, and its coordinate sum is the banked prefix partition identity. No product simplex, MaximalPath, nondegeneracy proof, inverse law, corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection result or consumer closure was introduced.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexCumulativeOrderHom.lean"
     "ConstructionTargets/ProductSimplexCumulativeOrderHom.md"],
