@@ -71109,8 +71109,46 @@
   {:consumer "t98A02",
    :stop-condition
    "Require compactness-derived closedness of L and containment L subset interior (K complement), or the correctly ordered symmetric construction, before applying coefficient excision; do not infer this containment when K and L overlap.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Audit whether coefficient excision applies to A = K complement and Z = L. For arbitrary overlapping compact K and L, L subset interior (K complement) is generally false, so a differently ordered or genuinely relative Mayer-Vietoris transport may be required before final exactness.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:nestedRightToExcised_mem
+     "d9d36851af2c1809d583eb6d8c5ab175d25d66f7f35931b4611ba752cb6cd15b",
+     :nestedRightRelativeChainsIso
+     "d817eed3f2c38103f476ec5a2b4dfb6671f04863e71ee1518bf9a93fc95e69f4"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean /tmp/CoefficientCompactComplementNestedExcisionChains.lean ConstructionTargets/CoefficientCompactComplementPairHomeomorph.lean ConstructionTargets/CoefficientOverlapNormalization.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-two-declaration audit over ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "9da20d9dbb918b526f4c58a309508e397bd6b21d",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean"],
+    :fixture
+    {:path
+     "/tmp/CoefficientCompactComplementNestedExcisionChains.lean",
+     :sha256
+     "a0e5f58cb14e81a0c8212309a836cabcae1fff5472c66b8cfedc3e923538bcd3",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The right-piece homeomorphism has the literal membership equivalence with excisedSubspace (K complement) L, and pairHomeo induces the required forward coefficient relative-chain isomorphism. The module compiles without warnings or placeholders; both dependency hashes match, the commit changes exactly the scoped path, and the worktree is clean. No excision hypothesis is asserted."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean"],
    :dag-node
