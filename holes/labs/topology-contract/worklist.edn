@@ -61724,36 +61724,32 @@
    :stop-condition
    "GO requires the chosen global atlas, specifications and same-atlas smooth inclusion. REVISE requires exactly one compiled prerequisite; no tangent or consumer closure claim.",
    :evidence
-   {:placeholder-after 0,
+   {:repair-kind :evidence-only,
+    :placeholder-after 0,
     :placeholder-delta 0,
     :residual
-    "Chosen global atlas, specifications and genuine-infinity smooth inclusion compile for exactly normalizedAtlas, preserving inherited topology, ordinary product norm, empty incidence and zero-dimensional kernels. Actual inclusion derivative injectivity and tangent equalizer, component coverage, orientations and homological comparisons remain. No consumer closure claimed.",
-    :dependency-review
-    {:outcome :pass, :job "invoke-1789018245956-17968-3992b67c"},
+    "Same-atlas normalized manifold structure and smooth inclusion remain compiled. Actual inclusion derivative injectivity, tangent equalizer, component coverage, orientations and homological comparisons remain subsequent; no consumer closure claimed.",
     :outcome :done-unreviewed,
     :warnings [],
     :statement-hashes
     {:normalizedAtlas
-     "0e098dd25beb4b950dae7892591f4aa09e788c6b2d1c5157326b908c86a62347",
+     "1f36b1887db90eafcead02427cda547bc046ed1d77c3e6da66ed95e0a3022403",
      :normalized-chartAt
-     "6c90fb4cc0ccfb3b189abf0de7d655c48f9eb394add2ae0ce247ab46dc8cdd6f",
+     "b84bd48ae1dc819b56bf6941702cba973b973bd2cd76dccda72fde6a1912cb84",
      :normalized-atlas
-     "654f29607aec0f4b13c0e29c8776772f6e8b6fda54eb28f2e2591df58184ca4e",
+     "0aa184ae31aeb434f3576bdce405f2bc42b85a274ba0c1e78ddcc0429f629b68",
      :normalized-chart-membership
-     "c274eb16354f76f4eea79a1c42316d16b4b8e9c19cc15d40b0a9d8dd483418d1",
+     "57b8406bcfc6316e553e7c795aa2bff5ac3a62a76092ea1a451636fd0f952dcb",
      :normalized-isManifold
-     "62cbd01d9e0d6e4ee27b82fa7c4f0f00416da5526c1af96a26154708afcf9a6a",
+     "f73c6680153af8c5ef28c42b69364700bcbb54391e3d6710a9e1ba336faa1764",
      :normalized-smooth-inclusion
-     "bd52479abdbcd160f86470c2546c3bc54fea6dfae7e1fe5b656e1548fce81d01"},
+     "c503810335b4b3b32738b3f65042031d9aed4f8014fee0aea58d34e1fa1ae168"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "codex-6",
     :placeholder-before 0,
     :commands
     [{:cmd
-      "sed '/^Path.*write_text/d' /tmp/manifold-target-incidence-global-audit.py | python3",
-      :exit 0}
-     {:cmd
-      "set -o pipefail; lake build ConstructionTargets.ManifoldTargetIncidenceSmoothCharts 2>&1 | tail -8",
+      "Python read-only corrected outer-delimiter extraction, 23-hash audit, complete normalized-header output, fixture equality and placeholder assertions",
       :exit 0}
      {:cmd
       "cmp /tmp/ManifoldTargetIncidenceGlobalAtlas.lean ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean",
@@ -61762,32 +61758,32 @@
       "lake env lean ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean",
       :exit 0}
      {:cmd
-      "git diff --check -- ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean",
+      "git diff --exit-code 7593f33c5eda754661e5169a50fd3dd72ef5589e -- ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean",
       :exit 0}
-     {:cmd "git diff --exit-code -- problems", :exit 0}
+     {:cmd "git diff --check", :exit 0}
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0}
-     {:cmd
-      "git diff --cached --check -- ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean",
-      :exit 0}],
-    :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-10",
-     :job "invoke-1789020063208-18008-99e2097f",
-     :finding
-     "Deterministic evidence defect in transition 568d7d09: /tmp/manifold-target-incidence-global-audit.py stops statement extraction at the first :=, including embedded letI assignments. Consequently the recorded hashes for normalized_chartAt, normalized_atlas, normalized_chart_mem, normalized_isManifold and normalized_smooth_inclusion omit their conclusions; normalized_isManifold hashes only 'theorem normalized_isManifold :\\n    letI '. Repair extraction to include the complete declaration type through the outer proof/body delimiter, then regenerate the affected evidence hashes. No Lean repair identified: commit 7593f33c has exact single-file scope, fixture SHA256 e3d12f117d5106fa50605de4b247a5b7de720a7cd2114b9b3247a11877f1ee71 matches, zero placeholders, dependency build passed 8450 jobs, compilation passed with 23 standard-only axiom audits, and pinned validator passed 483 items. Same-atlas normalized geometry and inherited topology are preserved. Ledger untouched."},
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "sed '/^Path.*write_text/d' /tmp/manifold-target-incidence-global-audit.py | python3",
+      :exit 0,
+      :correction
+      "Prior successful script execution produced invalid truncated statement evidence. Superseded its first-:= extraction and all six previously reported normalized hashes with complete declaration-header hashes."}],
     :commit "7593f33c5eda754661e5169a50fd3dd72ef5589e",
-    :changed-paths
-    ["ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean"],
+    :changed-paths [],
     :fixture
     {:path "/tmp/ManifoldTargetIncidenceGlobalAtlas.lean",
      :sha256
      "e3d12f117d5106fa50605de4b247a5b7de720a7cd2114b9b3247a11877f1ee71"},
+    :finding
+    "Replaced first-assignment extraction with fixture-specific outer declaration-delimiter extraction. Regenerated all 23 declaration hashes and printed complete normalized theorem headers, including letI assignments and conclusions. Lean remains byte-identical to the existing implementation commit; no new source commit or ledger edit was necessary.",
+    :statement-hash-method
+    "SHA256 of exact UTF-8 source from def/theorem keyword through the character before the space preceding the outer := or where. Outer delimiters match ' :=(?=\\n| by\\b| rfl\\b| h ▸)| where(?=\\n)', skipping embedded letI and named-argument assignments. Attributes and trailing separator whitespace are excluded.",
     :axiom-audit-declarations 23},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean"],
    :dag-node
