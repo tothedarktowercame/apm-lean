@@ -29562,22 +29562,117 @@
    :stop-condition
    "Bank only the exact derivative norms and upper and lower graph-density formulas. Do not claim an ambient coordinate isometry, cap-image equality, subtype or Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint47-cap-density/SphereCapGraphDensity.lean",
-      :sha256
-      "ead6d3e5f1495df18fad9742abd7a178da4e2d4082e1943efd1b6a4082dcb8d1"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/codex13-checkpoint47-cap-density/SphereCapGraphDensity.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Construct the explicit WithLp 2 to EuclideanSpace coordinate isometry, prove exact strict-cap image equalities and subtype identifications, and transport C1GraphGlobalBounds.exact_area_value.",
+    :gates
+    {:canonical-compile :pass,
+     :upper-functional-rewrite :pass,
+     :upper-fderiv-density :pass,
+     :whitespace :pass,
+     :dimension-two-both-signs :pass,
+     :lower-density :pass,
+     :fixture-hash :pass,
+     :axiom-audits 8,
+     :exact-scope :pass,
+     :claim-boundary :pass,
+     :placeholder-scan :pass,
+     :upper-density-square :pass,
+     :lake-build :pass,
+     :dimension-three-both-signs :pass,
+     :lower-density-square :pass,
+     :warning-scan :pass,
+     :upper-density :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :lower-derivative-norm :pass,
+     :upper-derivative-norm :pass,
+     :lower-fderiv-density :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"density_upperDerivative_sq"
+     "e39be61b91b13e96624586f7c996aee64718f43b349bff6d04e420abef98c4aa",
+     "density_upperDerivative"
+     "05027ddf4b38567b0c0a8ee21e88806303942d199b6d72f771e71e013be8b7a1",
+     "density_lowerDerivative"
+     "aaa40312b05bb187709da35d150bdd98a4d4b6cee8bc10e9287b4dd9551ff806",
+     "norm_upperDerivative"
+     "c8b0e2d7fb5dd947ed48455539bc4972afd80625e4a0b1d8b0b555d930539e3c",
+     "upperDerivative_eq"
+     "ca829e9f698d4f691d60abcb4c69bd3cb344641e8dc582f657588938d5491713",
+     "fderiv_upper_density"
+     "a4413e1c1cabaef18721122d569b3a1e1f3baca4e48f7447bb37ada6a918d884",
+     "norm_lowerDerivative"
+     "70de87477a01bc316fe17422fa892be8a314ef7762fdc67db0a3a5717ae2ea15",
+     "density_lowerDerivative_sq"
+     "ee76c8ff419737ff46484bfd5cc962e14a2e06eb8fd1c33e171752b1871ee823",
+     "fderiv_lower_density"
+     "b4ad98ae1712d7f0f2e62b86ee19b5019714a7feb3f2f7f031135101fa4a7775"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, build-loop design, both ledgers and reviewed dependency receipt",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint47-cap-density/SphereCapGraphDensity.lean ConstructionTargets/SphereCapGraphDensity.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint47-cap-density/SphereCapGraphDensity.lean ConstructionTargets/SphereCapGraphDensity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint47-cap-density/SphereCapGraphDensity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SphereCapGraphDensity.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SphereCapGraphDensity",
+      :exit 0}
+     {:cmd
+      "Audit eight namespace-local standard-only axiom reports and zero warnings or errors",
+      :exit 0}
+     {:cmd
+      "Audit innerSL_apply_norm calculation, both derivative norms, both squared-density identities, positivity arguments and both reciprocal fderiv-density formulas",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/SphereCapGraphDensity.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n '[[:blank:]]+$' ConstructionTargets/SphereCapGraphDensity.lean ConstructionTargets/SphereCapGraphDensity.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --cached --check and exact two-file staged-scope audit",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline efe4acb8 && git diff efe4acb8^ efe4acb8 --check",
+      :exit 0}],
+    :dependency-uptake
+    {:id :sphere-cap-height-fderivative-1,
+     :commit "67eedcc383de0eeb1bce7b89d2c0e3be56af7bf3",
+     :review "invoke-1789048138660-18702-99277621"},
+    :commit "efe4acb81a42396ab2377e66333563433a71a9ab",
+    :changed-paths
+    ["ConstructionTargets/SphereCapGraphDensity.lean"
+     "ConstructionTargets/SphereCapGraphDensity.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint47-cap-density/SphereCapGraphDensity.lean",
+     :sha256
+     "ead6d3e5f1495df18fad9742abd7a178da4e2d4082e1943efd1b6a4082dcb8d1",
+     :placeholder-count 0},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereCapGraphDensity.lean"
     "ConstructionTargets/SphereCapGraphDensity.md"],
