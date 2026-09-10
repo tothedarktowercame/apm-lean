@@ -19102,9 +19102,100 @@
   {:consumer :t94J08,
    :stop-condition
    "No supplied sequence morphism or naturality square, integral-to-R shortcut, signed sphere-action conclusion or consumer closure claim. Preserve arbitrary subsets and empty subspaces.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Signed hemisphere exchange, antipodal action and reduced-S0 normalization remain before t94J08 uptake; other consumers retain their geometric comparison obligations.",
+     :axiom-audits 18,
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:namespace "ConstructionTargets.CoefficientPairNaturality",
+      :implementation
+      "Promote the exact compiled fixture and document its actual sequence components, connecting direction and remaining geometric obligations.",
+      :declarations
+      ["sequenceMap"
+       "component_sub"
+       "component_absolute"
+       "component_relative"
+       "inclusion_square"
+       "projection_square"
+       "connecting_naturality"
+       "absolute_id"
+       "absolute_comp"
+       "pair_id"
+       "pair_comp"
+       "homology_id"
+       "homology_comp"
+       "contractible_naturality"
+       "integral_empty"
+       "rational_empty"
+       "integral_naturality"
+       "rational_naturality"],
+      :hypotheses
+      "R and all spaces are Type 0. R is a commutative ring; subsets are arbitrary, including empty subsets. Maps require continuity and MapsTo only. Connecting naturality holds in every degree including zero. Contractible connecting-isomorphism compatibility requires both ambient spaces contractible and positive target degree; no relative-map invertibility is assumed.",
+      :consumer-equation
+      "connecting R A n followed by homologyMap of the actual restricted map equals homologyMap of the actual cokernel pair map in degree n+1 followed by connecting R B n.",
+      :consumer-residual
+      "Signed hemisphere exchange, antipodal action and reduced-S0 normalization remain before t94J08 uptake. Degree realization, localization/gluing and nonbounding require their own geometric comparisons.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientPairNaturality."
+       "Reproduce all eighteen standard-only axiom audits and integer/rational examples, including empty subsets."
+       "Audit all three sequence-map components, both squares, connecting direction, pair identity/composition and contractible compatibility."
+       "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG, closure rules, both ledgers and dependency PASS receipts; inspect actual pair-map and homology-sequence APIs",
+       :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientPairNaturality.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientPairNaturality.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientPairNaturality.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "git diff --no-index --check /dev/null /tmp/CoefficientPairNaturality.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial fixture compilation",
+       :exit 1,
+       :correction
+       "Made categorical composition proofs explicit and changed inferred-type example declarations to definitions."}
+      {:cmd "Second fixture compilation",
+       :exit 1,
+       :correction
+       "Replaced unsuccessful simplification of pair identity with explicit transport of the cokernel-projection equation."}
+      {:cmd "Fixture compilation after adding audits",
+       :exit 1,
+       :correction
+       "Changed the standalone documentation comment before axiom commands to an ordinary block comment; final compilation succeeds."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientPairNaturality.lean",
+      :sha256
+      "62ae88d6bc3fd4de0b065813b3e157da15d0cf75e5e8ee4ac2c5c09b046b9580"},
+     :finding
+     "Complete actual-map fixture compiled. The constructed short-complex morphism has exactly the reviewed restricted, absolute and cokernel components. Both squares are proved; homology-sequence naturality yields the correctly oriented connecting equation, including degree zero. Actual relative maps and their homology arrows satisfy identity and composition. Contractible connecting-isomorphism compatibility follows from the exact forward maps without relative invertibility. Integer and rational examples retain empty subspaces. No consumer closure or signed sphere action is claimed.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientPairNaturality.lean"
+       "ConstructionTargets/CoefficientPairNaturality.md"]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientPairNaturality.lean"
+    "ConstructionTargets/CoefficientPairNaturality.md"],
    :dag-node
    "RELATIVE HOMOLOGY: actual coefficient-general pair connecting-map naturality",
    :acceptance
