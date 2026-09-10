@@ -4,6 +4,7 @@
          '[clojure.set :as set]
          '[clojure.java.shell :as shell]
          '[clojure.pprint :as pprint]
+         '[clojure.walk :as walk]
          '[clojure.java.io :as io])
 
 (def here (.getParent (.getAbsoluteFile (java.io.File. *file*))))
@@ -438,6 +439,26 @@
         (write-ledger! (assoc data :items (replace-item items id (constantly repaired))))
         (println "repaired dependencies for" (name id))))))
 
+(defn repair-fixture-hash! []
+  (let [fixture-path (nth *command-line-args* 2 "")
+        old-hash (nth *command-line-args* 3 "")
+        new-hash (nth *command-line-args* 4 "")
+        replacements (atom 0)
+        repaired (walk/postwalk
+                  (fn [x]
+                    (if (and (map? x)
+                             (= fixture-path (:path x))
+                             (= old-hash (:sha256 x)))
+                      (do (swap! replacements inc) (assoc x :sha256 new-hash))
+                      x))
+                  data)]
+    (when-not (= 1 @replacements)
+      (throw (ex-info "fixture hash repair needs exactly one matching fixture"
+                      {:path fixture-path :old-hash old-hash
+                       :matches @replacements})))
+    (write-ledger! repaired)
+    (println "repaired fixture hash for" fixture-path)))
+
 ;; A refusal has to arrive as a sentence. build_step.bb's failures reach the
 ;; operator through topology-build-loop.sh's `die "invalid receipt ...: $out"`
 ;; and then through the supervisor's last_stop_reason, which keeps the FIRST
@@ -463,8 +484,9 @@
           (if-let [i (by-id id)] (prn i) (System/exit 2)))
   "apply-result" (apply-result!)
   "repair-dependencies" (repair-dependencies!)
+  "repair-fixture-hash" (repair-fixture-hash!)
   "replay" (replay!)
   (do (binding [*out* *err*]
-        (println "usage: build_step.bb next-open|unreviewed|counts|row|apply-result|repair-dependencies|replay [ledger] [args...]"))
+        (println "usage: build_step.bb next-open|unreviewed|counts|row|apply-result|repair-dependencies|repair-fixture-hash|replay [ledger] [args...]"))
       (System/exit 2)))
 (catch clojure.lang.ExceptionInfo t (die! t)))
