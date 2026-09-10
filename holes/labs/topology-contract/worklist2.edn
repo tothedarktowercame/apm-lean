@@ -15961,8 +15961,150 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read DAG clusters, foundational-program election rules, closure stop rules and both ledgers",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint26Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint26Eligibility.bb", :exit 0}
+     {:cmd "bb /tmp/Checkpoint26Ledger.bb", :exit 0}
+     {:cmd
+      "git log --oneline 94d43811..HEAD -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "Inspect simplicial pushout and relative-cokernel APIs and relative-comparison PASS receipt",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :changed-paths [],
+    :finding
+    {:baseline "94d4381150f666cb6b88a7f031cce3b9a7d7d2f5",
+     :placeholder-delta 0,
+     :head "fa7cde09f171040201f9da44d4af6fc3999c7bf1",
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:modules-before 678,
+      :modules-after 681,
+      :portfolio 2,
+      :portfolio-commits
+      ["4e98d2ec29709dbe236bdf37d44241c09ced6741"
+       "568d4a99f0c68ff1783418b7c7fe89ab2bb5e8dc"],
+      :concurrent 1,
+      :concurrent-commits ["94c20be8f8066c470a0d1426f0886addcb2ea7a7"],
+      :consumer-files-changed []},
+     :corrected-closures 0,
+     :ranking
+     "Compared the whole DAG. The coefficient-general simplicial pushout-to-relative-cokernel construction serves four named consumers and is a bounded next excision input, using inspected free-chain colimit and categorical cokernel APIs. Localization, product homology, integration, covering classification and surface classification retain broader missing constructions; regular-preimage model transport is concurrently assigned. No orientation coherence or integral-to-R identification is inferred.",
+     :typed-residual-change
+     "The actual restricted-cover map, monicity and relative cokernel homology comparison are now reviewed over R. Excision still needs the coefficient-general chain pushout/cokernel identification and actual-subspace assembly. Concurrent chosen-atlas smooth compatibility is reviewed, while product derivative and regularity transport remain assigned elsewhere.",
+     :review-outcomes
+     {:portfolio-pass 2,
+      :portfolio-stop 0,
+      :cokernel-review "invoke-1789010115230-17742-ed1a544c",
+      :relative-review "invoke-1789010544196-17752-38d86e88",
+      :concurrent-smooth-transport-pass
+      "invoke-1789010174692-17744-17adc0cc",
+      :new-proved-refutations 0},
+     :reserved-concurrent
+     [:product-self-model-recharting-probe-refill38
+      :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
+     :near-closure-election
+     {:eligible-unassigned 0,
+      :elected 0,
+      :reason
+      "All 25 near-closure consumers retain unresolved reviewed boundaries; 24 have ledger STOP records and t03J02 has the explicit DAG collar/NDR and van Kampen boundary. Relative coefficient comparison does not complete any frozen consumer. No unchanged STOP retry is elected.",
+      :preserved-boundaries
+      "Planar separation; actual-cover van Kampen; literal pants and polygon classification; covering fundamental-class degree; general-model and analytic preimage geometry; flux and Hausdorff normalization; signed sphere-map homology action; torus Euler and geometric intersection; graph covering classification; Hopf-surface homeomorphism; attained analytic radial levels; projective-product nonbounding; genus/Euler multiplicativity; fundamental-class localization. Original refutations and the prior corrected t96J07 closure remain preserved."},
+     :census
+     {:path "/tmp/Checkpoint26Census.json",
+      :open 35,
+      :existing 58,
+      :zero-placeholder 23,
+      :after 66,
+      :sha256
+      "a81963cba5a3a84c82b4e11d6178b1767448e7cd657024e7b38c06fd26018162",
+      :named 59,
+      :missing [:t93A05],
+      :within-two 25,
+      :before 66}},
+    :replacement-items
+    [{:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Do not assume chain-level pushout preservation or the cokernel isomorphism. Do not reinterpret the integral construction as R-linear. Do not claim actual-subspace excision, sphere suspension or frozen closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "EXCISION: coefficient-general simplicial pushout relative-chain isomorphism",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a Type 0 commutative ring R, prove that the actual simplicial chain functor with coefficient object ModuleCat.of R R preserves pushouts, using the free-module coproduct adjunction and degreewise chain colimits. For a simplicial pushout construct the induced cokernel map and prove it is a chain-complex isomorphism. Prove the exact forward map, both inverse laws and its equation with the source cokernel projection in every degree. Specialize to the existing coefficient-independent union/intersection pushout for two simplicial subcomplexes, preserving all four inclusion directions. Compile integer and rational specializations. State universes. REVISE requires exactly one compiled missing colimit-preservation prerequisite; STOP if independent foundations remain.",
+       :consumer-equation
+       "The canonical R-linear relative-chain map from the W-to-Y cokernel to the X-to-Z cokernel of a simplicial pushout is an isomorphism, with its actual cokernel-projection equation.",
+       :consumer-residual
+       "Transport the geometric excision subcomplex square to actual subspaces and combine with CoefficientRelativeSmall; then coefficient-general excision and sphere suspension remain before rational S2 H1/H2.",
+       :gates
+       ["GO requires a complete placeholder-free fixture proving preservation, constructing the relative-chain isomorphism and checking its oriented equations and union/intersection specialization."
+        "Record fixture SHA256, integer/rational examples and standard-only audits."
+        "No assumed coefficient-change or topological excision theorem."]},
+      :representation
+      {:source
+       "The actual ModuleCat R chain cokernel of the map W to Y in a simplicial pushout W to X, W to Y, X to Z, Y to Z.",
+       :target
+       "The actual ModuleCat R chain cokernel of the map X to Z in that pushout.",
+       :direction
+       "Construct a chain-complex isomorphism from coker(C_R(W to Y)) to coker(C_R(X to Z)); its forward arrow is exactly cokernel.map induced by C_R(W to X) and C_R(Y to Z)."},
+      :id
+      :oriented-checkpoint26-coefficient-simplicial-pushout-relative-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint26-relative-comparison-and-consumer-refill
+       :oriented-checkpoint25-coefficient-relative-small-comparison-1],
+      :current-residual
+      "The existing simplicial pushout relative-chain construction is AddCommGrpCat-specific. Coefficient-general excision requires the actual R-linear chain functor and its quotient-map equations.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: relative pushout construction and consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+      :id :oriented-checkpoint27-pushout-relative-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint26-coefficient-simplicial-pushout-relative-1],
+      :current-residual
+      "Measure the relative pushout construction separately from consumer closure and reassess all reviewed boundaries and concurrent outcomes.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: relative coefficient comparison and consumer eligibility",
@@ -15978,6 +16120,72 @@
     :oriented-checkpoint25-small-chain-comparison-and-consumer-refill],
    :current-residual
    "Measure relative comparison separately from consumer closure, and reassess all reviewed boundaries and concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "Do not assume chain-level pushout preservation or the cokernel isomorphism. Do not reinterpret the integral construction as R-linear. Do not claim actual-subspace excision, sphere suspension or frozen closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "EXCISION: coefficient-general simplicial pushout relative-chain isomorphism",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a Type 0 commutative ring R, prove that the actual simplicial chain functor with coefficient object ModuleCat.of R R preserves pushouts, using the free-module coproduct adjunction and degreewise chain colimits. For a simplicial pushout construct the induced cokernel map and prove it is a chain-complex isomorphism. Prove the exact forward map, both inverse laws and its equation with the source cokernel projection in every degree. Specialize to the existing coefficient-independent union/intersection pushout for two simplicial subcomplexes, preserving all four inclusion directions. Compile integer and rational specializations. State universes. REVISE requires exactly one compiled missing colimit-preservation prerequisite; STOP if independent foundations remain.",
+    :consumer-equation
+    "The canonical R-linear relative-chain map from the W-to-Y cokernel to the X-to-Z cokernel of a simplicial pushout is an isomorphism, with its actual cokernel-projection equation.",
+    :consumer-residual
+    "Transport the geometric excision subcomplex square to actual subspaces and combine with CoefficientRelativeSmall; then coefficient-general excision and sphere suspension remain before rational S2 H1/H2.",
+    :gates
+    ["GO requires a complete placeholder-free fixture proving preservation, constructing the relative-chain isomorphism and checking its oriented equations and union/intersection specialization."
+     "Record fixture SHA256, integer/rational examples and standard-only audits."
+     "No assumed coefficient-change or topological excision theorem."]},
+   :representation
+   {:source
+    "The actual ModuleCat R chain cokernel of the map W to Y in a simplicial pushout W to X, W to Y, X to Z, Y to Z.",
+    :target
+    "The actual ModuleCat R chain cokernel of the map X to Z in that pushout.",
+    :direction
+    "Construct a chain-complex isomorphism from coker(C_R(W to Y)) to coker(C_R(X to Z)); its forward arrow is exactly cokernel.map induced by C_R(W to X) and C_R(Y to Z)."},
+   :id
+   :oriented-checkpoint26-coefficient-simplicial-pushout-relative-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint26-relative-comparison-and-consumer-refill
+    :oriented-checkpoint25-coefficient-relative-small-comparison-1
+    :oriented-checkpoint26-relative-comparison-and-consumer-refill],
+   :current-residual
+   "The existing simplicial pushout relative-chain construction is AddCommGrpCat-specific. Coefficient-general excision requires the actual R-linear chain functor and its quotient-map equations.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: relative pushout construction and consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint27-pushout-relative-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint26-coefficient-simplicial-pushout-relative-1
+    :oriented-checkpoint26-relative-comparison-and-consumer-refill],
+   :current-residual
+   "Measure the relative pushout construction separately from consumer closure and reassess all reviewed boundaries and concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
