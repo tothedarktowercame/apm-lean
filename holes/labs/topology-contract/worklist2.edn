@@ -28552,36 +28552,93 @@
    :other-consumers [:t95J05 :t01J06 :t94A10]}
   {:consumer :t02A05,
    :stop-condition
+   "Bank only measurable-set integration of pointwise ENNReal bounds and countable summation of scaled inequalities. Do not claim the C1 graph area formula, its per-piece geometric assembly, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/ENNRealCountableBounds.lean"
+    "ConstructionTargets/ENNRealCountableBounds.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: ENNReal measurable-piece integration and countable bound summation",
+   :acceptance
+   {:hypotheses
+    "The countable results concern arbitrary ENNReal scalars and sequences. The integration theorem uses an arbitrary measurable space, measure and measurable set with pointwise ENNReal bounds. No summability, finite-measure, nonzero or non-infinite hypothesis is imposed.",
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.ENNRealCountableBounds."
+     "Reproduce five standard-only axiom audits."
+     "Verify measurable-set integration uses actual set lintegrals and pointwise inequalities."
+     "Verify countable summation distributes ENNReal factors without summability or finiteness assumptions."
+     "Compile explicit zero and infinite examples."
+     "Confirm no ENNReal cancellation, real conversion or numerical Hausdorff normalization is used."
+     "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."],
+    :evidence
+    {:probe
+     {:outcome :go,
+      :seat "codex-13",
+      :fixture
+      {:path
+       "/tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean",
+       :sha256
+       "0e26f5c06c5f672c7087d83f9fd619bd536b1b9a391cc70c26c71c9fbb78cda6"},
+      :commands
+      [{:cmd
+        "lake env lean /tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean",
+        :exit 0}],
+      :warnings [],
+      :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+    :consumer-residual
+    "Instantiate the integration theorem with the reviewed derivative-density comparisons, combine it with C1GraphPartition.piece_bounds on each piece, normalize the factors, sum globally and apply ENNRealMultiplicativeSqueeze.",
+    :axioms :standard-only,
+    :consumer-equation
+    "Pointwise bounds a*c≤J≤b*c integrate over each measurable piece, and per-piece inequalities a*I_n≤G_n≤b*I_n sum to the corresponding global inequalities, including zero and infinite values.",
+    :declarations
+    ["sum_bounds"
+     "global_bounds"
+     "set_integral_bounds"
+     "zero_example"
+     "infinite_example"],
+    :namespace "ConstructionTargets.ENNRealCountableBounds",
+    :implementation
+    "Promote the exact compiled fixture and document its use for summing the reviewed graph partition inequalities without finiteness or cancellation."},
+   :id :ennreal-countable-integral-sum-bounds-1,
+   :kind :reusable-theorem,
+   :depends-on [:c1-graph-countable-measure-decomposition-1],
+   :current-residual
+   "Global graph-area inequalities require integrating pointwise density comparisons and summing per-piece bounds without assuming finite measures or cancelling infinite ENNReal values.",
+   :other-consumers [:t95J05 :t01J06 :t94A10]}
+  {:consumer :t02A05,
+   :stop-condition
    "Do not assume an area formula, integrability, finite measure, numerical Hausdorff normalization or measure-preserving parameterization. Retain actual L2 graph and Borel structures. Do not infer sphere masses, Stokes, periods or consumer closure. Exclude reserved orientation, covering and surface work; use a unique row-specific scratch directory.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Integrate and sum the compiled piecewise graph and density inequalities to obtain global multiplicative bounds for every positive epsilon below one, including zero and infinite measures, then apply ENNRealMultiplicativeSqueeze to prove exact C1 graph area.",
+     "Combine each reviewed graph bound with the integrated selected-versus-varying density bounds, normalize the resulting factors into a family tending to one, use the compiled countable summation theorem for global bounds, and apply ENNRealMultiplicativeSqueeze.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t02A05,
       :stop-condition
-      "Bank only the exact graph-measure and density-integral decompositions, density continuity and piecewise density comparisons. Do not claim summed global bounds, exact graph area, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
+      "Bank only measurable-set integration of pointwise ENNReal bounds and countable summation of scaled inequalities. Do not claim the C1 graph area formula, its per-piece geometric assembly, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/C1GraphMeasureDecomposition.lean"
-       "ConstructionTargets/C1GraphMeasureDecomposition.md"],
+      ["ConstructionTargets/ENNRealCountableBounds.lean"
+       "ConstructionTargets/ENNRealCountableBounds.md"],
       :dag-node
-      "MANIFOLD INTEGRATION: countable graph-measure and density-integral decomposition",
+      "MANIFOLD INTEGRATION: ENNReal measurable-piece integration and countable bound summation",
       :acceptance
       {:hypotheses
-       "E is EuclideanSpace real (Fin d), U is open, f is ContDiffOn real 1 on U, and epsilon is positive. Measures are the actual d-dimensional Hausdorff measures on E and WithLp 2 of E times real. No finiteness, integrability or numerical normalization hypothesis is imposed.",
+       "The countable results concern arbitrary ENNReal scalars and sequences. The integration theorem uses an arbitrary measurable space, measure and measurable set with pointwise ENNReal bounds. No summability, finite-measure, nonzero or non-infinite hypothesis is imposed.",
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.C1GraphMeasureDecomposition."
-        "Reproduce nine standard-only axiom audits and dimension-two and dimension-three examples."
-        "Audit continuity of the actual derivative density on U."
-        "Verify exact countable additivity for the measurable disjoint graph images and domain pieces."
-        "Verify the selected constant-density integral and both density comparison directions use the reviewed derivative-proximity theorem."
-        "Confirm no finite-measure assumption, ENNReal cancellation or numerical Hausdorff normalization is introduced."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.ENNRealCountableBounds."
+        "Reproduce five standard-only axiom audits."
+        "Verify measurable-set integration uses actual set lintegrals and pointwise inequalities."
+        "Verify countable summation distributes ENNReal factors without summability or finiteness assumptions."
+        "Compile explicit zero and infinite examples."
+        "Confirm no ENNReal cancellation, real conversion or numerical Hausdorff normalization is used."
         "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."],
        :evidence
        {:probe
@@ -28589,43 +28646,34 @@
          :seat "codex-13",
          :fixture
          {:path
-          "/tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+          "/tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean",
           :sha256
-          "de4423dbec32306d4c5191a7b165dbf09dd446d3c76f52584b619ae9dda421af"},
+          "0e26f5c06c5f672c7087d83f9fd619bd536b1b9a391cc70c26c71c9fbb78cda6"},
          :commands
          [{:cmd
-           "lake env lean /tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+           "lake env lean /tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean",
            :exit 0}],
          :warnings [],
          :axioms ["propext" "Classical.choice" "Quot.sound"]}},
        :consumer-residual
-       "Combine the exact decompositions with C1GraphPartition.piece_bounds, integrate the density comparisons, sum the inequalities and apply ENNRealMultiplicativeSqueeze.",
+       "Instantiate the integration theorem with the reviewed derivative-density comparisons, combine it with C1GraphPartition.piece_bounds on each piece, normalize the factors, sum globally and apply ENNRealMultiplicativeSqueeze.",
        :axioms :standard-only,
        :consumer-equation
-       "The actual graph measure and actual derivative-density integral decompose exactly over the reviewed pairwise-disjoint measurable partition. On every piece the selected derivative density has the stated constant integral and is compared in both directions with the varying derivative density.",
+       "Pointwise bounds a*c≤J≤b*c integrate over each measurable piece, and per-piece inequalities a*I_n≤G_n≤b*I_n sum to the corresponding global inequalities, including zero and infinite values.",
        :declarations
-       ["domainMeasure"
-        "ambientMeasure"
-        "densityAt"
-        "densityAt_value"
-        "densityAt_continuousOn"
-        "graph_measure_sum"
-        "density_integral_sum"
-        "selected_density_integral"
-        "density_piece_bounds"
-        "selected_density_upper"
-        "dimension_two"
-        "dimension_three"],
-       :namespace "ConstructionTargets.C1GraphMeasureDecomposition",
+       ["sum_bounds"
+        "global_bounds"
+        "set_integral_bounds"
+        "zero_example"
+        "infinite_example"],
+       :namespace "ConstructionTargets.ENNRealCountableBounds",
        :implementation
-       "Promote the exact compiled fixture and document how its countable decomposition and density comparisons feed the remaining global ENNReal bounds."},
-      :id :c1-graph-countable-measure-decomposition-1,
+       "Promote the exact compiled fixture and document its use for summing the reviewed graph partition inequalities without finiteness or cancellation."},
+      :id :ennreal-countable-integral-sum-bounds-1,
       :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint45-c1-graph-measurable-approximation-partition-1
-       :c1-graph-density-derivative-control-1],
+      :depends-on [:c1-graph-countable-measure-decomposition-1],
       :current-residual
-      "The exact graph-area proof needs actual countable-additivity equations for the reviewed graph partition and pointwise comparisons between selected and varying derivative densities.",
+      "Global graph-area inequalities require integrating pointwise density comparisons and summing per-piece bounds without assuming finite measures or cancelling infinite ENNReal values.",
       :other-consumers [:t95J05 :t01J06 :t94A10]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
@@ -28634,20 +28682,20 @@
        "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency PASS receipts",
        :exit 0}
       {:cmd
-       "Inspect C1GraphPartition, C1GraphDensityControl, ENNRealMultiplicativeSqueeze and Mathlib countable measure/integral APIs",
+       "Inspect C1GraphPartition, C1GraphDensityControl, C1GraphMeasureDecomposition, ENNRealMultiplicativeSqueeze and Mathlib ENNReal integral and tsum APIs",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+       "lake env lean /tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+       "sha256sum /tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "Python comment-stripped placeholder, whitespace and nine standard-only axiom audits",
+       "Python comment-stripped placeholder, whitespace and five standard-only axiom audits",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -28658,27 +28706,22 @@
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial graph measure decomposition compilation",
+     [{:cmd "Initial countable ENNReal bounds compilation",
        :exit 1,
        :correction
-       "Replaced the unavailable MeasurableOn formulation with a continuous-on-domain density theorem and avoided dependent rewriting of the partitioned domain."}
-      {:cmd
-       "Compilation after introducing a piecewise measurable extension",
-       :exit 1,
-       :correction
-       "The extension required unavailable measurable structure and decidability instances for the continuous-linear-map carrier. Removed the unnecessary global extension, retained the stronger usable ContinuousOn result, and proved the restricted-measure equality explicitly. Final compilation succeeds without warnings."}],
+       "Corrected the direction in which ENNReal.tsum_mul_left rewrites a scalar multiple of a countable sum. Final compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+      "/tmp/codex13-checkpoint46-global-sum/ENNRealCountableBounds.lean",
       :sha256
-      "de4423dbec32306d4c5191a7b165dbf09dd446d3c76f52584b619ae9dda421af",
+      "0e26f5c06c5f672c7087d83f9fd619bd536b1b9a391cc70c26c71c9fbb78cda6",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled analytic measure-decomposition prerequisite is supplied on the route of the open t02A05 placeholder and the shared t95J05, t01J06 and t94A10 routes. The actual derivative graph density is continuous on the open C1 domain. The reviewed measurable partition gives exact countable-sum identities for both the Hausdorff measure of the actual L2 graph and the domain density integral. Each selected constant density integrates to its value times the piece measure, and the fixture proves both actual-to-selected and selected-to-actual ENNReal density comparisons from derivative proximity. The parent is not GO: the piecewise Hausdorff bounds and density comparisons must still be integrated and summed into global bounds for every epsilon, then the reviewed ENNReal squeeze theorem must be applied. Sphere-chart assembly and numerical Hausdorff normalization remain downstream. No canonical source or ledger was edited; the concurrent translated-arc implementation, reviewed STOPs and refutations are preserved.",
+     "Exactly one complete compiled analytic summation prerequisite is supplied on the open t02A05 route and the shared t95J05, t01J06 and t94A10 routes. It integrates pointwise lower and upper ENNReal bounds over an actual measurable set and sums scaled inequalities over arbitrary countable families. Both operations permit zero and infinite values and use no cancellation, finiteness assumption or conversion to real numbers. Together with the reviewed graph and density decomposition, it reduces the parent to proving the per-piece combined factors from C1GraphPartition.piece_bounds and the derivative-density comparisons, then applying ENNRealMultiplicativeSqueeze. The parent is not GO because that geometric-algebraic assembly has not yet been compiled. No canonical source or ledger was edited; current reservations, reviewed STOPs and refutations are preserved.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact C1 graph Hausdorff area from measurable approximation partitions",
@@ -28709,7 +28752,8 @@
     :oriented-checkpoint45-c1-graph-measurable-approximation-partition-1
     :ennreal-multiplicative-unit-squeeze-1
     :c1-graph-density-derivative-control-1
-    :c1-graph-countable-measure-decomposition-1],
+    :c1-graph-countable-measure-decomposition-1
+    :ennreal-countable-integral-sum-bounds-1],
    :current-residual
    "Reviewed measurable pieces satisfy uniform graph bounds and approximate actual derivatives. Prove that their sums converge to the integral of the pointwise graph density and squeeze the graph measure to that integral.",
    :other-consumers [:t95J05 :t01J06 :t94A10]}
