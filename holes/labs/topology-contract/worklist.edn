@@ -72150,6 +72150,19 @@
       "git diff-tree --no-commit-id --name-only -r 0e1ba319d69f8700ceb0fdd8914b31868d858d33",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789073518970-19447-9e1f7f27",
+     :commands
+     ["lake env lean ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean"
+      "sha256sum /tmp/PlaneArcEndpointTotalDifferenceSubmersive.lean ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean"
+      "python3 placeholder-and-six-declaration audit over ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean"
+      "git diff-tree --no-commit-id --name-only -r 0e1ba319d69f8700ceb0fdd8914b31868d858d33"
+      "git diff --exit-code 0e1ba319d69f8700ceb0fdd8914b31868d858d33 -- ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean"
+      "git show --check --oneline --stat 0e1ba319d69f8700ceb0fdd8914b31868d858d33"],
+     :finding
+     "PASS: independently reviewed recorded commit 0e1ba319d69f8700ceb0fdd8914b31868d858d33 authored by codex-6. Its sole changed path is the scoped module, byte-identical to fixture SHA256 f18e50897c4cd22cf5105c5b189b391afc23d9954d01dc114d29eea632301deb; dependency SHA256 is 0b5955f85b1a0d73d995904b2a1512136237f4ab344ba3e93cba84a8c143e56a. Lean compiles with only propext, Classical.choice, and Quot.sound; placeholder count is zero; all six declaration hashes recompute exactly. Representation and orientation are correct: vectorInclusion maps paired vector directions q to ((0,0),q) in TotalParameters = (R×R)×(Plane×Plane), fixing curve-parameter directions. The chain-rule derivative of totalDifference along this inclusion equals totalParameterLinear, and surjectivity of that composite correctly implies surjectivity of the full derivative by lifting each target through vectorInclusion. The left/right corollaries use the corresponding reviewed interior-parameter surjectivity results and retain an explicit DifferentiableAt hypothesis. No relative Sard, genericity, finite-fiber, embedding, or chart-compatibility claim is made."},
     :commit "0e1ba319d69f8700ceb0fdd8914b31868d858d33",
     :changed-paths
     ["ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean"],
@@ -72161,7 +72174,7 @@
     :finding
     "The exact fixture and dependency pins reproduce. All six requested declarations compile without Lean warnings or placeholders using only standard axioms, and the commit changes exactly the scoped path. Pre-existing modifications to ProductSimplexWordPrefixCounts.lean and ProductSimplexWordPrefixCounts.md were left untouched."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean"],
    :dag-node
@@ -72257,7 +72270,7 @@
      "Compiled exactly one full-derivative bridge prerequisite. The continuous-linear inclusion sends a pair of perturbation-vector directions into the full total-parameter domain while fixing both curve-parameter directions at zero. Composing the full derivative with this inclusion equals the reviewed paired-vector derivative. Consequently, whenever the total coincidence map is differentiable and either curve parameter is interior, its full derivative is surjective. Relative differentiability on the open extension domain and the derivative-level submersion conclusion are now connected without inferring anything at the four endpoint pairs. Parametric Sard, simultaneous finite-family selection, embedding stability and chart-transition comparison remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
