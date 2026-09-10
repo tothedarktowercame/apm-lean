@@ -209,3 +209,7 @@ See the [implementation report](statement-encoding-progress-2026-09-10.md) for
 source-clause mappings, validation and the remaining nineteen bundles. These
 are unproved statements pending independent fidelity review, not new solved
 problems. The historical skip reasons above are retained for provenance.
+
+## Second construction tranche — 2026-09-10
+
+`t93A06`, `t97A05`, `t97A06`, `t98J06` and `t99J05` now have concrete compiled statements with explicit proof holes and construction requirements. Their historical skip explanations above are superseded by the [second progress report](statement-encoding-progress-round2-2026-09-10.md). The current source-stem count is 477/491, with 14 remaining.

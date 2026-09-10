@@ -7,8 +7,8 @@
   "counts": {
     "source": 491,
     "informal_file_at_least_100_bytes": 491,
-    "with_current_lean_material": 472,
-    "without_current_lean_material": 19
+    "with_current_lean_material": 477,
+    "without_current_lean_material": 14
   },
   "packages": [
     {
@@ -242,7 +242,9 @@
       "source": "apm/t93A06.tex",
       "source_sha256": "cd545b897b26f67892ea8b0b6797d8a9cfb91a6436c0548ddcad40f922add348",
       "informal": "problems/t93A06/informal-solution.md",
-      "current_lean_files": [],
+      "current_lean_files": [
+        "problems/t93A06/lean/Main.lean"
+      ],
       "review_status": "construction",
       "construction_packages": [
         "smooth-quotients",
@@ -250,7 +252,11 @@
       ],
       "statement_target": "Define torus forms, projection pullback, integral and exterior derivative; state unique descent of the printed form, integral 1/4, a Euclidean primitive, no torus primitive, and the specified parallelogram period.",
       "source_or_fidelity_review": "Use the actual quotient R2/Z2 and all three source parts. Stokes and descent theorems are later proof work.",
-      "formalization_status": "specification-only"
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Actual integer-lattice torus quotient and required smooth atlas; unique descent of the printed 2-form, integral 1/4, explicit primitive upstairs, no primitive downstairs, and integral 1/4 around all four printed parallelogram edges.",
+      "implementation_fidelity_notes": "The quotient atlas is existential construction work. Integration uses the oriented fundamental square and actual pulled-back alternating form. The path integral uses actual constant tangent vectors; no Stokes theorem is assumed.",
+      "lean_sha256": "f43425ad4a917c6e9bb93b44c360c317235bbc100cc4489a46ea0537c3de6fc4",
+      "independent_review": "pending"
     },
     {
       "problem_id": "t93J03",
@@ -443,7 +449,9 @@
       "source": "apm/t97A05.tex",
       "source_sha256": "7726d12d5ac13fb2fd4a5224508f72a8fe92a718c881f494fda357ec5420f6f1",
       "informal": "problems/t97A05/informal-solution.md",
-      "current_lean_files": [],
+      "current_lean_files": [
+        "problems/t97A05/lean/Main.lean"
+      ],
       "review_status": "construction",
       "construction_packages": [
         "intersection",
@@ -451,14 +459,20 @@
       ],
       "statement_target": "Define the geometric integer intersection pairing for the actual embedded W and Z; retain all dimensions, orientations, compactness, no-boundary and connectedness conditions; conclude connectedness of Y minus W.",
       "source_or_fidelity_review": "A finite signed sum without its connection to these submanifolds is insufficient; invariance under transverse perturbation is needed if the source does not assume transversality.",
-      "formalization_status": "specification-only"
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "All four compactness/orientation and connectedness conditions, boundaryless smooth embedded inclusions, nonzero oriented intersection number, and connected complement in Y.",
+      "implementation_fidelity_notes": "Intersection is defined by finite signed counts of actual derivatives after a smooth homotopic perturbation of the right map. Original transversality is not assumed. Construction work includes realization and invariance of this relation.",
+      "lean_sha256": "58e594274e43cefa7131eda4f42f1459e89de98ddc904772a03b3c13a4d28609",
+      "independent_review": "pending"
     },
     {
       "problem_id": "t97A06",
       "source": "apm/t97A06.tex",
       "source_sha256": "0addbc9963da851f5ab1bcabaa46b6aa899957ae3cb0099cd9011334f6ebf7fb",
       "informal": "problems/t97A06/informal-solution.md",
-      "current_lean_files": [],
+      "current_lean_files": [
+        "problems/t97A06/lean/Main.lean"
+      ],
       "review_status": "construction",
       "construction_packages": [
         "forms",
@@ -466,7 +480,11 @@
       ],
       "statement_target": "Define manifold forms, pullback along an embedded inclusion, a positive top-degree volume form, and closedness; state extension and nonclosedness of extensions when inclusion is null-homotopic.",
       "source_or_fidelity_review": "Preserve positive dimension, nonempty compact oriented smooth X and its embedding. Tubular-neighborhood/Stokes proofs can remain open.",
-      "formalization_status": "specification-only"
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Smooth volume form extends across the actual embedding; every smooth extension is nonclosed when the inclusion is null-homotopic.",
+      "implementation_fidelity_notes": "Positive dimension and nonempty compact source retained. A smooth nowhere-zero top form supplies its orientation. Manifold pullback and exterior differentiation are concrete chart formulas; their chart independence and calculus identities remain theorem targets.",
+      "lean_sha256": "41d127ab4439929c3e4e4ab1287477cbb0ce2a6c045259ddea4c1e4fcd7f139f",
+      "independent_review": "pending"
     },
     {
       "problem_id": "t97A07",
@@ -577,7 +595,9 @@
       "source": "apm/t98J06.tex",
       "source_sha256": "abc165b37607c212779d4981bea3adecbdd3e24a3dd946090fbd31a95a4a35d3",
       "informal": "problems/t98J06/informal-solution.md",
-      "current_lean_files": [],
+      "current_lean_files": [
+        "problems/t98J06/lean/Main.lean"
+      ],
       "review_status": "construction",
       "construction_packages": [
         "regular-geometry",
@@ -585,7 +605,11 @@
       ],
       "statement_target": "Define graph/diagonal manifold transversality and the oriented local intersection at a fixed point; state invertibility of df-id and its orientation sign.",
       "source_or_fidelity_review": "Connect the existing signed linear intersection datum to actual tangent inclusions, and fix order/normal orientation (b-a) explicitly. Do not stop at the linear-algebra half.",
-      "formalization_status": "specification-only"
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Actual graph/diagonal transversality implies nonsingularity of df-I; local intersection orientation is positive exactly when df-I preserves orientation.",
+      "implementation_fidelity_notes": "Local sign uses the tangent sum ordered diagonal then graph in the product manifold. It is computed independently from the derivative difference; neither determinant equality nor nonsingularity is assumed.",
+      "lean_sha256": "25b19e9ea8e451430470c1d1f5c49f0652507e4723975a05b2da9e914b82012a",
+      "independent_review": "pending"
     },
     {
       "problem_id": "t99A05",
@@ -657,7 +681,9 @@
       "source": "apm/t99J05.tex",
       "source_sha256": "a1c1e0a79d658a5d145f30fd9d4cbdbf0cbb6573fa8c3557f6fe516feedb81b8",
       "informal": "problems/t99J05/informal-solution.md",
-      "current_lean_files": [],
+      "current_lean_files": [
+        "problems/t99J05/lean/Main.lean"
+      ],
       "review_status": "construction",
       "construction_packages": [
         "smooth-quotients",
@@ -666,7 +692,11 @@
       ],
       "statement_target": "Construct topological/smooth CP^n and its coordinate charts, diagonal projective map and homotopy; define local fixed-point index and Euler characteristic; state all five parts, including chi(CP^n)=n+1.",
       "source_or_fidelity_review": "Use real orientation of complex charts; local fixed-point sign uses id-df, distinguish it from the graph convention in t98J06.",
-      "formalization_status": "specification-only"
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Construct the actual diagonal projective map and affine charts, homotopy to identity, all coordinate-line fixed points and local indices +1, and the Euler characteristic from the Lefschetz sum, for every n including printed CP2.",
+      "implementation_fidelity_notes": "Affine maps are ratios of actual projective representatives and their explicit inverses. Index uses real id-Df and requires differentiability and nondegeneracy. Euler and Lefschetz numbers use finite-dimensional, eventually vanishing rational singular homology.",
+      "lean_sha256": "82063828897239cc8fcf497406b16839e4307fc43e0a435bc5ee53abe59eac54",
+      "independent_review": "pending"
     },
     {
       "problem_id": "t99J06",
@@ -695,5 +725,6 @@
     "with_current_lean_material": 460,
     "without_current_lean_material": 31
   },
-  "implementation_report": "docs/statement-encoding-progress-2026-09-10.md"
+  "implementation_report": "docs/statement-encoding-progress-2026-09-10.md",
+  "followup_implementation_report": "docs/statement-encoding-progress-round2-2026-09-10.md"
 }

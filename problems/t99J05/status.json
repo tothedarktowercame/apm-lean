@@ -8,12 +8,17 @@
     "problem_tex": "apm/t99J05.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -25,6 +30,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-09-06T00:00:00Z"
+  "classification": "partial",
+  "imported_at": "2026-09-06T00:00:00Z",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t99j05",
+    "source_sha256": "a1c1e0a79d658a5d145f30fd9d4cbdbf0cbb6573fa8c3557f6fe516feedb81b8",
+    "lean_sha256": "82063828897239cc8fcf497406b16839e4307fc43e0a435bc5ee53abe59eac54",
+    "source_clause_mapping": "Construct the actual diagonal projective map and affine charts, homotopy to identity, all coordinate-line fixed points and local indices +1, and the Euler characteristic from the Lefschetz sum, for every n including printed CP2.",
+    "fidelity_notes": "Affine maps are ratios of actual projective representatives and their explicit inverses. Index uses real id-Df and requires differentiability and nondegeneracy. Euler and Lefschetz numbers use finite-dimensional, eventually vanishing rational singular homology.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
 }

@@ -1,1 +1,49 @@
-{"schema":"apm-problem-bundle.v1","problem_id":"t98J06","bundle_root":"problems/t98J06","layout":"single-bundle","source":{"kind":"apm-tex-census","problem_tex":"apm/t98J06.tex"},"lean":{"main":null,"scratch":null,"files":[],"sorry_count_main":0,"sorry_count_scratch":0,"sorry_count_total":0},"artifacts":{"has_problem_tex":true,"has_problem_md":true,"has_informal_solution":true,"has_proof_outline":false,"has_proof_plan":false,"has_changelog":false,"has_workspace_metadata":false,"has_receipt":false},"classification":"informal-only","classification_detail":"Transversality and local intersection-sign proof supplied; no Lean material exists yet.","imported_at":"2026-09-06"}
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "t98J06",
+  "bundle_root": "problems/t98J06",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "apm-tex-census",
+    "problem_tex": "apm/t98J06.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": false,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "classification_detail": "Concrete graph/diagonal statement compiles; the final theorem remains unproved.",
+  "imported_at": "2026-09-06",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t98j06",
+    "source_sha256": "abc165b37607c212779d4981bea3adecbdd3e24a3dd946090fbd31a95a4a35d3",
+    "lean_sha256": "25b19e9ea8e451430470c1d1f5c49f0652507e4723975a05b2da9e914b82012a",
+    "source_clause_mapping": "Actual graph/diagonal transversality implies nonsingularity of df-I; local intersection orientation is positive exactly when df-I preserves orientation.",
+    "fidelity_notes": "Local sign uses the tangent sum ordered diagonal then graph in the product manifold. It is computed independently from the derivative difference; neither determinant equality nor nonsingularity is assumed.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
+}

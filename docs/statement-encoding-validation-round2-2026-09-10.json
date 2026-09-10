@@ -1,0 +1,134 @@
+{
+  "date": "2026-09-10",
+  "lean_toolchain": "leanprover/lean4:v4.29.0-rc8",
+  "statements": [
+    {
+      "problem_id": "t93A06",
+      "exit_code": 0,
+      "source_sha256": "cd545b897b26f67892ea8b0b6797d8a9cfb91a6436c0548ddcad40f922add348",
+      "lean_sha256": "f43425ad4a917c6e9bb93b44c360c317235bbc100cc4489a46ea0537c3de6fc4",
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/tmpjt59qf85.lean:14:8: warning: declaration uses `sorry`\n'apm_t93a06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t97A05",
+      "exit_code": 0,
+      "source_sha256": "7726d12d5ac13fb2fd4a5224508f72a8fe92a718c881f494fda357ec5420f6f1",
+      "lean_sha256": "58e594274e43cefa7131eda4f42f1459e89de98ddc904772a03b3c13a4d28609",
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/tmptpfj85ww.lean:14:8: warning: declaration uses `sorry`\n'apm_t97a05' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t97A06",
+      "exit_code": 0,
+      "source_sha256": "0addbc9963da851f5ab1bcabaa46b6aa899957ae3cb0099cd9011334f6ebf7fb",
+      "lean_sha256": "41d127ab4439929c3e4e4ab1287477cbb0ce2a6c045259ddea4c1e4fcd7f139f",
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/tmp_kabuyjx.lean:22:8: warning: declaration uses `sorry`\n'apm_t97a06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t98J06",
+      "exit_code": 0,
+      "source_sha256": "abc165b37607c212779d4981bea3adecbdd3e24a3dd946090fbd31a95a4a35d3",
+      "lean_sha256": "25b19e9ea8e451430470c1d1f5c49f0652507e4723975a05b2da9e914b82012a",
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/tmpez411er7.lean:48:8: warning: declaration uses `sorry`\n'apm_t98j06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t99J05",
+      "exit_code": 0,
+      "source_sha256": "a1c1e0a79d658a5d145f30fd9d4cbdbf0cbb6573fa8c3557f6fe516feedb81b8",
+      "lean_sha256": "82063828897239cc8fcf497406b16839e4307fc43e0a435bc5ee53abe59eac54",
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/tmp8nk5can3.lean:24:8: warning: declaration uses `sorry`\n'apm_t99j05' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    }
+  ],
+  "construction_modules": [
+    {
+      "module": "ManifoldFormTargets",
+      "exit_code": 0,
+      "declarations": [
+        "Form",
+        "inChart",
+        "IsSmooth",
+        "pullback",
+        "exteriorDerivative",
+        "IsClosed",
+        "IsExact",
+        "IsVolumeForm"
+      ],
+      "axiom_output": "'ConstructionTargets.ManifoldFormTargets.Form' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ManifoldFormTargets.inChart' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ManifoldFormTargets.IsSmooth' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ManifoldFormTargets.pullback' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ManifoldFormTargets.exteriorDerivative' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ManifoldFormTargets.IsClosed' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ManifoldFormTargets.IsExact' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ManifoldFormTargets.IsVolumeForm' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+      "root_imported": true,
+      "olean_exists": true
+    },
+    {
+      "module": "ComplexProjectiveChartTargets",
+      "exit_code": 0,
+      "declarations": [
+        "CP",
+        "AffineCoordinates",
+        "coordinates",
+        "chartInverse",
+        "AffineChartConstruction",
+        "localMap",
+        "fixedPointDeterminant",
+        "localIndex"
+      ],
+      "axiom_output": "'ConstructionTargets.ComplexProjectiveChartTargets.CP' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ComplexProjectiveChartTargets.AffineCoordinates' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.ComplexProjectiveChartTargets.coordinates' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.ComplexProjectiveChartTargets.chartInverse' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.ComplexProjectiveChartTargets.AffineChartConstruction' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.ComplexProjectiveChartTargets.localMap' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ComplexProjectiveChartTargets.fixedPointDeterminant' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.ComplexProjectiveChartTargets.localIndex' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n",
+      "root_imported": true,
+      "olean_exists": true
+    },
+    {
+      "module": "TorusFormTargets",
+      "exit_code": 0,
+      "declarations": [
+        "Plane",
+        "Torus",
+        "projection",
+        "SmoothAtlas",
+        "areaForm",
+        "sourceForm",
+        "primitive",
+        "torusIntegral",
+        "segmentIntegral",
+        "parallelogramIntegral"
+      ],
+      "axiom_output": "'ConstructionTargets.TorusFormTargets.Plane' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.TorusFormTargets.Torus' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.TorusFormTargets.projection' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.TorusFormTargets.SmoothAtlas' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.TorusFormTargets.areaForm' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.TorusFormTargets.sourceForm' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.TorusFormTargets.primitive' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.TorusFormTargets.torusIntegral' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.TorusFormTargets.segmentIntegral' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.TorusFormTargets.parallelogramIntegral' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+      "root_imported": true,
+      "olean_exists": true
+    },
+    {
+      "module": "ManifoldIntersectionTargets",
+      "exit_code": 0,
+      "declarations": [
+        "E",
+        "Coincidence",
+        "Transverse",
+        "tangentFrame",
+        "localSign",
+        "HasIntersectionNumber"
+      ],
+      "axiom_output": "'ConstructionTargets.ManifoldIntersectionTargets.E' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ManifoldIntersectionTargets.Coincidence' does not depend on any axioms\n'ConstructionTargets.ManifoldIntersectionTargets.Transverse' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ManifoldIntersectionTargets.tangentFrame' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.ManifoldIntersectionTargets.localSign' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ManifoldIntersectionTargets.HasIntersectionNumber' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n",
+      "root_imported": true,
+      "olean_exists": true
+    }
+  ],
+  "global_reachability_gate": {
+    "current_exit_code": 1,
+    "baseline_exit_code": 1,
+    "baseline_head": "6c53872c88b6f9f19459d0344d8644a129bb6aa2",
+    "baseline_method": "git show HEAD root/lakefile; git ls-tree HEAD module filenames. Gate reads only filenames and root imports. No working source was replaced.",
+    "current_failure_count": 766,
+    "baseline_failure_count": 766,
+    "new_failures": []
+  },
+  "quality_screen": {
+    "initial_four": "t93A06                       pass\n      warn  no instances and no named hypotheses: verify the claim is not refutable by a degenerate instance\nt97A06                       FAIL\n      FAIL  source demands dimension and the encoding carries no sign of it: dropping conditions from the informal statement restates the problem as an easier one\nt98J06                       pass\nt99J05                       pass\n      warn  no instances and no named hypotheses: verify the claim is not refutable by a degenerate instance\n\n3/4 passed the screen.\n",
+    "intersection": "t97A05                       pass\n\n1/1 passed the screen.\n",
+    "volume_retest": "t97A06                       pass\n\n1/1 passed the screen.\n",
+    "initial_failure_resolution": "Positive model dimension is now expressed directly as 0 < Module.finrank \u211d (Fin n \u2192 \u211d), equivalent to 0 < n. No checker changes.",
+    "final_pass_count": 5,
+    "final_fail_count": 0
+  },
+  "construction_declarations_audited": 32
+}

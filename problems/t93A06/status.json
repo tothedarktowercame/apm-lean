@@ -10,12 +10,17 @@
     "problem_tex": "apm/t93A06.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +32,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:57.687144Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:57.687144Z",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t93a06",
+    "source_sha256": "cd545b897b26f67892ea8b0b6797d8a9cfb91a6436c0548ddcad40f922add348",
+    "lean_sha256": "f43425ad4a917c6e9bb93b44c360c317235bbc100cc4489a46ea0537c3de6fc4",
+    "source_clause_mapping": "Actual integer-lattice torus quotient and required smooth atlas; unique descent of the printed 2-form, integral 1/4, explicit primitive upstairs, no primitive downstairs, and integral 1/4 around all four printed parallelogram edges.",
+    "fidelity_notes": "The quotient atlas is existential construction work. Integration uses the oriented fundamental square and actual pulled-back alternating form. The path integral uses actual constant tangent vectors; no Stokes theorem is assumed.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
 }

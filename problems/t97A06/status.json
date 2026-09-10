@@ -10,12 +10,17 @@
     "problem_tex": "apm/t97A06.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +32,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:58.434456Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:58.434456Z",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t97a06",
+    "source_sha256": "0addbc9963da851f5ab1bcabaa46b6aa899957ae3cb0099cd9011334f6ebf7fb",
+    "lean_sha256": "41d127ab4439929c3e4e4ab1287477cbb0ce2a6c045259ddea4c1e4fcd7f139f",
+    "source_clause_mapping": "Smooth volume form extends across the actual embedding; every smooth extension is nonclosed when the inclusion is null-homotopic.",
+    "fidelity_notes": "Positive dimension and nonempty compact source retained. A smooth nowhere-zero top form supplies its orientation. Manifold pullback and exterior differentiation are concrete chart formulas; their chart independence and calculus identities remain theorem targets.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
 }

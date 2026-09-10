@@ -1,5 +1,7 @@
 # Statement-encoding progress — 2026-09-10
 
+Later on September 10, [the second tranche](statement-encoding-progress-round2-2026-09-10.md) added five more statements: the current count is 477/491, with 14 remaining. The report below records the first tranche.
+
 Twelve of the original 31 missing bundles now have compiled, concrete Lean
 statements. The source-stem material count is **472/491**, with **19** still
 missing. Each new problem has exactly one explicit `sorry`; this is statement
