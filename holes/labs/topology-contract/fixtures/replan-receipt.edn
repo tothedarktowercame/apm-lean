@@ -3,7 +3,7 @@
  :finding "one reviewed uptake is now the shortest consumer route"
  :replacement-items
  [{:id :next-adapter :kind :final-adapter :phase :probe :depends-on []
-   :consumer :nextConsumer :scope []
+   :consumer :tfix01 :scope []
    :acceptance {:probe "compile exact consumer adapter"}}
   {:id :next-checkpoint :kind :strategy-checkpoint :phase :strategy
    :depends-on [:next-adapter] :consumer :portfolio :scope []

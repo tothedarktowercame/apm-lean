@@ -37,11 +37,47 @@ source-fiber coordinate-image representation" -- naming the relation as well
 as the direction. Only you can supply it; nobody downstream can infer it from
 the other two fields without inventing mathematics.
 
+NEED-DRIVEN ELECTION (Joe, 2026-09-10; every strategy checkpoint, both
+loops). Infrastructure is built because an open frozen problem needs it to
+close, and for no other reason.
+
+a. Keep each open problem's route. For every open frozen problem the DAG
+   names, list its remaining placeholders (comment-stripped, as in rule 0)
+   and, for each placeholder, the chain of missing theorems or constructions
+   between it and what is already banked. Put these routes in the receipt's
+   `:finding`, updated from the previous checkpoint's.
+b. Elect only steps on a route. A work row is eligible only if it supplies a
+   missing step on the route of at least one open problem. Name that problem
+   as `:consumer` (others that need the same step as `:other-consumers`) and
+   say in the acceptance which placeholder and which route step it supplies.
+   Infrastructure that no open problem is waiting on is not elected, however
+   natural or general; list it in the finding as deferred.
+c. Build exactly what is needed. State each result at the generality its
+   named consumers use. Do not generalise for completeness; a later consumer
+   that needs more will elect the extension then.
+d. Build shared steps once. When two or more open problems need overlapping
+   steps, build the common part once, at the generality that covers exactly
+   those problems, and name them all. Before electing any step, search
+   `ConstructionTargets/` and the DAG's banked results for something that
+   already supplies it, and reuse that rather than rebuild it.
+e. Attempt a problem as soon as its route is complete. When every step on a
+   problem's route is banked, elect its closure probe or adapter first, under
+   rule 0. This holds for every problem, `DEFERRED-REP` ones such as `t00J02`
+   included.
+
+Admission enforces (b) and part of (d): `build_step.bb` rejects a replan any
+of whose non-documentation work rows names no frozen problem that still has
+placeholders, and a `:reusable-theorem` row naming fewer than two such
+problems without a `:bounded-exception`. A problem-prefixed label such as
+`:t02A05-moment-reduction` counts as naming `t02A05`; a label such as
+`:circle-fundamental-class` names no problem.
+
 STANDING PORTFOLIO POLICY (Joe, 2026-09-06; supersedes the prior
 owner-authorization gate). The campaign runs the DAG in strategic order until
 every consumer problem is closed. `FOUNDATION`, `SPEC-DEFECT` and
 `DEFERRED-REP` rows are STANDING AUTHORIZED: electing one needs no further
-owner approval. Rank the whole DAG and elect the top rows by, in order:
+owner approval. Rank the rows NEED-DRIVEN ELECTION admits and elect the top
+rows by, in order:
 
 0. CLOSE WHAT IS NEARLY CLOSED FIRST. Before ranking anything, count the
    remaining placeholders in each consumer problem the DAG names, with
@@ -75,7 +111,7 @@ owner approval. Rank the whole DAG and elect the top rows by, in order:
    STOP and name exactly what is missing -- that is a more useful result than
    another foundation, and it is not a refutation, so say which it is.
 
-1. how many downstream consumer problems the row unblocks (most first);
+1. how many open problems' routes the row lies on (most first);
 2. how little work it is (simplest first), preferring one coherent theorem or
    one bounded construction.
 
@@ -83,7 +119,7 @@ Except under rule 0, a `FOUNDATION` that unblocks several consumers outranks
 an adapter that unblocks one. `STOP :needs-owner` is NO LONGER a valid
 strategy outcome and must not be returned: if the only remaining rows are
 foundations, specification repairs or deferred representations, ELECT THE
-BEST ONE under the ranking above and proceed. The prior gate inverted this
+BEST NEEDED ONE under the ranking above and proceed. The prior gate inverted this
 policy -- it stopped the campaign precisely when the remaining work was the
 work that matters -- and it is withdrawn. Only two conditions end the
 campaign: every consumer problem closed, or a row whose mathematics is

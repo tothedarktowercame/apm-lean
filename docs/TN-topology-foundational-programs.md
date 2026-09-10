@@ -26,10 +26,11 @@ First milestones:
 
 Do not begin with `t00J02`.  Initial consumers should be a sphere or Euclidean
 model pair, followed by a punctured-manifold calculation.  This is an ordering
-rule, not a standing exclusion: `t00J02` is this program's demonstration
-consumer, and once the interfaces named in the DAG's "t00J02 disposition" are
-banked, strategic checkpoints elect a `t00J02` closure probe first (owner
-directive, 2026-09-10).
+rule, not a standing exclusion.  Under the need-driven election rule
+(`holes/labs/topology-contract/work-prompt.md`, 2026-09-10) the program builds
+only what open problems such as `t00J02`, `t98A02`, `t00A04` and `t01A05`
+need, builds steps they share once, and attempts each problem as soon as its
+route is complete.
 
 ## Manifold Sard and regular preimages
 

@@ -98,6 +98,76 @@
       (when-not (some #(not (str/blank? (str (get-in row %)))) paths)
         (throw (ex-info "representation comparison row lacks required field"
                         {:id (:id row) :field label}))))))
+;; Need-driven admission (Joe, 2026-09-10). A strategy checkpoint may elect
+;; only work that an open frozen problem needs: every non-documentation row it
+;; inserts must name a frozen problem that still has placeholders, and a
+;; reusable theorem must name two. topo2 was seeded as an "independent
+;; foundation campaign" and elected rows whose only consumers were labels such
+;; as :circle-fundamental-class; the ledger validator accepted any consumer
+;; name, so nothing tied that work to a problem. TOPOLOGY_PROBLEMS_ROOT lets
+;; the tests use fixture problems whose state never changes.
+(def problems-root
+  (or (System/getenv "TOPOLOGY_PROBLEMS_ROOT")
+      (str (or (:canonical-root data) (.getCanonicalPath (io/file here "../../.."))) "/problems")))
+(def problem-dirs (delay (set (.list (io/file problems-root)))))
+(defn problem-of
+  "The frozen problem a consumer names: its own id, or the id prefix of a
+   label such as :t02A05-moment-reduction. nil when it names no problem."
+  [consumer]
+  (let [s (str/replace (str consumer) #"^:" "")
+        by-lower (into {} (map (juxt str/lower-case identity) @problem-dirs))]
+    (or (@problem-dirs s)
+        (some->> (re-find #"^[a-z]+\d\d[aj]\d\d" (str/lower-case s)) by-lower))))
+(defn strip-lean [^String s]
+  (let [n (count s) sb (StringBuilder.)]
+    (loop [i 0]
+      (if (>= i n)
+        (str sb)
+        (let [c (.charAt s i) nx (when (< (inc i) n) (.charAt s (inc i)))]
+          (cond
+            (and (= c \-) (= nx \-)) (recur (or (str/index-of s "\n" i) n))
+            (and (= c \/) (= nx \-))
+            (recur (loop [k (+ i 2) depth 1]
+                     (cond (zero? depth) k
+                           (>= k n) n
+                           (str/starts-with? (subs s k (min n (+ k 2))) "/-") (recur (+ k 2) (inc depth))
+                           (str/starts-with? (subs s k (min n (+ k 2))) "-/") (recur (+ k 2) (dec depth))
+                           :else (recur (inc k) depth))))
+            (and (= c \') (= nx \") (< (+ i 2) n) (= (.charAt s (+ i 2)) \')) (recur (+ i 3))
+            (= c \") (recur (loop [k (inc i)]
+                              (cond (>= k n) n
+                                    (= (.charAt s k) \\) (recur (+ k 2))
+                                    (= (.charAt s k) \") (inc k)
+                                    :else (recur (inc k)))))
+            :else (do (.append sb c) (recur (inc i)))))))))
+(defn placeholder-count
+  "sorry/admit/axiom outside comments and strings in the problem's Lean
+   files; nil when the problem has no Lean file."
+  [problem]
+  (let [fs (->> (file-seq (io/file problems-root problem "lean"))
+                (filter #(str/ends-with? (.getName %) ".lean")))]
+    (when (seq fs)
+      (reduce + (for [f fs :let [code (strip-lean (slurp f))]]
+                  (+ (count (re-seq #"(?<![\w.])(?:sorry|admit)(?![\w.])" code))
+                     (count (re-seq #"(?m)^[ \t]*(?:private[ \t]+|protected[ \t]+)?axiom[ \t]" code))))))))
+(defn open-problems
+  "Distinct frozen problems named by the row that still have placeholders."
+  [row]
+  (->> (cons (:consumer row) (:other-consumers row))
+       (keep problem-of) distinct
+       (filter #(some-> (placeholder-count %) pos?))
+       set))
+(defn need-violation
+  "Why a strategy-elected work row is not needed to close an open problem, or nil."
+  [row]
+  (let [open (open-problems row)]
+    (cond
+      (empty? open)
+      {:id (:id row) :consumers (vec (cons (:consumer row) (:other-consumers row)))
+       :reason "names no open frozen problem; infrastructure is elected only when an open problem needs it"}
+      (and (= :reusable-theorem (:kind row)) (not (:bounded-exception row)) (< (count open) 2))
+      {:id (:id row) :open-problems (vec open)
+       :reason "reusable theorem needed by fewer than two open problems; elect it as that problem's adapter or record a :bounded-exception"})))
 (defn apply-result! []
   (let [id (keyword (nth *command-line-args* 2 ""))
         receipt-path (nth *command-line-args* 3 "")
@@ -144,7 +214,11 @@
                                (= :strategy (:phase checkpoint))
                                (set/subset? work-ids (set (:depends-on checkpoint))))
                   (throw (ex-info "REPLAN needs 1-5 work rows followed by their next checkpoint"
-                                  {:receipt receipt}))))
+                                  {:receipt receipt})))
+                (when-let [v (seq (keep need-violation
+                                        (remove #(= :documentation (:kind %)) work)))]
+                  (throw (ex-info "REPLAN elects work that no open frozen problem needs"
+                                  {:violations (vec v)}))))
       :done-unreviewed
       (do
         (doseq [k [:author :commit :fixture :changed-paths :commands :residual]]

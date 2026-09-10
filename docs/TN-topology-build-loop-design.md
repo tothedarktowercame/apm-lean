@@ -210,6 +210,14 @@ tail is invalid.  If the complete DAG contains no policy-eligible work, the
 strategist returns a reviewed STOP naming the precise owner election required;
 the supervisor reports PAUSED rather than DONE.
 
+Need-driven admission (2026-09-10).  Every work row a strategy receipt inserts
+must serve an open frozen problem: `build_step.bb` rejects a replan any of
+whose non-documentation rows names no frozen problem that still has
+placeholders, and a `:reusable-theorem` row naming fewer than two such
+problems without a `:bounded-exception`.  The election rule itself, including
+building shared steps once at exactly the generality their consumers use, is
+in `work-prompt.md`.
+
 ## Iteration state machine
 
 ```text

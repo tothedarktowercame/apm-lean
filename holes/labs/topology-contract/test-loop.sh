@@ -32,8 +32,23 @@ bb "$HERE/build_step.bb" apply-result "$stopped" edge "$HERE/fixtures/pass-recei
 bb "$HERE/worklist_check.bb" "$stopped"
 rm -f "$stopped"
 
+export TOPOLOGY_PROBLEMS_ROOT="$HERE/fixtures/problems"
 checkpoint="$(mktemp)"
 cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint"
+# Need-driven admission: a row naming no open frozen problem is refused, and
+# so is one whose only problem is already closed.
+for unneeded in ':consumer :circle-fundamental-class' ':consumer :tfix03'; do
+  unneeded_replan="$(mktemp)"
+  sed "s/:consumer :tfix01/$unneeded/" "$HERE/fixtures/replan-receipt.edn" > "$unneeded_replan"
+  before="$(sha256sum "$checkpoint" | cut -d' ' -f1)"
+  if bb "$HERE/build_step.bb" apply-result "$checkpoint" checkpoint "$unneeded_replan" \
+      >/dev/null 2>&1; then
+    echo "expected need-driven rejection for $unneeded" >&2
+    exit 1
+  fi
+  [ "$(sha256sum "$checkpoint" | cut -d' ' -f1)" = "$before" ]
+  rm -f "$unneeded_replan"
+done
 invalid_replan="$(mktemp)"
 sed 's/:kind :final-adapter/:kind :reusable-theorem/' \
   "$HERE/fixtures/replan-receipt.edn" > "$invalid_replan"
