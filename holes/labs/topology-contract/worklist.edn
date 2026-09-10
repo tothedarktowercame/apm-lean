@@ -65263,9 +65263,112 @@
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
   {:consumer "t00A01",
    :stop-condition
-   "GO requires the generic actual-cover comparison, its target naturality and chosen-basepoint group equivalence; REVISE requires exactly one compiled prerequisite.",
-   :phase :probe,
+   "Require the constructed overlap equivalence, both actual leg comparisons and target-natural pseudococone equivalence; no supplied comparison equivalence.",
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/TwoOpenPointSpanComparison.lean"],
+   :dag-node
+   "VAN KAMPEN / target-natural overlap-to-point-span comparison",
+   :acceptance
+   {:fixture "/tmp/TwoOpenPointSpanComparison.lean",
+    :fixture-sha256
+    "bdc1fda3541b9e6078a78260de6752adb463cac482120a542f6a957804bd1ab5",
+    :implementation
+    "Promote the exact fixture. Compile collapse and its faithful/full/essentially-surjective equivalence instances, overlapEquivalence, pointComparison, both piece equivalences, both leg comparisons, comparison, postcomposeIso and inversePostcomposeIso. Retain the supplied overlap point, actual inclusion functors and weaker hypotheses without openness or union coverage. Require zero placeholders, no warnings and standard-only axioms. Do not claim union reconstruction, a fundamental-group coproduct equivalence or consumer closure.",
+    :commands
+    ["lake env lean ConstructionTargets/TwoOpenPointSpanComparison.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "Pseudococones on the actual fundamental-groupoid span of U, V and their simply connected intersection",
+    :target
+    "Pseudococones on the trivial point span into the single-object categories of the two chosen vertex groups",
+    :direction
+    "Construct an equivalence from actual overlap-span pseudococones to point-span pseudococones, with forward and inverse target-postcomposition natural isomorphisms."},
+   :id :two-open-point-span-comparison-implementation-refill46,
+   :kind :representation-comparison,
+   :depends-on
+   [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+   :current-residual
+   "Compose with actual two-open descent and point-span free-product representations, reconstruct the union groupoid, then derive the group equivalence and explicit chosen-basepoint transport.",
+   :other-consumers ["t03J02" "t97A01" "t92J06"]}
+  {:consumer "t00A01",
+   :stop-condition
+   "GO requires the generic actual-cover comparison, its target naturality and chosen-basepoint group equivalence; REVISE requires exactly one compiled prerequisite.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "The generic span-comparison prerequisite is compiled. Actual-cover source reconstruction, fundamental-group coproduct extraction and chosen-basepoint transport remain; unrelated quotient consumers still must supply their covers.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer "t00A01",
+      :stop-condition
+      "Require the constructed overlap equivalence, both actual leg comparisons and target-natural pseudococone equivalence; no supplied comparison equivalence.",
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/TwoOpenPointSpanComparison.lean"],
+      :dag-node
+      "VAN KAMPEN / target-natural overlap-to-point-span comparison",
+      :acceptance
+      {:fixture "/tmp/TwoOpenPointSpanComparison.lean",
+       :fixture-sha256
+       "bdc1fda3541b9e6078a78260de6752adb463cac482120a542f6a957804bd1ab5",
+       :implementation
+       "Promote the exact fixture. Compile collapse and its faithful/full/essentially-surjective equivalence instances, overlapEquivalence, pointComparison, both piece equivalences, both leg comparisons, comparison, postcomposeIso and inversePostcomposeIso. Retain the supplied overlap point, actual inclusion functors and weaker hypotheses without openness or union coverage. Require zero placeholders, no warnings and standard-only axioms. Do not claim union reconstruction, a fundamental-group coproduct equivalence or consumer closure.",
+       :commands
+       ["lake env lean ConstructionTargets/TwoOpenPointSpanComparison.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :representation
+      {:source
+       "Pseudococones on the actual fundamental-groupoid span of U, V and their simply connected intersection",
+       :target
+       "Pseudococones on the trivial point span into the single-object categories of the two chosen vertex groups",
+       :direction
+       "Construct an equivalence from actual overlap-span pseudococones to point-span pseudococones, with forward and inverse target-postcomposition natural isomorphisms."},
+      :id :two-open-point-span-comparison-implementation-refill46,
+      :kind :representation-comparison,
+      :depends-on
+      [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+      :current-residual
+      "Compose with actual two-open descent and point-span free-product representations, reconstruct the union groupoid, then derive the group equivalence and explicit chosen-basepoint transport.",
+      :other-consumers ["t03J02" "t97A01" "t92J06"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/TwoOpenPointSpanComparison.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/two-open-point-span-comparison-audit.py",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/TwoOpenPointSpanComparison.lean",
+       :exit 1,
+       :correction
+       "Made path-quotient and PUnit hom types explicit for subsingleton inference, and supplied the target category through its named implicit argument."}
+      {:cmd "lake env lean /tmp/TwoOpenPointSpanComparison.lean",
+       :exit 1,
+       :correction
+       "Reduced the component identity maps explicitly and used elaborating rewrite for SingleObj functor identities."}
+      {:cmd "lake env lean /tmp/TwoOpenPointSpanComparison.lean",
+       :exit 1,
+       :correction
+       "Closed the remaining definitional equality of SingleObj identities with rfl. Final compilation succeeds without warnings."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/TwoOpenPointSpanComparison.lean",
+      :sha256
+      "bdc1fda3541b9e6078a78260de6752adb463cac482120a542f6a957804bd1ab5",
+      :placeholder-count 0},
+     :finding
+     "Compiled one generic target-natural comparison prerequisite. The simply connected overlap is constructively equivalent to SingleObj PUnit. The pieces retain their banked connector equivalences at the supplied overlap point. Explicit leg comparisons then produce an equivalence from actual overlap-span pseudococones to point-span pseudococones, compatible with target postcomposition in both directions. No span comparison or pushout is assumed. Union reconstruction and chosen-basepoint group transport remain.",
+     :seat "codex-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "VAN KAMPEN / generic chosen-vertex coproduct assembly",
    :acceptance
@@ -65283,7 +65386,7 @@
    :kind :representation-comparison,
    :depends-on
    [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles
-    :checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
+    :two-open-point-span-comparison-implementation-refill46],
    :current-residual
    "Reviewed t00A01 STOP identifies this generic assembly; special-cover reconstructions and the component foundations are banked.",
    :other-consumers ["t03J02" "t97A01" "t92J06"]}
