@@ -11772,87 +11772,94 @@
    :stop-condition
    "Construct the actual coefficient-general vertex maps and naturality square. No supplied comparison equation, coefficient-change isomorphism or singular subdivision chain map.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Affine-realization naturality is supplied. Subdivision affine-change compatibility and the remaining MissingFaceTransport assembly still precede singular differential compatibility and the full subdivision packet.",
-     :axiom-audits 6,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture, preserving the constructed vertex maps, actual singular postcomposition and explicitly oriented chain-map equality.",
-      :namespace "ConstructionTargets.CoefficientAffineNaturality",
-      :declarations
-      ["vertexMapDegree"
-       "vertexGenerator_vertexMapDegree"
-       "vertexMapDegree_comm_d"
-       "vertexMap"
-       "vertexMap_id"
-       "vertexMap_comp"
-       "vertexRealization_affine_natural"
-       "realization_naturality"
-       "face_naturality"
-       "affine_face_eq"
-       "actual_face_naturality"],
-      :hypotheses
-      "R and vertex types are Type 0; R is a commutative ring. Arbitrary vertex functions require no topology or finiteness. Affine realization uses standard real simplices with finite index types and coefficient object ModuleCat.of R R.",
-      :consumer-equation
-      "vertexMap(affineSimplex u) followed by target realization equals source realization followed by actual singular postcomposition with affineSimplex u.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientAffineNaturality."
-       "Reproduce all six standard-only axiom audits and integer/rational actual edge-face examples."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."],
-      :stop-condition
-      "No subdivision affine-change compatibility, singular subdivision chain endomorphism, homotopy, smallness, excision or frozen closure is claimed."},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG coefficient representations, closure stop rules, dependency reviews and vertex-map/affine-composition APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientAffineNaturality.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientAffineNaturality.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientAffineNaturality.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "Initial lake env lean /tmp/CoefficientAffineNaturality.lean",
-       :exit 1,
-       :correction
-       "Exposed the coproduct inclusion as the coefficient-general generator before simplifying composition with identity."}
-      {:cmd "First compilation with actual face-map specialization",
-       :exit 1,
-       :correction
-       "Limited continuous-map extensionality to one level so the affine-face equality retained its simplex-valued target. Final compilation passes."}],
-     :representation
-     {:source
-      "Coefficient-general ordered-vertex chains mapped by an affine simplex map, then realized.",
-      :target
-      "Source ordered-vertex chains realized first, then mapped by actual singular postcomposition.",
-      :direction
-      "Exact equality from vertex-map followed by target realization to source realization followed by the singular-chain map, degreewise and as chain maps."},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientAffineNaturality.lean",
-      :sha256
-      "2e697058de2561b9c7de96a85018a508c5a0ca054983a4459dab09ba042c7800"},
-     :finding
-     "The complete comparison compiles. Actual ModuleCat R ordered-vertex maps are constructed by coproduct descent, with generator evaluation, differential compatibility, identity and composition laws. Affine realization naturality is proved degreewise and as an equality of chain maps in the requested direction. The affine face formula is identified with stdSimplex.map i.succAbove, yielding actual face-inclusion naturality. Integer and rational examples cover both faces of the standard edge.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientAffineNaturality.lean"
-       "ConstructionTargets/CoefficientAffineNaturality.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Subdivision affine-change compatibility and remaining MissingFaceTransport assembly precede singular differential compatibility. No subdivision chain endomorphism, homotopy, smallness, excision or frozen closure claimed.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :integer-and-rational-face-examples :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass,
+     :six-axiom-audits :pass},
+    :axiom-audits 6,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 17 dependency warnings: SingularHomologyConcrete (1), SingularSubdivision (2), T02A06HemisphereCoordinates (6), T02A06HemisphereExcision (2), T02A06DiskRadialComparison (3), T02A06SphereShift (3). Fixture and canonical compilations were warning-free."],
+    :statement-hashes
+    {"actual_face_naturality"
+     "aada96c1b6665e7ac61885f1eb30ebdd27076042273a0b94f4d19ec201a9a2f2",
+     "vertexMap"
+     "eb6896e08571993d823fe7148790110655d9c33630ab7dcfb13decd4168babd3",
+     "vertexMap_id"
+     "a18a2bc43cfe4fd1150d41c19b04571d61e20072546e6c1329566bf59ae6f8c5",
+     "vertexMap_comp"
+     "f4a8ded9e30673a69f0ddc61ced002f56a28878d3f6d91f24454441079c3865e",
+     "realization_naturality"
+     "8ad76c34a1734a709575725f0da685d69d0813fad87851d4eefa2e0aee456e88",
+     "face_naturality"
+     "38bf741d1760eaaab5702d7ce62adf745977054f5a2133588d83ccd15e294116"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientAffineNaturality.lean", :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientAffineNaturality.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientAffineNaturality.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientAffineNaturality",
+      :exit 0}
+     {:cmd
+      "Python audit: exact promotion, fixture SHA256, six standard-only audits per compilation, both examples, warnings, placeholders and declaration hashes",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientAffineNaturality.lean /tmp/CoefficientAffineNaturality.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope verification and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Prove explicit-coefficient affine realization naturality\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope and clean checkout verification",
+      :exit 0}],
+    :repository-note
+    "Read DAG, closure stop rules and dependency evidence. Only the authorized two files changed; ledger and frozen consumers untouched. Checkout clean.",
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Coefficient-general ordered-vertex chains mapped by an affine simplex map, then realized",
+     :target
+     "Source ordered-vertex chains realized first, then mapped by actual singular postcomposition",
+     :direction
+     "Exact chain-map equality from vertex-map followed by target realization to source realization followed by actual singular postcomposition; the degreewise helper states the symmetric equality."},
+    :commit "ffb357f532bd183024c14cfe10bc04246beb9d33",
+    :changed-paths
+    ["ConstructionTargets/CoefficientAffineNaturality.lean"
+     "ConstructionTargets/CoefficientAffineNaturality.md"],
+    :fixture
+    {:path "/tmp/CoefficientAffineNaturality.lean",
+     :sha256
+     "2e697058de2561b9c7de96a85018a508c5a0ca054983a4459dab09ba042c7800"},
+    :finding
+    "Exact fixture promoted with constructed vertex maps, generator evaluation, differential compatibility, identity and composition laws, affine-realization naturality and actual face-inclusion equations. Both compilations, integer/rational face examples and the 8257-job build passed.",
+    :statement-hash-method
+    "SHA256 of declaration bytes beginning with def or theorem and ending immediately before the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientAffineNaturality.lean"
     "ConstructionTargets/CoefficientAffineNaturality.md"],
