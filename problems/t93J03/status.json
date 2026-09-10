@@ -10,12 +10,17 @@
     "problem_tex": "apm/t93J03.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +32,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:57.758722Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:57.758722Z",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t93j03",
+    "source_sha256": "d0e1b3fd3013109217d063decc078982af5409c94fe4be29f2d129fd40fa3e72",
+    "lean_sha256": "5420b035aab2e02241a12872a5bb41f567e60a8f98a0b597c096ffc697a1a4a0",
+    "source_clause_mapping": "Presentation of the actual Klein-bottle fundamental group; inclusion-induced subgroup condition; plane embedding for the specified locally connected subspace.",
+    "fidelity_notes": "The semilocal condition is small loops null-homotopic in the entire subspace. The presentation and its a-generator are bound together.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
 }

@@ -10,12 +10,17 @@
     "problem_tex": "apm/t96A01.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +32,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:58.371659Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:58.371659Z",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t96a01",
+    "source_sha256": "8ceefa0ee1c3b4cc086e32ebcafc2cabd567af8d5ccc51275a2ceb5d6f9ece7d",
+    "lean_sha256": "d0ac8b3c4c956c59d10f206e2554ad07d290f4aad1ed339cefed9cf764f5b521",
+    "source_clause_mapping": "Closed connected orientable genus-four surface; actual subgroup of its fundamental group with finite index n; explicit genus-(3n+1) presentation.",
+    "fidelity_notes": "Genus is expressed by comparison to the concrete polygon surface; topological manifold, compactness and connectedness are explicit. FiniteIndex excludes the infinite-index zero sentinel.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
 }

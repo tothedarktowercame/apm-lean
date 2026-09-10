@@ -8,12 +8,17 @@
     "problem_tex": "apm/t99J01.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -25,6 +30,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-09-06T00:00:00Z"
+  "classification": "partial",
+  "imported_at": "2026-09-06T00:00:00Z",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t99j01",
+    "source_sha256": "59a97944abd531cf769db4a5520f736fb6f71fd621d0ba83f706d1d045000d0d",
+    "lean_sha256": "f52bbc0d4ebd386c9809564106887e856ac7bbb9c8ff7ebf2c3740d25446f0aa",
+    "source_clause_mapping": "Positive-degree connected covers exist; every connected degree-n cover has free group rank 2n+1; arbitrary disconnected covers have componentwise ranks from actual sheet counts.",
+    "fidelity_notes": "Component sheets use Joined and the actual fiber, with positivity and the bound by total degree. No connectedness silently imposed on all covers.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
 }

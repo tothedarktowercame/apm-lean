@@ -10,12 +10,17 @@
     "problem_tex": "apm/t96J02.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +32,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:58.400638Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:58.400638Z",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t96j02",
+    "source_sha256": "07fb8c54583b17400364965f6b773b28226ad71e711055a1dcb8546f633dfe3c",
+    "lean_sha256": "e67845d7cd1eef2f72278b11b32dbdccd9094ee090b25565a0ef1a207d9dc498",
+    "source_clause_mapping": "All finite-index subgroups of the actual Klein-bottle fundamental group are isomorphic to it or Z2; both alternatives occur.",
+    "fidelity_notes": "The underlying Klein bottle is a concrete aabb polygon quotient, not a group-only substitute.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
 }

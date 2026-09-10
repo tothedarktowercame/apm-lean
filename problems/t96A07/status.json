@@ -10,12 +10,17 @@
     "problem_tex": "apm/t96A07.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +32,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:58.390277Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:58.390277Z",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t96a07",
+    "source_sha256": "c741790c85d438ac22e306b9a99c4b6998bbfeb68c68180464fbee6e6879b5a2",
+    "lean_sha256": "bb7ba547a62c9efd1f86f4258c09089e005d1d455a93a582fce7a9edb36bc22c",
+    "source_clause_mapping": "Construct quotient smooth atlas and descend (yz,xz,xy); negate z-axis transversality; infinitely many intersecting horizontal planes transverse to the original sphere map.",
+    "fidelity_notes": "Transversality is the sum of actual derivative ranges at incident points. Original and descended maps are distinguished as printed.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
 }

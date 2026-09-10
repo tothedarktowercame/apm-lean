@@ -10,12 +10,17 @@
     "problem_tex": "apm/t96A06.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +32,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:58.385539Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:58.385539Z",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t96a06",
+    "source_sha256": "d3b10a9d55ff83e12f530c255cbf530007a6effb4b027c8dd955f9da5d34a997",
+    "lean_sha256": "2404073430e6efb22a37cbfb0af6f55ab197344ff15f11dd091a1f01fc0bd05d",
+    "source_clause_mapping": "Descend the exact quadratic map from every nonzero vector; compute actual rational-homology Lefschetz number -3; nonhomotopy to identity.",
+    "fidelity_notes": "The descent clause also requires the image vector to be nonzero. Rational-homology finiteness is included in the number predicate.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
 }

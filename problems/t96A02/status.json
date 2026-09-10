@@ -10,12 +10,17 @@
     "problem_tex": "apm/t96A02.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +32,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:58.374560Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:58.374560Z",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t96a02",
+    "source_sha256": "1cc2cc3eedf7968727833dc7a0d4113a30072caa9cdae7fa5ff7979ae6c93a7d",
+    "lean_sha256": "af843d8b042039df0c10bb16b49a69157a88103fc0ec12a073b5a1d68629bef9",
+    "source_clause_mapping": "Construct the point wedge of two actual projective planes; every continuous self-map has a fixed point.",
+    "fidelity_notes": "No Lefschetz theorem or unspecified fixed-point predicate is assumed.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
 }

@@ -1,0 +1,102 @@
+{
+  "date": "2026-09-10",
+  "lean_toolchain": "leanprover/lean4:v4.29.0-rc8",
+  "mathlib_commit": "5ee50502f950564a1bc3f4a0bb7809b94e65a49a",
+  "statements": [
+    {
+      "problem_id": "t93J03",
+      "source_sha256": "5420b035aab2e02241a12872a5bb41f567e60a8f98a0b597c096ffc697a1a4a0",
+      "exit_code": 0,
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/codex18-statement-ja1cc2d1.lean:37:8: warning: declaration uses `sorry`\n'apm_t93j03' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t95A04",
+      "source_sha256": "4c7127b62804465cfe844ba7f1254eee80eee61bd62c92223e7cbec7c9f6f78d",
+      "exit_code": 0,
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/codex18-statement-5871v0s_.lean:23:8: warning: declaration uses `sorry`\n'apm_t95a04' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t96A01",
+      "source_sha256": "d0ac8b3c4c956c59d10f206e2554ad07d290f4aad1ed339cefed9cf764f5b521",
+      "exit_code": 0,
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/codex18-statement-vzni5k1_.lean:16:8: warning: declaration uses `sorry`\n'apm_t96a01' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t96A02",
+      "source_sha256": "af843d8b042039df0c10bb16b49a69157a88103fc0ec12a073b5a1d68629bef9",
+      "exit_code": 0,
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/codex18-statement-vugs4mtd.lean:14:8: warning: declaration uses `sorry`\n'apm_t96a02' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t96A06",
+      "source_sha256": "2404073430e6efb22a37cbfb0af6f55ab197344ff15f11dd091a1f01fc0bd05d",
+      "exit_code": 0,
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/codex18-statement-mi7cakb7.lean:27:8: warning: declaration uses `sorry`\n'apm_t96a06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t96A07",
+      "source_sha256": "bb7ba547a62c9efd1f86f4258c09089e005d1d455a93a582fce7a9edb36bc22c",
+      "exit_code": 0,
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/codex18-statement-s2l18et0.lean:35:8: warning: declaration uses `sorry`\n'apm_t96a07' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t96J02",
+      "source_sha256": "e67845d7cd1eef2f72278b11b32dbdccd9094ee090b25565a0ef1a207d9dc498",
+      "exit_code": 0,
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/codex18-statement-7md2jq9m.lean:17:8: warning: declaration uses `sorry`\n'apm_t96j02' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t98A06",
+      "source_sha256": "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
+      "exit_code": 0,
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/codex18-statement-13ygf4wt.lean:34:8: warning: declaration uses `sorry`\n'apm_t98a06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t98J01",
+      "source_sha256": "f137d0719fed8ba4d9b83268c28009d7917e260ed8c01dbd9c0764b74bfb02dd",
+      "exit_code": 0,
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/codex18-statement-y1upq6ge.lean:37:8: warning: declaration uses `sorry`\n'apm_t98j01' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t98J02",
+      "source_sha256": "43ffc2acd5f43ea8c2d74cb06217e98c1e3f868acb9621e6038f5c9a47d37525",
+      "exit_code": 0,
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/codex18-statement-9gs_60ee.lean:47:8: warning: declaration uses `sorry`\n'apm_t98j02' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t99J01",
+      "source_sha256": "f52bbc0d4ebd386c9809564106887e856ac7bbb9c8ff7ebf2c3740d25446f0aa",
+      "exit_code": 0,
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/codex18-statement-gshr2cc7.lean:25:8: warning: declaration uses `sorry`\n'apm_t99j01' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    },
+    {
+      "problem_id": "t99J06",
+      "source_sha256": "4c07856a604f952519b0233f84de6542c7a7fbbaa77444d2c59727d733357cd0",
+      "exit_code": 0,
+      "sorry_declarations": 1,
+      "compiler_output": "/tmp/codex18-statement-ad4zcmk0.lean:40:8: warning: declaration uses `sorry`\n'apm_t99j06' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n"
+    }
+  ],
+  "quality_screen_initial": "t93J03                       pass\nt95A04                       pass\n      warn  no instances and no named hypotheses: verify the claim is not refutable by a degenerate instance\nt96A01                       pass\nt96A02                       pass\n      warn  no instances and no named hypotheses: verify the claim is not refutable by a degenerate instance\nt96A06                       pass\n      warn  no instances and no named hypotheses: verify the claim is not refutable by a degenerate instance\nt96A07                       pass\n      warn  no instances and no named hypotheses: verify the claim is not refutable by a degenerate instance\nt96J02                       pass\n      warn  no instances and no named hypotheses: verify the claim is not refutable by a degenerate instance\nt98A06                       FAIL\n      FAIL  does not compile: /tmp/tmpjd91rk6v.lean:26:30: error(lean.unknownIdentifier): Unknown identifier `Metric.mem_sphere_zero_iff_norm.mpr`\nt98J01                       pass\n      warn  no instances and no named hypotheses: verify the claim is not refutable by a degenerate instance\nt98J02                       pass\nt99J01                       pass\nt99J06                       pass\n      warn  no instances and no named hypotheses: verify the claim is not refutable by a degenerate instance\n\n11/12 passed the screen.\n",
+  "quality_screen_after_t98a06_fix": "t98A06                       pass\n\n1/1 passed the screen.\n",
+  "quality_final_pass_count": 12,
+  "construction_axiom_audit": "'ConstructionTargets.StatementSurfaceModels.surfacePoint' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.StatementSurfaceModels.twoCirclesPoint' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.StatementSurfaceModels.surfaceRelator' depends on axioms: [propext, Quot.sound]\n'ConstructionTargets.StatementSurfaceModels.OrientableSurfaceGroup' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.RationalLefschetz.Homology' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.RationalLefschetz.induced' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.RationalLefschetz.HasLefschetzNumber' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.RationalLefschetz.HasEulerCharacteristic' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.ProjectiveSpaceTopology.Space' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ProjectiveSpaceTopology.quotientMap' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.ProjectiveSpaceTopology.continuous_quotientMap' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.ProjectiveSpaceTopology.surjective_quotientMap' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.ProjectiveSpaceTopology.coordinateLine' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.RealProjectiveSmoothTarget.sphereDimension' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.RealProjectiveSmoothTarget.sphereVector' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.RealProjectiveSmoothTarget.SmoothAtlas.mk' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.CoordinateSurfaceForms.coordinateProjection' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.CoordinateSurfaceForms.coordinateWedge' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.CoordinateSurfaceForms.volumeForm' depends on axioms: [propext, Classical.choice, Quot.sound]\n'ConstructionTargets.CoordinateSurfaceForms.pullbackCoefficient' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n'ConstructionTargets.CoordinateSurfaceForms.rectangleIntegral' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n",
+  "reachability_gate": {
+    "status": "pre-existing-failure",
+    "baseline_commit": "98ce43c1069994d2a76d4e8dee88a29ee2f7810a",
+    "baseline_and_current_failure_count": 762,
+    "new_failures": [],
+    "failing_module_lines_sha256": "3e363182c88b7176c80624a0a4c122ac96f13e45939f28d0fefd1fccb8b7e4a2"
+  }
+}

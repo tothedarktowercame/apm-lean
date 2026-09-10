@@ -10,12 +10,17 @@
     "problem_tex": "apm/t95A04.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +32,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:58.280049Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:58.280049Z",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t95a04",
+    "source_sha256": "2764ba5c6f5eb08dfe4ebe7591c79061441b279d7e9dd534b7e8c4213cc4310f",
+    "lean_sha256": "4c7127b62804465cfe844ba7f1254eee80eee61bd62c92223e7cbec7c9f6f78d",
+    "source_clause_mapping": "Construct quotient-compatible smooth RP2 atlas; descend the six-coordinate sphere polynomial; smoothness, embedding and immersion onto a submanifold.",
+    "fidelity_notes": "SmoothAtlas existence is part of the conclusion, not an assumed available construction. The topological quotient is fixed.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
 }

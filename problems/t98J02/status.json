@@ -1,1 +1,49 @@
-{"schema":"apm-problem-bundle.v1","problem_id":"t98J02","bundle_root":"problems/t98J02","layout":"single-bundle","source":{"kind":"apm-tex-census","problem_tex":"apm/t98J02.tex"},"lean":{"main":null,"scratch":null,"files":[],"sorry_count_main":0,"sorry_count_scratch":0,"sorry_count_total":0},"artifacts":{"has_problem_tex":true,"has_problem_md":true,"has_informal_solution":true,"has_proof_outline":false,"has_proof_plan":false,"has_changelog":false,"has_workspace_metadata":false,"has_receipt":false},"classification":"informal-only","classification_detail":"Homology proof and double-cover counterexample supplied; no Lean material exists yet.","imported_at":"2026-09-06"}
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "t98J02",
+  "bundle_root": "problems/t98J02",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "apm-tex-census",
+    "problem_tex": "apm/t98J02.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": false,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "classification_detail": "Homology proof and double-cover counterexample supplied; no Lean material exists yet.",
+  "imported_at": "2026-09-06",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t98j02",
+    "source_sha256": "38370bf9bc871040fffe3234cfc44667ef119d72fe882eb44381d3aa1ffc2a6f",
+    "lean_sha256": "43ffc2acd5f43ea8c2d74cb06217e98c1e3f868acb9621e6038f5c9a47d37525",
+    "source_clause_mapping": "Nonseparation lifts through connected finite covers; a disconnected-cover counterexample to unrestricted part (a); a connected-cover counterexample to part (b).",
+    "fidelity_notes": "Both readings of the unstated connected-cover convention are retained. Curves are embeddings and projection composed with lift equals the base parametrization.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
+}

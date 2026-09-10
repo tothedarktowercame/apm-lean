@@ -192,3 +192,20 @@ t99A04 is the next clearest: its source is a connected oriented compact
 2-manifold with a smooth circle embedding and closed 1-forms; its encoding is
 `g : ℝ → ℝ` with `∫₀¹ deriv g = 0`. The other nine are reported, not touched
 -- withdrawing committed encodings is a decision per problem, not a sweep.
+
+
+## Construction-led statement sweep, 2026-09-10 (codex-18)
+
+Twelve more bundles now have complete candidate statements with explicit open
+proofs: `t93J03`, `t95A04`, `t96A01`, `t96A02`, `t96A06`, `t96A07`, `t96J02`, `t98A06`, `t98J01`, `t98J02`, `t99J01`, `t99J06`.
+
+All twelve compile and pass the statement-quality screen; each has exactly one
+`sorry` for its theorem. Five shared construction modules supply concrete
+quotient/cover vocabulary, rational homology traces, real projective topology,
+the required quotient-compatible smooth atlas, and genuine alternating forms.
+The smooth atlas is a requested construction, not a postulated inhabitant.
+
+See the [implementation report](statement-encoding-progress-2026-09-10.md) for
+source-clause mappings, validation and the remaining nineteen bundles. These
+are unproved statements pending independent fidelity review, not new solved
+problems. The historical skip reasons above are retained for provenance.

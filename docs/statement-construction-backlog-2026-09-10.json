@@ -1,0 +1,699 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-10",
+  "scope": "Initial 31 missing canonical source stems, with implementation progress from the September 10 follow-up; compiled statements are not certified proofs.",
+  "apm_commit": "12988f1e27cc554e0d72e40835ca8c6f9ebe7e7d",
+  "mathlib_commit": "5ee50502f950564a1bc3f4a0bb7809b94e65a49a",
+  "counts": {
+    "source": 491,
+    "informal_file_at_least_100_bytes": 491,
+    "with_current_lean_material": 472,
+    "without_current_lean_material": 19
+  },
+  "packages": [
+    {
+      "id": "spaces-covers",
+      "title": "Concrete spaces, attachments and covers",
+      "existing_starting_points": [
+        "ConstructionTargets/Surfaces.lean",
+        "ConstructionTargets/PointWedgeQuotient.lean",
+        "ConstructionTargets/CoveringDegree.lean",
+        "ConstructionTargets/CircleUniversalCover.lean",
+        "ConstructionTargets/CoveringLiftRestriction.lean"
+      ],
+      "construction_target": "Quotient topology for polygon surfaces, antipodal spaces, wedges and cell attachments; actual continuous quotient maps; based loops and induced fundamental-group maps; IsKSheetedCover and simply connected covering total spaces.",
+      "remaining_obligations": "Connect models by homeomorphisms/homotopy equivalences at the appropriate strength. Prove smooth/manifold certificates only where demanded. Surface classification, subgroup classification, van Kampen and cover computations may remain open theorem targets.",
+      "consumers": [
+        "t00J05",
+        "t93J03",
+        "t95A01",
+        "t96A01",
+        "t96A02",
+        "t96J02",
+        "t98J02",
+        "t98J05",
+        "t99J01",
+        "t99J02"
+      ]
+    },
+    {
+      "id": "smooth-quotients",
+      "title": "Smooth projective and quotient geometry",
+      "existing_starting_points": [
+        ".lake/packages/mathlib/Mathlib/Geometry/Manifold/Immersion.lean",
+        ".lake/packages/mathlib/Mathlib/Geometry/Manifold/Diffeomorph.lean"
+      ],
+      "construction_target": "Construct RP^n/CP^n and torus quotient topologies, representative-independent maps and coordinate charts. Where smoothness is demanded, build ChartedSpace/IsManifold instances and actual tangent maps.",
+      "remaining_obligations": "Chart transitions and quotient/local-chart compatibility are construction obligations. A bare type named RP2 or an arbitrary smooth-space parameter is not a realization of this target.",
+      "consumers": [
+        "t93A05",
+        "t93A06",
+        "t95A01",
+        "t95A04",
+        "t96A06",
+        "t96A07",
+        "t98J05",
+        "t99J05"
+      ]
+    },
+    {
+      "id": "regular-geometry",
+      "title": "Regular values, submanifolds and vector fields",
+      "existing_starting_points": [
+        "ConstructionTargets/ManifoldRegularFiberGlobalAtlas.lean",
+        "ConstructionTargets/ManifoldRegularFiberTangentImage.lean",
+        "ConstructionTargets/ManifoldTargetRegularFiberGlobalAtlas.lean",
+        "ConstructionTargets/TransverseIncidenceManifold.lean"
+      ],
+      "construction_target": "CriticalValues(f) = f image {x | not Surjective(mfderiv f x)}; submersion = smooth plus pointwise derivative surjectivity; embedded submanifolds with dimension and tangent inclusion; transversality by spanning tangent ranges; smooth tangent sections and induced fiber manifolds.",
+      "remaining_obligations": "Reuse existing fiber-atlas/tangent constructions after checking exact typeclass requirements. No need to finish Sard, flow completeness or all regular-value theorems before expressing the desired propositions. Boundary/orientation data must be geometric, not arbitrary flags.",
+      "consumers": [
+        "t95A05",
+        "t96A07",
+        "t97A05",
+        "t97A06",
+        "t97A07",
+        "t98A06",
+        "t98J06",
+        "t99A05",
+        "t99A06"
+      ]
+    },
+    {
+      "id": "forms",
+      "title": "Manifold forms, exterior derivative and oriented integrals",
+      "existing_starting_points": [
+        ".lake/packages/mathlib/Mathlib/Analysis/Calculus/DifferentialForm/Basic.lean",
+        "ConstructionTargets/OrientedIntegration.lean",
+        "ConstructionTargets/CappedCylinderSurfaceIntegral.lean"
+      ],
+      "construction_target": "Smooth alternating covector fields with chart transformation law; actual derivative pullback and exterior derivative; closed/exact predicates; integration of top forms and parameterized curves/surfaces with fixed orientations. For torus descent use periodic coefficients plus explicit equivalence to quotient-manifold forms.",
+      "remaining_obligations": "Existing Euclidean DifferentialForm and signed coefficient integrals are starting points. Chart independence, quotient compatibility, boundary orientation and geometric meaning of parameter integration are construction obligations. Stokes, extension and final integral computations are theorem targets, not arbitrary assumed operators.",
+      "consumers": [
+        "t93A06",
+        "t93J05",
+        "t95A05",
+        "t97A06",
+        "t98J05",
+        "t99J06"
+      ]
+    },
+    {
+      "id": "intersection",
+      "title": "Geometric degree and intersection",
+      "existing_starting_points": [
+        "ConstructionTargets/Intersection.lean",
+        "ConstructionTargets/ManifoldTargetIncidenceTangent.lean",
+        "ConstructionTargets/OrientedSurfacePreimageDuality.lean"
+      ],
+      "construction_target": "Tie incidence points and derivative tangent-sum maps of actual embeddings to Intersection.PointDatum; define signed finite sums and parity, local graph/diagonal signs, and degree for its supported compact/proper domain.",
+      "remaining_obligations": "Derive finiteness and independence of frames/regular value/perturbation where needed. Existing Intersection is linear algebra; OrientedSurfacePreimageDuality documents an unfilled producer interface. Neither alone supplies a completed manifold intersection invariant.",
+      "consumers": [
+        "t93A05",
+        "t97A05",
+        "t98J06",
+        "t99A05",
+        "t99J05"
+      ]
+    },
+    {
+      "id": "homological-invariants",
+      "title": "Homological Euler characteristic and Lefschetz number",
+      "existing_starting_points": [
+        "ConstructionTargets/SingularHomologyConcrete.lean"
+      ],
+      "construction_target": "Construct rational homology of the named spaces and induced maps; package finite dimensionality and vanishing above a bound; define chi as alternating dimensions and L(f) as alternating traces. Connect local fixed-point indices to actual charts.",
+      "remaining_obligations": "Integral singular homology already exists locally; inspect coefficient infrastructure for a rational model. Finiteness certificates and bound independence are construction obligations. Kunneth, fixed-point formulas and values such as chi(CP^n)=n+1 remain proof targets. Never define the invariant to equal the desired answer.",
+      "consumers": [
+        "t96A06",
+        "t98J01",
+        "t99A06",
+        "t99J02",
+        "t99J05"
+      ]
+    },
+    {
+      "id": "knots",
+      "title": "Concrete links and embedded disks",
+      "existing_starting_points": [
+        "ConstructionTargets/CircleUniversalCover.lean"
+      ],
+      "construction_target": "Explicit embedded circles in R3, complement loops, solid torus S1 x D2 and its cover R x D2; disk-bounding by a topological/smooth embedding with prescribed boundary; linking as a degree or intersection invariant if needed.",
+      "remaining_obligations": "Recover the missing t98J04(b) picture before selecting its embedding. General knot classification is not necessary just to state null-homotopy or embedded-disk nonexistence.",
+      "consumers": [
+        "t98J04"
+      ]
+    },
+    {
+      "id": "borel-spectra",
+      "title": "Source-faithful Borel spectrum model",
+      "existing_starting_points": [],
+      "construction_target": "Source-defined spectra, equivariant/Borel objects, equivalences and restriction. A chosen concrete model must match the source homotopy theory; record its comparison to Fun(BG,Sp) if that is the route.",
+      "remaining_obligations": "An abstract theorem that evaluation reflects isomorphisms can be supporting work, but cannot count as the spectral statement until the model/comparison is supplied.",
+      "consumers": [
+        "lts-derived-induction-lem3"
+      ]
+    },
+    {
+      "id": "pettis-monad",
+      "title": "Source measure monad and Pettis barycenters",
+      "existing_starting_points": [
+        ".lake/packages/mathlib/Mathlib/MeasureTheory/Measure/GiryMonad.lean"
+      ],
+      "construction_target": "Recover exact source M, then define its objects, morphisms, unit, multiplication and measure bounds; define weak sigma algebra, norm bornology and Pettis barycenter by all continuous linear functionals; state c(unit x)=x and c(M c Xi)=c(join Xi).",
+      "remaining_obligations": "Mathlib has a Giry monad, but that does not identify this source monad. Measurability, bornological boundedness, Pettis existence/uniqueness and the unit/multiplication construction obligations must be explicit; do not assume the final algebra laws as input.",
+      "consumers": [
+        "lts-monadic-integration"
+      ]
+    }
+  ],
+  "problems": [
+    {
+      "problem_id": "a98J05",
+      "source": "apm/a98J05.tex",
+      "source_sha256": "949b1cbadedafdf16745e61e215dcae0080380be2abe4674bfb002b275c02e57",
+      "informal": "problems/a98J05/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "source-recovery",
+      "construction_packages": [],
+      "statement_target": "Recover the missing conclusion before choosing any construction target.",
+      "source_or_fidelity_review": "The TeX ends after the analytic power-series assumption. The informal file explicitly says there is no problem to solve.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "lts-derived-induction-lem3",
+      "source": "apm/lts-derived-induction-lem3.tex",
+      "source_sha256": "d16d590d6e72b232745ee8b70e1678a98c60a14979a04e89f6305db10732308a",
+      "informal": "problems/lts-derived-induction-lem3/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "source-definition",
+      "construction_packages": [
+        "borel-spectra"
+      ],
+      "statement_target": "Specify the intended category of Borel-equivariant spectra, restriction to e, and detection of equivalences for its morphisms.",
+      "source_or_fidelity_review": "Recover source definitions: genuine spectra restricted to Borel objects versus Fun(BG,Sp), and the comparison between these models. Ordinary equivariant objects alone do not formalize spectra.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "lts-monadic-integration",
+      "source": "apm/lts-monadic-integration.tex",
+      "source_sha256": "a4a2d8b80109bf2678f951c7c500cef93f1b778eebc9032d10468106fd82dbe0",
+      "informal": "problems/lts-monadic-integration/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "source-definition",
+      "construction_packages": [
+        "pettis-monad"
+      ],
+      "statement_target": "Specify the source measure monad on bornological measurable spaces, the weak measurable structure and norm bornology of X, Pettis barycenter, and the two algebra laws.",
+      "source_or_fidelity_review": "The stem never defines M or enough Pettis integrals. Recover measure class, support/variation bounds and morphisms; do not substitute the Giry monad by assumption.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t00J05",
+      "source": "apm/t00J05.tex",
+      "source_sha256": "f9aeb851904ea715232523bdd969b42e03e5630116b8668631ba561ded3f5368",
+      "informal": "problems/t00J05/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "construction-with-review",
+      "construction_packages": [
+        "spaces-covers"
+      ],
+      "statement_target": "Define the torus with a disk attached along the given essential embedded circle, an actual simply connected covering model, and continuous maps S2 -> X and X -> S2 that are not null-homotopic.",
+      "source_or_fidelity_review": "The informal solution moves through X homotopy-equivalent to S1 wedge S2. That does not by itself identify the original universal cover homeomorphically; preserve the requested geometric covering description.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t93A05",
+      "source": "apm/t93A05.tex",
+      "source_sha256": "023217553d4306ab203c20d4622799b7b0294f2e6853ce95134395e32b3c36cb",
+      "informal": "problems/t93A05/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "construction",
+      "construction_packages": [
+        "smooth-quotients",
+        "intersection"
+      ],
+      "statement_target": "State all three parts: null-homotopy of smooth S2 -> RP3; existence of compact circle/surface submanifolds with odd mod-2 intersection; nonexistence for oriented nonzero integral intersection.",
+      "source_or_fidelity_review": "Preserve compactness, dimensions, embeddings, and orientation in the respective parts; clarify transverse representatives in the definition of intersection.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t93A06",
+      "source": "apm/t93A06.tex",
+      "source_sha256": "cd545b897b26f67892ea8b0b6797d8a9cfb91a6436c0548ddcad40f922add348",
+      "informal": "problems/t93A06/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "construction",
+      "construction_packages": [
+        "smooth-quotients",
+        "forms"
+      ],
+      "statement_target": "Define torus forms, projection pullback, integral and exterior derivative; state unique descent of the printed form, integral 1/4, a Euclidean primitive, no torus primitive, and the specified parallelogram period.",
+      "source_or_fidelity_review": "Use the actual quotient R2/Z2 and all three source parts. Stokes and descent theorems are later proof work.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t93J03",
+      "source": "apm/t93J03.tex",
+      "source_sha256": "d0e1b3fd3013109217d063decc078982af5409c94fe4be29f2d129fd40fa3e72",
+      "informal": "problems/t93J03/informal-solution.md",
+      "current_lean_files": [
+        "problems/t93J03/lean/Main.lean"
+      ],
+      "review_status": "construction",
+      "construction_packages": [
+        "spaces-covers"
+      ],
+      "statement_target": "Define a concrete Klein bottle and chosen based generator loops; state its fundamental-group presentation and the plane embedding of each subspace satisfying the printed inclusion-image condition.",
+      "source_or_fidelity_review": "Retain path connected, locally path connected and semilocally simply connected; bind the subgroup generator to the actual loop through the presentation map.",
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Presentation of the actual Klein-bottle fundamental group; inclusion-induced subgroup condition; plane embedding for the specified locally connected subspace.",
+      "implementation_fidelity_notes": "The semilocal condition is small loops null-homotopic in the entire subspace. The presentation and its a-generator are bound together.",
+      "lean_sha256": "5420b035aab2e02241a12872a5bb41f567e60a8f98a0b597c096ffc697a1a4a0",
+      "independent_review": "pending"
+    },
+    {
+      "problem_id": "t93J05",
+      "source": "apm/t93J05.tex",
+      "source_sha256": "6b0fd90d5d8d4794d40dbafe09828efe068cd504fadee796bd14554a0688358d",
+      "informal": "problems/t93J05/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "source-conflict",
+      "construction_packages": [
+        "forms"
+      ],
+      "statement_target": "Define the printed alternating 2-form and its derivative; define oriented integration on the exact printed surface once its geometry is resolved.",
+      "source_or_fidelity_review": "The cylinder x^2+y^2=1 has no z bounds and no bottom cap. The informal solution calls it a closed bounding surface and returns zero. This is a source/solution conflict, not an absent-API verdict.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t95A01",
+      "source": "apm/t95A01.tex",
+      "source_sha256": "3332d3e2921f28e251021f18593659261791069fb49adeea95c2b652e2387c83",
+      "informal": "problems/t95A01/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "construction",
+      "construction_packages": [
+        "spaces-covers",
+        "smooth-quotients"
+      ],
+      "statement_target": "State the three existence/nonexistence questions for actual spaces, connected double coverings, nonorientable surfaces and finite fundamental groups.",
+      "source_or_fidelity_review": "A group presentation is supporting material only; the self-cover must be a map from the same surface to itself. Do not add niceness assumptions to the universal nonexistence claim merely to use classification.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t95A04",
+      "source": "apm/t95A04.tex",
+      "source_sha256": "2764ba5c6f5eb08dfe4ebe7591c79061441b279d7e9dd534b7e8c4213cc4310f",
+      "informal": "problems/t95A04/informal-solution.md",
+      "current_lean_files": [
+        "problems/t95A04/lean/Main.lean"
+      ],
+      "review_status": "construction",
+      "construction_packages": [
+        "smooth-quotients"
+      ],
+      "statement_target": "Construct RP2 as the antipodal sphere quotient with a smooth atlas; define the six-coordinate descended map and state smooth embedding onto its submanifold image.",
+      "source_or_fidelity_review": "A polynomial identity upstairs or topological injection alone omits the conclusion.",
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Construct quotient-compatible smooth RP2 atlas; descend the six-coordinate sphere polynomial; smoothness, embedding and immersion onto a submanifold.",
+      "implementation_fidelity_notes": "SmoothAtlas existence is part of the conclusion, not an assumed available construction. The topological quotient is fixed.",
+      "lean_sha256": "4c7127b62804465cfe844ba7f1254eee80eee61bd62c92223e7cbec7c9f6f78d",
+      "independent_review": "pending"
+    },
+    {
+      "problem_id": "t95A05",
+      "source": "apm/t95A05.tex",
+      "source_sha256": "abde7b57f75f19c0541b97c4ca673b676307b4b2951d57e5c7ea2849e91c709a",
+      "informal": "problems/t95A05/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "construction",
+      "construction_packages": [
+        "regular-geometry",
+        "forms"
+      ],
+      "statement_target": "Define oriented embedded manifolds with boundary, boundary orientation, separation of A and B, and integration of closed forms; state separator existence, independence of its integral, and finiteness of nondegenerate fixed points.",
+      "source_or_fidelity_review": "Part (c) defines Lefschetz fixed point by invertibility of df-id; it does not require a global Lefschetz number or theorem to state it. Specify the separator boundary avoids A and B so the integral has its declared domain.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t96A01",
+      "source": "apm/t96A01.tex",
+      "source_sha256": "8ceefa0ee1c3b4cc086e32ebcafc2cabd567af8d5ccc51275a2ceb5d6f9ece7d",
+      "informal": "problems/t96A01/informal-solution.md",
+      "current_lean_files": [
+        "problems/t96A01/lean/Main.lean"
+      ],
+      "review_status": "construction",
+      "construction_packages": [
+        "spaces-covers"
+      ],
+      "statement_target": "For an actual closed orientable genus-four surface and H <= pi1(S) of finite index n, state an isomorphism to the surface presentation with genus 3*n+1.",
+      "source_or_fidelity_review": "Reidemeister-Schreier and surface-cover classification prove the statement; they are not needed before stating the group isomorphism.",
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Closed connected orientable genus-four surface; actual subgroup of its fundamental group with finite index n; explicit genus-(3n+1) presentation.",
+      "implementation_fidelity_notes": "Genus is expressed by comparison to the concrete polygon surface; topological manifold, compactness and connectedness are explicit. FiniteIndex excludes the infinite-index zero sentinel.",
+      "lean_sha256": "d0ac8b3c4c956c59d10f206e2554ad07d290f4aad1ed339cefed9cf764f5b521",
+      "independent_review": "pending"
+    },
+    {
+      "problem_id": "t96A02",
+      "source": "apm/t96A02.tex",
+      "source_sha256": "1cc2cc3eedf7968727833dc7a0d4113a30072caa9cdae7fa5ff7979ae6c93a7d",
+      "informal": "problems/t96A02/informal-solution.md",
+      "current_lean_files": [
+        "problems/t96A02/lean/Main.lean"
+      ],
+      "review_status": "construction",
+      "construction_packages": [
+        "spaces-covers"
+      ],
+      "statement_target": "Construct RP2 wedge RP2 as a topological quotient and state: every continuous self-map has a fixed point.",
+      "source_or_fidelity_review": "No Lefschetz number or fixed-point theorem is needed to WRITE this assertion. Concrete quotient geometry is the statement requirement.",
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Construct the point wedge of two actual projective planes; every continuous self-map has a fixed point.",
+      "implementation_fidelity_notes": "No Lefschetz theorem or unspecified fixed-point predicate is assumed.",
+      "lean_sha256": "af843d8b042039df0c10bb16b49a69157a88103fc0ec12a073b5a1d68629bef9",
+      "independent_review": "pending"
+    },
+    {
+      "problem_id": "t96A06",
+      "source": "apm/t96A06.tex",
+      "source_sha256": "d3b10a9d55ff83e12f530c255cbf530007a6effb4b027c8dd955f9da5d34a997",
+      "informal": "problems/t96A06/informal-solution.md",
+      "current_lean_files": [
+        "problems/t96A06/lean/Main.lean"
+      ],
+      "review_status": "construction",
+      "construction_packages": [
+        "smooth-quotients",
+        "homological-invariants"
+      ],
+      "statement_target": "Define real projective 3-space and the descended quadratic map, its homological Lefschetz number, and the assertion that it is not homotopic to identity.",
+      "source_or_fidelity_review": "Only topological quotient/continuity is demanded in this problem; a smooth quotient atlas is not a prerequisite for these parts. Do not identify Lefschetz number with a guessed numeric constant.",
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Descend the exact quadratic map from every nonzero vector; compute actual rational-homology Lefschetz number -3; nonhomotopy to identity.",
+      "implementation_fidelity_notes": "The descent clause also requires the image vector to be nonzero. Rational-homology finiteness is included in the number predicate.",
+      "lean_sha256": "2404073430e6efb22a37cbfb0af6f55ab197344ff15f11dd091a1f01fc0bd05d",
+      "independent_review": "pending"
+    },
+    {
+      "problem_id": "t96A07",
+      "source": "apm/t96A07.tex",
+      "source_sha256": "c741790c85d438ac22e306b9a99c4b6998bbfeb68c68180464fbee6e6879b5a2",
+      "informal": "problems/t96A07/informal-solution.md",
+      "current_lean_files": [
+        "problems/t96A07/lean/Main.lean"
+      ],
+      "review_status": "construction",
+      "construction_packages": [
+        "smooth-quotients",
+        "regular-geometry"
+      ],
+      "statement_target": "Define the antipodal quotient and descended map (yz,xz,xy); express transversality through actual tangent maps to the axis/planes and state the infinitely-many intersecting transverse planes assertion.",
+      "source_or_fidelity_review": "Part (b) concerns the descended map; part (c) names the original map. Retain this distinction.",
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Construct quotient smooth atlas and descend (yz,xz,xy); negate z-axis transversality; infinitely many intersecting horizontal planes transverse to the original sphere map.",
+      "implementation_fidelity_notes": "Transversality is the sum of actual derivative ranges at incident points. Original and descended maps are distinguished as printed.",
+      "lean_sha256": "bb7ba547a62c9efd1f86f4258c09089e005d1d455a93a582fce7a9edb36bc22c",
+      "independent_review": "pending"
+    },
+    {
+      "problem_id": "t96J02",
+      "source": "apm/t96J02.tex",
+      "source_sha256": "07fb8c54583b17400364965f6b773b28226ad71e711055a1dcb8546f633dfe3c",
+      "informal": "problems/t96J02/informal-solution.md",
+      "current_lean_files": [
+        "problems/t96J02/lean/Main.lean"
+      ],
+      "review_status": "construction",
+      "construction_packages": [
+        "spaces-covers"
+      ],
+      "statement_target": "Bind G to pi1 of the concrete Klein bottle and state every finite-index subgroup is isomorphic to either that Klein-bottle group or Z x Z, with realizations.",
+      "source_or_fidelity_review": "The classification theorem belongs in the proof; a presented group without its connection to the space is only a partial encoding.",
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "All finite-index subgroups of the actual Klein-bottle fundamental group are isomorphic to it or Z2; both alternatives occur.",
+      "implementation_fidelity_notes": "The underlying Klein bottle is a concrete aabb polygon quotient, not a group-only substitute.",
+      "lean_sha256": "e67845d7cd1eef2f72278b11b32dbdccd9094ee090b25565a0ef1a207d9dc498",
+      "independent_review": "pending"
+    },
+    {
+      "problem_id": "t97A05",
+      "source": "apm/t97A05.tex",
+      "source_sha256": "7726d12d5ac13fb2fd4a5224508f72a8fe92a718c881f494fda357ec5420f6f1",
+      "informal": "problems/t97A05/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "construction",
+      "construction_packages": [
+        "intersection",
+        "regular-geometry"
+      ],
+      "statement_target": "Define the geometric integer intersection pairing for the actual embedded W and Z; retain all dimensions, orientations, compactness, no-boundary and connectedness conditions; conclude connectedness of Y minus W.",
+      "source_or_fidelity_review": "A finite signed sum without its connection to these submanifolds is insufficient; invariance under transverse perturbation is needed if the source does not assume transversality.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t97A06",
+      "source": "apm/t97A06.tex",
+      "source_sha256": "0addbc9963da851f5ab1bcabaa46b6aa899957ae3cb0099cd9011334f6ebf7fb",
+      "informal": "problems/t97A06/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "construction",
+      "construction_packages": [
+        "forms",
+        "regular-geometry"
+      ],
+      "statement_target": "Define manifold forms, pullback along an embedded inclusion, a positive top-degree volume form, and closedness; state extension and nonclosedness of extensions when inclusion is null-homotopic.",
+      "source_or_fidelity_review": "Preserve positive dimension, nonempty compact oriented smooth X and its embedding. Tubular-neighborhood/Stokes proofs can remain open.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t97A07",
+      "source": "apm/t97A07.tex",
+      "source_sha256": "26151d075f135b12fb200998eee5a956864bbf0c6ee0e91190bd10922b6d0369",
+      "informal": "problems/t97A07/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "source-convention",
+      "construction_packages": [
+        "regular-geometry"
+      ],
+      "statement_target": "Define critical values as the image of points where mfderiv is not surjective; state nonempty compactness and infinitude for n>1 and a nonconstant smooth map.",
+      "source_or_fidelity_review": "Part (a) fails at n=0. Resolve the source convention for R^n before adding n>0; no full Sard theorem is needed to define this set.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t98A06",
+      "source": "apm/t98A06.tex",
+      "source_sha256": "9e8fce7ea6c9f15ecb50c43aeae2c7c5a13780fe8db2ea7b1f3068031031dffc",
+      "informal": "problems/t98A06/informal-solution.md",
+      "current_lean_files": [
+        "problems/t98A06/lean/Main.lean"
+      ],
+      "review_status": "construction",
+      "construction_packages": [
+        "regular-geometry"
+      ],
+      "statement_target": "Define smooth tangent-bundle sections, derivative-surjectivity submersion, vector-field lift equation, and a diffeomorphism of the two regular fibers with their induced manifold structures.",
+      "source_or_fidelity_review": "Flow completeness and partition-of-unity lifting are proof methods, not prerequisites for writing the two assertions.",
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Every smooth target tangent field lifts through the submersion; the actual regular fibers over +1 and -1 are diffeomorphic.",
+      "implementation_fidelity_notes": "The usual finite-dimensional Hausdorff/second-countable, boundaryless smooth manifold convention is explicit. Both fibers use the existing constructed regular-fiber atlases.",
+      "lean_sha256": "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
+      "independent_review": "pending"
+    },
+    {
+      "problem_id": "t98J01",
+      "source": "apm/t98J01.tex",
+      "source_sha256": "6e5aa3b54ff04038f11b63455a4ceb7f10022e2217e66154498b25ddeaed99fd",
+      "informal": "problems/t98J01/informal-solution.md",
+      "current_lean_files": [
+        "problems/t98J01/lean/Main.lean"
+      ],
+      "review_status": "construction",
+      "construction_packages": [
+        "homological-invariants"
+      ],
+      "statement_target": "Define the explicit product map on S2 x S1 x S1; define Lefschetz number from induced finite-dimensional rational homology maps; state value 8 and that this map is not homotopic to the identity.",
+      "source_or_fidelity_review": "Retain the precise comparison with the identity. Kunneth is a later computation proof.",
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "The precise sphere/circle product map has Lefschetz number 8 and is not homotopic to identity.",
+      "implementation_fidelity_notes": "Actual coordinate spheres and actual induced rational homology maps, with finite-support certificates.",
+      "lean_sha256": "f137d0719fed8ba4d9b83268c28009d7917e260ed8c01dbd9c0764b74bfb02dd",
+      "independent_review": "pending"
+    },
+    {
+      "problem_id": "t98J02",
+      "source": "apm/t98J02.tex",
+      "source_sha256": "38370bf9bc871040fffe3234cfc44667ef119d72fe882eb44381d3aa1ffc2a6f",
+      "informal": "problems/t98J02/informal-solution.md",
+      "current_lean_files": [
+        "problems/t98J02/lean/Main.lean"
+      ],
+      "review_status": "construction",
+      "construction_packages": [
+        "spaces-covers"
+      ],
+      "statement_target": "For closed surfaces and a finite cover, define simple closed curves as embedded circles, the specified degree-one lift, and separation by disconnected complement; state (a) and a counterexample to (b).",
+      "source_or_fidelity_review": "Define closed surface with its actual manifold and compactness conditions. Homology and surface-separation classification are possible proof tools, not requirements for the statement.",
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Nonseparation lifts through connected finite covers; a disconnected-cover counterexample to unrestricted part (a); a connected-cover counterexample to part (b).",
+      "implementation_fidelity_notes": "Both readings of the unstated connected-cover convention are retained. Curves are embeddings and projection composed with lift equals the base parametrization.",
+      "lean_sha256": "43ffc2acd5f43ea8c2d74cb06217e98c1e3f868acb9621e6038f5c9a47d37525",
+      "independent_review": "pending"
+    },
+    {
+      "problem_id": "t98J04",
+      "source": "apm/t98J04.tex",
+      "source_sha256": "aac74147873443a5c22390e195b55dfd286aefda312a774f3b86e70e92f51d66",
+      "informal": "problems/t98J04/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "source-recovery",
+      "construction_packages": [
+        "knots"
+      ],
+      "statement_target": "Construct explicit linked circles for (a), their complement and loop; define a solid torus and disk-bounding as an embedded disk with the given boundary for (b).",
+      "source_or_fidelity_review": "The informal file identifies an absent diagram/parametrization for (b). Obtain that specification; do not select an arbitrary knot from the verbal description.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t98J05",
+      "source": "apm/t98J05.tex",
+      "source_sha256": "133cd060d0a03e3ab8a4c11bf726e6c28b0ff69711babc11b16ec6c48a463c30",
+      "informal": "problems/t98J05/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "source-convention",
+      "construction_packages": [
+        "smooth-quotients",
+        "forms",
+        "spaces-covers"
+      ],
+      "statement_target": "Specify the genus-two embedded surface, half-turn action and quotient torus, covering coordinates, descended alpha and beta; state closed/not-exact and a non-null-homotopic loop with zero period.",
+      "source_or_fidelity_review": "The printed x~y iff y=T(x) is not reflexive away from fixed points. Record the intended orbit-generated equivalence explicitly; also specify the geometric action and branched quotient rather than pretending it is everywhere a cover.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t98J06",
+      "source": "apm/t98J06.tex",
+      "source_sha256": "abc165b37607c212779d4981bea3adecbdd3e24a3dd946090fbd31a95a4a35d3",
+      "informal": "problems/t98J06/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "construction",
+      "construction_packages": [
+        "regular-geometry",
+        "intersection"
+      ],
+      "statement_target": "Define graph/diagonal manifold transversality and the oriented local intersection at a fixed point; state invertibility of df-id and its orientation sign.",
+      "source_or_fidelity_review": "Connect the existing signed linear intersection datum to actual tangent inclusions, and fix order/normal orientation (b-a) explicitly. Do not stop at the linear-algebra half.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t99A05",
+      "source": "apm/t99A05.tex",
+      "source_sha256": "f4a4a208d0ac815fdc81c21b5394b2f69f292b9f256692357b79f773f276370a",
+      "informal": "problems/t99A05/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "source-conflict",
+      "construction_packages": [
+        "intersection",
+        "regular-geometry"
+      ],
+      "statement_target": "Define mod-2 degree with its legitimate domain and mod-2 intersection of actual smooth submanifolds; retain dim Z=dim Y and the existential COMPACT W.",
+      "source_or_fidelity_review": "Withdrawn encoding fixed W to a fiber and erased hypotheses. The current informal yes proof also needs compactness/properness not printed for X/f. Resolve the literal question (including possible counterexample) before selecting a yes theorem.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t99A06",
+      "source": "apm/t99A06.tex",
+      "source_sha256": "335ae8cb80c6300ee899bc5c13c395e149aa599f7848871b0e6d37c9c610a8a4",
+      "informal": "problems/t99A06/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "source-convention",
+      "construction_packages": [
+        "homological-invariants",
+        "regular-geometry"
+      ],
+      "statement_target": "Define Euler characteristic from actual homology and submersion to the circle; state the obstruction under the verified source manifold convention.",
+      "source_or_fidelity_review": "The informal proof adds compactness and no boundary. Recover the convention or record a corrected source separately; do not silently strengthen the printed hypothesis.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t99J01",
+      "source": "apm/t99J01.tex",
+      "source_sha256": "59a97944abd531cf769db4a5520f736fb6f71fd621d0ba83f706d1d045000d0d",
+      "informal": "problems/t99J01/informal-solution.md",
+      "current_lean_files": [
+        "problems/t99J01/lean/Main.lean"
+      ],
+      "review_status": "construction-with-review",
+      "construction_packages": [
+        "spaces-covers"
+      ],
+      "statement_target": "Construct a wedge of three circles and finite-sheeted covers; state existence for every positive degree and the connected-cover group F_(2*n+1), with the disconnected componentwise alternative.",
+      "source_or_fidelity_review": "The source does not say covers are connected. Preserve the distinction rather than forcing all covers to have one basepoint-independent fundamental group.",
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Positive-degree connected covers exist; every connected degree-n cover has free group rank 2n+1; arbitrary disconnected covers have componentwise ranks from actual sheet counts.",
+      "implementation_fidelity_notes": "Component sheets use Joined and the actual fiber, with positivity and the bound by total degree. No connectedness silently imposed on all covers.",
+      "lean_sha256": "f52bbc0d4ebd386c9809564106887e856ac7bbb9c8ff7ebf2c3740d25446f0aa",
+      "independent_review": "pending"
+    },
+    {
+      "problem_id": "t99J02",
+      "source": "apm/t99J02.tex",
+      "source_sha256": "ba82a6d554013e8bc8e452f777b10fc5d1e0b630e045bdd1cca2816de4844cff",
+      "informal": "problems/t99J02/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "construction",
+      "construction_packages": [
+        "spaces-covers",
+        "homological-invariants"
+      ],
+      "statement_target": "Construct the double-torus CW and connected-sum models and their comparison; state the actual space homology groups and fundamental-group presentation, with maps/complexes for the requested two calculation methods.",
+      "source_or_fidelity_review": "Bare ranks and three abstract propositions were among the reverted pseudo-statements. van Kampen/Mayer-Vietoris can be open proof dependencies; actual chain maps and spaces must be identified.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t99J05",
+      "source": "apm/t99J05.tex",
+      "source_sha256": "a1c1e0a79d658a5d145f30fd9d4cbdbf0cbb6573fa8c3557f6fe516feedb81b8",
+      "informal": "problems/t99J05/informal-solution.md",
+      "current_lean_files": [],
+      "review_status": "construction",
+      "construction_packages": [
+        "smooth-quotients",
+        "homological-invariants",
+        "intersection"
+      ],
+      "statement_target": "Construct topological/smooth CP^n and its coordinate charts, diagonal projective map and homotopy; define local fixed-point index and Euler characteristic; state all five parts, including chi(CP^n)=n+1.",
+      "source_or_fidelity_review": "Use real orientation of complex charts; local fixed-point sign uses id-df, distinguish it from the graph convention in t98J06.",
+      "formalization_status": "specification-only"
+    },
+    {
+      "problem_id": "t99J06",
+      "source": "apm/t99J06.tex",
+      "source_sha256": "fbe8844f0e095fefd63dcd65af6f8a27909c98b9c29edc78a3a43a1fcde02437",
+      "informal": "problems/t99J06/informal-solution.md",
+      "current_lean_files": [
+        "problems/t99J06/lean/Main.lean"
+      ],
+      "review_status": "construction",
+      "construction_packages": [
+        "forms"
+      ],
+      "statement_target": "Define the literal alternating 2-form, exterior derivative and parameterized oriented cone integral; state d alpha=(2z+1) dx wedge dy wedge dz and integral 9*pi/2.",
+      "source_or_fidelity_review": "Retain dz wedge dz=0 exactly as printed. Record a suspected typo separately; handle the singular apex through the parameterized surface/chain definition, not a global smooth-surface assumption.",
+      "formalization_status": "compiled-unproved",
+      "source_clause_mapping": "Literal exterior derivative; cone as the actual parameter image; single-cover and immersion interior certificates; positive dx-wedge-dy orientation; pullback integral 9pi/2.",
+      "implementation_fidelity_notes": "The printed dz-wedge-dz term is retained. The singular apex/seam are boundary points of the parameter rectangle; no smooth cone manifold is invented.",
+      "lean_sha256": "4c07856a604f952519b0233f84de6542c7a7fbbaa77444d2c59727d733357cd0",
+      "independent_review": "pending"
+    }
+  ],
+  "initial_counts": {
+    "source": 491,
+    "informal_file_at_least_100_bytes": 491,
+    "with_current_lean_material": 460,
+    "without_current_lean_material": 31
+  },
+  "implementation_report": "docs/statement-encoding-progress-2026-09-10.md"
+}

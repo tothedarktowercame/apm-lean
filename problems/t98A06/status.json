@@ -1,1 +1,49 @@
-{"schema":"apm-problem-bundle.v1","problem_id":"t98A06","bundle_root":"problems/t98A06","layout":"single-bundle","source":{"kind":"apm-tex-census","problem_tex":"apm/t98A06.tex"},"lean":{"main":null,"scratch":null,"files":[],"sorry_count_main":0,"sorry_count_scratch":0,"sorry_count_total":0},"artifacts":{"has_problem_tex":true,"has_problem_md":true,"has_informal_solution":true,"has_proof_outline":false,"has_proof_plan":false,"has_changelog":false,"has_workspace_metadata":false,"has_receipt":false},"classification":"informal-only","classification_detail":"Partition-of-unity lift and flow proof supplied; no Lean material exists yet.","imported_at":"2026-09-06"}
+{
+  "schema": "apm-problem-bundle.v1",
+  "problem_id": "t98A06",
+  "bundle_root": "problems/t98A06",
+  "layout": "single-bundle",
+  "source": {
+    "kind": "apm-tex-census",
+    "problem_tex": "apm/t98A06.tex"
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "scratch": null,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
+  },
+  "artifacts": {
+    "has_problem_tex": true,
+    "has_problem_md": true,
+    "has_informal_solution": true,
+    "has_proof_outline": false,
+    "has_proof_plan": false,
+    "has_changelog": false,
+    "has_workspace_metadata": false,
+    "has_receipt": false
+  },
+  "classification": "partial",
+  "classification_detail": "Partition-of-unity lift and flow proof supplied; no Lean material exists yet.",
+  "imported_at": "2026-09-06",
+  "statement_encoding": {
+    "date": "2026-09-10",
+    "author": "codex-18",
+    "status": "compiled-unproved",
+    "theorem": "apm_t98a06",
+    "source_sha256": "9e8fce7ea6c9f15ecb50c43aeae2c7c5a13780fe8db2ea7b1f3068031031dffc",
+    "lean_sha256": "44399e714e0f58588b1b213f3c3b12320dfea50bb6f626693aa89c544b76dd3a",
+    "source_clause_mapping": "Every smooth target tangent field lifts through the submersion; the actual regular fibers over +1 and -1 are diffeomorphic.",
+    "fidelity_notes": "The usual finite-dimensional Hausdorff/second-countable, boundaryless smooth manifold convention is explicit. Both fibers use the existing constructed regular-fiber atlases.",
+    "review": "author clause-by-clause review; independent review pending",
+    "proof_status": "unproved; exactly one sorry declaration",
+    "validation": "lake env lean -DautoImplicit=false; compiler axiom report includes sorryAx"
+  }
+}

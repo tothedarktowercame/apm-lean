@@ -100,3 +100,8 @@ defect is under review. Contrast `BanachZarecki`, which shares zero declarations
 with a95J06 — that is what extraction looks like. See rule R2 in
 `futon3c/holes/labs/M-codex-sorry-loop/construction-targets.md`.
 -/
+import ConstructionTargets.StatementSurfaceModels
+import ConstructionTargets.RationalLefschetz
+import ConstructionTargets.ProjectiveSpaceTopology
+import ConstructionTargets.RealProjectiveSmoothTarget
+import ConstructionTargets.CoordinateSurfaceForms
