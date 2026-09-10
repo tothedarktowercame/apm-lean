@@ -67235,9 +67235,79 @@
   {:consumer "t99J03",
    :stop-condition
    "GO requires constructed uniform margin, translated embeddings, containment and pairwise finiteness; REVISE requires one compiled geometric prerequisite.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Finite embedded plane arcs now admit simultaneous small translated embeddings inside prescribed open targets with finite pairwise parameter coincidences. Translations still move endpoints; shared-endpoint control, compatibility across different charts, retained triangle coverage, compatible faces and triangulation remain subsequent.",
+     :dependency-review
+     {:outcome :pass,
+      :seat "codex-10",
+      :job "invoke-1789040075889-18488-d30d27c7"},
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {:finite_positive_lower_bound
+      "dff958785fe53224a63b304750bef3696b361885f20aabea27626557e5dae675",
+      :image_margin
+      "b501b0280627fd19c53758b9e9780ec9419c26581ffe61b423905d52ea3f57ea",
+      :translated_isEmbedding
+      "872f8f21b3d09b2c80808473257154b4278ba18ca930190211f88c428766b96b",
+      :contained_family
+      "eb41e7cc3518281cfced9c06680ae5c3149d7cb69a4932650f6ece2b5eb45dcc"},
+     :acceptance
+     {:implementation
+      "Promote the exact fixture. Compile finite_positive_lower_bound, image_margin, translated_isEmbedding and contained_family. Verify PlaneArcFiniteSmallTranslations SHA256 22aa45c5318d5cc59fd709d6ff0c3cb8b877297b1da83e338b2f10c9d07a7b7b. Preserve arbitrary finite index types, genuine smoothness on open neighborhoods of the closed interval, supplied closed-interval embeddings, prescribed open plane targets, strict epsilon bounds and all distinct-pair finiteness conclusions. Require zero placeholders, no warnings and standard-only axioms. Do not claim fixed endpoints, compatibility after unrelated chart changes, retained triangle coverage or triangulation.",
+      :commands
+      ["lake env lean ConstructionTargets/PlaneArcContainedSmallTranslations.lean"],
+      :axioms :standard-only,
+      :placeholder-before 0,
+      :placeholder-after 0},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean -o /tmp/chartball47/ConstructionTargets/PlaneArcFiniteSmallTranslations.olean ConstructionTargets/PlaneArcFiniteSmallTranslations.lean",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/PlaneArcContainedSmallTranslations.lean'",
+       :exit 0}
+      {:cmd
+       "python3 /tmp/plane-arc-contained-small-translations-audit.py",
+       :exit 0}
+      {:cmd "bb /tmp/t98a01-dependency-review.bb", :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/PlaneArcContainedSmallTranslations.lean'",
+       :exit 1,
+       :correction
+       "Replaced the initial induction with an explicitly typed finite-set lower-bound induction; the remaining compact-margin elaboration still timed out."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/PlaneArcContainedSmallTranslations.lean'",
+       :exit 1,
+       :correction
+       "Factored compact-margin witnesses into named choices and made the finite index type explicit; closed-thickening monotonicity still caused deterministic elaboration timeout."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/PlaneArcContainedSmallTranslations.lean'",
+       :exit 1,
+       :correction
+       "Reformulated the margin with open thickenings and proved monotonicity directly from witness distances. Final compilation succeeds at the standard heartbeat limit."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/PlaneArcContainedSmallTranslations.lean",
+      :sha256
+      "994efb3aa0e7abf565800fdc3156089d584a6743baf7daf1ad20bca1fa00242e",
+      :placeholder-count 0},
+     :finding
+     "Compiled the complete common-plane packet. Compact interval images inside their prescribed open sets yield individual positive thickening radii; finiteness supplies one positive uniform lower bound. The reviewed finite-family theorem chooses every translation below both that margin and the requested epsilon. Translation homeomorphisms preserve the supplied embeddings, thickening containment keeps every translated arc inside its prescribed open set, and every distinct pair has finitely many parameter coincidences, including endpoints. Empty and singleton families are covered.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/PlaneArcContainedSmallTranslations.lean"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/PlaneArcContainedSmallTranslations.lean"],
    :dag-node
    "SURFACE TRIANGULATION / translated embedded arcs inside chart targets",
    :acceptance
