@@ -73602,6 +73602,20 @@
       "git diff-tree --no-commit-id --name-only -r 3f4c22161ab23bdce58fff0818f8a366d9abfcc4",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789078063528-19618-570cfcb3",
+     :commands
+     ["git show 3f4c22161ab23bdce58fff0818f8a366d9abfcc4:ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean"
+      "git diff-tree --no-commit-id --name-only -r 3f4c22161ab23bdce58fff0818f8a366d9abfcc4"
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean"
+      "sha256sum /tmp/CoefficientSubspaceUnionRestrictedSmallHomology.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean"
+      "cmp -s /tmp/CoefficientSubspaceUnionRestrictedSmallHomology.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean"
+      "git show --check --oneline --stat 3f4c22161ab23bdce58fff0818f8a366d9abfcc4"
+      "python3 declaration-hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at bdcbd90d92e9fd35c83cc8c0fee41f5f81c0b93982af0d6c37af35e1f4135fe0, and the restricted-open-cover dependency reproduces 37775cbc97bc961d3ba54e356e94f33797c95d9afa5411bb75297fd81efca9f7. Lean compilation succeeds without warnings, all three frozen declaration hashes reproduce, placeholders are zero, and printed axioms are standard-only. The isomorphism orientation is cover-small homology to production singular homology of the union subtype; its hom is definitionally the cover-small inclusion homology map, yielding the correctly oriented IsIso instance in every degree for arbitrary commutative-ring coefficients. It does not identify this complex with the ambient-X union-generated range or assert downstream relative results."},
     :commit "3f4c22161ab23bdce58fff0818f8a366d9abfcc4",
     :changed-paths
     ["ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean"],
@@ -73613,7 +73627,7 @@
     :finding
     "The exact fixture and recorded restricted-open-cover dependency hash reproduce. All three requested declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean"],
    :dag-node
@@ -73704,7 +73718,7 @@
      "Compiled exactly one valid small-chain homology prerequisite. The Boolean cover restricted to A union B is open and covers its ambient union subtype, so the reviewed coefficient small-chain theorem gives an isomorphism in every degree from its cover-small homology to production singular homology of A union B. The forward isomorphism is exactly the homology map of the cover-small inclusion. This theorem is applied on the union subtype and makes no false claim that A and B cover the original ambient space X.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
