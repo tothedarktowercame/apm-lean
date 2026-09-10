@@ -69371,6 +69371,23 @@
      "The actual relative restriction map in degree n+1 followed by the coefficient pair connecting morphism for the K-support or L-support complement",
      :direction
      "Exact forward equality from each union-support connecting-and-subspace composite to its relative-restriction-and-target-connecting composite, separately for K and L in every natural degree."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789055789560-18910-8eee1e36",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r ba28b5eeed28d39f20f52f8fc367d14f0963bba7"
+      "git show ba28b5eeed28d39f20f52f8fc367d14f0963bba7:ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean | sha256sum"
+      "sha256sum /tmp/CoefficientCompactSupportRestrictionNaturality.lean"
+      "git show ba28b5eeed28d39f20f52f8fc367d14f0963bba7:ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean | sha256sum"
+      "git show ba28b5eeed28d39f20f52f8fc367d14f0963bba7:ConstructionTargets/CoefficientPairNaturality.lean | sha256sum"
+      "git diff --exit-code ba28b5eeed28d39f20f52f8fc367d14f0963bba7 -- ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean"
+      "lake env lean ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean"
+      "Python read-only audit: recompute two complete declaration-header SHA256 hashes and comment-stripped placeholder count"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check"],
+     :finding
+     "Recorded commit has exact one-file scope; fixture SHA256 78c21c6f8b359cd3ba3dce8ed47a2d12ce0a1f1366b5f05b0d61ec3fb1e938ae and dependency SHA256 values d511cdea24b570aff04d8a47f5d53566a370539dd31bf252f49776ce13bf9ea6 and 62ae88d6bc3fd4de0b065813b3e157da15d0cf75e5e8ee4ac2c5c09b046b9580 match; both frozen statement hashes reproduce; zero placeholders; Lean compiles without warnings with only standard axioms; the K and L connecting-naturality squares are oriented from union-support connecting-plus-subspace maps to restriction-plus-target-connecting maps in degree n+1, without unsupported downstream claims."},
     :commit "ba28b5eeed28d39f20f52f8fc367d14f0963bba7",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean"],
@@ -69385,7 +69402,7 @@
     :axiom-audit-count 2,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean"],
    :dag-node
@@ -69491,7 +69508,7 @@
      "The actual relative restriction maps are banked, but the requested relative Mayer-Vietoris sequence still lacks the comparison through pair connecting morphisms and coefficient excision. Compiled exactly one prerequisite: both concrete restriction maps commute with the coefficient pair connecting morphisms in the required forward direction. No sign comparison, excision isomorphism, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or fundamental class is claimed.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
