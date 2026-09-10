@@ -12837,8 +12837,193 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["Preserve the original t96J05 centered-circle refutation and canonical counterexample artifact; nonconstant radius is an explicit specification change."
+     "Preserve the old t96J07 refutation despite corrected closure, and the unresolved t01A05 defect."
+     "Do not retry unchanged polygon, pants, projective-nonbounding, generic-gluing or other reviewed consumer STOPs."
+     "Preserve signed orientation obligations, historical ordinary-H0(S0) refutation, reduced-S0 degree and one-dimensional local-index coverage."
+     "Exclude reserved t94a06-frozen-normal-translation-closure-probe-refill34, regular-fiber-manifold-target-local-charts-probe-refill34 and their successor."
+     "No inferred regular-value attainment, atlas compatibility, orientation coherence, excision or sphere-table closure."],
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint21Census.py", :exit 0}
+     {:cmd
+      "Read current DAG, foundational-program note, closure policy, both ledgers and dependency reviews",
+      :exit 0}
+     {:cmd
+      "git log --oneline 76e1612d..HEAD -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd "sha256sum problems/t96J05/lean/Main.lean", :exit 0}
+     {:cmd
+      "Corrected bb read-only radial-repair and concurrent-outcome ledger audit",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "Initial bb radial-repair and concurrent-outcome ledger audit",
+      :exit 1,
+      :correction
+      "Removed an extra closing parenthesis; the corrected read-only audit succeeds."}],
+    :measurement
+    {:concurrent-placeholder-delta 0,
+     :baseline "76e1612d30fe1c21b79326b4813430cbfcc268e9",
+     :placeholder-after 66,
+     :existing-consumers 58,
+     :missing-consumers [:t93A05],
+     :placeholder-delta -1,
+     :zero-placeholder-consumers 23,
+     :specification-repairs 1,
+     :open-consumers 35,
+     :placeholder-before 67,
+     :head "ce00018ae639c70ef4b5335183036497be85acf2",
+     :named-consumers 59,
+     :near-closure-consumers 25,
+     :infrastructure-packets
+     {:modules-before 658,
+      :modules-after 660,
+      :portfolio 1,
+      :concurrent 1},
+     :commits
+     {:axis-repair "6f475b3c40e2a2528a0efd7e17c89f8f1af904a7",
+      :singular-subdivision "7ba91c22931e88abd31450ef81a1bc4adb945424",
+      :concurrent-tangent-image "822296ca",
+      :concurrent-t95j04-documentation "f57ce465"},
+     :unchanged-statement-closures 0,
+     :corrected-statement-closures 1,
+     :review-outcomes
+     {:axis-repair-pass "invoke-1789002417270-17501-59e6c3e7",
+      :singular-subdivision-pass "invoke-1789002879492-17513-00cdd4ce",
+      :concurrent-neighborhood-stop-pass
+      "invoke-1789001701181-17482-a7bed4c8",
+      :concurrent-tangent-image-pass
+      "invoke-1789002254080-17496-cc6a0d7a"},
+     :portfolio-placeholder-delta -1,
+     :census
+     {:path "/tmp/Checkpoint21Census.json",
+      :sha256
+      "f57ccb9ac833ac5b61e778b627ffa3aed7fcab55d4e36c0ce18c56069c0993a7"}},
+    :replacement-items
+    [{:consumer :t96J05,
+      :stop-condition
+      "Preserve the original refutation and inhabited literal radial-level conclusion. Add only explicit nonconstant radius; no assumed regular value, extra countability hypothesis, supplied atlas or silent smooth-order restriction.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SPEC-DEFECT / REGULAR-PREIMAGE: nonconstant-radius repair and complete literal radial-level consumer",
+      :acceptance
+      {:axioms :standard-only,
+       :frozen-file "problems/t96J05/lean/Main.lean",
+       :frozen-sha256
+       "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :probe
+       "Under standing specification-repair authorization, construct a complete temporary Main adding only hradial : exists x y : X, norm x.val != norm y.val to the final theorem. Preserve every existing definition, hypothesis and conclusion. Derive a positive interval of attained squared radii from connectedness and radial variation, choose an attained regular value using applicable reviewed Sard, and construct the actual radial-level charted space from the reviewed manifold-fiber atlas. Prove all smooth-order, squared-radius fiber, dimension and fixed Euclidean-model transports. Do not reuse the earlier arbitrary attained radius. Recheck both ledgers before development; do not duplicate target-manifold chart work. Record old/corrected hashes, exact statement diff and a repair note retaining the original circle counterexample. No canonical edits during probe.",
+       :consumer-equation
+       "For a connected positive-dimensional smooth subset whose ambient norm is nonconstant, there exists a positive inhabited literal radial level carrying the specified dimension m-1 smooth manifold structure.",
+       :gates
+       ["GO requires a complete zero-placeholder corrected Main, exact statement-change audit, fixture SHA256 and standard-only audits."
+        "Preserve the canonical original-refutation artifact and distinguish corrected closure from frozen closure."
+        "If complete closure fails, STOP with the exact attainment, smooth-order or atlas-transport boundary; no partial GO or additional silent repair."]},
+      :id :oriented-checkpoint21-t96j05-nonconstant-radius-repair-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint21-axis-repair-and-singular-subdivision-refill],
+      :current-residual
+      "The original one-placeholder theorem is refuted by constant-radius manifolds. The proposed corrected theorem adds nonconstant radius; reviewed self-model manifold-fiber atlases now exist.",
+      :other-consumers []}
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "No supplied chain homotopy, contraction identity, coefficient-change isomorphism or small-chain comparison. Do not claim smallness, excision or sphere homology.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SINGULAR-SUBDIVISION: coefficient-general chain homotopy to identity",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a commutative ring R, construct the signed ordered-vertex prism using the reviewed coefficient-general cone and barycentric recursion, and realize it on actual ModuleCat R singular chains. Prove the required affine-change and face equations, then construct an actual Homotopy from CoefficientSingularSubdivision.singularSubdivision R to identity, explicitly stating and verifying the sign convention. Prove every homotopy equation, including degree zero, without importing integral conclusions as R-linear facts. Reuse coefficient-independent geometry and reviewed realization naturality. Compile integer and rational standard-edge equations and standard-only audits. State universes explicitly.",
+       :consumer-equation
+       "The actual R-valued singular subdivision endomorphism is chain homotopic to identity by constructed prism maps.",
+       :consumer-residual
+       "Preservation and eventual smallness, positive-degree small-chain comparison, relative excision and sphere suspension remain before rational S2 H1/H2.",
+       :gates
+       ["GO requires a complete placeholder-free fixture constructing the actual homotopy with all degree equations, integer/rational examples, fixture SHA256 and standard-only audits."
+        "REVISE requires exactly one compiled missing prism prerequisite; STOP if independent unconstructed foundations remain."]},
+      :id :oriented-checkpoint21-coefficient-subdivision-homotopy-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint21-axis-repair-and-singular-subdivision-refill
+       :oriented-checkpoint20-coefficient-singular-subdivision-assembly-1],
+      :current-residual
+      "Actual coefficient-general singular subdivision is reviewed. A constructed chain homotopy to identity, including its degree-zero equation, remains absent.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :t96J07,
+      :stop-condition
+      "Preserve the historical false-statement refutation and distinguish corrected closure from unchanged frozen closure. Documentation contributes no additional placeholder reduction.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["TOPOLOGY-DEPENDENCY-DAG.md"
+       "docs/TN-topology-closure-experiments.md"],
+      :dag-node "SPEC-DEFECT: reviewed corrected axis closure record",
+      :acceptance
+      {:implementation
+       "Update current t96J07 status using commit 6f475b3c40e2a2528a0efd7e17c89f8f1af904a7 and PASS invoke-1789002417270-17501-59e6c3e7. Verify canonical Main, statement-repair note, old/corrected hashes and preserved refutation. Record exactly two added statement parentheses and reviewed one-to-zero placeholders. Retain historical evidence and other unresolved defects. Recheck concurrent documentation ownership before editing; change only the two scoped documents and commit.",
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :id
+      :oriented-checkpoint21-t96j07-corrected-closure-documentation-1,
+      :kind :documentation,
+      :depends-on
+      [:oriented-checkpoint21-axis-repair-and-singular-subdivision-refill
+       :oriented-checkpoint20-t96j07-parenthesized-axis-repair-1],
+      :current-residual
+      "DAG still describes t96J07 as awaiting statement repair although the explicit parenthesis repair and corrected proof passed review.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: corrected radial-level uptake and subdivision homotopy",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint22-radial-repair-and-subdivision-homotopy-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint21-t96j05-nonconstant-radius-repair-1
+       :oriented-checkpoint21-coefficient-subdivision-homotopy-1
+       :oriented-checkpoint21-t96j07-corrected-closure-documentation-1],
+      :current-residual
+      "Measure corrected radial-level outcome separately from subdivision homotopy and documentation; preserve original refutations and attribute concurrent changes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :finding
+    "The axis repair closes the corrected t96J07 theorem while retaining its old refutation; this alone accounts for the placeholder reduction. Actual coefficient-general singular subdivision is now a natural chain endomorphism with degree-zero identity, but its homotopy remains absent. Concurrent tangent-image work proves inclusion derivative injectivity and kernel-range equality for the chosen manifold-fiber atlas. Concurrent t01J04 remains STOP; t95J04 documentation records an earlier closure and contributes no new reduction. Elect exactly one near-closure adapter first: a standing-authorized t96J05 repair adding explicit nonconstant radius, retaining the inhabited-level conclusion and all prior hypotheses. This is a new corrected statement, not a retry of the refuted original. The reviewed global fiber atlas supplies new construction evidence, but the probe must still establish attained regular-value selection, smooth-order compatibility and literal model transport. Then elect coefficient-general subdivision homotopy, serving four named consumers through one coherent chain construction. Other whole-DAG programs in surface classification, fundamental classes, intersection, product homology, integration and covering gluing require larger constructions; the comparable manifold-target fiber packet is concurrently reserved. Finally record t96J07 corrected closure in the stale DAG documentation.",
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: corrected axis characterization and actual singular subdivision uptake",
@@ -12856,6 +13041,120 @@
     :oriented-checkpoint20-polygon-and-barycentric-refill],
    :current-residual
    "Measure specification repair and corrected consumer closure separately from singular subdivision infrastructure; attribute concurrent changes and retain historical refutations.",
+   :other-consumers []}
+  {:consumer :t96J05,
+   :stop-condition
+   "Preserve the original refutation and inhabited literal radial-level conclusion. Add only explicit nonconstant radius; no assumed regular value, extra countability hypothesis, supplied atlas or silent smooth-order restriction.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SPEC-DEFECT / REGULAR-PREIMAGE: nonconstant-radius repair and complete literal radial-level consumer",
+   :acceptance
+   {:axioms :standard-only,
+    :frozen-file "problems/t96J05/lean/Main.lean",
+    :frozen-sha256
+    "3d0fa97de254e35aec83f46ae213d8c066c78281a7f102230377d3927c811a48",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :probe
+    "Under standing specification-repair authorization, construct a complete temporary Main adding only hradial : exists x y : X, norm x.val != norm y.val to the final theorem. Preserve every existing definition, hypothesis and conclusion. Derive a positive interval of attained squared radii from connectedness and radial variation, choose an attained regular value using applicable reviewed Sard, and construct the actual radial-level charted space from the reviewed manifold-fiber atlas. Prove all smooth-order, squared-radius fiber, dimension and fixed Euclidean-model transports. Do not reuse the earlier arbitrary attained radius. Recheck both ledgers before development; do not duplicate target-manifold chart work. Record old/corrected hashes, exact statement diff and a repair note retaining the original circle counterexample. No canonical edits during probe.",
+    :consumer-equation
+    "For a connected positive-dimensional smooth subset whose ambient norm is nonconstant, there exists a positive inhabited literal radial level carrying the specified dimension m-1 smooth manifold structure.",
+    :gates
+    ["GO requires a complete zero-placeholder corrected Main, exact statement-change audit, fixture SHA256 and standard-only audits."
+     "Preserve the canonical original-refutation artifact and distinguish corrected closure from frozen closure."
+     "If complete closure fails, STOP with the exact attainment, smooth-order or atlas-transport boundary; no partial GO or additional silent repair."]},
+   :id :oriented-checkpoint21-t96j05-nonconstant-radius-repair-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint21-axis-repair-and-singular-subdivision-refill
+    :oriented-checkpoint21-axis-repair-and-singular-subdivision-refill],
+   :current-residual
+   "The original one-placeholder theorem is refuted by constant-radius manifolds. The proposed corrected theorem adds nonconstant radius; reviewed self-model manifold-fiber atlases now exist.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No supplied chain homotopy, contraction identity, coefficient-change isomorphism or small-chain comparison. Do not claim smallness, excision or sphere homology.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SINGULAR-SUBDIVISION: coefficient-general chain homotopy to identity",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a commutative ring R, construct the signed ordered-vertex prism using the reviewed coefficient-general cone and barycentric recursion, and realize it on actual ModuleCat R singular chains. Prove the required affine-change and face equations, then construct an actual Homotopy from CoefficientSingularSubdivision.singularSubdivision R to identity, explicitly stating and verifying the sign convention. Prove every homotopy equation, including degree zero, without importing integral conclusions as R-linear facts. Reuse coefficient-independent geometry and reviewed realization naturality. Compile integer and rational standard-edge equations and standard-only audits. State universes explicitly.",
+    :consumer-equation
+    "The actual R-valued singular subdivision endomorphism is chain homotopic to identity by constructed prism maps.",
+    :consumer-residual
+    "Preservation and eventual smallness, positive-degree small-chain comparison, relative excision and sphere suspension remain before rational S2 H1/H2.",
+    :gates
+    ["GO requires a complete placeholder-free fixture constructing the actual homotopy with all degree equations, integer/rational examples, fixture SHA256 and standard-only audits."
+     "REVISE requires exactly one compiled missing prism prerequisite; STOP if independent unconstructed foundations remain."]},
+   :id :oriented-checkpoint21-coefficient-subdivision-homotopy-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint21-axis-repair-and-singular-subdivision-refill
+    :oriented-checkpoint20-coefficient-singular-subdivision-assembly-1
+    :oriented-checkpoint21-axis-repair-and-singular-subdivision-refill],
+   :current-residual
+   "Actual coefficient-general singular subdivision is reviewed. A constructed chain homotopy to identity, including its degree-zero equation, remains absent.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :t96J07,
+   :stop-condition
+   "Preserve the historical false-statement refutation and distinguish corrected closure from unchanged frozen closure. Documentation contributes no additional placeholder reduction.",
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["TOPOLOGY-DEPENDENCY-DAG.md"
+    "docs/TN-topology-closure-experiments.md"],
+   :dag-node "SPEC-DEFECT: reviewed corrected axis closure record",
+   :acceptance
+   {:implementation
+    "Update current t96J07 status using commit 6f475b3c40e2a2528a0efd7e17c89f8f1af904a7 and PASS invoke-1789002417270-17501-59e6c3e7. Verify canonical Main, statement-repair note, old/corrected hashes and preserved refutation. Record exactly two added statement parentheses and reviewed one-to-zero placeholders. Retain historical evidence and other unresolved defects. Recheck concurrent documentation ownership before editing; change only the two scoped documents and commit.",
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :oriented-checkpoint21-t96j07-corrected-closure-documentation-1,
+   :kind :documentation,
+   :depends-on
+   [:oriented-checkpoint21-axis-repair-and-singular-subdivision-refill
+    :oriented-checkpoint20-t96j07-parenthesized-axis-repair-1
+    :oriented-checkpoint21-axis-repair-and-singular-subdivision-refill],
+   :current-residual
+   "DAG still describes t96J07 as awaiting statement repair although the explicit parenthesis repair and corrected proof passed review.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: corrected radial-level uptake and subdivision homotopy",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint22-radial-repair-and-subdivision-homotopy-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint21-t96j05-nonconstant-radius-repair-1
+    :oriented-checkpoint21-coefficient-subdivision-homotopy-1
+    :oriented-checkpoint21-t96j07-corrected-closure-documentation-1
+    :oriented-checkpoint21-axis-repair-and-singular-subdivision-refill],
+   :current-residual
+   "Measure corrected radial-level outcome separately from subdivision homotopy and documentation; preserve original refutations and attribute concurrent changes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
