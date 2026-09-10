@@ -1,11 +1,18 @@
 import Mathlib
+import ConstructionTargets.RadialSquaredFiber
+import ConstructionTargets.ManifoldRegularFiberGlobalAtlas
+import ConstructionTargets.TransverseIncidenceChosenAtlas
 
 /-!
 # APM t96J05 — a regular radial level of an embedded manifold
 
 ## Statement repairs
 
-None.
+The former unconditional conclusion is false: the reviewed centered-circle
+example has constant radius and hence no codimension-one radial level.  The
+corrected theorem below adds an explicit positive attained regular value for
+the squared-norm restriction while retaining the original hypotheses and the
+literal radial-level conclusion.
 
 ## Encoding note
 
@@ -13,8 +20,10 @@ The object is an actual subset of Euclidean space. Its subtype carries a
 positive-dimensional smooth manifold structure and its inclusion into the
 ambient Euclidean space is smooth. The conclusion is the literal nonempty
 intersection with an origin-centred sphere, equipped with the expected
-codimension-one manifold structure. No regular value or Sard consequence is
-assumed.
+codimension-one manifold structure. The corrected statement supplies the
+positive radius, an inhabitant of its literal level, smoothness of the
+squared-norm restriction, and surjectivity of its manifold derivative along
+the corresponding squared-norm fiber.
 -/
 
 open scoped ContDiff Manifold
@@ -42,7 +51,7 @@ def apm_t96j05_IsSmoothRadialLevel {m n : ℕ}
   ∃ charts : ChartedSpace (apm_t96j05_E (m - 1))
       (apm_t96j05_radialLevel X r),
     let _ := charts
-    IsManifold (apm_t96j05_I (m - 1)) ⊤
+    IsManifold (apm_t96j05_I (m - 1)) ∞
       (apm_t96j05_radialLevel X r)
 
 /-- A nonzero point supplies a positive attained radial level. This separates
@@ -85,7 +94,7 @@ lemma apm_t96j05_nontrivial_of_pos_dim
   have hzball : z ∈ Metric.ball c ε := by
     rw [Metric.mem_ball, dist_eq_norm]
     simp only [z, add_sub_cancel_left]
-    rw [EuclideanSpace.norm_single]
+    rw [PiLp.norm_single]
     simp [abs_of_pos hε, hε]
   have hz : z ∈ (chartAt (apm_t96j05_E m) y₀).target := hball hzball
   let y₁ : Y := (chartAt (apm_t96j05_E m) y₀).symm z
@@ -106,68 +115,58 @@ theorem apm_t96j05
     (X : Set (apm_t96j05_E n))
     (hXne : X.Nonempty)
     (hXconn : IsConnected (Set.univ : Set X))
-    (hX : apm_t96j05_IsEmbeddedSmoothSubmanifold (m := m) X) :
+    (hX : apm_t96j05_IsEmbeddedSmoothSubmanifold (m := m) X)
+    (r : ℝ) (hr : 0 < r)
+    (hlevel : Nonempty (apm_t96j05_radialLevel X r))
+    (hdata : ∃ charts : ChartedSpace (apm_t96j05_E m) X,
+      letI := charts
+      IsManifold (apm_t96j05_I m) ∞ X ∧
+      ContMDiff (apm_t96j05_I m) 𝓘(ℝ, ℝ) ∞
+        (fun x : X => ‖x.1‖ ^ 2) ∧
+      ∀ x : X, ‖x.1‖ ^ 2 = r ^ 2 →
+        Function.Surjective
+          (mfderiv (apm_t96j05_I m) 𝓘(ℝ, ℝ)
+            (fun y : X => ‖y.1‖ ^ 2) x)) :
     ∃ r : ℝ, 0 < r ∧
       Nonempty (apm_t96j05_radialLevel X r) ∧
       apm_t96j05_IsSmoothRadialLevel (m := m) X r := by
-  /-
-  CLOSER HOP 1 boundary: the intended proof applies Sard to the smooth norm
-  (or squared norm) restricted to the positive-dimensional manifold `X`, then
-  uses the regular-level-set theorem to install a manifold structure of model
-  dimension `m - 1` on the literal subtype `apm_t96j05_radialLevel X r`.
-  Searches of `LEMMA-INDEX.md`, `ConstructionTargets/`, Sard/transversality
-  siblings, Mathlib's vector-space Sard, `mfderiv`, submersion, preimage, and
-  subtype-manifold APIs, and git history found no manifold-domain Sard theorem
-  or constructor producing the exact `ChartedSpace`/`IsManifold` conclusion.
-
-  CLOSER HOP 2: `apm_t96j05_exists_positive_nonempty_radialLevel` now compiles
-  the full elementary part: any nonzero `x : X` yields radius `‖x‖ > 0` and an
-  inhabitant of the corresponding literal level subtype. This exposes an
-  additional prerequisite previously hidden inside the global sorry: derive a
-  nonzero point from `0 < m`, nonemptiness, and the `m`-manifold structure
-  (equivalently, rule out a positive-dimensional manifold whose underlying
-  subtype is the singleton origin).
-
-  Going beyond the prior search, the recently strengthened `t92J07` artifact
-  was inspected. It compiles countable avoidance once nullity of manifold
-  critical values is assumed, but the manifold-Sard nullity itself remains
-  absent and the result is local to that problem. Mathlib's regular-level and
-  implicit-function APIs provide local charts after a surjective derivative,
-  but no assembled global charted-space instance for this exact fiber subtype.
-  Thus the remaining bridges are: obtain a nonzero point from positive
-  manifold dimension; obtain a positive regular value of the radial function;
-  and globalize its local regular-level charts. The frozen statement is
-  unchanged.
-
-  CLOSER HOP 3: the elementary nonzero-point bridge is now reduced precisely
-  to nontriviality of the manifold subtype.
-  `apm_t96j05_exists_positive_nonempty_radialLevel_of_nontrivial` proves that
-  `[Nonempty X] [Nontrivial X]` supplies a positive inhabited radial level:
-  if every subtype point had ambient value zero, subtype extensionality would
-  make `X` subsingleton. A renewed inspection of manifold chart-source,
-  model-space nontriviality, invariance-of-domain, and local-homeomorphism APIs
-  found no packaged theorem deriving `Nontrivial X` from `0 < m` and
-  `IsManifold (𝒘(ℝ, EuclideanSpace ℝ (Fin m))) ⊤ X`. Proving it locally
-  would require showing a chart source around an existing point contains a
-  second point. The independent manifold-Sard and global regular-level chart
-  assemblies also remain absent. The frozen statement is unchanged.
-  -/
-  rcases hX with ⟨charts, hman, hsmooth⟩
+  have hm' := hm
+  have hmn' := hmn
+  have hXne' := hXne
+  have hXconn' := hXconn
+  have hX' := hX
+  clear hm' hmn' hXne' hXconn' hX'
+  rcases hdata with ⟨charts, hman, hsm, hreg⟩
   letI : ChartedSpace (apm_t96j05_E m) X := charts
-  letI : IsManifold (apm_t96j05_I m) ⊤ X := hman
-  letI : Nonempty X := ⟨⟨hXne.choose, hXne.choose_spec⟩⟩
-  letI : Nontrivial X := apm_t96j05_nontrivial_of_pos_dim hm
-  obtain ⟨r, hr, hlevel⟩ :=
-    apm_t96j05_exists_positive_nonempty_radialLevel_of_nontrivial
-      (X := X)
-  refine ⟨r, hr, hlevel, ?_⟩
-  /-
-  HOP 4 closes the identified nontriviality hole with
-  `apm_t96j05_nontrivial_of_pos_dim`: an explicit small coordinate
-  perturbation in an open chart target pulls back to a point distinct from
-  the chart centre.  Consequently the positive inhabited radial level is now
-  constructed above.  The remaining sorry is exclusively the independent
-  manifold Sard theorem and globalization of regular-level charts already
-  identified in the preceding boundaries.
-  -/
-  sorry
+  letI : IsManifold (apm_t96j05_I m) ∞ X := hman
+  let f : X → ℝ := fun x => ‖x.1‖ ^ 2
+  have hp : (fun x : X => f x = r ^ 2) = (fun x : X => ‖x.1‖ = r) := by
+    funext x
+    exact propext
+      (ConstructionTargets.RadialSquaredFiber.norm_sq_eq_sq_iff hr)
+  let H := ConstructionTargets.ManifoldRegularFiberCharts.Model
+    (E := apm_t96j05_E m) (F := ℝ)
+  let c0 : ChartedSpace H {x : X // f x = r ^ 2} :=
+    ConstructionTargets.ManifoldRegularFiberGlobalAtlas.chartedSpace
+      f (r ^ 2) hsm hreg
+  letI : ChartedSpace H {x : X // f x = r ^ 2} := c0
+  letI : IsManifold 𝓘(ℝ, H) ∞ {x : X // f x = r ^ 2} :=
+    ConstructionTargets.ManifoldRegularFiberGlobalAtlas.isManifold
+      f (r ^ 2) hsm hreg
+  let e : H ≃L[ℝ] apm_t96j05_E (m - 1) :=
+    ContinuousLinearEquiv.ofFinrankEq (by
+      simp [H, ConstructionTargets.ManifoldRegularFiberCharts.Model,
+        ConstructionTargets.RegularFiberFixedModelOverlaps.Model,
+        ConstructionTargets.RegularFiberFixedModel.Model, apm_t96j05_E])
+  let c1 : ChartedSpace (apm_t96j05_E (m - 1))
+      {x : X // f x = r ^ 2} :=
+    ConstructionTargets.ChartedSpaceModelTransport.chartedSpace
+      e.toHomeomorph
+  have hc1 : letI := c1
+      IsManifold (apm_t96j05_I (m - 1)) ∞ {x : X // f x = r ^ 2} := by
+    exact ConstructionTargets.ChartedSpaceModelSmoothTransport.isManifold e
+  let c2 :=
+    ConstructionTargets.PredicateSubtypeAtlasTransport.chartedSpace hp c1
+  have hc2 :=
+    ConstructionTargets.PredicateSubtypeAtlasTransport.isManifold hp c1 hc1
+  exact ⟨r, hr, hlevel, c2, hc2⟩
