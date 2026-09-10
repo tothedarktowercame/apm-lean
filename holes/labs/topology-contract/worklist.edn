@@ -68444,6 +68444,18 @@
      "The direct infimum-to-left or infimum-to-right range map, followed by the corresponding ambient-range-to-subtype comparison",
      :direction
      "Exact forward equality from each intersection-subtype composite to its direct range-map composite, first on coefficient chains and then on homology in every natural degree."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789050570353-18761-d1439ac0",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r bd1455ac"
+      "git show bd1455ac:ConstructionTargets/CoefficientIntersectionRangeNaturality.lean | sha256sum"
+      "lake env lean ConstructionTargets/CoefficientIntersectionRangeNaturality.lean"
+      "sha256sum ConstructionTargets/CoefficientIntersectionRangeNaturality.lean ConstructionTargets/CoefficientIntersectionRangeComparison.lean ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean /tmp/CoefficientIntersectionRangeNaturality.lean"
+      "python3 comment-stripped declaration-header SHA256 and placeholder audit"],
+     :finding
+     "PASS: exact one-file scope and fixture promotion reproduced; both dependency hashes and four statement hashes match; zero placeholders; compilation is warning-free with standard-only axioms; left/right chain and homology squares have the required forward orientation and do not claim biproduct/union comparison, Mayer-Vietoris conjugation, excision, localization, vanishing, or a fundamental class."},
     :commit "bd1455ac2a4c28b0a9608fff95b5fbfb084fde5c",
     :changed-paths
     ["ConstructionTargets/CoefficientIntersectionRangeNaturality.lean"],
@@ -68458,7 +68470,7 @@
     :axiom-audit-count 4,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientIntersectionRangeNaturality.lean"],
    :dag-node
@@ -68571,7 +68583,7 @@
      "Compiled exactly one missing representation prerequisite. The coefficient chain comparison from the Mayer-Vietoris infimum range term to the literal intersection subtype commutes with both actual inclusions into the left and right subtype pieces. Applying homology proves both forward squares in every natural degree. Piece-biproduct and union comparisons, conjugated exactness and coefficient excision remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
