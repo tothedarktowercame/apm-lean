@@ -13106,6 +13106,17 @@
       :exit 1,
       :correction
       "Retained the actual reviewed model in the successful diagnostic. Transport to the literal model is not claimed."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789003475270-17533-584e1f7d",
+     :commands
+     ["lake env lean /tmp/T96J05AnalyticBoundary.lean"
+      "Python read-only audit: frozen/fixture/audit hashes, old/proposed statement hashes, hradial-only change, preserved helpers, placeholders and scope"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 61268455:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --check"],
+     :finding
+     "Accurate STOP: analytic top order is distinguished from infinity-order smoothness; lowering hypotheses permits the reviewed smooth scalar-fiber construction but does not establish the required analytic atlas or literal-model transport. Attained regular-radius selection also remains unproved. Proposed statement adds only nonconstant radius; canonical Main and original refutation are not changed. Hashes match, placeholders1->1, four standard-only audits and one inherited deprecation warning. No ledger edits."},
     :campaign-termination false,
     :audit
     {:path "/tmp/T96J05AnalyticBoundaryAudit.json",
@@ -13126,7 +13137,7 @@
     :mathematical-refutation false,
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "SPEC-DEFECT / REGULAR-PREIMAGE: nonconstant-radius repair and complete literal radial-level consumer",
