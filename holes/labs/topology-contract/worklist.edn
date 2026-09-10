@@ -62020,8 +62020,55 @@
   {:consumer "t02A08",
    :stop-condition
    "GO requires complete frozen closure; otherwise STOP names the exact missing geometric map or induced homology calculation, without refutation from infrastructure absence.",
+   :evidence
+   {:orientation-type-check
+    {:path "/tmp/T02A08OrientationAudit.lean",
+     :sha256
+     "361832564974581c31b625a8b611020eb482b444f24bb59eab14f7e45ecc2a62",
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :scope
+     "Existing orientation-isomorphism type match only; not a new prerequisite or complete consumer fixture."},
+    :placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "Arbitrary integer degree realization and its induced-map calculation remain. No complete frozen fixture or consumer closure is claimed.",
+    :dependency-review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789020695281-18024-d3039467"},
+    :outcome :stop,
+    :warnings [],
+    :boundary
+    {:construction
+     "An explicit arbitrary-integer sphere-map family, including zero and negative integers.",
+     :calculation
+     "An actual integral singular-homology action formula for that family, using derived suspension naturality or another proved comparison.",
+     :disposition
+     "Infrastructure STOP, not mathematical refutation or campaign termination."},
+    :disposition :stop,
+    :author "codex-12",
+    :placeholder-before 1,
+    :reason :missing-induced-map-calculation,
+    :commands
+    [{:cmd "lake env lean /tmp/T02A08OrientationAudit.lean", :exit 0}
+     {:cmd
+      "Python frozen SHA256, comment-stripped placeholder count and six-source hash audit",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :audit
+    {:path "/tmp/t02a08-refill42-audit.json",
+     :sha256
+     "a50eeb7a2d586fd8d9812e68923a5b8f6b9c7f1ffacdef2cf3081eb1b043f9c6",
+     :head "339841ef5a95a541ab625392f45f2c52324080ce"},
+    :changed-paths [],
+    :finding
+    "The exact integral H2 orientation isomorphism required by frozen Main is banked and its type match compiles. The remaining boundary is constructing continuous self-maps of the literal metric two-sphere for every integer n and proving their actual induced H2 action is multiplication by n. The banked sphere homology shift computes objects; it does not itself provide the required naturality calculation for suspended circle-power maps. The one-dimensional relative reflection sign does not close this boundary. The frozen intersection bridge is already proved.",
+    :frozen-sha256
+    "5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SPHERE DEGREE / arbitrary integer degree frozen closure",
    :acceptance
