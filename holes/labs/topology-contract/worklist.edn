@@ -65412,75 +65412,64 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The generic span-comparison prerequisite is compiled. Actual-cover source reconstruction, fundamental-group coproduct extraction and chosen-basepoint transport remain; unrelated quotient consumers still must supply their covers.",
-     :outcome :revise,
+     "Specialize this generic equivalence to the frozen t00A01 cover and transport its supplied piece comparisons before closing Main. Other quotient consumers must independently construct their required covers. No consumer closure is claimed.",
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer "t00A01",
-      :stop-condition
-      "Require the constructed overlap equivalence, both actual leg comparisons and target-natural pseudococone equivalence; no supplied comparison equivalence.",
-      :phase :implementation,
-      :state :open,
-      :scope ["ConstructionTargets/TwoOpenPointSpanComparison.lean"],
-      :dag-node
-      "VAN KAMPEN / target-natural overlap-to-point-span comparison",
-      :acceptance
-      {:fixture "/tmp/TwoOpenPointSpanComparison.lean",
-       :fixture-sha256
-       "bdc1fda3541b9e6078a78260de6752adb463cac482120a542f6a957804bd1ab5",
-       :implementation
-       "Promote the exact fixture. Compile collapse and its faithful/full/essentially-surjective equivalence instances, overlapEquivalence, pointComparison, both piece equivalences, both leg comparisons, comparison, postcomposeIso and inversePostcomposeIso. Retain the supplied overlap point, actual inclusion functors and weaker hypotheses without openness or union coverage. Require zero placeholders, no warnings and standard-only axioms. Do not claim union reconstruction, a fundamental-group coproduct equivalence or consumer closure.",
-       :commands
-       ["lake env lean ConstructionTargets/TwoOpenPointSpanComparison.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :representation
-      {:source
-       "Pseudococones on the actual fundamental-groupoid span of U, V and their simply connected intersection",
-       :target
-       "Pseudococones on the trivial point span into the single-object categories of the two chosen vertex groups",
-       :direction
-       "Construct an equivalence from actual overlap-span pseudococones to point-span pseudococones, with forward and inverse target-postcomposition natural isomorphisms."},
-      :id :two-open-point-span-comparison-implementation-refill46,
-      :kind :representation-comparison,
-      :depends-on
-      [:checkpoint-full-dag-refill-46-after-open-union-overlap-and-nested-triangles],
-      :current-residual
-      "Compose with actual two-open descent and point-span free-product representations, reconstruct the union groupoid, then derive the group equivalence and explicit chosen-basepoint transport.",
-      :other-consumers ["t03J02" "t97A01" "t92J06"]},
+     :acceptance
+     {:implementation
+      "Promote the exact fixture. Compile both pseudococone representation functors and pseudoSpanEquivalence, mapping, postcomposeIso, sourceEquivalence, groupEquivalence, basedGroupEquivalence and chosenGroupEquivalence. Preserve actual open sets, union coverage, path-connected pieces, simply connected overlap, supplied overlap point and explicit piece-basepoint paths. Verify TwoOpenPointSpanComparison SHA256 bdc1fda3541b9e6078a78260de6752adb463cac482120a542f6a957804bd1ab5. Require zero placeholders, no warnings and standard-only axioms. No supplied pushout, comparison equivalence or additional connectivity hypothesis. Do not claim frozen consumer closure.",
+      :commands
+      ["lake env lean ConstructionTargets/TwoOpenFreeProductMapping.lean"],
+      :axioms :standard-only,
+      :placeholder-before 0,
+      :placeholder-after 0},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/TwoOpenPointSpanComparison.lean",
+     [{:cmd
+       "lake env lean -o /tmp/surface45/ConstructionTargets/TwoOpenPointSpanComparison.olean ConstructionTargets/TwoOpenPointSpanComparison.lean",
        :exit 0}
-      {:cmd "python3 /tmp/two-open-point-span-comparison-audit.py",
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/surface45:$LEAN_PATH lean /tmp/TwoOpenFreeProductMapping.lean'",
+       :exit 0}
+      {:cmd "python3 /tmp/two-open-free-product-mapping-audit.py",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/TwoOpenPointSpanComparison.lean",
+     [{:cmd "lake env lean /tmp/TwoOpenFreeProductMapping.lean",
        :exit 1,
        :correction
-       "Made path-quotient and PUnit hom types explicit for subsingleton inference, and supplied the target category through its named implicit argument."}
-      {:cmd "lake env lean /tmp/TwoOpenPointSpanComparison.lean",
+       "Compiled the missing promoted point-span dependency into a private temporary object directory."}
+      {:cmd
+       "rg -n 'mapEnd|end.*MulEquiv' .lake/packages/mathlib/Mathlib/CategoryTheory/Equivalence.lean",
        :exit 1,
        :correction
-       "Reduced the component identity maps explicitly and used elaborating rewrite for SingleObj functor identities."}
-      {:cmd "lake env lean /tmp/TwoOpenPointSpanComparison.lean",
+       "Located the applicable fullyFaithfulFunctor.mulEquivEnd usage in the banked source-reconstruction module."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/surface45:$LEAN_PATH lean /tmp/TwoOpenFreeProductMapping.lean'",
        :exit 1,
        :correction
-       "Closed the remaining definitional equality of SingleObj identities with rfl. Final compilation succeeds without warnings."}],
+       "Qualified the path basepoint-change API with the FundamentalGroup namespace. Final compilation succeeds without warnings."}],
+     :representation
+     {:source
+      "Fundamental group of the actual two-open union at the supplied overlap point",
+      :target
+      "Group coproduct of the actual fundamental groups of its two pieces at chosen basepoints",
+      :direction
+      "Construct a group isomorphism from the union fundamental group to the piece-group coproduct via target-natural mapping-category equivalence and source reconstruction, then transport the factors along explicit paths."},
      :changed-paths [],
      :fixture
-     {:path "/tmp/TwoOpenPointSpanComparison.lean",
+     {:path "/tmp/TwoOpenFreeProductMapping.lean",
       :sha256
-      "bdc1fda3541b9e6078a78260de6752adb463cac482120a542f6a957804bd1ab5",
+      "c8a9721533e0b0c6962c83a81319bd099560a3db0f580e8fa68c7722f633ede9",
       :placeholder-count 0},
      :finding
-     "Compiled one generic target-natural comparison prerequisite. The simply connected overlap is constructively equivalent to SingleObj PUnit. The pieces retain their banked connector equivalences at the supplied overlap point. Explicit leg comparisons then produce an equivalence from actual overlap-span pseudococones to point-span pseudococones, compatible with target postcomposition in both directions. No span comparison or pushout is assumed. Union reconstruction and chosen-basepoint group transport remain.",
+     "Compiled the complete generic actual-cover construction. Actual two-open descent, the constructed point-span comparison and free-product representations yield a target-natural mapping-category equivalence. Source reconstruction gives the union fundamental groupoid a single-object free-product model. This induces the fundamental-group coproduct equivalence at the supplied overlap point. Explicit paths transport both piece groups to arbitrary chosen basepoints; path-connectedness also supplies those paths constructively.",
+     :implementation
+     {:scope ["ConstructionTargets/TwoOpenFreeProductMapping.lean"]},
      :seat "codex-12"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/TwoOpenFreeProductMapping.lean"],
    :dag-node "VAN KAMPEN / generic chosen-vertex coproduct assembly",
    :acceptance
    {:axioms :standard-only,
