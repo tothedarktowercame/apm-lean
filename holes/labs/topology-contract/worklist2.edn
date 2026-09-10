@@ -45195,6 +45195,29 @@
      "The same completed evidence whose primary fixture path names the banked immutable build_step artifact",
      :direction
      "Exact single-path state transition from the source completed-row evidence representation to the target immutable-artifact representation, preserving every other ledger value."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789082336285-19769-4280a6a2",
+     :commands
+     ["git log --oneline -8"
+      "inspect recorded row evidence and completion-transition in worklist2.edn"
+      "git show --stat --oneline be728d33"
+      "git show --format=fuller --no-ext-diff be728d33 --"
+      "git show --stat --oneline 0a82e87c"
+      "git show --format=fuller --no-ext-diff 0a82e87c --"
+      "verify be728d33 tree equals parent and diff names no paths"
+      "git archive 0a82e87c | tar -x -C <after-dir>"
+      "git archive 0a82e87c^ | tar -x -C <parent-dir>"
+      "git diff-tree --check 0a82e87c^ 0a82e87c"
+      "sha256sum <archived-target-artifact>"
+      "git hash-object <archived-target-artifact>"
+      "bb <archive>/holes/labs/topology-contract/test_gate_receipts.bb"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist2.edn"
+      "EDN structural comparison of checkpoint66 row before and after transition with only fixture.path masked"],
+     :finding
+     "PASS: evidence commit be728d331cd91ca20d4553078862f35170e7902d is exactly empty, and supervisor commit 0a82e87c84db2769dfebe3a41bdca585ecab058d applies the requested ledger transition. Independent EDN comparison shows the checkpoint66 primary path changes from holes/labs/topology-contract/build_step.bb to holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb and all other row data is identical. The target reproduces SHA256 ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b and Git blob 312908af0ceadb5ff15b1b47208e50ac66d67464; supporting-path remains holes/labs/topology-contract/test_gate_receipts.bb with its recorded hash, implementation commit f96d30c1129620704c9bfa11ca2afb0510f6cc02 and PASS review remain unchanged, and nil placeholder-count is preserved. Both archived ledgers validate, whitespace is clean, and the focused supervisor suite passes 55 assertions including malformed-transition rejection. No topology source, theorem orientation, frozen statement, consumer source, or placeholder count changed."},
     :commit "be728d331cd91ca20d4553078862f35170e7902d",
     :changed-paths [],
     :fixture
@@ -45229,7 +45252,7 @@
       :review-outcome :pass}},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: checkpoint66 primary validator fixture transition",
@@ -45300,7 +45323,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: checkpoint66 primary fixture transition and renewed consumer eligibility",
