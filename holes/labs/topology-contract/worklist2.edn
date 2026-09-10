@@ -44732,6 +44732,29 @@
      "Stable immutable repository artifacts containing those exact validator and test bytes",
      :direction
      "Exact byte equality from the source checkpoint66 evidence-commit representation to the target immutable-artifact representation, preserving both recorded hashes and executable behavior."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789081732270-19749-58d96a8e",
+     :commands
+     ["git log --oneline -8"
+      "inspect recorded row evidence and acceptance gates in worklist2.edn"
+      "git show --stat --oneline 5a3f382a"
+      "git show --format=fuller --no-ext-diff 5a3f382a --"
+      "git archive 5a3f382a | tar -x -C <review-dir>"
+      "git diff-tree --no-commit-id --name-status -r 5a3f382a"
+      "git diff-tree --check 5a3f382a^ 5a3f382a"
+      "sha256sum <archived-build-artifact> <archived-test-artifact>"
+      "git hash-object <archived-build-artifact> <archived-test-artifact>"
+      "recover both source files from f96d30c1129620704c9bfa11ca2afb0510f6cc02 and cmp against artifacts"
+      "clj-kondo --lint <archived-build-artifact>"
+      "clj-kondo --lint - --filename test_gate_receipts.bb < <archived-test-artifact>"
+      "emacs --batch -Q -l /home/joe/code/futon4/dev/check-parens.el -- <both-artifacts>"
+      "bb <archive>/holes/labs/topology-contract/test_gate_receipts.bb"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist2.edn"],
+     :finding
+     "PASS: commit 5a3f382a81899c1c22b99879b92584b1278dff3d has exact two-artifact scope and clean whitespace. Both artifacts are byte-identical to checkpoint66 evidence commit f96d30c1129620704c9bfa11ca2afb0510f6cc02. The validator artifact reproduces SHA256 ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b and Git blob 312908af0ceadb5ff15b1b47208e50ac66d67464; the supporting test artifact reproduces SHA256 22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc and Git blob 310a74aedd822169f193ffb0739d2e79738296f2. Content lint and parenthesis checks pass, and the recovered suite passes 55 assertions with zero failures/errors. Both archived ledgers validate. No live validator, ledger evidence, topology source, theorem orientation, frozen statement, consumer source, or placeholder count changed."},
     :commit "5a3f382a81899c1c22b99879b92584b1278dff3d",
     :changed-paths
     ["holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb"
@@ -44754,7 +44777,7 @@
    :consumer-residual
    "Atomically repoint checkpoint66 fixture and supporting evidence to these immutable artifacts, then reapply the tested evidence-shape schema implementation.",
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb"
     "holes/labs/topology-contract/evidence/atomic-fixture-transitions/test_gate_receipts-checkpoint66-22fdfdab.bb"],
@@ -44808,7 +44831,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: immutable checkpoint66 validator evidence and renewed consumer eligibility",
