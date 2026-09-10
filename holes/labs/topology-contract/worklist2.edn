@@ -27644,116 +27644,124 @@
    :stop-condition
    "Do not assume a partition, uniform residual estimate, graph-image measurability or area formula. Retain the L2 graph metric. Exclude reserved orientation and surface work. Do not infer numerical sphere mass or consumer closure; use a unique row-specific scratch directory.",
    :evidence
-   {:probe
-    {:concurrent-reservations
-     [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
-     :placeholder-delta 0,
-     :residual
-     "Exact variable-density area equality, sphere-chart assembly and numerical normalization remain downstream. No sphere mass or consumer closure is claimed; reviewed STOPs, refutations and concurrent work are preserved.",
-     :axiom-audits 18,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:namespace "ConstructionTargets.C1GraphPartition",
-      :implementation
-      "Promote the exact compiled fixture and document the constructed partition, actual graph-image identifications and remaining exact-area obligation.",
-      :declarations
-      ["partition_exists"
-       "graph_measurable"
-       "graph_disjoint"
-       "graph_union"
-       "pieces"
-       "linear"
-       "pieces_disjoint"
-       "pieces_measurable"
-       "pieces_union"
-       "pieces_subset"
-       "selected_derivative"
-       "derivative_proximity"
-       "residual"
-       "images_measurable"
-       "images_disjoint"
-       "images_union"
-       "piece_bounds"
-       "empty_pieces"
-       "dimension_two"
-       "dimension_three"],
-      :hypotheses
-      "Any natural dimension d; f is ContDiffOn real 1 on open U in EuclideanSpace real (Fin d). Positive epsilon suffices for the partition and approximation estimates; piece_bounds additionally requires epsilon<1. Actual Borel and WithLp 2 structures are retained. No partition, center, residual estimate, graph measurability or finite measure is supplied.",
-      :consumer-equation
-      "Constructed countably many disjoint Borel pieces cover U exactly. Every nonempty piece has a functional equal to an actual derivative at a selected point of U, with derivative proximity and two-point residual bounds. Their actual L2 graph sets are measurable and disjoint, cover the graph over U exactly, and satisfy the reviewed two-sided Hausdorff bounds.",
-      :consumer-residual
-      "Pass from measurable approximation pieces and derivative-density control to exact variable-density area equality. Sphere-chart assembly and numerical Euclidean Hausdorff normalization remain before frozen sphere-integral closure.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.C1GraphPartition."
-       "Reproduce eighteen standard-only axiom audits and dimension-two/three bound examples."
-       "Audit countable selection from the reviewed constructed approximation balls and measurable disjointification."
-       "Verify exact coverage, containment, selected derivative, derivative proximity and residual bounds."
-       "Verify actual graph measurability via the measurable extension and literal L2 coordinate equation; retain the reviewed graph-image identification."
-       "Verify pairwise graph disjointness and exact graph union."
-       "Verify piece_bounds applies GraphMetricComparison.bounds to the constructed residual estimate without finite-measure assumptions."
-       "Verify empty-domain handling does not select a point from an empty domain."
-       "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure experiments and build-loop rules; inspect both ledgers and dependency PASS receipts",
-       :exit 0}
-      {:cmd
-       "Inspect countable-subcover, measurable disjointification and continuous piecewise-extension APIs",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint45-partition-second/C1GraphPartition.lean > /tmp/codex13-checkpoint45-partition-second/compile.log",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint45-partition-second/C1GraphPartition.lean",
-       :exit 0}
-      {:cmd
-       "Python comment-stripped placeholder, forbidden-declaration, whitespace and eighteen standard-only axiom audits",
-       :exit 0}
-      {:cmd "Recheck both EDN ledgers and current open rows", :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial partition compilation",
-       :exit 1,
-       :correction
-       "Qualified the hereditary Lindelof theorem and explicitly simplified Pairwise in the empty-domain branch."}
-      {:cmd "Compilation after adding graph measurability",
-       :exit 1,
-       :correction
-       "Applied the parameterized WithLp coordinate-continuity lemmas before projecting measurability."}
-      {:cmd "Compilation after packaging chosen pieces",
-       :exit 1,
-       :correction
-       "Identified a dependent rewrite in pieces_subset and an unnecessarySimpa warning."}
-      {:cmd "Compilation after adding dimension examples and audits",
-       :exit 1,
-       :correction
-       "Reproduced the dependent rewrite failure; replaced it with transitivity through the union and removed the warning."}
-      {:cmd "Compilation after replacing the dependent rewrite",
-       :exit 1,
-       :correction
-       "Replaced the nonexistent Set.Subset.of_eq name with le_of_eq. Final audited compilation succeeds without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint45-partition-second/C1GraphPartition.lean",
-      :sha256
-      "26d94f98e9f8997ad4e56b9c1cf75951c59a8b65cacf0e93e8807398642f1f1d",
-      :placeholder-count 0},
-     :finding
-     "Complete placeholder-free fixture supplies the requested countable measurable approximation partition and actual graph-measure bounds. The empty-domain branch needs no center; graph measurability is proved from the continuous function on U through a measurable extension. Both dimension examples and all eighteen axiom audits pass.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/C1GraphPartition.lean"
-       "ConstructionTargets/C1GraphPartition.md"]},
-     :seat "codex-13"}},
+   {:concurrent-reservations-preserved
+    [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Exact variable-density area equality requires further derivative-density control and passage from piecewise bounds. Sphere-chart assembly and numerical Euclidean Hausdorff normalization remain downstream; no sphere mass or consumer closure is claimed.",
+    :scratch "/tmp/codex14-checkpoint45-partition-z5qj1yjk",
+    :gates
+    {:dimension-two-three-examples :pass,
+     :piece-hausdorff-bounds :pass,
+     :build-jobs 2524,
+     :selected-derivative-and-proximity :pass,
+     :countable-selection-from-constructed-balls :pass,
+     :graph-disjointness-and-union :pass,
+     :constructed-residual :pass,
+     :borel-disjointification-and-exact-coverage :pass,
+     :actual-l2-graph-measurability :pass,
+     :empty-domain-without-center-selection :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 18,
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"pieces"
+     "267bc204fbe6e20d757122ea697591c786cbe3b5cfb439d088742569f8b0c32d",
+     "images_disjoint"
+     "2ac611d329a2788d1642bfc4479fcc4b8fb46aa6b0a5f138fe5d2f059050aa45",
+     "images_union"
+     "885dca619d431be816eb54da7b5db1d496927ae0d626f844770d137593f39d32",
+     "selected_derivative"
+     "9eb4372eeac33c64c428dd00b3c642e1c4199f39abc61ab974d002223a7870de",
+     "pieces_union"
+     "4a9fca1bf26c005cd327fb11200ff7dc847250fb037d92e09ba3430a0ce47dbc",
+     "graph_union"
+     "54646fd79c69d2b7979f7bb502abc33f3fe49b6aae99aa1272c359fb0e03b562",
+     "empty_pieces"
+     "ff3bfe62d5e23d5552de23a819febe430e4d4aebd278044be9604c0894dd004f",
+     "partition_exists"
+     "3bbd42d5422010d96d9eb1876c46b07fbebf8fbea1374ae3e09d0d70e24707a3",
+     "pieces_subset"
+     "b7111ba473fc6aa9ac10526621a071af7d1a3466e7028db2a7562928f3078e0a",
+     "dimension_three"
+     "755eb4d9e287d9c0857911e6bf2b6cfea9c601bb2d24a52a2068f580df5fee1c",
+     "residual"
+     "0e097034aa6c2d72bf05b07deb994ec0c69bd9c2b67c8e346e86e1b4cf37df2b",
+     "graph_measurable"
+     "acfd0e951b866c5f3658a1b397285bf8039ae589f1f7c591d779da81b7886833",
+     "linear"
+     "3664ac2b64242bbeacc3b97860bacc5fbc90794bc95274f4c9a4b9ad58da54e8",
+     "graph_disjoint"
+     "aeaf7ac91eae1d854d362f68584214a28ef706d65036b10a1152c7f81b54db6a",
+     "pieces_disjoint"
+     "985f5166644bf84e330a400a93d90ba4aeed9f32c20c52f3dbf12c753005e8e8",
+     "pieces_measurable"
+     "0c2848fff0e8626e1b80dcd2aed7139d6d96b6b5bcb0186bb059fd5ffb1288d7",
+     "dimension_two"
+     "b7d1b8e8b9399c592d647247bf176387dae5e2d7c27bfc06b699e411a5e363d2",
+     "images_measurable"
+     "7e1b94821eb6de58967af3f16cb5f82fb1d2c741d302df58ec768c50870b9eff",
+     "piece_bounds"
+     "3e14cadb1f3c45b4e051467e93c81ac4e84545f37940cf0ab4a1db26e14db7a7",
+     "derivative_proximity"
+     "6e0853b4f3675951e1c94077af97b58158c5cf4a6561fa8ee4b6a84201449229"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG and closure rules; inspect both ledgers and three dependency PASS receipts",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "bb read-only dependency review and concurrent reservation inspection",
+      :exit 0}
+     {:cmd "Python fixture SHA256 verification and exact promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint45-partition-second/C1GraphPartition.lean",
+      :exit 0}
+     {:cmd "lake env lean ConstructionTargets/C1GraphPartition.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.C1GraphPartition", :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/C1GraphPartition.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python fixture equality, comment-stripped placeholder scan and twenty statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope and compile-log audits: eighteen target reports, standard-only axioms, no warnings or errors",
+      :exit 0}
+     {:cmd
+      "git commit -m 'Construct measurable C1 graph approximation partition'",
+      :exit 0}
+     {:cmd "git diff --check d0b56c5f^ d0b56c5f", :exit 0}
+     {:cmd
+      "Python committed two-file scope, fixture equality and clean scoped status verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :id
+    :oriented-checkpoint45-c1-graph-measurable-approximation-partition-1,
+    :commit "d0b56c5f053b8b7320e82ebeb506a058391f7551",
+    :changed-paths
+    ["ConstructionTargets/C1GraphPartition.lean"
+     "ConstructionTargets/C1GraphPartition.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint45-partition-second/C1GraphPartition.lean",
+     :sha256
+     "26d94f98e9f8997ad4e56b9c1cf75951c59a8b65cacf0e93e8807398642f1f1d",
+     :exact-promotion true,
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture and documented the constructed countable Borel partition, measurable L2 graph sets, exact coverage and piecewise Hausdorff bounds. The empty-domain branch selects no point. Both ledgers, unrelated consumers and reviewed STOPs remain untouched.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/C1GraphPartition.lean"
     "ConstructionTargets/C1GraphPartition.md"],
