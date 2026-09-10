@@ -14,8 +14,14 @@ two theorems derive the bound of each count by `i`.
 prefix endpoints. The subset argument lives in this module so it can use the
 private `wordPrefix` representation without exposing that implementation.
 
+For `i : Fin n`, the prefix ending at `i.succ` is exactly the prefix ending at
+`i.castSucc` with `i` inserted. The four successor theorems expose the
+resulting count calculation: a true letter increments only `horizontalCount`,
+while a false letter increments only `verticalCount`. Every equation is an
+equality of natural-number counts.
+
 No balanced-word subtype or terminal balance assumption appears here. The
 module does not reconstruct paths, prove inverse laws, define corner swaps,
 pair or cancel faces, construct chain sums or a cross product, or assert
 Eilenberg-Zilber, Kunneth, intersection, or consumer results. The next step
-uses the resulting balanced total bounds as cumulative path coordinates.
+uses these recurrences to compare step words with cumulative path coordinates.
