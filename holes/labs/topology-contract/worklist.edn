@@ -57578,8 +57578,162 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill35-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill35-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill35-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill35-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "git diff --name-status a9639d2efd3577244b5b86275703bce76c5f55b3 e2d16403cd97f8a05079969d9d933501368a56d8 -- ConstructionTargets problems",
+      :exit 0}],
+    :replacement-items
+    [{:consumer "t02A08",
+      :stop-condition
+      "GO requires complete frozen closure. Otherwise identify the exact missing induced-map degree or suspension naturality theorem; infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "SPHERE ORIENTATION / all-integer induced degree",
+      :acceptance
+      {:frozen-file "problems/t02A08/lean/Main.lean",
+       :frozen-sha256
+       "5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile the complete frozen Main without placeholders or changed definitions or hypotheses. Reuse actual sphere orientation, integral comparisons and degree composition. Audit the current coefficient subdivision/prism and sphere relative-pair producers for an actual naturality route; do not mistake a chain homotopy or abstract homology isomorphism for a degree calculation. Construct maps for all positive, zero and negative integers and prove the literal induced-map equation, then close the existing oriented-intersection assembly. No assumed degree map, suspension naturality or conditional final bridge. Preserve signed antipodal, reduced-S0 and one-dimensional local-index obligations as separate coverage."},
+      :id :t02a08-frozen-integer-degree-closure-probe-refill35,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
+      :current-residual
+      "One placeholder: construct a literal sphere self-map of every integer degree with its actual induced H2 action. Orientation and degree composition are banked; the all-integer map calculation remains."}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires compiled actual global atlas, genuine-infinity manifold structure and smooth inclusion for the same atlas. REVISE requires exactly one compiled prerequisite; no consumer closure claim.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE/SUBMERSION / manifold-target global fiber atlas and inclusion",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a genuine-infinity smooth map between self-model manifolds on finite-dimensional complete real inner-product spaces E and F and a regular value c, construct ChartedSpace and IsManifold genuine infinity on the literal inherited-topology fiber f=c with fixed Euclidean dimension finrank E minus finrank F. Invoke exactly ManifoldTargetRegularFiberCharts.exists_cover and its proven overlaps through Mathlib atlas APIs. Prove chosen chartAt and atlas membership specifications. For this same atlas prove genuine-infinity ContMDiff of subtype inclusion into the source manifold using the actual backward parameterizations. No assumed atlas, compatibility, smooth inclusion, altered topology or globally regular extension. Include empty fibers and zero-dimensional kernels; preserve existing APIs and state self-model applicability limits.",
+       :consumer-residual
+       "Global self-model manifold-to-manifold regular-fiber atlas and smooth inclusion only. Actual derivative injectivity and tangent kernel comparison, general models and consumer orientation, boundary, duality and transversality obligations remain."},
+      :id :manifold-target-fiber-global-atlas-inclusion-probe-refill35,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
+      :current-residual
+      "ManifoldTargetRegularFiberCharts supplies literal-fiber charts, coverage and smooth overlaps. Global charted-space and manifold structures and smooth inclusion for that atlas remain.",
+      :other-consumers ["t02A07" "t01J04" "t94A06"]}
+     {:consumer "t96J07",
+      :stop-condition
+      "Require exact agreement with the reviewed repair and closure; never label the old frozen statement proved or erase its refutation.",
+      :phase :implementation,
+      :state :blocked,
+      :scope
+      ["TOPOLOGY-DEPENDENCY-DAG.md"
+       "docs/TN-topology-closure-experiments.md"],
+      :dag-node
+      "SPEC-DEFECT / corrected encoded projective-axis closure record",
+      :acceptance
+      {:implementation
+       "Read commit 6f475b3c40e2a2528a0efd7e17c89f8f1af904a7, STATEMENT-REPAIR.md and independent PASS invoke-1789002417270-17501-59e6c3e7. Update current status to corrected encoded-statement closure while preserving the exact old zero-vector refutation and historical records. Record the two-parenthesis precedence repair, old and corrected statement hashes, one-to-zero reduction and standard axioms. Explicitly retain the absent intrinsic projective-derivative comparison. Documentation contributes zero additional placeholder reduction. Do not edit Lean files, ledger, runs2 or shared scripts.",
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :id :t96j07-reviewed-corrected-closure-documentation-refill35,
+      :kind :documentation,
+      :depends-on
+      [:checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
+      :current-residual
+      "Current DAG and closure note still describe the old specification defect without recording the reviewed corrected closure."}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped placeholders across every DAG consumer and separate consumer closures, infrastructure, documentation and concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve t96J05 local defect, t01J04 and t94A06 applicability boundaries, t96J07 old refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id :checkpoint-full-dag-refill-36-after-degree-and-target-atlas,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t02a08-frozen-integer-degree-closure-probe-refill35
+       :manifold-target-fiber-global-atlas-inclusion-probe-refill35
+       :t96j07-reviewed-corrected-closure-documentation-refill35],
+      :current-residual
+      "Await reviewed degree, target-atlas and corrected-closure documentation outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    {:baseline "a9639d2efd3577244b5b86275703bce76c5f55b3",
+     :placeholder-delta 0,
+     :coverage
+     "Preserve t96J05 centered-circle local refutation; t01J04 countability and boundary-chart route boundary; t94A06 dimension/model boundary; t96J07 old zero-vector refutation separately from its reviewed corrected encoded closure; signed antipodal naturality, reduced-S0 degree and one-dimensional local-index coverage. No campaign refutation or new consumer closure.",
+     :head "e2d16403cd97f8a05079969d9d933501368a56d8",
+     :infrastructure-packets
+     {:modules-before 659,
+      :modules-after 665,
+      :portfolio
+      ["ManifoldTargetFiberChartExtension"
+       "FiberPredicateTransfer"
+       "ManifoldTargetRegularFiberCharts"],
+      :concurrent
+      ["CoefficientSingularSubdivision"
+       "CoefficientVertexPrism"
+       "CoefficientSingularPrism"],
+      :consumer-closures 0,
+      :consumer-file-changes 0},
+     :ranking
+     "Exactly one near-closure adapter first: t02A08 has one coherent all-integer induced-degree obligation and existing final assembly. Audit current coefficient and sphere producers without presuming they supply degree naturality. Other near-closure consumers retain broader boundaries: t00J01 combines quotient geometry, rational homology and exact fold fibers; t98A01 combines concrete covering and surface classification/Euler transfer; t00A01 needs actual fundamental-group comparison; surface and planar consumers need independent geometry. Among shared foundations, target-fiber atlas assembly serves four named consumers and is simpler than fundamental-class localization, Poincare/Thom comparison, generic gluing, Kunneth, integration or covering classification. Documentation follows to correct a demonstrably stale status.",
+     :typed-residual-change
+     "Manifold-target localization and predicate transport now produce actual original-fiber charts, coverage and smooth overlaps. Global atlas, inclusion and tangent assembly remain. t94A06 critical nullity, negation measure transport and range-plus-axis comparison remain unresolved.",
+     :review-outcomes
+     {:adapter
+      "t94A06 STOP independently passed by invoke-1789003199649-17524-f12be4cf; missing finite-dimensional/self-model Sard applicability is not refutation.",
+      :foundation
+      "Both prerequisite implementations passed; complete literal-fiber charts passed at c20972de0f36d273644ea424e28d49ff411cb029, review invoke-1789004464076-17561-0878509f."},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing ["t93A05"],
+      :zero-placeholder 23,
+      :open 35,
+      :within-two 25,
+      :before 66,
+      :after 66}},
+    :artifacts
+    [{:path "/tmp/topology-refill35-measure.json",
+      :sha256
+      "dcfd070654f3b9655b53c9a18ba6fde39538b5031c6c6f4ce25c1cc056b41909"}
+     {:path "/tmp/topology-refill35-reviews.edn",
+      :sha256
+      "712a20a2a4cbc2907e06d36e084b7b51cb963dfd8db7269d8fc1bebe6000107b"}
+     {:path "/tmp/topology-refill35-tail.edn",
+      :sha256
+      "0e26e904d32fb734519d31d03879ceb03d19496384f4b1d32b5241f97e4eea94"}],
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -57593,7 +57747,101 @@
     :regular-fiber-manifold-target-local-charts-probe-refill34
     :checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image],
    :current-residual
-   "Await reviewed translation-adapter and target-fiber-chart outcomes, then rerank the complete DAG."}],
+   "Await reviewed translation-adapter and target-fiber-chart outcomes, then rerank the complete DAG."}
+  {:consumer "t02A08",
+   :stop-condition
+   "GO requires complete frozen closure. Otherwise identify the exact missing induced-map degree or suspension naturality theorem; infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SPHERE ORIENTATION / all-integer induced degree",
+   :acceptance
+   {:frozen-file "problems/t02A08/lean/Main.lean",
+    :frozen-sha256
+    "5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile the complete frozen Main without placeholders or changed definitions or hypotheses. Reuse actual sphere orientation, integral comparisons and degree composition. Audit the current coefficient subdivision/prism and sphere relative-pair producers for an actual naturality route; do not mistake a chain homotopy or abstract homology isomorphism for a degree calculation. Construct maps for all positive, zero and negative integers and prove the literal induced-map equation, then close the existing oriented-intersection assembly. No assumed degree map, suspension naturality or conditional final bridge. Preserve signed antipodal, reduced-S0 and one-dimensional local-index obligations as separate coverage."},
+   :id :t02a08-frozen-integer-degree-closure-probe-refill35,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts
+    :checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
+   :current-residual
+   "One placeholder: construct a literal sphere self-map of every integer degree with its actual induced H2 action. Orientation and degree composition are banked; the all-integer map calculation remains."}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires compiled actual global atlas, genuine-infinity manifold structure and smooth inclusion for the same atlas. REVISE requires exactly one compiled prerequisite; no consumer closure claim.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / manifold-target global fiber atlas and inclusion",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a genuine-infinity smooth map between self-model manifolds on finite-dimensional complete real inner-product spaces E and F and a regular value c, construct ChartedSpace and IsManifold genuine infinity on the literal inherited-topology fiber f=c with fixed Euclidean dimension finrank E minus finrank F. Invoke exactly ManifoldTargetRegularFiberCharts.exists_cover and its proven overlaps through Mathlib atlas APIs. Prove chosen chartAt and atlas membership specifications. For this same atlas prove genuine-infinity ContMDiff of subtype inclusion into the source manifold using the actual backward parameterizations. No assumed atlas, compatibility, smooth inclusion, altered topology or globally regular extension. Include empty fibers and zero-dimensional kernels; preserve existing APIs and state self-model applicability limits.",
+    :consumer-residual
+    "Global self-model manifold-to-manifold regular-fiber atlas and smooth inclusion only. Actual derivative injectivity and tangent kernel comparison, general models and consumer orientation, boundary, duality and transversality obligations remain."},
+   :id :manifold-target-fiber-global-atlas-inclusion-probe-refill35,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts
+    :checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
+   :current-residual
+   "ManifoldTargetRegularFiberCharts supplies literal-fiber charts, coverage and smooth overlaps. Global charted-space and manifold structures and smooth inclusion for that atlas remain.",
+   :other-consumers ["t02A07" "t01J04" "t94A06"]}
+  {:consumer "t96J07",
+   :stop-condition
+   "Require exact agreement with the reviewed repair and closure; never label the old frozen statement proved or erase its refutation.",
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["TOPOLOGY-DEPENDENCY-DAG.md"
+    "docs/TN-topology-closure-experiments.md"],
+   :dag-node
+   "SPEC-DEFECT / corrected encoded projective-axis closure record",
+   :acceptance
+   {:implementation
+    "Read commit 6f475b3c40e2a2528a0efd7e17c89f8f1af904a7, STATEMENT-REPAIR.md and independent PASS invoke-1789002417270-17501-59e6c3e7. Update current status to corrected encoded-statement closure while preserving the exact old zero-vector refutation and historical records. Record the two-parenthesis precedence repair, old and corrected statement hashes, one-to-zero reduction and standard axioms. Explicitly retain the absent intrinsic projective-derivative comparison. Documentation contributes zero additional placeholder reduction. Do not edit Lean files, ledger, runs2 or shared scripts.",
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :t96j07-reviewed-corrected-closure-documentation-refill35,
+   :kind :documentation,
+   :depends-on
+   [:checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts
+    :checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
+   :current-residual
+   "Current DAG and closure note still describe the old specification defect without recording the reviewed corrected closure."}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped placeholders across every DAG consumer and separate consumer closures, infrastructure, documentation and concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve t96J05 local defect, t01J04 and t94A06 applicability boundaries, t96J07 old refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id :checkpoint-full-dag-refill-36-after-degree-and-target-atlas,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t02a08-frozen-integer-degree-closure-probe-refill35
+    :manifold-target-fiber-global-atlas-inclusion-probe-refill35
+    :t96j07-reviewed-corrected-closure-documentation-refill35
+    :checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
+   :current-residual
+   "Await reviewed degree, target-atlas and corrected-closure documentation outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
