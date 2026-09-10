@@ -28942,6 +28942,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Deterministic census attribution defect in strategy commit d260df79: the recorded infrastructure packet claims modules 762->772 and lists ConstructionTargets/FiniteTranslatedEmbeddedArcsChartContainment.lean as a concurrent addition, but that file does not exist at the recorded pre-transition head d260df79^. The actual earlier-to-head change instead includes ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean, which the packet omits. Using the post-subcomplex baseline e0ddf23d reproduces 763->772 with nine additions (five portfolio plus four compact-complement modules), not 762->772. Using the prior checkpoint head e90e523c reproduces 762->772 but includes the omitted subcomplex module and the m02J06 consumer change, while still not including the claimed finite-arc module. Thus no commit interval supports the recorded before/after counts and attributed ten-module list.",
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
@@ -28972,6 +28974,12 @@
       :exit 0}
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1789045638299-18633-cabde5bc",
+     :finding
+     "Deterministic census attribution defect in strategy commit d260df79: the recorded infrastructure packet claims modules 762->772 and lists ConstructionTargets/FiniteTranslatedEmbeddedArcsChartContainment.lean as a concurrent addition, but that file does not exist at the recorded pre-transition head d260df79^. The actual earlier-to-head change instead includes ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean, which the packet omits. Using the post-subcomplex baseline e0ddf23d reproduces 763->772 with nine additions (five portfolio plus four compact-complement modules), not 762->772. Using the prior checkpoint head e90e523c reproduces 762->772 but includes the omitted subcomplex module and the m02J06 consumer change, while still not including the claimed finite-arc module. Thus no commit interval supports the recorded before/after counts and attributed ten-module list."},
     :replacement-items
     [{:consumer :t95J05,
       :stop-condition
@@ -29096,7 +29104,7 @@
     "The frozen files remain byte-unchanged and the comment-stripped total remains 62 placeholders across 33 open consumers. Routes: t95J05 has 1 placeholder: banked exact graph area -> missing actual S3 cap representation -> missing measurable cap assembly and Euclidean Hausdorff normalization -> missing square and fourth-coordinate moments -> frozen sphere integral. t02A05 has 2 placeholders: banked coefficient and projection reductions -> missing actual S2 cap representation -> missing cap assembly and normalization -> missing centered sphere moments -> frozen integral and minimum. t01J06 has 3 placeholders: banked restriction algebra -> the same S2 cap and moment route for the nonzero period, plus a separate manifold Stokes bridge and final conjunction. t94A10 has 3 placeholders: banked solid-angle algebra -> the same S2 cap and normalization route for the period, plus closedness/nonexactness assembly. t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 follow the compact-complement Mayer-Vietoris route; homology transport is done-unreviewed and compact-support conjugation/excision, localization, duality and gluing remain, so duplicate election is excluded. t99J03, t00A03, t01J01, t91J05 and t94J09 follow the finite translated-arc route; prescribed-chart containment and endpoint control are actively reserved, with polygon or classification steps later. t98A01 has 1 placeholder but its reviewed STOP identifies missing five-torsion cardinality, polygon-genus invariance and finite-cover Euler multiplicativity. t00J01 still needs concrete Klein-product and exact fold-fiber geometry. t01A05 retains its connectedness specification defect in addition to the shared compact-support route. t01A08 still needs arbitrary-model chart-domain and within-derivative applicability. t01J04 and t94A06 still need exact regular-preimage, half-space atlas and normal-translation applicability. t02A08 still needs an actual arbitrary-integer sphere map and its homology action. t03J02 retains the reviewed closed-circle gluing STOP. t03J04 still needs uniform rational torus homology and finite-cover Euler comparison. t92J06 still needs covering classification, monodromy, surface-cover realization and genus invariance. t96J05 retains the proved radial counterexample and requires a corrected analytic or smooth statement before uptake. No route is complete, so no frozen closure adapter is eligible. Infrastructure outside these named routes is deferred. One shared sphere-cap representation row is elected, followed by a successor checkpoint.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact graph area and renewed consumer eligibility",
@@ -29118,7 +29126,7 @@
    :stop-condition
    "Do not assume a cap parameterization is measure-preserving, suppress subtype or ambient measure transport, include the equator without a proved null-boundary comparison, or assume numerical Euclidean Hausdorff normalization. Do not evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Exclude active compact-support, arc, orientation and surface work; use a unique row-specific scratch directory.",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual unit-sphere caps as reviewed C1 L2 graphs",
@@ -29169,7 +29177,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: sphere-cap area comparison and renewed consumer eligibility",
