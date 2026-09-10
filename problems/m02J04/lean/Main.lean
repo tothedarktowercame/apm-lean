@@ -47,6 +47,1785 @@ def apm_m02J04_admissible : Set (ℝ → ℝ) :=
   {y | ContDiff ℝ 1 y ∧ (∀ x ∈ Icc (0 : ℝ) 1, 0 ≤ y x) ∧
     y 0 = 1 ∧ y 1 = Real.cosh 1}
 
+/-- The catenary satisfies the regularity, positivity, and endpoint conditions. -/
+lemma apm_m02J04_cosh_admissible :
+    (fun x : ℝ ↦ Real.cosh x) ∈ apm_m02J04_admissible := by
+  refine ⟨Real.contDiff_cosh.of_le le_rfl, ?_, ?_, rfl⟩
+  · intro x hx
+    exact (Real.cosh_pos x).le
+  · simp
+
+/-- A `C¹` real function has its total `deriv` as an actual derivative. -/
+lemma apm_m02J04_hasDerivAt_deriv_of_contDiff
+    {f : ℝ → ℝ} (hf : ContDiff ℝ 1 f) (x : ℝ) :
+    HasDerivAt f (deriv f x) x :=
+  (hf.differentiable (by norm_num)).differentiableAt.hasDerivAt
+
+/-- For a `C²` curve, its velocity is differentiable everywhere. -/
+lemma apm_m02J04_deriv_differentiable_of_contDiff_two
+    {f : ℝ → ℝ} (hf : ContDiff ℝ 2 f) : Differentiable ℝ (deriv f) :=
+  hf.differentiable_deriv_two
+
+/-- The two-dimensional Cauchy inequality in the exact form used by the
+supporting-hyperplane argument for the area integrand. -/
+lemma apm_m02J04_one_add_mul_le_sqrt_mul_sqrt (p s : ℝ) :
+    1 + p * s ≤ Real.sqrt (1 + p ^ 2) * Real.sqrt (1 + s ^ 2) := by
+  have hp : 0 ≤ 1 + p ^ 2 := by positivity
+  have hs : 0 ≤ 1 + s ^ 2 := by positivity
+  have hr : 0 ≤ Real.sqrt (1 + p ^ 2) * Real.sqrt (1 + s ^ 2) := by
+    positivity
+  by_cases h : 0 ≤ 1 + p * s
+  · rw [← sq_le_sq₀ h hr, mul_pow, Real.sq_sqrt hp, Real.sq_sqrt hs]
+    nlinarith [sq_nonneg (p - s)]
+  · exact le_trans (le_of_not_ge h) hr
+
+/-- Pointwise calibrated lower bound for the surface-of-revolution integrand.
+Keeping the positive `cosh` factor on the left avoids division at the later
+integration stage. -/
+lemma apm_m02J04_catenary_calibration (x y p : ℝ) (hy : 0 ≤ y) :
+    y * (1 + p * Real.sinh x) ≤
+      y * Real.sqrt (1 + p ^ 2) * Real.cosh x := by
+  have hc : 0 < Real.cosh x := Real.cosh_pos x
+  have hcs : Real.sqrt (1 + Real.sinh x ^ 2) = Real.cosh x := by
+    rw [add_comm, ← Real.cosh_sq]
+    exact Real.sqrt_sq_eq_abs (Real.cosh x) |>.trans (abs_of_pos hc)
+  have h := apm_m02J04_one_add_mul_le_sqrt_mul_sqrt p (Real.sinh x)
+  rw [hcs] at h
+  nlinarith [mul_le_mul_of_nonneg_left h hy]
+
+/-- The square-root term in the catenary's area density simplifies exactly. -/
+lemma apm_m02J04_cosh_sqrt_velocity (x : ℝ) :
+    Real.sqrt (1 + (deriv Real.cosh x) ^ 2) = Real.cosh x := by
+  rw [Real.deriv_cosh, add_comm, ← Real.cosh_sq]
+  exact Real.sqrt_sq_eq_abs (Real.cosh x) |>.trans
+    (abs_of_pos (Real.cosh_pos x))
+
+/-- Consequently the catenary area density is `cosh²`. -/
+lemma apm_m02J04_cosh_area_density (x : ℝ) :
+    Real.cosh x * Real.sqrt (1 + (deriv Real.cosh x) ^ 2) =
+      Real.cosh x ^ 2 := by
+  rw [apm_m02J04_cosh_sqrt_velocity, pow_two]
+
+/-- A convenient antiderivative of `cosh²`. -/
+lemma apm_m02J04_hasDerivAt_cosh_sq (x : ℝ) :
+    HasDerivAt
+      (fun t : ℝ ↦ (t + Real.sinh t * Real.cosh t) / 2)
+      (Real.cosh x ^ 2) x := by
+  convert ((hasDerivAt_id x).add
+    ((Real.hasDerivAt_sinh x).mul (Real.hasDerivAt_cosh x))).div_const 2 using 1
+  nlinarith [Real.cosh_sq_sub_sinh_sq x]
+
+/-- Closed form for the catenary density integral on `[0,1]`. -/
+lemma apm_m02J04_integral_cosh_sq :
+    (∫ x in (0 : ℝ)..1, Real.cosh x ^ 2) =
+      (1 + Real.sinh 1 * Real.cosh 1) / 2 := by
+  rw [intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (fun x _ ↦ apm_m02J04_hasDerivAt_cosh_sq x)
+    ((Real.continuous_cosh.pow 2).intervalIntegrable 0 1)]
+  simp
+
+/-- Closed form for the catenary's surface area (including the `2π` factor). -/
+lemma apm_m02J04_cosh_area :
+    apm_m02J04_area Real.cosh =
+      Real.pi * (1 + Real.sinh 1 * Real.cosh 1) := by
+  rw [apm_m02J04_area]
+  simp_rw [apm_m02J04_cosh_area_density]
+  rw [apm_m02J04_integral_cosh_sq]
+  ring
+
+/-- Integration by parts against `sinh`, packaged at the competitor interface. -/
+lemma apm_m02J04_integral_deriv_mul_sinh (y : ℝ → ℝ)
+    (hy : ContDiff ℝ 1 y) :
+    (∫ x in (0 : ℝ)..1, deriv y x * Real.sinh x) =
+      y 1 * Real.sinh 1 - ∫ x in (0 : ℝ)..1, y x * Real.cosh x := by
+  have hparts := intervalIntegral.integral_deriv_mul_eq_sub_of_hasDerivAt
+    (a := (0 : ℝ)) (b := 1)
+    (u := y) (v := Real.sinh) (u' := deriv y) (v' := Real.cosh)
+    hy.continuous.continuousOn Real.continuous_sinh.continuousOn
+    (fun x _ ↦ apm_m02J04_hasDerivAt_deriv_of_contDiff hy x)
+    (fun x _ ↦ Real.hasDerivAt_sinh x)
+    (hy.continuous_deriv_one.intervalIntegrable 0 1)
+    (Real.continuous_cosh.intervalIntegrable 0 1)
+  have hsplit :
+      (∫ x in (0 : ℝ)..1, deriv y x * Real.sinh x + y x * Real.cosh x) =
+        (∫ x in (0 : ℝ)..1, deriv y x * Real.sinh x) +
+          ∫ x in (0 : ℝ)..1, y x * Real.cosh x := by
+    exact intervalIntegral.integral_add
+      ((hy.continuous_deriv_one.mul Real.continuous_sinh).intervalIntegrable 0 1)
+      ((hy.continuous.mul Real.continuous_cosh).intervalIntegrable 0 1)
+  rw [hsplit] at hparts
+  simp at hparts
+  linarith
+
+/-- Fixing the velocity coordinate preserves the regularity of a Lagrangian. -/
+lemma apm_m02J04_contDiff_partial_position
+    {L : ℝ → ℝ → ℝ} (p : ℝ)
+    (hL : ContDiff ℝ 2 (fun z : ℝ × ℝ ↦ L z.1 z.2)) :
+    ContDiff ℝ 2 (fun q : ℝ ↦ L q p) := by
+  exact hL.comp (contDiff_id.prodMk contDiff_const)
+
+/-- Fixing the position coordinate preserves the regularity of a Lagrangian. -/
+lemma apm_m02J04_contDiff_partial_velocity
+    {L : ℝ → ℝ → ℝ} (q : ℝ)
+    (hL : ContDiff ℝ 2 (fun z : ℝ × ℝ ↦ L z.1 z.2)) :
+    ContDiff ℝ 2 (fun p : ℝ ↦ L q p) := by
+  exact hL.comp (contDiff_const.prodMk contDiff_id)
+
+/-- Both ordinary partial derivatives occurring in the frozen statement are
+genuine derivatives under its `C²` hypothesis. -/
+lemma apm_m02J04_hasDerivAt_partials
+    {L : ℝ → ℝ → ℝ} (q p : ℝ)
+    (hL : ContDiff ℝ 2 (fun z : ℝ × ℝ ↦ L z.1 z.2)) :
+    HasDerivAt (fun r : ℝ ↦ L r p) (deriv (fun r : ℝ ↦ L r p) q) q ∧
+      HasDerivAt (fun r : ℝ ↦ L q r) (deriv (fun r : ℝ ↦ L q r) p) p := by
+  constructor
+  · exact ((apm_m02J04_contDiff_partial_position p hL).differentiable
+      (by norm_num)).differentiableAt.hasDerivAt
+  · exact ((apm_m02J04_contDiff_partial_velocity q hL).differentiable
+      (by norm_num)).differentiableAt.hasDerivAt
+
+/-- Two-variable chain rule expressed using ordinary partial `deriv`s. -/
+lemma apm_m02J04_hasDerivAt_comp₂
+    {g : ℝ × ℝ → ℝ} {u v : ℝ → ℝ} {x u' v' : ℝ}
+    (hg : DifferentiableAt ℝ g (u x, v x))
+    (hu : HasDerivAt u u' x) (hv : HasDerivAt v v' x) :
+    HasDerivAt (fun t ↦ g (u t, v t))
+      (deriv (fun q ↦ g (q, v x)) (u x) * u' +
+        deriv (fun p ↦ g (u x, p)) (v x) * v') x := by
+  let G := fderiv ℝ g (u x, v x)
+  have hG : HasFDerivAt g G (u x, v x) := hg.hasFDerivAt
+  have hcomp : HasDerivAt (fun t ↦ g (u t, v t)) (G (u', v')) x :=
+    by
+      simpa only [Function.comp_apply, ContinuousLinearMap.comp_apply,
+        ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
+        (hG.comp x (hu.prodMk hv).hasFDerivAt).hasDerivAt
+  have hq : deriv (fun q ↦ g (q, v x)) (u x) = G (1, 0) :=
+    by
+      simpa only [Function.comp_apply, id_eq, ContinuousLinearMap.comp_apply,
+        ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
+        (hG.comp (u x) (((hasDerivAt_id (u x)).prodMk
+          (hasDerivAt_const (x := u x) (v x))).hasFDerivAt)).hasDerivAt.deriv
+  have hp : deriv (fun p ↦ g (u x, p)) (v x) = G (0, 1) :=
+    by
+      simpa only [Function.comp_apply, id_eq, ContinuousLinearMap.comp_apply,
+        ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
+        (hG.comp (v x) (((hasDerivAt_const (x := v x) (u x)).prodMk
+          (hasDerivAt_id (v x))).hasFDerivAt)).hasDerivAt.deriv
+  convert hcomp using 1
+  rw [hq, hp]
+  have huv : (u', v') = u' • (1, 0) + v' • (0, 1) := by
+    ext <;> simp
+  rw [huv, map_add, map_smul, map_smul]
+  simp [smul_eq_mul]
+  ring
+
+/-- The velocity partial is the Fréchet derivative in the second basis
+direction. This bridge lets `ContDiff` machinery reason about the ordinary
+`deriv` presentation used by the problem statement. -/
+lemma apm_m02J04_partial_velocity_eq_fderiv
+    {L : ℝ → ℝ → ℝ} (z : ℝ × ℝ)
+    (hL : ContDiff ℝ 2 (fun w : ℝ × ℝ ↦ L w.1 w.2)) :
+    deriv (fun p : ℝ ↦ L z.1 p) z.2 =
+      fderiv ℝ (fun w : ℝ × ℝ ↦ L w.1 w.2) z (0, 1) := by
+  let g : ℝ × ℝ → ℝ := fun w ↦ L w.1 w.2
+  let G := fderiv ℝ g z
+  have hG : HasFDerivAt g G z :=
+    (hL.differentiable (by norm_num)).differentiableAt.hasFDerivAt
+  simpa only [g, G, Function.comp_apply, id_eq, ContinuousLinearMap.comp_apply,
+    ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
+    (hG.comp z.2 (((hasDerivAt_const (x := z.2) z.1).prodMk
+      (hasDerivAt_id z.2)).hasFDerivAt)).hasDerivAt.deriv
+
+/-- Under a `C²` hypothesis the velocity partial is jointly `C¹`. -/
+lemma apm_m02J04_contDiff_velocity_partial
+    {L : ℝ → ℝ → ℝ}
+    (hL : ContDiff ℝ 2 (fun z : ℝ × ℝ ↦ L z.1 z.2)) :
+    ContDiff ℝ 1
+      (fun z : ℝ × ℝ ↦ deriv (fun p : ℝ ↦ L z.1 p) z.2) := by
+  have hf : ContDiff ℝ 1
+      (fun z : ℝ × ℝ ↦
+        fderiv ℝ (fun w : ℝ × ℝ ↦ L w.1 w.2) z (0, 1)) :=
+    (hL.fderiv_right (m := 1) (by norm_num)).clm_apply contDiff_const
+  convert hf using 1
+  funext z
+  exact apm_m02J04_partial_velocity_eq_fderiv z hL
+
+/-- Beltrami's identity for a smooth autonomous Lagrangian. -/
+lemma apm_m02J04_beltrami
+    (L : ℝ → ℝ → ℝ) (a b : ℝ) (y : ℝ → ℝ)
+    (hL : ContDiff ℝ 2 (fun z : ℝ × ℝ ↦ L z.1 z.2))
+    (hy : ContDiff ℝ 2 y)
+    (hEL : apm_m02J04_eulerLagrange (fun _ ↦ L) a b y) :
+    ∀ x ∈ Ioo a b,
+      HasDerivAt
+        (fun t ↦ L (y t) (deriv y t) -
+          deriv y t * deriv (fun p ↦ L (y t) p) (deriv y t)) 0 x := by
+  intro x hx
+  have hy1 : ContDiff ℝ 1 y := hy.of_le (by norm_num)
+  have hdy : HasDerivAt y (deriv y x) x :=
+    apm_m02J04_hasDerivAt_deriv_of_contDiff hy1 x
+  have hddy : HasDerivAt (deriv y) (deriv (deriv y) x) x :=
+    (hy.differentiable_deriv_two x).hasDerivAt
+  have hA : HasDerivAt (fun t ↦ L (y t) (deriv y t))
+      (deriv (fun q ↦ L q (deriv y x)) (y x) * deriv y x +
+        deriv (fun p ↦ L (y x) p) (deriv y x) * deriv (deriv y) x) x :=
+    apm_m02J04_hasDerivAt_comp₂
+      ((hL.differentiable (by norm_num)).differentiableAt) hdy hddy
+  have hP : HasDerivAt
+      (fun t ↦ deriv (fun p ↦ L (y t) p) (deriv y t))
+      (deriv (fun q ↦ L q (deriv y x)) (y x)) x := by
+    simpa [apm_m02J04_eulerLagrange] using hEL x hx
+  convert hA.sub (hddy.mul hP) using 1
+  ring
+
+/-- Spatial differentiation commutes with the affine variations used in the
+stationarity predicate. -/
+lemma apm_m02J04_deriv_affine_variation
+    {y η : ℝ → ℝ} (hy : Differentiable ℝ y) (hη : Differentiable ℝ η)
+    (t x : ℝ) :
+    deriv (fun z ↦ y z + t * η z) x = deriv y x + t * deriv η x := by
+  simpa only [Pi.add_apply, Pi.mul_apply, zero_mul, zero_add] using
+    ((hy x).hasDerivAt.add
+      ((hasDerivAt_const (x := x) t).mul (hη x).hasDerivAt)).deriv
+
+/-- A fixed-`x` slice of a smooth three-variable Lagrangian is smooth in its
+position and velocity coordinates. -/
+lemma apm_m02J04_contDiff_lagrangian_slice
+    {F : ℝ → ℝ → ℝ → ℝ} (x : ℝ)
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2)) :
+    ContDiff ℝ 2 (fun z : ℝ × ℝ ↦ F x z.1 z.2) := by
+  exact hF.comp (contDiff_const.prodMk (contDiff_fst.prodMk contDiff_snd))
+
+/-- Pointwise derivative of the Lagrangian along an affine variation. -/
+lemma apm_m02J04_hasDerivAt_lagrangian_variation
+    {F : ℝ → ℝ → ℝ → ℝ} {x y p η η' : ℝ}
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2)) :
+    HasDerivAt (fun t ↦ F x (y + t * η) (p + t * η'))
+      (deriv (fun q ↦ F x q p) y * η +
+        deriv (fun r ↦ F x y r) p * η') 0 := by
+  let g : ℝ × ℝ → ℝ := fun z ↦ F x z.1 z.2
+  have hg : DifferentiableAt ℝ g (y, p) :=
+    ((apm_m02J04_contDiff_lagrangian_slice x hF).differentiable
+      (by norm_num)).differentiableAt
+  have hy : HasDerivAt (fun t : ℝ ↦ y + t * η) η 0 := by
+    convert (hasDerivAt_const (x := 0) y).add
+      ((hasDerivAt_id 0).mul_const η) using 1
+    ring
+  have hp : HasDerivAt (fun t : ℝ ↦ p + t * η') η' 0 := by
+    convert (hasDerivAt_const (x := 0) p).add
+      ((hasDerivAt_id 0).mul_const η') using 1
+    ring
+  have hg' : DifferentiableAt ℝ g (y + 0 * η, p + 0 * η') := by
+    simpa using hg
+  simpa [g] using apm_m02J04_hasDerivAt_comp₂ hg' hy hp
+
+/-- Pointwise first-variation formula, including transport through the spatial
+`deriv` in the functional's actual integrand. -/
+lemma apm_m02J04_hasDerivAt_variation_integrand
+    {F : ℝ → ℝ → ℝ → ℝ} {y η : ℝ → ℝ} (x : ℝ)
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2))
+    (hy : ContDiff ℝ 2 y) (hη : ContDiff ℝ 1 η) :
+    HasDerivAt
+      (fun t ↦ F x (y x + t * η x)
+        (deriv (fun z ↦ y z + t * η z) x))
+      (deriv (fun q ↦ F x q (deriv y x)) (y x) * η x +
+        deriv (fun p ↦ F x (y x) p) (deriv y x) * deriv η x) 0 := by
+  have hy' : Differentiable ℝ y := hy.differentiable (by norm_num)
+  have hη' : Differentiable ℝ η := hη.differentiable (by norm_num)
+  have hpoint := apm_m02J04_hasDerivAt_lagrangian_variation
+    (x := x) (y := y x) (p := deriv y x) (η := η x) (η' := deriv η x) hF
+  convert hpoint using 1
+  funext t
+  rw [apm_m02J04_deriv_affine_variation hy' hη' t x]
+
+/-- The two partial derivatives of a `C²` three-variable Lagrangian, viewed
+jointly as functions of all three coordinates, are `C¹`. -/
+lemma apm_m02J04_contDiff_lagrangian_partials
+    {F : ℝ → ℝ → ℝ → ℝ}
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2)) :
+    ContDiff ℝ 1
+        (fun z : ℝ × ℝ × ℝ ↦ deriv (fun q ↦ F z.1 q z.2.2) z.2.1) ∧
+      ContDiff ℝ 1
+        (fun z : ℝ × ℝ × ℝ ↦ deriv (fun p ↦ F z.1 z.2.1 p) z.2.2) := by
+  let g : ℝ × ℝ × ℝ → ℝ := fun z ↦ F z.1 z.2.1 z.2.2
+  have hD : ContDiff ℝ 1 (fderiv ℝ g) := hF.fderiv_right (m := 1) (by norm_num)
+  have hqF : ContDiff ℝ 1 (fun z ↦ fderiv ℝ g z (0, (1, 0))) :=
+    hD.clm_apply contDiff_const
+  have hpF : ContDiff ℝ 1 (fun z ↦ fderiv ℝ g z (0, (0, 1))) :=
+    hD.clm_apply contDiff_const
+  have hq (z : ℝ × ℝ × ℝ) :
+      deriv (fun q ↦ F z.1 q z.2.2) z.2.1 = fderiv ℝ g z (0, (1, 0)) := by
+    have hg : HasFDerivAt g (fderiv ℝ g z) z :=
+      (hF.differentiable (by norm_num) z).hasFDerivAt
+    simpa only [g, Function.comp_apply, id_eq, ContinuousLinearMap.comp_apply,
+      ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
+      (hg.comp z.2.1 (((hasDerivAt_const (x := z.2.1) z.1).prodMk
+        ((hasDerivAt_id z.2.1).prodMk
+          (hasDerivAt_const (x := z.2.1) z.2.2))).hasFDerivAt)).hasDerivAt.deriv
+  have hp (z : ℝ × ℝ × ℝ) :
+      deriv (fun p ↦ F z.1 z.2.1 p) z.2.2 = fderiv ℝ g z (0, (0, 1)) := by
+    have hg : HasFDerivAt g (fderiv ℝ g z) z :=
+      (hF.differentiable (by norm_num) z).hasFDerivAt
+    simpa only [g, Function.comp_apply, id_eq, ContinuousLinearMap.comp_apply,
+      ContinuousLinearMap.toSpanSingleton_apply, one_smul] using
+      (hg.comp z.2.2 (((hasDerivAt_const (x := z.2.2) z.1).prodMk
+        ((hasDerivAt_const (x := z.2.2) z.2.1).prodMk
+          (hasDerivAt_id z.2.2))).hasFDerivAt)).hasDerivAt.deriv
+  constructor
+  · convert hqF using 1
+    funext z
+    exact hq z
+  · convert hpF using 1
+    funext z
+    exact hp z
+
+/-- Along a `C²` curve, both Lagrangian partials in the first-variation
+density are continuous (indeed `C¹`). -/
+lemma apm_m02J04_contDiff_partials_along_curve
+    {F : ℝ → ℝ → ℝ → ℝ} {y : ℝ → ℝ}
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2))
+    (hy : ContDiff ℝ 2 y) :
+    ContDiff ℝ 1
+        (fun x ↦ deriv (fun q ↦ F x q (deriv y x)) (y x)) ∧
+      ContDiff ℝ 1
+        (fun x ↦ deriv (fun p ↦ F x (y x) p) (deriv y x)) := by
+  have hy1 : ContDiff ℝ 1 y := hy.of_le (by norm_num)
+  have hdy1 : ContDiff ℝ 1 (deriv y) := hy.deriv'
+  have hz : ContDiff ℝ 1 (fun x : ℝ ↦ (x, (y x, deriv y x))) :=
+    contDiff_id.prodMk (hy1.prodMk hdy1)
+  constructor
+  · exact (apm_m02J04_contDiff_lagrangian_partials hF).1.comp hz
+  · exact (apm_m02J04_contDiff_lagrangian_partials hF).2.comp hz
+
+/-- The first-variation density is continuous and hence interval integrable. -/
+lemma apm_m02J04_first_variation_intervalIntegrable
+    {F : ℝ → ℝ → ℝ → ℝ} {y η : ℝ → ℝ} (a b : ℝ)
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2))
+    (hy : ContDiff ℝ 2 y) (hη : ContDiff ℝ 1 η) :
+    IntervalIntegrable
+      (fun x ↦ deriv (fun q ↦ F x q (deriv y x)) (y x) * η x +
+        deriv (fun p ↦ F x (y x) p) (deriv y x) * deriv η x)
+      MeasureTheory.volume a b := by
+  have hp := apm_m02J04_contDiff_partials_along_curve hF hy
+  exact ((hp.1.continuous.mul hη.continuous).add
+    (hp.2.continuous.mul hη.continuous_deriv_one)).intervalIntegrable a b
+
+/-- The derivative density remains continuous when the variation parameter is
+allowed to move. This is the compactness input for domination. -/
+lemma apm_m02J04_continuous_first_variation_family
+    {F : ℝ → ℝ → ℝ → ℝ} {y η : ℝ → ℝ}
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2))
+    (hy : ContDiff ℝ 2 y) (hη : ContDiff ℝ 1 η) :
+    Continuous (fun z : ℝ × ℝ ↦
+      deriv
+          (fun q ↦ F z.2 q (deriv y z.2 + z.1 * deriv η z.2))
+          (y z.2 + z.1 * η z.2) * η z.2 +
+        deriv
+          (fun p ↦ F z.2 (y z.2 + z.1 * η z.2) p)
+          (deriv y z.2 + z.1 * deriv η z.2) * deriv η z.2) := by
+  have cη : Continuous (fun z : ℝ × ℝ ↦ η z.2) :=
+    hη.continuous.comp continuous_snd
+  have cdη : Continuous (fun z : ℝ × ℝ ↦ deriv η z.2) :=
+    hη.continuous_deriv_one.comp continuous_snd
+  have cy : Continuous (fun z : ℝ × ℝ ↦ y z.2) :=
+    hy.continuous.comp continuous_snd
+  have cdy : Continuous (fun z : ℝ × ℝ ↦ deriv y z.2) :=
+    (hy.continuous_deriv (by norm_num)).comp continuous_snd
+  have hz : Continuous (fun z : ℝ × ℝ ↦
+      (z.2, (y z.2 + z.1 * η z.2,
+        deriv y z.2 + z.1 * deriv η z.2))) :=
+    continuous_snd.prodMk
+      ((cy.add (continuous_fst.mul cη)).prodMk
+        (cdy.add (continuous_fst.mul cdη)))
+  have hp := apm_m02J04_contDiff_lagrangian_partials hF
+  exact (((hp.1.continuous.comp hz).mul cη).add
+    ((hp.2.continuous.comp hz).mul cdη))
+
+/-- On a compact parameter strip, the first-variation derivatives admit one
+uniform bound, suitable as the constant dominating function. -/
+lemma apm_m02J04_first_variation_uniform_bound
+    {F : ℝ → ℝ → ℝ → ℝ} {y η : ℝ → ℝ} (a b : ℝ)
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2))
+    (hy : ContDiff ℝ 2 y) (hη : ContDiff ℝ 1 η) :
+    ∃ C : ℝ, ∀ t ∈ Icc (-1 : ℝ) 1, ∀ x ∈ uIcc a b,
+      ‖deriv
+            (fun q ↦ F x q (deriv y x + t * deriv η x))
+            (y x + t * η x) * η x +
+          deriv
+            (fun p ↦ F x (y x + t * η x) p)
+            (deriv y x + t * deriv η x) * deriv η x‖ ≤ C := by
+  let D : ℝ × ℝ → ℝ := fun z ↦
+    deriv
+        (fun q ↦ F z.2 q (deriv y z.2 + z.1 * deriv η z.2))
+        (y z.2 + z.1 * η z.2) * η z.2 +
+      deriv
+        (fun p ↦ F z.2 (y z.2 + z.1 * η z.2) p)
+        (deriv y z.2 + z.1 * deriv η z.2) * deriv η z.2
+  have hD : Continuous D :=
+    apm_m02J04_continuous_first_variation_family hF hy hη
+  obtain ⟨C, hC⟩ := (isCompact_Icc.prod isCompact_uIcc).exists_bound_of_continuousOn
+    hD.continuousOn
+  refine ⟨C, ?_⟩
+  intro t ht x hx
+  exact hC (t, x) ⟨ht, hx⟩
+
+/-- Pointwise first-variation formula at an arbitrary parameter value. -/
+lemma apm_m02J04_hasDerivAt_variation_integrand_at
+    {F : ℝ → ℝ → ℝ → ℝ} {y η : ℝ → ℝ} (t x : ℝ)
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2))
+    (hy : ContDiff ℝ 2 y) (hη : ContDiff ℝ 1 η) :
+    HasDerivAt
+      (fun s ↦ F x (y x + s * η x)
+        (deriv (fun z ↦ y z + s * η z) x))
+      (deriv
+          (fun q ↦ F x q (deriv y x + t * deriv η x))
+          (y x + t * η x) * η x +
+        deriv
+          (fun p ↦ F x (y x + t * η x) p)
+          (deriv y x + t * deriv η x) * deriv η x) t := by
+  have hy' : Differentiable ℝ y := hy.differentiable (by norm_num)
+  have hη' : Differentiable ℝ η := hη.differentiable (by norm_num)
+  let g : ℝ × ℝ → ℝ := fun z ↦ F x z.1 z.2
+  have hg : DifferentiableAt ℝ g
+      (y x + t * η x, deriv y x + t * deriv η x) :=
+    ((apm_m02J04_contDiff_lagrangian_slice x hF).differentiable
+      (by norm_num)).differentiableAt
+  have hu : HasDerivAt (fun s : ℝ ↦ y x + s * η x) (η x) t :=
+    by
+      convert (hasDerivAt_const (x := t) (y x)).add
+        ((hasDerivAt_id t).mul_const (η x)) using 1
+      ring
+  have hv : HasDerivAt (fun s : ℝ ↦ deriv y x + s * deriv η x) (deriv η x) t :=
+    by
+      convert (hasDerivAt_const (x := t) (deriv y x)).add
+        ((hasDerivAt_id t).mul_const (deriv η x)) using 1
+      ring
+  have hpoint := apm_m02J04_hasDerivAt_comp₂ hg hu hv
+  convert hpoint using 1
+  · funext s
+    rw [apm_m02J04_deriv_affine_variation hy' hη' s x]
+
+/-- For every parameter, the varied Lagrangian integrand is continuous in the
+spatial variable. -/
+lemma apm_m02J04_continuous_variation_integrand
+    {F : ℝ → ℝ → ℝ → ℝ} {y η : ℝ → ℝ} (t : ℝ)
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2))
+    (hy : ContDiff ℝ 2 y) (hη : ContDiff ℝ 1 η) :
+    Continuous (fun x ↦
+      F x (y x + t * η x) (deriv (fun z ↦ y z + t * η z) x)) := by
+  have hy' : Differentiable ℝ y := hy.differentiable (by norm_num)
+  have hη' : Differentiable ℝ η := hη.differentiable (by norm_num)
+  have hz : Continuous (fun x : ℝ ↦
+      (x, (y x + t * η x, deriv y x + t * deriv η x))) :=
+    continuous_id.prodMk
+      ((hy.continuous.add (continuous_const.mul hη.continuous)).prodMk
+        ((hy.continuous_deriv (by norm_num)).add
+          (continuous_const.mul hη.continuous_deriv_one)))
+  have hc := hF.continuous.comp hz
+  convert hc using 1
+  funext x
+  rw [apm_m02J04_deriv_affine_variation hy' hη' t x]
+  rfl
+
+/-- Differentiation of the variational functional under the interval integral. -/
+lemma apm_m02J04_hasDerivAt_functional_variation
+    {F : ℝ → ℝ → ℝ → ℝ} {y η : ℝ → ℝ} (a b : ℝ)
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2))
+    (hy : ContDiff ℝ 2 y) (hη : ContDiff ℝ 1 η) :
+    HasDerivAt
+      (fun t ↦ apm_m02J04_functional F a b (fun x ↦ y x + t * η x))
+      (∫ x in a..b,
+        deriv (fun q ↦ F x q (deriv y x)) (y x) * η x +
+          deriv (fun p ↦ F x (y x) p) (deriv y x) * deriv η x) 0 := by
+  let V : ℝ → ℝ → ℝ := fun t x ↦
+    F x (y x + t * η x) (deriv (fun z ↦ y z + t * η z) x)
+  let D : ℝ → ℝ → ℝ := fun t x ↦
+    deriv (fun q ↦ F x q (deriv y x + t * deriv η x)) (y x + t * η x) * η x +
+      deriv (fun p ↦ F x (y x + t * η x) p)
+        (deriv y x + t * deriv η x) * deriv η x
+  obtain ⟨C, hC⟩ := apm_m02J04_first_variation_uniform_bound a b hF hy hη
+  have hp := apm_m02J04_contDiff_partials_along_curve hF hy
+  have hden : Continuous (fun x ↦
+      deriv (fun q ↦ F x q (deriv y x)) (y x) * η x +
+        deriv (fun p ↦ F x (y x) p) (deriv y x) * deriv η x) :=
+    (hp.1.continuous.mul hη.continuous).add
+      (hp.2.continuous.mul hη.continuous_deriv_one)
+  have hDmeas : MeasureTheory.AEStronglyMeasurable (D 0)
+      (MeasureTheory.volume.restrict (uIoc a b)) := by
+    have hD0 : Continuous (D 0) := by simpa [D] using hden
+    exact hD0.aestronglyMeasurable.mono_measure MeasureTheory.Measure.restrict_le_self
+  have hmain := intervalIntegral.hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (μ := MeasureTheory.volume) (a := a) (b := b) (F := V) (F' := D)
+    (bound := fun _ ↦ C) (x₀ := (0 : ℝ)) (s := Icc (-1 : ℝ) 1)
+    (Icc_mem_nhds (by norm_num) (by norm_num))
+    (Filter.Eventually.of_forall fun t ↦
+      (apm_m02J04_continuous_variation_integrand t hF hy hη).aestronglyMeasurable)
+    ((apm_m02J04_continuous_variation_integrand 0 hF hy hη).intervalIntegrable a b)
+    hDmeas
+    (Filter.Eventually.of_forall fun x hx t ht ↦ hC t ht x (uIoc_subset_uIcc hx))
+    _root_.intervalIntegrable_const
+    (Filter.Eventually.of_forall fun x hx t ht ↦
+      apm_m02J04_hasDerivAt_variation_integrand_at t x hF hy hη)
+  have hder := hmain.2
+  simpa [V, D, apm_m02J04_functional] using hder
+
+/-- Stationarity is equivalent, in the direction needed below, to vanishing
+of the weak first-variation integral. -/
+lemma apm_m02J04_stationary_first_variation_eq_zero
+    {F : ℝ → ℝ → ℝ → ℝ} {a b : ℝ} {y : ℝ → ℝ}
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2))
+    (hy : ContDiff ℝ 2 y)
+    (hstat : apm_m02J04_stationary F a b y)
+    (η : ℝ → ℝ) (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
+    (∫ x in a..b,
+      deriv (fun q ↦ F x q (deriv y x)) (y x) * η x +
+        deriv (fun p ↦ F x (y x) p) (deriv y x) * deriv η x) = 0 := by
+  have hcalc := apm_m02J04_hasDerivAt_functional_variation a b hF hy hη
+  have hzero := hstat η hη hηa hηb
+  exact hcalc.unique hzero
+
+/-- Integration by parts for the momentum/variation term, with the endpoint
+terms eliminated by the admissible variation conditions. -/
+lemma apm_m02J04_integral_momentum_mul_deriv
+    {F : ℝ → ℝ → ℝ → ℝ} {a b : ℝ} {y η : ℝ → ℝ}
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2))
+    (hy : ContDiff ℝ 2 y) (hη : ContDiff ℝ 1 η)
+    (hηa : η a = 0) (hηb : η b = 0) :
+    (∫ x in a..b,
+      deriv (fun p ↦ F x (y x) p) (deriv y x) * deriv η x) =
+      -(∫ x in a..b,
+        deriv (fun t ↦ deriv (fun p ↦ F t (y t) p) (deriv y t)) x * η x) := by
+  let B : ℝ → ℝ := fun x ↦ deriv (fun p ↦ F x (y x) p) (deriv y x)
+  have hB : ContDiff ℝ 1 B :=
+    (apm_m02J04_contDiff_partials_along_curve hF hy).2
+  have hparts := intervalIntegral.integral_mul_deriv_eq_deriv_mul_of_hasDerivAt
+    (a := a) (b := b) (u := B) (v := η) (u' := deriv B) (v' := deriv η)
+    hB.continuous.continuousOn hη.continuous.continuousOn
+    (fun x _ ↦ apm_m02J04_hasDerivAt_deriv_of_contDiff hB x)
+    (fun x _ ↦ apm_m02J04_hasDerivAt_deriv_of_contDiff hη x)
+    (hB.continuous_deriv_one.intervalIntegrable a b)
+    (hη.continuous_deriv_one.intervalIntegrable a b)
+  simp [B, hηa, hηb] at hparts ⊢
+  exact hparts
+
+/-- Weak Euler–Lagrange equation after integration by parts. -/
+lemma apm_m02J04_stationary_residual_integral_eq_zero
+    {F : ℝ → ℝ → ℝ → ℝ} {a b : ℝ} {y : ℝ → ℝ}
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2))
+    (hy : ContDiff ℝ 2 y) (hstat : apm_m02J04_stationary F a b y)
+    (η : ℝ → ℝ) (hη : ContDiff ℝ 1 η) (hηa : η a = 0) (hηb : η b = 0) :
+    (∫ x in a..b,
+      (deriv (fun q ↦ F x q (deriv y x)) (y x) -
+        deriv (fun t ↦ deriv (fun p ↦ F t (y t) p) (deriv y t)) x) * η x) = 0 := by
+  let A : ℝ → ℝ := fun x ↦ deriv (fun q ↦ F x q (deriv y x)) (y x)
+  let B : ℝ → ℝ := fun x ↦ deriv (fun p ↦ F x (y x) p) (deriv y x)
+  have hp := apm_m02J04_contDiff_partials_along_curve hF hy
+  have hA : ContDiff ℝ 1 A := hp.1
+  have hB : ContDiff ℝ 1 B := hp.2
+  have hweak := apm_m02J04_stationary_first_variation_eq_zero
+    hF hy hstat η hη hηa hηb
+  have hip := apm_m02J04_integral_momentum_mul_deriv
+    hF hy hη hηa hηb
+  have hAη : IntervalIntegrable (fun x ↦ A x * η x)
+      MeasureTheory.volume a b :=
+    (hA.continuous.mul hη.continuous).intervalIntegrable a b
+  have hBη' : IntervalIntegrable (fun x ↦ B x * deriv η x)
+      MeasureTheory.volume a b :=
+    (hB.continuous.mul hη.continuous_deriv_one).intervalIntegrable a b
+  have hdBη : IntervalIntegrable (fun x ↦ deriv B x * η x)
+      MeasureTheory.volume a b :=
+    (hB.continuous_deriv_one.mul hη.continuous).intervalIntegrable a b
+  have hsplit :
+      (∫ x in a..b, A x * η x + B x * deriv η x) =
+        (∫ x in a..b, A x * η x) + ∫ x in a..b, B x * deriv η x :=
+    intervalIntegral.integral_add hAη hBη'
+  change (∫ x in a..b, A x * η x + B x * deriv η x) = 0 at hweak
+  change (∫ x in a..b, B x * deriv η x) =
+    -(∫ x in a..b, deriv B x * η x) at hip
+  rw [hsplit, hip] at hweak
+  change (∫ x in a..b, (A x - deriv B x) * η x) = 0
+  rw [show (fun x ↦ (A x - deriv B x) * η x) =
+      (fun x ↦ A x * η x - deriv B x * η x) by funext x; ring]
+  rw [intervalIntegral.integral_sub hAη hdBη]
+  linarith
+
+/-- A smooth nonnegative bump of prescribed outer radius on the real line. -/
+lemma apm_m02J04_exists_test_bump (x r : ℝ) (hr : 0 < r) :
+    ∃ η : ℝ → ℝ,
+      ContDiff ℝ 1 η ∧ η x = 1 ∧ (∀ z, 0 ≤ η z) ∧
+        (∀ z, dist z x < r → 0 < η z) ∧
+        ∀ z, r ≤ dist z x → η z = 0 := by
+  let φ : ContDiffBump x := ⟨r / 2, r, half_pos hr, half_lt_self hr⟩
+  refine ⟨φ, φ.contDiff, ?_, ?_, ?_, ?_⟩
+  · apply φ.one_of_mem_closedBall
+    simpa [φ] using (half_pos hr).le
+  · intro z
+    exact φ.nonneg
+  · intro z hz
+    apply φ.pos_of_mem_ball
+    simpa [Metric.mem_ball, dist_comm] using hz
+  · intro z hz
+    exact φ.zero_of_le_dist hz
+
+/-- A bump whose radius fits inside `(a,b)` automatically satisfies the
+endpoint-fixing conditions. -/
+lemma apm_m02J04_test_bump_endpoints
+    {a b x r : ℝ} (hax : a < x) (hxb : x < b) (hr : 0 < r)
+    (hra : r ≤ x - a) (hrb : r ≤ b - x) :
+    ∃ η : ℝ → ℝ,
+      ContDiff ℝ 1 η ∧ η a = 0 ∧ η b = 0 ∧ η x = 1 ∧
+        (∀ z, 0 ≤ η z) ∧ (∀ z, dist z x < r → 0 < η z) ∧
+        ∀ z, r ≤ dist z x → η z = 0 := by
+  obtain ⟨η, hη, hηx, hηnonneg, hηpos, hηzero⟩ :=
+    apm_m02J04_exists_test_bump x r hr
+  refine ⟨η, hη, ?_, ?_, hηx, hηnonneg, hηpos, hηzero⟩
+  · apply hηzero a
+    rw [Real.dist_eq]
+    rw [abs_of_neg (sub_neg.mpr hax)]
+    linarith
+  · apply hηzero b
+    rw [Real.dist_eq, abs_of_pos (sub_pos.mpr hxb)]
+    exact hrb
+
+/-- A continuous function positive at an interior point admits a smooth
+endpoint-fixing nonnegative test with strictly positive weighted integral. -/
+lemma apm_m02J04_exists_test_integral_pos
+    {f : ℝ → ℝ} {a b x : ℝ} (hf : Continuous f)
+    (hax : a < x) (hxb : x < b) (hfx : 0 < f x) :
+    ∃ η : ℝ → ℝ, ContDiff ℝ 1 η ∧ η a = 0 ∧ η b = 0 ∧
+      0 < ∫ z in a..b, f z * η z := by
+  have hopen : f ⁻¹' Ioi 0 ∈ nhds x :=
+    (isOpen_Ioi.preimage hf).mem_nhds hfx
+  obtain ⟨δ, hδ, hball⟩ := Metric.mem_nhds_iff.1 hopen
+  let r : ℝ := min (δ / 2) (min ((x - a) / 2) ((b - x) / 2))
+  have hr : 0 < r := by
+    dsimp [r]
+    exact lt_min (half_pos hδ)
+      (lt_min (half_pos (sub_pos.mpr hax)) (half_pos (sub_pos.mpr hxb)))
+  have hrδ : r < δ := by
+    exact (min_le_left _ _).trans_lt (half_lt_self hδ)
+  have hra : r ≤ x - a := by
+    calc
+      r ≤ (x - a) / 2 := (min_le_right _ _).trans (min_le_left _ _)
+      _ ≤ x - a := by linarith
+  have hrb : r ≤ b - x := by
+    calc
+      r ≤ (b - x) / 2 := (min_le_right _ _).trans (min_le_right _ _)
+      _ ≤ b - x := by linarith
+  obtain ⟨η, hη, hηa, hηb, hηx, hηnonneg, hηpos, hηzero⟩ :=
+    apm_m02J04_test_bump_endpoints hax hxb hr hra hrb
+  refine ⟨η, hη, hηa, hηb, ?_⟩
+  have hfpos : ∀ z, dist z x < r → 0 < f z := by
+    intro z hz
+    exact hball (by simpa [Metric.mem_ball] using hz.trans hrδ)
+  have hnonneg : ∀ z, 0 ≤ f z * η z := by
+    intro z
+    by_cases hz : dist z x < r
+    · exact mul_nonneg (hfpos z hz).le (hηnonneg z)
+    · rw [hηzero z (le_of_not_gt hz), mul_zero]
+  have hfi : IntervalIntegrable (fun z ↦ f z * η z)
+      MeasureTheory.volume a b :=
+    (hf.mul hη.continuous).intervalIntegrable a b
+  rw [intervalIntegral.integral_pos_iff_support_of_nonneg_ae
+    (Filter.Eventually.of_forall hnonneg) hfi]
+  refine ⟨hax.trans hxb, ?_⟩
+  have hs : Ioo (x - r / 2) (x + r / 2) ⊆
+      Function.support (fun z ↦ f z * η z) ∩ Ioc a b := by
+    intro z hz
+    have hdist : dist z x < r := by
+      rw [Real.dist_eq]
+      rw [abs_lt]
+      constructor <;> linarith [hz.1, hz.2]
+    have hzpos : 0 < f z * η z := mul_pos (hfpos z hdist) (hηpos z hdist)
+    refine ⟨Function.mem_support.mpr hzpos.ne', ?_⟩
+    constructor <;> linarith [hz.1, hz.2, hra, hrb]
+  have hinterval : x - r / 2 < x + r / 2 := by linarith
+  have hmeasure : 0 < MeasureTheory.volume (Ioo (x - r / 2) (x + r / 2)) :=
+    (MeasureTheory.Measure.measure_Ioo_pos MeasureTheory.volume).2 hinterval
+  exact hmeasure.trans_le (MeasureTheory.measure_mono hs)
+
+/-- Fundamental lemma of the calculus of variations for continuous real
+residuals and globally `C¹`, endpoint-fixing test functions. -/
+lemma apm_m02J04_fundamental_lemma
+    {f : ℝ → ℝ} {a b : ℝ} (hf : Continuous f)
+    (hzero : ∀ η : ℝ → ℝ, ContDiff ℝ 1 η → η a = 0 → η b = 0 →
+      (∫ x in a..b, f x * η x) = 0) :
+    ∀ x ∈ Ioo a b, f x = 0 := by
+  intro x hx
+  by_contra hne
+  rcases lt_or_gt_of_ne hne with hneg | hpos
+  · obtain ⟨η, hη, hηa, hηb, hint⟩ :=
+      apm_m02J04_exists_test_integral_pos hf.neg hx.1 hx.2 (neg_pos.mpr hneg)
+    have hz := hzero η hη hηa hηb
+    simp only [neg_mul, intervalIntegral.integral_neg] at hint
+    rw [hz, neg_zero] at hint
+    exact (lt_irrefl 0 hint)
+  · obtain ⟨η, hη, hηa, hηb, hint⟩ :=
+      apm_m02J04_exists_test_integral_pos hf hx.1 hx.2 hpos
+    rw [hzero η hη hηa hηb] at hint
+    exact (lt_irrefl 0 hint)
+
+/-- Smooth stationarity implies the pointwise Euler–Lagrange equation. -/
+lemma apm_m02J04_stationary_eulerLagrange
+    (F : ℝ → ℝ → ℝ → ℝ) (a b : ℝ) (y : ℝ → ℝ)
+    (hF : ContDiff ℝ 2 (fun z : ℝ × ℝ × ℝ ↦ F z.1 z.2.1 z.2.2))
+    (hy : ContDiff ℝ 2 y)
+    (hstat : apm_m02J04_stationary F a b y) :
+    apm_m02J04_eulerLagrange F a b y := by
+  let A : ℝ → ℝ := fun x ↦ deriv (fun q ↦ F x q (deriv y x)) (y x)
+  let B : ℝ → ℝ := fun x ↦ deriv (fun p ↦ F x (y x) p) (deriv y x)
+  have hp := apm_m02J04_contDiff_partials_along_curve hF hy
+  have hA : ContDiff ℝ 1 A := hp.1
+  have hB : ContDiff ℝ 1 B := hp.2
+  have hres : ∀ x ∈ Ioo a b, (A x - deriv B x) = 0 :=
+    apm_m02J04_fundamental_lemma
+      (hA.continuous.sub hB.continuous_deriv_one) (fun η hη hηa hηb ↦ by
+        simpa [A, B] using apm_m02J04_stationary_residual_integral_eq_zero
+          hF hy hstat η hη hηa hηb)
+  intro x hx
+  have hBx : HasDerivAt B (deriv B x) x :=
+    apm_m02J04_hasDerivAt_deriv_of_contDiff hB x
+  have heq : deriv B x = A x := by linarith [hres x hx]
+  simpa [A, B, heq] using hBx
+
+/-- The three completed components of the main theorem, consolidated at the
+exact root interfaces. -/
+lemma apm_m02J04_variational_principles :
+    (∀ (F : ℝ → ℝ → ℝ → ℝ) (a b : ℝ) (y : ℝ → ℝ),
+      a < b →
+      ContDiff ℝ 2 (fun p : ℝ × ℝ × ℝ ↦ F p.1 p.2.1 p.2.2) →
+      ContDiff ℝ 2 y →
+      apm_m02J04_stationary F a b y →
+      apm_m02J04_eulerLagrange F a b y) ∧
+    (∀ (L : ℝ → ℝ → ℝ) (a b : ℝ) (y : ℝ → ℝ),
+      a < b →
+      ContDiff ℝ 2 (fun p : ℝ × ℝ ↦ L p.1 p.2) →
+      ContDiff ℝ 2 y →
+      apm_m02J04_eulerLagrange (fun _ ↦ L) a b y →
+      ∀ x ∈ Ioo a b,
+        HasDerivAt
+          (fun t ↦ L (y t) (deriv y t) -
+            deriv y t * deriv (fun p ↦ L (y t) p) (deriv y t)) 0 x) ∧
+    (fun x ↦ Real.cosh x) ∈ apm_m02J04_admissible := by
+  refine ⟨?_, ?_, apm_m02J04_cosh_admissible⟩
+  · intro F a b y hab hF hy hstat
+    exact apm_m02J04_stationary_eulerLagrange F a b y hF hy hstat
+  · intro L a b y hab hL hy hEL
+    exact apm_m02J04_beltrami L a b y hL hy hEL
+
+/-- Every admissible curve has a continuous, interval-integrable area density. -/
+lemma apm_m02J04_admissible_density_regular
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) :
+    Continuous (fun x ↦ y x * Real.sqrt (1 + (deriv y x) ^ 2)) ∧
+      IntervalIntegrable (fun x ↦ y x * Real.sqrt (1 + (deriv y x) ^ 2))
+        MeasureTheory.volume 0 1 := by
+  have hyc : ContDiff ℝ 1 y := hy.1
+  have hrad : Continuous (fun x ↦ (1 : ℝ) + (deriv y x) ^ 2) :=
+    continuous_const.add (hyc.continuous_deriv_one.pow 2)
+  have hsqrt : Continuous (fun x ↦ Real.sqrt (1 + (deriv y x) ^ 2)) :=
+    Real.continuous_sqrt.comp hrad
+  have hdens := hyc.continuous.mul hsqrt
+  exact ⟨hdens, hdens.intervalIntegrable 0 1⟩
+
+/-- The area functional is nonnegative on the admissible class. -/
+lemma apm_m02J04_area_nonneg_of_admissible
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) :
+    0 ≤ apm_m02J04_area y := by
+  rw [apm_m02J04_area]
+  apply mul_nonneg
+  · positivity
+  · apply intervalIntegral.integral_nonneg (by norm_num)
+    intro x hx
+    exact mul_nonneg (hy.2.1 x hx) (Real.sqrt_nonneg _)
+
+/-- The slope contribution is bounded by the area square-root factor. -/
+lemma apm_m02J04_abs_le_sqrt_one_add_sq (p : ℝ) :
+    |p| ≤ Real.sqrt (1 + p ^ 2) := by
+  rw [← Real.sqrt_sq_eq_abs]
+  exact Real.sqrt_le_sqrt (by linarith)
+
+/-- A coarse but global endpoint lower bound for every admissible density. -/
+lemma apm_m02J04_endpoint_variation_lower_bound
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) :
+    (Real.cosh 1 ^ 2 - 1) / 2 ≤
+      ∫ x in (0 : ℝ)..1, y x * Real.sqrt (1 + (deriv y x) ^ 2) := by
+  have hyc : ContDiff ℝ 1 y := hy.1
+  have hyder : Continuous (deriv y) := hyc.continuous_deriv_one
+  have huv (x : ℝ) : HasDerivAt (fun t ↦ y t ^ 2 / 2)
+      (y x * deriv y x) x := by
+    convert ((apm_m02J04_hasDerivAt_deriv_of_contDiff hyc x).pow 2).div_const 2 using 1
+    ring
+  have huv_int : IntervalIntegrable (fun x ↦ y x * deriv y x)
+      MeasureTheory.volume 0 1 :=
+    (hyc.continuous.mul hyder).intervalIntegrable 0 1
+  have hFTC : (∫ x in (0 : ℝ)..1, y x * deriv y x) =
+      y 1 ^ 2 / 2 - y 0 ^ 2 / 2 :=
+    intervalIntegral.integral_eq_sub_of_hasDerivAt
+      (fun x _ ↦ huv x) huv_int
+  have habs := intervalIntegral.abs_integral_le_integral_abs
+    (μ := MeasureTheory.volume) (f := fun x ↦ y x * deriv y x)
+    (a := (0 : ℝ)) (b := 1) (by norm_num)
+  have habs_eq :
+      (∫ x in (0 : ℝ)..1, |y x * deriv y x|) =
+        ∫ x in (0 : ℝ)..1, y x * |deriv y x| := by
+    apply intervalIntegral.integral_congr
+    intro x hx
+    dsimp
+    have hx' : x ∈ Icc (0 : ℝ) 1 := by
+      rw [uIcc_of_le (by norm_num)] at hx
+      exact hx
+    rw [abs_mul, abs_of_nonneg (hy.2.1 x hx')]
+  rw [hFTC, hy.2.2.1, hy.2.2.2, habs_eq] at habs
+  have hslope : IntervalIntegrable (fun x ↦ y x * |deriv y x|)
+      MeasureTheory.volume 0 1 :=
+    (hyc.continuous.mul hyder.abs).intervalIntegrable 0 1
+  have hdens := (apm_m02J04_admissible_density_regular hy).2
+  have hmono := intervalIntegral.integral_mono_on (μ := MeasureTheory.volume)
+    (a := (0 : ℝ)) (b := 1) (by norm_num) hslope hdens (fun x hx ↦
+      mul_le_mul_of_nonneg_left (apm_m02J04_abs_le_sqrt_one_add_sq (deriv y x))
+        (hy.2.1 x hx))
+  have hcosh : 1 ≤ Real.cosh 1 := Real.one_le_cosh 1
+  rw [abs_of_nonneg (by nlinarith [hcosh])] at habs
+  linarith
+
+/-- Calibration divided by the positive catenary radius, in the form used by
+the stability calculation. -/
+lemma apm_m02J04_normalized_calibration (x y p : ℝ) (hy : 0 ≤ y) :
+    y / Real.cosh x + y * p * (Real.sinh x / Real.cosh x) ≤
+      y * Real.sqrt (1 + p ^ 2) := by
+  have hc : 0 < Real.cosh x := Real.cosh_pos x
+  have h := apm_m02J04_catenary_calibration x y p hy
+  calc
+    y / Real.cosh x + y * p * (Real.sinh x / Real.cosh x) =
+        (y * (1 + p * Real.sinh x)) / Real.cosh x := by
+          field_simp [hc.ne']
+    _ ≤ (y * Real.sqrt (1 + p ^ 2) * Real.cosh x) / Real.cosh x :=
+      (div_le_div_iff_of_pos_right hc).2 h
+    _ = y * Real.sqrt (1 + p ^ 2) := by field_simp [hc.ne']
+
+/-- Exact square defect in the zeroth-order normalized calibration term. -/
+lemma apm_m02J04_normalized_defect (x y : ℝ) :
+    y / Real.cosh x - y ^ 2 / (2 * Real.cosh x ^ 2) =
+      1 / 2 - (y / Real.cosh x - 1) ^ 2 / 2 := by
+  have hc : Real.cosh x ≠ 0 := (Real.cosh_pos x).ne'
+  field_simp [hc]
+  ring
+
+/-- The coarse endpoint bound with the full surface-area factor restored. -/
+lemma apm_m02J04_area_endpoint_lower_bound
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) :
+    Real.pi * (Real.cosh 1 ^ 2 - 1) ≤ apm_m02J04_area y := by
+  rw [apm_m02J04_area]
+  have h := apm_m02J04_endpoint_variation_lower_bound hy
+  have hpi : 0 ≤ 2 * Real.pi := by positivity
+  nlinarith [mul_le_mul_of_nonneg_left h hpi]
+
+/-- Derivative of the hyperbolic tangent, kept in quotient form to match the
+normalized calibration. -/
+lemma apm_m02J04_hasDerivAt_sinh_div_cosh (x : ℝ) :
+    HasDerivAt (fun t ↦ Real.sinh t / Real.cosh t)
+      (1 / Real.cosh x ^ 2) x := by
+  have h := (Real.hasDerivAt_sinh x).div (Real.hasDerivAt_cosh x)
+    (Real.cosh_pos x).ne'
+  convert h using 1
+  field_simp [(Real.cosh_pos x).ne']
+  nlinarith [Real.cosh_sq_sub_sinh_sq x]
+
+/-- Derivative of the primitive used to integrate the mixed calibration term. -/
+lemma apm_m02J04_hasDerivAt_calibration_primitive
+    {y : ℝ → ℝ} (hy : ContDiff ℝ 1 y) (x : ℝ) :
+    HasDerivAt
+      (fun t ↦ (y t ^ 2 / 2) * (Real.sinh t / Real.cosh t))
+      (y x * deriv y x * (Real.sinh x / Real.cosh x) +
+        y x ^ 2 / (2 * Real.cosh x ^ 2)) x := by
+  have hy' := apm_m02J04_hasDerivAt_deriv_of_contDiff hy x
+  have hsq : HasDerivAt (fun t ↦ y t ^ 2 / 2) (y x * deriv y x) x := by
+    convert (hy'.pow 2).div_const 2 using 1
+    ring
+  convert hsq.mul (apm_m02J04_hasDerivAt_sinh_div_cosh x) using 1
+  field_simp [(Real.cosh_pos x).ne']
+
+/-- Exact integration-by-parts identity for the mixed normalized calibration
+term, using the admissible endpoints. -/
+lemma apm_m02J04_integral_mixed_calibration
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) :
+    (∫ x in (0 : ℝ)..1,
+      y x * deriv y x * (Real.sinh x / Real.cosh x)) =
+      Real.sinh 1 * Real.cosh 1 / 2 -
+        ∫ x in (0 : ℝ)..1, y x ^ 2 / (2 * Real.cosh x ^ 2) := by
+  have hyc : ContDiff ℝ 1 y := hy.1
+  let H : ℝ → ℝ := fun t ↦ (y t ^ 2 / 2) * (Real.sinh t / Real.cosh t)
+  let G : ℝ → ℝ := fun x ↦
+    y x * deriv y x * (Real.sinh x / Real.cosh x) +
+      y x ^ 2 / (2 * Real.cosh x ^ 2)
+  have hG : Continuous G := by
+    have hratio : Continuous (fun x : ℝ ↦ Real.sinh x / Real.cosh x) :=
+      Real.continuous_sinh.div Real.continuous_cosh (fun x ↦ (Real.cosh_pos x).ne')
+    have hinv : Continuous (fun x : ℝ ↦ 1 / Real.cosh x ^ 2) :=
+      continuous_const.div (Real.continuous_cosh.pow 2)
+        (fun x ↦ pow_ne_zero 2 (Real.cosh_pos x).ne')
+    dsimp [G]
+    have hfirst := (hyc.continuous.mul hyc.continuous_deriv_one).mul hratio
+    have hsecond : Continuous (fun x : ℝ ↦ y x ^ 2 / (2 * Real.cosh x ^ 2)) := by
+      exact (hyc.continuous.pow 2).div
+        (continuous_const.mul (Real.continuous_cosh.pow 2))
+        (fun x ↦ mul_ne_zero (by norm_num) (pow_ne_zero 2 (Real.cosh_pos x).ne'))
+    exact hfirst.add hsecond
+  have hFTC : (∫ x in (0 : ℝ)..1, G x) = H 1 - H 0 :=
+    intervalIntegral.integral_eq_sub_of_hasDerivAt
+      (fun x _ ↦ apm_m02J04_hasDerivAt_calibration_primitive hyc x)
+      (hG.intervalIntegrable 0 1)
+  have hmix : IntervalIntegrable
+      (fun x ↦ y x * deriv y x * (Real.sinh x / Real.cosh x))
+      MeasureTheory.volume 0 1 := by
+    have hratio : Continuous (fun x : ℝ ↦ Real.sinh x / Real.cosh x) :=
+      Real.continuous_sinh.div Real.continuous_cosh (fun x ↦ (Real.cosh_pos x).ne')
+    exact ((hyc.continuous.mul hyc.continuous_deriv_one).mul hratio).intervalIntegrable 0 1
+  have hzero : IntervalIntegrable
+      (fun x ↦ y x ^ 2 / (2 * Real.cosh x ^ 2)) MeasureTheory.volume 0 1 := by
+    have hc : Continuous (fun x : ℝ ↦ 2 * Real.cosh x ^ 2) :=
+      continuous_const.mul (Real.continuous_cosh.pow 2)
+    exact ((hyc.continuous.pow 2).div hc
+      (fun x ↦ mul_ne_zero (by norm_num) (pow_ne_zero 2 (Real.cosh_pos x).ne'))).intervalIntegrable 0 1
+  rw [show G = (fun x ↦ y x * deriv y x * (Real.sinh x / Real.cosh x) +
+      y x ^ 2 / (2 * Real.cosh x ^ 2)) by rfl,
+    intervalIntegral.integral_add hmix hzero] at hFTC
+  simp [H, hy.2.2.1, hy.2.2.2] at hFTC
+  have hb : Real.cosh 1 ^ 2 / 2 * (Real.sinh 1 / Real.cosh 1) =
+      Real.sinh 1 * Real.cosh 1 / 2 := by
+    field_simp [(Real.cosh_pos 1).ne']
+  rw [hb] at hFTC
+  linarith
+
+/-- The normalized calibration after integration.  Its boundary contribution
+is exact; the only loss is the displayed zeroth-order weighted defect. -/
+lemma apm_m02J04_integrated_normalized_calibration
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) :
+    Real.sinh 1 * Real.cosh 1 / 2 +
+        (∫ x in (0 : ℝ)..1,
+          (y x / Real.cosh x - y x ^ 2 / (2 * Real.cosh x ^ 2))) ≤
+      ∫ x in (0 : ℝ)..1, y x * Real.sqrt (1 + (deriv y x) ^ 2) := by
+  have hyc : ContDiff ℝ 1 y := hy.1
+  let f : ℝ → ℝ := fun x ↦ y x / Real.cosh x
+  let m : ℝ → ℝ := fun x ↦
+    y x * deriv y x * (Real.sinh x / Real.cosh x)
+  let q : ℝ → ℝ := fun x ↦ y x ^ 2 / (2 * Real.cosh x ^ 2)
+  have hf : IntervalIntegrable f MeasureTheory.volume 0 1 := by
+    exact (hyc.continuous.div Real.continuous_cosh
+      (fun x ↦ (Real.cosh_pos x).ne')).intervalIntegrable 0 1
+  have hm : IntervalIntegrable m MeasureTheory.volume 0 1 := by
+    have hratio : Continuous (fun x : ℝ ↦ Real.sinh x / Real.cosh x) :=
+      Real.continuous_sinh.div Real.continuous_cosh
+        (fun x ↦ (Real.cosh_pos x).ne')
+    exact ((hyc.continuous.mul hyc.continuous_deriv_one).mul hratio).intervalIntegrable 0 1
+  have hq : IntervalIntegrable q MeasureTheory.volume 0 1 := by
+    exact ((hyc.continuous.pow 2).div
+      (continuous_const.mul (Real.continuous_cosh.pow 2))
+      (fun x ↦ mul_ne_zero (by norm_num)
+        (pow_ne_zero 2 (Real.cosh_pos x).ne'))).intervalIntegrable 0 1
+  have hdens := (apm_m02J04_admissible_density_regular hy).2
+  have hmono := intervalIntegral.integral_mono_on (μ := MeasureTheory.volume)
+    (a := (0 : ℝ)) (b := 1) (by norm_num) (hf.add hm) hdens (fun x hx ↦ by
+      dsimp [f, m]
+      exact apm_m02J04_normalized_calibration x (y x) (deriv y x) (hy.2.1 x hx))
+  rw [intervalIntegral.integral_add hf hm] at hmono
+  have hmix := apm_m02J04_integral_mixed_calibration hy
+  have hsub : (∫ x in (0 : ℝ)..1, f x - q x) =
+      (∫ x in (0 : ℝ)..1, f x) - ∫ x in (0 : ℝ)..1, q x := by
+    exact intervalIntegral.integral_sub hf hq
+  dsimp [f, q] at hsub ⊢
+  rw [hsub]
+  dsimp [f] at hmono
+  linarith
+
+/-- Stability form of the integrated calibration: the precise obstruction to
+the catenary bound is the weighted square measuring radial displacement. -/
+lemma apm_m02J04_integrated_calibration_defect
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) :
+    Real.sinh 1 * Real.cosh 1 / 2 + 1 / 2 -
+        (∫ x in (0 : ℝ)..1, (y x / Real.cosh x - 1) ^ 2 / 2) ≤
+      ∫ x in (0 : ℝ)..1, y x * Real.sqrt (1 + (deriv y x) ^ 2) := by
+  have h := apm_m02J04_integrated_normalized_calibration hy
+  have hremainder :
+      (∫ x in (0 : ℝ)..1,
+        (y x / Real.cosh x - y x ^ 2 / (2 * Real.cosh x ^ 2))) =
+        1 / 2 - ∫ x in (0 : ℝ)..1, (y x / Real.cosh x - 1) ^ 2 / 2 := by
+    calc
+      _ = ∫ x in (0 : ℝ)..1,
+          (1 / 2 - (y x / Real.cosh x - 1) ^ 2 / 2) := by
+            apply intervalIntegral.integral_congr
+            intro x _
+            exact apm_m02J04_normalized_defect x (y x)
+      _ = 1 / 2 - ∫ x in (0 : ℝ)..1,
+          (y x / Real.cosh x - 1) ^ 2 / 2 := by
+            rw [intervalIntegral.integral_sub]
+            · norm_num
+            · exact intervalIntegral.intervalIntegrable_const
+            · have hc : Continuous (fun x : ℝ ↦
+                  (y x / Real.cosh x - 1) ^ 2 / 2) := by
+                have hratio : Continuous (fun x : ℝ ↦ y x / Real.cosh x) :=
+                  hy.1.continuous.div Real.continuous_cosh
+                    (fun x ↦ (Real.cosh_pos x).ne')
+                exact ((hratio.sub continuous_const).pow 2).div_const 2
+              exact hc.intervalIntegrable 0 1
+  rw [hremainder] at h
+  linarith
+
+/-- A second calibration, adapted to competitors which stay outside the neck
+radius `1`.  Unlike the normalized calibration, this is the pointwise form of
+the closed one-form `dx + sqrt (y² - 1) dy`. -/
+lemma apm_m02J04_outer_calibration (y p : ℝ) (hy : 1 ≤ y) :
+    1 + p * Real.sqrt (y ^ 2 - 1) ≤ y * Real.sqrt (1 + p ^ 2) := by
+  have hr : 0 ≤ y ^ 2 - 1 := by nlinarith
+  have hs : Real.sqrt (1 + (Real.sqrt (y ^ 2 - 1)) ^ 2) = y := by
+    rw [Real.sq_sqrt hr]
+    have hy0 : 0 ≤ y := le_trans (by norm_num) hy
+    simpa [abs_of_nonneg hy0] using Real.sqrt_sq_eq_abs y
+  have h := apm_m02J04_one_add_mul_le_sqrt_mul_sqrt p
+    (Real.sqrt (y ^ 2 - 1))
+  rw [hs] at h
+  simpa [mul_comm] using h
+
+/-- A globally differentiable primitive for the vertical coefficient of the
+outer calibration.  Defining it by an interval integral avoids the removable
+endpoint singularity in the usual closed formula. -/
+noncomputable def apm_m02J04_outerPrimitive (z : ℝ) : ℝ :=
+  ∫ t in (1 : ℝ)..z, Real.sqrt (t ^ 2 - 1)
+
+lemma apm_m02J04_hasDerivAt_outerPrimitive (z : ℝ) :
+    HasDerivAt apm_m02J04_outerPrimitive (Real.sqrt (z ^ 2 - 1)) z := by
+  have hc : Continuous (fun t : ℝ ↦ Real.sqrt (t ^ 2 - 1)) :=
+    Real.continuous_sqrt.comp ((continuous_id.pow 2).sub continuous_const)
+  exact intervalIntegral.integral_hasDerivAt_right
+    (hc.intervalIntegrable 1 z)
+    hc.aestronglyMeasurable.stronglyMeasurableAtFilter hc.continuousAt
+
+/-- Along a `C¹` competitor, the vertical calibration term is an exact
+derivative. -/
+lemma apm_m02J04_hasDerivAt_outerPrimitive_comp
+    {y : ℝ → ℝ} (hy : ContDiff ℝ 1 y) (x : ℝ) :
+    HasDerivAt (fun t ↦ apm_m02J04_outerPrimitive (y t))
+      (deriv y x * Real.sqrt (y x ^ 2 - 1)) x := by
+  convert (apm_m02J04_hasDerivAt_outerPrimitive (y x)).comp x
+    (apm_m02J04_hasDerivAt_deriv_of_contDiff hy x) using 1
+  ring
+
+lemma apm_m02J04_integral_outer_exact
+    {y : ℝ → ℝ} (hy : ContDiff ℝ 1 y) :
+    (∫ x in (0 : ℝ)..1, deriv y x * Real.sqrt (y x ^ 2 - 1)) =
+      apm_m02J04_outerPrimitive (y 1) -
+        apm_m02J04_outerPrimitive (y 0) := by
+  have hc : Continuous (fun x : ℝ ↦
+      deriv y x * Real.sqrt (y x ^ 2 - 1)) := by
+    exact hy.continuous_deriv_one.mul
+      (Real.continuous_sqrt.comp ((hy.continuous.pow 2).sub continuous_const))
+  exact intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (fun x _ ↦ apm_m02J04_hasDerivAt_outerPrimitive_comp hy x)
+    (hc.intervalIntegrable 0 1)
+
+/-- On the nonnegative catenary parameter, the outer primitive has derivative
+`sinh²`; this supplies its endpoint value without invoking `arcosh`. -/
+lemma apm_m02J04_hasDerivAt_outerPrimitive_cosh
+    {x : ℝ} (hx : 0 ≤ x) :
+    HasDerivAt (fun t ↦ apm_m02J04_outerPrimitive (Real.cosh t))
+      (Real.sinh x ^ 2) x := by
+  have h := (apm_m02J04_hasDerivAt_outerPrimitive (Real.cosh x)).comp x
+    (Real.hasDerivAt_cosh x)
+  have hsqrt : Real.sqrt (Real.cosh x ^ 2 - 1) = Real.sinh x := by
+    have heq : Real.cosh x ^ 2 - 1 = Real.sinh x ^ 2 := by
+      nlinarith [Real.cosh_sq_sub_sinh_sq x]
+    rw [heq]
+    exact (Real.sqrt_sq_eq_abs _).trans
+      (abs_of_nonneg (Real.sinh_nonneg_iff.mpr hx))
+  rw [hsqrt] at h
+  convert h using 1
+  ring
+
+lemma apm_m02J04_hasDerivAt_sinh_sq_primitive (x : ℝ) :
+    HasDerivAt (fun t : ℝ ↦ (Real.sinh t * Real.cosh t - t) / 2)
+      (Real.sinh x ^ 2) x := by
+  convert (((Real.hasDerivAt_sinh x).mul (Real.hasDerivAt_cosh x)).sub
+    (hasDerivAt_id x)).div_const 2 using 1
+  nlinarith [Real.cosh_sq_sub_sinh_sq x]
+
+lemma apm_m02J04_outerPrimitive_cosh_one :
+    apm_m02J04_outerPrimitive (Real.cosh 1) =
+      (Real.sinh 1 * Real.cosh 1 - 1) / 2 := by
+  have hi : IntervalIntegrable (fun x : ℝ ↦ Real.sinh x ^ 2)
+      MeasureTheory.volume 0 1 :=
+    (Real.continuous_sinh.pow 2).intervalIntegrable 0 1
+  have hout : (∫ x in (0 : ℝ)..1, Real.sinh x ^ 2) =
+      apm_m02J04_outerPrimitive (Real.cosh 1) -
+        apm_m02J04_outerPrimitive (Real.cosh 0) :=
+    intervalIntegral.integral_eq_sub_of_hasDerivAt
+      (fun x hx ↦ by
+        rw [uIcc_of_le (by norm_num)] at hx
+        exact apm_m02J04_hasDerivAt_outerPrimitive_cosh hx.1) hi
+  have hclosed : (∫ x in (0 : ℝ)..1, Real.sinh x ^ 2) =
+      (Real.sinh 1 * Real.cosh 1 - 1) / 2 := by
+    rw [intervalIntegral.integral_eq_sub_of_hasDerivAt
+      (fun x _ ↦ apm_m02J04_hasDerivAt_sinh_sq_primitive x) hi]
+    simp
+  simp [apm_m02J04_outerPrimitive] at hout
+  rw [apm_m02J04_outerPrimitive]
+  linarith
+
+/-- The catenary is globally minimizing among admissible competitors which
+stay outside its neck radius. -/
+lemma apm_m02J04_outer_density_minimal
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible)
+    (houter : ∀ x ∈ Icc (0 : ℝ) 1, 1 ≤ y x) :
+    (∫ x in (0 : ℝ)..1,
+      Real.cosh x * Real.sqrt (1 + (deriv Real.cosh x) ^ 2)) ≤
+      ∫ x in (0 : ℝ)..1, y x * Real.sqrt (1 + (deriv y x) ^ 2) := by
+  have hyc : ContDiff ℝ 1 y := hy.1
+  let v : ℝ → ℝ := fun x ↦ deriv y x * Real.sqrt (y x ^ 2 - 1)
+  have hv : IntervalIntegrable v MeasureTheory.volume 0 1 := by
+    have hc : Continuous v := by
+      dsimp [v]
+      exact hyc.continuous_deriv_one.mul
+        (Real.continuous_sqrt.comp ((hyc.continuous.pow 2).sub continuous_const))
+    exact hc.intervalIntegrable 0 1
+  have hdens := (apm_m02J04_admissible_density_regular hy).2
+  have hmono := intervalIntegral.integral_mono_on (μ := MeasureTheory.volume)
+    (a := (0 : ℝ)) (b := 1) (by norm_num)
+    (intervalIntegral.intervalIntegrable_const.add hv) hdens (fun x hx ↦ by
+      dsimp [v]
+      exact apm_m02J04_outer_calibration (y x) (deriv y x) (houter x hx))
+  rw [intervalIntegral.integral_add intervalIntegral.intervalIntegrable_const hv] at hmono
+  have hv_exact := apm_m02J04_integral_outer_exact hyc
+  dsimp [v] at hmono
+  rw [hy.2.2.1, hy.2.2.2, apm_m02J04_outerPrimitive_cosh_one] at hv_exact
+  have hpone : apm_m02J04_outerPrimitive 1 = 0 := by
+    simp [apm_m02J04_outerPrimitive]
+  rw [hpone] at hv_exact
+  simp_rw [apm_m02J04_cosh_area_density]
+  rw [apm_m02J04_integral_cosh_sq]
+  norm_num at hmono
+  linarith
+
+lemma apm_m02J04_outer_area_minimal
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible)
+    (houter : ∀ x ∈ Icc (0 : ℝ) 1, 1 ≤ y x) :
+    apm_m02J04_area Real.cosh ≤ apm_m02J04_area y := by
+  rw [apm_m02J04_area, apm_m02J04_area]
+  exact mul_le_mul_of_nonneg_left (apm_m02J04_outer_density_minimal hy houter)
+    (by positivity)
+
+/-- Coarse radial-variation control on an arbitrary subinterval.  This is the
+piece needed on both sides of a competitor's minimum in the below-neck case. -/
+lemma apm_m02J04_segment_variation_lower
+    {y : ℝ → ℝ} (hy : ContDiff ℝ 1 y) {u v : ℝ} (huv : u ≤ v)
+    (hnonneg : ∀ x ∈ Icc u v, 0 ≤ y x) :
+    |y v ^ 2 - y u ^ 2| / 2 ≤
+      ∫ x in u..v, y x * Real.sqrt (1 + (deriv y x) ^ 2) := by
+  have hprod : IntervalIntegrable (fun x ↦ y x * deriv y x)
+      MeasureTheory.volume u v :=
+    (hy.continuous.mul hy.continuous_deriv_one).intervalIntegrable u v
+  have hdens : IntervalIntegrable
+      (fun x ↦ y x * Real.sqrt (1 + (deriv y x) ^ 2))
+      MeasureTheory.volume u v := by
+    have hs : Continuous (fun x ↦ Real.sqrt (1 + (deriv y x) ^ 2)) :=
+      Real.continuous_sqrt.comp
+        (continuous_const.add (hy.continuous_deriv_one.pow 2))
+    exact (hy.continuous.mul hs).intervalIntegrable u v
+  have hFTC : (∫ x in u..v, y x * deriv y x) =
+      y v ^ 2 / 2 - y u ^ 2 / 2 := by
+    exact intervalIntegral.integral_eq_sub_of_hasDerivAt
+      (fun x _ ↦ by
+        convert ((apm_m02J04_hasDerivAt_deriv_of_contDiff hy x).pow 2).div_const 2 using 1
+        ring)
+      hprod
+  have habs := intervalIntegral.abs_integral_le_integral_abs
+    (μ := MeasureTheory.volume) (f := fun x ↦ y x * deriv y x)
+    (a := u) (b := v) huv
+  have habs_eq : (∫ x in u..v, |y x * deriv y x|) =
+      ∫ x in u..v, y x * |deriv y x| := by
+    apply intervalIntegral.integral_congr
+    intro x hx
+    dsimp
+    rw [abs_mul, abs_of_nonneg (hnonneg x (by simpa [uIcc_of_le huv] using hx))]
+  rw [hFTC, habs_eq] at habs
+  have hslope : IntervalIntegrable (fun x ↦ y x * |deriv y x|)
+      MeasureTheory.volume u v :=
+    (hy.continuous.mul hy.continuous_deriv_one.abs).intervalIntegrable u v
+  have hmono := intervalIntegral.integral_mono_on (μ := MeasureTheory.volume)
+    (a := u) (b := v) huv hslope hdens (fun x hx ↦
+      mul_le_mul_of_nonneg_left (apm_m02J04_abs_le_sqrt_one_add_sq (deriv y x))
+        (hnonneg x hx))
+  rw [show y v ^ 2 / 2 - y u ^ 2 / 2 = (y v ^ 2 - y u ^ 2) / 2 by ring,
+    abs_div, abs_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)] at habs
+  linarith
+
+/-- Whole-interval coarse bound obtained by splitting at a point at or below
+the neck radius. -/
+lemma apm_m02J04_below_neck_variation_lower
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible)
+    {x : ℝ} (hx : x ∈ Icc (0 : ℝ) 1) (hneck : y x ≤ 1) :
+    (1 + Real.cosh 1 ^ 2 - 2 * y x ^ 2) / 2 ≤
+      ∫ t in (0 : ℝ)..1, y t * Real.sqrt (1 + (deriv y t) ^ 2) := by
+  have hyx0 : 0 ≤ y x := hy.2.1 x hx
+  have hleft := apm_m02J04_segment_variation_lower hy.1 hx.1
+    (fun t ht ↦ hy.2.1 t ⟨ht.1, le_trans ht.2 hx.2⟩)
+  have hright := apm_m02J04_segment_variation_lower hy.1 hx.2
+    (fun t ht ↦ hy.2.1 t ⟨le_trans hx.1 ht.1, ht.2⟩)
+  rw [hy.2.2.1, abs_of_nonpos (by nlinarith)] at hleft
+  rw [hy.2.2.2, abs_of_nonneg (by
+    have hc : 1 ≤ Real.cosh 1 := Real.one_le_cosh 1
+    nlinarith)] at hright
+  have hdens : Continuous (fun t ↦
+      y t * Real.sqrt (1 + (deriv y t) ^ 2)) :=
+    (apm_m02J04_admissible_density_regular hy).1
+  have hsplit := intervalIntegral.integral_add_adjacent_intervals
+    (μ := MeasureTheory.volume)
+    (hdens.intervalIntegrable 0 x) (hdens.intervalIntegrable x 1)
+  linarith
+
+/-- A tunable pointwise bound retaining horizontal and radial costs
+simultaneously. -/
+lemma apm_m02J04_weighted_slope_bound
+    {a b p : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (hab : a ^ 2 + b ^ 2 ≤ 1) :
+    a + b * |p| ≤ Real.sqrt (1 + p ^ 2) := by
+  have hl : 0 ≤ a + b * |p| := add_nonneg ha (mul_nonneg hb (abs_nonneg p))
+  have hr : 0 ≤ Real.sqrt (1 + p ^ 2) := Real.sqrt_nonneg _
+  rw [← sq_le_sq₀ hl hr, Real.sq_sqrt (by positivity)]
+  nlinarith [sq_nonneg (b - a * |p|), sq_abs p]
+
+lemma apm_m02J04_weighted_density_bound
+    {a b y p : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b)
+    (hab : a ^ 2 + b ^ 2 ≤ 1) (hy : 0 ≤ y) :
+    a * y + b * (y * |p|) ≤ y * Real.sqrt (1 + p ^ 2) := by
+  have h := mul_le_mul_of_nonneg_left
+    (apm_m02J04_weighted_slope_bound ha hb hab (p := p)) hy
+  nlinarith
+
+/-- The horizontal part of the weighted estimate is controlled by any global
+lower bound for the radius. -/
+lemma apm_m02J04_integral_radius_lower
+    {y : ℝ → ℝ} (hy : ContDiff ℝ 1 y) {m : ℝ}
+    (hm : ∀ x ∈ Icc (0 : ℝ) 1, m ≤ y x) :
+    m ≤ ∫ x in (0 : ℝ)..1, y x := by
+  have hmono := intervalIntegral.integral_mono_on (μ := MeasureTheory.volume)
+    (a := (0 : ℝ)) (b := 1) (by norm_num)
+    intervalIntegral.intervalIntegrable_const
+    (hy.continuous.intervalIntegrable 0 1) hm
+  norm_num at hmono
+  exact hmono
+
+/-- Parameterized closed calibration.  Taking `c = 1` recovers the outer
+calibration, while taking `c` to be a competitor's minimum remains valid on
+the entire curve. -/
+lemma apm_m02J04_parameter_calibration
+    {c y p : ℝ} (hc : 0 ≤ c) (hcy : c ≤ y) :
+    c + p * Real.sqrt (y ^ 2 - c ^ 2) ≤
+      y * Real.sqrt (1 + p ^ 2) := by
+  have hy : 0 ≤ y := le_trans hc hcy
+  have hrad : 0 ≤ y ^ 2 - c ^ 2 := by nlinarith
+  have hsq : (c + p * Real.sqrt (y ^ 2 - c ^ 2)) ^ 2 ≤
+      y ^ 2 * (1 + p ^ 2) := by
+    nlinarith [sq_nonneg (p * c - Real.sqrt (y ^ 2 - c ^ 2)),
+      Real.sq_sqrt hrad]
+  by_cases hn : 0 ≤ c + p * Real.sqrt (y ^ 2 - c ^ 2)
+  · rw [← sq_le_sq₀ hn (mul_nonneg hy (Real.sqrt_nonneg _)), mul_pow,
+      Real.sq_sqrt (by positivity)]
+    exact hsq
+  · exact le_trans (le_of_not_ge hn) (mul_nonneg hy (Real.sqrt_nonneg _))
+
+noncomputable def apm_m02J04_parameterPrimitive (c z : ℝ) : ℝ :=
+  ∫ t in c..z, Real.sqrt (t ^ 2 - c ^ 2)
+
+lemma apm_m02J04_hasDerivAt_parameterPrimitive (c z : ℝ) :
+    HasDerivAt (apm_m02J04_parameterPrimitive c)
+      (Real.sqrt (z ^ 2 - c ^ 2)) z := by
+  have hcont : Continuous (fun t : ℝ ↦ Real.sqrt (t ^ 2 - c ^ 2)) :=
+    Real.continuous_sqrt.comp ((continuous_id.pow 2).sub continuous_const)
+  exact intervalIntegral.integral_hasDerivAt_right
+    (hcont.intervalIntegrable c z)
+    hcont.aestronglyMeasurable.stronglyMeasurableAtFilter hcont.continuousAt
+
+lemma apm_m02J04_integral_parameter_exact
+    {y : ℝ → ℝ} (hy : ContDiff ℝ 1 y) (c : ℝ) :
+    (∫ x in (0 : ℝ)..1, deriv y x * Real.sqrt (y x ^ 2 - c ^ 2)) =
+      apm_m02J04_parameterPrimitive c (y 1) -
+        apm_m02J04_parameterPrimitive c (y 0) := by
+  have hder (x : ℝ) : HasDerivAt
+      (fun t ↦ apm_m02J04_parameterPrimitive c (y t))
+      (deriv y x * Real.sqrt (y x ^ 2 - c ^ 2)) x := by
+    convert (apm_m02J04_hasDerivAt_parameterPrimitive c (y x)).comp x
+      (apm_m02J04_hasDerivAt_deriv_of_contDiff hy x) using 1
+    ring
+  have hcont : Continuous (fun x ↦
+      deriv y x * Real.sqrt (y x ^ 2 - c ^ 2)) :=
+    hy.continuous_deriv_one.mul
+      (Real.continuous_sqrt.comp ((hy.continuous.pow 2).sub continuous_const))
+  exact intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (fun x _ ↦ hder x) (hcont.intervalIntegrable 0 1)
+
+lemma apm_m02J04_integral_parameter_exact_segment
+    {y : ℝ → ℝ} (hy : ContDiff ℝ 1 y) (c u v : ℝ) :
+    (∫ x in u..v, deriv y x * Real.sqrt (y x ^ 2 - c ^ 2)) =
+      apm_m02J04_parameterPrimitive c (y v) -
+        apm_m02J04_parameterPrimitive c (y u) := by
+  have hder (x : ℝ) : HasDerivAt
+      (fun t ↦ apm_m02J04_parameterPrimitive c (y t))
+      (deriv y x * Real.sqrt (y x ^ 2 - c ^ 2)) x := by
+    convert (apm_m02J04_hasDerivAt_parameterPrimitive c (y x)).comp x
+      (apm_m02J04_hasDerivAt_deriv_of_contDiff hy x) using 1
+    ring
+  have hcont : Continuous (fun x ↦
+      deriv y x * Real.sqrt (y x ^ 2 - c ^ 2)) :=
+    hy.continuous_deriv_one.mul
+      (Real.continuous_sqrt.comp ((hy.continuous.pow 2).sub continuous_const))
+  exact intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (fun x _ ↦ hder x) (hcont.intervalIntegrable u v)
+
+/-- Integrated parameter calibration, expressed entirely by the parameter and
+the two endpoint radii. -/
+lemma apm_m02J04_integrated_parameter_calibration
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) {c : ℝ} (hc : 0 ≤ c)
+    (hcy : ∀ x ∈ Icc (0 : ℝ) 1, c ≤ y x) :
+    c + apm_m02J04_parameterPrimitive c (Real.cosh 1) -
+        apm_m02J04_parameterPrimitive c 1 ≤
+      ∫ x in (0 : ℝ)..1, y x * Real.sqrt (1 + (deriv y x) ^ 2) := by
+  have hyc : ContDiff ℝ 1 y := hy.1
+  let v : ℝ → ℝ := fun x ↦
+    deriv y x * Real.sqrt (y x ^ 2 - c ^ 2)
+  have hv : IntervalIntegrable v MeasureTheory.volume 0 1 := by
+    have hcont : Continuous v := by
+      dsimp [v]
+      exact hyc.continuous_deriv_one.mul
+        (Real.continuous_sqrt.comp
+          ((hyc.continuous.pow 2).sub continuous_const))
+    exact hcont.intervalIntegrable 0 1
+  have hdens := (apm_m02J04_admissible_density_regular hy).2
+  have hmono := intervalIntegral.integral_mono_on (μ := MeasureTheory.volume)
+    (a := (0 : ℝ)) (b := 1) (by norm_num)
+    (intervalIntegral.intervalIntegrable_const.add hv) hdens (fun x hx ↦ by
+      dsimp [v]
+      exact apm_m02J04_parameter_calibration hc (hcy x hx))
+  rw [intervalIntegral.integral_add intervalIntegral.intervalIntegrable_const hv] at hmono
+  have hv_exact := apm_m02J04_integral_parameter_exact hyc c
+  rw [hy.2.2.1, hy.2.2.2] at hv_exact
+  dsimp [v] at hmono
+  norm_num at hmono
+  linarith
+
+/-- Every admissible competitor has an attained minimum radius on the compact
+parameter interval, furnishing the canonical calibration parameter. -/
+lemma apm_m02J04_exists_minimum
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) :
+    ∃ x ∈ Icc (0 : ℝ) 1, ∀ z ∈ Icc (0 : ℝ) 1, y x ≤ y z := by
+  exact isCompact_Icc.exists_isMinOn (nonempty_Icc.2 (by norm_num))
+    hy.1.continuous.continuousOn
+
+/-- Sharp calibration obtained by reversing the vertical covector on the two
+sides of an attained minimum. -/
+lemma apm_m02J04_split_parameter_calibration
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) {x c : ℝ}
+    (hx : x ∈ Icc (0 : ℝ) 1) (hc : 0 ≤ c) (hcx : y x = c)
+    (hmin : ∀ z ∈ Icc (0 : ℝ) 1, c ≤ y z) :
+    c + apm_m02J04_parameterPrimitive c 1 +
+        apm_m02J04_parameterPrimitive c (Real.cosh 1) ≤
+      ∫ t in (0 : ℝ)..1, y t * Real.sqrt (1 + (deriv y t) ^ 2) := by
+  have hyc : ContDiff ℝ 1 y := hy.1
+  let v : ℝ → ℝ := fun t ↦ deriv y t * Real.sqrt (y t ^ 2 - c ^ 2)
+  let d : ℝ → ℝ := fun t ↦ y t * Real.sqrt (1 + (deriv y t) ^ 2)
+  have hv : Continuous v := by
+    dsimp [v]
+    exact hyc.continuous_deriv_one.mul
+      (Real.continuous_sqrt.comp ((hyc.continuous.pow 2).sub continuous_const))
+  have hd : Continuous d := by
+    dsimp [d]
+    exact (apm_m02J04_admissible_density_regular hy).1
+  have hleft := intervalIntegral.integral_mono_on (μ := MeasureTheory.volume)
+    (a := (0 : ℝ)) (b := x) hx.1
+    (intervalIntegral.intervalIntegrable_const.sub (hv.intervalIntegrable 0 x))
+    (hd.intervalIntegrable 0 x) (fun t ht ↦ by
+      dsimp [v, d]
+      have ht' : t ∈ Icc (0 : ℝ) 1 := ⟨ht.1, le_trans ht.2 hx.2⟩
+      have h := apm_m02J04_parameter_calibration hc (hmin t ht')
+        (p := -deriv y t)
+      simpa [sub_eq_add_neg, mul_assoc] using h)
+  have hright := intervalIntegral.integral_mono_on (μ := MeasureTheory.volume)
+    (a := x) (b := 1) hx.2
+    (intervalIntegral.intervalIntegrable_const.add (hv.intervalIntegrable x 1))
+    (hd.intervalIntegrable x 1) (fun t ht ↦ by
+      dsimp [v, d]
+      exact apm_m02J04_parameter_calibration hc
+        (hmin t ⟨le_trans hx.1 ht.1, ht.2⟩))
+  rw [intervalIntegral.integral_sub intervalIntegral.intervalIntegrable_const
+      (hv.intervalIntegrable 0 x)] at hleft
+  rw [intervalIntegral.integral_add intervalIntegral.intervalIntegrable_const
+      (hv.intervalIntegrable x 1)] at hright
+  have hv0 := apm_m02J04_integral_parameter_exact_segment hyc c 0 x
+  have hv1 := apm_m02J04_integral_parameter_exact_segment hyc c x 1
+  rw [hy.2.2.1, hcx] at hv0
+  rw [hcx, hy.2.2.2] at hv1
+  have hpcc : apm_m02J04_parameterPrimitive c c = 0 := by
+    simp [apm_m02J04_parameterPrimitive]
+  rw [hpcc] at hv0 hv1
+  norm_num at hleft hright
+  have hsplit := intervalIntegral.integral_add_adjacent_intervals
+    (μ := MeasureTheory.volume) (hd.intervalIntegrable 0 x)
+    (hd.intervalIntegrable x 1)
+  dsimp [v] at hleft hright
+  dsimp [d] at hsplit
+  linarith
+
+/-- The split variation bound already proves minimality whenever the neck is
+deep enough; the hypothesis records the exact scalar threshold. -/
+lemma apm_m02J04_deep_neck_density_minimal
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) {x : ℝ}
+    (hx : x ∈ Icc (0 : ℝ) 1) (hneck : y x ≤ 1)
+    (hdeep : 2 * y x ^ 2 + Real.sinh 1 * Real.cosh 1 ≤ Real.cosh 1 ^ 2) :
+    (∫ t in (0 : ℝ)..1,
+      Real.cosh t * Real.sqrt (1 + (deriv Real.cosh t) ^ 2)) ≤
+      ∫ t in (0 : ℝ)..1, y t * Real.sqrt (1 + (deriv y t) ^ 2) := by
+  have hvar := apm_m02J04_below_neck_variation_lower hy hx hneck
+  simp_rw [apm_m02J04_cosh_area_density]
+  rw [apm_m02J04_integral_cosh_sq]
+  linarith
+
+lemma apm_m02J04_deep_neck_area_minimal
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) {x : ℝ}
+    (hx : x ∈ Icc (0 : ℝ) 1) (hneck : y x ≤ 1)
+    (hdeep : 2 * y x ^ 2 + Real.sinh 1 * Real.cosh 1 ≤ Real.cosh 1 ^ 2) :
+    apm_m02J04_area Real.cosh ≤ apm_m02J04_area y := by
+  rw [apm_m02J04_area, apm_m02J04_area]
+  exact mul_le_mul_of_nonneg_left
+    (apm_m02J04_deep_neck_density_minimal hy hx hneck hdeep) (by positivity)
+
+/-- Differential ingredients for the elementary closed form of the
+parameter primitive, valid away from its lower endpoint. -/
+lemma apm_m02J04_hasDerivAt_parameterRadical
+    {c t : ℝ} (hct : c < t) (hc : 0 ≤ c) :
+    HasDerivAt (fun z ↦ Real.sqrt (z ^ 2 - c ^ 2))
+      (t / Real.sqrt (t ^ 2 - c ^ 2)) t := by
+  have hrad : 0 < t ^ 2 - c ^ 2 := by nlinarith
+  have hinner : HasDerivAt (fun z : ℝ ↦ z ^ 2 - c ^ 2) (2 * t) t := by
+    simpa [mul_comm] using ((hasDerivAt_id t).pow 2).sub_const (c ^ 2)
+  convert (Real.hasDerivAt_sqrt hrad.ne').comp t hinner using 1
+  field_simp [Real.sqrt_ne_zero'.2 hrad]
+
+lemma apm_m02J04_hasDerivAt_arcosh_div
+    {c t : ℝ} (hc : 0 < c) (hct : c < t) :
+    HasDerivAt (fun z ↦ Real.arcosh (z / c))
+      ((1 / c) / Real.sqrt ((t / c) ^ 2 - 1)) t := by
+  have harg : 1 < t / c := (lt_div_iff₀ hc).2 (by simpa using hct)
+  convert (Real.hasDerivAt_arcosh harg).comp t
+    ((hasDerivAt_id t).div_const c) using 1
+  ring
+
+noncomputable def apm_m02J04_parameterClosed (c t : ℝ) : ℝ :=
+  (t * Real.sqrt (t ^ 2 - c ^ 2) - c ^ 2 * Real.arcosh (t / c)) / 2
+
+lemma apm_m02J04_sqrt_div_parameter
+    {c t : ℝ} (hc : 0 < c) (hct : c < t) :
+    Real.sqrt ((t / c) ^ 2 - 1) =
+      Real.sqrt (t ^ 2 - c ^ 2) / c := by
+  have hrad : 0 ≤ t ^ 2 - c ^ 2 := by nlinarith
+  have heq : (t / c) ^ 2 - 1 = (t ^ 2 - c ^ 2) / c ^ 2 := by
+    field_simp [hc.ne']
+  rw [heq, Real.sqrt_div (by positivity), Real.sqrt_sq_eq_abs,
+    abs_of_pos hc]
+
+lemma apm_m02J04_hasDerivAt_parameterClosed
+    {c t : ℝ} (hc : 0 < c) (hct : c < t) :
+    HasDerivAt (apm_m02J04_parameterClosed c)
+      (Real.sqrt (t ^ 2 - c ^ 2)) t := by
+  have hr := apm_m02J04_hasDerivAt_parameterRadical hct hc.le
+  have ha := apm_m02J04_hasDerivAt_arcosh_div hc hct
+  have hs := apm_m02J04_sqrt_div_parameter hc hct
+  have hrad : 0 < t ^ 2 - c ^ 2 := by nlinarith
+  unfold apm_m02J04_parameterClosed
+  convert (((hasDerivAt_id t).mul hr).sub (ha.const_mul (c ^ 2))).div_const 2 using 1
+  rw [hs]
+  field_simp [hc.ne', Real.sqrt_ne_zero'.2 hrad]
+  rw [Real.sq_sqrt hrad.le]
+  simp
+  ring
+
+lemma apm_m02J04_parameterPrimitive_eq_closed
+    {c t : ℝ} (hc : 0 < c) (hct : c < t) :
+    apm_m02J04_parameterPrimitive c t =
+      apm_m02J04_parameterClosed c t := by
+  have hrad : Continuous (fun z : ℝ ↦ Real.sqrt (z ^ 2 - c ^ 2)) :=
+    Real.continuous_sqrt.comp ((continuous_id.pow 2).sub continuous_const)
+  have hmap : MapsTo (fun z : ℝ ↦ z / c) (Icc c t) (Ici 1) := by
+    intro z hz
+    exact (le_div_iff₀ hc).2 (by simpa using hz.1)
+  have harc : ContinuousOn (fun z : ℝ ↦ Real.arcosh (z / c)) (Icc c t) :=
+    Real.continuousOn_arcosh.comp (continuous_id.div_const c).continuousOn hmap
+  have hclosed : ContinuousOn (apm_m02J04_parameterClosed c) (Icc c t) := by
+    unfold apm_m02J04_parameterClosed
+    exact (((continuousOn_id.mul hrad.continuousOn).sub
+      (continuousOn_const.mul harc)).div_const 2)
+  have hFTC := intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le hct.le
+    hclosed (fun z hz ↦ apm_m02J04_hasDerivAt_parameterClosed hc hz.1)
+    (hrad.intervalIntegrable c t)
+  rw [apm_m02J04_parameterPrimitive, hFTC]
+  have hcc : apm_m02J04_parameterClosed c c = 0 := by
+    simp [apm_m02J04_parameterClosed, hc.ne']
+  rw [hcc, sub_zero]
+
+lemma apm_m02J04_hasDerivAt_parameterRadical_left
+    {c z : ℝ} (hc : 0 < c) (hcz : c < z) :
+    HasDerivAt (fun s ↦ Real.sqrt (z ^ 2 - s ^ 2))
+      (-c / Real.sqrt (z ^ 2 - c ^ 2)) c := by
+  have hrad : 0 < z ^ 2 - c ^ 2 := by nlinarith
+  have hinner : HasDerivAt (fun s : ℝ ↦ z ^ 2 - s ^ 2) (-2 * c) c := by
+    convert (hasDerivAt_const c (z ^ 2)).sub ((hasDerivAt_id c).pow 2) using 1
+    simp only [id_eq]
+    ring
+  convert (Real.hasDerivAt_sqrt hrad.ne').comp c hinner using 1
+  field_simp [Real.sqrt_ne_zero'.2 hrad]
+
+lemma apm_m02J04_hasDerivAt_arcosh_parameter
+    {c z : ℝ} (hc : 0 < c) (hcz : c < z) :
+    HasDerivAt (fun s ↦ Real.arcosh (z / s))
+      ((Real.sqrt ((z / c) ^ 2 - 1))⁻¹ * (-z / c ^ 2)) c := by
+  have harg : 1 < z / c := (lt_div_iff₀ hc).2 (by simpa using hcz)
+  have hi : HasDerivAt (fun s : ℝ ↦ z / s) (-z / c ^ 2) c := by
+    convert (hasDerivAt_const c z).div (hasDerivAt_id c) hc.ne' using 1
+    simp only [id_eq]
+    ring
+  convert (Real.hasDerivAt_arcosh harg).comp c hi using 1
+
+lemma apm_m02J04_hasDerivAt_parameterClosed_left
+    {c z : ℝ} (hc : 0 < c) (hcz : c < z) :
+    HasDerivAt (fun s ↦ apm_m02J04_parameterClosed s z)
+      (-c * Real.arcosh (z / c)) c := by
+  have hr := apm_m02J04_hasDerivAt_parameterRadical_left hc hcz
+  have ha := apm_m02J04_hasDerivAt_arcosh_parameter hc hcz
+  have hs := apm_m02J04_sqrt_div_parameter hc hcz
+  have hrad : 0 < z ^ 2 - c ^ 2 := by nlinarith
+  unfold apm_m02J04_parameterClosed
+  convert (((hasDerivAt_const c z).mul hr).sub
+    (((hasDerivAt_id c).pow 2).mul ha)).div_const 2 using 1
+  rw [hs]
+  field_simp [hc.ne', Real.sqrt_ne_zero'.2 hrad]
+  simp only [Pi.pow_apply, id_eq]
+  rw [Real.sq_sqrt hrad.le]
+  ring
+
+noncomputable def apm_m02J04_scalarCalibration (c : ℝ) : ℝ :=
+  c + apm_m02J04_parameterClosed c 1 +
+    apm_m02J04_parameterClosed c (Real.cosh 1)
+
+lemma apm_m02J04_hasDerivAt_scalarCalibration
+    {c : ℝ} (hc : 0 < c) (hc1 : c < 1) :
+    HasDerivAt apm_m02J04_scalarCalibration
+      (1 - c * (Real.arcosh (1 / c) +
+        Real.arcosh (Real.cosh 1 / c))) c := by
+  have hC : c < Real.cosh 1 :=
+    lt_of_lt_of_le hc1 (Real.one_le_cosh 1)
+  unfold apm_m02J04_scalarCalibration
+  convert ((hasDerivAt_id c).add
+    (apm_m02J04_hasDerivAt_parameterClosed_left hc hc1)).add
+      (apm_m02J04_hasDerivAt_parameterClosed_left hc hC) using 1
+  ring
+
+lemma apm_m02J04_scalarCalibration_eq_split
+    {c : ℝ} (hc : 0 < c) (hc1 : c < 1) :
+    c + apm_m02J04_parameterPrimitive c 1 +
+        apm_m02J04_parameterPrimitive c (Real.cosh 1) =
+      apm_m02J04_scalarCalibration c := by
+  rw [apm_m02J04_parameterPrimitive_eq_closed hc hc1,
+    apm_m02J04_parameterPrimitive_eq_closed hc
+      (lt_of_lt_of_le hc1 (Real.one_le_cosh 1))]
+  rfl
+
+/-- Order-theoretic reduction of the elementary arcosh lower bound to a cosh
+upper bound. -/
+lemma apm_m02J04_sub_one_le_arcosh
+    {z : ℝ} (hz : 1 ≤ z) (hcosh : Real.cosh (z - 1) ≤ z) :
+    z - 1 ≤ Real.arcosh z := by
+  have hz0 : 0 ≤ z - 1 := sub_nonneg.2 hz
+  have hpos : 0 < Real.cosh (z - 1) := Real.cosh_pos _
+  have hzpos : 0 < z := lt_of_lt_of_le (by norm_num) hz
+  have hmono := (Real.arcosh_le_arcosh hpos hzpos).2 hcosh
+  rw [Real.arcosh_cosh hz0] at hmono
+  exact hmono
+
+lemma apm_m02J04_one_le_arcosh_cosh_div
+    {c : ℝ} (hc : 0 < c) (hc1 : c ≤ 1) :
+    1 ≤ Real.arcosh (Real.cosh 1 / c) := by
+  have hC : 0 < Real.cosh 1 := Real.cosh_pos 1
+  have hdiv : Real.cosh 1 ≤ Real.cosh 1 / c := by
+    rw [le_div_iff₀ hc]
+    nlinarith [Real.cosh_pos 1]
+  have hdivpos : 0 < Real.cosh 1 / c := div_pos hC hc
+  have h := (Real.arcosh_le_arcosh hC hdivpos).2 hdiv
+  rw [Real.arcosh_cosh (by norm_num)] at h
+  exact h
+
+lemma apm_m02J04_scalarCalibration_deriv_nonpos
+    {c : ℝ} (hc : 0 < c) (hc1 : c ≤ 1)
+    (harc : 1 / c - 1 ≤ Real.arcosh (1 / c)) :
+    1 - c * (Real.arcosh (1 / c) +
+      Real.arcosh (Real.cosh 1 / c)) ≤ 0 := by
+  have hC := apm_m02J04_one_le_arcosh_cosh_div hc hc1
+  have hc0 : 0 ≤ c := hc.le
+  have hsum : 1 / c ≤ Real.arcosh (1 / c) +
+      Real.arcosh (Real.cosh 1 / c) := by linarith
+  have := mul_le_mul_of_nonneg_left hsum hc0
+  field_simp [hc.ne'] at this ⊢
+  nlinarith
+
+lemma apm_m02J04_cosh_le_one_add_on_unit
+    {t : ℝ} (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
+    Real.cosh t ≤ 1 + t := by
+  have hu0 : 0 ≤ t ^ 2 / 2 := by positivity
+  have hu1 : t ^ 2 / 2 < 1 := by nlinarith [sq_nonneg (t - 1)]
+  have hcosh := Real.cosh_le_exp_half_sq t
+  have hexp := Real.exp_bound_div_one_sub_of_interval hu0 hu1
+  have hden : 0 < 1 - t ^ 2 / 2 := sub_pos.2 hu1
+  have hrat : 1 / (1 - t ^ 2 / 2) ≤ 1 + t := by
+    rw [div_le_iff₀ hden]
+    nlinarith [mul_nonneg ht0 (sub_nonneg.2 ht1)]
+  exact le_trans hcosh (le_trans hexp hrat)
+
+lemma apm_m02J04_arcosh_sub_one_bound
+    {z : ℝ} (hz1 : 1 ≤ z) (hz2 : z ≤ 2) :
+    z - 1 ≤ Real.arcosh z := by
+  apply apm_m02J04_sub_one_le_arcosh hz1
+  have h := apm_m02J04_cosh_le_one_add_on_unit
+    (sub_nonneg.2 hz1) (by linarith : z - 1 ≤ 1)
+  simpa using h
+
+lemma apm_m02J04_arcosh_inv_sub_one
+    {c : ℝ} (hc : 0 < c) (hc12 : 1 / 2 ≤ c) (hc1 : c ≤ 1) :
+    1 / c - 1 ≤ Real.arcosh (1 / c) := by
+  apply apm_m02J04_arcosh_sub_one_bound
+  · exact (le_div_iff₀ hc).2 (by simpa using hc1)
+  · rw [div_le_iff₀ hc]
+    nlinarith
+
+lemma apm_m02J04_parameterClosed_continuousOn
+    {z : ℝ} (hz : 1 ≤ z) :
+    ContinuousOn (fun c : ℝ ↦ apm_m02J04_parameterClosed c z)
+      (Icc (1 / 2 : ℝ) 1) := by
+  have hcpos : ∀ c ∈ Icc (1 / 2 : ℝ) 1, c ≠ 0 := by
+    intro c hc
+    have : 0 < c := by norm_num at hc ⊢; linarith [hc.1]
+    exact this.ne'
+  have hdiv : ContinuousOn (fun c : ℝ ↦ z / c) (Icc (1 / 2 : ℝ) 1) :=
+    continuousOn_const.div continuousOn_id hcpos
+  have hmap : MapsTo (fun c : ℝ ↦ z / c) (Icc (1 / 2 : ℝ) 1) (Ici 1) := by
+    intro c hc
+    change 1 ≤ z / c
+    have hc0 : 0 < c := by norm_num at hc ⊢; linarith [hc.1]
+    rw [le_div_iff₀ hc0]
+    exact le_trans (by simpa using hc.2) hz
+  have harc : ContinuousOn (fun c : ℝ ↦ Real.arcosh (z / c))
+      (Icc (1 / 2 : ℝ) 1) :=
+    Real.continuousOn_arcosh.comp hdiv hmap
+  unfold apm_m02J04_parameterClosed
+  exact (((continuousOn_const.mul
+    (Real.continuous_sqrt.comp
+      (continuous_const.sub (continuous_id.pow 2))).continuousOn).sub
+        ((continuousOn_id.pow 2).mul harc)).div_const 2)
+
+lemma apm_m02J04_scalarCalibration_antitoneOn :
+    AntitoneOn apm_m02J04_scalarCalibration (Icc (1 / 2 : ℝ) 1) := by
+  apply antitoneOn_of_deriv_nonpos (convex_Icc (1 / 2 : ℝ) 1)
+  · unfold apm_m02J04_scalarCalibration
+    exact ((continuousOn_id.add
+      (apm_m02J04_parameterClosed_continuousOn (by norm_num))).add
+        (apm_m02J04_parameterClosed_continuousOn (Real.one_le_cosh 1)))
+  · intro c hc
+    rw [interior_Icc] at hc
+    exact (apm_m02J04_hasDerivAt_scalarCalibration
+      (lt_trans (by norm_num) hc.1) hc.2).differentiableAt.differentiableWithinAt
+  · intro c hc
+    rw [interior_Icc] at hc
+    have hder := apm_m02J04_hasDerivAt_scalarCalibration
+      (lt_trans (by norm_num) hc.1) hc.2
+    rw [hder.deriv]
+    exact apm_m02J04_scalarCalibration_deriv_nonpos
+      (lt_trans (by norm_num) hc.1) hc.2.le
+      (apm_m02J04_arcosh_inv_sub_one (lt_trans (by norm_num) hc.1)
+        hc.1.le hc.2.le)
+
+lemma apm_m02J04_scalarCalibration_one :
+    apm_m02J04_scalarCalibration 1 =
+      (1 + Real.sinh 1 * Real.cosh 1) / 2 := by
+  have hC : (1 : ℝ) < Real.cosh 1 := Real.one_lt_cosh.mpr (by norm_num)
+  have heq := apm_m02J04_parameterPrimitive_eq_closed (c := (1 : ℝ))
+    (t := Real.cosh 1) (by norm_num) hC
+  have hout : apm_m02J04_parameterPrimitive 1 (Real.cosh 1) =
+      apm_m02J04_outerPrimitive (Real.cosh 1) := by
+    simp [apm_m02J04_parameterPrimitive, apm_m02J04_outerPrimitive]
+  unfold apm_m02J04_scalarCalibration
+  rw [← heq, hout, apm_m02J04_outerPrimitive_cosh_one]
+  simp [apm_m02J04_parameterClosed]
+  ring
+
+lemma apm_m02J04_scalarCalibration_ge_catenary
+    {c : ℝ} (hc12 : 1 / 2 ≤ c) (hc1 : c ≤ 1) :
+    (1 + Real.sinh 1 * Real.cosh 1) / 2 ≤
+      apm_m02J04_scalarCalibration c := by
+  rw [← apm_m02J04_scalarCalibration_one]
+  exact apm_m02J04_scalarCalibration_antitoneOn
+    ⟨hc12, hc1⟩ ⟨by norm_num, le_rfl⟩ hc1
+
+lemma apm_m02J04_half_le_cosh_gap :
+    (1 / 2 : ℝ) ≤ Real.cosh 1 ^ 2 - Real.sinh 1 * Real.cosh 1 := by
+  have hsq := Real.cosh_sq_sub_sinh_sq (1 : ℝ)
+  have hlt := Real.sinh_lt_cosh (1 : ℝ)
+  have hgap : 0 ≤ Real.cosh 1 - Real.sinh 1 := sub_nonneg.mpr hlt.le
+  have hm : (Real.cosh 1 + Real.sinh 1) *
+      (Real.cosh 1 - Real.sinh 1) ≤
+      (2 * Real.cosh 1) * (Real.cosh 1 - Real.sinh 1) :=
+    mul_le_mul_of_nonneg_right (by linarith) hgap
+  nlinarith
+
+lemma apm_m02J04_deep_threshold_of_lt_half
+    {c : ℝ} (hc0 : 0 ≤ c) (hc : c < 1 / 2) :
+    2 * c ^ 2 + Real.sinh 1 * Real.cosh 1 ≤ Real.cosh 1 ^ 2 := by
+  have hc_sq : c ^ 2 ≤ (1 / 2 : ℝ) ^ 2 := by nlinarith
+  nlinarith [apm_m02J04_half_le_cosh_gap]
+
+lemma apm_m02J04_intermediate_density_minimal
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) {x : ℝ}
+    (hx : x ∈ Icc (0 : ℝ) 1)
+    (hmin : ∀ z ∈ Icc (0 : ℝ) 1, y x ≤ y z)
+    (hc12 : 1 / 2 ≤ y x) (hc1 : y x < 1) :
+    (∫ t in (0 : ℝ)..1,
+      Real.cosh t * Real.sqrt (1 + (deriv Real.cosh t) ^ 2)) ≤
+      ∫ t in (0 : ℝ)..1, y t * Real.sqrt (1 + (deriv y t) ^ 2) := by
+  have hc0 : 0 ≤ y x := le_trans (by norm_num) hc12
+  have hsplit := apm_m02J04_split_parameter_calibration hy hx hc0 rfl hmin
+  rw [apm_m02J04_scalarCalibration_eq_split (lt_of_lt_of_le (by norm_num) hc12) hc1]
+    at hsplit
+  have hscalar := apm_m02J04_scalarCalibration_ge_catenary hc12 hc1.le
+  simp_rw [apm_m02J04_cosh_area_density]
+  rw [apm_m02J04_integral_cosh_sq]
+  exact le_trans hscalar hsplit
+
+lemma apm_m02J04_global_density_minimal
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) :
+    (∫ t in (0 : ℝ)..1,
+      Real.cosh t * Real.sqrt (1 + (deriv Real.cosh t) ^ 2)) ≤
+      ∫ t in (0 : ℝ)..1, y t * Real.sqrt (1 + (deriv y t) ^ 2) := by
+  obtain ⟨x, hx, hmin⟩ := apm_m02J04_exists_minimum hy
+  by_cases hc1 : 1 ≤ y x
+  · exact apm_m02J04_outer_density_minimal hy
+      (fun z hz ↦ le_trans hc1 (hmin z hz))
+  · have hc1' : y x < 1 := lt_of_not_ge hc1
+    by_cases hc12 : 1 / 2 ≤ y x
+    · exact apm_m02J04_intermediate_density_minimal hy hx hmin hc12 hc1'
+    · have hc0 : 0 ≤ y x := hy.2.1 x hx
+      exact apm_m02J04_deep_neck_density_minimal hy hx hc1'.le
+        (apm_m02J04_deep_threshold_of_lt_half hc0 (lt_of_not_ge hc12))
+
+lemma apm_m02J04_global_area_minimal
+    {y : ℝ → ℝ} (hy : y ∈ apm_m02J04_admissible) :
+    apm_m02J04_area Real.cosh ≤ apm_m02J04_area y := by
+  rw [apm_m02J04_area, apm_m02J04_area]
+  exact mul_le_mul_of_nonneg_left (apm_m02J04_global_density_minimal hy)
+    (by positivity)
+
 theorem apm_m02j04 :
     (∀ (F : ℝ → ℝ → ℝ → ℝ) (a b : ℝ) (y : ℝ → ℝ),
       a < b →
@@ -73,4 +1852,7 @@ theorem apm_m02j04 :
   Repair: require `a < b`, `ContDiff ℝ 2` of the uncurried `L`, and
   `ContDiff ℝ 2 y` in part (b), matching part (a)'s regularity discipline. The
   Beltrami identity is the standard one for smooth autonomous Lagrangians. -/
-  sorry
+  exact ⟨apm_m02J04_variational_principles.1,
+    apm_m02J04_variational_principles.2.1,
+    apm_m02J04_variational_principles.2.2,
+    fun y hy ↦ apm_m02J04_global_area_minimal hy⟩
