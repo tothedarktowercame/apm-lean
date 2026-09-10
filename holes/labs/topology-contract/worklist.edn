@@ -70935,8 +70935,46 @@
   {:consumer "t98A02",
    :stop-condition
    "Require valid coefficient-excision comparisons and their naturality with these explicit compact arrows before transporting the three final exactness statements.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the coefficient-excision isomorphisms from the nested compact-complement pair presentation to the four requested pairs in X, prove their naturality with these explicit arrows, and transport all three exactness segments.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:compactUnionToRelative_left
+     "5cc1eb792c601a8a83d3479192cb1a8124badfcb1ad2f014fb5dc087ecdebea0",
+     :compactUnionToRelative_right
+     "98415b67b3b243bbde9ee06aefd2828ffdcc490a9f8c7c5d51ce0a39d14cac31"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean /tmp/CoefficientCompactComplementUnionRelativeFormulas.lean ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-two-declaration audit over ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "8d87cb45ca2bc5e02f286f7ad7c69d0a249251dd",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean"],
+    :fixture
+    {:path
+     "/tmp/CoefficientCompactComplementUnionRelativeFormulas.lean",
+     :sha256
+     "894c53c84f2aabc6d6533fd7472c97caca005b3b7a6410e37463e44e3532af4d",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. Both explicit compact-complement piece formulas compile in the required forward orientation: the left composite is zero, while the right composite is the forward right-range chain comparison followed by the production quotient projection. The module has no placeholders or warnings, its dependency hash matches the pinned value, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean"],
    :dag-node
