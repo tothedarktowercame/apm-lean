@@ -19267,8 +19267,189 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:placeholder-delta 0,
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read DAG, foundational-program note, closure rules and standing portfolio policy",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint33Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint33Eligibility.bb", :exit 0}
+     {:cmd
+      "Inspect both ledgers, dependency PASS receipts and concurrent refill41 outcomes",
+      :exit 0}
+     {:cmd
+      "Inspect SphereZeroCoefficients, CoefficientCodiagonalKernel, CoefficientSphereEndpoints and actual pair naturality",
+      :exit 0}
+     {:cmd
+      "Verify unchanged t00J01 Main and its explicit sphere-branch consumption",
+      :exit 0}
+     {:cmd
+      "git log --format='%h %s' d4927bc3..0187f9b1 -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :infrastructure-packets
+    {:modules-before 702,
+     :modules-after 703,
+     :portfolio 1,
+     :concurrent 0,
+     :commit "8a43bbdecfed605f6a144eb28e4e74b635a5b253",
+     :new-branch-uptake 0},
+    :replacement-items
+    [{:consumer :t94J08,
+      :stop-condition
+      "No assumed reflection sign, boundary coordinate exchange or kernel naturality. Preserve ordinary two-point H0 and the original S0 refutation. Do not claim higher-dimensional antipodal action, orientation coherence or consumer closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SPHERE ORIENTATION: coefficient-general actual one-dimensional disk-reflection sign",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a Type 0 commutative ring R, construct negation as a continuous self-map of the actual one-dimensional Euclidean closed disk and prove it preserves its actual boundary subset. Construct its actual restricted and relative cokernel maps using CoefficientRadialPair. Prove the cokernel-projection equation in every degree. Under the exact CoefficientSphereEndpoints boundaryIso coordinates, prove the induced boundary H0 map exchanges false and true coordinates, and prove compatibility with the actual boundary inclusion and disk H0 map. Construct the induced map on the actual inclusion kernel and prove its normalized action is minus identity using the reviewed false-coordinate-positive, true-coordinate-negative convention. Use CoefficientPairNaturality and the exact contractible relative-H1 kernel comparison to prove that the actual disk-reflection relative H1 map becomes minus identity under the composite of that kernel comparison and boundaryKernelIso. Prove exact forward-map and conjugation equations. Compile integer and rational examples without a nontriviality or characteristic restriction. GO requires the complete actual geometric-map fixture; REVISE requires exactly one complete compiled missing boundary-map comparison; STOP names independent foundations.",
+       :consumer-equation
+       "The actual one-dimensional disk reflection induces coordinate exchange on ordinary boundary H0 and minus identity on relative H1 under the constructed signed kernel normalization.",
+       :consumer-residual
+       "Higher-dimensional hemisphere exchange and compatibility with sphere suspension remain before antipodal action and t94J08 uptake. All-integer degree realization, localization/gluing and nonbounding retain their own geometric obligations.",
+       :gates
+       ["Compile a complete placeholder-free fixture and record SHA256."
+        "Audit actual negation, restricted subtype map, cokernel projection and boundary coordinate exchange."
+        "Verify the kernel map and relative-H1 sign through actual connecting naturality; do not replace ordinary H0 by R."
+        "Record integer/rational examples and standard-only axiom audits."
+        "Recheck both ledgers and preserve original refutations; no signed higher-sphere or consumer closure claim."]},
+      :id :oriented-checkpoint33-coefficient-disk-reflection-sign-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint33-pair-naturality-and-consumer-refill
+       :oriented-checkpoint32-coefficient-pair-connecting-naturality-1
+       :oriented-checkpoint30-coefficient-sphere-endpoints-1],
+      :current-residual
+      "Actual pair naturality and signed boundary-kernel coordinates are reviewed. The actual disk reflection and its restricted boundary map have not been identified with coordinate exchange and the resulting relative-H1 sign.",
+      :other-consumers [:t02A08 :t98A02 :t96J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: disk-reflection sign and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id :oriented-checkpoint34-disk-reflection-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint33-coefficient-disk-reflection-sign-1
+       :oriented-checkpoint33-pair-naturality-and-consumer-refill],
+      :current-residual
+      "Measure actual reflection-sign progress separately from higher-dimensional sphere action and consumer closure; reassess the complete DAG and concurrent outcomes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :ranking
+    ["No newly eligible unassigned complete-consumer adapter exists among the 25 consumers within two placeholders. Preserve their exact boundaries instead of retrying unresolved STOPs."
+     "Exclude active covering pullback and manifold incidence-atlas work. Preserve the newly reviewed torus-Euler and finite-triangulation STOPs."
+     "Elect the actual coefficient disk-reflection sign calculation: four proposed consumer paths through signed degree, local orientation, localization and nonbounding. Existing geometric boundary coordinates, codiagonal kernel normalization and actual pair naturality make this one bounded calculation."
+     "Higher-dimensional fundamental classes, product homology, cap/Thom, integration and surface classification remain broader constructions. The elected calculation supplies an actual geometric sign without assuming their conclusions."],
+    :near-consumer-boundaries
+    {:t00J02
+     "Fundamental classes and geometric homological comparison; incidence work reserved.",
+     :t03J02 "Generic collar/NDR and gluing comparison.",
+     :t92J06 "Actual graph-covering construction.",
+     :t95J06 "Hopf-surface torus homeomorphism.",
+     :t97A01 "Literal polygon invariants.",
+     :t94A06 "General-model smoothness and dimension hypotheses.",
+     :a97J08 "Planar separation.",
+     :t01A05
+     "Actual covering fundamental-class equation and unresolved disconnected orientation defect.",
+     :t96J06 "Compact-manifold nonbounding and fundamental classes.",
+     :t00A03 "Literal pants decomposition and cutting count.",
+     :t01J04 "Analytic boundary-preimage atlas and countability.",
+     :t03J05 "Literal curves and intersection/nonhomotopy.",
+     :t94J09
+     "Actual polygon normalization and attaching-map homology.",
+     :t03J04
+     "Uniform rational torus Euler computation and finite-cover multiplicativity for the literal truncated finrank sum; reviewed STOP.",
+     :t95J05 "Numerical Hausdorff mass normalization.",
+     :t00J01
+     "Klein-product manifold/top-homology and exact fold fibers.",
+     :t99J03
+     "Compatible finite triangulation with realization homeomorphism, then polygon normalization; reviewed STOP.",
+     :t01A08 "General-model projected regular preimage.",
+     :t00A01
+     "Actual two-open free-product comparison and basepoint extraction.",
+     :t98A02 "Localization and gluing.",
+     :t02A05 "Literal flux and measure comparison.",
+     :t96J05
+     "Preserved radial-level refutation; attained regular levels and analytic atlas remain unresolved.",
+     :t98A01 "Genus invariance and Euler multiplicativity.",
+     :t02A08 "Signed all-integer sphere-degree realization.",
+     :t94J08
+     "Signed antipodal naturality; separate reduced-S0 normalization preserves the ordinary-H0 refutation."},
+    :finding
+    "Pair naturality adds one reviewed infrastructure module and no consumer closure. Every named consumer was recounted with comments stripped; all existing consumer files are unchanged in the measured interval. The earlier t00J01 frozen-branch uptake and t96J07 corrected closure remain distinct from unchanged frozen closure. Original refutations and unresolved STOPs are preserved. Elect one bounded geometric sign packet and a successor checkpoint.",
+    :typed-residual-change
+    {:before
+     "Actual coefficient pair maps and connecting morphisms existed separately; their sequence morphism and naturality were absent.",
+     :after
+     "Actual sequence components, both squares, all-degree connecting naturality, pair identity/composition and contractible compatibility are reviewed. Concrete reflection signs and higher-dimensional hemisphere exchange remain.",
+     :consumer-files-changed false,
+     :t00J01
+     "The previously consumed sphere-identity branch remains proved; the single placeholder still asks only for the Klein-product and fold-fiber conjunction."},
+    :review-outcomes
+    {:pair-naturality :pass,
+     :pair-naturality-review "invoke-1789019086413-17986-a3b4b783",
+     :triangulation-review "invoke-1789018896602-17982-76acd3c7",
+     :new-corrected-closures 0,
+     :concurrent-torus-euler :pass-as-stop,
+     :concurrent-finite-triangulation :pass-as-stop,
+     :new-proved-refutations 0,
+     :new-frozen-closures 0,
+     :previous-checkpoint :pass,
+     :torus-review "invoke-1789018480619-17976-17c65bfa"},
+    :reserved-concurrent
+    [:literal-covering-pullback-probe-refill41
+     :manifold-target-incidence-global-atlas-probe-refill41
+     :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint33Census.json",
+     :open 35,
+     :baseline "d4927bc30d40921e7b003d6762dfef3ea24b6be2",
+     :existing 58,
+     :placeholder-after 66,
+     :zero-placeholder 23,
+     :placeholder-before 66,
+     :head "0187f9b18df22b540ed5515fa8b49a057d140777",
+     :sha256
+     "7982258675b37f69a7b9f58a737726c553e40a1a552ae167059a7809126bb45b",
+     :named 59,
+     :missing [:t93A05],
+     :within-two 25}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: pair naturality and consumer eligibility",
@@ -19285,6 +19466,68 @@
     :oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill],
    :current-residual
    "Measure actual pair-map naturality separately from signed-action and consumer conclusions; reassess all reviewed boundaries and concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t94J08,
+   :stop-condition
+   "No assumed reflection sign, boundary coordinate exchange or kernel naturality. Preserve ordinary two-point H0 and the original S0 refutation. Do not claim higher-dimensional antipodal action, orientation coherence or consumer closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SPHERE ORIENTATION: coefficient-general actual one-dimensional disk-reflection sign",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a Type 0 commutative ring R, construct negation as a continuous self-map of the actual one-dimensional Euclidean closed disk and prove it preserves its actual boundary subset. Construct its actual restricted and relative cokernel maps using CoefficientRadialPair. Prove the cokernel-projection equation in every degree. Under the exact CoefficientSphereEndpoints boundaryIso coordinates, prove the induced boundary H0 map exchanges false and true coordinates, and prove compatibility with the actual boundary inclusion and disk H0 map. Construct the induced map on the actual inclusion kernel and prove its normalized action is minus identity using the reviewed false-coordinate-positive, true-coordinate-negative convention. Use CoefficientPairNaturality and the exact contractible relative-H1 kernel comparison to prove that the actual disk-reflection relative H1 map becomes minus identity under the composite of that kernel comparison and boundaryKernelIso. Prove exact forward-map and conjugation equations. Compile integer and rational examples without a nontriviality or characteristic restriction. GO requires the complete actual geometric-map fixture; REVISE requires exactly one complete compiled missing boundary-map comparison; STOP names independent foundations.",
+    :consumer-equation
+    "The actual one-dimensional disk reflection induces coordinate exchange on ordinary boundary H0 and minus identity on relative H1 under the constructed signed kernel normalization.",
+    :consumer-residual
+    "Higher-dimensional hemisphere exchange and compatibility with sphere suspension remain before antipodal action and t94J08 uptake. All-integer degree realization, localization/gluing and nonbounding retain their own geometric obligations.",
+    :gates
+    ["Compile a complete placeholder-free fixture and record SHA256."
+     "Audit actual negation, restricted subtype map, cokernel projection and boundary coordinate exchange."
+     "Verify the kernel map and relative-H1 sign through actual connecting naturality; do not replace ordinary H0 by R."
+     "Record integer/rational examples and standard-only axiom audits."
+     "Recheck both ledgers and preserve original refutations; no signed higher-sphere or consumer closure claim."]},
+   :id :oriented-checkpoint33-coefficient-disk-reflection-sign-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint33-pair-naturality-and-consumer-refill
+    :oriented-checkpoint32-coefficient-pair-connecting-naturality-1
+    :oriented-checkpoint30-coefficient-sphere-endpoints-1
+    :oriented-checkpoint33-pair-naturality-and-consumer-refill],
+   :current-residual
+   "Actual pair naturality and signed boundary-kernel coordinates are reviewed. The actual disk reflection and its restricted boundary map have not been identified with coordinate exchange and the resulting relative-H1 sign.",
+   :other-consumers [:t02A08 :t98A02 :t96J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: disk-reflection sign and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint34-disk-reflection-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint33-coefficient-disk-reflection-sign-1
+    :oriented-checkpoint33-pair-naturality-and-consumer-refill
+    :oriented-checkpoint33-pair-naturality-and-consumer-refill],
+   :current-residual
+   "Measure actual reflection-sign progress separately from higher-dimensional sphere action and consumer closure; reassess the complete DAG and concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
