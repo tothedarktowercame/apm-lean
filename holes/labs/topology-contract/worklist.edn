@@ -74234,71 +74234,129 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require construction and short exactness of the algebraic three-term quotient-chain sequence using the union-generated denominator, followed by transport through this relative comparison and construction of the genuine connecting morphism.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / union-generated quotient to literal relative-pair comparison",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
+    :fixture-sha256
+    "06d8f3ef9f20d106781745d4f748b39343095566ec9eeab61bdd43aa4634cfd9",
+    :implementation
+    "Promote the exact fixture. Compile unionGeneratedChains, unionGeneratedAmbientInclusion, unionGeneratedToProduction, unionGenerated_relative_square, unionGeneratedAmbientInclusion_mono, unionGeneratedToProduction_homologyMap_isIso, relativeComparisonIso and relativeComparisonIso_hom. This supplies the relative cokernel comparison required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05. Verify CoefficientSubspaceUnionRangeHomologyEquivalence SHA256 80423f25787938b99cb5dcee9a60810f6254783b17907fcae31d523cac56d762. Preserve arbitrary open subsets, arbitrary commutative-ring coefficients, every homological degree and empty cover members. Require zero placeholders, no warnings and standard-only axioms. Do not claim chain-level equivalence of the quotient complexes, short exactness of the Mayer-Vietoris complex, a connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "Homology of the cokernel of the union-generated ambient denominator inclusion",
+    :target
+    "Homology of the literal relative chain complex for the pair consisting of X and the union subset A union B",
+    :direction
+    "Canonical homology isomorphism from the source algebraic union-generated quotient representation to the target literal relative-pair representation, with its forward arrow exactly the homology map induced by the commuting cokernel square."},
+   :id
+   :coefficient-subspace-union-relative-cokernel-square-implementation-refill51,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-subspace-union-range-homology-equivalence-implementation-refill51],
+   :current-residual
+   "Construct the algebraically exact short complex whose terminal object is the cokernel of unionGeneratedAmbientInclusion, prove its degreewise short exactness, invoke the homology sequence, and transport its terminal homology and arrows through relativeComparisonIso to the literal relative pair.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Construct the homology-level relative cokernel comparison induced by the union-generated denominator inclusion and its ambient commuting square; then transport the algebraic quotient short exact sequence to the literal relative pairs and obtain the genuine Mayer-Vietoris connecting map.",
+     "Package and prove degreewise short exact the algebraic Mayer-Vietoris quotient sequence ending in cokernel unionGeneratedAmbientInclusion, apply its HomologySequence, and transport the terminal term and literal arrows through relativeComparisonIso.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the induced relative cokernel comparison between the algebraic union-generated quotient and the literal relative pair, then transport short exactness and construct the genuine connecting morphism.",
+      "Require construction and short exactness of the algebraic three-term quotient-chain sequence using the union-generated denominator, followed by transport through this relative comparison and construction of the genuine connecting morphism.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean"],
+      ["ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / union-generated denominator homology equivalence",
+      "MANIFOLD FUNDAMENTAL CLASS / union-generated quotient to literal relative-pair comparison",
       :acceptance
       {:fixture
-       "/tmp/CoefficientSubspaceUnionRangeHomologyEquivalence.lean",
+       "/tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
        :fixture-sha256
-       "80423f25787938b99cb5dcee9a60810f6254783b17907fcae31d523cac56d762",
+       "06d8f3ef9f20d106781745d4f748b39343095566ec9eeab61bdd43aa4634cfd9",
        :implementation
-       "Promote the exact fixture. Compile unionRange_homologyMap_isIso. This supplies the all-degree denominator homology equivalence required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: for arbitrary open subsets A and B and arbitrary commutative-ring coefficients, the literal inclusion from the union-generated range complex to the production range complex for A union B induces an isomorphism on homology. Verify CoefficientSubspaceUnionRangeFactorization SHA256 3aa64ffc5e174f5f434b4d759fa6bd46e94d7765eec00d2a528aae44ad10385c. Preserve every homological degree and empty cover members. Require zero placeholders, no warnings and standard-only axioms. Do not claim a chain isomorphism between the two denominator complexes, relative cokernel equivalence, short exactness, a connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile unionGeneratedChains, unionGeneratedAmbientInclusion, unionGeneratedToProduction, unionGenerated_relative_square, unionGeneratedAmbientInclusion_mono, unionGeneratedToProduction_homologyMap_isIso, relativeComparisonIso and relativeComparisonIso_hom. This supplies the relative cokernel comparison required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05. Verify CoefficientSubspaceUnionRangeHomologyEquivalence SHA256 80423f25787938b99cb5dcee9a60810f6254783b17907fcae31d523cac56d762. Preserve arbitrary open subsets, arbitrary commutative-ring coefficients, every homological degree and empty cover members. Require zero placeholders, no warnings and standard-only axioms. Do not claim chain-level equivalence of the quotient complexes, short exactness of the Mayer-Vietoris complex, a connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
+      :representation
+      {:source
+       "Homology of the cokernel of the union-generated ambient denominator inclusion",
+       :target
+       "Homology of the literal relative chain complex for the pair consisting of X and the union subset A union B",
+       :direction
+       "Canonical homology isomorphism from the source algebraic union-generated quotient representation to the target literal relative-pair representation, with its forward arrow exactly the homology map induced by the commuting cokernel square."},
       :id
-      :coefficient-subspace-union-range-homology-equivalence-implementation-refill51,
-      :kind :reusable-theorem,
+      :coefficient-subspace-union-relative-cokernel-square-implementation-refill51,
+      :kind :representation-comparison,
       :depends-on
-      [:coefficient-subspace-union-range-factorization-implementation-refill51],
+      [:coefficient-subspace-union-range-homology-equivalence-implementation-refill51],
       :current-residual
-      "Use unionRange_homologyMap_isIso with the reviewed ambient commuting square to compare the cokernel of the union-generated denominator inclusion with the literal relative chain complex for A union B. Then transport the algebraic short exact sequence and invoke its homology sequence.",
+      "Construct the algebraically exact short complex whose terminal object is the cokernel of unionGeneratedAmbientInclusion, prove its degreewise short exactness, invoke the homology sequence, and transport its terminal homology and arrows through relativeComparisonIso to the literal relative pair.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSubspaceUnionRangeFactorization >/tmp/union-range-homology-dep.log 2>&1",
+       "lake build ConstructionTargets.CoefficientSubspaceUnionRangeHomologyEquivalence >/tmp/relative-cokernel-square-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientSubspaceUnionRangeHomologyEquivalence.lean",
+       "lake env lean /tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientSubspaceUnionRangeHomologyEquivalence.lean ConstructionTargets/CoefficientSubspaceUnionRangeFactorization.lean",
+       "sha256sum /tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-one-declaration audit over /tmp/CoefficientSubspaceUnionRangeHomologyEquivalence.lean",
+       "python3 comment-stripped placeholder-and-eight-declaration audit over /tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
+       :exit 1,
+       :correction
+       "The initial fixture left two imported chains abbreviations ambiguous and used an unqualified identity-composition lemma. Qualified the coefficient chain functor throughout and used Category.comp_id."}
+      {:cmd
+       "lake env lean /tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
+       :exit 1,
+       :correction
+       "The commuting-square rewrites initially failed because definitionally equal chain-functor presentations were syntactically distinct, and the first monicity argument applied mono_of_mono_fac in the wrong orientation. Added typed change steps and proved monicity by transporting cancellation through the restricted-range isomorphism."}
+      {:cmd
+       "lake env lean /tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
+       :exit 1,
+       :correction
+       "The direct restricted-cover ambient map required its namespace to be opened and its two coefficient chain functors normalized before applying map_comp. Added the namespace and explicit typed normalization; the remaining no-goal rfl was then removed."}],
      :changed-paths [],
      :fixture
-     {:path
-      "/tmp/CoefficientSubspaceUnionRangeHomologyEquivalence.lean",
+     {:path "/tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
       :sha256
-      "80423f25787938b99cb5dcee9a60810f6254783b17907fcae31d523cac56d762",
+      "06d8f3ef9f20d106781745d4f748b39343095566ec9eeab61bdd43aa4634cfd9",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one denominator homology prerequisite. Applying homology functoriality to the reviewed exact chain factorization expresses homologyMap unionRangeChainsInclusion as a composite of the inverses of two chain-isomorphism maps and the valid open-cover small-chain homology map. All three factors are isomorphisms, so the literal denominator inclusion induces an isomorphism in every degree for arbitrary open A and B, including empty members. This proves no chain-level surjectivity and uses neither supportConnecting nor either false ordinary-excision premise. Relative cokernel transport, short exactness, the genuine connecting morphism and three exactness segments remain.",
+     "Compiled exactly one relative-cokernel comparison prerequisite. The union-generated denominator now maps to production chains on A union B, and this map forms an exact commuting square with the union-generated ambient inclusion, the literal production subspace inclusion and the ambient identity. The source inclusion is proved monic through the reviewed restricted-cover factorization. The left vertical map induces homology isomorphisms by the reviewed denominator theorem, while the ambient identity does so trivially; the existing cokernel comparison therefore gives an isomorphism from homology of the algebraic quotient to homology of the literal relative pair in every degree. Its forward map is exactly identified. This uses neither supportConnecting nor either false ordinary-excision premise. Algebraic short exactness, the genuine connecting morphism and three exactness segments remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -74324,7 +74382,8 @@
     :coefficient-subspace-union-restricted-range-iso-implementation-refill51
     :coefficient-ambient-subspace-range-compatibility-implementation-refill51
     :coefficient-subspace-union-range-factorization-implementation-refill51
-    :coefficient-subspace-union-range-homology-equivalence-implementation-refill51],
+    :coefficient-subspace-union-range-homology-equivalence-implementation-refill51
+    :coefficient-subspace-union-relative-cokernel-square-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
