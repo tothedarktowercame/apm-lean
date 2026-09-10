@@ -67546,8 +67546,100 @@
   {:consumer "t98A02",
    :stop-condition
    "Require coefficient chain and homology isomorphisms induced by all three actual homeomorphisms and exact compatibility with the inclusions into X; no supplied homology equivalence or commuting inclusion.",
+   :evidence
+   {:dependency
+    {:path
+     "ConstructionTargets/CoefficientCompactComplementPairHomeomorph.lean",
+     :sha256
+     "65749ac9db8e65421f640ce0bdf3b37332683276b89af56e8c786cf81dd38ca6"},
+    :placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Conjugate the signed subcomplex Mayer-Vietoris maps and connecting morphism through these isomorphisms, then perform the final relative-pair excision comparison. No localization monicity, dimension vanishing, fundamental class or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:originalRightInclusion
+     "5edf75c473f80ffda5044cb87cd0aebb9da503e9aacd684ac5e4ee5df312d67d",
+     :overlap_inclusion_comp
+     "8960b4103eb4b2c4e5b48390a258d25e661551485379b45e6d8b4760fb5c2c3d",
+     :leftHomologyIso
+     "78c5c934fde2de4edf7dc2df74fe55a88dd9b837bdcd9bdbd3adcf74dc351422",
+     :rightHomologyIso
+     "cb9168d985fc7088ee3a33c059211a1a7dbad2a0ad63aa9216bcf1861e594407",
+     :nestedLeftInclusion
+     "f61a18ee994a03f6e4ba3663c4f344a41df1927fbfac1e40c5d89deb64931b0f",
+     :originalLeftInclusion
+     "190bcca63a646f99da71f886738b3d162a26ba60b05b395d691909bffd9b0dea",
+     :originalOverlapInclusion
+     "77d17c63a3408332000feeb46883996e857fa668c7ab93e404906849f4767cdb",
+     :overlapHomologyIso
+     "54b369302808f41688d55f4a92984da91d8e6a80bbaff1c0551146234607bcce",
+     :right_inclusion_comp
+     "9170b21aaeffeca5cfd8fa8e246819db33e33684b87e41620fd4ed11fed035c8",
+     :overlapChainsIso
+     "9a4108ef9a573334c60ffb3326c8c32a1938f3430d1c332ad18d46fd4497a09e",
+     :left_inclusion_comp
+     "eec03bce63a97ff68d7cff735bdeaa7674361157f08a0a61dc40952bb5ae7f35",
+     :nestedOverlapInclusion
+     "f95d96f0b493efeb5e429201cd5e5785aef52723594ecfecaf68b60b05e79d8d",
+     :nestedRightInclusion
+     "caddb808aece9316134f6d3d090b1a729d91b9caa1e02e0d44db7bf5121669b6",
+     :rightChainsIso
+     "acff9ef77a152ba803562e10a9bb35b7115a1045a8386dbf3156b84405aa0a35",
+     :leftChainsIso
+     "e8b86b90fb412b1440c3307304e884ab03f1b087c8b5ae4fcb5caf13360e300a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CoefficientCompactComplementHomologyTransport.lean ConstructionTargets/CoefficientCompactComplementPairHomeomorph.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientCompactComplementPairHomeomorph",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, pinned SHA256, comment-stripped zero placeholders and fifteen complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "python3 /tmp/coefficient-compact-complement-homology-transport-audit.py",
+      :exit 2,
+      :correction
+      "The probe-reported temporary audit script was absent. Reproduced its checks with a read-only inline audit; exact fixture, dependency, placeholders and all declaration hashes pass."}],
+    :representation
+    {:source
+     "Coefficient singular chains and homology of the nested left, right and overlap subtypes inside the complement of K intersection L",
+     :target
+     "Coefficient singular chains and homology of X minus K, X minus L and X minus (K union L), with their inclusions into X",
+     :direction
+     "Apply the forward nested-to-original homeomorphisms to obtain chain and homology isomorphisms, and prove their forward maps followed by original inclusion equal the nested inclusion."},
+    :commit "ac943e312adb50f2ed43f48a1d6a093d55877e34",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactComplementHomologyTransport.lean",
+     :sha256
+     "fcab197c86e857e788128298cedc9cf0de41255c0961dbbabb983388b804e2b7",
+     :exact-promotion true},
+    :finding
+    "Exact fixture promoted. Actual coefficient singular-chain and homology isomorphisms transport all three nested complement pieces to the original complement subtypes in every natural degree, and their forward continuous maps commute exactly with the literal inclusions into X. Ledger untouched.",
+    :axiom-audit-count 9,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean"],
    :dag-node
