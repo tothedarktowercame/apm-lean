@@ -16714,6 +16714,19 @@
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789012584602-17800-e0e211fe",
+     :commands
+     ["Python read-only pinned Checkpoint28Census.json SHA256, consumer counts, module counts and changed-path attribution"
+      "bb recorded-ledger author, near-consumer boundaries, concurrent reservations, replacement propagation and successor checkpoint audit"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show ed4360ad:holes/labs/topology-contract/worklist.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show ed4360ad:holes/labs/topology-contract/worklist2.edn)"
+      "git log --oneline 989d88a8..e8a6f02b -- ConstructionTargets problems"
+      "git diff --check ed4360ad^ ed4360ad"],
+     :finding
+     "Independent review of ledger-only transition ed4360ad, author codex-13. Census SHA256 e9d35a03d4695fe14e83f8395f1f1fbcddecd7f11436855a15e8cec958904886 verified. All 59 named consumers reproduced: 58 existing, 23 zero-placeholder, 35 open, 25 near; placeholders 66->66, modules 683->685. Excision and concurrent incidence modules correctly attributed; no consumer changes. Connected-sum STOP preserved and incidence work reserved. Pair-sequence election requires actual R-linear connecting/projection maps, proved exactness and contractible vanishing, including the H1 kernel and H0 monicity endpoints; empty boundaries are explicit. No integral-to-R shortcut or sphere closure claim. Replacement propagation, identical successor checkpoint and both ledger validators pass. Ledger untouched."},
     :replacement-items
     [{:consumer :t00J01-rational-sphere-homology,
       :stop-condition
@@ -16868,7 +16881,7 @@
      :missing [:t93A05],
      :within-two 25}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: actual coefficient excision and renewed consumer eligibility",
@@ -16890,7 +16903,7 @@
    :stop-condition
    "No supplied pair connecting isomorphism, contractible homology vanishing or degree-zero monicity. Do not treat ordinary H0 as reduced H0, silently omit empty boundaries or claim sphere suspension before geometric assembly.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SPHERE SUSPENSION: coefficient-general actual pair connecting maps and contractible endpoints",
