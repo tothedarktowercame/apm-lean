@@ -60588,8 +60588,64 @@
   {:consumer "t00J02",
    :stop-condition
    "Require the actual open-domain construction, incident-center coverage and proved local zero-fiber equality; no assumed incidence comparison.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :compiled-declarations 5,
+    :residual
+    "Coordinate derivative transport, local transversality and actual incidence charts with smooth overlaps remain. This packet requires continuity only for openness and no finite-dimensionality or smoothness. No derivative transport, regularity, incidence chart or consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789014917549-17852-fe8c5dbf"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:domain
+     "7c8d5e14fc8462649515c54bbe393880994d2a9e6978e012a5263ab3b9fa201f",
+     :domain_open
+     "4bce49a7821aebe6b9351bf2df80fbe11bd9fdae76607c5a176daece16ddac4c",
+     :center_mem
+     "27517d4baee40c89ee43fd889b7494c727bb282b27924a82cc0d223ead17178d",
+     :coordinate_zero_iff
+     "49c242e843b4fb949b276d6d9a385908c778ab7f91c6b6cbb57a4f4c0a67437e",
+     :local_fiber_eq
+     "7e2eaf0ab46f9a0de87273ef934d21544ff9bd62397b31efcd6ffc30eca5014a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/ManifoldTargetIncidenceLocalization.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only fixture audit: comment-stripped placeholders and five complete declaration-header SHA256 hashes",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ManifoldTargetIncidenceLocalization.lean ConstructionTargets/ManifoldTargetIncidenceLocalization.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldTargetIncidenceLocalization.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "ls /tmp/*incidence*local*audit*",
+      :exit 2,
+      :correction
+      "No matching audit script existed; performed a read-only inline Python placeholder and statement-hash audit successfully."}],
+    :commit "f4c002fcf61a50d47acd217c9c5b7fe196d76667",
+    :changed-paths
+    ["ConstructionTargets/ManifoldTargetIncidenceLocalization.lean"],
+    :fixture
+    {:path "/tmp/ManifoldTargetIncidenceLocalization.lean",
+     :sha256
+     "8b52c3435e02a92d409a09fb40ca9ea641ea9a672f319031e3e8ec939a87a350"},
+    :axiom-audit-declarations 4},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ManifoldTargetIncidenceLocalization.lean"],
    :dag-node
