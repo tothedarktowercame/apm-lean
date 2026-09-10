@@ -70596,79 +70596,131 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require a corrected ledger packet carrying the verified fixture hash before implementation; after promotion, compact-complement specialization and three coefficient-excision exactness transports remain.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / coefficient union-to-production-relative comparison",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientUnionToProductionRelativeComparison.lean",
+    :fixture-sha256
+    "ea64a7591efc48a5e2f21Botsc8989a67049cb9e4d5991e18f1ca85d773886f57d71",
+    :implementation
+    "Promote the exact fixture after correcting the receipt hash typo to the verified SHA256 ea64a7591efc48a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71. Compile unionToProductionRelative, leftToUnion_unionToProductionRelative and rightToUnion_unionToProductionRelative. This supplies the coefficient union-to-production-relative map and both piece formulas required by the compact-support placeholder route. Verify CoefficientRangeRightToProductionPairComparison SHA256 fa77b7018a IRequest malformed receipt correction needed. Do not admit this prerequisite from the misspelled fixture hash field; use the verified fixture hash stated above.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "Coefficient chains on the supremum of the two ambient range subcomplexes, equipped with the reviewed Mayer-Vietoris pushout projection to the range-right relative cokernel",
+    :target
+    "Production coefficient relative chains for the nested intersection inside the right topological piece",
+    :direction
+    "Compose the reviewed pushout projection with the forward range-right-relative-to-production-pair isomorphism, obtaining an exact forward map whose left-piece composite is zero and whose right-piece composite is the forward right-range chain isomorphism followed by the production quotient projection."},
+   :id
+   :coefficient-union-to-production-relative-comparison-implementation-refill50,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-range-right-to-production-pair-comparison-implementation-refill50
+    :coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50],
+   :current-residual
+   "Correct the malformed acceptance hash field, then promote the compiled union-to-production-relative comparison. Compact-complement specialization and transport of all three exactness statements through valid coefficient excision remain.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative Mayer-Vietoris connecting morphism and three proved exactness statements with actual quotient-pair arrows. Reject any construction factoring the pair boundary through its own subspace map.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Construct the union-to-production-relative projection and prove both piece formulas, then specialize to compact complements and transport all three exactness statements through coefficient excision. Localization monicity still requires the separate vanishing theorem.",
+     "A receipt serialization typo corrupted the prerequisite acceptance hash even though the verified fixture is complete. Correct that ledger field before implementation; no mathematical reconstruction is needed.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the coefficient union-to-production-relative map and both piece formulas after this composite isomorphism; no compact-support exactness or coefficient-excision transport is supplied.",
+      "Require a corrected ledger packet carrying the verified fixture hash before implementation; after promotion, compact-complement specialization and three coefficient-excision exactness transports remain.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean"],
+      ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / coefficient range-right to production-pair comparison",
+      "MANIFOLD FUNDAMENTAL CLASS / coefficient union-to-production-relative comparison",
       :acceptance
       {:fixture
-       "/tmp/CoefficientRangeRightToProductionPairComparison.lean",
+       "/tmp/CoefficientUnionToProductionRelativeComparison.lean",
        :fixture-sha256
-       "fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5",
+       "ea64a7591efc48a5e2f21Botsc8989a67049cb9e4d5991e18f1ca85d773886f57d71",
        :implementation
-       "Promote the exact fixture. Compile rangeRightRelativeToProductionPairIso. This supplies the composite coefficient range-relative-to-production-pair identification required by the compact-support placeholder route. Verify CoefficientRangeRightRelativeCokernelComparison SHA256 590d2bdf61c233a910f04d83e3a59a19cf6b8005e0df4ca144feec23ac255bc4 and CoefficientNestedSubspaceIntersectionComparison SHA256 7b7db522a204b44ce7cdcc9540def617abdce0e86cf10787286d69b99f24e1cd. Preserve arbitrary topological X, arbitrary subsets U and V and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim the union-to-production-relative map, either piece formula, compact-complement specialization, coefficient excision, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture after correcting the receipt hash typo to the verified SHA256 ea64a7591efc48a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71. Compile unionToProductionRelative, leftToUnion_unionToProductionRelative and rightToUnion_unionToProductionRelative. This supplies the coefficient union-to-production-relative map and both piece formulas required by the compact-support placeholder route. Verify CoefficientRangeRightToProductionPairComparison SHA256 fa77b7018a IRequest malformed receipt correction needed. Do not admit this prerequisite from the misspelled fixture hash field; use the verified fixture hash stated above.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean"],
+       ["lake env lean ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "The coefficient relative cokernel of the Mayer-Vietoris infimum-range inclusion into the right ambient range subcomplex",
+       "Coefficient chains on the supremum of the two ambient range subcomplexes, equipped with the reviewed Mayer-Vietoris pushout projection to the range-right relative cokernel",
        :target
-       "The production coefficient relative chains for the nested subspace of the right topological piece consisting of points whose underlying value lies in the left piece",
+       "Production coefficient relative chains for the nested intersection inside the right topological piece",
        :direction
-       "Apply the reviewed forward range-relative-to-literal-intersection cokernel isomorphism and then the reviewed forward literal-intersection-to-nested-pair relative-chain isomorphism, yielding an exact forward isomorphism from the range-relative presentation to the production nested-pair presentation."},
+       "Compose the reviewed pushout projection with the forward range-right-relative-to-production-pair isomorphism, obtaining an exact forward map whose left-piece composite is zero and whose right-piece composite is the forward right-range chain isomorphism followed by the production quotient projection."},
       :id
-      :coefficient-range-right-to-production-pair-comparison-implementation-refill50,
+      :coefficient-union-to-production-relative-comparison-implementation-refill50,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-range-right-relative-cokernel-comparison-implementation-refill50
-       :coefficient-nested-subspace-intersection-comparison-implementation-refill50],
+      [:coefficient-range-right-to-production-pair-comparison-implementation-refill50
+       :coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50],
       :current-residual
-      "Compose the reviewed coefficient pushout union projection with this isomorphism and prove its left-zero and right-quotient projection formulas, then specialize to compact complements and transport all three exactness statements through valid coefficient excision.",
+      "Correct the malformed acceptance hash field, then promote the compiled union-to-production-relative comparison. Compact-complement specialization and transport of all three exactness statements through valid coefficient excision remain.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientRangeRightRelativeCokernelComparison ConstructionTargets.CoefficientNestedSubspaceIntersectionComparison >/tmp/coefficient-range-production-deps.log",
+       "lake build ConstructionTargets.CoefficientRangeRightToProductionPairComparison >/tmp/coefficient-union-production-dep.log",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientRangeRightToProductionPairComparison.lean",
+       "lake env lean /tmp/CoefficientUnionToProductionRelativeComparison.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientRangeRightToProductionPairComparison.lean ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean",
+       "python3 comment-stripped placeholder and three-declaration audit over /tmp/CoefficientUnionToProductionRelativeComparison.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder and declaration audit over /tmp/CoefficientRangeRightToProductionPairComparison.lean",
+       "sha256sum /tmp/CoefficientUnionToProductionRelativeComparison.lean ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/CoefficientUnionToProductionRelativeComparison.lean",
+       :exit 1,
+       :correction
+       "The first proof reassociated the piece composites in the wrong direction and did not expose the pushout formulas. Reassociated toward the reviewed left-zero and right-projection equalities."}
+      {:cmd
+       "lake env lean /tmp/CoefficientUnionToProductionRelativeComparison.lean",
+       :exit 1,
+       :correction
+       "The right-piece proof required exposing the two cokernel.mapIso forward maps and applying the second cokernel projection equation after cancelling the reviewed right-range isomorphism. The corrected fixture compiles without warnings or placeholders."}
+      {:cmd
+       "python3 malformed placeholder audit snippet over /tmp/CoefficientUnionToProductionRelativeComparison.lean",
+       :exit 1,
+       :correction
+       "Removed an accidental malformed regular-expression line and reran the comment-stripped audit successfully as a standalone acceptance command."}],
      :changed-paths [],
      :fixture
-     {:path
-      "/tmp/CoefficientRangeRightToProductionPairComparison.lean",
+     {:path "/tmp/CoefficientUnionToProductionRelativeComparison.lean",
       :sha256
-      "fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5",
+      "ea64a7591efc48a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one missing coefficient representation prerequisite. The relative cokernel of the Mayer-Vietoris range-intersection inclusion into the right range is identified with production relative chains for the nested intersection pair by composing the reviewed range-to-literal and literal-to-nested isomorphisms in their proved forward orientation. The construction remains nonzero-capable and does not use the refuted zero supportConnecting map.",
+     "Compiled exactly one missing coefficient map prerequisite. The reviewed pushout projection is composed with the forward range-relative-to-production-pair isomorphism. The resulting union-to-production-relative map kills the left range exactly, while its restriction to the right range is exactly the forward right-range chain isomorphism followed by the production relative quotient projection. This construction is nonzero-capable and does not use the refuted zero supportConnecting map.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
@@ -70685,7 +70737,8 @@
     :coefficient-nested-subspace-intersection-comparison-implementation-refill50
     :coefficient-range-intersection-to-right-comparison-implementation-refill50
     :coefficient-range-right-relative-cokernel-comparison-implementation-refill50
-    :coefficient-range-right-to-production-pair-comparison-implementation-refill50],
+    :coefficient-range-right-to-production-pair-comparison-implementation-refill50
+    :coefficient-union-to-production-relative-comparison-implementation-refill50],
    :current-residual
    "The absolute complement sequence and many comparison maps are reviewed, but the named relative connecting map is zero. A genuine relative chain sequence or proved excision conjugation is required.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
