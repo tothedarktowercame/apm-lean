@@ -14470,6 +14470,19 @@
       "git log --oneline 51f3ad03..b3fe65b7 -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
       :exit 0}
      {:cmd "git diff --check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789006976313-17653-7e526154",
+     :commands
+     ["Python read-only pinned census SHA256, consumer counts, module counts and scope audit"
+      "bb recorded replacement propagation and successor checkpoint audit"
+      "bb pinned-ledger eligibility audit for 24 near-consumer STOPs; inspect t03J02 DAG STOP"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 108fff80:holes/labs/topology-contract/worklist2.edn)"
+      "git log --oneline 51f3ad03..b3fe65b7 -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md"
+      "git diff --check"],
+     :finding
+     "Verified census66->66 placeholders and665->670 modules, correctly attributed to three portfolio and two concurrent modules. Foundation-only election accounts for all25 near-consumer STOP boundaries and avoids unchanged retries. Eventual-smallness task requires actual arbitrary-R chain elements, common exponents and constructed inclusion preimages for all larger iterates; no homology comparison is assumed. One work row and identical successor checkpoint verified; concurrent reservations preserved. No ledger edits."},
     :replacement-items
     [{:consumer :t00J01-rational-sphere-homology,
       :stop-condition
@@ -14591,7 +14604,7 @@
       :before 66}},
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: connected-cover repair and small-chain preservation uptake",
@@ -14614,7 +14627,7 @@
    :stop-condition
    "No assumed subdivision smallness or homology isomorphism. Use actual R-linear chain elements and maps; do not substitute an integral chain theorem or restrict arbitrary coefficients to integer multiples of generators.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SINGULAR-SUBDIVISION: actual coefficient-general eventual smallness",
