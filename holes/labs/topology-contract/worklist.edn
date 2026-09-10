@@ -71136,6 +71136,19 @@
       "git diff --check -- ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789068599116-19273-350ea8e5",
+     :commands
+     ["git diff --name-only 9da20d9d^ 9da20d9d"
+      "git diff --exit-code 9da20d9dbb918b526f4c58a309508e397bd6b21d -- ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean"
+      "lake env lean ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean"
+      "sha256sum ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean /tmp/CoefficientCompactComplementNestedExcisionChains.lean ConstructionTargets/CoefficientCompactComplementPairHomeomorph.lean ConstructionTargets/CoefficientOverlapNormalization.lean"
+      "python3 placeholder-and-two-declaration audit"
+      "git diff --check 9da20d9d^ 9da20d9d -- ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean"],
+     :finding
+     "Exact one-file scope; fixture and dependency hashes match; both declarations compile with only propext, Classical.choice, and Quot.sound; zero placeholders; both frozen statement hashes reproduce; membership equivalence and forward relative-chain isomorphism use the required excisedSubspace (K complement) L representation without claiming excision hypotheses."},
     :commit "9da20d9dbb918b526f4c58a309508e397bd6b21d",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean"],
@@ -71148,7 +71161,7 @@
     :finding
     "Promoted the exact fixture. The right-piece homeomorphism has the literal membership equivalence with excisedSubspace (K complement) L, and pairHomeo induces the required forward coefficient relative-chain isomorphism. The module compiles without warnings or placeholders; both dependency hashes match, the commit changes exactly the scoped path, and the worktree is clean. No excision hypothesis is asserted."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementNestedExcisionChains.lean"],
    :dag-node
@@ -71254,7 +71267,7 @@
      "Compiled exactly one coefficient relative-chain comparison and corrected the excision orientation. The pair with ambient right piece L complement and nested subspace complement of K union L is identified with the standard excision source excisedSubspace (K complement) L. Thus coefficient excision uses A = K complement and Z = L to reach H(X, K complement). The earlier subset-only homeomorphism to excisedSubspace (L complement) K did not preserve the ambient pair and must not be used for relative chains.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
