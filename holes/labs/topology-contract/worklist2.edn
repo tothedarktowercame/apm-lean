@@ -23939,20 +23939,110 @@
    :stop-condition
    "Bank restriction independence only. Do not duplicate reserved distinguished-chart identification or claim its normalization recovery, transition units, cocycles, local constancy, orientation coherence or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientChartRestriction.lean",
-      :sha256
-      "ce756577f18f1ffee92ab6b2d8df00b8b2f905f401ee6a50855503ab8dbfa591"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientChartRestriction.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholders 0,
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Recover CoefficientChartLocal.localIso through the separately reserved distinguished-chart identification, then construct transition units and prove generator-change and directed cocycle equations. That reservation, ledgers and frozen consumers remain untouched. No distinguished-chart recovery, local constancy, orientation coherence or consumer closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :whitespace :pass,
+     :fixture-and-canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :geometric-and-model-inputs-to-normalization-equality :pass,
+     :relative-and-homology-squares :pass,
+     :target-build :pass,
+     :translated-image-containment :pass,
+     :exact-fixture-promotion :pass,
+     :actual-coordinate-and-ambient-squares :pass,
+     :ten-standard-only-audits :pass,
+     :generator-equality :pass,
+     :degreewise-cokernel-projection :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 10,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation have zero warnings. Target build replays 22 dependency warnings and succeeds with 8301 jobs."],
+    :statement-hashes
+    {"coordinate_square"
+     "4b6a6253bc0e69ea0748df7eb09f5fb61c0b69fd859e91a57069489abbd793d0",
+     "image_projection"
+     "9163e8f4f32f1856b669488055572545d959d2768d60f89dd9dc0959443f96d2",
+     "relative_square"
+     "065517039efcdb530e5b4b64f75a4fd9a1914b5a3722f02166e55f42fab77440",
+     "normalization_natural"
+     "15e8e851fb8ebafd64ac6d9e15cb1c9e7ea84ef9dc20fbc582c618a75558f5b9",
+     "ambient_square"
+     "f3544bdeb44494ca39e061353b84442e603fc4c7413bfc4c88eabccc355a6cb8",
+     "coordinateInclusion"
+     "03a098e13e1eab0c95869a4c7b5aeb795571c9839c5c56c98093bff3d9c9fd48",
+     "image_subset"
+     "788e13a4cab44ca61a634a0888ed66bffb7d4d982619e1f331948745aa10d426",
+     "generator_restriction"
+     "c92a24edfc7fede703ab07620ffad65b32b72c088926b50341e0a21d94e43223",
+     "imageMap"
+     "1e69d536e5e0c17bba545eaf0e2c525a675d9a0f0a77d33199a7ade2cb85203d",
+     "integral_restriction"
+     "6edaa0692e50731d2aac9da1d8abcd90f11568b251a88a5a79de031b28aa8c9d",
+     "rational_restriction"
+     "9e1ca1e79f606bace174f82ea9782cf7fd350c5b73c95bbffaf7d3affefc28ed",
+     "homology_square"
+     "12f30993f69af91227bbda05a37e31f999a9850e32a3bc130e3d38417791e6c8",
+     "normalization_restriction"
+     "76fd127d77ee24b984855b9cece40315c505956435e05888c7d54116e9a76f4a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and both dependency PASS receipts from the ledgers",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientChartRestriction.lean", :exit 0}
+     {:cmd
+      "Python fixture hash verification and exact scoped promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientChartRestriction.lean > /tmp/chartrestriction-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientChartRestriction.lean > /tmp/chartrestriction-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientChartRestriction > /tmp/chartrestriction-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verification of ten standard-only audits in each compilation log and warning attribution",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientChartRestriction.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and thirteen statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m \"Prove chart normalization independence under neighborhood restriction\"",
+      :exit 0}
+     {:cmd "git diff --check 8a65c679^ 8a65c679", :exit 0}
+     {:cmd
+      "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "8a65c6799993ac37ded3159abd82d26a2f6c7ac0",
+    :changed-paths
+    ["ConstructionTargets/CoefficientChartRestriction.lean"
+     "ConstructionTargets/CoefficientChartRestriction.md"],
+    :fixture
+    {:path "/tmp/CoefficientChartRestriction.lean",
+     :sha256
+     "ce756577f18f1ffee92ab6b2d8df00b8b2f905f401ee6a50855503ab8dbfa591"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientChartRestriction.lean"
     "ConstructionTargets/CoefficientChartRestriction.md"],
