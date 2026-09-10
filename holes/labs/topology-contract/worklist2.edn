@@ -46641,6 +46641,21 @@
      "The same completed evidence whose fixture path names the banked immutable checkpoint67 recurrence artifact",
      :direction
      "Exact single-path state transition from the source reviewed recurrence representation to the target immutable-artifact representation, preserving every other evidence, declaration, statement-hash and review value."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789084412326-19850-9bced2df",
+     :commands
+     ["verify empty evidence commit tree identity and zero paths"
+      "archive supervisor commit and parent"
+      "git diff-tree --check 2249cbc1^ 2249cbc1"
+      "sha256sum and git hash-object immutable checkpoint67 artifact"
+      "lake env lean immutable checkpoint67 artifact"
+      "bb archived test_gate_receipts.bb"
+      "bb worklist_check.bb on both archived ledgers"
+      "EDN structural comparison of checkpoint67 before and after with only fixture.path masked"],
+     :finding
+     "PASS: empty evidence commit and atomic single-path transition verified; all preserved fields, hashes, declarations, statement hashes, review, and placeholder count remain exact."},
     :commit "eed1d2ffc7e80b2e616247a9bf5ca4b22ad6afea",
     :changed-paths [],
     :fixture
@@ -46693,7 +46708,7 @@
        "verticalCount_succ_of_false"]}},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: atomic checkpoint67 recurrence fixture transition",
@@ -46786,7 +46801,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: checkpoint67 recurrence transition and renewed consumer eligibility",
