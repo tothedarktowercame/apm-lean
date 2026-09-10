@@ -32095,102 +32095,52 @@
     "Confirm no normalization, measure sum, sphere mass, moment, Stokes or consumer-closure theorem is introduced."
     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "The sphere-equator representation and null-boundary comparison are complete. Numerical whole-sphere and moment formulas still require the separately preserved raw Hausdorff normalization result.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
-       :exit 0}
-      {:cmd
-       "Compile the five reviewed prerequisite fixtures to local oleans, then run LEAN_PATH=/tmp/codex13-checkpoint50-complete-equator lake-env Lean on SphereEquatorComplete.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint50-complete-equator/SphereEquatorComplete.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint50-complete-equator/*.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "Python comment-stripped placeholder, forbidden-declaration, whitespace, warning and eight standard-only axiom audits",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "Initial complete sphere-equator assembly before Borel-instance transport",
-       :exit 1,
-       :correction
-       "The source-sphere nullity and coordinate modules used propositionally equal but definitionally distinct Borel measurable-space instances. Applied the reviewed HausdorffBorelInstanceCoherence equality explicitly before invoking append-zero Hausdorff transport; the complete fixture then compiled with standard axioms."}
-      {:cmd "First final Python audit invocation",
-       :exit 1,
-       :correction
-       "Corrected a Python assignment typo and reran the identical placeholder, whitespace, warning and axiom audit successfully."}],
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint50-complete-equator/SphereEquatorComplete.lean",
-      :sha256
-      "a96251b7fbde45e657dd169aedaf1702a5da8924aaf0047a228b374544a45373",
-      :placeholder-count 0,
-      :supporting-paths
-      ["/tmp/codex13-checkpoint50-complete-equator/LowerDimensionalSphereNullity.lean"
-       "/tmp/codex13-checkpoint50-complete-equator/SphereEquatorImageNullity.lean"
-       "/tmp/codex13-checkpoint50-complete-equator/HausdorffSubtypeNullity.lean"
-       "/tmp/codex13-checkpoint50-complete-equator/SphereCapEquatorPartition.lean"
-       "/tmp/codex13-checkpoint50-complete-equator/HausdorffBorelInstanceCoherence.lean"]},
-     :finding
-     "A complete placeholder-free parent fixture now compiles. It explicitly transports the banked raw critical-dimensional source-sphere nullity across the two proved-equal Borel measurable-space instances, maps it through the reviewed append-zero isometry to the literal Fin.last-zero equators in EuclideanSpace real (Fin 3) and Fin 4, and derives intrinsic subtype nullity using the actual subtype coercion isometry. It also reuses the reviewed measurability and pairwise-disjointness theorems and proves exact decompositions of each literal unit sphere into its strict upper cap, strict lower cap and null equator. Both d=2 and d=3 compile with only propext, Classical.choice and Quot.sound. No Hausdorff normalization, measure summation, sphere mass, moment, Stokes or consumer-closure result is claimed; no canonical source or ledger was edited.",
-     :implementation
-     {:hypotheses
-      "Use only d=2 and d=3, raw d-dimensional Hausdorff measure, the literal unit spheres and Fin.last-zero equators. No normalization or finite sphere-measure hypothesis is supplied.",
-      :gates
-      ["Verify the recorded fixture SHA256 before implementation."
-       "Compile the fixture and canonical target; run lake build ConstructionTargets.SphereEquatorHausdorffNullity."
-       "Reproduce eight standard-only axiom audits."
-       "Verify source nullity is transported explicitly through HausdorffBorelInstanceCoherence before append-zero image transport."
-       "Verify ambient nullity uses the reviewed exact sphere-image equality and actual append-zero isometry."
-       "Verify intrinsic nullity uses HausdorffSubtypeNullity and the subtype coercion isometry."
-       "Verify measurable pairwise-disjoint exact partitions for d=2 and d=3."
-       "Confirm no normalization, measure sum, sphere mass, moment, Stokes or consumer-closure theorem is introduced."
-       "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
-      :consumer-residual
-      "Resolve the preserved addHaarScalarFactor normalization boundary, then combine the reviewed cap-area formulas with equator nullity and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
-      :scope
-      ["ConstructionTargets/SphereEquatorHausdorffNullity.lean"
-       "ConstructionTargets/SphereEquatorHausdorffNullity.md"],
-      :axioms :standard-only,
-      :consumer-equation
-      "For d=2 and d=3, the literal last-coordinate equator has zero ambient and intrinsic raw d-dimensional Hausdorff measure, and the literal unit sphere is the pairwise-disjoint measurable union of its strict upper cap, strict lower cap and equator.",
-      :declarations
-      ["EA"
-       "source_two_null"
-       "source_three_null"
-       "equator_two_ambient_null"
-       "equator_three_ambient_null"
-       "equator_two_intrinsic_null"
-       "equator_three_intrinsic_null"
-       "sphere_two_partition"
-       "sphere_three_partition"],
-      :namespace "ConstructionTargets.SphereEquatorHausdorffNullity",
-      :implementation
-      "Promote the complete fixture using the reviewed canonical dependency modules and document the explicit Borel-instance transport required between source-sphere nullity and coordinate-space Hausdorff transport."},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Promote namespace-correct canonical versions of the five supporting modules, then compile and pin ConstructionTargets.SphereEquatorHausdorffNullity against those imports; numerical normalization, sphere mass and moments remain downstream.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :reason :noncanonical-private-module-assembly,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint50-complete-equator/SphereEquatorComplete.lean; inspect main and supporting fixture namespaces and imports; verify all six prerequisite canonical modules are absent",
+      :exit 0}
+     {:cmd
+      "task_lean_path=\"/tmp/codex13-checkpoint50-complete-equator:$(lake env printenv LEAN_PATH)\"; LEAN_PATH=\"$task_lean_path\" lean /tmp/codex13-checkpoint50-complete-equator/SphereEquatorComplete.lean; test ! -e ConstructionTargets/SphereEquatorHausdorffNullity.lean; test ! -e ConstructionTargets/SphereEquatorHausdorffNullity.md; git diff --exit-code -- ConstructionTargets/SphereEquatorHausdorffNullity.lean ConstructionTargets/SphereEquatorHausdorffNullity.md; git diff --check",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "Compile supporting fixtures with LEAN_PATH containing only the scratch directory and the project build directory",
+      :exit 1,
+      :correction
+      "That manual LEAN_PATH omitted Mathlib package paths. Reused the already compiled reviewed supporting oleans and prepended the scratch directory to the complete LEAN_PATH reported by lake env; the main fixture then compiled successfully."}],
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint50-complete-equator/SphereEquatorComplete.lean",
+     :sha256
+     "a96251b7fbde45e657dd169aedaf1702a5da8924aaf0047a228b374544a45373",
+     :placeholder-count 0,
+     :supporting-paths
+     ["/tmp/codex13-checkpoint50-complete-equator/LowerDimensionalSphereNullity.lean"
+      "/tmp/codex13-checkpoint50-complete-equator/SphereEquatorImageNullity.lean"
+      "/tmp/codex13-checkpoint50-complete-equator/HausdorffSubtypeNullity.lean"
+      "/tmp/codex13-checkpoint50-complete-equator/SphereCapEquatorPartition.lean"
+      "/tmp/codex13-checkpoint50-complete-equator/HausdorffBorelInstanceCoherence.lean"]},
+    :finding
+    "The recorded main fixture matches SHA256 a96251b7fbde45e657dd169aedaf1702a5da8924aaf0047a228b374544a45373 and compiles all eight theorem audits with standard-only axioms only when five unqualified supporting modules are supplied through a private scratch LEAN_PATH. Those supporting modules are absent from ConstructionTargets because their implementation rows ended in reviewed namespace or import-boundary STOPs. The main fixture imports LowerDimensionalSphereNullity, SphereEquatorImageNullity, HausdorffSubtypeNullity, HausdorffBorelInstanceCoherence and SphereCapEquatorPartition rather than reviewed canonical ConstructionTargets modules, and declares namespace SphereEquatorComplete rather than ConstructionTargets.SphereEquatorHausdorffNullity. Exact promotion therefore cannot satisfy the required canonical dependency imports or namespace. Promote namespace-correct prerequisite modules first and produce a namespace-correct parent fixture importing them. This is a representation and dependency boundary, not a mathematical refutation.",
+    :seat "codex-14"},
    :consumer-residual
    "Resolve the preserved addHaarScalarFactor normalization boundary, then combine the reviewed cap-area formulas with equator nullity and evaluate the coordinate moments required by t95J05, t02A05, t01J06 and t94A10.",
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereEquatorHausdorffNullity.lean"
     "ConstructionTargets/SphereEquatorHausdorffNullity.md"],
