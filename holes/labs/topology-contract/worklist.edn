@@ -67108,8 +67108,73 @@
   {:consumer "t98A02",
    :stop-condition
    "Require actual compact-complement subcomplex identifications and excision transport before claiming the requested relative sequence; no supplied exact sequence or localization monicity.",
+   :evidence
+   {:dependency
+    {:path "ConstructionTargets/CoefficientPushoutRelative.lean",
+     :sha256
+     "5f010dfdf556e1586cdf7772c474389124455500744cfe46d56b51325f4abb19",
+     :review :pass},
+    :placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Construct compact-complement subcomplex identifications, neighborhood excision and actual relative-pair arrow transport to the requested four relative homology terms. Localization monicity and fundamental classes remain subsequent.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:subcomplexChainsMap_component_mono
+     "0cb0847187117a779e9b8d10002206ed244f265a28cf463cb63441c7d6156239",
+     :subcomplexChainsMap_mono
+     "051a1d19d725626ee114529c267ce720eef659ee8621c537151ade86f5723fe2",
+     :subcomplexChains_isPushout
+     "89d7e08f2841d19c7a5d925808422e9a7b5b3725cacbf14b1bdd10b4c2d2f076",
+     :shortExact
+     "cc1e4a51256273a638909c9290feb7025d8c4ef95789a95887c13b8cb8b86a23",
+     :connecting
+     "813aef414c87337c18a79cb7b9375372da4487de63cc9ac3c827f9eb721a4f7a",
+     :exact_intersection
+     "a437cb3b704762dbfaa0eea02fe76a217710bf0ab3bd1d0e8ac26c0a6c20ac74",
+     :exact_pieces
+     "7593f7720b8433b27f4ab054eb02f14f991bb018e7fa792b7cd23e59acc613a7",
+     :exact_union
+     "e9e7dd7d8b7fe38dfe15dc9e9666787d9261158c56feb95156e52003d0bc6008"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CoefficientSubcomplexMayerVietoris.lean ConstructionTargets/CoefficientPushoutRelative.lean",
+      :exit 0}
+     {:cmd "python3 /tmp/coefficient-subcomplex-mv-audit.py", :exit 0}
+     {:cmd
+      "cmp /tmp/CoefficientSubcomplexMayerVietoris.lean ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientPushoutRelative",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "cda8ab7b673f47073772a2ecea21f16067feb448",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubcomplexMayerVietoris.lean",
+     :sha256
+     "bed519ae21e3a1bad02abf9775eb734bcec6bb3c4e8f41a98cec894be2cf71e9",
+     :exact-promotion true},
+    :finding
+    "Exact fixture promoted. Free singular chains over arbitrary commutative-ring coefficients preserve the subcomplex intersection/union pushout. The actual signed inclusion complex is short exact and supplies its connecting morphism and exactness at intersection, pieces and union homology in every natural degree. Ledger untouched.",
+    :axiom-audit-count 8,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean"],
    :dag-node
