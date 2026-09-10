@@ -66448,9 +66448,109 @@
    :other-consumers []}
   {:consumer "t98A02",
    :stop-condition
-   "GO requires equality of the actual transition units at every point of a constructed neighborhood; REVISE requires exactly one compiled prerequisite. No global orientation or fundamental-class claim.",
-   :phase :probe,
+   "Require constructed second-chart maps, proved boundary avoidance and actual connecting and normalization equations; no supplied commuting square.",
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/CoefficientSecondChartBoundary.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / second-chart boundary connecting comparison",
+   :acceptance
+   {:fixture "/tmp/CoefficientSecondChartBoundary.lean",
+    :fixture-sha256
+    "9275703052f90de380e636b3b9262f72ca6fb20b8286857a788fb9395a2b6a20",
+    :implementation
+    "Promote the exact fixture. Compile secondMap, second_deleted, secondRelative, secondBoundary, sphereMap, sphere_value, connecting and normalized_connecting. Verify CoefficientChartBallNormalization SHA256 1e5daa85369856ec864f5fd7abc4c8f511585490c0ead0367ddfff6f5788cd61. Preserve actual subtype maps, commutative-ring coefficients, nearby-point hypotheses and explicit dimension m+2. Require zero placeholders, no warnings and standard-only axioms. Do not claim ambient second-chart normalization or transition-unit local constancy.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSecondChartBoundary.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The fixed ball-boundary relative lift mapped through the actual second chart at a nearby point",
+    :target
+    "The actual mapped sphere boundary recentered at that point and its Euclidean model normalization",
+    :direction
+    "Prove equality from the fixed lift followed by second-chart relative homology and connecting to the recentered boundary homology map; derive the directed model-normalization composite."},
+   :id :coefficient-second-chart-boundary-implementation-refill48,
+   :kind :representation-comparison,
+   :depends-on
+   [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
+   :current-residual
+   "Identify this composite with the second chart's ambient normalization, apply the banked boundary-motion homotopy, and derive equality of the actual transition units.",
+   :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
+   "GO requires equality of the actual transition units at every point of a constructed neighborhood; REVISE requires exactly one compiled prerequisite. No global orientation or fundamental-class claim.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Actual transition-unit local constancy remains unproved. Orientation, global localization and consumer closure remain subsequent; no lower-dimensional normalization extension is claimed.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer "t98A02",
+      :stop-condition
+      "Require constructed second-chart maps, proved boundary avoidance and actual connecting and normalization equations; no supplied commuting square.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/CoefficientSecondChartBoundary.lean"],
+      :dag-node
+      "MANIFOLD FUNDAMENTAL CLASS / second-chart boundary connecting comparison",
+      :acceptance
+      {:fixture "/tmp/CoefficientSecondChartBoundary.lean",
+       :fixture-sha256
+       "9275703052f90de380e636b3b9262f72ca6fb20b8286857a788fb9395a2b6a20",
+       :implementation
+       "Promote the exact fixture. Compile secondMap, second_deleted, secondRelative, secondBoundary, sphereMap, sphere_value, connecting and normalized_connecting. Verify CoefficientChartBallNormalization SHA256 1e5daa85369856ec864f5fd7abc4c8f511585490c0ead0367ddfff6f5788cd61. Preserve actual subtype maps, commutative-ring coefficients, nearby-point hypotheses and explicit dimension m+2. Require zero placeholders, no warnings and standard-only axioms. Do not claim ambient second-chart normalization or transition-unit local constancy.",
+       :commands
+       ["lake env lean ConstructionTargets/CoefficientSecondChartBoundary.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :representation
+      {:source
+       "The fixed ball-boundary relative lift mapped through the actual second chart at a nearby point",
+       :target
+       "The actual mapped sphere boundary recentered at that point and its Euclidean model normalization",
+       :direction
+       "Prove equality from the fixed lift followed by second-chart relative homology and connecting to the recentered boundary homology map; derive the directed model-normalization composite."},
+      :id :coefficient-second-chart-boundary-implementation-refill48,
+      :kind :representation-comparison,
+      :depends-on
+      [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
+      :current-residual
+      "Identify this composite with the second chart's ambient normalization, apply the banked boundary-motion homotopy, and derive equality of the actual transition units.",
+      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean -o /tmp/chartball47/ConstructionTargets/CoefficientChartBallNormalization.olean ConstructionTargets/CoefficientChartBallNormalization.lean'",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientSecondChartBoundary.lean'",
+       :exit 0}
+      {:cmd "python3 /tmp/coefficient-second-chart-boundary-audit.py",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/CoefficientSecondChartBoundary.lean",
+       :exit 1,
+       :correction
+       "The promoted normalization dependency lacked a canonical object. Compiled its unchanged source privately; subsequent fixture compilation succeeds."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientSecondChartBoundary.lean",
+      :sha256
+      "9275703052f90de380e636b3b9262f72ca6fb20b8286857a788fb9395a2b6a20",
+      :placeholder-count 0},
+     :finding
+     "Compiled one second-chart boundary prerequisite. The actual chart-ball map is evaluated through the second chart and recentered at a nearby point. Boundary avoidance follows from the first-chart radius bound and second-chart injectivity. Its sphere map has the literal mapped-boundary recentering formula. Actual pair connecting naturality and the fixed lift's inverse law give the connecting equation and its model-normalized composite. Ambient second-chart identification and transition-unit equality remain.",
+     :seat "codex-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / nearby transition-unit equality",
@@ -66463,7 +66563,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations
-    :checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
+    :coefficient-second-chart-boundary-implementation-refill48],
    :current-residual
    "Nearby normalization in the first chart is reviewed. Transport through the second chart and boundary motion must identify the transition units.",
    :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
