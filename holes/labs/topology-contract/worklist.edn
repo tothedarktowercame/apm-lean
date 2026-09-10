@@ -71049,6 +71049,19 @@
       "git diff --check -- ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789067678653-19240-2c3f65e6",
+     :commands
+     ["git diff --name-only 2fd86a7^ 2fd86a7"
+      "git diff --exit-code 2fd86a7560602b6269b388ce0784d32a19ebf2e0 -- ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean"
+      "lake env lean ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean"
+      "sha256sum ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean /tmp/CoefficientCompactComplementNestedExcisionSource.lean ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean ConstructionTargets/CoefficientExcision.lean"
+      "python3 declaration-hash-and-placeholder audit"
+      "git diff --check 2fd86a7^ 2fd86a7 -- ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean"],
+     :finding
+     "Recorded commit has exact one-file scope; fixture and dependency hashes match; Lean compiles with standard axioms only; zero placeholders; frozen statement hash matches; forward homeomorphism orientation and subtype representation boundaries are correct."},
     :commit "2fd86a7560602b6269b388ce0784d32a19ebf2e0",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean"],
@@ -71061,7 +71074,7 @@
     :finding
     "Promoted the exact fixture using the explicitly corrected dependency hash. The forward homeomorphism flattens the nested right compact-complement presentation to excisedSubspace (L complement) K while preserving both complement memberships. It compiles without warnings or placeholders; both dependency hashes match, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean"],
    :dag-node
@@ -71169,7 +71182,7 @@
      "Compiled exactly one missing excision-source representation prerequisite. The nested intersection of the left compact-complement piece inside the right piece is homeomorphic to excisedSubspace (L complement) K, the canonical source of coefficient excision from the pair (K complement, complement of K union L) to (X, L complement). No excision isomorphism or final exactness is claimed.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
