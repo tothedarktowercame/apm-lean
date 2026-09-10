@@ -20252,112 +20252,115 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Construct the height-preserving sphere action, hemisphere-coordinate and excision equivariance, then assemble the exact sphere-to-disk and sphere-shift equations. Signed sphere actions and consumer uptake remain downstream.",
-     :axiom-audits 13,
-     :outcome :revise,
+     "Transport reflection signs and establish the remaining coordinate-permutation or hemisphere-exchange comparisons before full antipodal action and frozen uptake.",
+     :axiom-audits 28,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t94J08,
-      :stop-condition
-      "Bank radial equivariance only. Do not claim a height-preserving ambient sphere action, hemisphere-coordinate equivariance, sphere-shift naturality or signed sphere action.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/CoefficientOrthogonalRadial.lean",
-         :sha256
-         "31cf135ff217e502e6e51acb81d6ee20e5a69a093c768cbd6b83e53ed9fc0193"},
-        :commands
-        [{:cmd "lake env lean /tmp/CoefficientOrthogonalRadial.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientOrthogonalRadial.lean"
-       "ConstructionTargets/CoefficientOrthogonalRadial.md"],
-      :dag-node
-      "SPHERE ORIENTATION: actual orthogonal equivariance of the radial pair comparison",
-      :acceptance
-      {:namespace "ConstructionTargets.CoefficientOrthogonalRadial",
-       :implementation
-       "Promote the exact compiled fixture and document the separate real geometry and arbitrary coefficient ring.",
-       :declarations
-       ["closedAction"
-        "openAction"
-        "boundaryAction"
-        "closed_mapsTo"
-        "open_mapsTo"
-        "radial_square"
-        "boundary_square"
-        "closedPair"
-        "openPair"
-        "radialPair"
-        "relative_square"
-        "radial_naturality"
-        "radial_inverse_naturality"
-        "closed_projection"
-        "open_projection"
-        "negation_one"
-        "integral_naturality"
-        "rational_naturality"
-        "zero_dimensional"],
-       :hypotheses
-       "R is a Type 0 commutative ring. Q is a real linear isometry equivalence of EuclideanSpace ℝ (Fin n). All dimensions and homology degrees are natural numbers, including zero. Boundary and punctured spaces are actual subtypes; no nonemptiness or coefficient characteristic restriction is imposed.",
-       :consumer-equation
-       "The actual closed-disk pair action followed by radialIso.hom equals radialIso.hom followed by the actual punctured-open-disk pair action on homology, in every degree. The inverse intertwining equation and both degreewise cokernel-projection equations are proved.",
-       :consumer-residual
-       "Construct the height-preserving ambient sphere action and its hemisphere-coordinate and excision squares, then assemble sphere-to-disk and sphere-shift equivariance.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientOrthogonalRadial."
-        "Reproduce thirteen standard-only axiom audits, integer/rational examples and the explicit zero-dimensional example."
-        "Audit actual geometric actions, radial and boundary squares, cokernel components and forward/inverse intertwining equations."
-        "Verify n=1 negation is the reviewed literal disk reflection."
-        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :coefficient-general-orthogonal-radial-equivariance-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint33-coefficient-disk-reflection-sign-1
-       :oriented-checkpoint32-coefficient-pair-connecting-naturality-1
-       :oriented-checkpoint29-coefficient-geometric-sphere-shift-1],
-      :current-residual
-      "Sphere-to-disk equivariance requires the radial comparison to intertwine actual orthogonal disk-pair maps.",
-      :other-consumers [:t02A08 :t98A02 :t96J06]},
+     :acceptance
+     {:namespace "ConstructionTargets.CoefficientOrthogonalSphere",
+      :implementation
+      "Promote the exact compiled fixture and document its actual geometric actions and oriented comparison equations.",
+      :declarations
+      ["sphereAction"
+       "height"
+       "north_mapsTo"
+       "lower_mapsTo"
+       "upper_mapsTo"
+       "upperAction"
+       "punctured_mapsTo"
+       "coordinate_square"
+       "upperPair"
+       "spherePair"
+       "relative_coordinate_square"
+       "coordinate_naturality"
+       "upperInclusion"
+       "upperInclusion_mapsTo"
+       "excision_geometric_square"
+       "excision_actual"
+       "relative_excision_square"
+       "excision_naturality"
+       "coordinate_inverse_naturality"
+       "excision_inverse_naturality"
+       "upper_projection"
+       "sphere_projection"
+       "sphereHomologyMap"
+       "projection_naturality"
+       "sphereToDisk_naturality"
+       "sphereToDisk_inverse_naturality"
+       "boundaryHomologyMap"
+       "boundary_homeomorphism_naturality"
+       "sphereShift_naturality"
+       "sphereShift_inverse_naturality"
+       "integral_comparison"
+       "rational_comparison"
+       "zero_dimensional"
+       "reflection_comparison"
+       "reflection_disk_action"],
+      :hypotheses
+      "R is any Type 0 commutative ring. Q is a real linear isometry equivalence of EuclideanSpace ℝ (Fin n). The constructed sphere action applies Q to the first n coordinates and fixes height. All dimensions include zero. Sphere-to-disk comparison requires positive homology degree; sphere-shift comparison requires positive target degree. Actual subtype chains and categorical cokernels are retained.",
+      :consumer-equation
+      "The actual sphere action followed by sphereToDiskIso.hom equals sphereToDiskIso.hom followed by the actual disk-pair action. The corresponding inverse equation and both sphereShift intertwining equations hold for the actual boundary action.",
+      :consumer-residual
+      "Transport reflection signs through these comparisons, then establish the coordinate-permutation or hemisphere-exchange comparisons needed for full antipodal action. Degree realization, localization/gluing and nonbounding retain independent obligations.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientOrthogonalSphere."
+       "Reproduce all twenty-eight standard-only axiom audits and integer/rational, zero-dimensional and reflection specializations."
+       "Audit constructed height-preserving action, subset preservation, geometric coordinate and excision squares, actual cokernel components and projection equations."
+       "Verify exact forward and inverse sphere-to-disk and sphere-shift equations; retain positive-degree hypotheses."
+       "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure rules, both ledgers and dependency PASS receipts; inspect radial and hemisphere geometry",
+       "Read DAG, closure rules, both ledgers and dependency PASS receipts; inspect hemisphere geometry and actual comparison APIs",
        :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientOrthogonalRadial.lean",
+      {:cmd "lake env lean /tmp/CoefficientOrthogonalSphere.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientOrthogonalRadial.lean", :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientOrthogonalSphere.lean", :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientOrthogonalRadial.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientOrthogonalSphere.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git status --short", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial orthogonal-radial fixture compilation",
+     [{:cmd "Initial hemisphere fixture compilation",
        :exit 1,
        :correction
-       "Unfolded actual boundary membership, used congruence for the dependent MapsTo argument, and supplied the negation equivalence's space as a named parameter. Final compilation succeeds without warnings."}],
+       "Made north-complement membership explicit and separated the coordinate norm calculation."}
+      {:cmd "Second hemisphere fixture compilation",
+       :exit 1,
+       :correction
+       "Exposed the actual open-disk action before applying norm preservation."}
+      {:cmd "Compilation after adding excision naturality",
+       :exit 1,
+       :correction
+       "Used the reviewed exact hemisphereIso forward-map equation rather than assuming definitional equality."}
+      {:cmd
+       "Compilation after adding sphere-to-disk inverse naturality",
+       :exit 1,
+       :correction
+       "Proved and applied an abstract categorical inverse-intertwining lemma to avoid unsuccessful rewriting across elaborated objects. Final complete fixture compiles without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientOrthogonalRadial.lean",
+     {:path "/tmp/CoefficientOrthogonalSphere.lean",
       :sha256
-      "31cf135ff217e502e6e51acb81d6ee20e5a69a093c768cbd6b83e53ed9fc0193"},
+      "8f89caff7fd8a19e09bdf99c7c76f921f99fbad28033e13ee037b6345e440de4"},
      :finding
-     "Exactly one complete compiled geometric-equivariance prerequisite is supplied. Actual orthogonal actions preserve the closed-disk boundary and punctured open disk. The radial and boundary-homeomorphism squares are proved geometrically. Actual pair-map composition yields the cokernel square and radial homology equivariance, with its inverse equation in every degree. Integer, rational and zero-dimensional examples compile; one-dimensional negation agrees with the reviewed reflection. Ambient sphere and hemisphere-coordinate equivariance remain unconstructed; the parent is not GO.",
+     "Complete placeholder-free fixture compiled. The height-preserving sphere action and subset preservation are constructed. Geometric hemisphere-coordinate and excision squares induce the actual cokernel-map equations. Combined with reviewed radial equivariance, these prove sphere-to-disk equivariance; actual connecting naturality and boundary-homeomorphism compatibility prove sphere-shift equivariance. Forward and inverse equations, coefficient specializations, dimension zero and the exact one-dimensional disk-reflection identification are verified. No hemisphere exchange, determinant sign, antipodal action or consumer closure is inferred.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientOrthogonalSphere.lean"
+       "ConstructionTargets/CoefficientOrthogonalSphere.md"]},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientOrthogonalSphere.lean"
+    "ConstructionTargets/CoefficientOrthogonalSphere.md"],
    :dag-node
    "SPHERE ORIENTATION: actual orthogonal equivariance of sphere-to-disk comparison",
    :acceptance
