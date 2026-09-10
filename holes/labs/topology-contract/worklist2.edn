@@ -34780,9 +34780,153 @@
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
-   "Construct only the finite signed-shuffle product-simplex data needed in total degrees at most four. Do not assume or claim a singular-chain cross product, Eilenberg-Zilber, Kunneth, product fundamental classes, intersection nonvanishing, ambient nonhomotopy or consumer closure. Use a unique row-specific scratch directory.",
-   :phase :probe,
+   "Expose only the maximal nondegenerate product-simplex lattice-path representation and its face deletion law. Do not define signs, affine realizations, singular chains, a cross product, Eilenberg-Zilber, Kunneth, intersection results or consumer closure.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/ProductSimplexMaximalPaths.lean"
+    "ConstructionTargets/ProductSimplexMaximalPaths.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: maximal product-simplex lattice-path interface",
+   :acceptance
+   {:namespace "ConstructionTargets.ProductSimplexMaximalPaths",
+    :implementation
+    "Promote the compiled fixture as the exact unsigned combinatorial interface from Mathlib's simplicial product of standard simplices to the bounded signed-shuffle construction.",
+    :hypotheses
+    "Use arbitrary natural p and q only for the existing maximal nondegenerate simplex representation; downstream use remains restricted to p+q at most four. No coefficient, orientation or topological realization hypothesis is needed.",
+    :declarations
+    ["MaximalPath"
+     "mem_maximalPath_iff"
+     "maximalPath_coordinate_sum"
+     "face_objEquiv"],
+    :consumer-equation
+    "A maximal nondegenerate simplex of Δ[p]×Δ[q] is a monotone lattice path whose two coordinates sum to its time index, and taking its ith simplicial face deletes exactly the ith path vertex.",
+    :consumer-residual
+    "Add integer shuffle parity, oriented interior-face pairing and affine realization for total degree at most four, then assemble the bounded signed-shuffle chain.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexMaximalPaths."
+     "Verify mem_maximalPath_iff is the exact maximal nondegeneracy characterization from ProdStdSimplex."
+     "Verify maximalPath_coordinate_sum has the product-coordinate sum on the left and the time index on the right."
+     "Verify face_objEquiv deletes the selected vertex through Fin.succAbove."
+     "Reproduce standard-only axiom audits for all three exported theorems."
+     "Confirm no sign, affine realization, chain cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure result is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :t03j05-product-simplex-maximal-lattice-path-interface-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint56-singular-cross-product-and-consumer-refill-1],
+   :current-residual
+   "Mathlib classifies maximal nondegenerate simplices in the simplicial product, but the project has no canonical interface exposing their lattice-path coordinate equation and face deletion formula to the signed-shuffle construction.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the finite signed-shuffle product-simplex data needed in total degrees at most four. Do not assume or claim a singular-chain cross product, Eilenberg-Zilber, Kunneth, product fundamental classes, intersection nonvanishing, ambient nonhomotopy or consumer closure. Use a unique row-specific scratch directory.",
+   :evidence
+   {:probe
+    {:residual
+     "Define parity on the maximal lattice paths, pair and cancel their interior faces with the correct signs, and realize their vertices as affine singular simplices in the product.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t03J05,
+      :stop-condition
+      "Expose only the maximal nondegenerate product-simplex lattice-path representation and its face deletion law. Do not define signs, affine realizations, singular chains, a cross product, Eilenberg-Zilber, Kunneth, intersection results or consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProductSimplexMaximalPaths.lean"
+       "ConstructionTargets/ProductSimplexMaximalPaths.md"],
+      :dag-node
+      "PRODUCT HOMOLOGY: maximal product-simplex lattice-path interface",
+      :acceptance
+      {:namespace "ConstructionTargets.ProductSimplexMaximalPaths",
+       :implementation
+       "Promote the compiled fixture as the exact unsigned combinatorial interface from Mathlib's simplicial product of standard simplices to the bounded signed-shuffle construction.",
+       :hypotheses
+       "Use arbitrary natural p and q only for the existing maximal nondegenerate simplex representation; downstream use remains restricted to p+q at most four. No coefficient, orientation or topological realization hypothesis is needed.",
+       :declarations
+       ["MaximalPath"
+        "mem_maximalPath_iff"
+        "maximalPath_coordinate_sum"
+        "face_objEquiv"],
+       :consumer-equation
+       "A maximal nondegenerate simplex of Δ[p]×Δ[q] is a monotone lattice path whose two coordinates sum to its time index, and taking its ith simplicial face deletes exactly the ith path vertex.",
+       :consumer-residual
+       "Add integer shuffle parity, oriented interior-face pairing and affine realization for total degree at most four, then assemble the bounded signed-shuffle chain.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexMaximalPaths."
+        "Verify mem_maximalPath_iff is the exact maximal nondegeneracy characterization from ProdStdSimplex."
+        "Verify maximalPath_coordinate_sum has the product-coordinate sum on the left and the time index on the right."
+        "Verify face_objEquiv deletes the selected vertex through Fin.succAbove."
+        "Reproduce standard-only axiom audits for all three exported theorems."
+        "Confirm no sign, affine realization, chain cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure result is claimed."
+        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+      :id :t03j05-product-simplex-maximal-lattice-path-interface-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint56-bounded-product-simplex-signed-shuffles-1],
+      :current-residual
+      "Mathlib classifies maximal nondegenerate simplices in the simplicial product, but the project has no canonical interface exposing their lattice-path coordinate equation and face deletion formula to the signed-shuffle construction.",
+      :other-consumers [:t96J06 :t97A04]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
+       :exit 0}
+      {:cmd
+       "Search ConstructionTargets and Mathlib for product-simplex triangulations, finite shuffles, affine simplex realization and oriented-face APIs",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "Reproduce standard-only axiom audits for mem_maximalPath_iff, maximalPath_coordinate_sum and face_objEquiv",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+       :exit 1,
+       :finding
+       "The first draft supplied an explicit universe argument to an abbreviation whose universe was inferred and reversed the coordinate-sum equality.",
+       :correction
+       "Expanded the subtype at its use site and oriented the equality from the product coordinates to the time index."}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+       :exit 1,
+       :finding
+       "The corrected subtype draft still applied symmetry after congrArg Fin.val, producing the reverse of the required natural-number equality.",
+       :correction
+       "Used congrArg Fin.val in its original direction; the final rerun compiled."}],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+      :sha256
+      "bf49a2ac0ea48a6b868d2f7aaff2963c125746bfdc559096625a9fd95e962761",
+      :placeholder-count 0},
+     :finding
+     "Exactly one complete compiled prerequisite is supplied. Mathlib's ProdStdSimplex already represents maximal nondegenerate simplices of Δ[p]×Δ[q] as monotone lattice paths and proves that simplicial faces delete the selected path vertex. The fixture exposes that representation, proves the coordinate-sum-equals-time characterization and records the exact face formula. The parent signed-shuffle goal is not GO because this unsigned path interface still lacks shuffle parity, oriented interior-face pairing and affine realization into the topological standard-simplex product. No singular-chain cross product, Eilenberg-Zilber, Kunneth or consumer closure is claimed.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: bounded signed-shuffle triangulation of products of standard simplices",
@@ -34812,7 +34956,8 @@
    :oriented-checkpoint56-bounded-product-simplex-signed-shuffles-1,
    :kind :reusable-theorem,
    :depends-on
-   [:oriented-checkpoint56-singular-cross-product-and-consumer-refill-1],
+   [:oriented-checkpoint56-singular-cross-product-and-consumer-refill-1
+    :t03j05-product-simplex-maximal-lattice-path-interface-1],
    :current-residual
    "The requested singular-chain cross product cannot be defined from current imports because no banked construction triangulates a product of standard simplices with the signed boundary and naturality identities.",
    :other-consumers [:t96J06 :t97A04]}
