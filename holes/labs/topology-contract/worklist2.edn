@@ -41023,6 +41023,25 @@
       "The Emacs Lisp file is not executable directly, and the test preparation edit had initially landed in the wrong similarly shaped test block.",
       :correction
       "Used emacs --batch -Q -l and moved the setup into review-command-descriptions-are-not-exit-records; the final suite passed 55 assertions with zero failures or errors."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789076579841-19565-3fddd5f7",
+     :commands
+     ["git show --stat --oneline f96d30c1"
+      "git show --format=fuller --no-ext-diff f96d30c1 -- holes/labs/topology-contract/build_step.bb holes/labs/topology-contract/test_gate_receipts.bb"
+      "git archive f96d30c1 | tar -x -C /tmp/topology-atomic-review-dWb6Sg"
+      "bb /tmp/topology-atomic-review-dWb6Sg/holes/labs/topology-contract/test_gate_receipts.bb"
+      "clj-kondo --lint both committed files"
+      "emacs --batch -Q -l /home/joe/code/futon4/dev/check-parens.el -- both committed files"
+      "bb worklist_check.bb on both archived ledgers"
+      "git diff-tree --no-commit-id --name-status -r f96d30c1"
+      "git show --check --oneline f96d30c1"
+      "sha256sum both scoped files and immutable checkpoint60 artifact"
+      "git diff 58e02f59^ 58e02f59 -- holes/labs/topology-contract/worklist2.edn"
+      "recompute t03J05 t96J06 t97A04 hashes and placeholder counts"],
+     :finding
+     "PASS: commit f96d30c1129620704c9bfa11ca2afb0510f6cc02 has the exact two-file scope and recorded fixture hashes ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b and 22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc reproduce. The focused suite passes 55 assertions with zero failures/errors; lint, parenthesis, whitespace, and both ledger checks pass. The optional transition is restricted to done-unreviewed receipts, exactly one completed row, exactly [:evidence :fixture :path], exact source and six preserved values, and an existing regular target matching the frozen SHA256. It runs before replacement insertion; the combined ledger is validated before the existing atomic move. The recorded supervisor transition changes checkpoint60 only from the canonical path to the byte-identical immutable artifact, whose SHA256 reproduces as e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187. Frozen hashes remain db4071c33fa3b5fb6af0d5d7955bf431400fe7d2c4f8dbc759941f4bf6611af4, 1d8874db11a786b11d04b5af4f0375fa439c05d5ac1bdafacd9943a89e238a71, and 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with placeholder counts 1/2/4. This is a ledger representation transition only; it makes no theorem-orientation, recurrence-promotion, or consumer-closure claim."},
     :commit "f96d30c1129620704c9bfa11ca2afb0510f6cc02",
     :git-blobs
     {"holes/labs/topology-contract/build_step.bb"
@@ -41061,7 +41080,7 @@
       :review-outcome :pass}},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["holes/labs/topology-contract/build_step.bb"
     "holes/labs/topology-contract/test_gate_receipts.bb"],
@@ -41134,7 +41153,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: applied fixture-path transition and renewed consumer eligibility",
