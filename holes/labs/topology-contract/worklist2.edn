@@ -33410,6 +33410,26 @@
      {:cmd
       "Recompute the committed squaredFiberEquivRadialLevel_apply declaration region including @[simp] and trailing newline; verify exact SHA256 039e6ccbe8db11c8727d0305896c3c6480394a0391ccf3b80adae66db2c614ec; verify committed source SHA256, Git blob, commit check and clean diff",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789063979109-19119-00f6bf74",
+     :commands
+     ["git show --stat --oneline a7ebc60d"
+      "git show --check --oneline a7ebc60d"
+      "git show a7ebc60d:holes/labs/topology-contract/worklist2.edn | sed -n '33340,33490p'"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git show 964e34dd:ConstructionTargets/RadialSquaredFiber.lean | sha256sum"
+      "lake env lean ConstructionTargets/RadialSquaredFiber.lean"
+      "lake build ConstructionTargets.RadialSquaredFiber"
+      "rg forbidden declarations and placeholders across the exact two-file scope"
+      "git diff-tree --no-commit-id --name-only -r 964e34dd"
+      "git diff --name-only 964e34dd^ 964e34dd -- problems"
+      "git diff --check 964e34dd^ 964e34dd"
+      "Perl SHA256 recomputation of the attributed squaredFiberEquivRadialLevel_apply declaration region"],
+     :finding
+     "PASS: ledger commit a7ebc60d repairs the evidence hash without changing implementation commit 964e34ddaca4357c77878f60a36838bc49576d55. Fixture SHA256 0670c4d1caed7969dbec19c5f24175eda9b3c11ff3ab88cd782450d3cb0c519f and corrected statement SHA256 039e6ccbe8db11c8727d0305896c3c6480394a0391ccf3b80adae66db2c614ec reproduce. Exact two-file scope, zero placeholders, direct compilation and 8447-job build pass with standard-only axioms. For positive radius, norm-square equality is converted using radius positivity and norm nonnegativity; the equivalence is correctly oriented from squared fiber to literal radial level and both maps preserve the underlying point definitionally. No atlas transport, regular-value existence, frozen edit or closure is claimed."},
     :commit "964e34ddaca4357c77878f60a36838bc49576d55",
     :changed-paths
     ["ConstructionTargets/RadialSquaredFiber.lean"
@@ -33425,7 +33445,7 @@
     "The implementation and commit are unchanged. The malformed transition value was replaced with the exact recomputed 64-hex SHA256 for the full attributed squaredFiberEquivRadialLevel_apply declaration region.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/RadialSquaredFiber.lean"
     "ConstructionTargets/RadialSquaredFiber.md"],
@@ -33573,7 +33593,7 @@
      "Exactly one complete compiled representation prerequisite is supplied. At every positive radius it proves that the squared-norm equality fiber and the literal t96J05 norm-level subtype are equivalent by the identity on the underlying embedded-manifold point, with exact forward and inverse coercion formulas. The parent corrected closure is not GO because the ChartedSpace and IsManifold structures produced by ManifoldRegularFiberGlobalAtlas still must be transported through this equivalence and its fixed-model dimension simplified to EuclideanSpace real (Fin (m-1)). The reviewed centered-circle counterexample to the original unconditional theorem is preserved; no regular radius is inferred and no frozen file or ledger is edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SPEC-DEFECT: corrected positive regular radial-level theorem",
