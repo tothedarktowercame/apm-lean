@@ -61828,8 +61828,166 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local missing infrastructure does not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill42-measure.py", :exit 0}
+     {:cmd
+      "Python pinned measurement augmentation: working consumer hashes, module attribution, reviewed residuals and duplicate-infrastructure audit",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill42-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill42-proposed-worklist.edn",
+      :exit 0}
+     {:cmd "sha256sum /tmp/topology-refill42-tail.edn", :exit 0}],
+    :measurement
+    {:path "/tmp/topology-refill42-measure.json",
+     :baseline "f4d0166d1fba13bc62df6db80d3dacbb833be02c",
+     :placeholder-delta 0,
+     :closures 0,
+     :head "a02047fb5a62fe711fdba08d5145449875bf97df",
+     :sha256
+     "07d2af824ef4c416489f722fed2233be5a72502ff1878e01e7c1b909cf6aa3b1",
+     :portfolio-modules 2,
+     :missing ["t93A05"],
+     :concurrent-documents 2,
+     :concurrent-modules 2},
+    :tail
+    {:path "/tmp/topology-refill42-tail.edn",
+     :sha256
+     "8c393f7e8c3b2c961fc138be967433990575d1cd7bcb59ae1bed4ce48525f26b"},
+    :replacement-items
+    [{:consumer "t02A08",
+      :stop-condition
+      "GO requires complete frozen closure; otherwise STOP names the exact missing geometric map or induced homology calculation, without refutation from infrastructure absence.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SPHERE DEGREE / arbitrary integer degree frozen closure",
+      :acceptance
+      {:frozen-file "problems/t02A08/lean/Main.lean",
+       :frozen-sha256
+       "5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile complete frozen Main. Construct continuous self-maps of the literal metric two-sphere of every integer degree in its actual integral singular H2 representation, then apply the proved intersection bridge. Reuse banked sphere homology and audit map naturality, circle powers and suspension. Derive the actual induced action; no assumed degree realization, orientation isomorphism or suspension naturality. Include zero and negative integers. Boundary reflection in dimension one alone does not compute arbitrary sphere degrees."},
+      :id :t02a08-frozen-integer-degree-closure-probe-refill42,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+      :current-residual
+      "One placeholder is the arbitrary-integer degree realization; intersection assembly is proved."}
+     {:consumer "t99J03",
+      :stop-condition
+      "GO requires actual embedded triangles and interior coverage; REVISE requires exactly one compiled geometric prerequisite. A finite chart-cover wrapper alone is insufficient.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE TRIANGULATION / finite embedded triangle cover",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a nonempty compact connected Hausdorff genuine-infinity self-model real two-manifold, construct finitely many embeddings of the closed standard two-simplex into the manifold by affine triangles contained in actual chart targets. Prove continuity and injectivity on each closed simplex, compact image, and that images of the relative interiors are open in the manifold and cover it. Choose and verify the affine triangles and chart-source restrictions; do not assume a triangulation, embeddings or coverage. Preserve original topology. This geometric prerequisite does not assert face-compatible intersections, global triangulation or classification."},
+      :id :compact-surface-embedded-triangle-cover-probe-refill42,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+      :current-residual
+      "Finite triangulation STOP identifies missing compatible embedded faces. Construct local embedded triangles first; shared-face refinement and realization homeomorphism remain subsequent.",
+      :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires same-atlas actual derivative injectivity and exact equalizer range; REVISE requires one compiled prerequisite. No component-coverage, orientation or consumer closure claim.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TRANSVERSE-PULLBACK / normalized incidence tangent equalizer",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For exactly ManifoldTargetIncidenceGlobalAtlas.normalizedAtlas under its banked hypotheses, prove actual subtype-inclusion mfderiv injective and its range equals the tangent pairs whose actual f and g mfderivs agree. Use actual local backward parameterizations and regular-fiber derivative identities, deriving every derivative transport and rank equality. Retain the normalized sum-minus-target dimension, inherited topology and original product norm. No supplied immersion, kernel comparison, alternative atlas or global extension transversality. Include empty incidence and zero-dimensional kernels."},
+      :id :manifold-target-incidence-tangent-probe-refill42,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+      :current-residual
+      "Normalized global atlas and smooth inclusion are banked; actual tangent geometry remains.",
+      :other-consumers ["t02A07" "t94A06" "t97J05"]}
+     {:consumer "t03J04",
+      :stop-condition
+      "GO requires actual all-degree chain transfer and identities; REVISE requires exactly one compiled prerequisite. Function-level fiber sums alone are insufficient.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "COVER-DEGREE / actual singular-chain transfer",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a covering map with explicitly finite fibers of constant cardinal k, construct integral singular-chain transfer by summing the lifts of each simplex. Derive unique simplex lifts and bijective face-restriction reindexing, prove commutation with every boundary and that projection after transfer is multiplication by k on actual singular chains. Reuse banked CoveringDegree and covering lifting; audit LiteralPullbackCover and LiteralCoveringPullback before adding any base-change helper. No supplied chain transfer, lift compatibility or homological multiplicativity. Include k=0 where applicable. Rational coefficient transport and Euler multiplicativity remain subsequent."},
+      :id :finite-cover-singular-chain-transfer-probe-refill42,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+      :current-residual
+      "Finite-fiber function transfer and literal base change exist; a boundary-compatible transfer on actual singular chains is unassembled.",
+      :other-consumers ["t01A02" "t98A01"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 4,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped DAG consumers; separate closures, typed partial uptake, duplicate infrastructure and concurrent work. Elect one near-closure adapter first, then shared foundations by reach and simplicity. Preserve conditional polygon witnesses and genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff normalization, t96J05 defect, t01J04/t94A06 applicability, t96J07 historical refutation versus corrected closure, signed antipodal action, reduced-S0 and one-dimensional local index. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t02a08-frozen-integer-degree-closure-probe-refill42
+       :compact-surface-embedded-triangle-cover-probe-refill42
+       :manifold-target-incidence-tangent-probe-refill42
+       :finite-cover-singular-chain-transfer-probe-refill42],
+      :current-residual
+      "Await all four independently reviewed outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    "No consumer closed: 59 DAG names, 58 existing files, 23 zero-placeholder and 35 open consumers, 25 within two placeholders, total 66 unchanged. Construction modules increased 702 to 706: two portfolio modules and two concurrent coefficient modules. LiteralCoveringPullback overlaps pre-existing LiteralPullbackCover and is not a newly closed base-change edge. Global incidence atlas and same-atlas smooth inclusion are new. Concurrent t00J01 sphere-identity uptake reduces its typed residual but retains one placeholder. Elect one complete consumer adapter first, followed by geometric prerequisites with five, four and three potential consumers. No campaign refutation is established.",
+    :review-outcomes
+    {:torus-euler
+     {:outcome :stop,
+      :review :pass,
+      :job "invoke-1789018480619-17976-17c65bfa"},
+     :finite-triangulation
+     {:outcome :stop,
+      :review :pass,
+      :job "invoke-1789018896602-17982-76acd3c7"},
+     :literal-pullback
+     {:review :pass, :job "invoke-1789019806128-18002-428b6fd6"},
+     :global-incidence
+     {:review :pass,
+      :job "invoke-1789020298315-18014-d3c2d4a7",
+      :evidence-repair
+      "Complete declaration hashes replace truncated first-assignment hashes; implementation unchanged."}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -61845,7 +62003,117 @@
     :manifold-target-incidence-global-atlas-probe-refill41
     :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
    :current-residual
-   "Await all four reviewed outcomes, then rerank the complete DAG."}],
+   "Await all four reviewed outcomes, then rerank the complete DAG."}
+  {:consumer "t02A08",
+   :stop-condition
+   "GO requires complete frozen closure; otherwise STOP names the exact missing geometric map or induced homology calculation, without refutation from infrastructure absence.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SPHERE DEGREE / arbitrary integer degree frozen closure",
+   :acceptance
+   {:frozen-file "problems/t02A08/lean/Main.lean",
+    :frozen-sha256
+    "5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile complete frozen Main. Construct continuous self-maps of the literal metric two-sphere of every integer degree in its actual integral singular H2 representation, then apply the proved intersection bridge. Reuse banked sphere homology and audit map naturality, circle powers and suspension. Derive the actual induced action; no assumed degree realization, orientation isomorphism or suspension naturality. Include zero and negative integers. Boundary reflection in dimension one alone does not compute arbitrary sphere degrees."},
+   :id :t02a08-frozen-integer-degree-closure-probe-refill42,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry
+    :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+   :current-residual
+   "One placeholder is the arbitrary-integer degree realization; intersection assembly is proved."}
+  {:consumer "t99J03",
+   :stop-condition
+   "GO requires actual embedded triangles and interior coverage; REVISE requires exactly one compiled geometric prerequisite. A finite chart-cover wrapper alone is insufficient.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SURFACE TRIANGULATION / finite embedded triangle cover",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a nonempty compact connected Hausdorff genuine-infinity self-model real two-manifold, construct finitely many embeddings of the closed standard two-simplex into the manifold by affine triangles contained in actual chart targets. Prove continuity and injectivity on each closed simplex, compact image, and that images of the relative interiors are open in the manifold and cover it. Choose and verify the affine triangles and chart-source restrictions; do not assume a triangulation, embeddings or coverage. Preserve original topology. This geometric prerequisite does not assert face-compatible intersections, global triangulation or classification."},
+   :id :compact-surface-embedded-triangle-cover-probe-refill42,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry
+    :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+   :current-residual
+   "Finite triangulation STOP identifies missing compatible embedded faces. Construct local embedded triangles first; shared-face refinement and realization homeomorphism remain subsequent.",
+   :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires same-atlas actual derivative injectivity and exact equalizer range; REVISE requires one compiled prerequisite. No component-coverage, orientation or consumer closure claim.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TRANSVERSE-PULLBACK / normalized incidence tangent equalizer",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For exactly ManifoldTargetIncidenceGlobalAtlas.normalizedAtlas under its banked hypotheses, prove actual subtype-inclusion mfderiv injective and its range equals the tangent pairs whose actual f and g mfderivs agree. Use actual local backward parameterizations and regular-fiber derivative identities, deriving every derivative transport and rank equality. Retain the normalized sum-minus-target dimension, inherited topology and original product norm. No supplied immersion, kernel comparison, alternative atlas or global extension transversality. Include empty incidence and zero-dimensional kernels."},
+   :id :manifold-target-incidence-tangent-probe-refill42,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry
+    :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+   :current-residual
+   "Normalized global atlas and smooth inclusion are banked; actual tangent geometry remains.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer "t03J04",
+   :stop-condition
+   "GO requires actual all-degree chain transfer and identities; REVISE requires exactly one compiled prerequisite. Function-level fiber sums alone are insufficient.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "COVER-DEGREE / actual singular-chain transfer",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a covering map with explicitly finite fibers of constant cardinal k, construct integral singular-chain transfer by summing the lifts of each simplex. Derive unique simplex lifts and bijective face-restriction reindexing, prove commutation with every boundary and that projection after transfer is multiplication by k on actual singular chains. Reuse banked CoveringDegree and covering lifting; audit LiteralPullbackCover and LiteralCoveringPullback before adding any base-change helper. No supplied chain transfer, lift compatibility or homological multiplicativity. Include k=0 where applicable. Rational coefficient transport and Euler multiplicativity remain subsequent."},
+   :id :finite-cover-singular-chain-transfer-probe-refill42,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry
+    :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+   :current-residual
+   "Finite-fiber function transfer and literal base change exist; a boundary-compatible transfer on actual singular chains is unassembled.",
+   :other-consumers ["t01A02" "t98A01"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 4,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped DAG consumers; separate closures, typed partial uptake, duplicate infrastructure and concurrent work. Elect one near-closure adapter first, then shared foundations by reach and simplicity. Preserve conditional polygon witnesses and genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff normalization, t96J05 defect, t01J04/t94A06 applicability, t96J07 historical refutation versus corrected closure, signed antipodal action, reduced-S0 and one-dimensional local index. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-43-after-degree-triangles-and-tangent-transfer,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t02a08-frozen-integer-degree-closure-probe-refill42
+    :compact-surface-embedded-triangle-cover-probe-refill42
+    :manifold-target-incidence-tangent-probe-refill42
+    :finite-cover-singular-chain-transfer-probe-refill42
+    :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+   :current-residual
+   "Await all four independently reviewed outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
