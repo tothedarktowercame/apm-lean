@@ -61034,8 +61034,56 @@
   {:consumer "t00J02",
    :stop-condition
    "Require constructed actual incidence charts and center coverage in both dimension presentations; no supplied chart or fiber equivalence.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Actual literal-incidence charts and center coverage compile in both dimension presentations, including explicit sum-minus-target dimension. Inherited topology, actual product charts, derived predicate comparison and weaker target hypotheses are preserved. Smooth coordinate specifications, overlap compatibility and global atlas assembly remain; no consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789016988278-17929-8ff1c36a"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:exists_chart
+     "d320d0cb25a0aa7b34115fd1bd02c973229f6961dd27a5743ad8765dc2ed9793",
+     :exists_chart_normalized
+     "8377da4fcdef8e64c819bc0df458664cbf8355ad2ad05e88ac25b9367ff90119"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/ManifoldTargetIncidenceChartExistence.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only fixture audit: comment-stripped placeholders and both complete theorem-header SHA256 hashes",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.LocalTransverseExtensionChart ConstructionTargets.ManifoldTargetIncidenceCoordinateTransport ConstructionTargets.FiberPredicateTransfer 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ManifoldTargetIncidenceChartExistence.lean ConstructionTargets/ManifoldTargetIncidenceChartExistence.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldTargetIncidenceChartExistence.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "45d19f67a564afeae1dc9dc648af535471261e56",
+    :changed-paths
+    ["ConstructionTargets/ManifoldTargetIncidenceChartExistence.lean"],
+    :fixture
+    {:path "/tmp/ManifoldTargetIncidenceChartExistence.lean",
+     :sha256
+     "0ce28194344825aa7276a03f933859e1662ca62c1d0e21fd615b26f8e684fc1c"},
+    :axiom-audit-declarations 2},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ManifoldTargetIncidenceChartExistence.lean"],
    :dag-node
