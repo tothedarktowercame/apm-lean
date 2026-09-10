@@ -70140,9 +70140,125 @@
    :other-consumers []}
   {:consumer "t98A02",
    :stop-condition
-   "Require a genuine nonzero-capable relative Mayer-Vietoris connecting morphism and three proved exactness statements with actual quotient-pair arrows. Reject any construction factoring the pair boundary through its own subspace map.",
-   :phase :probe,
+   "Require the coefficient-general topological range-to-production-relative comparison and its compatibility with the compact-complement inclusions before transporting exactness; do not reuse the identically-zero supportConnecting composite or claim coefficient excision without its hypotheses.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / coefficient Mayer-Vietoris to relative-pair connecting comparison",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+    :fixture-sha256
+    "da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906",
+    :implementation
+    "Promote the exact fixture. Compile unionToRightRelative, leftToUnion_unionToRightRelative, rightToUnion_unionToRightRelative, mayerVietorisToRightRelative, relativeConnecting_naturality and unionToRelative_connecting_eq_neg_mayerVietoris. This supplies the genuine coefficient chain-level connecting comparison required by the compact-support placeholder route: the union-to-relative projection, its two piece formulas, the short-complex morphism with forced negative identity on the intersection term, and the resulting signed connecting-map equality. Verify CoefficientSubcomplexMayerVietoris SHA256 bed519ae21e3a1bad02abf9775eb734bcec6bb3c4e8f41a98cec894be2cf71e9 and CoefficientCokernelComparison SHA256 eaa11a983fd6cbd117026568e4eddd48be7911686d61513dc1ab2b2794f490ce. Preserve arbitrary simplicial sets, arbitrary subcomplexes, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim compact-complement specialization, coefficient excision into X, all three final relative exactness statements, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The coefficient Mayer-Vietoris short exact sequence for two simplicial subcomplexes, including its signed intersection-to-biproduct arrow and absolute union connecting morphism",
+    :target
+    "The coefficient relative cokernel short exact sequence for the intersection included in the right subcomplex",
+    :direction
+    "Construct an exact forward morphism of short complexes from the Mayer-Vietoris presentation to the relative-cokernel presentation, using negative identity on the intersection term, second projection on the piece biproduct and the pushout-induced union projection; derive exact equality from the projected relative connecting morphism to the negative Mayer-Vietoris connecting morphism in every natural degree."},
+   :id
+   :coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-relative-mayer-vietoris-chain-sequence-probe-refill50],
+   :current-residual
+   "Instantiate the coefficient comparison on the reviewed compact-complement range subcomplexes, transport its right relative cokernel to the literal nested complement pair, and prove the coefficient excision/naturality squares into the four requested relative pairs in X before transporting all three exactness statements.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
+   "Require a genuine nonzero-capable relative Mayer-Vietoris connecting morphism and three proved exactness statements with actual quotient-pair arrows. Reject any construction factoring the pair boundary through its own subspace map.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Topological specialization remains: compare the range relative cokernel with the literal nested complement pair, then use valid coefficient excision and pair naturality to obtain the four relative terms and all three exactness statements. No localization monicity follows without the separate vanishing theorem.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer "t98A02",
+      :stop-condition
+      "Require the coefficient-general topological range-to-production-relative comparison and its compatibility with the compact-complement inclusions before transporting exactness; do not reuse the identically-zero supportConnecting composite or claim coefficient excision without its hypotheses.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean"],
+      :dag-node
+      "MANIFOLD FUNDAMENTAL CLASS / coefficient Mayer-Vietoris to relative-pair connecting comparison",
+      :acceptance
+      {:fixture
+       "/tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+       :fixture-sha256
+       "da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906",
+       :implementation
+       "Promote the exact fixture. Compile unionToRightRelative, leftToUnion_unionToRightRelative, rightToUnion_unionToRightRelative, mayerVietorisToRightRelative, relativeConnecting_naturality and unionToRelative_connecting_eq_neg_mayerVietoris. This supplies the genuine coefficient chain-level connecting comparison required by the compact-support placeholder route: the union-to-relative projection, its two piece formulas, the short-complex morphism with forced negative identity on the intersection term, and the resulting signed connecting-map equality. Verify CoefficientSubcomplexMayerVietoris SHA256 bed519ae21e3a1bad02abf9775eb734bcec6bb3c4e8f41a98cec894be2cf71e9 and CoefficientCokernelComparison SHA256 eaa11a983fd6cbd117026568e4eddd48be7911686d61513dc1ab2b2794f490ce. Preserve arbitrary simplicial sets, arbitrary subcomplexes, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim compact-complement specialization, coefficient excision into X, all three final relative exactness statements, localization monicity, dimension vanishing or a fundamental class.",
+       :commands
+       ["lake env lean ConstructionTargets/CoefficientPairConnectingMayerVietorisComparison.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :representation
+      {:source
+       "The coefficient Mayer-Vietoris short exact sequence for two simplicial subcomplexes, including its signed intersection-to-biproduct arrow and absolute union connecting morphism",
+       :target
+       "The coefficient relative cokernel short exact sequence for the intersection included in the right subcomplex",
+       :direction
+       "Construct an exact forward morphism of short complexes from the Mayer-Vietoris presentation to the relative-cokernel presentation, using negative identity on the intersection term, second projection on the piece biproduct and the pushout-induced union projection; derive exact equality from the projected relative connecting morphism to the negative Mayer-Vietoris connecting morphism in every natural degree."},
+      :id
+      :coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50,
+      :kind :representation-comparison,
+      :depends-on
+      [:coefficient-relative-mayer-vietoris-chain-sequence-probe-refill50],
+      :current-residual
+      "Instantiate the coefficient comparison on the reviewed compact-complement range subcomplexes, transport its right relative cokernel to the literal nested complement pair, and prove the coefficient excision/naturality squares into the four requested relative pairs in X before transporting all three exactness statements.",
+      :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake build ConstructionTargets.CoefficientSubcomplexMayerVietoris >/tmp/coefficient-pair-mv-dep.log",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/CoefficientPairConnectingMayerVietorisComparison.lean ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean ConstructionTargets/CoefficientCokernelComparison.lean",
+       :exit 0}
+      {:cmd
+       "python3 placeholder-and-six-declaration audit over /tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+       :exit 1,
+       :correction
+       "The first mechanical coefficient generalization left the coefficient chain functor's R argument implicit and retained integral cokernel-short-complex names. Made the coefficient parameter explicit and selected the coefficient cokernel construction."}
+      {:cmd
+       "lake env lean /tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+       :exit 1,
+       :correction
+       "Two short-complex proof fields still unfolded the integral definitions. Replaced them with the coefficient short-complex definitions; the final fixture compiles without warnings or placeholders."}],
+     :changed-paths [],
+     :fixture
+     {:path
+      "/tmp/CoefficientPairConnectingMayerVietorisComparison.lean",
+      :sha256
+      "da8c9f51c3aa129a811dcc07199807064d3278810fa4b57c0effbee67286d906",
+      :placeholder-count 0},
+     :finding
+     "Compiled exactly one prerequisite that is nonzero-capable and coefficient-general. The pushout-induced union map kills the left piece and restricts on the right piece to the relative quotient projection. Together with negative identity and the second biproduct projection it forms an actual morphism from the coefficient Mayer-Vietoris short complex to the relative cokernel short complex. Connecting-map naturality proves that the relative boundary after the union projection is exactly the negative Mayer-Vietoris boundary. The two unrelated pre-existing untracked documentation files were left untouched.",
+     :seat "codex-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
@@ -70155,7 +70271,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs
-    :checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
+    :coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50],
    :current-residual
    "The absolute complement sequence and many comparison maps are reviewed, but the named relative connecting map is zero. A genuine relative chain sequence or proved excision conjugation is required.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
