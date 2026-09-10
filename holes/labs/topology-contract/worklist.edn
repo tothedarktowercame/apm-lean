@@ -72201,76 +72201,104 @@
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
   {:consumer "t00A03",
    :stop-condition
+   "Require a relative parametric Sard theorem for the smooth submersive total coincidence map on the parameter square away from its four endpoint pairs, producing perturbation-vector parameters whose interior coincidence fibers are finite.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"],
+   :dag-node
+   "SURFACE TRIANGULATION / endpoint-relative total coincidence submersion",
+   :acceptance
+   {:fixture
+    "/tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
+    :fixture-sha256
+    "3e694e87a588cba2024c1b778cbd4940080b8686de43745cfb90703086471b4c",
+    :implementation
+    "Promote the exact fixture. Compile totalDifference_differentiableAt and fderiv_totalDifference_surjective_on_interior_direction. This supplies the open-domain differentiability specialization and derivative-surjectivity conclusion required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before relative parametric Sard. Verify PlaneArcEndpointTotalDifferenceSubmersive SHA256 f18e50897c4cd22cf5105c5b189b391afc23d9954d01dc114d29eea632301deb. Preserve arbitrary plane arcs smooth on arbitrary supplied open parameter neighborhoods, arbitrary perturbation vectors and every point where at least one curve parameter is interior. Require zero placeholders, no warnings and standard-only axioms. Do not claim relative Sard, regular parameter existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+    :commands
+    ["lake env lean ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :plane-arc-endpoint-total-difference-relative-submersion-implementation-refill50,
+   :kind :reusable-theorem,
+   :depends-on
+   [:plane-arc-endpoint-total-difference-submersive-implementation-refill50
+    :plane-arc-endpoint-total-coincidence-smooth-implementation-refill50
+    :plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50],
+   :current-residual
+   "Use the compiled relative submersion on the complement of the four endpoint pairs in the compact parameter square to obtain generic finite interior fibers. Then adjoin the reviewed finite boundary residual, choose one parameter tuple across the finite family, retain embeddings and compare through chart transitions.",
+   :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
+  {:consumer "t00A03",
+   :stop-condition
    "Require a compiled perturbation preserving prescribed endpoints and chartwise containment with finite pairwise intersections; do not infer cross-chart finiteness from unrelated plane translations.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The full total coincidence-map derivative is proved surjective at every differentiability point where either curve parameter is interior. Combine this with ContDiffOn on the open extension domain and the four-point boundary decomposition to state submersivity on the relative interior locus, then apply parametric Sard, select simultaneous finite-family parameters, retain embeddings and compare intersections through chart transitions.",
+     "The total coincidence map is now differentiable on its actual open extension domain and has surjective derivative wherever at least one curve parameter is interior. Apply a relative parametric Sard theorem to obtain generic finite interior coincidence fibers, adjoin the finite endpoint boundary, select parameters simultaneously for the finite family, retain embeddings and transport intersections through chart transitions.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t00A03",
       :stop-condition
-      "Require the ContDiffOn-to-DifferentiableAt specialization on the open extension domain and a relative parametric Sard theorem for the submersive total coincidence map away from the four endpoint pairs, yielding finite interior fibers for generic perturbation parameters.",
+      "Require a relative parametric Sard theorem for the smooth submersive total coincidence map on the parameter square away from its four endpoint pairs, producing perturbation-vector parameters whose interior coincidence fibers are finite.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean"],
+      ["ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"],
       :dag-node
-      "SURFACE TRIANGULATION / endpoint-relative full total-map derivative surjectivity",
+      "SURFACE TRIANGULATION / endpoint-relative total coincidence submersion",
       :acceptance
-      {:fixture "/tmp/PlaneArcEndpointTotalDifferenceSubmersive.lean",
+      {:fixture
+       "/tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
        :fixture-sha256
-       "f18e50897c4cd22cf5105c5b189b391afc23d9954d01dc114d29eea632301deb",
+       "3e694e87a588cba2024c1b778cbd4940080b8686de43745cfb90703086471b4c",
        :implementation
-       "Promote the exact fixture. Compile vectorInclusion, hasFDerivAt_insertVectors, fullDerivative_comp_vectorInclusion, fderiv_totalDifference_surjective_of_parameter, fderiv_totalDifference_surjective_of_left and fderiv_totalDifference_surjective_of_right. This supplies the full derivative restriction and surjectivity step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before applying relative parametric Sard. Verify PlaneArcEndpointTotalParameterSubmersive SHA256 0b5955f85b1a0d73d995904b2a1512136237f4ab344ba3e93cba84a8c143e56a. Preserve arbitrary pairs of plane arcs, arbitrary total-parameter base points, an explicit differentiability hypothesis and every parameter pair for which the left or right curve parameter is interior. Require zero placeholders, no warnings and standard-only axioms. Do not claim relative Sard, regular parameter existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation. Leave the unrelated modified ProductSimplexWordPrefixCounts files untouched.",
+       "Promote the exact fixture. Compile totalDifference_differentiableAt and fderiv_totalDifference_surjective_on_interior_direction. This supplies the open-domain differentiability specialization and derivative-surjectivity conclusion required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before relative parametric Sard. Verify PlaneArcEndpointTotalDifferenceSubmersive SHA256 f18e50897c4cd22cf5105c5b189b391afc23d9954d01dc114d29eea632301deb. Preserve arbitrary plane arcs smooth on arbitrary supplied open parameter neighborhoods, arbitrary perturbation vectors and every point where at least one curve parameter is interior. Require zero placeholders, no warnings and standard-only axioms. Do not claim relative Sard, regular parameter existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
        :commands
-       ["lake env lean ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean"],
+       ["lake env lean ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :plane-arc-endpoint-total-difference-submersive-implementation-refill50,
+      :plane-arc-endpoint-total-difference-relative-submersion-implementation-refill50,
       :kind :reusable-theorem,
       :depends-on
-      [:plane-arc-endpoint-total-parameter-submersive-implementation-refill50
-       :plane-arc-endpoint-total-coincidence-smooth-implementation-refill50],
+      [:plane-arc-endpoint-total-difference-submersive-implementation-refill50
+       :plane-arc-endpoint-total-coincidence-smooth-implementation-refill50
+       :plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50],
       :current-residual
-      "Specialize the reviewed totalDifference_contDiffOn theorem to differentiability at points of the open extension domain and combine it with full derivative surjectivity to obtain submersivity away from endpoint pairs. Parametric Sard, finite-family simultaneity, retained embeddings and chart-transition transport remain.",
+      "Use the compiled relative submersion on the complement of the four endpoint pairs in the compact parameter square to obtain generic finite interior fibers. Then adjoin the reviewed finite boundary residual, choose one parameter tuple across the finite family, retain embeddings and compare through chart transitions.",
       :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.PlaneArcEndpointTotalParameterSubmersive >/tmp/total-param-dep.log 2>&1",
+       "lake build ConstructionTargets.PlaneArcEndpointTotalDifferenceSubmersive >/tmp/full-subm-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/PlaneArcEndpointTotalDifferenceSubmersive.lean",
+       "lake env lean /tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/PlaneArcEndpointTotalDifferenceSubmersive.lean ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean",
+       "sha256sum /tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-six-declaration audit over /tmp/PlaneArcEndpointTotalDifferenceSubmersive.lean",
+       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/PlaneArcEndpointTotalDifferenceSubmersive.lean",
-       :exit 1,
-       :correction
-       "The initial insertion derivative used the nonexistent HasFDerivAt.prod field and oriented derivative uniqueness backwards. Replaced it with HasFDerivAt.prodMk and reversed the uniqueness equality; the corrected fixture compiles without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/PlaneArcEndpointTotalDifferenceSubmersive.lean",
+     {:path
+      "/tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
       :sha256
-      "f18e50897c4cd22cf5105c5b189b391afc23d9954d01dc114d29eea632301deb",
+      "3e694e87a588cba2024c1b778cbd4940080b8686de43745cfb90703086471b4c",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one full-derivative bridge prerequisite. The continuous-linear inclusion sends a pair of perturbation-vector directions into the full total-parameter domain while fixing both curve-parameter directions at zero. Composing the full derivative with this inclusion equals the reviewed paired-vector derivative. Consequently, whenever the total coincidence map is differentiable and either curve parameter is interior, its full derivative is surjective. Relative differentiability on the open extension domain and the derivative-level submersion conclusion are now connected without inferring anything at the four endpoint pairs. Parametric Sard, simultaneous finite-family selection, embedding stability and chart-transition comparison remain.",
+     "Compiled exactly one relative-submersion prerequisite. Smoothness on the actual open extension domains now yields differentiability at every total parameter whose curve coordinates lie in those domains. Combining this with the reviewed full-derivative theorem proves derivative surjectivity whenever either curve parameter is interior. This states the required submersivity input on the coincidence square outside the four endpoint pairs while retaining the supplied local ContDiffOn hypotheses. Parametric Sard, finite interior fibers, simultaneous finite-family selection, embedding stability and chart-transition comparison remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
@@ -72293,7 +72321,8 @@
     :plane-arc-endpoint-pair-parameter-derivative-implementation-refill50
     :plane-arc-endpoint-pair-parameter-right-derivative-implementation-refill50
     :plane-arc-endpoint-total-parameter-submersive-implementation-refill50
-    :plane-arc-endpoint-total-difference-submersive-implementation-refill50],
+    :plane-arc-endpoint-total-difference-submersive-implementation-refill50
+    :plane-arc-endpoint-total-difference-relative-submersion-implementation-refill50],
    :current-residual
    "Common-plane translations preserve embeddings and containment but move endpoints and do not compare curves transported through unrelated charts.",
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
