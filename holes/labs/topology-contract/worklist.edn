@@ -57398,70 +57398,103 @@
    :other-consumers ["t02A07" "t01J04" "t94A06"]}
   {:consumer "t00J02",
    :stop-condition
+   "Require the actual open partial homeomorphism and all five specifications; a set equivalence without topology is insufficient.",
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/FiberPredicateTransfer.lean"],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / predicate fiber transport across coordinate codomains",
+   :acceptance
+   {:fixture "/tmp/FiberPredicateTransfer.lean",
+    :fixture-sha256
+    "26b7d66e7f387f962f97e0eb6e2cc7d88b873de1160e319aaf455dbbad49eef7",
+    :implementation
+    "Promote the exact fixture preserving inherited topologies, exact source and target, center membership and domain-restricted coordinate formulas. Compile the constructor and five specifications, audit zero placeholders and standard-only axioms. Retain reuse of the existing fiber-transfer theorem and preserve existing APIs. Do not claim smooth overlaps or a global manifold structure.",
+    :commands
+    ["lake env lean ConstructionTargets/FiberPredicateTransfer.lean"],
+    :placeholder-before 0,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :fiber-predicate-transfer-implementation-refill34,
+   :kind :reusable-theorem,
+   :depends-on
+   [:manifold-target-fiber-chart-extension-implementation-refill34],
+   :current-residual
+   "Complete compiled predicate transfer awaits banking for original-fiber chart composition.",
+   :other-consumers ["t02A07" "t01J04" "t94A06"]}
+  {:consumer "t00J02",
+   :stop-condition
    "GO requires actual literal-fiber charts, coverage and smooth overlaps compiled. REVISE requires exactly one compiled prerequisite. State applicability limits without claiming consumer closure.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Transport the extension-fiber chart to the inherited-topology original fiber on the proved agreement neighborhood, then assemble center coverage and smooth overlaps. Applicability remains self-model finite-dimensional inner-product manifolds; empty fibers introduce no center obligations and zero-dimensional kernels are not excluded. General models, global atlas/inclusion/tangent assembly and consumer-specific boundary, orientation, duality and transversality obligations remain. No consumer closure is claimed.",
+     "Apply predicate transfer with P(y) := f y = c and Q(z) := g z = chartAt F c c on the banked agreement neighborhood, compose with the extension-fiber chart, and prove coverage and smooth overlaps. No globally regular extension is needed. Empty fibers and zero-dimensional kernels remain included. General models, global atlas/inclusion/tangent assembly and consumer-specific boundary, orientation, duality and transversality obligations remain; no consumer closure is claimed.",
      :dependency-review
-     {:outcome :pass, :job "invoke-1789002983822-17518-0a09fccc"},
+     {:outcome :pass,
+      :commit "87eec33a44aa52ae296a1a6575c6f3b5f6421624",
+      :job "invoke-1789003530847-17536-dd9a0b14"},
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {:representative-smooth
-      "1a669ca660fd93298f34b8ae04449e5ae5e0576a4e5cefad10e9fe7ab1666824",
-      :representative-derivative
-      "188c34929eb77c7cffc9af478f62ed7d6df9c6569718c6ddb51b4707e78d640b",
-      :exists-extension-chart
-      "0fea7834ecde378702c10537d2a85d70c3e9772f404cf07d06aa5c498bcefc9c"},
+     {:transfer
+      "2ebb57940214acf4b484c1b6bc5208a4cdeb0c56a8521212ab6c0d012dc4821c",
+      :source-eq
+      "b9ff90fdfee86062f8ea942937104db4bb2d7d11ab6c06f5197c915479a57fcb",
+      :target-eq
+      "178adbef0ca443898bbfc2f639c2b77f1b30a85ec5277984a0df1ba77d6a6d85",
+      :center-mem
+      "01ad068848fffd8a10c4bdd64281e585efd99098d6ffa2cade63edcf43d7f9bf",
+      :forward-eq
+      "978508b1ad6935649ca9e48b3b197a48729bd81e98d6390a7f9ae7588b03dcb2",
+      :backward-eq
+      "0777a129022a13ac031185dc3df21b9f0b810dd3777e4ca9691120d2cf481247"},
      :prerequisite
      {:consumer "t00J02",
       :stop-condition
-      "Require the exact compiled extension and local fiber-identification packet; no assumed agreement, derivative transport or globally regular extension.",
+      "Require the actual open partial homeomorphism and all five specifications; a set equivalence without topology is insufficient.",
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/ManifoldTargetFiberChartExtension.lean"],
+      :scope ["ConstructionTargets/FiberPredicateTransfer.lean"],
       :dag-node
-      "REGULAR-PREIMAGE/SUBMERSION / target-chart extension and exact local fiber identification",
+      "REGULAR-PREIMAGE/SUBMERSION / predicate fiber transport across coordinate codomains",
       :acceptance
-      {:fixture "/tmp/ManifoldTargetFiberChartExtension.lean",
+      {:fixture "/tmp/FiberPredicateTransfer.lean",
        :fixture-sha256
-       "1e0a009b8ebe447430810600f7dc094e036513e1f268aee522b0daf4cc1f71bc",
+       "26b7d66e7f387f962f97e0eb6e2cc7d88b873de1160e319aaf455dbbad49eef7",
        :implementation
-       "Promote the exact fixture, preserving genuine infinity, self-model hypotheses, the actual chart-pair domain, open-neighborhood value and derivative agreement, exact fiber equivalence and the center-containing extension-fiber chart. Compile all three declarations and audit zero placeholders and standard-only axioms. Preserve existing APIs; do not claim original-fiber charts, overlaps or global regularity of the extension.",
+       "Promote the exact fixture preserving inherited topologies, exact source and target, center membership and domain-restricted coordinate formulas. Compile the constructor and five specifications, audit zero placeholders and standard-only axioms. Retain reuse of the existing fiber-transfer theorem and preserve existing APIs. Do not claim smooth overlaps or a global manifold structure.",
        :commands
-       ["lake env lean ConstructionTargets/ManifoldTargetFiberChartExtension.lean"],
+       ["lake env lean ConstructionTargets/FiberPredicateTransfer.lean"],
        :placeholder-before 0,
        :placeholder-after 0,
        :axioms :standard-only},
-      :id
-      :manifold-target-fiber-chart-extension-implementation-refill34,
+      :id :fiber-predicate-transfer-implementation-refill34,
       :kind :reusable-theorem,
       :depends-on
-      [:checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image],
+      [:manifold-target-fiber-chart-extension-implementation-refill34],
       :current-residual
-      "Complete compiled chart-pair extension prerequisite awaits banking; literal original-fiber chart transport and overlap assembly remain.",
+      "Complete compiled predicate transfer awaits banking for original-fiber chart composition.",
       :other-consumers ["t02A07" "t01J04" "t94A06"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd
-       "lake env lean /tmp/ManifoldTargetFiberChartExtension.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/manifold-target-extension-audit.py",
-       :exit 0}],
-     :diagnostic-history [],
+     [{:cmd "lake env lean /tmp/FiberPredicateTransfer.lean", :exit 0}
+      {:cmd "python3 /tmp/fiber-predicate-audit.py", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/FiberPredicateTransfer.lean",
+       :exit 1,
+       :correction
+       "Finished source and target specifications by definitional equality after simplifying the composed homeomorphisms. Final compilation succeeds."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/ManifoldTargetFiberChartExtension.lean",
+     {:path "/tmp/FiberPredicateTransfer.lean",
       :sha256
-      "1e0a009b8ebe447430810600f7dc094e036513e1f268aee522b0daf4cc1f71bc"},
+      "26b7d66e7f387f962f97e0eb6e2cc7d88b873de1160e319aaf455dbbad49eef7"},
      :finding
-     "Compiled one prerequisite: actual source-target chart localization, constructed smooth extension, exact local fiber identification and an extension-fiber chart containing the center. Representative smoothness holds on the explicit open intersection of the source-chart target with the inverse image of the target-chart source. Its center fderiv equals the original mfderiv directly through the self-model coordinate definition. The cutoff producer supplies value agreement; openness gives derivative agreement throughout a smaller neighborhood. Target-chart injectivity proves that the extension's coordinate fiber equals the original target-value condition on that neighborhood. Center surjectivity then supplies the local fixed-model extension-fiber chart without global regularity of the extension. Original-manifold fiber charts and smooth overlaps are not yet assembled.",
+     "Compiled one predicate-level fiber-transfer prerequisite. Given an ambient open partial homeomorphism e, open V contained in its target and Q y iff P (e.symm y) on V, it constructs an actual open partial homeomorphism between the inherited-topology predicate subtypes. The source is exactly the original subtype over e.source with coordinates in V; the target is exactly the target subtype over V. Center membership and both underlying-value formulas are proved. The construction reuses OpenPartialHomeomorphFiberTransfer through proposition-valued maps and canonical subtype homeomorphisms. This permits different original and coordinate codomains, using the exact fiber equivalence supplied by ManifoldTargetFiberChartExtension. Original-fiber chart composition and smooth overlaps are not yet compiled.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / manifold-target fiber chart transport",
@@ -57475,7 +57508,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-34-after-neighborhood-preimage-and-tangent-image
-    :manifold-target-fiber-chart-extension-implementation-refill34],
+    :manifold-target-fiber-chart-extension-implementation-refill34
+    :fiber-predicate-transfer-implementation-refill34],
    :current-residual
    "Self-model manifold-to-vector fibers have global atlases and inclusion tangent geometry. Target-manifold chart transport on the literal fiber remains.",
    :other-consumers ["t02A07" "t01J04" "t94A06"]}
