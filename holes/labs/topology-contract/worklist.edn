@@ -62102,9 +62102,101 @@
    "One placeholder is the arbitrary-integer degree realization; intersection assembly is proved."}
   {:consumer "t99J03",
    :stop-condition
-   "GO requires actual embedded triangles and interior coverage; REVISE requires exactly one compiled geometric prerequisite. A finite chart-cover wrapper alone is insufficient.",
-   :phase :probe,
+   "Require the constructed affine embedding and all image specifications; no supplied embedding or triangle-image equality.",
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/StandardTriangleEmbedding.lean"],
+   :dag-node
+   "SURFACE TRIANGULATION / explicit affine simplex embedding",
+   :acceptance
+   {:fixture "/tmp/StandardTriangleEmbedding.lean",
+    :fixture-sha256
+    "8eac84f40a0fcba2925a02670f2cab15fae9634e568bec582e53b74d02d691f2",
+    :implementation
+    "Promote the exact fixture. Compile parametrization, continuity, injectivity, closed embedding, compact image, exact positive-barycentric image formula, openness and center membership. Preserve the standard simplex and ordinary product topology. Audit zero placeholders and standard-only axioms. Do not claim chart-target containment, manifold embeddings, finite coverage or face-compatible triangulation.",
+    :commands
+    ["lake env lean ConstructionTargets/StandardTriangleEmbedding.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :standard-triangle-embedding-implementation-refill42,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+   :current-residual
+   "The coordinate triangle is compiled. Scaling and translation into chart targets, manifold transfer and finite interior coverage remain.",
+   :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+  {:consumer "t99J03",
+   :stop-condition
+   "GO requires actual embedded triangles and interior coverage; REVISE requires exactly one compiled geometric prerequisite. A finite chart-cover wrapper alone is insufficient.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Construct scaled triangles inside actual chart targets, transfer their embeddings and open interiors to the manifold, and extract finite coverage. Compatible face intersections, global triangulation, classification and consumer closure remain subsequent.",
+     :outcome :revise,
+     :warnings [],
+     :statement-hashes
+     {:embedding
+      "c0229b7f4bc5ee68199169d50a032764d33422fc78fe7b835464e419cb27a6ad",
+      :compact-image
+      "6f1f93a477e51dd06e658331b9b18df52e0c9dab487efce92c411c1e8b253733",
+      :interior-image
+      "33d7bc25d61a4e478b3f0bbafef1e6b5d3d5ca693d87111bddce8f4e712c892d",
+      :open-interior
+      "1dfc72a403fb6a24fa0abbbf4535acf4ceeaa2984ebaafb2433994658207095f",
+      :center
+      "f7cc38d5e070564735fb56954512d65423b444a7bcedfcdb3a01b0318f330f18"},
+     :prerequisite
+     {:consumer "t99J03",
+      :stop-condition
+      "Require the constructed affine embedding and all image specifications; no supplied embedding or triangle-image equality.",
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/StandardTriangleEmbedding.lean"],
+      :dag-node
+      "SURFACE TRIANGULATION / explicit affine simplex embedding",
+      :acceptance
+      {:fixture "/tmp/StandardTriangleEmbedding.lean",
+       :fixture-sha256
+       "8eac84f40a0fcba2925a02670f2cab15fae9634e568bec582e53b74d02d691f2",
+       :implementation
+       "Promote the exact fixture. Compile parametrization, continuity, injectivity, closed embedding, compact image, exact positive-barycentric image formula, openness and center membership. Preserve the standard simplex and ordinary product topology. Audit zero placeholders and standard-only axioms. Do not claim chart-target containment, manifold embeddings, finite coverage or face-compatible triangulation.",
+       :commands
+       ["lake env lean ConstructionTargets/StandardTriangleEmbedding.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :id :standard-triangle-embedding-implementation-refill42,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+      :current-residual
+      "The coordinate triangle is compiled. Scaling and translation into chart targets, manifold transfer and finite interior coverage remain.",
+      :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/StandardTriangleEmbedding.lean",
+       :exit 0}
+      {:cmd "python3 /tmp/standard-triangle-embedding-audit.py",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/StandardTriangleEmbedding.lean",
+       :exit 1,
+       :correction
+       "Opened the Topology namespace, proved continuity through explicit coordinate evaluations, and reduced finite-index expressions before linear arithmetic. Final compilation succeeds without warnings."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/StandardTriangleEmbedding.lean",
+      :sha256
+      "8eac84f40a0fcba2925a02670f2cab15fae9634e568bec582e53b74d02d691f2",
+      :placeholder-count 0},
+     :finding
+     "Compiled one geometric prerequisite: an explicit affine embedding of the closed standard two-simplex into the ordinary real coordinate plane. Its image is compact. The image of strictly positive barycentric coordinates is exactly the open triangle defined by three strict affine inequalities and contains the origin. No embedding or image comparison is assumed.",
+     :seat "codex-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "SURFACE TRIANGULATION / finite embedded triangle cover",
    :acceptance
@@ -62115,7 +62207,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry
-    :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry],
+    :standard-triangle-embedding-implementation-refill42],
    :current-residual
    "Finite triangulation STOP identifies missing compatible embedded faces. Construct local embedded triangles first; shared-face refinement and realization homeomorphism remain subsequent.",
    :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
