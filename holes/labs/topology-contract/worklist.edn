@@ -57439,6 +57439,19 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789003883788-17549-d1260d19",
+     :commands
+     ["git show 638aeee0b5d9bf53664d2db05a4a47efbd6a9e8a"
+      "Independent scope, fixture SHA256, six declaration-signature hashes and placeholder audit"
+      "lake env lean ConstructionTargets/FiberPredicateTransfer.lean"
+      "lake build ConstructionTargets.OpenPartialHomeomorphFiberTransfer"
+      "git show --format= --check 638aeee0"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact one-file promotion; fixture and six signature hashes reproduce; zero placeholders; consumers unchanged. Predicate subtypes retain inherited topologies through setCongr homeomorphisms and existing fiber transfer. Exact source, target, center membership and domain-restricted forward/backward formulas verified. No smooth-overlap or global-manifold claim. Six declarations compile warning-free with standard axioms; prerequisite build succeeds (924 jobs). Whitespace clean; 444 ledger items validate; no edits."},
     :commit "638aeee0b5d9bf53664d2db05a4a47efbd6a9e8a",
     :changed-paths ["ConstructionTargets/FiberPredicateTransfer.lean"],
     :fixture
@@ -57449,7 +57462,7 @@
     :finding
     "Exact fixture promoted. Constructor and five specifications compile warning-free with standard-only axioms and zero placeholders. Inherited topologies, exact source/target, center membership and restricted coordinate formulas are preserved, reusing the existing fiber-transfer theorem. Existing APIs and consumers unchanged; worktree clean. Validator reports 444 items OK."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/FiberPredicateTransfer.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / predicate fiber transport across coordinate codomains",
@@ -57543,7 +57556,7 @@
      "Compiled one predicate-level fiber-transfer prerequisite. Given an ambient open partial homeomorphism e, open V contained in its target and Q y iff P (e.symm y) on V, it constructs an actual open partial homeomorphism between the inherited-topology predicate subtypes. The source is exactly the original subtype over e.source with coordinates in V; the target is exactly the target subtype over V. Center membership and both underlying-value formulas are proved. The construction reuses OpenPartialHomeomorphFiberTransfer through proposition-valued maps and canonical subtype homeomorphisms. This permits different original and coordinate codomains, using the exact fiber equivalence supplied by ManifoldTargetFiberChartExtension. Original-fiber chart composition and smooth overlaps are not yet compiled.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / manifold-target fiber chart transport",
