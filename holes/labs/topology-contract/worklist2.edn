@@ -33492,88 +33492,57 @@
    :current-residual
    "The global regular-fiber atlas applies to a squared-norm equality fiber, while the corrected consumer conclusion names the literal norm-equality radial level; their exact subtype equivalence must be banked before structure transport.",
    :other-consumers []}
-  {:consumer :t96J05,
+  {:placeholder-after 0,
+   :fixture-sha256
+   "a38dbeb208d66f777a1c7f713e3bcddef4977c8d1f13de584f53d47c8fffa7aa",
+   :statement-repair
+   "Add explicit positive attained regular-value data for the squared-norm restriction. Preserve the old hypotheses and literal radialLevel conclusion, and record that the former unconditional statement is refuted by the reviewed centered circle.",
+   :consumer :t96J05,
    :stop-condition
    "Preserve the reviewed centered-circle counterexample to the original unconditional statement. Do not claim the old frozen theorem, infer a regular radius from nonemptiness or connectedness, assume Sard supplies an attained value, weaken the literal radial-level subtype, or bypass the actual global regular-fiber atlas. Use a unique row-specific scratch directory.",
+   :gates
+   ["Verify the canonical RadialSquaredFiber source and fixture hashes."
+    "Apply the corrected statement repair only in problems/t96J05/lean/Main.lean."
+    "Compile the frozen Main with zero placeholders."
+    "Verify the positive radius and literal level inhabitant are retained."
+    "Verify the regular-fiber atlas is transported through the actual squared-fiber equivalence."
+    "Verify the fixed model is transported through a genuine continuous linear equivalence to EuclideanSpace real (Fin (m-1))."
+    "Reproduce standard-only axiom audits and require no warnings."
+    "Run placeholder, forbidden-declaration, whitespace, exact-scope and both-ledger checks; commit the scoped correction."],
    :evidence
    {:probe
-    {:placeholder-delta 0,
+    {:placeholder-delta -1,
      :residual
-     "Transport the banked global regular-fiber atlas through squaredFiberEquivRadialLevel, identify the fixed regular-fiber model with EuclideanSpace real (Fin (m-1)), and compile the corrected zero-placeholder t96J05 fixture.",
-     :outcome :revise,
+     "Implement the corrected theorem in the frozen Main file, replacing its sole placeholder and documenting the explicit regular-value statement repair.",
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t96J05,
-      :stop-condition
-      "Bank only the exact positive-radius equivalence between the squared-norm equality fiber and the literal norm radial-level subtype. Do not transport manifold structures, claim a regular value, modify the frozen statement, or claim corrected closure.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/RadialSquaredFiber.lean"
-       "ConstructionTargets/RadialSquaredFiber.md"],
-      :dag-node
-      "SPEC-DEFECT: squared-norm fiber to literal positive radial level",
-      :acceptance
-      {:namespace "ConstructionTargets.RadialSquaredFiber",
-       :implementation
-       "Promote the exact compiled fixture and document its role as the representation bridge between the regular-fiber atlas and the literal t96J05 radial level.",
-       :hypotheses
-       "Use EuclideanSpace real (Fin n), an arbitrary embedded subset X and a radius r with 0<r. No regularity, compactness, normalization or manifold hypothesis is needed for this representation equality.",
-       :declarations
-       ["E"
-        "radialLevel"
-        "squaredFiber"
-        "norm_sq_eq_sq_iff"
-        "squaredFiberEquivRadialLevel"
-        "squaredFiberEquivRadialLevel_apply"
-        "squaredFiberEquivRadialLevel_symm_apply"],
-       :consumer-equation
-       "For r>0, the subtype defined by norm(x)^2=r^2 is exactly equivalent to the literal subtype defined by norm(x)=r, and both directions preserve the underlying point definitionally.",
-       :consumer-residual
-       "Transport ManifoldRegularFiberGlobalAtlas across the equivalence, simplify its scalar-target fixed model to EuclideanSpace real (Fin (m-1)), and finish the corrected t96J05 theorem.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile the fixture and canonical target; run lake build ConstructionTargets.RadialSquaredFiber."
-        "Verify norm_sq_eq_sq_iff uses positivity and norm nonnegativity in the reverse implication."
-        "Verify both equivalence maps preserve the underlying subtype point exactly."
-        "Reproduce the three standard-only axiom audits."
-        "Confirm no atlas transport, regular-value existence or consumer closure is claimed."
-        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :representation
-      {:source
-       "The equality fiber in X defined by norm(x)^2=r^2, which is the fiber consumed by the squared-norm regular-value theorem",
-       :target
-       "The literal t96J05 radialLevel subtype in X defined by norm(x)=r",
-       :direction
-       "Exact positive-radius equivalence from the source squared-norm fiber to the target literal radial level, oriented by identity on the underlying embedded-manifold point, with an inverse in the opposite direction."},
-      :id :t96j05-radial-squared-fiber-literal-level-equivalence-1,
-      :kind :representation-comparison,
-      :depends-on
-      [:oriented-checkpoint53-t96j05-corrected-radial-regular-level-1],
-      :current-residual
-      "The global regular-fiber atlas applies to a squared-norm equality fiber, while the corrected consumer conclusion names the literal norm-equality radial level; their exact subtype equivalence must be banked before structure transport.",
-      :other-consumers []},
+     :statement-hashes
+     {:frozen-before
+      "4394da1c84c6e143f3b8e244912c2e0372f01d3893d5e0a019ad2cdc20f30760",
+      :corrected-fixture
+      "327eaf31434c8af95109bb022f729fbe60a77de49557675198b63321176ba314"},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and dependency receipts",
        :exit 0}
       {:cmd
-       "Inspect ConstructionTargets.ManifoldRegularFiberGlobalAtlas, ConstructionTargets.ManifoldRegularFiberCharts and the frozen t96J05 radial-level representation",
+       "Inspect ConstructionTargets.RadialSquaredFiber, ManifoldRegularFiberGlobalAtlas, ManifoldRegularFiberCharts, ChartedSpaceModelTransport, ChartedSpaceModelSmoothTransport and PredicateSubtypeAtlasTransport",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint53-radial-correction/RadialSquaredFiber.lean",
+       "lake env lean /tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/codex13-checkpoint53-radial-correction/RadialSquaredFiber.lean",
+       "sha256sum /tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint53-radial-correction/RadialSquaredFiber.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean",
        :exit 1,
        :expected-exit 1}
+      {:cmd "Reproduce the standard-only axiom audit for corrected",
+       :exit 0}
       {:cmd
-       "Reproduce three standard-only axiom audits for norm_sq_eq_sq_iff and both equivalence coordinate formulas",
+       "Python SHA256 audit of the frozen and corrected theorem statements",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -33585,16 +33554,39 @@
       {:cmd "git diff --exit-code", :exit 0}],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint53-radial-correction/RadialSquaredFiber.lean",
+      "/tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean",
       :sha256
-      "0670c4d1caed7969dbec19c5f24175eda9b3c11ff3ab88cd782450d3cb0c519f",
+      "a38dbeb208d66f777a1c7f713e3bcddef4977c8d1f13de584f53d47c8fffa7aa",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled representation prerequisite is supplied. At every positive radius it proves that the squared-norm equality fiber and the literal t96J05 norm-level subtype are equivalent by the identity on the underlying embedded-manifold point, with exact forward and inverse coercion formulas. The parent corrected closure is not GO because the ChartedSpace and IsManifold structures produced by ManifoldRegularFiberGlobalAtlas still must be transported through this equivalence and its fixed-model dimension simplified to EuclideanSpace real (Fin (m-1)). The reviewed centered-circle counterexample to the original unconditional theorem is preserved; no regular radius is inferred and no frozen file or ledger is edited.",
+     "A complete zero-placeholder corrected theorem compiles. It retains the embedded positive-dimensional submanifold, nonemptiness and connectedness data and adds explicit positive radius, inhabited literal radial level, smooth squared-norm restriction and derivative-surjectivity data on that squared-norm fiber. ManifoldRegularFiberGlobalAtlas supplies the fiber atlas. ContinuousLinearEquiv.ofFinrankEq and ChartedSpaceModelTransport identify its fixed model with EuclideanSpace real (Fin (m-1)). PredicateSubtypeAtlasTransport then moves the atlas and IsManifold proof across the banked exact equality between the squared-norm fiber and the literal norm-level subtype. The original centered-circle counterexample remains valid against the former unconditional theorem and does not satisfy the new regular-value hypothesis.",
+     :implementation
+     {:placeholder-after 0,
+      :fixture-sha256
+      "a38dbeb208d66f777a1c7f713e3bcddef4977c8d1f13de584f53d47c8fffa7aa",
+      :statement-repair
+      "Add explicit positive attained regular-value data for the squared-norm restriction. Preserve the old hypotheses and literal radialLevel conclusion, and record that the former unconditional statement is refuted by the reviewed centered circle.",
+      :gates
+      ["Verify the canonical RadialSquaredFiber source and fixture hashes."
+       "Apply the corrected statement repair only in problems/t96J05/lean/Main.lean."
+       "Compile the frozen Main with zero placeholders."
+       "Verify the positive radius and literal level inhabitant are retained."
+       "Verify the regular-fiber atlas is transported through the actual squared-fiber equivalence."
+       "Verify the fixed model is transported through a genuine continuous linear equivalence to EuclideanSpace real (Fin (m-1))."
+       "Reproduce standard-only axiom audits and require no warnings."
+       "Run placeholder, forbidden-declaration, whitespace, exact-scope and both-ledger checks; commit the scoped correction."],
+      :scope ["problems/t96J05/lean/Main.lean"],
+      :placeholder-before 1,
+      :consumer-equation
+      "Given r>0, an inhabitant of the literal radial level, smoothness of the squared-norm restriction and surjectivity of its manifold derivative throughout the squared-norm fiber, the literal radial level admits the required EuclideanSpace real (Fin (m-1)) atlas and manifold structure.",
+      :fixture
+      "/tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean",
+      :declarations ["apm_t96j05"],
+      :namespace "root frozen consumer namespace"},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["problems/t96J05/lean/Main.lean"],
    :dag-node
    "SPEC-DEFECT: corrected positive regular radial-level theorem",
    :acceptance
@@ -33620,11 +33612,18 @@
     "Under an explicit positive attained regular-value hypothesis for the radial squared-norm map, there exists r>0 whose literal radial level is nonempty and carries the required smooth manifold structure of dimension m-1.",
     :route-step
     "Supplies the sole t96J05 placeholder route by replacing the locally refuted unconditional radial-level assertion with an explicit positive attained regular-value hypothesis and applying the banked global regular-fiber atlas to the literal level subtype."},
+   :placeholder-before 1,
    :id :oriented-checkpoint53-t96j05-corrected-radial-regular-level-1,
    :kind :final-adapter,
+   :consumer-equation
+   "Given r>0, an inhabitant of the literal radial level, smoothness of the squared-norm restriction and surjectivity of its manifold derivative throughout the squared-norm fiber, the literal radial level admits the required EuclideanSpace real (Fin (m-1)) atlas and manifold structure.",
+   :fixture
+   "/tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean",
+   :declarations ["apm_t96j05"],
    :depends-on
    [:oriented-checkpoint53-sphere-cap-assembly-and-consumer-refill-1
     :t96j05-radial-squared-fiber-literal-level-equivalence-1],
+   :namespace "root frozen consumer namespace",
    :current-residual
    "The original one-placeholder theorem is locally refuted by the centered circle. A corrected theorem must expose a positive attained regular value and transport the banked regular-fiber atlas to the literal radial-level subtype.",
    :other-consumers []}
