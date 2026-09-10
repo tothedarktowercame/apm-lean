@@ -75059,6 +75059,20 @@
      "The four ordinary quotients of the ambient coefficient-chain degree module by the respective component-map range submodules",
      :direction
      "Canonical linear isomorphisms from each source categorical relative-cokernel degree representation to its target range-quotient representation, with exact equality from every evaluated categorical cokernel projection to the corresponding ordinary quotient map."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789084255648-19844-54cf7833",
+     :commands
+     ["git show ce46abadf3f0e538b37243e4b60f0770b7dc3998:ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean"
+      "git diff-tree --no-commit-id --name-only -r ce46abadf3f0e538b37243e4b60f0770b7dc3998"
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean"
+      "sha256sum /tmp/CoefficientSubcomplexRelativeDegreeQuotients.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean ConstructionTargets/CoefficientChainCokernelDegreeQuotient.lean"
+      "cmp -s /tmp/CoefficientSubcomplexRelativeDegreeQuotients.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean"
+      "git show --check --oneline --stat ce46abadf3f0e538b37243e4b60f0770b7dc3998"
+      "python3 eight-declaration hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at fbc78c211bdafed1ef1b8f169274aa0ceec3eb9d5fc60b979d8e0d443c0964c8, and the generic cokernel-degree dependency reproduces b1cc05c7878ba6eca524bafd8cc6e046c8c560e05221b0f6efaaaf25e9968d5d. Lean compilation succeeds without warnings, all eight frozen declaration hashes reproduce, placeholders are zero, and printed axioms are standard-only. The four isomorphisms consistently point from the intersection, left, right, and union categorical cokernel degree objects to quotients of the common ambient-chain degree module by the corresponding component-map ranges. Each projection theorem has the correct orientation from the evaluated categorical cokernel projection through the forward isomorphism to the ordinary quotient map. No range-lattice equality or quotient-arrow compatibility is asserted prematurely."},
     :commit "ce46abadf3f0e538b37243e4b60f0770b7dc3998",
     :changed-paths
     ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean"],
@@ -75071,7 +75085,7 @@
     "The exact fixture and reviewed generic cokernel-degree quotient dependency hashes reproduce. The four specialized degreewise quotient isomorphisms and all four categorical-projection compatibility theorems compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean"],
    :dag-node
@@ -75172,7 +75186,7 @@
      "Compiled exactly one bounded specialization of the degreewise cokernel representation. The intersection, left, right and union relative chain cokernels now each have a named degreewise isomorphism to the ambient degree module modulo the range of the corresponding subcomplex-chain inclusion. Four projection equations identify the categorical cokernel projections exactly with the ordinary quotient maps. This prepares the literal quotient arrows for comparison with the explicit module-level exact sequence without supportConnecting or excision.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
