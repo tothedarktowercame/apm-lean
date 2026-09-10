@@ -61625,14 +61625,77 @@
   {:consumer "t01A02",
    :stop-condition
    "GO requires the literal covering and fiber comparison packet; REVISE requires exactly one compiled prerequisite. No covering classification or consumer closure claim.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Literal covering base change and fiber transport are complete in the fixture. Consumer-specific covering classification, geometric comparisons and final adapters remain; no consumer closure is claimed.",
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {:fiberEquiv
+      "3e484a3376da6b79f0eef93b80761deb6b0b84bb34330017c5bf7734621f3e43",
+      :forward-value
+      "01800eb0fad3584847e6dce3e453d872aed1fcfc5c2bc592c5e019909af5ac4c",
+      :inverse-value
+      "d1c689e53be7b457d815e9402c323dac52a35766681a71b8939560ed64f5f50a",
+      :card
+      "0f0ed6507b0cbeb93412661be2b6698db1a44559d91a3f77713b322af87d38f2",
+      :localHomeomorph
+      "2049f784ca4ea27398d900aaaa0cfc4f947837f1a5ba7974af6390ac89bc33eb",
+      :local-existence
+      "97b46b81dd84cdab3c43ec35231b5fc23048dce95c4d91d9000760d1f99788b7",
+      :covering
+      "e9df021c833cc51a4b7956d5ac48a7145428510f948cb1b3ce191747e7608d19"},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/LiteralCoveringPullback.lean", :exit 0}
+      {:cmd "python3 /tmp/literal-covering-pullback-audit.py", :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/LiteralCoveringPullback.lean",
+       :exit 1,
+       :correction
+       "Exposed preimage membership before rewriting and omitted unused topology assumptions from fiber specifications."}
+      {:cmd "lake env lean /tmp/LiteralCoveringPullback.lean",
+       :exit 1,
+       :correction
+       "Removed a redundant tactic and separated product extensionality goals."}
+      {:cmd "lake env lean /tmp/LiteralCoveringPullback.lean",
+       :exit 1,
+       :correction
+       "Specified the dependent subtype argument and reduced the inverse-coordinate goal explicitly. Subsequent compilation succeeds."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/LiteralCoveringPullback.lean",
+      :sha256
+      "1943d624f6b7e575806e87abd018e2bb7a03919f7d020e7596c78f07af9b24a3",
+      :placeholder-count 0},
+     :finding
+     "Compiled the complete literal pullback covering packet. Pulling back actual evenly covered neighborhoods constructs local homeomorphisms compatible with the literal projection. The fiber equivalence has explicit forward and inverse value formulas and proves Nat.card equality. Empty fibers are included; no connectedness, surjectivity or finite-sheet assumptions are added.",
+     :implementation
+     {:scope ["ConstructionTargets/LiteralCoveringPullback.lean"],
+      :acceptance
+      {:implementation
+       "Promote the exact fixture. Compile projection, fiberEquiv, both fiber value specifications, fiber_card, localHomeomorph, its projection and inverse specifications, exists_localHomeomorph and covering. Preserve inherited subtype topology and all stated hypotheses. Audit zero placeholders and standard-only axioms.",
+       :commands
+       ["lake env lean ConstructionTargets/LiteralCoveringPullback.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0}},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/LiteralCoveringPullback.lean"],
    :dag-node "COVERING-BASIC / literal pullback and fiber transport",
    :acceptance
-   {:axioms :standard-only,
-    :probe
-    "For an actual IsCoveringMap p:E→B and continuous f:X→B, construct the covering projection from the inherited-topology literal subtype {z:X×E // f z.1=p z.2} to X. Derive local trivializations and the exact fiber equivalence over x with the fiber of p over f x, including forward and inverse value formulas and Nat.card equality. Audit existing Mathlib pullback APIs and reuse them through proved literal representation transport. Include empty fibers and avoid additional connectedness, surjectivity or finite-sheet assumptions. No supplied covering or fiber equivalence."},
+   {:implementation
+    "Promote the exact fixture. Compile projection, fiberEquiv, both fiber value specifications, fiber_card, localHomeomorph, its projection and inverse specifications, exists_localHomeomorph and covering. Preserve inherited subtype topology and all stated hypotheses. Audit zero placeholders and standard-only axioms.",
+    :commands
+    ["lake env lean ConstructionTargets/LiteralCoveringPullback.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
    :id :literal-covering-pullback-probe-refill41,
    :kind :reusable-theorem,
    :depends-on
