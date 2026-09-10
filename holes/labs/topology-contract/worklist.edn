@@ -58578,9 +58578,117 @@
    "One placeholder: construct OrientedSurfacePreimageDuality.Producer S. Self-model regular-fiber geometry is banked; oriented geometric-to-homological detection remains."}
   {:consumer "t00J02",
    :stop-condition
-   "GO requires the complete actual geometry packet compiled. REVISE requires exactly one compiled prerequisite; no conditional duality producer or consumer closure claim.",
-   :phase :probe,
+   "Require the exact smoothness, derivative formula, derived regularity and zero-fiber equality without supplied derivative or regularity assumptions.",
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/TransverseDifferenceRegularity.lean"],
+   :dag-node "TRANSVERSE-PULLBACK / difference-map regularity",
+   :acceptance
+   {:fixture "/tmp/TransverseDifferenceRegularity.lean",
+    :fixture-sha256
+    "eeb58cab302c436d07544eaef32444fcd66e7fa04be199eb1ee20ef028533a1b",
+    :implementation
+    "Promote the exact fixture. Compile smooth, derivative, regular and fiber_eq with zero placeholders and standard-only axioms. Preserve actual product models and mfderivs, genuine infinity and existing APIs. No finite-dimensionality is required for this prerequisite. Do not claim a fiber-product atlas, inclusion tangent comparison or duality.",
+    :commands
+    ["lake env lean ConstructionTargets/TransverseDifferenceRegularity.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :transverse-difference-regularity-implementation-refill37,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent],
+   :current-residual
+   "Complete difference-map smoothness, derivative and regularity packet compiled; literal fiber-product atlas transport remains.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires the complete actual geometry packet compiled. REVISE requires exactly one compiled prerequisite; no conditional duality producer or consumer closure claim.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Apply the finite-dimensional regular-fiber atlas to the difference map, transport it to the literal incidence subtype with inherited topology, and prove smooth inclusion and the requested tangent equalizer formula for that atlas. Product-model and dimension transport remain to be compiled. Target-manifold localization and oriented duality remain subsequent; no consumer closure is claimed.",
+     :outcome :revise,
+     :warnings [],
+     :statement-hashes
+     {:smooth
+      "9bcf00059b931f5b20880e377daf7dafd90730b36ab68b9021eebef6d927f3cf",
+      :derivative
+      "f0950b0df00db0a01674fa79a371ffab2259f07999a5dc0e7039cb0f6343029d",
+      :regular
+      "3aa20d57593819077cc84deaa84358f3490397fb0f6a122a26332b7dbe97d76c",
+      :fiber-eq
+      "2fbd08a1c825169ae40317983cdec1a8fa783231e4b4a451542904bcf4585487"},
+     :prerequisite
+     {:consumer "t00J02",
+      :stop-condition
+      "Require the exact smoothness, derivative formula, derived regularity and zero-fiber equality without supplied derivative or regularity assumptions.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/TransverseDifferenceRegularity.lean"],
+      :dag-node "TRANSVERSE-PULLBACK / difference-map regularity",
+      :acceptance
+      {:fixture "/tmp/TransverseDifferenceRegularity.lean",
+       :fixture-sha256
+       "eeb58cab302c436d07544eaef32444fcd66e7fa04be199eb1ee20ef028533a1b",
+       :implementation
+       "Promote the exact fixture. Compile smooth, derivative, regular and fiber_eq with zero placeholders and standard-only axioms. Preserve actual product models and mfderivs, genuine infinity and existing APIs. No finite-dimensionality is required for this prerequisite. Do not claim a fiber-product atlas, inclusion tangent comparison or duality.",
+       :commands
+       ["lake env lean ConstructionTargets/TransverseDifferenceRegularity.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :id :transverse-difference-regularity-implementation-refill37,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent],
+      :current-residual
+      "Complete difference-map smoothness, derivative and regularity packet compiled; literal fiber-product atlas transport remains.",
+      :other-consumers ["t02A07" "t94A06" "t97J05"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
+       :exit 1,
+       :correction
+       "Included smoothness hypotheses explicitly in theorem parameters."}
+      {:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
+       :exit 1,
+       :correction
+       "Added the required smooth subtraction imports and investigated tangent-space elaboration."}
+      {:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
+       :exit 1,
+       :correction "Made derivative codomain annotations explicit."}
+      {:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
+       :exit 1,
+       :correction
+       "Fixed subtraction to use the ambient F operation explicitly."}
+      {:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
+       :exit 1,
+       :correction
+       "Specified both product-model differentiability types."}
+      {:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
+       :exit 1,
+       :correction
+       "Changed the derivative goal to the pointwise difference of composed maps before rewriting."}
+      {:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
+       :exit 1,
+       :correction
+       "Closed the coordinate derivative equality by definitional reduction and instantiated subtraction-of-negation explicitly in F; final compilation succeeds."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/TransverseDifferenceRegularity.lean",
+      :sha256
+      "eeb58cab302c436d07544eaef32444fcd66e7fa04be199eb1ee20ef028533a1b"},
+     :finding
+     "Compiled one prerequisite. The difference map f(x)-g(y) is genuinely smooth; its actual manifold derivative sends (v,w) to Df(v)-Dg(w). Range-sum transversality gives coproduct surjectivity, and negating the second input proves zero is regular. The zero-fiber set equals the literal incidence set. These results assume neither derivative transport nor regularity and do not exclude empty incidence or zero-dimensional models.",
+     :seat "codex-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TRANSVERSE-PULLBACK / vector-target fiber product",
    :acceptance
@@ -58593,7 +58701,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent
-    :checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent],
+    :transverse-difference-regularity-implementation-refill37],
    :current-residual
    "Regular fibers have actual atlases and tangent geometry. Transverse incidence of two maps must be converted to a literal fiber-product manifold.",
    :other-consumers ["t02A07" "t94A06" "t97J05"]}
