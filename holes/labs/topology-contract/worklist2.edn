@@ -33338,6 +33338,8 @@
    "Measure symbolic whole-sphere assembly separately from blocked raw normalization, numerical moment evaluation and frozen closure; rerank every open consumer route against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t96J05,
+   :review-finding
+   "Recorded commit d0a4f11e stores the squaredFiberEquivRadialLevel_apply statement hash as malformed text containing ` ballot`. Recomputing the committed declaration region, including its @[simp] attribute and trailing newline, gives 039e6ccbe8db11c8727d0305896c3c6480394a0391ccf3b80adae66db2c614ec. Replace the malformed value with this exact 64-hex SHA256 and regenerate the transition.",
    :stop-condition
    "Bank only the exact positive-radius equivalence between the squared-norm equality fiber and the literal norm radial-level subtype. Do not transport manifold structures, claim a regular value, modify the frozen statement, or claim corrected closure.",
    :evidence
@@ -33407,6 +33409,12 @@
      {:cmd
       "git show --check --oneline 964e34dd; recompute committed SHA256, Git blob and seven declaration-region hashes; git diff --check; git status --short",
       :exit 0}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1789063847539-19114-1f0f2caf",
+     :finding
+     "Recorded commit d0a4f11e stores the squaredFiberEquivRadialLevel_apply statement hash as malformed text containing ` ballot`. Recomputing the committed declaration region, including its @[simp] attribute and trailing newline, gives 039e6ccbe8db11c8727d0305896c3c6480394a0391ccf3b80adae66db2c614ec. Replace the malformed value with this exact 64-hex SHA256 and regenerate the transition."},
     :commit "964e34ddaca4357c77878f60a36838bc49576d55",
     :changed-paths
     ["ConstructionTargets/RadialSquaredFiber.lean"
@@ -33422,7 +33430,7 @@
     "At every positive radius, the squared-norm equality fiber and literal norm radial-level subtype are canonically equivalent by identity on their underlying embedded-subset points. The reverse norm implication uses positivity of the radius and nonnegativity of the norm. No manifold structures, regular-value claim, frozen-statement edit, or corrected closure is included.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/RadialSquaredFiber.lean"
     "ConstructionTargets/RadialSquaredFiber.md"],
