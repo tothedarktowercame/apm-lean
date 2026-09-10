@@ -59144,59 +59144,55 @@
    :stop-condition
    "GO requires a compiled exact representation result. Otherwise report the precise homology or typing boundary. Preserve local evidence separately from frozen consumer validity; no campaign termination.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Bank the exact predicate-triviality evidence. A separate specification investigation must determine the correct component-coverage contract and its relation to the consumer. Any Producer refutation must satisfy its exact geometric hypotheses in a compiled counterexample; neither that nor frozen Main refutation is claimed here. Consumer definitions and its one placeholder remain unchanged.",
-     :dependency-review
-     {:outcome :pass, :job "invoke-1789008311597-17688-d36af4e2"},
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:constant-map-zero
-      "f11c85f28480e7731a956103752d819954cd9c2dc2d8d9a25005b936cdf5293c",
-      :always
-      "fb923bccb0f166025d6c6d6e62b85d5817adff63dee0521b0b0da82526c3cd7a",
-      :iff-true
-      "7c0d61fa4d8bd911863b27e517fb933160c992fe221523ce874610f36d4873bd"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "bb /tmp/t95j05-refill38-review.bb", :exit 0}
-      {:cmd "lake env lean /tmp/NullWindingPreimageTriviality.lean",
-       :exit 0}
-      {:cmd "python3 /tmp/null-winding-triviality-audit.py", :exit 0}],
-     :diagnostic-history [],
-     :representation
-     {:source
-      "EmbeddedCirclePreimage.HasNullWindingPreimage for actual integral singular H1 and arbitrary continuous f and c",
-      :target "True",
-      :direction
-      "Logical equivalence from the literal null-winding predicate to True, with the reverse implication proved by constructed constant-loop witnesses."},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/NullWindingPreimageTriviality.lean",
-      :sha256
-      "4a1449bc3f9683ee5d2c5cbf5a2f387310a45ef98e19e0f89268fc152564c334",
-      :placeholder-count 0},
-     :finding
-     "Compiled the exact representation result: HasNullWindingPreimage for actual integral singular H1 is universally true for arbitrary continuous f and c. At each incident point, choose a target-circle witness z and constant loops gamma at x and ell at z. These satisfy point membership, range containment and the composition equation. The banked singular-homology theorem proves the actual constant-map H1 action is zero by factoring through Unit; no nullity premise is supplied. ComponentsBoundByDisks requires the boundary range to equal connectedComponentIn s x, whereas HasNullWindingPreimage retains only point membership and range containment. This proves triviality of the existing predicate, not a counterexample to Producer or frozen Main.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/NullWindingPreimageTriviality.lean"],
-      :acceptance
-      {:fixture "/tmp/NullWindingPreimageTriviality.lean",
-       :fixture-sha256
-       "4a1449bc3f9683ee5d2c5cbf5a2f387310a45ef98e19e0f89268fc152564c334",
-       :implementation
-       "Promote the exact fixture. Compile constant_map_zero, always and iff_true with zero placeholders and standard-only axioms. Preserve the actual integral singular H1 functor and arbitrary continuous-map hypotheses. Do not change the existing predicate, Producer or consumer statements; do not claim a Producer or frozen-statement refutation.",
-       :commands
-       ["lake env lean ConstructionTargets/NullWindingPreimageTriviality.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0}},
-     :seat "codex-12"}},
+   {:placeholder-delta 0,
+    :residual
+    "The component-coverage contract and its consumer relationship require separate investigation. This establishes predicate triviality only, not a Producer or frozen Main refutation, specification repair, consumer closure or campaign termination.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:constant-map-zero
+     "f11c85f28480e7731a956103752d819954cd9c2dc2d8d9a25005b936cdf5293c",
+     :always
+     "fb923bccb0f166025d6c6d6e62b85d5817adff63dee0521b0b0da82526c3cd7a",
+     :iff-true
+     "7c0d61fa4d8bd911863b27e517fb933160c992fe221523ce874610f36d4873bd"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd "python3 /tmp/null-winding-triviality-audit.py", :exit 0}
+     {:cmd
+      "cmp /tmp/NullWindingPreimageTriviality.lean ConstructionTargets/NullWindingPreimageTriviality.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/NullWindingPreimageTriviality.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "EmbeddedCirclePreimage.HasNullWindingPreimage for actual integral singular H1 and arbitrary continuous f and c",
+     :target "True",
+     :direction
+     "Logical equivalence from the literal null-winding predicate to True, with the reverse implication proved by constructed constant-loop witnesses."},
+    :commit "0f3d11b9bcc54dda5419df74b6d8e726c81136c8",
+    :changed-paths
+    ["ConstructionTargets/NullWindingPreimageTriviality.lean"],
+    :fixture
+    {:path "/tmp/NullWindingPreimageTriviality.lean",
+     :sha256
+     "4a1449bc3f9683ee5d2c5cbf5a2f387310a45ef98e19e0f89268fc152564c334",
+     :placeholder-count 0},
+    :finding
+    "Exact fixture promoted. All three declarations compile warning-free with standard-only axioms and zero placeholders. Actual integral singular H1 and arbitrary continuous-map hypotheses are preserved. Existing predicates, Producer and consumers unchanged; worktree clean. Validator reports 460 items OK."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/NullWindingPreimageTriviality.lean"],
    :dag-node
    "POINCARE/THOM COMPARISON / null-winding representation audit",
