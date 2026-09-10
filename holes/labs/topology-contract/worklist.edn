@@ -66675,87 +66675,80 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Transition-unit local constancy remains. Orientation, global localization and consumer closure remain subsequent; no lower-dimensional normalization extension is claimed.",
+     "Actual transition-unit local constancy is proved in dimension m+2. Global orientation, global localization and fundamental-class construction remain subsequent. Lower-dimensional local comparisons are unchanged; normalization is not extended to lower dimensions.",
      :dependency-review
      {:outcome :pass,
       :seat "codex-10",
-      :job "invoke-1789037999068-18444-447071d9"},
-     :outcome :revise,
+      :job "invoke-1789038383499-18452-4a88445d"},
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer "t98A02",
-      :stop-condition
-      "Require actual sphere-map identification and derived neighborhood homology and normalized-composite equalities; no assumed local constancy.",
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientSecondChartBoundaryMotion.lean"],
-      :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / second-chart boundary-motion equality",
-      :acceptance
-      {:fixture "/tmp/CoefficientSecondChartBoundaryMotion.lean",
-       :fixture-sha256
-       "a0d598c17cdd0eedc7736aa860788c2a4b087f6bcd3d7e5ccab5d64dc35aebd3",
-       :implementation
-       "Promote the exact fixture. Compile center_bound, sphere_identification, center_identification, nearby_homology and nearby_normalized. Verify CoefficientSecondChartBoundary SHA256 9275703052f90de380e636b3b9262f72ca6fb20b8286857a788fb9395a2b6a20. Preserve the constructed neighborhood, actual homology maps, arbitrary natural degree, commutative-ring coefficients and dimension-m+2 normalization. Require zero placeholders, no warnings and standard-only axioms. Do not claim equality of transition units or global orientation.",
-       :commands
-       ["lake env lean ConstructionTargets/CoefficientSecondChartBoundaryMotion.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0},
-      :representation
-      {:source
-       "Actual second-chart boundary homology maps and normalized fixed-lift composites at nearby points",
-       :target
-       "The corresponding actual boundary map and normalized composite at the original center",
-       :direction
-       "Prove equality from each nearby-point homology map to the center map, then derive equality of the directed fixed-lift and model-normalization composites."},
-      :id
-      :coefficient-second-chart-boundary-motion-implementation-refill48,
-      :kind :representation-comparison,
-      :depends-on
-      [:coefficient-second-chart-boundary-implementation-refill48],
-      :current-residual
-      "Identify the second-chart composite with ambient chart normalization, combine with first-chart normalization, and extract equality of the banked transition units.",
-      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]},
+     :statement-hashes
+     {:locally_constant
+      "1f8f6333030fddc3fedf396f43da5bc80bf47928bd759f69d1956532db20ff78",
+      :lifted_right
+      "fc1d0e4e76a625788ad5b0d69f6bc2ce786bc0e3db9b2e2808d9c7525075d6b4",
+      :comparison_lift
+      "f41c595cd543544c4d2154fce8d17713d3d4f8715983147b51e47736d3a3b492"},
+     :acceptance
+     {:implementation
+      "Promote the exact fixture. Compile inclusion_normalization, second_factorization, lifted_left, lifted_right, comparison_lift and locally_constant. Preserve actual pair maps, the constructed open neighborhood, arbitrary commutative-ring coefficients, the original Hausdorff manifold topology and dimension m+2. Reuse the reviewed boundary-motion theorem without duplication. Require zero placeholders, no warnings and standard-only axioms.",
+      :commands
+      ["lake env lean ConstructionTargets/CoefficientTransitionLocalConstancy.lean"],
+      :axioms :standard-only,
+      :placeholder-before 0,
+      :placeholder-after 0},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean -o /tmp/chartball47/ConstructionTargets/CoefficientSecondChartBoundary.olean ConstructionTargets/CoefficientSecondChartBoundary.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean -o /tmp/chartball47/ConstructionTargets/CoefficientSecondChartBoundaryMotion.olean ConstructionTargets/CoefficientSecondChartBoundaryMotion.lean'",
        :exit 0}
       {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientSecondChartBoundaryMotion.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientTransitionLocalConstancy.lean'",
        :exit 0}
       {:cmd
-       "python3 /tmp/coefficient-second-chart-boundary-motion-audit.py",
+       "python3 /tmp/coefficient-transition-local-constancy-audit.py",
        :exit 0}
       {:cmd
-       "sha256sum ConstructionTargets/CoefficientSecondChartBoundary.lean",
+       "sha256sum /tmp/CoefficientTransitionLocalConstancy.lean ConstructionTargets/CoefficientSecondChartBoundaryMotion.lean ConstructionTargets/CoefficientChartBallNormalization.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientSecondChartBoundaryMotion.lean",
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientTransitionLocalConstancy.lean'",
        :exit 1,
        :correction
-       "Compiled the promoted dependency's missing object privately."}
+       "Initial normalization rewrite did not match the right-normalization abbreviation."}
       {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientSecondChartBoundaryMotion.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientTransitionLocalConstancy.lean'",
        :exit 1,
        :correction
-       "Unfolded the actual boundaryMap definition in the center specialization. Final compilation succeeds."}],
+       "Unfolding alone did not resolve the match; supplied explicit arguments and used elaborating rewrite."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientTransitionLocalConstancy.lean'",
+       :exit 1,
+       :correction
+       "Reduced the congrArg lambda before rewriting homology compositions."}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientTransitionLocalConstancy.lean'",
+       :exit 1,
+       :correction
+       "Closed the remaining definitional equality with rfl. The complete local-constancy fixture subsequently compiles without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientSecondChartBoundaryMotion.lean",
+     {:path "/tmp/CoefficientTransitionLocalConstancy.lean",
       :sha256
-      "a0d598c17cdd0eedc7736aa860788c2a4b087f6bcd3d7e5ccab5d64dc35aebd3",
+      "15601b5de06d11918a5d6922f4b71f78582f8a4292b5a707ce9d7702c445aef0",
       :placeholder-count 0},
      :finding
-     "Compiled one boundary-motion comparison prerequisite. The actual second-chart sphere map is identified with the banked recentered boundary map, including its center specialization. The constructed neighborhood and existing center-motion homotopy then prove equality of these actual homology maps in every natural degree. The proved connecting equation carries this equality to the fixed lift followed by second-chart relative homology and model normalization. Equality of the named transition units remains unproved.",
+     "Constructed an open neighborhood of the overlap point on which the actual coefficient transition unit equals its value at the center. Proved the actual second-chart pair factorization and ambient normalization comparison, combined both chart comparisons with the reviewed boundary-motion equality, and extracted equality of the named units. No local constancy or orientation compatibility is assumed.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientTransitionLocalConstancy.lean"]},
      :seat "codex-12"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientTransitionLocalConstancy.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / nearby transition-unit equality",
    :acceptance
