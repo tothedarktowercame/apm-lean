@@ -41685,8 +41685,309 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      :exit 0}
+     {:cmd
+      "Recount every DAG-named frozen consumer with comments stripped and inspect current open, blocked, superseded and reviewed rows",
+      :exit 0}
+     {:cmd
+      "Inspect reviewed ProductSimplexWordPrefixCounts recurrence promotion, ProductSimplexStepWord, ProductSimplexReconstructedPath, cumulative-order-homomorphism modules and the preserved inverse-law STOP",
+      :exit 0}
+     {:cmd
+      "Verify checkpoint60 points to the immutable predecessor artifact and the canonical recurrence source has SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08 with all four exported recurrence theorems",
+      :exit 0}
+     {:cmd
+      "Search ConstructionTargets and Mathlib for existing reconstructedPath/stepWord inverse laws",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Compare 8b770594740043fc891791f5db2f30c197753380..b7fd0ec4b739612463f00f484e59438596b904bd and attribute ConstructionTargets and frozen-problem changes",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :measures
+    {:baseline
+     {:commit "8b770594740043fc891791f5db2f30c197753380",
+      :description "Pre-checkpoint67 strategy head"},
+     :proved-refutations 0,
+     :frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :head
+     {:commit "b7fd0ec4b739612463f00f484e59438596b904bd",
+      :description "Pre-checkpoint68 strategy head"},
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:before 855,
+      :after 856,
+      :portfolio
+      ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"],
+      :concurrent
+      ["ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean"]},
+     :corrected-closures 0,
+     :review-outcomes
+     {:atomic-supervisor-fixture-path-transition
+      {:outcome :pass, :disposition :banked, :commit "f96d30c1"},
+      :product-simplex-reconstructed-maximal-path
+      {:outcome :pass, :disposition :banked},
+      :bounded-oriented-face-cancellation
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-balanced-step-word-maximal-path-equivalence},
+      :checkpoint60-fixture-path-transition
+      {:outcome :pass, :disposition :applied},
+      :finite-cover-rational-euler
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-finite-type-chain-level-covering-comparison},
+      :raw-hausdorff-normalization
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-addHaarScalarFactor-characterization},
+      :singular-cross-product
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-signed-product-simplex-shuffle-triangulation},
+      :balanced-word-cumulative-maximal-path-equivalence
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-prefix-count-successor-recurrences,
+       :disposition :boundary-resolved},
+      :immutable-predecessor-artifact-transition
+      {:outcome :pass,
+       :disposition :banked,
+       :commit "5a936aa4888fb7d4418afed931e459e752a43356"},
+      :product-simplex-prefix-successor-recurrences-promotion
+      {:outcome :pass,
+       :disposition :banked,
+       :commit "30f261b6",
+       :fixture
+       "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08"}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholders 61}},
+    :finding
+    {:typed-residual-change
+     "The four reviewed true/false successor recurrences are now promoted in ProductSimplexWordPrefixCounts, and checkpoint60 remains independently verifiable through its immutable predecessor artifact. Prefix arithmetic, balanced totals, monotonicity, cumulative grid coordinates, reconstructed maximal paths, path-to-word coordinate semantics and endpoint normalization are all banked. The exact remaining shared representation boundary is the two inverse laws: stepWord of a reconstructed balanced word must return that word, and reconstructing the balanced word extracted from a canonical maximal path must return the path. No existing ConstructionTargets or Mathlib theorem supplies these equations. This is the simplest needed step shared by t03J05, t96J06 and t97A04. No near-closure adapter has a complete route, no frozen placeholder changed, and the sole new ConstructionTargets module is concurrent coefficient work.",
+     :routes
+     [{:consumer :a97J08,
+       :placeholders 1,
+       :route
+       "local degree and orientation -> consumer comparison -> adapter"}
+      {:consumer :t00A03,
+       :placeholders 2,
+       :route
+       "translations -> endpoint perturbation -> compatible faces -> triangulation"}
+      {:consumer :t00J01,
+       :placeholders 1,
+       :route
+       "circle fold -> Klein geometry -> homology bridge -> adapter"}
+      {:consumer :t00J02,
+       :placeholders 1,
+       :route
+       "relative Mayer-Vietoris -> excision -> localization and fundamental class"}
+      {:consumer :t01A02,
+       :placeholders 3,
+       :route "H2 degree -> Lefschetz -> conjunction"}
+      {:consumer :t01A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> cap/Thom comparison -> calculations"}
+      {:consumer :t01A05,
+       :placeholders 1,
+       :route
+       "compact-support Mayer-Vietoris -> localization -> adapter"}
+      {:consumer :t01A08,
+       :placeholders 1,
+       :route "regularity conversion -> Sard -> adapter"}
+      {:consumer :t01J01,
+       :placeholders 3,
+       :route
+       "translations -> endpoint control -> triangulation -> theorem"}
+      {:consumer :t01J04,
+       :placeholders 1,
+       :route
+       "regular preimage -> countability and atlas applicability -> theorem"}
+      {:consumer :t01J06,
+       :placeholders 3,
+       :route
+       "sphere moments -> normalization -> Stokes -> conjunction"}
+      {:consumer :t02A05,
+       :placeholders 2,
+       :route "S2 flux -> normalization -> integral and minimum"}
+      {:consumer :t02A07,
+       :placeholders 3,
+       :route
+       "compact-support Mayer-Vietoris -> localization -> fundamental class"}
+      {:consumer :t02A08,
+       :placeholders 1,
+       :route "local comparison -> normalization -> theorem"}
+      {:consumer :t03J02,
+       :placeholders 2,
+       :route
+       "null winding -> collar or Schoenflies -> gluing -> theorem"}
+      {:consumer :t03J04,
+       :placeholders 1,
+       :route
+       "torus homology -> finite-cover Euler comparison -> theorem"}
+      {:consumer :t03J05,
+       :placeholders 1,
+       :route
+       "banked reconstructed paths and prefix recurrences -> word/path inverse laws -> adjacent corner swaps -> oriented cancellation -> cross product -> intersection and nonhomotopy -> theorem"}
+      {:consumer :t91J05,
+       :placeholders 3,
+       :route
+       "translations -> endpoint control -> compatible faces -> result"}
+      {:consumer :t92J05,
+       :placeholders 3,
+       :route
+       "antipodal and genus-two bridges -> classification -> assembly"}
+      {:consumer :t92J06,
+       :placeholders 1,
+       :route "covering data -> quotient adapter -> theorem"}
+      {:consumer :t94A06,
+       :placeholders 1,
+       :route
+       "regular preimage and translation -> applicability -> adapter"}
+      {:consumer :t94A10,
+       :placeholders 3,
+       :route "S2 moments -> normalization -> nonexactness"}
+      {:consumer :t94J09,
+       :placeholders 1,
+       :route
+       "translations -> endpoint perturbation -> intersection adapter"}
+      {:consumer :t95J05,
+       :placeholders 1,
+       :route "S3 moment -> mass normalization -> integral uptake"}
+      {:consumer :t95J06,
+       :placeholders 2,
+       :route "torus quotient -> classification -> result"}
+      {:consumer :t96J06,
+       :placeholders 2,
+       :route
+       "fundamental class and banked product paths -> word/path inverse laws -> oriented product comparison -> adapters"}
+      {:consumer :t97A01,
+       :placeholders 1,
+       :route
+       "cover transfer -> finite-cover Euler comparison -> theorem"}
+      {:consumer :t97A04,
+       :placeholders 4,
+       :route
+       "fundamental class and banked product paths -> word/path inverse laws -> cross product -> Eilenberg-Zilber -> Kunneth -> intersections"}
+      {:consumer :t97J05,
+       :placeholders 5,
+       :route
+       "compact-support Mayer-Vietoris -> localization -> fundamental class -> assembly"}
+      {:consumer :t98A01,
+       :placeholders 1,
+       :route
+       "five-torsion -> polygon genus -> Euler comparison -> conjunction"}
+      {:consumer :t98A02,
+       :placeholders 1,
+       :route
+       "relative Mayer-Vietoris -> excision -> localization monicity -> fundamental class"}
+      {:consumer :t99J03,
+       :placeholders 1,
+       :route
+       "endpoint perturbation -> coverage -> compatible faces -> triangulation"}],
+     :deferred
+     ["Do not define adjacent corner swaps before the exact word/path equivalence is banked."
+      "Do not retry oriented face cancellation or singular cross-product assembly before the inverse laws and corner operation are banked."
+      "Reviewed Euler and Hausdorff STOPs remain preserved; concurrent arc, coefficient and torsion work is excluded."]},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Construct only the exact two inverse laws between banked BalancedWord values and canonical MaximalPath values using reconstructedPath and stepWord. Do not define corner swaps, pair or cancel faces, prove shuffle-sign changes, construct chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PRODUCT HOMOLOGY: reconstructed balanced words and maximal paths are inverse",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use banked BalancedWord p q, cumulativeOrderHom, reconstructedPath, stepWord, exact coordinate semantics, endpoint normalization and the four prefix-count successor recurrences. Downstream cancellation remains restricted to p+q at most four.",
+       :route-step
+       "Supplies the exact representation equivalence on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes, immediately before adjacent-corner construction and oriented face cancellation.",
+       :probe
+       "Define the balanced word extracted from a canonical MaximalPath using its banked stepWord and endpoint cardinalities. Prove stepWord (reconstructedPath w) = w by evaluating each letter and using the horizontal and vertical prefix successor recurrences with the reconstructed objEquiv coordinates. Prove reconstructedPath of the extracted balanced word equals the original MaximalPath extensionally by recovering every cumulative coordinate from the stepWord prefix. Package the two maps as an exact equivalence and compile every p,q with p+q at most four. GO requires one complete placeholder-free fixture. REVISE requires exactly one complete compiled extracted-word balance, reconstructed-stepWord or stepWord-reconstructedPath prerequisite. STOP names the exact independent representation boundary.",
+       :consumer-equation
+       "The reconstructedPath map from BalancedWord p q to canonical MaximalPath p q and the balanced stepWord extraction map in the reverse direction are two-sided inverses.",
+       :consumer-residual
+       "Transport unlike-consecutive-letter swaps through the equivalence, prove involutivity and deleted affine-face equality, then prove opposite shuffle signs and bounded oriented cancellation.",
+       :gates
+       ["Compile a complete fixture and record SHA256."
+        "Audit the exact BalancedWord and MaximalPath representations and the direction of both maps."
+        "Verify stepWord of reconstructedPath equals the original balanced word letterwise using the promoted successor recurrences."
+        "Verify reconstruction of an extracted path word equals the original path by extensional equality of cumulative coordinates."
+        "Package the maps as a two-sided equivalence."
+        "Compile all p,q with p+q at most four."
+        "Reproduce standard-only axiom audits."
+        "Confirm no corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+        "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and reservations."]},
+      :representation
+      {:source
+       "Banked BalancedWord p q values reconstructed as canonical maximal paths by cumulative prefix counts",
+       :target
+       "Canonical MaximalPath p q values encoded as balanced Boolean step words by the banked stepWord map",
+       :direction
+       "Exact two-sided equivalence from the source balanced-word representation to the target canonical maximal-path representation via reconstructedPath, with balanced stepWord extraction as its inverse."},
+      :id
+      :oriented-checkpoint68-balanced-word-reconstructed-path-inverse-laws-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint68-promoted-product-simplex-recurrences-and-consumer-refill-1],
+      :current-residual
+      "All constructions and one-step count equations are banked, but neither composite between BalancedWord and MaximalPath has been proved equal to the identity.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: product-simplex word/path inverse laws and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint69-product-simplex-word-path-inverses-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint68-balanced-word-reconstructed-path-inverse-laws-1],
+      :current-residual
+      "Measure the exact word/path equivalence separately from adjacent-corner construction, oriented cancellation, cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: promoted product-simplex recurrences and renewed consumer eligibility",
@@ -41703,6 +42004,82 @@
     :oriented-checkpoint67-applied-fixture-path-transition-and-consumer-refill-1],
    :current-residual
    "Measure recurrence promotion separately from word/path inverse laws, oriented cancellation, cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the exact two inverse laws between banked BalancedWord values and canonical MaximalPath values using reconstructedPath and stepWord. Do not define corner swaps, pair or cancel faces, prove shuffle-sign changes, construct chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PRODUCT HOMOLOGY: reconstructed balanced words and maximal paths are inverse",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use banked BalancedWord p q, cumulativeOrderHom, reconstructedPath, stepWord, exact coordinate semantics, endpoint normalization and the four prefix-count successor recurrences. Downstream cancellation remains restricted to p+q at most four.",
+    :route-step
+    "Supplies the exact representation equivalence on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes, immediately before adjacent-corner construction and oriented face cancellation.",
+    :probe
+    "Define the balanced word extracted from a canonical MaximalPath using its banked stepWord and endpoint cardinalities. Prove stepWord (reconstructedPath w) = w by evaluating each letter and using the horizontal and vertical prefix successor recurrences with the reconstructed objEquiv coordinates. Prove reconstructedPath of the extracted balanced word equals the original MaximalPath extensionally by recovering every cumulative coordinate from the stepWord prefix. Package the two maps as an exact equivalence and compile every p,q with p+q at most four. GO requires one complete placeholder-free fixture. REVISE requires exactly one complete compiled extracted-word balance, reconstructed-stepWord or stepWord-reconstructedPath prerequisite. STOP names the exact independent representation boundary.",
+    :consumer-equation
+    "The reconstructedPath map from BalancedWord p q to canonical MaximalPath p q and the balanced stepWord extraction map in the reverse direction are two-sided inverses.",
+    :consumer-residual
+    "Transport unlike-consecutive-letter swaps through the equivalence, prove involutivity and deleted affine-face equality, then prove opposite shuffle signs and bounded oriented cancellation.",
+    :gates
+    ["Compile a complete fixture and record SHA256."
+     "Audit the exact BalancedWord and MaximalPath representations and the direction of both maps."
+     "Verify stepWord of reconstructedPath equals the original balanced word letterwise using the promoted successor recurrences."
+     "Verify reconstruction of an extracted path word equals the original path by extensional equality of cumulative coordinates."
+     "Package the maps as a two-sided equivalence."
+     "Compile all p,q with p+q at most four."
+     "Reproduce standard-only axiom audits."
+     "Confirm no corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+     "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and reservations."]},
+   :representation
+   {:source
+    "Banked BalancedWord p q values reconstructed as canonical maximal paths by cumulative prefix counts",
+    :target
+    "Canonical MaximalPath p q values encoded as balanced Boolean step words by the banked stepWord map",
+    :direction
+    "Exact two-sided equivalence from the source balanced-word representation to the target canonical maximal-path representation via reconstructedPath, with balanced stepWord extraction as its inverse."},
+   :id
+   :oriented-checkpoint68-balanced-word-reconstructed-path-inverse-laws-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint68-promoted-product-simplex-recurrences-and-consumer-refill-1
+    :oriented-checkpoint68-promoted-product-simplex-recurrences-and-consumer-refill-1],
+   :current-residual
+   "All constructions and one-step count equations are banked, but neither composite between BalancedWord and MaximalPath has been proved equal to the identity.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: product-simplex word/path inverse laws and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint69-product-simplex-word-path-inverses-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint68-balanced-word-reconstructed-path-inverse-laws-1
+    :oriented-checkpoint68-promoted-product-simplex-recurrences-and-consumer-refill-1],
+   :current-residual
+   "Measure the exact word/path equivalence separately from adjacent-corner construction, oriented cancellation, cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
