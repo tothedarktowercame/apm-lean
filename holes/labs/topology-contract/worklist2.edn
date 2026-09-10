@@ -28188,71 +28188,157 @@
    :other-consumers [:t95J05 :t01J06 :t94A10]}
   {:consumer :t02A05,
    :stop-condition
+   "Bank density continuity and derivative-perturbation bounds only. Do not claim global integral bounds, exact graph area, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
+      :sha256
+      "52879bd1fed15c508c3cf9e31cfb1ae8172fdf31414a3ccfe9cd655d438b7a2c"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/C1GraphDensityControl.lean"
+    "ConstructionTargets/C1GraphDensityControl.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: graph-density control under derivative perturbation",
+   :acceptance
+   {:namespace "ConstructionTargets.C1GraphDensityControl",
+    :implementation
+    "Promote the exact compiled fixture and document its L2 norm construction, continuity and real and ENNReal perturbation bounds.",
+    :declarations
+    ["density"
+     "density_sq"
+     "density_nonneg"
+     "one_le_density"
+     "density_eq_sqrt"
+     "density_sub_le"
+     "abs_density_sub_le"
+     "density_lipschitz"
+     "continuous_density"
+     "continuous_ennrealDensity"
+     "measurable_ennrealDensity"
+     "multiplicative_bounds"
+     "ofReal_multiplicative_bounds"
+     "functional_density_eq"
+     "dimension_two"
+     "dimension_three"],
+    :hypotheses
+    "X is an arbitrary real normed additive commutative group for the metric estimates. The measurable-density theorem additionally uses the Borel measurable structure. Multiplicative estimates assume only epsilon≥0 and norm(x-y)≤epsilon; no finite-dimensionality, strict epsilon bound or measure hypothesis is required.",
+    :consumer-equation
+    "The graph density is the actual L2 norm of (1,x), hence equals sqrt(1+norm(x)^2), is at least one and is 1-Lipschitz. If norm(x-y)≤epsilon, its real and ENNReal values lie between the explicit factors 1-epsilon and 1+epsilon times the density at y.",
+    :consumer-residual
+    "Use derivative_proximity on every reviewed partition piece, integrate these density inequalities, sum the disjoint piece bounds and apply ENNRealMultiplicativeSqueeze.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.C1GraphDensityControl."
+     "Reproduce eleven standard-only axiom audits and dimension-two/three functional examples."
+     "Audit the literal WithLp 2 representation and square-root identity."
+     "Verify the density lower bound and 1-Lipschitz estimate from actual L2 norm inequalities."
+     "Verify continuity and Borel measurability of the ENNReal-valued density."
+     "Verify real and ENNReal multiplicative bounds, including epsilon greater than one without invalid subtraction."
+     "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :c1-graph-density-derivative-control-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:ennreal-multiplicative-unit-squeeze-1
+    :oriented-checkpoint45-c1-graph-measurable-approximation-partition-1],
+   :current-residual
+   "Summing the partition bounds requires pointwise comparison between each selected derivative density and the actual derivative density.",
+   :other-consumers [:t95J05 :t01J06 :t94A10]}
+  {:consumer :t02A05,
+   :stop-condition
    "Do not assume an area formula, integrability, finite measure, numerical Hausdorff normalization or measure-preserving parameterization. Retain actual L2 graph and Borel structures. Do not infer sphere masses, Stokes, periods or consumer closure. Exclude reserved orientation, covering and surface work; use a unique row-specific scratch directory.",
    :evidence
    {:probe
     {:concurrent-reservations
-     [:coefficient-subcomplex-mayer-vietoris-implementation-refill49
-      :finite-translated-embedded-arcs-chart-containment-probe-refill49],
+     [:finite-translated-embedded-arcs-chart-containment-implementation-refill49],
      :placeholder-delta 0,
      :residual
-     "Construct the global integral bounds for every epsilon from the reviewed measurable graph partitions, actual density proximity and countable additivity, then apply the compiled squeeze theorem. Sphere charts and numerical Hausdorff normalization remain downstream; reservations, reviewed STOPs and refutations are preserved.",
-     :axiom-audits 3,
+     "Integrate the compiled density comparisons on each measurable partition piece, use countable additivity for the actual graph and domain decompositions, derive global bounds for every epsilon, and apply the reviewed ENNReal squeeze theorem. Sphere charts and numerical normalization remain downstream; reservations, reviewed STOPs and refutations are preserved.",
+     :axiom-audits 11,
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t02A05,
       :stop-condition
-      "Bank the ENNReal limit and squeeze theorem only. Do not claim global graph-integral bounds, an area formula, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
+      "Bank density continuity and derivative-perturbation bounds only. Do not claim global integral bounds, exact graph area, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
       :evidence
       {:probe
        {:outcome :go,
         :seat "codex-13",
         :fixture
         {:path
-         "/tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+         "/tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
          :sha256
-         "6d3e18144322b0d66cfeedfbfd978bc5663dd7941bab5784a0b349a4a73e95f9"},
+         "52879bd1fed15c508c3cf9e31cfb1ae8172fdf31414a3ccfe9cd655d438b7a2c"},
         :commands
         [{:cmd
-          "lake env lean /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+          "lake env lean /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
           :exit 0}],
         :warnings [],
         :axioms ["propext" "Classical.choice" "Quot.sound"]}},
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/ENNRealMultiplicativeSqueeze.lean"
-       "ConstructionTargets/ENNRealMultiplicativeSqueeze.md"],
+      ["ConstructionTargets/C1GraphDensityControl.lean"
+       "ConstructionTargets/C1GraphDensityControl.md"],
       :dag-node
-      "MANIFOLD INTEGRATION: ENNReal multiplicative squeeze at unit",
+      "MANIFOLD INTEGRATION: graph-density control under derivative perturbation",
       :acceptance
-      {:namespace "ConstructionTargets.ENNRealMultiplicativeSqueeze",
+      {:namespace "ConstructionTargets.C1GraphDensityControl",
        :implementation
-       "Promote the exact compiled fixture and document that it handles finite, zero and infinite ENNReal values without conversion or cancellation.",
-       :declarations ["upper_tendsto" "lower_tendsto" "eq_of_bounds"],
+       "Promote the exact compiled fixture and document its L2 norm construction, continuity and real and ENNReal perturbation bounds.",
+       :declarations
+       ["density"
+        "density_sq"
+        "density_nonneg"
+        "one_le_density"
+        "density_eq_sqrt"
+        "density_sub_le"
+        "abs_density_sub_le"
+        "density_lipschitz"
+        "continuous_density"
+        "continuous_ennrealDensity"
+        "measurable_ennrealDensity"
+        "multiplicative_bounds"
+        "ofReal_multiplicative_bounds"
+        "functional_density_eq"
+        "dimension_two"
+        "dimension_three"],
        :hypotheses
-       "d is any natural number and A,B are arbitrary extended nonnegative reals. For every real epsilon with 0<epsilon<1, assume (ofReal(1-epsilon))^d*B≤A≤(ofReal(1+epsilon))^d*B. No finiteness or nonzero hypothesis is imposed.",
+       "X is an arbitrary real normed additive commutative group for the metric estimates. The measurable-density theorem additionally uses the Borel measurable structure. Multiplicative estimates assume only epsilon≥0 and norm(x-y)≤epsilon; no finite-dimensionality, strict epsilon bound or measure hypothesis is required.",
        :consumer-equation
-       "The stated family of multiplicative bounds forces A=B, including B=0 and B=∞, by convergence of both factors to one.",
+       "The graph density is the actual L2 norm of (1,x), hence equals sqrt(1+norm(x)^2), is at least one and is 1-Lipschitz. If norm(x-y)≤epsilon, its real and ENNReal values lie between the explicit factors 1-epsilon and 1+epsilon times the density at y.",
        :consumer-residual
-       "Use the reviewed measurable graph partitions to prove the required global bounds for every epsilon by countable additivity and actual derivative-density comparison.",
+       "Use derivative_proximity on every reviewed partition piece, integrate these density inequalities, sum the disjoint piece bounds and apply ENNRealMultiplicativeSqueeze.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.ENNRealMultiplicativeSqueeze."
-        "Reproduce three standard-only axiom audits."
-        "Verify convergence of both ofReal factors along the punctured interval 0<epsilon<1."
-        "Verify ENNReal multiplication continuity is invoked at the finite nonzero limiting factor one and permits arbitrary B, including infinity."
-        "Verify eq_of_bounds uses eventual lower and upper inequalities without converting to real numbers or cancelling measures."
-        "Compile zero, finite and infinite B examples."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.C1GraphDensityControl."
+        "Reproduce eleven standard-only axiom audits and dimension-two/three functional examples."
+        "Audit the literal WithLp 2 representation and square-root identity."
+        "Verify the density lower bound and 1-Lipschitz estimate from actual L2 norm inequalities."
+        "Verify continuity and Borel measurability of the ENNReal-valued density."
+        "Verify real and ENNReal multiplicative bounds, including epsilon greater than one without invalid subtraction."
         "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :ennreal-multiplicative-unit-squeeze-1,
+      :id :c1-graph-density-derivative-control-1,
       :kind :reusable-theorem,
       :depends-on
-      [:oriented-checkpoint45-c1-graph-measurable-approximation-partition-1],
+      [:ennreal-multiplicative-unit-squeeze-1
+       :oriented-checkpoint45-c1-graph-measurable-approximation-partition-1],
       :current-residual
-      "Exact graph area requires passage from global bounds with multiplicative factors (1±epsilon)^d to equality, including when the density integral is infinite.",
+      "Summing the partition bounds requires pointwise comparison between each selected derivative density and the actual derivative density.",
       :other-consumers [:t95J05 :t01J06 :t94A10]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
@@ -28261,20 +28347,20 @@
        "Read DAG, closure experiments and build-loop design; inspect both ledgers and dependency PASS receipts",
        :exit 0}
       {:cmd
-       "Inspect Mathlib Jacobian partition, ENNReal convergence and order-limit APIs",
+       "Inspect Mathlib Jacobian partitions, graph-area availability and ENNReal integration APIs",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+       "lake env lean /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean > /tmp/codex13-checkpoint46-density/compile.log",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+       "sha256sum /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "Python comment-stripped placeholder, forbidden-declaration and whitespace audit",
+       "Python comment-stripped placeholder, whitespace and eleven standard-only axiom audits",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -28285,34 +28371,26 @@
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial ENNReal squeeze fixture compilation",
+     [{:cmd "Initial density-control fixture compilation",
        :exit 1,
        :correction
-       "Made the punctured-neighborhood filter explicit and replaced unavailable global multiplication continuity with the ENNReal finite-limit multiplication theorem."}
-      {:cmd "Compilation after initial filter correction",
+       "Used the WithLp first-coordinate norm bound for density≥1, corrected the square-root equality direction, aligned the triangle inequality subtraction order and split the ENNReal lower bound at epsilon≤1."}
+      {:cmd "Compilation after adding continuity and examples",
        :exit 1,
        :correction
-       "Corrected the order-limit lemma directions and supplied the NeBot instance for the right punctured neighborhood."}
-      {:cmd "Compilation with explicit real limits",
-       :exit 1,
-       :correction
-       "Normalized the real limits before composing with ENNReal.ofReal and selected the specialized ENNReal power theorem."}
-      {:cmd "Compilation after importing ENNReal limit lemmas",
-       :exit 1,
-       :correction
-       "Replaced generic Tendsto.pow, which requires globally continuous ENNReal multiplication, with ENNReal.Tendsto.pow. Final compilation succeeds."}],
+       "Rewrote source distance as the norm of a difference and added explicit Borel hypotheses to the generic measurable-density theorem. Final compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+      "/tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
       :sha256
-      "6d3e18144322b0d66cfeedfbfd978bc5663dd7941bab5784a0b349a4a73e95f9",
+      "52879bd1fed15c508c3cf9e31cfb1ae8172fdf31414a3ccfe9cd655d438b7a2c",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled analytic prerequisite is supplied. Multiplicative ENNReal bounds with factors tending to one imply equality for arbitrary extended values, including infinity, without unsafe cancellation. Mathlib contains analogous differentiable partition arguments for null-image estimates but no exact dimension-increasing graph-area or Jacobian-integral theorem. The parent is not GO: global bounds comparing the summed selected densities with the actual derivative-density integral remain unproved.",
+     "Exactly one complete compiled analytic prerequisite is supplied. The square-root graph density is realized as an actual L2 norm, proved 1-Lipschitz and measurable, and controlled multiplicatively under the reviewed derivative-proximity hypothesis in both real and ENNReal forms. Mathlib still has no exact dimension-increasing graph-area theorem. The parent is not GO: countable integration of these inequalities and global graph bounds remain unproved.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact C1 graph Hausdorff area from measurable approximation partitions",
@@ -28341,7 +28419,8 @@
    :depends-on
    [:oriented-checkpoint46-measurable-graph-partition-and-consumer-refill
     :oriented-checkpoint45-c1-graph-measurable-approximation-partition-1
-    :ennreal-multiplicative-unit-squeeze-1],
+    :ennreal-multiplicative-unit-squeeze-1
+    :c1-graph-density-derivative-control-1],
    :current-residual
    "Reviewed measurable pieces satisfy uniform graph bounds and approximate actual derivatives. Prove that their sums converge to the integral of the pointwise graph density and squeeze the graph measure to that integral.",
    :other-consumers [:t95J05 :t01J06 :t94A10]}
