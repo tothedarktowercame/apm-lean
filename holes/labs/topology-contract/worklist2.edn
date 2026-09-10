@@ -21756,84 +21756,100 @@
    :stop-condition
    "Do not classify the original ordinary-S0 proposition as proved, change frozen sources, erase historical refutations or edit either ledger.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Apply and independently review the two-file documentation patch; no additional consumer closure is claimed by this documentation packet.",
-     :axiom-audits 2,
-     :outcome :go,
-     :warnings
-     ["Canonical Main reproduces three existing simplification warnings and four unused frozen parameters: hm, hv, hp and hr. The documentation attributes them explicitly."],
-     :acceptance
-     {:implementation
-      "Apply the exact verified two-file documentation patch. It updates the sphere-homology cluster and stale t94J08 status, adds the repaired statement to the closure table, and records closure evidence in both documents.",
-      :source-hashes
-      {"TOPOLOGY-DEPENDENCY-DAG.md"
-       "70562aacce19dcb40c0345b7951c17a92b2e0124769402988b2597fc45b38e73",
-       "docs/TN-topology-closure-experiments.md"
-       "75825360608cd8222ebf9aae95d6d99078abee94ec4df2034f24dfb60a24f50d"},
-      :result-hashes
-      {"TOPOLOGY-DEPENDENCY-DAG.md"
-       "8fd3f0e8b5f1744a2f180169f5d98f4eedfc751588cb3a64eeb03989d870d82d",
-       "docs/TN-topology-closure-experiments.md"
-       "c7ad93ee2a66d51a4c8606720196b30f15ac37f7428579d524fdd165686a205c"},
-      :consumer-equation
-      "The repaired positive-dimensional t94J08 antipodal-degree and local-index theorem is independently reviewed complete.",
-      :consumer-residual
-      "No proof obligation remains in the repaired consumer. Original ordinary-S0 refutation and outstanding reduced-homology coverage remain explicitly separate.",
-      :gates
-      ["Verify patch SHA256 and both source hashes before applying."
-       "Apply only the two declared documentation paths and verify result hashes."
-       "Preserve closure commit 69eb3d52d58a9189da8413b0f26bc09ddd90f035 and review invoke-1789024889748-18126-04ebb0b2."
-       "Verify canonical Main SHA256, both preserved statement hashes and zero executable placeholders."
-       "Retain historical refutation and reduced-homology boundary; do not edit frozen sources or ledgers."
-       "Run git diff --check and exact two-file scope verification; commit the documentation change."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :verified-evidence
-     {:closure-commit "69eb3d52d58a9189da8413b0f26bc09ddd90f035",
-      :review "invoke-1789024889748-18126-04ebb0b2",
-      :main-sha256
-      "005a6a4d7d785eb3d9c90c54127b6ae6001a4ed481846959e19c4e98ab945ee5",
-      :statement-hashes
-      {"apm_t94J08_bridge_1"
-       "ab33967d8dbb761550c195fe761230edcb32d901a3bd832fb2dec719668bba0b",
-       "apm_t94j08"
-       "93379cadb92f80df85619dc6f37cbe084d858199cdc3b3ca5513d2c854339038"},
-      :closure-placeholder-before 2,
-      :closure-placeholder-after 0},
-     :commands
-     [{:cmd
-       "Read DAG and closure note; inspect closure commit and both dependency PASS receipts in the ledgers",
-       :exit 0}
-      {:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd "python3 /tmp/MakeT94J08ClosureDocs.py", :exit 0}
-      {:cmd
-       "git apply --check --whitespace=error /tmp/T94J08ClosureDocs.patch",
-       :exit 0}
-      {:cmd "git apply --numstat /tmp/T94J08ClosureDocs.patch",
-       :exit 0}
-      {:cmd "lake env lean problems/t94J08/lean/Main.lean", :exit 0}
-      {:cmd
-       "Python verification of both frozen theorem-statement hashes",
-       :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history [],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/T94J08ClosureDocs.patch",
-      :sha256
-      "47be747cff9ae3f1d58159aac490154b34c14c154be165f2bef9981302286e99",
-      :kind :documentation-patch},
-     :finding
-     "The exact documentation patch applies cleanly and touches only the requested files. Canonical Main recompiles with zero placeholders and standard-only audits for both theorems. The patch records the reviewed repaired-statement closure without erasing the original S0 refutation or claiming reduced-homology coverage. Canonical files remain unchanged during this probe.",
-     :implementation
-     {:scope
-      ["TOPOLOGY-DEPENDENCY-DAG.md"
-       "docs/TN-topology-closure-experiments.md"]},
-     :seat "codex-13"}},
+   {:source-hashes
+    {"TOPOLOGY-DEPENDENCY-DAG.md"
+     "70562aacce19dcb40c0345b7951c17a92b2e0124769402988b2597fc45b38e73",
+     "docs/TN-topology-closure-experiments.md"
+     "75825360608cd8222ebf9aae95d6d99078abee94ec4df2034f24dfb60a24f50d"},
+    :placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Independent review of this documentation commit remains. No proof obligation remains in the repaired consumer. The original ordinary-S0 statement remains refuted, and reduced-homology coverage remains outstanding. This documentation packet claims no additional consumer closure.",
+    :gates
+    {:main-hash :pass,
+     :patch-hash :pass,
+     :source-hashes :pass,
+     :whitespace :pass,
+     :closure-review-evidence :pass,
+     :historical-refutation-preserved :pass,
+     :statement-hashes :pass,
+     :two-file-scope :pass,
+     :main-compilation :pass,
+     :reduced-homology-boundary-preserved :pass,
+     :zero-placeholders :pass,
+     :result-hashes :pass,
+     :standard-only-audits :pass,
+     :frozen-sources-and-ledgers-unchanged :pass},
+    :axiom-audits 2,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Unchanged canonical Main reproduces three inherited simplification warnings and four unused frozen parameters: hm, hv, hp and hr. Both documents attribute these explicitly."],
+    :statement-hashes
+    {"apm_t94J08_bridge_1"
+     "ab33967d8dbb761550c195fe761230edcb32d901a3bd832fb2dec719668bba0b",
+     "apm_t94j08"
+     "93379cadb92f80df85619dc6f37cbe084d858199cdc3b3ca5513d2c854339038"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :verified-evidence
+    {:closure-commit "69eb3d52d58a9189da8413b0f26bc09ddd90f035",
+     :review "invoke-1789024889748-18126-04ebb0b2",
+     :main-sha256
+     "005a6a4d7d785eb3d9c90c54127b6ae6001a4ed481846959e19c4e98ab945ee5",
+     :closure-placeholder-before 2,
+     :closure-placeholder-after 0},
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read exact documentation patch, DAG and closure-note context, and both dependency PASS receipts",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Python verification of patch/source/Main hashes, closure-commit source equality, both theorem hashes and zero executable placeholders",
+      :exit 0}
+     {:cmd
+      "git apply --check --whitespace=error /tmp/T94J08ClosureDocs.patch",
+      :exit 0}
+     {:cmd "git apply --whitespace=error /tmp/T94J08ClosureDocs.patch",
+      :exit 0}
+     {:cmd
+      "Python verification of exact result hashes, closure evidence, historical boundaries, unchanged Main and two-file scope",
+      :exit 0}
+     {:cmd
+      "lake env lean problems/t94J08/lean/Main.lean > /tmp/t94docs-main.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python validation of both standard-only theorem audits and seven documented warnings",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Record reviewed repaired positive-dimensional t94J08 closure'",
+      :exit 0}
+     {:cmd "git diff --check e8822f1a^ e8822f1a", :exit 0}
+     {:cmd
+      "Python verification of pinned two-file commit scope and scoped cleanliness; git status --short",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "e8822f1a9d97d76dec8967feed88b9215d71b679",
+    :changed-paths
+    ["TOPOLOGY-DEPENDENCY-DAG.md"
+     "docs/TN-topology-closure-experiments.md"],
+    :result-hashes
+    {"TOPOLOGY-DEPENDENCY-DAG.md"
+     "8fd3f0e8b5f1744a2f180169f5d98f4eedfc751588cb3a64eeb03989d870d82d",
+     "docs/TN-topology-closure-experiments.md"
+     "c7ad93ee2a66d51a4c8606720196b30f15ac37f7428579d524fdd165686a205c"},
+    :fixture
+    {:path "/tmp/T94J08ClosureDocs.patch",
+     :sha256
+     "47be747cff9ae3f1d58159aac490154b34c14c154be165f2bef9981302286e99",
+     :kind :documentation-patch,
+     :promotion :exact},
+    :finding
+    "Applied the exact verified documentation patch. Both documents now record independently reviewed closure of repaired positive-dimensional t94J08, including commit, review, hashes, placeholder reduction and warning attribution. Stale current-status statements are updated while historical refutation evidence remains.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
