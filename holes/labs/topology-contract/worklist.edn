@@ -57491,73 +57491,69 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Apply predicate transfer with P(y) := f y = c and Q(z) := g z = chartAt F c c on the banked agreement neighborhood, compose with the extension-fiber chart, and prove coverage and smooth overlaps. No globally regular extension is needed. Empty fibers and zero-dimensional kernels remain included. General models, global atlas/inclusion/tangent assembly and consumer-specific boundary, orientation, duality and transversality obligations remain; no consumer closure is claimed.",
-     :dependency-review
-     {:outcome :pass,
-      :commit "87eec33a44aa52ae296a1a6575c6f3b5f6421624",
-      :job "invoke-1789003530847-17536-dd9a0b14"},
-     :outcome :revise,
+     "Next edge: global atlas and smooth inclusion for these manifold-to-manifold fiber charts, followed by actual inclusion derivative injectivity and kernel-range comparison. Applicability is self-model finite-dimensional real inner-product manifolds with complete source model. General models and consumer-specific orientation, boundary, duality and transversality obligations remain; no consumer closure is claimed.",
+     :outcome :go,
      :warnings [],
      :statement-hashes
-     {:transfer
-      "2ebb57940214acf4b484c1b6bc5208a4cdeb0c56a8521212ab6c0d012dc4821c",
-      :source-eq
-      "b9ff90fdfee86062f8ea942937104db4bb2d7d11ab6c06f5197c915479a57fcb",
-      :target-eq
-      "178adbef0ca443898bbfc2f639c2b77f1b30a85ec5277984a0df1ba77d6a6d85",
-      :center-mem
-      "01ad068848fffd8a10c4bdd64281e585efd99098d6ffa2cade63edcf43d7f9bf",
-      :forward-eq
-      "978508b1ad6935649ca9e48b3b197a48729bd81e98d6390a7f9ae7588b03dcb2",
-      :backward-eq
-      "0777a129022a13ac031185dc3df21b9f0b810dd3777e4ca9691120d2cf481247"},
-     :prerequisite
-     {:consumer "t00J02",
-      :stop-condition
-      "Require the actual open partial homeomorphism and all five specifications; a set equivalence without topology is insufficient.",
-      :phase :implementation,
-      :state :open,
-      :scope ["ConstructionTargets/FiberPredicateTransfer.lean"],
-      :dag-node
-      "REGULAR-PREIMAGE/SUBMERSION / predicate fiber transport across coordinate codomains",
-      :acceptance
-      {:fixture "/tmp/FiberPredicateTransfer.lean",
-       :fixture-sha256
-       "26b7d66e7f387f962f97e0eb6e2cc7d88b873de1160e319aaf455dbbad49eef7",
-       :implementation
-       "Promote the exact fixture preserving inherited topologies, exact source and target, center membership and domain-restricted coordinate formulas. Compile the constructor and five specifications, audit zero placeholders and standard-only axioms. Retain reuse of the existing fiber-transfer theorem and preserve existing APIs. Do not claim smooth overlaps or a global manifold structure.",
-       :commands
-       ["lake env lean ConstructionTargets/FiberPredicateTransfer.lean"],
-       :placeholder-before 0,
-       :placeholder-after 0,
-       :axioms :standard-only},
-      :id :fiber-predicate-transfer-implementation-refill34,
-      :kind :reusable-theorem,
-      :depends-on
-      [:manifold-target-fiber-chart-extension-implementation-refill34],
-      :current-residual
-      "Complete compiled predicate transfer awaits banking for original-fiber chart composition.",
-      :other-consumers ["t02A07" "t01J04" "t94A06"]},
+     {:exists-chart
+      "bd15891feb7c184831d6eb19edba837c35ad6d804a76620cef38ec38929c78f3",
+      :overlap-smooth
+      "49e22138f5e9081e1c16b603fc9bdd8026c66cddf154ead056694b8aa24b174a",
+      :exists-cover
+      "1fa0d39509b16fd94f89ee1436f2d507fe048da7c823e410f9b39b41fa59adcc"},
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture. Preserve inherited subtype topology, genuine infinity, fixed Euclidean dimension, exact coordinate formulas and existing APIs. Compile exists_chart, overlap_smooth and exists_cover; audit zero placeholders and standard-only axioms. Do not claim global atlas, inclusion or tangent geometry.",
+      :axioms :standard-only,
+      :placeholder-before 0,
+      :placeholder-after 0},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/FiberPredicateTransfer.lean", :exit 0}
-      {:cmd "python3 /tmp/fiber-predicate-audit.py", :exit 0}],
+     [{:cmd
+       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean -o /tmp/manifold-chart-build/ConstructionTargets/ManifoldTargetFiberChartExtension.olean ConstructionTargets/ManifoldTargetFiberChartExtension.lean && lean -o /tmp/manifold-chart-build/ConstructionTargets/FiberPredicateTransfer.olean ConstructionTargets/FiberPredicateTransfer.lean'",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldTargetRegularFiberCharts.lean'",
+       :exit 0}
+      {:cmd "python3 /tmp/manifold-target-charts-audit.py", :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/FiberPredicateTransfer.lean",
+     [{:cmd "lake env lean /tmp/ManifoldTargetRegularFiberCharts.lean",
        :exit 1,
        :correction
-       "Finished source and target specifications by definitional equality after simplifying the composed homeomorphisms. Final compilation succeeds."}],
+       "Missing prerequisite object; compiled canonical prerequisite sources into the temporary object directory without modifying canonical sources."}
+      {:cmd
+       "cat /tmp/ManifoldTargetRegularFiberCharts.lean; ls -l /tmp/manifold-chart-build/ConstructionTargets/{ManifoldTargetFiberChartExtension,FiberPredicateTransfer}.olean",
+       :exit 2,
+       :correction
+       "Confirmed both temporary object destinations were absent before compiling them."}
+      {:cmd
+       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/ManifoldTargetRegularFiberCharts.lean'",
+       :exit 1,
+       :correction
+       "Specified F explicitly in FiberChart applications because the manifold target no longer determines its coordinate model. Final compilation succeeds."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/FiberPredicateTransfer.lean",
+     {:path "/tmp/ManifoldTargetRegularFiberCharts.lean",
       :sha256
-      "26b7d66e7f387f962f97e0eb6e2cc7d88b873de1160e319aaf455dbbad49eef7"},
+      "bcb627d6faf071b85bbaefade01265c831b31ef494544f554a1ca8a4b146cc22"},
      :finding
-     "Compiled one predicate-level fiber-transfer prerequisite. Given an ambient open partial homeomorphism e, open V contained in its target and Q y iff P (e.symm y) on V, it constructs an actual open partial homeomorphism between the inherited-topology predicate subtypes. The source is exactly the original subtype over e.source with coordinates in V; the target is exactly the target subtype over V. Center membership and both underlying-value formulas are proved. The construction reuses OpenPartialHomeomorphFiberTransfer through proposition-valued maps and canonical subtype homeomorphisms. This permits different original and coordinate codomains, using the exact fiber equivalence supplied by ManifoldTargetFiberChartExtension. Original-fiber chart composition and smooth overlaps are not yet compiled.",
+     "Complete compiled literal-fiber chart packet. exists_chart composes predicate transfer on the proved chart-pair agreement neighborhood with the constructed extension-fiber chart. It proves center membership, exact source and forward/backward formulas, and smooth ambient parameterizations. overlap_smooth derives genuine-infinity transitions on their actual overlap domains from those parameterizations. exists_cover constructs covering charts for every regular fiber without global extension regularity. Empty fibers and zero-dimensional kernels are included.",
+     :dependency-reviews
+     [{:outcome :pass, :job "invoke-1789002983822-17518-0a09fccc"}
+      {:outcome :pass,
+       :commit "87eec33a44aa52ae296a1a6575c6f3b5f6421624",
+       :job "invoke-1789003530847-17536-dd9a0b14"}
+      {:outcome :pass,
+       :commit "638aeee0b5d9bf53664d2db05a4a47efbd6a9e8a",
+       :job "invoke-1789003883788-17549-d1260d19"}],
+     :implementation
+     {:scope
+      ["ConstructionTargets/ManifoldTargetRegularFiberCharts.lean"]},
      :seat "codex-12"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/ManifoldTargetRegularFiberCharts.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / manifold-target fiber chart transport",
    :acceptance
