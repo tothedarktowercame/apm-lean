@@ -67211,89 +67211,105 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the constructed compact-complement ambient space, actual open cover, intersection identification and canonical subtype maps; no supplied cover or relative sequence.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientCompactComplementGeometry.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / compact-complement cover geometry",
+   :acceptance
+   {:fixture "/tmp/CoefficientCompactComplementGeometry.lean",
+    :fixture-sha256
+    "b6c94bbe9598cec21e4ac54d255479a99045372efc91dbb6c5e95b84b206cdaf",
+    :implementation
+    "Promote the exact fixture. Compile ambient, left, right, left_open, right_open, left_union_right, left_inter_right, leftToKComplement, rightToLComplement, overlapToUnionComplement and all three value lemmas. Verify CoefficientSubcomplexMayerVietoris SHA256 bed519ae21e3a1bad02abf9775eb734bcec6bb3c4e8f41a98cec894be2cf71e9. Preserve arbitrary compact K and L in a Hausdorff space and the literal complement directions. Require zero placeholders, no warnings and standard-only axioms. Do not claim relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientCompactComplementGeometry.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :coefficient-compact-complement-geometry-implementation-refill49,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-subcomplex-mayer-vietoris-implementation-refill49],
+   :current-residual
+   "Identify the resulting cover-small subcomplex terms with the relative pairs for complements of K intersection L, K union L, K and L, using actual arrows and coefficient excision.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The coefficient subcomplex Mayer-Vietoris sequence is compiled. Actual compact-complement identifications, neighborhood excision and relative-pair arrow comparison remain; localization monicity and fundamental classes remain subsequent.",
-     :dependency-review
-     {:outcome :pass,
-      :seat "codex-10",
-      :job "invoke-1789040075889-18488-d30d27c7"},
+     "Use this actual two-open complement cover to identify its range subcomplex intersection and union, then transport the banked coefficient sequence through neighborhood subdivision, relative-pair maps and coefficient excision to the four requested relative homology terms.",
      :outcome :revise,
      :warnings [],
-     :statement-hashes
-     {:subcomplexChainsMap_component_mono
-      "0cb0847187117a779e9b8d10002206ed244f265a28cf463cb63441c7d6156239",
-      :subcomplexChainsMap_mono
-      "051a1d19d725626ee114529c267ce720eef659ee8621c537151ade86f5723fe2",
-      :subcomplexChains_isPushout
-      "89d7e08f2841d19c7a5d925808422e9a7b5b3725cacbf14b1bdd10b4c2d2f076",
-      :shortExact
-      "cc1e4a51256273a638909c9290feb7025d8c4ef95789a95887c13b8cb8b86a23",
-      :connecting
-      "813aef414c87337c18a79cb7b9375372da4487de63cc9ac3c827f9eb721a4f7a",
-      :exact_intersection
-      "a437cb3b704762dbfaa0eea02fe76a217710bf0ab3bd1d0e8ac26c0a6c20ac74",
-      :exact_pieces
-      "7593f7720b8433b27f4ab054eb02f14f991bb018e7fa792b7cd23e59acc613a7",
-      :exact_union
-      "e9e7dd7d8b7fe38dfe15dc9e9666787d9261158c56feb95156e52003d0bc6008"},
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require actual compact-complement subcomplex identifications and excision transport before claiming the requested relative sequence; no supplied exact sequence or localization monicity.",
+      "Require the constructed compact-complement ambient space, actual open cover, intersection identification and canonical subtype maps; no supplied cover or relative sequence.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean"],
+      ["ConstructionTargets/CoefficientCompactComplementGeometry.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / coefficient subcomplex Mayer-Vietoris",
+      "MANIFOLD FUNDAMENTAL CLASS / compact-complement cover geometry",
       :acceptance
-      {:fixture "/tmp/CoefficientSubcomplexMayerVietoris.lean",
+      {:fixture "/tmp/CoefficientCompactComplementGeometry.lean",
        :fixture-sha256
-       "bed519ae21e3a1bad02abf9775eb734bcec6bb3c4e8f41a98cec894be2cf71e9",
+       "b6c94bbe9598cec21e4ac54d255479a99045372efc91dbb6c5e95b84b206cdaf",
        :implementation
-       "Promote the exact fixture. Compile subcomplexChainsMap_component_mono, subcomplexChainsMap_mono, subcomplexChains_isPushout, shortComplex, shortExact, connecting, exact_intersection, exact_pieces and exact_union. Verify CoefficientPushoutRelative SHA256 5f010dfdf556e1586cdf7772c474389124455500744cfe46d56b51325f4abb19. Preserve arbitrary commutative-ring coefficients, actual signed subcomplex inclusion maps and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim compact-complement transport, localization monicity or a fundamental class.",
+       "Promote the exact fixture. Compile ambient, left, right, left_open, right_open, left_union_right, left_inter_right, leftToKComplement, rightToLComplement, overlapToUnionComplement and all three value lemmas. Verify CoefficientSubcomplexMayerVietoris SHA256 bed519ae21e3a1bad02abf9775eb734bcec6bb3c4e8f41a98cec894be2cf71e9. Preserve arbitrary compact K and L in a Hausdorff space and the literal complement directions. Require zero placeholders, no warnings and standard-only axioms. Do not claim relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean"],
+       ["lake env lean ConstructionTargets/CoefficientCompactComplementGeometry.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :coefficient-subcomplex-mayer-vietoris-implementation-refill49,
+      :coefficient-compact-complement-geometry-implementation-refill49,
       :kind :reusable-theorem,
       :depends-on
-      [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
+      [:coefficient-subcomplex-mayer-vietoris-implementation-refill49],
       :current-residual
-      "Construct the complement geometry for compact K and L and transport the coefficient subcomplex sequence through actual pair maps and excision to the four requested relative homology terms.",
+      "Identify the resulting cover-small subcomplex terms with the relative pairs for complements of K intersection L, K union L, K and L, using actual arrows and coefficient excision.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env lean /tmp/CoefficientSubcomplexMayerVietoris.lean",
+       "lake env lean /tmp/CoefficientCompactComplementGeometry.lean",
        :exit 0}
-      {:cmd "python3 /tmp/coefficient-subcomplex-mv-audit.py", :exit 0}
-      {:cmd "bb /tmp/t98a01-dependency-review.bb", :exit 0}
+      {:cmd
+       "sha256sum /tmp/CoefficientCompactComplementGeometry.lean ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean",
+       :exit 0}
+      {:cmd
+       "python3 /tmp/coefficient-compact-complement-geometry-audit.py",
+       :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientSubcomplexMayerVietoris.lean",
+       "lake env lean /tmp/CoefficientCompactComplementGeometry.lean",
        :exit 1,
        :correction
-       "The first import did not install coefficient-chain pushout preservation. Imported the existing CoefficientPushoutRelative provider, whose proved instance supplies the required preservation; the unchanged mathematical construction then compiles."}],
+       "The promoted coefficient subcomplex dependency had no canonical object file; the geometric prerequisite was made independently compilable with Mathlib while its acceptance separately pins the dependency source hash."}
+      {:cmd
+       "lake env lean /tmp/CoefficientCompactComplementGeometry.lean",
+       :exit 1,
+       :correction
+       "Parenthesized complement subtype codomains and constructed overlap nonmembership directly from both overlap components. Final compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientSubcomplexMayerVietoris.lean",
+     {:path "/tmp/CoefficientCompactComplementGeometry.lean",
       :sha256
-      "bed519ae21e3a1bad02abf9775eb734bcec6bb3c4e8f41a98cec894be2cf71e9",
+      "b6c94bbe9598cec21e4ac54d255479a99045372efc91dbb6c5e95b84b206cdaf",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one prerequisite: the coefficient-general Mayer-Vietoris short exact sequence for two simplicial subcomplexes. Free singular chains over any commutative ring preserve the intersection/union pushout; the signed chain complex is short exact and supplies its connecting morphism and exactness at the intersection, pieces and union homology terms in every natural degree. Compact-complement geometry and transport through coefficient excision remain.",
+     "The coefficient subcomplex Mayer-Vietoris sequence is banked, but the requested relative sequence still needs compact-complement geometry and transport through actual relative-pair maps and coefficient excision. Compiled exactly one geometric prerequisite: inside the complement of K intersection L, the complements of compact K and L form an actual open cover; their union is the whole ambient complement, their overlap is the inverse image of the complement of K union L, and the three canonical subtype maps retain their literal values. No localization monicity, vanishing theorem or fundamental class is claimed.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -67305,7 +67321,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families
-    :coefficient-subcomplex-mayer-vietoris-implementation-refill49],
+    :coefficient-subcomplex-mayer-vietoris-implementation-refill49
+    :coefficient-compact-complement-geometry-implementation-refill49],
    :current-residual
    "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
