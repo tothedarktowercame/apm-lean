@@ -22259,9 +22259,97 @@
   {:consumer :t98A02,
    :stop-condition
    "No supplied neighborhood isomorphism, integral-to-R reinterpretation, assumed generator or chart construction. Preserve T1 and openness hypotheses. Do not claim overlap orientation coherence, global localization monicity, gluing or consumer closure.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Deleted-point manifold chart comparisons and overlap compatibility remain before global localization and consumer uptake.",
+     :axiom-audits 15,
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:namespace "ConstructionTargets.CoefficientNeighborhoodLocal",
+      :implementation
+      "Promote the exact compiled fixture and document its explicit double-complement transport and actual neighborhood-inclusion maps.",
+      :declarations
+      ["deleted"
+       "localDeleted"
+       "inclusion"
+       "inclusionMap"
+       "excision_eq"
+       "complement_comparison"
+       "projection_degree"
+       "inclusion_isIso"
+       "inclusionIso"
+       "inclusionIso_hom"
+       "nestedInclusion"
+       "nestedMap"
+       "nested_comp"
+       "nested_homology"
+       "inverse_left"
+       "inverse_right"
+       "modelNormalization"
+       "model_forward"
+       "modelGenerator"
+       "generator_normalization"
+       "generator_image"
+       "integral_ball"
+       "rational_ball"],
+      :hypotheses
+      "R and X are Type 0; R is a commutative ring and X a topological space. Actual chain-map comparisons and nested composition require no openness or T1 assumption. The homology isomorphism requires T1Space X, IsOpen U and x∈U, and holds in every natural degree including zero. Euclidean normalization uses ambient dimension m+2, arbitrary open U containing zero, and ModuleCat.of R R coefficients.",
+      :consumer-equation
+      "Actual neighborhood inclusion induces an R-linear local-homology isomorphism. Its forward arrow is precisely homologyMap of the constructed subtype-cokernel map. Composing with the reviewed Euclidean model normalization constructs neighborhood coordinates and a generator whose actual inclusion image equals the ambient model generator.",
+      :consumer-residual
+      "Construct actual deleted-point manifold chart comparisons and overlap compatibility before global localization and t98A02 gluing. Neighborhood excision alone supplies no global conclusion.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientNeighborhoodLocal."
+       "Reproduce fifteen standard-only axiom audits and integer/rational ball examples."
+       "Audit actual subtype cokernels, degreewise projection, excision equality and explicit double-complement transport."
+       "Verify derived T1/openness excision hypotheses, all-degree forward map and both inverse laws."
+       "Verify actual nested-inclusion composition and induced homology equation."
+       "Verify Euclidean neighborhood normalization, generator normalization and actual generator-image equation."
+       "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."
+       "Preserve concurrent reservations and reviewed STOPs; do not claim chart construction, orientation coherence, global localization or frozen closure."]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG, closure rules, build-loop design, both ledgers and all four dependency PASS receipts; inspect actual neighborhood and coefficient-general excision APIs",
+       :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientNeighborhoodLocal.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientNeighborhoodLocal.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientNeighborhoodLocal.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial neighborhood-local fixture compilation",
+       :exit 1,
+       :correction
+       "Replaced dependent rewriting across double-complement subtype objects with explicit heterogeneous map transport and congrArg transport of the IsIso proposition. Subsequent complete compilation succeeds without warnings."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientNeighborhoodLocal.lean",
+      :sha256
+      "546aef3db35bcfd4e880ff312626db1ea435717364b497d22bd0624455507de0"},
+     :finding
+     "The complete placeholder-free fixture constructs the actual R-linear neighborhood map and identifies it with excision after double-complement transport. Excision proves its homology isomorphism in every degree. Actual nested composition, forward maps and inverse laws compile. Euclidean neighborhood normalization and its generator are constructed from the reviewed ambient model, with an exact inclusion-image equation. No integral-to-R reinterpretation or supplied neighborhood isomorphism is used.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientNeighborhoodLocal.lean"
+       "ConstructionTargets/CoefficientNeighborhoodLocal.md"]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientNeighborhoodLocal.lean"
+    "ConstructionTargets/CoefficientNeighborhoodLocal.md"],
    :dag-node
    "LOCAL HOMOLOGY: actual coefficient-general neighborhood inclusion and model normalization",
    :acceptance
