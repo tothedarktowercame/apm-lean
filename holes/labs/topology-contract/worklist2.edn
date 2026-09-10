@@ -31994,8 +31994,39 @@
   {:consumer :t95J05,
    :stop-condition
    "Bank only measurable-space equality and raw Hausdorff set-value equality across two Borel instances on the same topology. Do not claim equator nullity, cap partition, normalization, sphere mass, moments, Stokes or consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Produce and pin a namespace-correct fixture containing both generic coherence theorems and the required dimension-two and dimension-three instance examples; then transport the source sphere nullity into the coordinate-module measurable instances.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :reason :fixture-acceptance-conflict,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
+      :exit 0}
+     {:cmd
+      "rg -n 'HausdorffBorelInstanceCoherence|hausdorff-borel-measurable-instance-coherence-1' holes/labs/topology-contract/worklist2.edn; inspect the nested probe fixture and diagnostic history",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean; lake env lean /tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean; rg -n '^namespace |^example|WithLp\\.measurableSpace|LinearGraphMeasure\\.domainMeasurable|#print axioms' /tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean; test ! -e ConstructionTargets/HausdorffBorelInstanceCoherence.lean; test ! -e ConstructionTargets/HausdorffBorelInstanceCoherence.md; git diff --exit-code -- ConstructionTargets/HausdorffBorelInstanceCoherence.lean ConstructionTargets/HausdorffBorelInstanceCoherence.md; git diff --check",
+      :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint50-borel-coherence/HausdorffBorelInstanceCoherence.lean",
+     :sha256
+     "658162d3a85f5c8416d2f978801caf74349cba0af1a4548375e47fb72cbb16c8",
+     :placeholder-count 0},
+    :finding
+    "The recorded fixture matches SHA256 658162d3a85f5c8416d2f978801caf74349cba0af1a4548375e47fb72cbb16c8 and compiles both generic Borel-instance coherence theorems with standard-only axioms. Exact promotion cannot satisfy the row for two independent reasons. First, the fixture declares namespace HausdorffBorelInstanceCoherence rather than ConstructionTargets.HausdorffBorelInstanceCoherence. Second, the acceptance gate requires compiled examples using WithLp.measurableSpace and ConstructionTargets.LinearGraphMeasure.domainMeasurable on EuclideanSpace real (Fin 2) and Fin 3, but the exact fixture contains no examples and references neither instance. Renaming the namespace or adding those examples would change the exact fixture. Supply a corrected complete fixture with a new pinned digest, or consistently revise the namespace, exact-promotion requirement, and example gate. This is a specification boundary, not a mathematical refutation.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/HausdorffBorelInstanceCoherence.lean"
     "ConstructionTargets/HausdorffBorelInstanceCoherence.md"],
