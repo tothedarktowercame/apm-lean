@@ -66203,8 +66203,147 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :evidence
+   {:baseline "a23c64509baaf333a173f818ba8efa99c9759f57",
+    :outcome :replan,
+    :warnings [],
+    :disposition :replan,
+    :pin "fb6f9b9af1854e46fa6efa1eb305b3f30be955be",
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill48-measure.py", :exit 0}
+     {:cmd "bb /tmp/refill48-reviews.bb", :exit 0}
+     {:cmd "python3 /tmp/topology-refill48-tail.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill48-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill48-proposed-worklist.edn",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :replacement-items
+    [{:consumer "t03J02",
+      :stop-condition
+      "GO requires complete frozen closure; otherwise name the exact geometric cover, group-pushout or homology comparison boundary. Missing infrastructure is not refutation.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "VAN KAMPEN / frozen null-circle torus gluing",
+      :acceptance
+      {:axioms :standard-only,
+       :frozen-file "problems/t03J02/lean/Main.lean",
+       :frozen-sha256
+       "377c8bf4a422fb5f9274c34c78b2cb3754a3293cadd5c664de12970de3bc7edf",
+       :placeholder-before 2,
+       :placeholder-after 0,
+       :probe
+       "Compile complete frozen Main preserving both embedded nullhomotopic attaching circles, the literal quotient and all group and homology conjuncts. Audit banked actual-cover descent, torus computations and Mayer-Vietoris. Construct any required open-cover or cofibration comparison from the supplied embeddings; no assumed collar, disk filling or cover. The overlap is a circle, not simply connected: derive the effect of both nullhomotopic inclusions on the group pushout rather than applying the trivial-overlap coproduct theorem. Preserve the four-generator presentation and all homology degrees."},
+      :id :t03j02-frozen-null-circle-gluing-closure-probe-refill48,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
+      :current-residual
+      "Two placeholders remain. Generic descent and group reconstruction are banked; applicability to this closed circle gluing must be established.",
+      :other-consumers []}
+     {:consumer "t98A02",
+      :stop-condition
+      "GO requires equality of the actual transition units at every point of a constructed neighborhood; REVISE requires exactly one compiled prerequisite. No global orientation or fundamental-class claim.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD FUNDAMENTAL CLASS / nearby transition-unit equality",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Audit concurrent chart and boundary work first. For two actual charts and a point in their overlap, construct an open neighborhood on which their banked coefficient transition unit equals its value at that point. Reuse CoefficientChartBallNormalization, the fixed ball-boundary lift, actual mapped-boundary center-motion homotopies and CoefficientChartTransitionUnit. Derive the comparison through both charts and actual relative connecting maps; do not assume scalar continuity, local constancy or orientation compatibility. Retain commutative-ring coefficients and dimension m+2; preserve lower-dimensional comparison coverage separately."},
+      :id
+      :coefficient-chart-transition-unit-local-constancy-probe-refill48,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
+      :current-residual
+      "Nearby normalization in the first chart is reviewed. Transport through the second chart and boundary motion must identify the transition units.",
+      :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+     {:consumer "t99J03",
+      :stop-condition
+      "GO requires constructed simultaneous small translations and every pairwise finiteness conclusion; REVISE requires exactly one compiled prerequisite.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE TRIANGULATION / finite translated arc families",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a finite family of genuinely smooth plane curves on open neighborhoods of the closed unit interval, construct arbitrarily small individual translations such that every distinct pair has finitely many parameter coincidences in the closed square. Reuse PlaneArcSmallTranslation and open-domain Sard; derive simultaneous avoidance of the finite union of bad translation values, rather than assuming simultaneous regularity. Include empty and singleton families and endpoint coincidences. If chart-neighborhood containment is asserted, derive its uniform margin from compact images and openness. Translations may move endpoints; no endpoint-preserving perturbation, retained triangle coverage, compatible faces or triangulation is claimed."},
+      :id :finite-plane-arc-family-small-translations-probe-refill48,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
+      :current-residual
+      "Two-curve small translations are reviewed. A finite-family construction remains before relative chartwise boundary adjustment.",
+      :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 3,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped consumers across the complete DAG; distinguish closures, typed uptake, concurrent work and duplicated functionality. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve reviewed t00A01 closure; repaired t94J08 and t96J07 versus historical defects; signed positive-dimensional antipodal action versus ordinary/reduced S0 and integral dimension-one local index; all-dimensional local comparison versus m+2 normalization; conditional polygon witnesses and genus-zero boundary; null-winding triviality without Producer/Main refutation; Hausdorff mass normalization; t96J05 defect; t01J04/t94A06 applicability; resolved t01A08 regularity conversion versus general-model Sard; transfer versus Euler multiplicativity; and translations versus relative endpoint control. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t03j02-frozen-null-circle-gluing-closure-probe-refill48
+       :coefficient-chart-transition-unit-local-constancy-probe-refill48
+       :finite-plane-arc-family-small-translations-probe-refill48],
+      :current-residual
+      "Await three independently reviewed outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :measures
+    {:reviewed-local-stops 0,
+     :infrastructure-before 749,
+     :existing-consumers 58,
+     :missing-consumers ["t93A05"],
+     :placeholders 62,
+     :placeholder-delta -2,
+     :review-pass 3,
+     :infrastructure-after 754,
+     :concurrent-closures 0,
+     :zero-placeholder-consumers 25,
+     :open-consumers 33,
+     :overlapping-functionality-pairs 0,
+     :named-consumers 59,
+     :campaign-closures 1,
+     :consumer-changed-paths ["problems/t00A01/lean/Main.lean"],
+     :portfolio-modules 3,
+     :within-two 23,
+     :concurrent-modules 2},
+    :finding
+    "Frozen t00A01 is closed at reviewed commit 3612428cad65c85e6006c7488ea8eec4620a0181, with unchanged statements and placeholders 2 to 0. Every other named consumer is unchanged. Portfolio infrastructure proves nearby ambient chart normalization and arbitrarily small two-curve translations with finite coincidences. Concurrent CoefficientBallBoundaryLift supplies the reused Euclidean relative lift; LinearGraphMeasure supplies linear Hausdorff transport while leaving determinant evaluation and nonlinear sphere normalization unresolved. Elect t03J02 as the single near-closure probe to test banked descent and homology against its two frozen gluing bridges; explicitly require its own cover geometry and account for the non-simply-connected circle overlap. Then elect two five-consumer foundations: actual nearby chart transition-unit equality, followed by simultaneous small translations for a finite arc family. Other near-closure consumers retain separate global localization, polygon realization, covering construction, general-model Sard, degree realization, integration normalization, product-homology or specification boundaries. No local gap terminates the campaign.",
+    :artifacts
+    {:measurement
+     {:path "/tmp/topology-refill48-measure.json",
+      :sha256
+      "3fe2266ed7adbee436a40ce0189c2d2a2f08307c8244b988ecc9c72d0fce7e6b"},
+     :tail
+     {:path "/tmp/topology-refill48-tail.edn",
+      :sha256
+      "456b7e6f17094c2574dbf8186ddc0bf8e16bfdfa509058e1fb425bb8b3d85566"}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -66218,6 +66357,98 @@
     :coefficient-moving-boundary-relative-normalization-probe-refill47
     :plane-arc-small-translation-finite-intersections-probe-refill47
     :checkpoint-full-dag-refill-47-after-euler-triple-arcs-and-vertex],
+   :current-residual
+   "Await three independently reviewed outcomes, then rerank the complete DAG."}
+  {:consumer "t03J02",
+   :stop-condition
+   "GO requires complete frozen closure; otherwise name the exact geometric cover, group-pushout or homology comparison boundary. Missing infrastructure is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "VAN KAMPEN / frozen null-circle torus gluing",
+   :acceptance
+   {:axioms :standard-only,
+    :frozen-file "problems/t03J02/lean/Main.lean",
+    :frozen-sha256
+    "377c8bf4a422fb5f9274c34c78b2cb3754a3293cadd5c664de12970de3bc7edf",
+    :placeholder-before 2,
+    :placeholder-after 0,
+    :probe
+    "Compile complete frozen Main preserving both embedded nullhomotopic attaching circles, the literal quotient and all group and homology conjuncts. Audit banked actual-cover descent, torus computations and Mayer-Vietoris. Construct any required open-cover or cofibration comparison from the supplied embeddings; no assumed collar, disk filling or cover. The overlap is a circle, not simply connected: derive the effect of both nullhomotopic inclusions on the group pushout rather than applying the trivial-overlap coproduct theorem. Preserve the four-generator presentation and all homology degrees."},
+   :id :t03j02-frozen-null-circle-gluing-closure-probe-refill48,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations
+    :checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
+   :current-residual
+   "Two placeholders remain. Generic descent and group reconstruction are banked; applicability to this closed circle gluing must be established.",
+   :other-consumers []}
+  {:consumer "t98A02",
+   :stop-condition
+   "GO requires equality of the actual transition units at every point of a constructed neighborhood; REVISE requires exactly one compiled prerequisite. No global orientation or fundamental-class claim.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / nearby transition-unit equality",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Audit concurrent chart and boundary work first. For two actual charts and a point in their overlap, construct an open neighborhood on which their banked coefficient transition unit equals its value at that point. Reuse CoefficientChartBallNormalization, the fixed ball-boundary lift, actual mapped-boundary center-motion homotopies and CoefficientChartTransitionUnit. Derive the comparison through both charts and actual relative connecting maps; do not assume scalar continuity, local constancy or orientation compatibility. Retain commutative-ring coefficients and dimension m+2; preserve lower-dimensional comparison coverage separately."},
+   :id
+   :coefficient-chart-transition-unit-local-constancy-probe-refill48,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations
+    :checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
+   :current-residual
+   "Nearby normalization in the first chart is reviewed. Transport through the second chart and boundary motion must identify the transition units.",
+   :other-consumers ["t00J02" "t02A07" "t94A06" "t97J05"]}
+  {:consumer "t99J03",
+   :stop-condition
+   "GO requires constructed simultaneous small translations and every pairwise finiteness conclusion; REVISE requires exactly one compiled prerequisite.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SURFACE TRIANGULATION / finite translated arc families",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a finite family of genuinely smooth plane curves on open neighborhoods of the closed unit interval, construct arbitrarily small individual translations such that every distinct pair has finitely many parameter coincidences in the closed square. Reuse PlaneArcSmallTranslation and open-domain Sard; derive simultaneous avoidance of the finite union of bad translation values, rather than assuming simultaneous regularity. Include empty and singleton families and endpoint coincidences. If chart-neighborhood containment is asserted, derive its uniform margin from compact images and openness. Translations may move endpoints; no endpoint-preserving perturbation, retained triangle coverage, compatible faces or triangulation is claimed."},
+   :id :finite-plane-arc-family-small-translations-probe-refill48,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations
+    :checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
+   :current-residual
+   "Two-curve small translations are reviewed. A finite-family construction remains before relative chartwise boundary adjustment.",
+   :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped consumers across the complete DAG; distinguish closures, typed uptake, concurrent work and duplicated functionality. Elect exactly one near-closure adapter first, then shared foundations by reach and simplicity. Preserve reviewed t00A01 closure; repaired t94J08 and t96J07 versus historical defects; signed positive-dimensional antipodal action versus ordinary/reduced S0 and integral dimension-one local index; all-dimensional local comparison versus m+2 normalization; conditional polygon witnesses and genus-zero boundary; null-winding triviality without Producer/Main refutation; Hausdorff mass normalization; t96J05 defect; t01J04/t94A06 applicability; resolved t01A08 regularity conversion versus general-model Sard; transfer versus Euler multiplicativity; and translations versus relative endpoint control. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t03j02-frozen-null-circle-gluing-closure-probe-refill48
+    :coefficient-chart-transition-unit-local-constancy-probe-refill48
+    :finite-plane-arc-family-small-translations-probe-refill48
+    :checkpoint-full-dag-refill-48-after-cover-closure-boundary-and-translations],
    :current-residual
    "Await three independently reviewed outcomes, then rerank the complete DAG."}],
  :consumer-baselines
