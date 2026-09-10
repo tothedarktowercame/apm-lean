@@ -61449,8 +61449,56 @@
   {:consumer "t03J04",
    :stop-condition
    "GO requires complete frozen closure. Otherwise STOP identifies the exact missing rational torus computation or finite-cover/Euler comparison; infrastructure absence is not refutation.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "Uniform rational torus Euler computation and the actual finite-cover/Euler comparison remain. No complete frozen fixture was compiled. This is an infrastructure STOP, not a refutation or campaign termination.",
+    :dependency-review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789018245956-17968-3992b67c"},
+    :evidence
+    {:path "/tmp/t03j04-refill41-audit.json",
+     :sha256
+     "25332a2019b6293c91c00937b0d45092122bc921bea797067d46b068f227285d",
+     :head "c43f6a7ab2845ec2444d19a2e86d3daff79601f8",
+     :frozen-file "problems/t03J04/lean/Main.lean",
+     :frozen-sha256
+     "b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41"},
+    :outcome :stop,
+    :warnings [],
+    :boundary
+    {:torus
+     "For every n with NeZero n, prove apm_t03J04_eulerCharacteristic n (Fin n → Circle) = 0 in the actual ModuleCat Q singular-homology representation. A product-chain comparison with a rational Kunneth calculation, or an equivalent direct computation, remains absent from the audited bank.",
+     :target
+     "For the supplied local diffeomorphism phi and unchanged chart structures, derive enough finite-cover homological comparison to prove apm_t03J04_eulerCharacteristic n X = 0. The standard route needs a positive finite sheet count and Euler multiplicativity for this exact finrank sum, with its finiteness and truncation justification. These cannot be assumed or replaced by formal surface Euler arithmetic.",
+     :applicability
+     "The positive-dimensional, Hausdorff and connected hypotheses are retained. No missing-hypothesis claim or mathematical refutation is made. The displayed nonzero coordinate field alone does not identify the rational homological Euler sum."},
+    :disposition :stop,
+    :axioms :not-audited-no-new-proof,
+    :author "codex-12",
+    :placeholder-before 1,
+    :reason :missing-infrastructure,
+    :commands
+    [{:cmd "python3 /tmp/t03j04-refill41-audit.py", :exit 0}
+     {:cmd
+      "sed -n '80,101p' ConstructionTargets/BoundaryTorusH0Cokernel.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '568,586p' .lake/packages/mathlib/Mathlib/Topology/Covering/Basic.lean",
+      :exit 0}
+     {:cmd
+      "rg -n -i 'euler|kunneth|eilenberg.zilber' ConstructionTargets --glob '*.lean' | head -25",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t03j04-refill41-audit.json", :exit 0}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :finding
+    "The frozen nonzero-field and local-diffeomorphism surjectivity helpers are proved. Mathlib also supplies compact-Hausdorff local-homeomorphism covering machinery. The audited homology APIs do not supply the two remaining Euler conclusions: the uniform rational singular-homology calculation for Fin n → Circle, and a finite-cover comparison for the literal truncated alternating finrank sum. The complete integral boundary-torus table is banked, but it is neither a rational arbitrary-dimensional torus table nor an Euler multiplicativity theorem.",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "MANIFOLD EULER CHARACTERISTIC / frozen torus local diffeomorphism",
