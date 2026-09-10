@@ -71744,69 +71744,97 @@
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
   {:consumer "t00A03",
    :stop-condition
+   "Require a relative Sard theorem producing finite interior coincidence fibers for the endpoint-weighted family, followed by simultaneous finite-family parameter selection, embedding stability and explicit chart-transition comparison.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"],
+   :dag-node
+   "SURFACE TRIANGULATION / endpoint-relative coincidence boundary finiteness",
+   :acceptance
+   {:fixture "/tmp/PlaneArcEndpointPairBoundaryFinite.lean",
+    :fixture-sha256
+    "2315052450b3c2cf2773a9e272fc1e8fcc6c32b44a24091ada1e98cff0d9f784",
+    :implementation
+    "Promote the exact fixture. Compile endpointSet_finite, nonInteriorBoundary_subset, nonInteriorBoundary_finite and finite_union_nonInteriorBoundary. This supplies the finite fixed-boundary residual required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes: all parameter pairs lacking an interior perturbation direction form a finite subset of the four endpoint pairs, and adjoining them preserves finiteness. Verify PlaneArcEndpointPairBoundaryDecomposition SHA256 862a3c2044d4388bf12dd8c4b8477822de6721dcbd11f39604163c873c1d8d4b. Preserve the literal closed and open unit intervals and arbitrary finite interior residual sets. Require zero placeholders, no warnings and standard-only axioms. Do not claim relative Sard, finite interior coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+    :commands
+    ["lake env lean ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :plane-arc-endpoint-pair-boundary-finite-implementation-refill50,
+   :kind :reusable-theorem,
+   :depends-on
+   [:plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50],
+   :current-residual
+   "Prove finiteness of the interior coincidence locus for generic small perturbation parameters using relative Sard, then adjoin the compiled finite boundary residual. One common good parameter tuple, retained embeddings and cross-chart surface transport remain.",
+   :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
+  {:consumer "t00A03",
+   :stop-condition
    "Require a compiled perturbation preserving prescribed endpoints and chartwise containment with finite pairwise intersections; do not infer cross-chart finiteness from unrelated plane translations.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The complete four-point boundary decomposition compiles; relative Sard, finite-family simultaneous selection, embedding stability and cross-chart comparison remain.",
+     "The endpoint boundary residual is now proved finite and can be adjoined to any finite interior locus; relative Sard, simultaneous parameter selection, embedding stability and cross-chart comparison remain.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t00A03",
       :stop-condition
-      "Require a relative Sard theorem on the coincidence square minus the four endpoint pairs, plus explicit inclusion of any coincident prescribed endpoints in the finite fiber; then choose one good parameter tuple for every pair and prove chart-transition compatibility.",
+      "Require a relative Sard theorem producing finite interior coincidence fibers for the endpoint-weighted family, followed by simultaneous finite-family parameter selection, embedding stability and explicit chart-transition comparison.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean"],
+      ["ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"],
       :dag-node
-      "SURFACE TRIANGULATION / endpoint-relative coincidence-square boundary decomposition",
+      "SURFACE TRIANGULATION / endpoint-relative coincidence boundary finiteness",
       :acceptance
-      {:fixture "/tmp/PlaneArcEndpointPairBoundaryDecomposition.lean",
+      {:fixture "/tmp/PlaneArcEndpointPairBoundaryFinite.lean",
        :fixture-sha256
-       "862a3c2044d4388bf12dd8c4b8477822de6721dcbd11f39604163c873c1d8d4b",
+       "2315052450b3c2cf2773a9e272fc1e8fcc6c32b44a24091ada1e98cff0d9f784",
        :implementation
-       "Promote the exact fixture. Compile endpoint_cases and interior_direction_or_endpoint_pair. This supplies the complete boundary decomposition required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes: outside four explicit endpoint-endpoint pairs, at least one curve parameter is interior and hence has the reviewed surjective perturbation direction. Verify PlaneArcEndpointPairParameterSurjectivity SHA256 8657ea839db4ff9b7fb78d3eece0d2b4937de4be199d2967435b9e89b9fb64a7. Preserve the literal closed and open unit intervals and all four endpoint combinations. Require zero placeholders, no warnings and standard-only axioms. Do not claim endpoint separation, regular-value existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+       "Promote the exact fixture. Compile endpointSet_finite, nonInteriorBoundary_subset, nonInteriorBoundary_finite and finite_union_nonInteriorBoundary. This supplies the finite fixed-boundary residual required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes: all parameter pairs lacking an interior perturbation direction form a finite subset of the four endpoint pairs, and adjoining them preserves finiteness. Verify PlaneArcEndpointPairBoundaryDecomposition SHA256 862a3c2044d4388bf12dd8c4b8477822de6721dcbd11f39604163c873c1d8d4b. Preserve the literal closed and open unit intervals and arbitrary finite interior residual sets. Require zero placeholders, no warnings and standard-only axioms. Do not claim relative Sard, finite interior coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
        :commands
-       ["lake env lean ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean"],
+       ["lake env lean ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50,
+      :plane-arc-endpoint-pair-boundary-finite-implementation-refill50,
       :kind :reusable-theorem,
       :depends-on
-      [:plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50],
+      [:plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50],
       :current-residual
-      "Apply relative Sard using the compiled interior-direction cover and four-point boundary decomposition. Add the fixed coincident endpoints to each finite intersection set, choose parameters simultaneously across the finite family, retain embeddings, and transport coincidences through chart transitions.",
+      "Prove finiteness of the interior coincidence locus for generic small perturbation parameters using relative Sard, then adjoin the compiled finite boundary residual. One common good parameter tuple, retained embeddings and cross-chart surface transport remain.",
       :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.PlaneArcEndpointPairParameterSurjectivity >/tmp/endpoint-pair-dep.log 2>&1",
+       "lake build ConstructionTargets.PlaneArcEndpointPairBoundaryDecomposition >/tmp/endpoint-boundary-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/PlaneArcEndpointPairBoundaryDecomposition.lean",
+       "lake env lean /tmp/PlaneArcEndpointPairBoundaryFinite.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/PlaneArcEndpointPairBoundaryDecomposition.lean ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean",
+       "sha256sum /tmp/PlaneArcEndpointPairBoundaryFinite.lean ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/PlaneArcEndpointPairBoundaryDecomposition.lean",
+       "python3 comment-stripped placeholder-and-three-declaration audit over /tmp/PlaneArcEndpointPairBoundaryFinite.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/PlaneArcEndpointPairBoundaryDecomposition.lean",
+     {:path "/tmp/PlaneArcEndpointPairBoundaryFinite.lean",
       :sha256
-      "862a3c2044d4388bf12dd8c4b8477822de6721dcbd11f39604163c873c1d8d4b",
+      "2315052450b3c2cf2773a9e272fc1e8fcc6c32b44a24091ada1e98cff0d9f784",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one boundary-accounting prerequisite. A parameter in the closed unit interval that is not interior is exactly zero or one. Therefore every point of the closed parameter square either has an interior left parameter, has an interior right parameter, or is one of the four endpoint-endpoint pairs. Combined with the reviewed pairwise parameter-surjectivity results, this isolates the complete exceptional set for a relative regular-value argument. It does not assert whether the original prescribed endpoints coincide, choose simultaneous family parameters, retain embeddings or compare different charts.",
+     "Compiled exactly one set-level boundary-finiteness prerequisite. The subset of the closed coincidence square where neither coordinate is interior lies in {0,1} times {0,1}, hence is finite. The union of this boundary residual with any finite interior coincidence set remains finite. This proves that fixed endpoint pairs cannot destroy a future relative-Sard finiteness conclusion, without asserting that the interior coincidence set is already finite or that one parameter tuple works for the whole family.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
@@ -71823,7 +71851,8 @@
     :plane-arc-endpoint-perturbation-family-containment-implementation-refill50
     :plane-arc-endpoint-perturbation-interior-parameter-implementation-refill50
     :plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50
-    :plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50],
+    :plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50
+    :plane-arc-endpoint-pair-boundary-finite-implementation-refill50],
    :current-residual
    "Common-plane translations preserve embeddings and containment but move endpoints and do not compare curves transported through unrelated charts.",
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
