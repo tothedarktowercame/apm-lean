@@ -73215,8 +73215,52 @@
   {:consumer "t98A02",
    :stop-condition
    "Require a proof that the literal relative short complex is short exact, using the open-cover small-chain denominator comparison rather than ordinary excision; then apply its homology sequence to obtain the genuine connecting morphism and three exactness segments.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove that the packaged short complex is degreewise short exact after replacing the final actual-union denominator by the valid open-cover small-chain model. Its HomologySequence will then supply a nonzero-capable connecting map and the three required exactness segments.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:shortComplex
+     "c3274d378d606acf3707387b183684e1abe858fac175546913848fda9be410c2",
+     :shortComplex_f
+     "e81bd93c36b134b67d810d6ccd690006052291a8dcb207001973fd86b91c3e7b",
+     :shortComplex_g
+     "9210f03edbda62b3044cc3ec4c31c11ee9d3a8ce4af410effb9c8418b3f859b2",
+     :shortComplex_zero
+     "bcdb4b24b938aba1a1433c3e4e7db96256668af4b80c2fa8547c2f4c6af06ad9"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientCompactSupportRelativeShortComplex.lean ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean ConstructionTargets/CoefficientCompactSupportRelativeArrowComplex.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-four-declaration audit over ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 840a213cd308425e8cf751d46b2a64f489d55176",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 840a213cd308425e8cf751d46b2a64f489d55176",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "840a213cd308425e8cf751d46b2a64f489d55176",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactSupportRelativeShortComplex.lean",
+     :sha256
+     "bf8cbfb5d6de7d6a2a6b9796a002b197b2432248878dcfaefc83f8274e045b2d",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded relative-arrow-complex dependency hash reproduce. The literal arrows package into a ShortComplex and all four requested declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean"],
    :dag-node
