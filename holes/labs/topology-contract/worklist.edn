@@ -72947,8 +72947,59 @@
   {:consumer "t98A01",
    :stop-condition
    "GO requires the exact frozen t98A01 placeholder to close using the reviewed fivefold-cover fiber equivalence and five-torsion cardinality. Otherwise STOP at the first still-independent polygon-genus, genus-zero representation or covering Euler-multiplicativity boundary; do not infer any of them from fiber cardinality.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Build Euler-characteristic multiplicativity for finite-sheeted coverings of the literal Surface true g models and prove that a homeomorphism Surface true g ≃ₜ Surface true h forces g=h, preserving the genus-zero polygon representation. Then apply t98A01_orientable_genus_arithmetic and assemble the already proved regular torus cover and final connected-sum conjuncts.",
+    :outcome :stop,
+    :warnings
+    ["problems/t98A01/lean/Main.lean:104:8: declaration uses sorry"],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :reason
+    "The reviewed five-torsion theorem now completes the concrete front conjunct: every fiber of the torus map is equivalent to the five-torsion kernel, hence has Nat.card five, and the existing covering and deck-translation proofs give t98A01IsRegularNfoldCover 5 t98A01TorusFiveCover. The frozen theorem still cannot close because its second conjunct quantifies over every regular fivefold cover p : Surface true g → Surface true h and requires eulerCharacteristic true g = 5 * eulerCharacteristic true h together with g = 1 and h = 1. No theorem in ConstructionTargets supplies Euler-characteristic multiplicativity for such a covering, and no theorem proves genus invariance from Nonempty (Surface true g ≃ₜ Surface true h). The existing t98A01_orientable_genus_arithmetic derives g=h=1 only after both missing premises are supplied. Connected-sum arithmetic and the literal polygon data prove only the final three conjuncts. This is the exact remaining covering-Euler and polygon-genus boundary; numerical fiber cardinality does not imply either result.",
+    :commands
+    [{:cmd
+      "lake build ConstructionTargets.UnitAddCircleFiveTorsionCardinality >/tmp/t98-five-torsion-dep.log 2>&1",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T98A01FiveTorsionUptake.lean", :exit 0}
+     {:cmd "lake env lean problems/t98A01/lean/Main.lean", :exit 0}
+     {:cmd
+      "rg -n \"homeomorph.*genus|genus.*homeomorph|euler.*cover|cover.*euler\" ConstructionTargets/Surfaces.lean ConstructionTargets --glob '*.lean'",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "python3 comment-stripped placeholder and apm_t98a01 statement audit over problems/t98A01/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/T98A01FiveTorsionUptake.lean problems/t98A01/lean/Main.lean ConstructionTargets/UnitAddCircleFiveTorsionCardinality.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/T98A01FiveTorsionUptake.lean",
+      :exit 1,
+      :correction
+      "The first compile preceded creation of the promoted dependency object file. Built ConstructionTargets.UnitAddCircleFiveTorsionCardinality through Lake and reran the unchanged audit fixture successfully."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T98A01FiveTorsionUptake.lean",
+     :sha256
+     "b6b3c6a7dcbb1cdb7762d85a5356f2fdcecb226d9bdecb638982db077dc91abc",
+     :placeholder-count 0},
+    :finding
+    "The audit compiles fiber_card_five by rewriting the reviewed fiber-cardinality equivalence with UnitAddCircleFiveTorsionCardinality.fiveKernel_natCard, then packages covering, five-element fibers and deck transitivity into regular_fivefold. The exact concrete fivefold torus-cover obligation is therefore complete. The frozen universal surface-cover clause remains independent and requires both covering Euler multiplicativity and invariance of the literal orientable polygon genus under homeomorphism.",
+    :frozen
+    {:path "problems/t98A01/lean/Main.lean",
+     :sha256
+     "a607069bdb7416a01a1e6846cb6dd8e3e8bf87b0f2b122ef4c1fb828d5167f25",
+     :placeholder-before 1,
+     :placeholder-after 1,
+     :statement-sha256
+     "58a2e8144d472806a294d08dcbc54dae6717969a5264426a42a275e438fc7fed"},
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "COVERING CLASSIFICATION / frozen five-torsion cardinality uptake",
