@@ -70170,7 +70170,7 @@
    :coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50,
    :kind :representation-comparison,
    :depends-on
-   [:coefficient-relative-mayer-vietoris-chain-sequence-probe-refill50],
+   [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
    :current-residual
    "Instantiate the coefficient comparison on the reviewed compact-complement range subcomplexes, transport its right relative cokernel to the literal nested complement pair, and prove the coefficient excision/naturality squares into the four requested relative pairs in X before transporting all three exactness statements.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}

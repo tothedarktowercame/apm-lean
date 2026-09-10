@@ -63,6 +63,20 @@
                    java.nio.file.StandardCopyOption/ATOMIC_MOVE]))))
 (defn replace-item [xs id f]
   (mapv #(if (= id (:id %)) (f %) %) xs))
+(defn normalize-prerequisite [asking-row prerequisite]
+  ;; A prerequisite cannot depend on the row that is waiting for it. Agents
+  ;; occasionally describe provenance by putting the asking probe in P's
+  ;; :depends-on; after REVISE adds the reverse edge this becomes a cycle and
+  ;; leaves an :open row with an incomplete dependency. Preserve the actual
+  ;; scheduling constraint by splicing in the asking row's prior dependencies.
+  (let [asking-id (:id asking-row)
+        prior (:depends-on asking-row)]
+    (update prerequisite :depends-on
+            #(vec (distinct (mapcat (fn [dependency]
+                                      (if (= asking-id dependency)
+                                        prior
+                                        [dependency]))
+                                    (or % [])))))))
 (defn unblock-ready [xs]
   (let [idx (into {} (map (juxt :id identity) xs))]
     (mapv #(if (and (= :blocked (:state %))
@@ -266,7 +280,9 @@
       ;; and given its orientation; the receipt still carried the older copy
       ;; without one, and the loop stopped over a row that was already correct.
       :revise (when-not (by-id (:id (:prerequisite receipt)))
-                (validate-inserted-row! (:prerequisite receipt) (set ids)))
+                (validate-inserted-row!
+                 (normalize-prerequisite (by-id id) (:prerequisite receipt))
+                 (set ids)))
       :replan (let [rows (:replacement-items receipt)
                     allowed-ids (into (set ids) (map :id rows))]
                 (doseq [row rows]
@@ -307,7 +323,8 @@
             ;; A prerequisite that is already :done blocks nothing, so the
             ;; asking row stays runnable; one still in flight blocks it as
             ;; before. Either way the dependency is recorded once.
-            :revise (let [p (:prerequisite receipt)]
+            :revise (let [p (normalize-prerequisite (by-id id)
+                                                     (:prerequisite receipt))]
                       (when-not (and (map? p) (:id p))
                         (throw (ex-info "REVISE lacks prerequisite item" {:receipt receipt})))
                       (let [existing (by-id (:id p))
