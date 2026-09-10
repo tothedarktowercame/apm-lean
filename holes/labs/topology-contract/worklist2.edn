@@ -23531,20 +23531,125 @@
    :stop-condition
    "Bank the relative overlap inclusion square and transition inverse only. Do not claim ambient-map invertibility, normalization comparison, transition units, cocycles, orientation coherence or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientOverlapRelative.lean",
-      :sha256
-      "b573fd1815d0cef5c0c4e098bc4da3860cd830d70640f5c925a83587f610e406"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientOverlapRelative.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholders 0,
+    :placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Independent review remains. Use neighborhood excision to compare ambient chart normalizations and recover the distinguished-chart normalization, then derive transition units, generator-change and directed cocycle equations. Ambient-map invertibility, orientation coherence and consumer closure are not claimed. Ledgers and frozen consumers remain untouched.",
+    :gates
+    {:fixture-hash-and-exact-promotion :pass,
+     :integer-rational-examples :pass,
+     :whitespace :pass,
+     :four-actual-MapsTo-proofs :pass,
+     :relative-square-direction :pass,
+     :fixture-and-canonical-compilation :pass,
+     :four-degreewise-projection-equations :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :transition-inverse-laws :pass,
+     :target-build :pass,
+     :literal-deleted-subsets :pass,
+     :actual-homology-composition :pass,
+     :sixteen-standard-only-audits :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 16,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation have zero warnings. Target build replays 22 dependency warnings and succeeds with 8299 jobs."],
+    :statement-hashes
+    {"inverseMap"
+     "86dc9dfa71d2823b65c55e718e39d1d303740ef95be60c0bd1b5a9cb292dfc40",
+     "relative_square"
+     "22704dd0576103ea9476966c59fc3bb01bb754643d9b6553207b5bc6a9195c93",
+     "inverse_mapsTo"
+     "f68e1a19309165bcd131a44cbd26810be3d59c334fdd4961f763cc7ae78f3869",
+     "right_mapsTo"
+     "5d8778f3be398c7bb3ec99c16bf50a6ea5f8f762defd0d19ddc727270f8c4d6a",
+     "transition_projection"
+     "6c3e33839c33edb4cebfc749e7ce43d4bfd272438193c48d215f9167e576e9ff",
+     "relativeIso"
+     "abd05e1677e099b5212dcbac26d3f87817183ca0f3d49a83d0eb341c398a9fa9",
+     "inverse_right"
+     "394c79ce23295a6b833ca930383b7843fc3b1bbd2a4346d0602eb16092b9efb3",
+     "leftMap"
+     "bf2623610c6f9ff7bc13760bf9fdcc0005b6ef1a2de46719c803a6bdf5f1cef3",
+     "rational_square"
+     "bc9c09179ae60e85994fcf0a7b49d2359f92f47c34273ddff8b16a848740e46c",
+     "right_projection"
+     "9ed561b0748de664830b0b4c4ab7ec96449c19e5ddea6f8ba26ca58c9c84a12e",
+     "left_projection"
+     "6aba53d772f0d0dc86c834433c72cd6a88a05ac57a8fd2b36862053ed8fc6b0f",
+     "inverse_left"
+     "33de96e04d443574910d4cd7c1265be51f630353d1f05fca80106fccb9a9607a",
+     "inverse_projection"
+     "fe6b9ef21ad7fedf7ac9aee26e4bb4353878b924692b3cc84e7f55fbc984730c",
+     "homologyIso"
+     "803833a5fe08d1acf5819477298c7e2dbf87996cfcf5f522c6f4713e20769854",
+     "transition_mapsTo"
+     "6b71ed3f213e6b310307321e3235b070228a2d186be086da85dae1b0dd25470f",
+     "integral_square"
+     "19b298c9281a86a9b8986857231efa9ee14dfffb5a3d74f51f6d27dc763165a7",
+     "rightMap"
+     "196ebe37bd6227b107d78ea10f2bb0aee5acb67a7fbc583a1763636f340c671d",
+     "left_mapsTo"
+     "2854743ece021fb90afcd7dd11380d2aaf821118532b20d497b7ca21b2831b26",
+     "homology_square"
+     "8c337db3c21078dd765daca67c0d838d4a5d9eb5f4d7cc7962ec588afa580a6e",
+     "transitionMap"
+     "c0e9846c1036f3618d0501009d2f4844249e8c8ce5fb5924f46c292acf8e9115"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and both dependency PASS receipts from the ledgers",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientOverlapRelative.lean", :exit 0}
+     {:cmd
+      "Python fixture hash verification and exact scoped promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientOverlapRelative.lean > /tmp/overlaprelative-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientOverlapRelative.lean > /tmp/overlaprelative-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientOverlapRelative > /tmp/overlaprelative-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verification of sixteen standard-only audits in each direct compilation log and warning attribution",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientOverlapRelative.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and twenty statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m \"Construct actual relative overlap inclusion square\"",
+      :exit 0}
+     {:cmd "git diff --check 94b0259c^ 94b0259c", :exit 0}
+     {:cmd
+      "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "94b0259c67f7223c4938d3021da18cbaa3175062",
+    :changed-paths
+    ["ConstructionTargets/CoefficientOverlapRelative.lean"
+     "ConstructionTargets/CoefficientOverlapRelative.md"],
+    :fixture
+    {:path "/tmp/CoefficientOverlapRelative.lean",
+     :sha256
+     "b573fd1815d0cef5c0c4e098bc4da3860cd830d70640f5c925a83587f610e406"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientOverlapRelative.lean"
     "ConstructionTargets/CoefficientOverlapRelative.md"],
