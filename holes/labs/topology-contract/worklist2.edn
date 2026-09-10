@@ -45326,7 +45326,8 @@
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
    {:outcome :replan,
-    :seat "codex-13",
+    :disposition :replan,
+    :author "codex-13",
     :commands
     [{:cmd
       "Verify the reviewed t01J01 route-census defect in checkpoint74 evidence",
@@ -45342,6 +45343,117 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789082710535-19781-6adebb28",
+     :commands
+     ["git log --oneline -6"
+      "inspect active and historical t01J01 route strings in worklist2.edn"
+      "git show --stat --oneline 81a8c1a3"
+      "git show --format=fuller --no-ext-diff 81a8c1a3 --"
+      "git archive 81a8c1a3 | tar -x -C <review-dir>"
+      "git diff-tree --no-commit-id --name-status -r 81a8c1a3"
+      "git diff-tree --check 81a8c1a3^ 81a8c1a3"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist2.edn"
+      "sha256sum <archived-build-artifact> <archived-test-artifact>"
+      "inspect `translationslis` occurrences and confirm the sole remaining occurrence is quoted historical review evidence"
+      "bb <archive>/holes/labs/topology-contract/test_gate_receipts.bb"],
+     :finding
+     "PASS: repair commit 81a8c1a3194bc89ff20b8920ab98f75e837c936a has exact worklist2-only scope and clean whitespace. The active checkpoint74 census now records t01J01 exactly as `translations -> endpoint control -> triangulation -> theorem`; the malformed spelling remains only as an immutable quotation in the prior FAIL review finding. The repair preserves the census, zero placeholder delta, infrastructure accounting, route ranking, and election of the typed supporting-path transition. Both archived ledgers validate; checkpoint66 artifacts reproduce SHA256 ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b and 22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc; the focused supervisor suite passes 55 assertions. No topology source, theorem orientation, frozen statement, consumer source, or placeholder count changed."},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Construct only a typed atomic transition for a completed row's evidence.fixture.supporting-path and apply it to checkpoint66's banked immutable test artifact. Preserve the immutable primary fixture path, both hashes, commit, review, scope and all other ledger data. Do not modify test_gate_receipts.bb, add general evidence mutation, alter topology sources, promote terminal counts or claim consumer closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "LEDGER REPRESENTATION: checkpoint66 supporting validator fixture transition",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use checkpoint66's completed evidence after its primary fixture transition, the immutable supporting artifact with SHA256 22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc, and the existing pre-insertion, whole-ledger-validated atomic-write flow.",
+       :route-step
+       "Supplies the supporting evidence transition required before schema-aware validator promotion on the t03J05, t96J06 and t97A04 routes.",
+       :probe
+       "In a row-specific scratch copy of build_step.bb and worklist2.edn, add a narrowly typed supporting-fixture transition accepted only on done-unreviewed receipts. Require exactly one completed row; path exactly [:evidence :fixture :supporting-path]; exact source, target and complete preserved values including the immutable primary path and SHA256; an existing regular target whose SHA256 equals supporting-sha256; and mutation of only supporting-path. Exercise the concrete checkpoint66 transition, validate the complete resulting ledger, and reject wrong row, state, path, source, target, hash, omitted or extra preserve fields and wrong preserved values. GO requires a complete tested patch and transition fixture.",
+       :consumer-equation
+       "Checkpoint66's reviewed supporting test source is represented by its byte-identical immutable artifact while its immutable primary fixture and every other ledger value remain exactly unchanged.",
+       :consumer-residual
+       "Promote the previously tested schema-aware validator using the now-released build_step.bb and test_gate_receipts.bb paths.",
+       :gates
+       ["Retain existing primary fixture transition behavior and its 55-assertion suite unchanged."
+        "Accept only a separately typed supporting-path transition on done-unreviewed receipts."
+        "Preserve primary path holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb, primary SHA256 ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b, supporting SHA256 22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc, commit f96d30c1129620704c9bfa11ca2afb0510f6cc02 and PASS review."
+        "Verify target artifact Git blob 310a74aedd822169f193ffb0739d2e79738296f2."
+        "Reject unknown, incomplete, excessive and mismatched transition requests."
+        "Verify transition application precedes replacement insertion and complete-ledger validation precedes atomic write."
+        "Run clj-kondo and check-parens on the scratch validator."
+        "Run focused tests, both live ledger validators and whitespace checks."
+        "Confirm the probe leaves repository sources and live ledgers unchanged."]},
+      :representation
+      {:source
+       "Checkpoint66 completed evidence with immutable primary fixture and mutable supporting test path",
+       :target
+       "The same completed evidence with both primary and supporting fixtures at their banked immutable artifact paths",
+       :direction
+       "Exact single-path state transition from the source supporting-evidence representation to the target immutable supporting-artifact representation, changing only evidence.fixture.supporting-path after complete value and hash validation."},
+      :id
+      :oriented-checkpoint74-atomic-checkpoint66-supporting-fixture-transition-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint74-checkpoint66-primary-transition-and-consumer-refill-1],
+      :current-residual
+      "Checkpoint66's primary fixture is immutable, but supporting-path still pins mutable test_gate_receipts.bb and prevents its reviewed extension.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: checkpoint66 supporting transition and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint75-checkpoint66-supporting-transition-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint74-atomic-checkpoint66-supporting-fixture-transition-1],
+      :current-residual
+      "Measure checkpoint66's supporting transition separately from typed schema promotion, checkpoint67 transition, terminal-count promotion, adjacent corners, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
+    :measures
+    {:placeholder-delta 0,
+     :typed-residual-change
+     "checkpoint66 primary fixture evidence moved to its immutable artifact; only supporting-path remains pinned",
+     :infrastructure-packets
+     {:before 871, :after 873, :portfolio 0, :concurrent 2},
+     :review-outcomes
+     {:checkpoint74-strategy :fail-corrected,
+      :checkpoint66-primary-transition :done-unreviewed,
+      :checkpoint66-immutable-artifacts :pass,
+      :schema-aware-validator :stop-pass,
+      :checkpoint67-immutable-artifact :pass,
+      :terminal-count-promotion :stop-pass},
+     :frozen-branch-uptake 0,
+     :frozen-closures 0,
+     :corrected-closures 0,
+     :proved-refutations 0},
     :finding
     {:correction
      "The sole reviewed defect is corrected: t01J01 has route `translations -> endpoint control -> triangulation -> theorem`. The portfolio, measures and election remain unchanged.",
@@ -45481,102 +45593,9 @@
      ["schema-aware validator promotion until checkpoint66 supporting evidence is immutable"
       "checkpoint67 transition until typed validator promotion"
       "terminal-count promotion and adjacent-corner mathematics until evidence transitions complete"]},
-    :measures
-    {:placeholder-delta 0,
-     :typed-residual-change
-     "checkpoint66 primary fixture evidence moved to its immutable artifact; only supporting-path remains pinned",
-     :infrastructure-packets
-     {:before 871, :after 873, :portfolio 0, :concurrent 2},
-     :review-outcomes
-     {:checkpoint74-strategy :fail-corrected,
-      :checkpoint66-primary-transition :done-unreviewed,
-      :checkpoint66-immutable-artifacts :pass,
-      :schema-aware-validator :stop-pass,
-      :checkpoint67-immutable-artifact :pass,
-      :terminal-count-promotion :stop-pass},
-     :frozen-branch-uptake 0,
-     :frozen-closures 0,
-     :corrected-closures 0,
-     :proved-refutations 0},
-    :replacement-items
-    [{:consumer :t03J05,
-      :stop-condition
-      "Construct only a typed atomic transition for a completed row's evidence.fixture.supporting-path and apply it to checkpoint66's banked immutable test artifact. Preserve the immutable primary fixture path, both hashes, commit, review, scope and all other ledger data. Do not modify test_gate_receipts.bb, add general evidence mutation, alter topology sources, promote terminal counts or claim consumer closure.",
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "LEDGER REPRESENTATION: checkpoint66 supporting validator fixture transition",
-      :acceptance
-      {:axioms :standard-only,
-       :hypotheses
-       "Use checkpoint66's completed evidence after its primary fixture transition, the immutable supporting artifact with SHA256 22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc, and the existing pre-insertion, whole-ledger-validated atomic-write flow.",
-       :route-step
-       "Supplies the supporting evidence transition required before schema-aware validator promotion on the t03J05, t96J06 and t97A04 routes.",
-       :probe
-       "In a row-specific scratch copy of build_step.bb and worklist2.edn, add a narrowly typed supporting-fixture transition accepted only on done-unreviewed receipts. Require exactly one completed row; path exactly [:evidence :fixture :supporting-path]; exact source, target and complete preserved values including the immutable primary path and SHA256; an existing regular target whose SHA256 equals supporting-sha256; and mutation of only supporting-path. Exercise the concrete checkpoint66 transition, validate the complete resulting ledger, and reject wrong row, state, path, source, target, hash, omitted or extra preserve fields and wrong preserved values. GO requires a complete tested patch and transition fixture.",
-       :consumer-equation
-       "Checkpoint66's reviewed supporting test source is represented by its byte-identical immutable artifact while its immutable primary fixture and every other ledger value remain exactly unchanged.",
-       :consumer-residual
-       "Promote the previously tested schema-aware validator using the now-released build_step.bb and test_gate_receipts.bb paths.",
-       :gates
-       ["Retain existing primary fixture transition behavior and its 55-assertion suite unchanged."
-        "Accept only a separately typed supporting-path transition on done-unreviewed receipts."
-        "Preserve primary path holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb, primary SHA256 ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b, supporting SHA256 22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc, commit f96d30c1129620704c9bfa11ca2afb0510f6cc02 and PASS review."
-        "Verify target artifact Git blob 310a74aedd822169f193ffb0739d2e79738296f2."
-        "Reject unknown, incomplete, excessive and mismatched transition requests."
-        "Verify transition application precedes replacement insertion and complete-ledger validation precedes atomic write."
-        "Run clj-kondo and check-parens on the scratch validator."
-        "Run focused tests, both live ledger validators and whitespace checks."
-        "Confirm the probe leaves repository sources and live ledgers unchanged."]},
-      :representation
-      {:source
-       "Checkpoint66 completed evidence with immutable primary fixture and mutable supporting test path",
-       :target
-       "The same completed evidence with both primary and supporting fixtures at their banked immutable artifact paths",
-       :direction
-       "Exact single-path state transition from the source supporting-evidence representation to the target immutable supporting-artifact representation, changing only evidence.fixture.supporting-path after complete value and hash validation."},
-      :id
-      :oriented-checkpoint74-atomic-checkpoint66-supporting-fixture-transition-1,
-      :kind :representation-comparison,
-      :depends-on
-      [:oriented-checkpoint74-checkpoint66-primary-transition-and-consumer-refill-1],
-      :current-residual
-      "Checkpoint66's primary fixture is immutable, but supporting-path still pins mutable test_gate_receipts.bb and prevents its reviewed extension.",
-      :other-consumers [:t96J06 :t97A04]}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 1,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :stop-condition
-      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
-      :phase :strategy,
-      :state :open,
-      :scope [],
-      :dag-node
-      "PORTFOLIO POLICY: checkpoint66 supporting transition and renewed consumer eligibility",
-      :acceptance
-      {:strategy
-       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
-       :stop-condition
-       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
-      :id
-      :oriented-checkpoint75-checkpoint66-supporting-transition-and-consumer-refill-1,
-      :kind :strategy-checkpoint,
-      :depends-on
-      [:oriented-checkpoint74-atomic-checkpoint66-supporting-fixture-transition-1],
-      :current-residual
-      "Measure checkpoint66's supporting transition separately from typed schema promotion, checkpoint67 transition, terminal-count promotion, adjacent corners, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
-      :other-consumers []}],
-    :author "codex-13",
-    :disposition :replan},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: checkpoint66 primary fixture transition and renewed consumer eligibility",
@@ -45598,7 +45617,7 @@
    :stop-condition
    "Construct only a typed atomic transition for a completed row's evidence.fixture.supporting-path and apply it to checkpoint66's banked immutable test artifact. Preserve the immutable primary fixture path, both hashes, commit, review, scope and all other ledger data. Do not modify test_gate_receipts.bb, add general evidence mutation, alter topology sources, promote terminal counts or claim consumer closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: checkpoint66 supporting validator fixture transition",
