@@ -58507,8 +58507,42 @@
   {:consumer "t00J02",
    :stop-condition
    "GO requires complete frozen closure. Otherwise STOP names the exact missing oriented-preimage or homological comparison theorem; infrastructure absence is not refutation.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Audit the literal null-winding representation, then resolve the actual oriented-preimage homological comparison. No Producer, conditional final bridge, consumer closure, statement repair or campaign refutation was introduced.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789006552577-17637-1533bfae"},
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :reason
+    "The frozen Producer requires a geometric-to-integral-homology detection theorem not supplied by regular-fiber tangent geometry. Its null-winding predicate also permits arbitrary loops through points rather than requiring component parameterizations; this representation must be audited before asserting the proposed duality theorem. No frozen-statement counterexample is claimed.",
+    :commands
+    [{:cmd "lake env lean /tmp/T00J02DualityBoundary.lean", :exit 0}
+     {:cmd "python3 /tmp/t00j02-duality-audit.py", :exit 0}],
+    :exact-missing-contract
+    "Construct OrientedSurfacePreimageDuality.Producer S under the frozen surface hypotheses, with its literal NonzeroTopMapHasNonNullWinding conclusion, or establish a compiled local encoding counterexample and preserve it before proposing any repair. Mere smoothness, dimension and tangent-kernel identification cannot prove the induced integral H2 detection assertion.",
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T00J02DualityBoundary.lean",
+     :sha256
+     "0ddc4b81e92365e8d21e875fa391e5cbb062e6ed8c07290b51077f7c003ac0f7",
+     :role :boundary-diagnostic,
+     :full-consumer-closure false},
+    :finding
+    "Compiled the exact frozen prefix before the missing bridge and printed the actual Producer and HasNullWindingPreimage definitions. Producer quantifies over smooth f:S→S and embedded smooth c:Circle→S with surjective coproduct derivatives along incidence, requiring nonzero integral H2(f) to imply failure of HasNullWindingPreimage. That predicate asks, through every preimage point, for continuous gamma and ell with gamma contained in the preimage, c composed with ell equal to f composed with gamma, and H1(ell)=0. It does not require gamma to cover a component or be an embedding. Constant gamma and ell satisfy its geometric clauses, exposing a representation concern requiring a compiled audit. Disk-boundary producers supply component-covering loops, but the downstream predicate forgets that condition. Banked self-model regular-fiber geometry supplies neither this homological implication nor the orientation/localization comparison. The actual Circle model and transverse incidence construction require explicit transport rather than automatic application of a regular-value theorem.",
+    :frozen
+    {:path "problems/t00J02/lean/Main.lean",
+     :sha256
+     "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
+     :placeholder-before 1,
+     :placeholder-after 1},
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "POINCARE/THOM COMPARISON / frozen oriented preimage duality",
