@@ -72202,8 +72202,49 @@
   {:consumer "t00A03",
    :stop-condition
    "Require a relative parametric Sard theorem for the smooth submersive total coincidence map on the parameter square away from its four endpoint pairs, producing perturbation-vector parameters whose interior coincidence fibers are finite.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use the compiled relative submersion on the complement of the four endpoint pairs in the compact parameter square to obtain generic finite interior fibers. Then adjoin the reviewed finite boundary residual, choose one parameter tuple across the finite family, retain embeddings and compare through chart transitions.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:totalDifference_differentiableAt
+     "6d075cccc6c8d1129636347f959737107b3d56786b672407874778dba211747e",
+     :fderiv_totalDifference_surjective_on_interior_direction
+     "3b5c304d3e98162eb58b61067e1d9cad6e84340eabc9a13438b34068627e2249"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-two-declaration audit over ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 70273e34d0914627c3b8368882a275a6401ecf92",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 70273e34d0914627c3b8368882a275a6401ecf92",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "70273e34d0914627c3b8368882a275a6401ecf92",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"],
+    :fixture
+    {:path
+     "/tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
+     :sha256
+     "3e694e87a588cba2024c1b778cbd4940080b8686de43745cfb90703086471b4c",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded PlaneArcEndpointTotalDifferenceSubmersive dependency hash reproduce. Both requested declarations compile without warnings or placeholders using only standard axioms, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"],
    :dag-node
