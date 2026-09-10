@@ -30625,6 +30625,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Recorded commit d00c50100a0b55211b6dcaa9ec313172f01cdd6e materializes :oriented-checkpoint48-euclidean-hausdorff-volume-normalization-1 with :oriented-checkpoint48-sphere-cap-area-and-consumer-refill-repair2 duplicated in :depends-on; remove the duplicate so the row matches its replacement-item specification.",
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
@@ -30663,6 +30665,12 @@
       :exit 1,
       :correction
       "Excluded the missing t93A05 file from numeric summation while retaining it in the named and missing counts. The final exact 59-consumer census succeeds."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-11",
+     :job "invoke-1789052139992-18802-6c03e40b",
+     :finding
+     "Recorded commit d00c50100a0b55211b6dcaa9ec313172f01cdd6e materializes :oriented-checkpoint48-euclidean-hausdorff-volume-normalization-1 with :oriented-checkpoint48-sphere-cap-area-and-consumer-refill-repair2 duplicated in :depends-on; remove the duplicate so the row matches its replacement-item specification."},
     :replacement-items
     [{:consumer :t95J05,
       :stop-condition
@@ -30793,7 +30801,7 @@
     "The 59 DAG-named consumers retain 62 comment-stripped placeholders across 33 open files; 25 existing consumers have zero placeholders and t93A05 remains missing. No frozen file changed in the measured interval. Routes: t95J05 has 1 placeholder: banked intrinsic strict S3 cap areas -> missing Euclidean Hausdorff-to-volume normalization -> missing equator-null cap assembly -> missing square and fourth-coordinate moments -> frozen sphere integral. t02A05 has 2: banked coefficient/projection reductions and strict S2 cap areas -> the same normalization and equator assembly -> centered sphere moments -> frozen integral and minimum. t01J06 has 3: banked restriction algebra and the same S2 normalization/moment route for its period -> separate manifold Stokes bridge -> final conjunction. t94A10 has 3: banked solid-angle algebra and the same S2 normalization/moment route -> closedness/nonexactness assembly. t98A02(1), t00J02(1), t00A04(0), t01A05(1), t02A07(3) and t97J05(5) remain on the compact-complement Mayer-Vietoris route through the concurrently advancing range comparisons, cover sequence, homology square, localization, duality and gluing; t01A05 also retains its connectedness specification defect, and duplicate election is excluded. t99J03(1), t00A03(2), t01J01(3), t91J05(3) and t94J09(1) remain on the translated embedded-arc route through prescribed-chart containment, endpoint control and later polygon or classification steps; active work is excluded. t01A02(3) retains H2 degree/nonsurjectivity, Lefschetz and final assembly after its banked product cover. t01A04(4), t92J06(1) and t98A01(1) retain covering construction/classification, genus invariance and Euler-multiplicativity steps; t98A01's reviewed STOP is preserved. t00J01(1) still needs concrete Klein-product and exact fold-fiber geometry. t01A08(1) needs arbitrary-model chart-domain and within-derivative applicability. t01J04(1) and t94A06(1) need regular-preimage, half-space-atlas and normal-translation applicability. t02A08(1) needs an arbitrary-integer sphere map and its homology action. t03J02(2) and t97A01(1) retain the collar/cofibration and closed-circle gluing boundary. t03J04(1) needs rational torus homology and finite-cover Euler comparison. t03J05(1) and t96J06(2) remain on fundamental-class, cap/Thom and product-homology comparisons. t92J05(3) needs the RP2 antipodal bridge, genus-two classification bridge and final assembly. t95J06(2) retains the concrete torus homeomorphism route. t96J05(1) retains the proved radial counterexample and requires a corrected statement. t96J06 and t97A04(4) also retain the singular Eilenberg-Zilber and integral Kunneth route. a97J08(1) remains an uptake route whose geometric producer is not yet complete. t03J05, t95J06, t96J06, t97A04, t97A01, t01A02 and t01A04 therefore have no complete closure route. No near-closure adapter is presently eligible. Among eligible shared steps, exact Euclidean Hausdorff-to-volume normalization is on four open sphere-integral routes and is simpler than equator-null chart assembly or numerical moment evaluation. Unused general infrastructure is deferred. One bounded normalization row is elected, followed by a fresh successor checkpoint.",
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: sphere-cap area comparison and renewed consumer eligibility",
@@ -30815,7 +30823,7 @@
    :stop-condition
    "Do not assume a normalization constant, sphere mass, cap assembly, equator nullity, polar-coordinate formula or moment value. Use only d=2 and d=3 at the generality required by the named consumers. Do not infer consumer closure; use a unique row-specific scratch directory.",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact Euclidean Hausdorff-to-volume normalization in dimensions two and three",
@@ -30861,7 +30869,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: Euclidean Hausdorff normalization and renewed consumer eligibility",
