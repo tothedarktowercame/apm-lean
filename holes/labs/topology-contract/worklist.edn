@@ -73035,9 +73035,99 @@
    :other-consumers []}
   {:consumer "t98A02",
    :stop-condition
-   "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
-   :phase :probe,
+   "Require the remaining short-exact quotient-chain construction and genuine connecting morphism after compiling the literal relative arrow from the K- and L-support pair terms to the intersection-support pair term.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / literal relative pieces-to-intersection-support arrow",
+   :acceptance
+   {:fixture "/tmp/CoefficientCompactSupportPiecesToIntersection.lean",
+    :fixture-sha256
+    "604d7bb48ddd2ba7ae769e34c7c2210476b33745b754ad0a2581a52eb9279401",
+    :implementation
+    "Promote the exact fixture. Compile leftComplement_subset_intersectionComplement, rightComplement_subset_intersectionComplement, extendLeft, extendRight, piecesToIntersection and piecesToIntersectionHomology. This supplies the literal signed quotient-pair arrow from the biproduct of H_n(X,X minus K) and H_n(X,X minus L) to H_n(X,X minus (K intersection L)) required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes. Verify CoefficientCompactSupportRestrictionMaps SHA256 d511cdea24b570aff04d8a47f5d53566a370539dd31bf252f49776ce13bf9ea6. Preserve arbitrary subsets and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim zero composition, short exactness, a connecting morphism, three homology exactness segments, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :coefficient-compact-support-pieces-to-intersection-implementation-refill51,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion
+    :coefficient-relative-mayer-vietoris-chain-sequence-probe-refill50],
+   :current-residual
+   "Construct the complementary literal restriction arrow, prove the signed composite is zero, and obtain a short exact sequence by comparing the union-generated denominator with the actual open-union subspace through the reviewed small-chain equivalence. Then derive the genuine connecting morphism and all three exactness segments.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
+   "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "The literal signed middle-to-right relative arrow now compiles. A direct short exact quotient-chain sequence still requires its other arrow, zero-composite and kernel/image proof, together with the open-cover small-chain comparison that replaces the false ordinary-excision premise; only then can the genuine connecting map and three exactness statements be transported to the requested pairs.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer "t98A02",
+      :stop-condition
+      "Require the remaining short-exact quotient-chain construction and genuine connecting morphism after compiling the literal relative arrow from the K- and L-support pair terms to the intersection-support pair term.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean"],
+      :dag-node
+      "MANIFOLD FUNDAMENTAL CLASS / literal relative pieces-to-intersection-support arrow",
+      :acceptance
+      {:fixture
+       "/tmp/CoefficientCompactSupportPiecesToIntersection.lean",
+       :fixture-sha256
+       "604d7bb48ddd2ba7ae769e34c7c2210476b33745b754ad0a2581a52eb9279401",
+       :implementation
+       "Promote the exact fixture. Compile leftComplement_subset_intersectionComplement, rightComplement_subset_intersectionComplement, extendLeft, extendRight, piecesToIntersection and piecesToIntersectionHomology. This supplies the literal signed quotient-pair arrow from the biproduct of H_n(X,X minus K) and H_n(X,X minus L) to H_n(X,X minus (K intersection L)) required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes. Verify CoefficientCompactSupportRestrictionMaps SHA256 d511cdea24b570aff04d8a47f5d53566a370539dd31bf252f49776ce13bf9ea6. Preserve arbitrary subsets and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim zero composition, short exactness, a connecting morphism, three homology exactness segments, localization monicity, dimension vanishing or a fundamental class.",
+       :commands
+       ["lake env lean ConstructionTargets/CoefficientCompactSupportPiecesToIntersection.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :id
+      :coefficient-compact-support-pieces-to-intersection-implementation-refill51,
+      :kind :reusable-theorem,
+      :depends-on
+      [:coefficient-direct-relative-mayer-vietoris-chain-sequence-probe-refill51],
+      :current-residual
+      "Construct the complementary literal restriction arrow, prove the signed composite is zero, and obtain a short exact sequence by comparing the union-generated denominator with the actual open-union subspace through the reviewed small-chain equivalence. Then derive the genuine connecting morphism and all three exactness segments.",
+      :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake build ConstructionTargets.CoefficientCompactSupportRestrictionMaps >/tmp/pieces-intersection-dep.log 2>&1",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/CoefficientCompactSupportPiecesToIntersection.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/CoefficientCompactSupportPiecesToIntersection.lean ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean",
+       :exit 0}
+      {:cmd
+       "python3 comment-stripped placeholder-and-six-declaration audit over /tmp/CoefficientCompactSupportPiecesToIntersection.lean",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientCompactSupportPiecesToIntersection.lean",
+      :sha256
+      "604d7bb48ddd2ba7ae769e34c7c2210476b33745b754ad0a2581a52eb9279401",
+      :placeholder-count 0},
+     :finding
+     "Compiled exactly one direct quotient-pair prerequisite. The inclusions K complement into (K intersection L) complement and L complement into (K intersection L) complement induce genuine relative chain maps. Their signed biproduct descent gives the literal pieces-to-intersection-support arrow, and the corresponding homology arrow is defined without ordinary excision or the refuted supportConnecting map. The fixture does not yet prove the quotient short exact sequence, construct its connecting morphism, or establish any of the three required exactness segments.",
+     :seat "codex-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -73051,7 +73141,7 @@
    :depends-on
    [:checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion
     :coefficient-relative-mayer-vietoris-chain-sequence-probe-refill50
-    :checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion],
+    :coefficient-compact-support-pieces-to-intersection-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
