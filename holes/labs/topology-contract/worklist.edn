@@ -56993,8 +56993,49 @@
   {:consumer "t95J04",
    :stop-condition
    "Require exact reviewed provenance and consistent current closure status; preserve other consumers and outstanding representation/specification boundaries.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "No t95J04 mathematical residual. Documentation adds no closure or placeholder reduction; other consumers and outstanding representation/specification boundaries are unchanged.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:apm_t95j04
+     "4411a00266690b8196b64d48fd645c39ad27e922eb3fb8d6d2f62da64ba5f2db"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "Read closure and checkpoint dependency receipts from worklist.edn",
+      :exit 0}
+     {:cmd
+      "Python canonical commit, fixture hash, statement hash and zero-placeholder verification",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history [],
+    :axiom-evidence
+    "Reviewed warning-free consumer compilation; no Lean changes in this documentation row.",
+    :commit "f57ce4659db7de171ae3e99bdb187c2a742c298e",
+    :changed-paths
+    ["TOPOLOGY-DEPENDENCY-DAG.md"
+     "docs/TN-topology-closure-experiments.md"],
+    :fixture
+    {:path "problems/t95J04/lean/Main.lean",
+     :sha256
+     "81a52f4f97d8d47874c34dd610c8ed500f11e873439b1276b3ca08348e0f6ea6"},
+    :finding
+    "Recorded closure a13852f35c671f0d40d4bbf58e832710563a4ef7 and independent PASS invoke-1789000811470-17453-38632ef7, including its 1-to-0 placeholder change. Updated current status and closed-results table, retained historical STOP/partial evidence, and distinguished the embedded Hausdorff helper from separate extraction. Only scoped documents changed; worktree clean. Validator reports 439 items OK."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
