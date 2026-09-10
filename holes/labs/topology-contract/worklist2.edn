@@ -44644,11 +44644,113 @@
    "Measure typed atomic transition support separately from checkpoint67 transition application, terminal-count promotion, balanced corner construction, oriented cancellation, cross-product assembly, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t03J05,
+   :hypotheses
+   "Recover both artifacts from reviewed checkpoint66 implementation commit f96d30c1129620704c9bfa11ca2afb0510f6cc02.",
    :stop-condition
    "Construct only immutable repository artifacts for checkpoint66's reviewed build_step.bb fixture and supporting test bytes, preserving their recorded hashes, evidence commit and PASS review. Do not edit the live validator or ledger evidence, apply transitions, alter topology sources or claim consumer closure.",
-   :phase :probe,
+   :gates
+   ["Verify both scratch SHA256 values before copying."
+    "Copy both files byte-for-byte to the exact scoped evidence paths."
+    "Verify Git blobs 312908af0ceadb5ff15b1b47208e50ac66d67464 and 310a74aedd822169f193ffb0739d2e79738296f2."
+    "Run clj-kondo and check-parens on both stable artifacts."
+    "Run the focused suite with its reviewed fixture and worklist-check dependencies; require 55 assertions and zero failures or errors."
+    "Run both live ledger validators."
+    "Run whitespace and exact two-file scope checks; commit the scoped artifacts."
+    "Confirm no live validator, ledger evidence, topology source or consumer problem changes."],
+   :evidence
+   {:probe
+    {:residual
+     "Commit the two immutable artifacts, then atomically transition checkpoint66's fixture and supporting evidence paths before restoring the already tested schema-driven validator extension.",
+     :outcome :go,
+     :warnings [],
+     :commands
+     [{:cmd
+       "Recover build_step.bb and test_gate_receipts.bb from f96d30c1129620704c9bfa11ca2afb0510f6cc02 into /tmp/codex13-checkpoint72-validator-artifacts",
+       :exit 0}
+      {:cmd "sha256sum both recovered artifacts", :exit 0}
+      {:cmd "Compute both recovered Git blobs with git hash-object",
+       :exit 0}
+      {:cmd "clj-kondo --lint both recovered artifacts", :exit 0}
+      {:cmd
+       "emacs --batch -Q -l /home/joe/code/futon4/dev/check-parens.el -- both recovered artifacts",
+       :exit 0}
+      {:cmd
+       "Recover the reviewed fixtures directory and worklist_check.bb dependency from f96d30c1129620704c9bfa11ca2afb0510f6cc02",
+       :exit 0}
+      {:cmd
+       "bb /tmp/codex13-checkpoint72-validator-artifacts/holes/labs/topology-contract/test_gate_receipts.bb",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "bb /tmp/codex13-checkpoint72-validator-artifacts/holes/labs/topology-contract/test_gate_receipts.bb before recovering its fixture dependencies",
+       :exit 0,
+       :finding
+       "Babashka returned zero even though the test report contained six missing-fixture errors; exit status alone was insufficient.",
+       :correction
+       "Recovered the reviewed fixtures directory from the same commit and reran."}
+      {:cmd
+       "bb /tmp/codex13-checkpoint72-validator-artifacts/holes/labs/topology-contract/test_gate_receipts.bb with fixtures but without worklist_check.bb",
+       :exit 1,
+       :finding
+       "The suite ran 55 assertions with nine failures because build_step.bb invokes its colocated worklist_check.bb, which was absent from scratch.",
+       :correction
+       "Recovered worklist_check.bb from the same reviewed commit as an unscoped test dependency; the final rerun passed all 55 assertions with zero failures or errors."}],
+     :representation
+     {:source
+      "Checkpoint66's reviewed build_step.bb fixture and test_gate_receipts.bb supporting bytes at mutable source paths",
+      :target
+      "Stable immutable repository artifacts containing those exact validator and test bytes",
+      :direction
+      "Exact byte equality from the source checkpoint66 evidence-commit representation to the target immutable-artifact representation, preserving both recorded hashes, Git blobs and executable behavior."},
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint72-validator-artifacts/holes/labs/topology-contract/build_step.bb",
+      :sha256
+      "ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b",
+      :git-blob "312908af0ceadb5ff15b1b47208e50ac66d67464",
+      :supporting-path
+      "/tmp/codex13-checkpoint72-validator-artifacts/holes/labs/topology-contract/test_gate_receipts.bb",
+      :supporting-sha256
+      "22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc",
+      :supporting-git-blob "310a74aedd822169f193ffb0739d2e79738296f2",
+      :source-commit "f96d30c1129620704c9bfa11ca2afb0510f6cc02"},
+     :finding
+     "Both immutable artifact candidates are complete and tested. They reproduce checkpoint66's recorded SHA256 values ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b and 22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc and Git blobs 312908af0ceadb5ff15b1b47208e50ac66d67464 and 310a74aedd822169f193ffb0739d2e79738296f2. Both pass lint and parenthesis checks. With the reviewed fixture and worklist-check dependencies restored in scratch, the original suite passes 55 assertions with zero failures or errors. No live source or ledger was modified.",
+     :implementation
+     {:scope
+      ["holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb"
+       "holes/labs/topology-contract/evidence/atomic-fixture-transitions/test_gate_receipts-checkpoint66-22fdfdab.bb"],
+      :hypotheses
+      "Recover both artifacts from reviewed checkpoint66 implementation commit f96d30c1129620704c9bfa11ca2afb0510f6cc02.",
+      :consumer-equation
+      "The stable artifacts are byte-identical to checkpoint66's reviewed validator and supporting tests, reproduce their SHA256 and Git blobs, and retain the 55-assertion behavior.",
+      :consumer-residual
+      "Atomically repoint checkpoint66 fixture and supporting evidence to these immutable artifacts, then reapply the tested evidence-shape schema implementation.",
+      :gates
+      ["Verify both scratch SHA256 values before copying."
+       "Copy both files byte-for-byte to the exact scoped evidence paths."
+       "Verify Git blobs 312908af0ceadb5ff15b1b47208e50ac66d67464 and 310a74aedd822169f193ffb0739d2e79738296f2."
+       "Run clj-kondo and check-parens on both stable artifacts."
+       "Run the focused suite with its reviewed fixture and worklist-check dependencies; require 55 assertions and zero failures or errors."
+       "Run both live ledger validators."
+       "Run whitespace and exact two-file scope checks; commit the scoped artifacts."
+       "Confirm no live validator, ledger evidence, topology source or consumer problem changes."]},
+     :seat "codex-13"}},
+   :consumer-residual
+   "Atomically repoint checkpoint66 fixture and supporting evidence to these immutable artifacts, then reapply the tested evidence-shape schema implementation.",
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb"
+    "holes/labs/topology-contract/evidence/atomic-fixture-transitions/test_gate_receipts-checkpoint66-22fdfdab.bb"],
    :dag-node
    "LEDGER REPRESENTATION: immutable checkpoint66 atomic-transition validator artifacts",
    :acceptance
@@ -44679,6 +44781,8 @@
    :id
    :oriented-checkpoint72-immutable-checkpoint66-validator-artifacts-1,
    :kind :representation-comparison,
+   :consumer-equation
+   "The stable artifacts are byte-identical to checkpoint66's reviewed validator and supporting tests, reproduce their SHA256 and Git blobs, and retain the 55-assertion behavior.",
    :depends-on
    [:oriented-checkpoint72-typed-atomic-fixture-transitions-and-consumer-refill-1
     :oriented-checkpoint72-typed-atomic-fixture-transitions-and-consumer-refill-1],
