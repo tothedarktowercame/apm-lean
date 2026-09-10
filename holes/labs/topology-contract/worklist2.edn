@@ -28051,22 +28051,94 @@
    :stop-condition
    "Bank the ENNReal limit and squeeze theorem only. Do not claim global graph-integral bounds, an area formula, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
-      :sha256
-      "6d3e18144322b0d66cfeedfbfd978bc5663dd7941bab5784a0b349a4a73e95f9"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review remains. Use the reviewed measurable graph partitions to prove the global bounds for every epsilon through countable additivity and actual derivative-density comparison. No area formula, numerical Hausdorff normalization, sphere mass, Stokes, periods or consumer closure is claimed.",
+    :dependency-review "invoke-1789040285110-18495-d73b74cd",
+    :scratch "/tmp/codex14-ennreal-squeeze-ky1ssA",
+    :gates
+    {:lower-factor-convergence :pass,
+     :upper-factor-convergence :pass,
+     :build-jobs 2525,
+     :no-real-conversion-or-cancellation :pass,
+     :eventual-two-sided-squeeze :pass,
+     :zero-finite-infinite-examples :pass,
+     :arbitrary-zero-finite-infinite-second-factor :pass,
+     :multiplication-at-finite-nonzero-unit :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 3,
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"upper_tendsto"
+     "b4de3cc40c36016d1f2b62e42de1728f8a34587e9c052ce73304eb6eda0f68fa",
+     "lower_tendsto"
+     "650accd1336e23d9aedc96fbda670d77fec0e55a62126449bff5b38b3de3b0d9",
+     "eq_of_bounds"
+     "54f9f3ec4287f0dae73a42613ede459c899c84478dd64775088e53d4b7f2683c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and build-loop design; inspect both ledgers and dependency PASS receipt",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s ConstructionTargets/ENNRealMultiplicativeSqueeze.lean /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ENNRealMultiplicativeSqueeze.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ENNRealMultiplicativeSqueeze",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex14-ennreal-squeeze-ky1ssA/Examples.lean",
+      :exit 0}
+     {:cmd
+      "Python compile-log audit: three target reports, standard-only axioms, zero warnings and errors; zero, finite and infinite examples",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ENNRealMultiplicativeSqueeze.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder scan and three statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m 'Prove ENNReal multiplicative squeeze at one'",
+      :exit 0}
+     {:cmd "git diff --check 0413b30e^ 0413b30e", :exit 0}
+     {:cmd
+      "Python committed scope, fixture equality and clean scoped status verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :id :ennreal-multiplicative-unit-squeeze-1,
+    :commit "0413b30e7de3ff166bf8471969133265a8580b54",
+    :changed-paths
+    ["ConstructionTargets/ENNRealMultiplicativeSqueeze.lean"
+     "ConstructionTargets/ENNRealMultiplicativeSqueeze.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint46-area-limit/ENNRealMultiplicativeSqueeze.lean",
+     :sha256
+     "6d3e18144322b0d66cfeedfbfd978bc5663dd7941bab5784a0b349a4a73e95f9",
+     :exact-promotion true,
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. Both ENNReal multiplicative factors converge to one on the punctured interval, and eventual lower and upper bounds force equality for arbitrary B, including zero and infinity, without conversion or cancellation. Both ledgers and unrelated consumers remain untouched.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ENNRealMultiplicativeSqueeze.lean"
     "ConstructionTargets/ENNRealMultiplicativeSqueeze.md"],
