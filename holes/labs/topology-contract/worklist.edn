@@ -61626,66 +61626,66 @@
    :stop-condition
    "GO requires the literal covering and fiber comparison packet; REVISE requires exactly one compiled prerequisite. No covering classification or consumer closure claim.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Literal covering base change and fiber transport are complete in the fixture. Consumer-specific covering classification, geometric comparisons and final adapters remain; no consumer closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:fiberEquiv
-      "3e484a3376da6b79f0eef93b80761deb6b0b84bb34330017c5bf7734621f3e43",
-      :forward-value
-      "01800eb0fad3584847e6dce3e453d872aed1fcfc5c2bc592c5e019909af5ac4c",
-      :inverse-value
-      "d1c689e53be7b457d815e9402c323dac52a35766681a71b8939560ed64f5f50a",
-      :card
-      "0f0ed6507b0cbeb93412661be2b6698db1a44559d91a3f77713b322af87d38f2",
-      :localHomeomorph
-      "2049f784ca4ea27398d900aaaa0cfc4f947837f1a5ba7974af6390ac89bc33eb",
-      :local-existence
-      "97b46b81dd84cdab3c43ec35231b5fc23048dce95c4d91d9000760d1f99788b7",
-      :covering
-      "e9df021c833cc51a4b7956d5ac48a7145428510f948cb1b3ce191747e7608d19"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "lake env lean /tmp/LiteralCoveringPullback.lean", :exit 0}
-      {:cmd "python3 /tmp/literal-covering-pullback-audit.py", :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/LiteralCoveringPullback.lean",
-       :exit 1,
-       :correction
-       "Exposed preimage membership before rewriting and omitted unused topology assumptions from fiber specifications."}
-      {:cmd "lake env lean /tmp/LiteralCoveringPullback.lean",
-       :exit 1,
-       :correction
-       "Removed a redundant tactic and separated product extensionality goals."}
-      {:cmd "lake env lean /tmp/LiteralCoveringPullback.lean",
-       :exit 1,
-       :correction
-       "Specified the dependent subtype argument and reduced the inverse-coordinate goal explicitly. Subsequent compilation succeeds."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/LiteralCoveringPullback.lean",
-      :sha256
-      "1943d624f6b7e575806e87abd018e2bb7a03919f7d020e7596c78f07af9b24a3",
-      :placeholder-count 0},
-     :finding
-     "Compiled the complete literal pullback covering packet. Pulling back actual evenly covered neighborhoods constructs local homeomorphisms compatible with the literal projection. The fiber equivalence has explicit forward and inverse value formulas and proves Nat.card equality. Empty fibers are included; no connectedness, surjectivity or finite-sheet assumptions are added.",
-     :implementation
-     {:scope ["ConstructionTargets/LiteralCoveringPullback.lean"],
-      :acceptance
-      {:implementation
-       "Promote the exact fixture. Compile projection, fiberEquiv, both fiber value specifications, fiber_card, localHomeomorph, its projection and inverse specifications, exists_localHomeomorph and covering. Preserve inherited subtype topology and all stated hypotheses. Audit zero placeholders and standard-only axioms.",
-       :commands
-       ["lake env lean ConstructionTargets/LiteralCoveringPullback.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0}},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Literal covering base change, local projection-compatible homeomorphisms and fiber equivalence/cardinality transport are compiled with inherited subtype topology, including empty fibers. No connectedness, surjectivity or finite-sheet assumptions added. Consumer-specific classification, geometric comparisons and final adapters remain; no consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789018245956-17968-3992b67c"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:exists_localHomeomorph
+     "97b46b81dd84cdab3c43ec35231b5fc23048dce95c4d91d9000760d1f99788b7",
+     :fiberEquiv_apply_val
+     "01800eb0fad3584847e6dce3e453d872aed1fcfc5c2bc592c5e019909af5ac4c",
+     :fiberEquiv_symm_apply_val
+     "d1c689e53be7b457d815e9402c323dac52a35766681a71b8939560ed64f5f50a",
+     :localHomeomorph
+     "2049f784ca4ea27398d900aaaa0cfc4f947837f1a5ba7974af6390ac89bc33eb",
+     :fiber_card
+     "0f0ed6507b0cbeb93412661be2b6698db1a44559d91a3f77713b322af87d38f2",
+     :localHomeomorph_symm_val
+     "e46516575e515008036afc3cf59096c3c5f0d522712743a671673d1a03e11ff7",
+     :localHomeomorph_fst
+     "f5801df5db72b363c0a2751a35b1a47dfca4cfa0da74097a467815aa56bce6ce",
+     :projection
+     "54d93798cff9cb901f93d5e7c7e0f312dd02975860d83dae99dbf69db87ef274",
+     :fiberEquiv
+     "3e484a3376da6b79f0eef93b80761deb6b0b84bb34330017c5bf7734621f3e43",
+     :covering
+     "e9df021c833cc51a4b7956d5ac48a7145428510f948cb1b3ce191747e7608d19"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sed '/^Path.*write_text/d' /tmp/literal-covering-pullback-audit.py | python3",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/LiteralCoveringPullback.lean ConstructionTargets/LiteralCoveringPullback.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/LiteralCoveringPullback.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "f57572c751cfd302578d81f27e63de6498c52c88",
+    :changed-paths
+    ["ConstructionTargets/LiteralCoveringPullback.lean"],
+    :fixture
+    {:path "/tmp/LiteralCoveringPullback.lean",
+     :sha256
+     "1943d624f6b7e575806e87abd018e2bb7a03919f7d020e7596c78f07af9b24a3"},
+    :axiom-audit-declarations 9},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/LiteralCoveringPullback.lean"],
    :dag-node "COVERING-BASIC / literal pullback and fiber transport",
    :acceptance
