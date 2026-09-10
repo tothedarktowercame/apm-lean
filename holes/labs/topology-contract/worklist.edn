@@ -60684,8 +60684,59 @@
   {:consumer "t00J02",
    :stop-condition
    "Require proved common-chart smoothness, actual derivative equality and transported range-sum transversality; no supplied coordinate derivative identity.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Common-target coordinate smoothness, actual derivative equality and range-sum transversality transport are compiled without finite-dimensionality or completeness hypotheses. Local difference-map regularity, incidence charts and smooth overlaps remain. No consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789015706221-17879-d14f235f"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:right_smooth
+     "d8e5dfbbe94dbb5ca012a9e5ea11a35f7c840dae553c77183b3adc31e5e0a251",
+     :right_derivative
+     "fbfa427357b8817dc6409ef662ff89b25625df99572b07aa2f6d4a40c5b55417",
+     :coordinate_transversality
+     "c6706fef45635cc4f0c520a156e16b54c91d2e46570be9fe2b7031ccb4fb14af"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/ManifoldTargetIncidenceCoordinateTransport.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only fixture audit: comment-stripped placeholders and three complete theorem-header SHA256 hashes",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.ManifoldTargetFiberChartExtension 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ManifoldTargetIncidenceCoordinateTransport.lean ConstructionTargets/ManifoldTargetIncidenceCoordinateTransport.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldTargetIncidenceCoordinateTransport.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "6c88882b137ae584373de69074f938159c3faefd",
+    :changed-paths
+    ["ConstructionTargets/ManifoldTargetIncidenceCoordinateTransport.lean"],
+    :fixture
+    {:path "/tmp/ManifoldTargetIncidenceCoordinateTransport.lean",
+     :sha256
+     "92fda54324469332d33fe22d5de982bd51885fff655e4cf041351020a41b6862"},
+    :axiom-audit-declarations 3},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ManifoldTargetIncidenceCoordinateTransport.lean"],
    :dag-node
