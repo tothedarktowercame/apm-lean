@@ -24569,8 +24569,279 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:near-closure-eligibility
+    {:eligible-unreserved 0,
+     :boundaries
+     [{:consumers [:t03J04],
+       :boundary
+       "The newly reviewed STOP preserves one placeholder: rational transfer does not establish arbitrary-dimensional torus homology, the target Euler sums or Euler multiplicativity; finite-sheet assembly also remains."}
+      {:consumers [:t00A01],
+       :boundary
+       "Generic actual-cover vertex-group coproduct reconstruction and frozen basepoint transport remain; the foundation is reserved."}
+      {:consumers [:a97J08 :t00A03 :t94J09 :t97A01 :t99J03],
+       :boundary
+       "Controlled finite-position arcs, planar separation and polygon/classification comparisons remain; current transverse-arc work is reserved."}
+      {:consumers [:t95J06],
+       :boundary
+       "Hopf/surface classification comparison remains; retain the recorded homeomorphism-versus-source-diffeomorphism discrepancy."}
+      {:consumers [:t00J01],
+       :boundary
+       "Independent Klein-product and exact fold-fiber obligations remain after sphere branch uptake."}
+      {:consumers [:t00J02],
+       :boundary
+       "Global localization, duality and transverse-preimage orientation remain; do not begin here."}
+      {:consumers [:t01A05],
+       :boundary
+       "Canonical connectedness hypotheses remain defective; no disconnected-manifold orientation repair is silently assumed."}
+      {:consumers [:t01A08],
+       :boundary
+       "General-model chart-domain and within-derivative applicability remain after the reviewed regularity conversion."}
+      {:consumers [:t01J04 :t94A06],
+       :boundary
+       "Exact regular-preimage and normal-translation applicability remain."}
+      {:consumers [:t02A05 :t95J05],
+       :boundary
+       "Intrinsic sphere/projective measure normalization remains; the reviewed flux mass boundary is not a refutation."}
+      {:consumers [:t02A08],
+       :boundary
+       "Actual arbitrary-integer degree realization remains; antipodal action does not supply it."}
+      {:consumers [:t03J02],
+       :boundary
+       "Generic collar/NDR and quotient invariant comparisons remain; maps-out universality does not supply them."}
+      {:consumers [:t03J05 :t96J06],
+       :boundary
+       "Global intersection/nonbounding and their homological comparisons remain."}
+      {:consumers [:t92J06 :t98A01],
+       :boundary
+       "Exact covering classification, monodromy and surface-cover realization remain."}
+      {:consumers [:t96J05],
+       :boundary
+       "The reviewed attained radial-level counterexample remains a specification refutation."}
+      {:consumers [:t98A02],
+       :boundary
+       "Pointwise generators and an overlap cocycle do not supply orientation compatibility, global localization or connected-sum gluing."}]},
+    :concurrency
+    {:exclude
+     [:compact-transverse-arc-intersection-finiteness-probe-refill46
+      :generic-two-open-vertex-coproduct-comparison-probe-refill46
+      :coefficient-triple-overlap-geometric-composition-probe-refill46],
+     :reconciliation
+     {:row
+      :coefficient-triple-overlap-geometric-composition-probe-refill46,
+      :covered-by
+      :oriented-checkpoint40-coefficient-actual-overlap-transition-1,
+      :commit "3efa5cad",
+      :review "invoke-1789032441730-18306-d0918155",
+      :action
+      "Supervisor should compare acceptance against the reviewed triple-composition packet and reconcile the overlapping reservation; do not dispatch duplicate implementation."}},
+    :residual
+    "One fresh point-variation probe elected. No consumer closure, orientation compatibility or global localization is inferred, and neither ledger was edited.",
+    :outcome :replan,
+    :tail-artifact
+    {:path "/tmp/Checkpoint41Tail.edn",
+     :sha256
+     "a5c375bfe834c62fbe40f914d23b8c222bc5b62debd0f4c2cef341b693f6a916",
+     :validation
+     "Temporary proposed ledger passes with additions blocked until the current checkpoint is reviewed; canonical ledgers remain unchanged."},
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint41Census.py", :exit 0}
+     {:cmd
+      "Read complete-DAG status, closure rules, foundational-program note, both ledgers and dependency reviews; inspect frozen local-homology consumers and current reservations",
+      :exit 0}
+     {:cmd
+      "git log --format='%h %s' 44c92947..HEAD -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "bb review audit: thirteen implementation PASS receipts and subsequent reviewed STOP outcomes",
+      :exit 0}
+     {:cmd "bb /tmp/Checkpoint41Tail.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/Checkpoint41Proposed.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/Checkpoint41Census.json /tmp/Checkpoint41Tail.edn",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial proposed-ledger validation",
+      :exit 1,
+      :correction
+      "The temporary proposal prematurely marked the current checkpoint done without reviewed evidence. Retained its actual state."}
+     {:cmd "Proposed-ledger validation with current checkpoint open",
+      :exit 1,
+      :correction
+      "The elected work cannot be open before its checkpoint dependency completes. Validate proposed additions as blocked pending supervisor transition."}
+     {:cmd "Temporary tail-script revision",
+      :exit 1,
+      :correction
+      "Replaced nested anonymous-function literals with an explicit function."}
+     {:cmd "Validation after the failed script revision",
+      :exit 1,
+      :correction
+      "The stale proposal still contained an open row with an incomplete dependency. Regenerated the proposal with blocked additions; final validation passes."}],
+    :replacement-items
+    [{:consumer :t98A02,
+      :stop-condition
+      "Do not assume local constancy, a continuous unit-valued map, an orientation, or compatible generators. Do not infer that units equal one or construct global classes. Exclude reserved Euler, surface and vertex-coproduct work; reuse reviewed triple-overlap composition.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "LOCAL ORIENTATION: local constancy of actual chart transition units",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "R is a Type 0 commutative ring. M is a Type 0 Hausdorff space charted on EuclideanSpace ℝ (Fin (m+2)). No orientation, compactness or connectedness is assumed.",
+       :probe
+       "For actual charts indexed by a and b, prove that the reviewed transitionUnit R m a b x is locally constant on their common source. Precisely, for every x in the common source construct an open V containing x and contained in that source such that for every y in V the actual units u_ab(y) and u_ab(x) are equal. Use actual relative-chain maps and geometric homotopies or local relative classes to compare different deleted points; do not treat fixed-point restriction independence or the cocycle as a proof of point variation. Audit the required moving-puncture or supported-local-class construction before using it. Compile integer and rational examples. GO requires the complete placeholder-free local-constancy fixture. REVISE requires exactly one complete compiled geometric point-variation prerequisite; STOP names independent missing foundations.",
+       :consumer-equation
+       "The coefficient unit computed from actual chart-overlap local homology is constant on a constructed neighborhood of each point of the overlap.",
+       :consumer-residual
+       "Define the appropriate orientation structure and prove compatibility of its local classes, then construct global classes and localization before t98A02 gluing. Local constancy alone neither trivializes the cocycle nor supplies a global fundamental class.",
+       :gates
+       ["Compile complete fixture and record SHA256."
+        "Audit actual chart domains, openness, point membership and the exact unit equality at distinct points."
+        "Verify every moving-point comparison uses actual relative maps and proved geometric homotopies or constructed local classes."
+        "Do not assume a topology or continuity on R units to obtain local constancy."
+        "Record integer/rational examples and standard-only axiom audits."
+        "Recheck both ledgers and preserve reservations, reviewed STOPs and refutations."]},
+      :id
+      :oriented-checkpoint41-coefficient-transition-local-constancy-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint41-overlap-transition-and-consumer-refill
+       :oriented-checkpoint40-coefficient-actual-overlap-transition-1],
+      :current-residual
+      "Actual transition units and their geometric cocycle are reviewed, but no equality of transition units at nearby distinct points has been proved.",
+      :other-consumers [:t01A02 :t03J05 :t96J06]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: local orientation variation and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id :oriented-checkpoint42-local-constancy-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint41-coefficient-transition-local-constancy-1],
+      :current-residual
+      "Measure actual point-variation progress separately from orientation compatibility and global localization; rerank all consumers against concurrent outcomes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :measures
+    {:frozen-branch-uptake 0,
+     :typed-residual-after
+     "Actual overlap comparisons and geometric unit cocycles are reviewed, including distinguished-chart recovery. Nearby-point variation, orientation compatibility, global classes and localization remain.",
+     :frozen-closures 0,
+     :infrastructure-packets 13,
+     :corrected-closures 0,
+     :portfolio-infrastructure 6,
+     :new-proved-refutations 0,
+     :portfolio-modules
+     ["CoefficientOverlapPair"
+      "CoefficientOverlapRelative"
+      "CoefficientOverlapNormalization"
+      "CoefficientChartRestriction"
+      "CoefficientChartTransitionUnit"
+      "CoefficientOverlapTransition"],
+     :concurrent-infrastructure 7,
+     :review-outcomes
+     {:implementation-pass 13,
+      :reviewed-local-stop 3,
+      :stop-rows
+      [:surface-embedded-arcs-finite-position-probe-refill44
+       :t00a01-frozen-open-union-pi1-closure-probe-refill45
+       :t03j04-frozen-rational-euler-closure-probe-refill46]},
+     :concurrent-modules
+     ["CoefficientChartLocalAllDegrees"
+      "CoefficientFiniteModelChart"
+      "CoefficientManifoldLocalComparison"
+      "CoefficientDistinguishedChart"
+      "CoefficientDistinguishedTargetNormalization"
+      "CoefficientDistinguishedNormalization"
+      "SurfaceNestedTriangleCover"],
+     :typed-residual-before
+     "Actual overlap pair maps, relative inclusion compatibility, normalization comparison, restriction independence and geometric transition units were absent."},
+    :ranking
+    [{:rank 0,
+      :category :near-closure,
+      :finding
+      "All 24 near-closure consumers recounted; no available closing adapter survives the reviewed boundaries and reservations."}
+     {:rank 1,
+      :category :reserved,
+      :rows
+      [:compact-transverse-arc-intersection-finiteness-probe-refill46
+       :generic-two-open-vertex-coproduct-comparison-probe-refill46],
+      :finding
+      "Five-consumer surface and four-consumer actual-cover constructions are already reserved."}
+     {:rank 2,
+      :category :elected-foundation,
+      :consumers [:t98A02 :t01A02 :t03J05 :t96J06],
+      :finding
+      "Local constancy is one coherent geometric theorem needed after actual chart transition units. These are proposed downstream consumers, not immediate closures."}
+     {:rank 3,
+      :category :deferred-foundations,
+      :programs
+      ["Regular-preimage and transversality"
+       "Global fundamental classes and localization"
+       "Cap/Thom/intersection"],
+      :finding
+      "Broad consumer reach, but larger independent geometric or global obligations than the elected point-variation theorem."}
+     {:rank 4,
+      :category :deferred-foundations,
+      :programs
+      ["Closed gluing and collars"
+       "Cover classification and equivariant gluing"
+       "Product homology/Kunneth"
+       "Intrinsic integration and Stokes"
+       "Arbitrary-integer sphere degree"],
+      :finding
+      "Retain their exact missing comparisons; recent overlap results supply no closing adapter in these clusters."}
+     {:rank 5,
+      :category :banked-or-refuted,
+      :finding
+      "Closed Sard, dimension-gap, circle and sphere consumers receive no new closure credit. Preserve t96J07 corrected closure, repaired positive-dimensional t94J08 closure, original ordinary-S0 refutation and outstanding reduced-homology coverage."}],
+    :finding
+    "No unreserved eligible closing adapter remains. All named consumer files are unchanged. Thirteen reviewed infrastructure modules were added: six in this overlap portfolio and seven concurrently. Actual overlap transport, distinguished-chart recovery and geometric unit cocycles are now proved; comparison of units at distinct nearby points remains absent. Elect one bounded local-constancy probe. The concurrent triple-overlap row overlaps the newly reviewed completion and should be reconciled by the supervisor without duplicate implementation.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint41Census.json",
+     :open 34,
+     :baseline "44c9294744789f8f939a0574a99a3065ecce01d4",
+     :existing 58,
+     :placeholder-after 64,
+     :zero-placeholder 24,
+     :placeholder-delta 0,
+     :within-two-placeholders 24,
+     :placeholder-before 64,
+     :head "a7a09d02a89232fc08617edf84157aa264f23fe9",
+     :construction-modules-after 741,
+     :consumer-changed-paths [],
+     :construction-modules-before 728,
+     :sha256
+     "5bfff1d5d8f4e2f04326607c839c6fab4bbf1305a881cb051156b1f644ffcf56",
+     :named 59,
+     :missing ["t93A05"]}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: actual overlap transition and renewed consumer eligibility",
@@ -24587,6 +24858,69 @@
     :oriented-checkpoint40-chart-local-homology-and-consumer-refill],
    :current-residual
    "Measure actual overlap comparison separately from orientation compatibility and global localization; rerank every consumer against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t98A02,
+   :stop-condition
+   "Do not assume local constancy, a continuous unit-valued map, an orientation, or compatible generators. Do not infer that units equal one or construct global classes. Exclude reserved Euler, surface and vertex-coproduct work; reuse reviewed triple-overlap composition.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "LOCAL ORIENTATION: local constancy of actual chart transition units",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "R is a Type 0 commutative ring. M is a Type 0 Hausdorff space charted on EuclideanSpace ℝ (Fin (m+2)). No orientation, compactness or connectedness is assumed.",
+    :probe
+    "For actual charts indexed by a and b, prove that the reviewed transitionUnit R m a b x is locally constant on their common source. Precisely, for every x in the common source construct an open V containing x and contained in that source such that for every y in V the actual units u_ab(y) and u_ab(x) are equal. Use actual relative-chain maps and geometric homotopies or local relative classes to compare different deleted points; do not treat fixed-point restriction independence or the cocycle as a proof of point variation. Audit the required moving-puncture or supported-local-class construction before using it. Compile integer and rational examples. GO requires the complete placeholder-free local-constancy fixture. REVISE requires exactly one complete compiled geometric point-variation prerequisite; STOP names independent missing foundations.",
+    :consumer-equation
+    "The coefficient unit computed from actual chart-overlap local homology is constant on a constructed neighborhood of each point of the overlap.",
+    :consumer-residual
+    "Define the appropriate orientation structure and prove compatibility of its local classes, then construct global classes and localization before t98A02 gluing. Local constancy alone neither trivializes the cocycle nor supplies a global fundamental class.",
+    :gates
+    ["Compile complete fixture and record SHA256."
+     "Audit actual chart domains, openness, point membership and the exact unit equality at distinct points."
+     "Verify every moving-point comparison uses actual relative maps and proved geometric homotopies or constructed local classes."
+     "Do not assume a topology or continuity on R units to obtain local constancy."
+     "Record integer/rational examples and standard-only axiom audits."
+     "Recheck both ledgers and preserve reservations, reviewed STOPs and refutations."]},
+   :id :oriented-checkpoint41-coefficient-transition-local-constancy-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint41-overlap-transition-and-consumer-refill
+    :oriented-checkpoint40-coefficient-actual-overlap-transition-1
+    :oriented-checkpoint41-overlap-transition-and-consumer-refill],
+   :current-residual
+   "Actual transition units and their geometric cocycle are reviewed, but no equality of transition units at nearby distinct points has been proved.",
+   :other-consumers [:t01A02 :t03J05 :t96J06]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: local orientation variation and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint42-local-constancy-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint41-coefficient-transition-local-constancy-1
+    :oriented-checkpoint41-overlap-transition-and-consumer-refill],
+   :current-residual
+   "Measure actual point-variation progress separately from orientation compatibility and global localization; rerank all consumers against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
