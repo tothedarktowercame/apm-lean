@@ -70505,33 +70505,70 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the coefficient union-to-production-relative map and both piece formulas after this composite isomorphism; no compact-support exactness or coefficient-excision transport is supplied.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / coefficient range-right to production-pair comparison",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientRangeRightToProductionPairComparison.lean",
+    :fixture-sha256
+    "fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5",
+    :implementation
+    "Promote the exact fixture. Compile rangeRightRelativeToProductionPairIso. This supplies the composite coefficient range-relative-to-production-pair identification required by the compact-support placeholder route. Verify CoefficientRangeRightRelativeCokernelComparison SHA256 590d2bdf61c233a910f04d83e3a59a19cf6b8005e0df4ca144feec23ac255bc4 and CoefficientNestedSubspaceIntersectionComparison SHA256 7b7db522a204b44ce7cdcc9540def617abdce0e86cf10787286d69b99f24e1cd. Preserve arbitrary topological X, arbitrary subsets U and V and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim the union-to-production-relative map, either piece formula, compact-complement specialization, coefficient excision, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The coefficient relative cokernel of the Mayer-Vietoris infimum-range inclusion into the right ambient range subcomplex",
+    :target
+    "The production coefficient relative chains for the nested subspace of the right topological piece consisting of points whose underlying value lies in the left piece",
+    :direction
+    "Apply the reviewed forward range-relative-to-literal-intersection cokernel isomorphism and then the reviewed forward literal-intersection-to-nested-pair relative-chain isomorphism, yielding an exact forward isomorphism from the range-relative presentation to the production nested-pair presentation."},
+   :id
+   :coefficient-range-right-to-production-pair-comparison-implementation-refill50,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-range-right-relative-cokernel-comparison-implementation-refill50
+    :coefficient-nested-subspace-intersection-comparison-implementation-refill50],
+   :current-residual
+   "Compose the reviewed coefficient pushout union projection with this isomorphism and prove its left-zero and right-quotient projection formulas, then specialize to compact complements and transport all three exactness statements through valid coefficient excision.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative Mayer-Vietoris connecting morphism and three proved exactness statements with actual quotient-pair arrows. Reject any construction factoring the pair boundary through its own subspace map.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Compose with the coefficient nested-subspace relative isomorphism, construct the union-to-production-relative projection and prove its two piece formulas, then specialize to compact complements and transport all three exactness statements through coefficient excision. Localization monicity still requires the separate vanishing theorem.",
+     "Construct the union-to-production-relative projection and prove both piece formulas, then specialize to compact complements and transport all three exactness statements through coefficient excision. Localization monicity still requires the separate vanishing theorem.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the composite coefficient isomorphism from the range-relative cokernel to production relative chains and the union-to-production-relative map with both piece formulas; no compact-support exactness or excision transport is supplied.",
+      "Require the coefficient union-to-production-relative map and both piece formulas after this composite isomorphism; no compact-support exactness or coefficient-excision transport is supplied.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean"],
+      ["ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / coefficient range-right relative cokernel comparison",
+      "MANIFOLD FUNDAMENTAL CLASS / coefficient range-right to production-pair comparison",
       :acceptance
       {:fixture
-       "/tmp/CoefficientRangeRightRelativeCokernelComparison.lean",
+       "/tmp/CoefficientRangeRightToProductionPairComparison.lean",
        :fixture-sha256
-       "590d2bdf61c233a910f04d83e3a59a19cf6b8005e0df4ca144feec23ac255bc4",
+       "fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5",
        :implementation
-       "Promote the exact fixture. Compile rangeRightRelativeCokernelIso. This induces the exact coefficient relative-cokernel isomorphism required by the compact-support placeholder route from the reviewed range-intersection inclusion square. Verify CoefficientRangeIntersectionToRightComparison SHA256 2cc6c862b9c7d9a74815fb1418e7b995b0bc3c1de545be9fcdbca4e4e799b2e8. Preserve arbitrary topological X, arbitrary subsets U and V and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim the nested-pair composite, union-to-production-relative map, compact-complement specialization, coefficient excision, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile rangeRightRelativeToProductionPairIso. This supplies the composite coefficient range-relative-to-production-pair identification required by the compact-support placeholder route. Verify CoefficientRangeRightRelativeCokernelComparison SHA256 590d2bdf61c233a910f04d83e3a59a19cf6b8005e0df4ca144feec23ac255bc4 and CoefficientNestedSubspaceIntersectionComparison SHA256 7b7db522a204b44ce7cdcc9540def617abdce0e86cf10787286d69b99f24e1cd. Preserve arbitrary topological X, arbitrary subsets U and V and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim the union-to-production-relative map, either piece formula, compact-complement specialization, coefficient excision, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean"],
+       ["lake env lean ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
@@ -70539,55 +70576,45 @@
       {:source
        "The coefficient relative cokernel of the Mayer-Vietoris infimum-range inclusion into the right ambient range subcomplex",
        :target
-       "The coefficient relative cokernel of the literal topological intersection subtype included into the actual right subtype",
+       "The production coefficient relative chains for the nested subspace of the right topological piece consisting of points whose underlying value lies in the left piece",
        :direction
-       "Apply cokernel.mapIso to the reviewed forward infimum-range-to-literal-intersection chain isomorphism and forward right-range-to-subtype chain isomorphism, using the proved inclusion square to obtain an exact forward isomorphism between the two relative cokernels."},
+       "Apply the reviewed forward range-relative-to-literal-intersection cokernel isomorphism and then the reviewed forward literal-intersection-to-nested-pair relative-chain isomorphism, yielding an exact forward isomorphism from the range-relative presentation to the production nested-pair presentation."},
       :id
-      :coefficient-range-right-relative-cokernel-comparison-implementation-refill50,
+      :coefficient-range-right-to-production-pair-comparison-implementation-refill50,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-range-intersection-to-right-comparison-implementation-refill50],
+      [:coefficient-range-right-relative-cokernel-comparison-implementation-refill50
+       :coefficient-nested-subspace-intersection-comparison-implementation-refill50],
       :current-residual
-      "Compose this cokernel isomorphism with the reviewed coefficient literal-intersection-to-nested-pair isomorphism, then compose the result with the coefficient pushout union projection and prove its left-zero and right-quotient projection formulas.",
+      "Compose the reviewed coefficient pushout union projection with this isomorphism and prove its left-zero and right-quotient projection formulas, then specialize to compact complements and transport all three exactness statements through valid coefficient excision.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientRangeIntersectionToRightComparison >/tmp/coefficient-range-right-dep.log",
+       "lake build ConstructionTargets.CoefficientRangeRightRelativeCokernelComparison ConstructionTargets.CoefficientNestedSubspaceIntersectionComparison >/tmp/coefficient-range-production-deps.log",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientRangeRightRelativeCokernelComparison.lean",
+       "lake env lean /tmp/CoefficientRangeRightToProductionPairComparison.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientRangeRightRelativeCokernelComparison.lean ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean",
+       "sha256sum /tmp/CoefficientRangeRightToProductionPairComparison.lean ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean",
        :exit 0}
       {:cmd
-       "python3 placeholder-and-declaration audit over /tmp/CoefficientRangeRightRelativeCokernelComparison.lean",
+       "python3 comment-stripped placeholder and declaration audit over /tmp/CoefficientRangeRightToProductionPairComparison.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "shell heredoc creation and compile of /tmp/CoefficientRangeRightRelativeCokernelComparison.lean",
-       :exit 0,
-       :correction
-       "An exploratory malformed heredoc delimiter caused the shell body to be written into the temporary fixture while returning zero. Replaced the temporary file completely with the intended Lean source before any acceptance compile."}
-      {:cmd
-       "python3 placeholder-and-declaration audit over /tmp/CoefficientRangeRightRelativeCokernelComparison.lean",
-       :exit 1,
-       :correction
-       "Removed an accidental indented Python assignment from the audit snippet; the recorded clean rerun reports zero placeholders and the required declaration."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/CoefficientRangeRightRelativeCokernelComparison.lean",
+      "/tmp/CoefficientRangeRightToProductionPairComparison.lean",
       :sha256
-      "590d2bdf61c233a910f04d83e3a59a19cf6b8005e0df4ca144feec23ac255bc4",
+      "fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one induced coefficient cokernel comparison. The relative quotient of the Mayer-Vietoris range-intersection inclusion into the right range is isomorphic to the relative quotient of the literal intersection inclusion into the actual right subtype. This uses the previously proved chain square and remains nonzero-capable; it does not use the refuted zero supportConnecting map. The unrelated pre-existing untracked documentation files remain untouched.",
+     "Compiled exactly one missing coefficient representation prerequisite. The relative cokernel of the Mayer-Vietoris range-intersection inclusion into the right range is identified with production relative chains for the nested intersection pair by composing the reviewed range-to-literal and literal-to-nested isomorphisms in their proved forward orientation. The construction remains nonzero-capable and does not use the refuted zero supportConnecting map.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
@@ -70603,7 +70630,8 @@
     :coefficient-pair-connecting-mayer-vietoris-comparison-implementation-refill50
     :coefficient-nested-subspace-intersection-comparison-implementation-refill50
     :coefficient-range-intersection-to-right-comparison-implementation-refill50
-    :coefficient-range-right-relative-cokernel-comparison-implementation-refill50],
+    :coefficient-range-right-relative-cokernel-comparison-implementation-refill50
+    :coefficient-range-right-to-production-pair-comparison-implementation-refill50],
    :current-residual
    "The absolute complement sequence and many comparison maps are reviewed, but the named relative connecting map is zero. A genuine relative chain sequence or proved excision conjugation is required.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
