@@ -33977,8 +33977,11 @@
    :stop-condition
    "Require an actual finite-sheet covering map and an equality for the rational singular-homology finrank Euler sum. Do not infer multiplicativity from transfer alone, assume finite-dimensional homology, replace the consumer Euler definition by polygon arithmetic, specialize silently to surfaces, or claim any frozen consumer closure. Use a unique row-specific scratch directory.",
    :evidence
-   {:outcome :stop,
-    :seat "codex-13",
+   {:residual
+    "Construct a genuine finite-type chain model for the named compact manifolds and a k-sheet cellular lift comparison, or bank an equivalent finite-cover Euler-characteristic theorem with explicit finiteness and truncation hypotheses, before retrying the three consumer instances.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "codex-13",
     :reason
     "The banked covering transfer proves only transfer_* followed by p_* equals k times the identity on base homology. Over Q this makes p_* split-surjective and transfer_* injective, but it does not determine the complementary summand of source homology and therefore cannot prove dim H_i(E;Q)=k*dim H_i(B;Q) or Euler multiplicativity. No reviewed module or Mathlib theorem supplies a finite CW or cellular chain model whose cells lift in exactly k copies, a Lefschetz-trace/deck-action formula recovering the alternating complementary dimensions, or an existing Euler-characteristic multiplicativity theorem for finite-sheet coverings. The exact independent boundary is a finite-type chain-level covering comparison: construct bounded finite-dimensional chain complexes computing the consumers' rational singular homology and prove the source complex is degreewise the k-sheet lift of the base complex, with compatible differentials. This is missing infrastructure, not a mathematical refutation.",
     :commands
@@ -34009,14 +34012,27 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789064950145-19152-585c1211",
+     :commands
+     ["git show --stat --oneline 774b0e5f"
+      "git show 774b0e5f:holes/labs/topology-contract/worklist2.edn | sed -n '33910,34090p'"
+      "rg rational_homology_projection with context in ConstructionTargets/CoefficientCoveringTransfer.lean"
+      "rg 'Euler.*cover|cover.*Euler|euler.*cover|Covering.*Euler|finrank.*card_fiber|card_fiber.*finrank' .lake/packages/mathlib/Mathlib ConstructionTargets"
+      "lake env lean ConstructionTargets/CoefficientCoveringTransfer.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git diff --check 774b0e5f^ 774b0e5f"
+      "git diff --name-only 774b0e5f^ 774b0e5f"],
+     :finding
+     "PASS: commit 774b0e5f is an exact ledger-only STOP with no fixture, frozen statement, or placeholder change. CoefficientCoveringTransfer compiles with standard-only axioms and proves transfer_* followed by projection p_* equals k times the identity on base rational homology. For positive k this makes transfer injective and p_* surjective, but supplies neither the reverse composite nor a decomposition controlling extra source summands; finite-dimensionality alone cannot yield dim H_i(source)=k*dim H_i(base). Search confirms no banked finite-cover Euler theorem, lifted finite-chain model, or equivalent deck-action trace formula. The stated missing finite-type chain-level covering comparison is therefore the correct independent boundary, not a mathematical refutation."},
     :finding
     "The actual transfer identities were audited in both integer and coefficient-general forms. They control the base summand inside source homology but place no constraint on additional source summands; finite-dimensionality assumptions alone do not repair this logical gap. Euler multiplicativity needs alternating chain-level rank data or an equivalent trace theorem, neither of which is banked. The three consumer instances therefore cannot be compiled from the current covering-transfer API without inventing the missing finite-type comparison. No fixture, canonical source, consumer file or ledger was edited.",
-    :residual
-    "Construct a genuine finite-type chain model for the named compact manifolds and a k-sheet cellular lift comparison, or bank an equivalent finite-cover Euler-characteristic theorem with explicit finiteness and truncation hypotheses, before retrying the three consumer instances.",
-    :author "codex-13",
-    :disposition :stop},
+    :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "COVERING CLASSIFICATION: rational Euler characteristic under finite-sheet coverings",
@@ -34061,7 +34077,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: finite-cover Euler comparison and renewed consumer eligibility",
