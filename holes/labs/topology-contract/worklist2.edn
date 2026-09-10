@@ -33663,8 +33663,283 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :seat "codex-13",
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      :exit 0}
+     {:cmd
+      "Recount every DAG-named frozen consumer with comments stripped and inspect current open, blocked and done-unreviewed rows",
+      :exit 0}
+     {:cmd
+      "Inspect the reviewed t96J05 correction, preserved centered-circle counterexample, sphere-normalization STOP, active coefficient route and finite-cover Euler routes",
+      :exit 0}
+     {:cmd
+      "git diff --name-only c8e68a87797ac57b987048a5983413ec397afa52..HEAD -- ConstructionTargets problems | sort",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :measures
+    {:baseline
+     {:commit "c8e68a87797ac57b987048a5983413ec397afa52",
+      :description "Accepted symbolic sphere-cap assembly checkpoint"},
+     :proved-refutations 0,
+     :frozen-branch-uptake 1,
+     :placeholder-delta -1,
+     :head
+     {:commit "ba258161254a4d08f9a317784f043716a7a05836",
+      :description "Pre-checkpoint54 strategy head"},
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:before 816,
+      :after 818,
+      :portfolio
+      ["ConstructionTargets/RadialSquaredFiber.lean"
+       "ConstructionTargets/RadialSquaredFiber.md"],
+      :concurrent
+      ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"]},
+     :corrected-closures 1,
+     :review-outcomes
+     {:t96J05-corrected-closure
+      {:outcome :pass,
+       :commit "d108464309970781792e6c723950db304ec1db15",
+       :disposition :corrected-closure},
+      :t96J05-original-statement
+      {:outcome :refuted-local-specification,
+       :review :pass,
+       :disposition
+       "Preserved separately from the corrected closure."},
+      :raw-hausdorff-normalization
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-addHaarScalarFactor-characterization},
+      :coefficient-union-production-comparison
+      {:disposition
+       "Concurrent route progress; excluded from election."}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholder-before 62,
+      :placeholder-after 61}},
+    :finding
+    {:typed-residual-change
+     "t96J05 is corrected and closed at one fewer placeholder: the theorem now exposes positive attained regular-value data, transports the global regular-fiber atlas through the exact squared-norm/literal-level equivalence and uses the requested Fin (m-1) model. The original unconditional statement remains locally refuted. The four sphere-integration routes remain blocked only at the reviewed addHaarScalarFactor characterization before numerical mass uptake. Concurrent coefficient work advanced the compact-support route and is excluded. No remaining near-closure consumer has every route step banked. The highest-reuse inactive bounded step is rational Euler-characteristic multiplicativity for finite-sheet coverings, shared by t03J04, t97A01 and t98A01.",
+     :routes
+     [{:consumer :a97J08,
+       :placeholders 1,
+       :route
+       "banked local degree and orientation data -> consumer-facing comparison -> frozen adapter"}
+      {:consumer :t00A03,
+       :placeholders 2,
+       :route
+       "contained translations -> active endpoint-preserving chartwise perturbation -> compatible faces -> triangulation"}
+      {:consumer :t00J01,
+       :placeholders 1,
+       :route
+       "circle-fold evidence -> Klein-product and fold-fiber geometry -> homology bridge -> adapter"}
+      {:consumer :t00J02,
+       :placeholders 1,
+       :route
+       "concurrent genuine relative Mayer-Vietoris comparisons -> excision -> localization and fundamental-class assembly"}
+      {:consumer :t01A02,
+       :placeholders 3,
+       :route
+       "H2 degree and nonsurjectivity -> Lefschetz comparison -> conjunction"}
+      {:consumer :t01A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> cap/Thom and intersection comparison -> calculations"}
+      {:consumer :t01A05,
+       :placeholders 1,
+       :route
+       "concurrent compact-support Mayer-Vietoris -> localization, with connectedness defect preserved -> adapter"}
+      {:consumer :t01A08,
+       :placeholders 1,
+       :route
+       "resolved regularity conversion -> general-model Sard -> adapter"}
+      {:consumer :t01J01,
+       :placeholders 3,
+       :route
+       "contained translations -> active endpoint control -> compatible triangulation -> theorem"}
+      {:consumer :t01J04,
+       :placeholders 1,
+       :route
+       "regular-preimage geometry -> countability and half-space-atlas applicability -> theorem"}
+      {:consumer :t01J06,
+       :placeholders 3,
+       :route
+       "banked sphere assembly and moments -> blocked numerical normalization -> Stokes bridge -> conjunction"}
+      {:consumer :t02A05,
+       :placeholders 2,
+       :route
+       "banked S2 assembly and flux reduction -> blocked numerical normalization -> integral and minimum"}
+      {:consumer :t02A07,
+       :placeholders 3,
+       :route
+       "concurrent compact-support Mayer-Vietoris -> localization -> local comparison and fundamental class"}
+      {:consumer :t02A08,
+       :placeholders 1,
+       :route
+       "banked local comparison -> m+2 normalization -> theorem"}
+      {:consumer :t03J02,
+       :placeholders 2,
+       :route
+       "null-winding -> embedded-circle collar or Jordan-Schoenflies comparison -> gluing -> theorem"}
+      {:consumer :t03J04,
+       :placeholders 1,
+       :route
+       "rational torus homology -> finite-sheet Euler multiplicativity -> theorem"}
+      {:consumer :t03J05,
+       :placeholders 1,
+       :route
+       "punctured genus-two curves -> product-torus intersection and ambient nonhomotopy -> theorem"}
+      {:consumer :t91J05,
+       :placeholders 3,
+       :route
+       "contained translations -> active endpoint control -> compatible faces -> result"}
+      {:consumer :t92J05,
+       :placeholders 3,
+       :route
+       "RP2 antipodal and genus-two bridges -> classification -> assembly"}
+      {:consumer :t92J06,
+       :placeholders 1,
+       :route
+       "banked covering data -> action and quotient adapter -> theorem"}
+      {:consumer :t94A06,
+       :placeholders 1,
+       :route
+       "regular-preimage and normal-translation geometry -> model applicability -> adapter"}
+      {:consumer :t94A10,
+       :placeholders 3,
+       :route
+       "banked S2 assembly and moments -> blocked numerical normalization -> closedness and nonexactness"}
+      {:consumer :t94J09,
+       :placeholders 1,
+       :route
+       "contained translations -> active endpoint-preserving chartwise perturbation -> intersection adapter"}
+      {:consumer :t95J05,
+       :placeholders 1,
+       :route
+       "banked S3 assembly and density moment -> blocked numerical mass normalization -> integral uptake"}
+      {:consumer :t95J06,
+       :placeholders 2,
+       :route
+       "torus free-action quotient -> surface classification -> result"}
+      {:consumer :t96J06,
+       :placeholders 2,
+       :route
+       "fundamental-class and cap/Thom comparison -> product-homology representation -> adapters"}
+      {:consumer :t97A01,
+       :placeholders 1,
+       :route
+       "banked finite-cover transfer -> Euler-characteristic multiplicativity -> theorem"}
+      {:consumer :t97A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> Eilenberg-Zilber and integral Kunneth -> intersection calculations"}
+      {:consumer :t97J05,
+       :placeholders 5,
+       :route
+       "concurrent compact-support Mayer-Vietoris -> localization and global fundamental class -> assembly"}
+      {:consumer :t98A01,
+       :placeholders 1,
+       :route
+       "active five-torsion cardinality -> polygon genus invariance -> finite-cover Euler multiplicativity -> conjunction"}
+      {:consumer :t98A02,
+       :placeholders 1,
+       :route
+       "concurrent relative Mayer-Vietoris and excision -> localization monicity -> fundamental class"}
+      {:consumer :t99J03,
+       :placeholders 1,
+       :route
+       "active endpoint-preserving chartwise perturbation -> coverage and compatible faces -> triangulation"}],
+     :deferred
+     ["The reviewed addHaarScalarFactor STOP is preserved and not retried."
+      "The corrected t96J05 theorem and RadialSquaredFiber representation are banked and will not be rebuilt."
+      "Concurrent coefficient, arc and five-torsion rows are excluded from duplicate election."
+      "Eilenberg-Zilber, Kunneth, classification and unrelated infrastructure remain deferred behind the simpler shared Euler step."]},
+    :replacement-items
+    [{:consumer :t03J04,
+      :stop-condition
+      "Require an actual finite-sheet covering map and an equality for the rational singular-homology finrank Euler sum. Do not infer multiplicativity from transfer alone, assume finite-dimensional homology, replace the consumer Euler definition by polygon arithmetic, specialize silently to surfaces, or claim any frozen consumer closure. Use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "COVERING CLASSIFICATION: rational Euler characteristic under finite-sheet coverings",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use compact connected Hausdorff manifolds or the exact finite-CW hypotheses needed by the named consumers, an actual finite-sheet covering with positive sheet count, finite-dimensional rational singular homology in the required bounded degrees and the literal alternating finrank sums. State no integral Kunneth or polygon-genus theorem.",
+       :route-step
+       "Supplies the finite-cover Euler-multiplicativity step required by the sole t03J04 and t97A01 placeholders and by the remaining t98A01 conjunction after its cover construction.",
+       :probe
+       "Search the banked covering-transfer and rational-homology modules before constructing anything. Prove that for the actual finite-sheet covering representations used by t03J04, t97A01 and t98A01, the source rational Euler finrank sum equals the positive sheet count times the target sum. Audit bounded-degree vanishing and finite-dimensionality explicitly. Instantiate the theorem for the torus local-diffeomorphism cover and the two existing finite covers without proving their other consumer conjuncts. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled transfer-trace, finrank or bounded-complex prerequisite. STOP names the exact independent mathematical or representation boundary.",
+       :consumer-equation
+       "For each named finite-sheet covering p with sheet count d, the literal rational singular-homology Euler sum satisfies chi(source)=d*chi(target); since d>0, a zero source Euler sum forces zero target Euler sum.",
+       :consumer-residual
+       "Combine the result with rational torus homology for t03J04, with the existing cover data for t97A01, and with five-torsion and polygon-genus comparisons for t98A01.",
+       :gates
+       ["Compile a complete fixture and record SHA256."
+        "Audit the exact covering maps and positive finite sheet counts used by all three consumers."
+        "Use actual rational singular-homology groups and literal alternating finrank sums."
+        "Prove every finite-dimensionality and truncation fact used."
+        "Verify transfer and trace identities in the direction needed for finrank multiplication."
+        "Compile all three consumer instances with standard-only axioms."
+        "Confirm no polygon-genus, Kunneth or consumer-closure theorem is claimed."
+        "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and concurrent reservations."]},
+      :id
+      :oriented-checkpoint54-finite-cover-rational-euler-multiplicativity-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Finite-cover constructions and transfer identities are banked, but no theorem currently turns their positive sheet counts into multiplicativity of the consumers' literal rational singular-homology Euler sums.",
+      :other-consumers [:t97A01 :t98A01]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: finite-cover Euler comparison and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint55-finite-cover-euler-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint54-finite-cover-rational-euler-multiplicativity-1],
+      :current-residual
+      "Measure finite-cover Euler progress separately from the corrected t96J05 closure, blocked Hausdorff normalization, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}]},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: corrected radial-level review and renewed consumer eligibility",
@@ -33681,6 +33956,72 @@
     :oriented-checkpoint53-sphere-cap-assembly-and-consumer-refill-1],
    :current-residual
    "Measure the corrected t96J05 statement and closure separately from its preserved original refutation, blocked Hausdorff normalization, concurrent work and infrastructure; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J04,
+   :stop-condition
+   "Require an actual finite-sheet covering map and an equality for the rational singular-homology finrank Euler sum. Do not infer multiplicativity from transfer alone, assume finite-dimensional homology, replace the consumer Euler definition by polygon arithmetic, specialize silently to surfaces, or claim any frozen consumer closure. Use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "COVERING CLASSIFICATION: rational Euler characteristic under finite-sheet coverings",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use compact connected Hausdorff manifolds or the exact finite-CW hypotheses needed by the named consumers, an actual finite-sheet covering with positive sheet count, finite-dimensional rational singular homology in the required bounded degrees and the literal alternating finrank sums. State no integral Kunneth or polygon-genus theorem.",
+    :route-step
+    "Supplies the finite-cover Euler-multiplicativity step required by the sole t03J04 and t97A01 placeholders and by the remaining t98A01 conjunction after its cover construction.",
+    :probe
+    "Search the banked covering-transfer and rational-homology modules before constructing anything. Prove that for the actual finite-sheet covering representations used by t03J04, t97A01 and t98A01, the source rational Euler finrank sum equals the positive sheet count times the target sum. Audit bounded-degree vanishing and finite-dimensionality explicitly. Instantiate the theorem for the torus local-diffeomorphism cover and the two existing finite covers without proving their other consumer conjuncts. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled transfer-trace, finrank or bounded-complex prerequisite. STOP names the exact independent mathematical or representation boundary.",
+    :consumer-equation
+    "For each named finite-sheet covering p with sheet count d, the literal rational singular-homology Euler sum satisfies chi(source)=d*chi(target); since d>0, a zero source Euler sum forces zero target Euler sum.",
+    :consumer-residual
+    "Combine the result with rational torus homology for t03J04, with the existing cover data for t97A01, and with five-torsion and polygon-genus comparisons for t98A01.",
+    :gates
+    ["Compile a complete fixture and record SHA256."
+     "Audit the exact covering maps and positive finite sheet counts used by all three consumers."
+     "Use actual rational singular-homology groups and literal alternating finrank sums."
+     "Prove every finite-dimensionality and truncation fact used."
+     "Verify transfer and trace identities in the direction needed for finrank multiplication."
+     "Compile all three consumer instances with standard-only axioms."
+     "Confirm no polygon-genus, Kunneth or consumer-closure theorem is claimed."
+     "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and concurrent reservations."]},
+   :id
+   :oriented-checkpoint54-finite-cover-rational-euler-multiplicativity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint54-corrected-radial-level-and-consumer-refill-1],
+   :current-residual
+   "Finite-cover constructions and transfer identities are banked, but no theorem currently turns their positive sheet counts into multiplicativity of the consumers' literal rational singular-homology Euler sums.",
+   :other-consumers [:t97A01 :t98A01]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: finite-cover Euler comparison and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint55-finite-cover-euler-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint54-finite-cover-rational-euler-multiplicativity-1
+    :oriented-checkpoint54-corrected-radial-level-and-consumer-refill-1],
+   :current-residual
+   "Measure finite-cover Euler progress separately from the corrected t96J05 closure, blocked Hausdorff normalization, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
