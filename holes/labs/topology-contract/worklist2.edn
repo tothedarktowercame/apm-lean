@@ -34076,8 +34076,273 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :seat "codex-13",
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      :exit 0}
+     {:cmd
+      "Recount every DAG-named frozen consumer with comments stripped and inspect current open, blocked and done-unreviewed rows",
+      :exit 0}
+     {:cmd
+      "Inspect the reviewed finite-cover Euler STOP, covering-transfer APIs, active coefficient and arc routes, and the product-homology/intersection routes",
+      :exit 0}
+     {:cmd
+      "Search ConstructionTargets and Mathlib for an existing singular Eilenberg-Zilber, cross-product or product fundamental-class comparison",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :measures
+    {:baseline
+     {:commit "2b864880ec407d62ce56059504aa77008b5490df",
+      :description
+      "Accepted checkpoint54 corrected-radial refill transition"},
+     :proved-refutations 0,
+     :frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :head
+     {:commit "3c1326d740258477a25ec206e65d78babb65f9d2",
+      :description "Pre-checkpoint55 strategy head"},
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:before 818, :after 818, :portfolio [], :concurrent []},
+     :corrected-closures 0,
+     :review-outcomes
+     {:finite-cover-rational-euler
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-finite-type-chain-level-covering-comparison},
+      :t96J05-corrected-closure
+      {:outcome :pass,
+       :commit "d108464309970781792e6c723950db304ec1db15",
+       :disposition :preserved-corrected-closure},
+      :raw-hausdorff-normalization
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-addHaarScalarFactor-characterization},
+      :coefficient-relative-route
+      {:disposition
+       "Active concurrent work; excluded from election."}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholders 61}},
+    :finding
+    {:typed-residual-change
+     "The finite-cover Euler probe established an exact non-refuting boundary: transfer_* followed by projection_* equals the sheet count on base homology, but this does not control complementary source homology or yield finrank multiplication. A finite-type cellular or equivalent trace comparison is absent, so that STOP is preserved. No consumer or placeholder changed. The highest-reuse inactive route now available is the product-homology comparison shared by t03J05, t96J06 and t97A04. The first bounded step is an actual singular-chain cross product in the degrees and coefficients those consumers use, with boundary and map-naturality formulas; full Kunneth, intersection nonvanishing and consumer closure remain later steps.",
+     :routes
+     [{:consumer :a97J08,
+       :placeholders 1,
+       :route
+       "banked local degree and orientation -> consumer comparison -> adapter"}
+      {:consumer :t00A03,
+       :placeholders 2,
+       :route
+       "contained translations -> active endpoint-preserving chartwise perturbation -> compatible faces -> triangulation"}
+      {:consumer :t00J01,
+       :placeholders 1,
+       :route
+       "circle-fold evidence -> Klein-product and fold-fiber geometry -> homology bridge -> adapter"}
+      {:consumer :t00J02,
+       :placeholders 1,
+       :route
+       "active relative Mayer-Vietoris comparisons -> excision -> localization and fundamental class"}
+      {:consumer :t01A02,
+       :placeholders 3,
+       :route
+       "H2 degree and nonsurjectivity -> Lefschetz -> conjunction"}
+      {:consumer :t01A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> cap/Thom and intersection comparison -> calculations"}
+      {:consumer :t01A05,
+       :placeholders 1,
+       :route
+       "active compact-support Mayer-Vietoris -> localization, preserving connectedness defect -> adapter"}
+      {:consumer :t01A08,
+       :placeholders 1,
+       :route "regularity conversion -> general-model Sard -> adapter"}
+      {:consumer :t01J01,
+       :placeholders 3,
+       :route
+       "contained translations -> active endpoint control -> compatible triangulation -> theorem"}
+      {:consumer :t01J04,
+       :placeholders 1,
+       :route
+       "regular-preimage geometry -> countability and half-space-atlas applicability -> theorem"}
+      {:consumer :t01J06,
+       :placeholders 3,
+       :route
+       "sphere assembly and moments -> blocked normalization -> Stokes bridge -> conjunction"}
+      {:consumer :t02A05,
+       :placeholders 2,
+       :route
+       "S2 assembly and flux reduction -> blocked normalization -> integral and minimum"}
+      {:consumer :t02A07,
+       :placeholders 3,
+       :route
+       "active compact-support Mayer-Vietoris -> localization -> local comparison and fundamental class"}
+      {:consumer :t02A08,
+       :placeholders 1,
+       :route "local comparison -> m+2 normalization -> theorem"}
+      {:consumer :t03J02,
+       :placeholders 2,
+       :route
+       "null-winding -> embedded-circle collar or Jordan-Schoenflies -> gluing -> theorem"}
+      {:consumer :t03J04,
+       :placeholders 1,
+       :route
+       "rational torus homology -> blocked finite-type covering Euler comparison -> theorem"}
+      {:consumer :t03J05,
+       :placeholders 1,
+       :route
+       "punctured genus-two curves -> product-cycle comparison -> mod-2 intersection and ambient nonhomotopy -> theorem"}
+      {:consumer :t91J05,
+       :placeholders 3,
+       :route
+       "contained translations -> active endpoint control -> compatible faces -> result"}
+      {:consumer :t92J05,
+       :placeholders 3,
+       :route
+       "RP2 antipodal and genus-two bridges -> classification -> assembly"}
+      {:consumer :t92J06,
+       :placeholders 1,
+       :route
+       "covering data -> action and quotient adapter -> theorem"}
+      {:consumer :t94A06,
+       :placeholders 1,
+       :route
+       "regular-preimage and normal translation -> model applicability -> adapter"}
+      {:consumer :t94A10,
+       :placeholders 3,
+       :route
+       "S2 assembly and moments -> blocked normalization -> closedness and nonexactness"}
+      {:consumer :t94J09,
+       :placeholders 1,
+       :route
+       "contained translations -> active endpoint-preserving perturbation -> intersection adapter"}
+      {:consumer :t95J05,
+       :placeholders 1,
+       :route
+       "S3 assembly and density moment -> blocked mass normalization -> integral uptake"}
+      {:consumer :t95J06,
+       :placeholders 2,
+       :route "torus free-action quotient -> classification -> result"}
+      {:consumer :t96J06,
+       :placeholders 2,
+       :route
+       "fundamental class and cap/Thom comparison -> singular product comparison -> adapters"}
+      {:consumer :t97A01,
+       :placeholders 1,
+       :route
+       "cover transfer -> blocked finite-type Euler comparison -> theorem"}
+      {:consumer :t97A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> singular cross product and Eilenberg-Zilber -> integral Kunneth -> intersection calculations"}
+      {:consumer :t97J05,
+       :placeholders 5,
+       :route
+       "active compact-support Mayer-Vietoris -> localization and global fundamental class -> assembly"}
+      {:consumer :t98A01,
+       :placeholders 1,
+       :route
+       "active five-torsion -> polygon genus -> blocked finite-type Euler comparison -> conjunction"}
+      {:consumer :t98A02,
+       :placeholders 1,
+       :route
+       "active relative Mayer-Vietoris and excision -> localization monicity -> fundamental class"}
+      {:consumer :t99J03,
+       :placeholders 1,
+       :route
+       "active endpoint-preserving perturbation -> coverage and compatible faces -> triangulation"}],
+     :deferred
+     ["The reviewed finite-cover Euler STOP is not retried."
+      "The reviewed Hausdorff-normalization STOP is not retried."
+      "Active coefficient, arc and five-torsion work is excluded."
+      "Full Eilenberg-Zilber equivalence, integral Kunneth, cap/Thom comparison and consumer adapters remain deferred until the bounded cross-product interface is banked."]},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Construct an actual singular-chain cross product with the required boundary signs and induced-map naturality. Do not assume Eilenberg-Zilber, Kunneth, product fundamental classes, intersection nonvanishing, ambient nonhomotopy or consumer closure. Restrict coefficients and degrees to the three named consumers and use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PRODUCT HOMOLOGY: bounded singular cross-product chain interface",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use integer and mod-2 singular chains in degrees at most four, covering the circle, closed-surface and product classes named by t03J05, t96J06 and t97A04. No general coefficient ring or unbounded-degree theorem is required.",
+       :route-step
+       "Supplies the first missing product-homology step for the sole t03J05 placeholder, both t96J06 placeholders and the four t97A04 placeholders: a genuine chain-level product operation whose boundary and map-naturality formulas can feed the later product-class and intersection comparisons.",
+       :probe
+       "Search all banked Alexander-Whitney, simplex-product, tensor-complex and singular-chain modules before constructing new declarations. Define or expose the actual cross product for the required integer and ZMod 2 chain degrees. Prove the Leibniz boundary formula with the correct sign, prove naturality under pairs of continuous maps, and compile the induced cycle and homology-class maps needed for circle-by-circle and surface-product instances. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled missing simplex-triangulation, shuffle-sign or tensor-to-singular prerequisite. STOP names the exact representation or library boundary.",
+       :consumer-equation
+       "For the required degrees, cycles a and b determine a singular cycle a×b on the product; its class is natural under f×g, and the chain boundary is ∂(a×b)=∂a×b+(-1)^deg(a)a×∂b.",
+       :consumer-residual
+       "Use the cross-product interface to compare product fundamental classes and mod-2 intersections, then build the bounded Eilenberg-Zilber/Kunneth statements and frozen adapters.",
+       :gates
+       ["Compile a complete fixture and record SHA256."
+        "Audit the actual singular-chain and coefficient representations."
+        "Verify the Leibniz boundary sign in every required degree."
+        "Verify naturality under actual product continuous maps."
+        "Compile integer and ZModSlots 2 instances used by the consumers."
+        "Reproduce standard-only axiom audits."
+        "Confirm no Kunneth, intersection nonvanishing, ambient nonhomotopy or consumer closure is claimed."
+        "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and concurrent reservations."]},
+      :id
+      :oriented-checkpoint55-bounded-singular-cross-product-interface-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Tensor-complex and local intersection ingredients are banked, but the named consumers lack an actual singular-chain cross product with boundary and naturality formulas in their concrete coefficient representations.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: singular cross-product interface and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint56-singular-cross-product-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint55-bounded-singular-cross-product-interface-1],
+      :current-residual
+      "Measure bounded singular cross-product progress separately from the preserved Euler and Hausdorff STOPs, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}]},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: finite-cover Euler comparison and renewed consumer eligibility",
@@ -34093,6 +34358,73 @@
     :oriented-checkpoint54-corrected-radial-level-and-consumer-refill-1],
    :current-residual
    "Measure finite-cover Euler progress separately from the corrected t96J05 closure, blocked Hausdorff normalization, concurrent work and frozen uptake; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct an actual singular-chain cross product with the required boundary signs and induced-map naturality. Do not assume Eilenberg-Zilber, Kunneth, product fundamental classes, intersection nonvanishing, ambient nonhomotopy or consumer closure. Restrict coefficients and degrees to the three named consumers and use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PRODUCT HOMOLOGY: bounded singular cross-product chain interface",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use integer and mod-2 singular chains in degrees at most four, covering the circle, closed-surface and product classes named by t03J05, t96J06 and t97A04. No general coefficient ring or unbounded-degree theorem is required.",
+    :route-step
+    "Supplies the first missing product-homology step for the sole t03J05 placeholder, both t96J06 placeholders and the four t97A04 placeholders: a genuine chain-level product operation whose boundary and map-naturality formulas can feed the later product-class and intersection comparisons.",
+    :probe
+    "Search all banked Alexander-Whitney, simplex-product, tensor-complex and singular-chain modules before constructing new declarations. Define or expose the actual cross product for the required integer and ZMod 2 chain degrees. Prove the Leibniz boundary formula with the correct sign, prove naturality under pairs of continuous maps, and compile the induced cycle and homology-class maps needed for circle-by-circle and surface-product instances. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled missing simplex-triangulation, shuffle-sign or tensor-to-singular prerequisite. STOP names the exact representation or library boundary.",
+    :consumer-equation
+    "For the required degrees, cycles a and b determine a singular cycle a×b on the product; its class is natural under f×g, and the chain boundary is ∂(a×b)=∂a×b+(-1)^deg(a)a×∂b.",
+    :consumer-residual
+    "Use the cross-product interface to compare product fundamental classes and mod-2 intersections, then build the bounded Eilenberg-Zilber/Kunneth statements and frozen adapters.",
+    :gates
+    ["Compile a complete fixture and record SHA256."
+     "Audit the actual singular-chain and coefficient representations."
+     "Verify the Leibniz boundary sign in every required degree."
+     "Verify naturality under actual product continuous maps."
+     "Compile integer and ZModSlots 2 instances used by the consumers."
+     "Reproduce standard-only axiom audits."
+     "Confirm no Kunneth, intersection nonvanishing, ambient nonhomotopy or consumer closure is claimed."
+     "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and concurrent reservations."]},
+   :id
+   :oriented-checkpoint55-bounded-singular-cross-product-interface-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint55-finite-cover-euler-and-consumer-refill-1],
+   :current-residual
+   "Tensor-complex and local intersection ingredients are banked, but the named consumers lack an actual singular-chain cross product with boundary and naturality formulas in their concrete coefficient representations.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: singular cross-product interface and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint56-singular-cross-product-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint55-bounded-singular-cross-product-interface-1
+    :oriented-checkpoint55-finite-cover-euler-and-consumer-refill-1],
+   :current-residual
+   "Measure bounded singular cross-product progress separately from the preserved Euler and Hausdorff STOPs, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
