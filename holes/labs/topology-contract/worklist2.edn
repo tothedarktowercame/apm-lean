@@ -36974,8 +36974,115 @@
   {:consumer :t03J05,
    :stop-condition
    "Bank only prefix horizontal and vertical counts for finite Boolean words and their partition identity and bounds. Do not impose balanced cardinalities, reconstruct maximal paths, prove inverse laws, define corner swaps, pair or cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove the terminal counts of stepWord are p and q, define balanced words, use prefix counts as cumulative coordinates in prodStdSimplex.objEquiv.invFun, and prove the path/word inverse laws.",
+    :gates
+    {:canonical-compile :pass,
+     :strict-prefix-indexing :pass,
+     :whitespace :pass,
+     :fixture-hash :pass,
+     :axiom-audits 3,
+     :exact-scope :pass,
+     :true-letter-count :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :exact-fixture-promotion :pass,
+     :horizontal-bound :pass,
+     :target-warning-scan :pass,
+     :commit-check :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :prefix-partition-identity :pass,
+     :ledger-validation :pass,
+     :false-letter-count :pass,
+     :vertical-bound :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"horizontalCount"
+     "8e0a1fc1586eeb2b75e7167489cfa10d736cf9a34df6ccf947b1255bcf418d53",
+     "verticalCount"
+     "0b6c3af1cb9a5e5a6ef657e5bab7dc07f6c2b3a9d0e431b1a8c966f5d7afdce8",
+     "horizontalCount_add_verticalCount"
+     "9091899ca4c556fd30f828204a50a16664d0f0f6a326f41d5dc81b8266aea8c4",
+     "horizontalCount_le"
+     "2da0b0b4a329eb0edff60d28741b1f60b4238716a19821469084a5bfa495bf4b",
+     "verticalCount_le"
+     "96a80551496ae3219ee70c3de9f3c72676a33972467fe2e6b6247c09ba73d5ff"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the dependency receipts",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint59-prefix-counts/ProductSimplexWordPrefixCounts.lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean; cmp fixture canonical",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint59-prefix-counts/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexWordPrefixCounts",
+      :exit 0}
+     {:cmd
+      "Import the canonical target and reproduce standard-only axiom audits for horizontalCount_add_verticalCount, horizontalCount_le and verticalCount_le",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace, byte-identity, prefix-arithmetic and declaration-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; verify exact two-file scope; git diff --cached --check; git commit -m 'Count Boolean word prefixes'",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat HEAD; recompute canonical source, documentation, commit and Git blob hashes; git status --short",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "First exact-scope assertion",
+      :exit 1,
+      :correction
+      "The expected Markdown path contained an accidental `mdzier` suffix. Corrected it to ProductSimplexWordPrefixCounts.md and reran the exact unstaged and staged two-file scope checks successfully."}],
+    :canonical
+    {:path "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+     :sha256
+     "d8364e8ed53196dfbc157bfd321aa518d5ee66c2c4320da754e3e59435503ff5",
+     :git-blob "d19688310e3d176eea9a335ee4ab931b9fd38ccf"},
+    :commit "3957f9307fbeb0b527756e7389647e95d296716d",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+    :dependency-warnings
+    [{:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 2960,
+      :kind :unused-tactic}
+     {:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 3580,
+      :kind :unnecessary-simpa}],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint59-prefix-counts/ProductSimplexWordPrefixCounts.lean",
+     :sha256
+     "d8364e8ed53196dfbc157bfd321aa518d5ee66c2c4320da754e3e59435503ff5",
+     :placeholder-count 0},
+    :finding
+    "For every Boolean word indexed by Fin n and prefix endpoint i in Fin (n+1), horizontalCount and verticalCount count exactly the true and false letters at existing indices whose values are strictly below i.val. The partition theorem identifies the false filter with the complement of the true filter, applies card_filter_add_card_filter_not, and reduces Fin.card_filter_val_lt using i.isLt, yielding a sum equal to i. Each count is consequently bounded by i. No balance condition, maximal-path reconstruction, inverse law, corner swap, face pairing or cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure result is introduced.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
