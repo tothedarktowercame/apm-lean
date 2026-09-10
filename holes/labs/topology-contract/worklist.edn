@@ -65291,8 +65291,81 @@
   {:consumer "t00A01",
    :stop-condition
    "Require the constructed overlap equivalence, both actual leg comparisons and target-natural pseudococone equivalence; no supplied comparison equivalence.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Constructed overlap equivalence, actual leg comparisons and target-natural pseudococone equivalence preserve the supplied overlap point and weaker hypotheses. Compose with actual two-open descent and point-span free-product representations, reconstruct the union groupoid, and derive the group equivalence with explicit basepoint transport. No union reconstruction or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:collapse_full
+     "8c8b9b9938ea45a67484de797055e00dd20e0f3bd8d57742f51cac2b688c7520",
+     :comparison
+     "664df877c5487c8ec8a5a424e298af668ae454b2877d1e18e88bb175172bcea9",
+     :postcomposeIso
+     "e039c75218a040432da0b90575539f4d805fae4a61179c73561181096c128643",
+     :collapse_isEquivalence
+     "c9f62ce9fbc64c6693b2502549fbe5c8a632afb8394afb2b212c899f2fe4e7da",
+     :rightEquivalence
+     "39a8df4e139b573742f379cdaa80bf52be9c736280bdc1744e2ca8db63bfb81e",
+     :pointComparison
+     "ead909d5a5597dd5b0eae11449113230edd4d81897e4a0fecba3755e71835835",
+     :overlapEquivalence
+     "add57d51f455719136f3d59fd48938053a0637007cb9c696b18a005f385c0e43",
+     :collapse_faithful
+     "8dedfeaaa0792b5c1cf9943e83c7e6210cbfe7593889120d3fe2347e35bfe688",
+     :leftEquivalence
+     "8ffbd7563a78c290abb7ba3201069ac1d2c5600b0668f15588b9a530118ec725",
+     :collapse
+     "15f4cf894c2546853f9271a7e0799431322bb12fc2a6919d40dd7bb2a8172cbc",
+     :inversePostcomposeIso
+     "5555347c4a9fa5f9d5d758c4b7a783c5227e10f8f4e8c8796b70f8583261aa4b",
+     :rightComparison
+     "6e5fa31d157771c9f1b442ed57dbeca9174e2605fcf12c870379d68f97d54105",
+     :collapse_essSurj
+     "9bcee899c8c362240ad9c82f2ba723cd4b57828ad451d6cd3baf651f55a98bbb",
+     :leftComparison
+     "a5460bdb234b54c67a6e5c8acdd05fa252ffbdd283e67ae90f4948a415e033ca"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/TwoOpenPointSpanComparison.lean", :exit 0}
+     {:cmd
+      "Python read-only canonical-source audit: zero placeholders and complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/TwoOpenPointSpanComparison.lean ConstructionTargets/TwoOpenPointSpanComparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/TwoOpenPointSpanComparison.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Pseudococones on the actual fundamental-groupoid span of U, V and their simply connected intersection",
+     :target
+     "Pseudococones on the trivial point span into the single-object categories of the chosen vertex groups",
+     :direction
+     "Equivalence from actual overlap-span pseudococones to point-span pseudococones, with forward and inverse target-postcomposition natural isomorphisms."},
+    :commit "bf1d6bb906793851edd2327c910b3b582b814153",
+    :changed-paths
+    ["ConstructionTargets/TwoOpenPointSpanComparison.lean"],
+    :fixture
+    {:path "/tmp/TwoOpenPointSpanComparison.lean",
+     :sha256
+     "bdc1fda3541b9e6078a78260de6752adb463cac482120a542f6a957804bd1ab5"},
+    :axiom-audit-declarations 5},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TwoOpenPointSpanComparison.lean"],
    :dag-node
    "VAN KAMPEN / target-natural overlap-to-point-span comparison",
