@@ -55887,9 +55887,98 @@
    "Two placeholders in the repaired positive-dimensional branch: actual integral top-homology antipodal action and final local-index assembly."}
   {:consumer "t00J02",
    :stop-condition
-   "GO requires compiled actual fiber charts, coverage and smooth overlaps. REVISE requires one compiled prerequisite; do not strengthen the original local regularity into global regularity of an extension.",
-   :phase :probe,
+   "Require the complete compiled extension-and-center-chart packet without assumed extension agreement, derivative transport or global regularity.",
+   :phase :implementation,
    :state :open,
+   :scope ["ConstructionTargets/ManifoldFiberChartExtension.lean"],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / actual chart extension and center regularity",
+   :acceptance
+   {:fixture "/tmp/ManifoldFiberChartExtension.lean",
+    :fixture-sha256
+    "ab384f4a64ce8ef790fb381e733672a099f9de6a6db2fa7e12ae2f48844b0c0d",
+    :implementation
+    "Promote the exact fixture preserving genuine infinity, self-model hypotheses, the actual chart target, open-neighborhood value and derivative agreement, and the constructed extension-fiber chart containing the center. Reuse the existing cutoff and local implicit-function producers. Compile all three theorems, audit standard-only axioms and zero placeholders. Do not claim original-manifold fiber charts, smooth overlaps or global regularity of the extension.",
+    :commands
+    ["lake env lean ConstructionTargets/ManifoldFiberChartExtension.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :manifold-fiber-chart-extension-implementation-refill31,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
+   :current-residual
+   "Complete compiled chart-extension prerequisite awaits banking; original-fiber chart transport and smooth overlaps remain.",
+   :other-consumers ["t02A07" "t94A06" "t01J04"]}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires compiled actual fiber charts, coverage and smooth overlaps. REVISE requires one compiled prerequisite; do not strengthen the original local regularity into global regularity of an extension.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Restrict the constructed extension-fiber chart to the agreement neighborhood, transport it through the source chart to the inherited-topology original fiber, and prove coverage and smooth overlaps. Empty fibers introduce no center obligations; zero-dimensional kernels are not excluded. Applicability is presently self-model finite-dimensional inner-product source and vector target only. Named consumers retain their general-model, target-manifold, orientation, boundary or transversality obligations; no consumer closure is claimed.",
+     :outcome :revise,
+     :warnings [],
+     :statement-hashes
+     {:representative-smooth
+      "8b3127c2cd095a5b67da98d904ee45ed81d473a9d7a03555f9c87b433095bed7",
+      :representative-derivative
+      "98798ea6c2f6dc8d654bbbd13b6d8d7b7baa8a705ee1e3c862191ca2cf61ad37",
+      :exists-extension-chart
+      "6bc3005fcc609017a80c273ba571403f8731b47286ac882d8699765bf87b3cda"},
+     :prerequisite
+     {:consumer "t00J02",
+      :stop-condition
+      "Require the complete compiled extension-and-center-chart packet without assumed extension agreement, derivative transport or global regularity.",
+      :phase :implementation,
+      :state :open,
+      :scope ["ConstructionTargets/ManifoldFiberChartExtension.lean"],
+      :dag-node
+      "REGULAR-PREIMAGE/SUBMERSION / actual chart extension and center regularity",
+      :acceptance
+      {:fixture "/tmp/ManifoldFiberChartExtension.lean",
+       :fixture-sha256
+       "ab384f4a64ce8ef790fb381e733672a099f9de6a6db2fa7e12ae2f48844b0c0d",
+       :implementation
+       "Promote the exact fixture preserving genuine infinity, self-model hypotheses, the actual chart target, open-neighborhood value and derivative agreement, and the constructed extension-fiber chart containing the center. Reuse the existing cutoff and local implicit-function producers. Compile all three theorems, audit standard-only axioms and zero placeholders. Do not claim original-manifold fiber charts, smooth overlaps or global regularity of the extension.",
+       :commands
+       ["lake env lean ConstructionTargets/ManifoldFiberChartExtension.lean"],
+       :axioms :standard-only,
+       :placeholder-before 0,
+       :placeholder-after 0},
+      :id :manifold-fiber-chart-extension-implementation-refill31,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
+      :current-residual
+      "Complete compiled chart-extension prerequisite awaits banking; original-fiber chart transport and smooth overlaps remain.",
+      :other-consumers ["t02A07" "t94A06" "t01J04"]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "bb /tmp/t94j08-refill31-review.bb", :exit 0}
+      {:cmd "lake env lean /tmp/ManifoldFiberChartExtension.lean",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/ManifoldFiberChartExtension.lean",
+       :exit 1,
+       :correction
+       "Explicitly included the smoothness hypothesis in theorem parameters and installed the target's Borel measurable structure for the existing extension producer."}
+      {:cmd "lake env lean /tmp/ManifoldFiberChartExtension.lean",
+       :exit 1,
+       :correction
+       "Rewrote fderivWithin_univ and supplied BorelSpace for the locally installed structure. Removed unused section variables and renamed an unused existential proof binder; final compilation is warning-free."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/ManifoldFiberChartExtension.lean",
+      :sha256
+      "ab384f4a64ce8ef790fb381e733672a099f9de6a6db2fa7e12ae2f48844b0c0d"},
+     :finding
+     "Compiled one prerequisite: actual source-chart localization with a constructed smooth extension and a fixed-model chart on its fiber. representative_smooth derives ContDiffOn infinity on the actual open chart target. representative_derivative identifies its fderiv at the center with the original mfderiv. exists_extension_chart invokes the existing cutoff construction, derives an open neighborhood contained in the chart target with exact function and derivative agreement throughout, transfers center surjectivity, and invokes RegularFiberFixedModelOverlaps.exists_chart. No global regularity of the extension is assumed. The chart is currently on the extension fiber, not yet on the original manifold fiber; transport and overlap proofs remain.",
+     :seat "codex-12"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / manifold-source fiber charts",
@@ -55903,7 +55992,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion
-    :checkpoint-full-dag-refill-31-after-radial-level-and-fiber-inclusion],
+    :manifold-fiber-chart-extension-implementation-refill31],
    :current-residual
    "Euclidean-source fiber atlases and inclusion tangent comparison are banked. Actual local charts and smooth overlaps on fibers of a manifold-to-vector map remain.",
    :other-consumers ["t02A07" "t94A06" "t01J04"]}
