@@ -37056,6 +37056,29 @@
       :exit 1,
       :correction
       "The expected Markdown path contained an accidental `mdzier` suffix. Corrected it to ProductSimplexWordPrefixCounts.md and reran the exact unstaged and staged two-file scope checks successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789070510614-19344-21710a6d",
+     :commands
+     ["git show --stat --oneline 3957f930"
+      "git show --name-status --format=fuller 3957f930"
+      "sha256sum fixture and recorded canonical source"
+      "git hash-object recorded canonical source"
+      "cmp fixture canonical"
+      "lake env lean /tmp/codex13-checkpoint59-prefix-counts/ProductSimplexWordPrefixCounts.lean"
+      "lake env lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+      "lake build ConstructionTargets.ProductSimplexWordPrefixCounts"
+      "recompute five recorded declaration hashes"
+      "reproduce three #print axioms audits"
+      "scan canonical target for placeholders and forbidden declarations"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git diff-tree --no-commit-id --name-status -r 3957f930"
+      "git diff --check 3957f930^ 3957f930"
+      "recompute frozen hashes and placeholder counts for t03J05 t96J06 t97A04"],
+     :finding
+     "PASS: exact two-file implementation scope; fixture and canonical SHA256 d8364e8ed53196dfbc157bfd321aa518d5ee66c2c4320da754e3e59435503ff5 and Git blob d19688310e3d176eea9a335ee4ab931b9fd38ccf reproduce. All five declaration hashes match. horizontalCount and verticalCount count true and false letters at indices strictly below the Fin(n+1) endpoint; Boolean complement partition gives their sum as i.val, and both inequalities have the required direction. Fixture, target and focused build pass; three axiom audits report only propext, Classical.choice and Quot.sound. No balanced subtype, path reconstruction, cancellation or cross-product claim crosses the representation boundary. Frozen hashes are unchanged and placeholders remain 1/2/4."},
     :canonical
     {:path "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
      :sha256
@@ -37082,7 +37105,7 @@
     "For every Boolean word indexed by Fin n and prefix endpoint i in Fin (n+1), horizontalCount and verticalCount count exactly the true and false letters at existing indices whose values are strictly below i.val. The partition theorem identifies the false filter with the complement of the true filter, applies card_filter_add_card_filter_not, and reduces Fin.card_filter_val_lt using i.isLt, yielding a sum equal to i. Each count is consequently bounded by i. No balance condition, maximal-path reconstruction, inverse law, corner swap, face pairing or cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure result is introduced.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
@@ -37235,7 +37258,7 @@
      "Exactly one complete compiled prerequisite is supplied. The fixture defines horizontal and vertical counts on every prefix of a finite Boolean word and proves that they partition the prefix length, hence each is bounded by the endpoint. The parent equivalence is not GO because it still requires proving the terminal counts of a canonical stepWord are p and q, packaging balanced words, constructing the corresponding order homomorphism and proving both inverse laws. No maximal-path reconstruction, corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: balanced Boolean words as canonical maximal product-simplex paths",
