@@ -22100,6 +22100,19 @@
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789026309285-18166-d768d8db",
+     :commands
+     ["Python pinned census SHA256, all 59 consumer counts, module counts, changed-path attribution and unchanged frozen-source audit"
+      "bb recorded author, installed replacement-items, dependency-set and successor-checkpoint assertions"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 8ab45034:holes/labs/topology-contract/worklist2.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 8ab45034:holes/labs/topology-contract/worklist.edn)"
+      "git diff --check 8ab45034^ 8ab45034"
+      "git log --format='%h %s' 25f3a911..d618605d -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md"],
+     :finding
+     "PASS 8ab45034; independent of author codex-13. Census hash and all entries verified: 58 existing consumers, 24 zero, 34 open, 24 near; placeholders 64->64, modules 721->723. Infrastructure and documentation attribution correct, with no duplicate closure credit. Elected all-degree ModuleCat R neighborhood-excision comparison is distinct from existing integral H1 API; actual-map, T1, openness and downstream chart/global boundaries preserved. Installed rows and successor match; ledger-only transition; frozen sources unchanged."},
     :replacement-items
     [{:consumer :t98A02,
       :stop-condition
@@ -22225,7 +22238,7 @@
      :method
      "Count all DAG-named consumers in pinned baseline and head blobs after stripping block and line comments."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: local model progress and renewed consumer eligibility",
@@ -22247,7 +22260,7 @@
    :stop-condition
    "No supplied neighborhood isomorphism, integral-to-R reinterpretation, assumed generator or chart construction. Preserve T1 and openness hypotheses. Do not claim overlap orientation coherence, global localization monicity, gluing or consumer closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "LOCAL HOMOLOGY: actual coefficient-general neighborhood inclusion and model normalization",
