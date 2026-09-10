@@ -25561,128 +25561,208 @@
    :other-consumers [:t01A02 :t03J05 :t96J06]}
   {:consumer :t98A02,
    :stop-condition
+   "Bank the fixed ball-boundary relative lift and its recentering normalization only. Do not claim nonlinear chart transport, transition-unit local constancy, orientation compatibility or consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/CoefficientBallBoundaryLift.lean",
+      :sha256
+      "d116bc9cdec7e777a7fbe22a205fb3aeab7658ce61d40584c9895337ce7aca01"},
+     :commands
+     [{:cmd "lake env lean /tmp/CoefficientBallBoundaryLift.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientBallBoundaryLift.lean"
+    "ConstructionTargets/CoefficientBallBoundaryLift.md"],
+   :dag-node
+   "LOCAL ORIENTATION: fixed ball-boundary relative lift and moving-center model normalization",
+   :acceptance
+   {:namespace "ConstructionTargets.CoefficientBallBoundaryLift",
+    :implementation
+    "Promote the exact compiled fixture and document the remaining actual-chart transport of the fixed relative boundary class.",
+    :declarations
+    ["E"
+     "Ball"
+     "boundary"
+     "ballContractible"
+     "sphere"
+     "lift"
+     "recenter"
+     "recenter_mapsTo"
+     "relativeMap"
+     "boundaryMap"
+     "boundary_composite"
+     "connecting_equation"
+     "normalization"
+     "projection"
+     "integral_example"
+     "rational_example"],
+    :hypotheses
+    "R is a Type 0 commutative ring. The model is EuclideanSpace real (Fin (m+2)); r is positive and the moving point p satisfies norm(p)<r. The fixed domain is the closed ball and its literal norm-equals-radius boundary. No supplied relative class, isomorphism, orientation or nontriviality hypothesis is used.",
+    :consumer-equation
+    "The fixed sphere homology map followed by the inverse ball-pair connecting isomorphism defines a relative lift. For every interior p, its actual recentering pair map followed by CoefficientModelLocal.localIso equals CoefficientSphereAntipodal.normalization. The intermediate connecting equation is exactly the actual scaled recentered boundary homology map.",
+    :consumer-residual
+    "Transport the fixed ball and boundary through the actual chart overlap; identify the mapped relative class with chart normalizations and use compact-boundary motion to deduce nearby transition-unit equality.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientBallBoundaryLift."
+     "Reproduce ten standard-only axiom audits and integer/rational examples."
+     "Audit positive-radius contractibility, literal boundary subtype and scaled sphere inclusion."
+     "Verify the relative lift is independent of the moving interior point."
+     "Audit actual recentering MapsTo, cokernel projection and boundary composite."
+     "Verify the connecting equation uses actual pair connecting naturality and the proved connecting inverse law."
+     "Verify the model normalization equation uses the reviewed scaled-boundary radial inverse."
+     "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :coefficient-general-ball-boundary-relative-lift-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-general-scaled-boundary-radial-normalization-1
+    :oriented-checkpoint32-coefficient-pair-connecting-naturality-1],
+   :current-residual
+   "The absolute scaled-boundary calculation needs an actual relative class whose recenterings have the reviewed model normalization.",
+   :other-consumers [:t01A02 :t03J05 :t96J06]}
+  {:consumer :t98A02,
+   :stop-condition
    "Do not assume local constancy, a continuous unit-valued map, an orientation, or compatible generators. Do not infer that units equal one or construct global classes. Exclude reserved Euler, surface and vertex-coproduct work; reuse reviewed triple-overlap composition.",
    :evidence
    {:probe
-    {:concurrent-reservations
-     [:compact-transverse-arc-intersection-finiteness-probe-refill46],
-     :placeholder-delta 0,
+    {:placeholder-delta 0,
      :residual
-     "Scaled source-boundary normalization and invertibility are compiled. Actual boundary-to-relative-normalization identification and transition-unit local constancy remain. Reviewed STOPs, refutations and concurrent work are preserved; no orientation or global conclusion is claimed.",
+     "Fixed ball-boundary relative lifting and moving-center model normalization are compiled. Actual nonlinear chart transport and transition-unit local constancy remain. Both ledgers and reviewed STOPs/refutations are unchanged; concurrent checkpoint work is preserved. No orientation or global conclusion is claimed.",
      :axiom-audits 10,
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t98A02,
       :stop-condition
-      "Bank scaled-boundary normalization and its actual homology inverse only. Do not claim the relative connecting comparison, transition-unit local constancy, orientation compatibility or consumer closure.",
+      "Bank the fixed ball-boundary relative lift and its recentering normalization only. Do not claim nonlinear chart transport, transition-unit local constancy, orientation compatibility or consumer closure.",
       :evidence
       {:probe
        {:outcome :go,
         :seat "codex-13",
         :fixture
-        {:path "/tmp/CoefficientScaledBoundaryNormalization.lean",
+        {:path "/tmp/CoefficientBallBoundaryLift.lean",
          :sha256
-         "586c754b4afdb9d0d2a8598b484da1db69308fa4d036b3df1d9ce022b2f28dd7"},
+         "d116bc9cdec7e777a7fbe22a205fb3aeab7658ce61d40584c9895337ce7aca01"},
         :commands
-        [{:cmd
-          "lake env lean /tmp/CoefficientScaledBoundaryNormalization.lean",
+        [{:cmd "lake env lean /tmp/CoefficientBallBoundaryLift.lean",
           :exit 0}],
         :warnings [],
         :axioms ["propext" "Classical.choice" "Quot.sound"]}},
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientScaledBoundaryNormalization.lean"
-       "ConstructionTargets/CoefficientScaledBoundaryNormalization.md"],
+      ["ConstructionTargets/CoefficientBallBoundaryLift.lean"
+       "ConstructionTargets/CoefficientBallBoundaryLift.md"],
       :dag-node
-      "LOCAL ORIENTATION: scaled recentered sphere boundary and actual radial inverse",
+      "LOCAL ORIENTATION: fixed ball-boundary relative lift and moving-center model normalization",
       :acceptance
-      {:namespace
-       "ConstructionTargets.CoefficientScaledBoundaryNormalization",
+      {:namespace "ConstructionTargets.CoefficientBallBoundaryLift",
        :implementation
-       "Promote the exact compiled fixture and document how the chart-neighborhood radius and strict source-coordinate bound instantiate it.",
+       "Promote the exact compiled fixture and document the remaining actual-chart transport of the fixed relative boundary class.",
        :declarations
-       ["scaled"
-        "norm_scaled"
-        "gap"
-        "avoids"
-        "recentered"
-        "normalized"
-        "normalized_value"
-        "centered_identity"
-        "homology_identity"
-        "radialIso"
-        "forward_inverse"
-        "boundaryIso"
-        "inverse_right"
-        "inverse_left"
+       ["E"
+        "Ball"
+        "boundary"
+        "ballContractible"
+        "sphere"
+        "lift"
+        "recenter"
+        "recenter_mapsTo"
+        "relativeMap"
+        "boundaryMap"
+        "boundary_composite"
+        "connecting_equation"
+        "normalization"
+        "projection"
         "integral_example"
         "rational_example"],
        :hypotheses
-       "E is a Type 0 real normed vector space. R is a Type 0 commutative ring. Require r>0 and norm(p)<r. Equations hold in every natural homology degree without finite-dimensionality, nontriviality or orientation assumptions. No ordinary-S0 rank-one assertion is made.",
+       "R is a Type 0 commutative ring. The model is EuclideanSpace real (Fin (m+2)); r is positive and the moving point p satisfies norm(p)<r. The fixed domain is the closed ball and its literal norm-equals-radius boundary. No supplied relative class, isomorphism, orientation or nontriviality hypothesis is used.",
        :consumer-equation
-       "The actual normalized map z ↦ normalize(r*z-p) induces identity. The actual recentered map from the unit sphere to the punctured space induces an isomorphism with inverse induced by radial normalization.",
+       "The fixed sphere homology map followed by the inverse ball-pair connecting isomorphism defines a relative lift. For every interior p, its actual recentering pair map followed by CoefficientModelLocal.localIso equals CoefficientSphereAntipodal.normalization. The intermediate connecting equation is exactly the actual scaled recentered boundary homology map.",
        :consumer-residual
-       "Use the actual pair connecting naturality and neighborhood-inclusion maps to identify the source and mapped boundary calculations with the relative chart normalizations. Then deduce nearby transition-unit equality.",
+       "Transport the fixed ball and boundary through the actual chart overlap; identify the mapped relative class with chart normalizations and use compact-boundary motion to deduce nearby transition-unit equality.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientScaledBoundaryNormalization."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientBallBoundaryLift."
         "Reproduce ten standard-only axiom audits and integer/rational examples."
-        "Audit radius positivity, strict center bound, literal scaled boundary and recentered normalization formula."
-        "Verify the normalized homology identity uses the proved geometric boundary motion and positive radial scaling."
-        "Verify the actual forward-map identification and both radial inverse equations in every natural degree."
+        "Audit positive-radius contractibility, literal boundary subtype and scaled sphere inclusion."
+        "Verify the relative lift is independent of the moving interior point."
+        "Audit actual recentering MapsTo, cokernel projection and boundary composite."
+        "Verify the connecting equation uses actual pair connecting naturality and the proved connecting inverse law."
+        "Verify the model normalization equation uses the reviewed scaled-boundary radial inverse."
         "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :coefficient-general-scaled-boundary-radial-normalization-1,
+      :id :coefficient-general-ball-boundary-relative-lift-1,
       :kind :reusable-theorem,
       :depends-on
-      [:coefficient-general-compact-boundary-center-motion-1
-       :coefficient-general-actual-chart-boundary-neighborhood-1],
+      [:coefficient-general-scaled-boundary-radial-normalization-1
+       :oriented-checkpoint32-coefficient-pair-connecting-naturality-1],
       :current-residual
-      "The constructed chart boundary has arbitrary positive radius; its recentering at nearby points needs an actual normalized homology identity and invertible source-boundary map.",
+      "The absolute scaled-boundary calculation needs an actual relative class whose recenterings have the reviewed model normalization.",
       :other-consumers [:t01A02 :t03J05 :t96J06]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure experiments and build-loop design; inspect both ledgers, five dependency PASS receipts and current reservations",
+       "Read DAG, closure experiments and build-loop design; inspect both ledgers and six dependency review receipts",
        :exit 0}
       {:cmd
-       "Inspect actual model normalization, pair connecting naturality and scaled-boundary radial normalization APIs",
+       "Inspect CoefficientModelLocal, CoefficientContractiblePair and CoefficientPairNaturality APIs",
        :exit 0}
-      {:cmd
-       "lake env lean /tmp/CoefficientScaledBoundaryNormalization.lean",
+      {:cmd "lake env lean /tmp/CoefficientBallBoundaryLift.lean",
        :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientBallBoundaryLift.lean", :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientScaledBoundaryNormalization.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientScaledBoundaryNormalization.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientBallBoundaryLift.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial scaled-boundary normalization compilation",
+     [{:cmd "Initial ball-boundary fixture compilation",
        :exit 1,
        :correction
-       "Closed the reflexive radius inequality explicitly and corrected the direction of the zero-versus-positive-radius contradiction."}
-      {:cmd "Intermediate corrected compilation",
-       :exit 0,
+       "Installed the positive-radius contractibility instance explicitly in the lift and included the interior-point hypothesis in deleted-boundary preservation."}
+      {:cmd "Compilation after instance and hypothesis correction",
+       :exit 1,
        :correction
-       "Replaced unnecessary simpa with simp to remove its warning; added explicit inverse-law audits. Final compilation is warning-free."}],
+       "Corrected the implicit point argument to MapsTo and revised categorical reassociation."}
+      {:cmd "Compilation after initial connecting-equation revision",
+       :exit 1,
+       :correction
+       "Corrected a missing parenthesis and continued resolving connecting-map cancellation."}
+      {:cmd "Compilation with explicit reassociation",
+       :exit 1,
+       :correction
+       "The inverse-composition rewrite did not match; replaced it with an evaluated cancellation equation."}
+      {:cmd "Compilation with categorical cancellation equation",
+       :exit 1,
+       :correction
+       "The transported equality retained an unapplied lambda; attempted explicit reduction."}
+      {:cmd "Compilation after reduction",
+       :exit 1,
+       :correction
+       "Simplification made no progress. Replaced the connecting proof with linear-map extensionality and evaluated connecting naturality and inverse laws. Subsequent complete and audited compilations succeed without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientScaledBoundaryNormalization.lean",
+     {:path "/tmp/CoefficientBallBoundaryLift.lean",
       :sha256
-      "586c754b4afdb9d0d2a8598b484da1db69308fa4d036b3df1d9ce022b2f28dd7",
+      "d116bc9cdec7e777a7fbe22a205fb3aeab7658ce61d40584c9895337ce7aca01",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled source-boundary normalization prerequisite is supplied. For every positive radius r and center p with norm less than r, the actual map z ↦ normalize(r*z-p) induces identity on coefficient homology. The recentered boundary map z ↦ r*z-p induces an isomorphism whose inverse is the actual radial map, with both inverse equations proved. The parent is not GO: the boundary maps still need identification with the actual relative connecting and chart-normalization composites.",
+     "Exactly one complete compiled geometric point-variation prerequisite is supplied. A fixed positive-radius closed ball and its literal boundary define a relative boundary lift independent of the moving interior point. Actual recentering induces a subtype-cokernel pair map. Connecting naturality identifies its boundary composite with the reviewed scaled recentered sphere map; radial normalization proves that every interior recentering sends the fixed lift to the standard sphere normalization. The parent is not GO: transport through the actual nonlinear chart map and nearby transition-unit equality remain.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "LOCAL ORIENTATION: local constancy of actual chart transition units",
@@ -25711,7 +25791,8 @@
     :coefficient-general-moving-sphere-center-homotopy-1
     :coefficient-general-compact-boundary-center-motion-1
     :coefficient-general-actual-chart-boundary-neighborhood-1
-    :coefficient-general-scaled-boundary-radial-normalization-1],
+    :coefficient-general-scaled-boundary-radial-normalization-1
+    :coefficient-general-ball-boundary-relative-lift-1],
    :current-residual
    "Actual transition units and their geometric cocycle are reviewed, but no equality of transition units at nearby distinct points has been proved.",
    :other-consumers [:t01A02 :t03J05 :t96J06]}
