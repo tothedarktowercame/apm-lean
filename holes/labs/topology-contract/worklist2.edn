@@ -18046,20 +18046,106 @@
    :stop-condition
    "Bank only the categorical codiagonal kernel normalization. Do not claim the geometric H0-map identification, sphere homology endpoints, general signed naturality or frozen closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientCodiagonalKernel.lean",
-      :sha256
-      "1a17d9517ba4d962caf3a5ccd1d9031165d1e4d78cdc69592c678f1a69773d1a"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientCodiagonalKernel.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Identify the actual one-dimensional disk-boundary H0 inclusion with this codiagonal, compute the two-dimensional boundary inclusion kernel, and assemble circle H1 and S2 H1/H2. No geometric H0 identification, sphere endpoint, general signed naturality or frozen closure is claimed.",
+    :gates
+    {:fixture-hash :pass,
+     :scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :examples :pass,
+     :commit :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass,
+     :coordinate-equations :pass,
+     :compilation :pass},
+    :axiom-audits 10,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Direct fixture and canonical compilations produced zero warnings. Lake build replayed 20 dependency warnings."],
+    :statement-hashes
+    {"signedMap"
+     "39bcc35a1b8bdf11fff942222c4190dc0a97b176b6a22e73a542aed887853f39",
+     "integral_generator"
+     "94f4f0062a19d9236a20c63fe48b6faa7ac910584951fb176f24e4fa925e8509",
+     "signed_sum"
+     "44982ff7254a801890dfa778ae76c6d16c8e175de795b5888c912f0e36fec236",
+     "inverse_right"
+     "332b1d7f00527ba007185738b1e8de7ddfb83e498bbf007405099fabf1680780",
+     "rational_half_generator"
+     "14d01816cfbf02caeb2a8c91acc0a9806e343e355c21c5eb26ff95064c959f5c",
+     "inverse_false"
+     "91096d8035c5fef739a40c8558113f7c97b90e885df53a01562d6d18f39a2485",
+     "kernelIso"
+     "e0b62bcb32473614ffc3d8d549adb4c42018713e099e1e5c5aabfcfe7480155c",
+     "inverse_left"
+     "e24c89a87e5407aeca0848d72fc4f48cf4bf28ff928ab4b90b9b30ce400d759d",
+     "inverse_projection"
+     "f4356e7fafdab566a6a837095a37a526301a96d98cdfb14b6f22005cd0855d7b",
+     "sumMap"
+     "272381754c4a7e1de3358687f0e7d8cb141eb419b6657fe871be5d7f83166f2c",
+     "kerEquiv"
+     "7ca6ab4a1693044f43b486c5f7a690cf0cc2b943eb7d1a7e347e05483c12ade6",
+     "forward_coordinate"
+     "411b96ae86d83f112327224c3b6563ccc5cf440f0e2885ac9c47165e095daf00",
+     "inverse_true"
+     "10e145c5e9dacd11a0480a41bb4f2ee5635b7c0880a06c36df45b45a306bcd1f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientCodiagonalKernel.lean", :exit 0}
+     {:cmd "Read DAG, closure rules and dependency PASS receipt",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientCodiagonalKernel.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientCodiagonalKernel.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientCodiagonalKernel",
+      :exit 0,
+      :jobs 8281}
+     {:cmd
+      "Validate ten standard-only audits in both compilation logs, including integer and rational-half examples",
+      :exit 0}
+     {:cmd
+      "Inspect categorical kernel projection, false-positive/true-negative coordinates and both inverse laws",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientCodiagonalKernel.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Verify thirteen declaration hashes and byte-identical fixture promotion",
+      :exit 0}
+     {:cmd "Verify exact staged two-file scope", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Normalize coefficient-general codiagonal kernel'",
+      :exit 0}
+     {:cmd
+      "Verify exact committed scope, fixture equality and clean workspace",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "089792c96eeca964059b880db51828277040970b",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCodiagonalKernel.lean"
+     "ConstructionTargets/CoefficientCodiagonalKernel.md"],
+    :fixture
+    {:path "/tmp/CoefficientCodiagonalKernel.lean",
+     :sha256
+     "1a17d9517ba4d962caf3a5ccd1d9031165d1e4d78cdc69592c678f1a69773d1a",
+     :promoted-verbatim true},
+    :finding
+    "Promoted the exact categorical codiagonal-kernel normalization. The forward map evaluates kernel inclusion at false; the inverse has false coordinate r and true coordinate -r, with both inverse laws proved over an arbitrary Type 0 commutative ring.",
+    :statement-hash-method
+    "SHA256 of declaration text from theorem/def keyword to immediately before the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCodiagonalKernel.lean"
     "ConstructionTargets/CoefficientCodiagonalKernel.md"],
