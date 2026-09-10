@@ -73748,83 +73748,124 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the canonical isomorphism from the restricted cover-small source onto this identified range and its compatibility with the union-generated inclusion, then transport the reviewed union-subspace homology equivalence to the denominator inclusion.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / restricted cover ambient-range factor",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientSubspaceUnionRestrictedAmbientRange.lean",
+    :fixture-sha256
+    "d76c938f7ec14ae8d60627ae40c38f6c4fec3fb2cb55915b99af210871568d02",
+    :implementation
+    "Promote the exact fixture. Compile restrictedUnionAmbientMap and restrictedUnionAmbientMap_range. This supplies the exact range factor required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes: the restricted cover-small inclusion followed by the union-subspace inclusion into X has categorical range exactly equal to the union-generated ambient subcomplex. Verify CoefficientSubspaceUnionRestrictedCoverImage SHA256 e0b3ddac33210a18466719ef6efa3e93610b27abcbc43d947175888d464d2dd9. Preserve arbitrary subsets and arbitrary topological spaces. Require zero placeholders, no warnings and standard-only axioms. Do not claim the direct map is an isomorphism onto all ambient singular simplices, a homology isomorphism without openness, relative short exactness, a connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The direct simplicial map from the restricted Boolean cover-small object on A union B into ambient singular simplices of X",
+    :target
+    "The union-generated ambient subcomplex formed by the supremum of the A and B subspace ranges",
+    :direction
+    "Exact equality from the target union-generated subcomplex to the categorical range of the source direct ambient map."},
+   :id
+   :coefficient-subspace-union-restricted-ambient-range-implementation-refill51,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-subspace-union-restricted-cover-image-implementation-refill51],
+   :current-residual
+   "Use Subfunctor.toRange and restrictedUnionAmbientMap_range to construct the chain isomorphism from restricted union-cover small chains to union-generated ambient range chains, and prove that its composite with the range inclusion is the direct ambient map. Then transfer the open-cover homology isomorphism.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The restricted union-cover image is now exactly the union-generated ambient range. A range-factor chain isomorphism and its inclusion compatibility remain before the denominator homology equivalence, relative cokernel transport, genuine connecting morphism and three exactness segments.",
+     "The restricted cover-small direct ambient map now has exactly the union-generated denominator as its range. Construct its range-factor chain isomorphism and transfer the union-subspace cover-small homology equivalence; relative cokernel transport, the genuine connecting morphism and three exactness segments remain.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the range-factor chain isomorphism induced by this exact image equality and prove its compatibility with the restricted cover-small inclusion; then conjugate the union-subspace homology equivalence to the ambient union-range inclusion.",
+      "Require the canonical isomorphism from the restricted cover-small source onto this identified range and its compatibility with the union-generated inclusion, then transport the reviewed union-subspace homology equivalence to the denominator inclusion.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientSubspaceUnionRestrictedCoverImage.lean"],
+      ["ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / restricted union-cover image identification",
+      "MANIFOLD FUNDAMENTAL CLASS / restricted cover ambient-range factor",
       :acceptance
       {:fixture
-       "/tmp/CoefficientSubspaceUnionRestrictedCoverImage.lean",
+       "/tmp/CoefficientSubspaceUnionRestrictedAmbientRange.lean",
        :fixture-sha256
-       "e0b3ddac33210a18466719ef6efa3e93610b27abcbc43d947175888d464d2dd9",
+       "d76c938f7ec14ae8d60627ae40c38f6c4fec3fb2cb55915b99af210871568d02",
        :implementation
-       "Promote the exact fixture. Compile restrictedUnionCover_image. This supplies the exact simplicial-image comparison required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes: after restricting the Boolean cover to A union B and mapping back into X, its image is precisely the supremum of the two ambient subspace ranges. Verify CoefficientSubspaceUnionRestrictedSmallHomology SHA256 bdcbd90d92e9fd35c83cc8c0fee41f5f81c0b93982af0d6c37af35e1f4135fe0. Preserve arbitrary subsets and arbitrary topological spaces. Require zero placeholders, no warnings and standard-only axioms. Do not claim the restricted-cover map itself is an isomorphism, a homology isomorphism without openness, relative short exactness, a connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile restrictedUnionAmbientMap and restrictedUnionAmbientMap_range. This supplies the exact range factor required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes: the restricted cover-small inclusion followed by the union-subspace inclusion into X has categorical range exactly equal to the union-generated ambient subcomplex. Verify CoefficientSubspaceUnionRestrictedCoverImage SHA256 e0b3ddac33210a18466719ef6efa3e93610b27abcbc43d947175888d464d2dd9. Preserve arbitrary subsets and arbitrary topological spaces. Require zero placeholders, no warnings and standard-only axioms. Do not claim the direct map is an isomorphism onto all ambient singular simplices, a homology isomorphism without openness, relative short exactness, a connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedCoverImage.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "The restricted Boolean cover-small simplicial set on the union subtype, mapped into ambient singular simplices of X",
+       "The direct simplicial map from the restricted Boolean cover-small object on A union B into ambient singular simplices of X",
        :target
-       "The supremum of the ambient subspace ranges generated by A and B inside singular simplices of X",
+       "The union-generated ambient subcomplex formed by the supremum of the A and B subspace ranges",
        :direction
-       "Exact equality from the source image-subcomplex representation to the target union-generated ambient-range representation."},
+       "Exact equality from the target union-generated subcomplex to the categorical range of the source direct ambient map."},
       :id
-      :coefficient-subspace-union-restricted-cover-image-implementation-refill51,
+      :coefficient-subspace-union-restricted-ambient-range-implementation-refill51,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-subspace-union-restricted-small-homology-implementation-refill51],
+      [:coefficient-subspace-union-restricted-cover-image-implementation-refill51],
       :current-residual
-      "Factor the restricted cover-small map through its range, use restrictedUnionCover_image to identify that range with the union-generated ambient subcomplex, and compile the resulting chain isomorphism and ambient-inclusion compatibility. Then transport the reviewed open-cover homology isomorphism.",
+      "Use Subfunctor.toRange and restrictedUnionAmbientMap_range to construct the chain isomorphism from restricted union-cover small chains to union-generated ambient range chains, and prove that its composite with the range inclusion is the direct ambient map. Then transfer the open-cover homology isomorphism.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSubspaceUnionRestrictedSmallHomology >/tmp/restricted-cover-image-dep.log 2>&1",
+       "lake build ConstructionTargets.CoefficientSubspaceUnionRestrictedCoverImage >/tmp/restricted-ambient-range-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientSubspaceUnionRestrictedCoverImage.lean",
+       "lake env lean /tmp/CoefficientSubspaceUnionRestrictedAmbientRange.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientSubspaceUnionRestrictedCoverImage.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean",
+       "sha256sum /tmp/CoefficientSubspaceUnionRestrictedAmbientRange.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedCoverImage.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-declaration audit over /tmp/CoefficientSubspaceUnionRestrictedCoverImage.lean",
+       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/CoefficientSubspaceUnionRestrictedAmbientRange.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientSubspaceUnionRestrictedCoverImage.lean",
+       "lake env lean /tmp/CoefficientSubspaceUnionRestrictedAmbientRange.lean",
        :exit 1,
        :correction
-       "The first fixture omitted the namespace exposing subspaceInclusion. Opened SingularHomologyConcrete and reran the unchanged image calculation successfully."}],
+       "The first range proof did not simplify the range of the cover-small subcomplex inclusion. Added the explicit Subfunctor.range_ι equality before applying the reviewed image theorem."}
+      {:cmd
+       "lake env lean /tmp/CoefficientSubspaceUnionRestrictedAmbientRange.lean",
+       :exit 0,
+       :correction
+       "The exploratory successful compile reported a no-op change tactic. Removed it and reran the final acceptance compile without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientSubspaceUnionRestrictedCoverImage.lean",
+     {:path "/tmp/CoefficientSubspaceUnionRestrictedAmbientRange.lean",
       :sha256
-      "e0b3ddac33210a18466719ef6efa3e93610b27abcbc43d947175888d464d2dd9",
+      "d76c938f7ec14ae8d60627ae40c38f6c4fec3fb2cb55915b99af210871568d02",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one representation prerequisite. The general restricted-cover image formula reduces here to the join of the union range intersected with the A range and with the B range. Both intersections simplify to the corresponding member range because A and B lie in their union, yielding exact equality with the union-generated denominator. This identifies the correct image without asserting that every simplex in A union B is already subordinate to one cover member. The unrelated untracked holes/labs/topology-contract/worklist2.edn.tmp was left untouched.",
+     "Compiled exactly one range-factor prerequisite. The direct map from restricted union-cover small simplices into ambient singular simplices is now named, and its categorical range is proved exactly equal to the supremum of the two ambient subspace ranges. The calculation uses the range of the subcomplex inclusion and the previously reviewed restricted-cover image equality. It does not identify the range with all simplices in the union or invoke either false ordinary-excision premise.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -73845,7 +73886,8 @@
     :coefficient-subspace-union-cover-small-comparison-implementation-refill51
     :coefficient-subspace-union-restricted-open-cover-implementation-refill51
     :coefficient-subspace-union-restricted-small-homology-implementation-refill51
-    :coefficient-subspace-union-restricted-cover-image-implementation-refill51],
+    :coefficient-subspace-union-restricted-cover-image-implementation-refill51
+    :coefficient-subspace-union-restricted-ambient-range-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
