@@ -18503,8 +18503,199 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:placeholder-delta 0,
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read DAG, foundational-program note, closure rules and standing portfolio policy",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint31Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint31Eligibility.bb", :exit 0}
+     {:cmd
+      "Inspect both ledgers, dependency reviews, reviewed polygon STOPs and concurrent reservations",
+      :exit 0}
+     {:cmd
+      "Read exact frozen t00J01 definitions, sphere conjunct and remaining obligations",
+      :exit 0}
+     {:cmd
+      "git log --format='%h %s' e562b512..886aa441 -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "Verify non-DAG m02J05 placeholder attribution and roadmap hashes",
+      :exit 0}
+     {:cmd "sha256sum problems/t00J01/lean/Main.lean", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :infrastructure-packets
+    {:concurrent 6,
+     :outside-dag-change
+     {:consumer :m02J05,
+      :commit "802b5580",
+      :classification :statement-repair,
+      :placeholder-before 4,
+      :placeholder-after 4,
+      :topology-closure-credit 0},
+     :named-consumer-files-changed 0,
+     :portfolio 3,
+     :concurrent-commits
+     ["f4c002fcf61a50d47acd217c9c5b7fe196d76667"
+      "6c88882b137ae584373de69074f938159c3faefd"
+      "61b2f309247354b812375a42f1696f65856cd3bf"
+      "ec1c707a1cc5d8d86de9cf053c579d0578afd8ad"
+      "e69c078acad42ca017e665ff68e238ad8aac6b62"
+      "45d19f67a564afeae1dc9dc648af535471261e56"],
+     :modules-after 701,
+     :portfolio-commits
+     ["089792c96eeca964059b880db51828277040970b"
+      "58ea5c3159fa6d8042ba513b4ba948af9efb1c64"
+      "dfa06cec"],
+     :modules-before 692,
+     :endpoint-repair-commits
+     ["9c1dd72f" "654b65dadbca02cd4cfa126b68e06c5f6a93d68e"]},
+    :replacement-items
+    [{:consumer :t00J01,
+      :stop-condition
+      "No detached trace arithmetic, assumed rational homology witnesses, weakened final statement, new placeholders or full-closure claim. Do not retry the independent Klein-product or fold-fiber STOPs in this packet.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "CONSUMER UPTAKE: exact t00J01 rational sphere-identity branch",
+      :acceptance
+      {:placeholder-after 1,
+       :frozen-file "problems/t00J01/lean/Main.lean",
+       :gates
+       ["Compile the exact branch fixture with no placeholders and record SHA256."
+        "Audit arbitrary-witness trace invariance and all three actual induced maps."
+        "Record standard-only axioms and exact frozen statement hashes."
+        "Specify a one-file Main implementation that retains one placeholder with the strictly narrower residual; preserve every frozen definition and final statement."
+        "Distinguish branch uptake from full consumer closure."],
+       :consumer-residual
+       "Only the Klein-product manifold/top-homology and exact circle fold-fiber conjuncts remain in the final theorem after this branch is wired.",
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Compile a placeholder-free fixture proving the exact branch t00J01HasSphereLefschetzNumber t00J01SphereIdentity 2 and not t00J01HasSphereLefschetzNumber t00J01SphereIdentity 1. Use reviewed CoefficientSphereEndpoints rationalS2H0/H1/H2, the literal frozen sphere and the actual identity-induced maps. Evaluate the three traces. For the negated existential, handle arbitrary witness isomorphisms using identity conjugation; do not merely rule out the chosen coordinates. Preserve all frozen definitions and the full apm_t00j01 statement. Supply a concrete Main uptake plan that uses the proved branch and leaves exactly one existing placeholder for the conjunction of the independent Klein-product and fold-fiber obligations. Do not increase placeholders, assume another branch or call the whole problem closed. GO requires the complete exact branch fixture and reviewable typed residual; otherwise name the precise missing theorem.",
+       :consumer-equation
+       "The actual frozen sphere identity has Lefschetz number two and cannot have Lefschetz number one.",
+       :frozen-sha256
+       "03f9c56fbb9d5b417dc16298c6b81d10876a4463f9c7e5a8479615706584c217"},
+      :id :oriented-checkpoint31-t00j01-sphere-identity-uptake-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint31-sphere-endpoints-and-consumer-refill
+       :oriented-checkpoint30-coefficient-sphere-endpoints-1],
+      :current-residual
+      "The rational endpoint isomorphisms and identity-map equations are reviewed; the exact frozen sphere-identity Lefschetz conjunct still lacks transport and trace evaluation.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: sphere-identity branch uptake and remaining consumers",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint31-t00j01-sphere-identity-uptake-1
+       :oriented-checkpoint31-sphere-endpoints-and-consumer-refill],
+      :current-residual
+      "Verify whether the exact sphere branch is consumed by Main, measure its remaining typed obligation separately from placeholder count, and rerank all consumers.",
+      :other-consumers []}],
+    :changed-paths [],
+    :ranking
+    ["No unassigned complete-consumer adapter is justified by the current APIs. Elect exactly one newly eligible frozen-branch adapter first: t00J01 sphere identity, using the reviewed rational endpoints."
+     "Do not repeat the reviewed polygon or surface-classification STOPs or duplicate active incidence work."
+     "Retain localization/cap/Thom, product homology, covering classification, integration and signed sphere naturality foundations. A concrete consumer branch can now use the accumulated coefficient infrastructure before another foundation is elected."],
+    :near-consumer-boundaries
+    {:t00J02
+     "Fundamental-class producer and oriented homological comparison; incidence work reserved.",
+     :t03J02 "Generic collar/NDR and gluing comparison.",
+     :t92J06 "Actual graph-covering construction.",
+     :t95J06 "Hopf-surface torus homeomorphism.",
+     :t97A01 "Literal polygon invariants.",
+     :t94A06 "General-model smooth and dimension hypotheses.",
+     :a97J08 "Planar separation.",
+     :t01A05 "Actual covering fundamental-class degree equation.",
+     :t96J06
+     "Actual compact-manifold nonbounding and fundamental classes.",
+     :t00A03 "Literal pants decomposition and cutting count.",
+     :t01J04 "Analytic boundary-preimage atlas and countability.",
+     :t03J05 "Literal curves and intersection/nonhomotopy.",
+     :t94J09
+     "Constructed polygon normalization maps and attachment-to-singular-homology comparison; reviewed STOP.",
+     :t03J04 "Actual torus Euler computation.",
+     :t95J05 "Numerical diameter-power Hausdorff mass normalization.",
+     :t00J01
+     "Sphere conjunct now eligible for exact branch uptake; full closure still needs Klein-product and fold-fiber results.",
+     :t99J03
+     "Finite triangulation or polygon presentation from manifold hypotheses; reviewed STOP.",
+     :t01A08 "General-model projected regular preimage.",
+     :t00A01
+     "Generic target-natural actual two-open free-product comparison and basepoint extraction.",
+     :t98A02 "Localization and gluing.",
+     :t02A05 "Literal flux and measure comparison.",
+     :t96J05
+     "Attained regular radius and analytic literal-level atlas; original refutation retained.",
+     :t98A01 "Genus invariance and Euler multiplicativity.",
+     :t02A08 "Signed all-integer sphere-degree realization.",
+     :t94J08
+     "Signed antipodal naturality and reduced degree-zero normalization."},
+    :finding
+    "Elect one exact sphere-identity branch uptake packet. This is deliberately partial consumer progress: the final frozen statement remains unchanged and its remaining placeholder must be narrowed to the Klein-product and fold-fiber conjunction. Do not report the problem closed or manufacture a placeholder decrease. Preserve the original consumer refutations, corrected t96J07 closure, and the reviewed finding that the polygon homeomorphism adapter is conditional.",
+    :typed-residual-change
+    "Actual rational S2 H0/H1/H2 identifications and identity-map equations are now reviewed. The exact sphere-identity conjunct of t00J01 is reduced to frozen transport and trace evaluation. The other two conjuncts remain independent. Concurrent incidence prerequisites now construct local chart existence; the parent local-charts probe remains active.",
+    :review-outcomes
+    {:new-proved-topology-refutations 0,
+     :endpoint-review "invoke-1789017499298-17950-580f5dd7",
+     :new-corrected-closures 0,
+     :surface-classification :reviewed-stop,
+     :kernel-normalization :pass,
+     :sphere-endpoints :pass-after-whitespace-and-provenance-repair,
+     :connected-h0 :pass,
+     :concurrent-incidence-prerequisites-passed 6,
+     :polygon-consumer :reviewed-stop,
+     :new-frozen-closures 0},
+    :reserved-concurrent
+    [:manifold-target-incidence-local-charts-probe-refill40
+     :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+    :seat "codex-13",
+    :census
+    {:path "/tmp/Checkpoint31Census.json",
+     :open 35,
+     :baseline "e562b512f1a85ad849d67ae303a6dbe7f244206c",
+     :existing 58,
+     :placeholder-after 66,
+     :zero-placeholder 23,
+     :placeholder-before 66,
+     :head "886aa441d4e90cd0b61ff9921a222ef97faae4de",
+     :sha256
+     "ca6412c3430bf6390c4a1e8d049b299424c525f5044f46bf9151cb89dd8f88f6",
+     :named 59,
+     :missing [:t93A05],
+     :within-two 25}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: sphere endpoints and renewed consumer eligibility",
@@ -18521,6 +18712,73 @@
     :oriented-checkpoint30-geometric-sphere-shift-and-consumer-refill],
    :current-residual
    "Measure endpoint computations separately from frozen closure and recheck exact consumer branches, reviewed boundaries and concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t00J01,
+   :stop-condition
+   "No detached trace arithmetic, assumed rational homology witnesses, weakened final statement, new placeholders or full-closure claim. Do not retry the independent Klein-product or fold-fiber STOPs in this packet.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "CONSUMER UPTAKE: exact t00J01 rational sphere-identity branch",
+   :acceptance
+   {:placeholder-after 1,
+    :frozen-file "problems/t00J01/lean/Main.lean",
+    :gates
+    ["Compile the exact branch fixture with no placeholders and record SHA256."
+     "Audit arbitrary-witness trace invariance and all three actual induced maps."
+     "Record standard-only axioms and exact frozen statement hashes."
+     "Specify a one-file Main implementation that retains one placeholder with the strictly narrower residual; preserve every frozen definition and final statement."
+     "Distinguish branch uptake from full consumer closure."],
+    :consumer-residual
+    "Only the Klein-product manifold/top-homology and exact circle fold-fiber conjuncts remain in the final theorem after this branch is wired.",
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Compile a placeholder-free fixture proving the exact branch t00J01HasSphereLefschetzNumber t00J01SphereIdentity 2 and not t00J01HasSphereLefschetzNumber t00J01SphereIdentity 1. Use reviewed CoefficientSphereEndpoints rationalS2H0/H1/H2, the literal frozen sphere and the actual identity-induced maps. Evaluate the three traces. For the negated existential, handle arbitrary witness isomorphisms using identity conjugation; do not merely rule out the chosen coordinates. Preserve all frozen definitions and the full apm_t00j01 statement. Supply a concrete Main uptake plan that uses the proved branch and leaves exactly one existing placeholder for the conjunction of the independent Klein-product and fold-fiber obligations. Do not increase placeholders, assume another branch or call the whole problem closed. GO requires the complete exact branch fixture and reviewable typed residual; otherwise name the precise missing theorem.",
+    :consumer-equation
+    "The actual frozen sphere identity has Lefschetz number two and cannot have Lefschetz number one.",
+    :frozen-sha256
+    "03f9c56fbb9d5b417dc16298c6b81d10876a4463f9c7e5a8479615706584c217"},
+   :id :oriented-checkpoint31-t00j01-sphere-identity-uptake-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint31-sphere-endpoints-and-consumer-refill
+    :oriented-checkpoint30-coefficient-sphere-endpoints-1
+    :oriented-checkpoint31-sphere-endpoints-and-consumer-refill],
+   :current-residual
+   "The rational endpoint isomorphisms and identity-map equations are reviewed; the exact frozen sphere-identity Lefschetz conjunct still lacks transport and trace evaluation.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: sphere-identity branch uptake and remaining consumers",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint32-sphere-identity-uptake-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint31-t00j01-sphere-identity-uptake-1
+    :oriented-checkpoint31-sphere-endpoints-and-consumer-refill
+    :oriented-checkpoint31-sphere-endpoints-and-consumer-refill],
+   :current-residual
+   "Verify whether the exact sphere branch is consumed by Main, measure its remaining typed obligation separately from placeholder count, and rerank all consumers.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
