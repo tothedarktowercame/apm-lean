@@ -57349,6 +57349,19 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789003530847-17536-dd9a0b14",
+     :commands
+     ["git show 87eec33a44aa52ae296a1a6575c6f3b5f6421624"
+      "Independent scope, fixture SHA256, three statement hashes and placeholder audit"
+      "lake env lean ConstructionTargets/ManifoldTargetFiberChartExtension.lean"
+      "lake build ConstructionTargets.SardGenuineSmoothOpenDomainLocalization ConstructionTargets.RegularFiberFixedModelOverlaps"
+      "git show --format= --check 87eec33a"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact one-file fixture promotion; all hashes reproduce, zero placeholders, consumers unchanged. Actual chart-pair domain supports genuine-infinity smoothness; local agreement yields derivative equality and center surjectivity. Target-chart injectivity proves exact local fiber identification. Constructed chart belongs to the extension fiber, not yet the original fiber; no global extension regularity or broader-model claim. Three declarations compile warning-free with standard axioms; prerequisite build succeeds (8442 jobs). Whitespace clean; 443 ledger items validate; no edits."},
     :commit "87eec33a44aa52ae296a1a6575c6f3b5f6421624",
     :changed-paths
     ["ConstructionTargets/ManifoldTargetFiberChartExtension.lean"],
@@ -57360,7 +57373,7 @@
     :finding
     "Promoted the exact fixture. All three declarations compile warning-free with standard-only axioms and zero placeholders. Genuine infinity, self-model hypotheses, actual chart-pair domain, local value/derivative agreement, exact fiber equivalence and center-containing extension-fiber chart are preserved. Existing APIs and consumers unchanged; worktree clean. Validator reports 443 items OK."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ManifoldTargetFiberChartExtension.lean"],
    :dag-node
@@ -57448,7 +57461,7 @@
      "Compiled one prerequisite: actual source-target chart localization, constructed smooth extension, exact local fiber identification and an extension-fiber chart containing the center. Representative smoothness holds on the explicit open intersection of the source-chart target with the inverse image of the target-chart source. Its center fderiv equals the original mfderiv directly through the self-model coordinate definition. The cutoff producer supplies value agreement; openness gives derivative agreement throughout a smaller neighborhood. Target-chart injectivity proves that the extension's coordinate fiber equals the original target-value condition on that neighborhood. Center surjectivity then supplies the local fixed-model extension-fiber chart without global regularity of the extension. Original-manifold fiber charts and smooth overlaps are not yet assembled.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / manifold-target fiber chart transport",
