@@ -69746,8 +69746,294 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill49-measure.py", :exit 0}
+     {:cmd
+      "git diff --name-only 14c0c663a8698df4745e2229e0a49411c0e84006..HEAD -- ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill49-measure.json /tmp/topology-refill50-measure.json",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :finding
+    {:census
+     {:named 59,
+      :existing 58,
+      :missing ["t93A05"],
+      :closed 25,
+      :open 33,
+      :within-two 23,
+      :placeholders 62,
+      :placeholder-delta 0},
+     :typed-residual-change
+     ["t98A01: the torus covering, fiber equivalence and transitive deck maps compile; numerical five-torsion cardinality, polygon-genus invariance and covering Euler multiplicativity remain."
+      "t98A02 and five shared consumers: twenty coefficient compact-complement packets were banked, but the proposed relative connecting map is compiler-proved identically zero; the route returns to a genuine relative chain-level Mayer-Vietoris sequence or proved excision conjugation."
+      "t99J03 and four shared consumers: simultaneous finite translations now preserve embeddings and prescribed open-set containment; chartwise endpoint preservation, cross-chart compatibility, retained coverage and triangulation remain."],
+     :infrastructure-packets
+     {:portfolio 21, :concurrent 16, :total 37, :duplicates-found 0},
+     :review-outcomes
+     {:pass 3, :fail 0, :implemented 1, :local-stop 2},
+     :routes
+     [{:consumer "a97J08",
+       :placeholders 1,
+       :route
+       "banked local degree and orientation data -> missing consumer-facing comparison -> frozen adapter"}
+      {:consumer "t00A03",
+       :placeholders 2,
+       :route
+       "contained common-plane translations -> endpoint-preserving chartwise perturbation -> compatible faces and frozen triangulation"}
+      {:consumer "t00J01",
+       :placeholders 1,
+       :route
+       "circle-fold evidence -> concrete Klein-product manifold/top-homology bridge plus rational sphere Lefschetz normalization -> frozen adapter"}
+      {:consumer "t00J02",
+       :placeholders 1,
+       :route
+       "banked coefficient local homology and transition constancy -> genuine compact-support relative Mayer-Vietoris -> localization and fundamental-class assembly"}
+      {:consumer "t01A02",
+       :placeholders 3,
+       :route
+       "banked local computations -> required global comparison and normalization -> frozen conjunction"}
+      {:consumer "t01A04",
+       :placeholders 4,
+       :route
+       "manifold fundamental class -> intersection/cap comparison -> consumer calculations"}
+      {:consumer "t01A05",
+       :placeholders 1,
+       :route
+       "genuine coefficient compact-support Mayer-Vietoris -> localization -> frozen fundamental-class adapter"}
+      {:consumer "t01A08",
+       :placeholders 1,
+       :route
+       "resolved regularity conversion -> general-model critical-value Sard -> frozen adapter"}
+      {:consumer "t01J01",
+       :placeholders 3,
+       :route
+       "contained plane translations -> endpoint-preserving chartwise perturbation -> compatible triangulation -> consumer theorem"}
+      {:consumer "t01J04",
+       :placeholders 1,
+       :route
+       "banked applicable local results -> exact hypothesis/representation adapter -> frozen theorem"}
+      {:consumer "t01J06",
+       :placeholders 3,
+       :route
+       "covering and circle invariants -> missing classification comparisons -> frozen conjunction"}
+      {:consumer "t02A05",
+       :placeholders 2,
+       :route
+       "sphere/ball normalization -> moment computation -> frozen identities"}
+      {:consumer "t02A07",
+       :placeholders 3,
+       :route
+       "coefficient compact-support Mayer-Vietoris -> localization -> all-degree local comparison and fundamental class"}
+      {:consumer "t02A08",
+       :placeholders 1,
+       :route
+       "banked local comparison -> required m+2 normalization adapter -> frozen theorem"}
+      {:consumer "t03J02",
+       :placeholders 2,
+       :route
+       "null-winding result -> missing arbitrary embedded-circle collar/Jordan-Schoenflies comparison -> generic gluing and frozen theorem"}
+      {:consumer "t03J04",
+       :placeholders 1,
+       :route
+       "banked circle/sphere invariants -> remaining representation adapter -> frozen theorem"}
+      {:consumer "t03J05",
+       :placeholders 1,
+       :route
+       "banked local topology -> remaining consumer comparison -> frozen theorem"}
+      {:consumer "t91J05",
+       :placeholders 3,
+       :route
+       "contained plane translations -> relative endpoint control -> compatible faces and triangulation -> frozen result"}
+      {:consumer "t92J05",
+       :placeholders 3,
+       :route
+       "surface cutting/classification foundations -> polygon representation comparisons -> frozen theorem"}
+      {:consumer "t92J06",
+       :placeholders 1,
+       :route
+       "banked covering data -> remaining action/quotient adapter -> frozen theorem"}
+      {:consumer "t94A06",
+       :placeholders 1,
+       :route
+       "transition-unit local constancy -> applicability comparison at the frozen hypotheses -> frozen adapter"}
+      {:consumer "t94A10",
+       :placeholders 3,
+       :route
+       "banked solid-angle closedness -> sphere-period/Stokes nonexactness -> frozen conjunction"}
+      {:consumer "t94J09",
+       :placeholders 1,
+       :route
+       "contained translations -> endpoint-preserving chartwise perturbation -> frozen intersection adapter"}
+      {:consumer "t95J05",
+       :placeholders 1,
+       :route
+       "banked local homology ingredients -> missing coefficient/naturality comparison -> frozen adapter"}
+      {:consumer "t95J06",
+       :placeholders 2,
+       :route
+       "covering transport and circle invariants -> missing quotient/classification step -> frozen result"}
+      {:consumer "t96J05",
+       :placeholders 1,
+       :route
+       "preserve recorded specification defect -> repair statement and representation before proof work"}
+      {:consumer "t96J06",
+       :placeholders 2,
+       :route
+       "banked homology calculations -> remaining representation and consumer adapters"}
+      {:consumer "t97A01",
+       :placeholders 1,
+       :route
+       "covering transfer data -> missing Euler-multiplicativity comparison -> frozen theorem"}
+      {:consumer "t97A04",
+       :placeholders 4,
+       :route
+       "manifold fundamental class and localization -> intersection/cap comparison -> frozen conclusions"}
+      {:consumer "t97J05",
+       :placeholders 5,
+       :route
+       "coefficient compact-support Mayer-Vietoris -> localization and local-to-global fundamental class -> consumer assembly"}
+      {:consumer "t98A01",
+       :placeholders 1,
+       :route
+       "compiled fivefold torus cover and deck action -> five-torsion cardinality -> polygon genus invariance and covering Euler multiplicativity -> frozen conjunction"}
+      {:consumer "t98A02",
+       :placeholders 1,
+       :route
+       "genuine relative chain-level Mayer-Vietoris -> actual excision/naturality arrow comparison -> localization vanishing/monicity -> frozen fundamental class"}
+      {:consumer "t99J03",
+       :placeholders 1,
+       :route
+       "contained translated arc families -> endpoint-preserving chartwise compatibility -> retained coverage and compatible faces -> frozen triangulation"}],
+     :deferred
+     ["ordinary/reduced S0 and integral dimension-one extensions remain separate from the reviewed positive-dimensional antipodal theorem"
+      "all-degree local comparison remains separate from the m+2 normalization"
+      "conditional polygon witnesses do not erase the genus-zero literal quotient representation"
+      "null-winding does not refute the frozen arbitrary embedded-circle producer"
+      "Hausdorff sphere normalization remains distinct from coordinate graph-area bounds"
+      "general-model Sard remains distinct from the resolved regularity conversion"
+      "cover transfer remains distinct from Euler multiplicativity"]},
+    :replacement-items
+    [{:consumer "t99J03",
+      :stop-condition
+      "GO requires the exact frozen triangulation theorem with its sole placeholder removed; otherwise REVISE with exactly one compiled endpoint-preserving or chart-compatibility prerequisite, or STOP at the exact geometric boundary. Do not infer endpoint preservation or retained coverage from translations.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "SURFACE TRIANGULATION / frozen contained-arc uptake",
+      :acceptance
+      {:axioms :standard-only,
+       :frozen-file "problems/t99J03/lean/Main.lean",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :probe
+       "Attempt the one-placeholder frozen adapter using PlaneArcContainedSmallTranslations. Preserve the declared charts, shared endpoints, triangle coverage and compatible-face conclusions. This supplies the t99J03 placeholder route step from contained finite translated arcs to the frozen triangulation theorem; if translations cannot satisfy the relative endpoint and cross-chart conditions, compile exactly one nearest prerequisite instead."},
+      :id :t99j03-frozen-contained-arcs-closure-probe-refill50,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
+      :current-residual
+      "Contained finite-family translations are banked; endpoint preservation, cross-chart compatibility, retained coverage and compatible faces remain before the frozen theorem.",
+      :other-consumers []}
+     {:consumer "t98A02",
+      :stop-condition
+      "Require a genuine nonzero-capable relative Mayer-Vietoris connecting morphism and three proved exactness statements with actual quotient-pair arrows. Reject any construction factoring the pair boundary through its own subspace map.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For compact K and L in a Hausdorff space and arbitrary commutative-ring coefficients, construct directly at relative chain level, or by a proved chain isomorphism from the reviewed complement sequence, the three actual maps and exactness segments joining H_(n+1)(X,X minus (K intersection L)), H_n(X,X minus (K union L)), and the biproduct of the K- and L-support terms. This replaces the compiler-refuted zero supportConnecting representation and supplies the shared compact-support placeholder route step for t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05. Do not claim localization monicity, dimension vanishing or a fundamental class."},
+      :id
+      :coefficient-relative-mayer-vietoris-chain-sequence-probe-refill50,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
+      :current-residual
+      "The absolute complement sequence and many comparison maps are reviewed, but the named relative connecting map is zero. A genuine relative chain sequence or proved excision conjugation is required.",
+      :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+     {:consumer "t00A03",
+      :stop-condition
+      "Require a compiled perturbation preserving prescribed endpoints and chartwise containment with finite pairwise intersections; do not infer cross-chart finiteness from unrelated plane translations.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Using the reviewed contained finite plane-arc translations only where applicable, construct the next shared route step for the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholders: finite chartwise perturbations that fix the prescribed endpoints, remain in their chart targets and have finite pairwise intersections after transition to the surface. Preserve empty and singleton cases. Do not claim retained triangle coverage, compatible faces or triangulation without separate proofs."},
+      :id :finite-chartwise-endpoint-preserving-arcs-probe-refill50,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
+      :current-residual
+      "Common-plane translations preserve embeddings and containment but move endpoints and do not compare curves transported through unrelated charts.",
+      :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
+     {:bounded-exception
+      "This finite-group calculation is the smallest isolated missing step inside the sole frozen t98A01 placeholder and is scheduled only after its required near-closure attempt already produced a reviewed STOP.",
+      :consumer "t98A01",
+      :stop-condition
+      "Require an explicit equivalence or finite-cardinality proof showing the kernel of multiplication by five on UnitAddCircle has exactly five elements; do not infer polygon genus invariance or covering Euler multiplicativity.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "COVERING CLASSIFICATION / five-torsion fiber cardinality",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Complete the numerical fiber step on the t98A01 placeholder route: prove that the reviewed equivalence from each fiber of the fivefold torus cover to the kernel of five-fold multiplication on UnitAddCircle yields cardinality five. Reuse the compiled covering and deck-action audit. Preserve the separate polygon genus-invariance, genus-zero representation and Euler-multiplicativity boundaries."},
+      :id :unit-add-circle-five-torsion-cardinality-probe-refill50,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
+      :current-residual
+      "The fiber equivalence and transitive deck homeomorphisms compile; numerical cardinality five is the smallest missing cover-specific step, while polygon genus and Euler comparisons remain independent.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 4,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount the complete pinned consumer census and reviewed outcomes. Elect exactly one near-closure adapter first, then shared route steps by consumer reach and simplicity. Preserve the zero-map refutation of supportConnecting, the distinction between common-plane translations and endpoint-preserving chartwise control, the fivefold polygon genus/Euler boundaries, all prior closures and specification repairs, and every deferred representation boundary."},
+      :id
+      :checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t99j03-frozen-contained-arcs-closure-probe-refill50
+       :coefficient-relative-mayer-vietoris-chain-sequence-probe-refill50
+       :finite-chartwise-endpoint-preserving-arcs-probe-refill50
+       :unit-add-circle-five-torsion-cardinality-probe-refill50],
+      :current-residual
+      "Await four independently reviewed outcomes, then rerank the complete DAG."}],
+    :author "codex-12",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -69762,7 +70048,121 @@
     :finite-translated-embedded-arcs-chart-containment-probe-refill49
     :checkpoint-full-dag-refill-49-after-circle-gluing-units-and-arc-families],
    :current-residual
-   "Await three independently reviewed outcomes, then rerank the complete DAG."}],
+   "Await three independently reviewed outcomes, then rerank the complete DAG."}
+  {:consumer "t99J03",
+   :stop-condition
+   "GO requires the exact frozen triangulation theorem with its sole placeholder removed; otherwise REVISE with exactly one compiled endpoint-preserving or chart-compatibility prerequisite, or STOP at the exact geometric boundary. Do not infer endpoint preservation or retained coverage from translations.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "SURFACE TRIANGULATION / frozen contained-arc uptake",
+   :acceptance
+   {:axioms :standard-only,
+    :frozen-file "problems/t99J03/lean/Main.lean",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :probe
+    "Attempt the one-placeholder frozen adapter using PlaneArcContainedSmallTranslations. Preserve the declared charts, shared endpoints, triangle coverage and compatible-face conclusions. This supplies the t99J03 placeholder route step from contained finite translated arcs to the frozen triangulation theorem; if translations cannot satisfy the relative endpoint and cross-chart conditions, compile exactly one nearest prerequisite instead."},
+   :id :t99j03-frozen-contained-arcs-closure-probe-refill50,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs
+    :checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
+   :current-residual
+   "Contained finite-family translations are banked; endpoint preservation, cross-chart compatibility, retained coverage and compatible faces remain before the frozen theorem.",
+   :other-consumers []}
+  {:consumer "t98A02",
+   :stop-condition
+   "Require a genuine nonzero-capable relative Mayer-Vietoris connecting morphism and three proved exactness statements with actual quotient-pair arrows. Reject any construction factoring the pair boundary through its own subspace map.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For compact K and L in a Hausdorff space and arbitrary commutative-ring coefficients, construct directly at relative chain level, or by a proved chain isomorphism from the reviewed complement sequence, the three actual maps and exactness segments joining H_(n+1)(X,X minus (K intersection L)), H_n(X,X minus (K union L)), and the biproduct of the K- and L-support terms. This replaces the compiler-refuted zero supportConnecting representation and supplies the shared compact-support placeholder route step for t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05. Do not claim localization monicity, dimension vanishing or a fundamental class."},
+   :id
+   :coefficient-relative-mayer-vietoris-chain-sequence-probe-refill50,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs
+    :checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
+   :current-residual
+   "The absolute complement sequence and many comparison maps are reviewed, but the named relative connecting map is zero. A genuine relative chain sequence or proved excision conjugation is required.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t00A03",
+   :stop-condition
+   "Require a compiled perturbation preserving prescribed endpoints and chartwise containment with finite pairwise intersections; do not infer cross-chart finiteness from unrelated plane translations.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Using the reviewed contained finite plane-arc translations only where applicable, construct the next shared route step for the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholders: finite chartwise perturbations that fix the prescribed endpoints, remain in their chart targets and have finite pairwise intersections after transition to the surface. Preserve empty and singleton cases. Do not claim retained triangle coverage, compatible faces or triangulation without separate proofs."},
+   :id :finite-chartwise-endpoint-preserving-arcs-probe-refill50,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs
+    :checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
+   :current-residual
+   "Common-plane translations preserve embeddings and containment but move endpoints and do not compare curves transported through unrelated charts.",
+   :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
+  {:bounded-exception
+   "This finite-group calculation is the smallest isolated missing step inside the sole frozen t98A01 placeholder and is scheduled only after its required near-closure attempt already produced a reviewed STOP.",
+   :consumer "t98A01",
+   :stop-condition
+   "Require an explicit equivalence or finite-cardinality proof showing the kernel of multiplication by five on UnitAddCircle has exactly five elements; do not infer polygon genus invariance or covering Euler multiplicativity.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "COVERING CLASSIFICATION / five-torsion fiber cardinality",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Complete the numerical fiber step on the t98A01 placeholder route: prove that the reviewed equivalence from each fiber of the fivefold torus cover to the kernel of five-fold multiplication on UnitAddCircle yields cardinality five. Reuse the compiled covering and deck-action audit. Preserve the separate polygon genus-invariance, genus-zero representation and Euler-multiplicativity boundaries."},
+   :id :unit-add-circle-five-torsion-cardinality-probe-refill50,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs
+    :checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
+   :current-residual
+   "The fiber equivalence and transitive deck homeomorphisms compile; numerical cardinality five is the smallest missing cover-specific step, while polygon genus and Euler comparisons remain independent.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 4,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount the complete pinned consumer census and reviewed outcomes. Elect exactly one near-closure adapter first, then shared route steps by consumer reach and simplicity. Preserve the zero-map refutation of supportConnecting, the distinction between common-plane translations and endpoint-preserving chartwise control, the fivefold polygon genus/Euler boundaries, all prior closures and specification repairs, and every deferred representation boundary."},
+   :id
+   :checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t99j03-frozen-contained-arcs-closure-probe-refill50
+    :coefficient-relative-mayer-vietoris-chain-sequence-probe-refill50
+    :finite-chartwise-endpoint-preserving-arcs-probe-refill50
+    :unit-add-circle-five-torsion-cardinality-probe-refill50
+    :checkpoint-full-dag-refill-50-after-fivefold-compact-support-and-contained-arcs],
+   :current-residual
+   "Await four independently reviewed outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
