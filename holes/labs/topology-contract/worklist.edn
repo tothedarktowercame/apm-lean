@@ -72373,8 +72373,59 @@
   {:consumer "t00A03",
    :stop-condition
    "Require a regular-preimage manifold construction for the total incidence zero locus and a genuine Sard theorem for its projection to perturbation-vector space, producing generic finite sections.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Equip the relative incidence zero locus with the regular-preimage geometry supplied by total-map submersivity and apply Sard to its projection onto paired perturbation vectors. Then translate finite sections through the compiled equality and finish boundary, family, embedding and chart-transition steps.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:relativeCoincidenceFiber
+     "2512687954906eb71f7e68f3d2df2627ab29c6afc010a9d36d783b80ea43fb3f",
+     :incidenceZeroLocus
+     "8d0bbb52ed49972a3df68532a253febca18ba65e38204cc2dc85eca19420d2c9",
+     :mem_incidenceZeroLocus_section_iff
+     "b4d91b2751a35eddb7adbd6d15871537f821d0757024441c2590b6ffbf7f3528",
+     :relativeCoincidenceFiber_eq_incidence_section
+     "e968884e50b2c591da12602ba7fd582b650073722eb62bcb6d2c96f99fe490b9"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointIncidenceFiberSection.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/PlaneArcEndpointIncidenceFiberSection.lean ConstructionTargets/PlaneArcEndpointIncidenceFiberSection.lean ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-four-declaration audit over ConstructionTargets/PlaneArcEndpointIncidenceFiberSection.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat a55714713a6e93a3e005726c078b3fd1a6dc566b",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r a55714713a6e93a3e005726c078b3fd1a6dc566b",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "The relative-interior parameter pairs where the two endpoint-preserving perturbed plane arcs coincide for fixed perturbation vectors",
+     :target
+     "The section at those fixed perturbation vectors of the total coincidence-map zero locus inside the reviewed relative interior domain",
+     :direction
+     "Exact equality from the source coincidence-fiber representation to the target fixed-vector incidence-section representation, with membership equivalence in both directions."},
+    :commit "a55714713a6e93a3e005726c078b3fd1a6dc566b",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointIncidenceFiberSection.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointIncidenceFiberSection.lean",
+     :sha256
+     "9fdd5f5167662c0ace5c5f3f18927a0193a859503b81750f12341d5446771a82",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded critical-locus dependency hash reproduce. All four requested declarations compile without warnings or placeholders using only standard axioms, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointIncidenceFiberSection.lean"],
    :dag-node
