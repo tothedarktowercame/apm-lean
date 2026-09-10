@@ -62288,8 +62288,50 @@
   {:consumer "t99J03",
    :stop-condition
    "Require constructed inverse-chart triangles and every geometric specification; no supplied embedding or interior coverage.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Constructed inverse-chart triangles satisfy positive scale, target containment, closed embedding, compact image, source containment, open interior and center membership under the weaker Hausdorff-space hypotheses. Two-dimensional manifold specialization and finite interior coverage remain; no compatible faces or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:exists_chart_triangle
+     "d075c275211498183971332c6c8639cfb7d85ff91933e78d5b3bcefe4a2d02a8"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/ChartTriangleEmbedding.lean", :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.ScaledTriangleNeighborhood 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "Python read-only canonical-source audit: zero placeholders and complete declaration-header hash",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ChartTriangleEmbedding.lean ConstructionTargets/ChartTriangleEmbedding.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ChartTriangleEmbedding.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "3e20822e8672ac4e3dd9c2cf8fbcbd35bb782ed5",
+    :changed-paths ["ConstructionTargets/ChartTriangleEmbedding.lean"],
+    :fixture
+    {:path "/tmp/ChartTriangleEmbedding.lean",
+     :sha256
+     "d518cba79f8598c65949cd07e8dd50d8f346e3b740520cf0cfbce373a65e6d74"},
+    :axiom-audit-declarations 1},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ChartTriangleEmbedding.lean"],
    :dag-node
    "SURFACE TRIANGULATION / embedded triangles through actual charts",
