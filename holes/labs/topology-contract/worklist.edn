@@ -65356,6 +65356,17 @@
      "Pseudococones on the trivial point span into the single-object categories of the chosen vertex groups",
      :direction
      "Equivalence from actual overlap-span pseudococones to point-span pseudococones, with forward and inverse target-postcomposition natural isomorphisms."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789033481148-18334-b45210f8",
+     :commands
+     ["git show --check bf1d6bb9"
+      "Python read-only audit: pinned/fixture/working equality, dependency equality, fourteen complete declaration hashes and zero placeholders"
+      "lake env lean ConstructionTargets/TwoOpenPointSpanComparison.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show ff791e77:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "Independent review of codex-6 commit bf1d6bb906793851edd2327c910b3b582b814153 passes. Exact single-file scope, fixture hash and all fourteen statement hashes match. Compilation is warning-free with five standard-only axiom audits and zero placeholders. Simply connected overlap yields the constructed faithful/full/essentially-surjective collapse; connector equivalences retain the supplied overlap point as both vertex bases. Actual leg comparisons induce the claimed pseudococone equivalence and forward/inverse target-postcomposition isomorphisms. No open-cover descent, union reconstruction, chosen-basepoint group equivalence or consumer closure is claimed. Pinned ledger validates 518 items. No files edited."},
     :commit "bf1d6bb906793851edd2327c910b3b582b814153",
     :changed-paths
     ["ConstructionTargets/TwoOpenPointSpanComparison.lean"],
@@ -65365,7 +65376,7 @@
      "bdc1fda3541b9e6078a78260de6752adb463cac482120a542f6a957804bd1ab5"},
     :axiom-audit-declarations 5},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TwoOpenPointSpanComparison.lean"],
    :dag-node
    "VAN KAMPEN / target-natural overlap-to-point-span comparison",
@@ -65468,7 +65479,7 @@
      "Compiled one generic target-natural comparison prerequisite. The simply connected overlap is constructively equivalent to SingleObj PUnit. The pieces retain their banked connector equivalences at the supplied overlap point. Explicit leg comparisons then produce an equivalence from actual overlap-span pseudococones to point-span pseudococones, compatible with target postcomposition in both directions. No span comparison or pushout is assumed. Union reconstruction and chosen-basepoint group transport remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "VAN KAMPEN / generic chosen-vertex coproduct assembly",
    :acceptance
