@@ -69319,6 +69319,42 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require both actual coefficient pair connecting naturality squares for the identity-induced K- and L-restriction maps; no supplied sign comparison, coefficient excision or relative Mayer-Vietoris exactness.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / compact-support restriction connecting naturality",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientCompactSupportRestrictionNaturality.lean",
+    :fixture-sha256
+    "78c21c6f8b359cd3ba3dce8ed47a2d12ce0a1f1366b5f05b0d61ec3fb1e938ae",
+    :implementation
+    "Promote the exact fixture. Compile restrictLeft_connecting and restrictRight_connecting. This supplies the pair-connecting naturality step required by the compact-support placeholder route. Verify CoefficientCompactSupportRestrictionMaps SHA256 d511cdea24b570aff04d8a47f5d53566a370539dd31bf252f49776ce13bf9ea6 and CoefficientPairNaturality SHA256 62ae88d6bc3fd4de0b065813b3e157da15d0cf75e5e8ee4ac2c5c09b046b9580. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients and every natural degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim sign comparison, equality with the transported complement arrow, coefficient excision, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The coefficient pair connecting morphism for the union-support complement followed by the actual complement-subspace inclusion into the K-support or L-support complement",
+    :target
+    "The actual relative restriction map in degree n+1 followed by the coefficient pair connecting morphism for the K-support or L-support complement",
+    :direction
+    "Prove exact forward equality from each union-support connecting-and-subspace composite to its relative-restriction-and-target-connecting composite, separately for K and L in every natural degree."},
+   :id
+   :coefficient-compact-support-restriction-naturality-implementation-refill49,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-compact-support-restriction-maps-implementation-refill49],
+   :current-residual
+   "Construct the coefficient-excision comparisons relating the named absolute-complement Mayer-Vietoris arrows to the four relative pairs in X; use these two connecting naturality squares to identify the restriction arrows with the required sign convention and transport exactness.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
    :evidence
    {:probe
@@ -69328,64 +69364,70 @@
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the actual identity-induced relative pair maps from the union-support term to the K- and L-support terms, their biproduct map and both projection identities; no supplied sign comparison, relative connecting morphism or exactness.",
+      "Require both actual coefficient pair connecting naturality squares for the identity-induced K- and L-restriction maps; no supplied sign comparison, coefficient excision or relative Mayer-Vietoris exactness.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean"],
+      ["ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / compact-support relative restriction maps",
+      "MANIFOLD FUNDAMENTAL CLASS / compact-support restriction connecting naturality",
       :acceptance
-      {:fixture "/tmp/CoefficientCompactSupportRestrictionMaps.lean",
+      {:fixture
+       "/tmp/CoefficientCompactSupportRestrictionNaturality.lean",
        :fixture-sha256
-       "d511cdea24b570aff04d8a47f5d53566a370539dd31bf252f49776ce13bf9ea6",
+       "78c21c6f8b359cd3ba3dce8ed47a2d12ce0a1f1366b5f05b0d61ec3fb1e938ae",
        :implementation
-       "Promote the exact fixture. Compile unionComplement_subset_leftComplement, unionComplement_subset_rightComplement, restrictLeft, restrictRight, restrictPieces, restrictPieces_fst and restrictPieces_snd. This supplies the actual restriction-map step required by the compact-support placeholder route. Verify CoefficientCompactComplementTransportedArrows SHA256 c0b86527a652fcb4e131ef24eb9b342a69190bf0d6ef9ee62eee118f6cba2e77 and CoefficientRadialPair SHA256 c11a2ec7239b672a0ae6a6037c2d764fa6d2c7b3c60717b33fb05d0c644ad838. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim a sign choice, equality with the transported complement arrow, a relative connecting morphism, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile restrictLeft_connecting and restrictRight_connecting. This supplies the pair-connecting naturality step required by the compact-support placeholder route. Verify CoefficientCompactSupportRestrictionMaps SHA256 d511cdea24b570aff04d8a47f5d53566a370539dd31bf252f49776ce13bf9ea6 and CoefficientPairNaturality SHA256 62ae88d6bc3fd4de0b065813b3e157da15d0cf75e5e8ee4ac2c5c09b046b9580. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients and every natural degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim sign comparison, equality with the transported complement arrow, coefficient excision, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean"],
+       ["lake env lean ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
+      :representation
+      {:source
+       "The coefficient pair connecting morphism for the union-support complement followed by the actual complement-subspace inclusion into the K-support or L-support complement",
+       :target
+       "The actual relative restriction map in degree n+1 followed by the coefficient pair connecting morphism for the K-support or L-support complement",
+       :direction
+       "Prove exact forward equality from each union-support connecting-and-subspace composite to its relative-restriction-and-target-connecting composite, separately for K and L in every natural degree."},
       :id
-      :coefficient-compact-support-restriction-maps-implementation-refill49,
-      :kind :reusable-theorem,
+      :coefficient-compact-support-restriction-naturality-implementation-refill49,
+      :kind :representation-comparison,
       :depends-on
-      [:coefficient-compact-complement-transported-arrows-implementation-refill49],
+      [:coefficient-compact-support-restriction-maps-implementation-refill49],
       :current-residual
-      "Construct the relative compact-support connecting morphism from H_(n+1)(X,X minus (K intersection L)) to H_n(X,X minus (K union L)); prove the signed comparison between restrictPieces and the transported overlap-to-pieces arrow using coefficient pair naturality and excision, then transport exactness to the four requested relative terms.",
+      "Construct the coefficient-excision comparisons relating the named absolute-complement Mayer-Vietoris arrows to the four relative pairs in X; use these two connecting naturality squares to identify the restriction arrows with the required sign convention and transport exactness.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientCompactComplementTransportedArrows >/tmp/coefficient-restriction-deps.log",
+       "lake build ConstructionTargets.CoefficientCompactSupportRestrictionMaps >/tmp/coefficient-support-naturality-deps.log",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientCompactSupportRestrictionMaps.lean",
+       "lake env lean /tmp/CoefficientCompactSupportRestrictionNaturality.lean",
        :exit 0}
       {:cmd
-       "python3 placeholder-and-declaration audit over /tmp/CoefficientCompactSupportRestrictionMaps.lean",
+       "sha256sum /tmp/CoefficientCompactSupportRestrictionNaturality.lean ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean ConstructionTargets/CoefficientPairNaturality.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientCompactSupportRestrictionMaps.lean ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean ConstructionTargets/CoefficientRadialPair.lean",
+       "python3 placeholder-and-declaration audit over /tmp/CoefficientCompactSupportRestrictionNaturality.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/CoefficientCompactSupportRestrictionMaps.lean",
-       :exit 0,
+     [{:cmd "rg from /home/joe/code for canonical topology files",
+       :exit 2,
        :correction
-       "The first successful compile emitted two unused-section-variable warnings on point-set complement inclusions. Scoped those theorems with omit and reran the compile successfully without warnings."}],
-     :changed-paths [],
+       "Located the canonical checkout at /home/joe/code/apm-lean and performed all subsequent reads and acceptance commands there."}],
      :fixture
-     {:path "/tmp/CoefficientCompactSupportRestrictionMaps.lean",
+     {:path "/tmp/CoefficientCompactSupportRestrictionNaturality.lean",
       :sha256
-      "d511cdea24b570aff04d8a47f5d53566a370539dd31bf252f49776ce13bf9ea6",
+      "78c21c6f8b359cd3ba3dce8ed47a2d12ce0a1f1366b5f05b0d61ec3fb1e938ae",
       :placeholder-count 0},
      :finding
-     "The banked excision theorem does not by itself identify the absolute complement Mayer-Vietoris sequence with the requested relative sequence. Compiled exactly one required relative-map prerequisite instead: the actual identity-induced pair maps from H(X,X minus (K union L)) to H(X,X minus K) and H(X,X minus L), their biproduct lift, and both projection identities. Comparison with the transported complement arrow, its required sign convention, the relative connecting morphism and exactness remain.",
+     "The actual relative restriction maps are banked, but the requested relative Mayer-Vietoris sequence still lacks the comparison through pair connecting morphisms and coefficient excision. Compiled exactly one prerequisite: both concrete restriction maps commute with the coefficient pair connecting morphisms in the required forward direction. No sign comparison, excision isomorphism, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or fundamental class is claimed.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -69415,7 +69457,8 @@
     :coefficient-compact-complement-pieces-comparison-implementation-refill49
     :coefficient-compact-complement-transported-exactness-implementation-refill49
     :coefficient-compact-complement-transported-arrows-implementation-refill49
-    :coefficient-compact-support-restriction-maps-implementation-refill49],
+    :coefficient-compact-support-restriction-maps-implementation-refill49
+    :coefficient-compact-support-restriction-naturality-implementation-refill49],
    :current-residual
    "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
