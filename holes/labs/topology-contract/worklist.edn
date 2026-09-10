@@ -62521,81 +62521,115 @@
    :other-consumers ["t01A02" "t98A01"]}
   {:consumer "t03J04",
    :stop-condition
+   "Require constructed degreewise homomorphisms with generator and projection identities; no supplied transfer map.",
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/CoveringTransferDegree.lean"],
+   :dag-node "COVER-DEGREE / production degreewise transfer",
+   :acceptance
+   {:fixture "/tmp/CoveringTransferDegree.lean",
+    :fixture-sha256
+    "0f3ceabd405b0e2705749352b33815213d7d6ed77c288998632aed06c4441693",
+    :implementation
+    "Promote the exact fixture. Compile transferDegree, generator_transfer and projection. Preserve actual production chain groups, finite lift sums, all degrees and k=0. Audit zero placeholders and standard-only axioms. Do not claim boundary commutation, a chain-map transfer or consumer closure.",
+    :commands
+    ["lake env lean ConstructionTargets/CoveringTransferDegree.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :covering-transfer-degree-implementation-refill42,
+   :kind :reusable-theorem,
+   :depends-on [:covering-simplex-transfer-implementation-refill42],
+   :current-residual
+   "Degreewise production transfer is compiled. Prove boundary commutation using face-restriction lift bijections, then assemble the chain map.",
+   :other-consumers ["t01A02" "t98A01"]}
+  {:consumer "t03J04",
+   :stop-condition
    "GO requires actual all-degree chain transfer and identities; REVISE requires exactly one compiled prerequisite. Function-level fiber sums alone are insufficient.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Assemble degreewise transfer homomorphisms and prove boundary commutation by reindexing simplex lifts along faces. Then establish the chain-map projection identity. Rational transport, Euler multiplicativity and consumer closure remain subsequent.",
+     "Establish every boundary identity by finite lift reindexing and assemble the actual chain-map transfer with its projection identity. Rational transport, Euler multiplicativity and consumer closure remain subsequent.",
      :dependency-review
      {:outcome :pass,
       :seat "codex-10",
-      :job "invoke-1789021651883-18048-2ce7b12f"},
+      :job "invoke-1789022089256-18058-e7191d59"},
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {:finite-lifts
-      "73095785dccf21d4ceeeef3b6d5116e0e50f64d9a7de42d53806145a9f07c967",
-      :transfer-simplex
-      "44a03f26684ad35efe4db18047926ee740fa7aa97686964e37c94c829194608c",
+     {:transferDegree
+      "bb16441175594a424836414d2174c7f0e0d247fe57e0018bbd58b851af222399",
+      :generator-transfer
+      "755e97bca4a241f8250c2ce9db4107f05540af83d205b1924dd54c4f4f94525b",
       :projection
-      "633f272540fdd2638d93fdb45031ed8a7c3c9c50313def1a3d27e480ec82e38a"},
+      "558db8d24909d446720236063f379cc17baca31f83612215edc9ae317c6862d2"},
      :prerequisite
      {:consumer "t03J04",
       :stop-condition
-      "Require actual finite lift sums and their production projection identity; function-level fiber sums or assumed lift finiteness are insufficient.",
+      "Require constructed degreewise homomorphisms with generator and projection identities; no supplied transfer map.",
       :phase :implementation,
       :state :open,
-      :scope ["ConstructionTargets/CoveringSimplexTransfer.lean"],
-      :dag-node "COVER-DEGREE / production simplex lift sums",
+      :scope ["ConstructionTargets/CoveringTransferDegree.lean"],
+      :dag-node "COVER-DEGREE / production degreewise transfer",
       :acceptance
-      {:fixture "/tmp/CoveringSimplexTransfer.lean",
+      {:fixture "/tmp/CoveringTransferDegree.lean",
        :fixture-sha256
-       "782dcd0ddc7efc794b45eeef9281afd90ccd5fe78f52c891701a643114430a38",
+       "0f3ceabd405b0e2705749352b33815213d7d6ed77c288998632aed06c4441693",
        :implementation
-       "Promote the exact fixture. Compile vertex, finiteLifts, transferSimplex and transferSimplex_projection. Preserve actual production singular generators and postcomposition, derived lift finiteness, every degree and zero-sheet cases. Audit zero placeholders and standard-only axioms. Do not claim boundary commutation, a chain-map transfer or consumer closure.",
+       "Promote the exact fixture. Compile transferDegree, generator_transfer and projection. Preserve actual production chain groups, finite lift sums, all degrees and k=0. Audit zero placeholders and standard-only axioms. Do not claim boundary commutation, a chain-map transfer or consumer closure.",
        :commands
-       ["lake env lean ConstructionTargets/CoveringSimplexTransfer.lean"],
+       ["lake env lean ConstructionTargets/CoveringTransferDegree.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
-      :id :covering-simplex-transfer-implementation-refill42,
+      :id :covering-transfer-degree-implementation-refill42,
       :kind :reusable-theorem,
-      :depends-on [:covering-lift-restriction-implementation-refill42],
+      :depends-on [:covering-simplex-transfer-implementation-refill42],
       :current-residual
-      "Production simplex transfer and projection identity are compiled. Extend over chain groups and prove all boundary identities using lift restriction bijections.",
+      "Degreewise production transfer is compiled. Prove boundary commutation using face-restriction lift bijections, then assemble the chain map.",
       :other-consumers ["t01A02" "t98A01"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/CoveringLiftRestriction.olean ConstructionTargets/CoveringLiftRestriction.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean -o /tmp/incidence-local40/ConstructionTargets/CoveringSimplexTransfer.olean ConstructionTargets/CoveringSimplexTransfer.lean'",
        :exit 0}
       {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/CoveringSimplexTransfer.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/CoveringTransferDegree.lean'",
        :exit 0}
-      {:cmd "python3 /tmp/covering-simplex-transfer-audit.py", :exit 0}
-      {:cmd "git status --short", :exit 0}],
+      {:cmd "python3 /tmp/covering-transfer-degree-audit.py",
+       :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/CoveringSimplexTransfer.lean",
+     [{:cmd
+       "Private-path CoveringTransferDegree compilation, initial attempt",
        :exit 1,
-       :correction
-       "Compiled the missing banked lift-restriction object privately."}
+       :correction "Opened the Simplicial notation scope."}
       {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/CoveringSimplexTransfer.lean'",
+       "Private-path CoveringTransferDegree compilation, coproduct rewrite",
        :exit 1,
        :correction
-       "Explicitly installed the derived finiteLifts instance with its covering witness before constructing the finite sum. Final compilation succeeds without warnings."}],
+       "Reduced the identity wrapper around the generator."}
+      {:cmd
+       "Private-path CoveringTransferDegree compilation, reduced generator",
+       :exit 1,
+       :correction
+       "Used elaborating rewrite for the definitionally equal coproduct presentation."}
+      {:cmd
+       "Private-path CoveringTransferDegree compilation, simplex conversion",
+       :exit 1,
+       :correction
+       "Applied the explicit simplex equivalence inverse identity. Final compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoveringSimplexTransfer.lean",
+     {:path "/tmp/CoveringTransferDegree.lean",
       :sha256
-      "782dcd0ddc7efc794b45eeef9281afd90ccd5fe78f52c891701a643114430a38",
+      "0f3ceabd405b0e2705749352b33815213d7d6ed77c288998632aed06c4441693",
       :placeholder-count 0},
      :finding
-     "Compiled one production-chain prerequisite. Every standard simplex has finitely many continuous lifts, derived from the actual finite fiber. transferSimplex sums their generators in the production integral singular-chain group in every degree. Projection sends this sum to k times the original generator, including k=0. Boundary commutation and assembly into a chain map remain uncompiled.",
+     "Compiled one degreewise transfer prerequisite. The coproduct of actual singular generators extends the finite simplex-lift sums to homomorphisms on production integral singular-chain groups in every degree. Their generator formula and projection identity, transfer followed by projection equals k times identity, are proved. Boundary commutation remains uncompiled.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "COVER-DEGREE / actual singular-chain transfer",
    :acceptance
@@ -62607,7 +62641,8 @@
    :depends-on
    [:checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry
     :covering-lift-restriction-implementation-refill42
-    :covering-simplex-transfer-implementation-refill42],
+    :covering-simplex-transfer-implementation-refill42
+    :covering-transfer-degree-implementation-refill42],
    :current-residual
    "Finite-fiber function transfer and literal base change exist; a boundary-compatible transfer on actual singular chains is unassembled.",
    :other-consumers ["t01A02" "t98A01"]}
