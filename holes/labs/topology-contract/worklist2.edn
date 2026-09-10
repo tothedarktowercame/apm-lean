@@ -21038,123 +21038,99 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The actual reflection product and antipodal scalar calculation remain in the parent. The ordinary-S0 refutation is preserved; no frozen consumer closure is claimed.",
-     :axiom-audits 13,
-     :outcome :revise,
+     "Exact repaired t94J08 integral transport and degree/local-index uptake remain downstream. The original ordinary-S0 refutation is preserved; no frozen consumer closure is claimed.",
+     :axiom-audits 18,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t94J08,
-      :stop-condition
-      "Bank positive-dimensional top-homology coordinates and coordinate-reflection signs only. Do not claim the reflection product equals antipodal, its scalar action, ordinary-S0 rank one or frozen consumer closure.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/CoefficientFirstReflection.lean",
-         :sha256
-         "5063a6f38e85a592a577ea947ddb99b96b93d71c726b19b37f09cc55efc6cee0"},
-        :commands
-        [{:cmd "lake env lean /tmp/CoefficientFirstReflection.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientFirstReflection.lean"
-       "ConstructionTargets/CoefficientFirstReflection.md"],
-      :dag-node
-      "SPHERE ORIENTATION: positive top-homology coordinates and actual coordinate-reflection signs",
-      :acceptance
-      {:namespace "ConstructionTargets.CoefficientFirstReflection",
-       :implementation
-       "Promote the exact compiled fixture, retaining the literal sphere types and positive-dimensional induction.",
-       :declarations
-       ["extended_reflection"
-        "boundary_reflection"
-        "homology_actual"
-        "reflection_one"
-        "circle_negative"
-        "all_reflections_negative"
-        "topIso"
-        "topIso_step"
-        "normalized_reflection"
-        "reflection_conjugation"
-        "inverse_left"
-        "inverse_right"
-        "integral_circle"
-        "rational_circle"
-        "integral_sphereTwo"
-        "rational_sphereTwo"],
-       :hypotheses
-       "R is a Type 0 commutative ring. Geometry uses EuclideanSpace ℝ. all_reflections_negative requires n ≠ 0 and i : Fin (n+1). topIso uses m : ℕ to identify actual H_(m+1) of the unit sphere in ambient dimension m+2 with ModuleCat.of R R. No nontriviality, characteristic, determinant-sign or permutation-sign assumption is imposed.",
-       :consumer-equation
-       "Every actual coordinate reflection induces negative identity on positive-dimensional top homology. Under topIso, its forward map equals negative topIso.hom and its conjugation equals negative identity.",
-       :consumer-residual
-       "Prove the product of all actual coordinate reflections is literal negation, then apply homology functor composition to derive the antipodal scalar (-1)^(n+1). Exact repaired t94J08 transport remains downstream.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientFirstReflection."
-        "Reproduce thirteen standard-only axiom audits and integer/rational examples in dimensions one and two."
-        "Audit the actual height-preserving reflection equality, circle disk-reflection base, induction degree shifts and permutation transport."
-        "Audit recursive topIso, forward normalization, conjugation and both inverse laws."
-        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :coefficient-general-positive-top-reflection-induction-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:coefficient-general-coordinate-reflection-conjugation-1
-       :oriented-checkpoint34-coefficient-orthogonal-sphere-comparison-1
-       :oriented-checkpoint33-coefficient-disk-reflection-sign-1
-       :oriented-checkpoint30-coefficient-sphere-endpoints-1],
-      :current-residual
-      "The antipodal calculation needs positive top-homology coordinates and an unconditional negative-identity action for each actual coordinate reflection.",
-      :other-consumers [:t02A08 :t98A02 :t96J06]},
+     :acceptance
+     {:namespace "ConstructionTargets.CoefficientSphereAntipodal",
+      :implementation
+      "Promote the exact compiled fixture, reusing the reviewed coordinate-reflection conjugation, first-reflection induction and recursive top-homology coordinates.",
+      :declarations
+      ["reflectionProduct"
+       "product_coordinate"
+       "antipodal"
+       "product_antipodal"
+       "product_homology"
+       "antipodal_action"
+       "normalization"
+       "normalization_forward"
+       "normalization_conjugation"
+       "scalar_equation"
+       "inverse_left"
+       "inverse_right"
+       "inverse_action"
+       "integral_circle"
+       "integral_sphereTwo"
+       "rational_circle"
+       "rational_sphereTwo"
+       "circle_scalar"
+       "sphereTwo_scalar"],
+      :hypotheses
+      "R is a Type 0 commutative ring. Geometry uses the literal unit sphere in EuclideanSpace ℝ (Fin d). The geometric product equality holds in every ambient dimension, including zero. antipodal_action requires n ≠ 0 and computes actual ModuleCat R singular homology in degree n and ambient dimension n+1. normalization is indexed by m with sphere dimension m+1, covering precisely all positive dimensions. No nontriviality or characteristic restriction is imposed.",
+      :consumer-equation
+      "The product of all coordinate reflections is literal negation. Its actual induced map on H_n(S^n;R), for n positive, equals (-1)^(n+1) times identity. Under the constructed normalization the forward, conjugation and elementwise scalar equations hold, together with both inverse laws and the inverse intertwining equation.",
+      :consumer-residual
+      "Transport the integral specialization into the exact repaired t94J08 definitions and discharge its degree and local-index obligations. All-integer degree realization, localization/gluing and nonbounding remain separate.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSphereAntipodal."
+       "Reproduce eighteen standard-only axiom audits and integer/rational specializations in dimensions one and two."
+       "Audit the actual coordinate-reflection product, pointwise product-to-negation proof and homology functor composition."
+       "Audit positive-dimensional hypotheses, reviewed circle base and reflection induction, recursive normalization, scalar equations and inverse laws."
+       "Preserve the ordinary-S0 refutation; do not claim frozen consumer closure."
+       "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure rules, build-loop design, both ledgers and all five dependency PASS receipts; inspect actual sphere and disk comparison APIs",
+       "Read DAG, closure rules and build-loop design; inspect both ledgers and all six dependency PASS receipts",
        :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientFirstReflection.lean",
+      {:cmd "lake env lean /tmp/CoefficientSphereAntipodal.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientFirstReflection.lean", :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientSphereAntipodal.lean", :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientFirstReflection.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSphereAntipodal.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial first-reflection fixture compilation",
+     [{:cmd "Initial product and antipodal-action compilation",
+       :exit 0,
+       :correction
+       "Removed one unused simp argument reported by the linter."}
+      {:cmd "Compilation after adding normalization equations",
        :exit 1,
        :correction
-       "Proved the last coordinate differs from a castSucc coordinate and unfolded the actual snoc definition."}
-      {:cmd "Second first-reflection fixture compilation",
-       :exit 1,
-       :correction
-       "Unfolded Fin.init to finish the geometric coordinate equality."}
-      {:cmd "Compilation after adding top-homology normalization",
-       :exit 1,
-       :correction
-       "The recursive forward equation hit the default heartbeat limit during definitional reduction; isolated the equation for correction."}
+       "Replaced unsuccessful categorical scalar simplification with module-map extensionality and explicit linearity; proved inverse action directly from the actual antipodal-action equation."}
       {:cmd
-       "Normalization compilation after removing the redundant base equation",
+       "Compilation after adding evaluated low-dimensional scalars",
        :exit 1,
        :correction
-       "The recursive forward equation still timed out; replaced unrestricted rfl reduction with an explicit rewrite by topIso followed by rfl. Final compilation succeeds at the unchanged heartbeat limit."}],
+       "Expanded the odd power explicitly for the sphere-two scalar."}
+      {:cmd "Second evaluated-scalar compilation",
+       :exit 1,
+       :correction
+       "Added the missing left-unit and multiplication-by-negative-one simplifications. Final compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientFirstReflection.lean",
+     {:path "/tmp/CoefficientSphereAntipodal.lean",
       :sha256
-      "5063a6f38e85a592a577ea947ddb99b96b93d71c726b19b37f09cc55efc6cee0"},
+      "dd50b5b31824c2d507d7a607e912ddb590c36e6c5e40b1a5f61e078910f9cccc"},
      :finding
-     "Exactly one complete compiled coordinate-reflection prerequisite is supplied. The fixture identifies the height-preserving extension with the actual coordinate reflection, derives the circle sign from disk-reflection equivariance, and inducts through sphereShift to prove every coordinate reflection acts by negative identity in positive top degree. It constructs top-homology coordinates from the circle endpoint and sphere shift, with normalized reflection equations and inverse laws. The product-to-negation and antipodal scalar calculation remain; the parent is not GO.",
+     "The complete antipodal fixture compiles without placeholders. Actual coordinate reflections compose to literal negation, and functorial composition with the reviewed reflection signs proves the antipodal scalar over every Type 0 commutative ring. Constructed positive top-homology coordinates, forward normalization, conjugation, scalar and inverse equations are verified. Integer and rational circle and two-sphere examples compile. No determinant theorem, permutation sign or antipodal action is assumed.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientSphereAntipodal.lean"
+       "ConstructionTargets/CoefficientSphereAntipodal.md"]},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientSphereAntipodal.lean"
+    "ConstructionTargets/CoefficientSphereAntipodal.md"],
    :dag-node
    "SPHERE ORIENTATION: positive-dimensional top homology and actual antipodal action",
    :acceptance
