@@ -62241,6 +62241,20 @@
       :exit 0}
      {:cmd "git diff --cached --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789024599031-18116-20e605c0",
+     :commands
+     ["git show dfe31bd0:ConstructionTargets/ScaledTriangleNeighborhood.lean"
+      "Independent Python pinned-fixture comparison, three complete declaration hashes and placeholder audit"
+      "lake build ConstructionTargets.StandardTriangleEmbedding"
+      "lake env lean ConstructionTargets/ScaledTriangleNeighborhood.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 35bc430b:holes/labs/topology-contract/worklist.edn)"
+      "git diff-tree --no-commit-id --name-only -r dfe31bd0"
+      "git show --check dfe31bd0"],
+     :finding
+     "Author codex-6 is independent. Exact single-file promotion and fixture SHA256 8c4bf09cef6430b0b167f57db3139818ddbcd3a7568e4b9c0d6fff7bd0667e66 verified; three complete declaration hashes match; zero placeholders. Dependency build passes 3285 jobs; compilation warning-free with two standard-only axiom audits; validator passes 494 items. Scale epsilon/2 is constructed from an open ball; the proved product-norm bound gives containment. Scaling and translation preserve closed embedding, compact image and open interior containing the requested center. Manifold chart transport, finite coverage and compatible faces remain unclaimed. Ledger untouched."},
     :commit "dfe31bd074dedf6fab48fa0e87badbc0d79fea42",
     :changed-paths
     ["ConstructionTargets/ScaledTriangleNeighborhood.lean"],
@@ -62250,7 +62264,7 @@
      "8c4bf09cef6430b0b167f57db3139818ddbcd3a7568e4b9c0d6fff7bd0667e66"},
     :axiom-audit-declarations 2},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ScaledTriangleNeighborhood.lean"],
    :dag-node
    "SURFACE TRIANGULATION / scaled triangles inside coordinate neighborhoods",
@@ -62355,7 +62369,7 @@
      "Compiled one geometric prerequisite: every point of an open coordinate-plane set admits a positively scaled, translated standard triangle contained in that set. The constructed map is a closed embedding with compact image; its positive-barycentric interior has open image containing the requested point. Containment follows from a proved norm bound and a chosen open ball. Manifold chart transport and finite coverage remain uncompiled.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "SURFACE TRIANGULATION / finite embedded triangle cover",
    :acceptance
