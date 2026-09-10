@@ -43790,7 +43790,8 @@
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
    {:outcome :replan,
-    :seat "codex-13",
+    :disposition :replan,
+    :author "codex-13",
     :commands
     [{:cmd
       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
@@ -43809,6 +43810,98 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789080856639-19719-aac417cf",
+     :commands
+     ["git log --oneline -8"
+      "rg -n -C 8 ':oriented-checkpoint71-immutable-checkpoint67-evidence-and-consumer-refill-1' holes/labs/topology-contract/worklist2.edn"
+      "git show --stat --oneline 483bf575"
+      "git show --format=fuller --no-ext-diff 483bf575 --"
+      "git archive 483bf575 | tar -x -C <review-dir>"
+      "git diff-tree --no-commit-id --name-status -r 483bf575"
+      "git diff-tree --check 483bf575^ 483bf575"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist2.edn"
+      "sha256sum <archived-checkpoint67-artifact> <archived-canonical-module>"
+      "inspect archived strategy census, reviewed STOP reason, replacement row, dependencies, route boundaries, and deferred work"],
+     :finding
+     "PASS: commit 483bf575e82efbad3f7c7ee6b034ddb574ddc0b8 has exact worklist2-only scope and clean whitespace; both archived ledgers validate. The checkpoint records zero placeholder or closure progress, preserves the reviewed checkpoint70 STOP caused by checkpoint67's reviewed-source evidence shape, and elects exactly the typed evidence-shape-aware atomic fixture transition needed before terminal-count promotion. The replacement requires complete allowlisted preservation, checkpoint60 compatibility, checkpoint67 fixture/predecessor hashes, reviewed source, declarations, statement hashes, implementation commit and PASS review, with negative tests for every representation boundary. Artifact and canonical recurrence bytes both reproduce SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08. No topology or consumer source changed, so recurrence orientations, frozen statement hashes and consumer placeholder counts remain unchanged."},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Implement only a typed extension of atomic completion-transition preservation that can validate checkpoint67's actual reviewed-source evidence fields while retaining the existing checkpoint60 behavior and every rejection invariant. Do not permit arbitrary ledger mutation, omit preserved fields, weaken target hashing, alter topology sources, promote terminal counts or claim consumer closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "LEDGER REPRESENTATION: evidence-shape-aware atomic fixture-path transitions",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use the existing checkpoint60 transition and the banked checkpoint67 immutable artifact as the two required concrete evidence shapes.",
+       :route-step
+       "Supplies the atomic checkpoint67 evidence transition required before terminal-count promotion on the t03J05, t96J06 and t97A04 routes.",
+       :probe
+       "Extend the completion-transition representation so each supported evidence shape explicitly names every preserved ledger path and expected value. Preserve the current fixed checkpoint60 request unchanged. Add the checkpoint67 case preserving fixture SHA256, reviewed-source, reviewed-source-sha256, predecessor-path, predecessor-sha256, placeholder count, implementation commit, review outcome, declarations and statement hashes. Reject unknown paths, omitted or extra fields, wrong values, wrong source or target, absent or wrongly hashed artifacts, noncompleted rows and all mutations beyond evidence.fixture.path. Prove by focused tests that both transitions apply before replacement insertion and whole-ledger validation precedes atomic write. GO requires a complete tested patch. REVISE requires exactly one complete tested schema or validator prerequisite. STOP names an exact invariant conflict.",
+       :consumer-equation
+       "An atomic fixture-path transition validates the complete declared immutable evidence shape of its target completed row, changes only evidence.fixture.path, and preserves all other ledger data exactly.",
+       :consumer-residual
+       "Apply the checkpoint67 transition to its banked immutable artifact, promote terminal-count equations, then resume balanced corner construction.",
+       :gates
+       ["Retain all existing checkpoint60 transition tests unchanged."
+        "Require an allowlisted complete preserve-path schema for each supported evidence shape."
+        "Preserve checkpoint67 fixture and predecessor hashes, reviewed source, declarations, statement hashes, implementation commit and PASS review."
+        "Reject omitted, extra, unknown or mismatched preserved fields."
+        "Reject wrong row, state, source, target, target hash and any path other than evidence.fixture.path."
+        "Test concrete checkpoint60 and checkpoint67 scratch-ledger transitions."
+        "Run clj-kondo, check-parens, focused receipt tests, both ledger validators and whitespace checks."
+        "Confirm no ledger, scope, dependency, hash, review or atomic-write invariant is weakened and no topology theorem is claimed."]},
+      :representation
+      {:source
+       "Completed rows with distinct, explicitly recorded fixture-evidence shapes and immutable artifact targets",
+       :target
+       "A validated atomic fixture-path transition preserving every allowlisted field belonging to the selected evidence shape",
+       :direction
+       "Exact state transition from each source completed-row evidence representation to its target immutable-artifact representation, changing only evidence.fixture.path after exhaustive shape-specific value validation."},
+      :id
+      :oriented-checkpoint71-evidence-shape-aware-atomic-fixture-transitions-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint71-immutable-checkpoint67-evidence-and-consumer-refill-1],
+      :current-residual
+      "The atomic transition validator accepts only checkpoint60's supporting-source evidence shape and cannot validate checkpoint67's reviewed-source and predecessor evidence without a typed schema extension.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: typed atomic fixture transitions and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint72-typed-atomic-fixture-transitions-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint71-evidence-shape-aware-atomic-fixture-transitions-1],
+      :current-residual
+      "Measure typed atomic transition support separately from checkpoint67 transition application, terminal-count promotion, balanced corner construction, oriented cancellation, cross-product assembly, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
     :measures
     {:placeholder-delta 0,
      :frozen-branch-uptake 0,
@@ -43985,84 +44078,9 @@
      ["Do not apply the checkpoint67 transition by inventing absent supporting evidence or omitting preserved-value checks."
       "Do not retry terminal-count promotion or adjacent-corner construction before the typed transition is banked and applied."
       "Reviewed Euler and Hausdorff STOPs remain preserved; concurrent coefficient work is excluded."]},
-    :replacement-items
-    [{:consumer :t03J05,
-      :stop-condition
-      "Implement only a typed extension of atomic completion-transition preservation that can validate checkpoint67's actual reviewed-source evidence fields while retaining the existing checkpoint60 behavior and every rejection invariant. Do not permit arbitrary ledger mutation, omit preserved fields, weaken target hashing, alter topology sources, promote terminal counts or claim consumer closure.",
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "LEDGER REPRESENTATION: evidence-shape-aware atomic fixture-path transitions",
-      :acceptance
-      {:axioms :standard-only,
-       :hypotheses
-       "Use the existing checkpoint60 transition and the banked checkpoint67 immutable artifact as the two required concrete evidence shapes.",
-       :route-step
-       "Supplies the atomic checkpoint67 evidence transition required before terminal-count promotion on the t03J05, t96J06 and t97A04 routes.",
-       :probe
-       "Extend the completion-transition representation so each supported evidence shape explicitly names every preserved ledger path and expected value. Preserve the current fixed checkpoint60 request unchanged. Add the checkpoint67 case preserving fixture SHA256, reviewed-source, reviewed-source-sha256, predecessor-path, predecessor-sha256, placeholder count, implementation commit, review outcome, declarations and statement hashes. Reject unknown paths, omitted or extra fields, wrong values, wrong source or target, absent or wrongly hashed artifacts, noncompleted rows and all mutations beyond evidence.fixture.path. Prove by focused tests that both transitions apply before replacement insertion and whole-ledger validation precedes atomic write. GO requires a complete tested patch. REVISE requires exactly one complete tested schema or validator prerequisite. STOP names an exact invariant conflict.",
-       :consumer-equation
-       "An atomic fixture-path transition validates the complete declared immutable evidence shape of its target completed row, changes only evidence.fixture.path, and preserves all other ledger data exactly.",
-       :consumer-residual
-       "Apply the checkpoint67 transition to its banked immutable artifact, promote terminal-count equations, then resume balanced corner construction.",
-       :gates
-       ["Retain all existing checkpoint60 transition tests unchanged."
-        "Require an allowlisted complete preserve-path schema for each supported evidence shape."
-        "Preserve checkpoint67 fixture and predecessor hashes, reviewed source, declarations, statement hashes, implementation commit and PASS review."
-        "Reject omitted, extra, unknown or mismatched preserved fields."
-        "Reject wrong row, state, source, target, target hash and any path other than evidence.fixture.path."
-        "Test concrete checkpoint60 and checkpoint67 scratch-ledger transitions."
-        "Run clj-kondo, check-parens, focused receipt tests, both ledger validators and whitespace checks."
-        "Confirm no ledger, scope, dependency, hash, review or atomic-write invariant is weakened and no topology theorem is claimed."]},
-      :representation
-      {:source
-       "Completed rows with distinct, explicitly recorded fixture-evidence shapes and immutable artifact targets",
-       :target
-       "A validated atomic fixture-path transition preserving every allowlisted field belonging to the selected evidence shape",
-       :direction
-       "Exact state transition from each source completed-row evidence representation to its target immutable-artifact representation, changing only evidence.fixture.path after exhaustive shape-specific value validation."},
-      :id
-      :oriented-checkpoint71-evidence-shape-aware-atomic-fixture-transitions-1,
-      :kind :representation-comparison,
-      :depends-on
-      [:oriented-checkpoint71-immutable-checkpoint67-evidence-and-consumer-refill-1],
-      :current-residual
-      "The atomic transition validator accepts only checkpoint60's supporting-source evidence shape and cannot validate checkpoint67's reviewed-source and predecessor evidence without a typed schema extension.",
-      :other-consumers [:t96J06 :t97A04]}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 1,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :stop-condition
-      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
-      :phase :strategy,
-      :state :open,
-      :scope [],
-      :dag-node
-      "PORTFOLIO POLICY: typed atomic fixture transitions and renewed consumer eligibility",
-      :acceptance
-      {:strategy
-       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
-       :stop-condition
-       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
-      :id
-      :oriented-checkpoint72-typed-atomic-fixture-transitions-and-consumer-refill-1,
-      :kind :strategy-checkpoint,
-      :depends-on
-      [:oriented-checkpoint71-evidence-shape-aware-atomic-fixture-transitions-1],
-      :current-residual
-      "Measure typed atomic transition support separately from checkpoint67 transition application, terminal-count promotion, balanced corner construction, oriented cancellation, cross-product assembly, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
-      :other-consumers []}],
-    :author "codex-13",
-    :disposition :replan},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: immutable checkpoint67 recurrence evidence and renewed consumer eligibility",
@@ -44084,7 +44102,7 @@
    :stop-condition
    "Implement only a typed extension of atomic completion-transition preservation that can validate checkpoint67's actual reviewed-source evidence fields while retaining the existing checkpoint60 behavior and every rejection invariant. Do not permit arbitrary ledger mutation, omit preserved fields, weaken target hashing, alter topology sources, promote terminal counts or claim consumer closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: evidence-shape-aware atomic fixture-path transitions",
