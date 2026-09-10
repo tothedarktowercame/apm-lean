@@ -15787,89 +15787,123 @@
    :stop-condition
    "Do not assume the relative comparison or horizontal monicity. Do not reinterpret AddCommGrpCat results as ModuleCat R facts. Do not claim excision, sphere suspension or frozen closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Coefficient-general excision still needs the subcomplex union/intersection and actual-subspace quotient identifications. Sphere suspension and rational S2 H1/H2 remain downstream. No excision or frozen consumer closure is claimed.",
-     :axiom-audits 9,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact compiled fixture, preserving actual subtypes, coefficient object and categorical cokernels.",
-      :namespace "ConstructionTargets.CoefficientRelativeSmall",
-      :declarations
-      ["chains"
-       "subspaceMap"
-       "restrictedMap"
-       "inclusion_square"
-       "subspaceMap_component_mono"
-       "subspaceMap_mono"
-       "smallInclusion_mono"
-       "restrictedMap_mono"
-       "restrictedMap_generator"
-       "restrictedMap_d"
-       "relativeSmall"
-       "relativeChains"
-       "relativeMap"
-       "comparisonIso"
-       "comparisonIso_hom"
-       "subspaceMap_eq_postcomposition"
-       "inverse_left"
-       "inverse_right"
-       "integral_interval"
-       "rational_interval"],
-      :hypotheses
-      "R, X and the cover index type are Type 0. R is a commutative ring and X a topological space. A is an arbitrary subset, not assumed open. Map constructions and monicity require no cover hypothesis. The homology comparison requires an indexed open cover of X. Empty spaces and arbitrary index types are retained; no connectedness or nonemptiness is imposed. The coefficient object is ModuleCat.of R R.",
-      :consumer-equation
-      "The induced relative cokernel map gives an isomorphism on homology in every natural-number degree. comparisonIso_hom identifies the forward map exactly; inverse_left and inverse_right prove both inverse laws.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientRelativeSmall."
-       "Reproduce nine standard-only axiom audits and integer/rational examples for the closed interval subtype in the overlapping real interval cover."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure rules, reviewed dependencies and restricted-cover/subtype simplicial APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientRelativeSmall.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientRelativeSmall.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientRelativeSmall.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial lake env lean /tmp/CoefficientRelativeSmall.lean",
-       :exit 1,
-       :correction
-       "Applied the coproduct generator equation explicitly and rewrote the restricted-cover union equality directly. Final complete compilation succeeds without warnings."}],
-     :representation
-     {:source
-      "Homology of the actual cokernel of the restricted-cover small-chain map from A to X over ModuleCat R.",
-      :target
-      "Homology of the actual cokernel of singular postcomposition by the subtype inclusion A into X over ModuleCat R.",
-      :direction
-      "Construct an isomorphism from relative cover-small homology to relative singular homology whose forward arrow equals homologyMap of the cokernel map induced by the two actual small-chain inclusions."},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientRelativeSmall.lean",
-      :sha256
-      "8d748371a567aff62b8214d511fb6275fd24832a9544540d21fb5d39c1bbfd79"},
-     :finding
-     "Complete relative small-chain comparison compiles over ModuleCat R. The restricted map is constructed through the coefficient-general chain functor from the existing restricted-cover simplicial map. Generator evaluation, differential compatibility and the inclusion square are proved. Injectivity of the actual subtype simplicial map proves absolute monicity; the square proves restricted monicity. Both relative complexes are actual categorical cokernels. Reviewed absolute comparisons on X and A discharge the cokernel-comparison hypotheses, yielding every-degree relative isomorphisms with the exact induced forward map and both inverse laws.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientRelativeSmall.lean"
-       "ConstructionTargets/CoefficientRelativeSmall.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Coefficient-general excision still needs subcomplex union/intersection and actual-subspace quotient identifications. Sphere suspension and rational S2 H1/H2 remain downstream. No excision or frozen consumer closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :nine-standard-only-audits :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 9,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 20 existing dependency warnings; both direct compilations had zero warnings."],
+    :statement-hashes
+    {"relativeMap"
+     "c8391c263b7a35558084d2de53b42a5be56abe37ff8ecd0b9adeea5b631bcc00",
+     "smallInclusion_mono"
+     "6666c1ce8b912b0d0092f507c177271caa09e2a8077093da4d6f69c0eb713ca6",
+     "comparisonIso_hom"
+     "2c80a4da75201edc405fb7bbdc21e852aee021622da8bd410efc9608a14873bc",
+     "comparisonIso"
+     "eb4c169b1684b79729bd051bac51fac3c29df589c587f65acdcb8c53546344a9",
+     "relativeChains"
+     "d6a42ac86dee9e4f54b06f49a78dc6a4ba548c28871b8d800eeede7f5f3cf233",
+     "relativeSmall"
+     "07cbb81fe24b4b72eaa62b6d7247531a567f4100915187ddcbb64fb97d194b72",
+     "inverse_right"
+     "fe4cb888b18fb39ce07e8b23124374ed70c8d9bfed6358a0f1e5a1f86aaab52b",
+     "subspaceMap_mono"
+     "f3a0edb663a4a593dec42f64e0097aa3918dc05b1c82cfe32174574560dc5a09",
+     "restrictedMap"
+     "c39501e05f47330d582abdc4ff4dc8e8d5cb33bf0ab00e965680af701f435a6a",
+     "chains"
+     "0673aea4cc75c4745680101dcde323cf6371551294b22acd82a7f98af6c9b8ec",
+     "inclusion_square"
+     "9d897c8dfbba98d6e416085e7b7a40f8b712398f62de408834ad0ad497f9a467",
+     "rational_interval"
+     "44198f4a2970d85d95031447aeb87f696ce494a8e911004b8323d4c33263daac",
+     "inverse_left"
+     "d07600a95bd4d9de83451c61275ea70bfcb8a6ab28bd7e6b2e937f8bab82b087",
+     "subspaceMap"
+     "e0dfa0230307bd3848878e0c8cf627549d9048fc67af6c8531ad3de4a7d3c096",
+     "restrictedMap_generator"
+     "b5bd5837e236da7f6f0c741225a9abf077927e43868fe7329020f0fcb95f328d",
+     "restrictedMap_d"
+     "10085c2961e413e88df3571c6853c011ebf613384f46388a02a88d8d13ef52d0",
+     "restrictedMap_mono"
+     "9be5eb300a970196f6b77c03a539fc8da88e7aa9637eb116070b7533e8084b0d",
+     "integral_interval"
+     "f5a576ee6a751f82e5a8c91473a415df88e5e63461c14940b5878c7bc3d2cccc",
+     "subspaceMap_component_mono"
+     "a7727f67d1e53630721010b48db686de06d5c020b463c25ccf0f2601511ce361",
+     "subspaceMap_eq_postcomposition"
+     "52d61dc223072d12ce1b923ef1f71ccce4940dafaa646838774a18f3323bc51c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure stop rules and all dependency PASS receipts",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientRelativeSmall.lean", :exit 0}
+     {:cmd "Python verify fixture SHA256 and promote exact fixture",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientRelativeSmall.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientRelativeSmall.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientRelativeSmall",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientRelativeSmall.lean /tmp/CoefficientRelativeSmall.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, nine standard-only audits per compilation, warning and twenty declaration-hash audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope audit and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct coefficient-general relative small-chain comparison\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope audit pinned to 568d4a99 and clean tracked checkout verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Homology of the actual cokernel of the restricted-cover small-chain map from A to X over ModuleCat R.",
+     :target
+     "Homology of the actual cokernel of singular postcomposition by subtype inclusion A into X over ModuleCat R.",
+     :direction
+     "Construct an isomorphism from relative cover-small homology to relative singular homology whose forward arrow equals homologyMap of the cokernel map induced by the two actual small-chain inclusions."},
+    :commit "568d4a99f0c68ff1783418b7c7fe89ab2bb5e8dc",
+    :changed-paths
+    ["ConstructionTargets/CoefficientRelativeSmall.lean"
+     "ConstructionTargets/CoefficientRelativeSmall.md"],
+    :fixture
+    {:path "/tmp/CoefficientRelativeSmall.lean",
+     :sha256
+     "8d748371a567aff62b8214d511fb6275fd24832a9544540d21fb5d39c1bbfd79"},
+    :finding
+    "Promoted the exact fixture and documented actual subtype maps, coefficient object and categorical cokernels. Constructed the restricted map, inclusion square and horizontal monicity; applied absolute comparisons on X and A to obtain every-degree relative isomorphisms with exact forward map and both inverse laws. Integer/rational closed-interval-subtype examples compile. Focused build passed with 8274 jobs.",
+    :statement-hash-method
+    "SHA256 of declaration text beginning with theorem, def, abbrev or instance and ending immediately before the space preceding := or where; namespace ConstructionTargets.CoefficientRelativeSmall.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientRelativeSmall.lean"
     "ConstructionTargets/CoefficientRelativeSmall.md"],
