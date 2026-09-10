@@ -66672,81 +66672,67 @@
    :stop-condition
    "GO requires equality of the actual transition units at every point of a constructed neighborhood; REVISE requires exactly one compiled prerequisite. No global orientation or fundamental-class claim.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Actual transition-unit local constancy is proved in dimension m+2. Global orientation, global localization and fundamental-class construction remain subsequent. Lower-dimensional local comparisons are unchanged; normalization is not extended to lower dimensions.",
-     :dependency-review
-     {:outcome :pass,
-      :seat "codex-10",
-      :job "invoke-1789038383499-18452-4a88445d"},
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:locally_constant
-      "1f8f6333030fddc3fedf396f43da5bc80bf47928bd759f69d1956532db20ff78",
-      :lifted_right
-      "fc1d0e4e76a625788ad5b0d69f6bc2ce786bc0e3db9b2e2808d9c7525075d6b4",
-      :comparison_lift
-      "f41c595cd543544c4d2154fce8d17713d3d4f8715983147b51e47736d3a3b492"},
-     :acceptance
-     {:implementation
-      "Promote the exact fixture. Compile inclusion_normalization, second_factorization, lifted_left, lifted_right, comparison_lift and locally_constant. Preserve actual pair maps, the constructed open neighborhood, arbitrary commutative-ring coefficients, the original Hausdorff manifold topology and dimension m+2. Reuse the reviewed boundary-motion theorem without duplication. Require zero placeholders, no warnings and standard-only axioms.",
-      :commands
-      ["lake env lean ConstructionTargets/CoefficientTransitionLocalConstancy.lean"],
-      :axioms :standard-only,
-      :placeholder-before 0,
-      :placeholder-after 0},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean -o /tmp/chartball47/ConstructionTargets/CoefficientSecondChartBoundaryMotion.olean ConstructionTargets/CoefficientSecondChartBoundaryMotion.lean'",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientTransitionLocalConstancy.lean'",
-       :exit 0}
-      {:cmd
-       "python3 /tmp/coefficient-transition-local-constancy-audit.py",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/CoefficientTransitionLocalConstancy.lean ConstructionTargets/CoefficientSecondChartBoundaryMotion.lean ConstructionTargets/CoefficientChartBallNormalization.lean",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientTransitionLocalConstancy.lean'",
-       :exit 1,
-       :correction
-       "Initial normalization rewrite did not match the right-normalization abbreviation."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientTransitionLocalConstancy.lean'",
-       :exit 1,
-       :correction
-       "Unfolding alone did not resolve the match; supplied explicit arguments and used elaborating rewrite."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientTransitionLocalConstancy.lean'",
-       :exit 1,
-       :correction
-       "Reduced the congrArg lambda before rewriting homology compositions."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/chartball47:$LEAN_PATH lean /tmp/CoefficientTransitionLocalConstancy.lean'",
-       :exit 1,
-       :correction
-       "Closed the remaining definitional equality with rfl. The complete local-constancy fixture subsequently compiles without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientTransitionLocalConstancy.lean",
-      :sha256
-      "15601b5de06d11918a5d6922f4b71f78582f8a4292b5a707ce9d7702c445aef0",
-      :placeholder-count 0},
-     :finding
-     "Constructed an open neighborhood of the overlap point on which the actual coefficient transition unit equals its value at the center. Proved the actual second-chart pair factorization and ambient normalization comparison, combined both chart comparisons with the reviewed boundary-motion equality, and extracted equality of the named units. No local constancy or orientation compatibility is assumed.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientTransitionLocalConstancy.lean"]},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Global orientation, global localization and fundamental-class construction remain subsequent. Lower-dimensional comparisons are unchanged; normalization is not extended to lower dimensions. No consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789038383499-18452-4a88445d"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:inclusion_normalization
+     "d20273baf6f8cc4bc4c6203f94fc41bd8dd22b62bafc32d65745549916a3821c",
+     :second_factorization
+     "bb4f018a3b18abf2301cb6ba97a0d9608c70f26ce1bc0e721c6bc61682aff682",
+     :lifted_left
+     "59917bf6578baa94262aec35b6344e6d0aa69047ef35693b61e57abdfb5b44f5",
+     :lifted_right
+     "fc1d0e4e76a625788ad5b0d69f6bc2ce786bc0e3db9b2e2808d9c7525075d6b4",
+     :comparison_lift
+     "f41c595cd543544c4d2154fce8d17713d3d4f8715983147b51e47736d3a3b492",
+     :locally_constant
+     "1f8f6333030fddc3fedf396f43da5bc80bf47928bd759f69d1956532db20ff78"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/CoefficientTransitionLocalConstancy.lean",
+      :exit 0}
+     {:cmd
+      "python3 /tmp/coefficient-transition-local-constancy-audit.py",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/CoefficientTransitionLocalConstancy.lean ConstructionTargets/CoefficientTransitionLocalConstancy.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientSecondChartBoundaryMotion ConstructionTargets.CoefficientChartTransitionUnit",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientTransitionLocalConstancy.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "84213e950cb5a1f26fb9f4933760312c87e863f7",
+    :changed-paths
+    ["ConstructionTargets/CoefficientTransitionLocalConstancy.lean"],
+    :fixture
+    {:path "/tmp/CoefficientTransitionLocalConstancy.lean",
+     :sha256
+     "15601b5de06d11918a5d6922f4b71f78582f8a4292b5a707ce9d7702c445aef0",
+     :exact-promotion true},
+    :finding
+    "Exact fixture promoted. Actual second-chart factorization and both ambient normalization comparisons combine with reviewed boundary motion to prove equality of the named transition units on a constructed open neighborhood. Arbitrary commutative-ring coefficients, original Hausdorff topology and dimension m+2 are preserved. Ledger untouched.",
+    :axiom-audit-count 6,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientTransitionLocalConstancy.lean"],
    :dag-node
