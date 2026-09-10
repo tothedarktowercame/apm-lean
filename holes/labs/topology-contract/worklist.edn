@@ -58289,6 +58289,20 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789006299884-17632-de51f2eb",
+     :commands
+     ["git show 73de6ddd70496c3c807fd5f4836fe82dab1aa634"
+      "Independent pinned fixture, scope and dependency-byte audit"
+      "python3 /tmp/manifold-target-tangent-audit.py"
+      "lake build ConstructionTargets.ManifoldTargetRegularFiberGlobalAtlas"
+      "lake env lean ConstructionTargets/ManifoldTargetRegularFiberTangentImage.lean"
+      "git show --format= --check 73de6ddd"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact one-file promotion; fixture and four recorded signature hashes reproduce; complete statements inspected; zero placeholders; consumers unchanged. Local inverse laws prove backward derivative injectivity; coordinate agreement identifies the actual inclusion derivative for the chosen atlas. Constant defining-map composition gives kernel containment, and regularity plus rank-nullity gives equality. Empty fibers and zero-dimensional kernels remain included; general-model and consumer-specific obligations remain separate. Four declarations compile warning-free with standard axioms; prerequisite build succeeds (8447 jobs). Whitespace clean; 451 ledger items validate; no edits."},
     :commit "73de6ddd70496c3c807fd5f4836fe82dab1aa634",
     :changed-paths
     ["ConstructionTargets/ManifoldTargetRegularFiberTangentImage.lean"],
@@ -58300,7 +58314,7 @@
     :finding
     "Exact fixture promoted. All four declarations compile warning-free with standard-only axioms and zero placeholders. Actual inclusion derivative injectivity and kernel-range equality use exactly ManifoldTargetRegularFiberGlobalAtlas.chartedSpace. Existing APIs and consumers unchanged; worktree clean. Validator reports 451 items OK."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ManifoldTargetRegularFiberTangentImage.lean"],
    :dag-node
@@ -58331,7 +58345,7 @@
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
