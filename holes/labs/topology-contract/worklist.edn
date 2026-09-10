@@ -61124,76 +61124,54 @@
    :stop-condition
    "GO requires actual literal-incidence local charts, coverage and overlaps. REVISE requires exactly one compiled prerequisite; no assumed compatibility or consumer closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Local manifold-target incidence charts, coverage and smooth overlaps are complete for the stated self models, including empty incidence and zero-dimensional kernels. Global ChartedSpace/IsManifold assembly, same-atlas inclusion and tangent geometry, component-coverage contracts, orientations and homological comparisons remain subsequent. No Producer or frozen consumer closure is claimed.",
-     :dependency-review
-     {:outcome :pass,
-      :seat "codex-10",
-      :job "invoke-1789017392906-17946-80d7f5f2"},
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:exists-chart
-      "fe0ce87f12af6a94cc84d66cdf2f97cac725ce4047e1439dccbbad627210bc09",
-      :overlap-smooth
-      "3aaff9b9686406ecbe15386e548d5c9a0de0d913ba9013aa58f9c6b8d3b39f71",
-      :exists-cover
-      "ca7e48cad47b93c7dc56091a95fb1609c5347aebcd1a5c88eedf6600d661a46b",
-      :exists-cover-normalized
-      "4d761e70a3986adb2ba61a7ca93a209ae7cc7590fe630885f7f55132f402dafc"},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceSmoothCharts.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/manifold-target-incidence-smooth-audit.py",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "rg -n 'contMDiffOn.*prod|prod.*contMDiffOn' .lake/packages/mathlib/Mathlib/Geometry/Manifold/ContMDiff/Prod.lean",
-       :exit 2,
-       :correction
-       "Located chart smoothness in ContMDiff/Atlas.lean; the searched Prod.lean path does not exist."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceSmoothCharts.lean'",
-       :exit 1,
-       :correction
-       "Specified the product chart center and annotated the backward-map target restriction."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceSmoothCharts.lean'",
-       :exit 1,
-       :correction
-       "Explicitly installed the coordinate vector space's self ChartedSpace so the chart calculus theorems use the intended instance."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceSmoothCharts.lean'",
-       :exit 0,
-       :correction
-       "Removed redundant section assumptions from overlap_smooth. Final compilation is warning-free."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/ManifoldTargetIncidenceSmoothCharts.lean",
-      :sha256
-      "839a4b4b07543f26c78c98572431028db0a3066a19392ffda66ab6ae9428f912",
-      :placeholder-count 0},
-     :finding
-     "Compiled the complete local incidence-chart packet. IncidenceChart records an actual OpenPartialHomeomorph on literal incidence, its ambient source, forward and backward coordinate formulas, and genuine-infinity smoothness of both ambient parameterizations. exists_chart constructs this data from the actual source charts, common target chart, derived coordinate transversality, local extensions and predicate transfer. overlap_smooth proves compatibility by composing those parameterizations. exists_cover constructs a center-covering family; exists_cover_normalized supplies the requested Euclidean dimension finrank E + finrank G - finrank F with smooth overlaps. The inherited topology and ordinary product norm are preserved. No global extension transversality, chart or compatibility is assumed.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/ManifoldTargetIncidenceSmoothCharts.lean"],
-      :acceptance
-      {:implementation
-       "Promote the exact fixture. Compile IncidenceChart, exists_chart, overlap_smooth, exists_cover and exists_cover_normalized. Preserve the actual incidence subtype, ambient coordinate specifications, constructed chart coverage, genuine-infinity overlaps and explicit sum-minus-target dimension. Preserve existing APIs and the weaker target hypotheses. Audit zero placeholders and standard-only axioms. No global atlas, inclusion tangent theorem or consumer closure is claimed.",
-       :commands
-       ["lake env lean ConstructionTargets/ManifoldTargetIncidenceSmoothCharts.lean"],
-       :axioms :standard-only,
-       :placeholder-before 0,
-       :placeholder-after 0}},
-     :seat "codex-12"}},
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Local literal-incidence charts, ambient coordinate specifications, coverage and genuine-infinity overlaps are compiled for the stated self models, preserving inherited topology, ordinary product norm and explicit sum-minus-target dimension. Empty incidence and zero-dimensional kernels are included. Global atlas assembly, same-atlas inclusion and tangent geometry, component coverage, orientations and homological comparisons remain. No Producer or frozen consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789017392906-17946-80d7f5f2"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:exists_chart
+     "fe0ce87f12af6a94cc84d66cdf2f97cac725ce4047e1439dccbbad627210bc09",
+     :overlap_smooth
+     "3aaff9b9686406ecbe15386e548d5c9a0de0d913ba9013aa58f9c6b8d3b39f71",
+     :exists_cover
+     "ca7e48cad47b93c7dc56091a95fb1609c5347aebcd1a5c88eedf6600d661a46b",
+     :exists_cover_normalized
+     "4d761e70a3986adb2ba61a7ca93a209ae7cc7590fe630885f7f55132f402dafc"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sed '/^pathlib.Path.*write_text/d' /tmp/manifold-target-incidence-smooth-audit.py | python3",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ManifoldTargetIncidenceSmoothCharts.lean ConstructionTargets/ManifoldTargetIncidenceSmoothCharts.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldTargetIncidenceSmoothCharts.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "ab87b24fd4909eb34a40fbb3d14d9ca19900cf96",
+    :changed-paths
+    ["ConstructionTargets/ManifoldTargetIncidenceSmoothCharts.lean"],
+    :fixture
+    {:path "/tmp/ManifoldTargetIncidenceSmoothCharts.lean",
+     :sha256
+     "839a4b4b07543f26c78c98572431028db0a3066a19392ffda66ab6ae9428f912"},
+    :axiom-audit-declarations 4},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ManifoldTargetIncidenceSmoothCharts.lean"],
    :dag-node
