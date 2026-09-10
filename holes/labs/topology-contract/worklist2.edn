@@ -33022,8 +33022,287 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :seat "codex-13",
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      :exit 0}
+     {:cmd
+      "Recount all DAG-named frozen consumers with comments stripped and inspect current open, blocked and done-unreviewed rows",
+      :exit 0}
+     {:cmd
+      "Inspect canonical SphereCapNullEquatorMeasureAssembly, IntrinsicSphereSecondMoments, IntrinsicSphereFourthMoments and the reviewed raw-Hausdorff normalization STOP",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean",
+      :exit 0}
+     {:cmd
+      "git diff --name-only 9c8b138e3d48deb42fd02d95d174556c99f16619..HEAD -- ConstructionTargets problems | sort",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :measures
+    {:baseline
+     {:commit "9c8b138e3d48deb42fd02d95d174556c99f16619",
+      :description "Accepted checkpoint52 strategy transition"},
+     :proved-refutations 0,
+     :frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :head
+     {:commit "c8e68a87797ac57b987048a5983413ec397afa52",
+      :description "Pre-checkpoint53 strategy head"},
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:before 814,
+      :after 816,
+      :portfolio
+      ["ConstructionTargets/SphereCapNullEquatorMeasureAssembly.lean"
+       "ConstructionTargets/SphereCapNullEquatorMeasureAssembly.md"],
+      :concurrent []},
+     :corrected-closures 0,
+     :review-outcomes
+     {:sphere-cap-null-equator-assembly
+      {:outcome :pass,
+       :commit "f6c7344b21577f342bf2a84afe82bbd04e5d03bd",
+       :fixture-sha256
+       "bf7c2f94ed65c0c992120fb26d29b94cb3a53de2146b3f9680ed60ca76b50aad"},
+      :raw-hausdorff-normalization
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-addHaarScalarFactor-characterization},
+      :intrinsic-sphere-moments
+      {:outcome :pass,
+       :finding
+       "Second, mixed and fourth moments and both consumer-specific density reductions are already banked; duplicate moment work is excluded."}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 33,
+      :zero-placeholder 25,
+      :within-two 23,
+      :placeholders 62}},
+    :finding
+    {:typed-residual-change
+     "Canonical symbolic whole-sphere assembly is banked: raw S2 and S3 Hausdorff measures equal the sums of their strict-cap reciprocal-height integrals, with equators removed only by proved nullity. The four sphere consumers already have the abstract moment identities. Their numerical mass equations still require the reviewed missing addHaarScalarFactor characterization, so that STOP is preserved and neither normalization nor moment infrastructure is re-elected. The complete-DAG rerank moves to the one-placeholder t96J05 specification repair: its reviewed centered-circle counterexample refutes the frozen unconditional radial-level assertion locally, while an explicit positive regular-value hypothesis permits a precise corrected theorem using the banked regular-fiber atlas.",
+     :routes
+     [{:consumer :a97J08,
+       :placeholders 1,
+       :route
+       "banked local degree and orientation data -> missing consumer-facing comparison -> frozen adapter"}
+      {:consumer :t00A03,
+       :placeholders 2,
+       :route
+       "contained translations -> active endpoint-preserving chartwise perturbation -> compatible faces -> frozen triangulation"}
+      {:consumer :t00J01,
+       :placeholders 1,
+       :route
+       "circle-fold evidence -> Klein-product geometry and homology bridge -> frozen adapter"}
+      {:consumer :t00J02,
+       :placeholders 1,
+       :route
+       "banked coefficient comparisons -> active genuine relative Mayer-Vietoris and excision -> localization and fundamental-class assembly"}
+      {:consumer :t01A02,
+       :placeholders 3,
+       :route
+       "H2 degree and nonsurjectivity -> Lefschetz comparison -> frozen conjunction"}
+      {:consumer :t01A04,
+       :placeholders 4,
+       :route
+       "manifold fundamental class -> cap/Thom and intersection comparison -> consumer calculations"}
+      {:consumer :t01A05,
+       :placeholders 1,
+       :route
+       "active compact-support Mayer-Vietoris -> localization, with connectedness specification defect preserved -> frozen adapter"}
+      {:consumer :t01A08,
+       :placeholders 1,
+       :route
+       "resolved regularity conversion -> general-model Sard -> frozen adapter"}
+      {:consumer :t01J01,
+       :placeholders 3,
+       :route
+       "contained translations -> active endpoint-preserving chartwise control -> compatible triangulation -> frozen theorem"}
+      {:consumer :t01J04,
+       :placeholders 1,
+       :route
+       "regular-preimage geometry -> missing countability and half-space-atlas applicability -> frozen theorem"}
+      {:consumer :t01J06,
+       :placeholders 3,
+       :route
+       "banked symbolic sphere assembly and moments -> blocked numerical normalization -> Stokes bridge -> frozen conjunction"}
+      {:consumer :t02A05,
+       :placeholders 2,
+       :route
+       "banked symbolic S2 assembly and flux reduction -> blocked numerical normalization -> frozen integral and minimum"}
+      {:consumer :t02A07,
+       :placeholders 3,
+       :route
+       "active coefficient compact-support Mayer-Vietoris -> localization -> all-degree local comparison and fundamental class"}
+      {:consumer :t02A08,
+       :placeholders 1,
+       :route
+       "banked local comparison -> m+2 normalization adapter -> frozen theorem"}
+      {:consumer :t03J02,
+       :placeholders 2,
+       :route
+       "null-winding result -> arbitrary embedded-circle collar or Jordan-Schoenflies comparison -> gluing -> frozen theorem"}
+      {:consumer :t03J04,
+       :placeholders 1,
+       :route
+       "rational torus homology -> finite-cover Euler multiplicativity -> frozen theorem"}
+      {:consumer :t03J05,
+       :placeholders 1,
+       :route
+       "concrete punctured genus-two curve system -> mod-2 product-torus intersection and ambient nonhomotopy comparison -> frozen theorem"}
+      {:consumer :t91J05,
+       :placeholders 3,
+       :route
+       "contained translations -> active relative endpoint control -> compatible faces and triangulation -> frozen result"}
+      {:consumer :t92J05,
+       :placeholders 3,
+       :route
+       "RP2 antipodal and genus-two surface bridges -> classification comparisons -> final assembly"}
+      {:consumer :t92J06,
+       :placeholders 1,
+       :route
+       "banked covering data -> action and quotient adapter -> frozen theorem"}
+      {:consumer :t94A06,
+       :placeholders 1,
+       :route
+       "regular-preimage and normal-translation geometry -> finite-dimensional model applicability -> frozen adapter"}
+      {:consumer :t94A10,
+       :placeholders 3,
+       :route
+       "banked symbolic S2 assembly and moments -> blocked numerical normalization -> closedness and nonexactness assembly"}
+      {:consumer :t94J09,
+       :placeholders 1,
+       :route
+       "contained translations -> active endpoint-preserving chartwise perturbation -> frozen intersection adapter"}
+      {:consumer :t95J05,
+       :placeholders 1,
+       :route
+       "banked symbolic S3 assembly and projective-density moment -> blocked numerical mass normalization -> frozen integral uptake"}
+      {:consumer :t95J06,
+       :placeholders 2,
+       :route
+       "torus free-action quotient geometry -> surface classification -> frozen result"}
+      {:consumer :t96J05,
+       :placeholders 1,
+       :route
+       "reviewed centered-circle counterexample -> explicit corrected positive-regular-value statement -> banked global regular-fiber atlas -> corrected frozen closure"}
+      {:consumer :t96J06,
+       :placeholders 2,
+       :route
+       "fundamental-class and cap/Thom comparison -> product-homology representation -> frozen adapters"}
+      {:consumer :t97A01,
+       :placeholders 1,
+       :route
+       "cover transfer data -> Euler-multiplicativity comparison -> frozen theorem"}
+      {:consumer :t97A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> singular Eilenberg-Zilber and integral Kunneth -> intersection calculations -> frozen conclusions"}
+      {:consumer :t97J05,
+       :placeholders 5,
+       :route
+       "active compact-support Mayer-Vietoris -> localization and local-to-global fundamental class -> consumer assembly"}
+      {:consumer :t98A01,
+       :placeholders 1,
+       :route
+       "active five-torsion cardinality -> polygon genus invariance -> covering Euler multiplicativity -> frozen conjunction"}
+      {:consumer :t98A02,
+       :placeholders 1,
+       :route
+       "active genuine relative Mayer-Vietoris and excision -> localization monicity -> frozen fundamental class"}
+      {:consumer :t99J03,
+       :placeholders 1,
+       :route
+       "active endpoint-preserving chartwise perturbation -> retained coverage and compatible faces -> frozen triangulation"}],
+     :deferred
+     ["The reviewed addHaarScalarFactor normalization STOP is not retried."
+      "Banked intrinsic second and fourth moments are reused rather than rebuilt."
+      "Active coefficient Mayer-Vietoris, endpoint-preserving arc and five-torsion work is excluded from duplicate election."
+      "Unrelated infrastructure is deferred."]},
+    :replacement-items
+    [{:consumer :t96J05,
+      :stop-condition
+      "Preserve the reviewed centered-circle counterexample to the original unconditional statement. Do not claim the old frozen theorem, infer a regular radius from nonemptiness or connectedness, assume Sard supplies an attained value, weaken the literal radial-level subtype, or bypass the actual global regular-fiber atlas. Use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SPEC-DEFECT: corrected positive regular radial-level theorem",
+      :acceptance
+      {:placeholder-after 0,
+       :hypotheses
+       "Retain the embedded positive-dimensional smooth submanifold data. State explicitly that the squared-norm restriction has a positive attained regular value, or an equivalent audited derivative-surjectivity hypothesis on one positive level. Do not add compactness or silently permit an empty level.",
+       :frozen-file "problems/t96J05/lean/Main.lean",
+       :gates
+       ["Compile a complete corrected frozen-facing fixture and record SHA256."
+        "Audit the corrected theorem statement against the preserved counterexample."
+        "Verify positivity and nonemptiness of the selected literal norm level."
+        "Use the actual derivative-surjectivity regular-value condition and ManifoldRegularFiberGlobalAtlas."
+        "Prove exact equality between the squared-norm fiber and apm_t96j05_radialLevel before transporting structures."
+        "Reproduce standard-only axiom audits."
+        "Run placeholder, forbidden-declaration, warning and whitespace scans; recheck both ledgers and preserve concurrent reservations."],
+       :consumer-residual
+       "After corrected-statement review, promote the zero-placeholder frozen repair and record one corrected closure while preserving the counterexample to the former unconditional statement.",
+       :axioms :standard-only,
+       :placeholder-before 1,
+       :probe
+       "Construct a complete corrected Main fixture. Preserve the existing elementary nontriviality and positive-level lemmas and the literal apm_t96j05_radialLevel subtype. Form the smooth squared-norm map on X, translate the supplied positive regular-value data to the corresponding positive radius, identify its equality fiber exactly with the literal norm level, and transport ManifoldRegularFiberGlobalAtlas through that equality to install the required ChartedSpace and IsManifold structures of dimension m-1. Compile the corrected theorem with zero placeholders and standard-only axioms. If the exact fiber identification or atlas transport cannot compile, return exactly one complete compiled missing prerequisite; if the corrected hypotheses are inconsistent with the frozen representation, STOP at that exact boundary.",
+       :consumer-equation
+       "Under an explicit positive attained regular-value hypothesis for the radial squared-norm map, there exists r>0 whose literal radial level is nonempty and carries the required smooth manifold structure of dimension m-1.",
+       :route-step
+       "Supplies the sole t96J05 placeholder route by replacing the locally refuted unconditional radial-level assertion with an explicit positive attained regular-value hypothesis and applying the banked global regular-fiber atlas to the literal level subtype."},
+      :id
+      :oriented-checkpoint53-t96j05-corrected-radial-regular-level-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "The original one-placeholder theorem is locally refuted by the centered circle. A corrected theorem must expose a positive attained regular value and transport the banked regular-fiber atlas to the literal radial-level subtype.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: corrected radial-level review and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint54-corrected-radial-level-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint53-t96j05-corrected-radial-regular-level-1],
+      :current-residual
+      "Measure the corrected t96J05 statement and closure separately from its preserved original refutation, blocked Hausdorff normalization, concurrent work and infrastructure; rerank every open consumer route.",
+      :other-consumers []}]},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: symbolic sphere-cap assembly and renewed consumer eligibility",
@@ -33040,6 +33319,74 @@
     :oriented-checkpoint52-sphere-equator-canonical-repair-and-consumer-refill-1],
    :current-residual
    "Measure symbolic whole-sphere assembly separately from blocked raw normalization, numerical moment evaluation and frozen closure; rerank every open consumer route against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t96J05,
+   :stop-condition
+   "Preserve the reviewed centered-circle counterexample to the original unconditional statement. Do not claim the old frozen theorem, infer a regular radius from nonemptiness or connectedness, assume Sard supplies an attained value, weaken the literal radial-level subtype, or bypass the actual global regular-fiber atlas. Use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SPEC-DEFECT: corrected positive regular radial-level theorem",
+   :acceptance
+   {:placeholder-after 0,
+    :hypotheses
+    "Retain the embedded positive-dimensional smooth submanifold data. State explicitly that the squared-norm restriction has a positive attained regular value, or an equivalent audited derivative-surjectivity hypothesis on one positive level. Do not add compactness or silently permit an empty level.",
+    :frozen-file "problems/t96J05/lean/Main.lean",
+    :gates
+    ["Compile a complete corrected frozen-facing fixture and record SHA256."
+     "Audit the corrected theorem statement against the preserved counterexample."
+     "Verify positivity and nonemptiness of the selected literal norm level."
+     "Use the actual derivative-surjectivity regular-value condition and ManifoldRegularFiberGlobalAtlas."
+     "Prove exact equality between the squared-norm fiber and apm_t96j05_radialLevel before transporting structures."
+     "Reproduce standard-only axiom audits."
+     "Run placeholder, forbidden-declaration, warning and whitespace scans; recheck both ledgers and preserve concurrent reservations."],
+    :consumer-residual
+    "After corrected-statement review, promote the zero-placeholder frozen repair and record one corrected closure while preserving the counterexample to the former unconditional statement.",
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :probe
+    "Construct a complete corrected Main fixture. Preserve the existing elementary nontriviality and positive-level lemmas and the literal apm_t96j05_radialLevel subtype. Form the smooth squared-norm map on X, translate the supplied positive regular-value data to the corresponding positive radius, identify its equality fiber exactly with the literal norm level, and transport ManifoldRegularFiberGlobalAtlas through that equality to install the required ChartedSpace and IsManifold structures of dimension m-1. Compile the corrected theorem with zero placeholders and standard-only axioms. If the exact fiber identification or atlas transport cannot compile, return exactly one complete compiled missing prerequisite; if the corrected hypotheses are inconsistent with the frozen representation, STOP at that exact boundary.",
+    :consumer-equation
+    "Under an explicit positive attained regular-value hypothesis for the radial squared-norm map, there exists r>0 whose literal radial level is nonempty and carries the required smooth manifold structure of dimension m-1.",
+    :route-step
+    "Supplies the sole t96J05 placeholder route by replacing the locally refuted unconditional radial-level assertion with an explicit positive attained regular-value hypothesis and applying the banked global regular-fiber atlas to the literal level subtype."},
+   :id :oriented-checkpoint53-t96j05-corrected-radial-regular-level-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint53-sphere-cap-assembly-and-consumer-refill-1],
+   :current-residual
+   "The original one-placeholder theorem is locally refuted by the centered circle. A corrected theorem must expose a positive attained regular value and transport the banked regular-fiber atlas to the literal radial-level subtype.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: corrected radial-level review and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint54-corrected-radial-level-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint53-t96j05-corrected-radial-regular-level-1
+    :oriented-checkpoint53-sphere-cap-assembly-and-consumer-refill-1],
+   :current-residual
+   "Measure the corrected t96J05 statement and closure separately from its preserved original refutation, blocked Hausdorff normalization, concurrent work and infrastructure; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
