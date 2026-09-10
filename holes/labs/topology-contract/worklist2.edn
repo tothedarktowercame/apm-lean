@@ -15453,8 +15453,157 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read DAG clusters, foundational-program note, closure rules and both ledgers",
+      :exit 0}
+     {:cmd "python3 /tmp/Checkpoint25Census.py", :exit 0}
+     {:cmd "bb /tmp/Checkpoint25Eligibility.bb", :exit 0}
+     {:cmd "bb /tmp/Checkpoint25Ledger.bb", :exit 0}
+     {:cmd
+      "git log --oneline 4f249ecd..HEAD -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "Inspect SingularExcision cokernel-square signatures and latest concurrent chart-transport review",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :changed-paths [],
+    :finding
+    {:baseline "4f249ecd43a9650dfdf260320710fb3f8b5de29a",
+     :placeholder-delta 0,
+     :head "94d4381150f666cb6b88a7f031cce3b9a7d7d2f5",
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:modules-before 674,
+      :modules-after 678,
+      :portfolio 2,
+      :portfolio-commits
+      ["42e4bb083eec774f433dd1d223d89c4c3d4a5f37"
+       "ad9d15f31e8b970d705d3b46f4c0482f69d5aca5"],
+      :concurrent 2,
+      :concurrent-commits
+      ["0f3d11b9bcc54dda5419df74b6d8e726c81136c8"
+       "ab99abe095db8d5d4d0a783b732bd8dc461408a7"],
+      :consumer-files-changed []},
+     :corrected-closures 0,
+     :ranking
+     "Compared the whole DAG. Relative small-chain quotient comparison serves four named downstream consumers and now has reviewed absolute comparison on X and every subspace A. The inspected cokernel-square proof is currently AddCommGrpCat-specific and must be proved over ModuleCat R. This bounded comparison precedes excision. Localization, product homology, covering classification, integration and surface classification retain broader constructions; product recharting is concurrently assigned. No owner-authorization stop or orientation inference is used.",
+     :typed-residual-change
+     "Actual cover-small inclusion now induces the constructed all-degree ModuleCat R homology isomorphism, with exact forward map and inverse laws. Relative quotient comparison and excision remain absent. Concurrent chart-carrier transport does not yet supply smooth compatibility or derivative transport. Concurrent null-winding predicate triviality does not supply a Producer or frozen-consumer refutation.",
+     :review-outcomes
+     {:portfolio-pass 2,
+      :portfolio-stop 0,
+      :iterated-homotopy-review "invoke-1789008929184-17712-ee5ae71e",
+      :small-comparison-review "invoke-1789009495871-17725-e087a06b",
+      :concurrent-null-winding-pass
+      "invoke-1789008850671-17710-0133905c",
+      :concurrent-chart-transport-pass
+      "invoke-1789009295089-17720-ac66ef2d",
+      :concurrent-integral-stop-pass
+      "invoke-1789008552252-17697-5e6feba7",
+      :new-proved-refutations 0},
+     :reserved-concurrent
+     [:product-self-model-recharting-probe-refill38
+      :checkpoint-full-dag-refill-39-after-integral-recharting-and-null-winding-audit],
+     :near-closure-election
+     {:eligible-unassigned 0,
+      :elected 0,
+      :reason
+      "Recounted all 25 near-closure consumers. Their recorded boundaries remain unresolved; 24 have ledger STOP records and t03J02 has the explicit DAG collar/NDR and van Kampen boundary. The latest t95J05 probe reduces its literal integral to negative half the intrinsic sphere mass, but mass 3 = 2*pi^2 remains unproved for the actual Hausdorff normalization. No unchanged adapter retry is elected.",
+      :preserved-boundaries
+      "Planar separation; actual-cover van Kampen; literal pants and polygon classification; covering fundamental-class degree; general-model and analytic preimage geometry; flux and Hausdorff normalization; signed sphere-map homology action; torus Euler and geometric intersection; graph covering classification; Hopf-surface homeomorphism; attained analytic radial levels; projective-product nonbounding; genus/Euler multiplicativity; fundamental-class localization. Historical refutations and the earlier corrected t96J07 closure remain preserved."},
+     :census
+     {:path "/tmp/Checkpoint25Census.json",
+      :open 35,
+      :existing 58,
+      :zero-placeholder 23,
+      :after 66,
+      :sha256
+      "3f436e27b63c8e4fee763e3ae8615adcc25828e84e7bb2c8b3cb7d75456db058",
+      :named 59,
+      :missing [:t93A05],
+      :within-two 25,
+      :before 66}},
+    :replacement-items
+    [{:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Do not assume the relative comparison or horizontal monicity. Do not reinterpret AddCommGrpCat results as ModuleCat R facts. Do not claim excision, sphere suspension or frozen closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "RELATIVE SINGULAR CHAINS: coefficient-general relative small-chain comparison",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a commutative ring R, a topological space X, arbitrary subset A and arbitrary indexed open cover U of X, construct the restricted cover on the actual subtype A and the actual map of cover-small chain complexes induced by subtype inclusion. Prove its generator equation, differential compatibility, monicity and the square with both absolute small-chain inclusions. Define both relative chain complexes as actual categorical cokernels over ModuleCat R. Generalize the inspected cokernel-short-exact and homology-sequence argument directly over R, and apply reviewed CoefficientSmallComparison on X and A to prove the induced cokernel map is an isomorphism on homology in every degree. Construct the isomorphism with its exact forward-map equation and both inverse laws. State universes, retain empty spaces and arbitrary cover indices, and compile integer/rational interval-subspace examples. REVISE requires exactly one compiled missing restricted-chain-map or cokernel-comparison prerequisite; STOP if independent foundations remain.",
+       :consumer-equation
+       "The actual relative cover-small inclusion induces an isomorphism on all relative homology groups over R, with forward map exactly induced by the constructed cokernel square.",
+       :consumer-residual
+       "Coefficient-general excision still needs the subcomplex union/intersection and actual-subspace quotient identifications; sphere suspension and rational S2 H1/H2 remain downstream.",
+       :gates
+       ["GO requires a complete placeholder-free fixture constructing the relative maps and all-degree comparison with exact forward map."
+        "Record fixture SHA256, integer/rational examples and standard-only audits."
+        "No supplied relative comparison, coefficient-change shortcut or silent subspace representation replacement."]},
+      :representation
+      {:source
+       "Homology of the cokernel of the actual map from cover-small chains of A with the restricted cover to cover-small chains of X.",
+       :target
+       "Homology of the cokernel of the actual singular-chain map induced by the subtype inclusion A into X, with coefficient object ModuleCat.of R R.",
+       :direction
+       "Construct an isomorphism from relative cover-small homology to actual relative singular homology whose forward arrow is the homology map of the cokernel map induced by the two actual small-chain inclusions."},
+      :id
+      :oriented-checkpoint25-coefficient-relative-small-comparison-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint25-small-chain-comparison-and-consumer-refill
+       :oriented-checkpoint24-coefficient-small-chain-homology-comparison-1],
+      :current-residual
+      "Absolute small-chain comparison is reviewed over R. The relative inclusion square, its monic horizontal maps, and the induced quotient homology comparison remain unconstructed over R.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: relative coefficient comparison and consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint26-relative-comparison-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint25-coefficient-relative-small-comparison-1],
+      :current-residual
+      "Measure relative comparison separately from consumer closure, and reassess all reviewed boundaries and concurrent outcomes.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: coefficient homology comparison and renewed consumer eligibility",
@@ -15471,6 +15620,71 @@
     :oriented-checkpoint24-eventual-smallness-and-consumer-refill],
    :current-residual
    "Measure actual small-chain homology comparison separately from consumer closure and reassess all reviewed consumer boundaries and concurrent work.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "Do not assume the relative comparison or horizontal monicity. Do not reinterpret AddCommGrpCat results as ModuleCat R facts. Do not claim excision, sphere suspension or frozen closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "RELATIVE SINGULAR CHAINS: coefficient-general relative small-chain comparison",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a commutative ring R, a topological space X, arbitrary subset A and arbitrary indexed open cover U of X, construct the restricted cover on the actual subtype A and the actual map of cover-small chain complexes induced by subtype inclusion. Prove its generator equation, differential compatibility, monicity and the square with both absolute small-chain inclusions. Define both relative chain complexes as actual categorical cokernels over ModuleCat R. Generalize the inspected cokernel-short-exact and homology-sequence argument directly over R, and apply reviewed CoefficientSmallComparison on X and A to prove the induced cokernel map is an isomorphism on homology in every degree. Construct the isomorphism with its exact forward-map equation and both inverse laws. State universes, retain empty spaces and arbitrary cover indices, and compile integer/rational interval-subspace examples. REVISE requires exactly one compiled missing restricted-chain-map or cokernel-comparison prerequisite; STOP if independent foundations remain.",
+    :consumer-equation
+    "The actual relative cover-small inclusion induces an isomorphism on all relative homology groups over R, with forward map exactly induced by the constructed cokernel square.",
+    :consumer-residual
+    "Coefficient-general excision still needs the subcomplex union/intersection and actual-subspace quotient identifications; sphere suspension and rational S2 H1/H2 remain downstream.",
+    :gates
+    ["GO requires a complete placeholder-free fixture constructing the relative maps and all-degree comparison with exact forward map."
+     "Record fixture SHA256, integer/rational examples and standard-only audits."
+     "No supplied relative comparison, coefficient-change shortcut or silent subspace representation replacement."]},
+   :representation
+   {:source
+    "Homology of the cokernel of the actual map from cover-small chains of A with the restricted cover to cover-small chains of X.",
+    :target
+    "Homology of the cokernel of the actual singular-chain map induced by the subtype inclusion A into X, with coefficient object ModuleCat.of R R.",
+    :direction
+    "Construct an isomorphism from relative cover-small homology to actual relative singular homology whose forward arrow is the homology map of the cokernel map induced by the two actual small-chain inclusions."},
+   :id :oriented-checkpoint25-coefficient-relative-small-comparison-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint25-small-chain-comparison-and-consumer-refill
+    :oriented-checkpoint24-coefficient-small-chain-homology-comparison-1
+    :oriented-checkpoint25-small-chain-comparison-and-consumer-refill],
+   :current-residual
+   "Absolute small-chain comparison is reviewed over R. The relative inclusion square, its monic horizontal maps, and the induced quotient homology comparison remain unconstructed over R.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: relative coefficient comparison and consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint26-relative-comparison-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint25-coefficient-relative-small-comparison-1
+    :oriented-checkpoint25-small-chain-comparison-and-consumer-refill],
+   :current-residual
+   "Measure relative comparison separately from consumer closure, and reassess all reviewed boundaries and concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
