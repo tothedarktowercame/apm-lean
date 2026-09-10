@@ -63868,8 +63868,88 @@
   {:consumer "t98A02",
    :stop-condition
    "Require constructed coordinate transport and actual comparison; no supplied atlas or homology isomorphism.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Constructed coordinate atlas, actual all-degree comparison, inverse laws and generator normalization compile with original topology and finrank E=m+2 preserved. Lower-dimensional coefficient comparison remains distinct from banked integral dimension-one local-index coverage. No orientation coherence or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:converted_source
+     "af9059da6023af225fa5a92a746404530c8bda7a18de69b88e62cbbc67088835",
+     :comparison
+     "ca6008fabdc8cebec6bf9147e3f89b3f2eb0abc033dfa45c3018470b07402657",
+     :inverse_right
+     "ccfed1aa1ff97c6cb00b054e7d6b4e045ecefc5da3fcf834b6e7544801bc81fd",
+     :coordinates
+     "f325e699b55cd4d799002b8c837a1208565e2f919b960358e39971426812c706",
+     :atlas_spec
+     "77a2f66639b452e2b01353c42b4b41d0a78db11254401188da896f6dfe926836",
+     :generator_normalization
+     "8d048b554edb58b6c2742ecf110968f94ebeeb8e0ad50bbbcc70fc2f32305a4b",
+     :converted
+     "cb67a3257ff286d71175ea0ef9fad1d966205fa811d983e706f7fcedcf040d82",
+     :forward
+     "f2a50b7d658fb4944ce8eb0b0c3392bc7567e3623d61f75f9524f56f5bbb70ff",
+     :euclideanAtlas
+     "fb53fb90cc9edbee6a3780be9c993383747dc3a4595d848260b90d63aaf57c48",
+     :actual_forward
+     "a42d746aeb3ab4b84732c906118866679279efd7cee669da61c316f69f38f535",
+     :coordinate_value
+     "897918856c255f93ce87d0c6e5430aff42221c4e3e3b1611e05c7986e8c0dbe6",
+     :inverse_value
+     "6bc4ca58d9c14c3301b819705a536827907f55de35165651b05d973c8948bf4e",
+     :generator
+     "540e39ad279e9ada4b061855d6feb22d78a73e67bc317ecab891f83cc3a84557",
+     :chart_spec
+     "4eff17f7d7c5c130d00f16e22d4cbcc544c9a81f80e7daeed1a3d844b8a90da8",
+     :inverse_left
+     "86b2b947c034e3976713521bb9341a7bc439b703e977bc42fe716531dae20550",
+     :normalization
+     "764a84e4622f9258886fa9f81b7407ac30653e6850741c3ef6c16b0e82364115"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/CoefficientFiniteModelChart.lean", :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.CoefficientChartLocalAllDegrees 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "Python read-only canonical-source audit: zero placeholders and complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/CoefficientFiniteModelChart.lean ConstructionTargets/CoefficientFiniteModelChart.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientFiniteModelChart.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Actual coefficient local homology of a Hausdorff manifold charted on finite-dimensional real normed E with finrank E=m+2",
+     :target
+     "Actual coefficient local homology of Euclidean space of dimension m+2 at zero",
+     :direction
+     "Isomorphism from manifold local homology to Euclidean-model local homology through constructed coordinate conversion and the banked actual translated-chart comparison."},
+    :commit "9f48c402684d7499653a7c0ae8cfe96db3f955c9",
+    :changed-paths
+    ["ConstructionTargets/CoefficientFiniteModelChart.lean"],
+    :fixture
+    {:path "/tmp/CoefficientFiniteModelChart.lean",
+     :sha256
+     "b06c74755ff2f62e27aa8130b15232ffcde1866098a2dddc9e06fcbe2b105ec8"},
+    :axiom-audit-declarations 12},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoefficientFiniteModelChart.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / finite-dimensional model transport",
