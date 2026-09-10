@@ -71432,8 +71432,43 @@
   {:consumer "t00A03",
    :stop-condition
    "Require small-parameter embedding stability and a relative finite-family transversality theorem for endpoint-weighted perturbations, followed by transition-map comparison for arcs assigned to different charts.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove sufficiently small endpoint-weighted perturbations remain embeddings and establish a relative finite-family transversality theorem; arcs assigned to different charts still require explicit transition-map compatibility.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:exists_common_radius
+     "1fe142d2f0887f39d892ef5f8b497008367e805ca52376f91cc242ce5bb2720a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean /tmp/PlaneArcEndpointPerturbationFamilyContainment.lean ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-declaration audit over ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "1ae6fd45ebc0436601197b28b34a90e7fc997245",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointPerturbationFamilyContainment.lean",
+     :sha256
+     "9776248fc44f9976d4dd7a94a3386f13d0f7d782d33397334f4e4c00ee3e7f0d",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. Compactness of every unit-interval arc image and finiteness of the index type yield one positive radius; every family of endpoint-preserving perturbation vectors below that radius remains inside its prescribed open plane target. Empty and singleton index types are retained. The module compiles without warnings or placeholders, its dependency hash matches, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean"],
    :dag-node
