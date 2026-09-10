@@ -26162,6 +26162,22 @@
       :exit 1,
       :correction
       "Qualified lintegral_abs_det_fderiv_eq_addHaar_image with MeasureTheory. The corrected audit compiles without warnings."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789036255020-18398-d534a894",
+     :commands
+     ["git show 8fc9bdf0 (recorded STOP and scope)"
+      "sha256sum /tmp/codex13-oriented-checkpoint42-graph-area/BoundaryAudit.lean"
+      "lake env lean /tmp/codex13-oriented-checkpoint42-graph-area/BoundaryAudit.lean"
+      "Inspect Mathlib Jacobian and Hausdorff theorem signatures and SphereCapFiniteMeasure"
+      "rg area-formula, Gram-density and Hausdorff derivative comparisons in ConstructionTargets and Mathlib/MeasureTheory"
+      "rg forbidden declarations and placeholders in BoundaryAudit.lean"
+      "git diff --exit-code 8fc9bdf0^ 8fc9bdf0 -- ConstructionTargets problems"
+      "bb holes/labs/topology-contract/worklist_check.bb on both recorded ledgers at 8fc9bdf0"
+      "git diff --check 8fc9bdf0^ 8fc9bdf0"],
+     :finding
+     "Independent of author codex-13. Accept STOP only. Diagnostic SHA256 0a1d5dbd8f207e9ccec29ef488abde6f7905c5d92e130f4473e80d0a6bcf808a matches; compilation passes without warnings with four standard-only audits and zero placeholders. The cited Jacobian image-measure theorem requires E-to-E maps and additive Haar measure; the diagnostic proves the ambient dimension mismatch for graph maps, including dimensions two and three. General-codomain linear approximation and Lipschitz finiteness do not supply the missing codimension-one Hausdorff density equality. Function-space Hausdorff normalization is not silently transferred to L2 geometry. No graph-area theorem or mathematical refutation is certified. Recorded scope is ledger-only, with canonical statement and placeholder deltas zero; reviewer made no edits."},
     :changed-paths [],
     :fixture
     {:path
@@ -26174,7 +26190,7 @@
     "The compiled audit establishes an exact applicability boundary. Mathlib's Jacobian image-measure theorem uses f:E→E, derivatives E→L E and an additive Haar measure on E. The requested graph maps Euclidean dimension d into d+1 and requires d-dimensional Hausdorff image measure. The audit proves the dimension gap and absence of a linear equivalence between these ambient spaces, including d=2 and d=3. This rules out direct same-space Jacobian transport, not the requested theorem. Existing sphere-cap results provide subtype measure identification and Lipschitz finiteness, not the graph-density equality. No complete graph-area fixture or complete new geometric prerequisite was obtained.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual Euclidean graph Hausdorff-area comparison",
@@ -26215,7 +26231,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: graph-area progress and renewed consumer eligibility",
