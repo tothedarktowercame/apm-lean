@@ -61493,12 +61493,25 @@
       :exit 0}
      {:cmd "sha256sum /tmp/t03j04-refill41-audit.json", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789018480619-17976-17c65bfa",
+     :commands
+     ["git show fd7a08c3516177afcc7c93198f08d6491fdeeb1f"
+      "Python artifact SHA256, five source hashes, frozen byte/hash comparison, placeholder census and scope audit"
+      "Inspect frozen rational Euler definition, boundary-torus integral table and compact-Hausdorff covering API"
+      "rg -n -i 'euler|kunneth|eilenberg.zilber' ConstructionTargets --glob '*.lean'"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show fd7a08c3:holes/labs/topology-contract/worklist.edn)"
+      "git show --format= --check fd7a08c3"],
+     :finding
+     "PASS as STOP, not closure. Independent of author codex-12. Artifact 25332a2019b6293c91c00937b0d45092122bc921bea797067d46b068f227285d and five source hashes verified; frozen Main b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41 retains one placeholder. Nonzero-field and surjectivity helpers are proved; compact-Hausdorff covering machinery exists. The integral two-torus table does not provide uniform rational torus homology or multiplicativity for the literal truncated alternating finrank sum. Both Euler conclusions remain unassembled, with original dimensional and target hypotheses preserved. No new proof, axiom audit, closure or refutation claimed. Validator 483 items OK; ledger-only scope and whitespace clean; ledger untouched."},
     :changed-paths [],
     :finding
     "The frozen nonzero-field and local-diffeomorphism surjectivity helpers are proved. Mathlib also supplies compact-Hausdorff local-homeomorphism covering machinery. The audited homology APIs do not supply the two remaining Euler conclusions: the uniform rational singular-homology calculation for Fin n → Circle, and a finite-cover comparison for the literal truncated alternating finrank sum. The complete integral boundary-torus table is banked, but it is neither a rational arbitrary-dimensional torus table nor an Euler multiplicativity theorem.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "MANIFOLD EULER CHARACTERISTIC / frozen torus local diffeomorphism",
