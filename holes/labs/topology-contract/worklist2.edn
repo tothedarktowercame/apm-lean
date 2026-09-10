@@ -27483,9 +27483,190 @@
    :other-consumers []}
   {:consumer :t02A05,
    :stop-condition
-   "Do not assume a partition, uniform residual estimate, graph-image measurability or area formula. Retain the L2 graph metric. Exclude reserved orientation and surface work. Do not infer numerical sphere mass or consumer closure; use a unique row-specific scratch directory.",
-   :phase :probe,
+   "Bank local approximation balls and their graph bounds only. Do not claim countable disjointification, graph-image measurability, exact area equality, numerical sphere normalization or consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint45-c1-partition/C1GraphLocalApproximation.lean",
+      :sha256
+      "558b8faca4c5dd128e8fa8db5bc4b1eb3e71ae14f881b5842299f15125fc199f"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/codex13-checkpoint45-c1-partition/C1GraphLocalApproximation.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/C1GraphLocalApproximation.lean"
+    "ConstructionTargets/C1GraphLocalApproximation.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: constructed C1 approximation balls and local graph bounds",
+   :acceptance
+   {:namespace "ConstructionTargets.C1GraphLocalApproximation",
+    :implementation
+    "Promote the exact compiled fixture and document the remaining countable-partition and graph-image measurability obligations.",
+    :declarations
+    ["local_ball"
+     "radius"
+     "radius_pos"
+     "radius_subset"
+     "derivative_bound"
+     "residual_bound"
+     "subset_bounds"
+     "ball_measurable"
+     "center_member"
+     "dimension_two"
+     "dimension_three"],
+    :hypotheses
+    "Any natural dimension d; f is ContDiffOn real 1 on an open Euclidean domain U; x belongs to U and epsilon is positive. The subset Hausdorff bounds additionally require epsilon<1. No radius, uniform estimate, measurable subset or finite-measure assumption is supplied.",
+    :consumer-equation
+    "A positive-radius ball containing x and contained in U has derivative variation at most epsilon relative to fderiv f x. Convex mean-value estimates give the required two-point residual bound, and every subset of this constructed ball satisfies the reviewed two-sided L2 graph Hausdorff bounds.",
+    :consumer-residual
+    "Select countably many constructed balls, disjointify them measurably, and prove measurability, disjointness and exact coverage of their actual graph images. Then pass from piecewise bounds to exact variable-density equality.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.C1GraphLocalApproximation."
+     "Reproduce eleven standard-only axiom audits and dimension-two/three examples."
+     "Audit derivative continuity on the open domain and construction of a positive ball radius."
+     "Verify ball containment, center membership and Borel measurability."
+     "Verify the two-point residual estimate uses the convex mean-value theorem with actual derivatives."
+     "Verify subset_bounds instantiates GraphMetricComparison.bounds with the constructed residual estimate and preserves arbitrary zero or infinite measures."
+     "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :c1-graph-local-convex-approximation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint44-uniform-graph-hausdorff-bounds-1],
+   :current-residual
+   "The measurable-partition construction needs actual neighborhoods satisfying derivative-proximity and two-point residual estimates derived from C1 regularity.",
+   :other-consumers [:t95J05 :t01J06 :t94A10]}
+  {:consumer :t02A05,
+   :stop-condition
+   "Do not assume a partition, uniform residual estimate, graph-image measurability or area formula. Retain the L2 graph metric. Exclude reserved orientation and surface work. Do not infer numerical sphere mass or consumer closure; use a unique row-specific scratch directory.",
+   :evidence
+   {:probe
+    {:concurrent-reservations
+     [:coefficient-chart-transition-unit-local-constancy-probe-refill48
+      :finite-plane-arc-family-small-translations-probe-refill48],
+     :placeholder-delta 0,
+     :residual
+     "Complete the measurable approximation partition before exact variable-density area assembly. Numerical sphere normalization and consumer closure remain downstream; reservations, reviewed STOPs and refutations are preserved.",
+     :axiom-audits 11,
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t02A05,
+      :stop-condition
+      "Bank local approximation balls and their graph bounds only. Do not claim countable disjointification, graph-image measurability, exact area equality, numerical sphere normalization or consumer closure.",
+      :evidence
+      {:probe
+       {:outcome :go,
+        :seat "codex-13",
+        :fixture
+        {:path
+         "/tmp/codex13-checkpoint45-c1-partition/C1GraphLocalApproximation.lean",
+         :sha256
+         "558b8faca4c5dd128e8fa8db5bc4b1eb3e71ae14f881b5842299f15125fc199f"},
+        :commands
+        [{:cmd
+          "lake env lean /tmp/codex13-checkpoint45-c1-partition/C1GraphLocalApproximation.lean",
+          :exit 0}],
+        :warnings [],
+        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/C1GraphLocalApproximation.lean"
+       "ConstructionTargets/C1GraphLocalApproximation.md"],
+      :dag-node
+      "MANIFOLD INTEGRATION: constructed C1 approximation balls and local graph bounds",
+      :acceptance
+      {:namespace "ConstructionTargets.C1GraphLocalApproximation",
+       :implementation
+       "Promote the exact compiled fixture and document the remaining countable-partition and graph-image measurability obligations.",
+       :declarations
+       ["local_ball"
+        "radius"
+        "radius_pos"
+        "radius_subset"
+        "derivative_bound"
+        "residual_bound"
+        "subset_bounds"
+        "ball_measurable"
+        "center_member"
+        "dimension_two"
+        "dimension_three"],
+       :hypotheses
+       "Any natural dimension d; f is ContDiffOn real 1 on an open Euclidean domain U; x belongs to U and epsilon is positive. The subset Hausdorff bounds additionally require epsilon<1. No radius, uniform estimate, measurable subset or finite-measure assumption is supplied.",
+       :consumer-equation
+       "A positive-radius ball containing x and contained in U has derivative variation at most epsilon relative to fderiv f x. Convex mean-value estimates give the required two-point residual bound, and every subset of this constructed ball satisfies the reviewed two-sided L2 graph Hausdorff bounds.",
+       :consumer-residual
+       "Select countably many constructed balls, disjointify them measurably, and prove measurability, disjointness and exact coverage of their actual graph images. Then pass from piecewise bounds to exact variable-density equality.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.C1GraphLocalApproximation."
+        "Reproduce eleven standard-only axiom audits and dimension-two/three examples."
+        "Audit derivative continuity on the open domain and construction of a positive ball radius."
+        "Verify ball containment, center membership and Borel measurability."
+        "Verify the two-point residual estimate uses the convex mean-value theorem with actual derivatives."
+        "Verify subset_bounds instantiates GraphMetricComparison.bounds with the constructed residual estimate and preserves arbitrary zero or infinite measures."
+        "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+      :id :c1-graph-local-convex-approximation-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint44-uniform-graph-hausdorff-bounds-1],
+      :current-residual
+      "The measurable-partition construction needs actual neighborhoods satisfying derivative-proximity and two-point residual estimates derived from C1 regularity.",
+      :other-consumers [:t95J05 :t01J06 :t94A10]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG, closure experiments and build-loop design; inspect both ledgers and dependency PASS receipts",
+       :exit 0}
+      {:cmd
+       "Inspect open-domain derivative continuity and convex mean-value APIs",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint45-c1-partition/C1GraphLocalApproximation.lean > /tmp/codex13-checkpoint45-c1-partition/compile.log",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint45-c1-partition/C1GraphLocalApproximation.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint45-c1-partition/C1GraphLocalApproximation.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "Python audit of eleven axiom reports, comment-stripped placeholders and fixture whitespace",
+       :exit 0}
+      {:cmd "Recheck both EDN ledgers and current reservations",
+       :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial local approximation fixture compilation",
+       :exit 1,
+       :correction
+       "Unfolded the metric ball and set preimage to identify the derivative-continuity neighborhood. Corrected and extended audited compilations succeed without warnings."}],
+     :changed-paths [],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint45-c1-partition/C1GraphLocalApproximation.lean",
+      :sha256
+      "558b8faca4c5dd128e8fa8db5bc4b1eb3e71ae14f881b5842299f15125fc199f",
+      :placeholder-count 0},
+     :finding
+     "Exactly one complete compiled geometric prerequisite is supplied. Actual C1 regularity constructs convex approximation balls with derivative and residual control; every subset inherits the reviewed graph measure bounds. The parent is not GO: countable Borel disjointification and actual graph-image measurability and coverage remain unproved.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: countable measurable C1 graph approximation partition",
@@ -27513,7 +27694,7 @@
    :depends-on
    [:oriented-checkpoint45-uniform-area-bounds-and-consumer-refill
     :oriented-checkpoint44-uniform-graph-hausdorff-bounds-1
-    :oriented-checkpoint45-uniform-area-bounds-and-consumer-refill],
+    :c1-graph-local-convex-approximation-1],
    :current-residual
    "The reviewed graph bounds require an explicit uniform two-point residual estimate. Construct measurable pieces satisfying that estimate from C1 regularity on an open Euclidean domain.",
    :other-consumers [:t95J05 :t01J06 :t94A10]}
