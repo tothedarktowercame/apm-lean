@@ -35542,9 +35542,111 @@
   {:consumer :t03J05,
    :stop-condition
    "Construct only the exact representation bridge from canonical maximal simplicial-product paths to continuous affine simplices in the product of topological standard simplices. Do not prove oriented face cancellation, define chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Restrict downstream instances to total degree at most four and use a unique row-specific scratch directory.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Implement the two-file canonical module, then combine its face-compatible realization with ProductSimplexShuffleParity to prove oriented interior-face cancellation and the surviving Leibniz faces.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
+       :exit 0}
+      {:cmd
+       "Inspect canonical ProductSimplexMaximalPaths, ProductSimplexShuffleParity and SingularSubdivision affine realization APIs",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "Reproduce standard-only axiom audits for pathRealization_standardVertex and productAffine_comp_face",
+       :exit 0}
+      {:cmd
+       "Verify the generic construction instantiates every p,q with p+q at most four",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
+       :exit 1,
+       :finding
+       "The first draft contained a malformed theorem binder, attempted componentwise extensionality at the wrong function level and included an unnecessary dependent cast for a specialized path-face statement.",
+       :correction
+       "Replaced the malformed theorem with a generic ordered-product-vertex realization and a dimension-independent face theorem."}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
+       :exit 1,
+       :finding
+       "After ContinuousMap.ext the goal already quantified the input point, so funext did not match.",
+       :correction
+       "Introduced the point directly and then used product extensionality."}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
+       :exit 1,
+       :finding
+       "The attempted use of affineSimplex_comp_map expected stdSimplex.map, while faceAffine is itself expressed as an affine simplex on undeleted basis vertices.",
+       :correction
+       "Used affineSimplex_comp_affineSimplex and proved the standard-basis evaluation lemma needed to simplify the composed vertex family."}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
+       :exit 1,
+       :finding
+       "Direct simplification exposed a double finite sum and did not invoke the affine-composition theorem.",
+       :correction
+       "Applied affineSimplex_comp_affineSimplex separately to both product coordinates; the final rerun compiled."}],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint57-affine-product/ProductSimplexAffineRealization.lean",
+      :sha256
+      "e8e851a9749c46e899692253501ca0f4b4af8189c1d9e0b3c7e7125f7b0ec5e3",
+      :placeholder-count 0},
+     :finding
+     "A complete placeholder-free representation fixture compiles. It maps every canonical maximal simplicial-product path vertex to the corresponding pair of topological standard-simplex basis vertices, realizes the two coordinate families affinely as one continuous map into their product, packages each maximal path as a production singular simplex, proves exact evaluation on every standard vertex, and proves that precomposition by every affine face map deletes the same ordered vertex. The construction is uniform in p and q, so all required total degrees at most four are instances. No orientation cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection result or consumer closure is claimed.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/ProductSimplexAffineRealization.lean"
+       "ConstructionTargets/ProductSimplexAffineRealization.md"],
+      :namespace "ConstructionTargets.ProductSimplexAffineRealization",
+      :declarations
+      ["gridVertex"
+       "productAffine"
+       "pathRealization"
+       "productAffine_standardVertex"
+       "pathRealization_standardVertex"
+       "affineSimplex_standardVertex'"
+       "productAffine_comp_face"],
+      :representation
+      {:source
+       "A maximal nondegenerate simplex of the simplicial-set product Δ[p] ⊗ Δ[q], represented by its canonical monotone lattice path of grid vertices",
+       :target
+       "A production singular (p+q)-simplex represented by a continuous affine map into stdSimplex real (Fin (p+1)) × stdSimplex real (Fin (q+1))",
+       :direction
+       "Exact face-compatible realization from the source lattice-path vertex representation to the target affine singular-product-simplex representation; standard vertices map to the corresponding grid vertices and source vertex deletion maps to target affine-face precomposition."},
+      :consumer-residual
+      "Use productAffine_comp_face with the banked shuffle parity to pair and cancel interior faces and identify the surviving exterior faces with the two Leibniz boundary terms."},
+     :seat "codex-13"}},
+   :consumer-residual
+   "Use productAffine_comp_face with the banked shuffle parity to pair and cancel interior faces and identify the surviving exterior faces with the two Leibniz boundary terms.",
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/ProductSimplexAffineRealization.lean"
+    "ConstructionTargets/ProductSimplexAffineRealization.md"],
    :dag-node
    "PRODUCT HOMOLOGY: maximal lattice paths as affine singular product simplices",
    :acceptance
@@ -35571,16 +35673,25 @@
      "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and concurrent reservations."]},
    :representation
    {:source
-    "A maximal nondegenerate simplex of the simplicial-set product Δ[p] ⊗ Δ[q], represented canonically as its monotone lattice path of grid vertices",
+    "A maximal nondegenerate simplex of the simplicial-set product Δ[p] ⊗ Δ[q], represented by its canonical monotone lattice path of grid vertices",
     :target
-    "A production singular (p+q)-simplex given by a continuous affine map into the product stdSimplex real (Fin (p+1)) × stdSimplex real (Fin (q+1))",
+    "A production singular (p+q)-simplex represented by a continuous affine map into stdSimplex real (Fin (p+1)) × stdSimplex real (Fin (q+1))",
     :direction
-    "Exact face-compatible realization from the source lattice-path vertex representation to the target affine singular-product-simplex representation, with simplicial vertex deletion identified with production face precomposition."},
+    "Exact face-compatible realization from the source lattice-path vertex representation to the target affine singular-product-simplex representation; standard vertices map to the corresponding grid vertices and source vertex deletion maps to target affine-face precomposition."},
    :id
    :oriented-checkpoint57-product-simplex-affine-singular-realization-1,
    :kind :representation-comparison,
+   :declarations
+   ["gridVertex"
+    "productAffine"
+    "pathRealization"
+    "productAffine_standardVertex"
+    "pathRealization_standardVertex"
+    "affineSimplex_standardVertex'"
+    "productAffine_comp_face"],
    :depends-on
    [:oriented-checkpoint57-product-simplex-shuffles-and-consumer-refill-1],
+   :namespace "ConstructionTargets.ProductSimplexAffineRealization",
    :current-residual
    "Maximal paths and their integer signs are banked, but they remain simplicial-set objects with no canonical face-compatible realization as production singular simplices in the topological product.",
    :other-consumers [:t96J06 :t97A04]}
