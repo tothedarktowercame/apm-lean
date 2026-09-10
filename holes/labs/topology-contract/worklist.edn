@@ -63182,8 +63182,55 @@
   {:consumer "t01A08",
    :stop-condition
    "GO requires complete frozen closure; otherwise identify the exact regularity, model or Sard applicability boundary without inferring refutation from missing infrastructure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "General-model chart-domain Sard and actual derivative transport remain before the regular-value argument can close frozen Main. The campaign continues.",
+    :dependency-review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789025648871-18146-cf15549c"},
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :author "codex-12",
+    :reason :model-applicability-boundary,
+    :commands
+    [{:cmd "lake env lean /tmp/T01A08RegularityAudit.lean", :exit 0}
+     {:cmd "sha256sum problems/t01A08/lean/Main.lean", :exit 0}
+     {:cmd
+      "rg -n 'ModelWithCorners|range I|extend|extension|open_domain_critical' ConstructionTargets/*Sard*.lean",
+      :exit 0}
+     {:cmd
+      "rg -n 'range.*(Closed|Open)|isClosed_range|uniqueDiff' .lake/packages/mathlib/Mathlib/Geometry/Manifold/IsManifold/Basic.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "rg inspection of ConstructionTargets/SardFiniteOrderRankLocusLocalAggregationProbe.lean",
+      :exit 2,
+      :correction
+      "The module filename omits Probe; its actual import was located in SardGenuineSmoothOpenDomainLocalization.lean."}],
+    :audit
+    {:path "/tmp/t01a08-refill43-audit.json",
+     :sha256
+     "d6abf5fb814c1df4fd1e880c131a952251cbcbeeae69c24d80453d2e00ccaf26",
+     :head "d2f91ffa69c1d30eafbf60936169dece08665719",
+     :typecheck-fixture "/tmp/T01A08RegularityAudit.lean",
+     :typecheck-sha256
+     "8bf5767c8fa491af6879af3cb4c87cb532ad11f9e78b95c9318342ee01d9bc05"},
+    :changed-paths [],
+    :finding
+    "The frozen regularity is definitionally genuine infinity; this conversion compiles. The remaining boundary is the arbitrary ModelWithCorners source. Banked manifold Sard requires self-model charts, while its Euclidean localization requires an open vector-space domain. The frozen chart-coordinate domains may meet the boundary of range I. Missing is critical-image nullity on these domains with actual within-derivative comparison and transport to the frozen mfderiv, together with the required finite-dimensional normed-model transport. No complete frozen fixture or new compiled geometric prerequisite was obtained. This is infrastructure absence, not mathematical refutation.",
+    :frozen
+    {:path "problems/t01A08/lean/Main.lean",
+     :sha256
+     "e01ccfe6008fe27aabcead609ae507d379880610efd547f780a96177771708e7",
+     :placeholder-before 1,
+     :placeholder-after 1},
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "MANIFOLD SARD / frozen regular affine line",
    :acceptance
