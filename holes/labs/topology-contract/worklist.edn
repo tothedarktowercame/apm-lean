@@ -58252,9 +58252,55 @@
   {:consumer "t00J02",
    :stop-condition
    "GO requires both actual derivative injectivity and kernel-range equality compiled for the chosen atlas. REVISE requires exactly one compiled prerequisite; no frozen consumer closure claim.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Embedded tangent geometry is now compiled for self-model finite-dimensional real inner-product manifold-to-manifold regular fibers with complete source model. General-model transport and consumer-specific orientation, duality, boundary and transversality obligations remain. No frozen consumer closure is claimed.",
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {:backward-injective
+      "ecd392b49a47ca43d65d6a72dfa2178119f0a5fbbac1a7846bb251316cab5ce7",
+      :derivative-eq
+      "b28c94f77666dae8688b572d4de76e2e3e03c9343ca799de99aa72ea3bad8fdd",
+      :inclusion-injective
+      "bfa0f479acfaa0c88570f03e23d243cc156414f59790b4a465ce697dcfa12642",
+      :inclusion-range
+      "d9119409724575400724f6c2087f04d0403c0a4e702f70b87ceac97739b00a5c"},
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture, preserving ManifoldTargetRegularFiberGlobalAtlas.chartedSpace and all existing APIs. Compile backward_injective, derivative_eq, inclusion_injective and inclusion_range; audit zero placeholders and standard-only axioms. Retain genuine infinity, inherited topology, empty fibers and zero-dimensional kernels. Do not claim broader-model applicability or frozen consumer closure.",
+      :axioms :standard-only,
+      :placeholder-before 0,
+      :placeholder-after 0},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean -o /tmp/manifold-chart-build/ConstructionTargets/ManifoldTargetRegularFiberGlobalAtlas.olean ConstructionTargets/ManifoldTargetRegularFiberGlobalAtlas.lean && lean /tmp/ManifoldTargetRegularFiberTangentImage.lean'",
+       :exit 0}
+      {:cmd "python3 /tmp/manifold-target-tangent-audit.py", :exit 0}],
+     :diagnostic-history [],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/ManifoldTargetRegularFiberTangentImage.lean",
+      :sha256
+      "2e0cef7760b44312d7c31f85e6e96cd5b19132ca6d8788abef4f93067ad92a92"},
+     :finding
+     "Compiled both requested conclusions for exactly the chosen global atlas. Local forward/backward inverse laws and the manifold chain rule prove backward derivative injectivity. Actual coordinate agreement identifies the inclusion mfderiv with that backward derivative. The defining map composed with inclusion is constant, giving range containment in its mfderiv kernel; injectivity and regular-value rank-nullity give equality. No immersion, derivative comparison, alternative atlas or topology is assumed. Empty fibers and zero-dimensional kernels are included.",
+     :dependency-reviews
+     [{:outcome :pass, :job "invoke-1789005780937-17610-3b67ff63"}
+      {:outcome :pass,
+       :commit "7dd6810529b01300cc375dbd5a30706e47aacaa5",
+       :job "invoke-1789005326995-17594-da9df8cf"}],
+     :implementation
+     {:scope
+      ["ConstructionTargets/ManifoldTargetRegularFiberTangentImage.lean"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/ManifoldTargetRegularFiberTangentImage.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / manifold-target inclusion tangent kernel",
    :acceptance
