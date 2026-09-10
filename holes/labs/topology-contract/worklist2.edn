@@ -36973,9 +36973,162 @@
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
-   "Construct only the exact equivalence between canonical maximal product-simplex paths and balanced Boolean step words. Do not define corner swaps, pair or cancel faces, prove shuffle-sign changes, construct chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
-   :phase :probe,
+   "Bank only prefix horizontal and vertical counts for finite Boolean words and their partition identity and bounds. Do not impose balanced cardinalities, reconstruct maximal paths, prove inverse laws, define corner swaps, pair or cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+    "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: prefix counts of Boolean product-simplex step words",
+   :acceptance
+   {:namespace "ConstructionTargets.ProductSimplexWordPrefixCounts",
+    :implementation
+    "Promote the compiled fixture as the finite prefix-count arithmetic required to reconstruct a canonical maximal path from a balanced Boolean word.",
+    :hypotheses
+    "Use an arbitrary Boolean word indexed by Fin n and prefix endpoints indexed by Fin (n+1). No balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+    :declarations
+    ["horizontalCount"
+     "verticalCount"
+     "horizontalCount_add_verticalCount"
+     "horizontalCount_le"
+     "verticalCount_le"],
+    :consumer-equation
+    "For every prefix endpoint i, the number of true letters before i plus the number of false letters before i equals i; each count is therefore at most i.",
+    :consumer-residual
+    "Prove the terminal counts of stepWord are p and q, define balanced words, use prefix counts as cumulative coordinates in prodStdSimplex.objEquiv.invFun, and prove the path/word inverse laws.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexWordPrefixCounts."
+     "Verify horizontalCount and verticalCount count exactly the true and false letters at Fin indices strictly below the prefix endpoint."
+     "Verify horizontalCount_add_verticalCount partitions every prefix and equals the endpoint value."
+     "Verify both prefix-count bounds."
+     "Reproduce standard-only axiom audits for all three exported theorems."
+     "Confirm no balanced-word subtype, path reconstruction, inverse law, corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :t03j05-product-simplex-word-prefix-counts-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint59-oriented-shuffle-cancellation-and-consumer-refill-1],
+   :current-residual
+   "The Boolean step-word and endpoint interfaces are banked, but reconstruction needs canonical cumulative horizontal and vertical prefix counts with their partition identity and bounds.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the exact equivalence between canonical maximal product-simplex paths and balanced Boolean step words. Do not define corner swaps, pair or cancel faces, prove shuffle-sign changes, construct chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
+   :evidence
+   {:probe
+    {:residual
+     "Prove terminal stepWord cardinalities, package balanced words, reconstruct cumulative-coordinate maximal paths and establish the two inverse laws.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t03J05,
+      :stop-condition
+      "Bank only prefix horizontal and vertical counts for finite Boolean words and their partition identity and bounds. Do not impose balanced cardinalities, reconstruct maximal paths, prove inverse laws, define corner swaps, pair or cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+       "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+      :dag-node
+      "PRODUCT HOMOLOGY: prefix counts of Boolean product-simplex step words",
+      :acceptance
+      {:namespace "ConstructionTargets.ProductSimplexWordPrefixCounts",
+       :implementation
+       "Promote the compiled fixture as the finite prefix-count arithmetic required to reconstruct a canonical maximal path from a balanced Boolean word.",
+       :hypotheses
+       "Use an arbitrary Boolean word indexed by Fin n and prefix endpoints indexed by Fin (n+1). No balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+       :declarations
+       ["horizontalCount"
+        "verticalCount"
+        "horizontalCount_add_verticalCount"
+        "horizontalCount_le"
+        "verticalCount_le"],
+       :consumer-equation
+       "For every prefix endpoint i, the number of true letters before i plus the number of false letters before i equals i; each count is therefore at most i.",
+       :consumer-residual
+       "Prove the terminal counts of stepWord are p and q, define balanced words, use prefix counts as cumulative coordinates in prodStdSimplex.objEquiv.invFun, and prove the path/word inverse laws.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexWordPrefixCounts."
+        "Verify horizontalCount and verticalCount count exactly the true and false letters at Fin indices strictly below the prefix endpoint."
+        "Verify horizontalCount_add_verticalCount partitions every prefix and equals the endpoint value."
+        "Verify both prefix-count bounds."
+        "Reproduce standard-only axiom audits for all three exported theorems."
+        "Confirm no balanced-word subtype, path reconstruction, inverse law, corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
+        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+      :id :t03j05-product-simplex-word-prefix-counts-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint59-balanced-step-word-maximal-path-equivalence-1],
+      :current-residual
+      "The Boolean step-word and endpoint interfaces are banked, but reconstruction needs canonical cumulative horizontal and vertical prefix counts with their partition identity and bounds.",
+      :other-consumers [:t96J06 :t97A04]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
+       :exit 0}
+      {:cmd
+       "Inspect canonical ProductSimplexStepWord and ProductSimplexPathEndpoints and search ConstructionTargets and Mathlib for Boolean count and prefix-cardinality APIs",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint59-prefix-counts/ProductSimplexWordPrefixCounts.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint59-prefix-counts/ProductSimplexWordPrefixCounts.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint59-prefix-counts/ProductSimplexWordPrefixCounts.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "Reproduce standard-only axiom audits for horizontalCount_add_verticalCount, horizontalCount_le and verticalCount_le",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/codex13-checkpoint59-prefix-counts/ProductSimplexWordPrefixCounts.lean",
+       :exit 1,
+       :finding
+       "The first draft attempted to construct Fin indices inside a Finset.range filter before the membership proof was available and left the filter predicate underdetermined.",
+       :correction
+       "Represented a prefix as the Finset of existing Fin indices whose values are below the prefix endpoint."}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint59-prefix-counts/ProductSimplexWordPrefixCounts.lean",
+       :exit 1,
+       :finding
+       "The second draft applied the complementary-filter cardinality theorem before identifying false Boolean letters with the negation of true letters.",
+       :correction
+       "Proved the two filtered Finsets equal extensionally before applying card_filter_add_card_filter_not."}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint59-prefix-counts/ProductSimplexWordPrefixCounts.lean",
+       :exit 1,
+       :finding
+       "Fin.card_filter_val_lt returns min n i, while the target used i directly.",
+       :correction
+       "Used i.isLt to prove i ≤ n and reduced min n i to i; the final rerun compiled."}],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint59-prefix-counts/ProductSimplexWordPrefixCounts.lean",
+      :sha256
+      "d8364e8ed53196dfbc157bfd321aa518d5ee66c2c4320da754e3e59435503ff5",
+      :placeholder-count 0},
+     :finding
+     "Exactly one complete compiled prerequisite is supplied. The fixture defines horizontal and vertical counts on every prefix of a finite Boolean word and proves that they partition the prefix length, hence each is bounded by the endpoint. The parent equivalence is not GO because it still requires proving the terminal counts of a canonical stepWord are p and q, packaging balanced words, constructing the corresponding order homomorphism and proving both inverse laws. No maximal-path reconstruction, corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: balanced Boolean words as canonical maximal product-simplex paths",
@@ -37013,7 +37166,7 @@
    :kind :representation-comparison,
    :depends-on
    [:oriented-checkpoint59-oriented-shuffle-cancellation-and-consumer-refill-1
-    :oriented-checkpoint59-oriented-shuffle-cancellation-and-consumer-refill-1],
+    :t03j05-product-simplex-word-prefix-counts-1],
    :current-residual
    "The path-to-word map, local semantics and endpoints are banked, but no canonical inverse reconstructs a maximal path from a balanced word.",
    :other-consumers [:t96J06 :t97A04]}
