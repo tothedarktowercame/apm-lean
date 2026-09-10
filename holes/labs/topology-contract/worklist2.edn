@@ -42088,6 +42088,26 @@
      {:cmd
       "git show --check --stat --oneline HEAD; git status --short",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789077744251-19608-828730f4",
+     :commands
+     ["git show --stat --oneline 4fc16429"
+      "git show --format=fuller --no-ext-diff 4fc16429"
+      "git archive 4fc16429 | tar -x -C /tmp/topology-stepword-review-7jcZmg"
+      "git diff-tree --no-commit-id --name-status -r 4fc16429"
+      "git show --check --oneline 4fc16429"
+      "sha256sum archived canonical fixture and reviewed source fixture"
+      "cmp archived canonical fixture against reviewed source fixture"
+      "lake env lean archived ProductSimplexStepWordReconstructed.lean"
+      "lake build ConstructionTargets.ProductSimplexStepWordReconstructed"
+      "scan for placeholders, forbidden declarations, and deferred interfaces"
+      "bb worklist_check.bb on both archived ledgers"
+      "recompute stepWord_reconstructedPath statement hash"
+      "recompute t03J05 t96J06 t97A04 hashes and placeholder counts"],
+     :finding
+     "PASS: commit 4fc16429d1176790cf36b2b6d7f6188d159bcf59 has exact two-file scope and clean whitespace. The committed Lean module is byte-identical to the reviewed fixture at SHA256 476654e50d5510303ecb04a511e43f3c52c649bc5e0131e6da760b34420fffca, compiles, builds, has zero placeholders or forbidden declarations, and both ledgers validate. The theorem has the required direction stepWord (reconstructedPath w) = w.toWord and is pointwise over every Fin (p+q) index. Its true branch uses horizontalCount_succ_of_true to establish the canonical horizontal increment; its false branch combines horizontalCount_succ_of_false with isHorizontal_iff_first_coordinate_succ to rule out a horizontal step. The standard-only axiom audit reports propext, Classical.choice, and Quot.sound. Statement hash reproduces as 1f2705d5410c7a5cbbc10902b21cc1b8fed9bbba9875f288f9b131e895d6db64. The implementation correctly leaves arbitrary-path balanced extraction, the reverse inverse, equivalence packaging, corner swaps, cancellation, cross products, and closure unresolved. Frozen hashes remain db4071c33fa3b5fb6af0d5d7955bf431400fe7d2c4f8dbc759941f4bf6611af4, 1d8874db11a786b11d04b5af4f0375fa439c05d5ac1bdafacd9943a89e238a71, and 79ca854186b39183bf53490a20b5be92695e345a2c099fcf928b5ad3300ee4ec with placeholder counts 1/2/4."},
     :commit "4fc16429d1176790cf36b2b6d7f6188d159bcf59",
     :changed-paths
     ["ConstructionTargets/ProductSimplexStepWordReconstructed.lean"
@@ -42109,7 +42129,7 @@
     "The canonical module is byte-identical to the reviewed placeholder-free fixture. The theorem proves function equality by funext over every Fin (p+q) index. True letters use horizontalCount_succ_of_true to establish the reconstructed first-coordinate increment; false letters use horizontalCount_succ_of_false to contradict IsHorizontal. Both branches pass through the canonical stepWord Boolean equivalences and isHorizontal_iff_first_coordinate_succ. No reverse inverse law, extraction, equivalence, corner swap, cancellation, chain construction, cross product, intersection or closure declaration was added.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexStepWordReconstructed.lean"
     "ConstructionTargets/ProductSimplexStepWordReconstructed.md"],
@@ -42244,7 +42264,7 @@
      "Exactly one complete compiled prerequisite is supplied. The fixture proves letterwise that reading stepWord from reconstructedPath returns the original BalancedWord function: true letters use the promoted horizontal successor recurrence, while a false letter rules out a horizontal reconstructed step because its horizontal count is unchanged. The parent equivalence is not GO because balanced extraction from an arbitrary MaximalPath and the reverse reconstruction inverse law remain uncompiled. No corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: reconstructed balanced words and maximal paths are inverse",
