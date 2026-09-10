@@ -71811,8 +71811,33 @@
   {:consumer "t00A03",
    :stop-condition
    "Require the derivative-level submersion theorem for the smooth total coincidence map away from the finite endpoint boundary, then a parametric Sard projection argument yielding generic finite fibers.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Differentiate the total coincidence map and prove submersivity away from the four endpoint pairs, then apply parametric Sard to obtain generic finite fibers. Simultaneous selection, embedding stability and chart-transition compatibility remain.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean /tmp/PlaneArcEndpointTotalCoincidenceSmooth.lean ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean",
+      :exit 0}],
+    :commit "69139ad4bd6cfe6d85e68840f6b5bf4370a1548d",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointTotalCoincidenceSmooth.lean",
+     :sha256
+     "a431c6295a0ae7d5c24fa1db8c39540a2c54d5a13afdbc8bac68857d38e32c94",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The total coincidence difference depends smoothly on both curve parameters and both endpoint-preserving perturbation vectors over arbitrary supplied open extension domains. The module compiles without warnings or placeholders and its dependency hash matches."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"],
    :dag-node
