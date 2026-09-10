@@ -61719,6 +61719,8 @@
    "The DAG marks covering base change LOCAL-GO; a literal subtype constructor and fiber transport would serve four covering consumers.",
    :other-consumers ["t01A04" "t92J06" "t98A01"]}
   {:consumer "t00J02",
+   :review-finding
+   "Deterministic evidence defect in transition 568d7d09: /tmp/manifold-target-incidence-global-audit.py stops statement extraction at the first :=, including embedded letI assignments. Consequently the recorded hashes for normalized_chartAt, normalized_atlas, normalized_chart_mem, normalized_isManifold and normalized_smooth_inclusion omit their conclusions; normalized_isManifold hashes only 'theorem normalized_isManifold :\\n    letI '. Repair extraction to include the complete declaration type through the outer proof/body delimiter, then regenerate the affected evidence hashes. No Lean repair identified: commit 7593f33c has exact single-file scope, fixture SHA256 e3d12f117d5106fa50605de4b247a5b7de720a7cd2114b9b3247a11877f1ee71 matches, zero placeholders, dependency build passed 8450 jobs, compilation passed with 23 standard-only axiom audits, and pinned validator passed 483 items. Same-atlas normalized geometry and inherited topology are preserved. Ledger untouched.",
    :stop-condition
    "GO requires the chosen global atlas, specifications and same-atlas smooth inclusion. REVISE requires exactly one compiled prerequisite; no tangent or consumer closure claim.",
    :evidence
@@ -61770,6 +61772,12 @@
       "git diff --cached --check -- ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-10",
+     :job "invoke-1789020063208-18008-99e2097f",
+     :finding
+     "Deterministic evidence defect in transition 568d7d09: /tmp/manifold-target-incidence-global-audit.py stops statement extraction at the first :=, including embedded letI assignments. Consequently the recorded hashes for normalized_chartAt, normalized_atlas, normalized_chart_mem, normalized_isManifold and normalized_smooth_inclusion omit their conclusions; normalized_isManifold hashes only 'theorem normalized_isManifold :\\n    letI '. Repair extraction to include the complete declaration type through the outer proof/body delimiter, then regenerate the affected evidence hashes. No Lean repair identified: commit 7593f33c has exact single-file scope, fixture SHA256 e3d12f117d5106fa50605de4b247a5b7de720a7cd2114b9b3247a11877f1ee71 matches, zero placeholders, dependency build passed 8450 jobs, compilation passed with 23 standard-only axiom audits, and pinned validator passed 483 items. Same-atlas normalized geometry and inherited topology are preserved. Ledger untouched."},
     :commit "7593f33c5eda754661e5169a50fd3dd72ef5589e",
     :changed-paths
     ["ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean"],
@@ -61779,7 +61787,7 @@
      "e3d12f117d5106fa50605de4b247a5b7de720a7cd2114b9b3247a11877f1ee71"},
     :axiom-audit-declarations 23},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/ManifoldTargetIncidenceGlobalAtlas.lean"],
    :dag-node
