@@ -25845,8 +25845,242 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:near-closure-eligibility
+    {:eligible-unreserved 0,
+     :boundaries
+     [{:consumers [:a97J08 :t00A03 :t94J09 :t97A01 :t99J03 :t95J06],
+       :boundary
+       "Planar separation, controlled arc position, polygon invariants and classification remain; plane-arc translation is reserved. Preserve the homeomorphism-versus-diffeomorphism discrepancy."}
+      {:consumers [:t00J01],
+       :boundary
+       "Klein-product and exact fold-fiber obligations remain after sphere-branch uptake."}
+      {:consumers [:t00J02 :t03J05 :t96J06 :t98A02],
+       :boundary
+       "Global localization, orientation compatibility, intersection/duality and gluing remain. Fixed-point cocycles and boundary homotopies do not close these consumers."}
+      {:consumers [:t01A05],
+       :boundary
+       "The recorded connectedness specification defect remains; no silent repair."}
+      {:consumers [:t01A08],
+       :boundary
+       "Arbitrary ModelWithCorners chart domains and within-derivative transport remain."}
+      {:consumers [:t01J04 :t94A06],
+       :boundary
+       "Exact regular-preimage, half-space atlas and normal-translation applicability remain; source countability cannot be added silently."}
+      {:consumers [:t02A05 :t95J05],
+       :boundary
+       "Literal intrinsic Hausdorff sphere mass remains unevaluated. Flux and quotient-density reductions do not justify substitution of Haar-derived sphere measure."}
+      {:consumers [:t02A08],
+       :boundary
+       "Actual arbitrary-integer sphere maps with computed induced degree remain unconstructed."}
+      {:consumers [:t03J02],
+       :boundary
+       "Generic collar/NDR geometry and quotient invariant comparisons remain."}
+      {:consumers [:t03J04],
+       :boundary
+       "Rational transfer does not establish arbitrary-dimensional torus homology, Euler sums or covering Euler multiplicativity."}
+      {:consumers [:t92J06 :t98A01],
+       :boundary
+       "Cover classification, monodromy, surface-cover realization and genus invariance remain."}
+      {:consumers [:t96J05],
+       :boundary
+       "Preserve the reviewed radial counterexample and separate analytic/smooth repair obligations."}]},
+    :concurrency
+    {:exclude
+     [:coefficient-chart-ball-transport-implementation-refill47
+      :coefficient-moving-boundary-relative-normalization-probe-refill47
+      :plane-arc-small-translation-finite-intersections-probe-refill47],
+     :preserve-stop
+     :oriented-checkpoint41-coefficient-transition-local-constancy-1,
+     :requirement
+     "Supervisor must reconcile ownership and distinct scratch paths before any local-constancy retry. This portfolio does not retry that row."},
+    :residual
+    "One fresh unreserved foundation and a matching successor are elected. No local-constancy retry, duplicate chart transport, numerical normalization, orientation compatibility or new closure is inferred. Canonical DAG and ledgers were not edited.",
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read topology DAG, foundational-program note, closure experiments and standing policy; inspect both ledgers, dependency reviews and current reservations",
+      :exit 0}
+     {:cmd "python3 /tmp/codex13-checkpoint42-census.py", :exit 0}
+     {:cmd
+      "git log --format='%h %s' a7a09d02..HEAD -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "Inspect IntrinsicSphereSecondMoments, SphereCapFiniteMeasure and Mathlib Hausdorff/Jacobian APIs",
+      :exit 0}
+     {:cmd
+      "Recheck chart-ball implementation, blocked normalization row and independently reviewed execution STOP",
+      :exit 0}
+     {:cmd "sha256sum /tmp/codex13-checkpoint42-census.json", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial consumer census using only b/t prefixes",
+      :exit 0,
+      :correction
+      "Omitted a97J08. Replaced with the established a/b/t-prefix census; final artifact counts all 59 named consumers."}
+     {:cmd
+      "sed -n '1,110p' ConstructionTargets/IntrinsicSphereMeasure.lean",
+      :exit 2,
+      :correction
+      "That guessed filename does not exist. Located and read IntrinsicSphereSecondMoments and SphereCapFiniteMeasure instead."}],
+    :replacement-items
+    [{:consumer :t02A05,
+      :stop-condition
+      "Do not assume an area formula, numerical sphere mass, measure-preserving chart or Euclidean-to-sup-norm isometry. Preserve the diameter-power Hausdorff convention. No Stokes theorem, frozen integral value or consumer closure follows from this comparison alone. Use a row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD INTEGRATION: actual Euclidean graph Hausdorff-area comparison",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use EuclideanSpace real (Fin d) with its L2 metric, d=2 or d=3, an open domain U, and a continuously differentiable real-valued graph function. The graph lies in the Euclidean orthogonal product model; retain its actual induced metric and measurable structures.",
+       :probe
+       "Construct the graph embedding and prove the exact Hausdorff measure change-of-variables formula on measurable subsets of U: graph Hausdorff d-measure equals the integral of sqrt(1+norm(fderiv f)^2) against Hausdorff d-measure on the Euclidean domain. Prove the graph/subtype measure identifications and the actual Jacobian density rather than assuming a measure-preserving parameterization. Audit the normalization convention before any comparison with volume. Specialize to the actual upper sphere-cap graph on a radius strictly below one, with its derivative and density explicit. GO requires a complete placeholder-free compiled fixture; REVISE requires exactly one complete compiled missing geometric measure-comparison prerequisite; STOP must name the exact independent foundation or a compiled refutation.",
+       :consumer-equation
+       "The actual sphere-cap Hausdorff measure is expressed by its graph density against the actual Euclidean-domain Hausdorff measure, with no unproved normalization factor suppressed.",
+       :consumer-residual
+       "Determine the Euclidean Hausdorff-to-volume normalization, cover the sphere with compatible measurable charts, and evaluate the literal total masses before closing t02A05 or t95J05. Stokes and period consumers remain further downstream.",
+       :gates
+       ["Compile complete fixture and record SHA256."
+        "Audit L2 metric, graph image, subtype measure and measurable-set identifications."
+        "Prove the actual graph density and measure equation without supplied area or normalization assumptions."
+        "Instantiate both d=2 and d=3 and the actual sphere-cap graph."
+        "Record standard-only axiom and placeholder audits."
+        "Recheck both ledgers and preserve all reservations, unresolved STOPs and refutations."]},
+      :id :oriented-checkpoint42-euclidean-graph-hausdorff-area-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint42-local-constancy-and-consumer-refill],
+      :current-residual
+      "Intrinsic sphere finiteness and moments are reviewed, but no exact graph-area measure comparison identifies the literal sphere Hausdorff measure with an integrable chart density.",
+      :other-consumers [:t95J05 :t01J06 :t94A10]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: graph-area progress and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id :oriented-checkpoint43-graph-area-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint42-euclidean-graph-hausdorff-area-1],
+      :current-residual
+      "Measure exact graph-area progress separately from numerical sphere normalization and frozen integral closure; rerank all consumers against concurrent outcomes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :measures
+    {:concurrent-placeholder-delta -2,
+     :frozen-branch-uptake 0,
+     :reviewed-infrastructure-packets 9,
+     :typed-residual-after
+     "Boundary homotopies, constructed overlap sphere, scaled radial inverse and fixed relative boundary lift are reviewed. Actual ambient chart-normalization comparison and equality of nearby transition units remain; concurrent chart-ball transport is not yet reviewed.",
+     :concurrent-reviewed-modules
+     ["CoefficientTripleOverlap"
+      "CompactTransverseArcIntersections"
+      "TwoOpenPointSpanComparison"
+      "TwoOpenFreeProductMapping"],
+     :unreviewed-infrastructure-packets 1,
+     :frozen-closures 1,
+     :infrastructure-packets 10,
+     :corrected-closures 0,
+     :concurrent-unreviewed-module
+     {:module "CoefficientChartBallTransport",
+      :commit "7d1d361d",
+      :state :done-unreviewed},
+     :portfolio-infrastructure 5,
+     :new-proved-refutations 0,
+     :portfolio-modules
+     ["CoefficientMovingSphereCenter"
+      "CoefficientCompactBoundaryMotion"
+      "CoefficientChartBoundaryNeighborhood"
+      "CoefficientScaledBoundaryNormalization"
+      "CoefficientBallBoundaryLift"],
+     :concurrent-infrastructure 5,
+     :review-outcomes
+     {:infrastructure-pass 9,
+      :consumer-closure-pass 1,
+      :execution-stop-pass 1,
+      :pending-infrastructure-review 1},
+     :portfolio-placeholder-delta 0,
+     :closure
+     {:consumer :t00A01,
+      :commit "3612428cad65c85e6006c7488ea8eec4620a0181",
+      :reviewer "codex-6",
+      :outcome :pass,
+      :placeholder-before 2,
+      :placeholder-after 0,
+      :classification :frozen-closure},
+     :typed-residual-before
+     "No geometric comparison across nearby punctures was banked."},
+    :ranking
+    [{:rank 0,
+      :program "Near-closure adapters",
+      :finding
+      "All 23 remaining near-closure consumers retain reviewed boundaries. t00A01 is already closed concurrently and receives no duplicate adapter."}
+     {:rank 1,
+      :program "Surface position and chart point-variation",
+      :finding
+      "Broad shared reach, but the next bounded constructions are reserved or subject to the unresolved execution STOP; excluded."}
+     {:rank 2,
+      :program "Intrinsic integration and Stokes",
+      :finding
+      "Elect one graph-area measure comparison. It serves the explicit sphere-mass seams of t02A05 and t95J05; t01J06 and t94A10 are proposed downstream integration consumers, not immediate closures."}
+     {:rank 3,
+      :program
+      "Regular-preimage, general-model Sard, fundamental classes and cap/Thom",
+      :finding
+      "Broad reach remains, but next unreserved steps require larger atlas, orientation or global constructions than the selected measure comparison."}
+     {:rank 4,
+      :program
+      "Cover classification, collar/gluing, Eilenberg-Zilber/Kunneth and arbitrary-integer degree",
+      :finding
+      "Retain exact missing constructions; no new closing adapter follows from this portfolio's boundary packets."}
+     {:rank 5,
+      :program "Banked uptake, repaired closures and refutations",
+      :finding
+      "Do not refactor closed consumers or count documentation as closure. Preserve repaired t94J08, its original S0 refutation and reduced-homology coverage, corrected t96J07, and the t96J05 refutation."}],
+    :finding
+    "Concurrent frozen t00A01 closure reduces the named-consumer total by two. Five reviewed point-variation prerequisites now provide boundary motion, actual chart-boundary geometry, radial normalization and a fixed relative ball-boundary lift. They do not prove transition-unit local constancy. The parent ended with an independently accepted execution/ownership STOP; do not retry it. Concurrent chart-ball transport is committed but awaiting review, and its normalization continuation remains reserved. No unreserved near-closure adapter clears the recorded mathematical boundaries. Elect one independent bounded graph-area foundation for the intrinsic sphere-integral program.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/codex13-checkpoint42-census.json",
+     :open 33,
+     :baseline "a7a09d02a89232fc08617edf84157aa264f23fe9",
+     :existing 58,
+     :placeholder-after 62,
+     :zero-placeholder 25,
+     :placeholder-delta -2,
+     :within-two-placeholders 23,
+     :placeholder-before 64,
+     :head "b8e903eff7a6f18cd1fdf5135dea0902a7446e52",
+     :construction-modules-after 751,
+     :consumer-changed-paths ["problems/t00A01/lean/Main.lean"],
+     :construction-modules-before 741,
+     :sha256
+     "1902159c7cf21e1d9b1649100e53a0853e584e9c8af0142ff869d95854489603",
+     :named 59,
+     :missing ["t93A05"]}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: local orientation variation and renewed consumer eligibility",
@@ -25862,6 +26096,68 @@
     :oriented-checkpoint41-overlap-transition-and-consumer-refill],
    :current-residual
    "Measure actual point-variation progress separately from orientation compatibility and global localization; rerank all consumers against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t02A05,
+   :stop-condition
+   "Do not assume an area formula, numerical sphere mass, measure-preserving chart or Euclidean-to-sup-norm isometry. Preserve the diameter-power Hausdorff convention. No Stokes theorem, frozen integral value or consumer closure follows from this comparison alone. Use a row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD INTEGRATION: actual Euclidean graph Hausdorff-area comparison",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use EuclideanSpace real (Fin d) with its L2 metric, d=2 or d=3, an open domain U, and a continuously differentiable real-valued graph function. The graph lies in the Euclidean orthogonal product model; retain its actual induced metric and measurable structures.",
+    :probe
+    "Construct the graph embedding and prove the exact Hausdorff measure change-of-variables formula on measurable subsets of U: graph Hausdorff d-measure equals the integral of sqrt(1+norm(fderiv f)^2) against Hausdorff d-measure on the Euclidean domain. Prove the graph/subtype measure identifications and the actual Jacobian density rather than assuming a measure-preserving parameterization. Audit the normalization convention before any comparison with volume. Specialize to the actual upper sphere-cap graph on a radius strictly below one, with its derivative and density explicit. GO requires a complete placeholder-free compiled fixture; REVISE requires exactly one complete compiled missing geometric measure-comparison prerequisite; STOP must name the exact independent foundation or a compiled refutation.",
+    :consumer-equation
+    "The actual sphere-cap Hausdorff measure is expressed by its graph density against the actual Euclidean-domain Hausdorff measure, with no unproved normalization factor suppressed.",
+    :consumer-residual
+    "Determine the Euclidean Hausdorff-to-volume normalization, cover the sphere with compatible measurable charts, and evaluate the literal total masses before closing t02A05 or t95J05. Stokes and period consumers remain further downstream.",
+    :gates
+    ["Compile complete fixture and record SHA256."
+     "Audit L2 metric, graph image, subtype measure and measurable-set identifications."
+     "Prove the actual graph density and measure equation without supplied area or normalization assumptions."
+     "Instantiate both d=2 and d=3 and the actual sphere-cap graph."
+     "Record standard-only axiom and placeholder audits."
+     "Recheck both ledgers and preserve all reservations, unresolved STOPs and refutations."]},
+   :id :oriented-checkpoint42-euclidean-graph-hausdorff-area-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint42-local-constancy-and-consumer-refill
+    :oriented-checkpoint42-local-constancy-and-consumer-refill],
+   :current-residual
+   "Intrinsic sphere finiteness and moments are reviewed, but no exact graph-area measure comparison identifies the literal sphere Hausdorff measure with an integrable chart density.",
+   :other-consumers [:t95J05 :t01J06 :t94A10]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: graph-area progress and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint43-graph-area-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint42-euclidean-graph-hausdorff-area-1
+    :oriented-checkpoint42-local-constancy-and-consumer-refill],
+   :current-residual
+   "Measure exact graph-area progress separately from numerical sphere normalization and frozen integral closure; rerank all consumers against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
