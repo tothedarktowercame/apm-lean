@@ -21035,99 +21035,124 @@
    :stop-condition
    "No assumed sphere homology table, determinant-degree theorem, coordinate-permutation sign or antipodal action. Preserve the ordinary-S0 refutation and positive-dimensional hypotheses. Do not claim frozen consumer closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Exact repaired t94J08 integral transport and degree/local-index uptake remain downstream. The original ordinary-S0 refutation is preserved; no frozen consumer closure is claimed.",
-     :axiom-audits 18,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:namespace "ConstructionTargets.CoefficientSphereAntipodal",
-      :implementation
-      "Promote the exact compiled fixture, reusing the reviewed coordinate-reflection conjugation, first-reflection induction and recursive top-homology coordinates.",
-      :declarations
-      ["reflectionProduct"
-       "product_coordinate"
-       "antipodal"
-       "product_antipodal"
-       "product_homology"
-       "antipodal_action"
-       "normalization"
-       "normalization_forward"
-       "normalization_conjugation"
-       "scalar_equation"
-       "inverse_left"
-       "inverse_right"
-       "inverse_action"
-       "integral_circle"
-       "integral_sphereTwo"
-       "rational_circle"
-       "rational_sphereTwo"
-       "circle_scalar"
-       "sphereTwo_scalar"],
-      :hypotheses
-      "R is a Type 0 commutative ring. Geometry uses the literal unit sphere in EuclideanSpace ℝ (Fin d). The geometric product equality holds in every ambient dimension, including zero. antipodal_action requires n ≠ 0 and computes actual ModuleCat R singular homology in degree n and ambient dimension n+1. normalization is indexed by m with sphere dimension m+1, covering precisely all positive dimensions. No nontriviality or characteristic restriction is imposed.",
-      :consumer-equation
-      "The product of all coordinate reflections is literal negation. Its actual induced map on H_n(S^n;R), for n positive, equals (-1)^(n+1) times identity. Under the constructed normalization the forward, conjugation and elementwise scalar equations hold, together with both inverse laws and the inverse intertwining equation.",
-      :consumer-residual
-      "Transport the integral specialization into the exact repaired t94J08 definitions and discharge its degree and local-index obligations. All-integer degree realization, localization/gluing and nonbounding remain separate.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSphereAntipodal."
-       "Reproduce eighteen standard-only axiom audits and integer/rational specializations in dimensions one and two."
-       "Audit the actual coordinate-reflection product, pointwise product-to-negation proof and homology functor composition."
-       "Audit positive-dimensional hypotheses, reviewed circle base and reflection induction, recursive normalization, scalar equations and inverse laws."
-       "Preserve the ordinary-S0 refutation; do not claim frozen consumer closure."
-       "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure rules and build-loop design; inspect both ledgers and all six dependency PASS receipts",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientSphereAntipodal.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientSphereAntipodal.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSphereAntipodal.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial product and antipodal-action compilation",
-       :exit 0,
-       :correction
-       "Removed one unused simp argument reported by the linter."}
-      {:cmd "Compilation after adding normalization equations",
-       :exit 1,
-       :correction
-       "Replaced unsuccessful categorical scalar simplification with module-map extensionality and explicit linearity; proved inverse action directly from the actual antipodal-action equation."}
-      {:cmd
-       "Compilation after adding evaluated low-dimensional scalars",
-       :exit 1,
-       :correction
-       "Expanded the odd power explicitly for the sphere-two scalar."}
-      {:cmd "Second evaluated-scalar compilation",
-       :exit 1,
-       :correction
-       "Added the missing left-unit and multiplication-by-negative-one simplifications. Final compilation succeeds without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientSphereAntipodal.lean",
-      :sha256
-      "dd50b5b31824c2d507d7a607e912ddb590c36e6c5e40b1a5f61e078910f9cccc"},
-     :finding
-     "The complete antipodal fixture compiles without placeholders. Actual coordinate reflections compose to literal negation, and functorial composition with the reviewed reflection signs proves the antipodal scalar over every Type 0 commutative ring. Constructed positive top-homology coordinates, forward normalization, conjugation, scalar and inverse equations are verified. Integer and rational circle and two-sphere examples compile. No determinant theorem, permutation sign or antipodal action is assumed.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientSphereAntipodal.lean"
-       "ConstructionTargets/CoefficientSphereAntipodal.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Transport the integral specialization into the exact repaired t94J08 definitions and discharge its degree and local-index obligations. All-integer degree realization, localization/gluing and nonbounding remain separate. The original ordinary-S0 refutation is preserved; no frozen consumer closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :whitespace :pass,
+     :placeholders :pass,
+     :positive-dimensional-hypotheses :pass,
+     :inverse-laws :pass,
+     :fixture-hash :pass,
+     :reviewed-reflection-induction :pass,
+     :canonical-compilation :pass,
+     :two-file-scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :homology-composition :pass,
+     :normalization-and-scalar-equations :pass,
+     :actual-product-to-negation :pass,
+     :fixture-compilation :pass,
+     :ordinary-S0-refutation-preserved :pass},
+    :axiom-audits 18,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation emitted no warnings. Build replayed 20 dependency warnings; none originated in this module."],
+    :statement-hashes
+    {:integral_sphereTwo
+     "5b993bd5a248360e02819b9ec510735d5cf5c7cd6b759f91f3edc1864b375c2a",
+     :inverse_right
+     "f66a1c7c06234c656eaae2a36694f7aafa14a3c894c5a42f22ae848a934614df",
+     :product_antipodal
+     "c102d5e2f0a37a4b1daa3a37ed9b359fab0d6084d525891ad2ad423ccb93a6cd",
+     :integral_circle
+     "d33e2dbdfa891dea68147e29d1421821ad9122cc0db25baec35792b9b922d4fc",
+     :normalization_conjugation
+     "37d75132fde07d5a139cb0cbe1095886908ecfca54eaa866ca1d9a9275e63384",
+     :antipodal
+     "82ca64a5d6dee991ab03faffd239966db9c8a7b726e44264e2ff7eae827996d5",
+     :product_homology
+     "b4fda0b3667927e23790876ced8da3f67f80fc35a4180b1beeee57c451118463",
+     :inverse_action
+     "80b9b13f292af7ad5380ef6c4a85205fb445c1c799cca9929e0048865446b149",
+     :rational_circle
+     "e3b0471bf9270f82294d6d1b14e88b4dc1081a1324420b0becf1ff1ce631a17e",
+     :product_coordinate
+     "3351647921cfca54914ac4f4e1d522e49b05f19e5034b6abfb7edcfd27acfbb1",
+     :rational_sphereTwo
+     "571fcb1e4181534d7204bff4131b375ff7f8171ae968d4c0373306949ce1f703",
+     :sphereTwo_scalar
+     "460488fe085ee5f98dbfa1f8282df90fe73b0bbea75517674a7703dd66b44fe6",
+     :normalization_forward
+     "89fe2e6548ad030efb5ca54f8a024e044ccd98733223f76971021223fc25046a",
+     :inverse_left
+     "a9b018b1bcfc29194f1c49787bfef2c929dc4d60a7d5219f84d462c6950aef99",
+     :scalar_equation
+     "d25ed81b0857a93091cc73e852892ad277bc0b9cdad645dfb3c2b3a5a704ced5",
+     :normalization
+     "e62a36c396ec419ea04bd3da3dd43c995f51681946d3732ae7560c4cd7e88e37",
+     :antipodal_action
+     "b16ad5dc62bdbf1a6f88f2648089912471679f32c6996447aa4276c14ac2020b",
+     :circle_scalar
+     "45cfa681b14530d25aa4fa5d119ca5788833a5cb0896ec5ecae904f33c975931",
+     :reflectionProduct
+     "1ea2f5210836811357a04e7ec2e3f2168c4c87ea30b02c7cd23b54861cd16da3"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure rules, both ledgers and six dependency PASS receipts; inspect actual reflection product, homology composition and normalization",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "Verify fixture SHA256 before byte-identical promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientSphereAntipodal.lean > /tmp/antipodal-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientSphereAntipodal.lean > /tmp/antipodal-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientSphereAntipodal > /tmp/antipodal-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Validate eighteen standard-only audits in each direct compilation log and inspect build warnings",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSphereAntipodal.lean ConstructionTargets/CoefficientSphereAntipodal.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python audit of fixture equality, zero placeholders, nineteen declaration hashes and exact two-file scope",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Prove actual antipodal action on positive sphere top homology'",
+      :exit 0}
+     {:cmd "git diff --check 9e835292^ 9e835292", :exit 0}
+     {:cmd
+      "Python verification of pinned commit scope, fixture equality and scoped cleanliness; git status --short",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "9e8352926c5896dd66aaf93eae771391865b0fac",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSphereAntipodal.lean"
+     "ConstructionTargets/CoefficientSphereAntipodal.md"],
+    :fixture
+    {:path "/tmp/CoefficientSphereAntipodal.lean",
+     :sha256
+     "dd50b5b31824c2d507d7a607e912ddb590c36e6c5e40b1a5f61e078910f9cccc",
+     :promotion :byte-identical},
+    :finding
+    "Promoted the exact fixture proving that all coordinate reflections compose to literal negation. Actual homology functor composition and reviewed reflection signs yield multiplication by (-1)^(n+1) on positive-dimensional top homology. Constructed normalization, forward, conjugation, elementwise scalar and inverse equations compile over every Type 0 commutative ring. Integer and rational circle and two-sphere examples pass.",
+    :statement-hash-method
+    "SHA256 from declaration keyword to immediately before the space preceding := or where; for reflectionProduct, to immediately before the newline introducing its first equation.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSphereAntipodal.lean"
     "ConstructionTargets/CoefficientSphereAntipodal.md"],
