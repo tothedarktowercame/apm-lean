@@ -59122,8 +59122,60 @@
   {:consumer "t00J02",
    :stop-condition
    "Require the exact actual ChartedSpace construction and all specifications; retaining the old chart carrier is insufficient.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Smooth compatibility and derivative transport for the chosen atlas remain. No IsManifold, smooth identity maps, incidence atlas or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:chartAt-eq
+     "af9d3cb8512753235361c485873306f5623dd19bedcf0ff87afcc16584f28a90",
+     :atlas-eq
+     "3d4789a19e3186a8dd204f4361cb4071caa60dadbe672336cd69ec68388559e0",
+     :chart-source
+     "bf768515b2550c672aff492fa805490f3d8996cf66088999047902242eabe98e",
+     :chart-target
+     "2daf5f975f8472447de6f574be94af14c7a58c71a8df2a522a55bb3fabc06614",
+     :chart-apply
+     "3ba5bb321980bfc3f08df9cdbdfb3a1697984c6147151c8cfc9decd577d20313",
+     :chart-symm-apply
+     "49580fb855a62cb2de1cc9e47b05aae867c2b2974a4e880e28f699c612ee21cd",
+     :product-dimension
+     "39fd1afae65ab266b2cc6e586caceb9a072cda624efff132164b938e3cc07f2d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "Python fixture hash, forbidden-token and complete theorem-signature audit",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ChartedSpaceModelTransport.lean ConstructionTargets/ChartedSpaceModelTransport.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ChartedSpaceModelTransport.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history [],
+    :commit "ab99abe095db8d5d4d0a783b732bd8dc461408a7",
+    :changed-paths
+    ["ConstructionTargets/ChartedSpaceModelTransport.lean"],
+    :fixture
+    {:path "/tmp/ChartedSpaceModelTransport.lean",
+     :sha256
+     "d6753f7626585b57947d20a13b99ec171c2100ac5d2c4d15ba28d83a7b98d7a7",
+     :placeholder-count 0},
+    :finding
+    "Exact fixture promoted. Constructors, six coordinate/atlas specifications, product specialization and dimension theorem compile warning-free with zero placeholders; all nine printed audits use standard axioms. Existing topology, ordinary product norm, weaker hypotheses and existing APIs preserved. Consumers unchanged; worktree clean. Validator reports 461 items OK."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/ChartedSpaceModelTransport.lean"],
    :dag-node "TRANSVERSE-PULLBACK / actual chart-carrier transport",
    :acceptance
