@@ -42826,9 +42826,144 @@
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
-   "Construct only the adjacent unequal-letter swap on balanced words, its transport to canonical maximal paths through wordPathEquiv, involutivity, and equality of the affine faces obtained by deleting the exchanged corner. Do not assign shuffle signs, pair or cancel a chain sum, construct a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
-   :phase :probe,
+   "Bank only the generic adjacent Boolean-word transposition and its exact pointwise and involutive laws. Do not prove balanced totals, package a BalancedWord or MaximalPath swap, compare deleted faces, assign shuffle signs, cancel chains, construct a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/ProductSimplexAdjacentWordSwap.lean"
+    "ConstructionTargets/ProductSimplexAdjacentWordSwap.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: generic adjacent Boolean-word transposition",
+   :acceptance
+   {:hypotheses
+    "Use an arbitrary Boolean word on Fin (n+1) and a cut index i : Fin n. No unequal-letter, balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexAdjacentWordSwap."
+     "Verify the left and right adjacent positions are exchanged."
+     "Verify every position distinct from both adjacent positions is unchanged."
+     "Verify applying the same adjacent swap twice is functionally equal to the original word."
+     "Reproduce standard-only axiom audits for all four theorems."
+     "Confirm no balanced-word packaging, path transport, deleted-face comparison, shuffle sign, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
+    :consumer-residual
+    "Prove the adjacent transposition preserves both terminal counts, package it as a BalancedWord and canonical MaximalPath operation, then prove the common deleted-face equation.",
+    :axioms :standard-only,
+    :consumer-equation
+    "Precomposition with Equiv.swap i.castSucc i.succ exchanges exactly the two positions adjacent to i, fixes every other position, and applying the same transposition twice returns the original Boolean word.",
+    :declarations
+    ["adjacentSwapWord"
+     "adjacentSwapWord_left"
+     "adjacentSwapWord_right"
+     "adjacentSwapWord_of_ne"
+     "adjacentSwapWord_involutive"],
+    :namespace "ConstructionTargets.ProductSimplexAdjacentWordSwap",
+    :route-step
+    "Supplies the generic involutive transposition needed by the adjacent-corner construction on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes.",
+    :implementation
+    "Promote the compiled fixture as the generic adjacent word-swap foundation."},
+   :id :t03j05-product-simplex-adjacent-word-swap-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint69-product-simplex-word-path-inverses-and-consumer-refill-1],
+   :current-residual
+   "The word/path equivalence is banked, but the generic adjacent Boolean-word transposition and its involutive laws were not yet available.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the adjacent unequal-letter swap on balanced words, its transport to canonical maximal paths through wordPathEquiv, involutivity, and equality of the affine faces obtained by deleting the exchanged corner. Do not assign shuffle signs, pair or cancel a chain sum, construct a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
+   :evidence
+   {:probe
+    {:residual
+     "After banking the generic transposition, prove preservation of horizontal and vertical terminal counts, package the balanced and path swaps, prove path-level involutivity, and identify the common deleted affine face.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t03J05,
+      :stop-condition
+      "Bank only the generic adjacent Boolean-word transposition and its exact pointwise and involutive laws. Do not prove balanced totals, package a BalancedWord or MaximalPath swap, compare deleted faces, assign shuffle signs, cancel chains, construct a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProductSimplexAdjacentWordSwap.lean"
+       "ConstructionTargets/ProductSimplexAdjacentWordSwap.md"],
+      :dag-node
+      "PRODUCT HOMOLOGY: generic adjacent Boolean-word transposition",
+      :acceptance
+      {:hypotheses
+       "Use an arbitrary Boolean word on Fin (n+1) and a cut index i : Fin n. No unequal-letter, balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexAdjacentWordSwap."
+        "Verify the left and right adjacent positions are exchanged."
+        "Verify every position distinct from both adjacent positions is unchanged."
+        "Verify applying the same adjacent swap twice is functionally equal to the original word."
+        "Reproduce standard-only axiom audits for all four theorems."
+        "Confirm no balanced-word packaging, path transport, deleted-face comparison, shuffle sign, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
+       :consumer-residual
+       "Prove the adjacent transposition preserves both terminal counts, package it as a BalancedWord and canonical MaximalPath operation, then prove the common deleted-face equation.",
+       :axioms :standard-only,
+       :consumer-equation
+       "Precomposition with Equiv.swap i.castSucc i.succ exchanges exactly the two positions adjacent to i, fixes every other position, and applying the same transposition twice returns the original Boolean word.",
+       :declarations
+       ["adjacentSwapWord"
+        "adjacentSwapWord_left"
+        "adjacentSwapWord_right"
+        "adjacentSwapWord_of_ne"
+        "adjacentSwapWord_involutive"],
+       :namespace "ConstructionTargets.ProductSimplexAdjacentWordSwap",
+       :route-step
+       "Supplies the generic involutive transposition needed by the adjacent-corner construction on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes.",
+       :implementation
+       "Promote the compiled fixture as the generic adjacent word-swap foundation."},
+      :id :t03j05-product-simplex-adjacent-word-swap-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint69-product-simplex-adjacent-corner-swap-1],
+      :current-residual
+      "The word/path equivalence is banked, but the generic adjacent Boolean-word transposition and its involutive laws were not yet available.",
+      :other-consumers [:t96J06 :t97A04]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
+       :exit 0}
+      {:cmd
+       "Inspect ProductSimplexWordPrefixCounts, ProductSimplexBalancedWords and ProductSimplexWordPathEquivalence plus existing Fin and Equiv.swap.swap APIs",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint69-adjacent-word-swap/AdjacentWordSwap.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint69-adjacent-word-swap/AdjacentWordSwap.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint69-adjacent-word-swap/AdjacentWordSwap.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "Reproduce standard-only axiom audits for adjacentSwapWord_left, adjacentSwapWord_right, adjacentSwapWord_of_ne and adjacentSwapWord_involutive",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint69-adjacent-word-swap/AdjacentWordSwap.lean",
+      :sha256
+      "0fa575f4c08f037f2dfe0b1e03ee0ebc218fbbac18fd275684648ffce6523d53",
+      :placeholder-count 0},
+     :finding
+     "Exactly one complete compiled prerequisite is supplied. The fixture defines the adjacent transposition by precomposition with Equiv.swap, proves that it exchanges the two positions bordering the indexed cut, fixes every other position, and is involutive on arbitrary Boolean words. The parent row is not GO because preservation of horizontal and vertical terminal counts, BalancedWord packaging, path transport, and the common deleted-face equation remain uncompiled. No shuffle sign, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: adjacent balanced-word corner swaps and common deleted faces",
@@ -42858,7 +42993,7 @@
    :kind :reusable-theorem,
    :depends-on
    [:oriented-checkpoint69-product-simplex-word-path-inverses-and-consumer-refill-1
-    :oriented-checkpoint69-product-simplex-word-path-inverses-and-consumer-refill-1],
+    :t03j05-product-simplex-adjacent-word-swap-1],
    :current-residual
    "Balanced words and maximal paths are exactly equivalent, but no adjacent unequal-letter swap, involutivity law or common deleted-face equation has been constructed.",
    :other-consumers [:t96J06 :t97A04]}
