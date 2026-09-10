@@ -29158,8 +29158,130 @@
   {:consumer :t95J05,
    :stop-condition
    "Bank only the open-ball height geometry, C1 regularity, signs and literal L2 unit-norm equations. Do not claim derivative or density formulas, an ambient coordinate isometry, cap-image equality, Hausdorff transport, equator nullity, numerical normalization, moments or consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Compute actual fderivatives and graph densities, construct the L2 coordinate isometry to EuclideanSpace real (Fin (d+1)), identify graph images with strict sphere caps and transport exact Hausdorff area.",
+    :gates
+    {:canonical-compile :pass,
+     :lower-sign :pass,
+     :open-ball-membership :pass,
+     :lower-l2-unit-norm :pass,
+     :whitespace :pass,
+     :dimension-two-both-signs :pass,
+     :upper-c1 :pass,
+     :fixture-hash :pass,
+     :upper-l2-unit-norm :pass,
+     :axiom-audits 11,
+     :upper-sign :pass,
+     :lower-c1 :pass,
+     :exact-scope :pass,
+     :upper-square :pass,
+     :radicand-positivity :pass,
+     :claim-boundary :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :dimension-three-both-signs :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"dimension_two_upper"
+     "0341733dc95caedf40f6a946d6c03ac5c3aaae14471aa983a8ba6fcd0a81ec5f",
+     "upper_norm_sq"
+     "256719ab485db5b364ab057031e04fd52db76d429a6e1f757a76150c2dd5f10d",
+     "lower_norm_sq"
+     "ec400509b9b8134c6278ae532df1b24cbfe51fa1c399b9a7da1df6b4e9532bf6",
+     "norm_lt_one"
+     "cad731f00e7d5d38617d717a66047b8c5158a357a6137a7dec7498a61ce8a991",
+     "upper"
+     "dd06ffad3740d14236c6cd4fc64f5b4d8b8cb5f89a99ef6a9dca6e1a13418f0a",
+     "dimension_three_lower"
+     "2398474be3d848f6d86f359944bcefda245fe89aaf82a3956b9741d991519c74",
+     "dimension_three_upper"
+     "f85c65301525a894bdce2e253f0026e9cb801da19cd2c002a0977b377a3eff6d",
+     "lower_neg"
+     "1a5a751f8f50fee6398792332b18d1203984264dd44b50a47a7dbfcaeea463d1",
+     "radicand_pos"
+     "05590aa5ce50b4dd4e9d86a448117ce1d47f2e0c312b586fe59f15d6bed85237",
+     "upper_sq"
+     "b941d07c7eb9f27278902ef03ec6f519ca1a9f5c6f229edecaf7a714d49698c0",
+     "lower_contDiffOn"
+     "11d4dd0d1326de5c2d6553c7942ed2f5939e1e83a28eda125614c350a3e50a98",
+     "E"
+     "b2e7a74dc0f8a980579ce54384e43d662d23841d9116eed609089411e652e918",
+     "domain"
+     "b1f6c0b967c9ed07faa9c6bed005d7f9bd23ae8aca1f23bf3f8150c8b860c484",
+     "upper_pos"
+     "1518c61004fe5d27ff5a8acd82b2976d7172c7929089d2946a774eea1b24578a",
+     "lower"
+     "6ffbabac77e7e84063ac2d017960c07f95673ccf777f922400316f4719396c14",
+     "upper_contDiffOn"
+     "9ed059aecf9da7e55dcc6802dfce5556776230d0d5a325558e53b27419d2d755",
+     "dimension_two_lower"
+     "818af8d3faa583387b47c564f520a4b71a1a048055a662874416f3dd65aeec8f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, build-loop design, both ledgers and reviewed dependency receipt",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean ConstructionTargets/SphereCapHeight.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean ConstructionTargets/SphereCapHeight.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean",
+      :exit 0}
+     {:cmd "lake env lean ConstructionTargets/SphereCapHeight.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.SphereCapHeight", :exit 0}
+     {:cmd
+      "Audit eleven namespace-local standard-only axiom reports and zero warnings or errors",
+      :exit 0}
+     {:cmd
+      "Audit open-ball membership, radicand positivity, square-root signs, C1 construction and literal WithLp 2 squared-norm equations",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/SphereCapHeight.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n '[[:blank:]]+$' ConstructionTargets/SphereCapHeight.lean ConstructionTargets/SphereCapHeight.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --cached --check and exact two-file staged-scope audit",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline 40ed9a46 && git diff 40ed9a46^ 40ed9a46 --check",
+      :exit 0}],
+    :dependency-uptake
+    {:id :oriented-checkpoint46-c1-graph-exact-hausdorff-area-1,
+     :commit "3c551fb6a315e4c16a111fd87beaf495a3ff6679",
+     :review "invoke-1789045271081-18623-40dd4178"},
+    :commit "40ed9a46b8d1cf310a63c9eb617b361e2210e668",
+    :changed-paths
+    ["ConstructionTargets/SphereCapHeight.lean"
+     "ConstructionTargets/SphereCapHeight.md"],
+    :fixture
+    {:path "/tmp/codex13-checkpoint47-cap-height/SphereCapHeight.lean",
+     :sha256
+     "abc60c72fdfa1bdd211a99897ea929d0fd3c00c1de4b9af83431eb9e59d9e832",
+     :placeholder-count 0},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereCapHeight.lean"
     "ConstructionTargets/SphereCapHeight.md"],
