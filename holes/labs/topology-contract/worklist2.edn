@@ -14443,8 +14443,155 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["Original t01A05 disconnected-cover refutation and corrected connected-cover degree STOP remain; no repair is implemented."
+     "Original t96J05 circle refutation and nonconstant-radius analytic-atlas/attainment STOP remain."
+     "Old t96J07 refutation remains separate from its earlier corrected closure."
+     "Preserve polygon, pants, projective-nonbounding, generic-gluing, general-model Sard, covering-classification and integration STOPs."
+     "Preserve signed antipodal naturality, the ordinary-H0(S0) refutation, reduced-S0 degree and one-dimensional local-index coverage."
+     "No inferred orientation coherence, homology comparison, excision or sphere-table closure."],
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint23Census.py", :exit 0}
+     {:cmd
+      "Read current DAG, foundational-program note, closure policy and both ledgers",
+      :exit 0}
+     {:cmd "bb /tmp/Checkpoint23Eligibility.bb", :exit 0}
+     {:cmd
+      "Read dependency reviews and concurrent refill35 through refill37 outcomes",
+      :exit 0}
+     {:cmd
+      "Inspect SingularSubdivision eventual-subordination and production-chain factorization declarations",
+      :exit 0}
+     {:cmd
+      "git log --oneline 51f3ad03..b3fe65b7 -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :replacement-items
+    [{:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "No assumed subdivision smallness or homology isomorphism. Use actual R-linear chain elements and maps; do not substitute an integral chain theorem or restrict arbitrary coefficients to integer multiples of generators.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SINGULAR-SUBDIVISION: actual coefficient-general eventual smallness",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a commutative ring R and an arbitrary indexed open cover of X, construct iterates of the reviewed actual singular subdivision chain map. Use the existing coefficient-independent eventual_postcomposedIteratedSubdivision_subordinate geometry and the reviewed coefficient-general finite realization equations. Prove finite generator support for an arbitrary element of the actual ModuleCat R singular-chain object, with arbitrary R coefficients. Choose a common subdivision exponent and construct its preimage under the actual cover-small inclusion. Prove eventual factorization for all larger exponents using the reviewed preservation theorem. State universes, include every degree and empty spaces, and impose no connectedness or finite-cover hypothesis. Compile integer and rational overlapping interval-cover examples. REVISE requires exactly one compiled missing finite-support or iterate-realization prerequisite; STOP if independent foundations remain.",
+       :consumer-equation
+       "For every degree n and actual R-valued singular chain c, there exists N such that for every k at least N, the k-fold subdivision of c lies in the image of the actual cover-small inclusion, with a constructed small-chain preimage.",
+       :consumer-residual
+       "Positive-degree small-chain homology comparison, relative excision and sphere suspension remain before rational S2 H1/H2.",
+       :gates
+       ["GO requires a complete placeholder-free compiled fixture proving actual-chain eventual factorization with arbitrary R coefficients."
+        "Record fixture SHA256, integer/rational examples and standard-only audits."
+        "Do not claim homology comparison, excision or frozen consumer closure."]},
+      :id :oriented-checkpoint23-coefficient-eventual-smallness-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint23-connected-cover-and-small-preservation-refill
+       :oriented-checkpoint22-coefficient-small-chain-preservation-1
+       :coefficient-general-finite-operator-realization-1],
+      :current-residual
+      "Actual subdivision and prism preserve cover-small chains. Iterated subdivision of an arbitrary actual R-valued finite chain still needs a constructed factorization through the cover-small inclusion.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: eventual smallness and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document the exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint24-eventual-smallness-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint23-coefficient-eventual-smallness-1],
+      :current-residual
+      "Measure eventual-smallness infrastructure separately from consumer closure and recheck whether any reviewed consumer boundary has actually been discharged.",
+      :other-consumers []}],
+    :changed-paths [],
+    :finding
+    {:concurrent-placeholder-delta 0,
+     :baseline "51f3ad0371ee114180e107351cac9e9cc4b29a00",
+     :concurrency
+     "Exclude transverse-vector-fiber-product-geometry-probe-refill37 and its successor. Preserve the newly reviewed t00J02 duality STOP; do not begin with t00J02. The concurrent t96J07 documentation verification adds no consumer reduction.",
+     :placeholder-delta 0,
+     :head "b3fe65b7f774ca5ebb0120f79e42032400327abc",
+     :infrastructure-packets
+     {:modules-before 665,
+      :modules-after 670,
+      :portfolio 3,
+      :concurrent 2,
+      :portfolio-modules
+      ["CoefficientFiniteRealization"
+       "CoefficientFiniteOperators"
+       "CoefficientSmallPreservation"],
+      :concurrent-modules
+      ["ManifoldTargetRegularFiberGlobalAtlas"
+       "ManifoldTargetRegularFiberTangentImage"],
+      :concurrent-documentation-packets 1},
+     :ranking
+     "With no eligible near-closure adapter, elect one bounded foundation rather than inventing a closure candidate or returning an empty refill. Eventual smallness serves four named downstream consumers and has existing coefficient-independent compactness and support geometry plus newly reviewed realization and preservation maps. It is the next concrete construction on that route. Fundamental classes, intersection comparison, surface classification, generic collars and integration retain broader independent foundations; their aggregate consumer counts do not identify a comparably ready single construction. Transverse fiber-product geometry is reserved by the other campaign.",
+     :unchanged-statement-closures 0,
+     :corrected-statement-closures 0,
+     :typed-residual-change
+     "Finite signed formulas now realize to the actual coefficient-general operators, which restrict to small chains with an inclusion-compatible homotopy to identity. Eventual smallness remains. Connectedness alone has not supplied the upstairs orientation or actual covering-degree equation; no connected-cover repair was implemented. Concurrent manifold-target global atlas and tangent-kernel constructions are banked, but their reviewed consumer probes still stop at separate induced-degree, surface-invariant and duality boundaries.",
+     :review-outcomes
+     {:small-preservation-pass "invoke-1789006720756-17644-7102535c",
+      :concurrent-duality-stop-pass
+      "invoke-1789006768733-17646-7857c903",
+      :concurrent-global-atlas-pass
+      "invoke-1789005326995-17594-da9df8cf",
+      :concurrent-degree-stop-pass
+      "invoke-1789005004579-17580-4d3bea20",
+      :concurrent-tangent-image-pass
+      "invoke-1789006299884-17632-de51f2eb",
+      :connected-cover-stop-pass "invoke-1789005276731-17591-aea9e05a",
+      :finite-realization-pass "invoke-1789005718545-17608-17c81fd6",
+      :finite-operators-pass "invoke-1789006188521-17627-018ff60e",
+      :concurrent-fivefold-stop-pass
+      "invoke-1789005975143-17617-e2057336"},
+     :near-closure-election
+     {:eligible 0,
+      :elected 0,
+      :reason
+      "All 25 consumers within two placeholders retain unresolved consumer boundaries or refutations. The ledger audit finds STOP records for 24; t03J02 has its explicit historical collar/NDR and van Kampen STOP in the DAG. Recent coefficient work resolves intermediate representation boundaries, not these complete consumer obligations. Electing an unchanged adapter would violate the no-unresolved-STOP-retry condition."},
+     :portfolio-placeholder-delta 0,
+     :census
+     {:path "/tmp/Checkpoint23Census.json",
+      :open 35,
+      :existing 58,
+      :zero-placeholder 23,
+      :after 66,
+      :sha256
+      "0058ea1b9f6502695549a71b6e54f7327a75622f5526014e9acef84853bab703",
+      :named 59,
+      :missing [:t93A05],
+      :within-two 25,
+      :before 66}},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: connected-cover repair and small-chain preservation uptake",
@@ -14462,6 +14609,65 @@
     :oriented-checkpoint22-radial-repair-and-subdivision-homotopy-refill],
    :current-residual
    "Measure corrected connected-cover outcome separately from cover-small preservation; attribute concurrent work and retain historical refutations.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "No assumed subdivision smallness or homology isomorphism. Use actual R-linear chain elements and maps; do not substitute an integral chain theorem or restrict arbitrary coefficients to integer multiples of generators.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SINGULAR-SUBDIVISION: actual coefficient-general eventual smallness",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a commutative ring R and an arbitrary indexed open cover of X, construct iterates of the reviewed actual singular subdivision chain map. Use the existing coefficient-independent eventual_postcomposedIteratedSubdivision_subordinate geometry and the reviewed coefficient-general finite realization equations. Prove finite generator support for an arbitrary element of the actual ModuleCat R singular-chain object, with arbitrary R coefficients. Choose a common subdivision exponent and construct its preimage under the actual cover-small inclusion. Prove eventual factorization for all larger exponents using the reviewed preservation theorem. State universes, include every degree and empty spaces, and impose no connectedness or finite-cover hypothesis. Compile integer and rational overlapping interval-cover examples. REVISE requires exactly one compiled missing finite-support or iterate-realization prerequisite; STOP if independent foundations remain.",
+    :consumer-equation
+    "For every degree n and actual R-valued singular chain c, there exists N such that for every k at least N, the k-fold subdivision of c lies in the image of the actual cover-small inclusion, with a constructed small-chain preimage.",
+    :consumer-residual
+    "Positive-degree small-chain homology comparison, relative excision and sphere suspension remain before rational S2 H1/H2.",
+    :gates
+    ["GO requires a complete placeholder-free compiled fixture proving actual-chain eventual factorization with arbitrary R coefficients."
+     "Record fixture SHA256, integer/rational examples and standard-only audits."
+     "Do not claim homology comparison, excision or frozen consumer closure."]},
+   :id :oriented-checkpoint23-coefficient-eventual-smallness-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint23-connected-cover-and-small-preservation-refill
+    :oriented-checkpoint22-coefficient-small-chain-preservation-1
+    :coefficient-general-finite-operator-realization-1
+    :oriented-checkpoint23-connected-cover-and-small-preservation-refill],
+   :current-residual
+   "Actual subdivision and prism preserve cover-small chains. Iterated subdivision of an arbitrary actual R-valued finite chain still needs a constructed factorization through the cover-small inclusion.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: eventual smallness and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document the exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint24-eventual-smallness-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint23-coefficient-eventual-smallness-1
+    :oriented-checkpoint23-connected-cover-and-small-preservation-refill],
+   :current-residual
+   "Measure eventual-smallness infrastructure separately from consumer closure and recheck whether any reviewed consumer boundary has actually been discharged.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
