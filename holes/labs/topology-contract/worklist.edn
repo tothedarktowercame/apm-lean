@@ -70691,8 +70691,27 @@
   {:consumer "t98A02",
    :stop-condition
    "Require exact dependency pin correction before promotion; compact-complement specialization and the three coefficient-excision exactness transports remain.",
+   :evidence
+   {:outcome :stop,
+    :seat "codex-6",
+    :reason
+    "Admission refused at the row's explicit dependency-pin boundary. CoefficientRangeRightToProductionPairComparison.lean has verified SHA256 fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5, which does not equal the acceptance text's required fa77b7018a16c83a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71. The union fixture and already-promoted target both independently match ea64a7591efc48a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71 and compile, but the row expressly says to refuse admission when the dependency pin does not match command output. This is a ledger specification defect, not a mathematical refutation.",
+    :commands
+    [{:cmd
+      "sha256sum ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean /tmp/CoefficientUnionToProductionRelativeComparison.lean ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :finding
+    "No files were changed. Actual dependency SHA256 is fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5; the row must be corrected to that exact value before this duplicate implementation packet can be admitted.",
+    :residual
+    "Correct the dependency pin to fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5. Compact-complement specialization and three coefficient-excision exactness transports then remain.",
+    :author "codex-6",
+    :disposition :stop},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"],
    :dag-node
