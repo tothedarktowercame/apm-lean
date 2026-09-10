@@ -58011,8 +58011,145 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill36-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill36-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill36-elect.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill36-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill36-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill36-{measure.json,reviews.edn,tail.edn}",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "bb /tmp/topology-refill36-elect.bb",
+      :exit 1,
+      :correction
+      "Removed an extra closing parenthesis in the temporary election script; successful rerun and full proposed-ledger validation followed."}],
+    :replacement-items
+    [{:consumer "t98A01",
+      :stop-condition
+      "GO needs the complete frozen consumer. Otherwise STOP naming the exact absent covering, Euler multiplicativity or polygon-classification theorem; partial torus closure is not GO and missing infrastructure is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "COVERINGS / fivefold torus and surface classification",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free copy of frozen Main preserving every definition and conjunct. Reuse the actual AddCircle quotient cover, product-cover constructor and kernel/fiber results to prove every torus fiber has five points and actual deck homeomorphisms act transitively. For the literal Surface true g quotients prove Euler characteristic multiplication for the supplied five-sheet cover and genus equality from the supplied homeomorphism, then use the frozen arithmetic. Do not assume classification injectivity, Euler-cover multiplicativity, fiber cardinality or a conditional final bridge. Inspect all banked covering and surface results before declaring the boundary.",
+       :frozen-file "problems/t98A01/lean/Main.lean",
+       :frozen-sha256
+       "a607069bdb7416a01a1e6846cb6dd8e3e8bf87b0f2b122ef4c1fb828d5167f25",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only},
+      :id :t98a01-frozen-fivefold-cover-closure-probe-refill36,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-36-after-degree-and-target-atlas],
+      :current-residual
+      "One placeholder packages the actual fivefold regular torus cover and Euler/genus rigidity for homeomorphic orientable polygon surfaces; printed connected-sum arithmetic is proved."}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires both actual derivative injectivity and kernel-range equality compiled for the chosen atlas. REVISE requires exactly one compiled prerequisite; no frozen consumer closure claim.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "REGULAR-PREIMAGE/SUBMERSION / manifold-target inclusion tangent kernel",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a genuine-infinity smooth map between self-model manifolds modeled on finite-dimensional complete real inner-product spaces E and F, at a regular value c use exactly ManifoldTargetRegularFiberGlobalAtlas.chartedSpace on the inherited-topology literal fiber. Prove injectivity of the actual mfderiv of subtype inclusion and equality of its linear-map range with the kernel of the defining map's actual mfderiv at every fiber point. Reuse selected backward parameterizations and local inverse laws, derive coordinate derivative transport, and use smooth inclusion and rank-nullity. No assumed immersion, derivative identity, kernel comparison, alternative atlas or altered topology. Include empty fibers and zero-dimensional kernels. Preserve existing APIs and state self-model applicability limits.",
+       :consumer-residual
+       "Embedded self-model manifold-to-manifold regular-fiber tangent geometry only. General models and consumer-specific orientation, duality, boundary and transversality obligations remain."},
+      :id :manifold-target-fiber-tangent-kernel-probe-refill36,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-36-after-degree-and-target-atlas],
+      :current-residual
+      "ManifoldTargetRegularFiberGlobalAtlas constructs the actual global atlas and smooth inclusion. Its inclusion derivative injectivity and exact kernel-range equality remain.",
+      :other-consumers ["t02A07" "t01J04" "t94A06"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped placeholders across all DAG consumers and compare typed residuals, reviewed outcomes and portfolio versus concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve t96J05 local defect, t01J04 and t94A06 applicability boundaries, t96J07 old refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t98a01-frozen-fivefold-cover-closure-probe-refill36
+       :manifold-target-fiber-tangent-kernel-probe-refill36],
+      :current-residual
+      "Await both reviewed outcomes, then rerank the complete DAG and distinguish consumer closure from infrastructure."}],
+    :changed-paths [],
+    :finding
+    {:baseline "e2d16403cd97f8a05079969d9d933501368a56d8",
+     :placeholder-delta 0,
+     :coverage
+     "Preserve t96J05 local refutation, t01J04 countability/boundary-chart and t94A06 dimension/model boundaries, historical t96J07 refutation versus corrected encoded closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Missing infrastructure is not campaign refutation.",
+     :head "b777a8df8a4dbb983875946ae09f43eeac36f0d4",
+     :infrastructure-packets
+     {:modules-before 665,
+      :modules-after 666,
+      :portfolio 1,
+      :concurrent 0,
+      :consumer-closures 0,
+      :consumer-file-changes 0,
+      :documentation-packets 1},
+     :ranking
+     "Elect exactly one one-placeholder adapter first: t98A01, auditing the complete fivefold-cover and polygon-surface clause against current APIs. Its prior STOP remains evidence, not a claim of readiness; torus covering alone cannot close it. The recently rechecked degree and arbitrary-model Sard adapters retain their exact boundaries. Other near-closure alternatives include independent planar separation, quotient geometry, surface classification, normalization and fundamental-group comparisons. Among shared foundations, chosen-atlas tangent comparison serves four named consumers and is a bounded continuation using reviewed parameterizations and rank-nullity; fundamental-class localization, Poincare/Thom comparison, generic gluing, Kunneth and surface classification require broader constructions.",
+     :typed-residual-change
+     "Manifold-target fibers now have an actual global atlas and genuine-infinity smooth inclusion for that atlas. Actual inclusion derivative injectivity and kernel-range equality remain. Sphere orientation and identity degree do not resolve all-integer degree. Documentation now distinguishes the old t96J07 refutation from corrected encoded closure.",
+     :review-outcomes
+     {:degree
+      "STOP independently passed by invoke-1789005004579-17580-4d3bea20; actual all-integer induced-degree construction remains absent.",
+      :atlas
+      "PASS invoke-1789005326995-17594-da9df8cf for 7dd6810529b01300cc375dbd5a30706e47aacaa5.",
+      :documentation
+      "PASS invoke-1789005526122-17601-7a24f98f for 9b6944bcb06fa7b8772c09d5cfb5e0ef792e6d69; no additional closure counted."},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing ["t93A05"],
+      :zero-placeholder 23,
+      :open 35,
+      :within-two 25,
+      :before 66,
+      :after 66}},
+    :artifacts
+    [{:path "/tmp/topology-refill36-measure.json",
+      :sha256
+      "ed8fb29ee8da4a912344eeaa6df81a5227da258dbdf13d94352e93b385afb997"}
+     {:path "/tmp/topology-refill36-reviews.edn",
+      :sha256
+      "1ba4120903cbcde53c45f6a0f39d90e07b400ee4425a72c2c370ffdb546d707b"}
+     {:path "/tmp/topology-refill36-tail.edn",
+      :sha256
+      "cb660aeaa236fb00aac94de9d1ce9a0675274b8b91623e8948a9e4b890457783"}],
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -58026,7 +58163,79 @@
     :t96j07-reviewed-corrected-closure-documentation-refill35
     :checkpoint-full-dag-refill-35-after-normal-translation-and-target-fiber-charts],
    :current-residual
-   "Await reviewed degree, target-atlas and corrected-closure documentation outcomes, then rerank the complete DAG."}],
+   "Await reviewed degree, target-atlas and corrected-closure documentation outcomes, then rerank the complete DAG."}
+  {:consumer "t98A01",
+   :stop-condition
+   "GO needs the complete frozen consumer. Otherwise STOP naming the exact absent covering, Euler multiplicativity or polygon-classification theorem; partial torus closure is not GO and missing infrastructure is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "COVERINGS / fivefold torus and surface classification",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free copy of frozen Main preserving every definition and conjunct. Reuse the actual AddCircle quotient cover, product-cover constructor and kernel/fiber results to prove every torus fiber has five points and actual deck homeomorphisms act transitively. For the literal Surface true g quotients prove Euler characteristic multiplication for the supplied five-sheet cover and genus equality from the supplied homeomorphism, then use the frozen arithmetic. Do not assume classification injectivity, Euler-cover multiplicativity, fiber cardinality or a conditional final bridge. Inspect all banked covering and surface results before declaring the boundary.",
+    :frozen-file "problems/t98A01/lean/Main.lean",
+    :frozen-sha256
+    "a607069bdb7416a01a1e6846cb6dd8e3e8bf87b0f2b122ef4c1fb828d5167f25",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only},
+   :id :t98a01-frozen-fivefold-cover-closure-probe-refill36,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-36-after-degree-and-target-atlas
+    :checkpoint-full-dag-refill-36-after-degree-and-target-atlas],
+   :current-residual
+   "One placeholder packages the actual fivefold regular torus cover and Euler/genus rigidity for homeomorphic orientable polygon surfaces; printed connected-sum arithmetic is proved."}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires both actual derivative injectivity and kernel-range equality compiled for the chosen atlas. REVISE requires exactly one compiled prerequisite; no frozen consumer closure claim.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "REGULAR-PREIMAGE/SUBMERSION / manifold-target inclusion tangent kernel",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a genuine-infinity smooth map between self-model manifolds modeled on finite-dimensional complete real inner-product spaces E and F, at a regular value c use exactly ManifoldTargetRegularFiberGlobalAtlas.chartedSpace on the inherited-topology literal fiber. Prove injectivity of the actual mfderiv of subtype inclusion and equality of its linear-map range with the kernel of the defining map's actual mfderiv at every fiber point. Reuse selected backward parameterizations and local inverse laws, derive coordinate derivative transport, and use smooth inclusion and rank-nullity. No assumed immersion, derivative identity, kernel comparison, alternative atlas or altered topology. Include empty fibers and zero-dimensional kernels. Preserve existing APIs and state self-model applicability limits.",
+    :consumer-residual
+    "Embedded self-model manifold-to-manifold regular-fiber tangent geometry only. General models and consumer-specific orientation, duality, boundary and transversality obligations remain."},
+   :id :manifold-target-fiber-tangent-kernel-probe-refill36,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-36-after-degree-and-target-atlas
+    :checkpoint-full-dag-refill-36-after-degree-and-target-atlas],
+   :current-residual
+   "ManifoldTargetRegularFiberGlobalAtlas constructs the actual global atlas and smooth inclusion. Its inclusion derivative injectivity and exact kernel-range equality remain.",
+   :other-consumers ["t02A07" "t01J04" "t94A06"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped placeholders across all DAG consumers and compare typed residuals, reviewed outcomes and portfolio versus concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve t96J05 local defect, t01J04 and t94A06 applicability boundaries, t96J07 old refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t98a01-frozen-fivefold-cover-closure-probe-refill36
+    :manifold-target-fiber-tangent-kernel-probe-refill36
+    :checkpoint-full-dag-refill-36-after-degree-and-target-atlas],
+   :current-residual
+   "Await both reviewed outcomes, then rerank the complete DAG and distinguish consumer closure from infrastructure."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
