@@ -70091,6 +70091,23 @@
       "rg -n \"PlaneArcContainedSmallTranslations|contained_family\" problems/t99J03/lean/Main.lean ConstructionTargets --glob '*.lean'",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789058019485-18986-804b482c",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 01e0478c10c7e524a97971c8712978f473aca069"
+      "git show --stat --format=fuller 01e0478c10c7e524a97971c8712978f473aca069"
+      "git show 01e0478c10c7e524a97971c8712978f473aca069:problems/t99J03/lean/Main.lean | sha256sum"
+      "git diff --exit-code 01e0478c10c7e524a97971c8712978f473aca069^ 01e0478c10c7e524a97971c8712978f473aca069 -- problems/t99J03/lean/Main.lean"
+      "lake env lean problems/t99J03/lean/Main.lean"
+      "Python comment-stripped placeholder and exact theorem-header SHA256 audit"
+      "rg -n surface-classification and polygon-normal-form terms in ConstructionTargets and Mathlib"
+      "rg -n PlaneArcContainedSmallTranslations and contained_family in the consumer and ConstructionTargets"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check"],
+     :finding
+     "Recorded commit has exact ledger-only scope; author codex-12 differs from reviewer codex-10. Frozen file SHA256 7ae7fd891041611e289a84b18eeec7c22e2464255e3e909f31ced868b41bc2f6, exact apm_t99j03 declaration-header SHA256 2f28fac68a70ed22e43078a4957957bac9f3cdaa5fcc63d55d432e3a1695ce44, and one comment-stripped placeholder reproduce. Lean compiles with only the expected sorry warning. Repository search confirms no packaged surface-classification or polygon-normal-form implementation, while PlaneArcContainedSmallTranslations is absent from the consumer and cannot apply because the frozen hypotheses expose no triangulation, arcs, charts, shared endpoints, or coverage. The STOP preserves the distinction between useful contained plane translations and the missing triangulation, cutting, quotient-homeomorphism, orientability, and Euler-invariance foundations; ledger and diff gates pass."},
     :changed-paths [],
     :finding
     "The frozen file compiles with its one existing placeholder. PlaneArcContainedSmallTranslations.contained_family is not imported or referenced by the consumer, and the consumer exposes no geometric arc data. Search hits for surface classification are commentary/program descriptions plus Mathlib's statement that dimension-two Poincare follows from surface classification; none implements the required theorem. The two unrelated pre-existing untracked documentation files were left untouched.",
@@ -70103,7 +70120,7 @@
      "2f28fac68a70ed22e43078a4957957bac9f3cdaa5fcc63d55d432e3a1695ce44"},
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "SURFACE TRIANGULATION / frozen contained-arc uptake",
    :acceptance
