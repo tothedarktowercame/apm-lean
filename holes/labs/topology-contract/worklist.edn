@@ -61221,8 +61221,203 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local defects and infrastructure absence do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["Null-winding predicate triviality does not prove component coverage or refute Producer/Main."
+     "t95J05 diameter-power Hausdorff normalization concern remains unrefuted by a compiled counterexample."
+     "t96J05 local defect and t01J04/t94A06 applicability limits remain."
+     "t96J07 historical refutation and corrected closure remain distinct."
+     "Signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage remain separate."
+     "Literal Surface o 0 is not identified with S2; polygon homeomorphism assembly is conditional on witnesses."],
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill41-measure.py", :exit 0}
+     {:cmd
+      "git diff --stat 6bf816149d1683a9403b375a87a0def75870bf5a HEAD -- ConstructionTargets problems docs TOPOLOGY-DEPENDENCY-DAG.md",
+      :exit 0}
+     {:cmd "bb /tmp/topology-refill41-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill41-proposed-worklist.edn",
+      :exit 0}
+     {:cmd "git diff -- problems/t00J01/lean/Main.lean | head -65",
+      :exit 0}
+     {:cmd "sha256sum /tmp/topology-refill41-tail.edn", :exit 0}],
+    :diagnostic-history [],
+    :measurement
+    {:baseline "6bf816149d1683a9403b375a87a0def75870bf5a",
+     :concurrent-infrastructure-packets 4,
+     :placeholder-after 66,
+     :portfolio-infrastructure-packets 7,
+     :missing-consumers ["t93A05"],
+     :portfolio-documentation-packets 0,
+     :placeholder-delta 0,
+     :within-two-placeholders 25,
+     :zero-placeholder-consumers 23,
+     :consumer-closures 0,
+     :open-consumers 35,
+     :placeholder-before 66,
+     :head "f4d0166d1fba13bc62df6db80d3dacbb833be02c",
+     :named-consumers 59,
+     :construction-modules-after 702,
+     :concurrent-outside-dag-change
+     "m02J05 definition repair adds the Luxemburg integrability condition; placeholders remain 4. This is not a campaign closure.",
+     :construction-modules-before 691,
+     :sha256
+     "4c68a859f8409bf522b68b80355cd5c8ae43c0fa1cc2f88d742ff227f6642089",
+     :artifact "/tmp/topology-refill41-measure.json",
+     :concurrent-documentation-packets 4,
+     :available-consumers 58,
+     :uncommitted-concurrent-change
+     "After the pinned census, t00J01 acquired a sphere-identity adapter and residual conjunction reduction. It remains unreviewed here and was excluded from election to avoid overlapping active work."},
+    :replacement-items
+    [{:consumer "t03J04",
+      :stop-condition
+      "GO requires complete frozen closure. Otherwise STOP identifies the exact missing rational torus computation or finite-cover/Euler comparison; infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD EULER CHARACTERISTIC / frozen torus local diffeomorphism",
+      :acceptance
+      {:frozen-file "problems/t03J04/lean/Main.lean",
+       :frozen-sha256
+       "b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile the complete frozen Main preserving its positive-dimensional torus, supplied chart structures, Hausdorff and connected target hypotheses, and every conjunct. Reuse the proved nonzero vector field and local-diffeomorphism surjectivity. Derive the literal alternating sum of rational singular-homology finranks for both torus and target. Audit current coefficient homology, product, finite-cover and Euler APIs. No assumed torus homology table, Euler multiplicativity, Poincare-Hopf theorem or conditional final bridge. Low-dimensional sphere endpoints alone are insufficient."},
+      :id :t03j04-frozen-torus-euler-closure-probe-refill41,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+      :current-residual
+      "One placeholder remains for the full conjunction. Nonzero field and surjectivity helpers are proved; actual rational Euler computations and transport remain."}
+     {:consumer "t99J03",
+      :stop-condition
+      "Name the exact unavailable geometric construction if neither a complete fixture nor one compiled prerequisite exists. No owner gate, assumed triangulation or campaign termination.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE CUTTING/CLASSIFICATION / finite triangulation construction",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Construct a finite triangulation and actual realization homeomorphism from the stated manifold hypotheses. Audit finite chart refinements, embedded arcs, triangulation and realization APIs. Prove finiteness and dimension two from the construction; a finite chart cover or supplied CW structure alone is insufficient. Preserve the original topology and do not assume a polygon presentation or classification theorem. GO requires the full triangulation result; REVISE requires exactly one compiled geometric prerequisite. Polygon normalization, genus detection and consumer uptake remain subsequent."},
+      :representation
+      {:source
+       "A nonempty compact connected Hausdorff genuine-infinity self-model real two-manifold",
+       :target
+       "The geometric realization of a constructed finite two-dimensional simplicial complex",
+       :direction
+       "Construct a homeomorphism from the finite geometric realization to the given manifold; neither triangulation nor a realization comparison is assumed."},
+      :id :compact-surface-finite-triangulation-probe-refill41,
+      :kind :representation-comparison,
+      :depends-on
+      [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+      :current-residual
+      "The reviewed classification STOP identifies construction of a finite presentation as the first missing edge, separate from polygon normalization.",
+      :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+     {:consumer "t01A02",
+      :stop-condition
+      "GO requires the literal covering and fiber comparison packet; REVISE requires exactly one compiled prerequisite. No covering classification or consumer closure claim.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "COVERING-BASIC / literal pullback and fiber transport",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For an actual IsCoveringMap p:E→B and continuous f:X→B, construct the covering projection from the inherited-topology literal subtype {z:X×E // f z.1=p z.2} to X. Derive local trivializations and the exact fiber equivalence over x with the fiber of p over f x, including forward and inverse value formulas and Nat.card equality. Audit existing Mathlib pullback APIs and reuse them through proved literal representation transport. Include empty fibers and avoid additional connectedness, surjectivity or finite-sheet assumptions. No supplied covering or fiber equivalence."},
+      :id :literal-covering-pullback-probe-refill41,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+      :current-residual
+      "The DAG marks covering base change LOCAL-GO; a literal subtype constructor and fiber transport would serve four covering consumers.",
+      :other-consumers ["t01A04" "t92J06" "t98A01"]}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires the chosen global atlas, specifications and same-atlas smooth inclusion. REVISE requires exactly one compiled prerequisite; no tangent or consumer closure claim.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "TRANSVERSE-PULLBACK / manifold-target global incidence atlas",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "Under exactly the banked self-model finite-dimensional manifold-target transversality hypotheses, construct ChartedSpace and IsManifold genuine infinity on literal inherited-topology incidence. Invoke ManifoldTargetIncidenceSmoothCharts constructed cover and proved overlaps through atlas APIs. Retain fixed Euclidean dimension finrank E+finrank G-finrank F. Prove chosen chartAt and atlas membership specifications and smooth subtype inclusion into the original product manifold from the actual backward parameterizations. No assumed atlas, compatibility or smooth inclusion, altered topology or globally transverse extension. Include empty incidence and zero-dimensional kernels."},
+      :id :manifold-target-incidence-global-atlas-probe-refill41,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+      :current-residual
+      "Reviewed local incidence charts, coverage and smooth overlaps are complete. Global atlas assembly and smooth inclusion remain; actual tangent equalizer and oriented homology remain subsequent.",
+      :other-consumers ["t02A07" "t94A06" "t97J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 4,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local missing infrastructure does not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount all pinned comment-stripped DAG consumer placeholders and compare reviewed residuals, portfolio infrastructure and concurrent changes. Elect one near-closure adapter first, then shared foundations by reach and simplicity. Preserve conditional polygon homeomorphism versus actual witnesses, literal genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff normalization concern, t96J05 defect, t01J04/t94A06 applicability limits, t96J07 historical refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t03j04-frozen-torus-euler-closure-probe-refill41
+       :compact-surface-finite-triangulation-probe-refill41
+       :literal-covering-pullback-probe-refill41
+       :manifold-target-incidence-global-atlas-probe-refill41],
+      :current-residual
+      "Await all four reviewed outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    "No pinned DAG consumer closed. Seven reviewed modules now construct literal manifold-target incidence charts with smooth ambient parameterizations, center coverage, genuine-infinity overlaps and normalized dimension. Global atlas assembly remains. The polygon STOP corrects the earlier strategy claim: its homeomorphism constructor still requires actual disk-map witnesses, independently of its missing attaching-map homology computation. The surface-classification STOP separates finite presentation construction from polygon normalization. Elect exactly one near-closure adapter, t03J04, whose one placeholder contains concrete rational Euler-characteristic obligations; require complete closure or an exact boundary. Among shared foundations, elect finite surface triangulation for the five-consumer classification cluster, then literal covering pullback and global incidence atlas assembly, each with four proposed downstream consumers. Covering base change precedes atlas assembly as the simpler bounded construction. These are proposed applicability counts, not observed closures. Other reviewed degree, normalization, general-model and homological boundaries remain; no owner gate or campaign termination is warranted.",
+    :review-outcomes
+    {:surface-presentation
+     {:outcome :stop,
+      :review :pass,
+      :job "invoke-1789015371566-17868-05ce044c"},
+     :incidence-chart
+     {:review :pass, :job "invoke-1789017392906-17946-80d7f5f2"},
+     :incidence-localization
+     {:review :pass, :job "invoke-1789015706221-17879-d14f235f"},
+     :extension-chart
+     {:review :pass, :job "invoke-1789016988278-17929-8ff1c36a"},
+     :incidence-smooth-cover
+     {:review :pass,
+      :commit "ab87b24fd4909eb34a40fbb3d14d9ca19900cf96",
+      :job "invoke-1789017869817-17958-7e7eec9c"},
+     :local-difference
+     {:review :pass, :job "invoke-1789016347773-17904-58f3d10e"},
+     :coordinate-difference
+     {:review :pass, :job "invoke-1789016687412-17913-1d2ec9ff"},
+     :coordinate-transport
+     {:review :pass, :job "invoke-1789016029555-17891-0ffb6ef5"},
+     :polygon
+     {:outcome :stop,
+      :review :pass,
+      :job "invoke-1789015213597-17861-c743a66c"}},
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -61237,7 +61432,126 @@
     :manifold-target-incidence-local-charts-probe-refill40
     :checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas],
    :current-residual
-   "Await three reviewed portfolio outcomes, then rerank the complete DAG."}],
+   "Await three reviewed portfolio outcomes, then rerank the complete DAG."}
+  {:consumer "t03J04",
+   :stop-condition
+   "GO requires complete frozen closure. Otherwise STOP identifies the exact missing rational torus computation or finite-cover/Euler comparison; infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD EULER CHARACTERISTIC / frozen torus local diffeomorphism",
+   :acceptance
+   {:frozen-file "problems/t03J04/lean/Main.lean",
+    :frozen-sha256
+    "b359b2c8a6d1650683ce8be18867becf9bb32fe6b44fd07cf4ec1d6e95164f41",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile the complete frozen Main preserving its positive-dimensional torus, supplied chart structures, Hausdorff and connected target hypotheses, and every conjunct. Reuse the proved nonzero vector field and local-diffeomorphism surjectivity. Derive the literal alternating sum of rational singular-homology finranks for both torus and target. Audit current coefficient homology, product, finite-cover and Euler APIs. No assumed torus homology table, Euler multiplicativity, Poincare-Hopf theorem or conditional final bridge. Low-dimensional sphere endpoints alone are insufficient."},
+   :id :t03j04-frozen-torus-euler-closure-probe-refill41,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence
+    :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+   :current-residual
+   "One placeholder remains for the full conjunction. Nonzero field and surjectivity helpers are proved; actual rational Euler computations and transport remain."}
+  {:consumer "t99J03",
+   :stop-condition
+   "Name the exact unavailable geometric construction if neither a complete fixture nor one compiled prerequisite exists. No owner gate, assumed triangulation or campaign termination.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SURFACE CUTTING/CLASSIFICATION / finite triangulation construction",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Construct a finite triangulation and actual realization homeomorphism from the stated manifold hypotheses. Audit finite chart refinements, embedded arcs, triangulation and realization APIs. Prove finiteness and dimension two from the construction; a finite chart cover or supplied CW structure alone is insufficient. Preserve the original topology and do not assume a polygon presentation or classification theorem. GO requires the full triangulation result; REVISE requires exactly one compiled geometric prerequisite. Polygon normalization, genus detection and consumer uptake remain subsequent."},
+   :representation
+   {:source
+    "A nonempty compact connected Hausdorff genuine-infinity self-model real two-manifold",
+    :target
+    "The geometric realization of a constructed finite two-dimensional simplicial complex",
+    :direction
+    "Construct a homeomorphism from the finite geometric realization to the given manifold; neither triangulation nor a realization comparison is assumed."},
+   :id :compact-surface-finite-triangulation-probe-refill41,
+   :kind :representation-comparison,
+   :depends-on
+   [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence
+    :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+   :current-residual
+   "The reviewed classification STOP identifies construction of a finite presentation as the first missing edge, separate from polygon normalization.",
+   :other-consumers ["t00A03" "t01J01" "t91J05" "t94J09"]}
+  {:consumer "t01A02",
+   :stop-condition
+   "GO requires the literal covering and fiber comparison packet; REVISE requires exactly one compiled prerequisite. No covering classification or consumer closure claim.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "COVERING-BASIC / literal pullback and fiber transport",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For an actual IsCoveringMap p:E→B and continuous f:X→B, construct the covering projection from the inherited-topology literal subtype {z:X×E // f z.1=p z.2} to X. Derive local trivializations and the exact fiber equivalence over x with the fiber of p over f x, including forward and inverse value formulas and Nat.card equality. Audit existing Mathlib pullback APIs and reuse them through proved literal representation transport. Include empty fibers and avoid additional connectedness, surjectivity or finite-sheet assumptions. No supplied covering or fiber equivalence."},
+   :id :literal-covering-pullback-probe-refill41,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence
+    :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+   :current-residual
+   "The DAG marks covering base change LOCAL-GO; a literal subtype constructor and fiber transport would serve four covering consumers.",
+   :other-consumers ["t01A04" "t92J06" "t98A01"]}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires the chosen global atlas, specifications and same-atlas smooth inclusion. REVISE requires exactly one compiled prerequisite; no tangent or consumer closure claim.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "TRANSVERSE-PULLBACK / manifold-target global incidence atlas",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "Under exactly the banked self-model finite-dimensional manifold-target transversality hypotheses, construct ChartedSpace and IsManifold genuine infinity on literal inherited-topology incidence. Invoke ManifoldTargetIncidenceSmoothCharts constructed cover and proved overlaps through atlas APIs. Retain fixed Euclidean dimension finrank E+finrank G-finrank F. Prove chosen chartAt and atlas membership specifications and smooth subtype inclusion into the original product manifold from the actual backward parameterizations. No assumed atlas, compatibility or smooth inclusion, altered topology or globally transverse extension. Include empty incidence and zero-dimensional kernels."},
+   :id :manifold-target-incidence-global-atlas-probe-refill41,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-41-after-polygon-and-target-incidence
+    :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+   :current-residual
+   "Reviewed local incidence charts, coverage and smooth overlaps are complete. Global atlas assembly and smooth inclusion remain; actual tangent equalizer and oriented homology remain subsequent.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 4,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local missing infrastructure does not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount all pinned comment-stripped DAG consumer placeholders and compare reviewed residuals, portfolio infrastructure and concurrent changes. Elect one near-closure adapter first, then shared foundations by reach and simplicity. Preserve conditional polygon homeomorphism versus actual witnesses, literal genus-zero boundary, null-winding triviality without Producer/Main refutation, Hausdorff normalization concern, t96J05 defect, t01J04/t94A06 applicability limits, t96J07 historical refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-42-after-torus-euler-and-shared-geometry,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t03j04-frozen-torus-euler-closure-probe-refill41
+    :compact-surface-finite-triangulation-probe-refill41
+    :literal-covering-pullback-probe-refill41
+    :manifold-target-incidence-global-atlas-probe-refill41
+    :checkpoint-full-dag-refill-41-after-polygon-and-target-incidence],
+   :current-residual
+   "Await all four reviewed outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
