@@ -74724,8 +74724,57 @@
   {:consumer "t98A02",
    :stop-condition
    "Require identification of each degree of intersectionToPiecesRelative with this explicit injective diagonal quotient map, plus the corresponding explicit middle exactness theorem.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Identify each degree component of the categorical cokernel arrow intersectionToPiecesRelative with infQuotientDiagonal and transfer injectivity. Prove that the range of this diagonal equals the kernel of the signed map to the union quotient, apply shortComplex_shortExact_of_degreewise, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport through relativeComparisonIso to the literal compact-complement pairs.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:infQuotientDiagonal
+     "f4b0690693b1dfd467c134a1deae4249ade5cadbe76191672deac6234cf48ad3",
+     :infQuotientDiagonal_mk
+     "939859303027ccb1963a20a20bf0719a4f5485cb11e2e4e9aebce2c8f8d0a221",
+     :infQuotientDiagonal_injective
+     "170c6a695563b0d33c6ea544af0154fde4160a54abf1ce8395963f5ca5ec83c6"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubmoduleInfQuotientDiagonal.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubmoduleInfQuotientDiagonal.lean ConstructionTargets/CoefficientSubmoduleInfQuotientDiagonal.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisDegreewiseCriterion.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder-and-three-declaration audit over ConstructionTargets/CoefficientSubmoduleInfQuotientDiagonal.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 564bb3773e5facef50dfaceb09dc52b5c22155b4",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 564bb3773e5facef50dfaceb09dc52b5c22155b4",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubmoduleInfQuotientDiagonal.lean",
+      :exit 1,
+      :correction
+      "The initial promotion transcribed the quotient slash as Unicode U+2A38 instead of the fixture's Lean quotient notation U+29F8. Corrected that character, restored exact fixture byte identity, and reran the compile successfully."}],
+    :commit "564bb3773e5facef50dfaceb09dc52b5c22155b4",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubmoduleInfQuotientDiagonal.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubmoduleInfQuotientDiagonal.lean",
+     :sha256
+     "0b71128dd726c121283c76ee328ea80a5a8de65a3b3d8a64cf8760b91a83544b",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and reviewed degreewise-criterion dependency hashes reproduce. The diagonal quotient map, its representative formula, and injectivity theorem compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubmoduleInfQuotientDiagonal.lean"],
    :dag-node
