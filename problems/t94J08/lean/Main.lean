@@ -1,3 +1,4 @@
+import ConstructionTargets.CoefficientSphereAntipodal
 import Mathlib
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
@@ -172,7 +173,13 @@ theorem apm_t94J08_bridge_1 :
               (t94J08Antipodal :
                 C(T94J08Sphere (n + 1), T94J08Sphere (n + 1))) a) =
           ((-1 : ℤ) ^ (n + 1)) * orientation.hom a := by
-  sorry
+  intro n hn
+  cases n with
+  | zero => omega
+  | succ m =>
+    refine ⟨ConstructionTargets.CoefficientSphereAntipodal.normalization ℤ m, ?_⟩
+    intro a
+    exact ConstructionTargets.CoefficientSphereAntipodal.scalar_equation ℤ m a
 
 theorem apm_t94j08 :
     (∀ n : ℕ, 1 ≤ n →
@@ -226,7 +233,7 @@ theorem apm_t94j08 :
   induced antipodal action. The bridge therefore remains exactly the missing
   singular-homology computation, not a point-set lemma.
   -/
-    sorry
+    exact apm_t94J08_bridge_1
   refine ⟨hantipodal, ?_⟩
   intro m hm v hv p hp r hr hlink hlinkNeg d hindex
   obtain ⟨link, hlink_eq, hdegree⟩ := hindex
@@ -239,3 +246,5 @@ theorem apm_t94j08 :
   rw [hlink_eq x]
 
 #print axioms apm_t94j08
+
+#print axioms apm_t94J08_bridge_1
