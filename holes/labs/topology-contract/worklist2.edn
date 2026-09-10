@@ -31641,6 +31641,21 @@
       "cp /tmp/codex13-checkpoint50-equator-embedding/SphereEquatorEmbedding.lean /tmp/codex14-equator-embedding-namespace-audit.lean; append checks for SphereEquatorEmbedding.appendZero and ConstructionTargets.SphereEquatorEmbedding.appendZero; lake env lean /tmp/codex14-equator-embedding-namespace-audit.lean",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789056207571-18929-e4adb035",
+     :commands
+     ["git show --format=fuller --stat 4fac34921fd874f0b3740c719c17fda6993b8b03"
+      "git diff-tree --no-commit-id --name-status -r 4fac34921fd874f0b3740c719c17fda6993b8b03"
+      "git diff --check 4fac34921fd874f0b3740c719c17fda6993b8b03^ 4fac34921fd874f0b3740c719c17fda6993b8b03"
+      "sha256sum /tmp/codex13-checkpoint50-equator-embedding/SphereEquatorEmbedding.lean"
+      "lake env lean /tmp/codex13-checkpoint50-equator-embedding/SphereEquatorEmbedding.lean"
+      "lake env lean /tmp/codex14-equator-embedding-namespace-audit.lean"
+      "placeholder, forbidden-declaration, warning, and whitespace scans on the fixture"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers from recorded commit"],
+     :finding
+     "PASS: commit 4fac3492 is ledger-only and whitespace-clean. The fixture reproduces SHA256 2d57af29396b64df733918bd4143ded4ec7885d68c02f2249ab2d52d80413e40, has zero placeholders, and compiles with only propext, Classical.choice, and Quot.sound. Its appendZero map is correctly oriented from EuclideanSpace real (Fin d) into EuclideanSpace real (Fin (d+1)); it uses the reviewed L2 coordinate isometry, preserves every Fin.castSucc coordinate, sets Fin.last to zero, preserves the norm, and instantiates at d=2 and d=3. It claims no measure or sphere-image result. The fixture declares SphereEquatorEmbedding, while exact promotion requires ConstructionTargets.SphereEquatorEmbedding; the independent audit confirms the former identifier exists and the latter is unknown. The recorded STOP therefore correctly identifies a specification boundary. Both ledgers validate; no frozen consumer changed, so frozen statement hashes and placeholder recount are not applicable."},
     :changed-paths [],
     :fixture
     {:path
@@ -31652,7 +31667,7 @@
     "The reviewed fixture exists, matches SHA256 2d57af29396b64df733918bd4143ded4ec7885d68c02f2249ab2d52d80413e40, and compiles the append-zero linear isometric embedding and both coordinate formulas with standard-only axioms. It declares namespace SphereEquatorEmbedding, while the implementation row requires exact promotion under ConstructionTargets.SphereEquatorEmbedding. A direct audit confirms SphereEquatorEmbedding.appendZero exists and ConstructionTargets.SphereEquatorEmbedding.appendZero is unknown. Renaming or wrapping would change the exact fixture. Repair the fixture namespace and recorded digest, or consistently revise the acceptance namespace and exact-promotion requirement. This is a specification boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereEquatorEmbedding.lean"
     "ConstructionTargets/SphereEquatorEmbedding.md"],
@@ -31807,7 +31822,7 @@
      "Exactly one complete compiled representation prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 routes. It constructs the append-zero linear isometric embedding from EuclideanSpace real (Fin d) into EuclideanSpace real (Fin (d+1)) by reusing the reviewed WithLp product coordinate isometry. For every source coordinate i, the image at i.castSucc is exactly the source value, and the image at Fin.last d is exactly zero. Exact norm preservation and the d=2 and d=3 instances compile. The parent probe is not GO because the image of each source unit sphere has not yet been proved equal to the literal last-coordinate-zero equator, and ambient Hausdorff transport, intrinsic subtype nullity and the upper-cap/lower-cap/equator partition remain unproved. No normalization scalar, sphere mass, moment, Stokes or consumer-closure result is claimed; no canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: Hausdorff-null equators for the literal S2 and S3 cap decompositions",
