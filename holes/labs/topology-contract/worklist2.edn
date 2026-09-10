@@ -15292,95 +15292,93 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Actual inclusion-induced homology-map injectivity, surjectivity and all-degree isomorphism remain in the parent probe. Relative excision and sphere suspension remain downstream.",
-     :axiom-audits 5,
-     :outcome :revise,
+     "Coefficient-general relative excision and sphere suspension remain before rational S2 H1/H2. No relative-excision theorem, sphere homology calculation or frozen consumer closure is claimed.",
+     :axiom-audits 8,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t00J01-rational-sphere-homology,
-      :stop-condition
-      "Bank only iterated homotopies, inclusion compatibility and identity action of subdivision iterates on homology. Do not claim that the small-chain inclusion induces an isomorphism.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/CoefficientIteratedHomotopy.lean",
-         :sha256
-         "caacbdb193d1ac317c55572cea4eff0ddf682761bbafda2742dae6c79769c96a"},
-        :commands
-        [{:cmd "lake env lean /tmp/CoefficientIteratedHomotopy.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientIteratedHomotopy.lean"
-       "ConstructionTargets/CoefficientIteratedHomotopy.md"],
-      :dag-node
-      "SINGULAR-SUBDIVISION: coefficient-general iterated homotopies and homology identities",
-      :acceptance
-      {:implementation
-       "Promote the exact compiled fixture, preserving the reviewed absolute iterate and constructing the restricted iterate by composition.",
-       :namespace "ConstructionTargets.CoefficientIteratedHomotopy",
-       :declarations
-       ["smallIterate"
-        "absoluteHomotopy"
-        "smallHomotopy"
-        "iterate_inclusion"
-        "absolute_homology_identity"
-        "small_homology_identity"
-        "integral_interval"
-        "rational_interval"],
-       :hypotheses
-       "R, X and the family index type are Type 0; R is a commutative ring and X is a topological space. The indexed subsets are arbitrary. No openness, covering, connectedness or nonemptiness is required. Both chain complexes use actual ModuleCat R chains with coefficient object ModuleCat.of R R.",
-       :consumer-equation
-       "Every absolute and restricted subdivision iterate is chain homotopic to identity; restricted iteration followed by inclusion equals inclusion followed by absolute iteration. Both iterates induce identity on homology in every degree.",
-       :consumer-residual
-       "Use eventual factorization on actual cycles and bounding chains to prove surjectivity and injectivity of the inclusion-induced homology map, then assemble the all-degree isomorphism.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientIteratedHomotopy."
-        "Reproduce five standard-only axiom audits and integer/rational interval examples."
-        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-      :id :coefficient-general-iterated-subdivision-homotopy-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint23-coefficient-eventual-smallness-1
-       :oriented-checkpoint22-coefficient-small-chain-preservation-1
-       :oriented-checkpoint21-coefficient-subdivision-homotopy-1],
-      :current-residual
-      "The small-chain comparison needs constructed homotopies for arbitrary subdivision iterates on both complexes.",
-      :other-consumers [:t03J04 :t02A08 :t94J08]},
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture and document the actual inclusion-induced all-degree comparison.",
+      :namespace "ConstructionTargets.CoefficientSmallComparison",
+      :declarations
+      ["elementHom"
+       "elementHom_one"
+       "cycle_lift"
+       "exists_boundary"
+       "surjective_succ"
+       "injective_all"
+       "inclusion_isIso"
+       "homologyIso"
+       "homologyIso_hom"
+       "inverse_left"
+       "inverse_right"
+       "integral_interval"
+       "rational_interval"],
+      :hypotheses
+      "R, X and the cover index type are Type 0. R is a commutative ring, X a topological space, and the indexed subsets form an open cover. Arbitrary actual R-valued cycles and bounding chains are supported. No connectedness, nonemptiness or finite-cover hypothesis is imposed. Generic cycle and boundary helpers use ChainComplex (ModuleCat.{0} R) Nat.",
+      :consumer-equation
+      "The actual cover-small inclusion induces an isomorphism on homology in every natural-number degree; homologyIso_hom identifies its forward map exactly, and inverse_left and inverse_right prove both inverse laws.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSmallComparison."
+       "Reproduce eight standard-only axiom audits and all-degree integer/rational interval-cover examples."
+       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure rules, build-loop revision requirements and all dependency PASS receipts",
+       "Read DAG, closure rules, reviewed dependencies and actual cycle, boundary and homology-map APIs",
        :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientIteratedHomotopy.lean",
+      {:cmd "lake env lean /tmp/CoefficientSmallComparison.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientIteratedHomotopy.lean", :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientSmallComparison.lean", :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientIteratedHomotopy.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSmallComparison.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history [],
+     :diagnostic-history
+     [{:cmd "Initial comparison-fixture compilation",
+       :exit 1,
+       :correction
+       "Specified the ModuleCat object universe and corrected elementwise naturality orientations and zero-map evaluation."}
+      {:cmd "Second comparison-fixture compilation",
+       :exit 1,
+       :correction
+       "Used explicit linear-map extensionality and restricted simplification in the cycle-lift proof."}
+      {:cmd "Third comparison-fixture compilation",
+       :exit 1,
+       :correction
+       "Composed the lift equation explicitly with elementHom_one; the surjectivity fixture then compiled."}
+      {:cmd "First complete comparison-fixture compilation",
+       :exit 1,
+       :correction
+       "Removed the nonexistent ModuleCat.zero_apply simplification name. Final complete compilation succeeds without warnings."}],
+     :representation
+     {:source
+      "Homology of actual cover-small ModuleCat R chains with coefficient object ModuleCat.of R R.",
+      :target "Homology of actual R-valued singular chains of X.",
+      :direction
+      "Construct an isomorphism from cover-small homology to singular homology whose forward arrow equals HomologicalComplex.homologyMap of the actual coverSmallInclusion, in every degree."},
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientIteratedHomotopy.lean",
+     {:path "/tmp/CoefficientSmallComparison.lean",
       :sha256
-      "caacbdb193d1ac317c55572cea4eff0ddf682761bbafda2742dae6c79769c96a"},
+      "d70b14c6d71ccbf4c9bcdea7613261413bfa3f68457aa3bac1fcdfb2b52f16dc"},
      :finding
-     "Exactly one compiled iterated-homotopy prerequisite is supplied. Absolute and cover-small subdivision iterates have constructed Homotopy objects to identity. Their actual inclusion equation and identity action on homology hold in every degree. Integer and rational interval examples compile. Injectivity and surjectivity of the inclusion-induced homology map remain unproved; the parent is not GO.",
+     "Complete coefficient-general small-chain homology comparison compiles. Positive-degree surjectivity follows by subdividing an actual cycle, lifting it through the monic inclusion, and using the absolute iterate homotopy. Injectivity follows by subdividing an actual bounding chain and using the restricted iterate homotopy. The reviewed H0 comparison completes all degrees. The constructed isomorphism has exactly the inclusion-induced homology map as its forward arrow, with both inverse laws. No integral comparison theorem is reinterpreted over R.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientSmallComparison.lean"
+       "ConstructionTargets/CoefficientSmallComparison.md"]},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientSmallComparison.lean"
+    "ConstructionTargets/CoefficientSmallComparison.md"],
    :dag-node
    "SINGULAR-SUBDIVISION: actual coefficient-general small-chain homology comparison",
    :acceptance
