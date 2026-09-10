@@ -57764,8 +57764,42 @@
   {:consumer "t02A08",
    :stop-condition
    "GO requires complete frozen closure. Otherwise identify the exact missing induced-map degree or suspension naturality theorem; infrastructure absence is not refutation.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Frozen Main remains unchanged at one placeholder, SHA256 5ae2524e052530a80e46ffdb0504329f22f5babf9e6d4e9a6ffcfc472e4d16a1. No complete consumer fixture or new prerequisite is claimed. Signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage remain separate outstanding obligations; neither abstract orientation nor the degree-one diagnostic closes them.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789004805921-17573-6e1a03ea"},
+    :outcome :stop,
+    :warnings
+    ["One existing unnecessarySimpa warning at fixture line 126 in the unchanged frozen degree-composition proof."],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :reason
+    "The all-integer induced-degree construction remains absent. The compiled sphere homology isomorphism supplies orientation, but no audited theorem transports the circle power-map action through the production sphere suspension shift to the literal H2Map. Subdivision homotopy and relative connecting naturality do not supply that identification. This is an infrastructure boundary, not a refutation.",
+    :commands
+    [{:cmd "python3 /tmp/t02a08-boundary-audit.py", :exit 0}
+     {:cmd "lake env lean /tmp/T02A08SphereDegreeBoundary.lean",
+      :exit 0}
+     {:cmd
+      "rg -n 'def spherePositiveHomology|theorem spherePositiveHomology|suspension.*natural|suspend.*degree|sphere.*degree' ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/CoefficientSingularPrism.lean ConstructionTargets/T02A06SphereShift.lean ConstructionTargets/CoverSmallRelativeProjectionComparison.lean",
+      :exit 0}],
+    :exact-missing-contract
+    "For every n : Int, construct g : C(apm_t02a08_S2, apm_t02a08_S2) and an actual orientation : apm_t02a08_H2 ≅ ModuleCat.of Int Int such that for every a, orientation.hom (apm_t02a08_H2Map g a) = n * orientation.hom a. A suspension route must construct the sphere map and prove the commuting induced-map square through the actual production shift and integral coefficient comparison; positive, zero and negative integers must all be covered.",
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T02A08SphereDegreeBoundary.lean",
+     :sha256
+     "c02a702990b9f97ba613cc08ee718c382a4e794b6e3ab49f5365027aea50a472"},
+    :finding
+    "Recompiled the existing placeholder-free diagnostic preserving the frozen definitions and proved prefix exactly. It constructs the actual integral H2 orientation, proves degree one for identity and closes the corresponding literal oriented-intersection case. CoefficientSingularPrism.subdivisionHomotopy compares subdivision with identity; it computes no sphere self-map action. T02A06SphereShift.spherePositiveHomologyShift constructs an isomorphism through projection, inverse excision, coordinate and radial comparisons. Its existence alone does not establish naturality for a suspended power map. CoverSmallRelativeProjectionComparison identifies actual relative projection arrows but supplies no all-integer degree equation.",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "SPHERE ORIENTATION / all-integer induced degree",
    :acceptance
