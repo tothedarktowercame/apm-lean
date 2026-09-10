@@ -59072,6 +59072,21 @@
       :exit 2,
       :correction
       "The glob matched no files. Replaced it with the successful recursive pathlib source audit."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789008552252-17697-5e6feba7",
+     :commands
+     ["Inspect recorded transition 92ff0796 and measure definitions"
+      "Independent pinned frozen/fixture and integral-statement hash audit"
+      "python3 /tmp/t95j05-intrinsic-mass-audit.py"
+      "bb /tmp/t95j05-refill38-review.bb"
+      "lake env lean /tmp/T95J05IntrinsicMassBoundary.lean"
+      "lake build ConstructionTargets.IntrinsicSphereSecondMoments"
+      "git show --format= --check 92ff0796"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "PASS as STOP, not closure. Author codex-12 differs from reviewer. Frozen Main unchanged with one placeholder; fixture, integral statement and preserved prefix verify; diagnostic has zero placeholders. Literal quotient integral equals negative half intrinsic sphere mass. Numerical mass remains unproved: diameter-power Hausdorff measure cannot be replaced by Haar-derived sphere measure without normalization comparison. No refutation or normalized substitute claimed. Compilation has standard axioms and only the recorded inherited unnecessarySimpa warning. Prerequisite build succeeds (8243 jobs); whitespace clean; 460 ledger items validate; no edits."},
     :refutation false,
     :changed-paths [],
     :fixture
@@ -59084,7 +59099,7 @@
     "Compiled the literal frozen integral as minus one half of IntrinsicSphereSecondMoments.mass 3, reusing the banked intrinsic density moment. Frozen definitions and the proved prefix are preserved. The missing numerical assertion is mass 3 = 2*pi^2. Mathlib defines hausdorffMeasure d using diameter powers without a dimensional prefactor; its polar-coordinate API instead constructs volume.toSphere. No identification of these measures or numerical intrinsic mass theorem was found in the audited canonical and Mathlib sources. Consequently the usual sphere-area value cannot be substituted without proving the normalization comparison. This is an exact measure boundary and a normalization concern, not a compiled refutation.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION / literal projective density integral",
