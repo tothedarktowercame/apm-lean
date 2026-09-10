@@ -62353,6 +62353,20 @@
       :exit 0}
      {:cmd "git diff --cached --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789024063009-18098-5b886ff8",
+     :commands
+     ["git show b831e401:ConstructionTargets/ManifoldTargetIncidenceTangent.lean"
+      "Independent Python pinned-fixture comparison, six declaration hashes and placeholder audit"
+      "lake build ConstructionTargets.ManifoldTargetIncidenceImmersion"
+      "lake env lean ConstructionTargets/ManifoldTargetIncidenceTangent.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 31a512cd:holes/labs/topology-contract/worklist.edn)"
+      "git diff-tree --no-commit-id --name-only -r b831e401"
+      "git show --check b831e401"],
+     :finding
+     "Author codex-6 is independent. Exact single-file promotion and fixture SHA256 9277d1a8a855482a51fd24fe1dcada62ab97fe94c7e5c6d5f2421be97bf2a244 verified; six declaration hashes match; zero placeholders. Dependency build passes 8452 jobs; compilation warning-free with four standard-only axiom audits; validator passes 493 items. Actual chain rules give range containment in the derivative-difference kernel; transversality gives surjectivity, and proved immersion plus rank-nullity gives equality. Final injectivity and tangent equalizer use exactly normalizedAtlas, inherited topology and original product norm. Weaker auxiliary surjectivity hypotheses, empty incidence and zero-dimensional kernels are preserved. No component-coverage, orientation or consumer closure claimed; ledger untouched."},
     :commit "b831e4012f68281dfa003ca1b59d14a766a3cab1",
     :changed-paths
     ["ConstructionTargets/ManifoldTargetIncidenceTangent.lean"],
@@ -62362,7 +62376,7 @@
      "9277d1a8a855482a51fd24fe1dcada62ab97fe94c7e5c6d5f2421be97bf2a244"},
     :axiom-audit-declarations 4},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldTargetIncidenceTangent.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / normalized incidence tangent equalizer",
