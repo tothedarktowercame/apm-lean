@@ -38384,57 +38384,97 @@
    :other-consumers [:t96J06 :t97A04]}
   {:consumer :t03J05,
    :stop-condition
+   "Bank only construction of the product simplex and canonical maximal nondegenerate path from the cumulative balanced-word order homomorphism, together with its objEquiv equations. Do not prove either word/path inverse law, define corner swaps, pair or cancel faces, prove sign changes, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/ProductSimplexReconstructedPath.lean"
+    "ConstructionTargets/ProductSimplexReconstructedPath.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: canonical maximal path reconstructed from cumulative balanced-word counts",
+   :acceptance
+   {:namespace "ConstructionTargets.ProductSimplexReconstructedPath",
+    :implementation
+    "Promote the compiled fixture as the exact cumulative-order-homomorphism to canonical-MaximalPath construction.",
+    :hypotheses
+    "Use banked BalancedWord p q and cumulativeOrderHom. No coefficient, orientation or bounded-degree hypothesis is required.",
+    :declarations
+    ["reconstructedSimplex"
+     "reconstructedSimplex_objEquiv"
+     "reconstructedPath"],
+    :consumer-equation
+    "Applying prodStdSimplex.objEquiv.symm to the cumulative-count order homomorphism produces a product simplex whose coordinate sum is the time index, hence a canonical maximal nondegenerate path.",
+    :consumer-residual
+    "Prove that stepWord of reconstructedPath returns the balanced word and that reconstruction of the balanced word extracted from a maximal path returns that path.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexReconstructedPath."
+     "Verify reconstructedSimplex is exactly prodStdSimplex.objEquiv.symm applied to cumulativeOrderHom."
+     "Verify its objEquiv equation by the equivalence inverse law."
+     "Verify reconstructedPath nondegeneracy through mem_maximalPath_iff and cumulativeOrderHom_coordinate_sum."
+     "Reproduce standard-only axiom audits for reconstructedSimplex_objEquiv and reconstructedPath."
+     "Confirm no word/path inverse law, corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :t03j05-product-simplex-reconstructed-maximal-path-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint61-product-simplex-prefix-monotonicity-and-consumer-refill-1
+    :t03j05-product-simplex-cumulative-order-hom-1],
+   :current-residual
+   "The cumulative order homomorphism is banked, but it has not been applied through prodStdSimplex.objEquiv.symm or proved maximal and nondegenerate.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :t03J05,
+   :stop-condition
    "Construct only the exact cumulative-coordinate equivalence between banked BalancedWord p q values and canonical maximal product-simplex paths. Do not define corner swaps, pair or cancel faces, prove shuffle-sign changes, construct chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Use a unique row-specific scratch directory.",
    :evidence
    {:probe
     {:residual
-     "Construct the product simplex from cumulativeOrderHom, prove maximal nondegeneracy, package the canonical MaximalPath and prove both inverse laws.",
+     "Prove stepWord(reconstructedPath w)=w and reconstructing the balanced word extracted from any canonical maximal path returns that path.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t03J05,
       :stop-condition
-      "Bank only the Fin-valued cumulative grid vertex, its order homomorphism, coordinate projections and coordinate-sum theorem for balanced Boolean words. Do not invoke prodStdSimplex.objEquiv.invFun, construct a simplex or MaximalPath, prove nondegeneracy or inverse laws, define corner swaps, cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+      "Bank only construction of the product simplex and canonical maximal nondegenerate path from the cumulative balanced-word order homomorphism, together with its objEquiv equations. Do not prove either word/path inverse law, define corner swaps, pair or cancel faces, prove sign changes, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/ProductSimplexCumulativeOrderHom.lean"
-       "ConstructionTargets/ProductSimplexCumulativeOrderHom.md"],
+      ["ConstructionTargets/ProductSimplexReconstructedPath.lean"
+       "ConstructionTargets/ProductSimplexReconstructedPath.md"],
       :dag-node
-      "PRODUCT HOMOLOGY: cumulative-count order homomorphism of balanced step words",
+      "PRODUCT HOMOLOGY: canonical maximal path reconstructed from cumulative balanced-word counts",
       :acceptance
       {:namespace
-       "ConstructionTargets.ProductSimplexCumulativeOrderHom",
+       "ConstructionTargets.ProductSimplexReconstructedPath",
        :implementation
-       "Promote the compiled fixture as the exact order-homomorphism input required by prodStdSimplex.objEquiv.invFun.",
+       "Promote the compiled fixture as the exact cumulative-order-homomorphism to canonical-MaximalPath construction.",
        :hypotheses
-       "Use banked BalancedWord p q and its exported prefix-count monotonicity and total bounds. No simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+       "Use banked BalancedWord p q and cumulativeOrderHom. No coefficient, orientation or bounded-degree hypothesis is required.",
        :declarations
-       ["gridVertex"
-        "cumulativeOrderHom"
-        "cumulativeOrderHom_fst"
-        "cumulativeOrderHom_snd"
-        "cumulativeOrderHom_coordinate_sum"],
+       ["reconstructedSimplex"
+        "reconstructedSimplex_objEquiv"
+        "reconstructedPath"],
        :consumer-equation
-       "Every prefix endpoint of a balanced word determines the bounded grid vertex given by its horizontal and vertical prefix counts; these vertices form an order homomorphism and their coordinate sum equals the endpoint.",
+       "Applying prodStdSimplex.objEquiv.symm to the cumulative-count order homomorphism produces a product simplex whose coordinate sum is the time index, hence a canonical maximal nondegenerate path.",
        :consumer-residual
-       "Apply prodStdSimplex.objEquiv.invFun to cumulativeOrderHom, prove maximal nondegeneracy from the coordinate-sum identity, package the MaximalPath and prove both word/path inverse laws.",
+       "Prove that stepWord of reconstructedPath returns the balanced word and that reconstruction of the balanced word extracted from a maximal path returns that path.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexCumulativeOrderHom."
-        "Verify gridVertex uses exactly the exported horizontal and vertical prefix counts and their balanced total bounds."
-        "Verify cumulativeOrderHom is coordinatewise monotone using the exported count monotonicity theorems."
-        "Verify both coordinate projection theorems and the coordinate-sum-equals-endpoint theorem."
-        "Reproduce standard-only axiom audits for the three exported theorems."
-        "Confirm no simplex reconstruction, nondegeneracy, inverse law, corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
+        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexReconstructedPath."
+        "Verify reconstructedSimplex is exactly prodStdSimplex.objEquiv.symm applied to cumulativeOrderHom."
+        "Verify its objEquiv equation by the equivalence inverse law."
+        "Verify reconstructedPath nondegeneracy through mem_maximalPath_iff and cumulativeOrderHom_coordinate_sum."
+        "Reproduce standard-only axiom audits for reconstructedSimplex_objEquiv and reconstructedPath."
+        "Confirm no word/path inverse law, corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
         "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :t03j05-product-simplex-cumulative-order-hom-1,
+      :id :t03j05-product-simplex-reconstructed-maximal-path-1,
       :kind :reusable-theorem,
       :depends-on
       [:oriented-checkpoint61-balanced-word-cumulative-maximal-path-equivalence-1],
       :current-residual
-      "Balanced prefix counts are bounded and monotone, but the project lacks the canonical Fin-valued grid order homomorphism required by prodStdSimplex.objEquiv.invFun.",
+      "The cumulative order homomorphism is banked, but it has not been applied through prodStdSimplex.objEquiv.symm or proved maximal and nondegenerate.",
       :other-consumers [:t96J06 :t97A04]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
@@ -38442,20 +38482,20 @@
        "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the row dependency receipts",
        :exit 0}
       {:cmd
-       "Inspect canonical ProductSimplexMaximalPaths, ProductSimplexWordPrefixCounts and ProductSimplexBalancedWords and Mathlib ProdStdSimplex.objEquiv and nondegeneracy APIs",
+       "Inspect canonical ProductSimplexMaximalPaths, ProductSimplexCumulativeOrderHom and Mathlib ProdStdSimplex.objEquiv and nondegeneracy APIs",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint61-cumulative-orderhom/ProductSimplexCumulativeOrderHom.lean",
+       "lake env lean /tmp/codex13-checkpoint61-reconstructed-path/ProductSimplexReconstructedPath.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/codex13-checkpoint61-cumulative-orderhom/ProductSimplexCumulativeOrderHom.lean",
+       "sha256sum /tmp/codex13-checkpoint61-reconstructed-path/ProductSimplexReconstructedPath.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint61-cumulative-orderhom/ProductSimplexCumulativeOrderHom.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint61-reconstructed-path/ProductSimplexReconstructedPath.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "Reproduce standard-only axiom audits for cumulativeOrderHom_fst, cumulativeOrderHom_snd and cumulativeOrderHom_coordinate_sum",
+       "Reproduce standard-only axiom audits for reconstructedSimplex_objEquiv and reconstructedPath",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -38463,27 +38503,40 @@
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
        :exit 0}
-      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --check-check-only", :exit 0}
       {:cmd "git diff --exit-code", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/codex13-checkpoint61-cumulative-orderhom/ProductSimplexCumulativeOrderHom.lean",
-       :exit 0,
+       "lake env lean /tmp/codex13-checkpoint61-reconstructed-path/ProductSimplexReconstructedPath.lean",
+       :exit 1,
        :finding
-       "The first compiled draft emitted unused-variable warnings for the explicit endpoint names in the monotonicity field.",
+       "The first draft supplied explicit universe arguments to declarations whose universes are inferred and redundantly applied Fin.ext after extensionality had already reduced the goal to coerced natural-number equality.",
        :correction
-       "Renamed the unused binders with underscore prefixes and reran the compiler without warnings."}],
+       "Expanded the MaximalPath subtype at the result boundary, let the expected type determine the universe and removed the redundant Fin.ext step."}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint61-reconstructed-path/ProductSimplexReconstructedPath.lean",
+       :exit 1,
+       :finding
+       "The intermediate proof referenced a polymorphic helper theorem without enough expected universe information, leaving universe metavariables in reconstructedPath.",
+       :correction
+       "Proved the objEquiv equality locally after fixing the reconstructed simplex type and used objEquiv.apply_symm_apply directly."}
+      {:cmd "Malformed scratch-edit shell command",
+       :exit 2,
+       :finding
+       "A mismatched heredoc quote prevented the edit command from running.",
+       :correction
+       "Repeated the edit with a properly quoted Python command; the final Lean rerun compiled."}],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint61-cumulative-orderhom/ProductSimplexCumulativeOrderHom.lean",
+      "/tmp/codex13-checkpoint61-reconstructed-path/ProductSimplexReconstructedPath.lean",
       :sha256
-      "27ca63d0289a65205a22908ada4ee092c6bdfa946b431d581106ececd486bd2a",
+      "bc8980b485e836a722b1aee041170e625464dcf8f6dc34b8969039354c68ee20e",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled prerequisite is supplied. The fixture maps each balanced-word prefix to the pair of bounded horizontal and vertical counts, packages these vertices as an order homomorphism, exposes both coordinate projections and proves that their sum is the prefix endpoint. The parent equivalence is not GO because applying prodStdSimplex.objEquiv.invFun, proving maximal nondegeneracy and establishing both inverse laws remain uncompiled. No simplex reconstruction, corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
+     "Exactly one complete compiled prerequisite is supplied. The fixture applies prodStdSimplex.objEquiv.symm to the banked cumulative order homomorphism, proves the exact objEquiv equation, and packages the resulting simplex as a maximal nondegenerate path using the coordinate-sum identity. The parent equivalence is not GO because both word/path inverse laws remain uncompiled. No inverse law, corner swap, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection theorem or consumer closure is claimed.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: cumulative balanced words as canonical maximal product-simplex paths",
@@ -38521,7 +38574,8 @@
    :kind :representation-comparison,
    :depends-on
    [:oriented-checkpoint61-product-simplex-prefix-monotonicity-and-consumer-refill-1
-    :t03j05-product-simplex-cumulative-order-hom-1],
+    :t03j05-product-simplex-cumulative-order-hom-1
+    :t03j05-product-simplex-reconstructed-maximal-path-1],
    :current-residual
    "All prefix arithmetic and coordinate bounds are banked, but no canonical construction packages cumulative counts through prodStdSimplex.objEquiv.invFun or proves the two word/path inverse laws.",
    :other-consumers [:t96J06 :t97A04]}
