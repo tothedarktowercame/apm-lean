@@ -37420,8 +37420,307 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      :exit 0}
+     {:cmd
+      "Recount every DAG-named frozen consumer with comments stripped and inspect current open, blocked and reviewed rows",
+      :exit 0}
+     {:cmd
+      "Inspect the reviewed balanced-word equivalence STOP and canonical ProductSimplexWordPrefixCounts and ProductSimplexBalancedWords modules",
+      :exit 0}
+     {:cmd
+      "Search ConstructionTargets and Mathlib for exported horizontalCount or verticalCount monotonicity and prefix-subset theorems",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Compare 589cf9cb..55915ed889b7984df91970cf98b1ee61dc17a27e and attribute ConstructionTargets and frozen-problem changes",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :measures
+    {:baseline
+     {:commit "589cf9cb551f4493b0359bf5c41e525f6fcb3ec1",
+      :description "Accepted checkpoint59 strategy head"},
+     :proved-refutations 0,
+     :frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :head
+     {:commit "55915ed889b7984df91970cf98b1ee61dc17a27e",
+      :description "Pre-checkpoint60 strategy head"},
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:before 833,
+      :after 840,
+      :portfolio
+      ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+       "ConstructionTargets/ProductSimplexBalancedWords.lean"],
+      :concurrent
+      ["ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean"
+       "ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"
+       "ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"
+       "ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean"
+       "ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean"]},
+     :corrected-closures 0,
+     :review-outcomes
+     {:product-simplex-word-prefix-counts
+      {:outcome :pass, :disposition :banked},
+      :product-simplex-balanced-words
+      {:outcome :pass, :disposition :banked},
+      :balanced-step-word-maximal-path-equivalence
+      {:outcome :stop,
+       :review :pass,
+       :reason :private-prefix-set-blocks-monotonicity},
+      :bounded-oriented-face-cancellation
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-balanced-step-word-maximal-path-equivalence},
+      :singular-cross-product
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-signed-product-simplex-shuffle-triangulation},
+      :finite-cover-rational-euler
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-finite-type-chain-level-covering-comparison},
+      :raw-hausdorff-normalization
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-addHaarScalarFactor-characterization}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholders 61}},
+    :finding
+    {:typed-residual-change
+     "The prefix-count and balanced-word representations are banked. The reviewed equivalence probe found a narrow exported-API boundary: wordPrefix is private and the count module exports no monotonicity theorem, so downstream code cannot derive that cumulative counts are bounded by balanced terminal totals without duplicating the hidden representation. The next eligible shared step is to prove prefix monotonicity inside ProductSimplexWordPrefixCounts and expose balanced coordinate bounds in ProductSimplexBalancedWords. It serves t03J05, t96J06 and t97A04 and directly resolves the reviewed STOP. No near-closure adapter is eligible because each consumer within two placeholders still has an unresolved route step. No frozen placeholder changed.",
+     :routes
+     [{:consumer :a97J08,
+       :placeholders 1,
+       :route
+       "banked local degree and orientation -> consumer comparison -> adapter"}
+      {:consumer :t00A03,
+       :placeholders 2,
+       :route
+       "contained translations -> active endpoint-preserving perturbation -> compatible faces -> triangulation"}
+      {:consumer :t00J01,
+       :placeholders 1,
+       :route
+       "circle-fold evidence -> Klein-product and fold-fiber geometry -> homology bridge -> adapter"}
+      {:consumer :t00J02,
+       :placeholders 1,
+       :route
+       "active relative Mayer-Vietoris -> excision -> localization and fundamental class"}
+      {:consumer :t01A02,
+       :placeholders 3,
+       :route
+       "H2 degree and nonsurjectivity -> Lefschetz -> conjunction"}
+      {:consumer :t01A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> cap/Thom and intersection comparison -> calculations"}
+      {:consumer :t01A05,
+       :placeholders 1,
+       :route
+       "active compact-support Mayer-Vietoris -> localization preserving connectedness -> adapter"}
+      {:consumer :t01A08,
+       :placeholders 1,
+       :route "regularity conversion -> general-model Sard -> adapter"}
+      {:consumer :t01J01,
+       :placeholders 3,
+       :route
+       "contained translations -> active endpoint control -> compatible triangulation -> theorem"}
+      {:consumer :t01J04,
+       :placeholders 1,
+       :route
+       "regular-preimage geometry -> countability and half-space-atlas applicability -> theorem"}
+      {:consumer :t01J06,
+       :placeholders 3,
+       :route
+       "sphere assembly and moments -> normalization boundary -> Stokes bridge -> conjunction"}
+      {:consumer :t02A05,
+       :placeholders 2,
+       :route
+       "S2 assembly and flux reduction -> normalization boundary -> integral and minimum"}
+      {:consumer :t02A07,
+       :placeholders 3,
+       :route
+       "active compact-support Mayer-Vietoris -> localization -> local comparison and fundamental class"}
+      {:consumer :t02A08,
+       :placeholders 1,
+       :route "local comparison -> m+2 normalization -> theorem"}
+      {:consumer :t03J02,
+       :placeholders 2,
+       :route
+       "null-winding -> embedded-circle collar or Jordan-Schoenflies -> gluing -> theorem"}
+      {:consumer :t03J04,
+       :placeholders 1,
+       :route
+       "rational torus homology -> finite-type covering Euler boundary -> theorem"}
+      {:consumer :t03J05,
+       :placeholders 1,
+       :route
+       "punctured genus-two curves -> banked product-simplex interfaces -> prefix monotonicity and balanced coordinate bounds -> word/path equivalence -> oriented cancellation -> singular cross product -> mod-2 intersection and ambient nonhomotopy -> theorem"}
+      {:consumer :t91J05,
+       :placeholders 3,
+       :route
+       "contained translations -> active endpoint control -> compatible faces -> result"}
+      {:consumer :t92J05,
+       :placeholders 3,
+       :route
+       "RP2 antipodal and genus-two bridges -> classification -> assembly"}
+      {:consumer :t92J06,
+       :placeholders 1,
+       :route
+       "covering data -> action and quotient adapter -> theorem"}
+      {:consumer :t94A06,
+       :placeholders 1,
+       :route
+       "regular-preimage and normal translation -> model applicability -> adapter"}
+      {:consumer :t94A10,
+       :placeholders 3,
+       :route
+       "S2 assembly and moments -> normalization boundary -> closedness and nonexactness"}
+      {:consumer :t94J09,
+       :placeholders 1,
+       :route
+       "contained translations -> active endpoint-preserving perturbation -> intersection adapter"}
+      {:consumer :t95J05,
+       :placeholders 1,
+       :route
+       "S3 assembly and density moment -> mass-normalization boundary -> integral uptake"}
+      {:consumer :t95J06,
+       :placeholders 2,
+       :route "torus free-action quotient -> classification -> result"}
+      {:consumer :t96J06,
+       :placeholders 2,
+       :route
+       "fundamental class and cap/Thom comparison -> banked product-simplex interfaces -> prefix monotonicity and balanced bounds -> word/path equivalence -> oriented cancellation and singular-product comparison -> adapters"}
+      {:consumer :t97A01,
+       :placeholders 1,
+       :route
+       "cover transfer -> finite-type Euler boundary -> theorem"}
+      {:consumer :t97A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> banked product-simplex interfaces -> prefix monotonicity and balanced bounds -> word/path equivalence -> oriented cancellation and cross product -> bounded Eilenberg-Zilber -> integral Kunneth -> intersections"}
+      {:consumer :t97J05,
+       :placeholders 5,
+       :route
+       "active compact-support Mayer-Vietoris -> localization and global fundamental class -> assembly"}
+      {:consumer :t98A01,
+       :placeholders 1,
+       :route
+       "active five-torsion -> polygon genus -> finite-type Euler boundary -> conjunction"}
+      {:consumer :t98A02,
+       :placeholders 1,
+       :route
+       "active relative Mayer-Vietoris and excision -> localization monicity -> fundamental class"}
+      {:consumer :t99J03,
+       :placeholders 1,
+       :route
+       "active endpoint-preserving perturbation -> coverage and compatible faces -> triangulation"}],
+     :deferred
+     ["Retrying word/path equivalence before prefix monotonicity is exported."
+      "Oriented cancellation and singular-chain cross product remain behind the word/path equivalence."
+      "Reviewed finite-cover Euler and Hausdorff-normalization STOPs remain preserved."
+      "Concurrent coefficient, arc and five-torsion work is excluded."
+      "Eilenberg-Zilber, Kunneth, intersections and adapters await preceding route steps."]},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Extend only the banked Boolean prefix-count and balanced-word interfaces with monotonicity and terminal-total bounds. Do not reconstruct maximal paths, prove inverse laws, define corner swaps, pair or cancel faces, construct chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+       "ConstructionTargets/ProductSimplexWordPrefixCounts.md"
+       "ConstructionTargets/ProductSimplexBalancedWords.lean"
+       "ConstructionTargets/ProductSimplexBalancedWords.md"],
+      :dag-node
+      "PRODUCT HOMOLOGY: monotone prefix counts and balanced coordinate bounds",
+      :acceptance
+      {:hypotheses
+       "Use arbitrary Boolean words on Fin n and ordered endpoints in Fin (n+1); specialize only to BalancedWord p q for terminal bounds. No simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+       :gates
+       ["Compile both modified canonical targets and run lake build for them."
+        "Verify wordPrefix inclusion is proved inside its owning module."
+        "Verify horizontalCount_mono and verticalCount_mono for arbitrary ordered prefix endpoints."
+        "Verify balanced horizontal and vertical counts are bounded by p and q through monotonicity and terminal equalities."
+        "Reproduce standard-only axiom audits for all four exported theorems."
+        "Confirm no path reconstruction, inverse law, corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+        "Run placeholder, forbidden-declaration, warning, whitespace and exact four-file scope checks; commit the scoped implementation."],
+       :consumer-residual
+       "Use these bounds to construct Fin-valued cumulative coordinates and the canonical maximal path, then prove the word/path inverse laws.",
+       :axioms :standard-only,
+       :consumer-equation
+       "If i≤j then both Boolean prefix counts at i are at most their counts at j; consequently a balanced (p,q)-word has every horizontal prefix count at most p and every vertical prefix count at most q.",
+       :declarations
+       ["horizontalCount_mono"
+        "verticalCount_mono"
+        "BalancedWord.horizontalCount_le_total"
+        "BalancedWord.verticalCount_le_total"],
+       :namespace
+       "ConstructionTargets.ProductSimplexWordPrefixCounts and ConstructionTargets.ProductSimplexBalancedWords",
+       :route-step
+       "Resolves the private-prefix exported-API boundary on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes, immediately before cumulative-coordinate maximal-path construction.",
+       :implementation
+       "Prove prefix-set inclusion and count monotonicity inside the module that owns private wordPrefix, then expose the exact p and q bounds for balanced-word cumulative coordinates."},
+      :id
+      :oriented-checkpoint60-product-simplex-prefix-monotonicity-repair-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint60-balanced-product-simplex-words-and-consumer-refill-1],
+      :current-residual
+      "The count definitions are correct, but private wordPrefix and the absence of exported monotonicity prevent downstream balanced coordinate bounds.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: product-simplex prefix monotonicity and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint61-product-simplex-prefix-monotonicity-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint60-product-simplex-prefix-monotonicity-repair-1],
+      :current-residual
+      "Measure exported prefix monotonicity separately from word/path reconstruction, oriented cancellation, singular-cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: balanced product-simplex words and renewed consumer eligibility",
@@ -37438,6 +37737,84 @@
     :oriented-checkpoint59-oriented-shuffle-cancellation-and-consumer-refill-1],
    :current-residual
    "Measure balanced-word reconstruction separately from oriented cancellation, singular-cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Extend only the banked Boolean prefix-count and balanced-word interfaces with monotonicity and terminal-total bounds. Do not reconstruct maximal paths, prove inverse laws, define corner swaps, pair or cancel faces, construct chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+    "ConstructionTargets/ProductSimplexWordPrefixCounts.md"
+    "ConstructionTargets/ProductSimplexBalancedWords.lean"
+    "ConstructionTargets/ProductSimplexBalancedWords.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: monotone prefix counts and balanced coordinate bounds",
+   :acceptance
+   {:hypotheses
+    "Use arbitrary Boolean words on Fin n and ordered endpoints in Fin (n+1); specialize only to BalancedWord p q for terminal bounds. No simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+    :gates
+    ["Compile both modified canonical targets and run lake build for them."
+     "Verify wordPrefix inclusion is proved inside its owning module."
+     "Verify horizontalCount_mono and verticalCount_mono for arbitrary ordered prefix endpoints."
+     "Verify balanced horizontal and vertical counts are bounded by p and q through monotonicity and terminal equalities."
+     "Reproduce standard-only axiom audits for all four exported theorems."
+     "Confirm no path reconstruction, inverse law, corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact four-file scope checks; commit the scoped implementation."],
+    :consumer-residual
+    "Use these bounds to construct Fin-valued cumulative coordinates and the canonical maximal path, then prove the word/path inverse laws.",
+    :axioms :standard-only,
+    :consumer-equation
+    "If i≤j then both Boolean prefix counts at i are at most their counts at j; consequently a balanced (p,q)-word has every horizontal prefix count at most p and every vertical prefix count at most q.",
+    :declarations
+    ["horizontalCount_mono"
+     "verticalCount_mono"
+     "BalancedWord.horizontalCount_le_total"
+     "BalancedWord.verticalCount_le_total"],
+    :namespace
+    "ConstructionTargets.ProductSimplexWordPrefixCounts and ConstructionTargets.ProductSimplexBalancedWords",
+    :route-step
+    "Resolves the private-prefix exported-API boundary on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes, immediately before cumulative-coordinate maximal-path construction.",
+    :implementation
+    "Prove prefix-set inclusion and count monotonicity inside the module that owns private wordPrefix, then expose the exact p and q bounds for balanced-word cumulative coordinates."},
+   :id
+   :oriented-checkpoint60-product-simplex-prefix-monotonicity-repair-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint60-balanced-product-simplex-words-and-consumer-refill-1
+    :oriented-checkpoint60-balanced-product-simplex-words-and-consumer-refill-1],
+   :current-residual
+   "The count definitions are correct, but private wordPrefix and the absence of exported monotonicity prevent downstream balanced coordinate bounds.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: product-simplex prefix monotonicity and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint61-product-simplex-prefix-monotonicity-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint60-product-simplex-prefix-monotonicity-repair-1
+    :oriented-checkpoint60-balanced-product-simplex-words-and-consumer-refill-1],
+   :current-residual
+   "Measure exported prefix monotonicity separately from word/path reconstruction, oriented cancellation, singular-cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
