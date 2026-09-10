@@ -68505,8 +68505,73 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the actual coefficient homology isomorphism between the two range-subcomplex piece terms and the biproduct of the literal subtype terms, with forward and inverse projection formulas; no supplied union comparison, exactness conjugation or excision.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Construct the coefficient homology comparison for the union range term and actual ambient complement, then conjugate the instantiated signed Mayer-Vietoris exactness through the intersection, biproduct and union comparisons and transport the relative terms to the requested pairs in X by coefficient excision.",
+    :dependency-hashes
+    {:CoefficientIntersectionRangeNaturality
+     "4619a45836530c6e5706d113a86132b8aa5fc6236e05221423e1ab72c6fe9f09"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:pieceHomologyIso
+     "8e72d5de18125b015c0f0445580f2b3cf2a601d0fb501158a1c6732c80b8c136",
+     :pieceHomologyIso_hom_fst
+     "cfe9cc2b7e27c3f5687f58d2b50fbb1174f4508b687196e6f9b5e1bbeaf093b5",
+     :pieceHomologyIso_hom_snd
+     "af64b597f3ceb7c10243af5f59a455362d72802d3d91b31d0435b0d646f9effc",
+     :pieceHomologyIso_inv_fst
+     "e302f4812a05ed6ea3981e4bb32072c7be1f37348a24296097b92d70e57d3e9f",
+     :pieceHomologyIso_inv_snd
+     "463f903e1724f12c7ab69e860039f28982c0d2e6990de73c368b8f04a1bf4014"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and five complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientPieceRangeBiproductComparison.lean ConstructionTargets/CoefficientIntersectionRangeNaturality.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Add coefficient piece range biproduct comparison Hershwal'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "The biproduct of coefficient homology groups of the left and right ambient range subcomplexes in the instantiated Mayer-Vietoris sequence",
+     :target
+     "The biproduct of coefficient homology groups of the corresponding actual topological subtypes",
+     :direction
+     "The two forward ambient-range-to-subtype homology isomorphisms are applied componentwise, producing an exact biproduct isomorphism whose forward and inverse arrows commute with both canonical projections."},
+    :commit "1fdef2d915925a128afb1235a2a16b699a22e87d",
+    :changed-paths
+    ["ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean"],
+    :fixture
+    {:path "/tmp/CoefficientPieceRangeBiproductComparison.lean",
+     :sha256
+     "e9ca8cac704c128859f2f872b753cd4d2687bb18dcd588fa179c7bb04d73c795",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled the actual coefficient-homology biproduct isomorphism between both ambient range-subcomplex piece terms and their literal subtype terms. Its forward and inverse arrows satisfy all four canonical projection formulas for arbitrary X, A, B, coefficient ring and degree. No union comparison, Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 5,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientPieceRangeBiproductComparison.lean"],
    :dag-node
