@@ -66,6 +66,7 @@ MAX_ITER=3 bash "$scratch/loop.sh" --once > "$scratch/valid.log" 2>&1
 [ -s "$TOPOLOGY_RUNS/jobs/test-1.receipt.edn" ]
 grep -q 'REJECTED receipt from test-1 for checkpoint:' "$scratch/valid.log"
 grep -q 'Your previous receipt for this row was rejected:' "$TOPOLOGY_RUNS/prompt-2"
+grep -q 'parse the exact map after the nonce with clojure.edn/read-string' "$TOPOLOGY_RUNS/prompt-2"
 first_nonce="$(sed -n 's/^TOPOLOGY_RECEIPT_EDN \([^ ]*\).*/\1/p' "$TOPOLOGY_RUNS/prompt-1")"
 second_nonce="$(sed -n 's/^TOPOLOGY_RECEIPT_EDN \([^ ]*\).*/\1/p' "$TOPOLOGY_RUNS/prompt-2")"
 [ -n "$first_nonce" ] && [ "$first_nonce" != "$second_nonce" ]
