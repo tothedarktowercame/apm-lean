@@ -31516,9 +31516,143 @@
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
-   "Do not use the blocked raw Hausdorff normalization, assume that a lower-dimensional coordinate hyperplane is null, infer intrinsic nullity from ambient nullity without an actual subtype isometry, assemble caps, evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Prove only d=2 and d=3 and use a unique row-specific scratch directory.",
-   :phase :probe,
+   "Bank only raw critical-dimensional Hausdorff nullity of the unit spheres in EuclideanSpace real (Fin 2) and EuclideanSpace real (Fin 3). Do not claim an ambient equator embedding, intrinsic subtype transport, cap partition, numerical normalization, sphere mass, moment value, Stokes result or consumer closure.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/LowerDimensionalSphereNullity.lean"
+    "ConstructionTargets/LowerDimensionalSphereNullity.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: raw Hausdorff nullity of lower-dimensional Euclidean unit spheres",
+   :acceptance
+   {:namespace "ConstructionTargets.LowerDimensionalSphereNullity",
+    :implementation
+    "Promote the exact compiled fixture and document that explicit equator embeddings and cap partitions remain for the parent comparison.",
+    :hypotheses
+    "Use raw hausdorffMeasure 2 on EuclideanSpace real (Fin 2) and raw hausdorffMeasure 3 on EuclideanSpace real (Fin 3), with their actual L2 metrics. No normalization constant or supplied null-set hypothesis is allowed.",
+    :declarations ["E2" "E3" "sphere_two_null" "sphere_three_null"],
+    :consumer-equation
+    "The unit sphere in E2 is raw two-dimensional Hausdorff-null, and the unit sphere in E3 is raw three-dimensional Hausdorff-null.",
+    :consumer-residual
+    "Embed these source spheres isometrically as the literal last-coordinate-zero equators in E3 and E4, transport ambient and intrinsic nullity, and prove the cap partitions.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.LowerDimensionalSphereNullity."
+     "Reproduce two standard-only axiom audits."
+     "Verify both proofs use the actual critical-dimensional raw-Hausdorff additive-Haar instances and addHaar_sphere."
+     "Confirm no normalization scalar, equator embedding, subtype transport, cap partition, sphere mass or moment theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :lower-dimensional-sphere-raw-hausdorff-nullity-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2],
+   :current-residual
+   "The literal equators are isometric images of lower-dimensional unit spheres; their source raw Hausdorff nullity must be banked before ambient and subtype transport.",
+   :other-consumers [:t02A05 :t01J06 :t94A10]}
+  {:consumer :t95J05,
+   :stop-condition
+   "Do not use the blocked raw Hausdorff normalization, assume that a lower-dimensional coordinate hyperplane is null, infer intrinsic nullity from ambient nullity without an actual subtype isometry, assemble caps, evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Prove only d=2 and d=3 and use a unique row-specific scratch directory.",
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Construct the append-zero linear isometric embeddings from E2 to E3 and E3 to E4, identify their unit-sphere images exactly with the literal Fin.last-zero equators, transport the banked raw Hausdorff nullity to ambient and intrinsic measures, and prove the strict-upper-cap, strict-lower-cap and equator partitions.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t95J05,
+      :stop-condition
+      "Bank only raw critical-dimensional Hausdorff nullity of the unit spheres in EuclideanSpace real (Fin 2) and EuclideanSpace real (Fin 3). Do not claim an ambient equator embedding, intrinsic subtype transport, cap partition, numerical normalization, sphere mass, moment value, Stokes result or consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/LowerDimensionalSphereNullity.lean"
+       "ConstructionTargets/LowerDimensionalSphereNullity.md"],
+      :dag-node
+      "MANIFOLD INTEGRATION: raw Hausdorff nullity of lower-dimensional Euclidean unit spheres",
+      :acceptance
+      {:namespace "ConstructionTargets.LowerDimensionalSphereNullity",
+       :implementation
+       "Promote the exact compiled fixture and document that explicit equator embeddings and cap partitions remain for the parent comparison.",
+       :hypotheses
+       "Use raw hausdorffMeasure 2 on EuclideanSpace real (Fin 2) and raw hausdorffMeasure 3 on EuclideanSpace real (Fin 3), with their actual L2 metrics. No normalization constant or supplied null-set hypothesis is allowed.",
+       :declarations ["E2" "E3" "sphere_two_null" "sphere_three_null"],
+       :consumer-equation
+       "The unit sphere in E2 is raw two-dimensional Hausdorff-null, and the unit sphere in E3 is raw three-dimensional Hausdorff-null.",
+       :consumer-residual
+       "Embed these source spheres isometrically as the literal last-coordinate-zero equators in E3 and E4, transport ambient and intrinsic nullity, and prove the cap partitions.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.LowerDimensionalSphereNullity."
+        "Reproduce two standard-only axiom audits."
+        "Verify both proofs use the actual critical-dimensional raw-Hausdorff additive-Haar instances and addHaar_sphere."
+        "Confirm no normalization scalar, equator embedding, subtype transport, cap partition, sphere mass or moment theorem is claimed."
+        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+      :id :lower-dimensional-sphere-raw-hausdorff-nullity-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2],
+      :current-residual
+      "The literal equators are isometric images of lower-dimensional unit spheres; their source raw Hausdorff nullity must be banked before ambient and subtype transport.",
+      :other-consumers [:t02A05 :t01J06 :t94A10]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
+       :exit 0}
+      {:cmd
+       "Inspect raw Hausdorff dimension-gap, Lipschitz-image and additive-Haar sphere-nullity APIs",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/codex13-checkpoint50-source-sphere-nullity/LowerDimensionalSphereNullity.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint50-source-sphere-nullity/LowerDimensionalSphereNullity.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint50-source-sphere-nullity/LowerDimensionalSphereNullity.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "Python comment-stripped placeholder, forbidden-declaration, whitespace and two standard-only axiom audits",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "Initial lower-dimensional sphere-nullity fixture compilation",
+       :exit 1,
+       :correction
+       "Attempted to express raw critical-dimensional Hausdorff measure directly as an unspecified scalar multiple of volume, but the required finite-on-compacts instance was unavailable in that orientation. Replaced this route with the additive-Haar sphere-nullity theorem."}
+      {:cmd "Compilation using normalized-measure cancellation",
+       :exit 1,
+       :correction
+       "The intermediate measure-application rewrite did not reduce under the congrArg lambda, and the attempted volume-sphere theorem name was unavailable. Removed this unnecessary cancellation route after locating addHaar_sphere."}
+      {:cmd "First compilation with addHaar_sphere",
+       :exit 1,
+       :correction
+       "Numeric Hausdorff dimensions elaborated as real literals and did not select the Euclidean critical-dimension IsAddHaarMeasure instances. Annotated both dimensions as natural numbers; the corrected fixture compiles."}],
+     :changed-paths [],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint50-source-sphere-nullity/LowerDimensionalSphereNullity.lean",
+      :sha256
+      "9f4adeca79ba7746204a10eb5a8fb1e2b5582618879d98d5f6d3579e9bf2997f",
+      :placeholder-count 0},
+     :finding
+     "Exactly one complete compiled prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 routes. It proves that the literal unit sphere in EuclideanSpace real (Fin 2) has zero raw two-dimensional Hausdorff measure and that the literal unit sphere in EuclideanSpace real (Fin 3) has zero raw three-dimensional Hausdorff measure. The proof uses the actual critical-dimensional raw-Hausdorff additive-Haar instances and addHaar_sphere, so it neither invokes nor computes the blocked normalization scalar. These source spheres are the lower-dimensional models for the equators of the literal S2 and S3 cap decompositions. The parent probe is not GO because their explicit isometric embeddings as the Fin.last-equals-zero subsets of EuclideanSpace real (Fin 3) and Fin 4, the induced ambient and intrinsic Hausdorff transport, and the exact cap-plus-equator partitions remain unproved. No canonical source or ledger was edited.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: Hausdorff-null equators for the literal S2 and S3 cap decompositions",
@@ -31547,7 +31681,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:oriented-checkpoint47-sphere-cap-c1-graph-area-comparison-repair2
-    :oriented-checkpoint50-corrected-raw-normalization-and-consumer-refill-1],
+    :oriented-checkpoint50-corrected-raw-normalization-and-consumer-refill-1
+    :lower-dimensional-sphere-raw-hausdorff-nullity-1],
    :current-residual
    "The two strict cap area formulas are banked, but assembling them into whole-sphere formulas requires proving that the literal last-coordinate equator is d-dimensional Hausdorff-null in dimensions two and three.",
    :other-consumers [:t02A05 :t01J06 :t94A10]}
