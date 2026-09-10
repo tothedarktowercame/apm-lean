@@ -65409,66 +65409,81 @@
    :stop-condition
    "GO requires the generic actual-cover comparison, its target naturality and chosen-basepoint group equivalence; REVISE requires exactly one compiled prerequisite.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Specialize this generic equivalence to the frozen t00A01 cover and transport its supplied piece comparisons before closing Main. Other quotient consumers must independently construct their required covers. No consumer closure is claimed.",
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:implementation
-      "Promote the exact fixture. Compile both pseudococone representation functors and pseudoSpanEquivalence, mapping, postcomposeIso, sourceEquivalence, groupEquivalence, basedGroupEquivalence and chosenGroupEquivalence. Preserve actual open sets, union coverage, path-connected pieces, simply connected overlap, supplied overlap point and explicit piece-basepoint paths. Verify TwoOpenPointSpanComparison SHA256 bdc1fda3541b9e6078a78260de6752adb463cac482120a542f6a957804bd1ab5. Require zero placeholders, no warnings and standard-only axioms. No supplied pushout, comparison equivalence or additional connectivity hypothesis. Do not claim frozen consumer closure.",
-      :commands
-      ["lake env lean ConstructionTargets/TwoOpenFreeProductMapping.lean"],
-      :axioms :standard-only,
-      :placeholder-before 0,
-      :placeholder-after 0},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "lake env lean -o /tmp/surface45/ConstructionTargets/TwoOpenPointSpanComparison.olean ConstructionTargets/TwoOpenPointSpanComparison.lean",
-       :exit 0}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/surface45:$LEAN_PATH lean /tmp/TwoOpenFreeProductMapping.lean'",
-       :exit 0}
-      {:cmd "python3 /tmp/two-open-free-product-mapping-audit.py",
-       :exit 0}
-      {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/TwoOpenFreeProductMapping.lean",
-       :exit 1,
-       :correction
-       "Compiled the missing promoted point-span dependency into a private temporary object directory."}
-      {:cmd
-       "rg -n 'mapEnd|end.*MulEquiv' .lake/packages/mathlib/Mathlib/CategoryTheory/Equivalence.lean",
-       :exit 1,
-       :correction
-       "Located the applicable fullyFaithfulFunctor.mulEquivEnd usage in the banked source-reconstruction module."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/surface45:$LEAN_PATH lean /tmp/TwoOpenFreeProductMapping.lean'",
-       :exit 1,
-       :correction
-       "Qualified the path basepoint-change API with the FundamentalGroup namespace. Final compilation succeeds without warnings."}],
-     :representation
-     {:source
-      "Fundamental group of the actual two-open union at the supplied overlap point",
-      :target
-      "Group coproduct of the actual fundamental groups of its two pieces at chosen basepoints",
-      :direction
-      "Construct a group isomorphism from the union fundamental group to the piece-group coproduct via target-natural mapping-category equivalence and source reconstruction, then transport the factors along explicit paths."},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/TwoOpenFreeProductMapping.lean",
-      :sha256
-      "c8a9721533e0b0c6962c83a81319bd099560a3db0f580e8fa68c7722f633ede9",
-      :placeholder-count 0},
-     :finding
-     "Compiled the complete generic actual-cover construction. Actual two-open descent, the constructed point-span comparison and free-product representations yield a target-natural mapping-category equivalence. Source reconstruction gives the union fundamental groupoid a single-object free-product model. This induces the fundamental-group coproduct equivalence at the supplied overlap point. Explicit paths transport both piece groups to arbitrary chosen basepoints; path-connectedness also supplies those paths constructively.",
-     :implementation
-     {:scope ["ConstructionTargets/TwoOpenFreeProductMapping.lean"]},
-     :seat "codex-12"}},
+   {:dependency
+    {:path "ConstructionTargets/TwoOpenPointSpanComparison.lean",
+     :sha256
+     "bdc1fda3541b9e6078a78260de6752adb463cac482120a542f6a957804bd1ab5",
+     :review :pass},
+    :placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Specialize to the frozen t00A01 cover and transport its supplied piece comparisons. Other quotient consumers must independently construct their covers. No consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:pseudoToSpanFunctor
+     "c28e34d56551a002a8260f9ea5dc8c1fa7a70078d85bc1e73954c25aa1cfa584",
+     :chosenGroupEquivalence
+     "00c70c14e2581f2094870e6b93b3c8a05881f86da515e4e89ad407c300fa10cd",
+     :sourceEquivalence
+     "1104c887f900c6dbcf6b1bff29eb8eb5637a25d8a8462c8e25c3578a676316b0",
+     :pseudoSpanEquivalence
+     "437d3faa822d01f0e69fef6abfacb0208de780362eda7c09ff8301fc43f6c566",
+     :postcomposeIso
+     "4c0843b67731a004501924a5e67bc42b32050edd443d7014b61c60571a404101",
+     :basedGroupEquivalence
+     "9228fb43aa51cfd1faffe91188e97ea6a3807a44722651af7f9484c7736fe1ba",
+     :spanToPseudoFunctor
+     "18d69ef0ced7da8d0366cd9a26c1f0350cc7df0e293d36dbed6f38e7964c3e59",
+     :mapping
+     "9d17e42d936010fcb3d8d9b0fb27645b0b19225f71cfff7dfb2bbeba66c29f7c",
+     :groupEquivalence
+     "0f957022bcb099cf63b63990a5812b8e41d5aa16da85aea8b6116360927d2549"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "python3 /tmp/two-open-free-product-mapping-audit.py",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.TwoOpenPointSpanComparison",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/TwoOpenFreeProductMapping.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped placeholders and thirteen complete declaration-header hashes",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "Fundamental group of the actual two-open union at the supplied overlap point",
+     :target
+     "Group coproduct of the actual piece fundamental groups at chosen basepoints",
+     :direction
+     "Construct a group isomorphism from the union fundamental group to the piece-group coproduct via target-natural mapping-category equivalence and source reconstruction, then transport both factors along explicit paths."},
+    :commit "5ff0a7d76d3546f2c62d9d7f1140eab4eee4066e",
+    :changed-paths
+    ["ConstructionTargets/TwoOpenFreeProductMapping.lean"],
+    :dependency-build-warnings
+    "Existing upstream linter warnings replayed; scoped compilation warning-free.",
+    :fixture
+    {:path "/tmp/TwoOpenFreeProductMapping.lean",
+     :sha256
+     "c8a9721533e0b0c6962c83a81319bd099560a3db0f580e8fa68c7722f633ede9",
+     :exact-promotion true},
+    :finding
+    "Exact fixture promoted. Actual open-cover descent, pseudococone comparison, target naturality, source reconstruction and chosen-basepoint group equivalences compile without additional connectivity assumptions or supplied comparison equivalences. Ledger untouched.",
+    :axiom-audit-count 7,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/TwoOpenFreeProductMapping.lean"],
    :dag-node "VAN KAMPEN / generic chosen-vertex coproduct assembly",
    :acceptance
