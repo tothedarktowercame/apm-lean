@@ -59944,6 +59944,19 @@
       :exit 2,
       :correction
       "Recursive discovery encountered unrelated permission-denied directories. Read and successfully ran the located /tmp/transverse-incidence-chosen-audit.py directly."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789012983449-17808-f794442d",
+     :commands
+     ["git show 7587067571c0e30ada8f76bc2199ccb2450a1081:ConstructionTargets/TransverseIncidenceChosenAtlas.lean"
+      "Python pinned scope, fixture SHA256, byte equality, twenty statement hashes and placeholder audit"
+      "lake build ConstructionTargets.ChartedSpaceModelDerivativeTransport ConstructionTargets.ManifoldRegularFiberGlobalAtlas"
+      "lake env lean ConstructionTargets/TransverseIncidenceChosenAtlas.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 8ab85dbf:holes/labs/topology-contract/worklist.edn)"
+      "git show --format= --check 75870675"],
+     :finding
+     "Independent of author codex-6. Exact single-file scope and fixture 1bac3145ded3ba6fcd4cc412903b489c471728395f587963fe41db981bb1ced1 verified; twenty statement hashes match, zero placeholders. Dependencies build successfully (8451 jobs); Lean warning-free with eighteen standard-only axiom audits; validator 467 items OK; whitespace clean. Predicate-equality transport preserves inherited topology, chart directions and underlying values. Incidence specialization uses the banked zero-fiber atlas and derived regularity; smooth inclusion and actual derivative equality refer to that same chosen atlas and original product model. Model finrank is correctly sum-minus-target; definitional model normalization, derivative injectivity and tangent equalizer equality remain explicit residuals. No consumer closure claimed."},
     :commit "7587067571c0e30ada8f76bc2199ccb2450a1081",
     :changed-paths
     ["ConstructionTargets/TransverseIncidenceChosenAtlas.lean"],
@@ -59953,7 +59966,7 @@
      "1bac3145ded3ba6fcd4cc412903b489c471728395f587963fe41db981bb1ced1"},
     :axiom-audit-declarations 18},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TransverseIncidenceChosenAtlas.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / chosen incidence atlas and derivative transport",
@@ -60051,7 +60064,7 @@
      "Compiled one chosen-atlas prerequisite. Predicate equality transports the actual banked zero-fiber ChartedSpace to literal incidence, with exact chartAt, atlas-image and coordinate formulas. The constructed atlas is genuinely smooth, its inclusion into the original product manifold is genuinely smooth, and its actual inclusion mfderiv equals the original-product inclusion mfderiv on the zero fiber. The incidence predicate equality is derived from sub_eq_zero. No atlas, regularity or derivative comparison is assumed in the incidence specialization.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TRANSVERSE-PULLBACK / literal incidence atlas and tangent equalizer",
