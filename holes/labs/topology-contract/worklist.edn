@@ -69478,6 +69478,22 @@
      {:cmd "git commit -m 'Add compact support connecting morphism'",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789056339461-18936-face3474",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 4338a703c6e2a7c4dcb028650c964fbd34e00495"
+      "git show 4338a703c6e2a7c4dcb028650c964fbd34e00495:ConstructionTargets/CoefficientCompactSupportConnecting.lean | sha256sum"
+      "sha256sum /tmp/CoefficientCompactSupportConnecting.lean"
+      "git show 4338a703c6e2a7c4dcb028650c964fbd34e00495:ConstructionTargets/CoefficientCompactSupportRestrictionNaturality.lean | sha256sum"
+      "git diff --exit-code 4338a703c6e2a7c4dcb028650c964fbd34e00495 -- ConstructionTargets/CoefficientCompactSupportConnecting.lean"
+      "lake env lean ConstructionTargets/CoefficientCompactSupportConnecting.lean"
+      "Python read-only audit: recompute two complete declaration-header SHA256 hashes and comment-stripped placeholder count"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check"],
+     :finding
+     "Recorded commit has exact one-file scope; fixture SHA256 494601c742dbce3412b811fce3c578ce2d9f1ab068e7c44b525aeffdca9902b7 and dependency SHA256 78c21c6f8b359cd3ba3dce8ed47a2d12ce0a1f1366b5f05b0d61ec3fb1e938ae match; both frozen statement hashes reproduce; zero placeholders; Lean compiles without warnings with only standard axioms; supportConnecting has the required degree-n+1 intersection-support to degree-n union-support direction and literal boundary-subspace-projection formula, without unsupported comparison, sign, excision, exactness, vanishing, or fundamental-class claims."},
     :commit "4338a703c6e2a7c4dcb028650c964fbd34e00495",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactSupportConnecting.lean"],
@@ -69492,7 +69508,7 @@
     :axiom-audit-count 2,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactSupportConnecting.lean"],
    :dag-node
@@ -69582,7 +69598,7 @@
      "Compiled exactly one missing map prerequisite: the actual relative compact-support connecting arrow from H_(n+1)(X,X minus (K intersection L)) to H_n(X,X minus (K union L)). It is explicitly the pair boundary for the intersection-support complement, followed by its inclusion into X and the quotient projection for the union-support complement. The comparison with the transported absolute-complement connecting arrow, the signed restriction square, coefficient-excision transport and final exactness remain unproved.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
