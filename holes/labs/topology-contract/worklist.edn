@@ -70359,6 +70359,22 @@
       "git diff --check -- ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789059932976-19039-015b32ee",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 2c02b06338376092afdf0c2c32f8c02fa9a9c9bf"
+      "git show 2c02b06338376092afdf0c2c32f8c02fa9a9c9bf:ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean | sha256sum"
+      "sha256sum /tmp/CoefficientRangeIntersectionToRightComparison.lean ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean ConstructionTargets/CoefficientIntersectionRangeNaturality.lean"
+      "git diff --exit-code 2c02b06338376092afdf0c2c32f8c02fa9a9c9bf -- ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean"
+      "lake env lean ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean"
+      "Python comment-stripped placeholder and two complete-declaration SHA256 audit"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --check --oneline 2c02b06338376092afdf0c2c32f8c02fa9a9c9bf"
+      "git diff --check"],
+     :finding
+     "Recorded commit has exact one-file scope and author codex-6 differs from reviewer codex-10. Canonical source and fixture are byte-identical at SHA256 2cc6c862b9c7d9a74815fb1418e7b995b0bc3c1de545be9fcdbca4e4e799b2e8; dependency hashes 7b7db522a204b44ce7cdcc9540def617abdce0e86cf10787286d69b99f24e1cd and 4619a45836530c6e5706d113a86132b8aa5fc6236e05221423e1ab72c6fe9f09 match. Zero placeholders and recorded declaration hashes 2ba5e20d0d0d667628f34a5a5a5cd0bbc8ec5cb388c2e690ad1395b22224d528 and fbaf209458d5a6a1be5aac4ca5972716cfe71ff2ef5ee070c94814e59e145464 reproduce. Lean compiles without warnings with axioms propext, Classical.choice and Quot.sound. The range-intersection chain isomorphism correctly applies the inverse intersection-range comparison followed by the forward ambient-range comparison, and the proved square identifies its literal intersection-to-right inclusion composite with the direct infimum-to-right range map followed by the right comparison. No unsupported relative-cokernel, production-map, compact-complement, excision, exactness, localization, vanishing, or fundamental-class claim is made; ledger and diff gates pass."},
     :commit "2c02b06338376092afdf0c2c32f8c02fa9a9c9bf",
     :changed-paths
     ["ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean"],
@@ -70370,7 +70386,7 @@
     :finding
     "Promoted the exact fixture. The coefficient chain isomorphism from the Mayer-Vietoris range intersection to the literal intersection and its exact compatibility square with inclusion into the right subtype compile without warnings or placeholders. Both dependency hashes match their pinned values. Two unrelated pre-existing untracked documentation files remain untouched."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientRangeIntersectionToRightComparison.lean"],
    :dag-node
@@ -70484,7 +70500,7 @@
      "Compiled exactly one missing representation prerequisite. The coefficient Mayer-Vietoris range-intersection chain object is identified with coefficient chains on the literal intersection subtype, and its inclusion into the right range is proved equal to the actual subtype inclusion after comparison. This is the square required to construct the next relative-cokernel isomorphism and does not use the refuted zero supportConnecting map. The unrelated pre-existing untracked documentation files remain untouched.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
