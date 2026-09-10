@@ -38660,8 +38660,302 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
+      :exit 0}
+     {:cmd
+      "Recount every DAG-named frozen consumer with comments stripped and inspect current open, blocked and reviewed rows",
+      :exit 0}
+     {:cmd
+      "Inspect reviewed ProductSimplexCumulativeOrderHom and ProductSimplexReconstructedPath and the preserved inverse-law STOP",
+      :exit 0}
+     {:cmd
+      "Search ConstructionTargets and Mathlib for exported horizontalCount and verticalCount successor recurrences",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Compare d6c01567..d9a31ad139da6f40e10f39107eed6947b623b978 and attribute ConstructionTargets and frozen-problem changes",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :measures
+    {:baseline
+     {:commit "d6c015678ea7915e766fc8024249a1023d0728e1",
+      :description "Accepted checkpoint61 strategy head"},
+     :proved-refutations 0,
+     :frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :head
+     {:commit "d9a31ad139da6f40e10f39107eed6947b623b978",
+      :description "Pre-checkpoint62 strategy head"},
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:before 841,
+      :after 846,
+      :portfolio
+      ["ConstructionTargets/ProductSimplexCumulativeOrderHom.lean"
+       "ConstructionTargets/ProductSimplexReconstructedPath.lean"],
+      :concurrent
+      ["ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean"
+       "ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean"
+       "ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"]},
+     :corrected-closures 0,
+     :review-outcomes
+     {:product-simplex-cumulative-order-hom
+      {:outcome :pass, :disposition :banked},
+      :product-simplex-reconstructed-maximal-path
+      {:outcome :pass, :commit "842928ff", :disposition :banked},
+      :balanced-word-cumulative-maximal-path-equivalence
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-prefix-count-successor-recurrences},
+      :bounded-oriented-face-cancellation
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-balanced-step-word-maximal-path-equivalence},
+      :singular-cross-product
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-signed-product-simplex-shuffle-triangulation},
+      :finite-cover-rational-euler
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-finite-type-chain-level-covering-comparison},
+      :raw-hausdorff-normalization
+      {:outcome :stop,
+       :review :pass,
+       :reason :missing-addHaarScalarFactor-characterization}},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholders 61}},
+    :finding
+    {:typed-residual-change
+     "The cumulative order homomorphism and reconstructed maximal path are banked. The reviewed equivalence probe identifies one exact remaining exported-API boundary before the inverse laws: ProductSimplexWordPrefixCounts lacks the four one-step true/false recurrences needed to recover each Boolean letter from consecutive cumulative coordinates. The next shared step is a scoped repair inside the module that owns private wordPrefix; it serves t03J05, t96J06 and t97A04 without duplicating the hidden representation. No near-closure adapter has a complete route, and no frozen placeholder changed.",
+     :routes
+     [{:consumer :a97J08,
+       :placeholders 1,
+       :route
+       "banked local degree and orientation -> consumer comparison -> adapter"}
+      {:consumer :t00A03,
+       :placeholders 2,
+       :route
+       "contained translations -> active endpoint-preserving perturbation -> compatible faces -> triangulation"}
+      {:consumer :t00J01,
+       :placeholders 1,
+       :route
+       "circle-fold evidence -> Klein-product and fold-fiber geometry -> homology bridge -> adapter"}
+      {:consumer :t00J02,
+       :placeholders 1,
+       :route
+       "active relative Mayer-Vietoris -> excision -> localization and fundamental class"}
+      {:consumer :t01A02,
+       :placeholders 3,
+       :route
+       "H2 degree and nonsurjectivity -> Lefschetz -> conjunction"}
+      {:consumer :t01A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> cap/Thom and intersection comparison -> calculations"}
+      {:consumer :t01A05,
+       :placeholders 1,
+       :route
+       "active compact-support Mayer-Vietoris -> localization preserving connectedness -> adapter"}
+      {:consumer :t01A08,
+       :placeholders 1,
+       :route "regularity conversion -> general-model Sard -> adapter"}
+      {:consumer :t01J01,
+       :placeholders 3,
+       :route
+       "contained translations -> active endpoint control -> compatible triangulation -> theorem"}
+      {:consumer :t01J04,
+       :placeholders 1,
+       :route
+       "regular-preimage geometry -> countability and half-space-atlas applicability -> theorem"}
+      {:consumer :t01J06,
+       :placeholders 3,
+       :route
+       "sphere assembly and moments -> normalization boundary -> Stokes bridge -> conjunction"}
+      {:consumer :t02A05,
+       :placeholders 2,
+       :route
+       "S2 assembly and flux reduction -> normalization boundary -> integral and minimum"}
+      {:consumer :t02A07,
+       :placeholders 3,
+       :route
+       "active compact-support Mayer-Vietoris -> localization -> local comparison and fundamental class"}
+      {:consumer :t02A08,
+       :placeholders 1,
+       :route "local comparison -> m+2 normalization -> theorem"}
+      {:consumer :t03J02,
+       :placeholders 2,
+       :route
+       "null-winding -> embedded-circle collar or Jordan-Schoenflies -> gluing -> theorem"}
+      {:consumer :t03J04,
+       :placeholders 1,
+       :route
+       "rational torus homology -> finite-type covering Euler boundary -> theorem"}
+      {:consumer :t03J05,
+       :placeholders 1,
+       :route
+       "punctured genus-two curves -> banked product-simplex interfaces and reconstructed paths -> prefix successor recurrences -> word/path inverse laws -> oriented cancellation -> singular cross product -> mod-2 intersection and ambient nonhomotopy -> theorem"}
+      {:consumer :t91J05,
+       :placeholders 3,
+       :route
+       "contained translations -> active endpoint control -> compatible faces -> result"}
+      {:consumer :t92J05,
+       :placeholders 3,
+       :route
+       "RP2 antipodal and genus-two bridges -> classification -> assembly"}
+      {:consumer :t92J06,
+       :placeholders 1,
+       :route
+       "covering data -> action and quotient adapter -> theorem"}
+      {:consumer :t94A06,
+       :placeholders 1,
+       :route
+       "regular-preimage and normal translation -> model applicability -> adapter"}
+      {:consumer :t94A10,
+       :placeholders 3,
+       :route
+       "S2 assembly and moments -> normalization boundary -> closedness and nonexactness"}
+      {:consumer :t94J09,
+       :placeholders 1,
+       :route
+       "contained translations -> active endpoint-preserving perturbation -> intersection adapter"}
+      {:consumer :t95J05,
+       :placeholders 1,
+       :route
+       "S3 assembly and density moment -> mass-normalization boundary -> integral uptake"}
+      {:consumer :t95J06,
+       :placeholders 2,
+       :route "torus free-action quotient -> classification -> result"}
+      {:consumer :t96J06,
+       :placeholders 2,
+       :route
+       "fundamental class and cap/Thom comparison -> banked product-simplex interfaces and reconstructed paths -> prefix recurrences -> inverse laws -> oriented cancellation and singular-product comparison -> adapters"}
+      {:consumer :t97A01,
+       :placeholders 1,
+       :route
+       "cover transfer -> finite-type Euler boundary -> theorem"}
+      {:consumer :t97A04,
+       :placeholders 4,
+       :route
+       "fundamental class -> banked product-simplex interfaces and reconstructed paths -> prefix recurrences -> inverse laws -> oriented cancellation and cross product -> bounded Eilenberg-Zilber -> integral Kunneth -> intersections"}
+      {:consumer :t97J05,
+       :placeholders 5,
+       :route
+       "active compact-support Mayer-Vietoris -> localization and global fundamental class -> assembly"}
+      {:consumer :t98A01,
+       :placeholders 1,
+       :route
+       "active five-torsion -> polygon genus -> finite-type Euler boundary -> conjunction"}
+      {:consumer :t98A02,
+       :placeholders 1,
+       :route
+       "active relative Mayer-Vietoris and excision -> localization monicity -> fundamental class"}
+      {:consumer :t99J03,
+       :placeholders 1,
+       :route
+       "active endpoint-preserving perturbation -> coverage and compatible faces -> triangulation"}],
+     :deferred
+     ["Word/path inverse laws until prefix successor recurrences are exported."
+      "Oriented cancellation and singular-chain cross product remain behind the inverse laws."
+      "Reviewed finite-cover Euler and Hausdorff-normalization STOPs remain preserved."
+      "Concurrent arc, coefficient and five-torsion work is excluded."
+      "Eilenberg-Zilber, Kunneth, intersections and adapters await preceding route steps."]},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Extend only ProductSimplexWordPrefixCounts with the exact one-step true/false recurrences for horizontalCount and verticalCount. Do not construct or compare maximal paths, prove word/path inverse laws, define corner swaps, cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+       "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+      :dag-node
+      "PRODUCT HOMOLOGY: successor recurrences for Boolean step-word prefix counts",
+      :acceptance
+      {:hypotheses
+       "Use arbitrary Boolean words on Fin n and indices i : Fin n. No balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+       :gates
+       ["Compile the modified canonical target and run lake build ConstructionTargets.ProductSimplexWordPrefixCounts."
+        "Verify the successor prefix is exactly the predecessor prefix with index i inserted."
+        "Verify all four true/false recurrence equations."
+        "Verify natural-number equality without modular Fin arithmetic."
+        "Reproduce standard-only axiom audits for all four theorems."
+        "Confirm no path comparison, inverse law, corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+        "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
+       :consumer-residual
+       "Use these recurrences with reconstructedPath_objEquiv and the banked stepWord coordinate characterization to prove both word/path inverse laws.",
+       :axioms :standard-only,
+       :consumer-equation
+       "Across the step indexed by i, horizontalCount increases by one exactly when w i is true and otherwise stays fixed; verticalCount increases by one exactly when w i is false and otherwise stays fixed.",
+       :declarations
+       ["horizontalCount_succ_of_true"
+        "horizontalCount_succ_of_false"
+        "verticalCount_succ_of_true"
+        "verticalCount_succ_of_false"],
+       :namespace "ConstructionTargets.ProductSimplexWordPrefixCounts",
+       :route-step
+       "Resolves the inverse-law boundary on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes, immediately before proving stepWord and reconstructedPath are inverse.",
+       :implementation
+       "Prove the four successor recurrences inside the module that owns private wordPrefix, using the exact insertion of index i between prefixes i.castSucc and i.succ."},
+      :id
+      :oriented-checkpoint62-product-simplex-prefix-successor-recurrences-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint62-cumulative-product-simplex-paths-and-consumer-refill-1],
+      :current-residual
+      "Prefix counts are monotone and bounded, but their exported interface does not identify the exact coordinate increment contributed by the next Boolean letter.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: product-simplex prefix recurrences and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint63-product-simplex-prefix-recurrences-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint62-product-simplex-prefix-successor-recurrences-1],
+      :current-residual
+      "Measure prefix recurrence progress separately from word/path inverse laws, oriented cancellation, singular-cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: cumulative product-simplex paths and renewed consumer eligibility",
@@ -38678,6 +38972,81 @@
     :oriented-checkpoint61-product-simplex-prefix-monotonicity-and-consumer-refill-1],
    :current-residual
    "Measure cumulative word/path equivalence separately from oriented cancellation, singular-cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Extend only ProductSimplexWordPrefixCounts with the exact one-step true/false recurrences for horizontalCount and verticalCount. Do not construct or compare maximal paths, prove word/path inverse laws, define corner swaps, cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+    "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: successor recurrences for Boolean step-word prefix counts",
+   :acceptance
+   {:hypotheses
+    "Use arbitrary Boolean words on Fin n and indices i : Fin n. No balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+    :gates
+    ["Compile the modified canonical target and run lake build ConstructionTargets.ProductSimplexWordPrefixCounts."
+     "Verify the successor prefix is exactly the predecessor prefix with index i inserted."
+     "Verify all four true/false recurrence equations."
+     "Verify natural-number equality without modular Fin arithmetic."
+     "Reproduce standard-only axiom audits for all four theorems."
+     "Confirm no path comparison, inverse law, corner swap, cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or closure theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."],
+    :consumer-residual
+    "Use these recurrences with reconstructedPath_objEquiv and the banked stepWord coordinate characterization to prove both word/path inverse laws.",
+    :axioms :standard-only,
+    :consumer-equation
+    "Across the step indexed by i, horizontalCount increases by one exactly when w i is true and otherwise stays fixed; verticalCount increases by one exactly when w i is false and otherwise stays fixed.",
+    :declarations
+    ["horizontalCount_succ_of_true"
+     "horizontalCount_succ_of_false"
+     "verticalCount_succ_of_true"
+     "verticalCount_succ_of_false"],
+    :namespace "ConstructionTargets.ProductSimplexWordPrefixCounts",
+    :route-step
+    "Resolves the inverse-law boundary on the sole t03J05 placeholder route, both t96J06 routes and all four t97A04 routes, immediately before proving stepWord and reconstructedPath are inverse.",
+    :implementation
+    "Prove the four successor recurrences inside the module that owns private wordPrefix, using the exact insertion of index i between prefixes i.castSucc and i.succ."},
+   :id
+   :oriented-checkpoint62-product-simplex-prefix-successor-recurrences-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint62-cumulative-product-simplex-paths-and-consumer-refill-1
+    :oriented-checkpoint62-cumulative-product-simplex-paths-and-consumer-refill-1],
+   :current-residual
+   "Prefix counts are monotone and bounded, but their exported interface does not identify the exact coordinate increment contributed by the next Boolean letter.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: product-simplex prefix recurrences and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint63-product-simplex-prefix-recurrences-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint62-product-simplex-prefix-successor-recurrences-1
+    :oriented-checkpoint62-cumulative-product-simplex-paths-and-consumer-refill-1],
+   :current-residual
+   "Measure prefix recurrence progress separately from word/path inverse laws, oriented cancellation, singular-cross-product assembly, preserved Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t95J05,
    :stop-condition
