@@ -46800,8 +46800,137 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Read complete DAG, foundational note, build-loop documents and both ledgers",
+      :exit 0}
+     {:cmd
+      "Verify checkpoint67 immutable fixture transition and PASS review",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "Parse this exact receipt map with clojure.edn/read-string",
+      :exit 0}],
+    :finding
+    {:census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholders 61},
+     :routes
+     "a97J08(1): local degree/orientation -> comparison -> adapter; t00A03(2): translations -> endpoint perturbation -> compatible faces -> triangulation; t00J01(1): circle fold -> Klein geometry -> homology bridge -> adapter; t00J02(1): relative Mayer-Vietoris -> excision -> localization -> fundamental class; t01A02(3): H2 degree -> Lefschetz -> conjunction; t01A04(4): fundamental class -> cap/Thom comparison -> calculations; t01A05(1): compact-support Mayer-Vietoris -> localization -> adapter; t01A08(1): regularity conversion -> Sard -> adapter; t01J01(3): translations -> endpoint control -> triangulation -> theorem; t01J04(1): regular preimage -> countability/atlas applicability -> theorem; t01J06(3): sphere moments -> normalization -> Stokes -> conjunction; t02A05(2): S2 flux -> normalization -> integral/minimum; t02A07(3): compact-support Mayer-Vietoris -> localization -> fundamental class; t02A08(1): local comparison -> normalization -> theorem; t03J02(2): null winding -> collar/Schoenflies -> gluing -> theorem; t03J04(1): torus homology -> finite-cover Euler comparison -> theorem; t03J05(1): terminal-count promotion -> adjacent corners -> cancellation -> cross product -> theorem; t91J05(3): translations -> endpoint control -> compatible faces -> result; t92J05(3): antipodal/genus-two bridges -> classification -> assembly; t92J06(1): covering data -> quotient adapter -> theorem; t94A06(1): regular preimage/translation -> applicability -> adapter; t94A10(3): S2 moments -> normalization -> nonexactness; t94J09(1): translations -> endpoint perturbation -> intersection adapter; t95J05(1): S3 moment -> mass normalization -> integral uptake; t95J06(2): torus quotient -> classification -> result; t96J06(2): terminal counts -> adjacent corners -> cancellation -> cross-product assembly; t97A01(1): cover transfer -> finite-cover Euler comparison -> theorem; t97A04(4): terminal counts -> adjacent corners -> cancellation -> cross product -> Kunneth/intersections; t97J05(5): compact-support Mayer-Vietoris -> localization -> fundamental class -> assembly; t98A01(1): five-torsion -> polygon genus -> Euler comparison -> conjunction; t98A02(1): relative Mayer-Vietoris -> excision -> localization monicity -> fundamental class; t99J03(1): endpoint perturbation -> coverage -> compatible faces -> triangulation",
+     :ranking
+     "Checkpoint67 is immutably transitioned and reviewed PASS. The compiled two-theorem terminal-count extension is the smallest shared step on t03J05, t96J06 and t97A04.",
+     :deferred
+     ["adjacent corners until terminal counts are promoted"
+      "shuffle signs, cancellation and cross products until adjacent corners are banked"]},
+    :measures
+    {:placeholder-delta 0,
+     :typed-residual-change
+     "checkpoint67 transition completed; terminal-count promotion is unblocked",
+     :infrastructure-packets
+     {:before 876, :after 879, :portfolio 0, :concurrent 3},
+     :review-outcomes
+     {:typed-validator :pass,
+      :checkpoint67-transition :pass,
+      :terminal-count-fixture :compiled},
+     :frozen-branch-uptake 0,
+     :frozen-closures 0,
+     :corrected-closures 0,
+     :proved-refutations 0},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Promote only the two compiled terminal-count characterizations into ProductSimplexWordPrefixCounts and document them. Preserve every existing declaration. Do not define swaps, package balanced words or paths, compare faces, assign signs, cancel chains, construct a cross product or claim closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+       "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+      :dag-node
+      "PRODUCT HOMOLOGY: promoted terminal word-count characterizations",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use an arbitrary Boolean word on Fin n; no balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+       :route-step
+       "Supplies terminal-count enumeration immediately before adjacent-swap balance preservation on the t03J05, t96J06 and t97A04 routes.",
+       :implementation
+       "Promote the exact additive fixture at /tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean.",
+       :consumer-equation
+       "At Fin.last n, horizontalCount is the cardinality of true positions and verticalCount is the cardinality of false positions.",
+       :consumer-residual
+       "Use filtered-cardinality invariance under adjacent transposition to package balanced and path swaps and prove their common deleted face.",
+       :declarations
+       ["horizontalCount_last_eq_card_filter"
+        "verticalCount_last_eq_card_filter"],
+       :gates
+       ["Verify fixture SHA256 f2d795b7b39602eb881503a501bef7e30cf25773b4cea4c4bda245b6dbc430ac before editing."
+        "Verify checkpoint67 evidence points to its immutable artifact."
+        "Preserve every existing declaration."
+        "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexWordPrefixCounts."
+        "Reproduce standard-only axiom audits for both new theorems."
+        "Run placeholder, forbidden-declaration, warning, whitespace, exact two-file scope and both-ledger checks."
+        "Commit the scoped implementation and confirm no swap, face, sign, cancellation, cross-product or closure theorem is added."]},
+      :id
+      :oriented-checkpoint77-promoted-product-simplex-terminal-word-counts-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint77-checkpoint67-transition-and-consumer-refill-1],
+      :current-residual
+      "Checkpoint67 evidence is immutable, but the terminal all-position count characterizations remain only in a compiled fixture.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: terminal word counts and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint78-terminal-word-counts-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint77-promoted-product-simplex-terminal-word-counts-1],
+      :current-residual
+      "Measure terminal-count promotion separately from adjacent corners, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: checkpoint67 recurrence transition and renewed consumer eligibility",
@@ -46818,6 +46947,78 @@
     :oriented-checkpoint76-promoted-evidence-shape-transitions-and-consumer-refill-1],
    :current-residual
    "Measure checkpoint67's transition separately from terminal-count promotion, adjacent corners, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Promote only the two compiled terminal-count characterizations into ProductSimplexWordPrefixCounts and document them. Preserve every existing declaration. Do not define swaps, package balanced words or paths, compare faces, assign signs, cancel chains, construct a cross product or claim closure.",
+   :phase :implementation,
+   :state :blocked,
+   :scope
+   ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+    "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: promoted terminal word-count characterizations",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use an arbitrary Boolean word on Fin n; no balance, simplex, coefficient, orientation or bounded-degree hypothesis is required.",
+    :route-step
+    "Supplies terminal-count enumeration immediately before adjacent-swap balance preservation on the t03J05, t96J06 and t97A04 routes.",
+    :implementation
+    "Promote the exact additive fixture at /tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean.",
+    :consumer-equation
+    "At Fin.last n, horizontalCount is the cardinality of true positions and verticalCount is the cardinality of false positions.",
+    :consumer-residual
+    "Use filtered-cardinality invariance under adjacent transposition to package balanced and path swaps and prove their common deleted face.",
+    :declarations
+    ["horizontalCount_last_eq_card_filter"
+     "verticalCount_last_eq_card_filter"],
+    :gates
+    ["Verify fixture SHA256 f2d795b7b39602eb881503a501bef7e30cf25773b4cea4c4bda245b6dbc430ac before editing."
+     "Verify checkpoint67 evidence points to its immutable artifact."
+     "Preserve every existing declaration."
+     "Compile the fixture and canonical target; run lake build ConstructionTargets.ProductSimplexWordPrefixCounts."
+     "Reproduce standard-only axiom audits for both new theorems."
+     "Run placeholder, forbidden-declaration, warning, whitespace, exact two-file scope and both-ledger checks."
+     "Commit the scoped implementation and confirm no swap, face, sign, cancellation, cross-product or closure theorem is added."]},
+   :id
+   :oriented-checkpoint77-promoted-product-simplex-terminal-word-counts-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint77-checkpoint67-transition-and-consumer-refill-1
+    :oriented-checkpoint77-checkpoint67-transition-and-consumer-refill-1],
+   :current-residual
+   "Checkpoint67 evidence is immutable, but the terminal all-position count characterizations remain only in a compiled fixture.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: terminal word counts and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint78-terminal-word-counts-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint77-promoted-product-simplex-terminal-word-counts-1
+    :oriented-checkpoint77-checkpoint67-transition-and-consumer-refill-1],
+   :current-residual
+   "Measure terminal-count promotion separately from adjacent corners, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
