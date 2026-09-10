@@ -13534,6 +13534,17 @@
       "Python exact committed scope audit pinned to 7ba06a9e and clean tracked checkout verification",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789004781629-17571-7b47e35b",
+     :commands
+     ["git show 7ba06a9e --"
+      "Python read-only audit: exact scope, canonical Main and repair-note hashes, old/corrected statement hashes, two-parenthesis repair, preserved definitions/refutation and placeholder accounting"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 702d83b9:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --check"],
+     :finding
+     "Both stale DAG entries and the closure record accurately describe specification repair plus corrected closure, not unchanged frozen closure or intrinsic projective differential comparison. Evidence matches reviewed implementation6f475b3c and its independent PASS. Historical refutation and other unresolved defects are preserved. Exact two-document scope; no Lean changes; documentation placeholder delta0. No ledger edits."},
     :axiom-evidence :reviewed-implementation,
     :commit "7ba06a9ebac26ba95c30d53f10001ff175679f2b",
     :changed-paths
@@ -13550,7 +13561,7 @@
     :implementation-commit "6f475b3c40e2a2528a0efd7e17c89f8f1af904a7",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
@@ -13581,7 +13592,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: corrected radial-level uptake and subdivision homotopy",
