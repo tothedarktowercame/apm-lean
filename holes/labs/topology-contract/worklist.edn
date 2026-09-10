@@ -67380,6 +67380,18 @@
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789044618786-18609-b8f4f48f",
+     :commands
+     ["git show 62df0a41d2bae9d71b72d984aa95fdad3b402863:ConstructionTargets/CoefficientCompactComplementSmallComparison.lean > /tmp/CoefficientCompactComplementSmallComparison.review2.lean"
+      "sha256sum /tmp/CoefficientCompactComplementSmallComparison.review2.lean"
+      "python3 <comment-stripped placeholder and nine declaration-header hash audit>"
+      "lake env lean /tmp/CoefficientCompactComplementSmallComparison.review2.lean"
+      "git show --check --oneline 62df0a41d2bae9d71b72d984aa95fdad3b402863"],
+     :finding
+     "PASS: evidence-only repair pins the reproducible cover and overlap hashes; all nine declaration hashes, exact fixture and dependency hashes, zero placeholders, compilation, standard-only axioms, scope, orientations and representation boundaries verify."},
     :commit "62df0a41d2bae9d71b72d984aa95fdad3b402863",
     :changed-paths [],
     :fixture
@@ -67390,7 +67402,7 @@
     :axiom-audit-count 6,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementSmallComparison.lean"],
    :dag-node
@@ -67492,7 +67504,7 @@
      "The compact-complement geometry is now banked. Compiled exactly one further prerequisite: its Boolean cover by the complements of K and L is open and exhaustive; the overlap is the inverse image of the complement of K union L; cover-small coefficient homology computes the ambient complement; and the restricted cover computes the actual relative pair with that overlap in every natural degree. The Mayer-Vietoris arrow transport to the four original relative pairs, localization monicity, dimension vanishing and fundamental classes remain unproved.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
