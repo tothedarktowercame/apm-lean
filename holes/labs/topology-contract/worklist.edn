@@ -67324,12 +67324,17 @@
    {:placeholder-after 0,
     :placeholder-delta 0,
     :residual
-    "Transport the signed subcomplex sequence through these comparison isomorphisms and coefficient excision, proving equality with the requested relative-pair restriction arrows and connecting map. Localization monicity, dimension vanishing and fundamental classes remain subsequent.",
+    "Transport the signed subcomplex sequence through these comparison isomorphisms and coefficient excision, proving equality with the requested relative-pair restriction arrows and connecting map. Localization monicity, dimension vanishing and fundamental classes remain subsequent. Ledger untouched.",
     :dependency-hashes
     {:CoefficientCompactComplementGeometry
      "b6c94bbe9598cec21e4ac54d255479a99045372efc91dbb6c5e95b84b206cdaf",
      :CoefficientSubcomplexMayerVietoris
      "bed519ae21e3a1bad02abf9775eb734bcec6bb3c4e8f41a98cec894be2cf71e9"},
+    :repair
+    {:kind :evidence-only,
+     :lean-change false,
+     :finding
+     "The previous extractor required the outer assignment to precede a newline, by, or rfl. It therefore skipped the inline bodies of cover and overlap and hashed through later declarations. Extraction through the first whitespace-prefixed := reproduces the reviewer hashes. No Lean repair or new commit is required."},
     :outcome :done-unreviewed,
     :warnings [],
     :statement-hashes
@@ -67338,7 +67343,7 @@
      :relativeHomologyIso
      "43ec4881604592f7eaf745f008410beed4fee364a8116f23881e9b42b6b638af",
      :overlap
-     "c64e6bd3fe586e90626fda9b97f39e83065d98c7be45ec3d89b3f25a49c1493a",
+     "792209d3ca055df9ba2d9d96ec3d76ccdd3aa089bad98afa6923724d0ec74515",
      :relativeHomologyIso_hom
      "17ca151195ca512d98ba536d97886f5b6422a59f25ba3409259c6279a7dc091c",
      :ambientHomologyMap_isIso
@@ -67346,7 +67351,7 @@
      :ambientHomologyIso
      "101aea080cc7f886dbe0b5ece5ffc060f8c2bdc51392b070477332cafe25931b",
      :cover
-     "b967af2f6e05d547bd24d9d5ecedd0845aa6fb9f32db374f40e105d3f6a56d5d",
+     "cb470b608544a2f83045ee8d5580d4f02e3c688c1840cb41963da7992ba72682",
      :cover_covers
      "0b425d33702b93eba4b4934719c74656ddf2dc65325e4e02c23bb0326cc231f0",
      :cover_open
@@ -67356,45 +67361,36 @@
     :placeholder-before 0,
     :commands
     [{:cmd
-      "sha256sum /tmp/CoefficientCompactComplementSmallComparison.lean ConstructionTargets/CoefficientCompactComplementGeometry.lean ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean",
+      "sha256sum /tmp/CoefficientCompactComplementSmallComparison.lean ConstructionTargets/CoefficientCompactComplementSmallComparison.lean ConstructionTargets/CoefficientCompactComplementGeometry.lean ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean",
       :exit 0}
      {:cmd
-      "lake build ConstructionTargets.CoefficientCompactComplementGeometry ConstructionTargets.CoefficientSubcomplexMayerVietoris",
+      "cmp /tmp/CoefficientCompactComplementSmallComparison.lean ConstructionTargets/CoefficientCompactComplementSmallComparison.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: extract each complete declaration type through its first whitespace-prefixed outer := and hash all nine headers",
       :exit 0}
      {:cmd
       "lake env lean ConstructionTargets/CoefficientCompactComplementSmallComparison.lean",
       :exit 0}
-     {:cmd
-      "Python read-only audit: exact fixture equality, pinned SHA256, comment-stripped zero placeholders and nine complete declaration-header hashes",
+     {:cmd "Python comment-stripped placeholder audit", :exit 0}
+     {:cmd "git show --check 62df0a41d2bae9d71b72d984aa95fdad3b402863",
       :exit 0}
      {:cmd "git diff --check", :exit 0}
-     {:cmd "git diff --exit-code -- problems ConstructionTargets",
-      :exit 0}
+     {:cmd "git status --short", :exit 0}
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-      :exit 0}
-     {:cmd "git diff --cached --check", :exit 0}
-     {:cmd "git status --short", :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-10",
-     :job "invoke-1789044295360-18600-9a7445ef",
-     :finding
-     "Two frozen declaration-header pins are non-reproducible from the exact fixture: cover recorded b967af2f6e05d547bd24d9d5ecedd0845aa6fb9f32db374f40e105d3f6a56d5d but recomputes cb470b608544a2f83045ee8d5580d4f02e3c688c1840cb41963da7992ba72682; overlap recorded c64e6bd3fe586e90626fda9b97f39e83065d98c7be45ec3d89b3f25a49c1493a but recomputes 792209d3ca055df9ba2d9d96ec3d76ccdd3aa089bad98afa6923724d0ec74515. The same method reproduces the other seven hashes exactly."},
+      :exit 0}],
     :commit "62df0a41d2bae9d71b72d984aa95fdad3b402863",
-    :changed-paths
-    ["ConstructionTargets/CoefficientCompactComplementSmallComparison.lean"],
+    :changed-paths [],
     :fixture
     {:path "/tmp/CoefficientCompactComplementSmallComparison.lean",
      :sha256
      "e510ba7b8399a61480d380d5711d81530444577be01b81a1d6ee83808ac45708",
      :exact-promotion true},
-    :finding
-    "Exact fixture promoted. The actual Boolean open cover of the complement of K intersection L, its overlap identification with the complement of K union L, and absolute and relative cover-small homology comparisons compile for arbitrary compact K and L, commutative-ring coefficients and every natural degree. Ledger untouched.",
     :axiom-audit-count 6,
     :seat "codex-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementSmallComparison.lean"],
    :dag-node
