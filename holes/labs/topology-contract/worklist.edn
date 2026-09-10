@@ -57957,6 +57957,18 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789005526122-17601-7a24f98f",
+     :commands
+     ["git show 9b6944bcb06fa7b8772c09d5cfb5e0ef792e6d69"
+      "Inspect repair commit 6f475b3c, STATEMENT-REPAIR.md and recorded codex-11 PASS"
+      "Independent old/corrected file and statement hashes, repair-note hash, preserved prefix and placeholder audit"
+      "git show --format= --check 9b6944bc"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"],
+     :finding
+     "Author codex-6 differs from reviewer. Exactly two scoped documents changed. Canonical, old/corrected statement and repair-note hashes reproduce; definitions and old zero-vector refutation remain verbatim. Documentation accurately records the precedence repair and implementation-only 1-to-0 reduction, with warning-free standard-axiom evidence from codex-11. Existing closure record is retained, not counted again; intrinsic projective-derivative comparison remains explicitly absent. Whitespace clean; 448 ledger items validate; no edits."},
     :axiom-evidence
     "Independent codex-11 PASS invoke-1789002417270-17501-59e6c3e7 records warning-free compilation and standard-only audits.",
     :commit "9b6944bcb06fa7b8772c09d5cfb5e0ef792e6d69",
@@ -57970,7 +57982,7 @@
     :finding
     "The corrected-closure record was already present. Reverified its evidence, identified the independent reviewer and explicitly retained the absent intrinsic comparison. Existing records preserve the two-parenthesis repair, original zero-vector refutation, both statement hashes and implementation-only 1-to-0 reduction. No Lean or ledger changes; worktree clean. Validator reports 448 items OK."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["TOPOLOGY-DEPENDENCY-DAG.md"
     "docs/TN-topology-closure-experiments.md"],
@@ -58000,7 +58012,7 @@
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
