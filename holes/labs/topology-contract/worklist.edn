@@ -69262,6 +69262,23 @@
      {:cmd "git commit -m 'Add compact support restriction maps'",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789055100255-18889-6ace3589",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r be68fdd59a2fd2f9a77f73f2c488a27347834d8a"
+      "git show be68fdd59a2fd2f9a77f73f2c488a27347834d8a:ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean | sha256sum"
+      "sha256sum /tmp/CoefficientCompactSupportRestrictionMaps.lean"
+      "git show be68fdd59a2fd2f9a77f73f2c488a27347834d8a:ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean | sha256sum"
+      "git show be68fdd59a2fd2f9a77f73f2c488a27347834d8a:ConstructionTargets/CoefficientRadialPair.lean | sha256sum"
+      "git diff --exit-code be68fdd59a2fd2f9a77f73f2c488a27347834d8a -- ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean"
+      "lake env lean ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean"
+      "Python read-only audit: recompute seven complete declaration-header SHA256 hashes including omit-prefixes and comment-stripped placeholder count"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check"],
+     :finding
+     "Recorded commit has exact one-file scope; fixture SHA256 d511cdea24b570aff04d8a47f5d53566a370539dd31bf252f49776ce13bf9ea6 and dependency SHA256 values c0b86527a652fcb4e131ef24eb9b342a69190bf0d6ef9ee62eee118f6cba2e77 and c11a2ec7239b672a0ae6a6037c2d764fa6d2c7b3c60717b33fb05d0c644ad838 match; all seven frozen statement hashes reproduce; zero placeholders; Lean compiles without warnings with only standard axioms; relative-pair restriction directions and biproduct projections are correct, with no unsupported sign, connecting morphism, exactness, excision, vanishing, or fundamental-class claim."},
     :commit "be68fdd59a2fd2f9a77f73f2c488a27347834d8a",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean"],
@@ -69276,7 +69293,7 @@
     :axiom-audit-count 7,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactSupportRestrictionMaps.lean"],
    :dag-node
@@ -69368,7 +69385,7 @@
      "The banked excision theorem does not by itself identify the absolute complement Mayer-Vietoris sequence with the requested relative sequence. Compiled exactly one required relative-map prerequisite instead: the actual identity-induced pair maps from H(X,X minus (K union L)) to H(X,X minus K) and H(X,X minus L), their biproduct lift, and both projection identities. Comparison with the transported complement arrow, its required sign convention, the relative connecting morphism and exactness remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
