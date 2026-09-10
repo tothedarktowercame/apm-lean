@@ -13319,86 +13319,107 @@
    :stop-condition
    "No supplied chain homotopy, contraction identity, coefficient-change isomorphism or small-chain comparison. Do not claim smallness, excision or sphere homology.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Preservation and eventual smallness, positive-degree small-chain comparison, relative excision and sphere suspension remain before rational S2 H1/H2.",
-     :axiom-audits 7,
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure and build-loop rules, reviewed dependency receipts and integral/coefficient prism APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientSingularPrism.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientSingularPrism.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSingularPrism.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial fixture compilation",
-       :exit 1,
-       :correction
-       "Restored the final line omitted while extracting the boundary proof."}
-      {:cmd "Initial homotopy assembly compilation",
-       :exit 1,
-       :correction
-       "Replaced an unrestricted commutativity rewrite that selected a dependent natural-number index."}
-      {:cmd "First homotopy and example compilation",
-       :exit 1,
-       :correction
-       "Made the degree-map and identity components explicit before additive normalization; replaced expensive example elaboration with a direct rewrite by the proved prism identity."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientSingularPrism.lean",
-      :sha256
-      "021c6faedc9e50031d64ecfff2a3d15604ebfff810b5301841cbf3b45fdd3237"},
-     :finding
-     "Constructed the realized singular prism, geometric and actual simplicial face transport, and every boundary equation over ModuleCat R. The actual subdivisionHomotopy runs from singularSubdivision R to identity. Its sign is dT + Td = subdivision - identity; the lower correction is explicitly zero in degree zero. Integer and rational standard-edge equations compile. Reviewed vertex-prism constructions are reused.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientSingularPrism.lean"
-       "ConstructionTargets/CoefficientSingularPrism.md"],
-      :acceptance
-      {:namespace "ConstructionTargets.CoefficientSingularPrism",
-       :implementation
-       "Promote the complete compiled fixture and document the sign convention, coefficient object, universes and downstream limits.",
-       :declarations
-       ["singularPrismDegree"
-        "singularGenerator_singularPrismDegree"
-        "prismFace_transport"
-        "singularPrismCorrection"
-        "singularGenerator_prismCorrection_succ"
-        "singularGenerator_prism_boundary"
-        "singularGenerator_prismCorrection"
-        "singularPrism_identity"
-        "prismComponents"
-        "prismComponents_succ"
-        "subdivisionHomotopy"
-        "actual_prism_face"
-        "degree_zero"
-        "standard_edge_equation"
-        "integral_standard_edge"
-        "rational_standard_edge"],
-       :hypotheses
-       "R and X are Type 0; R is a commutative ring and X is an arbitrary topological space. Chains use coefficient object ModuleCat.of R R. No nonemptiness or connectedness hypothesis.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before promotion."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSingularPrism."
-        "Reproduce all seven standard-only axiom audits and both standard-edge specializations."
-        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit scoped implementation."],
-       :stop-condition
-       "Do not claim preservation, eventual smallness, small-chain comparison, excision or sphere homology."}},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Preservation and eventual smallness, positive-degree small-chain comparison, relative excision and sphere suspension remain before rational S2 H1/H2. No smallness, excision, sphere homology or frozen closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :seven-standard-only-audits :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 7,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 17 existing dependency warnings; both direct compilations had zero warnings."],
+    :statement-hashes
+    {"prismComponents_succ"
+     "dae765fe683a3b9b602bbced0634e4bf1cb4685e4621088b5d09842f895a5aab",
+     "subdivisionHomotopy"
+     "62d65e559ee74d47622b0538f6bf6345a6445f81d40bfff4574646d8a615d4c9",
+     "singularPrismCorrection"
+     "e4f5c7feb37fc39e394beb1c51113f7b859f50bf32d6511c1b2f8d149635a05f",
+     "singularGenerator_prismCorrection_succ"
+     "eeb4a49ec7caaff32df827e44a2abbd902428e11824f8b60c3f798480f9e280b",
+     "degree_zero"
+     "226d7f363380b3d2bb36a10fad0ffa31a879b3b1d084eeda1c7b6af5275e04b3",
+     "singularPrism_identity"
+     "217fdcb6f4d75c7dd38c018d63c5cf2b19330960837428ae0da496ae2c59990d",
+     "integral_standard_edge"
+     "c32008594c32a845d19ca97d51e9c2ae00b5a77022b1e8440906efab12d244dd",
+     "standard_edge_equation"
+     "33789e15595cd8ff218263716351d9c17deaae8c1572540e6c6790e3fce2f484",
+     "singularPrismDegree"
+     "d6556e2778a8a31750521f776f8ebe22042722f6fda0ee507b09672f7a4a7a56",
+     "singularGenerator_prismCorrection"
+     "e68786b7c1bf4926004357cb332db07f9754e69f948132fd492de28193834594",
+     "actual_prism_face"
+     "9e7f31687ad10b0a856b78d63847b3df494acb8fcfcd1b66c3b225d7def50674",
+     "prismComponents"
+     "0ba883c74155d28ac06c0750883a9453955ef4b8893b0b4e07ba9efcd20c75ca",
+     "singularGenerator_singularPrismDegree"
+     "572eac2039c9d6b2272a613dd01b64efbaf34b5c2ddbd4ee5b8bd997a7e3fa63",
+     "singularGenerator_prism_boundary"
+     "1d2a5069cef766c22c2bff1583a14f8153d97d87ecf6a3569ccab2a3e8a76c00",
+     "prismFace_transport"
+     "f313c6c334b5f980efd8e9fce6ecdf1616cda9e0e844aec20ce50f27c1fea469",
+     "rational_standard_edge"
+     "c3b1cda497a947c0d58ffee5b1fd9633739c4bf10aa3475452d65bf8870d7fa6"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "Read DAG, closure stop rules and dependency PASS receipts",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientSingularPrism.lean", :exit 0}
+     {:cmd "Python verify fixture SHA256 and promote exact fixture",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientSingularPrism.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientSingularPrism.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientSingularPrism",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientSingularPrism.lean /tmp/CoefficientSingularPrism.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, seven standard-only audits per compilation, warning and declaration-hash audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope audit and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct coefficient-general singular subdivision homotopy\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope audit pinned to eea08bb2 and clean tracked checkout verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "eea08bb2c491498ef19b7024ccf5f86d9d6c40df",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSingularPrism.lean"
+     "ConstructionTargets/CoefficientSingularPrism.md"],
+    :fixture
+    {:path "/tmp/CoefficientSingularPrism.lean",
+     :sha256
+     "021c6faedc9e50031d64ecfff2a3d15604ebfff810b5301841cbf3b45fdd3237"},
+    :finding
+    "Promoted the exact fixture and documented coefficient object, universes, sign and limits. The realized singular prism satisfies actual face transport and every boundary equation, constructing Homotopy from subdivision to identity with sign dT + Td = subdivision - identity and zero lower correction in degree zero. Integer and rational standard-edge equations compile. Focused build passed with 8261 jobs.",
+    :statement-hash-method
+    "SHA256 of declaration text beginning with theorem or def, excluding preceding attributes, and ending immediately before the space preceding := or where; namespace ConstructionTargets.CoefficientSingularPrism.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSingularPrism.lean"
     "ConstructionTargets/CoefficientSingularPrism.md"],
