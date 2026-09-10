@@ -71384,9 +71384,58 @@
    :consumer "t98A01",
    :stop-condition
    "Require an explicit equivalence or finite-cardinality proof showing the kernel of multiplication by five on UnitAddCircle has exactly five elements; do not infer polygon genus invariance or covering Euler multiplicativity.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "After promotion, reuse the reviewed fiber-to-kernel equivalence to obtain five-element torus fibers and package kernel translations as deck homeomorphisms. Polygon genus invariance, genus-zero representation and Euler multiplicativity remain independent.",
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:fixture "/tmp/UnitAddCircleFiveTorsionCardinality.lean",
+      :fixture-sha256
+      "44fc40ba218f56ce9eae68997faadf6a755164ac4f8bd2d77d69596777694c39",
+      :implementation
+      "Promote the exact fixture. Compile finFiveToKernel, finFiveToKernel_bijective, finFiveEquivKernel and fiveKernel_natCard. The explicit equivalence sends m in Fin 5 to the UnitAddCircle class of m/5, proves kernel membership using AddCircle.nsmul_eq_zero_iff, proves injectivity using the canonical half-open representative interval, and proves surjectivity from the same five-torsion classification. Conclude that the kernel of nsmulAddMonoidHom 5 on UnitAddCircle has Nat.card five. Preserve the exact UnitAddCircle kernel representation and arbitrary downstream fiber equivalences. Require zero placeholders, no warnings and standard-only axioms. Do not claim the torus product covering, deck transitivity, polygon genus invariance, genus-zero representation or Euler multiplicativity.",
+      :commands
+      ["lake env lean ConstructionTargets/UnitAddCircleFiveTorsionCardinality.lean"],
+      :axioms :standard-only,
+      :placeholder-before 0,
+      :placeholder-after 0},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "lake env lean /tmp/UnitAddCircleFiveTorsionCardinality.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/UnitAddCircleFiveTorsionCardinality.lean problems/t98A01/lean/Main.lean",
+       :exit 0}
+      {:cmd
+       "python3 comment-stripped placeholder-and-three-declaration audit over /tmp/UnitAddCircleFiveTorsionCardinality.lean",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/UnitAddCircleFiveTorsionCardinality.lean",
+       :exit 1,
+       :correction
+       "The initial explicit representative used an ambiguous real-to-AddCircle coercion and did not discharge the half-open interval bounds. Added explicit UnitAddCircle coercions, simplified the period-one representative formula, and proved both interval bounds before the successful acceptance compile."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/UnitAddCircleFiveTorsionCardinality.lean",
+      :sha256
+      "44fc40ba218f56ce9eae68997faadf6a755164ac4f8bd2d77d69596777694c39",
+      :placeholder-count 0},
+     :finding
+     "A complete explicit equivalence Fin 5 ≃ (nsmulAddMonoidHom (α := UnitAddCircle) 5).ker compiles. Its forward map is m ↦ m/5 modulo one; AddCircle.nsmul_eq_zero_iff supplies membership and surjectivity, while uniqueness in the interval [0,1) supplies injectivity. Nat.card_congr then gives kernel cardinality five. The unrelated pre-existing untracked ProductSimplexPathEndpoints files were left untouched.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/UnitAddCircleFiveTorsionCardinality.lean"]},
+     :seat "codex-12"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/UnitAddCircleFiveTorsionCardinality.lean"],
    :dag-node
    "COVERING CLASSIFICATION / five-torsion fiber cardinality",
    :acceptance
