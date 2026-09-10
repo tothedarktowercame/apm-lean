@@ -62214,8 +62214,60 @@
   {:consumer "t00J02",
    :stop-condition
    "Require actual derivative identification and normalized-atlas injectivity; no supplied immersion or alternative atlas.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Actual derivative identification and injectivity compile for exactly the banked chosen and normalized atlases, preserving inherited topology, original product norm and weaker backward_injective hypotheses. Equalizer containment and dimension comparison for exact range equality remain; no consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:backward_injective
+     "b919a31b86ca2f70f2ef70153a29385596ecc62f1f1b3067b2cd51390db41bd6",
+     :derivative_eq
+     "a34083183369e31553cbe65fc4bda4e625ec84d2925c5ca09ffc7588bc8a535f",
+     :inclusion_injective
+     "8c0a10e90f28a23f93215b9d3ff85e54ed645ee852e2913216f416082f4cf693",
+     :Immersion
+     "9252de88af754aa047abde1b6f927db3c05a0ab25515571f9ff3002ecc943cf1",
+     :normalized_injective
+     "8643fb0d1535de52181abbc9576b8a63ac7050a479f94160ceb2f3a82df5a817"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/ManifoldTargetIncidenceImmersion.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only fixture audit: zero placeholders and complete declaration-header SHA256 hashes",
+      :exit 0}
+     {:cmd
+      "set -o pipefail; lake build ConstructionTargets.ManifoldTargetIncidenceGlobalAtlas 2>&1 | tail -8",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ManifoldTargetIncidenceImmersion.lean ConstructionTargets/ManifoldTargetIncidenceImmersion.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ManifoldTargetIncidenceImmersion.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "c5d0be94674823aaf1b85f6c3152783d8430aef2",
+    :changed-paths
+    ["ConstructionTargets/ManifoldTargetIncidenceImmersion.lean"],
+    :fixture
+    {:path "/tmp/ManifoldTargetIncidenceImmersion.lean",
+     :sha256
+     "f3e5731b97600922ab8e6a49afba78a2aea5b9807500585772b4beed171dff5d"},
+    :axiom-audit-declarations 4},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ManifoldTargetIncidenceImmersion.lean"],
    :dag-node "TRANSVERSE-PULLBACK / normalized incidence immersion",
