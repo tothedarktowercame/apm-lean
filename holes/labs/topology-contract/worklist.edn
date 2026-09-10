@@ -55988,8 +55988,75 @@
   {:consumer "t00J02",
    :stop-condition
    "Require the actual open partial homeomorphism and all five specifications to compile; an equivalence without continuity and openness is insufficient.",
+   :evidence
+   {:placeholder-delta
+    {:consumer "t00J02", :before 1, :after 1, :delta 0, :fixture 0},
+    :residual
+    "Literal fiber transfer now supplies an actual open partial homeomorphism with exact domains, value formulas and center membership. Composition with extension-fiber charts, smooth overlaps, global manifold assembly and consumer uptake remain. No smooth-overlap or global-manifold claim; independent review remains.",
+    :gates
+    {:exact-promotion :pass,
+     :compile :pass,
+     :standard-only-axioms :pass,
+     :actual-open-partial-homeomorphism true,
+     :five-specifications :pass,
+     :inherited-topologies-preserved true,
+     :existing-apis-preserved true,
+     :scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"transfer"
+     "ec2af2af92438fcd9033c181e2a265b2ea0ad0ed3c79ab646ac2432206e398d4",
+     "source_eq"
+     "d48b3f6d3d5c2da1160176a39ffdc2c46156a89a103b2d77a17c749baee77c5d",
+     "target_eq"
+     "9f64c83b157362d58c493e85d453522cc6d3163712108db213a6b49590c5b78d",
+     "center_mem"
+     "4563d1357c6f1e6ffd8b26a450fb67939620568474563a562056cbaa2519b287",
+     "forward_eq"
+     "c8dad72e09a85612c120a850332c9713e2d9d6c0b40e2272c66d33ed5ddf1a10",
+     "backward_eq"
+     "96a5a975ace1ec4317ec4cd3fa4a702528e3ef2b42e72c55272430ff375f9a8b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author :codex-6,
+    :commands
+    [{:cmd
+      "Read DAG certification rules, closure policy, dependency review receipt and complete fixture",
+      :exit 0}
+     {:cmd "sha256sum /tmp/OpenPartialHomeomorphFiberTransfer.lean",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/OpenPartialHomeomorphFiberTransfer.lean ConstructionTargets/OpenPartialHomeomorphFiberTransfer.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/OpenPartialHomeomorphFiberTransfer.lean",
+      :exit 0}
+     {:cmd
+      "Python forbidden-token, constructor/specification hashes and consumer hash/placeholder audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 432 items OK; {:done 421, :needs-owner 1, :superseded 6, :open 2, :blocked 2}"}
+     {:cmd
+      "git diff --exit-code -- ConstructionTargets problems TOPOLOGY-DEPENDENCY-DAG.md holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --check and git diff --cached --check", :exit 0}
+     {:cmd "Scoped git add and git commit --only", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "e9f968b9d8581e1e8de257da264a6d59f989f019",
+    :changed-paths
+    ["ConstructionTargets/OpenPartialHomeomorphFiberTransfer.lean"],
+    :fixture
+    {:path "/tmp/OpenPartialHomeomorphFiberTransfer.lean",
+     :sha256
+     "4c22110a281a32a615b957f5c8eb3971079932906ecfe498f2bfb6ad77d6d7a8",
+     :placeholder-count 0},
+    :consumer-sha256
+    "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/OpenPartialHomeomorphFiberTransfer.lean"],
    :dag-node "REGULAR-PREIMAGE/SUBMERSION / literal fiber transfer",
