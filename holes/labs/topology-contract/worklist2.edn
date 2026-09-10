@@ -15145,20 +15145,94 @@
    :stop-condition
    "Bank only iterated homotopies, inclusion compatibility and identity action of subdivision iterates on homology. Do not claim that the small-chain inclusion induces an isomorphism.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientIteratedHomotopy.lean",
-      :sha256
-      "caacbdb193d1ac317c55572cea4eff0ddf682761bbafda2742dae6c79769c96a"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientIteratedHomotopy.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Use eventual factorization on actual cycles and bounding chains to prove surjectivity and injectivity of the inclusion-induced homology map, then assemble the all-degree isomorphism. No small-chain inclusion isomorphism or frozen closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :five-standard-only-audits :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 5,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 20 existing dependency warnings; both direct compilations had zero warnings."],
+    :statement-hashes
+    {"smallIterate"
+     "b017eb9034c155600d6616b732ad49732cc21b7fa8a11c27b0643a4d5384940e",
+     "absoluteHomotopy"
+     "b6e08c7542a282b61943e043f19e0d200b0dfe9204e175ad590cc77a872ee8dc",
+     "smallHomotopy"
+     "fe62db3754065578f5ca095acb016f123dd6e0f0e1f0413d2c07e4c75167bf4a",
+     "iterate_inclusion"
+     "472fae111387983ff4594d5fa0fe266cd01bb8065aaf62ad3e73edd28c841c06",
+     "absolute_homology_identity"
+     "0c96d4232d3fdc3890d8fe4a1619c00240f8a40ba7c23fdc1137fcb8b6fcbbe7",
+     "small_homology_identity"
+     "c645ab89f0dec59fa6724740272cfc595122e6f51e2359711bc8d4e8971a2654",
+     "integral_interval"
+     "0831f5f5c6a0a239ea6246e2bedbd930ebb0a912745eb3879ebecd5d54a5b00b",
+     "rational_interval"
+     "995eb135eb1331867d764d5c09b82ceada8868395a3901ffff42d117ffec00ff"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure stop rules and all dependency PASS receipts",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientIteratedHomotopy.lean", :exit 0}
+     {:cmd "Python verify fixture SHA256 and promote exact fixture",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientIteratedHomotopy.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientIteratedHomotopy.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientIteratedHomotopy",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientIteratedHomotopy.lean /tmp/CoefficientIteratedHomotopy.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, five standard-only audits per compilation, warning and eight declaration-hash audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope audit and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct iterated subdivision homotopies and homology identities\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope audit pinned to 42e4bb08 and clean tracked checkout verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "42e4bb083eec774f433dd1d223d89c4c3d4a5f37",
+    :changed-paths
+    ["ConstructionTargets/CoefficientIteratedHomotopy.lean"
+     "ConstructionTargets/CoefficientIteratedHomotopy.md"],
+    :fixture
+    {:path "/tmp/CoefficientIteratedHomotopy.lean",
+     :sha256
+     "caacbdb193d1ac317c55572cea4eff0ddf682761bbafda2742dae6c79769c96a"},
+    :finding
+    "Promoted the exact fixture and documented its hypotheses and limits. Constructed absolute and restricted iterated homotopies to identity, proved iteration commutes with actual inclusion, and proved identity action on homology in every degree. Integer/rational interval examples compile. Focused build passed with 8271 jobs.",
+    :statement-hash-method
+    "SHA256 of declaration text beginning with theorem or def, excluding preceding attributes, and ending immediately before the space preceding := or where; namespace ConstructionTargets.CoefficientIteratedHomotopy.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientIteratedHomotopy.lean"
     "ConstructionTargets/CoefficientIteratedHomotopy.md"],
