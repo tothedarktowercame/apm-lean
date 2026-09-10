@@ -62335,8 +62335,68 @@
   {:consumer "t03J04",
    :stop-condition
    "Require derived lift existence, uniqueness and restriction bijectivity with the actual standard-simplex specialization; no supplied lift comparison.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Lift evaluation and restriction bijections, equivalences, cardinality transport and actual standard-simplex specialization are compiled without finite-sheet or surjectivity assumptions. Finite lift sums on singular chains, boundary commutation and projection-transfer identity remain. No singular-chain transfer or consumer closure claimed.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789020695281-18024-d3039467"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:card_lifts
+     "8d1a9d973259ee3adb12bf081861089e026e57b6d14497107ce52cc6358bc0bd",
+     :evaluate
+     "f57e16b95bf2cf0941383eea1cd9ef3e1c38f8a5cf74b0792bffa10411c47f0d",
+     :Lifts
+     "4852b3ee21b140c44144bd218210b68356c6501812db595153697d0d12d6a79a",
+     :evaluate_bijective
+     "47fa3cd73c7ccca7ce89f79d913a263eb729c78a6b80ff6bcdfa41b0719c0053",
+     :restrictionEquiv
+     "377e3ac9b8e56de2352807a02a4f7a2492cec9437150bd664fd7234cb54b7eea",
+     :restrict_bijective
+     "ed05a4459d2bd96bb15039f67a60d10ed9782445c8e89b2d72f6881139013ef1",
+     :simplex_restriction_bijective
+     "648e3737b566225d908dbe27720e70fe6a6b16bc81d11df52f7f874f0b15d853",
+     :restrict
+     "eeba2d705aa7435439fdc864eb52ec019adeed3e96c93e97db1d6aa111813c9d",
+     :restrict_value
+     "586ed0c1a2ebc68741597b22ef533c64f20363107b1c569917b966ada7a9360f",
+     :evaluationEquiv
+     "fea86445d7a2082fc36a1bb3626a9dee689afd607b854cb21acbd6b4e07d7550"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd "sha256sum /tmp/CoveringLiftRestriction.lean", :exit 0}
+     {:cmd
+      "Python read-only fixture audit: zero placeholders and ten complete outer-delimited declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/CoveringLiftRestriction.lean ConstructionTargets/CoveringLiftRestriction.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoveringLiftRestriction.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "3830e6d3a77240a763f428b7d7d5412c19499a1f",
+    :changed-paths
+    ["ConstructionTargets/CoveringLiftRestriction.lean"],
+    :fixture
+    {:path "/tmp/CoveringLiftRestriction.lean",
+     :sha256
+     "169c6c05ef53f23054f7a230eed5d15a0be7770a459cd11b07cc85088d8d6a38"},
+    :axiom-audit-declarations 4},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoveringLiftRestriction.lean"],
    :dag-node "COVER-DEGREE / simplex lift restriction bijection",
    :acceptance
