@@ -38385,8 +38385,106 @@
   {:consumer :t03J05,
    :stop-condition
    "Bank only construction of the product simplex and canonical maximal nondegenerate path from the cumulative balanced-word order homomorphism, together with its objEquiv equations. Do not prove either word/path inverse law, define corner swaps, pair or cancel faces, prove sign changes, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:source-hashes
+    {"ConstructionTargets/ProductSimplexReconstructedPath.lean"
+     "bc8980b485e836a722b1aee041170e625464dcf8f6dc34b8969039354c68e20e",
+     "ConstructionTargets/ProductSimplexReconstructedPath.md"
+     "d9b1c7fd5b5cfad2e174166eede6a408f03eacf12a0f527d19be50791d41f46a"},
+    :placeholder-delta 0,
+    :residual
+    "Prove that stepWord of reconstructedPath returns the balanced word and that reconstruction of the balanced word extracted from a maximal path returns that path.",
+    :gates
+    {:canonical-compile :pass,
+     :whitespace :pass,
+     :objEquiv-symm-construction :pass,
+     :target-warnings :pass,
+     :maximal-nondegeneracy :pass,
+     :fixture-hash :pass,
+     :axiom-audits 2,
+     :fixture-byte-equality :pass,
+     :exact-scope :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :commit :pass,
+     :fixture-compile :pass,
+     :objEquiv-inverse-law :pass,
+     :forbidden-declaration-scan :pass,
+     :ledger-validation :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"reconstructedSimplex"
+     "27d5ce51934c9437e3a8529c839b29263ee25afe2d5e0e9fe975878322316e9e",
+     "reconstructedSimplex_objEquiv"
+     "b19095004af389cd72075eaef448fa0906a13b4d26dac012f41791ff787e8a66",
+     "reconstructedPath"
+     "f109181f265e3883251632a4fcf28b3dde697b4d87f2d6137f4f9058264a70de"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "readlink -f .lake/packages; read required DAG, design, experiment and dependency-receipt sources; inspect ProductSimplexMaximalPaths and ProductSimplexCumulativeOrderHom",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint61-reconstructed-path/ProductSimplexReconstructedPath.lean; inspect exact fixture and dependency receipt",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint61-reconstructed-path/ProductSimplexReconstructedPath.lean ConstructionTargets/ProductSimplexReconstructedPath.lean; sha256sum fixture, canonical Lean source and documentation",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint61-reconstructed-path/ProductSimplexReconstructedPath.lean; lake env lean ConstructionTargets/ProductSimplexReconstructedPath.lean; lake build ConstructionTargets.ProductSimplexReconstructedPath",
+      :exit 0}
+     {:cmd "lake env lean /tmp/codex14-reconstructed-path-audit.lean",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ProductSimplexReconstructedPath.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace, declaration-presence and statement-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; stage exact two-file scope; git diff --cached --check; git commit -m 'Reconstruct maximal product simplex paths'",
+      :exit 0}
+     {:cmd
+      "git rev-parse HEAD; git show --check --stat --oneline HEAD; git ls-tree HEAD for exact scope; sha256sum canonical files; git status --short",
+      :exit 0}],
+    :commit "842928fff867da5ea0a0c422aa927ba47b58d3df",
+    :git-blobs
+    {"ConstructionTargets/ProductSimplexReconstructedPath.lean"
+     "2a5c3d8a0c846ce76d9e2eb7e57792a1710330d1",
+     "ConstructionTargets/ProductSimplexReconstructedPath.md"
+     "eaca4f2a3812164cc039460e1468ec5030d882f4"},
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexReconstructedPath.lean"
+     "ConstructionTargets/ProductSimplexReconstructedPath.md"],
+    :dependency-warnings
+    [{:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 2960,
+      :kind :unused-tactic}
+     {:path "ConstructionTargets/SingularSubdivision.lean",
+      :line 3580,
+      :kind :unnecessary-simpa}],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint61-reconstructed-path/ProductSimplexReconstructedPath.lean",
+     :sha256
+     "bc8980b485e836a722b1aee041170e625464dcf8f6dc34b8969039354c68e20e",
+     :canonical-path
+     "ConstructionTargets/ProductSimplexReconstructedPath.lean",
+     :canonical-sha256
+     "bc8980b485e836a722b1aee041170e625464dcf8f6dc34b8969039354c68e20e",
+     :git-blob "2a5c3d8a0c846ce76d9e2eb7e57792a1710330d1",
+     :placeholder-count 0},
+    :finding
+    "The exact recorded fixture is promoted canonically. reconstructedSimplex is prodStdSimplex.objEquiv.symm applied to cumulativeOrderHom, and reconstructedSimplex_objEquiv follows from the equivalence inverse law. reconstructedPath uses mem_maximalPath_iff and cumulativeOrderHom_coordinate_sum to package the simplex as a maximal nondegenerate path. No word/path inverse law, corner swap, sign change, face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection result or consumer closure was introduced.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexReconstructedPath.lean"
     "ConstructionTargets/ProductSimplexReconstructedPath.md"],
