@@ -24306,140 +24306,195 @@
    :evidence
    {:probe
     {:concurrent-reservations
-     [:coefficient-overlap-ambient-normalization-probe-refill45
-      :surface-nested-triangle-cover-margin-probe-refill45],
+     [:surface-nested-triangle-cover-margin-probe-refill45],
      :placeholder-delta 0,
      :residual
-     "Distinguished-chart recovery and explicit triple-overlap geometric composition remain in the parent. Reserved work, reviewed STOPs and refutations are preserved. No local constancy, orientation triviality, global class or frozen consumer closure is claimed.",
-     :axiom-audits 15,
-     :outcome :revise,
+     "The bounded overlap-transition proof obligations are assembled. Orientation compatibility or local constancy, global classes, localization and t98A02 gluing remain downstream. No transition-unit triviality or consumer closure is claimed; reviewed STOPs and refutations are preserved.",
+     :axiom-audits 37,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t98A02,
-      :stop-condition
-      "Bank the geometric chart-indexed comparison and its unit equations only. Do not duplicate reserved distinguished-chart recovery or claim explicit triple-overlap point-set composition, local constancy, orientation coherence or consumer closure.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/CoefficientChartTransitionUnit.lean",
-         :sha256
-         "e3f94ec9e7e0dcd4438b5c84ff78bc1cce3bbc08b0c152b511fda16326f06d36"},
-        :commands
-        [{:cmd
-          "lake env lean /tmp/CoefficientChartTransitionUnit.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientChartTransitionUnit.lean"
-       "ConstructionTargets/CoefficientChartTransitionUnit.md"],
-      :dag-node
-      "LOCAL ORIENTATION: geometric chart-indexed normalization comparison and transition unit",
-      :acceptance
-      {:namespace "ConstructionTargets.CoefficientChartTransitionUnit",
-       :implementation
-       "Promote the exact compiled fixture and document the distinction between the proved normalization-comparison cocycle and the remaining explicit triple-overlap geometric composition.",
-       :declarations
-       ["linear_scalar"
-        "isoUnit"
-        "isoUnit_action"
-        "chartNormalization"
-        "left_restriction"
-        "right_restriction"
-        "comparison"
-        "geometric_comparison"
-        "transitionUnit"
-        "scalar_action"
-        "chartGenerator"
-        "generator_change"
-        "comparison_cocycle"
-        "comparison_identity"
-        "comparison_inverse"
-        "unit_cocycle"
-        "unit_identity"
-        "unit_inverse"
-        "geometric_unit"
-        "integral_unit"
-        "rational_unit"],
-       :hypotheses
-       "R is a Type 0 commutative ring. M is Type 0, Hausdorff and charted on EuclideanSpace ℝ (Fin (m+2)). Each chart normalization requires membership of x in its actual chart source. No nontriviality, orientation, compactness, connectedness or transition-sign assumption is imposed.",
-       :consumer-equation
-       "For chart normalizations N_a and N_b, N_a inverse followed by N_b equals model normalization inverse followed by actual overlap homology followed by model normalization. Its value at one is a unit u_ab, its action is r mapped to u_ab*r, and generator_a = u_ab • generator_b. The constructed units satisfy u_ab*u_bc=u_ac, u_aa=1 and inverse(u_ab)=u_ba.",
-       :consumer-residual
-       "Use the separately reserved distinguished-chart comparison to recover CoefficientChartLocal.localIso, and assemble explicit triple-overlap point-set and pair-map composition. Local constancy, orientation compatibility and global localization remain downstream.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientChartTransitionUnit."
-        "Reproduce fifteen standard-only axiom audits and integer/rational geometric-unit examples."
-        "Audit both restriction identifications and the equality with the actual normalized overlap homology map."
-        "Verify unit inverse construction, scalar action and generator-change direction without a nontriviality assumption."
-        "Verify identity, inverse and cocycle equations and accurately document their normalization-comparison scope."
-        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :coefficient-general-geometric-chart-transition-unit-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:coefficient-general-chart-normalization-restriction-1
-       :coefficient-general-geometric-overlap-normalization-1],
-      :current-residual
-      "The common-neighborhood geometric comparison must be identified with chart-indexed normalization change before extracting its coefficient unit and generator-change equation.",
-      :other-consumers [:t01A02 :t03J05 :t96J06]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure experiments and build-loop design; inspect both ledgers, eight dependency PASS receipts and current distinguished-chart reservation",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientChartTransitionUnit.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientChartTransitionUnit.lean",
+       "Read DAG, closure experiments and build-loop design; inspect both ledgers, nine dependency PASS receipts and distinguished-normalization review",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientChartTransitionUnit.lean",
-       :exit 1,
-       :expected-exit 1}
+       "lake env lean -o /tmp/overlap40/ConstructionTargets/CoefficientDistinguishedNormalization.olean ConstructionTargets/CoefficientDistinguishedNormalization.lean",
+       :exit 0}
+      {:cmd
+       "cp -as /home/joe/code/apm-lean/.lake/build/lib/lean/ConstructionTargets/. /tmp/overlap40/ConstructionTargets/",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'LEAN_PATH=/tmp/overlap40:$LEAN_PATH lean /tmp/CoefficientOverlapTransition.lean' > /tmp/CoefficientOverlapTransition.compile.log 2>&1",
+       :exit 0}
+      {:cmd
+       "Python fixture SHA256, declaration and forbidden-placeholder audit",
+       :exit 0}
+      {:cmd
+       "Python compile-log audit: 37 standard-only axiom audits, zero warnings and errors",
+       :exit 0}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial chart-transition-unit fixture compilation",
+     [{:cmd "Initial direct fixture compilation",
        :exit 1,
        :correction
-       "Explicitly reduced the categorical identity evaluation in the generator-change proof before applying linearity. The corrected fixture and subsequent extended audited fixture compile successfully."}],
+       "The reviewed distinguished-normalization source lacked a compiled object. Compiled it into a temporary object directory."}
+      {:cmd "Initial compilation using temporary object directory",
+       :exit 1,
+       :correction
+       "The temporary ConstructionTargets namespace shadowed canonical objects. Added symlinks to existing canonical build artifacts in the temporary directory."}
+      {:cmd "Initial geometric-composition compilation",
+       :exit 1,
+       :correction
+       "Dependent MapsTo arguments prevented ordinary rewriting. Used congruence for composition and simplification for the identity map."}
+      {:cmd "Compilation after adding normalization comparison",
+       :exit 1,
+       :correction
+       "Explicitly included the openness hypothesis used by the geometric cocycle proof and removed an unused separation instance from the normalization-composition theorem."}
+      {:cmd "Compilation after adding geometric identity and inverse",
+       :exit 1,
+       :correction
+       "Corrected categorical identity simplification to match the right-associated composite. The final audited compilation succeeds."}],
+     :dependency-uptake
+     {:id :coefficient-overlap-ambient-normalization-probe-refill45,
+      :commit "3510365eedac863a7e69e71cefc9135cfd808f98",
+      :review "invoke-1789031537156-18288-dfb60dd1",
+      :path
+      "ConstructionTargets/CoefficientDistinguishedNormalization.lean",
+      :sha256
+      "514f0c1014720638f0cec1d327386e07e06b694c130dc0b73c1bd94134ebbfe4"},
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientChartTransitionUnit.lean",
+     {:path "/tmp/CoefficientOverlapTransition.lean",
       :sha256
-      "e3f94ec9e7e0dcd4438b5c84ff78bc1cce3bbc08b0c152b511fda16326f06d36"},
+      "8d609d6360e921428fb06fc330a7419f39b6ae7da3fe5a3bcf910cac8d4a826d",
+      :placeholder-count 0},
      :finding
-     "Exactly one complete compiled geometric chart-normalization comparison prerequisite is supplied. Restriction independence identifies common-neighborhood normalizations with full-chart normalizations. Their comparison equals the normalized actual overlap homology map. Evaluation at one constructs its coefficient unit; scalar action, correctly directed generator change, and normalization-comparison identity, inverse and cocycle equations compile. The parent is not GO: distinguished-chart recovery remains reserved, and explicit triple-overlap point-set/pair-map composition remains to be assembled.",
+     "The complete overlap packet compiles. Actual coordinate transitions on a common open neighborhood compose pointwise, on deleted-point relative cokernels, and on homology. Their normalized maps recover chart-indexed comparisons by restriction independence. Unit identity, inverse and triple-overlap cocycle equations follow through these actual compositions. Scalar action and generator change have explicit direction. The independently reviewed distinguished-chart normalization is reused to recover CoefficientChartLocal.localIso. Integer and rational examples compile.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientOverlapTransition.lean"
+       "ConstructionTargets/CoefficientOverlapTransition.md"],
+      :additional-depends-on
+      [:coefficient-overlap-ambient-normalization-probe-refill45],
+      :acceptance
+      {:namespace "ConstructionTargets.CoefficientOverlapTransition",
+       :implementation
+       "Promote the exact compiled fixture and document the complete geometric composition route, reusing the reviewed distinguished-normalization dependency.",
+       :declarations
+       ["coordinateTransition"
+        "coordinate_composition"
+        "deleted_iff"
+        "relativeTransition"
+        "relative_composition"
+        "homology_composition"
+        "relative_identity"
+        "relative_inverse"
+        "projection"
+        "ambient_square"
+        "ambient_homology_square"
+        "coordinate_formula"
+        "common_transition"
+        "triple"
+        "triple_open"
+        "triple_composition"
+        "modelCoordinates"
+        "normalizedTransition"
+        "normalized_composition"
+        "normalized_identity"
+        "normalized_inverse"
+        "ambient_comparison"
+        "normalization_comparison"
+        "chart_comparison"
+        "geometric_unit_cocycle"
+        "geometric_unit_identity"
+        "geometric_unit_inverse"
+        "distinguished"
+        "normalized_scalar"
+        "geometric_generator_change"
+        "triple_unit_cocycle"
+        "integral_triple"
+        "rational_triple"
+        "integral_recovery"
+        "rational_recovery"],
+       :hypotheses
+       "R and M are Type 0; R is a commutative ring. M is charted on EuclideanSpace ℝ (Fin (m+2)). Actual transitions use an open neighborhood U containing x and contained in the relevant chart sources. Ambient normalization comparison retains T2Space M. Relative-map composition holds in every natural homology degree; normalization uses m+2. No orientation or nontriviality assumption is added.",
+       :consumer-equation
+       "The normalized actual transition acts by u_ab, generator_a = u_ab • generator_b, u_aa = 1, inverse(u_ab) = u_ba, and u_ab*u_bc = u_ac. These unit equations are derived through actual geometric transition composition. The distinguished chart normalization equals CoefficientChartLocal.localIso.",
+       :axioms :standard-only,
+       :gates
+       ["Verify fixture SHA256 and the reviewed distinguished-normalization dependency before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientOverlapTransition."
+        "Reproduce 37 standard-only axiom audits and integer/rational triple-overlap and distinguished-recovery examples."
+        "Audit actual chart restrictions, coordinate formula, deleted-point preservation, projection equation and common-transition identification."
+        "Verify point-set, relative-chain and all-degree homology composition, identity and inverse equations."
+        "Verify ambient inclusion squares, normalization comparison and restriction to full-chart normalizations."
+        "Verify unit identity, inverse and cocycle proofs pass through actual normalized geometric composition; audit scalar and generator-change direction."
+        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]}},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientOverlapTransition.lean"
+    "ConstructionTargets/CoefficientOverlapTransition.md"],
    :dag-node
    "LOCAL ORIENTATION: actual coefficient-general overlap transition and normalization comparison",
    :acceptance
-   {:axioms :standard-only,
+   {:namespace "ConstructionTargets.CoefficientOverlapTransition",
+    :implementation
+    "Promote the exact compiled fixture and document the complete geometric composition route, reusing the reviewed distinguished-normalization dependency.",
+    :declarations
+    ["coordinateTransition"
+     "coordinate_composition"
+     "deleted_iff"
+     "relativeTransition"
+     "relative_composition"
+     "homology_composition"
+     "relative_identity"
+     "relative_inverse"
+     "projection"
+     "ambient_square"
+     "ambient_homology_square"
+     "coordinate_formula"
+     "common_transition"
+     "triple"
+     "triple_open"
+     "triple_composition"
+     "modelCoordinates"
+     "normalizedTransition"
+     "normalized_composition"
+     "normalized_identity"
+     "normalized_inverse"
+     "ambient_comparison"
+     "normalization_comparison"
+     "chart_comparison"
+     "geometric_unit_cocycle"
+     "geometric_unit_identity"
+     "geometric_unit_inverse"
+     "distinguished"
+     "normalized_scalar"
+     "geometric_generator_change"
+     "triple_unit_cocycle"
+     "integral_triple"
+     "rational_triple"
+     "integral_recovery"
+     "rational_recovery"],
     :hypotheses
-    "R is a Type 0 commutative ring; M is a Type 0 Hausdorff space charted on EuclideanSpace ℝ (Fin (m+2)). Use actual chartAt charts indexed by a and b and a point x lying in both sources. No orientation, compactness or connectedness is assumed.",
-    :probe
-    "Construct the actual common source neighborhood and the homeomorphism between its two chart-coordinate images, translating each image so that x maps to zero. Prove openness, distinguished-point membership, deleted-point equivalence and the actual point-set transition formula. Construct its coefficient-relative cokernel map and inverse, prove projection equations and compatibility with the two neighborhood inclusion maps. Normalize local homology at x using each chart by the reviewed neighborhood/model construction; recover CoefficientChartLocal.localIso when the chart index is x. Prove that the geometrically constructed overlap map induces the exact comparison of those two ambient normalizations. Extract the resulting unit of R, prove its scalar action and generator-change equation, and prove identity, inverse and triple-overlap cocycle equations through actual transition-map composition. Compile integer and rational examples. GO requires the complete placeholder-free actual-overlap fixture; REVISE requires exactly one compiled missing geometric overlap-pair comparison; STOP names independent foundations.",
+    "R and M are Type 0; R is a commutative ring. M is charted on EuclideanSpace ℝ (Fin (m+2)). Actual transitions use an open neighborhood U containing x and contained in the relevant chart sources. Ambient normalization comparison retains T2Space M. Relative-map composition holds in every natural homology degree; normalization uses m+2. No orientation or nontriviality assumption is added.",
     :consumer-equation
-    "Actual overlap coordinate transport computes the change between two chart-based local-homology normalizations at the same point, with an explicitly constructed unit and correctly directed generator-change equation.",
-    :consumer-residual
-    "Prove the compatibility or local-constancy properties required by an appropriate orientation structure, then construct global classes and localization before t98A02 gluing. A transition cocycle alone does not trivialize the orientation obstruction.",
+    "The normalized actual transition acts by u_ab, generator_a = u_ab • generator_b, u_aa = 1, inverse(u_ab) = u_ba, and u_ab*u_bc = u_ac. These unit equations are derived through actual geometric transition composition. The distinguished chart normalization equals CoefficientChartLocal.localIso.",
+    :axioms :standard-only,
     :gates
-    ["Compile complete fixture and record SHA256."
-     "Audit actual chart restrictions, common neighborhood, translated coordinate images and transition formula."
-     "Verify actual cokernel projection, inverse and neighborhood inclusion squares."
-     "Identify the geometric homology map with the normalization comparison; do not substitute detached isomorphism arithmetic."
-     "Verify unit action, generator change and identity/inverse/triple-overlap equations with explicit direction."
-     "Record integer/rational examples and standard-only axiom audits."
-     "Recheck both ledgers and preserve concurrent reservations, reviewed STOPs and refutations."]},
+    ["Verify fixture SHA256 and the reviewed distinguished-normalization dependency before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientOverlapTransition."
+     "Reproduce 37 standard-only axiom audits and integer/rational triple-overlap and distinguished-recovery examples."
+     "Audit actual chart restrictions, coordinate formula, deleted-point preservation, projection equation and common-transition identification."
+     "Verify point-set, relative-chain and all-degree homology composition, identity and inverse equations."
+     "Verify ambient inclusion squares, normalization comparison and restriction to full-chart normalizations."
+     "Verify unit identity, inverse and cocycle proofs pass through actual normalized geometric composition; audit scalar and generator-change direction."
+     "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
    :id :oriented-checkpoint40-coefficient-actual-overlap-transition-1,
    :kind :reusable-theorem,
    :depends-on
@@ -24454,7 +24509,9 @@
     :coefficient-general-geometric-chart-transition-unit-1],
    :current-residual
    "Pointwise chartAt local normalization is reviewed; its comparison across two actual chart neighborhoods containing the same point has not been constructed.",
-   :other-consumers [:t01A02 :t03J05 :t96J06]}
+   :other-consumers [:t01A02 :t03J05 :t96J06],
+   :additional-depends-on
+   [:coefficient-overlap-ambient-normalization-probe-refill45]}
   {:consumer :portfolio,
    :checkpoint
    {:after-problems 1,
