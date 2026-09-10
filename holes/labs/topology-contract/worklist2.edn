@@ -12556,9 +12556,93 @@
   {:consumer :t96J07,
    :stop-condition
    "Preserve the compiled refutation of the old statement. Change only the precedence of the nonzero-vector hypothesis; do not call this unchanged frozen closure or infer an actual projective differential theorem.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta
+     {:canonical 0, :fixture -1, :before 1, :after 0},
+     :residual
+     "No proof obligation remains in the corrected fixture. Scoped implementation and independent review remain; the original statement remains refuted.",
+     :dependency-review "invoke-1789001810392-17486-588a490f",
+     :repair-note
+     {:path "/tmp/T96J07StatementRepair.md",
+      :sha256
+      "14f89a7eeb71dc809d3eff9f7bff87a5a356c2b25d89cf67af60d65e1a605fdc"},
+     :axiom-audits 2,
+     :outcome :go,
+     :warnings [],
+     :statement-hashes
+     {:old
+      "73ea287c4fcc2f57d66253d4f3d13e1933715c77418a1d2c902a16bc2bd5c7fc",
+      :corrected
+      "4ac8e3368212f29658a06d810fc3043f0a7b3dd16c7fbb603a46fd3cf09ee195"},
+     :acceptance
+     {:implementation
+      "Promote the exact complete Main fixture and the supplied statement-repair note. Preserve the old refutation verbatim. Record corrected closure separately from the historical false statement.",
+      :axioms :standard-only,
+      :placeholder-before 1,
+      :placeholder-after 0,
+      :gates
+      ["Verify original Main and fixture SHA256 before implementation."
+       "Compile the fixture and promoted Main; reproduce both standard-only axiom audits with zero warnings."
+       "Run /tmp/audit-t96j07-repair.py before promotion and verify the same preserved definitions, old refutation and exact two-parenthesis statement change against the original committed Main after promotion."
+       "Promote the supplied statement-repair note; verify exact two-file scope, placeholder and forbidden-declaration scans, git diff --check; commit the scoped change."]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :classification :specification-repair-and-corrected-closure,
+     :statement-diff
+     {:path "/tmp/T96J07Statement.diff",
+      :sha256
+      "8d8623fc77ee1c499cc894242ebad6e0a1f87052bf37c5b1b5b44e7af5e63a42"},
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd "cat problems/t96J07/lean/Main.lean", :exit 0}
+      {:cmd "lake env lean /tmp/T96J07Repaired.lean", :exit 0}
+      {:cmd "python3 /tmp/audit-t96j07-repair.py", :exit 0}
+      {:cmd
+       "sha256sum /tmp/T96J07Repaired.lean /tmp/T96J07StatementRepair.md /tmp/T96J07Statement.diff /tmp/T96J07RepairAudit.json",
+       :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial fixture compilation",
+       :exit 1,
+       :correction
+       "Replaced unresolved erased-universe products with explicit finite-set calculations."}
+      {:cmd "Second fixture compilation",
+       :exit 1,
+       :correction "Expanded finite-set product simplification."}
+      {:cmd "Third fixture compilation",
+       :exit 1,
+       :correction
+       "Supplied decidable equalities for each erased index set and distinct indices."}
+      {:cmd "Fourth fixture compilation",
+       :exit 1,
+       :correction
+       "Normalized Fin.succ 2 to the final Fin 4 index. Final compilation succeeds without warnings."}],
+     :audit
+     {:path "/tmp/T96J07RepairAudit.json",
+      :sha256
+      "cef1e734e29dbf8900c4fc560258e84a0bbfc13cab5d3b49880fa17d0d27a69f"},
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/T96J07Repaired.lean",
+      :sha256
+      "6eac671c9e7ac401f30c08e2c10643e00c1ee968599462285b9273adf8f345e6"},
+     :finding
+     "Complete corrected Main compiles. Exactly two parentheses place the axis equivalence beneath the nonzero-vector implication. Every definition, all other conjuncts and the old zero-vector refutation are preserved. Coordinate cancellation proves both directions of the characterization; explicit finite products prove indices -1, 1, -1, 1 and sum zero. This is not closure of the old frozen statement or an intrinsic projective-derivative comparison.",
+     :statement-hash-method
+     "Declaration text beginning with theorem apm_t96j07 : and ending immediately before the space preceding := by.",
+     :frozen-sha256
+     "e6e6a2247da5fef25f52343ba20b00c0b4b9efd9d29e4803808df7da7a645b74",
+     :implementation
+     {:scope
+      ["problems/t96J07/lean/Main.lean"
+       "problems/t96J07/STATEMENT-REPAIR.md"]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["problems/t96J07/lean/Main.lean"
+    "problems/t96J07/STATEMENT-REPAIR.md"],
    :dag-node
    "SPEC-DEFECT: parenthesized projective-axis characterization and complete corrected consumer",
    :acceptance
