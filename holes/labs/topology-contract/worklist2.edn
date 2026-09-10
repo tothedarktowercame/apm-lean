@@ -13793,8 +13793,90 @@
   {:consumer :t01A05,
    :stop-condition
    "Preserve the old refutation. Add only ConnectedSpace hypotheses for the base and total space in the general-cover clause. Do not assume fundamental-class localization, orientation compatibility or covering degree.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "The connected-cover repair is proposed only. Actual orientation existence and covering-degree comparison remain before corrected consumer closure; no implementation scope is proposed.",
+    :typed-boundaries
+    ["Under every corrected general-cover hypothesis, construct ot : T01A05Orientation n Xtilde from o : T01A05Orientation n X."
+     "Prove degreeEquation (k := k) π ot o for the constructed orientation using the actual ModuleCat integral singular-homology map."
+     "Establish the concrete torus clause, including its actual H2 degree equation for every positive k."],
+    :preserved-refutation
+    {:path "/tmp/T01A05Counterexample.lean",
+     :sha256
+     "3f7271678d72276ce8bf379bf2ec2e57bf7424e69e39c4b55b302877abf114d1",
+     :review "invoke-1788986791271-17028-241d46dd",
+     :recompiled true},
+    :axiom-audits {:boundary 3, :preserved-refutation 5},
+    :outcome :stop,
+    :warnings
+    ["Both successful compilations report the inherited unused hk binder."],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-13",
+    :placeholder-before 1,
+    :reason :actual-covering-homology-degree-boundary,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read DAG, closure policy, dependency reviews, frozen Main and CoveringDegree API",
+      :exit 0}
+     {:cmd "sha256sum /tmp/T01A05Counterexample.lean", :exit 0}
+     {:cmd "lake env lean /tmp/T01A05Counterexample.lean", :exit 0}
+     {:cmd "lake env lean /tmp/T01A05ConnectedBoundary.lean", :exit 0}
+     {:cmd
+      "Python audit preserved definitions, exact proposed statement diff, refutation hash, artifact hashes and canonical placeholder count",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/T01A05ConnectedBoundary.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial boundary fixture compilation",
+      :exit 1,
+      :correction
+      "Expressed orientation transport explicitly through the associated linear equivalence."}
+     {:cmd "Second boundary fixture compilation",
+      :exit 1,
+      :correction
+      "Unfolded the fundamental-class definition in the final normalization."}],
+    :changed-paths [],
+    :statement-audit
+    {:corrected-claim-proved false,
+     :method
+     "Declaration text from theorem apm_t01a05 : to immediately before := by.",
+     :repair-note
+     {:path "/tmp/T01A05ConnectedRepair.md",
+      :sha256
+      "1a68848d339225b0c28bf2a95216f1fdf8bd8d987ae651d34e2bdd8acf3a00a2"},
+     :implemented false,
+     :proposed
+     "41c862b544abe585356779a38bffa8a3996e7de274e662b28ea9c166a71f35e3",
+     :change
+     "Only ConnectedSpace X and ConnectedSpace Xtilde added to the general-cover clause; all definitions and other clauses preserved.",
+     :syntax-diff
+     {:path "/tmp/T01A05ConnectedRepairAudit.json",
+      :sha256
+      "cf89b8d856fdca1f9ff8818369575a5541bb15b3ff6703795c1af3f1f9d2713c"},
+     :frozen-sha256
+     "51f5c94da12b4d5e1eb1f7ada0fd397cbbfccdfb223a6ae6287978da86605750",
+     :old
+     "9d1e890a19f8fc75f1b08d6584240df77181cefd02ff91b037cbe8ec23ae0609"},
+    :fixture
+    {:path "/tmp/T01A05ConnectedBoundary.lean",
+     :sha256
+     "22c2211871943b6426fb4b086d5fdf38e6a7bb49d6bdc30fc79922933fbb27f5",
+     :role :typed-boundary,
+     :placeholder-count 0},
+    :finding
+    "Connectedness excludes the reviewed disconnected-cover counterexample, but complete corrected closure is unavailable. The compiled diagnostic derives finite-fiber covering data from the positive frozen sheet count and applies the existing function transfer. It proves that the demanded fundamental-class relation is equivalent to o.topIso.hom (t01A05TopHomologyMap π (ot.topIso.inv 1)) = k. Constructing the upstairs top-homology orientation and proving this actual induced-map equation remain absent. The function-transfer theorem does not establish either obligation. The concrete torus homology action also remains unproved.",
+    :mathematical-refutation false,
+    :seat "codex-13"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "SPEC-DEFECT / COVER-DEGREE: connected finite-cover fundamental-class consumer",
