@@ -42027,8 +42027,89 @@
   {:consumer :t03J05,
    :stop-condition
    "Bank only the inverse law stating that stepWord reads every original letter from reconstructedPath. Do not define balanced-word extraction from an arbitrary path, prove reconstruction after extraction, package the full equivalence, define corner swaps, pair or cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Construct the balanced word extracted from an arbitrary canonical MaximalPath and prove reconstructedPath of that extracted word equals the original path; then package the two maps as an equivalence.",
+    :gates
+    {:canonical-compile :pass,
+     :fixture-sha256 :pass,
+     :whitespace :pass,
+     :false-letter-contradiction :pass,
+     :pointwise-proof :pass,
+     :true-letter-recurrence :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :warning-audit :pass,
+     :commit :pass,
+     :both-ledgers :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :axiom-audit :pass,
+     :canonical-horizontal-semantics :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"stepWord_reconstructedPath"
+     "1f2705d5410c7a5cbbc10902b21cc1b8fed9bbba9875f288f9b131e895d6db64"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/codex13-checkpoint68-stepword-reconstructed/StepWordReconstructed.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint68-stepword-reconstructed/StepWordReconstructed.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexStepWordReconstructed.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexStepWordReconstructed",
+      :exit 0}
+     {:cmd
+      "Python fixture-byte-identity, exact statement-hash, comment-stripped placeholder, pointwise-interface and whitespace audit",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|^\\s*(axiom|opaque|unsafe)\\b|^(def|theorem|structure|instance).*?(extract|equiv|swap|cancel|chain|cross|intersection|closure)' ConstructionTargets/ProductSimplexStepWordReconstructed.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --name-only", :exit 0}
+     {:cmd "git commit -m 'Prove step word reconstruction inverse'",
+      :exit 0}
+     {:cmd
+      "git show --check --stat --oneline HEAD; git status --short",
+      :exit 0}],
+    :commit "4fc16429d1176790cf36b2b6d7f6188d159bcf59",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexStepWordReconstructed.lean"
+     "ConstructionTargets/ProductSimplexStepWordReconstructed.md"],
+    :dependency-warnings
+    ["ConstructionTargets/SingularSubdivision.lean:2960 unused tactic"
+     "ConstructionTargets/SingularSubdivision.lean:3580 unnecessary simpa"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint68-stepword-reconstructed/StepWordReconstructed.lean",
+     :sha256
+     "476654e50d5510303ecb04a511e43f3c52c649bc5e0131e6da760b34420fffca",
+     :canonical-path
+     "ConstructionTargets/ProductSimplexStepWordReconstructed.lean",
+     :canonical-sha256
+     "476654e50d5510303ecb04a511e43f3c52c649bc5e0131e6da760b34420fffca",
+     :placeholder-count 0},
+    :finding
+    "The canonical module is byte-identical to the reviewed placeholder-free fixture. The theorem proves function equality by funext over every Fin (p+q) index. True letters use horizontalCount_succ_of_true to establish the reconstructed first-coordinate increment; false letters use horizontalCount_succ_of_false to contradict IsHorizontal. Both branches pass through the canonical stepWord Boolean equivalences and isHorizontal_iff_first_coordinate_succ. No reverse inverse law, extraction, equivalence, corner swap, cancellation, chain construction, cross product, intersection or closure declaration was added.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexStepWordReconstructed.lean"
     "ConstructionTargets/ProductSimplexStepWordReconstructed.md"],
