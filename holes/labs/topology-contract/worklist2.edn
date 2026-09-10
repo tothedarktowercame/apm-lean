@@ -23529,127 +23529,193 @@
    :other-consumers [:t01A02 :t03J05 :t96J06]}
   {:consumer :t98A02,
    :stop-condition
+   "Bank the relative overlap inclusion square and transition inverse only. Do not claim ambient-map invertibility, normalization comparison, transition units, cocycles, orientation coherence or consumer closure.",
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "codex-13",
+     :fixture
+     {:path "/tmp/CoefficientOverlapRelative.lean",
+      :sha256
+      "b573fd1815d0cef5c0c4e098bc4da3860cd830d70640f5c925a83587f610e406"},
+     :commands
+     [{:cmd "lake env lean /tmp/CoefficientOverlapRelative.lean",
+       :exit 0}],
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientOverlapRelative.lean"
+    "ConstructionTargets/CoefficientOverlapRelative.md"],
+   :dag-node
+   "LOCAL ORIENTATION: actual relative overlap and ambient inclusion square",
+   :acceptance
+   {:namespace "ConstructionTargets.CoefficientOverlapRelative",
+    :implementation
+    "Promote the exact compiled fixture and document the remaining normalization and unit calculations.",
+    :declarations
+    ["transition_mapsTo"
+     "left_mapsTo"
+     "right_mapsTo"
+     "transitionMap"
+     "leftMap"
+     "rightMap"
+     "relative_square"
+     "homology_square"
+     "inverse_mapsTo"
+     "inverseMap"
+     "inverse_right"
+     "inverse_left"
+     "relativeIso"
+     "homologyIso"
+     "integral_square"
+     "rational_square"
+     "transition_projection"
+     "left_projection"
+     "right_projection"
+     "inverse_projection"],
+    :hypotheses
+    "R is a Type 0 commutative ring. M is Type 0 and charted on EuclideanSpace ℝ (Fin (m+2)); x belongs to the actual common chart source. All homology degrees are natural, including zero. This map comparison needs no separation assumption; the parent retains Hausdorff hypotheses for neighborhood excision.",
+    :consumer-equation
+    "The actual deleted-zero transition map followed by the right coordinate map into (M,M minus x) equals the left coordinate map, on relative cokernel complexes and their homology. The transition is invertible on the exact deleted-zero complexes.",
+    :consumer-residual
+    "Use neighborhood excision to compare chart-based ambient normalizations and recover the distinguished-chart normalization; then derive the transition unit, generator-change and directed cocycle equations.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientOverlapRelative."
+     "Reproduce sixteen standard-only axiom audits and integer/rational square examples."
+     "Audit all four actual MapsTo proofs and literal deleted-zero/deleted-x subsets."
+     "Audit relative inclusion-square direction and induced homology equation through actual pair-map composition."
+     "Verify transition inverse laws and all four degreewise cokernel-projection equations."
+     "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :coefficient-general-relative-overlap-inclusion-square-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-general-geometric-overlap-pair-1
+    :oriented-checkpoint32-coefficient-pair-connecting-naturality-1],
+   :current-residual
+   "The reviewed geometric ambient square must be lifted to actual deleted-point cokernel maps before comparing ambient normalizations.",
+   :other-consumers [:t01A02 :t03J05 :t96J06]}
+  {:consumer :t98A02,
+   :stop-condition
    "No supplied transition homeomorphism, commuting square or orientation compatibility. Do not infer that transition units equal one, are locally constant, or define an orientation. Exclude reserved all-degree/general-model chart transport and surface work.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The parent still requires relative neighborhood-inclusion compatibility, geometric normalization comparison and transition-unit/cocycle calculations. No orientation triviality, local constancy, global class or consumer closure is claimed. Reserved general-model chart and surface work, reviewed STOPs and refutations remain untouched.",
-     :axiom-audits 19,
+     "Relative overlap inclusion compatibility is now compiled. Ambient normalization comparison and transition-unit/generator/cocycle calculations remain in the parent. No local constancy, orientation triviality, global class or frozen closure is claimed; concurrent reservations and reviewed STOPs/refutations remain untouched.",
+     :axiom-audits 16,
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t98A02,
       :stop-condition
-      "Bank geometric overlap-pair construction only. Do not claim relative neighborhood-inclusion compatibility, normalization-change units, cocycle equations, local constancy, orientation coherence or consumer closure.",
+      "Bank the relative overlap inclusion square and transition inverse only. Do not claim ambient-map invertibility, normalization comparison, transition units, cocycles, orientation coherence or consumer closure.",
       :evidence
       {:probe
        {:outcome :go,
         :seat "codex-13",
         :fixture
-        {:path "/tmp/CoefficientOverlapPair.lean",
+        {:path "/tmp/CoefficientOverlapRelative.lean",
          :sha256
-         "864eee4fa5de60a5154e583a815cf24df5ac85bff9b110de26e52d1fbd982708"},
+         "b573fd1815d0cef5c0c4e098bc4da3860cd830d70640f5c925a83587f610e406"},
         :commands
-        [{:cmd "lake env lean /tmp/CoefficientOverlapPair.lean",
+        [{:cmd "lake env lean /tmp/CoefficientOverlapRelative.lean",
           :exit 0}],
         :warnings [],
         :axioms ["propext" "Classical.choice" "Quot.sound"]}},
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientOverlapPair.lean"
-       "ConstructionTargets/CoefficientOverlapPair.md"],
+      ["ConstructionTargets/CoefficientOverlapRelative.lean"
+       "ConstructionTargets/CoefficientOverlapRelative.md"],
       :dag-node
-      "LOCAL ORIENTATION: actual translated chart-overlap pair geometry",
+      "LOCAL ORIENTATION: actual relative overlap and ambient inclusion square",
       :acceptance
-      {:namespace "ConstructionTargets.CoefficientOverlapPair",
+      {:namespace "ConstructionTargets.CoefficientOverlapRelative",
        :implementation
-       "Promote the exact compiled fixture and document the remaining relative inclusion and normalization comparison.",
+       "Promote the exact compiled fixture and document the remaining normalization and unit calculations.",
        :declarations
-       ["E"
-        "common"
-        "common_open"
-        "restricted"
-        "restricted_source"
-        "coordinates"
-        "image"
-        "image_open"
-        "translate"
-        "pointed"
-        "pointed_value"
-        "left"
-        "right"
-        "transition"
-        "left_zero"
-        "right_zero"
-        "transition_square"
-        "pair"
-        "left_image_zero"
-        "right_image_zero"
-        "transition_value"
-        "left_deleted"
-        "right_deleted"
-        "leftAmbient"
-        "rightAmbient"
-        "ambient_square"
-        "ambient_chain_square"
-        "projection"
-        "pair_inverse_left"
-        "pair_inverse_right"
-        "integral_overlap"
-        "rational_overlap"
-        "inverse_projection"
-        "homology"
-        "homology_forward"],
+       ["transition_mapsTo"
+        "left_mapsTo"
+        "right_mapsTo"
+        "transitionMap"
+        "leftMap"
+        "rightMap"
+        "relative_square"
+        "homology_square"
+        "inverse_mapsTo"
+        "inverseMap"
+        "inverse_right"
+        "inverse_left"
+        "relativeIso"
+        "homologyIso"
+        "integral_square"
+        "rational_square"
+        "transition_projection"
+        "left_projection"
+        "right_projection"
+        "inverse_projection"],
        :hypotheses
-       "R is a Type 0 commutative ring. M is Type 0 and charted on EuclideanSpace ℝ (Fin (m+2)). The distinguished point belongs to the actual intersection of the two chart sources. This geometric pair comparison requires no separation assumption; the parent retains Hausdorff hypotheses for ambient neighborhood excision. No transition homeomorphism or orientation data is supplied.",
+       "R is a Type 0 commutative ring. M is Type 0 and charted on EuclideanSpace ℝ (Fin (m+2)); x belongs to the actual common chart source. All homology degrees are natural, including zero. This map comparison needs no separation assumption; the parent retains Hausdorff hypotheses for neighborhood excision.",
        :consumer-equation
-       "The constructed translated overlap homeomorphism induces an isomorphism of actual deleted-point R-linear cokernel chain complexes, with explicit coordinate formula, projection equations and inverse laws. Its ambient coordinate maps commute geometrically and on absolute chains.",
+       "The actual deleted-zero transition map followed by the right coordinate map into (M,M minus x) equals the left coordinate map, on relative cokernel complexes and their homology. The transition is invertible on the exact deleted-zero complexes.",
        :consumer-residual
-       "Lift the ambient inclusion square to the relevant relative neighborhood maps, compare the two chart-based ambient normalizations, and derive the transition unit, generator-change and directed cocycle equations.",
+       "Use neighborhood excision to compare chart-based ambient normalizations and recover the distinguished-chart normalization; then derive the transition unit, generator-change and directed cocycle equations.",
        :axioms :standard-only,
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientOverlapPair."
-        "Reproduce nineteen standard-only axiom audits and integer/rational overlap examples."
-        "Audit actual chartAt restrictions, common source, translated images, openness and zero membership."
-        "Audit transition formula, deleted-subset identifications, geometric ambient square and absolute-chain square."
-        "Audit both cokernel projection equations, pair inverse laws and actual homology forward map."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientOverlapRelative."
+        "Reproduce sixteen standard-only axiom audits and integer/rational square examples."
+        "Audit all four actual MapsTo proofs and literal deleted-zero/deleted-x subsets."
+        "Audit relative inclusion-square direction and induced homology equation through actual pair-map composition."
+        "Verify transition inverse laws and all four degreewise cokernel-projection equations."
         "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :coefficient-general-geometric-overlap-pair-1,
+      :id :coefficient-general-relative-overlap-inclusion-square-1,
       :kind :reusable-theorem,
       :depends-on
-      [:oriented-checkpoint39-coefficient-actual-chart-local-homology-1
-       :coefficient-general-actual-chart-pair-comparison-1],
+      [:coefficient-general-geometric-overlap-pair-1
+       :oriented-checkpoint32-coefficient-pair-connecting-naturality-1],
       :current-residual
-      "Normalization comparison requires the actual transition between translated images of the common chart source and its deleted-point cokernel map.",
+      "The reviewed geometric ambient square must be lifted to actual deleted-point cokernel maps before comparing ambient normalizations.",
       :other-consumers [:t01A02 :t03J05 :t96J06]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure experiments and build-loop design; inspect both ledgers, dependency PASS receipts and concurrent reservations",
+       "Read DAG, closure rules and build-loop design; inspect both ledgers, five dependency PASS receipts and concurrent reservations",
        :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientOverlapPair.lean", :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientOverlapPair.lean", :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientOverlapRelative.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientOverlapRelative.lean", :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientOverlapPair.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientOverlapRelative.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history [],
+     :diagnostic-history
+     [{:cmd "Compilation after adding transition inverse equations",
+       :exit 1,
+       :correction
+       "The ext tactic descended into Euclidean coordinates. Replaced it with explicit ContinuousMap.ext to apply the homeomorphism inverse laws."}
+      {:cmd
+       "Compilation with projection audits before the inverse correction",
+       :exit 1,
+       :correction
+       "Reproduced the same overextended ext goals. The subsequent corrected compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientOverlapPair.lean",
+     {:path "/tmp/CoefficientOverlapRelative.lean",
       :sha256
-      "864eee4fa5de60a5154e583a815cf24df5ac85bff9b110de26e52d1fbd982708"},
+      "b573fd1815d0cef5c0c4e098bc4da3860cd830d70640f5c925a83587f610e406"},
      :finding
-     "Exactly one complete compiled geometric overlap-pair prerequisite is supplied. Actual chartAt restrictions construct the common-source coordinate homeomorphisms and translated images. The transition has the explicit chart-b composed with inverse-chart-a formula, preserves the distinguished deleted points, and satisfies the geometric ambient inclusion square and its absolute-chain equation. Actual relative cokernel maps have both projection equations and inverse laws. Integer and rational examples and nineteen standard-only audits pass. The parent is not GO: relative neighborhood-inclusion compatibility, normalization comparison and transition-unit/cocycle calculations remain.",
+     "Exactly one complete compiled relative overlap comparison is supplied. The actual translated transition and both coordinate maps into M preserve the literal deleted-zero/deleted-x subsets. Pair-map composition proves the relative inclusion square and its induced homology equation in every natural degree. The transition has a constructed inverse on these exact relative complexes; all four degreewise projection equations compile. The parent is not GO: chart-based normalization comparison, recovery of the distinguished-chart normalization, and transition-unit/generator/cocycle equations remain.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "LOCAL ORIENTATION: actual coefficient-general overlap transition and normalization comparison",
@@ -23678,7 +23744,8 @@
     :oriented-checkpoint39-coefficient-actual-chart-local-homology-1
     :oriented-checkpoint38-coefficient-neighborhood-local-excision-1
     :coefficient-general-actual-chart-pair-comparison-1
-    :coefficient-general-geometric-overlap-pair-1],
+    :coefficient-general-geometric-overlap-pair-1
+    :coefficient-general-relative-overlap-inclusion-square-1],
    :current-residual
    "Pointwise chartAt local normalization is reviewed; its comparison across two actual chart neighborhoods containing the same point has not been constructed.",
    :other-consumers [:t01A02 :t03J05 :t96J06]}
