@@ -17645,96 +17645,140 @@
    :stop-condition
    "No supplied sphere shift, radial relative homology isomorphism or coefficient-change shortcut. Preserve actual subspace cokernels and distinguish ordinary H0 from reduced H0. Do not claim the sphere table or frozen closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Rational S2 H1/H2 endpoint calculations, normalization and required naturality remain before consumer uptake. No sphere table, orientation coherence, frozen closure or change to historical refutations is claimed.",
-     :axiom-audits 18,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:namespace "ConstructionTargets.CoefficientSphereShift",
-      :implementation
-      "Promote the exact compiled fixture, preserving actual coefficient-general subtype cokernels and the oriented composite.",
-      :declarations
-      ["coordinateMap"
-       "coordinate_projection"
-       "coordinate_absolute_isIso"
-       "coordinate_subspace_isIso"
-       "coordinateIso"
-       "coordinateIso_hom"
-       "hemisphereIso"
-       "hemisphereIso_hom"
-       "hemisphere_projection"
-       "coordinate_inverse_left"
-       "coordinate_inverse_right"
-       "sphereToDiskIso"
-       "sphereToDiskIso_hom"
-       "boundaryIso"
-       "sphereShift"
-       "sphereShift_hom"
-       "sphereH1KernelIso"
-       "sphereH1KernelIso_hom"
-       "sphereH1Kernel_projection"
-       "shift_inverse_left"
-       "shift_inverse_right"
-       "kernel_inverse_left"
-       "kernel_inverse_right"
-       "integral_shift"
-       "rational_shift"
-       "integral_kernel"
-       "rational_kernel"],
-      :hypotheses
-      "R is a Type 0 commutative ring; geometric spaces are Type 0. Every natural-number dimension is retained, including zero and its empty disk boundary. The shift requires positive target degree k; sphere-to-disk comparison requires positive degree q. The separate H1 endpoint uses the kernel of the actual ordinary-H0 boundary inclusion. No sphere calculation, relative isomorphism or vanishing is assumed.",
-      :consumer-equation
-      "Sphere homology in degree k+1 maps isomorphically to boundary-sphere homology in positive degree k through projection, inverse excision, inverse coordinate comparison, inverse radial comparison and the disk connecting map. Sphere H1 maps isomorphically to the actual ordinary-H0 inclusion kernel.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSphereShift."
-       "Reproduce eighteen standard-only axiom audits and integer/rational shift and kernel examples."
-       "Verify coordinate and hemisphere projection equations, exact forward composites and both inverse laws; retain dimension zero and empty boundary support."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG representation requirements, closure rules, build-loop definitions, hemisphere and radial APIs, and dependency PASS receipts in both ledgers",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientSphereShift.lean", :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientSphereShift.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSphereShift.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial temporary sphere-fixture discovery using ls",
-       :exit 2,
-       :correction
-       "No prior sphere fixture existed; created the new fixture under /tmp. Both compilation passes succeeded."}],
-     :representation
-     {:source
-      "Actual ModuleCat R homology of ambientSphere n in degree k+1, with a separate degree-one endpoint.",
-      :target
-      "Actual ModuleCat R homology of euclideanUnitSphere n in positive degree k; separately the kernel of the closed-disk boundary inclusion on ordinary H0.",
-      :direction
-      "Construct sphere-to-boundary and sphere-H1-to-kernel isomorphisms in these directions, with explicit forward composite equations."},
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientSphereShift.lean",
-      :sha256
-      "57668b0c5a0891b897a8aace2a14303caccfc175769bb16ec824996399006589"},
-     :finding
-     "The complete fixture constructs the coordinate relative comparison from actual homeomorphisms, instantiates coefficient-general hemisphere excision, and composes the reviewed radial and contractible-pair maps. It proves the positive-degree sphere shift and separate H1 kernel endpoint with exact forward equations and inverse laws. Integer and rational specializations compile, including dimension zero. No integral homology conclusion is reinterpreted as R-linear.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientSphereShift.lean"
-       "ConstructionTargets/CoefficientSphereShift.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Rational S2 H1/H2 endpoint calculations, normalization and required naturality remain before consumer uptake. No sphere table, orientation coherence, frozen closure or historical-refutation change is claimed.",
+    :gates
+    {:oriented-equations :pass,
+     :fixture-hash :pass,
+     :scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :examples :pass,
+     :commit :pass,
+     :forbidden-scan :pass,
+     :diff-check :pass,
+     :compilation :pass},
+    :axiom-audits 18,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Direct fixture and canonical compilations produced zero warnings. Lake build replayed 20 dependency warnings."],
+    :statement-hashes
+    {"kernel_inverse_right"
+     "49ba8fa9415bc09b968f24cdf4c3d16e97c607ab2c62c7fe4ca337e7cd04018f",
+     "sphereToDiskIso_hom"
+     "efa5eee2887534e3ddf5622d02396703b38b05117000ac4ec8ff49a64192596b",
+     "sphereShift"
+     "de1de0af9b55511a73d60d8bd8f1df259e871f569cb3229fbd325a4aa7ac6adc",
+     "sphereH1Kernel_projection"
+     "8d8c0f8944e98ea3880f222fe3d349e15083f1deeb89b274fd946f4c88a0254e",
+     "hemisphere_projection"
+     "557c82f82f98e563c7620deac831e79fd89811933c45139533bfe023a9c47571",
+     "rational_shift"
+     "c398f48f606d2324e3b9d1c1579cb3c214c90b343e48f056038e383ca439cddc",
+     "coordinateIso"
+     "1bcd771ec5ade4a1c4b7245f15243bd028a45f3ff4097c7d9619778256ebc21a",
+     "coordinateIso_hom"
+     "71c1e6212b75b052d3ca68676ed18fdfd29b9dd67015ec7382684b4ba669ca7b",
+     "coordinate_inverse_left"
+     "c78dab3c9a46e471a1afe78e6fdbf59d95fc5daf159094dbff9c121340ef75f1",
+     "hemisphereIso"
+     "bd522afd23a3e0e552fc8f14fb3672753d94096af3764c6917b15514af40811b",
+     "shift_inverse_left"
+     "3cd562a6747a217fd04f515bdc7285a9455fa06d018388c467b08beb60a9e4b3",
+     "kernel_inverse_left"
+     "9cda47200bb209b0286e8509e33c0c22bb89fd9c339f443a74068767dc434aec",
+     "sphereH1KernelIso"
+     "39abe874c208a8c47eaae04ca3ea2ba5eb79606d0b7d45473d3070f482ff153d",
+     "sphereShift_hom"
+     "e8378bfabb033df8dd66c0d64be21ee2e61da1ce6544f1f7025dce2a64287b4f",
+     "integral_kernel"
+     "7d3447589c79e9a7fdff00596e3bbe6d59f792c3c0591aa4070bd0eb56645e65",
+     "sphereToDiskIso"
+     "34f9c6b26c6b8e61da6956ecdd4138dd1bcf6fa6ee77ab0422af5aadafd6287d",
+     "coordinate_projection"
+     "7d882ccdb6e9010eb25b0fab119b39196beaa56668d2b958c60a30c6f4a43fdb",
+     "coordinate_subspace_isIso"
+     "6be44cb2e7fee0fcca511039ea34a476109d5b93003e827f036a77c4616b870e",
+     "shift_inverse_right"
+     "37ae1bc33a089a693a8207d2474a2495546c8c4f34f27d9d08c8f73c974162ed",
+     "coordinate_absolute_isIso"
+     "78104820fa80aa6237a9cd6aff4f95eee8e65291bc50baa973dd1f604c183348",
+     "rational_kernel"
+     "6b5855c9dfec6c1adab20f2afbf80788ff67e4513ec552c0bf131d316e06d17c",
+     "hemisphereIso_hom"
+     "23b3952289b2a4a52d58b6034a07b1449e96e596137731020cf1b3500684eb55",
+     "integral_shift"
+     "33fc80d5b7d671d285ec239ab47c45c07d2828760bb4dba4300a9e32130a6bbb",
+     "sphereH1KernelIso_hom"
+     "2909cebc87c40bee34c3ff1319efe8417a84f30a131b7e863661af3bce1fd94a",
+     "boundaryIso"
+     "4c7ddfe62b8864f8be2d9448b8ca12932ca11a648e046eb23ecce1beb70c7fa0",
+     "coordinateMap"
+     "8a1c0bdd514661b27f720528db1110486e68cec6c7b8d00407b3d2d08abc5f19",
+     "coordinate_inverse_right"
+     "0cb2947e82f6fa0041cc90915a609bc8cae84ef3fa3e4886aefb329920893e9e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientSphereShift.lean", :exit 0}
+     {:cmd
+      "Read DAG, closure rules, both ledgers and dependency PASS receipts",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientSphereShift.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientSphereShift.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientSphereShift",
+      :exit 0,
+      :jobs 8280}
+     {:cmd
+      "Validate eighteen standard-only audits in both compilation logs, including integer/rational shift and kernel examples",
+      :exit 0}
+     {:cmd
+      "Inspect coordinate and hemisphere projections, forward composites, inverse laws and dimension-zero support",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientSphereShift.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Verify twenty-seven declaration hashes and byte-identical fixture promotion",
+      :exit 0}
+     {:cmd "Verify exact staged two-file scope", :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Construct coefficient-general geometric sphere shift'",
+      :exit 0}
+     {:cmd
+      "Verify exact committed scope, fixture equality and clean workspace",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Actual ModuleCat R homology of ambientSphere n in degree k+1; separately degree one.",
+     :target
+     "Actual ModuleCat R homology of euclideanUnitSphere n in positive degree k; separately the kernel of the actual closed-disk boundary inclusion on ordinary H0.",
+     :direction
+     "Constructed sphere-to-boundary isomorphism through projection, inverse excision, inverse coordinate and radial comparisons, and the disk connecting map. The H1 isomorphism runs from sphere H1 to the ordinary-H0 inclusion kernel."},
+    :commit "0a94275eecb3e7a059de4816cb4a8b06c8d7e339",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSphereShift.lean"
+     "ConstructionTargets/CoefficientSphereShift.md"],
+    :fixture
+    {:path "/tmp/CoefficientSphereShift.lean",
+     :sha256
+     "57668b0c5a0891b897a8aace2a14303caccfc175769bb16ec824996399006589",
+     :promoted-verbatim true},
+    :finding
+    "Promoted the exact fixture constructing coefficient-general coordinate comparison, hemisphere excision and the oriented sphere shift, with a separate ordinary-H0 kernel endpoint for H1. Exact forward composites, inverse laws and dimension-zero support are preserved.",
+    :statement-hash-method
+    "SHA256 of declaration text from theorem/def keyword to immediately before the space preceding :=.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSphereShift.lean"
     "ConstructionTargets/CoefficientSphereShift.md"],
