@@ -43706,6 +43706,24 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789080683852-19711-e90424c4",
+     :commands
+     ["git show --stat --oneline bf67d9e5 && git show --format=fuller --no-ext-diff bf67d9e5 --"
+      "git show bf67d9e5:holes/labs/topology-contract/build_step.bb | rg -n -C 8 'fixture-transition-preserve-paths|apply-completion-transition|supporting-path|reviewed-source'"
+      "inspect checkpoint67 committed evidence fields"
+      "git archive bf67d9e5 | tar -x -C <review-dir>"
+      "git diff-tree --no-commit-id --name-status -r bf67d9e5"
+      "git diff-tree --check bf67d9e5^ bf67d9e5"
+      "sha256sum <archived-artifact> <archived-canonical-source>"
+      "cmp -s <archived-artifact> <archived-canonical-source>"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist2.edn"
+      "lake env lean <archived-artifact>"],
+     :finding
+     "PASS: commit bf67d9e55c398586e22ba9afbb28b10615fe03e1 has exact worklist2-only scope and clean whitespace; both archived ledgers validate. Independent source inspection confirms the deterministic STOP: build_step.bb requires a fixed preserve map containing supporting-path and supporting-sha256, but checkpoint67 has reviewed-source and reviewed-source-sha256 instead, so the mandatory equality checks cannot represent this row without a typed schema extension. The immutable artifact and canonical module remain byte-identical at SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08 and compile. Recurrence declarations, orientations, statement hashes, evidence commit, PASS review, placeholder count, consumers, and canonical source are unchanged; no fixture-path transition or topology claim was improperly made."},
     :fixture
     {:path
      "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint67-7db40149.lean",
@@ -43718,7 +43736,7 @@
     "The immutable checkpoint67 artifact is banked, byte-identical and correctly hashed, but the existing atomic completion-transition cannot represent checkpoint67's evidence. build_step.bb requires the preserve map to contain exactly :sha256, :supporting-path, :supporting-sha256, :placeholder-count, :commit and :review-outcome and compares every value at fixed paths. Checkpoint67 has :reviewed-source and :reviewed-source-sha256 instead of :supporting-path and :supporting-sha256. The field audit reports both required supporting fields absent and both reviewed-source fields present. Any transition under the current schema therefore fails the mandatory preserved-value check; inventing supporting values or omitting checks would weaken the invariant.",
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: immutable checkpoint67 recurrence artifact transition",
@@ -43771,7 +43789,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: immutable checkpoint67 recurrence evidence and renewed consumer eligibility",
