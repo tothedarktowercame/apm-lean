@@ -67430,8 +67430,76 @@
   {:consumer "t98A02",
    :stop-condition
    "Require explicit homeomorphisms from all three nested complement pieces to the original complement subtypes and their underlying-value identities; no supplied equivalence or homology comparison.",
+   :evidence
+   {:dependency
+    {:path
+     "ConstructionTargets/CoefficientCompactComplementSmallComparison.lean",
+     :sha256
+     "e510ba7b8399a61480d380d5711d81530444577be01b81a1d6ee83808ac45708"},
+    :placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Transport coefficient chains and homology through these homeomorphisms, prove compatibility with actual inclusions, and conjugate the signed Mayer-Vietoris arrows and connecting map. No coefficient excision, localization monicity, dimension vanishing, fundamental class or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:leftHomeomorph
+     "fe2d1d3932ff6508a32c4ef7125a4953b0282175be09b3283ba3230d5754b3c2",
+     :rightHomeomorph
+     "c75f58b2f0710079de72d6a34e25326da0e83ee7826a2b7011f6c0d340ffffd8",
+     :overlapHomeomorph
+     "2517300cf7f7ae83fa8963bf9f8e048a85c40334f05ebc2b9a4657aa5857a698",
+     :leftHomeomorph_value
+     "e2e89ad8027649368462466fadfb3cd115d1191e06bf5fb736f5943ef577253e",
+     :rightHomeomorph_value
+     "97c64a6fad69cd30bf0dc657b91989594c9e025aeb219d23351fec14c36ea63d",
+     :overlapHomeomorph_value
+     "3dba9eb1fabe60e910a7a6930f6bd62b3aa64f748780b545f48e4ecca16cdb76"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CoefficientCompactComplementPairHomeomorph.lean ConstructionTargets/CoefficientCompactComplementSmallComparison.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientCompactComplementSmallComparison",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementPairHomeomorph.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, pinned SHA256, comment-stripped zero placeholders and six complete declaration-header hashes",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "The nested left, right and overlap subtypes inside the complement of K intersection L",
+     :target
+     "The original subtypes X minus K, X minus L and X minus (K union L)",
+     :direction
+     "Construct homeomorphisms from each nested complement representation to its original complement subtype, preserving the literal underlying point in X."},
+    :commit "1dd9048ae814a295c94501d130d0c1b0ba6a3e26",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementPairHomeomorph.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactComplementPairHomeomorph.lean",
+     :sha256
+     "65749ac9db8e65421f640ce0bdf3b37332683276b89af56e8c786cf81dd38ca6",
+     :exact-promotion true},
+    :finding
+    "Exact fixture promoted. Explicit homeomorphisms flatten all three nested complement subtypes to the original complements of K, L and K union L, with literal underlying-value identities. Arbitrary subsets in an arbitrary topological space are preserved. Ledger untouched.",
+    :axiom-audit-count 6,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementPairHomeomorph.lean"],
    :dag-node
