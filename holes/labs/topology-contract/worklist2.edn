@@ -31734,6 +31734,22 @@
      {:cmd
       "sha256sum /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean; sed -n '1,90p' /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean; lake env lean /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean; test ! -e ConstructionTargets/LowerDimensionalSphereNullity.lean; test ! -e ConstructionTargets/SphereEquatorEmbedding.lean; test ! -e ConstructionTargets/SphereEquatorImageNullity.lean; test ! -e ConstructionTargets/SphereEquatorImageNullity.md; git diff --exit-code -- ConstructionTargets/SphereEquatorImageNullity.lean ConstructionTargets/SphereEquatorImageNullity.md; git diff --check",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789056794101-18950-45cc5804",
+     :commands
+     ["git show --format=fuller --stat 25c94ce9176d8954a62b10810485c1c1514520ce"
+      "git diff-tree --no-commit-id --name-status -r 25c94ce9176d8954a62b10810485c1c1514520ce"
+      "git diff --check 25c94ce9176d8954a62b10810485c1c1514520ce^ 25c94ce9176d8954a62b10810485c1c1514520ce"
+      "sha256sum /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean"
+      "lake env lean /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean"
+      "placeholder and forbidden-declaration scans on the fixture"
+      "verify absence of canonical LowerDimensionalSphereNullity, SphereEquatorEmbedding, and SphereEquatorImageNullity modules"
+      "inspect image_sphere, appendZero_dropLast, and equator_measure_eq_zero orientations"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers from recorded commit"],
+     :finding
+     "PASS: commit 25c94ce9 is ledger-only and whitespace-clean. The fixture reproduces SHA256 41b5affc82871ddb64935e292e521c6879020ae9dbe3a0466128251f18f8036a, has zero placeholders, compiles, and uses only propext, Classical.choice, and Quot.sound. Its representation is correctly oriented: appendZero maps the source Euclidean sphere into the literal Fin.last-zero target equator; dropLast proves the reverse inclusion; image_sphere is exact; and Isometry.hausdorffMeasure_image transports a supplied source-zero equality to ambient target nullity without normalization or cancellation. However, both required canonical prerequisite imports remain absent, the fixture necessarily repeats appendZero declarations and lacks the named unconditional d=2/d=3 results, and it declares SphereEquatorImageNullity rather than ConstructionTargets.SphereEquatorImageNullity. Exact promotion would therefore violate the dependency/import and namespace contract. The recorded STOP correctly identifies this representation boundary. Both ledgers validate; no frozen consumer changed, so frozen statement hashes and placeholder recount are not applicable."},
     :changed-paths [],
     :fixture
     {:path
@@ -31745,7 +31761,7 @@
     "The fixture matches SHA256 41b5affc82871ddb64935e292e521c6879020ae9dbe3a0466128251f18f8036a and compiles the image and ambient-nullity mathematics with standard-only axioms, but it does so by repeating appendZero and its coordinate theorems because the two required canonical prerequisite modules do not exist. The probe diagnostic history explicitly records this composition. The implementation acceptance instead requires importing ConstructionTargets.LowerDimensionalSphereNullity and ConstructionTargets.SphereEquatorEmbedding and extracting only the new declarations. Both prerequisites ended in reviewed namespace-conflict STOPs and remain absent. The combined fixture also declares the unqualified namespace SphereEquatorImageNullity rather than ConstructionTargets.SphereEquatorImageNullity. Promoting it would therefore repeat prerequisite declarations, violate the required import boundary, and miss the required namespace. Repair and promote both prerequisite fixtures first, then produce a namespace-correct fixture containing only the seven new declarations. This is a representation and dependency boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereEquatorImageNullity.lean"
     "ConstructionTargets/SphereEquatorImageNullity.md"],
@@ -31914,7 +31930,7 @@
      "Exactly one complete compiled representation-and-transport prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 routes. It defines the literal last-coordinate-zero equator, reconstructs a source point by dropping the last coordinate, proves appendZero(dropLast y)=y whenever the last coordinate is zero, and proves exact equality between the append-zero image of the source unit sphere and that equator. It then transports the already-banked source raw-Hausdorff nullity through the actual append-zero isometry using Isometry.hausdorffMeasure_image. Generic transport and the d=2 and d=3 applications compile. The parent probe is not GO because intrinsic subtype Hausdorff nullity and the measurable strict-upper-cap, strict-lower-cap and equator partition remain unproved. No numerical normalization, sphere mass, moment, Stokes or consumer-closure theorem is claimed; no canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: Hausdorff-null equators for the literal S2 and S3 cap decompositions",
