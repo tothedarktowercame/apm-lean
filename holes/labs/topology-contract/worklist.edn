@@ -71457,6 +71457,19 @@
       "git diff --check -- ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789070182616-19330-704a5e84",
+     :commands
+     ["git diff --name-only 1ae6fd45^ 1ae6fd45"
+      "git diff --exit-code 1ae6fd45ebc0436601197b28b34a90e7fc997245 -- ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean"
+      "lake env lean ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean"
+      "sha256sum ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean /tmp/PlaneArcEndpointPerturbationFamilyContainment.lean ConstructionTargets/PlaneArcEndpointPerturbationContainment.lean"
+      "python3 placeholder-and-declaration audit"
+      "git diff --check 1ae6fd45^ 1ae6fd45 -- ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean"],
+     :finding
+     "Exact one-file scope; fixture and dependency hashes match; Lean compiles with only propext, Classical.choice, and Quot.sound; zero placeholders; the frozen exists_common_radius hash reproduces. The quantifiers and direction give one positive radius controlling every vector family and every unit-interval point into its prescribed open target, while retaining empty and singleton finite types and making no embedding or transversality claim."},
     :commit "1ae6fd45ebc0436601197b28b34a90e7fc997245",
     :changed-paths
     ["ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean"],
@@ -71468,7 +71481,7 @@
     :finding
     "Promoted the exact fixture. Compactness of every unit-interval arc image and finiteness of the index type yield one positive radius; every family of endpoint-preserving perturbation vectors below that radius remains inside its prescribed open plane target. Empty and singleton index types are retained. The module compiles without warnings or placeholders, its dependency hash matches, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPerturbationFamilyContainment.lean"],
    :dag-node
@@ -71563,7 +71576,7 @@
      "Compiled exactly one finite-family containment prerequisite. Compactness of every original arc image and openness of every chart target produce one positive radius shared by the finite family. Every endpoint-weighted perturbation whose vector norm is below that radius remains in its assigned target for all unit-interval parameters. The proof uses Fintype.ofFinite and therefore preserves empty and singleton index cases. It does not claim embedding stability, finite coincidences or comparison through different surface charts.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
