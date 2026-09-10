@@ -16512,9 +16512,123 @@
   {:consumer :t00J01-rational-sphere-homology,
    :stop-condition
    "No assumed excision isomorphism, subspace transport square or coefficient-change shortcut. Do not silently replace actual subtype chains by ambient ranges. Do not claim sphere suspension or consumer closure.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Coefficient-general sphere suspension, rational sphere H1/H2 and the required naturality and normalization remain before consumer uptake. No sphere computation, frozen closure or change to historical refutations is claimed.",
+     :axiom-audits 11,
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture and document actual-subspace transport, all four simplicial arrows and the canonical excision-map equation.",
+      :namespace "ConstructionTargets.CoefficientExcision",
+      :declarations
+      ["excisionSourceChain_square"
+       "excisionSourceRelativeIso"
+       "excisionTargetChain_square"
+       "excisionTargetSmallRelativeIso"
+       "smallIso"
+       "pairInclusion"
+       "pair_square"
+       "pair_chain_square"
+       "excisionMap"
+       "projection"
+       "projection_degree"
+       "complement_composite"
+       "composite_eq"
+       "homologyIso"
+       "homologyIso_hom"
+       "excision_isIso"
+       "inverse_left"
+       "inverse_right"
+       "integral_interval"
+       "rational_interval"],
+      :hypotheses
+      "R and X are Type 0; R is a commutative ring and X a topological space. The chain transports and canonical map equation hold for arbitrary subsets A and Z. The all-degree homology isomorphism requires IsClosed Z and Z contained in interior A. No connectedness or nonemptiness is assumed. Coefficients are ModuleCat.of R R.",
+      :consumer-equation
+      "The actual subtype-induced excision cokernel map induces an isomorphism in every homology degree, with its exact forward arrow and both inverse laws.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientExcision."
+       "Reproduce all eleven standard-only axiom audits and integer/rational interval-subspace examples."
+       "Audit the actual source and target cokernels, projection equation, composite equality and all-degree inverse laws."
+       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG, closure rules, build-loop definitions, both ledgers and dependency PASS receipts",
+       :exit 0}
+      {:cmd
+       "Inspect coefficient-general relative comparison, pushout comparison and coefficient-independent simplicial excision transport equations",
+       :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientExcision.lean", :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientExcision.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientExcision.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "Initial transport fixture compilation",
+       :exit 1,
+       :correction
+       "Supplied explicit abbreviations for the original private subcomplex vertices; reused the existing simplicial square proofs."}
+      {:cmd "First canonical composite compilation",
+       :exit 1,
+       :correction "Corrected projection syntax after cancel_epi."}
+      {:cmd "Second canonical composite compilation",
+       :exit 1,
+       :correction
+       "Replaced nonexistent cokernel projection lemma names."}
+      {:cmd "Third canonical composite compilation",
+       :exit 1,
+       :correction
+       "Identified the remaining relative-map projection before applying the complement equation."}
+      {:cmd "Canonical composite trace compilation",
+       :exit 1,
+       :correction
+       "Inspected the residual projection expression; removed temporary trace."}
+      {:cmd "Canonical composite explicit simplification compilation",
+       :exit 1,
+       :correction
+       "Removed ineffective simplification arguments and isolated the projection equality."}
+      {:cmd "Canonical composite direct rewrite compilation",
+       :exit 1,
+       :correction
+       "Used an explicitly typed relative-map projection theorem."}
+      {:cmd "Canonical composite slice compilation",
+       :exit 1,
+       :correction
+       "Replaced the slice calculation with congrArg followed by reassociation."}
+      {:cmd "Canonical composite reassociation compilation",
+       :exit 1,
+       :correction "Removed the no-progress simp step."}
+      {:cmd "Initial homology forward-map compilation",
+       :exit 1,
+       :correction
+       "Applied homologyMap_comp explicitly and transported the proved composite equality. Final compilation has only standard axioms."}],
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientExcision.lean",
+      :sha256
+      "46da907c33015a2696e2609583fb4d06182317f1ff79cfa05fbd3f182a03ad5a"},
+     :finding
+     "Complete coefficient-general actual-subspace excision compiles. Constructed source and target cokernel identifications transport the reviewed simplicial pushout isomorphism to the actual excised pair and relative cover-small complex. Their composite with relative small-chain inclusion equals the canonical cokernel map induced by subtype inclusions. Its projection equation holds in every chain degree. Reviewed all-degree relative comparison supplies the homology isomorphism, with exact forward-map equality and both inverse laws. Integer and rational interval-subspace examples compile. No integral chain conclusion is treated as R-linear.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientExcision.lean"
+       "ConstructionTargets/CoefficientExcision.md"]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientExcision.lean"
+    "ConstructionTargets/CoefficientExcision.md"],
    :dag-node
    "EXCISION: coefficient-general actual-subspace transport and canonical relative map",
    :acceptance
