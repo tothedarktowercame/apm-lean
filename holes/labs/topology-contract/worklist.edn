@@ -64514,6 +64514,18 @@
      "CoefficientChartLocal.pointedTarget and pointedChart at x",
      :direction
      "Target-set equality and equality from the transported overlap pointed homeomorphism to the distinguished pointedChart, inducing the forward deleted-pair isomorphism."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789030506591-18268-d5246d4f",
+     :commands
+     ["git show --check 385d5758"
+      "Python read-only audit: pinned/fixture/working equality, dependency SHA256, eleven complete declaration hashes and zero placeholders"
+      "lake build ConstructionTargets.CoefficientOverlapNormalization"
+      "lake env lean ConstructionTargets/CoefficientDistinguishedChart.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show cf415de5:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "Independent review of codex-6 commit 385d575847d78cce76a75d8f18732265e2b1ca9a passes. Exact single-file scope, fixture/dependency hashes and all eleven statement hashes match. Dependency build succeeds (8300 jobs); implementation compiles warning-free with nine standard-only axiom audits and zero placeholders. Full-source restriction recovers the distinguished chart; target-set transport preserves coordinates and identifies the pointed homeomorphism and inverse. Actual deleted-pair transport has both inverse laws and the stated forward homology map in every natural degree, with dimension m+2 explicit. Normalization-composite equality and consumer closure remain unclaimed. Pinned ledger validates 511 items. No files edited."},
     :commit "385d575847d78cce76a75d8f18732265e2b1ca9a",
     :changed-paths
     ["ConstructionTargets/CoefficientDistinguishedChart.lean"],
@@ -64523,7 +64535,7 @@
      "284908c57e17da0e422f6c3d54daf1cb03588d8dcf6597dfad7893b490da2957"},
     :axiom-audit-declarations 9},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CoefficientDistinguishedChart.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / distinguished translated-chart identification",
@@ -64624,7 +64636,7 @@
      "Concurrent CoefficientOverlapNormalization at 237dcad73487fe524354edb74123fe837d5cb962 already constructs ambient invertibility and overlap normalization comparison; these were reused, not duplicated. Compiled one prerequisite identifying the distinguished-chart geometry: restriction to its own source equals the original chart, translated target equals pointedTarget, and the transported pointed homeomorphism and inverse equal CoefficientChartLocal's maps. The actual deleted-pair isomorphism, inverse laws and induced homology forward map compile. Equality with CoefficientChartLocal.localIso remains.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / ambient overlap normalization comparison",
