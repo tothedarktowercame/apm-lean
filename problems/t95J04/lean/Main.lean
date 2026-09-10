@@ -1,6 +1,38 @@
+import Mathlib.Topology.MetricSpace.HausdorffDimension
+import ConstructionTargets.SardFiniteOrderRankLocusLocalAggregation
+import ConstructionTargets.FixedTargetChartDimensionDropNullity
+import ConstructionTargets.FixedChartNullForcesNonsurjectivity
 import ConstructionTargets.SingularHomologyRetractNonvanishing
 import ConstructionTargets.SimplyConnectedSphereProducts
 import ConstructionTargets.T95J04FinalProductComparison
+
+open Set MeasureTheory Filter
+open scoped Topology ENNReal NNReal
+noncomputable section
+namespace ConstructionTargets.OpenDomainHausdorffNullity
+variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] [MeasurableSpace F] [BorelSpace F]
+theorem image_null {f : E → F} {U s : Set E} (hU : IsOpen U)
+    (hf : ContDiffOn ℝ 1 f U) (hs : s ⊆ U) (n : ℕ)
+    (hn : Module.finrank ℝ E < n) : μH[n] (f '' s) = 0 := by
+  have hdim : dimH (f '' s) ≤ dimH s := by
+    apply dimH_image_le_of_locally_lipschitzOn
+    intro x hx
+    obtain ⟨r, hr, hball⟩ := Metric.isOpen_iff.mp hU x (hs hx)
+    obtain ⟨C, t, ht, hLip⟩ :=
+      ((hf.mono hball) x (Metric.mem_ball_self hr)).exists_lipschitzOnWith
+        (convex_ball x r)
+    refine ⟨C, t, ?_, hLip⟩
+    have ht' : t ∈ 𝓝 x := by
+      simpa only [nhdsWithin_eq_nhds.mpr (Metric.ball_mem_nhds x hr)] using ht
+    exact mem_nhdsWithin_of_mem_nhds ht'
+  have hle : dimH s ≤ (Module.finrank ℝ E : ℝ≥0∞) := by
+    exact (dimH_mono (subset_univ s)).trans_eq (Real.dimH_univ_eq_finrank E)
+  have hlt : dimH (f '' s) < (n : ℝ≥0∞) :=
+    (hdim.trans hle).trans_lt (by exact_mod_cast hn)
+  simpa using (hausdorffMeasure_of_dimH_lt (d := (n : ℝ≥0)) hlt)
+#print axioms image_null
+end ConstructionTargets.OpenDomainHausdorffNullity
 
 /-!
 # APM t95J04 — low-dimensional maps to spheres and six-manifolds
@@ -131,4 +163,36 @@ theorem apm_t95j04 :
     exact ConstructionTargets.SimplyConnectedSphereProducts.simplyConnectedSpace_prod
   -- Remaining: Sard/nullity/non-surjectivity/null-homotopy.  All three
   -- simple-connectivity and all three nonhomeomorphism conjuncts are closed.
-  all_goals sorry
+  intro k n hkn M _ _ _ _ _ _ f hf
+  letI : Fact (Module.finrank ℝ (T95J04E (n+1)) = n+1) := ⟨by simp [T95J04E]⟩
+  let g : M → T95J04E (n+1) := fun x => (f x).val
+  have hg : ContMDiff (T95J04I k) 𝓘(ℝ,T95J04E (n+1)) ∞ g :=
+    (contMDiff_coe_sphere (E := T95J04E (n+1)) (n := n)).comp hf
+  have hn : μH[n] (Set.range g) = 0 := by
+    rw [← Set.image_univ]
+    apply SardFiniteOrderRankLocusLocalAggregationProbe.measure_image_zero_of_rankLocus_pointwise_open
+    intro x _
+    let e := chartAt (T95J04E k) x
+    have hq : ContDiffOn ℝ 1 (g ∘ e.symm) e.target :=
+      ((hg.comp_contMDiffOn contMDiffOn_chart_symm).contDiffOn).of_le (by simp)
+    have hz := ConstructionTargets.OpenDomainHausdorffNullity.image_null
+      e.open_target hq (Subset.refl _) n (by simpa using hkn)
+    refine ⟨e.source, e.open_source, mem_chart_source _ x, measure_mono_null ?_ hz⟩
+    rintro _ ⟨y, hy, rfl⟩
+    exact ⟨e y, e.map_source hy.2, congrArg g (e.left_inv hy.2)⟩
+  have hnull : μH[n] (Set.range f) = 0 := by
+    have he := (isometry_subtype_coe : Isometry (Subtype.val : T95J04Sphere n → T95J04E (n+1))).hausdorffMeasure_image
+      (Or.inl (by positivity : (0:ℝ) ≤ n)) (Set.range f)
+    have him : Subtype.val '' Set.range f = Set.range g := by
+      ext y
+      simp [g]
+    rw [him] at he
+    exact he.symm.trans hn
+  letI : Nonempty (T95J04Sphere n) := t95J04_sphere_nonempty n
+  let q : T95J04Sphere n := Classical.choice inferInstance
+  have hc := ConstructionTargets.FixedTargetChartDimensionDropNullity.fixed_extChartAt_range_inter_source_null
+    (T95J04I k) (T95J04I n) f (hf.of_le (by simp)) (by simpa using hkn) volume q
+  have hnot := ConstructionTargets.FixedChartNullForcesNonsurjectivity.not_surjective_of_fixedChart_coordinateNull
+    (T95J04I n) volume f q hc
+  exact ⟨hnull, hnot, t95J04_nullHomotopic_of_not_surjective n f hf.continuous hnot⟩
+#print axioms apm_t95j04
