@@ -75158,6 +75158,20 @@
       :exit 0}
      {:cmd "git status --short", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789084594961-19856-310b2700",
+     :commands
+     ["git show 96930b0696498e827f1786079e3e091a1686f100:ConstructionTargets/CoefficientSubcomplexRelativeDegreeRangeOrder.lean"
+      "git diff-tree --no-commit-id --name-only -r 96930b0696498e827f1786079e3e091a1686f100"
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeRangeOrder.lean"
+      "sha256sum /tmp/CoefficientSubcomplexRelativeDegreeRangeOrder.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeRangeOrder.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean"
+      "cmp -s /tmp/CoefficientSubcomplexRelativeDegreeRangeOrder.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeRangeOrder.lean"
+      "git show --check --oneline --stat 96930b0696498e827f1786079e3e091a1686f100"
+      "python3 six-declaration hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at 873d10f8d3566158260a0afcf88c9b45869bc05ac3ec16af3cb3a03456327d1f, and the four-degree-quotient dependency reproduces fbc78c211bdafed1ef1b8f169274aa0ceec3eb9d5fc60b979d8e0d443c0964c8. Lean compilation succeeds without warnings, all six frozen declaration hashes reproduce, placeholders are zero, and printed axioms are standard-only. The four component-map factorizations have the correct order: intersection factors through each member, and each member factors through the union. Consequently the proved range inclusions point exactly from the intersection range to the infimum and from the supremum of member ranges to the union range. The reverse inclusions and resulting equalities are not asserted."},
     :commit "96930b0696498e827f1786079e3e091a1686f100",
     :changed-paths
     ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeRangeOrder.lean"],
@@ -75170,7 +75184,7 @@
     "The exact fixture and reviewed four-quotient dependency hashes reproduce. The four chain-map factorizations and the two functorial range inclusions compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeRangeOrder.lean"],
    :dag-node
@@ -75268,7 +75282,7 @@
      "Compiled exactly one range-order prerequisite. Four componentwise factorization theorems show that the intersection ambient inclusion factors through each member inclusion and each member inclusion factors through the union inclusion. Consequently, the intersection component range lies below the infimum of the member ranges, while the supremum of the member ranges lies below the union component range. These are the functorial halves of the two required range equalities; the reverse inclusions require the coefficient-chain basis calculation. No supportConnecting or excision hypothesis is used.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
