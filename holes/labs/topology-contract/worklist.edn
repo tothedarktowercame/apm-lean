@@ -60034,6 +60034,19 @@
       :exit 0}
      {:cmd "git diff --cached --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789013712888-17826-d6497535",
+     :commands
+     ["git show 82d876986a2e972df752b10321b458f2ea54569a:ConstructionTargets/TransverseIncidenceTangent.lean"
+      "Python pinned scope, fixture SHA256, byte equality, five statement hashes and placeholder audit"
+      "lake build ConstructionTargets.TransverseIncidenceChosenAtlas ConstructionTargets.ManifoldRegularFiberTangentImage ConstructionTargets.TransverseDifferenceKernel"
+      "lake env lean ConstructionTargets/TransverseIncidenceTangent.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 5e9d1220:holes/labs/topology-contract/worklist.edn)"
+      "git show --format= --check 82d87698"],
+     :finding
+     "Independent of author codex-6. Exact single-file scope and fixture 94e87ed09a9b09030cd28f37d4a8d4638e5aaa203ff04cbf29197ec6fe247654 verified; five statement hashes match, zero placeholders. Dependencies build successfully (8454 jobs); Lean warning-free with five standard-only axiom audits; validator 468 items OK; whitespace clean. Actual inclusion mfderiv factors through the correctly directed WithLp equivalence; injectivity transfers from the banked zero-fiber inclusion. For exactly chosenAtlas, the constant composite gives kernel containment and derived rank-nullity gives equality, yielding Df(v)=Dg(w) in the original product model. Topology and norms unchanged. Explicit model-index normalization and final assembly remain; no consumer closure claimed."},
     :commit "82d876986a2e972df752b10321b458f2ea54569a",
     :changed-paths
     ["ConstructionTargets/TransverseIncidenceTangent.lean"],
@@ -60043,7 +60056,7 @@
      "94e87ed09a9b09030cd28f37d4a8d4638e5aaa203ff04cbf29197ec6fe247654"},
     :axiom-audit-declarations 5},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/TransverseIncidenceTangent.lean"],
    :dag-node
    "TRANSVERSE-PULLBACK / chosen incidence inclusion tangent equalizer",
@@ -60182,7 +60195,7 @@
      "Compiled one tangent prerequisite for exactly chosenAtlas. The original-product inclusion derivative factors through the recharted zero-fiber inclusion derivative and the canonical WithLp continuous linear equivalence. Banked zero-fiber injectivity therefore proves actual incidence inclusion derivative injectivity. Constant composition gives range containment in the difference derivative kernel; rank-nullity proves equality. Kernel membership then gives exactly Df(v)=Dg(w). inclusionLinear is a definition of the actual mfderiv, not an assumed comparison.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TRANSVERSE-PULLBACK / literal incidence atlas and tangent equalizer",
