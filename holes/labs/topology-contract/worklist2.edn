@@ -31812,67 +31812,86 @@
    :other-consumers [:t02A05 :t01J06 :t94A10]}
   {:consumer :t95J05,
    :stop-condition
+   "Bank only the generic equality between intrinsic subtype Hausdorff measure of the whole subtype and ambient Hausdorff measure of its carrier, plus nullity transport and the d=2 and d=3 examples. Do not claim a sphere partition, cap-area assembly, numerical normalization, sphere mass, moments, Stokes or consumer closure.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/HausdorffSubtypeNullity.lean"
+    "ConstructionTargets/HausdorffSubtypeNullity.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: intrinsic subtype Hausdorff nullity from ambient nullity",
+   :acceptance
+   {:namespace "ConstructionTargets.HausdorffSubtypeNullity",
+    :implementation
+    "Promote the exact compiled fixture and document its application to the reviewed ambient equator-nullity theorem.",
+    :hypotheses
+    "Use an arbitrary Borel emetric space, a subset with its induced subtype structures and raw d-dimensional Hausdorff measure for d nonnegative. The named examples use d=2 in EuclideanSpace real (Fin 3) and d=3 in EuclideanSpace real (Fin 4). No normalization or finiteness hypothesis is supplied.",
+    :declarations ["subtype_univ_measure" "subtype_univ_null"],
+    :consumer-equation
+    "The raw Hausdorff measure of Set.univ in the induced subtype equals the ambient raw Hausdorff measure of the carrier; hence every ambient Hausdorff-null carrier has intrinsically null subtype.",
+    :consumer-residual
+    "Instantiate the theorem for the literal S2 and S3 equators and prove the measurable strict-cap/equator partitions.",
+    :axioms :standard-only,
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.HausdorffSubtypeNullity."
+     "Reproduce two standard-only axiom audits and both Euclidean examples."
+     "Verify subtype_univ_measure uses the actual subtype coercion isometry and Hausdorff image equality."
+     "Verify subtype_univ_null rewrites only by the proved measure equality and supplied ambient nullity."
+     "Confirm no partition, normalization, sphere-mass or moment theorem is claimed."
+     "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
+   :id :hausdorff-subtype-nullity-transport-1,
+   :kind :reusable-theorem,
+   :depends-on [:sphere-equator-image-ambient-nullity-1],
+   :current-residual
+   "Ambient equator nullity is banked, but the parent comparison explicitly requires its intrinsic subtype measure to be identified through the coercion isometry.",
+   :other-consumers [:t02A05 :t01J06 :t94A10]}
+  {:consumer :t95J05,
+   :stop-condition
    "Do not use the blocked raw Hausdorff normalization, assume that a lower-dimensional coordinate hyperplane is null, infer intrinsic nullity from ambient nullity without an actual subtype isometry, assemble caps, evaluate sphere masses or moments, invoke Stokes, or claim consumer closure. Prove only d=2 and d=3 and use a unique row-specific scratch directory.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Use the ambient equator nullity to prove nullity for the equator subtype through the coercion isometry, then prove measurable exact decomposition of each literal unit sphere into the strict upper cap, strict lower cap and equator.",
+     "Apply the generic subtype-nullity theorem to the banked literal equators, then prove measurability, pairwise disjointness and exact union of the strict upper cap, strict lower cap and equator for d=2 and d=3.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t95J05,
       :stop-condition
-      "Bank only the exact append-zero sphere-image equality and ambient raw-Hausdorff nullity transport from the reviewed source-nullity theorem. Do not claim intrinsic subtype nullity, cap partition, numerical normalization, sphere mass, moments, Stokes or consumer closure.",
+      "Bank only the generic equality between intrinsic subtype Hausdorff measure of the whole subtype and ambient Hausdorff measure of its carrier, plus nullity transport and the d=2 and d=3 examples. Do not claim a sphere partition, cap-area assembly, numerical normalization, sphere mass, moments, Stokes or consumer closure.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/SphereEquatorImageNullity.lean"
-       "ConstructionTargets/SphereEquatorImageNullity.md"],
+      ["ConstructionTargets/HausdorffSubtypeNullity.lean"
+       "ConstructionTargets/HausdorffSubtypeNullity.md"],
       :dag-node
-      "MANIFOLD INTEGRATION: literal equator image equality and ambient Hausdorff nullity",
+      "MANIFOLD INTEGRATION: intrinsic subtype Hausdorff nullity from ambient nullity",
       :acceptance
-      {:namespace "ConstructionTargets.SphereEquatorImageNullity",
+      {:namespace "ConstructionTargets.HausdorffSubtypeNullity",
        :implementation
-       "Promote the new equator, reconstruction, image-equality and ambient-nullity declarations from the compiled fixture, importing the reviewed LowerDimensionalSphereNullity and SphereEquatorEmbedding modules instead of repeating their declarations.",
+       "Promote the exact compiled fixture and document its application to the reviewed ambient equator-nullity theorem.",
        :hypotheses
-       "Use the reviewed append-zero linear isometric embedding and reviewed raw critical-dimensional nullity of the source unit spheres. The generic transport theorem accepts exactly that source-nullity equality; named applications use d=2 and d=3. No normalization or finite sphere-measure hypothesis is supplied.",
-       :declarations
-       ["equator"
-        "dropLast"
-        "appendZero_dropLast"
-        "image_sphere"
-        "equator_measure_eq_zero"
-        "equator_two_null"
-        "equator_three_null"],
+       "Use an arbitrary Borel emetric space, a subset with its induced subtype structures and raw d-dimensional Hausdorff measure for d nonnegative. The named examples use d=2 in EuclideanSpace real (Fin 3) and d=3 in EuclideanSpace real (Fin 4). No normalization or finiteness hypothesis is supplied.",
+       :declarations ["subtype_univ_measure" "subtype_univ_null"],
        :consumer-equation
-       "The append-zero image of the lower-dimensional unit sphere equals the literal last-coordinate-zero equator, and its banked source raw-Hausdorff nullity transports to ambient equator nullity in dimensions two and three.",
+       "The raw Hausdorff measure of Set.univ in the induced subtype equals the ambient raw Hausdorff measure of the carrier; hence every ambient Hausdorff-null carrier has intrinsically null subtype.",
        :consumer-residual
-       "Prove intrinsic subtype equator nullity and the measurable upper-cap, lower-cap and equator partition.",
+       "Instantiate the theorem for the literal S2 and S3 equators and prove the measurable strict-cap/equator partitions.",
        :axioms :standard-only,
        :gates
-       ["Verify the recorded fixture SHA256 and extract only the new declarations over the two reviewed imports."
-        "Compile the fixture and canonical target; run lake build ConstructionTargets.SphereEquatorImageNullity."
-        "Reproduce two standard-only axiom audits and d=2 and d=3 applications."
-        "Audit dropLast and appendZero_dropLast coordinate reconstruction."
-        "Verify image_sphere proves both inclusions against the literal sphere and Fin.last-zero predicates."
-        "Verify ambient nullity uses the actual append-zero isometry and Isometry.hausdorffMeasure_image."
-        "Confirm no intrinsic subtype, partition, normalization, sphere-mass or moment theorem is claimed."
+       ["Verify fixture SHA256 before implementation."
+        "Compile fixture and canonical target; run lake build ConstructionTargets.HausdorffSubtypeNullity."
+        "Reproduce two standard-only axiom audits and both Euclidean examples."
+        "Verify subtype_univ_measure uses the actual subtype coercion isometry and Hausdorff image equality."
+        "Verify subtype_univ_null rewrites only by the proved measure equality and supplied ambient nullity."
+        "Confirm no partition, normalization, sphere-mass or moment theorem is claimed."
         "Run placeholder, forbidden-declaration, warning, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :representation
-      {:source
-       "The unit sphere in EuclideanSpace real (Fin d), with its reviewed raw d-dimensional Hausdorff-nullity theorem",
-       :target
-       "The literal subset of the unit sphere in EuclideanSpace real (Fin (d+1)) whose Fin.last coordinate is zero",
-       :direction
-       "Exact equality from the source sphere image under the reviewed append-zero isometric embedding to the target literal equator, followed by equality-preserving raw Hausdorff-measure transport from source nullity to ambient target nullity."},
-      :id :sphere-equator-image-ambient-nullity-1,
-      :kind :representation-comparison,
-      :depends-on
-      [:lower-dimensional-sphere-raw-hausdorff-nullity-1
-       :sphere-equator-append-zero-isometric-embedding-1],
+      :id :hausdorff-subtype-nullity-transport-1,
+      :kind :reusable-theorem,
+      :depends-on [:sphere-equator-image-ambient-nullity-1],
       :current-residual
-      "Source sphere nullity and the append-zero embedding are banked, but their image must be identified exactly with the literal equator before ambient and intrinsic nullity can be used in cap assembly.",
+      "Ambient equator nullity is banked, but the parent comparison explicitly requires its intrinsic subtype measure to be identified through the coercion isometry.",
       :other-consumers [:t02A05 :t01J06 :t94A10]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
@@ -31881,16 +31900,16 @@
        "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
        :exit 0}
       {:cmd
-       "Inspect SphereCapCoordinateIsometry, SphereEquatorEmbedding fixture, lower-dimensional sphere-nullity fixture and Isometry.hausdorffMeasure_image",
+       "Inspect subtype coercion isometry and raw Hausdorff image-transport APIs",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean",
+       "lake env lean /tmp/codex13-checkpoint50-subtype-nullity/HausdorffSubtypeNullity.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean",
+       "sha256sum /tmp/codex13-checkpoint50-subtype-nullity/HausdorffSubtypeNullity.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint50-subtype-nullity/HausdorffSubtypeNullity.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
@@ -31905,32 +31924,26 @@
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial sphere-equator image-nullity fixture compilation",
+     [{:cmd "Initial intrinsic Hausdorff-subtype fixture compilation",
        :exit 1,
        :correction
-       "The two prerequisite implementation modules were not yet present as canonical imports. Compiled their reviewed declarations in the same scratch fixture while keeping the new image and transport theorems separately named."}
-      {:cmd
-       "Compilation after composing the prerequisite declarations",
+       "The generic context supplied only a pseudo-metric structure, while raw Hausdorff image transport requires emetric, measurable and Borel structures. Added exactly those structures; the generic transport declarations then compiled."}
+      {:cmd "Compilation after correcting the generic context",
        :exit 1,
        :correction
-       "Corrected unit-sphere membership by rewriting with the append-zero norm theorem and isolated the source-nullity statements from the opened cap namespaces."}
-      {:cmd
-       "Compilation with source-nullity statements in the combined namespace",
-       :exit 1,
-       :correction
-       "Import interactions prevented the critical-dimension additive-Haar instance from elaborating in the combined declaration block. Made the new transport theorem accept the already-banked source-nullity equality explicitly; both d=2 and d=3 applications compile and introduce no new hypothesis beyond the prerequisite theorem."}],
+       "The concrete Euclidean d=2 and d=3 examples lacked their measurable-space instances under the minimal Hausdorff import. Added the Euclidean volume-measure import that provides the canonical Borel structures; the final fixture compiles without warnings."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint50-equator-image/SphereEquatorImageNullity.lean",
+      "/tmp/codex13-checkpoint50-subtype-nullity/HausdorffSubtypeNullity.lean",
       :sha256
-      "41b5affc82871ddb64935e292e521c6879020ae9dbe3a0466128251f18f8036a",
+      "347846695ecaca6f5698ca59508ad4bc1f73607954bb9d383322da315c18d746",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled representation-and-transport prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 routes. It defines the literal last-coordinate-zero equator, reconstructs a source point by dropping the last coordinate, proves appendZero(dropLast y)=y whenever the last coordinate is zero, and proves exact equality between the append-zero image of the source unit sphere and that equator. It then transports the already-banked source raw-Hausdorff nullity through the actual append-zero isometry using Isometry.hausdorffMeasure_image. Generic transport and the d=2 and d=3 applications compile. The parent probe is not GO because intrinsic subtype Hausdorff nullity and the measurable strict-upper-cap, strict-lower-cap and equator partition remain unproved. No numerical normalization, sphere mass, moment, Stokes or consumer-closure theorem is claimed; no canonical source or ledger was edited.",
+     "Exactly one complete compiled subtype-transport prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 routes. For any subset of a Borel emetric space, it proves that the raw d-dimensional Hausdorff measure of the entire induced subtype equals the ambient raw Hausdorff measure of the carrier. The proof uses isometry_subtype_coe and Isometry.hausdorffMeasure_image in the required direction. It then derives intrinsic subtype nullity from ambient nullity without normalization or scalar cancellation. Concrete applications for subsets of EuclideanSpace real (Fin 3) at d=2 and EuclideanSpace real (Fin 4) at d=3 compile. The parent probe is not GO because the measurable exact partition of each literal sphere into strict upper cap, strict lower cap and equator remains unproved. No sphere mass, cap-area sum, moment, Stokes or consumer-closure theorem is claimed; no canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: Hausdorff-null equators for the literal S2 and S3 cap decompositions",
@@ -31962,7 +31975,8 @@
     :oriented-checkpoint50-corrected-raw-normalization-and-consumer-refill-1
     :lower-dimensional-sphere-raw-hausdorff-nullity-1
     :sphere-equator-append-zero-isometric-embedding-1
-    :sphere-equator-image-ambient-nullity-1],
+    :sphere-equator-image-ambient-nullity-1
+    :hausdorff-subtype-nullity-transport-1],
    :current-residual
    "The two strict cap area formulas are banked, but assembling them into whole-sphere formulas requires proving that the literal last-coordinate equator is d-dimensional Hausdorff-null in dimensions two and three.",
    :other-consumers [:t02A05 :t01J06 :t94A10]}
