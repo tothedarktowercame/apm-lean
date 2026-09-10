@@ -26842,8 +26842,207 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:near-closure-eligibility
+    {:eligible-unreserved 0,
+     :boundaries
+     [{:consumers [:a97J08 :t00A03 :t94J09 :t97A01 :t99J03 :t95J06],
+       :boundary
+       "Controlled finite-family arc position, planar separation, polygon invariants and classification remain; finite-family translation is reserved. Preserve the homeomorphism-versus-diffeomorphism discrepancy."}
+      {:consumers [:t00J01],
+       :boundary
+       "Klein-product and exact fold-fiber obligations remain."}
+      {:consumers [:t00J02 :t03J05 :t96J06 :t98A02],
+       :boundary
+       "Orientation compatibility, global localization, intersection/duality and gluing remain; transition-unit constancy is reserved."}
+      {:consumers [:t01A05],
+       :boundary
+       "Recorded connectedness specification defect remains."}
+      {:consumers [:t01A08],
+       :boundary
+       "Arbitrary-model chart-domain and within-derivative applicability remain."}
+      {:consumers [:t01J04 :t94A06],
+       :boundary
+       "Exact regular-preimage, half-space atlas and normal-translation applicability remain."}
+      {:consumers [:t02A05 :t95J05],
+       :boundary
+       "Linear graph density is now proved, but nonlinear area transport and literal intrinsic sphere mass are not."}
+      {:consumers [:t02A08],
+       :boundary
+       "Actual arbitrary-integer sphere degree realization remains."}
+      {:consumers [:t03J02],
+       :boundary
+       "The frozen closed-circle gluing adapter is concurrently awaiting review; no closure is inferred."}
+      {:consumers [:t03J04],
+       :boundary
+       "Transfer does not establish arbitrary-dimensional torus homology, Euler sums or Euler multiplicativity."}
+      {:consumers [:t92J06 :t98A01],
+       :boundary
+       "Cover classification, monodromy, surface-cover realization and genus invariance remain."}
+      {:consumers [:t96J05],
+       :boundary
+       "Preserve the proved radial counterexample and separate analytic/smooth repair obligations."}]},
+    :concurrency
+    {:exclude
+     [:t03j02-frozen-null-circle-gluing-closure-probe-refill48
+      :coefficient-chart-transition-unit-local-constancy-probe-refill48
+      :finite-plane-arc-family-small-translations-probe-refill48],
+     :preserve-stops
+     [:oriented-checkpoint41-coefficient-transition-local-constancy-1
+      :oriented-checkpoint42-euclidean-graph-hausdorff-area-1],
+     :finding
+     "Concurrent chart normalization and two-arc translation are reviewed, but do not imply transition-unit constancy, endpoint-preserving perturbation or consumer closure. Do not duplicate their reserved continuations."},
+    :residual
+    "One fresh bounded metric/measure construction and a matching successor are elected. Full nonlinear area transport remains stopped pending its missing constructions. No canonical source or ledger was edited.",
+    :outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read DAG, foundational-program note and closure policy; inspect both ledgers and dependency reviews",
+      :exit 0}
+     {:cmd "python3 /tmp/codex13-checkpoint44-census.py", :exit 0}
+     {:cmd
+      "Audit concurrent chart normalization, plane translation and refill48 reservations",
+      :exit 0}
+     {:cmd
+      "Inspect ApproximatesLinearOn and its Lipschitz residual API",
+      :exit 0}
+     {:cmd "sha256sum /tmp/codex13-checkpoint44-census.json", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}],
+    :replacement-items
+    [{:consumer :t02A05,
+      :stop-condition
+      "Do not assume a nonlinear area formula, supplied graph equivalence, measure inequality or numerical normalization. Retain the actual L2 graph metric. Do not retry full differentiable area assembly, infer sphere masses or claim consumer closure. Use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "MANIFOLD INTEGRATION: two-sided Hausdorff graph bounds from uniform linear approximation",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "E is EuclideanSpace real (Fin d), with d a natural dimension. Let f:E→real, ell:E→L[real]real, s⊆E and 0≤epsilon<1. Assume the explicit two-point residual bound norm(f(x)-f(y)-ell(x-y))≤epsilon*norm(x-y) for x,y∈s, equivalently the appropriate ApproximatesLinearOn hypothesis. No derivative, openness or area formula is supplied.",
+       :probe
+       "Construct the actual correspondence between the linear graph of ell over s and the graph of f over s, preserving source coordinates, with its inverse and induced subtype topology. Prove the forward Lipschitz bound 1+epsilon and inverse bound 1/(1-epsilon) using the L2 graph norm and the two-point residual estimate. Derive the exact two-sided Hausdorff d-measure bounds (1-epsilon)^d*J(ell)*H_d(s)≤H_d(graph(f,s))≤(1+epsilon)^d*J(ell)*H_d(s), where J(ell)=sqrt(1+norm(ell)^2), by actual graph-image transport and the reviewed LinearGraphDensity theorem. State coefficients in ENNReal without invalid subtraction or cancellation at infinity. Include empty sets, epsilon=0, zero ell and d=2/d=3 examples. GO requires a complete placeholder-free fixture; REVISE requires exactly one complete compiled missing geometric metric/measure prerequisite; STOP names an independent missing construction.",
+       :consumer-equation
+       "On every set with the stated uniform residual bound, actual nonlinear graph Hausdorff measure lies between the explicit lower and upper perturbations of the reviewed linear graph density.",
+       :consumer-residual
+       "Partition differentiable graphs into measurable approximation pieces and pass to exact density equality. Sphere-chart assembly and numerical Euclidean Hausdorff normalization remain before frozen sphere-integral closure; Stokes and periods remain downstream.",
+       :gates
+       ["Compile complete fixture and record SHA256."
+        "Audit the actual L2 graph correspondence, inverse and source-coordinate equations."
+        "Prove both metric bounds from the explicit residual hypothesis."
+        "Verify both Hausdorff inequalities through actual maps and reviewed linear density."
+        "Audit ENNReal factors and infinite/zero measure cases without unsafe cancellation."
+        "Compile empty-set, zero-error, zero-functional and dimension-two/three examples; record standard-only axioms."
+        "Recheck both ledgers, reservations and unresolved STOPs; run placeholder and forbidden-declaration scans."]},
+      :id :oriented-checkpoint44-uniform-graph-hausdorff-bounds-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint44-linear-area-and-consumer-refill
+       :oriented-checkpoint43-linear-graph-hausdorff-distortion-1],
+      :current-residual
+      "Exact linear graph density is reviewed. Nonlinear area transport needs quantitative graph-image measure bounds on sets where the scalar function is uniformly approximated by a fixed linear functional.",
+      :other-consumers [:t95J05 :t01J06 :t94A10]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: uniform graph measure bounds and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint45-uniform-area-bounds-and-consumer-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint44-uniform-graph-hausdorff-bounds-1],
+      :current-residual
+      "Measure uniform graph bounds separately from exact differentiable area transport and numerical sphere normalization; rerank all consumers against concurrent outcomes.",
+      :other-consumers []}],
+    :changed-paths [],
+    :measures
+    {:frozen-branch-uptake 0,
+     :placeholder-delta 0,
+     :typed-residual-after
+     "Constructed range isometry, exact Hausdorff determinant transport and Gram-based sqrt(1+norm(ell)^2) evaluation are reviewed. Uniform nonlinear graph distortion estimates, differentiable area assembly and numerical normalization remain.",
+     :frozen-closures 0,
+     :infrastructure-packets 4,
+     :corrected-closures 0,
+     :portfolio-infrastructure 2,
+     :new-proved-refutations 0,
+     :portfolio-modules ["LinearGraphMeasure" "LinearGraphDensity"],
+     :concurrent-infrastructure 2,
+     :review-outcomes
+     {:implementation-pass 4, :concurrent-adapter-awaiting-review 1},
+     :concurrent-modules
+     ["CoefficientChartBallNormalization" "PlaneArcSmallTranslation"],
+     :typed-residual-before
+     "Actual linear graph range transport and evaluation of its determinant factor were absent."},
+    :ranking
+    [{:rank 0,
+      :program "Near-closure adapters",
+      :finding
+      "All 23 recounted; no unreserved adapter clears its recorded boundary. Exclude the active t03J02 adapter."}
+     {:rank 1,
+      :program "Surface geometry and local point-variation",
+      :finding
+      "Broad shared reach, with next bounded constructions already reserved."}
+     {:rank 2,
+      :program "Intrinsic integration and Stokes",
+      :finding
+      "Elect one uniform graph-distortion estimate using the newly reviewed exact linear density. Direct measure seams are t02A05 and t95J05; t01J06 and t94A10 remain proposed downstream integration consumers."}
+     {:rank 3,
+      :program
+      "Regular-preimage, general-model Sard, global fundamental classes and cap/Thom",
+      :finding
+      "Broad reach but larger independent atlas, orientation and global obligations than the selected metric estimate."}
+     {:rank 4,
+      :program
+      "Cover classification, collar/gluing, product homology/Kunneth and integer sphere degree",
+      :finding
+      "Their exact missing constructions remain; no closing adapter follows from the new linear measure theorem."}
+     {:rank 5,
+      :program "Banked uptake, corrected closures and refutations",
+      :finding
+      "Preserve existing frozen closures, repaired positive-dimensional t94J08 and original S0 refutation/reduced-homology coverage, corrected t96J07 and the t96J05 refutation. No repeated closure credit."}],
+    :finding
+    "All named consumer files are unchanged. Four infrastructure modules were added and independently reviewed: two linear graph measure modules and two concurrent geometric modules. The exact linear Hausdorff distortion is now proved, including zero functional. Nonlinear area transport and numerical sphere normalization remain absent. No unreserved near-closure adapter became eligible; the concurrent circle-gluing adapter is awaiting review. Elect one bounded two-sided graph measure estimate from uniform linear approximation, leaving nonlinear area assembly and all unresolved STOPs separate.",
+    :seat "codex-13",
+    :census
+    {:path "/tmp/codex13-checkpoint44-census.json",
+     :open 33,
+     :baseline "1569ccdfe3f716644ee88f4d86131008274970bf",
+     :existing 58,
+     :placeholder-after 62,
+     :zero-placeholder 25,
+     :placeholder-delta 0,
+     :within-two-placeholders 23,
+     :placeholder-before 62,
+     :head "db73e34eb80699872f845e738c9d6e1191ac5cf8",
+     :construction-modules-after 755,
+     :consumer-changed-paths [],
+     :construction-modules-before 751,
+     :sha256
+     "d78795f35f7e2d589c4fc4efdacff7c786f1b62ff48f3df0b569955ed90e74a7",
+     :named 59,
+     :missing ["t93A05"]}},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: linear Hausdorff distortion and renewed consumer eligibility",
@@ -26859,6 +27058,70 @@
     :oriented-checkpoint43-graph-area-and-consumer-refill],
    :current-residual
    "Measure linear Hausdorff distortion separately from nonlinear area transport and numerical sphere normalization; rerank all consumers against concurrent outcomes.",
+   :other-consumers []}
+  {:consumer :t02A05,
+   :stop-condition
+   "Do not assume a nonlinear area formula, supplied graph equivalence, measure inequality or numerical normalization. Retain the actual L2 graph metric. Do not retry full differentiable area assembly, infer sphere masses or claim consumer closure. Use a unique row-specific scratch directory.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "MANIFOLD INTEGRATION: two-sided Hausdorff graph bounds from uniform linear approximation",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "E is EuclideanSpace real (Fin d), with d a natural dimension. Let f:E→real, ell:E→L[real]real, s⊆E and 0≤epsilon<1. Assume the explicit two-point residual bound norm(f(x)-f(y)-ell(x-y))≤epsilon*norm(x-y) for x,y∈s, equivalently the appropriate ApproximatesLinearOn hypothesis. No derivative, openness or area formula is supplied.",
+    :probe
+    "Construct the actual correspondence between the linear graph of ell over s and the graph of f over s, preserving source coordinates, with its inverse and induced subtype topology. Prove the forward Lipschitz bound 1+epsilon and inverse bound 1/(1-epsilon) using the L2 graph norm and the two-point residual estimate. Derive the exact two-sided Hausdorff d-measure bounds (1-epsilon)^d*J(ell)*H_d(s)≤H_d(graph(f,s))≤(1+epsilon)^d*J(ell)*H_d(s), where J(ell)=sqrt(1+norm(ell)^2), by actual graph-image transport and the reviewed LinearGraphDensity theorem. State coefficients in ENNReal without invalid subtraction or cancellation at infinity. Include empty sets, epsilon=0, zero ell and d=2/d=3 examples. GO requires a complete placeholder-free fixture; REVISE requires exactly one complete compiled missing geometric metric/measure prerequisite; STOP names an independent missing construction.",
+    :consumer-equation
+    "On every set with the stated uniform residual bound, actual nonlinear graph Hausdorff measure lies between the explicit lower and upper perturbations of the reviewed linear graph density.",
+    :consumer-residual
+    "Partition differentiable graphs into measurable approximation pieces and pass to exact density equality. Sphere-chart assembly and numerical Euclidean Hausdorff normalization remain before frozen sphere-integral closure; Stokes and periods remain downstream.",
+    :gates
+    ["Compile complete fixture and record SHA256."
+     "Audit the actual L2 graph correspondence, inverse and source-coordinate equations."
+     "Prove both metric bounds from the explicit residual hypothesis."
+     "Verify both Hausdorff inequalities through actual maps and reviewed linear density."
+     "Audit ENNReal factors and infinite/zero measure cases without unsafe cancellation."
+     "Compile empty-set, zero-error, zero-functional and dimension-two/three examples; record standard-only axioms."
+     "Recheck both ledgers, reservations and unresolved STOPs; run placeholder and forbidden-declaration scans."]},
+   :id :oriented-checkpoint44-uniform-graph-hausdorff-bounds-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint44-linear-area-and-consumer-refill
+    :oriented-checkpoint43-linear-graph-hausdorff-distortion-1
+    :oriented-checkpoint44-linear-area-and-consumer-refill],
+   :current-residual
+   "Exact linear graph density is reviewed. Nonlinear area transport needs quantitative graph-image measure bounds on sets where the scalar function is uniformly approximated by a fixed linear functional.",
+   :other-consumers [:t95J05 :t01J06 :t94A10]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: uniform graph measure bounds and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id :oriented-checkpoint45-uniform-area-bounds-and-consumer-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint44-uniform-graph-hausdorff-bounds-1
+    :oriented-checkpoint44-linear-area-and-consumer-refill],
+   :current-residual
+   "Measure uniform graph bounds separately from exact differentiable area transport and numerical sphere normalization; rerank all consumers against concurrent outcomes.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
