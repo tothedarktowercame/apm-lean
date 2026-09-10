@@ -26462,22 +26462,129 @@
    :stop-condition
    "Bank the actual range and determinant measure comparison only. Do not claim the determinant equals sqrt(1+norm(ell)^2), even for zero ell, or infer nonlinear area transport, sphere normalization or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint43-linear-graph/LinearGraphMeasure.lean",
-      :sha256
-      "9f9be05c41ec8cc25a059a8cfe4b9b2b51843cc62b0fd720b0019251aa3cf15e"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/codex13-checkpoint43-linear-graph/LinearGraphMeasure.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholders 0,
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Compute the constructed absolute determinant as sqrt(1+norm(ell)^2), including ell=0. Its value is not evaluated here. Nonlinear area transport, numerical sphere normalization and consumer closure remain downstream. Ledgers and frozen consumers remain untouched.",
+    :gates
+    {:range-dimension :pass,
+     :determinant-positivity :pass,
+     :whitespace :pass,
+     :fixture-and-canonical-compilation :pass,
+     :actual-WithLp-graph-and-injectivity :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :no-assumed-numerical-normalization :pass,
+     :target-build :pass,
+     :exact-fixture-promotion :pass,
+     :ten-standard-only-audits :pass,
+     :actual-isometry-and-Haar-transport :pass,
+     :dimension-two-and-three-examples :pass,
+     :intrinsic-and-ambient-Hausdorff-equations :pass,
+     :constructed-orthonormal-range-isometry :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 10,
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"range"
+     "622132cb52d30cf75bf85814c4e95a4691aae6e395611cad4569ea5be364ab90",
+     "graph_value"
+     "5d0661a350f9afbe6091d454cd6f33a412194acd1898c95b95fcc6e38c03b22a",
+     "Ambient"
+     "9a240eed350eb620032068061584f0acc1a7d23f4663e05c877916a085205f7b",
+     "graph"
+     "3252a07e31519f9f87846f8ff640ad5df34795dfb89b24481c609004a81c366b",
+     "rangeMap"
+     "6701cc09dc3206b19b71910170b77bd4016ce99e7b8460a86267b657f0bf568f",
+     "graph_injective"
+     "2b1395b3256f9c13d6ccb1d7be49569918d1a3c1ee901432f8879d695ea54522",
+     "range_dimension"
+     "84209ed76f941f571ea430dc9b995173220f81bcafe9d6706dd9cf3f4a693bc3",
+     "dimension_three"
+     "d32072ee4f171ed5d7a007a5f40bd7c37209ea8b7c3f569af90110f4281a5de6",
+     "range_measure"
+     "fac915c579fa9ca1d8a757578b962b1af45f81c69ec773a0bddcda5bce2220be",
+     "E"
+     "b2e7a74dc0f8a980579ce54384e43d662d23841d9116eed609089411e652e918",
+     "rangeIsometry"
+     "03d3bdb0b3eb3455e29d9a8513531500ce76e54bf7465eecfdd437cf4ddb8635",
+     "distortion_pos"
+     "e191b75f9c804774e741f88833ad6da8a0b8356f7c790c30b586121729b5b9ee",
+     "ambientBorel"
+     "c055cebac6b111f7c26607e0204d1318ea4af184657f077974768f67539c5390",
+     "distortion"
+     "13ff8990f1627d8c46f7f48071f41b83e4ac62839a978b6ff72312f9ee650397",
+     "image_measure"
+     "16653e8ca0fcb4269b258ba02c84cd54f1beeb0552fccc0103ad875791ccadba",
+     "dimension_two"
+     "c778c653494a2f6e752955c3978bff94e52dca8085a8c9b9790361c1f622bf4f",
+     "domainMeasurable"
+     "c0e38632a175cddbc6f0c39f05e9405870d439eb9d42368aebb5f10f0a52081d",
+     "domainBorel"
+     "96f7702535939c95aa4f00dd795aba719c8ffb2fef3f6c46dfd1273331cb3dcf",
+     "coordinate_injective"
+     "7be98d16f908314f2dd45e9782b94b75b0e242e003cadc5b1b2276ebaa8336ac",
+     "coordinateMap"
+     "937a47c8d0fd922eb2d76b741c868aefb00dabbf824f79aa4f4aaca1965a90c4",
+     "ambientMeasurable"
+     "9fc12f776384ba253c2bba8eb56228bf5440c03eee42c33b83704c64303345a0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and dependency PASS receipt from both ledgers",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint43-linear-graph/LinearGraphMeasure.lean",
+      :exit 0}
+     {:cmd
+      "Python fixture hash verification and exact scoped promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint43-linear-graph/LinearGraphMeasure.lean > /tmp/lineargraph-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/LinearGraphMeasure.lean > /tmp/lineargraph-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.LinearGraphMeasure > /tmp/lineargraph-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verification of ten standard-only audits in each compilation log and zero warnings/errors; build 2429 jobs",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/LinearGraphMeasure.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and twenty-one statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m \"Construct linear graph range Hausdorff determinant comparison\"",
+      :exit 0}
+     {:cmd "git diff --check 773bf66a^ 773bf66a", :exit 0}
+     {:cmd
+      "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "773bf66a17f555bcfa561f3d6b65f18b65e8ea8d",
+    :changed-paths
+    ["ConstructionTargets/LinearGraphMeasure.lean"
+     "ConstructionTargets/LinearGraphMeasure.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint43-linear-graph/LinearGraphMeasure.lean",
+     :sha256
+     "9f9be05c41ec8cc25a059a8cfe4b9b2b51843cc62b0fd720b0019251aa3cf15e"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/LinearGraphMeasure.lean"
     "ConstructionTargets/LinearGraphMeasure.md"],
