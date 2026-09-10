@@ -69095,8 +69095,81 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the three actual conjugated compact-complement arrows, their six short-complex field identities and exactness at all three consecutive terms; no supplied coefficient-excision comparison to pairs in X.",
+   :evidence
+   {:placeholder-after 0,
+    :concurrent-paths ["holes/labs/topology-contract/build_step.bb"],
+    :placeholder-delta 0,
+    :residual
+    "Construct the coefficient relative-pair excision isomorphisms from the ambient complement presentation to H(X,X minus K), H(X,X minus L), H(X,X minus (K union L)) and H(X,X minus (K intersection L)); prove their naturality with the named arrows and transport the three exactness statements.",
+    :dependency-hashes
+    {:CoefficientCompactComplementTransportedExactness
+     "483bbc412f4f5c9914b1d0f1b3772f18235bb4b1ef28dff90258d0a551e9022a"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:intersectionPresentation_f
+     "d94594763ff97afd5fa28cdfc1c2287032f4cb5202e95f5321fc2f7c685f695e",
+     :exact_overlap
+     "5ab5819f84fd9434c78d70ecc819f6bdfa70d01ac8111ae89d08996146cd40b6",
+     :piecesPresentation_g
+     "a8954e04a39ce50c97f8082a717ce4cc96e424ceed9d6d4344891975c8932a99",
+     :piecesPresentation_f
+     "d9d4231c160d202e6f0474efe1b87f2586297ed755e4636fd3311671a2f636fb",
+     :exact_ambient
+     "8e0a411031c22bd85aef9fb4f10659f0880f262c0c294c9211e06581c7da1927",
+     :exact_pieces
+     "0d568b0258b124942e6b9c5a9b818acd68707add0325731b5cf7dd741267f659",
+     :intersectionPresentation_g
+     "bfa7070955839f87d530b4e8316938a7bc75ffbc617bc5d9ab252d0a19d464b1",
+     :ambientConnecting
+     "13767e30a3c05815a7af70f48a111f14ec3aa7fdc29db6f748c94ea79a70d2d0",
+     :unionPresentation_f
+     "2b0c42bc8b1ae7313dfcf50a60a3467312a90a8795c380ba7545b1ad3dd3f5bf",
+     :piecesToAmbient
+     "b6e4038a8b4ebf82f0b90ba982afc1ef6a618658f605db72106bc1d1b2f8af05",
+     :unionPresentation_g
+     "602cf34ad9e847a70588ef5e7b9e2cff725c1ce32ecfe7f997b798290e0595b7",
+     :overlapToPieces
+     "122c6b1267b3fc748bad4e891b5c29d1304e2a22d866aa3c0278968b87ad76ac"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and twelve complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientCompactComplementTransportedArrows.lean ConstructionTargets/CoefficientCompactComplementTransportedExactness.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Name transported compact complement arrows'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "e317e80717ce524b3e7539d85ea7a3a3d042f3bc",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactComplementTransportedArrows.lean",
+     :sha256
+     "c0b86527a652fcb4e131ef24eb9b342a69190bf0d6ef9ee62eee118f6cba2e77",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled the three named conjugated compact-complement arrows, all six short-complex field identities and exactness at the overlap, pieces and ambient consecutive terms. The signed middle arrow, compact Hausdorff hypotheses, arbitrary commutative-ring coefficients and all degrees are preserved. A concurrent modification to build_step.bb was observed after the scoped commit and left untouched. No final relative-pair arrow identification, coefficient excision, localization monicity, dimension vanishing or fundamental class is claimed.",
+    :axiom-audit-count 3,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean"],
    :dag-node
