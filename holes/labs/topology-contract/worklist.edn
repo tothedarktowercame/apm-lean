@@ -60544,12 +60544,25 @@
      "The literal Euclidean S2 or ConstructionTargets.Surfaces.Surface o g with 0 < g",
      :direction
      "Construct a homeomorphism from the source manifold to one of these target spaces; no classification or triangulation is assumed."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789015371566-17868-05ce044c",
+     :commands
+     ["git show 0b3af42ee6030a9f3780257ce8d0eed4f17437ca"
+      "Python artifact SHA256, six source hashes, pinned byte equality, placeholder counts and scope audit"
+      "Inspect Surfaces.SurfaceRel, CW attachment definitions and t99J03 conditional uniqueness adapter"
+      "rg -n 'triangulat|polygon|collar|cutAlong' ConstructionTargets --glob '*.lean'"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 0b3af42e:holes/labs/topology-contract/worklist.edn)"
+      "git show --format= --check 0b3af42e"],
+     :finding
+     "PASS as STOP, not closure. Independent of author codex-12. Artifact 50c25bfc0b85d1ca378ed0a06cd833e1108eae963c1fe6763c013ea092a04284 and six source hashes verified; audited consumers unchanged with one placeholder each. Existing CW definitions require attachment data; square triangulation and solid-torus collars concern specific spaces. The t99J03 adapter assumes existence and Euler invariance, so it cannot supply classification existence. Finite presentation and quotient-preserving polygon normalization remain distinct obligations. SurfaceRel at genus zero has no bounded-existential witnesses; keeping literal S2 separate is justified, without asserting a compiled consumer refutation. No new proof or axiom audit claimed. Validator 472 items OK; ledger-only scope and whitespace clean; ledger untouched."},
     :changed-paths [],
     :finding
     "The audited APIs do not construct a finite triangulation or polygon presentation from these manifold hypotheses. Mathlib's CW definitions require attachment data; they do not produce it for an arbitrary compact surface. Banked square triangulation and solid-torus collar constructions concern specific spaces. Surfaces supplies the target quotients, continuous surjective quotient maps and arithmetic formulas, but no polygon normalization or classification homeomorphism. The t99J03 uniqueness adapter assumes the existence dichotomy and Euler invariance, so it cannot establish the requested existence theorem.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "SURFACE CUTTING/CLASSIFICATION / compact surface polygon presentation",
