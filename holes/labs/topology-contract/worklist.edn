@@ -67486,6 +67486,19 @@
      "The original subtypes X minus K, X minus L and X minus (K union L)",
      :direction
      "Construct homeomorphisms from each nested complement representation to its original complement subtype, preserving the literal underlying point in X."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789045002660-18618-0a9c1395",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 1dd9048ae814a295c94501d130d0c1b0ba6a3e26"
+      "cmp /tmp/CoefficientCompactComplementPairHomeomorph.lean /tmp/CoefficientCompactComplementPairHomeomorph.review.lean"
+      "python3 <fixture, comment-stripped placeholder, and six declaration-header hash audit>"
+      "lake build ConstructionTargets.CoefficientCompactComplementSmallComparison"
+      "lake env lean /tmp/CoefficientCompactComplementPairHomeomorph.review.lean"
+      "git show --check --oneline 1dd9048ae814a295c94501d130d0c1b0ba6a3e26"],
+     :finding
+     "PASS: exact one-file fixture and dependency hashes reproduce; six declaration hashes and zero placeholders reproduce; compilation is green with standard-only axioms; all three homeomorphisms have the required nested-to-original complement direction and literal underlying-value boundary."},
     :commit "1dd9048ae814a295c94501d130d0c1b0ba6a3e26",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementPairHomeomorph.lean"],
@@ -67499,7 +67512,7 @@
     :axiom-audit-count 6,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementPairHomeomorph.lean"],
    :dag-node
@@ -67607,7 +67620,7 @@
      "The actual compact-complement cover and its absolute and relative cover-small comparisons are banked. Compiled exactly one geometric transport prerequisite: explicit homeomorphisms flatten the nested left piece, right piece and overlap to the original complements of K, L and K union L, with literal underlying-value formulas. These maps supply the required representations for coefficient homology transport. The ambient relative-pair comparison, signed Mayer-Vietoris arrow conjugation, localization monicity, dimension vanishing and fundamental classes remain unproved.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
