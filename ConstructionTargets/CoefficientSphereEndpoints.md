@@ -1,6 +1,6 @@
 # Coefficient-general low-dimensional sphere endpoints
 
-Promoted unchanged from `/tmp/CoefficientSphereEndpoints.lean`, SHA256 `115d7b73752f1ab988149c43021ca178a97b1a64c61120aaa9e6df6d07cac82c`.
+Promoted from `/tmp/CoefficientSphereEndpoints.lean`, SHA256 `115d7b73752f1ab988149c43021ca178a97b1a64c61120aaa9e6df6d07cac82c`. Owner repair commit `9c1dd72f234cea3a8ed52ea09ea08d24664dd772` removed only its extra EOF blank line to satisfy the whitespace gate. The canonical SHA256 is `6c35382757f8511301f7d2dbbedbad9c7c2ceeb674d97cc1d4b6b37fae5e3e33`; all declaration text and proofs are unchanged.
 
 R and all spaces are Type 0; R is a commutative ring with no field, domain or nontriviality assumption. Actual chains and homology use ModuleCat R with coefficient object `ModuleCat.of R R`.
 
