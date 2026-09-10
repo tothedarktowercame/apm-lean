@@ -31896,8 +31896,42 @@
   {:consumer :t95J05,
    :stop-condition
    "Bank only measurability, pairwise disjointness and exact sphere union for the strict upper cap, strict lower cap and Fin.last-zero equator. Do not sum measures, claim sphere mass, use numerical normalization, evaluate moments, invoke Stokes or claim consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Repair and immutably pin the fixture namespace before promoting the measurable strict-cap/equator partition; concrete intrinsic equator nullity instantiation remains downstream.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :reason :fixture-namespace-conflict,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
+      :exit 0}
+     {:cmd
+      "rg -n 'SphereCapEquatorPartition|sphere-cap-equator-measurable-partition-1' holes/labs/topology-contract/worklist2.edn; inspect the nested probe fixture and diagnostic history",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint50-cap-partition/SphereCapEquatorPartition.lean; sed -n '1,140p' /tmp/codex13-checkpoint50-cap-partition/SphereCapEquatorPartition.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint50-cap-partition/SphereCapEquatorPartition.lean; test ! -e ConstructionTargets/SphereCapEquatorPartition.lean; test ! -e ConstructionTargets/SphereCapEquatorPartition.md; git diff --exit-code -- ConstructionTargets/SphereCapEquatorPartition.lean ConstructionTargets/SphereCapEquatorPartition.md; git diff --check",
+      :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint50-cap-partition/SphereCapEquatorPartition.lean",
+     :sha256
+     "491f30b9213d04597a1d8e483ab0457d0033e2c102c2fa5512b49f0c30918a01",
+     :placeholder-count 0},
+    :finding
+    "The reviewed fixture matches SHA256 491f30b9213d04597a1d8e483ab0457d0033e2c102c2fa5512b49f0c30918a01 and independently compiles all three measurability results, all three pairwise-disjointness results, the exact sphere union, and the d=2 and d=3 examples with standard-only axioms. It imports the banked SphereCapEuclideanImage module and does not require the stopped nullity modules for these set-theoretic results. However, it declares namespace SphereCapEquatorPartition, while exact promotion requires ConstructionTargets.SphereCapEquatorPartition. Renaming or wrapping would change the exact fixture. Repair the fixture namespace and recorded digest, or consistently revise the acceptance namespace and exact-promotion requirement. This is a specification boundary, not a mathematical refutation.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereCapEquatorPartition.lean"
     "ConstructionTargets/SphereCapEquatorPartition.md"],
