@@ -18361,115 +18361,94 @@
    :stop-condition
    "No assumed sphere homology table, codiagonal identification, kernel normalization or coefficient-change theorem. Preserve ordinary H0 of the two-point sphere and all original consumer refutations.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Frozen sphere-identity transport and trace evaluation remain before that branch is discharged. Independent Klein-product and fold-fiber obligations prevent full t00J01 closure; antipodal signs and general orientation naturality are not claimed.",
-     :axiom-audits 25,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:namespace "ConstructionTargets.CoefficientSphereEndpoints",
-      :implementation
-      "Promote the exact compiled fixture, preserving actual homology maps, subtype inclusions and endpoint coordinate orientation.",
-      :declarations
-      ["boundaryHomeo"
-       "boundarySigmaIso"
-       "diskPointEquiv"
-       "diskIso"
-       "inclusion"
-       "sigma_coordinates"
-       "boolModuleIso"
-       "boolModule_sum"
-       "boundaryIso"
-       "inclusion_coordinates"
-       "boundaryKernelIso"
-       "boundaryKernelIso_hom"
-       "kernel_signed_projection"
-       "kernel_false"
-       "kernel_true"
-       "circleH1"
-       "circleH1_hom"
-       "sphereH2"
-       "sphereH2_hom"
-       "sphereH1"
-       "sphereH0"
-       "circle_inverse_left"
-       "circle_inverse_right"
-       "sphere_two_inverse_left"
-       "sphere_two_inverse_right"
-       "sphere_one_inverse_left"
-       "sphere_one_inverse_right"
-       "identity_coordinates"
-       "rationalS2H0"
-       "rationalS2H1"
-       "rationalS2H2"
-       "integralS1H1"
-       "integralS2H1"
-       "integralS2H2"
-       "rational_identity_zero"
-       "rational_identity_one"
-       "rational_identity_two"],
-      :hypotheses
-      "R is a Type 0 commutative ring. All spaces and actual ModuleCat R chains are Type 0. No field, domain or nontriviality hypothesis is imposed. Boundary coordinates send the negative disk endpoint to false and the positive endpoint to true. Ordinary H0 of the disconnected boundary retains both coordinates.",
-      :consumer-equation
-      "Actual H1(S1;R) and H2(S2;R) are isomorphic to R; actual H1(S2;R) is isomorphic to ModuleCat.of R (Fin 0 → R). Rational S2 H0, H1 and H2 identifications conjugate the actual identity-induced maps to identities.",
-      :consumer-residual
-      "Transport the rational identifications to the exact frozen sphere-identity branch and evaluate its traces. The full t00J01 theorem retains independent Klein-product and fold-fiber obligations; general signed naturality remains separate.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientSphereEndpoints."
-       "Reproduce twenty-five standard-only axiom audits and all integer/rational examples."
-       "Audit actual boundary-inclusion codiagonal equation, signed kernel projection, forward composites and both inverse laws."
-       "Verify rational identity-map equations in degrees zero, one and two."
-       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure rules, dependency PASS receipts and discrete H0, geometric boundary and kernel APIs",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/CoefficientSphereEndpoints.lean > /tmp/CoefficientSphereEndpoints.log 2>&1",
-       :exit 0}
-      {:cmd
-       "Validate twenty-five standard-only axiom audits and absence of warnings and errors in the final compilation log",
-       :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientSphereEndpoints.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientSphereEndpoints.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial endpoint fixture compilation",
-       :exit 1,
-       :correction
-       "Corrected the subtype-inclusion namespace, supplied the coproduct projection equation and explicit source map for kernel transport. The initial elaboration timeout disappeared without changing resource options."}
-      {:cmd "Second endpoint fixture compilation",
-       :exit 1,
-       :correction
-       "Removed a redundant tactic and transported the composed-map equality with explicit congrArg and associativity."}
-      {:cmd "First extended endpoint compilation",
-       :exit 1,
-       :correction
-       "Qualified CategoryTheory.Functor.map_id to avoid resolving the unrelated root Functor identity lemma. Subsequent and final compilations succeeded."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientSphereEndpoints.lean",
-      :sha256
-      "115d7b73752f1ab988149c43021ca178a97b1a64c61120aaa9e6df6d07cac82c"},
-     :finding
-     "The complete fixture proves that the actual one-dimensional disk-boundary H0 inclusion is the codiagonal in constructed coordinates. Its categorical kernel generator has coordinates (r,-r), with explicit projection and forward-map equations. The reviewed sphere shift gives circle H1 and S2 H2; the reviewed connected-boundary calculation supplies S2 H1 vanishing. Integer and rational endpoint isomorphisms, inverse laws and rational identity-map equations compile. No integral conclusion is reinterpreted as R-linear.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientSphereEndpoints.lean"
-       "ConstructionTargets/CoefficientSphereEndpoints.md"]},
-     :seat "codex-13"}},
+   {:canonical-sha256
+    "6c35382757f8511301f7d2dbbedbad9c7c2ceeb674d97cc1d4b6b37fae5e3e33",
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Frozen sphere-identity transport and trace evaluation remain downstream; independent Klein-product and fold-fiber obligations prevent full t00J01 closure. No antipodal signs or general orientation naturality claimed.",
+    :owner-repair-commit "9c1dd72f234cea3a8ed52ea09ea08d24664dd772",
+    :gates
+    {:compilation :pass,
+     :build :pass,
+     :axioms :pass,
+     :examples :pass,
+     :forbidden-scan :pass,
+     :scope :pass,
+     :diff-check :pass,
+     :commit :pass},
+    :axiom-audits 25,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Direct compilations: zero warnings. Build replayed 20 dependency warnings."],
+    :statement-hashes
+    {:count 37,
+     :unchanged-from-original-fixture true,
+     :method
+     "Declaration text from theorem/def keyword to immediately before the space preceding :=; equality verified for all 37 declarations."},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :fixture-deviation
+    "Owner repair removed exactly one final newline; all declarations and proofs remain unchanged.",
+    :commands
+    [{:cmd
+      "Inspect owner repair commit 9c1dd72f and verify exactly one final newline removed",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientSphereEndpoints.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientSphereEndpoints.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientSphereEndpoints",
+      :exit 0,
+      :jobs 8284}
+     {:cmd
+      "Validate twenty-five standard-only axiom audits in fixture and canonical compilation logs",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientSphereEndpoints.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m 'Record owner whitespace repair for sphere endpoint fixture'",
+      :exit 0}
+     {:cmd
+      "git diff --check dfa06cec^ 654b65da -- ConstructionTargets/CoefficientSphereEndpoints.lean ConstructionTargets/CoefficientSphereEndpoints.md",
+      :exit 0}
+     {:cmd
+      "Verify all 37 statement hashes unchanged, combined two-file implementation scope and clean workspace",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "Initial assertion that canonical file still equals the original fixture",
+      :exit 1,
+      :correction
+      "Discovered the owner's intervening whitespace repair; verified its exact one-byte change."}
+     {:cmd "git diff --check dfa06cec^ dfa06cec",
+      :exit 2,
+      :correction
+      "This historical range predates the owner repair. The cumulative corrected implementation range passes."}],
+    :this-turn-changed-paths
+    ["ConstructionTargets/CoefficientSphereEndpoints.md"],
+    :commit "654b65dadbca02cd4cfa126b68e06c5f6a93d68e",
+    :commits
+    ["654b65dadbca02cd4cfa126b68e06c5f6a93d68e"
+     "dfa06cecfa45962b8152a8035128b1c977c33b01"
+     "9c1dd72f234cea3a8ed52ea09ea08d24664dd772"],
+    :changed-paths
+    ["ConstructionTargets/CoefficientSphereEndpoints.lean"
+     "ConstructionTargets/CoefficientSphereEndpoints.md"],
+    :fixture
+    {:path "/tmp/CoefficientSphereEndpoints.lean",
+     :sha256
+     "115d7b73752f1ab988149c43021ca178a97b1a64c61120aaa9e6df6d07cac82c"},
+    :finding
+    "Completed fresh acceptance verification after the owner repair and committed accurate fixture provenance documentation. Endpoint proofs, signed coordinates, inverse laws and rational identity-map equations remain unchanged.",
+    :implementation-commit "dfa06cecfa45962b8152a8035128b1c977c33b01",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSphereEndpoints.lean"
     "ConstructionTargets/CoefficientSphereEndpoints.md"],
