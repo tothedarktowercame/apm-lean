@@ -67686,88 +67686,123 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require all three coefficient chain inclusion squares and their derived homology squares with exact forward arrows; no supplied naturality square or exactness.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientCompactComplementHomologySquares.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / compact-complement homology inclusion squares",
+   :acceptance
+   {:fixture "/tmp/CoefficientCompactComplementHomologySquares.lean",
+    :fixture-sha256
+    "f7ece409aa802bf09740d18ec252def76d2a2e75ace12002d1e135d49fecba6f",
+    :implementation
+    "Promote the exact fixture. Compile left_chain_square, right_chain_square, overlap_chain_square, left_homology_square, right_homology_square and overlap_homology_square. Verify CoefficientCompactComplementHomologyTransport SHA256 fcab197c86e857e788128298cedc9cf0de41255c0961dbbabb983388b804e2b7. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients, every natural homology degree and the literal forward inclusion arrows. Retain the 800000 elaboration heartbeat bound. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris exactness, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquares.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "Homeomorphism-induced coefficient chain and homology maps from the nested complement pieces, followed by the original-complement inclusions into X",
+    :target
+    "The direct coefficient chain and homology maps of the nested-piece inclusions into X",
+    :direction
+    "Prove exact equality from each transported forward composite to its direct nested inclusion map, first on chains and then on homology in every natural degree."},
+   :id
+   :coefficient-compact-complement-homology-squares-implementation-refill49,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-compact-complement-homology-transport-implementation-refill49],
+   :current-residual
+   "Use these three naturality squares to conjugate the signed subcomplex Mayer-Vietoris maps and connecting morphism, then transport the relative ambient-complement presentation to the requested pairs in X by coefficient excision.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Use the three proved homology isomorphisms and inclusion identities to conjugate the signed subcomplex Mayer-Vietoris arrows and connecting morphism, then compare the resulting ambient-complement relative pair with the four requested relative pairs by coefficient excision.",
+     "Conjugate the banked signed subcomplex Mayer-Vietoris short complex through the proved left, right, overlap and ambient comparison squares, obtaining the exact sequence on the complement presentation before transporting its relative terms to X by coefficient excision.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require coefficient chain and homology isomorphisms induced by all three actual homeomorphisms and exact compatibility with the inclusions into X; no supplied homology equivalence or commuting inclusion.",
+      "Require all three coefficient chain inclusion squares and their derived homology squares with exact forward arrows; no supplied naturality square or exactness.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean"],
+      ["ConstructionTargets/CoefficientCompactComplementHomologySquares.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / compact-complement homology transport",
+      "MANIFOLD FUNDAMENTAL CLASS / compact-complement homology inclusion squares",
       :acceptance
       {:fixture
-       "/tmp/CoefficientCompactComplementHomologyTransport.lean",
+       "/tmp/CoefficientCompactComplementHomologySquares.lean",
        :fixture-sha256
-       "fcab197c86e857e788128298cedc9cf0de41255c0961dbbabb983388b804e2b7",
+       "f7ece409aa802bf09740d18ec252def76d2a2e75ace12002d1e135d49fecba6f",
        :implementation
-       "Promote the exact fixture. Compile chains, all three chain isomorphisms, all three homology isomorphisms, the six inclusion maps and all three inclusion-composition equalities. Verify CoefficientCompactComplementPairHomeomorph SHA256 65749ac9db8e65421f640ce0bdf3b37332683276b89af56e8c786cf81dd38ca6. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris exactness, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile left_chain_square, right_chain_square, overlap_chain_square, left_homology_square, right_homology_square and overlap_homology_square. Verify CoefficientCompactComplementHomologyTransport SHA256 fcab197c86e857e788128298cedc9cf0de41255c0961dbbabb983388b804e2b7. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients, every natural homology degree and the literal forward inclusion arrows. Retain the 800000 elaboration heartbeat bound. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris exactness, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean"],
+       ["lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquares.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "Coefficient singular chains and homology of the nested left, right and overlap subtypes inside the complement of K intersection L",
+       "Homeomorphism-induced coefficient chain and homology maps from the nested complement pieces, followed by the original-complement inclusions into X",
        :target
-       "Coefficient singular chains and homology of X minus K, X minus L and X minus (K union L), with their inclusions into X",
+       "The direct coefficient chain and homology maps of the nested-piece inclusions into X",
        :direction
-       "Apply the forward nested-to-original homeomorphisms to obtain chain and homology isomorphisms, and prove their forward maps followed by original inclusion equal the nested inclusion."},
+       "Prove exact equality from each transported forward composite to its direct nested inclusion map, first on chains and then on homology in every natural degree."},
       :id
-      :coefficient-compact-complement-homology-transport-implementation-refill49,
+      :coefficient-compact-complement-homology-squares-implementation-refill49,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-compact-complement-pair-homeomorph-implementation-refill49
-       :coefficient-compact-complement-small-comparison-implementation-refill49],
+      [:coefficient-compact-complement-homology-transport-implementation-refill49],
       :current-residual
-      "Conjugate the signed subcomplex Mayer-Vietoris maps and connecting morphism through these isomorphisms, then perform the final relative-pair excision comparison.",
+      "Use these three naturality squares to conjugate the signed subcomplex Mayer-Vietoris maps and connecting morphism, then transport the relative ambient-complement presentation to the requested pairs in X by coefficient excision.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientCompactComplementPairHomeomorph",
+       "lake build ConstructionTargets.CoefficientCompactComplementHomologyTransport",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientCompactComplementHomologyTransport.lean",
+       "lake env lean /tmp/CoefficientCompactComplementHomologySquares.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientCompactComplementHomologyTransport.lean ConstructionTargets/CoefficientCompactComplementPairHomeomorph.lean",
+       "sha256sum /tmp/CoefficientCompactComplementHomologySquares.lean ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean",
        :exit 0}
       {:cmd
-       "python3 /tmp/coefficient-compact-complement-homology-transport-audit.py",
+       "python3 /tmp/coefficient-compact-complement-homology-squares-audit.py",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientCompactComplementHomologyTransport.lean",
+       "lake env lean /tmp/CoefficientCompactComplementHomologySquares.lean",
        :exit 1,
        :correction
-       "Added explicit source and target chain-complex types so TopCat.isoOfHomeo could infer both subtype spaces, and expressed each homeomorphism as an explicit ContinuousMap for inclusion composition. Final compilation succeeds without warnings."}
-      {:cmd "python3 - <<'PY' ... PY",
+       "Unfolded each mapped homeomorphism to the exact TopCat isomorphism before applying functorial composition."}
+      {:cmd
+       "lake env lean /tmp/CoefficientCompactComplementHomologySquares.lean",
        :exit 1,
        :correction
-       "Removed a stray diagnostic quote and reran the placeholder audit successfully."}],
+       "Raised the deterministic elaboration heartbeat limit to 800000 for the three large definitional chain-map equalities; no theorem, hypothesis or invariant changed. Final compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientCompactComplementHomologyTransport.lean",
+     {:path "/tmp/CoefficientCompactComplementHomologySquares.lean",
       :sha256
-      "fcab197c86e857e788128298cedc9cf0de41255c0961dbbabb983388b804e2b7",
+      "f7ece409aa802bf09740d18ec252def76d2a2e75ace12002d1e135d49fecba6f",
       :placeholder-count 0},
      :finding
-     "The three nested compact-complement homeomorphisms are banked. Compiled exactly one homological transport prerequisite: applying actual coefficient singular chains and homology produces isomorphisms from the nested left, right and overlap pieces to the original complements of K, L and K union L in every natural degree. The underlying continuous maps commute exactly with the literal inclusions into X. Signed Mayer-Vietoris conjugation, the ambient relative-pair comparison, localization monicity, dimension vanishing and fundamental classes remain unproved.",
+     "The coefficient chain and homology isomorphisms for all three compact-complement pieces are banked. Compiled exactly one naturality prerequisite: the forward homeomorphism-induced chain maps followed by the original-complement inclusions equal the nested inclusions for the left, right and overlap pieces, and the corresponding homology-map squares commute in every natural degree. Signed Mayer-Vietoris conjugation, relative ambient excision, localization monicity, dimension vanishing and fundamental classes remain unproved.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -67783,7 +67818,8 @@
     :coefficient-compact-complement-geometry-implementation-refill49
     :coefficient-compact-complement-small-comparison-implementation-refill49
     :coefficient-compact-complement-pair-homeomorph-implementation-refill49
-    :coefficient-compact-complement-homology-transport-implementation-refill49],
+    :coefficient-compact-complement-homology-transport-implementation-refill49
+    :coefficient-compact-complement-homology-squares-implementation-refill49],
    :current-residual
    "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
