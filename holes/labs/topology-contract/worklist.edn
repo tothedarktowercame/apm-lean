@@ -73570,8 +73570,50 @@
   {:consumer "t98A02",
    :stop-condition
    "Require an exact chain comparison between the restricted union-subspace cover-small complex and the ambient-X union-generated range complex, then conjugate this homology isomorphism to the compiled union-range inclusion and induce the relative cokernel comparison.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Compare the restricted-cover small chains on the union subtype with the union-generated ambient range chains, using the subspace-range chain isomorphism and the compiled ambient inclusion triangle. This will prove the denominator inclusion is a homology equivalence and enable the relative cokernel comparison.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:unionCoverHomologyIso
+     "861c79b7f9d72edb4cd832f3ef5028ceb3325e7a0659783b8ec557a7760b417d",
+     :unionCoverHomologyIso_hom
+     "c25a36db92a3e30e8f80882bde24c2f30e7beebe388e0adbf1203c5b6a8553d4",
+     :unionCover_homologyMap_isIso
+     "42002288ebadf554d8d449526514758af76cc3a62487aaa6d65f4bdf19d2e01e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubspaceUnionRestrictedSmallHomology.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedOpenCover.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-three-declaration audit over ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 3f4c22161ab23bdce58fff0818f8a366d9abfcc4",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 3f4c22161ab23bdce58fff0818f8a366d9abfcc4",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "3f4c22161ab23bdce58fff0818f8a366d9abfcc4",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubspaceUnionRestrictedSmallHomology.lean",
+     :sha256
+     "bdcbd90d92e9fd35c83cc8c0fee41f5f81c0b93982af0d6c37af35e1f4135fe0",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded restricted-open-cover dependency hash reproduce. All three requested declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRestrictedSmallHomology.lean"],
    :dag-node
