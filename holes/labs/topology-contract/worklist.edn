@@ -68168,6 +68168,41 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the coefficient chain and homology naturality squares for every actual subtype inclusion; no supplied commuting square.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / coefficient ambient-range naturality",
+   :acceptance
+   {:fixture "/tmp/CoefficientAmbientSubspaceRangeNaturality.lean",
+    :fixture-sha256
+    "a7f7ae638a11bc10b5c21c19310db71b922862e1aaf86708f0593869995cf66b",
+    :implementation
+    "Promote the exact fixture. Compile chain_square and homology_square. This supplies the actual-inclusion naturality route step required by the compact-support placeholder. Preserve arbitrary topological X, arbitrary inclusions A subset B, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The coefficient chain and homology maps obtained by first identifying an ambient range subcomplex with its actual subtype and then applying an actual subtype inclusion",
+    :target
+    "The coefficient chain and homology maps obtained by first applying the ambient range inclusion and then identifying the target range with its actual subtype",
+    :direction
+    "Prove exact equality from the range-to-subtype forward composite to the ambient-range-inclusion composite, first on coefficient chains and then on homology in every natural degree."},
+   :id
+   :coefficient-ambient-subspace-range-naturality-implementation-refill49,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-ambient-subspace-range-comparison-implementation-refill49],
+   :current-residual
+   "Instantiate these naturality squares for the compact-complement intersection, left, right and union arrows; conjugate the signed sequence through the resulting range homology isomorphisms, then transport its relative terms to the four requested pairs in X by coefficient excision.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
    :evidence
    {:probe
@@ -68177,75 +68212,64 @@
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require the coefficient chain and homology isomorphisms between an ambient range subcomplex and its actual topological subtype, with explicit forward and inverse map identities; no supplied comparison.",
+      "Require the coefficient chain and homology naturality squares for every actual subtype inclusion; no supplied commuting square.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean"],
+      ["ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / coefficient ambient-range comparison",
+      "MANIFOLD FUNDAMENTAL CLASS / coefficient ambient-range naturality",
       :acceptance
-      {:fixture "/tmp/CoefficientAmbientSubspaceRangeComparison.lean",
+      {:fixture "/tmp/CoefficientAmbientSubspaceRangeNaturality.lean",
        :fixture-sha256
-       "5072a4f2414c65eaa97d9b992fc1b09141e90ca0f120119eaebad092aa0d74d7",
+       "a7f7ae638a11bc10b5c21c19310db71b922862e1aaf86708f0593869995cf66b",
        :implementation
-       "Promote the exact fixture. Compile rangeChainsIso, rangeHomologyIso, rangeHomologyIso_hom and rangeHomologyIso_inv. This supplies the coefficient ambient-range comparison needed by the compact-support placeholder route. Preserve arbitrary topological X, arbitrary subspace A, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim naturality with inclusions, Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile chain_square and homology_square. This supplies the actual-inclusion naturality route step required by the compact-support placeholder. Preserve arbitrary topological X, arbitrary inclusions A subset B, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean"],
+       ["lake env lean ConstructionTargets/CoefficientAmbientSubspaceRangeNaturality.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "Coefficient singular chains and homology of the ambient SSet range subcomplex determined by a topological subspace inclusion",
+       "The coefficient chain and homology maps obtained by first identifying an ambient range subcomplex with its actual subtype and then applying an actual subtype inclusion",
        :target
-       "Coefficient singular chains and homology of the actual topological subtype",
+       "The coefficient chain and homology maps obtained by first applying the ambient range inclusion and then identifying the target range with its actual subtype",
        :direction
-       "Apply the inverse range isomorphism in the forward ambient-range-to-subtype direction, then apply coefficient chains and homology; identify both resulting isomorphism arrows as the corresponding chain and homology maps."},
+       "Prove exact equality from the range-to-subtype forward composite to the ambient-range-inclusion composite, first on coefficient chains and then on homology in every natural degree."},
       :id
-      :coefficient-ambient-subspace-range-comparison-implementation-refill49,
+      :coefficient-ambient-subspace-range-naturality-implementation-refill49,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-compact-complement-cover-sequence-implementation-refill49],
+      [:coefficient-ambient-subspace-range-comparison-implementation-refill49],
       :current-residual
-      "Prove coefficient naturality of the range comparison for the intersection, left, right and union inclusions; use those squares to conjugate the instantiated signed sequence, then transport its relative terms to the requested pairs in X by coefficient excision.",
+      "Instantiate these naturality squares for the compact-complement intersection, left, right and union arrows; conjugate the signed sequence through the resulting range homology isomorphisms, then transport its relative terms to the four requested pairs in X by coefficient excision.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientCompactComplementCoverSequence >/tmp/coefficient-cover-build.log",
+       "lake build ConstructionTargets.CoefficientAmbientSubspaceRangeComparison >/tmp/coefficient-range-build.log",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientAmbientSubspaceRangeComparison.lean",
+       "lake env lean /tmp/CoefficientAmbientSubspaceRangeNaturality.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientAmbientSubspaceRangeComparison.lean ConstructionTargets/CoefficientCompactComplementCoverSequence.lean",
+       "sha256sum /tmp/CoefficientAmbientSubspaceRangeNaturality.lean ConstructionTargets/CoefficientAmbientSubspaceRangeComparison.lean",
        :exit 0}
       {:cmd
-       "python3 placeholder-and-declaration audit over /tmp/CoefficientAmbientSubspaceRangeComparison.lean",
+       "python3 placeholder-and-declaration audit over /tmp/CoefficientAmbientSubspaceRangeNaturality.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/CoefficientAmbientSubspaceRangeComparison.lean",
-       :exit 1,
-       :correction
-       "The promoted compact-complement cover-sequence dependency lacked its canonical object file. Built that unchanged dependency before retrying."}
-      {:cmd
-       "lake env lean /tmp/CoefficientAmbientSubspaceRangeComparison.lean",
-       :exit 1,
-       :correction
-       "Opened the existing SingularHomologyConcrete namespace that owns subspaceInclusion. The final fixture compiles without placeholders or warnings."}],
      :fixture
-     {:path "/tmp/CoefficientAmbientSubspaceRangeComparison.lean",
+     {:path "/tmp/CoefficientAmbientSubspaceRangeNaturality.lean",
       :sha256
-      "5072a4f2414c65eaa97d9b992fc1b09141e90ca0f120119eaebad092aa0d74d7",
+      "a7f7ae638a11bc10b5c21c19310db71b922862e1aaf86708f0593869995cf66b",
       :placeholder-count 0},
      :finding
-     "Compiled one missing coefficient comparison prerequisite. For every subspace A of a topological space and every commutative coefficient ring, the coefficient singular chains on the ambient range subcomplex are isomorphic to the coefficient singular chains of the actual subtype A; applying homology gives the corresponding isomorphism in every natural degree with both forward and inverse arrows identified as actual homology maps. This is the coefficient-general range comparison needed to conjugate the instantiated compact-complement sequence.",
+     "Compiled the coefficient-general naturality prerequisite for the ambient-range comparison. For every actual inclusion A subset B, the forward coefficient chain comparison followed by the subtype inclusion equals the ambient-range inclusion followed by the target comparison; applying homology proves the same square in every natural degree. This supplies the exact arrow compatibility required to conjugate the compact-complement Mayer-Vietoris sequence.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -68265,7 +68289,8 @@
     :coefficient-compact-complement-homology-squares-implementation-refill49
     :coefficient-compact-complement-homology-square-bundle-implementation-refill49
     :coefficient-compact-complement-cover-sequence-implementation-refill49
-    :coefficient-ambient-subspace-range-comparison-implementation-refill49],
+    :coefficient-ambient-subspace-range-comparison-implementation-refill49
+    :coefficient-ambient-subspace-range-naturality-implementation-refill49],
    :current-residual
    "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
