@@ -26571,6 +26571,22 @@
       "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789036987549-18416-305658ea",
+     :commands
+     ["git show 773bf66a17f555bcfa561f3d6b65f18b65e8ea8d (Lean and documentation)"
+      "Python exact fixture SHA256/equality, two-file scope, 21 statement hashes and forbidden-declaration audit"
+      "Python comment-stripped problem Lean placeholder census: 312->312"
+      "lake env lean /tmp/codex13-checkpoint43-linear-graph/LinearGraphMeasure.lean"
+      "lake env lean ConstructionTargets/LinearGraphMeasure.lean"
+      "lake build ConstructionTargets.LinearGraphMeasure"
+      "git diff --check 773bf66a^ 773bf66a"
+      "bb holes/labs/topology-contract/worklist_check.bb on both recorded ledgers at 1c26a4c3"
+      "git log -1 --oneline -- ConstructionTargets/PlaneArcSmallTranslation.lean"],
+     :finding
+     "Independent of author codex-14. Fixture SHA256 9f9be05c41ec8cc25a059a8cfe4b9b2b51843cc62b0fd720b0019251aa3cf15e matches recorded source exactly. Actual WithLp 2 graph injectivity proves range dimension; an orthonormal-basis range isometry constructs the square coordinate map. Its determinant is nonzero, and actual isometry transport plus same-dimensional Haar distortion proves intrinsic and ambient Hausdorff equations for every set. Ten standard-only audits and dimension-two/three examples pass; build succeeds with 2429 jobs and no warnings. Concurrent PlaneArcSmallTranslation is unrelated. The sqrt(1+norm(ell)^2) evaluation, nonlinear area transport and numerical normalization remain explicitly downstream."},
     :commit "773bf66a17f555bcfa561f3d6b65f18b65e8ea8d",
     :changed-paths
     ["ConstructionTargets/LinearGraphMeasure.lean"
@@ -26584,7 +26600,7 @@
     "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/LinearGraphMeasure.lean"
     "ConstructionTargets/LinearGraphMeasure.md"],
@@ -26779,7 +26795,7 @@
      "Exactly one complete compiled linear geometric measure prerequisite is supplied. The graph is constructed in WithLp 2 (EuclideanSpace real (Fin d) × real). Its injectivity gives the actual range dimension; a reindexed orthonormal basis constructs the range isometry. This reduces both intrinsic range measure and ambient graph image measure to the absolute determinant of a constructed endomorphism of the original Euclidean space. The determinant factor is proved positive. The parent is not GO: its evaluation as sqrt(1+norm(ell)^2) remains unproved.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact linear Euclidean graph Hausdorff distortion",
