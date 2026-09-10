@@ -69094,6 +69094,34 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the three actual conjugated compact-complement arrows, their six short-complex field identities and exactness at all three consecutive terms; no supplied coefficient-excision comparison to pairs in X.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / named compact-complement Mayer-Vietoris arrows",
+   :acceptance
+   {:fixture "/tmp/CoefficientCompactComplementTransportedArrows.lean",
+    :fixture-sha256
+    "c0b86527a652fcb4e131ef24eb9b342a69190bf0d6ef9ee62eee118f6cba2e77",
+    :implementation
+    "Promote the exact fixture. Compile ambientConnecting, overlapToPieces, piecesToAmbient, intersectionPresentation_f, intersectionPresentation_g, piecesPresentation_f, piecesPresentation_g, unionPresentation_f, unionPresentation_g, exact_overlap, exact_pieces and exact_ambient. This supplies explicit conjugated arrows and exactness on the compact-support placeholder route. Verify CoefficientCompactComplementTransportedExactness SHA256 483bbc412f4f5c9914b1d0f1b3772f18235bb4b1ef28dff90258d0a551e9022a. Preserve compact K and L in a Hausdorff space, arbitrary commutative-ring coefficients, the signed middle arrow and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim equality with final relative-pair restriction maps, coefficient excision into X, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :coefficient-compact-complement-transported-arrows-implementation-refill49,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-compact-complement-transported-exactness-implementation-refill49],
+   :current-residual
+   "Construct the coefficient relative-pair excision isomorphisms from the ambient complement presentation to H(X,X minus K), H(X,X minus L), H(X,X minus (K union L)) and H(X,X minus (K intersection L)); prove their naturality with the named arrows and transport the three exactness statements.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
    :evidence
    {:probe
@@ -69103,63 +69131,59 @@
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require all three instantiated compact-complement Mayer-Vietoris segments transported through the actual overlap, piece and ambient comparison isomorphisms, with proved exactness; no supplied arrow identification or coefficient excision.",
+      "Require the three actual conjugated compact-complement arrows, their six short-complex field identities and exactness at all three consecutive terms; no supplied coefficient-excision comparison to pairs in X.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientCompactComplementTransportedExactness.lean"],
+      ["ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / transported compact-complement coefficient exactness",
+      "MANIFOLD FUNDAMENTAL CLASS / named compact-complement Mayer-Vietoris arrows",
       :acceptance
       {:fixture
-       "/tmp/CoefficientCompactComplementTransportedExactness.lean",
+       "/tmp/CoefficientCompactComplementTransportedArrows.lean",
        :fixture-sha256
-       "483bbc412f4f5c9914b1d0f1b3772f18235bb4b1ef28dff90258d0a551e9022a",
+       "c0b86527a652fcb4e131ef24eb9b342a69190bf0d6ef9ee62eee118f6cba2e77",
        :implementation
-       "Promote the exact fixture. Compile intersectionSource, piecesSource, unionSource, intersectionPresentation, piecesPresentation, unionPresentation, intersectionPresentation_exact, piecesPresentation_exact and unionPresentation_exact. This supplies the three exact transported segments required by the compact-support placeholder route. Verify CoefficientCompactComplementPiecesComparison SHA256 ad3e126a8fcb015891f2f872b753cd4d2687bb18dcd588fa179c7bb04d73c795 and CoefficientCompactComplementUnionComparison SHA256 a91c06af52938916deb44ee2f9f45f3cd260969d75357268267f1ab539672de9. Preserve compact K and L in a Hausdorff space, arbitrary commutative-ring coefficients and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim equality of the transported arrows with final restriction maps, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile ambientConnecting, overlapToPieces, piecesToAmbient, intersectionPresentation_f, intersectionPresentation_g, piecesPresentation_f, piecesPresentation_g, unionPresentation_f, unionPresentation_g, exact_overlap, exact_pieces and exact_ambient. This supplies explicit conjugated arrows and exactness on the compact-support placeholder route. Verify CoefficientCompactComplementTransportedExactness SHA256 483bbc412f4f5c9914b1d0f1b3772f18235bb4b1ef28dff90258d0a551e9022a. Preserve compact K and L in a Hausdorff space, arbitrary commutative-ring coefficients, the signed middle arrow and every natural homology degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim equality with final relative-pair restriction maps, coefficient excision into X, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientCompactComplementTransportedExactness.lean"],
+       ["lake env lean ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :coefficient-compact-complement-transported-exactness-implementation-refill49,
+      :coefficient-compact-complement-transported-arrows-implementation-refill49,
       :kind :reusable-theorem,
       :depends-on
-      [:coefficient-compact-complement-pieces-comparison-implementation-refill49
-       :coefficient-compact-complement-union-comparison-implementation-refill49
-       :coefficient-intersection-range-comparison-implementation-refill49
-       :coefficient-compact-complement-cover-sequence-implementation-refill49],
+      [:coefficient-compact-complement-transported-exactness-implementation-refill49],
       :current-residual
-      "Identify the three transported connecting and inclusion arrows with the actual maps on the literal complement presentation, then compare the ambient-complement relative presentation with H(X,X minus K), H(X,X minus L), H(X,X minus (K union L)) and H(X,X minus (K intersection L)) through actual coefficient-excision maps.",
+      "Construct the coefficient relative-pair excision isomorphisms from the ambient complement presentation to H(X,X minus K), H(X,X minus L), H(X,X minus (K union L)) and H(X,X minus (K intersection L)); prove their naturality with the named arrows and transport the three exactness statements.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientCompactComplementPiecesComparison ConstructionTargets.CoefficientCompactComplementUnionComparison >/tmp/coefficient-transport-deps.log",
+       "lake build ConstructionTargets.CoefficientCompactComplementTransportedExactness >/tmp/coefficient-arrows-deps.log",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientCompactComplementTransportedExactness.lean",
+       "lake env lean /tmp/CoefficientCompactComplementTransportedArrows.lean",
        :exit 0}
       {:cmd
-       "python3 placeholder-and-declaration audit over /tmp/CoefficientCompactComplementTransportedExactness.lean",
+       "python3 placeholder-and-declaration audit over /tmp/CoefficientCompactComplementTransportedArrows.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientCompactComplementTransportedExactness.lean ConstructionTargets/CoefficientCompactComplementPiecesComparison.lean ConstructionTargets/CoefficientCompactComplementUnionComparison.lean",
+       "sha256sum /tmp/CoefficientCompactComplementTransportedArrows.lean ConstructionTargets/CoefficientCompactComplementTransportedExactness.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :changed-paths [],
      :fixture
-     {:path
-      "/tmp/CoefficientCompactComplementTransportedExactness.lean",
+     {:path "/tmp/CoefficientCompactComplementTransportedArrows.lean",
       :sha256
-      "483bbc412f4f5c9914b1d0f1b3772f18235bb4b1ef28dff90258d0a551e9022a",
+      "c0b86527a652fcb4e131ef24eb9b342a69190bf0d6ef9ee62eee118f6cba2e77",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one missing exactness prerequisite. The three consecutive segments of the instantiated coefficient Mayer-Vietoris sequence are transported through the reviewed union-to-ambient, intersection-to-overlap, and chain-biproduct-to-literal-pieces isomorphisms. Exactness now holds at the literal overlap, literal piece-biproduct, and actual ambient-complement presentations in every natural degree. Identifying the transported arrows with named restriction maps and transporting the relative terms into X by coefficient excision remain.",
+     "Compiled exactly one missing arrow-presentation prerequisite. The three transported maps are now explicit: the ambient-complement connecting map, the signed overlap-to-piece-biproduct map, and the piece-biproduct-to-ambient map. All six identifications with the transported short-complex fields compile, and exactness is restated using these named arrows at the overlap, pieces and ambient terms in every natural degree. Comparison with the final relative-pair restriction maps through coefficient excision remains.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -69187,7 +69211,8 @@
     :coefficient-compact-complement-union-comparison-implementation-refill49
     :coefficient-homology-biproduct-iso-implementation-refill49
     :coefficient-compact-complement-pieces-comparison-implementation-refill49
-    :coefficient-compact-complement-transported-exactness-implementation-refill49],
+    :coefficient-compact-complement-transported-exactness-implementation-refill49
+    :coefficient-compact-complement-transported-arrows-implementation-refill49],
    :current-residual
    "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
