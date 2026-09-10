@@ -73846,8 +73846,61 @@
   {:consumer "t98A02",
    :stop-condition
    "Require transport of the reviewed union-subspace cover-small homology isomorphism through this chain isomorphism and the ambient-subspace range presentation, proving that unionRangeChainsInclusion induces homology isomorphisms in every degree.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Combine the restrictedUnionRangeChainsIso with the reviewed unionCoverHomologyIso and ambientSubspaceRangeChainsIso for A union B. Prove the resulting homology isomorphism has forward map equal to homologyMap unionRangeChainsInclusion, then use it in the ambient commuting cokernel square.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:restrictedUnionAmbientMap_mono
+     "2b04fba7c7d704a6c813dc70a898c79e5cf650fe1e087d80b7c226a2bf776f62",
+     :restrictedUnionRangeSSetIso
+     "a304fa547b2a440e6e244bb7af99a0ef4feee5dd5f6ed537b8aebb2ed6898941",
+     :restrictedUnionRangeChainsIso
+     "ca7e6da648cfe80db2ff08a4d89a690cf195116fb20c761e9b81c5dc305881d7",
+     :restrictedUnionRangeSSetIso_hom_comp_ambient
+     "69516798fbd5403d649006651085d31c090f4605a5cd93a03304f3c8724bf053",
+     :restrictedUnionRangeChainsIso_hom_comp_ambient
+     "b13011e20e2460d77953a12e139121a0b7f80da8891015a576257579aeccf3c5"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubspaceUnionRestrictedRangeIso.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedAmbientRange.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-five-declaration audit over ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat d13d400e64c2989dae771140a258b0c9fff68d41",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r d13d400e64c2989dae771140a258b0c9fff68d41",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "Coefficient cover-small chains for the Boolean cover restricted to the union subtype",
+     :target
+     "Coefficient chains on the union-generated ambient subcomplex inside singular simplices of X",
+     :direction
+     "Canonical chain isomorphism from the source restricted cover-small representation to the target union-generated range representation, with exact equality after inclusion into ambient coefficient chains."},
+    :commit "d13d400e64c2989dae771140a258b0c9fff68d41",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubspaceUnionRestrictedRangeIso.lean",
+     :sha256
+     "fcdb8331d731c21de340aa41036f16dea032124fc2134786b0922ea3d236f5dd",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded restricted-ambient-range dependency hash reproduce. All five requested declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean"],
    :dag-node
