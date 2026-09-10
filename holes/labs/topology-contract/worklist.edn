@@ -73300,8 +73300,56 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the union-range chain inclusion to induce homology isomorphisms when the two subsets form an open cover of their union, then apply the cokernel comparison to replace the algebraically exact union-generated quotient by the literal relative pair.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "For the open complements of compact K and L, identify the source with the Boolean cover-small complex and prove that unionRangeChainsInclusion induces an isomorphism on homology. Use its commuting ambient square in CoefficientCokernelComparison to transport the algebraic quotient sequence to the actual relative pair.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:left_subset_union
+     "067b6742085b5dd395b9e0ad0c0fc4002d9077df0893f8fbc95101d1fcc5f997",
+     :right_subset_union
+     "f9dd55c72aae25e3ebf80e92bf279972bed2d791247fac7258cbcb0656496586",
+     :unionRangeInclusion
+     "708fbd862e8182db7dc429433baeefaee67a46991110d08bfd48bf458258df15",
+     :unionRangeChainsInclusion
+     "b960141d40f673aee8e1fbd910d6e5500f9f42e38feaf9d205febc824828ec4d",
+     :unionRangeInclusion_comp_ambient
+     "98c00b2e6a725ee912231ab236c9d1b36c923cf125e5af996beee255a8a35d88",
+     :unionRangeChainsInclusion_comp_ambient
+     "c82c4583a1e27f7a418dc65e3df5ae8861467fe9d42099f9797a92f41908e194"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubspaceUnionRangeInclusion.lean ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean ConstructionTargets/CoefficientCompactSupportRelativeShortComplex.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-six-declaration audit over ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 244970fb5699e2fda5bad9c0154be1bcacbe5842",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 244970fb5699e2fda5bad9c0154be1bcacbe5842",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "244970fb5699e2fda5bad9c0154be1bcacbe5842",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubspaceUnionRangeInclusion.lean",
+     :sha256
+     "f082c52703e6e08185349e06ffc2b91db4e535e9bece25395f5fb9c5d33f9fcb",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded relative-short-complex dependency hash reproduce. All six requested declarations compile without warnings or placeholders; the subset lemmas are axiom-free and the inclusion constructions and ambient commutation identities use only standard axioms. The commit changes exactly the scoped path. Pre-existing modifications to ProductSimplexWordPrefixCounts.lean and ProductSimplexWordPrefixCounts.md were left untouched."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRangeInclusion.lean"],
    :dag-node
