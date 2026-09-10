@@ -13168,20 +13168,98 @@
    :stop-condition
    "Bank only the constructed ordered-vertex prism, boundary identity and naturality. Do not claim a singular-chain Homotopy, small-chain comparison, excision or frozen closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientVertexPrism.lean",
-      :sha256
-      "09c3a742f6c44c3c93272a41faf3de451bd14b1e5924cc8229a57e5bc9f2b287"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientVertexPrism.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Realize the prism on actual singular chains, prove singular face transport and construct the correctly oriented Homotopy from subdivision to identity. No singular-chain Homotopy, small-chain comparison, excision or frozen closure is claimed.",
+    :gates
+    {:integer-rational-examples :pass,
+     :post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :five-standard-only-audits :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 5,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 17 existing dependency warnings; both direct compilations had zero warnings."],
+    :statement-hashes
+    {"vertexPrismCorrection"
+     "44e7aece15a41a4bf738a978197491cfa2dbbdcbd11b36dabe6a7b0a87feb716",
+     "vertexPrism_natural"
+     "169316114ffffa50fe454a1c4e8e5cde85beb30b3ce552246e5395cc22ccf750",
+     "d_comp_vertexPrismCorrection"
+     "aec1abbe19d175c291993ba9ba50cd926362c0986dcb0eabd36fcecde9a74a99",
+     "vertexPrism_zero"
+     "acb1be543024a73fc44e6767cd743d39cbde014a636441e9da9b3ac8a6ccd6e3",
+     "integral_standard_edge"
+     "f561988d7a9407331914e877f997861a3c8f7ab7bdd7506e43ca8811f0690636",
+     "vertexPrism"
+     "b6faa20fd33ddb6c29747464e22ebee83a97c72d966ce7326abbbebe0807ee2a",
+     "vertexGenerator_vertexPrism_succ"
+     "4dcc1dd240dcfd720637c1f0c599e5e46a83ed51d7df08f0ca0aa89ed64e7fde",
+     "vertexPrism_identity"
+     "3d1aaf4c297bdf1b3ea69d9e52fad3cf8080f83c112774c5dc4d63ef87438d9d",
+     "vertexPrism_standardEdge_identity"
+     "7a714ffc8d7189fd88dee26bffcf15ce20a705583acdf7126860601d85f4f53a",
+     "vertexPrism_affine_natural"
+     "07e6d53f1711c1e385a392b9758a4ae879ab25e9c071378591261c1119b88023",
+     "rational_standard_edge"
+     "56606fb3b3b23aa3133292e054dcbc8d057990aa2d88f5a036faf1d1d7dc01b1"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure stop rules and subdivision dependency PASS receipt",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientVertexPrism.lean", :exit 0}
+     {:cmd "Python verify fixture SHA256 and promote exact fixture",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientVertexPrism.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientVertexPrism.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientVertexPrism",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientVertexPrism.lean /tmp/CoefficientVertexPrism.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, five standard-only audits per compilation, warning and declaration-hash audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope audit and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Construct coefficient-general ordered-vertex prism\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope audit pinned to c87641d5 and clean tracked checkout verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "c87641d5b6608827ee76c19f50ae21801553575c",
+    :changed-paths
+    ["ConstructionTargets/CoefficientVertexPrism.lean"
+     "ConstructionTargets/CoefficientVertexPrism.md"],
+    :fixture
+    {:path "/tmp/CoefficientVertexPrism.lean",
+     :sha256
+     "09c3a742f6c44c3c93272a41faf3de451bd14b1e5924cc8229a57e5bc9f2b287"},
+    :finding
+    "Promoted the exact fixture and documented its hypotheses, reused constructions and limits. The recursive ordered-vertex prism satisfies the boundary identity and barycenter-preserving naturality, specialized to affine simplex maps. Integer and rational standard-edge identities compile. Focused build passed with 8260 jobs.",
+    :statement-hash-method
+    "SHA256 of declaration text beginning with theorem or def, excluding preceding attributes, and ending immediately before the space preceding := or where; namespace ConstructionTargets.CoefficientVertexPrism.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientVertexPrism.lean"
     "ConstructionTargets/CoefficientVertexPrism.md"],
