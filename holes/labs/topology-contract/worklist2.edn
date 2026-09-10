@@ -31517,8 +31517,55 @@
   {:consumer :t95J05,
    :stop-condition
    "Bank only raw critical-dimensional Hausdorff nullity of the unit spheres in EuclideanSpace real (Fin 2) and EuclideanSpace real (Fin 3). Do not claim an ambient equator embedding, intrinsic subtype transport, cap partition, numerical normalization, sphere mass, moment value, Stokes result or consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Repair the fixture namespace and pin its corrected digest before promoting the two source sphere-nullity theorems; equator embeddings, subtype transport and cap partitions remain downstream.",
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :reason :fixture-namespace-conflict,
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency receipts",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/build_step.bb row holes/labs/topology-contract/worklist2.edn lower-dimensional-sphere-raw-hausdorff-nullity-1",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint50-source-sphere-nullity/LowerDimensionalSphereNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint50-source-sphere-nullity/LowerDimensionalSphereNullity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex14-lower-sphere-namespace-audit.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git log --all --oneline -- ConstructionTargets/LowerDimensionalSphereNullity.lean; git rev-list --all --objects | rg 'LowerDimensionalSphereNullity'; test ! -e ConstructionTargets/LowerDimensionalSphereNullity.lean; test ! -e ConstructionTargets/LowerDimensionalSphereNullity.md; git diff --exit-code -- ConstructionTargets/LowerDimensionalSphereNullity.lean ConstructionTargets/LowerDimensionalSphereNullity.md; git diff --check",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/codex14-lower-sphere-namespace-audit.lean",
+      :exit 1,
+      :correction
+      "The first audit attempted an unsupported absolute-path import. Replaced it with the fixture's minimal declaration and direct checks; the corrected audit deterministically shows the required qualified identifier is unknown."}],
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint50-source-sphere-nullity/LowerDimensionalSphereNullity.lean",
+     :sha256
+     "9f4adeca79ba7746204a10eb5a8fb1e2b5582618879d98d5f6d3579e9bf2997f",
+     :placeholder-count 0},
+    :finding
+    "The authoritative dependency receipt supplies a complete fixture at SHA256 9f4adeca79ba7746204a10eb5a8fb1e2b5582618879d98d5f6d3579e9bf2997f, and that fixture compiles both required raw Hausdorff-nullity theorems with standard-only axioms. However, it declares namespace LowerDimensionalSphereNullity, while this implementation row requires exact fixture promotion under ConstructionTargets.LowerDimensionalSphereNullity. The unqualified theorem exists and the required qualified theorem is unknown. Renaming or wrapping the fixture would violate exact promotion. Repair the fixture namespace and recorded SHA256, or consistently revise the acceptance namespace and exact-promotion requirement. This is a specification boundary, not a mathematical refutation.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/LowerDimensionalSphereNullity.lean"
     "ConstructionTargets/LowerDimensionalSphereNullity.md"],
