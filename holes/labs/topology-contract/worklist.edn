@@ -72060,6 +72060,19 @@
       "git diff --check -- ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789073136228-19437-38852110",
+     :commands
+     ["lake env lean ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean"
+      "sha256sum ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean /tmp/PlaneArcEndpointTotalParameterSubmersive.lean ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean"
+      "python3 placeholder-and-five-declaration audit over ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean"
+      "git diff --name-only e14bf550ae22e0d788c218fab4036a06660ca968^ e14bf550ae22e0d788c218fab4036a06660ca968"
+      "git diff --exit-code e14bf550ae22e0d788c218fab4036a06660ca968 -- ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean"
+      "git diff --check e14bf550ae22e0d788c218fab4036a06660ca968^ e14bf550ae22e0d788c218fab4036a06660ca968 -- ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean"],
+     :finding
+     "PASS: independently reviewed recorded commit e14bf550ae22e0d788c218fab4036a06660ca968 authored by codex-6. Its sole changed path is the scoped module, byte-identical to fixture SHA256 0b5955f85b1a0d73d995904b2a1512136237f4ab344ba3e93cba84a8c143e56a; dependency SHA256 is 511c9936242bc8208afa4b27609772caaeafd3549a5c9d80fb14721ae2790500. Lean compiles with only propext, Classical.choice, and Quot.sound; placeholder count is zero; all five declaration hashes recompute exactly. The derivative orientation and product representation are correct: the paired parameter map is left endpoint-weight multiplication plus negative right endpoint-weight multiplication, acting from Plane × Plane to Plane. Varying (x,0) proves surjectivity for an interior left parameter, while varying (0,x) and negating the target proves it for an interior right parameter. The module does not overclaim the full total-map derivative or submersivity, Sard, finite fibers, embedding preservation, or chart compatibility."},
     :commit "e14bf550ae22e0d788c218fab4036a06660ca968",
     :changed-paths
     ["ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean"],
@@ -72071,7 +72084,7 @@
     :finding
     "Promoted the exact fixture. The paired perturbation-vector derivative is the sum of the left endpoint-weight map and negative right endpoint-weight map; its fderiv formula is explicit and it is surjective whenever either curve parameter is interior. The module compiles without warnings or placeholders, its dependency hash matches, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PlaneArcEndpointTotalParameterSubmersive.lean"],
    :dag-node
@@ -72172,7 +72185,7 @@
      "Compiled exactly one combined parameter-derivative prerequisite. The derivative of the pairwise coincidence difference with respect to the pair of perturbation vectors is the sum of the reviewed left weight map and negative right weight map. It is surjective whenever either curve parameter is interior, by varying only the corresponding vector coordinate. Together with the four-point boundary decomposition, this supplies the parameter-direction input for proving that the full total coincidence map is a submersion away from endpoint-endpoint pairs. The restriction-to-full-derivative bridge, parametric Sard, simultaneous finite-family selection, embedding stability and chart-transition comparison remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
