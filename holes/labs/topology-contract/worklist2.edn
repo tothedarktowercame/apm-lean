@@ -20483,6 +20483,19 @@
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789022290272-18064-6dbb8ea0",
+     :commands
+     ["Read-only Python recomputation of Checkpoint35 census SHA256, all 59 consumer counts, module counts, changed paths and frozen-source equality"
+      "Read-only Babashka verification of replacement rows, dependency sets, successor settings and concurrent reservations"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 4839021d:holes/labs/topology-contract/worklist2.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 4839021d:holes/labs/topology-contract/worklist.edn)"
+      "git diff --check 4839021d^ 4839021d"
+      "git log --format='%h %s' 2470cc2f..205dbfa7 -- ConstructionTargets problems"],
+     :finding
+     "Checkpoint 4839021d independently verified. Census SHA256 1ea5258a32c63ff119fdbe921dedb749782cf369c8790af6c664f197e8b56c21 matches; placeholders 66->66, modules 707->711, frozen sources unchanged. Two portfolio and two concurrent modules correctly attributed. One positive-dimensional top-homology/antipodal probe plus matching successor; actual coordinate reflections, permutation conjugation and product-to-negation equations required. Ordinary-S0 refutation and frozen-transport boundary preserved. Exact ledger-only scope; validators and whitespace gate pass."},
     :infrastructure-packets
     {:modules-before 707,
      :modules-after 711,
@@ -20643,7 +20656,7 @@
      :missing [:t93A05],
      :within-two 25}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: orthogonal sphere comparison and consumer eligibility",
@@ -20666,7 +20679,7 @@
    :stop-condition
    "No assumed sphere homology table, determinant-degree theorem, coordinate-permutation sign or antipodal action. Preserve the ordinary-S0 refutation and positive-dimensional hypotheses. Do not claim frozen consumer closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SPHERE ORIENTATION: positive-dimensional top homology and actual antipodal action",
