@@ -58344,8 +58344,139 @@
      :review-outcomes]},
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-12",
+    :commands
+    [{:cmd "python3 /tmp/topology-refill37-measure.py", :exit 0}
+     {:cmd "bb /tmp/topology-refill37-reviews.bb", :exit 0}
+     {:cmd "bb /tmp/topology-refill37-validate.bb", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill37-proposed-worklist.edn",
+      :exit 0}
+     {:cmd
+      "git diff --name-status b777a8df..06f215df -- ConstructionTargets problems",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/topology-refill37-{measure.json,reviews.edn,tail.edn}",
+      :exit 0}],
+    :replacement-items
+    [{:consumer "t00J02",
+      :stop-condition
+      "GO requires complete frozen closure. Otherwise STOP names the exact missing oriented-preimage or homological comparison theorem; infrastructure absence is not refutation.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node
+      "POINCARE/THOM COMPARISON / frozen oriented preimage duality",
+      :acceptance
+      {:frozen-file "problems/t00J02/lean/Main.lean",
+       :frozen-sha256
+       "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
+       :placeholder-before 1,
+       :placeholder-after 0,
+       :axioms :standard-only,
+       :probe
+       "Compile the complete frozen Main preserving every definition and hypothesis. Construct the actual OrientedSurfacePreimageDuality.Producer S from the available geometry and integral singular-homology APIs. Audit the actual circle model, transverse incidence fiber, component disk hypotheses and homological detection conclusion. Reuse reviewed regular-fiber atlases and tangent geometry only where their hypotheses apply. Derive orientations, localization or Thom/intersection comparisons needed to reach the literal induced map; no supplied Producer, duality certificate, fundamental class, orientation comparison or conditional final bridge. If the geometric-to-homological connection is absent, state its exact types and applicability boundary; mere existence of a smooth fiber is not closure."},
+      :id :t00j02-frozen-duality-producer-closure-probe-refill37,
+      :kind :final-adapter,
+      :depends-on
+      [:checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent],
+      :current-residual
+      "One placeholder: construct OrientedSurfacePreimageDuality.Producer S. Self-model regular-fiber geometry is banked; oriented geometric-to-homological detection remains."}
+     {:consumer "t00J02",
+      :stop-condition
+      "GO requires the complete actual geometry packet compiled. REVISE requires exactly one compiled prerequisite; no conditional duality producer or consumer closure claim.",
+      :phase :probe,
+      :state :blocked,
+      :scope [],
+      :dag-node "TRANSVERSE-PULLBACK / vector-target fiber product",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For genuine-infinity smooth maps f:M→F and g:N→F from self-model manifolds modeled on finite-dimensional complete real inner-product spaces E and G into a finite-dimensional real inner-product space F, assume the ranges of their actual mfderivs sum to top at every pair with f x=g y. Construct ChartedSpace and IsManifold infinity on the inherited-topology literal subtype {p:M×N // f p.1=g p.2}, modeled on Euclidean dimension finrank E+finrank G-finrank F. Derive smoothness and the actual derivative of the difference map on the product; prove zero is regular from range-sum transversality using existing linear-pair APIs. Reuse the banked regular-fiber atlas, transporting the exact zero-fiber equality without changing topology. Prove smooth inclusion into M×N and injectivity of its actual mfderiv with range exactly the pairs of tangent vectors satisfying Df v=Dg w. No assumed regularity, fiber equivalence, atlas, smooth inclusion or tangent identity. Include empty incidence and zero-dimensional kernels; preserve existing APIs. State that vector-target geometry does not yet supply target-manifold transport or oriented duality.",
+       :consumer-residual
+       "Actual transverse vector-target fiber-product geometry only. Target-manifold localization, orientation/localization and consumer-specific parametric, boundary and homological obligations remain."},
+      :id :transverse-vector-fiber-product-geometry-probe-refill37,
+      :kind :reusable-theorem,
+      :depends-on
+      [:checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent],
+      :current-residual
+      "Regular fibers have actual atlases and tangent geometry. Transverse incidence of two maps must be converted to a literal fiber-product manifold.",
+      :other-consumers ["t02A07" "t94A06" "t97J05"]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 2,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "PORTFOLIO POLICY",
+      :acceptance
+      {:strategy
+       "Recount pinned comment-stripped consumer placeholders and compare typed residuals, reviews and portfolio versus concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve local defects, t01J04/t94A06 applicability boundaries, t96J07 old refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+      :id
+      :checkpoint-full-dag-refill-38-after-duality-and-transverse-product,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:t00j02-frozen-duality-producer-closure-probe-refill37
+       :transverse-vector-fiber-product-geometry-probe-refill37],
+      :current-residual
+      "Await reviewed duality and transverse-product outcomes, then rerank the complete DAG."}],
+    :changed-paths [],
+    :finding
+    {:baseline "b777a8df8a4dbb983875946ae09f43eeac36f0d4",
+     :placeholder-delta 0,
+     :coverage
+     "Preserve t96J05 local refutation; t01J04 and t94A06 applicability boundaries; t96J07 old refutation separately from corrected encoded closure; signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. No campaign refutation or consumer closure inferred.",
+     :head "06f215df8fa1ff19604b32e737c7fdcb4357a4df",
+     :infrastructure-packets
+     {:modules-before 666,
+      :modules-after 669,
+      :portfolio ["ManifoldTargetRegularFiberTangentImage"],
+      :concurrent
+      ["CoefficientFiniteOperators" "CoefficientFiniteRealization"],
+      :consumer-closures 0,
+      :consumer-file-changes 0},
+     :ranking
+     "Exactly one near-closure adapter first: t00J02 has one literal Producer obligation and now merits a consumer-facing audit after the geometry advances. The probe must expose any missing geometric-to-homological connection. Recently rechecked degree, fivefold-surface and arbitrary-model Sard routes remain stopped; other near-closure consumers retain planar separation, quotient classification, normalization or fundamental-group boundaries. For shared foundations, transverse vector-target fiber products serve four named proposed consumers and reuse regular-fiber geometry plus range-sum linear algebra. This bounded construction precedes broader target-manifold transport, fundamental-class localization, Poincare/Thom comparison, generic gluing, Kunneth and surface classification.",
+     :typed-residual-change
+     "The chosen self-model manifold-to-manifold regular-fiber atlas now has proved inclusion derivative injectivity and exact kernel-range equality. This completes the stated regular-fiber tangent packet, not oriented transverse-preimage duality or frozen uptake.",
+     :review-outcomes
+     {:cover
+      "STOP independently passed by invoke-1789005975143-17617-e2057336; exact torus cardinality and polygon genus/Euler connections remain.",
+      :tangent
+      "PASS invoke-1789006299884-17632-de51f2eb for 73de6ddd70496c3c807fd5f4836fe82dab1aa634."},
+     :census
+     {:named 59,
+      :existing 58,
+      :missing ["t93A05"],
+      :zero-placeholder 23,
+      :open 35,
+      :within-two 25,
+      :before 66,
+      :after 66}},
+    :artifacts
+    [{:path "/tmp/topology-refill37-measure.json",
+      :sha256
+      "73ff8e382c288fda789d414a5239d7571e784f2ef0410f45838185d27c2f5d9f"}
+     {:path "/tmp/topology-refill37-reviews.edn",
+      :sha256
+      "6b855def1077bdced816cc781e89ae611a767075d02b6b8fcb23c94c5b1a1558"}
+     {:path "/tmp/topology-refill37-tail.edn",
+      :sha256
+      "edccb68ea84acb06bcc3f5d3e0803e900fb2e4b5f7e3f552b52e9298617a2af6"}],
+    :seat "codex-12"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -58359,7 +58490,79 @@
     :manifold-target-fiber-tangent-kernel-probe-refill36
     :checkpoint-full-dag-refill-36-after-degree-and-target-atlas],
    :current-residual
-   "Await both reviewed outcomes, then rerank the complete DAG and distinguish consumer closure from infrastructure."}],
+   "Await both reviewed outcomes, then rerank the complete DAG and distinguish consumer closure from infrastructure."}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires complete frozen closure. Otherwise STOP names the exact missing oriented-preimage or homological comparison theorem; infrastructure absence is not refutation.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "POINCARE/THOM COMPARISON / frozen oriented preimage duality",
+   :acceptance
+   {:frozen-file "problems/t00J02/lean/Main.lean",
+    :frozen-sha256
+    "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923",
+    :placeholder-before 1,
+    :placeholder-after 0,
+    :axioms :standard-only,
+    :probe
+    "Compile the complete frozen Main preserving every definition and hypothesis. Construct the actual OrientedSurfacePreimageDuality.Producer S from the available geometry and integral singular-homology APIs. Audit the actual circle model, transverse incidence fiber, component disk hypotheses and homological detection conclusion. Reuse reviewed regular-fiber atlases and tangent geometry only where their hypotheses apply. Derive orientations, localization or Thom/intersection comparisons needed to reach the literal induced map; no supplied Producer, duality certificate, fundamental class, orientation comparison or conditional final bridge. If the geometric-to-homological connection is absent, state its exact types and applicability boundary; mere existence of a smooth fiber is not closure."},
+   :id :t00j02-frozen-duality-producer-closure-probe-refill37,
+   :kind :final-adapter,
+   :depends-on
+   [:checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent
+    :checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent],
+   :current-residual
+   "One placeholder: construct OrientedSurfacePreimageDuality.Producer S. Self-model regular-fiber geometry is banked; oriented geometric-to-homological detection remains."}
+  {:consumer "t00J02",
+   :stop-condition
+   "GO requires the complete actual geometry packet compiled. REVISE requires exactly one compiled prerequisite; no conditional duality producer or consumer closure claim.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TRANSVERSE-PULLBACK / vector-target fiber product",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For genuine-infinity smooth maps f:M→F and g:N→F from self-model manifolds modeled on finite-dimensional complete real inner-product spaces E and G into a finite-dimensional real inner-product space F, assume the ranges of their actual mfderivs sum to top at every pair with f x=g y. Construct ChartedSpace and IsManifold infinity on the inherited-topology literal subtype {p:M×N // f p.1=g p.2}, modeled on Euclidean dimension finrank E+finrank G-finrank F. Derive smoothness and the actual derivative of the difference map on the product; prove zero is regular from range-sum transversality using existing linear-pair APIs. Reuse the banked regular-fiber atlas, transporting the exact zero-fiber equality without changing topology. Prove smooth inclusion into M×N and injectivity of its actual mfderiv with range exactly the pairs of tangent vectors satisfying Df v=Dg w. No assumed regularity, fiber equivalence, atlas, smooth inclusion or tangent identity. Include empty incidence and zero-dimensional kernels; preserve existing APIs. State that vector-target geometry does not yet supply target-manifold transport or oriented duality.",
+    :consumer-residual
+    "Actual transverse vector-target fiber-product geometry only. Target-manifold localization, orientation/localization and consumer-specific parametric, boundary and homological obligations remain."},
+   :id :transverse-vector-fiber-product-geometry-probe-refill37,
+   :kind :reusable-theorem,
+   :depends-on
+   [:checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent
+    :checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent],
+   :current-residual
+   "Regular fibers have actual atlases and tangent geometry. Transverse incidence of two maps must be converted to a literal fiber-product manifold.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 2,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only on all campaign consumers closed or exact campaign-level refutation; local defects and missing infrastructure do not terminate the campaign.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "PORTFOLIO POLICY",
+   :acceptance
+   {:strategy
+    "Recount pinned comment-stripped consumer placeholders and compare typed residuals, reviews and portfolio versus concurrent changes. Elect exactly one near-closure adapter first, then foundations by reach and simplicity, with a fresh dependent checkpoint. Preserve local defects, t01J04/t94A06 applicability boundaries, t96J07 old refutation versus corrected closure, signed antipodal action, reduced-S0 degree and one-dimensional local-index coverage. Do not edit track-2 ledger, runs2 or shared scripts."},
+   :id
+   :checkpoint-full-dag-refill-38-after-duality-and-transverse-product,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:t00j02-frozen-duality-producer-closure-probe-refill37
+    :transverse-vector-fiber-product-geometry-probe-refill37
+    :checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent],
+   :current-residual
+   "Await reviewed duality and transverse-product outcomes, then rerank the complete DAG."}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
