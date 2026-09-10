@@ -72286,73 +72286,99 @@
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
   {:consumer "t00A03",
    :stop-condition
+   "Require a genuine parameterized Sard or regular-fiber projection theorem for the zero locus of the total coincidence map, producing perturbation-vector parameters with finite interior fibers; ordinary critical-value Sard for the total map alone does not establish this.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean"],
+   :dag-node
+   "SURFACE TRIANGULATION / endpoint-relative interior critical-locus elimination",
+   :acceptance
+   {:fixture "/tmp/PlaneArcEndpointInteriorCriticalLocusEmpty.lean",
+    :fixture-sha256
+    "e3fe65c7f0c754976ef323eb3c099456cba6a021296b7413dfccc1ffe5426322",
+    :implementation
+    "Promote the exact fixture. Compile relativeInteriorDomain, criticalLocus, relativeInteriorDomain_disjoint_criticalLocus and relativeInteriorDomain_inter_criticalLocus_eq_empty. This supplies the exact critical-locus elimination statement required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before a parameterized Sard projection argument. Verify PlaneArcEndpointTotalDifferenceRelativeSubmersion SHA256 3e694e87a588cba2024c1b778cbd4940080b8686de43745cfb90703086471b4c. Preserve arbitrary plane arcs smooth on arbitrary supplied open parameter neighborhoods and the literal condition that at least one curve parameter is interior. Require zero placeholders, no warnings and standard-only axioms. Do not claim parameterized Sard, regular perturbation parameters, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+    :commands
+    ["lake env lean ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :plane-arc-endpoint-interior-critical-locus-empty-implementation-refill50,
+   :kind :reusable-theorem,
+   :depends-on
+   [:plane-arc-endpoint-total-difference-relative-submersion-implementation-refill50
+    :plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50],
+   :current-residual
+   "Construct the incidence zero locus on the relative interior domain, obtain its regular-preimage manifold structure from the compiled submersion, and apply Sard to its projection onto the perturbation-vector space. Then convert regular zero-dimensional compact fibers to finite sets and handle finite-family simultaneity, embeddings and chart transitions.",
+   :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
+  {:consumer "t00A03",
+   :stop-condition
    "Require a compiled perturbation preserving prescribed endpoints and chartwise containment with finite pairwise intersections; do not infer cross-chart finiteness from unrelated plane translations.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The total coincidence map is now differentiable on its actual open extension domain and has surjective derivative wherever at least one curve parameter is interior. Apply a relative parametric Sard theorem to obtain generic finite interior coincidence fibers, adjoin the finite endpoint boundary, select parameters simultaneously for the finite family, retain embeddings and transport intersections through chart transitions.",
+     "The actual critical locus is proved empty on the relative interior domain. Establish the parameterized Sard projection theorem that gives generic regular perturbation-vector parameters and finite interior coincidence fibers, then adjoin the finite endpoint boundary, choose parameters simultaneously, retain embeddings and compare intersections through chart transitions.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t00A03",
       :stop-condition
-      "Require a relative parametric Sard theorem for the smooth submersive total coincidence map on the parameter square away from its four endpoint pairs, producing perturbation-vector parameters whose interior coincidence fibers are finite.",
+      "Require a genuine parameterized Sard or regular-fiber projection theorem for the zero locus of the total coincidence map, producing perturbation-vector parameters with finite interior fibers; ordinary critical-value Sard for the total map alone does not establish this.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"],
+      ["ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean"],
       :dag-node
-      "SURFACE TRIANGULATION / endpoint-relative total coincidence submersion",
+      "SURFACE TRIANGULATION / endpoint-relative interior critical-locus elimination",
       :acceptance
-      {:fixture
-       "/tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
+      {:fixture "/tmp/PlaneArcEndpointInteriorCriticalLocusEmpty.lean",
        :fixture-sha256
-       "3e694e87a588cba2024c1b778cbd4940080b8686de43745cfb90703086471b4c",
+       "e3fe65c7f0c754976ef323eb3c099456cba6a021296b7413dfccc1ffe5426322",
        :implementation
-       "Promote the exact fixture. Compile totalDifference_differentiableAt and fderiv_totalDifference_surjective_on_interior_direction. This supplies the open-domain differentiability specialization and derivative-surjectivity conclusion required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before relative parametric Sard. Verify PlaneArcEndpointTotalDifferenceSubmersive SHA256 f18e50897c4cd22cf5105c5b189b391afc23d9954d01dc114d29eea632301deb. Preserve arbitrary plane arcs smooth on arbitrary supplied open parameter neighborhoods, arbitrary perturbation vectors and every point where at least one curve parameter is interior. Require zero placeholders, no warnings and standard-only axioms. Do not claim relative Sard, regular parameter existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+       "Promote the exact fixture. Compile relativeInteriorDomain, criticalLocus, relativeInteriorDomain_disjoint_criticalLocus and relativeInteriorDomain_inter_criticalLocus_eq_empty. This supplies the exact critical-locus elimination statement required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before a parameterized Sard projection argument. Verify PlaneArcEndpointTotalDifferenceRelativeSubmersion SHA256 3e694e87a588cba2024c1b778cbd4940080b8686de43745cfb90703086471b4c. Preserve arbitrary plane arcs smooth on arbitrary supplied open parameter neighborhoods and the literal condition that at least one curve parameter is interior. Require zero placeholders, no warnings and standard-only axioms. Do not claim parameterized Sard, regular perturbation parameters, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
        :commands
-       ["lake env lean ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean"],
+       ["lake env lean ConstructionTargets/PlaneArcEndpointInteriorCriticalLocusEmpty.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :plane-arc-endpoint-total-difference-relative-submersion-implementation-refill50,
+      :plane-arc-endpoint-interior-critical-locus-empty-implementation-refill50,
       :kind :reusable-theorem,
       :depends-on
-      [:plane-arc-endpoint-total-difference-submersive-implementation-refill50
-       :plane-arc-endpoint-total-coincidence-smooth-implementation-refill50
+      [:plane-arc-endpoint-total-difference-relative-submersion-implementation-refill50
        :plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50],
       :current-residual
-      "Use the compiled relative submersion on the complement of the four endpoint pairs in the compact parameter square to obtain generic finite interior fibers. Then adjoin the reviewed finite boundary residual, choose one parameter tuple across the finite family, retain embeddings and compare through chart transitions.",
+      "Construct the incidence zero locus on the relative interior domain, obtain its regular-preimage manifold structure from the compiled submersion, and apply Sard to its projection onto the perturbation-vector space. Then convert regular zero-dimensional compact fibers to finite sets and handle finite-family simultaneity, embeddings and chart transitions.",
       :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.PlaneArcEndpointTotalDifferenceSubmersive >/tmp/full-subm-dep.log 2>&1",
+       "lake build ConstructionTargets.PlaneArcEndpointTotalDifferenceRelativeSubmersion >/tmp/relative-subm-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
+       "lake env lean /tmp/PlaneArcEndpointInteriorCriticalLocusEmpty.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean ConstructionTargets/PlaneArcEndpointTotalDifferenceSubmersive.lean",
+       "sha256sum /tmp/PlaneArcEndpointInteriorCriticalLocusEmpty.lean ConstructionTargets/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
+       "python3 comment-stripped placeholder-and-four-declaration audit over /tmp/PlaneArcEndpointInteriorCriticalLocusEmpty.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :changed-paths [],
      :fixture
-     {:path
-      "/tmp/PlaneArcEndpointTotalDifferenceRelativeSubmersion.lean",
+     {:path "/tmp/PlaneArcEndpointInteriorCriticalLocusEmpty.lean",
       :sha256
-      "3e694e87a588cba2024c1b778cbd4940080b8686de43745cfb90703086471b4c",
+      "e3fe65c7f0c754976ef323eb3c099456cba6a021296b7413dfccc1ffe5426322",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one relative-submersion prerequisite. Smoothness on the actual open extension domains now yields differentiability at every total parameter whose curve coordinates lie in those domains. Combining this with the reviewed full-derivative theorem proves derivative surjectivity whenever either curve parameter is interior. This states the required submersivity input on the coincidence square outside the four endpoint pairs while retaining the supplied local ContDiffOn hypotheses. Parametric Sard, finite interior fibers, simultaneous finite-family selection, embedding stability and chart-transition comparison remain.",
+     "Compiled exactly one critical-locus prerequisite. The relative interior domain consists of total parameters whose curve coordinates lie in the supplied open extension domains and for which at least one curve parameter is interior. This domain is disjoint from the actual nonsurjective-derivative locus of the total coincidence map, so its intersection with that critical locus is empty. The next missing step is the genuine parameterized Sard or regular-fiber projection theorem converting this total-map submersion into generic finite fibers over perturbation-vector parameters; the banked ordinary Sard results do not directly provide that projection statement.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
@@ -72376,7 +72402,8 @@
     :plane-arc-endpoint-pair-parameter-right-derivative-implementation-refill50
     :plane-arc-endpoint-total-parameter-submersive-implementation-refill50
     :plane-arc-endpoint-total-difference-submersive-implementation-refill50
-    :plane-arc-endpoint-total-difference-relative-submersion-implementation-refill50],
+    :plane-arc-endpoint-total-difference-relative-submersion-implementation-refill50
+    :plane-arc-endpoint-interior-critical-locus-empty-implementation-refill50],
    :current-residual
    "Common-plane translations preserve embeddings and containment but move endpoints and do not compare curves transported through unrelated charts.",
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
