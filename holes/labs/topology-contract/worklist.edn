@@ -63298,6 +63298,20 @@
       :exit 2,
       :correction
       "IncidenceParameterProjection had not been promoted at inspection time. No claim of its absence as a mathematical obstruction is made; projection regularity alone does not construct compatible surface faces."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789026517814-18172-415ebc8e",
+     :commands
+     ["Read recorded transition 2d1b389c and pinned supporting constructions"
+      "Independent Python three-source hash and five-consumer hash/placeholder audit"
+      "rg inspection of arc, perturbation, simplicial-complex and CW APIs"
+      "sed -n '210,244p' .lake/packages/mathlib/Mathlib/Geometry/Manifold/Bordism.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 2d1b389c:holes/labs/topology-contract/worklist.edn)"
+      "git diff-tree --no-commit-id --name-only -r 2d1b389c"
+      "git show --check 2d1b389c"],
+     :finding
+     "PASS as STOP evidence, not closure. Author codex-12 is independent; ledger-only scope verified. Supporting construction hashes match; five consumer files remain unchanged with placeholder counts 1/2/3/3/1. Finite embedded-triangle coverage supplies no boundary compatibility. Audited simplicial/CW interfaces require intersection or disjointness data, and Bordism's perturbation discussion is documentation rather than a constructor. Controlled embedded arcs, finite intersections and disk-face subdivision remain unconstructed here. No compiled fixture, geometric prerequisite, refutation or campaign termination claimed. Validator passes 500 items; whitespace clean; ledger untouched."},
     :changed-paths [],
     :finding
     "The banked finite triangle cover proves embeddings, chart containment and open-interior coverage, but supplies no compatibility between boundaries. The audited APIs do not construct replacement embedded arcs with controlled finite intersections while preserving coverage, nor subdivide their union into a finite embedded graph with proved disk complementary faces. These are the missing geometric constructions. Arbitrary smooth chart boundaries cannot be treated as having finite intersections. Mathlib's simplicial-complex and CW interfaces require intersection or cell-disjointness data; they do not derive it from this cover. The transversality discussion in Bordism is documentation, not a perturbation constructor. No complete fixture or single compiled geometric prerequisite was obtained. This is a local foundation boundary, not refutation or campaign termination.",
@@ -63310,7 +63324,7 @@
       :job "invoke-1789025310202-18140-681b0c9e"}],
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / compatible embedded face refinement",
