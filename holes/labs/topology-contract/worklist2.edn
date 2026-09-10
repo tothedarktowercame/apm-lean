@@ -23637,6 +23637,20 @@
       "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789029630136-18246-9db174a4",
+     :commands
+     ["lake env lean /tmp/CoefficientOverlapRelative.lean"
+      "lake env lean ConstructionTargets/CoefficientOverlapRelative.lean"
+      "lake build ConstructionTargets.CoefficientOverlapRelative"
+      "git diff --check 94b0259c^ 94b0259c"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 71b386f1:holes/labs/topology-contract/worklist2.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 71b386f1:holes/labs/topology-contract/worklist.edn)"
+      "Python recorded fixture SHA256/equality, twenty declaration hashes, exact scope, forbidden-declaration and placeholder audits"],
+     :finding
+     "PASS 94b0259c67f7223c4938d3021da18cbaa3175062; independent of author codex-14. Four actual MapsTo proofs preserve literal deleted-zero/deleted-x subsets. Transition followed by right ambient map equals left ambient map on relative cokernels and all-degree homology. Four projection equations and transition inverse laws verified. Twenty hashes and sixteen standard-only audits pass; build 8299 jobs; two-file scope; placeholders 310->310. Ambient-map invertibility, normalization comparison, units and cocycles remain explicitly downstream."},
     :commit "94b0259c67f7223c4938d3021da18cbaa3175062",
     :changed-paths
     ["ConstructionTargets/CoefficientOverlapRelative.lean"
@@ -23649,7 +23663,7 @@
     "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientOverlapRelative.lean"
     "ConstructionTargets/CoefficientOverlapRelative.md"],
@@ -23820,7 +23834,7 @@
      "Exactly one complete compiled relative overlap comparison is supplied. The actual translated transition and both coordinate maps into M preserve the literal deleted-zero/deleted-x subsets. Pair-map composition proves the relative inclusion square and its induced homology equation in every natural degree. The transition has a constructed inverse on these exact relative complexes; all four degreewise projection equations compile. The parent is not GO: chart-based normalization comparison, recovery of the distinguished-chart normalization, and transition-unit/generator/cocycle equations remain.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "LOCAL ORIENTATION: actual coefficient-general overlap transition and normalization comparison",
