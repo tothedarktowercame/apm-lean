@@ -44101,8 +44101,69 @@
   {:consumer :t03J05,
    :stop-condition
    "Bank only schema-driven validation of exact preserved ledger paths and values for completion transitions. Do not apply fixture-path mutations, change atomic-write ordering, alter topology sources, promote terminal counts or claim consumer closure.",
+   :evidence
+   {:residual
+    "Preserve checkpoint66's reviewed build_step.bb bytes as an immutable repository artifact and atomically repoint its completed-row fixture path there; then reapply the tested schema-driven preservation implementation and proceed to checkpoint67's fixture-path transition.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "codex-14",
+    :reason :completed-checkpoint66-pins-mutable-build-step-fixture,
+    :commands
+    [{:cmd
+      "Implement checkpoint60 and checkpoint67 allowlisted preserve schemas plus exact positive, unknown-schema, omitted-label, extra-label and mismatched-value tests in the two scoped files",
+      :exit 0}
+     {:cmd
+      "clj-kondo --lint holes/labs/topology-contract/build_step.bb holes/labs/topology-contract/test_gate_receipts.bb",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/test_gate_receipts.bb with schema implementation present",
+      :exit 0}
+     {:cmd
+      "emacs --batch -Q -l /home/joe/code/futon4/dev/check-parens.el holes/labs/topology-contract/build_step.bb holes/labs/topology-contract/test_gate_receipts.bb",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn with schema implementation present",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn with schema implementation present",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git restore -- holes/labs/topology-contract/build_step.bb holes/labs/topology-contract/test_gate_receipts.bb",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn after restoration",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn after restoration",
+      :exit 0}
+     {:cmd
+      "git diff --check; git diff --exit-code; git status --short",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/test_gate_receipts.bb after restoration",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "emacs --batch -Q -l futon4/dev/check-parens.el holes/labs/topology-contract/build_step.bb holes/labs/topology-contract/test_gate_receipts.bb",
+      :exit 1,
+      :finding
+      "The repository-relative checker path does not exist from apm-lean.",
+      :correction
+      "Reran with /home/joe/code/futon4/dev/check-parens.el; both scoped files passed."}],
+    :representation
+    {:source
+     "An allowlisted completed-row evidence shape and a preserve request",
+     :target
+     "Exact validated equality between every requested preserved value and its fixed ledger path",
+     :direction
+     "Exact fieldwise equality from the source preserve-request representation to the target completed-row evidence representation, requiring identical label sets and values."},
+    :changed-paths [],
+    :finding
+    "A complete focused implementation was exercised before restoration. It retained checkpoint60 as the default preserve schema, added checkpoint67's reviewed-source, predecessor and statement-hash schema, required exact label sets, rejected unknown schemas, omitted labels, extra labels and every mismatched value, passed clj-kondo and check-parens, and passed 81 test assertions. The mandatory worklist2 gate deterministically rejected the source change because completed row oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1 records holes/labs/topology-contract/build_step.bb as its mutable fixture path at the prior hash. The two scoped files were restored; both ledgers now validate, the original 55 test assertions pass, and the worktree is clean. This is an exact ledger-evidence representation boundary, not a mathematical refutation.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["holes/labs/topology-contract/build_step.bb"
     "holes/labs/topology-contract/test_gate_receipts.bb"],
