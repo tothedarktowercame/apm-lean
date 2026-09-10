@@ -45128,7 +45128,95 @@
   {:consumer :t03J05,
    :stop-condition
    "Apply only checkpoint66's primary immutable fixture-path transition. Change exactly its completed-row evidence.fixture.path from the mutable build_step.bb source to the banked byte-identical artifact. Preserve all other evidence and review fields. Do not change supporting-path, modify validator code, alter topology sources, promote terminal counts or claim consumer closure.",
-   :phase :probe,
+   :gates
+   ["Verify the scratch fixture SHA256."
+    "Reproduce the 11 positive, structural-identity and rejection assertions."
+    "Verify target SHA256 ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b and Git blob 312908af0ceadb5ff15b1b47208e50ac66d67464."
+    "Use exactly the recorded completion-transition request."
+    "Verify both live ledgers before completion."
+    "Create an exact empty-scope evidence commit and confirm it names no paths."
+    "Return the completion transition in the done-unreviewed receipt so the supervisor applies it atomically."
+    "Confirm supporting-path and every other ledger field remain unchanged."],
+   :evidence
+   {:probe
+    {:residual
+     "Transition checkpoint66's supporting-path evidence to its banked immutable test artifact, then promote the tested evidence-shape-aware validator.",
+     :outcome :go,
+     :warnings [],
+     :axioms [],
+     :commands
+     [{:cmd
+       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and dependency receipts; inspect apply-completion-transition and focused tests",
+       :exit 0}
+      {:cmd
+       "bb /tmp/codex13-checkpoint73-primary-transition/primary_transition.bb",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-checkpoint73-primary-transition/primary_transition.bb /tmp/codex13-checkpoint73-primary-transition/worklist2-transitioned.edn holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb",
+       :exit 0}
+      {:cmd
+       "git hash-object holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "bb /tmp/codex13-checkpoint73-primary-transition/primary_transition.bb",
+       :exit 1,
+       :finding
+       "The initial scratch fixture bound the name source, which Babashka already imports from clojure.repl.",
+       :correction
+       "Renamed the binding to ledger-source and reran the complete fixture successfully."}],
+     :fixture
+     {:path
+      "/tmp/codex13-checkpoint73-primary-transition/primary_transition.bb",
+      :sha256
+      "3ce2c867f5881049cdec2f4c4c9dbdded3d6cffa0a85501e51856c8a6b217313",
+      :assertions 11,
+      :transitioned-ledger-path
+      "/tmp/codex13-checkpoint73-primary-transition/worklist2-transitioned.edn",
+      :transitioned-ledger-sha256
+      "625aeafefac50b9438fd025663f813ded9e1dfbc6ede7eedecc05c0877555322"},
+     :finding
+     "The placeholder-free scratch fixture applies the exact checkpoint66 primary transition to an isolated copy of worklist2.edn. It checks the transition field set and permitted path, uniquely locates the completed row, checks its source path and all six preserved values including nil placeholder-count, verifies the immutable target hash, changes only evidence.fixture.path, and validates the complete resulting ledger. Structural comparison after masking that one path proves all other ledger data is identical. Negative cases reject a wrong row, source, target, fixture hash and preserved commit. The immutable artifact reproduces SHA256 ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b and Git blob 312908af0ceadb5ff15b1b47208e50ac66d67464. Both live ledgers validate and remain unchanged.",
+     :implementation
+     {:scope [],
+      :implementation
+      "Submit a done-unreviewed receipt with an exact empty-scope evidence commit and the tested completion-transition request. The supervisor applies the transition before replacing the row and validates the complete resulting ledger before atomic write.",
+      :completion-transition
+      {:row
+       :oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1,
+       :path [:evidence :fixture :path],
+       :from "holes/labs/topology-contract/build_step.bb",
+       :to
+       "holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb",
+       :preserve
+       {:sha256
+        "ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b",
+        :supporting-path
+        "holes/labs/topology-contract/test_gate_receipts.bb",
+        :supporting-sha256
+        "22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc",
+        :placeholder-count nil,
+        :commit "f96d30c1129620704c9bfa11ca2afb0510f6cc02",
+        :review-outcome :pass}},
+      :gates
+      ["Verify the scratch fixture SHA256."
+       "Reproduce the 11 positive, structural-identity and rejection assertions."
+       "Verify target SHA256 ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b and Git blob 312908af0ceadb5ff15b1b47208e50ac66d67464."
+       "Use exactly the recorded completion-transition request."
+       "Verify both live ledgers before completion."
+       "Create an exact empty-scope evidence commit and confirm it names no paths."
+       "Return the completion transition in the done-unreviewed receipt so the supervisor applies it atomically."
+       "Confirm supporting-path and every other ledger field remain unchanged."]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
    :scope [],
    :dag-node
@@ -45166,6 +45254,25 @@
    :depends-on
    [:oriented-checkpoint73-immutable-checkpoint66-validator-evidence-and-consumer-refill-1
     :oriented-checkpoint73-immutable-checkpoint66-validator-evidence-and-consumer-refill-1],
+   :completion-transition
+   {:row
+    :oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1,
+    :path [:evidence :fixture :path],
+    :from "holes/labs/topology-contract/build_step.bb",
+    :to
+    "holes/labs/topology-contract/evidence/atomic-fixture-transitions/build_step-checkpoint66-ca2e9a94.bb",
+    :preserve
+    {:sha256
+     "ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b",
+     :supporting-path
+     "holes/labs/topology-contract/test_gate_receipts.bb",
+     :supporting-sha256
+     "22fdfdabded0a436ac1c7f3ce05a9a86331aeb2e2d673b0c8e72c1588cf72dcc",
+     :placeholder-count nil,
+     :commit "f96d30c1129620704c9bfa11ca2afb0510f6cc02",
+     :review-outcome :pass}},
+   :implementation
+   "Submit a done-unreviewed receipt with an exact empty-scope evidence commit and the tested completion-transition request. The supervisor applies the transition before replacing the row and validates the complete resulting ledger before atomic write.",
    :current-residual
    "Both immutable checkpoint66 artifacts exist, but the completed row still pins its primary fixture to mutable build_step.bb.",
    :other-consumers [:t96J06 :t97A04]}
