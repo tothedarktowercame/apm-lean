@@ -74284,6 +74284,20 @@
      "Homology of the literal relative chain complex for the pair consisting of X and the union subset A union B",
      :direction
      "Canonical homology isomorphism from the source algebraic union-generated quotient representation to the target literal relative-pair representation, with its forward arrow exactly the homology map induced by the commuting cokernel square."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789081202856-19731-5b36a4eb",
+     :commands
+     ["git show 8dda8d748c2707c8ae9b21a3b9b250482adae08e:ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean"
+      "git diff-tree --no-commit-id --name-only -r 8dda8d748c2707c8ae9b21a3b9b250482adae08e"
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean"
+      "sha256sum /tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean"
+      "cmp -s /tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean"
+      "git show --check --oneline --stat 8dda8d748c2707c8ae9b21a3b9b250482adae08e"
+      "python3 eight-declaration hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at 06d8f3ef9f20d106781745d4f748b39343095566ec9eeab61bdd43aa4634cfd9, and the union-range homology-equivalence dependency reproduces 80423f25787938b99cb5dcee9a60810f6254783b17907fcae31d523cac56d762. Lean compilation succeeds without warnings, all eight frozen declaration hashes reproduce, placeholders are zero, and printed axioms are standard-only. The commuting square is correctly oriented from the union-generated denominator inclusion into ambient X to the production union-subspace inclusion into X, using unionGeneratedToProduction vertically and identity on ambient chains. The induced comparison points from homology of the algebraic cokernel to homology of the literal relative pair, and its forward arrow is exactly the homology map of the cokernel square. No chain-level quotient equivalence or Mayer-Vietoris exactness is overclaimed."},
     :commit "8dda8d748c2707c8ae9b21a3b9b250482adae08e",
     :changed-paths
     ["ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean"],
@@ -74295,7 +74309,7 @@
     :finding
     "The exact fixture and recorded union-range homology-equivalence dependency hash reproduce. All eight requested declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean"],
    :dag-node
@@ -74415,7 +74429,7 @@
      "Compiled exactly one relative-cokernel comparison prerequisite. The union-generated denominator now maps to production chains on A union B, and this map forms an exact commuting square with the union-generated ambient inclusion, the literal production subspace inclusion and the ambient identity. The source inclusion is proved monic through the reviewed restricted-cover factorization. The left vertical map induces homology isomorphisms by the reviewed denominator theorem, while the ambient identity does so trivially; the existing cokernel comparison therefore gives an isomorphism from homology of the algebraic quotient to homology of the literal relative pair in every degree. Its forward map is exactly identified. This uses neither supportConnecting nor either false ordinary-excision premise. Algebraic short exactness, the genuine connecting morphism and three exactness segments remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
