@@ -69155,6 +69155,22 @@
       "git commit -m 'Name transported compact complement arrows'",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789054015967-18858-5de38c4c",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r e317e80717ce524b3e7539d85ea7a3a3d042f3bc"
+      "git show e317e80717ce524b3e7539d85ea7a3a3d042f3bc:ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean | sha256sum"
+      "sha256sum /tmp/CoefficientCompactComplementTransportedArrows.lean"
+      "git show e317e80717ce524b3e7539d85ea7a3a3d042f3bc:ConstructionTargets/CoefficientCompactComplementTransportedExactness.lean | sha256sum"
+      "git diff --exit-code e317e80717ce524b3e7539d85ea7a3a3d042f3bc -- ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean"
+      "lake env lean ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean"
+      "Python read-only audit: recompute twelve complete declaration-header SHA256 hashes and comment-stripped placeholder count"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git diff --check"],
+     :finding
+     "Recorded commit has exact one-file scope; fixture SHA256 c0b86527a652fcb4e131ef24eb9b342a69190bf0d6ef9ee62eee118f6cba2e77 and dependency SHA256 483bbc412f4f5c9914b1d0f1b3772f18235bb4b1ef28dff90258d0a551e9022a match; all twelve frozen statement hashes reproduce; zero placeholders; Lean compiles without warnings with only standard axioms; conjugated arrow orientations, signed middle map, and degree shifts are correct and remain within the compact-complement presentation boundary."},
     :commit "e317e80717ce524b3e7539d85ea7a3a3d042f3bc",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean"],
@@ -69169,7 +69185,7 @@
     :axiom-audit-count 3,
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementTransportedArrows.lean"],
    :dag-node
@@ -69256,7 +69272,7 @@
      "Compiled exactly one missing arrow-presentation prerequisite. The three transported maps are now explicit: the ambient-complement connecting map, the signed overlap-to-piece-biproduct map, and the piece-biproduct-to-ambient map. All six identifications with the transported short-complex fields compile, and exactness is restated using these named arrows at the overlap, pieces and ambient terms in every natural degree. Comparison with the final relative-pair restriction maps through coefficient excision remains.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
