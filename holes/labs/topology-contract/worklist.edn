@@ -66558,8 +66558,74 @@
   {:consumer "t98A02",
    :stop-condition
    "Require actual sphere-map identification and derived neighborhood homology and normalized-composite equalities; no assumed local constancy.",
+   :evidence
+   {:dependency
+    {:path "ConstructionTargets/CoefficientSecondChartBoundary.lean",
+     :sha256
+     "9275703052f90de380e636b3b9262f72ca6fb20b8286857a788fb9395a2b6a20",
+     :review :pass},
+    :placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Identify the second-chart composite with ambient normalization, combine with first-chart normalization, and extract transition-unit equality. No global orientation or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:center_bound
+     "867246ca7adcca03f107f152f20ecb4e06e06ca7d3e5a0c2d72324cf6c73e78d",
+     :sphere_identification
+     "48c160a916526ca40c7ffec86c5314ef44c099af5c5245da95a7430fe25c80f4",
+     :center_identification
+     "bba20ed524c325b11a807706cd825ae8f6c6ad4df1447210b12b0d4f873a39ad",
+     :nearby_homology
+     "d7eb1e69bbc173b8d5fd57c147983cedf25f30c7a516cfd53d99cb53241cf6c2",
+     :nearby_normalized
+     "dc7e70d1f808bef83acc03c97362e02d39cb599b93234f6d0d4ba4624bb29f1c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "sha256sum /tmp/CoefficientSecondChartBoundaryMotion.lean ConstructionTargets/CoefficientSecondChartBoundary.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientSecondChartBoundary",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientSecondChartBoundaryMotion.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and five complete theorem-header hashes",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "Actual second-chart boundary homology maps and normalized fixed-lift composites at nearby points",
+     :target
+     "The corresponding actual boundary map and normalized composite at the original center",
+     :direction
+     "Prove equality from each nearby-point homology map to the center map, then derive equality of the directed fixed-lift and model-normalization composites."},
+    :commit "41e1e96d924c20182cf8fb888a7cf48ba13458e9",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSecondChartBoundaryMotion.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSecondChartBoundaryMotion.lean",
+     :sha256
+     "a0d598c17cdd0eedc7736aa860788c2a4b087f6bcd3d7e5ccab5d64dc35aebd3",
+     :exact-promotion true},
+    :finding
+    "Exact fixture promoted. Sphere-map identifications and the constructed neighborhood yield actual homology equality in every natural degree and normalized-composite equality in dimension m+2. Commutative-ring coefficients are preserved. Ledger untouched.",
+    :axiom-audit-count 4,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSecondChartBoundaryMotion.lean"],
    :dag-node
