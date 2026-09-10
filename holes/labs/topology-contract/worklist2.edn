@@ -44158,12 +44158,33 @@
      "Exact validated equality between every requested preserved value and its fixed ledger path",
      :direction
      "Exact fieldwise equality from the source preserve-request representation to the target completed-row evidence representation, requiring identical label sets and values."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789081118399-19727-eeb88290",
+     :commands
+     ["git log --oneline -10"
+      "rg -n -C 8 ':t03j05-schema-driven-fixture-transition-preservation-1' holes/labs/topology-contract/worklist2.edn"
+      "git show --stat --oneline d704f223"
+      "git show --format=fuller --no-ext-diff d704f223 --"
+      "inspect completed checkpoint66 evidence, fixture path, fixture hashes, commit and PASS review"
+      "git archive d704f223 | tar -x -C <review-dir>"
+      "git diff-tree --no-commit-id --name-status -r d704f223"
+      "git diff-tree --check d704f223^ d704f223"
+      "sha256sum <archive>/holes/labs/topology-contract/build_step.bb <archive>/holes/labs/topology-contract/test_gate_receipts.bb"
+      "bb <archive>/holes/labs/topology-contract/test_gate_receipts.bb"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist2.edn"
+      "clj-kondo --lint <archived-build-step> <archived-tests>"
+      "search stable evidence tree for an immutable build_step artifact"],
+     :finding
+     "PASS: commit d704f223bcc091286657c7fb1bc21bfa7c0715f5 has exact worklist2-only scope and clean whitespace. The deterministic STOP is correct: completed checkpoint66 records holes/labs/topology-contract/build_step.bb as its mutable fixture at SHA256 ca2e9a9488cdf1d976f13864ddcabff7dfcb9ae0d56b2c77aa3593eed454120b, and no immutable build_step artifact exists; committing the tested schema implementation would invalidate that completed evidence. The scoped implementation was therefore restored. Archived build_step.bb and test_gate_receipts.bb reproduce their recorded hashes, the original suite passes 55 assertions with zero failures/errors, lint passes, and both archived ledgers validate. No fixture transition, source mutation, theorem-orientation change, placeholder change, or consumer closure was claimed."},
     :changed-paths [],
     :finding
     "A complete focused implementation was exercised before restoration. It retained checkpoint60 as the default preserve schema, added checkpoint67's reviewed-source, predecessor and statement-hash schema, required exact label sets, rejected unknown schemas, omitted labels, extra labels and every mismatched value, passed clj-kondo and check-parens, and passed 81 test assertions. The mandatory worklist2 gate deterministically rejected the source change because completed row oriented-checkpoint66-atomic-supervisor-fixture-path-transition-1 records holes/labs/topology-contract/build_step.bb as its mutable fixture path at the prior hash. The two scoped files were restored; both ledgers now validate, the original 55 test assertions pass, and the worktree is clean. This is an exact ledger-evidence representation boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["holes/labs/topology-contract/build_step.bb"
     "holes/labs/topology-contract/test_gate_receipts.bb"],
@@ -44286,7 +44307,7 @@
      :residual
      "After banking schema-driven preservation, integrate it into atomic fixture-path transitions, retain checkpoint60 behavior, test checkpoint67 end-to-end and apply its transition."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: evidence-shape-aware atomic fixture-path transitions",
