@@ -25925,6 +25925,19 @@
       :exit 2,
       :correction
       "That guessed filename does not exist. Located and read IntrinsicSphereSecondMoments and SphereCapFiniteMeasure instead."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789036036869-18392-e5fd6ef1",
+     :commands
+     ["git show b896ecaa022c2542588e930a47900bb85c2cc5cd (recorded checkpoint and scope)"
+      "Python read-only census reconstruction at a7a09d02a89232fc08617edf84157aa264f23fe9 and b8e903eff7a6f18cd1fdf5135dea0902a7446e52; artifact SHA256, consumer counts, module counts and changed paths"
+      "Python attribution of changed t00A01 source to 3612428c"
+      "bb EDN audit of replacement installation, dependencies and successor checkpoint keys"
+      "bb holes/labs/topology-contract/worklist_check.bb on both recorded ledgers at b896ecaa"
+      "git diff --check b896ecaa^ b896ecaa"],
+     :finding
+     "Independent of author codex-13. Census SHA256 1902159c7cf21e1d9b1649100e53a0853e584e9c8af0142ff869d95854489603 verified. Reproduced 59 named/58 existing consumers, 25 zero-placeholder, 33 open, 23 within two placeholders, total 64->62 and modules 741->751. Sole consumer change is concurrent t00A01 closure. One independent graph-area probe and matching successor installed. Local-constancy execution STOP and chart-transport reservations are preserved; pending infrastructure is distinguished from reviewed work. The proposed measure comparison retains actual L2 geometry and Hausdorff normalization boundaries without claiming numerical sphere mass, Stokes or consumer closure."},
     :replacement-items
     [{:consumer :t02A05,
       :stop-condition
@@ -26080,7 +26093,7 @@
      :named 59,
      :missing ["t93A05"]}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: local orientation variation and renewed consumer eligibility",
@@ -26101,7 +26114,7 @@
    :stop-condition
    "Do not assume an area formula, numerical sphere mass, measure-preserving chart or Euclidean-to-sup-norm isometry. Preserve the diameter-power Hausdorff convention. No Stokes theorem, frozen integral value or consumer closure follows from this comparison alone. Use a row-specific scratch directory.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual Euclidean graph Hausdorff-area comparison",
