@@ -33573,6 +33573,26 @@
       :exit 1,
       :correction
       "The frozen smooth-level predicate requested analytic top regularity while the reviewed fixture and global regular-fiber atlas supply smooth infinity regularity. Aligned the predicate with the corrected fixture and replaced the deprecated norm_single lemma; the final file then compiled without warnings."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789064602866-19137-923e8e4a",
+     :commands
+     ["git show --stat --oneline d108464309970781792e6c723950db304ec1db15"
+      "git show --check --oneline d108464309970781792e6c723950db304ec1db15"
+      "git show --format=fuller --no-ext-diff d1084643 -- problems/t96J05/lean/Main.lean"
+      "sha256sum /tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean problems/t96J05/lean/Main.lean"
+      "git show d1084643^:problems/t96J05/lean/Main.lean | sha256sum"
+      "git diff-tree --no-commit-id --name-only -r d1084643"
+      "lake env lean problems/t96J05/lean/Main.lean"
+      "diff -u /tmp/codex13-checkpoint53-radial-parent/T96J05Corrected.lean problems/t96J05/lean/Main.lean"
+      "rg forbidden declarations and placeholders in problems/t96J05/lean/Main.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git diff --check d1084643^ d1084643"
+      "Count executable sorry occurrences before and after; recompute committed blob ID"],
+     :finding
+     "PASS: commit d108464309970781792e6c723950db304ec1db15 changes only problems/t96J05/lean/Main.lean; canonical SHA256 73dcf8110f27c8fc76ac2e11e13bdcdbd18e7f51b3b08d2dbd6573ed5ff232f9, fixture SHA256 a38dbeb208d66f777a1c7f713e3bcddef4977c8d1f13de584f53d47c8fffa7aa and blob 35c0b842ead73b4c737f499c55e12913355841d9 reproduce. Placeholder count falls from one to zero. The repaired theorem retains the original manifold, dimension, nonemptiness and connectedness inputs while explicitly adding r>0, an inhabitant of the literal level, smooth squared-norm data and derivative surjectivity on its squared fiber. ManifoldRegularFiberGlobalAtlas is transported forward through a finrank-certified continuous linear model equivalence and the exact predicate-subtype equality. Compilation is warning-free with only propext, Classical.choice and Quot.sound. This is a corrected closure only; the former unconditional theorem remains refuted and documented."},
     :canonical
     {:path "problems/t96J05/lean/Main.lean",
      :sha256
@@ -33590,7 +33610,7 @@
     "The sole placeholder is replaced by the reviewed corrected theorem. It retains the original embedded-manifold, dimension, nonemptiness and connectedness hypotheses and adds an explicit positive radius, an inhabitant of the literal radial level, smoothness of the squared-norm restriction and derivative surjectivity throughout its squared fiber. The proof uses ManifoldRegularFiberGlobalAtlas, transports the fixed model through ContinuousLinearEquiv.ofFinrankEq, and moves the resulting atlas across the exact squared-fiber-to-literal-level predicate equality. The statement-repair note preserves the centered-circle refutation of the former unconditional theorem.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t96J05/lean/Main.lean"],
    :dag-node
    "SPEC-DEFECT: corrected positive regular radial-level theorem",
@@ -33644,7 +33664,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: corrected radial-level review and renewed consumer eligibility",
