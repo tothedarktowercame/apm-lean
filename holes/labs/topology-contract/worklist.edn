@@ -71878,8 +71878,33 @@
   {:consumer "t00A03",
    :stop-condition
    "Require the symmetric right perturbation derivative and full derivative-level submersion theorem for the smooth total coincidence map away from the finite endpoint boundary, then a parametric Sard argument yielding finite fibers.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove the symmetric right derivative and full total-map submersivity away from the four endpoint pairs, then apply parametric Sard for finite fibers.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean /tmp/PlaneArcEndpointPairParameterDerivative.lean ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean",
+      :exit 0}],
+    :commit "d1c101bf3797b6157d43382f1a80ee2f1f3ac314",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointPairParameterDerivative.lean",
+     :sha256
+     "4f8a779e084cde752365c3a6d83281fd8505190119cd5ab597b141b45c5e6c42",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The left perturbation derivative is the endpoint-weight scalar continuous-linear map, its fderiv formula is explicit, and it is surjective at every interior left parameter. The module compiles without warnings or placeholders and its dependency hash matches."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean"],
    :dag-node
