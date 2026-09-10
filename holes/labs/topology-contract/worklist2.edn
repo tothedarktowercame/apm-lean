@@ -30015,6 +30015,24 @@
      "EuclideanSpace real (Fin (d+1)), with source coordinates at Fin.castSucc and height at Fin.last d",
      :direction
      "Exact linear isometric equivalence from the source L2 product representation to the target appended-coordinate Euclidean representation, with a proved inverse and coordinate equalities in both directions."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789050107497-18746-768d2abf",
+     :commands
+     ["git show --stat 7b50fe63"
+      "git diff-tree --no-commit-id --name-status -r 7b50fe63"
+      "git diff --check 7b50fe63^ 7b50fe63"
+      "sha256sum fixture and canonical SphereCapCoordinateIsometry.lean"
+      "cmp -s fixture canonical"
+      "lake env lean fixture"
+      "lake env lean ConstructionTargets/SphereCapCoordinateIsometry.lean"
+      "lake build ConstructionTargets.SphereCapCoordinateIsometry"
+      "Python proposition-only ten-statement hash and comment-stripped placeholder audit"
+      "rg forbidden declarations and trailing whitespace"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers"],
+     :finding
+     "PASS: exact two-file scope and fixture SHA256 verified; fixture, canonical target and 2547-job build pass; all ten statement hashes match, zero placeholders and forbidden declarations, and five standard-only axiom audits reproduce. Forward and inverse appended-coordinate maps, castSucc/last formulas, both inverse laws and exact L2 norm preservation have the correct source-to-target orientation. Euclidean cap images and Hausdorff transport remain downstream."},
     :dependency-uptake
     {:id :sphere-cap-l2-strict-image-1,
      :commit "961683199fb4fe926bd527743a14b2366485d029",
@@ -30031,7 +30049,7 @@
      :placeholder-count 0},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/SphereCapCoordinateIsometry.lean"
     "ConstructionTargets/SphereCapCoordinateIsometry.md"],
@@ -30204,7 +30222,7 @@
      "Exactly one complete compiled representation prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 sphere-integration routes. It constructs an explicit linear isometric equivalence from WithLp 2 (EuclideanSpace real (Fin d) times real) to EuclideanSpace real (Fin (d+1)). The first d coordinates recover the graph source and the last coordinate recovers the height; the inverse uses Fin.castSucc and Fin.last. Exact norm preservation is proved from the two L2 norm-square formulas, and d=2 and d=3 instances compile. The parent comparison is not GO: the isometry images of the native strict caps must still be identified with literal Euclidean sphere caps, followed by subtype and Hausdorff-measure transport. No canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: actual unit-sphere caps as reviewed C1 L2 graphs",
