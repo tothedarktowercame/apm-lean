@@ -70506,8 +70506,49 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the coefficient union-to-production-relative map and both piece formulas after this composite isomorphism; no compact-support exactness or coefficient-excision transport is supplied.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Compose the reviewed coefficient pushout union projection with this isomorphism and prove its left-zero and right-quotient projection formulas, then specialize to compact complements and transport all three exactness statements through valid coefficient excision.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:rangeRightRelativeToProductionPairIso
+     "2a04b35bd768fe9e4812c33924110536a5c3c951ae0ce482002e3b104379d584"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean /tmp/CoefficientRangeRightToProductionPairComparison.lean ConstructionTargets/CoefficientRangeRightRelativeCokernelComparison.lean ConstructionTargets/CoefficientNestedSubspaceIntersectionComparison.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-declaration audit over ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "python3 initial placeholder-and-declaration audit over ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean",
+      :exit 1,
+      :correction
+      "Removed an accidental malformed auxiliary regular expression from the audit; the corrected placeholder and exact declaration audit succeeded."}],
+    :commit "fcbdb23afa0758da869f44c78e481f8b5e10d937",
+    :changed-paths
+    ["ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean"],
+    :fixture
+    {:path "/tmp/CoefficientRangeRightToProductionPairComparison.lean",
+     :sha256
+     "fa77b7018a16c83ea8e03f5994a30b8b02ca18eab3867178fe2b91ce2f5410d5",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The forward composite from the Mayer-Vietoris range-relative cokernel through the literal-intersection cokernel to production nested-pair relative chains compiles without warnings or placeholders. Both dependency hashes match their pinned values, and the final worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientRangeRightToProductionPairComparison.lean"],
    :dag-node
