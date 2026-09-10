@@ -72981,6 +72981,20 @@
       :exit 1,
       :correction
       "The first compile preceded creation of the promoted dependency object file. Built ConstructionTargets.UnitAddCircleFiveTorsionCardinality through Lake and reran the unchanged audit fixture successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789075467980-19525-2983904c",
+     :commands
+     ["lake build ConstructionTargets.UnitAddCircleFiveTorsionCardinality >/tmp/codex10-t98-five-dep.log 2>&1"
+      "lake env lean /tmp/T98A01FiveTorsionUptake.lean"
+      "lake env lean problems/t98A01/lean/Main.lean"
+      "rg -n \"homeomorph.*genus|genus.*homeomorph|euler.*cover|cover.*euler\" ConstructionTargets/Surfaces.lean ConstructionTargets --glob '*.lean' # expected exit 1"
+      "python3 comment-stripped placeholder and apm_t98a01 statement audit over problems/t98A01/lean/Main.lean"
+      "sha256sum /tmp/T98A01FiveTorsionUptake.lean problems/t98A01/lean/Main.lean ConstructionTargets/UnitAddCircleFiveTorsionCardinality.lean"
+      "git status --short"],
+     :finding
+     "PASS: independently reviewed the scope-empty STOP probe authored by codex-12; no implementation commit was recorded. The audit fixture compiles with zero placeholders and only propext, Classical.choice, and Quot.sound. Its SHA256 is b6b3c6a7dcbb1cdb7762d85a5356f2fdcecb226d9bdecb638982db077dc91abc, the frozen file remains exactly a607069bdb7416a01a1e6846cb6dd8e3e8bf87b0f2b122ef4c1fb828d5167f25 with one placeholder, and the dependency is 44fc40ba218f56ce9eae68997faadf6a755164ac4f8bd2d77d69596777694c39. The frozen apm_t98a01 statement hash recomputes exactly as 58a2e8144d472806a294d08dcbc54dae6717969a5264426a42a275e438fc7fed. Orientation and representations are sound: fiberEquiv identifies each torus-map fiber with the five-torsion kernel, fiber_card_five rewrites through that equivalence to fiveKernel_natCard, and regular_fivefold combines the covering, five-element fibers, and fiberwise deck transitivity. The frozen universal Surface true g to Surface true h conjunct is genuinely independent: it still requires covering Euler multiplicativity and genus invariance under homeomorphism before the existing arithmetic lemma can yield g=h=1. Repository search finds neither theorem. The STOP therefore preserves the frozen placeholder and correctly avoids inferring polygon genus, genus-zero representation, or Euler multiplicativity from numerical fiber cardinality."},
     :changed-paths [],
     :fixture
     {:path "/tmp/T98A01FiveTorsionUptake.lean",
@@ -72999,7 +73013,7 @@
      "58a2e8144d472806a294d08dcbc54dae6717969a5264426a42a275e438fc7fed"},
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "COVERING CLASSIFICATION / frozen five-torsion cardinality uptake",
