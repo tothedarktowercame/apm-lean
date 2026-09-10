@@ -74235,8 +74235,67 @@
   {:consumer "t98A02",
    :stop-condition
    "Require construction and short exactness of the algebraic three-term quotient-chain sequence using the union-generated denominator, followed by transport through this relative comparison and construction of the genuine connecting morphism.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the algebraically exact short complex whose terminal object is the cokernel of unionGeneratedAmbientInclusion, prove its degreewise short exactness, invoke the homology sequence, and transport its terminal homology and arrows through relativeComparisonIso to the literal relative pair.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:unionGeneratedChains
+     "9dfd43721b9144decc0e473e0bff7d481a9e0f3b20c3a1ecbf1e360712d2df9d",
+     :unionGeneratedAmbientInclusion
+     "1daf44c01e4a3c500a430bb21c445b9e7a66d2d1d42d7960a070e02cfc211869",
+     :unionGeneratedToProduction
+     "05eda8d5383b8b4d08db8320f0b3f389be0f36d3c1fcd39207d14b7daf50ee7d",
+     :unionGenerated_relative_square
+     "687aa16f93807d7e41081dd48d5c3d6824b5bc414e59d580264af705f527b05a",
+     :unionGeneratedAmbientInclusion_mono
+     "5573c6f479bc399e256400e1c75f83451f60ea3ddbda09cde0e495299979c483",
+     :unionGeneratedToProduction_homologyMap_isIso
+     "b8e013ec2b5d548040eee69d915911f61178cc04cc37c0c5ba9d33afe2c035eb",
+     :relativeComparisonIso
+     "2f2e38bb790b240ae52e010efa371ccdca8deb06265f46bc290856c00e0b9097",
+     :relativeComparisonIso_hom
+     "c01241955da939a97afde8f290c9d08211d3d1bfb2333cd9475c23869239c25f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-eight-declaration audit over ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 8dda8d748c2707c8ae9b21a3b9b250482adae08e",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 8dda8d748c2707c8ae9b21a3b9b250482adae08e",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :representation
+    {:source
+     "Homology of the cokernel of the union-generated ambient denominator inclusion",
+     :target
+     "Homology of the literal relative chain complex for the pair consisting of X and the union subset A union B",
+     :direction
+     "Canonical homology isomorphism from the source algebraic union-generated quotient representation to the target literal relative-pair representation, with its forward arrow exactly the homology map induced by the commuting cokernel square."},
+    :commit "8dda8d748c2707c8ae9b21a3b9b250482adae08e",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubspaceUnionRelativeCokernelSquare.lean",
+     :sha256
+     "06d8f3ef9f20d106781745d4f748b39343095566ec9eeab61bdd43aa4634cfd9",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded union-range homology-equivalence dependency hash reproduce. All eight requested declarations compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRelativeCokernelSquare.lean"],
    :dag-node
