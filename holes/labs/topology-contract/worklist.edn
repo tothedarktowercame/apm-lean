@@ -70875,6 +70875,21 @@
       "git diff --check -- ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789066346832-19190-ca40a756",
+     :commands
+     ["git show --stat --oneline a26a97c1501b9e03c546addfe2123a4bbe379dc3"
+      "git show a26a97c1501b9e03c546addfe2123a4bbe379dc3:ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean > /tmp/review-cccur.lean"
+      "sha256sum /tmp/review-cccur.lean ConstructionTargets/CoefficientUnionToProductionRelativeComparison.lean"
+      "lake env lean /tmp/review-cccur.lean"
+      "python3 comment-stripped placeholder census /tmp/review-cccur.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git diff --check"],
+     :finding
+     "PASS: independently reviewed author codex-12's recorded commit a26a97c1501b9e03c546addfe2123a4bbe379dc3 rather than the working tree. Exact scope is the single declared new file ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean. Its immutable bytes reproduce fixture SHA256 545c94e194b682e805c80e3b316996b2a303b84b0d549bd783dc6f748559e2a7; the required dependency reproduces ea64a7591efc48a5e2f21c8989a67049cb9e4d5991e18f1ca85d773886f57d71. Lean compilation succeeds with no warnings, zero placeholders, and axioms [propext, Classical.choice, Quot.sound]. The representation is correctly oriented: compactUnionToRelative specializes the reviewed forward unionToProductionRelative map to compact-complement left K L and right K L subsets, retaining arbitrary X, K, L, and commutative-ring R without claiming the deferred piece formulas, excision, exactness, localization, vanishing, or fundamental-class results. Both ledgers validate and git diff check is clean."},
     :commit "a26a97c1501b9e03c546addfe2123a4bbe379dc3",
     :changed-paths
     ["ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean"],
@@ -70886,7 +70901,7 @@
     :finding
     "Promoted the exact fixture. The genuine coefficient union-to-production-relative map specializes in the forward direction to the actual compact-complement left and right subsets. The module compiles without warnings or placeholders, its dependency hash matches the pinned value, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean"],
    :dag-node
@@ -70991,7 +71006,7 @@
      "Compiled exactly one missing compact-complement specialization prerequisite. The genuine coefficient union-to-production-relative map is instantiated on the reviewed left and right compact-complement pieces. It remains nonzero-capable and does not use the refuted zero supportConnecting map. Explicit compact piece formulas, coefficient excision and the three final exactness transports remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
