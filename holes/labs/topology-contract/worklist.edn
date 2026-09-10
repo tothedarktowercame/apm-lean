@@ -71301,6 +71301,19 @@
       "git diff --check -- ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean",
       :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789069605541-19305-07ccc741",
+     :commands
+     ["git diff --name-only a48c938d^ a48c938d"
+      "git diff --exit-code a48c938d1b7f1e58a8bd1603de4836274ed78714 -- ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean"
+      "lake env lean ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean"
+      "sha256sum ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean /tmp/PlaneArcEndpointPreservingPerturbation.lean ConstructionTargets/PlaneArcContainedSmallTranslations.lean"
+      "python3 placeholder-and-six-declaration audit"
+      "git diff --check a48c938d^ a48c938d -- ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean"],
+     :finding
+     "Exact one-file scope; fixture and dependency hashes match; Lean compiles with standard axioms; zero placeholders; all six frozen declaration hashes reproduce. The endpoint weight vanishes at zero and one, the perturbation fixes both endpoints in the required orientation, and ContDiffOn smoothness is preserved without claiming embedding, containment, finiteness, or transversality."},
     :commit "a48c938d1b7f1e58a8bd1603de4836274ed78714",
     :changed-paths
     ["ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean"],
@@ -71312,7 +71325,7 @@
     :finding
     "Promoted the exact fixture. The polynomial endpoint weight vanishes at zero and one, so the perturbation fixes both endpoints exactly; the weight is smooth and preserves ContDiffOn smoothness of arbitrary plane arcs. The module compiles without warnings or placeholders, its dependency hash matches, the commit changes exactly the scoped path, and the worktree is clean. No embedding, containment or transversality claim is made."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPreservingPerturbation.lean"],
    :dag-node
@@ -71408,7 +71421,7 @@
      "The reviewed constant translations cannot preserve prescribed endpoints unless their translation vectors vanish, and they compare coincidences only in one common plane. Compiled exactly one nearest prerequisite: the relative perturbation a(t) + t(1-t)v is smooth whenever a is smooth and agrees exactly with a at t=0 and t=1. It handles every vector, including v=0, so empty and singleton family cases remain available downstream. This fixture does not claim embedding stability, containment, finite intersections, or compatibility between unrelated charts. The two unrelated pre-existing untracked ProductSimplexStepWord files were left untouched.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
