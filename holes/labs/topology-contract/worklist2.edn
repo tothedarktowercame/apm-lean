@@ -34781,8 +34781,101 @@
   {:consumer :t03J05,
    :stop-condition
    "Expose only the maximal nondegenerate product-simplex lattice-path representation and its face deletion law. Do not define signs, affine realizations, singular chains, a cross product, Eilenberg-Zilber, Kunneth, intersection results or consumer closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Add integer shuffle parity, oriented interior-face pairing and affine realization for total degree at most four, then assemble the bounded signed-shuffle chain.",
+    :gates
+    {:canonical-compile :pass,
+     :coordinate-sum-orientation :pass,
+     :whitespace :pass,
+     :maximal-nondegeneracy-characterization :pass,
+     :fixture-hash :pass,
+     :axiom-audits 3,
+     :exact-scope :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :warning-scan :pass,
+     :commit-check :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :ledger-validation :pass,
+     :face-succAbove-deletion :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"MaximalPath"
+     "7f13a5d8244472065fc7ed3d711a1dcfe04793bf24fec04e5d658bc851c4e980",
+     "mem_maximalPath_iff"
+     "049e71358aa104c24edff5d5357ad4d6be555051022ad63a752fc506dabf6665",
+     "maximalPath_coordinate_sum"
+     "88f5569ab10a134db86fd25744408eeb5be26d247e0212c8b0c9e3687367d2aa",
+     "face_objEquiv"
+     "b0aaf9d9f66a362f6e3dd49994a1c77a05aa859d6f50e4de92656a52b03f677b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the dependency receipt",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexMaximalPaths.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ProductSimplexMaximalPaths",
+      :exit 0}
+     {:cmd
+      "Import the canonical target and reproduce standard-only axiom audits for mem_maximalPath_iff, maximalPath_coordinate_sum and face_objEquiv",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/ProductSimplexMaximalPaths.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python comment-stripped placeholder, forbidden-declaration, whitespace, fixture-hash, theorem-shape and declaration-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --check; verify exact two-file scope; git diff --cached --check; git commit -m 'Expose maximal product simplex paths'",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat HEAD; recompute canonical source, documentation, commit and Git blob hashes; git status --short",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "First combined final-audit script",
+      :exit 1,
+      :correction
+      "Removed an accidental invalid Python assignment after the otherwise successful axiom and forbidden-pattern checks, then reran the complete Python audit successfully."}],
+    :canonical
+    {:path "ConstructionTargets/ProductSimplexMaximalPaths.lean",
+     :sha256
+     "c4c5125f3aa572726b2b42bc3dbe6776e9f239075ad8dc6b43fdcd99b02cc424",
+     :git-blob "a815cdd83667c9215a96408029cde0352d7614fb"},
+    :commit "6311733ce8c04b8e87dd39ce76b0bdbb46b8b108",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexMaximalPaths.lean"
+     "ConstructionTargets/ProductSimplexMaximalPaths.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint56-product-simplex/ProductSimplexMaximalPaths.lean",
+     :sha256
+     "bf49a2ac0ea48a6b868d2f7aaff2963c125746bfdc559096625a9fd95e962761",
+     :placeholder-count 0},
+    :finding
+    "The canonical module exposes Mathlib's maximal nondegenerate product-simplex representation without adding new combinatorial structure. mem_maximalPath_iff is exactly prodStdSimplex.nonDegenerate_max_dim_iff; maximalPath_coordinate_sum evaluates its identity with the two product coordinates on the left and the time index on the right; face_objEquiv delegates to objEquiv_δ_apply and records deletion through Fin.succAbove. No sign, affine realization, singular chain, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is introduced.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexMaximalPaths.lean"
     "ConstructionTargets/ProductSimplexMaximalPaths.md"],
