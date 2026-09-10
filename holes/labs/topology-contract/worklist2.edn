@@ -31554,6 +31554,22 @@
       :exit 1,
       :correction
       "The first audit attempted an unsupported absolute-path import. Replaced it with the fixture's minimal declaration and direct checks; the corrected audit deterministically shows the required qualified identifier is unknown."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789055710849-18908-f579e1c8",
+     :commands
+     ["git show --format=fuller --stat e868fa09b615c88c356056fc2b1b501419c1939e"
+      "git diff-tree --no-commit-id --name-status -r e868fa09b615c88c356056fc2b1b501419c1939e"
+      "git diff --check e868fa09b615c88c356056fc2b1b501419c1939e^ e868fa09b615c88c356056fc2b1b501419c1939e"
+      "sha256sum /tmp/codex13-checkpoint50-source-sphere-nullity/LowerDimensionalSphereNullity.lean"
+      "lake env lean /tmp/codex13-checkpoint50-source-sphere-nullity/LowerDimensionalSphereNullity.lean"
+      "lake env lean /tmp/codex14-lower-sphere-namespace-audit.lean"
+      "placeholder, forbidden-declaration, and whitespace scans on the fixture"
+      "git history and object search for ConstructionTargets/LowerDimensionalSphereNullity.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb on both ledgers from recorded commit"],
+     :finding
+     "PASS: commit e868fa09 is ledger-only and whitespace-clean. The fixture reproduces SHA256 9f4adeca79ba7746204a10eb5a8fb1e2b5582618879d98d5f6d3579e9bf2997f, has zero placeholders, compiles both raw critical-dimensional Hausdorff sphere-nullity theorems, and uses only propext, Classical.choice, and Quot.sound. The theorem orientation is correct: addHaar_sphere gives μH[2](sphere in E2)=0 and μH[3](sphere in E3)=0 without numerical normalization. However, the fixture declares LowerDimensionalSphereNullity, whereas exact promotion requires ConstructionTargets.LowerDimensionalSphereNullity; the independent audit confirms the former qualified theorem exists and the latter is unknown. No canonical target exists in Git, so renaming would change the frozen fixture. The recorded STOP therefore correctly identifies a specification boundary. Both ledgers validate; no frozen consumer changed, so frozen statement hashes and placeholder recount are not applicable."},
     :changed-paths [],
     :fixture
     {:path
@@ -31565,7 +31581,7 @@
     "The authoritative dependency receipt supplies a complete fixture at SHA256 9f4adeca79ba7746204a10eb5a8fb1e2b5582618879d98d5f6d3579e9bf2997f, and that fixture compiles both required raw Hausdorff-nullity theorems with standard-only axioms. However, it declares namespace LowerDimensionalSphereNullity, while this implementation row requires exact fixture promotion under ConstructionTargets.LowerDimensionalSphereNullity. The unqualified theorem exists and the required qualified theorem is unknown. Renaming or wrapping the fixture would violate exact promotion. Repair the fixture namespace and recorded SHA256, or consistently revise the acceptance namespace and exact-promotion requirement. This is a specification boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/LowerDimensionalSphereNullity.lean"
     "ConstructionTargets/LowerDimensionalSphereNullity.md"],
@@ -31699,7 +31715,7 @@
      "Exactly one complete compiled prerequisite is supplied on the shared t95J05, t02A05, t01J06 and t94A10 routes. It proves that the literal unit sphere in EuclideanSpace real (Fin 2) has zero raw two-dimensional Hausdorff measure and that the literal unit sphere in EuclideanSpace real (Fin 3) has zero raw three-dimensional Hausdorff measure. The proof uses the actual critical-dimensional raw-Hausdorff additive-Haar instances and addHaar_sphere, so it neither invokes nor computes the blocked normalization scalar. These source spheres are the lower-dimensional models for the equators of the literal S2 and S3 cap decompositions. The parent probe is not GO because their explicit isometric embeddings as the Fin.last-equals-zero subsets of EuclideanSpace real (Fin 3) and Fin 4, the induced ambient and intrinsic Hausdorff transport, and the exact cap-plus-equator partitions remain unproved. No canonical source or ledger was edited.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: Hausdorff-null equators for the literal S2 and S3 cap decompositions",
