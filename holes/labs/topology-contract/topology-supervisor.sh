@@ -44,6 +44,9 @@ MAX_ESCALATIONS="${TOPOLOGY_MAX_ESCALATIONS:-2}"
 # How long the loop must run before its previous faults are considered
 # unrelated to the next one. See the budget reset in the main loop.
 BUDGET_RESET_SECONDS="${TOPOLOGY_BUDGET_RESET_SECONDS:-1200}"
+# How long to hold for ANOTHER writer to release the canonical tree before
+# telling a human. See hold_for_other_writer.
+DIRTY_HOLD_SECONDS="${TOPOLOGY_DIRTY_HOLD_SECONDS:-14400}"
 ESCALATION_TIMEOUT="${TOPOLOGY_ESCALATION_TIMEOUT:-3600}"
 ESCALATION_POLL="${TOPOLOGY_ESCALATION_POLL:-60}"
 
@@ -171,17 +174,58 @@ healthy() {
   return 0
 }
 
+# A tree still dirty after the loop's own DIRTY_WAIT_SECONDS is another writer's
+# UNCOMMITTED work. No repair can fix that without committing or discarding
+# someone else's work, so refusing to repair it is right -- but EXITING was
+# wrong. On 2026-09-10 runs2 stopped at 17:41 on codex-18's formalization
+# tranche, which Joe had commissioned directly; the supervisor exited, and
+# nothing would have restarted the loop when that work was committed. Waiting
+# for another writer needs no agent and spends no quota. Hold, and restart the
+# moment the tree is clean and the ledger validates.
+hold_for_other_writer() {
+  local held=0
+  while [ "$held" -lt "$DIRTY_HOLD_SECONDS" ]; do
+    sleep "$ESCALATION_POLL"; held=$((held+ESCALATION_POLL))
+    if healthy; then slog "tree released after ${held}s of holding; restarting loop"; return 0; fi
+    [ $((held % 600)) -eq 0 ] && slog "still holding for another writer (${held}s)"
+  done
+  return 1
+}
+
+# The exact command that brings this supervisor back, for a bell that has to
+# tell its reader the supervisor is gone.
+restart_env() {
+  local v out="TOPOLOGY_LEDGER=$LEDGER TOPOLOGY_RUNS=$RUNS"
+  for v in OWNER_SEAT AUTHOR_SEAT REVIEW_SEAT PROBE_SEAT STRATEGY_SEAT \
+           TOPOLOGY_REPAIR_SEAT TOPOLOGY_ESCALATE_TO MAX_ITER DIRTY_WAIT_SECONDS; do
+    [ -n "${!v:-}" ] && out="$out $v=${!v}"
+  done
+  printf '%s' "$out"
+}
+
+# escalate REASON MODE HEADER. MODE is `waiting` only on the one path that
+# really does wait and restart; every other caller exits, and used to send the
+# same "You do NOT need to restart it" text anyway -- on 2026-09-10 a bell said
+# the supervisor would restart runs2 itself when it had already exited, and
+# claimed three repair attempts when none had been made. A bell must say what
+# is true of the supervisor that sent it.
 escalate() {
-  local reason="$1" note out
+  local reason="$1" mode="${2:-stopped}" header="${3:-the loop stopped}" note out
   note="$(mktemp)"
-  { echo "topology-supervisor: automated repair is exhausted after $MAX_REPAIRS attempts."
+  { echo "topology-supervisor: $header."
     echo "last stop: $reason"
-    echo "This needs a human or a more capable agent. The loop is stopped."
-    echo
-    echo "You do NOT need to restart it. This supervisor waits up to"
-    echo "${ESCALATION_TIMEOUT}s and restarts the loop itself as soon as the ledger"
-    echo "validates and the worktree is clean. COMMIT your fix -- an uncommitted one"
-    echo "leaves the tree dirty, which is one of the two things being waited on."
+    if [ "$mode" = waiting ]; then
+      echo "This needs a human or a more capable agent. The loop is stopped."
+      echo
+      echo "You do NOT need to restart it. This supervisor waits up to"
+      echo "${ESCALATION_TIMEOUT}s and restarts the loop itself as soon as the ledger"
+      echo "validates and the worktree is clean. COMMIT your fix -- an uncommitted one"
+      echo "leaves the tree dirty, which is one of the two things being waited on."
+    else
+      echo "The loop is STOPPED and this supervisor has EXITED. Nothing will restart it."
+      echo "Fix the cause, then restart it with:"
+      echo "  cd $HERE && setsid env $(restart_env) nohup ./topology-supervisor.sh >> $RUNS/nohup.log 2>&1 < /dev/null &"
+    fi
     echo; echo "== validator =="; bb "$HERE/worklist_check.bb" "$LEDGER" 2>&1 | tail -10
     echo; echo "== last 40 log lines =="; tail -40 "$LOG"; } > "$note"
   # A bell, not a whistle. A whistle blocks until the recipient ANSWERS, and
@@ -245,12 +289,19 @@ while true; do
     # someone who stopped the loop on purpose does not need to be told they did.
     case "$reason" in
       *"received signal"*)
-        slog "deliberate stop; leaving stopped, not escalating" ;;
+        slog "deliberate stop; leaving stopped, not escalating"
+        exit "$rc" ;;
+      *"worktree is dirty"*)
+        slog "another writer holds the canonical tree; holding up to ${DIRTY_HOLD_SECONDS}s (no repair, no escalation)"
+        if hold_for_other_writer; then continue; fi
+        slog "tree still held after ${DIRTY_HOLD_SECONDS}s; escalating once and leaving stopped"
+        escalate "$reason" stopped "the canonical tree has been held dirty by another writer for over ${DIRTY_HOLD_SECONDS}s"
+        exit "$rc" ;;
       *)
         slog "not auto-repairable by policy; escalating once and leaving stopped"
-        escalate "$reason" ;;
+        escalate "$reason" stopped "a stop this supervisor will not auto-repair (policy)"
+        exit "$rc" ;;
     esac
-    exit "$rc"
   fi
 
   if [ "$repairs" -ge "$MAX_REPAIRS" ]; then
@@ -265,7 +316,7 @@ while true; do
     fi
     escalations=$((escalations+1))
     slog "repair budget exhausted; escalating to $ESCALATE_TO ($escalations/$MAX_ESCALATIONS)"
-    escalate "$reason" || true
+    escalate "$reason" waiting "automated repair is exhausted after $repairs attempts" || true
     slog "waiting up to ${ESCALATION_TIMEOUT}s for the escalated repair to land"
     waited=0
     while [ "$waited" -lt "$ESCALATION_TIMEOUT" ]; do
@@ -283,7 +334,7 @@ while true; do
   fi
   repairs=$((repairs+1))
 
-  dispatch_repair "$reason" || { slog "dispatch failed; escalating"; escalate "$reason"; exit "$rc"; }
+  dispatch_repair "$reason" || { slog "dispatch failed; escalating"; escalate "$reason" stopped "a repair could not be dispatched"; exit "$rc"; }
 
   # Wait for the repair to take effect, judged by the world rather than by the
   # agent's say-so: the ledger validates and the tree is clean.
@@ -295,7 +346,7 @@ while true; do
   done
   if ! healthy; then
     slog "still unhealthy after ${waited}s; escalating to $ESCALATE_TO"
-    escalate "$reason"
+    escalate "$reason" stopped "the automated repair did not land within ${REPAIR_TIMEOUT}s"
     exit "$rc"
   fi
 done
