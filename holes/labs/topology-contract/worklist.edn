@@ -55939,6 +55939,19 @@
      {:cmd "git diff --check and git diff --cached --check", :exit 0}
      {:cmd "Scoped git add and git commit --only", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788998695492-17385-3e1b7374",
+     :commands
+     ["git show 937a5c78559bca54386c944ad1819c2005124915"
+      "Independent exact-promotion, scope, fixture/three statement hashes and placeholder audit"
+      "lake env lean ConstructionTargets/ManifoldFiberChartExtension.lean"
+      "Inspect cutoff-extension and local fiber-chart producer hypotheses"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check 937a5c78"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact single-file promotion and all hashes verified. Actual self-model chart representatives are smooth on their open targets; center derivative equals mfderiv. Constructed extension agrees in value and derivative on an open neighborhood, giving a center-containing extension-fiber chart without assuming global regularity. Original-fiber chart transport and overlaps remain explicitly unproved. Three axiom audits pass standard-only; compilation warning-free, module zero placeholders. Frozen t00J02 unchanged at one. Ledger passes 431 items; whitespace clean. No edits."},
     :commit "937a5c78559bca54386c944ad1819c2005124915",
     :changed-paths
     ["ConstructionTargets/ManifoldFiberChartExtension.lean"],
@@ -55950,7 +55963,7 @@
     :consumer-sha256
     "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldFiberChartExtension.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / actual chart extension and center regularity",
@@ -56039,7 +56052,7 @@
      "Compiled one prerequisite: actual source-chart localization with a constructed smooth extension and a fixed-model chart on its fiber. representative_smooth derives ContDiffOn infinity on the actual open chart target. representative_derivative identifies its fderiv at the center with the original mfderiv. exists_extension_chart invokes the existing cutoff construction, derives an open neighborhood contained in the chart target with exact function and derivative agreement throughout, transfers center surjectivity, and invokes RegularFiberFixedModelOverlaps.exists_chart. No global regularity of the extension is assumed. The chart is currently on the extension fiber, not yet on the original manifold fiber; transport and overlap proofs remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / manifold-source fiber charts",
