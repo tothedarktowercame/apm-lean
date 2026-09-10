@@ -74552,8 +74552,54 @@
   {:consumer "t98A02",
    :stop-condition
    "Require monicity of the diagonal quotient arrow and kernel-image exactness at the middle quotient biproduct; together with this terminal epimorphism these establish short exactness.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove intersectionToPiecesRelative is monic and that its image equals the kernel of piecesToUnionRelative. Then ShortComplex.ShortExact.mk' combines those results with piecesToUnionRelative_epi, enabling the homology connecting morphism and three exactness segments.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:leftToUnionRelative_epi
+     "aacc37fb66aa11d717581c0f562bdf4666f37109562138c0ce81e3c7452d2eff",
+     :rightToUnionRelative_epi
+     "808ac93625be315ed1ac0d7e464e73be571bbca01e296e4522b879c5c4f883b5",
+     :inl_piecesToUnionRelative
+     "aae376bc87b6f09ffcbf80d69841e212348bcab8357e0202d87ef4827d2261fa",
+     :piecesToUnionRelative_epi
+     "ed8e16a2c1f00d1a47aaf145559c2db64676ecb180a796e1e37ceb2956b5b207"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisEpi.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubcomplexRelativeMayerVietorisEpi.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisEpi.lean ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisComplex.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder-and-four-declaration audit over ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisEpi.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 15ff50cacc0029e28d5c9de8913a3c923fdfbcbd",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 15ff50cacc0029e28d5c9de8913a3c923fdfbcbd",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :commit "15ff50cacc0029e28d5c9de8913a3c923fdfbcbd",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisEpi.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubcomplexRelativeMayerVietorisEpi.lean",
+     :sha256
+     "cfb50c4a8d0eb17c54f775c69d00ae8bf30406b5059d96364a65366c1ef1b7f0",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and reviewed short-complex dependency hashes reproduce. The two component epimorphism instances, the biproduct-inclusion factorization, and the terminal epimorphism compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeMayerVietorisEpi.lean"],
    :dag-node
