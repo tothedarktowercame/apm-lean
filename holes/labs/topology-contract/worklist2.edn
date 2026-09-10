@@ -46195,6 +46195,27 @@
      "A typed atomic transition validated against the complete allowlisted evidence schema for the selected row",
      :direction
      "Exact state transition from each supported source evidence representation to its immutable-artifact target representation, changing only the selected allowlisted fixture path after exhaustive field and hash validation."},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789083570444-19815-3afea4de",
+     :commands
+     ["git log --oneline -10"
+      "inspect recorded row evidence and acceptance gates in worklist2.edn"
+      "git show --stat --oneline 1808d9fa"
+      "git show --format=fuller --no-ext-diff 1808d9fa -- holes/labs/topology-contract/build_step.bb holes/labs/topology-contract/test_gate_receipts.bb"
+      "git archive 1808d9fa | tar -x -C <review-dir>"
+      "git diff-tree --no-commit-id --name-status -r 1808d9fa"
+      "git diff-tree --check 1808d9fa^ 1808d9fa"
+      "sha256sum <archive>/holes/labs/topology-contract/build_step.bb <archive>/holes/labs/topology-contract/test_gate_receipts.bb"
+      "clj-kondo --lint <archived-build-step> <archived-tests>"
+      "emacs --batch -Q -l /home/joe/code/futon4/dev/check-parens.el -- <archived-build-step> <archived-tests>"
+      "bb <archive>/holes/labs/topology-contract/test_gate_receipts.bb"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <archive>/holes/labs/topology-contract/worklist2.edn"
+      "inspect apply-completion-transition ordering and whole-ledger validation before atomic move"],
+     :finding
+     "PASS: commit 1808d9fa32e546b11a86fdca1e5fcdf373134071 has exact build_step.bb plus test_gate_receipts.bb scope and clean whitespace. Recorded fixture hashes reproduce as fbbab1f3167774d19d9ebd9204ca0bba5d9e9cbd5121f958d622cd2ab3cdef14 and d0d4f8939d58e39346a7487711bc1a427cac0533890b4f8c72b1925fbd2ff0c2. The validator retains default checkpoint60-primary and checkpoint66-supporting behavior and adds an explicit checkpoint67-primary schema covering fixture SHA256, reviewed source and hash, predecessor path and hash, placeholder count, implementation commit, PASS review, declarations and statement hashes. Schema/path agreement, exact label sets and fixed-path value equality are enforced before mutation; existing completed-row, source, target-hash, pre-insertion and pre-atomic-write checks remain intact. The suite passes 85 assertions covering all three concrete shapes and unknown schema, omitted/extra labels, mismatches, wrong paths, rows, states, sources, targets and hashes. Lint, parentheses and both archived ledgers pass. No topology source, theorem orientation, frozen statement, consumer source or placeholder count changed."},
     :commit "1808d9fa32e546b11a86fdca1e5fcdf373134071",
     :changed-paths
     ["holes/labs/topology-contract/build_step.bb"
@@ -46214,7 +46235,7 @@
     "The validator now selects an explicit allowlisted evidence schema while retaining default checkpoint60 primary and checkpoint66 supporting-path behavior. The checkpoint67 primary schema requires exact fixture SHA256, reviewed source and hash, predecessor path and hash, placeholder count, implementation commit, PASS review, declarations and statement hashes. Schema and request paths must agree, and preserve label sets must match exactly before every value is compared at its fixed ledger path. The 85-assertion suite covers all three concrete transition shapes plus unknown schemas, omitted and extra labels, mismatched values, wrong paths, rows, states, sources, targets and hashes. Transition application remains before replacement insertion, and whole-ledger validation remains before atomic move. No topology source or consumer file changed.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["holes/labs/topology-contract/build_step.bb"
     "holes/labs/topology-contract/test_gate_receipts.bb"],
@@ -46270,7 +46291,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: promoted evidence-shape transitions and renewed consumer eligibility",
