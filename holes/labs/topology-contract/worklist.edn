@@ -75008,6 +75008,41 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require identification of the intersection and union component ranges with the infimum and supremum of the left and right component ranges, followed by compatibility of the two genuine categorical quotient arrows with the explicit diagonal and signed quotient maps.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / four relative subcomplex degree-quotient presentations",
+   :acceptance
+   {:fixture "/tmp/CoefficientSubcomplexRelativeDegreeQuotients.lean",
+    :fixture-sha256
+    "fbc78c211bdafed1ef1b8f169274aa0ceec3eb9d5fc60b979d8e0d443c0964c8",
+    :implementation
+    "Promote the exact fixture. Compile intersectionDegreeIso, leftDegreeIso, rightDegreeIso, unionDegreeIso and their four projection compatibility theorems. This supplies the four specialized degreewise quotient presentations required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05. Verify CoefficientChainCokernelDegreeQuotient SHA256 b1cc05c7878ba6eca524bafd8cc6e046c8c560e05221b0f6efaaaf25e9968d5d. Preserve arbitrary simplicial sets, arbitrary subcomplexes, arbitrary commutative-ring coefficients and every natural-number degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim the range-lattice equalities, compatibility of either relative quotient arrow, chain-level short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The degree components of the four categorical relative cokernels for the intersection, left, right and union ambient subcomplex-chain inclusions",
+    :target
+    "The four ordinary quotients of the ambient coefficient-chain degree module by the respective component-map range submodules",
+    :direction
+    "Canonical linear isomorphisms from each source categorical relative-cokernel degree representation to its target range-quotient representation, with exact equality from every evaluated categorical cokernel projection to the corresponding ordinary quotient map."},
+   :id
+   :coefficient-subcomplex-relative-degree-quotients-implementation-refill51,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-chain-cokernel-degree-quotient-implementation-refill51],
+   :current-residual
+   "Prove in each degree that the intersection inclusion range is the infimum and the union inclusion range is the supremum of the left and right inclusion ranges. Use the four projection equations to identify the conjugated genuine arrows with infQuotientDiagonal and piecesToSupQuotient, transfer injectivity and middle exactness, apply shortComplex_shortExact_of_degreewise, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport through relativeComparisonIso to the literal compact-complement pairs.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
@@ -75017,81 +75052,66 @@
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require specialization of this degreewise cokernel isomorphism to the intersection, left, right and union ambient inclusions, identification of their range submodules with the corresponding infimum and supremum, and compatibility of both genuine quotient arrows with the explicit module maps.",
+      "Require identification of the intersection and union component ranges with the infimum and supremum of the left and right component ranges, followed by compatibility of the two genuine categorical quotient arrows with the explicit diagonal and signed quotient maps.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientChainCokernelDegreeQuotient.lean"],
+      ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / chain cokernel degree quotient representation",
+      "MANIFOLD FUNDAMENTAL CLASS / four relative subcomplex degree-quotient presentations",
       :acceptance
-      {:fixture "/tmp/CoefficientChainCokernelDegreeQuotient.lean",
+      {:fixture
+       "/tmp/CoefficientSubcomplexRelativeDegreeQuotients.lean",
        :fixture-sha256
-       "b1cc05c7878ba6eca524bafd8cc6e046c8c560e05221b0f6efaaaf25e9968d5d",
+       "fbc78c211bdafed1ef1b8f169274aa0ceec3eb9d5fc60b979d8e0d443c0964c8",
        :implementation
-       "Promote the exact fixture. Compile cokernelDegreeQuotientIso and cokernelDegreeQuotientIso_projection. This supplies the degreewise categorical-to-explicit quotient representation required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: each degree of a chain-complex cokernel is canonically isomorphic to the target degree module modulo the range of the component map, and the cokernel projection becomes the ordinary quotient map. Verify CoefficientSubmoduleRelativeMayerVietorisExact SHA256 5c396593f1db7886c792e3d136bcce9ef4f47fdcbe01566c18675f9da0487f4c. Preserve arbitrary chain complexes of modules over arbitrary commutative rings and every natural-number degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim the needed range-lattice identifications, compatibility of the relative Mayer-Vietoris arrows, chain-level short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile intersectionDegreeIso, leftDegreeIso, rightDegreeIso, unionDegreeIso and their four projection compatibility theorems. This supplies the four specialized degreewise quotient presentations required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05. Verify CoefficientChainCokernelDegreeQuotient SHA256 b1cc05c7878ba6eca524bafd8cc6e046c8c560e05221b0f6efaaaf25e9968d5d. Preserve arbitrary simplicial sets, arbitrary subcomplexes, arbitrary commutative-ring coefficients and every natural-number degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim the range-lattice equalities, compatibility of either relative quotient arrow, chain-level short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientChainCokernelDegreeQuotient.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeQuotients.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "A fixed degree of the categorical cokernel of a chain-complex morphism in ModuleCat over the coefficient ring",
+       "The degree components of the four categorical relative cokernels for the intersection, left, right and union ambient subcomplex-chain inclusions",
        :target
-       "The ordinary module quotient of the target degree module by the linear range of the corresponding component morphism",
+       "The four ordinary quotients of the ambient coefficient-chain degree module by the respective component-map range submodules",
        :direction
-       "Canonical linear isomorphism from the source categorical chain-cokernel degree representation to the target range-quotient representation, with exact equality from the evaluated categorical cokernel projection to the ordinary quotient map after the isomorphism."},
+       "Canonical linear isomorphisms from each source categorical relative-cokernel degree representation to its target range-quotient representation, with exact equality from every evaluated categorical cokernel projection to the corresponding ordinary quotient map."},
       :id
-      :coefficient-chain-cokernel-degree-quotient-implementation-refill51,
+      :coefficient-subcomplex-relative-degree-quotients-implementation-refill51,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-submodule-relative-mayer-vietoris-exact-implementation-refill51],
+      [:coefficient-chain-cokernel-degree-quotient-implementation-refill51],
       :current-residual
-      "Specialize cokernelDegreeQuotientIso to the four ambient subcomplex-chain inclusions. Prove that their component ranges realize the intersection and supremum of the left and right ranges, and that the conjugated genuine arrows are infQuotientDiagonal and piecesToSupQuotient. Transfer injectivity and middle exactness, apply shortComplex_shortExact_of_degreewise, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport through relativeComparisonIso to the literal compact-complement pairs.",
+      "Prove in each degree that the intersection inclusion range is the infimum and the union inclusion range is the supremum of the left and right inclusion ranges. Use the four projection equations to identify the conjugated genuine arrows with infQuotientDiagonal and piecesToSupQuotient, transfer injectivity and middle exactness, apply shortComplex_shortExact_of_degreewise, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport through relativeComparisonIso to the literal compact-complement pairs.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSubmoduleRelativeMayerVietorisExact >/tmp/relative-mv-cokernel-degree-dep.log 2>&1",
+       "lake build ConstructionTargets.CoefficientChainCokernelDegreeQuotient >/tmp/relative-mv-degree-specialize-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientChainCokernelDegreeQuotient.lean",
+       "lake env lean /tmp/CoefficientSubcomplexRelativeDegreeQuotients.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientChainCokernelDegreeQuotient.lean ConstructionTargets/CoefficientSubmoduleRelativeMayerVietorisExact.lean",
+       "sha256sum /tmp/CoefficientSubcomplexRelativeDegreeQuotients.lean ConstructionTargets/CoefficientChainCokernelDegreeQuotient.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/CoefficientChainCokernelDegreeQuotient.lean",
+       "python3 comment-stripped placeholder-and-eight-declaration audit over /tmp/CoefficientSubcomplexRelativeDegreeQuotients.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/CoefficientChainCokernelDegreeQuotient.lean",
-       :exit 1,
-       :correction
-       "The initial projection proof tried to reassociate a composite already parsed in the opposite association. Replaced the generic associativity rewrite with the dedicated PreservesCokernel projection compatibility theorem."}
-      {:cmd
-       "lake env lean /tmp/CoefficientChainCokernelDegreeQuotient.lean",
-       :exit 1,
-       :correction
-       "The dedicated projection rewrite first failed because the evaluated component was not syntactically exposed as a functor map. Added an explicit typed change to the evaluation-functor presentation and used the reassociated compatibility lemma."}
-      {:cmd
-       "lake env lean /tmp/CoefficientChainCokernelDegreeQuotient.lean",
-       :exit 1,
-       :correction
-       "The final ModuleCat quotient-projection theorem left its coefficient ring metavariable unresolved. Supplied R and the degree component map explicitly."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientChainCokernelDegreeQuotient.lean",
+     {:path "/tmp/CoefficientSubcomplexRelativeDegreeQuotients.lean",
       :sha256
-      "b1cc05c7878ba6eca524bafd8cc6e046c8c560e05221b0f6efaaaf25e9968d5d",
+      "fbc78c211bdafed1ef1b8f169274aa0ceec3eb9d5fc60b979d8e0d443c0964c8",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one degreewise cokernel representation prerequisite. Evaluation identifies each degree of a categorical chain-complex cokernel with the cokernel of the corresponding ModuleCat component, and ModuleCat identifies that cokernel with the ordinary quotient by the component map's linear range. The composite isomorphism sends the categorical chain-complex cokernel projection exactly to the ordinary quotient map. This provides the required bridge to the explicit injectivity and middle-exactness theorems without supportConnecting or excision.",
+     "Compiled exactly one bounded specialization of the degreewise cokernel representation. The intersection, left, right and union relative chain cokernels now each have a named degreewise isomorphism to the ambient degree module modulo the range of the corresponding subcomplex-chain inclusion. Four projection equations identify the categorical cokernel projections exactly with the ordinary quotient maps. This prepares the literal quotient arrows for comparison with the explicit module-level exact sequence without supportConnecting or excision.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -75125,7 +75145,8 @@
     :coefficient-subcomplex-relative-mayer-vietoris-degreewise-criterion-implementation-refill51
     :coefficient-submodule-inf-quotient-diagonal-implementation-refill51
     :coefficient-submodule-relative-mayer-vietoris-exact-implementation-refill51
-    :coefficient-chain-cokernel-degree-quotient-implementation-refill51],
+    :coefficient-chain-cokernel-degree-quotient-implementation-refill51
+    :coefficient-subcomplex-relative-degree-quotients-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
