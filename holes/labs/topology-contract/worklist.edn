@@ -67825,88 +67825,117 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the simultaneous left, right and overlap forward homology equalities; no supplied naturality square or exactness.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / bundled compact-complement homology naturality",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientCompactComplementHomologySquareBundle.lean",
+    :fixture-sha256
+    "dfb2a7cead7ce630e8e96382f27d2ff64cfbc515668b256477669a41ac614be4",
+    :implementation
+    "Promote the exact fixture and compile homology_square_bundle. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients, every natural homology degree and all three literal forward inclusion arrows. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris exactness, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The three homeomorphism-induced coefficient homology maps for the nested left, right and overlap complement pieces, each followed by its original-complement inclusion into X",
+    :target
+    "The three direct coefficient homology maps induced by the corresponding nested-piece inclusions into X",
+    :direction
+    "Prove one simultaneous conjunction of exact forward equalities from every transported composite to its direct nested inclusion map in each natural degree."},
+   :id
+   :coefficient-compact-complement-homology-square-bundle-implementation-refill49,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-compact-complement-homology-squares-implementation-refill49],
+   :current-residual
+   "Use the bundled naturality theorem to conjugate the signed subcomplex Mayer-Vietoris arrows and connecting morphism, prove exactness on the complement presentation, then transport its relative terms to the four requested pairs by coefficient excision.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "GO requires the actual relative maps and proved exactness; REVISE requires exactly one compiled prerequisite. Do not infer localization monicity without the necessary vanishing theorem.",
    :evidence
    {:probe
     {:placeholder-delta 0,
-     :residual
-     "Conjugate the banked signed subcomplex Mayer-Vietoris short complex through the proved left, right, overlap and ambient comparison squares, obtaining the exact sequence on the complement presentation before transporting its relative terms to X by coefficient excision.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require all three coefficient chain inclusion squares and their derived homology squares with exact forward arrows; no supplied naturality square or exactness.",
+      "Require the simultaneous left, right and overlap forward homology equalities; no supplied naturality square or exactness.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientCompactComplementHomologySquares.lean"],
+      ["ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / compact-complement homology inclusion squares",
+      "MANIFOLD FUNDAMENTAL CLASS / bundled compact-complement homology naturality",
       :acceptance
       {:fixture
-       "/tmp/CoefficientCompactComplementHomologySquares.lean",
+       "/tmp/CoefficientCompactComplementHomologySquareBundle.lean",
        :fixture-sha256
-       "f7ece409aa802bf09740d18ec252def76d2a2e75ace12002d1e135d49fecba6f",
+       "dfb2a7cead7ce630e8e96382f27d2ff64cfbc515668b256477669a41ac614be4",
        :implementation
-       "Promote the exact fixture. Compile left_chain_square, right_chain_square, overlap_chain_square, left_homology_square, right_homology_square and overlap_homology_square. Verify CoefficientCompactComplementHomologyTransport SHA256 fcab197c86e857e788128298cedc9cf0de41255c0961dbbabb983388b804e2b7. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients, every natural homology degree and the literal forward inclusion arrows. Retain the 800000 elaboration heartbeat bound. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris exactness, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture and compile homology_square_bundle. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients, every natural homology degree and all three literal forward inclusion arrows. Require zero placeholders, no warnings and standard-only axioms. Do not claim Mayer-Vietoris exactness, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquares.lean"],
+       ["lake env lean ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "Homeomorphism-induced coefficient chain and homology maps from the nested complement pieces, followed by the original-complement inclusions into X",
+       "The three homeomorphism-induced coefficient homology maps for the nested left, right and overlap complement pieces, each followed by its original-complement inclusion into X",
        :target
-       "The direct coefficient chain and homology maps of the nested-piece inclusions into X",
+       "The three direct coefficient homology maps induced by the corresponding nested-piece inclusions into X",
        :direction
-       "Prove exact equality from each transported forward composite to its direct nested inclusion map, first on chains and then on homology in every natural degree."},
+       "Prove one simultaneous conjunction of exact forward equalities from every transported composite to its direct nested inclusion map in each natural degree."},
       :id
-      :coefficient-compact-complement-homology-squares-implementation-refill49,
+      :coefficient-compact-complement-homology-square-bundle-implementation-refill49,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-compact-complement-homology-transport-implementation-refill49],
+      [:coefficient-compact-complement-homology-squares-implementation-refill49],
       :current-residual
-      "Use these three naturality squares to conjugate the signed subcomplex Mayer-Vietoris maps and connecting morphism, then transport the relative ambient-complement presentation to the requested pairs in X by coefficient excision.",
+      "Use the bundled naturality theorem to conjugate the signed subcomplex Mayer-Vietoris arrows and connecting morphism, prove exactness on the complement presentation, then transport its relative terms to the four requested pairs by coefficient excision.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientCompactComplementHomologyTransport",
+       "lake build ConstructionTargets.CoefficientCompactComplementHomologySquares",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientCompactComplementHomologySquares.lean",
+       "lake env lean /tmp/CoefficientCompactComplementHomologySquareBundle.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientCompactComplementHomologySquares.lean ConstructionTargets/CoefficientCompactComplementHomologyTransport.lean",
+       "sha256sum /tmp/CoefficientCompactComplementHomologySquareBundle.lean ConstructionTargets/CoefficientCompactComplementHomologySquares.lean",
        :exit 0}
       {:cmd
-       "python3 /tmp/coefficient-compact-complement-homology-squares-audit.py",
+       "python3 placeholder-and-homology-map audit over /tmp/CoefficientCompactComplementHomologySquareBundle.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientCompactComplementHomologySquares.lean",
+       "lake env lean /tmp/CoefficientCompactComplementHomologySquareBundle.lean",
        :exit 1,
        :correction
-       "Unfolded each mapped homeomorphism to the exact TopCat isomorphism before applying functorial composition."}
-      {:cmd
-       "lake env lean /tmp/CoefficientCompactComplementHomologySquares.lean",
-       :exit 1,
-       :correction
-       "Raised the deterministic elaboration heartbeat limit to 800000 for the three large definitional chain-map equalities; no theorem, hypothesis or invariant changed. Final compilation succeeds without warnings."}],
-     :changed-paths [],
+       "The newly promoted CoefficientCompactComplementHomologySquares dependency lacked its canonical object file. Built that unchanged dependency, then the fixture compiled successfully."}],
      :fixture
-     {:path "/tmp/CoefficientCompactComplementHomologySquares.lean",
+     {:path
+      "/tmp/CoefficientCompactComplementHomologySquareBundle.lean",
       :sha256
-      "f7ece409aa802bf09740d18ec252def76d2a2e75ace12002d1e135d49fecba6f",
+      "dfb2a7cead7ce630e8e96382f27d2ff64cfbc515668b256477669a41ac614be4",
       :placeholder-count 0},
      :finding
-     "The coefficient chain and homology isomorphisms for all three compact-complement pieces are banked. Compiled exactly one naturality prerequisite: the forward homeomorphism-induced chain maps followed by the original-complement inclusions equal the nested inclusions for the left, right and overlap pieces, and the corresponding homology-map squares commute in every natural degree. Signed Mayer-Vietoris conjugation, relative ambient excision, localization monicity, dimension vanishing and fundamental classes remain unproved.",
+     "Compiled one new bounded prerequisite that packages the three reviewed forward homology inclusion squares into one simultaneous theorem for the left, right and overlap complement pieces. This supplies a single typed naturality input for the signed Mayer-Vietoris conjugation. Exactness on the complement presentation and the final coefficient-excision transport remain unproved.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / compact-support relative Mayer-Vietoris",
@@ -67923,7 +67952,8 @@
     :coefficient-compact-complement-small-comparison-implementation-refill49
     :coefficient-compact-complement-pair-homeomorph-implementation-refill49
     :coefficient-compact-complement-homology-transport-implementation-refill49
-    :coefficient-compact-complement-homology-squares-implementation-refill49],
+    :coefficient-compact-complement-homology-squares-implementation-refill49
+    :coefficient-compact-complement-homology-square-bundle-implementation-refill49],
    :current-residual
    "Transition-unit local constancy is reviewed. Compact-support assembly and global localization remain independent of chart normalization.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
