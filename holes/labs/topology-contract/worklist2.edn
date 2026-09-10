@@ -30290,20 +30290,102 @@
    :stop-condition
    "Bank only ambient Hausdorff preservation and exact ambient strict-cap area formulas. Do not claim intrinsic subtype measure identification, equator nullity, numerical normalization, moments or consumer closure.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/codex13-checkpoint47-measure.lean",
-      :sha256
-      "80cda55fa8a17d2a9c85b8182556db3c419dea759fdee46224e0c0d5d2c0c2a8"},
-     :commands
-     [{:cmd "lake env lean /tmp/codex13-checkpoint47-measure.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Identify Hausdorff measure on each strict-cap subtype with ambient Hausdorff measure of its underlying set, then expose both ambient and intrinsic formulas as the completed sphere-cap comparison.",
+    :gates
+    {:canonical-compile :pass,
+     :exact-area-reuse :pass,
+     :lower-open-ball-integral-congruence :pass,
+     :whitespace :pass,
+     :dimension-two-both-signs :pass,
+     :upper-graph-image-rewrite :pass,
+     :fixture-hash :pass,
+     :axiom-audits 3,
+     :exact-scope :pass,
+     :no-finiteness :pass,
+     :claim-boundary :pass,
+     :coordinate-hausdorff-image :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :dimension-three-both-signs :pass,
+     :lower-reciprocal-density :pass,
+     :lower-graph-image-rewrite :pass,
+     :warning-scan :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :upper-reciprocal-density :pass,
+     :upper-open-ball-integral-congruence :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"coordinate_hausdorff_image"
+     "8e1a915ec5ab99cafb293ae3d668902e41d9ac947689ae5ed524398619086bbc",
+     "upper_strictCap_measure"
+     "5f6547d6ba1d0b02488299eda5e19de68cde897851a0046b38216953f28bdff5",
+     "lower_strictCap_measure"
+     "dfe33a492443e77a7b1f6ba59bc39a051ce3175b3431be05c5ef632cd99fa994"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, build-loop design, both ledgers and reviewed dependency receipt",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint47-measure.lean ConstructionTargets/SphereCapHausdorffTransport.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint47-measure.lean ConstructionTargets/SphereCapHausdorffTransport.lean",
+      :exit 0}
+     {:cmd "lake env lean /tmp/codex13-checkpoint47-measure.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/SphereCapHausdorffTransport.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.SphereCapHausdorffTransport",
+      :exit 0}
+     {:cmd
+      "Audit three namespace-local standard-only axiom reports and zero warnings or errors",
+      :exit 0}
+     {:cmd
+      "Audit coordinateIsometry image preservation through IsometryEquiv.hausdorffMeasure_image, both Euclidean graph-image rewrites, C1GraphGlobalBounds.exact_area_value reuse, and open-ball setLIntegral congruence through reciprocal-height densities",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/SphereCapHausdorffTransport.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n '[[:blank:]]+$' ConstructionTargets/SphereCapHausdorffTransport.lean ConstructionTargets/SphereCapHausdorffTransport.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --cached --check and exact two-file staged-scope audit",
+      :exit 0}
+     {:cmd "git diff c316c65e^ c316c65e --check", :exit 0}],
+    :dependency-uptake
+    {:id :sphere-cap-euclidean-strict-image-1,
+     :commit "135331478746614d16fd277d3712750c3e155ae1",
+     :review "invoke-1789050666455-18765-b51d4385"},
+    :commit "c316c65efbb69cf31b5ea009a1d6d3950b2ee94f",
+    :changed-paths
+    ["ConstructionTargets/SphereCapHausdorffTransport.lean"
+     "ConstructionTargets/SphereCapHausdorffTransport.md"],
+    :fixture
+    {:path "/tmp/codex13-checkpoint47-measure.lean",
+     :sha256
+     "80cda55fa8a17d2a9c85b8182556db3c419dea759fdee46224e0c0d5d2c0c2a8",
+     :placeholder-count 0},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/SphereCapHausdorffTransport.lean"
     "ConstructionTargets/SphereCapHausdorffTransport.md"],
