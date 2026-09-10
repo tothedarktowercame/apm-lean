@@ -71669,75 +71669,97 @@
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
   {:consumer "t00A03",
    :stop-condition
+   "Require a relative Sard theorem on the coincidence square minus the four endpoint pairs, plus explicit inclusion of any coincident prescribed endpoints in the finite fiber; then choose one good parameter tuple for every pair and prove chart-transition compatibility.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean"],
+   :dag-node
+   "SURFACE TRIANGULATION / endpoint-relative coincidence-square boundary decomposition",
+   :acceptance
+   {:fixture "/tmp/PlaneArcEndpointPairBoundaryDecomposition.lean",
+    :fixture-sha256
+    "862a3c2044d4388bf12dd8c4b8477822de6721dcbd11f39604163c873c1d8d4b",
+    :implementation
+    "Promote the exact fixture. Compile endpoint_cases and interior_direction_or_endpoint_pair. This supplies the complete boundary decomposition required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes: outside four explicit endpoint-endpoint pairs, at least one curve parameter is interior and hence has the reviewed surjective perturbation direction. Verify PlaneArcEndpointPairParameterSurjectivity SHA256 8657ea839db4ff9b7fb78d3eece0d2b4937de4be199d2967435b9e89b9fb64a7. Preserve the literal closed and open unit intervals and all four endpoint combinations. Require zero placeholders, no warnings and standard-only axioms. Do not claim endpoint separation, regular-value existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+    :commands
+    ["lake env lean ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50,
+   :kind :reusable-theorem,
+   :depends-on
+   [:plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50],
+   :current-residual
+   "Apply relative Sard using the compiled interior-direction cover and four-point boundary decomposition. Add the fixed coincident endpoints to each finite intersection set, choose parameters simultaneously across the finite family, retain embeddings, and transport coincidences through chart transitions.",
+   :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
+  {:consumer "t00A03",
+   :stop-condition
    "Require a compiled perturbation preserving prescribed endpoints and chartwise containment with finite pairwise intersections; do not infer cross-chart finiteness from unrelated plane translations.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Pairwise parameter surjectivity away from endpoint-endpoint pairs compiles; relative regular-value selection, fixed endpoint-pair accounting, finite-family simultaneity, embedding stability and cross-chart comparison remain.",
+     "The complete four-point boundary decomposition compiles; relative Sard, finite-family simultaneous selection, embedding stability and cross-chart comparison remain.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t00A03",
       :stop-condition
-      "Require a relative Sard theorem for the full pairwise coincidence map on the compact parameter square with its four endpoint pairs handled separately, followed by one simultaneous finite-family parameter selection and explicit chart-transition comparison.",
+      "Require a relative Sard theorem on the coincidence square minus the four endpoint pairs, plus explicit inclusion of any coincident prescribed endpoints in the finite fiber; then choose one good parameter tuple for every pair and prove chart-transition compatibility.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"],
+      ["ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean"],
       :dag-node
-      "SURFACE TRIANGULATION / endpoint-relative pairwise coincidence parameter surjectivity",
+      "SURFACE TRIANGULATION / endpoint-relative coincidence-square boundary decomposition",
       :acceptance
-      {:fixture "/tmp/PlaneArcEndpointPairParameterSurjectivity.lean",
+      {:fixture "/tmp/PlaneArcEndpointPairBoundaryDecomposition.lean",
        :fixture-sha256
-       "8657ea839db4ff9b7fb78d3eece0d2b4937de4be199d2967435b9e89b9fb64a7",
+       "862a3c2044d4388bf12dd8c4b8477822de6721dcbd11f39604163c873c1d8d4b",
        :implementation
-       "Promote the exact fixture. Compile pairDifference, pairDifference_vary_left_surjective and pairDifference_vary_right_surjective. This supplies the pairwise interior parameter-surjectivity step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes: whenever either arc parameter is interior, one corresponding perturbation-vector coordinate moves the coincidence difference surjectively through the plane. Verify PlaneArcEndpointPerturbationInteriorParameter SHA256 5220ea4ac53c6345fb6b467c7ba59e452385d5a42c0f2889bfe890cdc91b0fc7. Preserve arbitrary pairs of plane arcs and arbitrary fixed perturbation data for the other curve. Require zero placeholders, no warnings and standard-only axioms. Do not claim endpoint-endpoint separation, regular-value existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+       "Promote the exact fixture. Compile endpoint_cases and interior_direction_or_endpoint_pair. This supplies the complete boundary decomposition required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes: outside four explicit endpoint-endpoint pairs, at least one curve parameter is interior and hence has the reviewed surjective perturbation direction. Verify PlaneArcEndpointPairParameterSurjectivity SHA256 8657ea839db4ff9b7fb78d3eece0d2b4937de4be199d2967435b9e89b9fb64a7. Preserve the literal closed and open unit intervals and all four endpoint combinations. Require zero placeholders, no warnings and standard-only axioms. Do not claim endpoint separation, regular-value existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
        :commands
-       ["lake env lean ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean"],
+       ["lake env lean ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50,
+      :plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50,
       :kind :reusable-theorem,
       :depends-on
-      [:plane-arc-endpoint-perturbation-interior-parameter-implementation-refill50],
+      [:plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50],
       :current-residual
-      "Apply Sard to the pairwise total coincidence maps using the compiled left/right parameter directions away from endpoint-endpoint pairs; prove the four fixed endpoint pairs form the complete boundary residual. Then choose parameters simultaneously, retain embeddings, and transport intersections through chart transitions.",
+      "Apply relative Sard using the compiled interior-direction cover and four-point boundary decomposition. Add the fixed coincident endpoints to each finite intersection set, choose parameters simultaneously across the finite family, retain embeddings, and transport coincidences through chart transitions.",
       :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.PlaneArcEndpointPerturbationInteriorParameter >/tmp/endpoint-interior-dep.log 2>&1",
+       "lake build ConstructionTargets.PlaneArcEndpointPairParameterSurjectivity >/tmp/endpoint-pair-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/PlaneArcEndpointPairParameterSurjectivity.lean",
+       "lake env lean /tmp/PlaneArcEndpointPairBoundaryDecomposition.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/PlaneArcEndpointPairParameterSurjectivity.lean ConstructionTargets/PlaneArcEndpointPerturbationInteriorParameter.lean",
+       "sha256sum /tmp/PlaneArcEndpointPairBoundaryDecomposition.lean ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/PlaneArcEndpointPairParameterSurjectivity.lean",
+       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/PlaneArcEndpointPairBoundaryDecomposition.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/PlaneArcEndpointPairParameterSurjectivity.lean",
-       :exit 1,
-       :correction
-       "The first proof tried to unfold pairDifference through rw and then rewrite an equality before its additive cancellation was exposed. Unfolded the definition explicitly and transported the parameter-surjectivity equation by adding the fixed base point."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/PlaneArcEndpointPairParameterSurjectivity.lean",
+     {:path "/tmp/PlaneArcEndpointPairBoundaryDecomposition.lean",
       :sha256
-      "8657ea839db4ff9b7fb78d3eece0d2b4937de4be199d2967435b9e89b9fb64a7",
+      "862a3c2044d4388bf12dd8c4b8477822de6721dcbd11f39604163c873c1d8d4b",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one pairwise regular-value prerequisite. For the difference of two endpoint-preserving perturbed arcs, varying the left perturbation vector is surjective whenever the left curve parameter lies in the open interval; symmetrically, varying the right vector is surjective whenever the right parameter is interior. Thus every coincidence parameter pair outside the four endpoint-endpoint pairs has a surjective available perturbation direction. The four fixed endpoint pairs, finite-family simultaneous parameter choice, embedding stability and chart-transition transport remain separate.",
+     "Compiled exactly one boundary-accounting prerequisite. A parameter in the closed unit interval that is not interior is exactly zero or one. Therefore every point of the closed parameter square either has an interior left parameter, has an interior right parameter, or is one of the four endpoint-endpoint pairs. Combined with the reviewed pairwise parameter-surjectivity results, this isolates the complete exceptional set for a relative regular-value argument. It does not assert whether the original prescribed endpoints coincide, choose simultaneous family parameters, retain embeddings or compare different charts.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
@@ -71753,7 +71775,8 @@
     :plane-arc-endpoint-perturbation-containment-implementation-refill50
     :plane-arc-endpoint-perturbation-family-containment-implementation-refill50
     :plane-arc-endpoint-perturbation-interior-parameter-implementation-refill50
-    :plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50],
+    :plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50
+    :plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50],
    :current-residual
    "Common-plane translations preserve embeddings and containment but move endpoints and do not compare curves transported through unrelated charts.",
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
