@@ -63705,6 +63705,18 @@
       :exit 0}
      {:cmd "sha256sum problems/t02A05/lean/Main.lean", :exit 0}
      {:cmd "git status --short", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789027695025-18202-25b05d09",
+     :commands
+     ["git show --check a0834961"
+      "sha256sum /tmp/T02A05IntrinsicMassBoundary.lean"
+      "lake env lean /tmp/T02A05IntrinsicMassBoundary.lean"
+      "Python: recompute pinned Main hash and placeholder counts; compare copied definitions and compiled sources"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show a0834961:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "Independent review of codex-12's ledger-only STOP passes. Fixture and frozen hashes match; placeholders remain 0 and 2 respectively. Diagnostic compiles with only the two disclosed warnings and standard axioms. Copied definitions preserve the literal outward tangent-projection integral. Both the flux bridge and complete optimization conclusion are proved equivalent to intrinsic sphere mass 2 = 4*pi. Neither normalization nor its negation is established; no closure or refutation claimed. Pinned ledger validates: 504 items. No files edited."},
     :changed-paths [],
     :fixture
     {:path "/tmp/T02A05IntrinsicMassBoundary.lean",
@@ -63722,7 +63734,7 @@
      :placeholder-after 2},
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "MANIFOLD INTEGRATION / frozen sphere flux",
    :acceptance
