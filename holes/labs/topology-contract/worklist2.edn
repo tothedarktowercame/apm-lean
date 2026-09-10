@@ -18530,6 +18530,19 @@
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789017814258-17956-d9f478b3",
+     :commands
+     ["Read-only Python recomputation of Checkpoint31 census SHA256, all consumer counts, module counts, changed paths and frozen t00J01 SHA256"
+      "Read-only Babashka verification of replacement rows, dependency sets, successor checkpoint settings and near-consumer STOP evidence"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 475489cc:holes/labs/topology-contract/worklist2.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 475489cc:holes/labs/topology-contract/worklist.edn)"
+      "git diff --check 475489cc^ 475489cc"
+      "git log --format='%h %s' e562b512..886aa441 -- ConstructionTargets problems"],
+     :finding
+     "Checkpoint 475489cc independently verified against codex-13 evidence. Census SHA256 ca6412c3430bf6390c4a1e8d049b299424c525f5044f46bf9151cb89dd8f88f6 matches; 59 named consumers, 58 existing, 66->66 placeholders, 692->701 modules. Frozen t00J01 hash matches. Exact ledger-only scope; three portfolio and six concurrent modules correctly attributed. One bounded sphere-identity branch probe preserves arbitrary-witness trace obligations and the independent Klein-product/fold-fiber residual, without claiming full closure or placeholder reduction. Successor settings preserved; validators pass; no ledger edits."},
     :infrastructure-packets
     {:concurrent 6,
      :outside-dag-change
@@ -18695,7 +18708,7 @@
      :missing [:t93A05],
      :within-two 25}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: sphere endpoints and renewed consumer eligibility",
@@ -18717,7 +18730,7 @@
    :stop-condition
    "No detached trace arithmetic, assumed rational homology witnesses, weakened final statement, new placeholders or full-closure claim. Do not retry the independent Klein-product or fold-fiber STOPs in this packet.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "CONSUMER UPTAKE: exact t00J01 rational sphere-identity branch",
