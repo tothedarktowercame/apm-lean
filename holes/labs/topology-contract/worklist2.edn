@@ -10814,8 +10814,161 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["All reviewed unresolved consumer STOPs remain in force; no unchanged STOP is retried."
+     "Preserve t96J05, t01A05 and t96J07 refutations and the historical ordinary-H0(S0) refutation for t94J08."
+     "The repaired positive-dimensional t94J08 branch remains separate and reserved to the other campaign."
+     "No inferred orientation coherence, positive-degree small-chain comparison, nonclosed excision or rational S2 H1/H2 calculation."],
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint17Census.py", :exit 0}
+     {:cmd "cat TOPOLOGY-DEPENDENCY-DAG.md", :exit 0}
+     {:cmd "sed -n '400,680p' TOPOLOGY-DEPENDENCY-DAG.md", :exit 0}
+     {:cmd "sed -n '1,150p' docs/TN-topology-closure-experiments.md",
+      :exit 0}
+     {:cmd "sed -n '1,170p' docs/TN-topology-foundational-programs.md",
+      :exit 0}
+     {:cmd "cat docs/TN-topology-build-loop-design.md | head -100",
+      :exit 0}
+     {:cmd "cat problems/t96J06/lean/Main.lean", :exit 0}
+     {:cmd "sha256sum problems/t96J06/lean/Main.lean", :exit 0}
+     {:cmd
+      "git log --oneline a012bfbf642ea23a9d9fc31d4a699076db839464..HEAD",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :measurement
+    {:baseline "a012bfbf642ea23a9d9fc31d4a699076db839464",
+     :placeholder-after 68,
+     :existing-consumers 58,
+     :missing-consumers [:t93A05],
+     :placeholder-delta 0,
+     :zero-placeholder-consumers 21,
+     :specification-repairs 0,
+     :open-consumers 37,
+     :placeholder-before 68,
+     :head "f29cda413ad7550f086cc8ccb4d976f2cc1fa1af",
+     :named-consumers 59,
+     :near-closure-consumers 27,
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:modules-before 646,
+      :modules-after 650,
+      :portfolio 2,
+      :concurrent 2},
+     :concurrent-commits ["2793ca55" "a7588aaf"],
+     :review-outcomes
+     {:product-tori-stop-pass "invoke-1788996866773-17339-75ea2a66",
+      :small-path-implementation-pass
+      "invoke-1788997386659-17354-52aa4336",
+      :small-h0-implementation-pass
+      "invoke-1788998070901-17367-180942ca"},
+     :portfolio-commits ["62e51680" "9152580f"],
+     :census
+     {:path "/tmp/Checkpoint17Census.json",
+      :sha256
+      "d026998d818627ae27ecc6027659369c3ba2e842b8a70b58c1ee4c8109c9a901"}},
+    :replacement-items
+    [{:consumer :t96J06,
+      :stop-condition
+      "Preserve actual projectivization, arbitrary compact subset and its chosen half-space atlas. Do not assume a smooth ambient inclusion, fundamental class, intersection pairing or boundary null-homology.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "INTERSECTION: exact projective-product nonbounding consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t96J06/lean/Main.lean",
+       :stop-condition
+       "No partial GO, assumed homological obstruction or silent ambient regularity restriction. STOP names the exact missing topological or homological theorem; absence of an API is not a refutation.",
+       :gates
+       ["GO requires a complete zero-placeholder frozen fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+        "Propose implementation scope only after complete closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 2,
+       :probe
+       "Audit the entire frozen BoundsThreeManifold predicate and bridge. Determine whether the available obstruction applies to an arbitrary compact subset carrying the stated intrinsic atlas, without assuming smoothness or local flatness of its ambient inclusion. Construct the actual obstruction for the coordinate RP1 product inside RP2 product and close both placeholders in a complete temporary exact Main. Reuse coordinate incidence lemmas but do not treat them as an intersection invariant. If closure is unavailable, compile precise typed boundary evidence; a refutation must satisfy every frozen hypothesis and contradict the complete conclusion.",
+       :consumer-equation
+       "No compact subset of the actual RP2 product with the frozen three-dimensional half-space manifold structure has intrinsic boundary image equal to the coordinate RP1 product.",
+       :frozen-sha256
+       "1d8874db11a786b11d04b5af4f0375fa439c05d5ac1bdafacd9943a89e238a71"},
+      :id :oriented-checkpoint17-t96j06-exact-projective-nonbounding-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint17-product-tori-and-small-h0-refill],
+      :current-residual
+      "Two executable placeholders remain: the compact subset intrinsic-boundary obstruction and its final existential assembly. The coordinate projective product is explicit; no mod-two obstruction is supplied.",
+      :other-consumers []}
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Construct the operator on actual ModuleCat R singular chains. No assumed chain map, coefficient-change theorem, subdivision homotopy or homology isomorphism.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SINGULAR-SUBDIVISION: explicit-coefficient barycentric chain endomorphism",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For an explicitly stated commutative ring R, construct barycentric subdivision on actual singular chains with coefficient object ModuleCat.of R R. Reuse coefficient-independent vertex barycenters and affine-simplex geometry from SingularSubdivision; generalize the signed cone and generator arguments as necessary. Prove commutation with every differential, the degree-zero identity, the explicit simplex-generator formula and naturality under continuous maps. Compile integer and rational examples showing the subdivided standard edge and its boundary. State universes explicitly. Do not import an integral conclusion as an R-linear fact.",
+       :consumer-equation
+       "The constructed subdivision is a chain endomorphism of actual R-valued singular chains, natural under continuous maps, equal to identity in degree zero and given on each simplex by its signed barycentric subdivision.",
+       :consumer-residual
+       "A coefficient-general homotopy to identity, preservation and eventual smallness, positive-degree small-chain comparison, relative excision and sphere suspension remain downstream before rational S2 H1/H2.",
+       :gates
+       ["GO requires a complete placeholder-free compiled fixture constructing the chain endomorphism and proving its generator, differential and naturality equations."
+        "Record fixture SHA256, integer and rational examples and standard-only audits."
+        "REVISE only to exactly one compiled missing coefficient-general cone or realization prerequisite."],
+       :stop-condition
+       "Do not retry full excision or the sphere table. If multiple independent unconstructed prerequisites remain, STOP with their precise typed boundaries."},
+      :id
+      :oriented-checkpoint17-coefficient-singular-subdivision-map-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint17-product-tori-and-small-h0-refill],
+      :current-residual
+      "Actual coefficient-general chains and the small-chain H0 comparison are banked. Positive-degree comparison still needs an actual subdivision operator and subsequent homotopy and smallness arguments.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: projective nonbounding and coefficient subdivision uptake",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+      :id
+      :oriented-checkpoint18-projective-boundary-and-subdivision-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint17-t96j06-exact-projective-nonbounding-1
+       :oriented-checkpoint17-coefficient-singular-subdivision-map-1],
+      :current-residual
+      "Measure exact projective-product nonbounding separately from coefficient subdivision infrastructure; attribute concurrent changes and preserve reviewed boundaries.",
+      :other-consumers []}],
+    :changed-paths [],
+    :finding
+    "The exact product-torus consumer remains at one placeholder: actual punctured-surface curves and the invariant under every frozen ambient embedding remain absent. CoefficientSmallPath and CoefficientSmallH0 now construct finite subordinate path boundaries and the inverse to the actual inclusion-induced H0 map over R, including empty and disconnected spaces. This removes the degree-zero absolute small-chain comparison boundary, but supplies neither positive-degree comparison nor relative excision. Concurrent smooth fiber inclusion and tangent-kernel comparison add two modules without changing a frozen consumer. Both ledgers were inspected: a97J08 already has a reviewed unresolved planar-separation STOP and is excluded. Elect t96J06 as the single fresh two-placeholder consumer audit, followed by the coefficient-general subdivision chain map. This shared chain construction has four named downstream consumers and reuses existing simplex geometry; broader fundamental-class, intersection, Kunneth, Stokes, surface-classification and covering-gluing programs require larger constructions. Active manifold-source fiber charts and the reserved antipodal and radial-refutation work are excluded.",
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: exact product-torus uptake and small-chain H0",
@@ -10832,6 +10985,99 @@
     :oriented-checkpoint16-neighborhood-and-excision-refill],
    :current-residual
    "Measure frozen product-torus outcome separately from small-chain H0 infrastructure; attribute concurrent changes and preserve reviewed boundaries.",
+   :other-consumers []}
+  {:consumer :t96J06,
+   :stop-condition
+   "Preserve actual projectivization, arbitrary compact subset and its chosen half-space atlas. Do not assume a smooth ambient inclusion, fundamental class, intersection pairing or boundary null-homology.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "INTERSECTION: exact projective-product nonbounding consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t96J06/lean/Main.lean",
+    :stop-condition
+    "No partial GO, assumed homological obstruction or silent ambient regularity restriction. STOP names the exact missing topological or homological theorem; absence of an API is not a refutation.",
+    :gates
+    ["GO requires a complete zero-placeholder frozen fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+     "Propose implementation scope only after complete closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 2,
+    :probe
+    "Audit the entire frozen BoundsThreeManifold predicate and bridge. Determine whether the available obstruction applies to an arbitrary compact subset carrying the stated intrinsic atlas, without assuming smoothness or local flatness of its ambient inclusion. Construct the actual obstruction for the coordinate RP1 product inside RP2 product and close both placeholders in a complete temporary exact Main. Reuse coordinate incidence lemmas but do not treat them as an intersection invariant. If closure is unavailable, compile precise typed boundary evidence; a refutation must satisfy every frozen hypothesis and contradict the complete conclusion.",
+    :consumer-equation
+    "No compact subset of the actual RP2 product with the frozen three-dimensional half-space manifold structure has intrinsic boundary image equal to the coordinate RP1 product.",
+    :frozen-sha256
+    "1d8874db11a786b11d04b5af4f0375fa439c05d5ac1bdafacd9943a89e238a71"},
+   :id :oriented-checkpoint17-t96j06-exact-projective-nonbounding-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint17-product-tori-and-small-h0-refill
+    :oriented-checkpoint17-product-tori-and-small-h0-refill],
+   :current-residual
+   "Two executable placeholders remain: the compact subset intrinsic-boundary obstruction and its final existential assembly. The coordinate projective product is explicit; no mod-two obstruction is supplied.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "Construct the operator on actual ModuleCat R singular chains. No assumed chain map, coefficient-change theorem, subdivision homotopy or homology isomorphism.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SINGULAR-SUBDIVISION: explicit-coefficient barycentric chain endomorphism",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For an explicitly stated commutative ring R, construct barycentric subdivision on actual singular chains with coefficient object ModuleCat.of R R. Reuse coefficient-independent vertex barycenters and affine-simplex geometry from SingularSubdivision; generalize the signed cone and generator arguments as necessary. Prove commutation with every differential, the degree-zero identity, the explicit simplex-generator formula and naturality under continuous maps. Compile integer and rational examples showing the subdivided standard edge and its boundary. State universes explicitly. Do not import an integral conclusion as an R-linear fact.",
+    :consumer-equation
+    "The constructed subdivision is a chain endomorphism of actual R-valued singular chains, natural under continuous maps, equal to identity in degree zero and given on each simplex by its signed barycentric subdivision.",
+    :consumer-residual
+    "A coefficient-general homotopy to identity, preservation and eventual smallness, positive-degree small-chain comparison, relative excision and sphere suspension remain downstream before rational S2 H1/H2.",
+    :gates
+    ["GO requires a complete placeholder-free compiled fixture constructing the chain endomorphism and proving its generator, differential and naturality equations."
+     "Record fixture SHA256, integer and rational examples and standard-only audits."
+     "REVISE only to exactly one compiled missing coefficient-general cone or realization prerequisite."],
+    :stop-condition
+    "Do not retry full excision or the sphere table. If multiple independent unconstructed prerequisites remain, STOP with their precise typed boundaries."},
+   :id :oriented-checkpoint17-coefficient-singular-subdivision-map-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint17-product-tori-and-small-h0-refill
+    :oriented-checkpoint17-product-tori-and-small-h0-refill],
+   :current-residual
+   "Actual coefficient-general chains and the small-chain H0 comparison are banked. Positive-degree comparison still needs an actual subdivision operator and subsequent homotopy and smallness arguments.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: projective nonbounding and coefficient subdivision uptake",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+   :id
+   :oriented-checkpoint18-projective-boundary-and-subdivision-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint17-t96j06-exact-projective-nonbounding-1
+    :oriented-checkpoint17-coefficient-singular-subdivision-map-1
+    :oriented-checkpoint17-product-tori-and-small-h0-refill],
+   :current-residual
+   "Measure exact projective-product nonbounding separately from coefficient subdivision infrastructure; attribute concurrent changes and preserve reviewed boundaries.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
