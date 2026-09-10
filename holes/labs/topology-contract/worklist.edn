@@ -58662,92 +58662,95 @@
    :other-consumers ["t02A07" "t94A06" "t97J05"]}
   {:consumer "t00J02",
    :stop-condition
+   "Require the actual derivative-kernel characterization and derived dimension formula; no supplied kernel identity or dimension assumption.",
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/TransverseDifferenceKernel.lean"],
+   :dag-node
+   "TRANSVERSE-PULLBACK / actual difference kernel and dimension",
+   :acceptance
+   {:fixture "/tmp/TransverseDifferenceKernel.lean",
+    :fixture-sha256
+    "9a50b4fe1ffe16a7cc83de9e430a5581531ae03603439bf5897bc1ad5918913a",
+    :implementation
+    "Promote the exact compiled fixture. Compile mem_kernel and kernel_dimension with zero placeholders and standard-only axioms. Preserve the actual product-model mfderiv and derived transversality regularity. Retain the weaker hypotheses proved by the fixture and existing APIs. Do not claim an incidence atlas, inclusion derivative theorem or consumer closure.",
+    :commands
+    ["lake env lean ConstructionTargets/TransverseDifferenceKernel.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :transverse-difference-kernel-implementation-refill37,
+   :kind :reusable-theorem,
+   :depends-on
+   [:transverse-difference-regularity-implementation-refill37],
+   :current-residual
+   "The actual difference derivative kernel is characterized and its dimension derived; product-model and literal incidence atlas transport remain.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer "t00J02",
+   :stop-condition
    "GO requires the complete actual geometry packet compiled. REVISE requires exactly one compiled prerequisite; no conditional duality producer or consumer closure claim.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Apply the finite-dimensional regular-fiber atlas to the difference map, transport it to the literal incidence subtype with inherited topology, and prove smooth inclusion and the requested tangent equalizer formula for that atlas. Product-model and dimension transport remain to be compiled. Target-manifold localization and oriented duality remain subsequent; no consumer closure is claimed.",
+     "The banked manifold-fiber atlas requires an inner-product source model; applying it to the ordinary product model still requires explicit model transport. Then transport the zero-fiber atlas to the literal incidence subtype, prove smooth inclusion, and identify its derivative range using this kernel packet. No product norm or topology was changed. Empty incidence and zero-dimensional kernels remain included. Target-manifold localization, oriented duality and frozen consumer uptake remain subsequent.",
+     :dependency-review
+     {:outcome :pass,
+      :commit "d775d4083df884f250a89e5ac7e5137748f12cde",
+      :job "invoke-1789007224423-17661-38db1531"},
      :outcome :revise,
      :warnings [],
      :statement-hashes
-     {:smooth
-      "9bcf00059b931f5b20880e377daf7dafd90730b36ab68b9021eebef6d927f3cf",
-      :derivative
-      "f0950b0df00db0a01674fa79a371ffab2259f07999a5dc0e7039cb0f6343029d",
-      :regular
-      "3aa20d57593819077cc84deaa84358f3490397fb0f6a122a26332b7dbe97d76c",
-      :fiber-eq
-      "2fbd08a1c825169ae40317983cdec1a8fa783231e4b4a451542904bcf4585487"},
+     {:mem-kernel
+      "6075e58cfd8e6b0612db5cd69edead7433b1aaa30cefad6749a4de5b12255238",
+      :kernel-dimension
+      "791888c7aa870cd5cdb0daa53650f32402cc1373cb5ea2bc57813976c7f5f0a8"},
      :prerequisite
      {:consumer "t00J02",
       :stop-condition
-      "Require the exact smoothness, derivative formula, derived regularity and zero-fiber equality without supplied derivative or regularity assumptions.",
+      "Require the actual derivative-kernel characterization and derived dimension formula; no supplied kernel identity or dimension assumption.",
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/TransverseDifferenceRegularity.lean"],
-      :dag-node "TRANSVERSE-PULLBACK / difference-map regularity",
+      :scope ["ConstructionTargets/TransverseDifferenceKernel.lean"],
+      :dag-node
+      "TRANSVERSE-PULLBACK / actual difference kernel and dimension",
       :acceptance
-      {:fixture "/tmp/TransverseDifferenceRegularity.lean",
+      {:fixture "/tmp/TransverseDifferenceKernel.lean",
        :fixture-sha256
-       "eeb58cab302c436d07544eaef32444fcd66e7fa04be199eb1ee20ef028533a1b",
+       "9a50b4fe1ffe16a7cc83de9e430a5581531ae03603439bf5897bc1ad5918913a",
        :implementation
-       "Promote the exact fixture. Compile smooth, derivative, regular and fiber_eq with zero placeholders and standard-only axioms. Preserve actual product models and mfderivs, genuine infinity and existing APIs. No finite-dimensionality is required for this prerequisite. Do not claim a fiber-product atlas, inclusion tangent comparison or duality.",
+       "Promote the exact compiled fixture. Compile mem_kernel and kernel_dimension with zero placeholders and standard-only axioms. Preserve the actual product-model mfderiv and derived transversality regularity. Retain the weaker hypotheses proved by the fixture and existing APIs. Do not claim an incidence atlas, inclusion derivative theorem or consumer closure.",
        :commands
-       ["lake env lean ConstructionTargets/TransverseDifferenceRegularity.lean"],
+       ["lake env lean ConstructionTargets/TransverseDifferenceKernel.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
-      :id :transverse-difference-regularity-implementation-refill37,
+      :id :transverse-difference-kernel-implementation-refill37,
       :kind :reusable-theorem,
       :depends-on
-      [:checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent],
+      [:transverse-difference-regularity-implementation-refill37],
       :current-residual
-      "Complete difference-map smoothness, derivative and regularity packet compiled; literal fiber-product atlas transport remains.",
+      "The actual difference derivative kernel is characterized and its dimension derived; product-model and literal incidence atlas transport remain.",
       :other-consumers ["t02A07" "t94A06" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
+     [{:cmd
+       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean -o /tmp/manifold-chart-build/ConstructionTargets/TransverseDifferenceRegularity.olean ConstructionTargets/TransverseDifferenceRegularity.lean && lean /tmp/TransverseDifferenceKernel.lean'",
+       :exit 0}
+      {:cmd
+       "lake env bash -c 'export LEAN_PATH=/tmp/manifold-chart-build:$LEAN_PATH; lean /tmp/TransverseDifferenceKernel.lean'",
        :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
-       :exit 1,
-       :correction
-       "Included smoothness hypotheses explicitly in theorem parameters."}
-      {:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
-       :exit 1,
-       :correction
-       "Added the required smooth subtraction imports and investigated tangent-space elaboration."}
-      {:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
-       :exit 1,
-       :correction "Made derivative codomain annotations explicit."}
-      {:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
-       :exit 1,
-       :correction
-       "Fixed subtraction to use the ambient F operation explicitly."}
-      {:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
-       :exit 1,
-       :correction
-       "Specified both product-model differentiability types."}
-      {:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
-       :exit 1,
-       :correction
-       "Changed the derivative goal to the pointwise difference of composed maps before rewriting."}
-      {:cmd "lake env lean /tmp/TransverseDifferenceRegularity.lean",
-       :exit 1,
-       :correction
-       "Closed the coordinate derivative equality by definitional reduction and instantiated subtraction-of-negation explicitly in F; final compilation succeeds."}],
+     :diagnostic-history [],
      :changed-paths [],
      :fixture
-     {:path "/tmp/TransverseDifferenceRegularity.lean",
+     {:path "/tmp/TransverseDifferenceKernel.lean",
       :sha256
-      "eeb58cab302c436d07544eaef32444fcd66e7fa04be199eb1ee20ef028533a1b"},
+      "9a50b4fe1ffe16a7cc83de9e430a5581531ae03603439bf5897bc1ad5918913a"},
      :finding
-     "Compiled one prerequisite. The difference map f(x)-g(y) is genuinely smooth; its actual manifold derivative sends (v,w) to Df(v)-Dg(w). Range-sum transversality gives coproduct surjectivity, and negating the second input proves zero is regular. The zero-fiber set equals the literal incidence set. These results assume neither derivative transport nor regularity and do not exclude empty incidence or zero-dimensional models.",
+     "Compiled one prerequisite. Membership in the actual difference-map mfderiv kernel is equivalent to Df(v)=Dg(w). At every incident pair, range-sum transversality supplies surjectivity and rank-nullity gives finrank E+finrank G-finrank F. No inner-product structure on the ordinary product norm, positive dimension or nonempty incidence is assumed.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TRANSVERSE-PULLBACK / vector-target fiber product",
    :acceptance
@@ -58760,7 +58763,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:checkpoint-full-dag-refill-37-after-fivefold-and-target-tangent
-    :transverse-difference-regularity-implementation-refill37],
+    :transverse-difference-regularity-implementation-refill37
+    :transverse-difference-kernel-implementation-refill37],
    :current-residual
    "Regular fibers have actual atlases and tangent geometry. Transverse incidence of two maps must be converted to a literal fiber-product manifold.",
    :other-consumers ["t02A07" "t94A06" "t97J05"]}
