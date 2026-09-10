@@ -20772,6 +20772,20 @@
       "Python verification of pinned commit scope, fixture equality and scoped cleanliness; git status --short",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789022933978-18076-675a8caa",
+     :commands
+     ["lake env lean /tmp/CoefficientCoordinateReflections.lean"
+      "lake env lean ConstructionTargets/CoefficientCoordinateReflections.lean"
+      "lake build ConstructionTargets.CoefficientCoordinateReflections"
+      "git diff --check 62a0af3d^ 62a0af3d"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show d75b7c98:holes/labs/topology-contract/worklist2.edn)"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show d75b7c98:holes/labs/topology-contract/worklist.edn)"
+      "Read-only Python audit of fixture SHA256, 16 declaration hashes, exact scope, forbidden declarations and placeholder counts"],
+     :finding
+     "Commit 62a0af3d4b4b7b2cbe034858bbe8a3d969b9ebce independently verified. Fixture SHA256 e85522027b7e02a970f1c7329d447861d6b770a63a516367fca1562938941aa4 matches. Actual sphere homeomorphisms, inverse-permutation convention and homology conjugation direction are correct. Conditional sign transport retains its negative-action hypothesis and assumes no permutation sign. Ten standard-only audits and integer/rational examples pass. All gates pass; frozen sources unchanged; placeholders 312->312. First-coordinate sign and antipodal assembly remain downstream. No ledger edits."},
     :commit "62a0af3d4b4b7b2cbe034858bbe8a3d969b9ebce",
     :changed-paths
     ["ConstructionTargets/CoefficientCoordinateReflections.lean"
@@ -20787,7 +20801,7 @@
     "SHA256 from declaration keyword to immediately before the space preceding :=; includes auxiliary abbreviation H.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientCoordinateReflections.lean"
     "ConstructionTargets/CoefficientCoordinateReflections.md"],
@@ -20948,7 +20962,7 @@
      "Exactly one complete compiled permutation-conjugation prerequisite is supplied. It constructs actual coordinate reflections and permutation homeomorphisms of the literal Euclidean unit sphere, proves point-set conjugation and permutation inversion, and derives their actual coefficient-general homology equations. A proved negative reflection action transports to any coordinate without assuming a permutation sign. The parent is not GO: top-homology normalization, first-coordinate sign induction and the antipodal product calculation remain.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "SPHERE ORIENTATION: positive-dimensional top homology and actual antipodal action",
