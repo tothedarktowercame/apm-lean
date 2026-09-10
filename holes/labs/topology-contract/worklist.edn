@@ -56829,8 +56829,38 @@
   {:consumer "t01J04",
    :stop-condition
    "GO requires full frozen closure; otherwise name the countability, radius-selection or actual boundary-chart obstruction. Local specification defects do not refute the campaign.",
+   :evidence
+   {:placeholder-after 1,
+    :placeholder-delta 0,
+    :residual
+    "Need simultaneous regular-boundary selection under the original hypotheses without assuming countable source coverage, followed by actual closed-preimage half-space atlas assembly. Neither a complete frozen closure nor an exact frozen-statement counterexample was compiled. Frozen definitions and smooth-order expressions remain unchanged; empty and zero-dimensional cases remain covered by the task, not excluded. This STOP identifies the current route's hypothesis and representation boundaries and does not classify the consumer as refuted or terminate the campaign.",
+    :dependency-review
+    {:outcome :pass, :job "invoke-1789001461232-17472-9b510539"},
+    :outcome :stop,
+    :warnings [],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-12",
+    :placeholder-before 1,
+    :reason :hypothesis-and-boundary-chart-gap,
+    :commands
+    [{:cmd "lake env lean /tmp/T01J04Boundary.lean", :exit 0}
+     {:cmd "python3 /tmp/t01j04-boundary-audit.py", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/T01J04Boundary.lean",
+      :exit 1,
+      :correction
+      "Removed a redundant simp-only step that made no progress; the subsequent contradiction at derivative value 1 closes the goal. Final compilation succeeds."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/T01J04Boundary.lean",
+     :sha256
+     "624e8e1fca5efff50599534e0fcddc77a33576624e2532e823a72fbf2fa7c1c7"},
+    :finding
+    "Target neighborhood shrinking compiles under exactly RegularSpace Y. Two independent obligations prevent frozen closure. First, the banked manifold Sard and local-nullity aggregation require SecondCountableTopology X, absent from frozen Main. The diagnostic proves that an arbitrarily indexed family of smooth constant real maps has individually null critical-value sets whose union is the entire real target; individual chart nullity therefore cannot justify arbitrary-union avoidance. This is an obstruction to that inference, not a realized counterexample to the frozen theorem. Second, ManifoldRegularFiberGlobalAtlas supplies equality-fiber charts with a Euclidean model, whereas the literal conclusion requires half-space charts on the inherited-topology closed preimage. A regular-sublevel boundary-chart construction and compatibility with interior charts remain absent from the inspected producers. Equality-fiber smooth inclusion alone does not supply them.",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / closed neighborhood manifold with boundary",
