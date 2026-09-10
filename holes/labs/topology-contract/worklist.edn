@@ -71810,69 +71810,105 @@
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
   {:consumer "t00A03",
    :stop-condition
+   "Require the derivative-level submersion theorem for the smooth total coincidence map away from the finite endpoint boundary, then a parametric Sard projection argument yielding generic finite fibers.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"],
+   :dag-node
+   "SURFACE TRIANGULATION / endpoint-relative total coincidence-map smoothness",
+   :acceptance
+   {:fixture "/tmp/PlaneArcEndpointTotalCoincidenceSmooth.lean",
+    :fixture-sha256
+    "a431c6295a0ae7d5c24fa1db8c39540a2c54d5a13afdbc8bac68857d38e32c94",
+    :implementation
+    "Promote the exact fixture. Compile totalDifference and totalDifference_contDiffOn. This supplies the smooth total coincidence-map step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before parametric Sard: the map depends smoothly on both curve parameters and both endpoint-preserving perturbation vectors on the actual open extension domains. Verify PlaneArcEndpointPairBoundaryFinite SHA256 2315052450b3c2cf2773a9e272fc1e8fcc6c32b44a24091ada1e98cff0d9f784. Preserve arbitrary plane arcs smooth on arbitrary supplied parameter neighborhoods and the full two-vector parameter space. Require zero placeholders, no warnings and standard-only axioms. Do not claim total-map submersivity, relative Sard, regular parameter existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+    :commands
+    ["lake env lean ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :plane-arc-endpoint-total-coincidence-smooth-implementation-refill50,
+   :kind :reusable-theorem,
+   :depends-on
+   [:plane-arc-endpoint-pair-boundary-finite-implementation-refill50
+    :plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50],
+   :current-residual
+   "Differentiate the total coincidence map and use the reviewed left/right parameter surjectivity to prove submersivity away from the four endpoint pairs. Apply parametric Sard, adjoin the finite boundary, choose one tuple for the finite family, retain embeddings and compare through chart transitions.",
+   :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
+  {:consumer "t00A03",
+   :stop-condition
    "Require a compiled perturbation preserving prescribed endpoints and chartwise containment with finite pairwise intersections; do not infer cross-chart finiteness from unrelated plane translations.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The endpoint boundary residual is now proved finite and can be adjoined to any finite interior locus; relative Sard, simultaneous parameter selection, embedding stability and cross-chart comparison remain.",
+     "The total coincidence map is smooth on the actual open extension domains; derivative-level submersivity, parametric Sard, simultaneous selection, embedding stability and cross-chart comparison remain.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t00A03",
       :stop-condition
-      "Require a relative Sard theorem producing finite interior coincidence fibers for the endpoint-weighted family, followed by simultaneous finite-family parameter selection, embedding stability and explicit chart-transition comparison.",
+      "Require the derivative-level submersion theorem for the smooth total coincidence map away from the finite endpoint boundary, then a parametric Sard projection argument yielding generic finite fibers.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"],
+      ["ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"],
       :dag-node
-      "SURFACE TRIANGULATION / endpoint-relative coincidence boundary finiteness",
+      "SURFACE TRIANGULATION / endpoint-relative total coincidence-map smoothness",
       :acceptance
-      {:fixture "/tmp/PlaneArcEndpointPairBoundaryFinite.lean",
+      {:fixture "/tmp/PlaneArcEndpointTotalCoincidenceSmooth.lean",
        :fixture-sha256
-       "2315052450b3c2cf2773a9e272fc1e8fcc6c32b44a24091ada1e98cff0d9f784",
+       "a431c6295a0ae7d5c24fa1db8c39540a2c54d5a13afdbc8bac68857d38e32c94",
        :implementation
-       "Promote the exact fixture. Compile endpointSet_finite, nonInteriorBoundary_subset, nonInteriorBoundary_finite and finite_union_nonInteriorBoundary. This supplies the finite fixed-boundary residual required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes: all parameter pairs lacking an interior perturbation direction form a finite subset of the four endpoint pairs, and adjoining them preserves finiteness. Verify PlaneArcEndpointPairBoundaryDecomposition SHA256 862a3c2044d4388bf12dd8c4b8477822de6721dcbd11f39604163c873c1d8d4b. Preserve the literal closed and open unit intervals and arbitrary finite interior residual sets. Require zero placeholders, no warnings and standard-only axioms. Do not claim relative Sard, finite interior coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+       "Promote the exact fixture. Compile totalDifference and totalDifference_contDiffOn. This supplies the smooth total coincidence-map step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before parametric Sard: the map depends smoothly on both curve parameters and both endpoint-preserving perturbation vectors on the actual open extension domains. Verify PlaneArcEndpointPairBoundaryFinite SHA256 2315052450b3c2cf2773a9e272fc1e8fcc6c32b44a24091ada1e98cff0d9f784. Preserve arbitrary plane arcs smooth on arbitrary supplied parameter neighborhoods and the full two-vector parameter space. Require zero placeholders, no warnings and standard-only axioms. Do not claim total-map submersivity, relative Sard, regular parameter existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
        :commands
-       ["lake env lean ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean"],
+       ["lake env lean ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :plane-arc-endpoint-pair-boundary-finite-implementation-refill50,
+      :plane-arc-endpoint-total-coincidence-smooth-implementation-refill50,
       :kind :reusable-theorem,
       :depends-on
-      [:plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50],
+      [:plane-arc-endpoint-pair-boundary-finite-implementation-refill50
+       :plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50],
       :current-residual
-      "Prove finiteness of the interior coincidence locus for generic small perturbation parameters using relative Sard, then adjoin the compiled finite boundary residual. One common good parameter tuple, retained embeddings and cross-chart surface transport remain.",
+      "Differentiate the total coincidence map and use the reviewed left/right parameter surjectivity to prove submersivity away from the four endpoint pairs. Apply parametric Sard, adjoin the finite boundary, choose one tuple for the finite family, retain embeddings and compare through chart transitions.",
       :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.PlaneArcEndpointPairBoundaryDecomposition >/tmp/endpoint-boundary-dep.log 2>&1",
+       "lake build ConstructionTargets.PlaneArcEndpointPairBoundaryFinite >/tmp/endpoint-boundary-finite-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/PlaneArcEndpointPairBoundaryFinite.lean",
+       "lake env lean /tmp/PlaneArcEndpointTotalCoincidenceSmooth.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/PlaneArcEndpointPairBoundaryFinite.lean ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean",
+       "sha256sum /tmp/PlaneArcEndpointTotalCoincidenceSmooth.lean ConstructionTargets/PlaneArcEndpointPairBoundaryFinite.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-three-declaration audit over /tmp/PlaneArcEndpointPairBoundaryFinite.lean",
+       "python3 comment-stripped placeholder-and-declaration audit over /tmp/PlaneArcEndpointTotalCoincidenceSmooth.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/PlaneArcEndpointTotalCoincidenceSmooth.lean",
+       :exit 1,
+       :correction
+       "The first proof asked fun_prop to infer the two supplied ContDiffOn hypotheses through nested product projections. Constructed the six projected ContDiffOn maps explicitly and combined them by addition, scalar multiplication and subtraction."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/PlaneArcEndpointPairBoundaryFinite.lean",
+     {:path "/tmp/PlaneArcEndpointTotalCoincidenceSmooth.lean",
       :sha256
-      "2315052450b3c2cf2773a9e272fc1e8fcc6c32b44a24091ada1e98cff0d9f784",
+      "a431c6295a0ae7d5c24fa1db8c39540a2c54d5a13afdbc8bac68857d38e32c94",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one set-level boundary-finiteness prerequisite. The subset of the closed coincidence square where neither coordinate is interior lies in {0,1} times {0,1}, hence is finite. The union of this boundary residual with any finite interior coincidence set remains finite. This proves that fixed endpoint pairs cannot destroy a future relative-Sard finiteness conclusion, without asserting that the interior coincidence set is already finite or that one parameter tuple works for the whole family.",
+     "Compiled exactly one analytic prerequisite for relative Sard. The total coincidence difference map, with variables consisting of both curve parameters and both plane perturbation vectors, is smooth on the product of the two actual open extension domains with the unrestricted vector-parameter space. This retains the consumer's ContDiffOn hypotheses rather than replacing them with global smoothness. Together with the reviewed interior parameter surjectivity and finite boundary residual, it supplies the smooth total map required for a parametric regular-value argument, but does not itself produce a good parameter or finite fiber.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
@@ -71890,7 +71926,8 @@
     :plane-arc-endpoint-perturbation-interior-parameter-implementation-refill50
     :plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50
     :plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50
-    :plane-arc-endpoint-pair-boundary-finite-implementation-refill50],
+    :plane-arc-endpoint-pair-boundary-finite-implementation-refill50
+    :plane-arc-endpoint-total-coincidence-smooth-implementation-refill50],
    :current-residual
    "Common-plane translations preserve embeddings and containment but move endpoints and do not compare curves transported through unrelated charts.",
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
