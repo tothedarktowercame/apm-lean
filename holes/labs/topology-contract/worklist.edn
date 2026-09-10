@@ -60775,73 +60775,97 @@
    :other-consumers ["t02A07" "t94A06" "t97J05"]}
   {:consumer "t00J02",
    :stop-condition
+   "Require actual local smoothness, derivative formula and surjectivity derived from range-sum transversality; no supplied difference derivative or regularity premise.",
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/LocalTransverseDifference.lean"],
+   :dag-node
+   "TRANSVERSE-PULLBACK / local coordinate difference regularity",
+   :acceptance
+   {:fixture "/tmp/LocalTransverseDifference.lean",
+    :fixture-sha256
+    "87e8aac0eddbedbb5d1f2f47adde51ad2a11099072ce40e5e34cbb637ced07c3",
+    :implementation
+    "Promote the exact fixture. Compile difference, smooth_on, derivative and surjective with zero placeholders and standard-only axioms. Preserve local ContDiffOn hypotheses, actual fderiv and derived surjectivity. Retain the weaker normed-space hypotheses without finite-dimensionality or completeness. Do not claim the manifold-coordinate specialization, incidence charts, overlaps or consumer closure.",
+    :commands
+    ["lake env lean ConstructionTargets/LocalTransverseDifference.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :local-transverse-difference-implementation-refill40,
+   :kind :reusable-theorem,
+   :depends-on
+   [:manifold-target-incidence-coordinate-transport-implementation-refill40],
+   :current-residual
+   "The generic local vector-space difference packet is compiled. Its chart-coordinate specialization, local regular-fiber construction and literal incidence chart transport remain.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer "t00J02",
+   :stop-condition
    "GO requires actual literal-incidence local charts, coverage and overlaps. REVISE requires exactly one compiled prerequisite; no assumed compatibility or consumer closure.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Construct the coordinate difference map on the product domain, derive its surjectivity at the incident center, apply local regular-fiber chart construction and transfer charts to literal incidence with proved coverage and overlaps. No global extension transversality is asserted. Empty incidence and zero-dimensional models remain allowed. Global assembly, orientation and homological obligations remain subsequent; no consumer closure is claimed.",
+     "Specialize to the banked common-target coordinate representatives, derive differentiability from smoothness on their open domains, transport the ordinary product model to the inner-product model where required, and construct local regular-fiber charts. Transfer them to literal incidence and prove coverage and smooth overlaps. No global extension transversality or consumer closure is claimed; empty incidence and zero-dimensional models remain included.",
      :dependency-review
      {:outcome :pass,
       :seat "codex-10",
-      :job "invoke-1789015706221-17879-d14f235f"},
+      :job "invoke-1789016029555-17891-0ffb6ef5"},
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t00J02",
       :stop-condition
-      "Require proved common-chart smoothness, actual derivative equality and transported range-sum transversality; no supplied coordinate derivative identity.",
+      "Require actual local smoothness, derivative formula and surjectivity derived from range-sum transversality; no supplied difference derivative or regularity premise.",
       :phase :implementation,
       :state :open,
-      :scope
-      ["ConstructionTargets/ManifoldTargetIncidenceCoordinateTransport.lean"],
+      :scope ["ConstructionTargets/LocalTransverseDifference.lean"],
       :dag-node
-      "TRANSVERSE-PULLBACK / common target-chart derivative transport",
+      "TRANSVERSE-PULLBACK / local coordinate difference regularity",
       :acceptance
-      {:fixture "/tmp/ManifoldTargetIncidenceCoordinateTransport.lean",
+      {:fixture "/tmp/LocalTransverseDifference.lean",
        :fixture-sha256
-       "92fda54324469332d33fe22d5de982bd51885fff655e4cf041351020a41b6862",
+       "87e8aac0eddbedbb5d1f2f47adde51ad2a11099072ce40e5e34cbb637ced07c3",
        :implementation
-       "Promote the exact fixture. Compile right_smooth, right_derivative and coordinate_transversality with zero placeholders and standard-only axioms. Preserve the actual chosen target chart, source-chart domains, genuine infinity and actual derivatives. Preserve the weaker proved hypotheses: no finite-dimensionality or completeness is required. Do not claim difference-map regularity, incidence charts, overlaps or consumer closure.",
+       "Promote the exact fixture. Compile difference, smooth_on, derivative and surjective with zero placeholders and standard-only axioms. Preserve local ContDiffOn hypotheses, actual fderiv and derived surjectivity. Retain the weaker normed-space hypotheses without finite-dimensionality or completeness. Do not claim the manifold-coordinate specialization, incidence charts, overlaps or consumer closure.",
        :commands
-       ["lake env lean ConstructionTargets/ManifoldTargetIncidenceCoordinateTransport.lean"],
+       ["lake env lean ConstructionTargets/LocalTransverseDifference.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
-      :id
-      :manifold-target-incidence-coordinate-transport-implementation-refill40,
+      :id :local-transverse-difference-implementation-refill40,
       :kind :reusable-theorem,
       :depends-on
-      [:manifold-target-incidence-localization-implementation-refill40],
+      [:manifold-target-incidence-coordinate-transport-implementation-refill40],
       :current-residual
-      "Common-target coordinate derivative and transversality transport are compiled. Local difference-map regularity, chart construction and smooth overlaps remain.",
+      "The generic local vector-space difference packet is compiled. Its chart-coordinate specialization, local regular-fiber construction and literal incidence chart transport remain.",
       :other-consumers ["t02A07" "t94A06" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd
-       "lake env lean /tmp/ManifoldTargetIncidenceCoordinateTransport.lean",
+     [{:cmd "lake env lean /tmp/LocalTransverseDifference.lean",
        :exit 0}
-      {:cmd
-       "sha256sum /tmp/ManifoldTargetIncidenceCoordinateTransport.lean",
-       :exit 0}
+      {:cmd "sha256sum /tmp/LocalTransverseDifference.lean", :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/ManifoldTargetIncidenceCoordinateTransport.lean",
-       :exit 0,
+     [{:cmd "lake env lean /tmp/LocalTransverseDifference.lean",
+       :exit 1,
        :correction
-       "Initial compilation reported unused section assumptions. Explicitly omitted redundant topology and IsManifold assumptions; final compilation is warning-free."}],
+       "Removed explicit point arguments from the implicit-point projection derivative lemmas."}
+      {:cmd "lake env lean /tmp/LocalTransverseDifference.lean",
+       :exit 1,
+       :correction
+       "Annotated both composed HasFDerivAt statements with their product domains and continuous linear maps. Final compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/ManifoldTargetIncidenceCoordinateTransport.lean",
+     {:path "/tmp/LocalTransverseDifference.lean",
       :sha256
-      "92fda54324469332d33fe22d5de982bd51885fff655e4cf041351020a41b6862",
+      "87e8aac0eddbedbb5d1f2f47adde51ad2a11099072ce40e5e34cbb637ced07c3",
       :placeholder-count 0},
      :finding
-     "Compiled one coordinate-transport prerequisite. At an incident pair, rewriting f x = g y identifies the two chosen target charts. The right coordinate representative is genuinely smooth on its actual chart domain, and its actual fderiv equals the defining map's mfderiv. Together with the banked left representative derivative, this transports the assumed derivative-range sum to the coordinate derivatives in the same target chart. No derivative comparison or coordinate transversality is assumed.",
+     "Compiled one local difference-map prerequisite for normed real vector spaces. Smoothness of f and g on U and V gives genuine-infinity smoothness of f(x)-g(y) on U×V. At differentiability points its actual fderiv sends (v,w) to Df(v)-Dg(w). Range-sum transversality proves surjectivity by the banked linear coproduct theorem and negating the second input. No global smoothness or global regularity is required.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TRANSVERSE-PULLBACK / manifold-target local incidence charts",
@@ -60854,7 +60878,8 @@
    :depends-on
    [:checkpoint-full-dag-refill-40-after-connected-sum-and-incidence-atlas
     :manifold-target-incidence-localization-implementation-refill40
-    :manifold-target-incidence-coordinate-transport-implementation-refill40],
+    :manifold-target-incidence-coordinate-transport-implementation-refill40
+    :local-transverse-difference-implementation-refill40],
    :current-residual
    "Vector-target incidence has a normalized global atlas and exact tangent equalizer. Common target-chart localization and local incidence chart transport remain for manifold targets.",
    :other-consumers ["t02A07" "t94A06" "t97J05"]}
