@@ -40470,8 +40470,49 @@
   {:consumer :t03J05,
    :stop-condition
    "Promote only the already reviewed four successor recurrences into ProductSimplexWordPrefixCounts and document them. Begin only after checkpoint60's live fixture path has been committed as the immutable predecessor artifact. Preserve all predecessor declarations. Do not construct or compare maximal paths, prove word/path inverse laws, define corner swaps, cancel faces, construct chain sums or a cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure.",
+   :evidence
+   {:residual
+    "The supervisor must apply checkpoint64's explicit transition to checkpoint60 evidence.fixture.path while preserving its SHA256, supporting path and hash, placeholder count, commit and PASS review; rerun this promotion row after both ledgers validate with that live path.",
+    :outcome :stop,
+    :warnings [],
+    :scope
+    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+    :disposition :stop,
+    :author "codex-14",
+    :reason :checkpoint60-live-fixture-transition-not-applied,
+    :commands
+    [{:cmd
+      "Read checkpoint65 row, dependency receipts and checkpoint60 evidence; readlink -f .lake/packages",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "sha256sum holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean /tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "bb EDN inspection of oriented-checkpoint60-product-simplex-prefix-monotonicity-repair-1 evidence fixture, commit and review",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path
+     "/tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean",
+     :sha256
+     "7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08",
+     :predecessor-artifact
+     "holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean",
+     :predecessor-sha256
+     "e1da7ae462e7d1dfb00afdd43eb3d8d0acd49a9c6b8dc6ef3d347f54598aa187"},
+    :finding
+    "The mandatory pre-edit gate fails: checkpoint60's live evidence.fixture.path is still ConstructionTargets/ProductSimplexWordPrefixCounts.lean, not holes/labs/topology-contract/evidence/product-simplex-word-prefix-counts/ProductSimplexWordPrefixCounts-checkpoint60-e1da7ae4.lean. The immutable artifact exists with the required e1da7ae4 SHA256, and the reviewed successor fixture exists with the required 7db40149 SHA256, but the prior supervisor transition was merely recorded inside checkpoint64 evidence rather than applied to checkpoint60. Both ledgers currently validate only because the canonical module still contains the predecessor bytes. Editing the canonical source now would recreate the checkpoint60 fixture mismatch. The row explicitly forbids beginning before the live transition and this seat may not edit the ledger, so no source edit or commit was made.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
