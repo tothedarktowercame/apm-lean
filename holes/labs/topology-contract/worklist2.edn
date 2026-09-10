@@ -14074,20 +14074,117 @@
    :stop-condition
    "Bank operator-realization equations only. Do not claim constructed small-chain restrictions, restricted homotopy, eventual smallness, homology comparison or excision.",
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "codex-13",
-     :fixture
-     {:path "/tmp/CoefficientFiniteOperators.lean",
-      :sha256
-      "cfe5ab726fdc46212ff59c922057fb8f97b077305150dffbbf8ca5daf48a2852"},
-     :commands
-     [{:cmd "lake env lean /tmp/CoefficientFiniteOperators.lean",
-       :exit 0}],
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+   {:placeholder-delta 0,
+    :residual
+    "Apply subordinate-support factorization to construct small-chain restrictions, prove actual inclusion equations and assemble the restricted homotopy. No restrictions, eventual smallness, homology comparison, excision or frozen closure are claimed.",
+    :gates
+    {:post-commit-cleanliness :pass,
+     :focused-build :pass,
+     :four-integer-rational-examples :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :seven-standard-only-audits :pass,
+     :commit :pass,
+     :exact-promotion :pass,
+     :fixture-compilation :pass,
+     :diff-check :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 7,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Focused build replayed 20 existing dependency warnings; both direct compilations had zero warnings."],
+    :statement-hashes
+    {"integral_prism_edge"
+     "f4935b4ec29a361f7effd5d32bf49f7f7c7d643482f4505c34e581b12480035c",
+     "realize_boundary"
+     "3a30118614d66a4e88669ec1eb938b8256c0772a56388cb640381b7a6551a6f0",
+     "finiteVertexPrism_realize"
+     "6382bb08cce216177fdde282a00b3ca25bcd7ac5b1bd2aab38edf877f76b337c",
+     "realize_cone"
+     "fe0a218b460349b54e217b70176ab3fae9d71546520d7a01bcf1f8eb501d4b1d",
+     "realize_bind"
+     "9cb94f42c0965ab7f3bdace0ad92a9407ec25a4df5bf1a7e294028b133d7dd58",
+     "realize_zero"
+     "60b4e13a9f0e97bec93f3b52dc07971fecfea19a5c98bdfcad993b5c25ee206d",
+     "rational_prism_edge"
+     "ea952df99e2a00ded5fe692bc9cd1c6012e38eea4e177b592b2f6a5f547b9f2b",
+     "realize_add"
+     "3cb2de7c064a21302e4bfc2b4df40b79f2a7f82fef54b9915af9d54d7d5ac09b",
+     "realize_neg"
+     "8adff57cef7dd70df26a73314d9a0ad39826f0ca5c4562557df62a7eeec52aa1",
+     "realize_single"
+     "8097760d6afb6d1ac5f527bbced514588ab1d3312c4ac6017259231bbe117da9",
+     "realize_finset_sum"
+     "12f03aae61ab37e16ed1a0dfbf1ec2e5d4b882fa8a16f83305b910f21471beb3",
+     "integral_subdivision_edge"
+     "17f7098776d7acda23acf00f0b73305b07f3a462ad63f0f762b534fe2d7a38d2",
+     "realize_sub"
+     "fe162ced78935430dbf36f9b920223394d332e1ffda0029445097278dd9a2bf0",
+     "finiteVertexSubdivision_realize"
+     "6aad15363a87f2ecf91ef96560678bd82642f0f28f40a30a2a30694143645d73",
+     "rational_subdivision_edge"
+     "b506e7c12d14e4eb070e098c306bb4754c29082ae4b9f2bfbe3a7c7561bc54bd",
+     "realize_zsmul"
+     "3eb1604bd2dfce1badd5eb498a23a6a645e7941fdb853961a4a6d7c97b3ba7b8",
+     "postcomposeFiniteVertexChain_realize"
+     "058e89dea1c17dcc5eb1af4d2df1041c7ea9c12fd89e7e75b12d122fd315753d",
+     "prism_realize"
+     "46340a514a942bb15bd82df02aa88a1b52675e2cebd3f1b69cfd6c15e02ec7b9",
+     "realize"
+     "10f9ba3c6673c100e94b7c42a6b8ab21da4edeec2937eeda875e1a489bd340a4",
+     "subdivision_realize"
+     "6907528bf55a9d6e132b007d623f8933e47ca16fecda1adf3db9c704c3cb272b"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure stop rules and both dependency PASS receipts",
+      :exit 0}
+     {:cmd "realpath .lake/packages", :exit 0}
+     {:cmd "sha256sum /tmp/CoefficientFiniteOperators.lean", :exit 0}
+     {:cmd "Python verify fixture SHA256 and promote exact fixture",
+      :exit 0}
+     {:cmd "lake env lean /tmp/CoefficientFiniteOperators.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientFiniteOperators.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.CoefficientFiniteOperators",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/CoefficientFiniteOperators.lean /tmp/CoefficientFiniteOperators.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, seven standard-only audits per compilation, warning and twenty declaration-hash audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "Python exact staged scope audit and git diff --cached --check",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Identify finite realizations with coefficient-general operators\"",
+      :exit 0}
+     {:cmd
+      "Python exact committed scope audit pinned to 15c18c05 and clean tracked checkout verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "15c18c05f76310b8424165ca8a056f447ece1591",
+    :changed-paths
+    ["ConstructionTargets/CoefficientFiniteOperators.lean"
+     "ConstructionTargets/CoefficientFiniteOperators.md"],
+    :fixture
+    {:path "/tmp/CoefficientFiniteOperators.lean",
+     :sha256
+     "cfe5ab726fdc46212ff59c922057fb8f97b077305150dffbbf8ca5daf48a2852"},
+    :finding
+    "Promoted the exact fixture and documented its coefficient representation and dependencies. Finite subdivision and prism realizations equal actual singular generator application followed by the reviewed R-linear operators. All four integer/rational standard-edge equations compile. Focused build passed with 8266 jobs.",
+    :statement-hash-method
+    "SHA256 of declaration text beginning with theorem or def, excluding preceding attributes, and ending immediately before the space preceding := or where; namespace ConstructionTargets.CoefficientFiniteOperators.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientFiniteOperators.lean"
     "ConstructionTargets/CoefficientFiniteOperators.md"],
