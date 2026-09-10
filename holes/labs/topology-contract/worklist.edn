@@ -67941,8 +67941,75 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the actual left/right compact-complement range subcomplexes, connecting morphism and all three exactness statements; no supplied exact sequence or excision.",
+   :evidence
+   {:placeholder-after 0,
+    :placeholder-delta 0,
+    :residual
+    "Conjugate this instantiated sequence through the bundled left, right and overlap homology squares and the ambient cover-small comparison, then identify the four resulting relative terms in X through actual coefficient-excision maps.",
+    :dependency-hashes
+    {:CoefficientSubcomplexMayerVietoris
+     "bed519ae21e3a1bad02abf9775eb734bcec6bb3c4e8f41a98cec894be2cf71e9",
+     :CoefficientCompactComplementGeometry
+     "b6c94bbe9598cec21e4ac54d255479a99045372efc91dbb6c5e95b84b206cdaf",
+     :CoefficientCompactComplementHomologySquareBundle
+     "dfb2a7cead7ce630e8e96382f27d2ff64cfbc515668b256477669a41ac614be4"},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:ambientSSet
+     "1d943ecc4cbfcceb69ec4b1908045373043a38511a81a8bc7764e9434f142069",
+     :leftRange
+     "90585af37b68e9c3ae6ada7870fa16957ac4c0d585bd6857e6f9c1dd0e9623d3",
+     :rightRange
+     "c6e08566fcd146c9fe9b2af0742497fca3622cd9f8c42d4c5a3779d8845c1549",
+     :shortComplex
+     "7e0085e84a430bb1cb6cfe3a9b80d8f9d61ff838d0a70475b39b9ec6cdeb4d27",
+     :connecting
+     "85d0c3d9f2bd9cbb25e2312e32e18768464ad9caee5e8cc113985bf78092771e",
+     :exact_intersection
+     "4d983bab7c6b0a1b311a1a876708d6485756c74cf98841a02f3fdd69619c8a3f",
+     :exact_pieces
+     "48cc79883df9f47a9e0cc7c66d81203fc5ef825e8866e4bba5f825e87749ae9f",
+     :exact_union
+     "5a0c28417b7189e327e4610dc0026789ed8cf2b15137376d173a7f56737a7246"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :placeholder-before 0,
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementCoverSequence.lean",
+      :exit 0}
+     {:cmd
+      "Python read-only audit: exact fixture equality, comment-stripped zero placeholders and eight complete declaration-header hashes",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientCompactComplementCoverSequence.lean ConstructionTargets/CoefficientSubcomplexMayerVietoris.lean ConstructionTargets/CoefficientCompactComplementGeometry.lean ConstructionTargets/CoefficientCompactComplementHomologySquareBundle.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git commit -m 'Add compact complement cover sequence'",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "43debfff88738d59ef61a2a444ff18f7221d1728",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementCoverSequence.lean"],
+    :fixture
+    {:path "/tmp/CoefficientCompactComplementCoverSequence.lean",
+     :sha256
+     "1e1d651d3db679386223ff74964e1dc663a50dbfcb7e19a74a9358a7b8060234",
+     :placeholder-count 0,
+     :exact-promotion true},
+    :finding
+    "Promoted the exact fixture and compiled the actual compact-complement cover sequence. The literal left and right range subcomplexes, connecting morphism and intersection, pieces and union exactness statements hold for arbitrary topological X, subsets K and L, commutative-ring coefficients and every natural degree. This supplies the compact-support route step without claiming conjugation, coefficient excision, localization monicity, dimension vanishing or a fundamental class.",
+    :axiom-audit-count 3,
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementCoverSequence.lean"],
    :dag-node
