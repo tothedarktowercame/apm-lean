@@ -26659,98 +26659,115 @@
    :stop-condition
    "Do not assume a graph-area formula, measure-preserving range identification, Gram determinant value or numerical Hausdorff normalization. Do not replace the L2 metric with the ordinary product or function-space sup metric. Do not retry nonlinear area transport, infer sphere masses or claim consumer closure. Use a unique row-specific scratch directory.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "The requested linear Hausdorff distortion is complete. Nonlinear graph-area transport and numerical sphere normalization remain unresolved downstream. Concurrent work and reviewed STOPs/refutations are preserved; no frozen consumer closure or orientation conclusion is claimed.",
-     :axiom-audits 17,
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure experiments and build-loop design; inspect both ledgers and reviewed LinearGraphMeasure dependency",
-       :exit 0}
-      {:cmd
-       "Inspect Gram matrix, rank-one determinant, L2 inner-product and orthonormal-basis dual-norm APIs",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint43-graph-density/LinearGraphDensity.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint43-graph-density/LinearGraphDensity.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint43-graph-density/LinearGraphDensity.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial graph-density compilation",
-       :exit 1,
-       :correction
-       "Corrected inner-product preservation qualification, orthonormal-basis inner-product API, coordinate-matrix identification and dotProduct namespace."}
-      {:cmd "Compilation after initial API corrections",
-       :exit 1,
-       :correction
-       "Fully qualified LinearIsometryEquiv.inner_map_map and proved the coordinate-matrix identification entrywise."}
-      {:cmd "Compilation after explicit Gram identification",
-       :exit 1,
-       :correction
-       "Reduced the real scalar inner product explicitly and corrected multiplication order. Complete and audited reruns succeed without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint43-graph-density/LinearGraphDensity.lean",
-      :sha256
-      "729e0334f324ce77a9f5369547d7631c4c03362b5c4a8fa34b80aa28afc242ff",
-      :placeholder-count 0},
-     :finding
-     "The complete linear graph Hausdorff-distortion fixture compiles. It reuses the reviewed actual L2 graph and constructed range isometry, proves the coordinate-map inner-product equation, identifies its Gram matrix with identity plus the functional-coefficient outer product, and computes its determinant using the rank-one determinant lemma and orthonormal-basis dual-norm identity. Thus the constructed absolute determinant is exactly sqrt(1+norm(ell)^2). Both ambient graph-image and intrinsic range-subtype Hausdorff equations follow. Zero-functional distortion is explicitly one. The result holds in every natural dimension and for every set, including the required dimension-two and dimension-three examples.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/LinearGraphDensity.lean"
-       "ConstructionTargets/LinearGraphDensity.md"],
-      :acceptance
-      {:namespace "ConstructionTargets.LinearGraphDensity",
-       :implementation
-       "Promote the exact compiled fixture and document the linear scope and remaining nonlinear area and numerical-normalization obligations.",
-       :declarations
-       ["basis"
-        "coefficients"
-        "matrix"
-        "inner_coordinate"
-        "gram_equation"
-        "matrix_gram"
-        "determinant_square"
-        "distortion_eq"
-        "image_measure"
-        "range_measure"
-        "zero_distortion"
-        "dimension_two"
-        "dimension_three"],
-       :hypotheses
-       "d is any natural dimension and ell is a real continuous linear functional on EuclideanSpace real (Fin d). Reuse LinearGraphMeasure's actual WithLp 2 graph, Borel structures, range and constructed range isometry. Both measure equations hold for arbitrary sets; no nonzero-functional, positive-dimension or measurability assumption is added.",
-       :consumer-equation
-       "Hausdorff d-measure of the actual graph image, and of its intrinsic range image, equals ENNReal.ofReal(sqrt(1+norm(ell)^2)) times source Hausdorff d-measure. The scalar is proved equal to the determinant factor of the reviewed coordinate map, and equals one when ell=0.",
-       :consumer-residual
-       "Nonlinear differentiable graph area transport, sphere-chart measure assembly and Euclidean Hausdorff numerical normalization remain before frozen sphere-integral closure. No Stokes or period conclusion follows.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.LinearGraphDensity."
-        "Reproduce seventeen standard-only axiom audits, including the seven reviewed geometric and measure inputs."
-        "Audit actual coordinate-map inner products through the constructed range isometry and L2 graph."
-        "Verify Gram identity, transpose-product identification, rank-one determinant calculation and dual-norm identity."
-        "Verify exact square-root distortion and explicit zero-functional value."
-        "Verify ambient image and intrinsic range-subtype Hausdorff equations and dimension-two/three examples."
-        "Confirm no nonlinear area formula, numerical Hausdorff-to-volume normalization or supplied isometry is assumed."
-        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]}},
-     :seat "codex-13"}},
+   {:placeholders 0,
+    :placeholder-delta 0,
+    :residual
+    "Independent review remains. Nonlinear differentiable graph area transport, sphere-chart measure assembly and Euclidean Hausdorff numerical normalization remain downstream. No sphere mass, Stokes, period, orientation or consumer-closure conclusion is claimed. Ledgers and frozen consumers remain untouched.",
+    :scratch "/tmp/codex14-checkpoint43-graph-density-fb24reev",
+    :gates
+    {:actual-L2-coordinate-inner-products :pass,
+     :zero-functional-value :pass,
+     :exact-square-root-distortion :pass,
+     :ambient-and-intrinsic-Hausdorff-equations :pass,
+     :whitespace :pass,
+     :fixture-and-canonical-compilation :pass,
+     :constructed-range-isometry :pass,
+     :placeholder-and-forbidden-scans :pass,
+     :target-build :pass,
+     :rank-one-determinant-and-dual-norm :pass,
+     :exact-fixture-promotion :pass,
+     :dimension-two-and-three-examples :pass,
+     :Gram-and-transpose-product-identification :pass,
+     :seventeen-standard-only-audits :pass,
+     :no-assumed-nonlinear-or-numerical-normalization :pass,
+     :exact-two-file-scope :pass},
+    :axiom-audits 17,
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"distortion_eq"
+     "2b844811a8a2482871c8486f16318c8eb84bb1e67e295e1b4a257036f885192d",
+     "zero_distortion"
+     "3e6d95f97acd29067f5d4ff21caac5a4cf0a1cc878a8d05dd9281816564946e6",
+     "determinant_square"
+     "08bf94107619d4bfa946ab094f41a80dccdd9553b155d1f0f84d56a439a8fd94",
+     "matrix"
+     "5270d3184eb452726c142ed8da52e5be83c6068caaf914fd930609a82afe696d",
+     "matrix_gram"
+     "89d23e16fa2168cd15754dca00d549dfa3ecd8b8287b9229e42fdc6717f859f3",
+     "dimension_three"
+     "d32072ee4f171ed5d7a007a5f40bd7c37209ea8b7c3f569af90110f4281a5de6",
+     "coefficients"
+     "934469556d9e6d26074b43ec29687618aa2b2992312365359a99214d1c5032cc",
+     "range_measure"
+     "483be3c9ef14430ab323ff9a8cb63f628e7bb1d67351f142bc79031cbc17d1e8",
+     "basis"
+     "5eee1a61b3456cfccb369b10fcbd3dbe6ac2d7f2e06eec6f033aa6f98e0fbf0b",
+     "inner_coordinate"
+     "1f8a3f69210f6d37206a488170f60607925320ff58ef6bfb609db494c772ed21",
+     "image_measure"
+     "724427d11ea96e58c21bea3737809de35ea9450ad0bba695c33db4b8a90bcf3e",
+     "dimension_two"
+     "c778c653494a2f6e752955c3978bff94e52dca8085a8c9b9790361c1f622bf4f",
+     "gram_equation"
+     "4dc45756261dd8e98fa7856fa6a606aa19c9cad0ac13cda1ce4ae0ab2a4ef00a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure experiments and both dependency PASS receipts from the ledgers",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint43-graph-density/LinearGraphDensity.lean",
+      :exit 0}
+     {:cmd
+      "Python unique scratch-directory creation, fixture hash verification and exact scoped promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint43-graph-density/LinearGraphDensity.lean > /tmp/codex14-checkpoint43-graph-density-fb24reev/fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/LinearGraphDensity.lean > /tmp/codex14-checkpoint43-graph-density-fb24reev/canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.LinearGraphDensity > /tmp/codex14-checkpoint43-graph-density-fb24reev/build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Python verification of seventeen standard-only audits in each compilation log and zero warnings/errors; build 2445 jobs",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/LinearGraphDensity.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact fixture equality, comment-stripped placeholder scan and thirteen statement hashes",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "Python exact two-file staged scope verification", :exit 0}
+     {:cmd
+      "git commit -m \"Prove exact linear graph Hausdorff density\"",
+      :exit 0}
+     {:cmd "git diff --check f5293159^ f5293159", :exit 0}
+     {:cmd
+      "Python committed fixture equality, exact two-file scope and clean scoped paths verification",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "f52931597246cf0a47e933920adfa02143319517",
+    :changed-paths
+    ["ConstructionTargets/LinearGraphDensity.lean"
+     "ConstructionTargets/LinearGraphDensity.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint43-graph-density/LinearGraphDensity.lean",
+     :sha256
+     "729e0334f324ce77a9f5369547d7631c4c03362b5c4a8fa34b80aa28afc242ff"},
+    :statement-hash-method
+    "SHA256 from declaration keyword through statement, excluding the space preceding := or where.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/LinearGraphDensity.lean"
     "ConstructionTargets/LinearGraphDensity.md"],
