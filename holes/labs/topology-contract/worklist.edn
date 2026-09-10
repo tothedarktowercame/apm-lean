@@ -61534,8 +61534,59 @@
   {:consumer "t99J03",
    :stop-condition
    "Name the exact unavailable geometric construction if neither a complete fixture nor one compiled prerequisite exists. No owner gate, assumed triangulation or campaign termination.",
+   :evidence
+   {:placeholder-delta 0,
+    :api-audit
+    {:available
+     ["Abstract simplicial complexes and geometric complexes with prescribed face-intersection conditions"
+      "Simplicial-set geometric realization and its singular-set adjunction"
+      "Compact-manifold Euclidean closed embedding"
+      "Explicit two-triangle subdivision of the standard square"],
+     :boundary
+     "These APIs do not supply compatible triangular subdivisions of arbitrary overlapping surface charts. A Euclidean embedding, finite chart cover, or singular simplicial set does not establish the required finite triangulation. CW structures require attachment data."},
+    :residual
+    "Construct compatible embedded triangular faces and their realization comparison. Polygon normalization, the explicit spherical case, genus detection and consumer uptake remain subsequent; no consumer closure is claimed.",
+    :dependency-review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789018245956-17968-3992b67c"},
+    :compiled-fixture false,
+    :outcome :stop,
+    :warnings [],
+    :consumer-placeholders
+    {"t99J03" 1, "t00A03" 2, "t01J01" 3, "t91J05" 3, "t94J09" 1},
+    :disposition :stop,
+    :axioms :not-audited,
+    :author "codex-12",
+    :reason :geometric-construction-gap,
+    :commands
+    [{:cmd
+      "python3 /tmp/compact-surface-triangulation-refill41-audit.py",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "rg --files -g AGENTS.md",
+      :exit 1,
+      :expected-exit 1,
+      :correction
+      "No repository-local AGENTS.md matched; supplied workspace instructions remain applicable."}],
+    :representation
+    {:source
+     "A nonempty compact connected Hausdorff genuine-infinity self-model real two-manifold",
+     :target
+     "The realization of a constructed finite two-dimensional simplicial complex",
+     :direction
+     "Construct a homeomorphism from the finite realization to the given manifold."},
+    :audit
+    {:path "/tmp/compact-surface-triangulation-refill41-audit.json",
+     :sha256
+     "e2731657c1b2b6eecf1df9214ea6a2a270c913e556a82d411f8d5cf6cb1eff9e",
+     :head "810b7f271c4c586048351a9d9de494c2609cf192"},
+    :changed-paths [],
+    :finding
+    "The missing construction is a finite family of embedded triangles covering the given surface, with intersections identified exactly along compatible faces. This must produce a finite dimension-two complex and a continuous bijective realization map to the original surface. No complete fixture or new compiled geometric prerequisite was obtained. This is an infrastructure boundary, not a mathematical refutation or campaign termination.",
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "SURFACE CUTTING/CLASSIFICATION / finite triangulation construction",
