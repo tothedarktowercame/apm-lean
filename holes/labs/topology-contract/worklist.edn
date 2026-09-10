@@ -71945,8 +71945,49 @@
   {:consumer "t00A03",
    :stop-condition
    "Require a full derivative-level submersion theorem for the smooth total coincidence map away from the four endpoint pairs, using the compiled left or right surjective coordinate according to the boundary decomposition, then a parametric Sard argument yielding finite fibers.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Combine the left and right derivative blocks with the four-point boundary decomposition to prove full total-coincidence-map submersivity away from endpoint pairs, then apply parametric Sard for finite fibers.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:negWeightLinear
+     "e5f9a0f0249656a8225d67c2a82e4fe284b99e1d87ef9a7f487d45d82a4ede33",
+     :hasFDerivAt_pairDifference_right
+     "b74aab73bbcc0d560d745f07e3bc63806baa47f744a2c1e2191d021e2000cd45",
+     :fderiv_pairDifference_right
+     "b576f1c5a91ccb4c6f95a00b6834a3d2a20348bc04b27c27ae9ec8f4f36d8589",
+     :fderiv_pairDifference_right_surjective
+     "680d8d08695203201cedd04671eb9c85569f7534b27c55b5d39f7553a8ea4f21"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean /tmp/PlaneArcEndpointPairParameterRightDerivative.lean ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-four-declaration audit over ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "c7a4084af62ac3e4345685332961127cb45a544c",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointPairParameterRightDerivative.lean",
+     :sha256
+     "511c9936242bc8208afa4b27609772caaeafd3549a5c9d80fb14721ae2790500",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. The right perturbation derivative is the negative endpoint-weight scalar map, its fderiv formula is explicit, and it is surjective at every interior right parameter. The module compiles without warnings or placeholders, its dependency hash matches, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean"],
    :dag-node
