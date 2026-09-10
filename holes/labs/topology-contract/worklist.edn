@@ -60636,6 +60636,19 @@
       :exit 2,
       :correction
       "No matching audit script existed; performed a read-only inline Python placeholder and statement-hash audit successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789015706221-17879-d14f235f",
+     :commands
+     ["git show f4c002fcf61a50d47acd217c9c5b7fe196d76667:ConstructionTargets/ManifoldTargetIncidenceLocalization.lean"
+      "Python pinned scope, fixture SHA256, byte equality, five statement hashes and placeholder audit"
+      "lake build Mathlib.Geometry.Manifold.IsManifold.Basic"
+      "lake env lean ConstructionTargets/ManifoldTargetIncidenceLocalization.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show d39ebc39:holes/labs/topology-contract/worklist.edn)"
+      "git show --format= --check f4c002fc"],
+     :finding
+     "Independent of author codex-6. Exact single-file scope and fixture 8b52c3435e02a92d409a09fb40ca9ea641ea9a672f319031e3e8ec939a87a350 verified; five statement hashes match, zero placeholders. Dependency build succeeds (2035 jobs); Lean warning-free with four standard-only axiom audits; validator 473 items OK; whitespace clean. Domain requires both images in the same actual chart source; incident-center coverage is proved. Chart injectivity yields coordinate-zero equivalence only on that domain, and local fiber equality retains the restriction on both sides. Continuity is required only for openness; no finite-dimensionality or smoothness assumptions added. Derivative transport, regularity and incidence charts remain unclaimed."},
     :commit "f4c002fcf61a50d47acd217c9c5b7fe196d76667",
     :changed-paths
     ["ConstructionTargets/ManifoldTargetIncidenceLocalization.lean"],
@@ -60645,7 +60658,7 @@
      "8b52c3435e02a92d409a09fb40ca9ea641ea9a672f319031e3e8ec939a87a350"},
     :axiom-audit-declarations 4},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ManifoldTargetIncidenceLocalization.lean"],
    :dag-node
@@ -60740,7 +60753,7 @@
      "Compiled one common-target-chart localization prerequisite. The constructed domain requires both images to lie in the same actual chart source. It is open for continuous maps, contains every incident center, and on it the coordinate difference vanishes exactly when the original values agree, by chart injectivity. The corresponding restricted zero-fiber and incidence sets are equal. No fiber equivalence or incidence equality is assumed.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "TRANSVERSE-PULLBACK / manifold-target local incidence charts",
