@@ -64231,6 +64231,19 @@
       "CoefficientOverlapPair"
       "CoefficientOverlapRelative"],
      :portfolio-closures 0},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789029867866-18252-c0ccab94",
+     :commands
+     ["git show --check 6af5755f"
+      "Python read-only pinned DAG census: all consumer hashes, comment-stripped placeholder counts, module census and artifact hashes"
+      "git diff --name-status 1336224bcc770c7814961101c8629f1b868d2a83 2a77a5927fc96a99ad89c860db985cf812302391 -- ConstructionTargets problems"
+      "bb read-only verification of pinned reviews and tail/evidence/proposed/canonical equality"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/topology-refill45-proposed-worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 6af5755f:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "Independent review of codex-12's ledger-only checkpoint passes. Both artifact hashes match. Reproduced 59 named consumers, 58 existing, missing t93A05, 64 placeholders, 24 closed, 34 open and 24 within two; all consumer bytes unchanged. Modules increase 726→733: three portfolio and four concurrent, correctly attributed. Three pinned PASS reviews support two STOPs and one completed comparison packet. Four fresh replacement rows match evidence and proposed/canonical ledgers after supervisor dependency normalization: exactly one final adapter first, two five-consumer foundations, then checkpoint. All-dimensional comparison remains distinct from higher-dimensional normalization; flux and arc limitations remain explicit. Both validators pass 510 items. No files edited."},
     :replacement-items
     [{:consumer "t00A01",
       :stop-condition
@@ -64340,7 +64353,7 @@
       "cea1836f47fb6344edf5ea789e07a5ad6e561b8ba06a87102978ea54e09af30a"}},
     :seat "codex-12"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
@@ -64359,7 +64372,7 @@
    :stop-condition
    "GO requires complete frozen closure; otherwise name the exact missing actual-cover or chosen-basepoint comparison. Infrastructure absence is not refutation.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "VAN KAMPEN / frozen connected-sum open-union adapter",
    :acceptance
@@ -64382,7 +64395,7 @@
    :stop-condition
    "GO requires actual ambient invertibility and normalization comparison; REVISE requires one compiled prerequisite. Do not duplicate concurrent work or claim a fundamental class.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / ambient overlap normalization comparison",
@@ -64409,7 +64422,7 @@
    :stop-condition
    "GO requires constructed nested embedded triangles, strict containment and inner coverage. REVISE requires exactly one compiled geometric prerequisite; no finite chart-cover wrapper alone.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "SURFACE TRIANGULATION / nested triangle coverage margin",
    :acceptance
