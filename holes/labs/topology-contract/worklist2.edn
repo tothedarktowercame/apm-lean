@@ -35214,7 +35214,8 @@
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
    {:outcome :replan,
-    :seat "codex-13",
+    :disposition :replan,
+    :author "codex-13",
     :commands
     [{:cmd
       "Read complete TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both ledgers",
@@ -35240,6 +35241,96 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789067609175-19238-4549f5cc",
+     :commands
+     ["git show --stat --oneline 0d1124a4"
+      "git show --check --oneline 0d1124a4"
+      "git diff 0d1124a4^ 0d1124a4 -- holes/labs/topology-contract/worklist2.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git diff --name-status 03e8585aa248e9437bc4ba12d0ca75069240a51d 6697452856e292acca9b072064cc853faf39f7c5"
+      "git diff --numstat 03e8585aa248e9437bc4ba12d0ca75069240a51d 6697452856e292acca9b072064cc853faf39f7c5 -- ConstructionTargets problems"
+      "git show 0d1124a4:holes/labs/topology-contract/worklist2.edn | rg -n 'oriented-checkpoint57-product-simplex-affine-singular-realization-1|oriented-checkpoint58-affine-product-simplex-and-consumer-refill-1'"
+      "rg --pcre2 -o '(?<![A-Za-z0-9_.])(sorry|admit)(?![A-Za-z0-9_.])|^[[:space:]]*((private|protected)[[:space:]]+)?axiom[[:space:]]' problems/{t03J05,t96J06,t97A04}/lean -g '*.lean'"],
+     :finding
+     "PASS: commit 0d1124a4 changes only worklist2.edn. It preserves reviewed STOPs, attributes the two banked product-simplex modules and one concurrent coefficient packet, and elects the exact missing representation bridge rather than retrying signed cancellation. The bridge is correctly directed from canonical simplicial-product lattice paths to production affine singular simplices in the topological product, with deletion identified with face precomposition. Dependencies into checkpoint58 are correctly materialized, both ledgers validate, no fixture or statement hash applies, and frozen placeholders remain 1/2/4 with 61 overall."},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Construct only the exact representation bridge from canonical maximal simplicial-product paths to continuous affine simplices in the product of topological standard simplices. Do not prove oriented face cancellation, define chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Restrict downstream instances to total degree at most four and use a unique row-specific scratch directory.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PRODUCT HOMOLOGY: maximal lattice paths as affine singular product simplices",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use the canonical MaximalPath p q representation, its coordinate equation and face deletion theorem, standard topological simplices over real, and the existing affine-simplex realization machinery. No coefficient or orientation hypothesis is required for this representation comparison.",
+       :route-step
+       "Supplies the missing affine-realization comparison on the sole t03J05 placeholder route, both t96J06 placeholder routes and all four t97A04 placeholder routes, after maximal paths and parity and before oriented face cancellation.",
+       :probe
+       "For each canonical maximal path z, map every lattice vertex to the pair of corresponding standard-simplex vertices and construct the continuous affine map from stdSimplex real (Fin (p+q+1)) into stdSimplex real (Fin (p+1)) times stdSimplex real (Fin (q+1)). Package it as the production singular simplex of the product. Prove its values on standard vertices are exactly the path vertices and prove for every deleted vertex that production face precomposition equals the affine realization of the deleted lattice path. Compile every p,q with p+q at most four. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled missing product-continuity, affine-coordinate or face-precomposition prerequisite. STOP names the exact independent representation boundary.",
+       :consumer-equation
+       "The affine singular-product simplex associated to a maximal simplicial-product path has exactly that path's ordered grid vertices, and precomposition by face i is exactly the affine simplex on the path with vertex i deleted.",
+       :consumer-residual
+       "Use this face-compatible realization with shuffle parity to pair and cancel interior faces and identify the two exterior-face families with the Leibniz boundary terms.",
+       :gates
+       ["Compile a complete fixture and record SHA256."
+        "Audit the source maximal-path and target production singular-simplex representations."
+        "Verify every grid vertex uses the exact two coordinates supplied by prodStdSimplex.objEquiv."
+        "Verify the continuous affine realization lands in the product of the two topological standard simplices."
+        "Verify standard-vertex evaluation and every face-precomposition equality."
+        "Compile all p,q with p+q at most four."
+        "Reproduce standard-only axiom audits."
+        "Confirm no face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
+        "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and concurrent reservations."]},
+      :representation
+      {:source
+       "A maximal nondegenerate simplex of the simplicial-set product Δ[p] ⊗ Δ[q], represented canonically as its monotone lattice path of grid vertices",
+       :target
+       "A production singular (p+q)-simplex given by a continuous affine map into the product stdSimplex real (Fin (p+1)) × stdSimplex real (Fin (q+1))",
+       :direction
+       "Exact face-compatible realization from the source lattice-path vertex representation to the target affine singular-product-simplex representation, with simplicial vertex deletion identified with production face precomposition."},
+      :id
+      :oriented-checkpoint57-product-simplex-affine-singular-realization-1,
+      :kind :representation-comparison,
+      :depends-on [],
+      :current-residual
+      "Maximal paths and their integer signs are banked, but they remain simplicial-set objects with no canonical face-compatible realization as production singular simplices in the topological product.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: affine product-simplex realization and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint58-affine-product-simplex-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint57-product-simplex-affine-singular-realization-1],
+      :current-residual
+      "Measure affine product-simplex realization separately from the preserved signed-shuffle, singular-cross-product, Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
     :measures
     {:baseline
      {:commit "03e8585aa248e9437bc4ba12d0ca75069240a51d",
@@ -35428,84 +35519,9 @@
       "The reviewed finite-cover Euler and Hausdorff-normalization STOPs are preserved."
       "Active coefficient, arc and five-torsion work is excluded."
       "Oriented interior-face pairing, the full signed boundary formula, singular cross product, Eilenberg-Zilber, Kunneth, intersections and consumer adapters remain deferred until the representation comparison is banked."]},
-    :replacement-items
-    [{:consumer :t03J05,
-      :stop-condition
-      "Construct only the exact representation bridge from canonical maximal simplicial-product paths to continuous affine simplices in the product of topological standard simplices. Do not prove oriented face cancellation, define chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Restrict downstream instances to total degree at most four and use a unique row-specific scratch directory.",
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node
-      "PRODUCT HOMOLOGY: maximal lattice paths as affine singular product simplices",
-      :acceptance
-      {:axioms :standard-only,
-       :hypotheses
-       "Use the canonical MaximalPath p q representation, its coordinate equation and face deletion theorem, standard topological simplices over real, and the existing affine-simplex realization machinery. No coefficient or orientation hypothesis is required for this representation comparison.",
-       :route-step
-       "Supplies the missing affine-realization comparison on the sole t03J05 placeholder route, both t96J06 placeholder routes and all four t97A04 placeholder routes, after maximal paths and parity and before oriented face cancellation.",
-       :probe
-       "For each canonical maximal path z, map every lattice vertex to the pair of corresponding standard-simplex vertices and construct the continuous affine map from stdSimplex real (Fin (p+q+1)) into stdSimplex real (Fin (p+1)) times stdSimplex real (Fin (q+1)). Package it as the production singular simplex of the product. Prove its values on standard vertices are exactly the path vertices and prove for every deleted vertex that production face precomposition equals the affine realization of the deleted lattice path. Compile every p,q with p+q at most four. GO requires a complete placeholder-free fixture. REVISE requires exactly one complete compiled missing product-continuity, affine-coordinate or face-precomposition prerequisite. STOP names the exact independent representation boundary.",
-       :consumer-equation
-       "The affine singular-product simplex associated to a maximal simplicial-product path has exactly that path's ordered grid vertices, and precomposition by face i is exactly the affine simplex on the path with vertex i deleted.",
-       :consumer-residual
-       "Use this face-compatible realization with shuffle parity to pair and cancel interior faces and identify the two exterior-face families with the Leibniz boundary terms.",
-       :gates
-       ["Compile a complete fixture and record SHA256."
-        "Audit the source maximal-path and target production singular-simplex representations."
-        "Verify every grid vertex uses the exact two coordinates supplied by prodStdSimplex.objEquiv."
-        "Verify the continuous affine realization lands in the product of the two topological standard simplices."
-        "Verify standard-vertex evaluation and every face-precomposition equality."
-        "Compile all p,q with p+q at most four."
-        "Reproduce standard-only axiom audits."
-        "Confirm no face cancellation, chain sum, cross product, Eilenberg-Zilber, Kunneth, intersection or consumer-closure theorem is claimed."
-        "Run placeholder and forbidden-declaration scans; recheck both ledgers and preserve reviewed STOPs, refutations and concurrent reservations."]},
-      :representation
-      {:source
-       "A maximal nondegenerate simplex of the simplicial-set product Δ[p] ⊗ Δ[q], represented canonically as its monotone lattice path of grid vertices",
-       :target
-       "A production singular (p+q)-simplex given by a continuous affine map into the product stdSimplex real (Fin (p+1)) × stdSimplex real (Fin (q+1))",
-       :direction
-       "Exact face-compatible realization from the source lattice-path vertex representation to the target affine singular-product-simplex representation, with simplicial vertex deletion identified with production face precomposition."},
-      :id
-      :oriented-checkpoint57-product-simplex-affine-singular-realization-1,
-      :kind :representation-comparison,
-      :depends-on [],
-      :current-residual
-      "Maximal paths and their integer signs are banked, but they remain simplicial-set objects with no canonical face-compatible realization as production singular simplices in the topological product.",
-      :other-consumers [:t96J06 :t97A04]}
-     {:consumer :portfolio,
-      :checkpoint
-      {:after-problems 1,
-       :may-supersede-future true,
-       :required-measures
-       [:placeholder-delta
-        :typed-residual-change
-        :infrastructure-packets
-        :review-outcomes]},
-      :stop-condition
-      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
-      :phase :strategy,
-      :state :open,
-      :scope [],
-      :dag-node
-      "PORTFOLIO POLICY: affine product-simplex realization and renewed consumer eligibility",
-      :acceptance
-      {:strategy
-       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
-       :stop-condition
-       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
-      :id
-      :oriented-checkpoint58-affine-product-simplex-and-consumer-refill-1,
-      :kind :strategy-checkpoint,
-      :depends-on
-      [:oriented-checkpoint57-product-simplex-affine-singular-realization-1],
-      :current-residual
-      "Measure affine product-simplex realization separately from the preserved signed-shuffle, singular-cross-product, Euler and Hausdorff boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
-      :other-consumers []}],
-    :author "codex-13",
-    :disposition :replan},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: bounded product-simplex shuffles and renewed consumer eligibility",
@@ -35527,7 +35543,7 @@
    :stop-condition
    "Construct only the exact representation bridge from canonical maximal simplicial-product paths to continuous affine simplices in the product of topological standard simplices. Do not prove oriented face cancellation, define chain sums or a singular cross product, assume Eilenberg-Zilber or Kunneth, prove intersections, or claim consumer closure. Restrict downstream instances to total degree at most four and use a unique row-specific scratch directory.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: maximal lattice paths as affine singular product simplices",
