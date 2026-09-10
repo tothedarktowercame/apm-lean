@@ -71944,70 +71944,100 @@
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
   {:consumer "t00A03",
    :stop-condition
+   "Require a full derivative-level submersion theorem for the smooth total coincidence map away from the four endpoint pairs, using the compiled left or right surjective coordinate according to the boundary decomposition, then a parametric Sard argument yielding finite fibers.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean"],
+   :dag-node
+   "SURFACE TRIANGULATION / endpoint-relative pairwise right-parameter derivative",
+   :acceptance
+   {:fixture "/tmp/PlaneArcEndpointPairParameterRightDerivative.lean",
+    :fixture-sha256
+    "511c9936242bc8208afa4b27609772caaeafd3549a5c9d80fb14721ae2790500",
+    :implementation
+    "Promote the exact fixture. Compile negWeightLinear, hasFDerivAt_pairDifference_right, fderiv_pairDifference_right and fderiv_pairDifference_right_surjective. This supplies the symmetric right derivative-level parameter-surjectivity step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before proving total-map submersivity. Verify PlaneArcEndpointPairParameterDerivative SHA256 4f8a779e084cde752365c3a6d83281fd8505190119cd5ab597b141b45c5e6c42. Preserve arbitrary pairs of plane arcs, arbitrary fixed left perturbation data and every interior right curve parameter. Require zero placeholders, no warnings and standard-only axioms. Do not claim full total-map submersivity, relative Sard, regular parameter existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+    :commands
+    ["lake env lean ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :plane-arc-endpoint-pair-parameter-right-derivative-implementation-refill50,
+   :kind :reusable-theorem,
+   :depends-on
+   [:plane-arc-endpoint-pair-parameter-derivative-implementation-refill50],
+   :current-residual
+   "Combine the compiled left and right derivative blocks with the four-point boundary decomposition to prove that the full total coincidence map is a submersion away from endpoint-endpoint pairs. Parametric Sard, finite-family simultaneity, retained embeddings and chart-transition transport remain.",
+   :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
+  {:consumer "t00A03",
+   :stop-condition
    "Require a compiled perturbation preserving prescribed endpoints and chartwise containment with finite pairwise intersections; do not infer cross-chart finiteness from unrelated plane translations.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The left parameter derivative is compiled and surjective at interior parameters. Prove the symmetric right derivative and assemble full total-map submersivity away from the finite endpoint boundary, then apply parametric Sard, choose simultaneous finite-family parameters, retain embeddings and compare intersections through chart transitions.",
+     "Both coordinate derivative blocks are compiled and surjective at their respective interior parameters. Assemble them with the four-point boundary decomposition to prove full total coincidence-map submersivity away from the finite endpoint boundary, then apply parametric Sard, select simultaneous finite-family parameters, retain embeddings and compare intersections through chart transitions.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t00A03",
       :stop-condition
-      "Require the symmetric right perturbation derivative and full derivative-level submersion theorem for the smooth total coincidence map away from the finite endpoint boundary, then a parametric Sard argument yielding finite fibers.",
+      "Require a full derivative-level submersion theorem for the smooth total coincidence map away from the four endpoint pairs, using the compiled left or right surjective coordinate according to the boundary decomposition, then a parametric Sard argument yielding finite fibers.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean"],
+      ["ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean"],
       :dag-node
-      "SURFACE TRIANGULATION / endpoint-relative pairwise parameter derivative",
+      "SURFACE TRIANGULATION / endpoint-relative pairwise right-parameter derivative",
       :acceptance
-      {:fixture "/tmp/PlaneArcEndpointPairParameterDerivative.lean",
+      {:fixture
+       "/tmp/PlaneArcEndpointPairParameterRightDerivative.lean",
        :fixture-sha256
-       "4f8a779e084cde752365c3a6d83281fd8505190119cd5ab597b141b45c5e6c42",
+       "511c9936242bc8208afa4b27609772caaeafd3549a5c9d80fb14721ae2790500",
        :implementation
-       "Promote the exact fixture. Compile weightLinear, hasFDerivAt_pairDifference_left, fderiv_pairDifference_left and fderiv_pairDifference_left_surjective. This supplies the left derivative-level parameter-surjectivity step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before proving total-map submersivity. Verify PlaneArcEndpointTotalCoincidenceSmooth SHA256 a431c6295a0ae7d5c24fa1db8c39540a2c54d5a13afdbc8bac68857d38e32c94. Preserve arbitrary pairs of plane arcs, arbitrary fixed right perturbation data and every interior left curve parameter. Require zero placeholders, no warnings and standard-only axioms. Do not claim the symmetric right derivative, full total-map submersivity, relative Sard, regular parameter existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
+       "Promote the exact fixture. Compile negWeightLinear, hasFDerivAt_pairDifference_right, fderiv_pairDifference_right and fderiv_pairDifference_right_surjective. This supplies the symmetric right derivative-level parameter-surjectivity step required by the t00A03, t01J01, t91J05, t94J09 and t99J03 placeholder routes before proving total-map submersivity. Verify PlaneArcEndpointPairParameterDerivative SHA256 4f8a779e084cde752365c3a6d83281fd8505190119cd5ab597b141b45c5e6c42. Preserve arbitrary pairs of plane arcs, arbitrary fixed left perturbation data and every interior right curve parameter. Require zero placeholders, no warnings and standard-only axioms. Do not claim full total-map submersivity, relative Sard, regular parameter existence, finite coincidence fibers, simultaneous finite-family selection, embedding preservation, cross-chart compatibility, retained coverage, compatible faces or triangulation.",
        :commands
-       ["lake env lean ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean"],
+       ["lake env lean ConstructionTargets/PlaneArcEndpointPairParameterRightDerivative.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :id
-      :plane-arc-endpoint-pair-parameter-derivative-implementation-refill50,
+      :plane-arc-endpoint-pair-parameter-right-derivative-implementation-refill50,
       :kind :reusable-theorem,
       :depends-on
-      [:plane-arc-endpoint-total-coincidence-smooth-implementation-refill50
-       :plane-arc-endpoint-pair-parameter-surjectivity-implementation-refill50],
+      [:plane-arc-endpoint-pair-parameter-derivative-implementation-refill50],
       :current-residual
-      "Prove the symmetric right derivative block and combine either interior coordinate with the four-point boundary decomposition to obtain full total coincidence-map submersivity. Parametric Sard, finite-family simultaneity, retained embeddings and chart-transition transport remain.",
+      "Combine the compiled left and right derivative blocks with the four-point boundary decomposition to prove that the full total coincidence map is a submersion away from endpoint-endpoint pairs. Parametric Sard, finite-family simultaneity, retained embeddings and chart-transition transport remain.",
       :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
-     [{:cmd
-       "lake build ConstructionTargets.PlaneArcEndpointTotalCoincidenceSmooth >/tmp/endpoint-total-dep.log 2>&1",
+     [{:cmd "test -L .lake/packages && readlink -f .lake/packages",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/PlaneArcEndpointPairParameterDerivative.lean",
+       "lake build ConstructionTargets.PlaneArcEndpointPairParameterDerivative >/tmp/endpoint-left-derivative-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/PlaneArcEndpointPairParameterDerivative.lean ConstructionTargets/PlaneArcEndpointTotalCoincidenceSmooth.lean",
+       "lake env lean /tmp/PlaneArcEndpointPairParameterRightDerivative.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-four-declaration audit over /tmp/PlaneArcEndpointPairParameterDerivative.lean",
+       "sha256sum /tmp/PlaneArcEndpointPairParameterRightDerivative.lean ConstructionTargets/PlaneArcEndpointPairParameterDerivative.lean",
+       :exit 0}
+      {:cmd
+       "python3 comment-stripped placeholder-and-four-declaration audit over /tmp/PlaneArcEndpointPairParameterRightDerivative.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/PlaneArcEndpointPairParameterDerivative.lean",
+     {:path "/tmp/PlaneArcEndpointPairParameterRightDerivative.lean",
       :sha256
-      "4f8a779e084cde752365c3a6d83281fd8505190119cd5ab597b141b45c5e6c42",
+      "511c9936242bc8208afa4b27609772caaeafd3549a5c9d80fb14721ae2790500",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one derivative-level prerequisite. For the left perturbation-vector coordinate, the Fréchet derivative of the pairwise coincidence difference is scalar multiplication by the endpoint weight t(1-t), and this derivative is surjective whenever the left curve parameter is interior. This converts the reviewed pointwise parameter surjectivity into the derivative statement needed for submersivity. The corresponding right derivative block, full total-map submersivity away from the four endpoint pairs, parametric Sard, simultaneous finite-family selection, embedding stability and chart-transition comparison remain.",
+     "Compiled exactly one symmetric derivative prerequisite. For the right perturbation-vector coordinate, the Fréchet derivative of the pairwise coincidence difference is negative scalar multiplication by the endpoint weight s(1-s), and this derivative is surjective whenever the right curve parameter is interior. Together with the reviewed left derivative and four-point boundary decomposition, both derivative blocks required to prove total-map submersivity are now available. Full total-map submersivity, parametric Sard, simultaneous finite-family selection, embedding stability and chart-transition comparison remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / relative endpoint-preserving chartwise arc perturbation",
@@ -72027,7 +72057,8 @@
     :plane-arc-endpoint-pair-boundary-decomposition-implementation-refill50
     :plane-arc-endpoint-pair-boundary-finite-implementation-refill50
     :plane-arc-endpoint-total-coincidence-smooth-implementation-refill50
-    :plane-arc-endpoint-pair-parameter-derivative-implementation-refill50],
+    :plane-arc-endpoint-pair-parameter-derivative-implementation-refill50
+    :plane-arc-endpoint-pair-parameter-right-derivative-implementation-refill50],
    :current-residual
    "Common-plane translations preserve embeddings and containment but move endpoints and do not compare curves transported through unrelated charts.",
    :other-consumers ["t01J01" "t91J05" "t94J09" "t99J03"]}
