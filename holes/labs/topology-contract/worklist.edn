@@ -59212,8 +59212,58 @@
   {:consumer "t00J02",
    :stop-condition
    "Require all five declarations for the actual banked chartedSpace; no supplied compatibility or alternative atlas.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Actual mfderiv formulas and regularity transport remain. No derivative transport, difference-map regularity in the new model, incidence atlas or consumer closure claimed.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:overlap
+     "0912aeedcd535dc6e704fc7a7b353f7d06841dff3c1ad6c98a9e30e3abaa0235",
+     :isManifold
+     "0fd234f9e65eadf8a2c927bff73945b107cfbb751a5461d38916a227541976dc",
+     :smooth-id-forward
+     "ea0df8cc915f571071b4ef6239c7a00fbb58dbc82d9f123319580204750616fa",
+     :smooth-id-backward
+     "4431101e3ae4cedd1e134bbcbdd925f2abcaa57743d52b46cae9832f0f802ac9",
+     :product-isManifold
+     "72c1cf4792a1dd597b18917598c54282ede5202fdd687140374ab7d27b07715f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "Python fixture hash, forbidden-token and complete statement-hash audit",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.ChartedSpaceModelTransport",
+      :exit 0}
+     {:cmd
+      "cmp /tmp/ChartedSpaceModelSmoothTransport.lean ConstructionTargets/ChartedSpaceModelSmoothTransport.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ChartedSpaceModelSmoothTransport.lean",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code -- problems ConstructionTargets",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git status --porcelain=v1", :exit 0}],
+    :diagnostic-history [],
+    :commit "94c20be8f8066c470a0d1426f0886addcb2ea7a7",
+    :changed-paths
+    ["ConstructionTargets/ChartedSpaceModelSmoothTransport.lean"],
+    :fixture
+    {:path "/tmp/ChartedSpaceModelSmoothTransport.lean",
+     :sha256
+     "f87686a01159dbbfd0ea09669f9b5b5806b43f4ce39a890609fc4d91222f485c",
+     :placeholder-count 0},
+    :finding
+    "Exact fixture promoted. All five declarations compile warning-free with standard-only axioms and zero placeholders. Chosen atlas, genuine infinity, existing topology and norms, weaker hypotheses and existing APIs preserved. Consumers unchanged; worktree clean. Validator reports 462 items OK."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ChartedSpaceModelSmoothTransport.lean"],
    :dag-node
