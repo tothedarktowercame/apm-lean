@@ -56138,6 +56138,19 @@
      {:cmd "git diff --cached --check", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788999687266-17417-cf2c4d7d",
+     :commands
+     ["git show b636aab0a1b2f8f549af576de68c602a66d08794"
+      "Independent exact-promotion, scope, fixture/three statement hashes, prerequisite hashes and placeholder audit"
+      "lake env lean ConstructionTargets/ManifoldRegularFiberCharts.lean"
+      "lake build ConstructionTargets.ManifoldFiberChartExtension ConstructionTargets.OpenPartialHomeomorphFiberTransfer"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check b636aab0"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact single-file promotion and all hashes verified. Composed charts restrict to extension agreement neighborhoods on literal inherited-topology fibers; coordinate formulas and smooth compositions respect actual source/target domains. Coverage and genuine-infinity overlaps follow without global regularity of extensions or extra nonemptiness assumptions. Three axiom audits pass standard-only; compilation warning-free; prerequisite build passes 8444 jobs. Frozen t00J02 unchanged at one placeholder. Global atlas, inclusion transport and broader consumer obligations remain unclaimed. Ledger passes 432 items; no edits."},
     :commit "b636aab0a1b2f8f549af576de68c602a66d08794",
     :changed-paths
     ["ConstructionTargets/ManifoldRegularFiberCharts.lean"],
@@ -56149,7 +56162,7 @@
     :finding
     "Promoted the exact fixture. Actual literal-fiber charts, coverage and smooth overlaps compile warning-free with standard-only axioms. Both prerequisite imports, inherited topology, fixed model and restricted coordinate formulas are preserved. Worktree clean."},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/ManifoldRegularFiberCharts.lean"],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / manifold-source fiber charts",
