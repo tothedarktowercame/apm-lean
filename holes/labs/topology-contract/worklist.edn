@@ -74143,8 +74143,57 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the induced relative cokernel comparison between the algebraic union-generated quotient and the literal relative pair, then transport short exactness and construct the genuine connecting morphism.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use unionRange_homologyMap_isIso with the reviewed ambient commuting square to compare the cokernel of the union-generated denominator inclusion with the literal relative chain complex for A union B. Then transport the algebraic short exact sequence and invoke its homology sequence.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:unionRange_homologyMap_isIso
+     "f4de0514e79b90556bcbe80901cb1e506f8c4019274af669335b52cd6feb42aa"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubspaceUnionRangeHomologyEquivalence.lean ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean ConstructionTargets/CoefficientSubspaceUnionRangeFactorization.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-declaration audit over ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 1bcb7f51f48bacca0965ab71062829b94a7f1d28",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 1bcb7f51f48bacca0965ab71062829b94a7f1d28",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "python3 malformed placeholder-and-declaration audit invocation",
+      :exit 1,
+      :correction
+      "The audit body accidentally contained non-Python placeholder text. Replaced it with the intended comment-stripped placeholder counter and exact declaration-block SHA-256 calculation; the corrected audit exited zero."}
+     {:cmd "780",
+      :exit 127,
+      :correction
+      "An accidental shell token was issued while preparing the post-commit gate. It did not mutate the workspace; the full post-commit compile, hash, scope and status command was then run successfully."}],
+    :commit "1bcb7f51f48bacca0965ab71062829b94a7f1d28",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean"],
+    :fixture
+    {:path
+     "/tmp/CoefficientSubspaceUnionRangeHomologyEquivalence.lean",
+     :sha256
+     "80423f25787938b99cb5dcee9a60810f6254783b17907fcae31d523cac56d762",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and recorded repaired factorization dependency hash reproduce. The requested all-degree homology-equivalence theorem compiles without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubspaceUnionRangeHomologyEquivalence.lean"],
    :dag-node
