@@ -60951,83 +60951,92 @@
    :other-consumers ["t02A07" "t94A06" "t97J05"]}
   {:consumer "t00J02",
    :stop-condition
+   "Require constructed smooth extensions and an actual center-covering fiber chart; no supplied extension, derivative comparison or chart.",
+   :phase :implementation,
+   :state :open,
+   :scope ["ConstructionTargets/LocalTransverseExtensionChart.lean"],
+   :dag-node
+   "TRANSVERSE-PULLBACK / local transverse extension fiber chart",
+   :acceptance
+   {:fixture "/tmp/LocalTransverseExtensionChart.lean",
+    :fixture-sha256
+    "4b4d2bd2ad4ddc416e5f1f4b3e5ba106ba6db3806e3b2fa3ec542e0ccd5a7d6b",
+    :implementation
+    "Promote the exact fixture. Compile exists_chart with zero placeholders and standard-only axioms. Preserve constructed extensions, neighborhood equality, actual derivative transport and center-covering RegularFiberFixedModelOverlaps.FiberChart. Preserve the ordinary product norm and the stated finite-dimensional hypotheses. Do not claim global extension transversality, literal manifold incidence charts, overlaps or consumer closure.",
+    :commands
+    ["lake env lean ConstructionTargets/LocalTransverseExtensionChart.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id :local-transverse-extension-chart-implementation-refill40,
+   :kind :reusable-theorem,
+   :depends-on
+   [:manifold-target-incidence-difference-implementation-refill40],
+   :current-residual
+   "A regular-fiber chart for the constructed local difference extensions is compiled. Specialization and transfer to literal manifold incidence remain.",
+   :other-consumers ["t02A07" "t94A06" "t97J05"]}
+  {:consumer "t00J02",
+   :stop-condition
    "GO requires actual literal-incidence local charts, coverage and overlaps. REVISE requires exactly one compiled prerequisite; no assumed compatibility or consumer closure.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Transport the product coordinate model as needed, apply the local regular-fiber construction, and transfer its charts to literal incidence using the proved common-target-chart equality. Coverage and smooth overlaps remain uncompiled. No global extension transversality is asserted. Empty incidence and zero-dimensional models remain allowed; global assembly, orientations and homological obligations remain subsequent.",
+     "Specialize to common-target chart representatives, choose open neighborhoods witnessing extension equality inside the coordinate domains, and transfer the extension zero-fiber chart through the actual product source chart to literal incidence. Prove coverage and smooth overlaps. The resulting model index still needs the explicit finrank-sum normalization. Empty incidence and zero-dimensional kernels remain allowed. Global assembly, orientations and homological comparisons remain subsequent; no consumer closure is claimed.",
      :dependency-review
      {:outcome :pass,
       :seat "codex-10",
-      :job "invoke-1789016347773-17904-58f3d10e"},
+      :job "invoke-1789016687412-17913-1d2ec9ff"},
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t00J02",
       :stop-condition
-      "Require every local_packet conjunct, with openness, center membership and derivative surjectivity derived rather than assumed.",
+      "Require constructed smooth extensions and an actual center-covering fiber chart; no supplied extension, derivative comparison or chart.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/ManifoldTargetIncidenceDifference.lean"],
+      ["ConstructionTargets/LocalTransverseExtensionChart.lean"],
       :dag-node
-      "TRANSVERSE-PULLBACK / actual chart-coordinate local difference packet",
+      "TRANSVERSE-PULLBACK / local transverse extension fiber chart",
       :acceptance
-      {:fixture "/tmp/ManifoldTargetIncidenceDifference.lean",
+      {:fixture "/tmp/LocalTransverseExtensionChart.lean",
        :fixture-sha256
-       "ce5b168dea2d6cb0c4da2e15c70928e400d796372d0bd6f5e637d4fd686402bf",
+       "4b4d2bd2ad4ddc416e5f1f4b3e5ba106ba6db3806e3b2fa3ec542e0ccd5a7d6b",
        :implementation
-       "Promote the exact fixture. Compile local_packet with zero placeholders and standard-only axioms. Preserve the actual source-chart domains, common target chart, genuine infinity, center vanishing and derived surjectivity of the actual fderiv. Preserve weaker hypotheses without finite-dimensionality or completeness. Do not claim a local regular-fiber chart, incidence atlas, overlaps or consumer closure.",
+       "Promote the exact fixture. Compile exists_chart with zero placeholders and standard-only axioms. Preserve constructed extensions, neighborhood equality, actual derivative transport and center-covering RegularFiberFixedModelOverlaps.FiberChart. Preserve the ordinary product norm and the stated finite-dimensional hypotheses. Do not claim global extension transversality, literal manifold incidence charts, overlaps or consumer closure.",
        :commands
-       ["lake env lean ConstructionTargets/ManifoldTargetIncidenceDifference.lean"],
+       ["lake env lean ConstructionTargets/LocalTransverseExtensionChart.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
-      :id
-      :manifold-target-incidence-difference-implementation-refill40,
+      :id :local-transverse-extension-chart-implementation-refill40,
       :kind :reusable-theorem,
       :depends-on
-      [:local-transverse-difference-implementation-refill40
-       :manifold-target-incidence-coordinate-transport-implementation-refill40],
+      [:manifold-target-incidence-difference-implementation-refill40],
       :current-residual
-      "Actual coordinate difference smoothness and regularity at the incident center are compiled. Inner-product model transport, local regular-fiber charts and literal incidence transfer remain.",
+      "A regular-fiber chart for the constructed local difference extensions is compiled. Specialization and transfer to literal manifold incidence remain.",
       :other-consumers ["t02A07" "t94A06" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceDifference.lean'",
+       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/LocalTransverseExtensionChart.lean'",
        :exit 0}
-      {:cmd "sha256sum /tmp/ManifoldTargetIncidenceDifference.lean",
+      {:cmd "sha256sum /tmp/LocalTransverseExtensionChart.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/ManifoldTargetIncidenceDifference.lean",
-       :exit 1,
-       :correction
-       "The canonical coordinate-transport object was absent. Compiled the two banked dependencies into a private temporary object directory."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceDifference.lean'",
-       :exit 1,
-       :correction
-       "Completed the private module directory with links to existing canonical dependency objects."}
-      {:cmd
-       "lake env bash -c 'LEAN_PATH=/tmp/incidence-local40:$LEAN_PATH lean /tmp/ManifoldTargetIncidenceDifference.lean'",
-       :exit 1,
-       :correction
-       "Explicitly included smoothness and incidence hypotheses in local_packet. Final compilation succeeds without warnings."}],
+     :diagnostic-history [],
      :changed-paths [],
      :fixture
-     {:path "/tmp/ManifoldTargetIncidenceDifference.lean",
+     {:path "/tmp/LocalTransverseExtensionChart.lean",
       :sha256
-      "ce5b168dea2d6cb0c4da2e15c70928e400d796372d0bd6f5e637d4fd686402bf",
+      "4b4d2bd2ad4ddc416e5f1f4b3e5ba106ba6db3806e3b2fa3ec542e0ccd5a7d6b",
       :placeholder-count 0},
      :finding
-     "Compiled one actual manifold-coordinate difference packet. The product of the two source-coordinate domains is open and contains the incident center. On it the common-target-chart difference is genuinely smooth, vanishes at the center, and has surjective actual fderiv there. Differentiability follows from smoothness on the proved open neighborhoods; surjectivity follows from the banked common-chart derivative transport and local transverse difference theorem. No regularity or coordinate-domain premise is supplied.",
+     "Compiled one local extension-and-chart prerequisite. Smooth maps on open neighborhoods admit separately constructed globally smooth extensions agreeing near their centers. Their difference vanishes at the incident center, and eventual equality transports the actual derivatives, proving surjectivity there from range-sum transversality. The banked regular-fiber constructor then supplies a FiberChart covering that center. Its source model permits the ordinary product norm; no product inner-product instance or norm replacement is needed. Global transversality of the extensions is neither assumed nor proved.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "TRANSVERSE-PULLBACK / manifold-target local incidence charts",
@@ -61042,7 +61051,8 @@
     :manifold-target-incidence-localization-implementation-refill40
     :manifold-target-incidence-coordinate-transport-implementation-refill40
     :local-transverse-difference-implementation-refill40
-    :manifold-target-incidence-difference-implementation-refill40],
+    :manifold-target-incidence-difference-implementation-refill40
+    :local-transverse-extension-chart-implementation-refill40],
    :current-residual
    "Vector-target incidence has a normalized global atlas and exact tangent equalizer. Common target-chart localization and local incidence chart transport remain for manifold targets.",
    :other-consumers ["t02A07" "t94A06" "t97J05"]}
