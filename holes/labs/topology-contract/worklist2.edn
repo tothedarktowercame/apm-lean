@@ -39499,6 +39499,24 @@
      {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn; git diff --check; git diff --exit-code; git status --short; verify predecessor Git bytes, current canonical hash and successor fixture hash",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789074502289-19485-2e265e0c",
+     :commands
+     ["git show --stat --oneline 394a492b45a34b2555258535497b3e3339a82c00"
+      "git show --format=fuller 394a492b45a34b2555258535497b3e3339a82c00 -- holes/labs/topology-contract/worklist2.edn"
+      "sha256sum /tmp/codex14-ledger-extension-js3hpL/ProductSimplexWordPrefixCounts-predecessor.lean /tmp/codex14-prefix-successor-UjNCFM/ProductSimplexWordPrefixCounts.lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+      "git show d7ecc4b411b2f783f762da03ac598994100be9a1:ConstructionTargets/ProductSimplexWordPrefixCounts.lean | sha256sum"
+      "bb holes/labs/topology-contract/worklist_check.bb /tmp/codex14-ledger-extension-js3hpL/worklist2-transition.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "git diff-tree --no-commit-id --name-status -r 394a492b"
+      "git diff --check 394a492b^ 394a492b"
+      "git status --short"
+      "python3 predecessor/successor placeholder, successor declaration-hash, and frozen-consumer audit"],
+     :finding
+     "PASS: codex-14 authored the replacement; codex-11 independently reviewed it. Recorded commit scope is exactly worklist2.edn. The preserved predecessor artifact and Git source both hash to e1da7ae4..., the reviewed successor hashes to 7db40149..., and the temporary transitioned ledger validates under the existing checker. The recorded negative mutation test is consistent with the checker’s strict current-file SHA comparison. Both artifacts contain zero placeholders; successor theorem hashes reproduce as dba9b7d3..., e0f8f658..., 931fb373..., and fc888542..., with correct true-horizontal/false-vertical orientation. Live ledgers and whitespace pass. The remaining STOP is exact: the row has empty scope and cannot add the repository evidence artifact or canonical Lean/Markdown successor, while the ledger transition belongs to the supervisor. Frozen consumers remain 1/2/4 placeholders with unchanged hashes."},
     :changed-paths [],
     :fixture
     {:path
@@ -39513,7 +39531,7 @@
     "The review correction is mathematically and mechanically correct: the existing schema accepts checkpoint60 when its fixture path is changed to a separate regular file containing the exact e1da7ae4 predecessor bytes, and the same validator rejects that transitioned ledger after those predecessor bytes are altered. The 7db40149 successor remains independently hashed. Completing the requested repository transition, however, requires adding a uniquely named evidence file and editing worklist2 checkpoint60 before changing the canonical module. This implementation row has an empty scope, while the controlling instructions require modifications to remain inside scope and forbid this seat from editing the ledger because the supervisor applies ledger transitions. No repository file can therefore be committed by this row without violating exact scope or the ledger-ownership rule. This is a scheduling/specification conflict in the author packet; no topology result or closure is claimed.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "LEDGER REPRESENTATION: immutable predecessor evidence and additive canonical-module successor",
@@ -39565,7 +39583,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: ledger-safe canonical extensions and renewed consumer eligibility",
