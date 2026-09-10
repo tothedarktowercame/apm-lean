@@ -56045,6 +56045,18 @@
      {:cmd "git diff --check and git diff --cached --check", :exit 0}
      {:cmd "Scoped git add and git commit --only", :exit 0}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1788999091394-17399-b68a4da2",
+     :commands
+     ["git show e9f968b9d8581e1e8de257da264a6d59f989f019"
+      "Independent exact-promotion, scope, fixture/six declaration hashes and placeholder audit"
+      "lake env lean ConstructionTargets/OpenPartialHomeomorphFiberTransfer.lean"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn"
+      "git show --format= --check e9f968b9"],
+     :finding
+     "Author codex-6 differs from reviewer. Exact single-file promotion and all hashes verified. Transfer uses literal fibers with inherited topologies, exact restricted source/target, and valid inverse and continuity proofs. Underlying-value formulas are correctly domain-restricted; fallback centers outside those domains do not strengthen the claims. Compilation is warning-free with standard axioms and zero placeholders. Frozen t00J02 unchanged at one; smooth overlaps and global manifold structure remain unclaimed. Ledger passes 432 items; whitespace clean. No edits."},
     :commit "e9f968b9d8581e1e8de257da264a6d59f989f019",
     :changed-paths
     ["ConstructionTargets/OpenPartialHomeomorphFiberTransfer.lean"],
@@ -56056,7 +56068,7 @@
     :consumer-sha256
     "0b3b4888807bfa06c8d60d86829b75776394ea8aa45a98c933c087165521f923"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/OpenPartialHomeomorphFiberTransfer.lean"],
    :dag-node "REGULAR-PREIMAGE/SUBMERSION / literal fiber transfer",
@@ -56156,7 +56168,7 @@
      "Compiled one generic fiber-transfer prerequisite. Given an ambient open partial homeomorphism e, an open V contained in its target, and g y = f (e.symm y) on V, transfer constructs an actual OpenPartialHomeomorph between the literal fibers f=c and g=c. Its source is exactly {u | u.val lies in e.source and e u.val lies in V}; its target is exactly the extension fiber over V. Both inverse laws, openness, continuity, center membership and underlying-value formulas are proved. The banked ManifoldFiberChartExtension supplies this agreement neighborhood for actual chart representatives without globally regular extensions. Composition with its extension-fiber chart and smooth-overlap assembly are not yet compiled.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "REGULAR-PREIMAGE/SUBMERSION / manifold-source fiber charts",
