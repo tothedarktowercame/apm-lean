@@ -71024,8 +71024,44 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the coefficient relative-chain isomorphism induced by this homeomorphism, then apply coefficient excision with compactness-derived closedness and interior containment before transporting exactness.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Lift the homeomorphism to coefficient relative chains, prove compatibility with the compact union-to-relative quotient map, and apply coefficient excision to the requested pairs before transporting all three exactness statements.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:nestedRightToExcised
+     "25ccb3a17696d9a791c80726831786989b811bb76f65c58d38a36792c032be99"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean /tmp/CoefficientCompactComplementNestedExcisionSource.lean ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean ConstructionTargets/CoefficientExcision.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-declaration audit over ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean",
+      :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "2fd86a7560602b6269b388ce0784d32a19ebf2e0",
+    :changed-paths
+    ["ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean"],
+    :fixture
+    {:path
+     "/tmp/CoefficientCompactComplementNestedExcisionSource.lean",
+     :sha256
+     "e615383be6fd700615cbbbe5bb5dce60a306dfa36064bb66898a1f9e2919278b",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture using the explicitly corrected dependency hash. The forward homeomorphism flattens the nested right compact-complement presentation to excisedSubspace (L complement) K while preserving both complement memberships. It compiles without warnings or placeholders; both dependency hashes match, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean"],
    :dag-node
