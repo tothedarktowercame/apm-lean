@@ -22826,100 +22826,139 @@
    :stop-condition
    "No supplied pointed chart homeomorphism, local orientation witness or local-homology isomorphism. Use actual chartAt restrictions and subtype cokernels. Do not infer overlap orientation coherence, global fundamental classes, localization monicity, gluing or frozen closure.",
    :evidence
-   {:probe
-    {:concurrent-reservations
-     ["t02a05-frozen-flux-closure-probe-refill44 was done-unreviewed when inspected; untouched."],
-     :placeholder-delta 0,
-     :residual
-     "No construction remains in this probe packet. Independent implementation and review remain. Overlap orientation coherence, global fundamental classes, localization monicity, gluing and frozen consumer closure are not claimed; reviewed STOPs and refutations remain preserved.",
-     :axiom-audits 20,
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read topology DAG, closure experiments and build-loop design; inspect both ledgers and five dependency PASS receipts",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientChartLocal.lean", :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientChartLocal.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientChartLocal.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "Compilation after adding forward, generator and projection audits",
-       :exit 1,
-       :correction
-       "Supplied explicit deleted subsets and continuous map in the projection theorem; removed an unused simplification argument."}
-      {:cmd
-       "Compilation after adding translated chart pair-composition equation",
-       :exit 1,
-       :correction
-       "Implicit elaboration reached the unchanged default heartbeat limit. Unfolded deletedMap and explicitly rewrote by pair_comp. Final compilation succeeds at the original limit."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientChartLocal.lean",
-      :sha256
-      "ae0f436d51a3141e8b2ddc32119aa2d6afcddf3b3f19013be3e9156c7f2ae6cd"},
-     :finding
-     "The complete actual-chart fixture compiles without placeholders or warnings. The actual chartAt restriction is followed by translation subtracting its distinguished coordinate. The translated target is proved open and contains zero. Actual deleted-point cokernel maps satisfy projection, composition and inverse equations. Explicit deleted-subset equality transports connect the inverse source-neighborhood inclusion, translated chart homology map, pointed target inclusion and reviewed model normalization. This constructs ambient local homology isomorphic to R, with exact forward composite, inverse laws and generator normalization. Integer and rational Euclidean chart examples compile.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientChartLocal.lean"
-       "ConstructionTargets/CoefficientChartLocal.md"],
-      :acceptance
-      {:namespace "ConstructionTargets.CoefficientChartLocal",
-       :implementation
-       "Promote the exact compiled fixture and document the ordered normalization composite and its pointwise scope.",
-       :declarations
-       ["E"
-        "coordinate"
-        "pointedTarget"
-        "pointed_open"
-        "pointed_zero"
-        "translateTarget"
-        "pointedChart"
-        "pointed_value"
-        "pointed_base"
-        "H"
-        "sourceTransport"
-        "pointed_deleted"
-        "targetTransport"
-        "localIso"
-        "forward_composite"
-        "inverse_left"
-        "inverse_right"
-        "generator"
-        "generator_normalization"
-        "integral_chart"
-        "rational_chart"
-        "pointed_projection"
-        "pointed_pair_inverse_right"
-        "pointed_pair_inverse_left"
-        "pointed_inverse_projection"
-        "pointed_pair_composite"],
-       :hypotheses
-       "R is a Type 0 commutative ring; M is Type 0 with a topology and ChartedSpace (EuclideanSpace ℝ (Fin (m+2))) M. Ambient local normalization retains T2Space M. No compactness, connectedness, orientation, supplied pointed chart equivalence or supplied local class is assumed.",
-       :consumer-equation
-       "The actual chartAt and neighborhood inclusions construct H_(m+2)(M,M minus x;R) isomorphic to ModuleCat.of R R, with explicit translated-chart forward composite and a constructed generator mapping to one.",
-       :consumer-residual
-       "Overlap compatibility for an appropriate orientation structure, global classes and localization remain before t98A02 gluing. Separately constructed pointwise generators do not establish an orientation or fundamental class.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientChartLocal."
-        "Reproduce twenty standard-only axiom audits and integer/rational Euclidean chart examples."
-        "Audit actual chart restrictions, translation y minus chart coordinate, translated target openness and zero membership."
-        "Audit deleted-subset equality transports, both actual projection equations, pair composition and pair inverse laws."
-        "Audit the exact ambient-local-to-model forward composite, normalization inverse laws and constructed generator equation."
-        "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."]}},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Overlap compatibility for an appropriate orientation structure, global classes and localization remain before t98A02 gluing. Separately constructed pointwise generators establish neither an orientation nor a fundamental class. No localization monicity, gluing or frozen consumer closure is claimed; reviewed STOPs, refutations and concurrent reservations remain unchanged.",
+    :gates
+    {:ambient-forward-composite :pass,
+     :deleted-subset-transports :pass,
+     :integer-rational-examples :pass,
+     :whitespace :pass,
+     :placeholders :pass,
+     :actual-chart-translation :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :two-file-scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :pair-composition-and-inverses :pass,
+     :normalization-inverse-laws :pass,
+     :fixture-compilation :pass,
+     :projection-equations :pass,
+     :target-openness-and-zero :pass,
+     :generator-normalization :pass},
+    :axiom-audits 20,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation emitted no warnings. Build replayed 22 dependency warnings; none originated in this module."],
+    :statement-hashes
+    {:pointed_zero
+     "210396c7d2d78507ab256e1363ccd3b3366ba56d2663ce04f6df40d6d7aa3062",
+     :sourceTransport
+     "f63e6fe2600a930f3b44a974102907505150348ab63fff6a8b9b67fe22177f3a",
+     :inverse_right
+     "a0bffc91b7e961978e9cce775c43664b64347d7f3b6af7a39e7c27836d2bc3c8",
+     :pointed_projection
+     "654288eada84659c55a49e8e3882541d71e6fed091dcc4b8e67f72644019c258",
+     :localIso
+     "f19c36a88eeccac7fb1b4b6dd6201dae1bf4371d84209f7054743f63a4a17a92",
+     :pointed_value
+     "f51d255d9cfbeb9f213f071bf1ce8d1da2003b26c24f6c4328b3fb4df4b6831f",
+     :generator_normalization
+     "ee9d9a4834ed1b8842c084cdf4c83c7669dabb6fcd96a431dafd8d3e8119763b",
+     :pointed_base
+     "30a9990faf7982b4a85805d2e5a72904cf1b807697b85311469bf31d75ad04a6",
+     :pointed_inverse_projection
+     "9302f04d873027ce825285ec2791751cfd0c320d5fca33d5936ffac4a0943393",
+     :targetTransport
+     "d68c874419ad44b0e3f4a780911c85408c41e189db10be9882e22a67c49d86e2",
+     :pointed_pair_composite
+     "a458be20ac73271aa4f54aee7ef52c737bcadabc79f5a8bebb4067b7ca84e86e",
+     :pointedTarget
+     "5a4d3c2eb4699f9758f6e7f39c23e53dc7b70e30c6b85251bd4317ea48853cc0",
+     :E
+     "a764ebcc02f6828182673955aac50c92631ad2bc1fe015ae80378605b1e71b8f",
+     :pointedChart
+     "a8afbfd32b510fc79e2b334c539b92095be1196f40917000cd3acba44633e152",
+     :pointed_pair_inverse_left
+     "eb013bdbe424e563d3ff294179c50705f8cefe0222f011370602495e8f8ae90c",
+     :generator
+     "488bdc21427f91fe243bec66a15a7d488a4e4177277aa7b4a142b0b2bd3930f8",
+     :coordinate
+     "3d54ef3aa650b1a1a7120f3a2647a4e1f0c0dd7e0466fa4fb80b959bf79dad5f",
+     :pointed_open
+     "76f632e1661eba10f1998a38ebbda816bda9da16325d17cfd790da44b459743c",
+     :pointed_deleted
+     "854c1f224e5490f64d468b9bb33bc7f23a53d98575b5fb558c368209c2d978db",
+     :rational_chart
+     "19da6bb658aad3220c53f9d84eb1d766a7fed750f15341b9d3547ba819dd1565",
+     :H
+     "e1be539e853a428cc1a5dbfbd2e328a418ad8ccd0ef6da2e4dbcc54899e14b93",
+     :translateTarget
+     "0ae5d62baef98bf815a391b36452d9eee0896383c9969c8e6c47fc6b6b8efcc0",
+     :forward_composite
+     "b445fe6692d750d4a0d77510ca512836e5c2961b0e7b5f5d3344ae0abab664e7",
+     :inverse_left
+     "d03383974071cfe94e71b011b3b7f0de27497b204d8fdff3609d776eb7d9f933",
+     :pointed_pair_inverse_right
+     "94331bbdbf298aad94d90a04dc16c77fbd95b16cb0bbf83994adcbe546f7f1a4",
+     :integral_chart
+     "3c601f0920387daf8a227c479c915eb013377b56685d1eecce9640950541d98a"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure rules, both ledgers and five dependency PASS receipts; inspect actual chart translation, transports and normalization composite",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "Verify fixture SHA256 before byte-identical promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientChartLocal.lean > /tmp/chartlocal-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientChartLocal.lean > /tmp/chartlocal-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientChartLocal > /tmp/chartlocal-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Validate twenty standard-only audits in each direct compilation log and inspect build warnings",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientChartLocal.lean ConstructionTargets/CoefficientChartLocal.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python audit of fixture equality, zero placeholders, twenty-six declaration hashes and exact two-file scope",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Construct actual translated-chart local homology normalization'",
+      :exit 0}
+     {:cmd "git diff --check c17b1ff4^ c17b1ff4", :exit 0}
+     {:cmd
+      "Python verification of pinned commit scope, fixture equality and scoped cleanliness; git status --short",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "c17b1ff4cd7551b2bf8af599968b4443be23c48c",
+    :changed-paths
+    ["ConstructionTargets/CoefficientChartLocal.lean"
+     "ConstructionTargets/CoefficientChartLocal.md"],
+    :fixture
+    {:path "/tmp/CoefficientChartLocal.lean",
+     :sha256
+     "ae0f436d51a3141e8b2ddc32119aa2d6afcddf3b3f19013be3e9156c7f2ae6cd",
+     :promotion :byte-identical},
+    :finding
+    "Promoted the exact fixture constructing the actual chartAt restriction followed by translation to zero. Explicit deleted-subset transports and neighborhood inclusions assemble the ambient local-homology normalization, with its exact six-arrow forward composite, inverse laws and generator mapping to one. Both translated pair projections, composition and inverse equations compile; T2Space M is retained for ambient normalization.",
+    :statement-hash-method
+    "SHA256 from declaration keyword to immediately before the space preceding := or where; excludes leading indentation and omit directives.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientChartLocal.lean"
     "ConstructionTargets/CoefficientChartLocal.md"],
