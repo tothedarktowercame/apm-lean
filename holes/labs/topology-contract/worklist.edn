@@ -71023,75 +71023,117 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the coefficient relative-chain isomorphism induced by this homeomorphism, then apply coefficient excision with compactness-derived closedness and interior containment before transporting exactness.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / compact-complement nested excision source",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientCompactComplementNestedExcisionSource.lean",
+    :fixture-sha256
+    "e615383be6fd700615cbbbe5bb5dce60a306dfa36064bb66898a1f9e2919278b",
+    :implementation
+    "Promote the exact fixture. Compile nestedRightToExcised. This supplies the point-set representation comparison needed to apply coefficient excision to the genuine compact union-to-relative map. Verify CoefficientCompactComplementUnionRelativeFormulas SHA256 894c53c84f2aabc6d6533fd7472c97caca005b3b7a6410e37463e44e353reti? no; use the exact verified SHA256 894c53c84f2aabc6d6533fd7472c97caca005b3b7a6410e37463e44e3532af4d and CoefficientExcision SHA256 46da907c33015a2696e2609583fb4d06182317f1ff79cfa05fbd3f182a03ad5a. Preserve arbitrary topological X and arbitrary subsets K and L. Require zero placeholders, no warnings and standard-only axioms. Do not claim coefficient chain or homology transport, excision hypotheses, final relative arrows, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The nested intersection of the left compact-complement piece inside the right compact-complement piece produced by the genuine union-to-relative map",
+    :target
+    "The standard coefficient-excision source subset excisedSubspace (L complement) K inside K complement",
+    :direction
+    "Construct an exact forward homeomorphism from the nested right-piece presentation to the standard excision-source presentation, flattening the ambient and right-piece subtype layers while preserving both K-complement and L-complement membership."},
+   :id
+   :coefficient-compact-complement-nested-excision-source-implementation-refill50,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-compact-complement-union-relative-formulas-implementation-refill50],
+   :current-residual
+   "Lift the homeomorphism to coefficient relative chains, prove compatibility with the compact union-to-relative quotient map, and apply coefficient excision to the requested pairs before transporting all three exactness statements.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative Mayer-Vietoris connecting morphism and three proved exactness statements with actual quotient-pair arrows. Reject any construction factoring the pair boundary through its own subspace map.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Coefficient excision, final relative-pair arrow identification and all three exactness transports remain. Localization monicity still requires the separate vanishing theorem.",
+     "Coefficient relative-chain transport, valid excision hypotheses, final arrow squares and all three exactness transports remain. Localization monicity still requires the separate vanishing theorem.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require valid coefficient-excision comparisons and their naturality with these explicit compact arrows before transporting the three final exactness statements.",
+      "Require the coefficient relative-chain isomorphism induced by this homeomorphism, then apply coefficient excision with compactness-derived closedness and interior containment before transporting exactness.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean"],
+      ["ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / compact-complement union-relative piece formulas",
+      "MANIFOLD FUNDAMENTAL CLASS / compact-complement nested excision source",
       :acceptance
       {:fixture
-       "/tmp/CoefficientCompactComplementUnionRelativeFormulas.lean",
+       "/tmp/CoefficientCompactComplementNestedExcisionSource.lean",
        :fixture-sha256
-       "894c53c84f2aabc6d6533fd7472c97caca005b3b7a6410e37463e44e3532af4d",
+       "e615383be6fd700615cbbbe5bb5dce60a306dfa36064bb66898a1f9e2919278b",
        :implementation
-       "Promote the exact fixture. Compile compactUnionToRelative_left and compactUnionToRelative_right. This supplies both explicit compact piece formulas required by the shared compact-support placeholder route. Verify CoefficientCompactComplementUnionToRelative SHA256 545c94e194b682e805c80e3b316996b2a303b84b0d549bd783dc6f748559e2a7. Preserve arbitrary topological X, arbitrary subsets K and L, arbitrary commutative-ring coefficients and the nonzero-capable union-to-relative construction. Require zero placeholders, no warnings and standard-only axioms. Do not claim coefficient excision, final relative-pair arrow identification, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile nestedRightToExcised. This supplies the point-set representation comparison needed to apply coefficient excision to the genuine compact union-to-relative map. Verify CoefficientCompactComplementUnionRelativeFormulas SHA256 894c53c84f2aabc6d6533fd7472c97caca005b3b7a6410e37463e44e353reti? no; use the exact verified SHA256 894c53c84f2aabc6d6533fd7472c97caca005b3b7a6410e37463e44e3532af4d and CoefficientExcision SHA256 46da907c33015a2696e2609583fb4d06182317f1ff79cfa05fbd3f182a03ad5a. Preserve arbitrary topological X and arbitrary subsets K and L. Require zero placeholders, no warnings and standard-only axioms. Do not claim coefficient chain or homology transport, excision hypotheses, final relative arrows, relative Mayer-Vietoris exactness, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean"],
+       ["lake env lean ConstructionTargets/CoefficientCompactComplementNestedExcisionSource.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "The explicit left-range and right-range inclusions into the supremum chain object of the compact-complement Mayer-Vietoris cover, followed by the compact union-to-relative map",
+       "The nested intersection of the left compact-complement piece inside the right compact-complement piece produced by the genuine union-to-relative map",
        :target
-       "Zero for the left piece and the forward right-range chain comparison followed by the production relative quotient projection for the right piece",
+       "The standard coefficient-excision source subset excisedSubspace (L complement) K inside K complement",
        :direction
-       "Prove exact forward equalities from each explicit compact piece composite to its target formula, retaining the left-zero and right-quotient orientations of the reviewed general comparison."},
+       "Construct an exact forward homeomorphism from the nested right-piece presentation to the standard excision-source presentation, flattening the ambient and right-piece subtype layers while preserving both K-complement and L-complement membership."},
       :id
-      :coefficient-compact-complement-union-relative-formulas-implementation-refill50,
+      :coefficient-compact-complement-nested-excision-source-implementation-refill50,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-compact-complement-union-to-relative-implementation-refill50],
+      [:coefficient-compact-complement-union-relative-formulas-implementation-refill50],
       :current-residual
-      "Construct the coefficient-excision isomorphisms from the nested compact-complement pair presentation to the four requested pairs in X, prove the arrow squares, and transport all three exactness segments.",
+      "Lift the homeomorphism to coefficient relative chains, prove compatibility with the compact union-to-relative quotient map, and apply coefficient excision to the requested pairs before transporting all three exactness statements.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientCompactComplementUnionToRelative >/tmp/cccurf-dep.log",
+       "lake build ConstructionTargets.CoefficientCompactComplementUnionRelativeFormulas >/tmp/ccnes-dep.log",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientCompactComplementUnionRelativeFormulas.lean",
+       "lake env lean /tmp/CoefficientCompactComplementNestedExcisionSource.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientCompactComplementUnionRelativeFormulas.lean ConstructionTargets/CoefficientCompactComplementUnionToRelative.lean",
+       "sha256sum /tmp/CoefficientCompactComplementNestedExcisionSource.lean ConstructionTargets/CoefficientCompactComplementUnionRelativeFormulas.lean ConstructionTargets/CoefficientExcision.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/CoefficientCompactComplementNestedExcisionSource.lean",
+       :exit 1,
+       :correction
+       "Added the missing TopologicalSpace parameter, then corrected the two nested subtype proof fields: membership in the left piece supplies the K-complement proof, while membership in the right piece supplies the L-complement proof. The corrected fixture compiles without warnings or placeholders."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/CoefficientCompactComplementUnionRelativeFormulas.lean",
+      "/tmp/CoefficientCompactComplementNestedExcisionSource.lean",
       :sha256
-      "894c53c84f2aabc6d6533fd7472c97caca005b3b7a6410e37463e44e3532af4d",
+      "e615383be6fd700615cbbbe5bb5dce60a306dfa36064bb66898a1f9e2919278b",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one missing compact formula prerequisite. With both source maps written explicitly, the compact-specialized genuine union-to-relative map kills the left compact-complement range and restricts on the right range to the forward range-chain isomorphism followed by the production relative quotient projection. Coefficient excision and the three final exactness transports remain.",
+     "Compiled exactly one missing excision-source representation prerequisite. The nested intersection of the left compact-complement piece inside the right piece is homeomorphic to excisedSubspace (L complement) K, the canonical source of coefficient excision from the pair (K complement, complement of K union L) to (X, L complement). No excision isomorphism or final exactness is claimed.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / genuine coefficient relative Mayer-Vietoris chain sequence",
@@ -71113,7 +71155,8 @@
     :coefficient-union-to-production-relative-comparison-implementation-refill50-corrected
     :coefficient-union-to-production-relative-comparison-implementation-refill50-hash-corrected
     :coefficient-compact-complement-union-to-relative-implementation-refill50
-    :coefficient-compact-complement-union-relative-formulas-implementation-refill50],
+    :coefficient-compact-complement-union-relative-formulas-implementation-refill50
+    :coefficient-compact-complement-nested-excision-source-implementation-refill50],
    :current-residual
    "The absolute complement sequence and many comparison maps are reviewed, but the named relative connecting map is zero. A genuine relative chain sequence or proved excision conjugation is required.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
