@@ -11712,6 +11712,18 @@
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789000009107-17427-85cee1c6",
+     :commands
+     ["lake env lean /tmp/T00A03Boundary.lean"
+      "Python read-only audit of fixture SHA256, recorded frozen source, three statement hashes, placeholders and scope"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show b6fca559:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --exit-code"
+      "git diff --check"],
+     :finding
+     "Verified recorded STOP at b6fca559: fixture hash matches; frozen statements unchanged; placeholders 2->2; three clean axiom audits. Exact residual equivalence and literal max-norm pants membership are proved without assuming geometric classification or the component-count conclusion. No closure claimed; no ledger edits."},
     :campaign-termination false,
     :changed-paths [],
     :fixture
@@ -11728,7 +11740,7 @@
     :mathematical-refutation false,
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "SURFACE CUTTING: exact maximal-curve pants-decomposition consumer",
