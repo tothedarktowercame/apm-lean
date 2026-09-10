@@ -28735,108 +28735,130 @@
     "Confirm no numerical Hausdorff normalization, sphere mass, Stokes, period or consumer closure claim is introduced."
     "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."],
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Specialize the exact formula to the actual upper and lower sphere-cap graphs, assemble compatible measurable charts, and determine the Euclidean Hausdorff-to-volume normalization before evaluating literal sphere masses and frozen integrals.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency PASS receipts",
-       :exit 0}
-      {:cmd
-       "Inspect C1GraphPartition, C1GraphDensityControl, C1GraphMeasureDecomposition, ENNRealCountableBounds, ENNRealMultiplicativeSqueeze and Mathlib ENNReal integral and tsum APIs",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/codex13-checkpoint46-assembly/C1GraphGlobalBounds.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-checkpoint46-assembly/C1GraphGlobalBounds.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint46-assembly/C1GraphGlobalBounds.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "Python comment-stripped placeholder, whitespace and eleven standard-only axiom audits",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edPk",
-       :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial C1 graph global-bounds compilation",
-       :exit 1,
-       :correction
-       "Added the positivity hypotheses explicitly to the scalar product lemma, corrected the upper-bound association, and used the nondeprecated ordered multiplication theorem."}
-      {:cmd "Compilation after the per-piece bounds succeeded",
-       :exit 1,
-       :correction
-       "Included the open-domain, differentiability and positive-error hypotheses in the global theorem so its partition terms were well scoped. The complete exact-area fixture and audited rerun then compiled without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path
-      "/tmp/codex13-checkpoint46-assembly/C1GraphGlobalBounds.lean",
-      :sha256
-      "9755e82c8a8c5e57e88899d665294b404ae735c689a17ef80f983031d00f6a2c",
-      :placeholder-count 0},
-     :finding
-     "The complete placeholder-free fixture proves the requested exact C1 graph Hausdorff-area formula. On every reviewed partition piece, the actual derivative-density integral is compared with the selected constant density. Combining those inequalities with the reviewed graph bounds produces factors (1-epsilon)^(d+1) and (1+epsilon)^(d+1); the lower estimate uses the proved ENNReal inequality (1-epsilon)(1+epsilon)≤1 and performs no division or cancellation. Exact countable decompositions and ENNReal summation give global bounds even when either side is zero or infinite. ENNRealMultiplicativeSqueeze then proves equality. The displayed density is rewritten to ofReal(sqrt(1+norm(fderiv real f x)^2)). Empty-domain, zero-function, dimension-two and dimension-three cases compile. No numerical Hausdorff-to-volume normalization, sphere mass, Stokes theorem, period result or consumer closure is inferred. No canonical source or ledger was edited; current reservations, reviewed STOPs and refutations are preserved.",
-     :implementation
-     {:hypotheses
-      "E is EuclideanSpace real (Fin d), U is open and f is ContDiffOn real 1 on U. The exact theorem imposes no finiteness or integrability assumption. Its temporary partition estimates use 0<epsilon<1 and the actual d-dimensional Hausdorff measures on E and WithLp 2 of E times real.",
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile the exact fixture and canonical target; run lake build ConstructionTargets.C1GraphGlobalBounds."
-       "Reproduce eleven standard-only axiom audits."
-       "Audit that every partition and local graph estimate comes from C1GraphPartition and every density comparison comes from C1GraphDensityControl."
-       "Verify the per-piece lower and upper bounds, including the ENNReal proof of (1-epsilon)(1+epsilon)≤1."
-       "Verify exact graph-measure and density-integral countable decompositions and summation without finite-measure assumptions."
-       "Verify ENNRealMultiplicativeSqueeze is applied with exponent d+1 and without cancellation or conversion to real numbers."
-       "Verify the displayed square-root density equation and empty-domain, zero-function, dimension-two and dimension-three cases."
-       "Confirm no numerical Hausdorff normalization, sphere mass, Stokes, period or consumer closure claim is introduced."
-       "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."],
-      :consumer-residual
-      "Specialize to upper and lower sphere-cap graphs, prove the measurable chart assembly, and determine Euclidean Hausdorff-to-volume normalization before literal sphere-mass evaluation.",
-      :scope
-      ["ConstructionTargets/C1GraphGlobalBounds.lean"
-       "ConstructionTargets/C1GraphGlobalBounds.md"],
-      :axioms :standard-only,
-      :consumer-equation
-      "The d-dimensional Hausdorff measure of the actual L2 graph of f over U equals the Hausdorff lintegral over U of ENNReal.ofReal(sqrt(1+norm(fderiv real f x)^2)), with the existing diameter-power convention and no suppressed normalization factor.",
-      :declarations
-      ["a"
-       "b"
-       "P"
-       "D"
-       "I"
-       "G"
-       "integral_upper"
-       "selected_integral_upper"
-       "ab_le_one"
-       "piece_global_bounds"
-       "global_bounds"
-       "exact_area"
-       "exact_area_value"
-       "empty_domain"
-       "zero_function"
-       "dimension_two"
-       "dimension_three"],
-      :namespace "ConstructionTargets.C1GraphGlobalBounds",
-      :implementation
-      "Promote the exact compiled fixture and document the per-piece exponent d+1 bounds, countable summation and ENNReal squeeze argument."},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Specialize the exact formula to the actual upper and lower sphere-cap graphs, assemble compatible measurable charts, and determine the Euclidean Hausdorff-to-volume normalization before evaluating literal sphere masses and frozen integrals.",
+    :gates
+    {:canonical-compile :pass,
+     :ab-le-one :pass,
+     :whitespace :pass,
+     :reviewed-partition-uptake :pass,
+     :fixture-hash :pass,
+     :dimension-three :pass,
+     :axiom-audits 11,
+     :zero-function :pass,
+     :dimension-two :pass,
+     :exact-scope :pass,
+     :empty-domain :pass,
+     :ennreal-summation :pass,
+     :claim-boundary :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :square-root-density :pass,
+     :reviewed-density-control-uptake :pass,
+     :squeeze-exponent-d-plus-one :pass,
+     :fixture-compile :pass,
+     :piece-lower-upper-bounds :pass,
+     :countable-decompositions :pass,
+     :forbidden-declaration-scan :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"selected_integral_upper"
+     "5b154d7611856345c0010082d05787ebb9d09eceb3fb58d3f9fa67cfbe9092cf",
+     "ab_le_one"
+     "47d0cfa91c6754ac5615cab592474f407d19adec3f1e5370b26f6926bf140c85",
+     "global_bounds"
+     "23829e204aef452eb01798210b660f782a33ccb5ec69571de3791cdd8c42af41",
+     "dimension_three"
+     "75968e3e9910c4e14168df26963a7ea230c0dab51c16d0ad5e76afd541950c80",
+     "empty_domain"
+     "0aa1945fa68929f026f46b940d937c9b448b13e3039e0bfadce01214251df9ed",
+     "zero_function"
+     "99070fffe1ad157a86ad1852741f6bf10cff381d0d6996c3ad0e29f21018c607",
+     "exact_area_value"
+     "7aefb936ef4e0e9f8a1e1fce317f28bafa303ee65a1b9db8f44a77efa205740b",
+     "exact_area"
+     "299589a18dc6e5dfc98c9e0583cce99d8ea4c6d6df48288e8ee2a5ef0b143647",
+     "integral_upper"
+     "1e86ed4b0da5a72ca3d4c894fbbc34440e65ffac4df769e4013f019c133b1ff0",
+     "dimension_two"
+     "37c2276f5315754cd87f810355470914ffb1878717b52d6feb7e710e23473efe",
+     "piece_global_bounds"
+     "0aa4b40bd3b47dd724526673be5211e5dcd45373d0e786abf3a522d2a1ff97b1"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, build-loop design, both ledgers and reviewed dependency receipts",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/codex13-checkpoint46-assembly/C1GraphGlobalBounds.lean ConstructionTargets/C1GraphGlobalBounds.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/codex13-checkpoint46-assembly/C1GraphGlobalBounds.lean ConstructionTargets/C1GraphGlobalBounds.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint46-assembly/C1GraphGlobalBounds.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/C1GraphGlobalBounds.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.C1GraphGlobalBounds",
+      :exit 0}
+     {:cmd
+      "Audit eleven namespace-local standard-only axiom reports and zero warnings or errors",
+      :exit 0}
+     {:cmd
+      "Audit use of C1GraphPartition, C1GraphDensityControl, exact countable decompositions, ENNRealCountableBounds, exponent d+1, ab_le_one and ENNRealMultiplicativeSqueeze.eq_of_bounds",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' ConstructionTargets/C1GraphGlobalBounds.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n '[[:blank:]]+$' ConstructionTargets/C1GraphGlobalBounds.lean ConstructionTargets/C1GraphGlobalBounds.md",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "git diff --cached --check and exact two-file staged-scope audit",
+      :exit 0}
+     {:cmd "git show --check --oneline HEAD && git diff --check",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "Initial deterministic statement-hash audit requiring every theorem body to begin with := by",
+      :exit 1,
+      :correction
+      "Generalized the audit boundary to the first := token so direct term proofs for dimension_two and dimension_three are hashed by the same proposition-only convention; the corrected audit produced all eleven hashes."}],
+    :dependency-uptake
+    [:oriented-checkpoint45-c1-graph-measurable-approximation-partition-1
+     :ennreal-multiplicative-unit-squeeze-1
+     :c1-graph-density-derivative-control-1
+     :c1-graph-countable-measure-decomposition-1
+     :ennreal-countable-integral-sum-bounds-1],
+    :commit "3c551fb6a315e4c16a111fd87beaf495a3ff6679",
+    :changed-paths
+    ["ConstructionTargets/C1GraphGlobalBounds.lean"
+     "ConstructionTargets/C1GraphGlobalBounds.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint46-assembly/C1GraphGlobalBounds.lean",
+     :sha256
+     "9755e82c8a8c5e57e88899d665294b404ae735c689a17ef80f983031d00f6a2c",
+     :placeholder-count 0},
+    :seat "codex-14"},
    :consumer-residual
    "Specialize to upper and lower sphere-cap graphs, prove the measurable chart assembly, and determine Euclidean Hausdorff-to-volume normalization before literal sphere-mass evaluation.",
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/C1GraphGlobalBounds.lean"
     "ConstructionTargets/C1GraphGlobalBounds.md"],
