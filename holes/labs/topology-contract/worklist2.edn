@@ -28368,109 +28368,168 @@
    :other-consumers [:t95J05 :t01J06 :t94A10]}
   {:consumer :t02A05,
    :stop-condition
+   "Bank only the exact graph-measure and density-integral decompositions, density continuity and piecewise density comparisons. Do not claim summed global bounds, exact graph area, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/C1GraphMeasureDecomposition.lean"
+    "ConstructionTargets/C1GraphMeasureDecomposition.md"],
+   :dag-node
+   "MANIFOLD INTEGRATION: countable graph-measure and density-integral decomposition",
+   :acceptance
+   {:hypotheses
+    "E is EuclideanSpace real (Fin d), U is open, f is ContDiffOn real 1 on U, and epsilon is positive. Measures are the actual d-dimensional Hausdorff measures on E and WithLp 2 of E times real. No finiteness, integrability or numerical normalization hypothesis is imposed.",
+    :gates
+    ["Verify fixture SHA256 before implementation."
+     "Compile fixture and canonical target; run lake build ConstructionTargets.C1GraphMeasureDecomposition."
+     "Reproduce nine standard-only axiom audits and dimension-two and dimension-three examples."
+     "Audit continuity of the actual derivative density on U."
+     "Verify exact countable additivity for the measurable disjoint graph images and domain pieces."
+     "Verify the selected constant-density integral and both density comparison directions use the reviewed derivative-proximity theorem."
+     "Confirm no finite-measure assumption, ENNReal cancellation or numerical Hausdorff normalization is introduced."
+     "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."],
+    :evidence
+    {:probe
+     {:outcome :go,
+      :seat "codex-13",
+      :fixture
+      {:path
+       "/tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+       :sha256
+       "de4423dbec32306d4c5191a7b165dbf09dd446d3c76f52584b619ae9dda421af"},
+      :commands
+      [{:cmd
+        "lake env lean /tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+        :exit 0}],
+      :warnings [],
+      :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+    :consumer-residual
+    "Combine the exact decompositions with C1GraphPartition.piece_bounds, integrate the density comparisons, sum the inequalities and apply ENNRealMultiplicativeSqueeze.",
+    :axioms :standard-only,
+    :consumer-equation
+    "The actual graph measure and actual derivative-density integral decompose exactly over the reviewed pairwise-disjoint measurable partition. On every piece the selected derivative density has the stated constant integral and is compared in both directions with the varying derivative density.",
+    :declarations
+    ["domainMeasure"
+     "ambientMeasure"
+     "densityAt"
+     "densityAt_value"
+     "densityAt_continuousOn"
+     "graph_measure_sum"
+     "density_integral_sum"
+     "selected_density_integral"
+     "density_piece_bounds"
+     "selected_density_upper"
+     "dimension_two"
+     "dimension_three"],
+    :namespace "ConstructionTargets.C1GraphMeasureDecomposition",
+    :implementation
+    "Promote the exact compiled fixture and document how its countable decomposition and density comparisons feed the remaining global ENNReal bounds."},
+   :id :c1-graph-countable-measure-decomposition-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint45-c1-graph-measurable-approximation-partition-1
+    :c1-graph-density-derivative-control-1],
+   :current-residual
+   "The exact graph-area proof needs actual countable-additivity equations for the reviewed graph partition and pointwise comparisons between selected and varying derivative densities.",
+   :other-consumers [:t95J05 :t01J06 :t94A10]}
+  {:consumer :t02A05,
+   :stop-condition
    "Do not assume an area formula, integrability, finite measure, numerical Hausdorff normalization or measure-preserving parameterization. Retain actual L2 graph and Borel structures. Do not infer sphere masses, Stokes, periods or consumer closure. Exclude reserved orientation, covering and surface work; use a unique row-specific scratch directory.",
    :evidence
    {:probe
-    {:concurrent-reservations
-     [:finite-translated-embedded-arcs-chart-containment-implementation-refill49],
-     :placeholder-delta 0,
+    {:placeholder-delta 0,
      :residual
-     "Integrate the compiled density comparisons on each measurable partition piece, use countable additivity for the actual graph and domain decompositions, derive global bounds for every epsilon, and apply the reviewed ENNReal squeeze theorem. Sphere charts and numerical normalization remain downstream; reservations, reviewed STOPs and refutations are preserved.",
-     :axiom-audits 11,
+     "Integrate and sum the compiled piecewise graph and density inequalities to obtain global multiplicative bounds for every positive epsilon below one, including zero and infinite measures, then apply ENNRealMultiplicativeSqueeze to prove exact C1 graph area.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer :t02A05,
       :stop-condition
-      "Bank density continuity and derivative-perturbation bounds only. Do not claim global integral bounds, exact graph area, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path
-         "/tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
-         :sha256
-         "52879bd1fed15c508c3cf9e31cfb1ae8172fdf31414a3ccfe9cd655d438b7a2c"},
-        :commands
-        [{:cmd
-          "lake env lean /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+      "Bank only the exact graph-measure and density-integral decompositions, density continuity and piecewise density comparisons. Do not claim summed global bounds, exact graph area, numerical Hausdorff normalization, sphere masses, Stokes, periods or consumer closure.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/C1GraphDensityControl.lean"
-       "ConstructionTargets/C1GraphDensityControl.md"],
+      ["ConstructionTargets/C1GraphMeasureDecomposition.lean"
+       "ConstructionTargets/C1GraphMeasureDecomposition.md"],
       :dag-node
-      "MANIFOLD INTEGRATION: graph-density control under derivative perturbation",
+      "MANIFOLD INTEGRATION: countable graph-measure and density-integral decomposition",
       :acceptance
-      {:namespace "ConstructionTargets.C1GraphDensityControl",
-       :implementation
-       "Promote the exact compiled fixture and document its L2 norm construction, continuity and real and ENNReal perturbation bounds.",
-       :declarations
-       ["density"
-        "density_sq"
-        "density_nonneg"
-        "one_le_density"
-        "density_eq_sqrt"
-        "density_sub_le"
-        "abs_density_sub_le"
-        "density_lipschitz"
-        "continuous_density"
-        "continuous_ennrealDensity"
-        "measurable_ennrealDensity"
-        "multiplicative_bounds"
-        "ofReal_multiplicative_bounds"
-        "functional_density_eq"
-        "dimension_two"
-        "dimension_three"],
-       :hypotheses
-       "X is an arbitrary real normed additive commutative group for the metric estimates. The measurable-density theorem additionally uses the Borel measurable structure. Multiplicative estimates assume only epsilon≥0 and norm(x-y)≤epsilon; no finite-dimensionality, strict epsilon bound or measure hypothesis is required.",
-       :consumer-equation
-       "The graph density is the actual L2 norm of (1,x), hence equals sqrt(1+norm(x)^2), is at least one and is 1-Lipschitz. If norm(x-y)≤epsilon, its real and ENNReal values lie between the explicit factors 1-epsilon and 1+epsilon times the density at y.",
-       :consumer-residual
-       "Use derivative_proximity on every reviewed partition piece, integrate these density inequalities, sum the disjoint piece bounds and apply ENNRealMultiplicativeSqueeze.",
-       :axioms :standard-only,
+      {:hypotheses
+       "E is EuclideanSpace real (Fin d), U is open, f is ContDiffOn real 1 on U, and epsilon is positive. Measures are the actual d-dimensional Hausdorff measures on E and WithLp 2 of E times real. No finiteness, integrability or numerical normalization hypothesis is imposed.",
        :gates
        ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.C1GraphDensityControl."
-        "Reproduce eleven standard-only axiom audits and dimension-two/three functional examples."
-        "Audit the literal WithLp 2 representation and square-root identity."
-        "Verify the density lower bound and 1-Lipschitz estimate from actual L2 norm inequalities."
-        "Verify continuity and Borel measurability of the ENNReal-valued density."
-        "Verify real and ENNReal multiplicative bounds, including epsilon greater than one without invalid subtraction."
-        "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."]},
-      :id :c1-graph-density-derivative-control-1,
+        "Compile fixture and canonical target; run lake build ConstructionTargets.C1GraphMeasureDecomposition."
+        "Reproduce nine standard-only axiom audits and dimension-two and dimension-three examples."
+        "Audit continuity of the actual derivative density on U."
+        "Verify exact countable additivity for the measurable disjoint graph images and domain pieces."
+        "Verify the selected constant-density integral and both density comparison directions use the reviewed derivative-proximity theorem."
+        "Confirm no finite-measure assumption, ENNReal cancellation or numerical Hausdorff normalization is introduced."
+        "Run placeholder, forbidden-declaration, whitespace and exact two-file scope checks; commit the scoped implementation."],
+       :evidence
+       {:probe
+        {:outcome :go,
+         :seat "codex-13",
+         :fixture
+         {:path
+          "/tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+          :sha256
+          "de4423dbec32306d4c5191a7b165dbf09dd446d3c76f52584b619ae9dda421af"},
+         :commands
+         [{:cmd
+           "lake env lean /tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
+           :exit 0}],
+         :warnings [],
+         :axioms ["propext" "Classical.choice" "Quot.sound"]}},
+       :consumer-residual
+       "Combine the exact decompositions with C1GraphPartition.piece_bounds, integrate the density comparisons, sum the inequalities and apply ENNRealMultiplicativeSqueeze.",
+       :axioms :standard-only,
+       :consumer-equation
+       "The actual graph measure and actual derivative-density integral decompose exactly over the reviewed pairwise-disjoint measurable partition. On every piece the selected derivative density has the stated constant integral and is compared in both directions with the varying derivative density.",
+       :declarations
+       ["domainMeasure"
+        "ambientMeasure"
+        "densityAt"
+        "densityAt_value"
+        "densityAt_continuousOn"
+        "graph_measure_sum"
+        "density_integral_sum"
+        "selected_density_integral"
+        "density_piece_bounds"
+        "selected_density_upper"
+        "dimension_two"
+        "dimension_three"],
+       :namespace "ConstructionTargets.C1GraphMeasureDecomposition",
+       :implementation
+       "Promote the exact compiled fixture and document how its countable decomposition and density comparisons feed the remaining global ENNReal bounds."},
+      :id :c1-graph-countable-measure-decomposition-1,
       :kind :reusable-theorem,
       :depends-on
-      [:ennreal-multiplicative-unit-squeeze-1
-       :oriented-checkpoint45-c1-graph-measurable-approximation-partition-1],
+      [:oriented-checkpoint45-c1-graph-measurable-approximation-partition-1
+       :c1-graph-density-derivative-control-1],
       :current-residual
-      "Summing the partition bounds requires pointwise comparison between each selected derivative density and the actual derivative density.",
+      "The exact graph-area proof needs actual countable-additivity equations for the reviewed graph partition and pointwise comparisons between selected and varying derivative densities.",
       :other-consumers [:t95J05 :t01J06 :t94A10]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure experiments and build-loop design; inspect both ledgers and dependency PASS receipts",
+       "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md, both ledgers and dependency PASS receipts",
        :exit 0}
       {:cmd
-       "Inspect Mathlib Jacobian partitions, graph-area availability and ENNReal integration APIs",
+       "Inspect C1GraphPartition, C1GraphDensityControl, ENNRealMultiplicativeSqueeze and Mathlib countable measure/integral APIs",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean > /tmp/codex13-checkpoint46-density/compile.log",
+       "lake env lean /tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
+       "sha256sum /tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
        :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd
-       "Python comment-stripped placeholder, whitespace and eleven standard-only axiom audits",
+       "Python comment-stripped placeholder, whitespace and nine standard-only axiom audits",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -28481,26 +28540,27 @@
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
      :diagnostic-history
-     [{:cmd "Initial density-control fixture compilation",
+     [{:cmd "Initial graph measure decomposition compilation",
        :exit 1,
        :correction
-       "Used the WithLp first-coordinate norm bound for density≥1, corrected the square-root equality direction, aligned the triangle inequality subtraction order and split the ENNReal lower bound at epsilon≤1."}
-      {:cmd "Compilation after adding continuity and examples",
+       "Replaced the unavailable MeasurableOn formulation with a continuous-on-domain density theorem and avoided dependent rewriting of the partitioned domain."}
+      {:cmd
+       "Compilation after introducing a piecewise measurable extension",
        :exit 1,
        :correction
-       "Rewrote source distance as the norm of a difference and added explicit Borel hypotheses to the generic measurable-density theorem. Final compilation succeeds without warnings."}],
+       "The extension required unavailable measurable structure and decidability instances for the continuous-linear-map carrier. Removed the unnecessary global extension, retained the stronger usable ContinuousOn result, and proved the restricted-measure equality explicitly. Final compilation succeeds without warnings."}],
      :changed-paths [],
      :fixture
      {:path
-      "/tmp/codex13-checkpoint46-density/C1GraphDensityControl.lean",
+      "/tmp/codex13-checkpoint46-sums/C1GraphMeasureDecomposition.lean",
       :sha256
-      "52879bd1fed15c508c3cf9e31cfb1ae8172fdf31414a3ccfe9cd655d438b7a2c",
+      "de4423dbec32306d4c5191a7b165dbf09dd446d3c76f52584b619ae9dda421af",
       :placeholder-count 0},
      :finding
-     "Exactly one complete compiled analytic prerequisite is supplied. The square-root graph density is realized as an actual L2 norm, proved 1-Lipschitz and measurable, and controlled multiplicatively under the reviewed derivative-proximity hypothesis in both real and ENNReal forms. Mathlib still has no exact dimension-increasing graph-area theorem. The parent is not GO: countable integration of these inequalities and global graph bounds remain unproved.",
+     "Exactly one complete compiled analytic measure-decomposition prerequisite is supplied on the route of the open t02A05 placeholder and the shared t95J05, t01J06 and t94A10 routes. The actual derivative graph density is continuous on the open C1 domain. The reviewed measurable partition gives exact countable-sum identities for both the Hausdorff measure of the actual L2 graph and the domain density integral. Each selected constant density integrates to its value times the piece measure, and the fixture proves both actual-to-selected and selected-to-actual ENNReal density comparisons from derivative proximity. The parent is not GO: the piecewise Hausdorff bounds and density comparisons must still be integrated and summed into global bounds for every epsilon, then the reviewed ENNReal squeeze theorem must be applied. Sphere-chart assembly and numerical Hausdorff normalization remain downstream. No canonical source or ledger was edited; the concurrent translated-arc implementation, reviewed STOPs and refutations are preserved.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD INTEGRATION: exact C1 graph Hausdorff area from measurable approximation partitions",
@@ -28530,7 +28590,8 @@
    [:oriented-checkpoint46-measurable-graph-partition-and-consumer-refill
     :oriented-checkpoint45-c1-graph-measurable-approximation-partition-1
     :ennreal-multiplicative-unit-squeeze-1
-    :c1-graph-density-derivative-control-1],
+    :c1-graph-density-derivative-control-1
+    :c1-graph-countable-measure-decomposition-1],
    :current-residual
    "Reviewed measurable pieces satisfy uniform graph bounds and approximate actual derivatives. Prove that their sums converge to the integral of the pointwise graph density and squeeze the graph measure to that integral.",
    :other-consumers [:t95J05 :t01J06 :t94A10]}
