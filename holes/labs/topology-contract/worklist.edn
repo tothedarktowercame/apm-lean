@@ -71670,8 +71670,42 @@
   {:consumer "t00A03",
    :stop-condition
    "Require a relative Sard theorem on the coincidence square minus the four endpoint pairs, plus explicit inclusion of any coincident prescribed endpoints in the finite fiber; then choose one good parameter tuple for every pair and prove chart-transition compatibility.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Apply relative Sard on the coincidence square away from the four endpoint pairs, include coincident prescribed endpoints in each finite fiber, choose parameters simultaneously, retain embeddings, and prove chart-transition compatibility.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:endpoint_cases
+     "d9b17566e62df8f95fa91225f9baa9ee4d1fcbc933621cac51958e6898291c83",
+     :interior_direction_or_endpoint_pair
+     "6a8819200da7874dcbc5d1bf44556233c85df9408692b2767e484467155f043f"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean /tmp/PlaneArcEndpointPairBoundaryDecomposition.lean ConstructionTargets/PlaneArcEndpointPairParameterSurjectivity.lean",
+      :exit 0}
+     {:cmd
+      "python3 placeholder-and-two-declaration audit over ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :commit "f62f16eab6b92e9e6e4bac0713e9fae20068b704",
+    :changed-paths
+    ["ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean"],
+    :fixture
+    {:path "/tmp/PlaneArcEndpointPairBoundaryDecomposition.lean",
+     :sha256
+     "862a3c2044d4388bf12dd8c4b8477822de6721dcbd11f39604163c873c1d8d4b",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture. Every closed-unit-interval parameter outside the interior is exactly zero or one, and every parameter pair either has an interior coordinate or is one of the four explicit endpoint pairs. The module compiles without warnings or placeholders, its dependency hash matches, the commit changes exactly the scoped path, and the worktree is clean."},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/PlaneArcEndpointPairBoundaryDecomposition.lean"],
    :dag-node
