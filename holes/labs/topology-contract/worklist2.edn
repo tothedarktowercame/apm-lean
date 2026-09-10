@@ -11477,8 +11477,166 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :preserved-boundaries
+    ["All reviewed unresolved STOPs, including t96J06 and full coefficient subdivision, remain in force."
+     "Preserve t96J05, t01A05 and t96J07 refutations and the historical ordinary-H0(S0) refutation for t94J08."
+     "Exclude the other campaign's manifold-fiber chart work, radial-counterexample preservation and reserved successor portfolio."
+     "No inferred orientation coherence, positive-degree small-chain comparison, excision or rational S2 H1/H2 calculation."],
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd "python3 /tmp/Checkpoint18Census.py", :exit 0}
+     {:cmd
+      "Read DAG representations and problem clusters, foundational-program note, closure stop rules, both ledgers and dependency reviews",
+      :exit 0}
+     {:cmd "sed -n '1,175p' problems/t00A03/lean/Main.lean", :exit 0}
+     {:cmd "sed -n '213,252p' problems/t00A03/lean/Main.lean", :exit 0}
+     {:cmd "sha256sum problems/t00A03/lean/Main.lean", :exit 0}
+     {:cmd
+      "git log --oneline f29cda413ad7550f086cc8ccb4d976f2cc1fa1af..HEAD",
+      :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :measurement
+    {:baseline "f29cda413ad7550f086cc8ccb4d976f2cc1fa1af",
+     :placeholder-after 68,
+     :existing-consumers 58,
+     :missing-consumers [:t93A05],
+     :placeholder-delta 0,
+     :zero-placeholder-consumers 21,
+     :specification-repairs 0,
+     :open-consumers 37,
+     :placeholder-before 68,
+     :head "a53a617eb3023a9aa165c1d0d2fdf10d73a37993",
+     :named-consumers 59,
+     :near-closure-consumers 27,
+     :frozen-closures 0,
+     :infrastructure-packets
+     {:modules-before 650,
+      :modules-after 655,
+      :portfolio 2,
+      :concurrent 3},
+     :concurrent-commits ["937a5c78" "e9f968b9" "b636aab0"],
+     :review-outcomes
+     {:projective-nonbounding-stop-pass
+      "invoke-1788998706415-17387-aea31379",
+      :subdivision-stop-pass "invoke-1788999604225-17413-a93c9ada",
+      :cone-implementation-pass "invoke-1788999046112-17397-6b6616fe",
+      :realization-implementation-pass
+      "invoke-1788999348917-17407-c35da2b2"},
+     :portfolio-commits ["9dffaa35" "25313dd9"],
+     :census
+     {:path "/tmp/Checkpoint18Census.json",
+      :sha256
+      "66d1877349f7d1c42a456ebd643e4f7d29d7400f1d744c1cf9700b3bba009653"}},
+    :replacement-items
+    [{:consumer :t00A03,
+      :stop-condition
+      "Preserve literal complement components, the exact pants subtype, homological genus and topological embedding hypotheses. No assumed surface classification, collars, Euler additivity or boundary-incidence count.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SURFACE CUTTING: exact maximal-curve pants-decomposition consumer",
+      :acceptance
+      {:placeholder-after 0,
+       :frozen-file "problems/t00A03/lean/Main.lean",
+       :stop-condition
+       "No partial GO, assumed component classification, silent norm/model replacement or unproved refutation. STOP names the exact missing topology or invariant theorem.",
+       :gates
+       ["GO requires a complete zero-placeholder exact frozen fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+        "Propose implementation scope only after complete closure compiles."],
+       :axioms :standard-only,
+       :placeholder-before 2,
+       :probe
+       "Audit both frozen bridges and the final theorem, including the norm used in the literal pants subtype, genus at least two, maximality up to the exact free-homotopy predicate, and the absence of smoothness assumptions on embedded curves. Construct the component homeomorphisms and actual cutting/incidence argument giving n=3g-3. Compile a complete temporary exact Main if closure is available. Otherwise compile precise typed boundary evidence. A refutation requires a compiled admissible instance contradicting the complete conclusion.",
+       :consumer-equation
+       "Every component of the literal complement of the maximal essential disjoint nonparallel curve family is homeomorphic to the specified open pants subtype, and the number of curves is 3g-3.",
+       :frozen-sha256
+       "e35f2b14e3fe3485840dacc50cf3feb9b00fd4e1f9b1203d068cee33bcbfa143"},
+      :id :oriented-checkpoint18-t00a03-exact-pants-decomposition-1,
+      :kind :final-adapter,
+      :depends-on
+      [:oriented-checkpoint18-projective-boundary-and-subdivision-refill],
+      :current-residual
+      "Two placeholders assert that every actual complementary component is homeomorphic to the literal open pants model and that the maximal curve family has cardinality 3g-3. Genus is specified through actual integral singular homology.",
+      :other-consumers []}
+     {:consumer :t00J01-rational-sphere-homology,
+      :stop-condition
+      "Construct the actual coefficient-general vertex maps and naturality square. No supplied comparison equation, coefficient-change isomorphism or singular subdivision chain map.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "SINGULAR-SUBDIVISION: explicit-coefficient affine realization naturality",
+      :acceptance
+      {:axioms :standard-only,
+       :probe
+       "For a commutative ring R, construct the ordered-vertex chain map induced by a function on vertices through the actual vertexSSet and ModuleCat R chain functor. Prove generator evaluation, identity and composition. For affine maps between standard simplices, prove the correctly oriented realization naturality square using the existing coefficient-independent affine composition formula and actual coefficient-general singular postcomposition. Specialize to simplex face inclusions, and compile integer and rational edge-face examples. State universes explicitly. Reuse CoefficientAffineRealization and CoefficientVertexCone without duplicating their constructions.",
+       :consumer-equation
+       "Mapping ordered vertices by an affine simplex map and then realizing equals realizing first and applying the actual singular-chain map of that affine map.",
+       :consumer-residual
+       "Subdivision affine-change compatibility and MissingFaceTransport remain before singular differential compatibility; full subdivision, homotopy, smallness and excision are not claimed.",
+       :gates
+       ["GO requires a complete placeholder-free compiled fixture with constructed maps, functoriality, realization naturality and face specializations."
+        "Record fixture SHA256, integer/rational examples and standard-only audits."
+        "REVISE only to exactly one compiled missing map or affine-composition prerequisite."],
+       :stop-condition
+       "Do not retry full coefficient subdivision or excision. STOP at a precise independent boundary if the complete comparison cannot be constructed."},
+      :representation
+      {:source
+       "ModuleCat R ordered-vertex chains mapped by an affine map of standard simplices, then realized as singular chains.",
+       :target
+       "The same source ordered-vertex chains first realized, then mapped by the actual inclusion of the affine map into singular-chain functoriality.",
+       :direction
+       "Prove equality from vertex-map followed by target realization to source realization followed by the actual singular-chain map of the affine map, in every degree and as chain maps."},
+      :id
+      :oriented-checkpoint18-coefficient-affine-realization-naturality-1,
+      :kind :representation-comparison,
+      :depends-on
+      [:oriented-checkpoint18-projective-boundary-and-subdivision-refill
+       :coefficient-general-affine-realization-1
+       :coefficient-general-ordered-vertex-cone-1],
+      :current-residual
+      "Reviewed coefficient-general affine realization has its differential equation but lacks compatibility with affine changes of simplex. The stopped singular subdivision differential proof needs this comparison.",
+      :other-consumers [:t03J04 :t02A08 :t94J08]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: exact pants decomposition and affine naturality uptake",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+      :id :oriented-checkpoint19-pants-and-affine-naturality-refill,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint18-t00a03-exact-pants-decomposition-1
+       :oriented-checkpoint18-coefficient-affine-realization-naturality-1],
+      :current-residual
+      "Measure exact pants-decomposition outcome separately from affine-realization naturality; attribute concurrent changes and preserve reviewed boundaries.",
+      :other-consumers []}],
+    :changed-paths [],
+    :finding
+    "Neither primary consumer probe closed: t96J06 retains its intrinsic-boundary obstruction, and coefficient singular subdivision retains affine-face transport and singular differential compatibility. Two reviewed prerequisites now construct coefficient-general ordered-vertex cones and affine realization. The temporary recursion diagnostic is not a banked singular chain endomorphism. Concurrent chart extension, literal fiber transfer and manifold regular-fiber local charts account for three additional modules; the local-chart parent is done-unreviewed and remains reserved. No frozen file changed in the census interval. Elect t00A03 first as one fresh two-placeholder exact consumer audit, with no matching dispatched row found in either ledger. Next elect affine-realization naturality as a bounded shared comparison with four named downstream consumers. It constructs actual maps and a commuting square rather than retrying the full stopped subdivision packet. Broader classification, fundamental-class, intersection, Kunneth, Stokes and covering-gluing programs require larger constructions; active fiber work is excluded.",
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: projective nonbounding and coefficient subdivision uptake",
@@ -11496,6 +11654,108 @@
     :oriented-checkpoint17-product-tori-and-small-h0-refill],
    :current-residual
    "Measure exact projective-product nonbounding separately from coefficient subdivision infrastructure; attribute concurrent changes and preserve reviewed boundaries.",
+   :other-consumers []}
+  {:consumer :t00A03,
+   :stop-condition
+   "Preserve literal complement components, the exact pants subtype, homological genus and topological embedding hypotheses. No assumed surface classification, collars, Euler additivity or boundary-incidence count.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SURFACE CUTTING: exact maximal-curve pants-decomposition consumer",
+   :acceptance
+   {:placeholder-after 0,
+    :frozen-file "problems/t00A03/lean/Main.lean",
+    :stop-condition
+    "No partial GO, assumed component classification, silent norm/model replacement or unproved refutation. STOP names the exact missing topology or invariant theorem.",
+    :gates
+    ["GO requires a complete zero-placeholder exact frozen fixture, unchanged statement hashes, fixture SHA256 and standard-only audits."
+     "Propose implementation scope only after complete closure compiles."],
+    :axioms :standard-only,
+    :placeholder-before 2,
+    :probe
+    "Audit both frozen bridges and the final theorem, including the norm used in the literal pants subtype, genus at least two, maximality up to the exact free-homotopy predicate, and the absence of smoothness assumptions on embedded curves. Construct the component homeomorphisms and actual cutting/incidence argument giving n=3g-3. Compile a complete temporary exact Main if closure is available. Otherwise compile precise typed boundary evidence. A refutation requires a compiled admissible instance contradicting the complete conclusion.",
+    :consumer-equation
+    "Every component of the literal complement of the maximal essential disjoint nonparallel curve family is homeomorphic to the specified open pants subtype, and the number of curves is 3g-3.",
+    :frozen-sha256
+    "e35f2b14e3fe3485840dacc50cf3feb9b00fd4e1f9b1203d068cee33bcbfa143"},
+   :id :oriented-checkpoint18-t00a03-exact-pants-decomposition-1,
+   :kind :final-adapter,
+   :depends-on
+   [:oriented-checkpoint18-projective-boundary-and-subdivision-refill
+    :oriented-checkpoint18-projective-boundary-and-subdivision-refill],
+   :current-residual
+   "Two placeholders assert that every actual complementary component is homeomorphic to the literal open pants model and that the maximal curve family has cardinality 3g-3. Genus is specified through actual integral singular homology.",
+   :other-consumers []}
+  {:consumer :t00J01-rational-sphere-homology,
+   :stop-condition
+   "Construct the actual coefficient-general vertex maps and naturality square. No supplied comparison equation, coefficient-change isomorphism or singular subdivision chain map.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "SINGULAR-SUBDIVISION: explicit-coefficient affine realization naturality",
+   :acceptance
+   {:axioms :standard-only,
+    :probe
+    "For a commutative ring R, construct the ordered-vertex chain map induced by a function on vertices through the actual vertexSSet and ModuleCat R chain functor. Prove generator evaluation, identity and composition. For affine maps between standard simplices, prove the correctly oriented realization naturality square using the existing coefficient-independent affine composition formula and actual coefficient-general singular postcomposition. Specialize to simplex face inclusions, and compile integer and rational edge-face examples. State universes explicitly. Reuse CoefficientAffineRealization and CoefficientVertexCone without duplicating their constructions.",
+    :consumer-equation
+    "Mapping ordered vertices by an affine simplex map and then realizing equals realizing first and applying the actual singular-chain map of that affine map.",
+    :consumer-residual
+    "Subdivision affine-change compatibility and MissingFaceTransport remain before singular differential compatibility; full subdivision, homotopy, smallness and excision are not claimed.",
+    :gates
+    ["GO requires a complete placeholder-free compiled fixture with constructed maps, functoriality, realization naturality and face specializations."
+     "Record fixture SHA256, integer/rational examples and standard-only audits."
+     "REVISE only to exactly one compiled missing map or affine-composition prerequisite."],
+    :stop-condition
+    "Do not retry full coefficient subdivision or excision. STOP at a precise independent boundary if the complete comparison cannot be constructed."},
+   :representation
+   {:source
+    "ModuleCat R ordered-vertex chains mapped by an affine map of standard simplices, then realized as singular chains.",
+    :target
+    "The same source ordered-vertex chains first realized, then mapped by the actual inclusion of the affine map into singular-chain functoriality.",
+    :direction
+    "Prove equality from vertex-map followed by target realization to source realization followed by the actual singular-chain map of the affine map, in every degree and as chain maps."},
+   :id
+   :oriented-checkpoint18-coefficient-affine-realization-naturality-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint18-projective-boundary-and-subdivision-refill
+    :coefficient-general-affine-realization-1
+    :coefficient-general-ordered-vertex-cone-1
+    :oriented-checkpoint18-projective-boundary-and-subdivision-refill],
+   :current-residual
+   "Reviewed coefficient-general affine realization has its differential equation but lacks compatibility with affine changes of simplex. The stopped singular subdivision differential proof needs this comparison.",
+   :other-consumers [:t03J04 :t02A08 :t94J08]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: exact pants decomposition and affine naturality uptake",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first, then rank the whole DAG by concrete consumers and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Do not begin with t00J02.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen closure and proved refutation."},
+   :id :oriented-checkpoint19-pants-and-affine-naturality-refill,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint18-t00a03-exact-pants-decomposition-1
+    :oriented-checkpoint18-coefficient-affine-realization-naturality-1
+    :oriented-checkpoint18-projective-boundary-and-subdivision-refill],
+   :current-residual
+   "Measure exact pants-decomposition outcome separately from affine-realization naturality; attribute concurrent changes and preserve reviewed boundaries.",
    :other-consumers []}
   {:consumer :t00A01,
    :stop-condition
