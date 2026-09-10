@@ -21787,90 +21787,135 @@
    :stop-condition
    "No integral-to-R reinterpretation, assumed relative isomorphism, assumed local sign or manifold orientation coherence. Do not claim global localization, gluing, nonbounding or frozen closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Deleted-point manifold chart transport, overlap compatibility and global localization remain downstream; no frozen consumer closure is claimed.",
-     :axiom-audits 17,
-     :outcome :go,
-     :warnings [],
-     :acceptance
-     {:namespace "ConstructionTargets.CoefficientModelLocal",
-      :implementation
-      "Promote the exact compiled fixture and document the actual connecting-radial normalization and its model-only boundary.",
-      :declarations
-      ["puncture"
-       "negation"
-       "negation_mapsTo"
-       "restricted"
-       "radial_square"
-       "radialIso"
-       "radialIso_hom"
-       "localIso"
-       "pairMap"
-       "projection_degree"
-       "radial_naturality"
-       "forward_composite"
-       "relativeAction"
-       "local_forward"
-       "inverse_left"
-       "inverse_right"
-       "generator"
-       "generator_normalization"
-       "local_conjugation"
-       "integral_two"
-       "integral_three"
-       "rational_two"
-       "rational_three"],
-      :hypotheses
-      "R is a Type 0 commutative ring. Geometry uses EuclideanSpace ℝ (Fin d). The local isomorphism and sign statements use d=m+2 for m : ℕ, covering every dimension at least two. The puncture is the actual subset {x | x ≠ 0}; relative chains are the reviewed ModuleCat R subtype cokernel with coefficient object ModuleCat.of R R. No characteristic, nontriviality or supplied vanishing assumption is imposed.",
-      :consumer-equation
-      "Actual H_(m+2) of the Euclidean deleted-origin pair is isomorphic to R. The forward map is exactly the actual pair connecting map followed by radial-normalization homology and the constructed sphere normalization. Actual pair negation acts by (-1)^(m+2), with forward and conjugation equations, both inverse laws and generator normalization.",
-      :consumer-residual
-      "Transport model generators through actual deleted-point manifold charts and prove overlap compatibility before global localization and t98A02 gluing. Cover-degree and nonbounding retain separate global comparisons.",
-      :axioms :standard-only,
-      :gates
-      ["Verify fixture SHA256 before implementation."
-       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientModelLocal."
-       "Reproduce seventeen standard-only axiom audits and integer/rational examples in dimensions two and three."
-       "Audit actual subtype cokernel, degreewise projection equation, connecting arrow and puncture-to-sphere radial orientation."
-       "Verify geometric negation square and derivation of the local sign from actual connecting naturality."
-       "Verify forward composite, scalar action, generator normalization and both inverse laws."
-       "Run placeholder and forbidden-declaration scans, whitespace and exact two-file scope checks; commit the scoped implementation."
-       "Preserve all reviewed consumer STOPs and make no manifold orientation, global localization or frozen-closure claim."]},
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "readlink -f .lake/packages", :exit 0}
-      {:cmd
-       "Read DAG, closure rules, build-loop design, both ledgers and all four dependency PASS receipts; inspect punctured-space radial geometry and coefficient-general pair APIs",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientModelLocal.lean", :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientModelLocal.lean", :exit 0}
-      {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientModelLocal.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "Initial local-model fixture compilation",
-       :exit 1,
-       :correction
-       "Exposed the underlying vector equality in the radial-negation square and composed explicit functor map_comp equations instead of rewriting across elaborated categorical objects. Subsequent complete fixture compilation succeeds without warnings."}],
-     :changed-paths [],
-     :fixture
-     {:path "/tmp/CoefficientModelLocal.lean",
-      :sha256
-      "accb8413838980bf979a8f7e97c7550a87df9071854455723c489677f8f7829c"},
-     :finding
-     "The complete placeholder-free fixture constructs actual coefficient-general Euclidean model local homology and its negation action. Contractibility and the reviewed radial homotopy equivalence supply the isomorphisms; no integral conclusion is reinterpreted over R. Actual connecting naturality, the proved radial square and reviewed antipodal action establish the local sign. All examples and audits pass.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/CoefficientModelLocal.lean"
-       "ConstructionTargets/CoefficientModelLocal.md"]},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :git-author "Joe Corneli <holtzermann17@gmail.com>",
+    :residual
+    "Transport model generators through actual deleted-point manifold charts and prove overlap compatibility before global localization and t98A02 gluing. Cover-degree and nonbounding retain separate global comparisons. Reviewed consumer STOPs remain unchanged; no manifold orientation coherence, global localization, gluing, nonbounding or frozen closure is claimed.",
+    :gates
+    {:projection-equation :pass,
+     :integer-rational-examples :pass,
+     :whitespace :pass,
+     :placeholders :pass,
+     :scalar-action :pass,
+     :inverse-laws :pass,
+     :fixture-hash :pass,
+     :canonical-compilation :pass,
+     :two-file-scope :pass,
+     :axioms :pass,
+     :build :pass,
+     :negation-square :pass,
+     :fixture-compilation :pass,
+     :connecting-naturality :pass,
+     :connecting-radial-orientation :pass,
+     :generator-normalization :pass,
+     :actual-subtype-cokernel :pass},
+    :axiom-audits 17,
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical compilation emitted no warnings. Build replayed 22 dependency warnings; none originated in this module."],
+    :statement-hashes
+    {:inverse_right
+     "209eaeb6d1a4dc0ecd749b1c1a9cd0832419972950969ab8c6461d416451de49",
+     :radialIso
+     "fc9b3e2d948946bb8e235bd283ff97732c06e9d8bb851cc3f99201f937f94398",
+     :localIso
+     "5677d81f47cc4cb8c82b0530e76a5d2589b4057ea4bbbb1bc778535ac21d3914",
+     :rational_two
+     "b18d39b15682573578e4d67738d3de2d7be03e51dd9f24639c8a0e4d1bb44374",
+     :generator_normalization
+     "ea313349e3508c6d6c8faa9a7f1392a890eadf4bcce04dc3a6d297da3ceb8fb2",
+     :local_forward
+     "9d6acaf1a17487f4f9aefb6e90589077816dfee1e9c58767782f659e020f31c0",
+     :negation
+     "a6d787fb650b69dabe0ccff18cf54ddff86f23a525357db2918859bfe8cb486f",
+     :negation_mapsTo
+     "85e8f8a0458d0bcea01b46908bd4e7887b644e621caa1cad1542f8783238edd7",
+     :projection_degree
+     "1a9ddd17152624dacf099aecfc66c6c62f5e01bb46eb19c7ff374cb97adff25f",
+     :radial_naturality
+     "e92564bc53622855a0d2fc65cec4f495e812b91fec81e3f749c79aab82e87203",
+     :restricted
+     "d8c85cef234eb1d59c801fbcf0d0b37f05e76286950c65bc017a1ece4a34d111",
+     :E
+     "b2e7a74dc0f8a980579ce54384e43d662d23841d9116eed609089411e652e918",
+     :integral_two
+     "6afd1d524e889e162af20e97ad574bd36a5535eb67e7d1fed683f753a3bb9e1e",
+     :pairMap
+     "8034db2a53d3b81afb9d801269e9b96f6eb5ef1a955c2b555ce483dda0e779f9",
+     :rational_three
+     "6917a16f57da48af976ccb12740d67175e26b84765bdfb2b535a4c1f96eb16a1",
+     :radialIso_hom
+     "5a40a9f57beb198b16a29adf87e13a60ddbd8e2b504761ca304ca162ed1630a7",
+     :generator
+     "9a893c2a76a3cdbe97c2e0b6b4a05226decc7c956d7e1c8838a4ce763deba2d1",
+     :forward_composite
+     "04fbc022eb994b080d1815df0cf52d34ab360fa0b139447d5d91feda85ae4858",
+     :integral_three
+     "5562062cceded449761bf44e9a16f81d454c0003e9e8ab97491dd15b28a8a7ce",
+     :inverse_left
+     "fb9b7231847d20d988f4675cc5a5466c9eb30fafa55732668e4c4dffba37eaf9",
+     :relativeAction
+     "6fdaeedcfde08633f2f1efab3efc183ee94ad6b7d97911ae96f10ba3c27ba5d5",
+     :puncture
+     "00f64c87d559706a1e6734853fc8bbd862bc6068bdd38ad143df3e79d1e90c41",
+     :radial_square
+     "98ea816a5f0f48e61b569c04d199132b7a5eb1e296e30aceae77aa4fbdbe33a4",
+     :local_conjugation
+     "8fdba054251435b245b83093b1a731fa03f5c80e9c87fdec62e671e959ae40f9"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-14",
+    :commands
+    [{:cmd
+      "Read DAG, closure rules, both ledgers and four dependency PASS receipts; inspect actual puncture, connecting-radial normalization and negation equations",
+      :exit 0}
+     {:cmd "readlink -f .lake/packages", :exit 0}
+     {:cmd "Verify fixture SHA256 before byte-identical promotion",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/CoefficientModelLocal.lean > /tmp/modellocal-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/CoefficientModelLocal.lean > /tmp/modellocal-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.CoefficientModelLocal > /tmp/modellocal-build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "Validate seventeen standard-only audits in each direct compilation log and inspect build warnings",
+      :exit 0}
+     {:cmd
+      "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientModelLocal.lean ConstructionTargets/CoefficientModelLocal.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python audit of fixture equality, zero placeholders, twenty-four declaration hashes and exact two-file scope",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "git commit -m 'Construct coefficient-general Euclidean local homology and negation'",
+      :exit 0}
+     {:cmd "git diff --check d5fc86bd^ d5fc86bd", :exit 0}
+     {:cmd
+      "Python verification of pinned commit scope, fixture equality and scoped cleanliness; git status --short",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "d5fc86bde4bd87f7ee934d9001fa754d9124f456",
+    :changed-paths
+    ["ConstructionTargets/CoefficientModelLocal.lean"
+     "ConstructionTargets/CoefficientModelLocal.md"],
+    :fixture
+    {:path "/tmp/CoefficientModelLocal.lean",
+     :sha256
+     "accb8413838980bf979a8f7e97c7550a87df9071854455723c489677f8f7829c",
+     :promotion :byte-identical},
+    :finding
+    "Promoted the exact fixture constructing actual R-linear Euclidean deleted-origin local homology in every dimension at least two. The forward isomorphism is precisely connecting map, puncture-to-sphere radial homology, then sphere normalization. Actual connecting naturality and the geometric radial-negation square establish multiplication by (-1)^d. Generator normalization, inverse laws and integer/rational examples pass.",
+    :statement-hash-method
+    "SHA256 from declaration keyword to immediately before the space preceding :=; includes auxiliary abbreviation E.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientModelLocal.lean"
     "ConstructionTargets/CoefficientModelLocal.md"],
