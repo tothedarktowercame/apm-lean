@@ -38585,12 +38585,28 @@
       "The broad expression matched ProductSimplexCumulativeOrderHom.lean because horizontalCount and verticalCount occur before Nat.lt_succ_of_le; it did not establish that successor-recurrence declarations exist.",
       :correction
       "Replaced it with the declaration-specific theorem search recorded in commands. That search returned no matches with actual and expected exit 1."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789072892350-19428-1c457e31",
+     :commands
+     ["git show --stat --oneline 504bfd8de19b1fd1c88e0277fa984fddebe41f30"
+      "git show 504bfd8de19b1fd1c88e0277fa984fddebe41f30"
+      "rg -n \"theorem (horizontalCount|verticalCount).*succ|reconstructedPath.*stepWord|stepWord.*reconstructed\" ConstructionTargets .lake/packages/mathlib/Mathlib # exit 1"
+      "lake build ConstructionTargets.ProductSimplexReconstructedPath"
+      "python3 scripts/check_worklist.py holes/labs/topology-contract/worklist.edn"
+      "python3 scripts/check_worklist.py holes/labs/topology-contract/worklist2.edn"
+      "git diff-tree --no-commit-id --name-status -r 504bfd8de19b1fd1c88e0277fa984fddebe41f30"
+      "git diff --check 504bfd8de19b1fd1c88e0277fa984fddebe41f30^ 504bfd8de19b1fd1c88e0277fa984fddebe41f30"
+      "sha256sum holes/Topology/t03J05.lean holes/Topology/t96J06.lean holes/Topology/t97A04.lean; placeholder recount"],
+     :finding
+     "PASS: replacement commit corrects the prior broad-search false positive with a declaration-specific search that exits 1; only worklist2.edn changed. The exact missing interface is four horizontalCount/verticalCount successor recurrences, needed to recover Boolean letters and prove reconstructedPath/stepWord inverse laws; private wordPrefix makes this a valid representation-boundary STOP. Focused build and ledger gates pass; frozen placeholder counts are 1/2/4 and hashes match db4071c3..., 1d8874db..., 79ca8541.... No fixture or frozen statement hash applies."},
     :changed-paths [],
     :finding
     "The corrected declaration-specific search confirms that neither ConstructionTargets nor Mathlib exports horizontalCount or verticalCount successor-recurrence theorems, and no reconstructedPath/stepWord inverse theorem exists. Recovering stepWord at index i requires four exact one-step equations: horizontalCount increases by one for true and stays fixed for false, while verticalCount stays fixed for true and increases by one for false. The private wordPrefix implementation prevents proving these downstream without duplicating its representation. The banked reconstructed path still builds successfully, both ledgers validate, and the worktree is clean. This is an exported combinatorial boundary, not a mathematical refutation.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: cumulative balanced words as canonical maximal product-simplex paths",
@@ -38645,7 +38661,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: cumulative product-simplex paths and renewed consumer eligibility",
