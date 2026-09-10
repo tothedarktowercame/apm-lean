@@ -74043,88 +74043,142 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require applying homology functoriality to this exact factorization and the reviewed open-cover homology isomorphism, proving unionRangeChainsInclusion induces an isomorphism in every degree.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSubspaceUnionRangeFactorization.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / literal union-range denominator factorization",
+   :acceptance
+   {:fixture "/tmp/CoefficientSubspaceUnionRangeFactorization.lean",
+    :fixture-sha256
+    "3aa64ffc5e174f5f434b4d759fa6bd46e94d7765eec00d2a528aae44ad10385c",
+    :implementation
+    "Promote the exact fixture. Compile unionCover_eq_restrictedCover and unionRangeChainsInclusion_factorization. This supplies the exact chain factorization required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes: the literal union-generated denominator inclusion factors through the reviewed restricted-cover range isomorphism, the valid cover-small inclusion on the union subtype and the coefficient ambient-subspace range isomorphism. Verify CoefficientAmbientSubspaceRangeCompatibility SHA256 29ce41fd37107ede574576e64bdc7b326d30323fad499b7a4a6687b3237e29b6. Preserve arbitrary topological spaces, arbitrary subsets and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim the induced homology map is already an isomorphism, relative short exactness, a connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSubspaceUnionRangeFactorization.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The literal coefficient-chain inclusion from the union-generated ambient subcomplex into the ambient range of A union B",
+    :target
+    "The composite through restricted Boolean cover-small chains, production coefficient chains on the union subtype and the coefficient ambient-range presentation",
+    :direction
+    "Exact equality from the source literal union-range inclusion to the target three-factor chain-map representation, oriented through the inverses of the restricted-cover range isomorphism and ambient-subspace range isomorphism."},
+   :id
+   :coefficient-subspace-union-range-factorization-implementation-refill51,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-ambient-subspace-range-compatibility-implementation-refill51],
+   :current-residual
+   "Apply the homology functor to unionRangeChainsInclusion_factorization, identify the restricted cover with unionCover, and combine the two chain-isomorphism maps with unionCoverHomologyIso to prove the literal denominator inclusion induces an isomorphism in every degree. Then induce the relative cokernel comparison.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Use the compiled coefficient range compatibility to transport the union-subspace cover-small homology isomorphism through restrictedUnionRangeChainsIso and prove that unionRangeChainsInclusion induces an isomorphism on homology in every degree; then construct the relative cokernel comparison and the genuine Mayer-Vietoris sequence.",
+     "Use the exact chain factorization and unionCoverHomologyIso to prove that homologyMap unionRangeChainsInclusion is an isomorphism in every degree; then transport the algebraic quotient sequence to the literal relative pairs and construct its genuine connecting morphism.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require transport of the union-subspace cover-small homology isomorphism through this coefficient-generic range presentation and the reviewed restricted-cover range isomorphism, proving that unionRangeChainsInclusion induces homology isomorphisms in every degree.",
+      "Require applying homology functoriality to this exact factorization and the reviewed open-cover homology isomorphism, proving unionRangeChainsInclusion induces an isomorphism in every degree.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean"],
+      ["ConstructionTargets/CoefficientSubspaceUnionRangeFactorization.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / coefficient ambient-subspace range compatibility",
+      "MANIFOLD FUNDAMENTAL CLASS / literal union-range denominator factorization",
       :acceptance
-      {:fixture
-       "/tmp/CoefficientAmbientSubspaceRangeCompatibility.lean",
+      {:fixture "/tmp/CoefficientSubspaceUnionRangeFactorization.lean",
        :fixture-sha256
-       "29ce41fd37107ede574576e64bdc7b326d30323fad499b7a4a6687b3237e29b6",
+       "3aa64ffc5e174f5f434b4d759fa6bd46e94d7765eec00d2a528aae44ad10385c",
        :implementation
-       "Promote the exact fixture. Compile ambientSubspaceRangeChainsIso and ambientSubspaceRangeChainsIso_hom_comp_subspaceMap. This supplies the coefficient-generic range presentation and exact production-subspace inclusion compatibility required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes. Verify CoefficientSubspaceUnionRestrictedRangeIso SHA256 fcdb8331d731c21de340aa41036f16dea032124fc2134786b0922ea3d236f5dd. Preserve arbitrary topological spaces, arbitrary subsets and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim the union-range denominator inclusion is already a homology equivalence, relative short exactness, a connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile unionCover_eq_restrictedCover and unionRangeChainsInclusion_factorization. This supplies the exact chain factorization required by the t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05 routes: the literal union-generated denominator inclusion factors through the reviewed restricted-cover range isomorphism, the valid cover-small inclusion on the union subtype and the coefficient ambient-subspace range isomorphism. Verify CoefficientAmbientSubspaceRangeCompatibility SHA256 29ce41fd37107ede574576e64bdc7b326d30323fad499b7a4a6687b3237e29b6. Preserve arbitrary topological spaces, arbitrary subsets and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim the induced homology map is already an isomorphism, relative short exactness, a connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSubspaceUnionRangeFactorization.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "Coefficient chains on the categorical range of the singular-simplicial inclusion of a topological subspace",
+       "The literal coefficient-chain inclusion from the union-generated ambient subcomplex into the ambient range of A union B",
        :target
-       "Production coefficient singular chains on that topological subspace, followed by its chain inclusion into the ambient space",
+       "The composite through restricted Boolean cover-small chains, production coefficient chains on the union subtype and the coefficient ambient-range presentation",
        :direction
-       "Canonical chain isomorphism from the source ambient-range representation to the target production-subspace representation, with exact equality after inclusion into ambient coefficient singular chains."},
+       "Exact equality from the source literal union-range inclusion to the target three-factor chain-map representation, oriented through the inverses of the restricted-cover range isomorphism and ambient-subspace range isomorphism."},
       :id
-      :coefficient-ambient-subspace-range-compatibility-implementation-refill51,
+      :coefficient-subspace-union-range-factorization-implementation-refill51,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-subspace-union-restricted-range-iso-implementation-refill51],
+      [:coefficient-ambient-subspace-range-compatibility-implementation-refill51],
       :current-residual
-      "Compose the reviewed restrictedUnionRangeChainsIso with this coefficient ambient-subspace range isomorphism and the compiled unionCoverHomologyIso. Prove that the resulting forward homology isomorphism is homologyMap unionRangeChainsInclusion, then use the denominator commuting square to induce the relative cokernel comparison.",
+      "Apply the homology functor to unionRangeChainsInclusion_factorization, identify the restricted cover with unionCover, and combine the two chain-isomorphism maps with unionCoverHomologyIso to prove the literal denominator inclusion induces an isomorphism in every degree. Then induce the relative cokernel comparison.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSubspaceUnionRestrictedRangeIso >/tmp/coefficient-range-compat-dep.log 2>&1",
+       "lake build ConstructionTargets.CoefficientAmbientSubspaceRangeCompatibility >/tmp/union-range-factor-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientAmbientSubspaceRangeCompatibility.lean",
+       "lake env lean /tmp/CoefficientSubspaceUnionRangeFactorization.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientAmbientSubspaceRangeCompatibility.lean ConstructionTargets/CoefficientSubspaceUnionRestrictedRangeIso.lean",
+       "sha256sum /tmp/CoefficientSubspaceUnionRangeFactorization.lean ConstructionTargets/CoefficientAmbientSubspaceRangeCompatibility.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/CoefficientAmbientSubspaceRangeCompatibility.lean",
+       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/CoefficientSubspaceUnionRangeFactorization.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientAmbientSubspaceRangeCompatibility.lean",
+       "lake env lean /tmp/CoefficientSubspaceUnionRangeFactorization.lean",
        :exit 1,
        :correction
-       "The first fixture referenced a nonexistent rangeSSetIso identifier. Replaced it with the categorical toRange isomorphism used by the reviewed range-chain construction."}
+       "The initial statement rewrote the propositionally equal unionCover and restrictedCover inside a dependent chain-complex type. Stated the factorization with restrictedCover directly and retained their exact equality as a separate theorem."}
       {:cmd
-       "lake env lean /tmp/CoefficientAmbientSubspaceRangeCompatibility.lean",
+       "lake env lean /tmp/CoefficientSubspaceUnionRangeFactorization.lean",
        :exit 1,
        :correction
-       "The second fixture attempted to instantiate the integer-specialized rangeChainsIso with coefficient parameter R. Defined the required coefficient-generic mapIso directly from asIso (Subfunctor.toRange ...), after which the compatibility theorem compiled."}],
+       "The first proof left chains ambiguous between two imported namespace abbreviations. Qualified CoefficientSubspaceUnionRangeInclusion.chains explicitly."}
+      {:cmd
+       "lake env lean /tmp/CoefficientSubspaceUnionRangeFactorization.lean",
+       :exit 1,
+       :correction
+       "Attempts to cancel the ambient range inclusion required a chain-level monomorphism instance that was not directly synthesized. Reorganized the proof to cancel the range isomorphism and the already reviewed production subspace monomorphism separately."}
+      {:cmd
+       "lake env lean /tmp/CoefficientSubspaceUnionRangeFactorization.lean",
+       :exit 1,
+       :correction
+       "The reorganized proof initially retained an unsimplified inverse-forward isomorphism composite. Simplified that composite before the second cancellation."}
+      {:cmd
+       "lake env lean /tmp/CoefficientSubspaceUnionRangeFactorization.lean",
+       :exit 1,
+       :correction
+       "Rewriting the inclusion square and union-range triangle required explicit reassociation and qualification of the coefficient chain functor. Added those typed intermediate forms."}
+      {:cmd
+       "lake env lean /tmp/CoefficientSubspaceUnionRangeFactorization.lean",
+       :exit 1,
+       :correction
+       "The restricted-cover inclusion followed by the production subspace map was not definitionally folded into restrictedUnionAmbientMap through functor composition. Proved the local map-composition equality explicitly, then completed the proof with the reviewed restricted-range compatibility."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientAmbientSubspaceRangeCompatibility.lean",
+     {:path "/tmp/CoefficientSubspaceUnionRangeFactorization.lean",
       :sha256
-      "29ce41fd37107ede574576e64bdc7b326d30323fad499b7a4a6687b3237e29b6",
+      "3aa64ffc5e174f5f434b4d759fa6bd46e94d7765eec00d2a528aae44ad10385c",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one coefficient-generic representation prerequisite. The previously reviewed ambientSubspaceRangeChainsIso is specialized to integer chains, while the current route requires arbitrary commutative-ring coefficients. The fixture constructs the same canonical range presentation for ModuleCat R chains and proves that its forward map followed by the production subspace chain map is exactly the inclusion of the ambient range subcomplex. This permits the reviewed restricted-cover homology equivalence to be conjugated to unionRangeChainsInclusion without asserting that every simplex in a union lies in one cover member. Relative cokernel transport, short exactness, the genuine connecting morphism and the three homology exactness segments remain.",
+     "Compiled exactly one denominator-factorization prerequisite. The literal inclusion from chains generated by the two member ranges into chains on the range of their union equals a three-stage composite: inverse of the restricted-cover range chain isomorphism, the valid cover-small inclusion on the union subtype, and inverse of the coefficient ambient-subspace range isomorphism. The proof compares both sides through the actual production subspace inclusion and uses only the reviewed categorical range identities. It neither asserts that every union simplex lies in one cover member nor uses either false ordinary-excision premise. Homology transport, relative cokernel comparison, short exactness, the genuine connecting morphism and three exactness segments remain.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -74148,7 +74202,8 @@
     :coefficient-subspace-union-restricted-cover-image-implementation-refill51
     :coefficient-subspace-union-restricted-ambient-range-implementation-refill51
     :coefficient-subspace-union-restricted-range-iso-implementation-refill51
-    :coefficient-ambient-subspace-range-compatibility-implementation-refill51],
+    :coefficient-ambient-subspace-range-compatibility-implementation-refill51
+    :coefficient-subspace-union-range-factorization-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
