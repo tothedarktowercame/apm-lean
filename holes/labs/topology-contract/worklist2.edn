@@ -16137,9 +16137,89 @@
   {:consumer :t00J01-rational-sphere-homology,
    :stop-condition
    "Do not assume chain-level pushout preservation or the cokernel isomorphism. Do not reinterpret the integral construction as R-linear. Do not claim actual-subspace excision, sphere suspension or frozen closure.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:placeholder-delta 0,
+     :residual
+     "Transport the geometric excision subcomplex square to actual subspaces and combine with CoefficientRelativeSmall. Actual-subspace excision, sphere suspension and rational S2 H1/H2 remain downstream; no frozen closure is claimed.",
+     :axiom-audits 8,
+     :outcome :go,
+     :warnings [],
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture and document the four map directions and projection equation.",
+      :namespace "ConstructionTargets.CoefficientPushoutRelative",
+      :declarations
+      ["chains"
+       "preserves_pushouts"
+       "relativeMap"
+       "relativeMap_isIso"
+       "relativeIso"
+       "relativeIso_hom"
+       "projection"
+       "projection_degree"
+       "inverse_left"
+       "inverse_right"
+       "unionSquare"
+       "unionRelativeIso"
+       "union_projection"
+       "integral_union"
+       "rational_union"],
+      :hypotheses
+      "R is a Type 0 commutative ring; simplicial sets have Type 0 degrees. The actual chain functor uses ModuleCat.of R R. The generic construction takes a simplicial pushout square, not an assumed chain pushout. The union specialization constructs that square from arbitrary simplicial subcomplexes P and Q, without nonemptiness assumptions.",
+      :consumer-equation
+      "The induced relative cokernel map is a chain-complex isomorphism. Source projection followed by its forward map equals C_R(Y to Z) followed by target projection, in every degree. For subcomplexes this identifies C_R(Q)/C_R(P intersection Q) with C_R(P union Q)/C_R(P).",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientPushoutRelative."
+       "Reproduce eight standard-only axiom audits and integer/rational union specializations."
+       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd "readlink -f .lake/packages", :exit 0}
+      {:cmd
+       "Read DAG, closure rules, dependency PASS receipts and simplicial pushout/cokernel APIs",
+       :exit 0}
+      {:cmd "lake env lean /tmp/CoefficientPushoutRelative.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientPushoutRelative.lean", :exit 0}
+      {:cmd
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientPushoutRelative.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "git diff --check", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "Initial lake env lean /tmp/CoefficientPushoutRelative.lean",
+       :exit 1,
+       :correction
+       "Replaced nonexistent subcomplex inclusion names with the existing public coefficient-independent declarations. This also removed the associated elaboration timeout; final compilation succeeds without resource-option changes."}],
+     :representation
+     {:source
+      "Actual ModuleCat R chain cokernel of W to Y in a simplicial pushout W to X, W to Y, X to Z, Y to Z.",
+      :target
+      "Actual ModuleCat R chain cokernel of X to Z in the same pushout.",
+      :direction
+      "Construct a chain-complex isomorphism from coker(C_R(W to Y)) to coker(C_R(X to Z)), with forward arrow exactly cokernel.map induced by C_R(W to X) and C_R(Y to Z)."},
+     :changed-paths [],
+     :fixture
+     {:path "/tmp/CoefficientPushoutRelative.lean",
+      :sha256
+      "5f010dfdf556e1586cdf7772c474389124455500744cfe46d56b51325f4abb19"},
+     :finding
+     "Complete coefficient-general simplicial pushout relative-chain construction compiles. Pushout preservation is proved for the actual R-valued chain functor using degreewise colimits and the coefficient-object coproduct adjunction. The induced cokernel map is proved invertible. Its exact forward map, both inverse laws and the cokernel-projection equation in every degree are established. The union/intersection specialization and integer/rational examples compile without importing an integral conclusion as R-linear.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientPushoutRelative.lean"
+       "ConstructionTargets/CoefficientPushoutRelative.md"]},
+     :seat "codex-13"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientPushoutRelative.lean"
+    "ConstructionTargets/CoefficientPushoutRelative.md"],
    :dag-node
    "EXCISION: coefficient-general simplicial pushout relative-chain isomorphism",
    :acceptance
