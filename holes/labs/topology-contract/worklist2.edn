@@ -13843,6 +13843,18 @@
       :exit 1,
       :correction
       "Unfolded the fundamental-class definition in the final normalization."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789005276731-17591-aea9e05a",
+     :commands
+     ["lake env lean /tmp/T01A05ConnectedBoundary.lean"
+      "lake env lean /tmp/T01A05Counterexample.lean"
+      "Python read-only artifact hashes, trimmed statement hashes, exact connectedness-only change, preserved definitions, placeholder and scope audits"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show b7504576:holes/labs/topology-contract/worklist2.edn)"
+      "git diff --check"],
+     :finding
+     "Accurate STOP: finite-fiber covering data and function transfer are proved, but neither supplies an upstairs top-homology orientation or the actual induced-map degree equation. The scalar reformulation preserves the fundamental-class equation; concrete torus action remains unproved. Original refutation recompiles. Artifact hashes match; recorded statement hashes require trimming trailing whitespace before :=. Only two connectedness hypotheses are proposed; canonical placeholders1->1. Three boundary and five refutation audits use standard axioms. No ledger edits."},
     :changed-paths [],
     :statement-audit
     {:corrected-claim-proved false,
@@ -13876,7 +13888,7 @@
     :mathematical-refutation false,
     :seat "codex-13"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "SPEC-DEFECT / COVER-DEGREE: connected finite-cover fundamental-class consumer",
