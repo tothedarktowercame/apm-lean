@@ -15790,96 +15790,89 @@
    {:probe
     {:placeholder-delta 0,
      :residual
-     "The actual restricted-cover inclusion square, its monicity proofs and geometric relative comparison remain in the parent probe. Excision, sphere suspension and rational S2 H1/H2 remain downstream.",
-     :axiom-audits 5,
-     :outcome :revise,
+     "Coefficient-general excision still needs the subcomplex union/intersection and actual-subspace quotient identifications. Sphere suspension and rational S2 H1/H2 remain downstream. No excision or frozen consumer closure is claimed.",
+     :axiom-audits 9,
+     :outcome :go,
      :warnings [],
-     :prerequisite
-     {:consumer :t00J01-rational-sphere-homology,
-      :stop-condition
-      "Bank only the generic cokernel comparison with explicit square, monicity and absolute-isomorphism hypotheses. Do not claim those hypotheses for the geometric restricted-cover square or claim excision.",
-      :evidence
-      {:probe
-       {:outcome :go,
-        :seat "codex-13",
-        :fixture
-        {:path "/tmp/CoefficientCokernelComparison.lean",
-         :sha256
-         "eaa11a983fd6cbd117026568e4eddd48be7911686d61513dc1ab2b2794f490ce"},
-        :commands
-        [{:cmd "lake env lean /tmp/CoefficientCokernelComparison.lean",
-          :exit 0}],
-        :warnings [],
-        :axioms ["propext" "Classical.choice" "Quot.sound"]}},
-      :phase :implementation,
-      :state :open,
-      :scope
-      ["ConstructionTargets/CoefficientCokernelComparison.lean"
-       "ConstructionTargets/CoefficientCokernelComparison.md"],
-      :dag-node
-      "RELATIVE HOMOLOGY: coefficient-general cokernel-square comparison",
-      :acceptance
-      {:implementation
-       "Promote the exact compiled fixture and document its explicit hypotheses and geometric residual.",
-       :namespace "ConstructionTargets.CoefficientCokernelComparison",
-       :declarations
-       ["cokernelShortComplex"
-        "cokernelShortComplex_shortExact"
-        "cokernelSquareMap"
-        "cokernelSquare_homologyMap_isIso"
-        "comparisonIso"
-        "comparisonIso_hom"
-        "inverse_left"
-        "inverse_right"
-        "integral_identity_example"
-        "rational_identity_example"],
-       :hypotheses
-       "R is a Type 0 commutative ring; complexes are ChainComplex (ModuleCat.{0} R) Nat. A commuting square has monic horizontal maps. The degreewise theorem requires absolute homology isomorphisms in the current and adjacent degrees; comparisonIso requires them in all degrees. These assumptions are explicit and must be discharged by the geometric consumer.",
-       :consumer-equation
-       "The induced map between actual categorical cokernels induces a homology isomorphism, with comparisonIso_hom identifying the forward map and both inverse equations proved.",
-       :consumer-residual
-       "Construct the restricted-cover chain map, prove its generator and inclusion equations and horizontal monicity, then apply reviewed absolute small-chain comparison on X and A.",
-       :axioms :standard-only,
-       :gates
-       ["Verify fixture SHA256 before implementation."
-        "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientCokernelComparison."
-        "Reproduce five standard-only axiom audits and integer/rational identity-square examples."
-        "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
-      :id :coefficient-general-cokernel-homology-comparison-1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint24-coefficient-small-chain-homology-comparison-1],
-      :current-residual
-      "Relative small-chain comparison needs the cokernel homology-sequence argument over ModuleCat R rather than its existing AddCommGrpCat specialization.",
-      :other-consumers [:t03J04 :t02A08 :t94J08]},
+     :acceptance
+     {:implementation
+      "Promote the exact compiled fixture, preserving actual subtypes, coefficient object and categorical cokernels.",
+      :namespace "ConstructionTargets.CoefficientRelativeSmall",
+      :declarations
+      ["chains"
+       "subspaceMap"
+       "restrictedMap"
+       "inclusion_square"
+       "subspaceMap_component_mono"
+       "subspaceMap_mono"
+       "smallInclusion_mono"
+       "restrictedMap_mono"
+       "restrictedMap_generator"
+       "restrictedMap_d"
+       "relativeSmall"
+       "relativeChains"
+       "relativeMap"
+       "comparisonIso"
+       "comparisonIso_hom"
+       "subspaceMap_eq_postcomposition"
+       "inverse_left"
+       "inverse_right"
+       "integral_interval"
+       "rational_interval"],
+      :hypotheses
+      "R, X and the cover index type are Type 0. R is a commutative ring and X a topological space. A is an arbitrary subset, not assumed open. Map constructions and monicity require no cover hypothesis. The homology comparison requires an indexed open cover of X. Empty spaces and arbitrary index types are retained; no connectedness or nonemptiness is imposed. The coefficient object is ModuleCat.of R R.",
+      :consumer-equation
+      "The induced relative cokernel map gives an isomorphism on homology in every natural-number degree. comparisonIso_hom identifies the forward map exactly; inverse_left and inverse_right prove both inverse laws.",
+      :axioms :standard-only,
+      :gates
+      ["Verify fixture SHA256 before implementation."
+       "Compile fixture and canonical target; run lake build ConstructionTargets.CoefficientRelativeSmall."
+       "Reproduce nine standard-only axiom audits and integer/rational examples for the closed interval subtype in the overlapping real interval cover."
+       "Run placeholder and forbidden-declaration scans, git diff --check and exact two-file scope verification; commit the scoped implementation."]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd "readlink -f .lake/packages", :exit 0}
       {:cmd
-       "Read DAG, closure rules, dependency PASS receipts and restricted-cover/cokernel APIs",
+       "Read DAG, closure rules, reviewed dependencies and restricted-cover/subtype simplicial APIs",
        :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientCokernelComparison.lean",
+      {:cmd "lake env lean /tmp/CoefficientRelativeSmall.lean",
        :exit 0}
-      {:cmd "sha256sum /tmp/CoefficientCokernelComparison.lean",
-       :exit 0}
+      {:cmd "sha256sum /tmp/CoefficientRelativeSmall.lean", :exit 0}
       {:cmd
-       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientCokernelComparison.lean",
+       "rg -n '\\bsorry\\b|\\badmit\\b|sorryAx|\\baxiom\\b|\\bopaque\\b|\\bunsafe\\b' /tmp/CoefficientRelativeSmall.lean",
        :exit 1,
        :expected-exit 1}
       {:cmd "git diff --exit-code", :exit 0}
       {:cmd "git diff --check", :exit 0}],
-     :diagnostic-history [],
+     :diagnostic-history
+     [{:cmd "Initial lake env lean /tmp/CoefficientRelativeSmall.lean",
+       :exit 1,
+       :correction
+       "Applied the coproduct generator equation explicitly and rewrote the restricted-cover union equality directly. Final complete compilation succeeds without warnings."}],
+     :representation
+     {:source
+      "Homology of the actual cokernel of the restricted-cover small-chain map from A to X over ModuleCat R.",
+      :target
+      "Homology of the actual cokernel of singular postcomposition by the subtype inclusion A into X over ModuleCat R.",
+      :direction
+      "Construct an isomorphism from relative cover-small homology to relative singular homology whose forward arrow equals homologyMap of the cokernel map induced by the two actual small-chain inclusions."},
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientCokernelComparison.lean",
+     {:path "/tmp/CoefficientRelativeSmall.lean",
       :sha256
-      "eaa11a983fd6cbd117026568e4eddd48be7911686d61513dc1ab2b2794f490ce"},
+      "8d748371a567aff62b8214d511fb6275fd24832a9544540d21fb5d39c1bbfd79"},
      :finding
-     "Exactly one compiled cokernel-comparison prerequisite is supplied. The cokernel short exact sequence and its comparison theorem are proved directly for ModuleCat R chain complexes using the homology sequence. The constructed quotient-homology isomorphism has the exact cokernel-induced forward map and both inverse laws. Its explicit generic hypotheses require monic horizontal maps and absolute homology isomorphisms; their geometric instantiation remains in the parent. No relative small-chain comparison or parent GO is claimed.",
+     "Complete relative small-chain comparison compiles over ModuleCat R. The restricted map is constructed through the coefficient-general chain functor from the existing restricted-cover simplicial map. Generator evaluation, differential compatibility and the inclusion square are proved. Injectivity of the actual subtype simplicial map proves absolute monicity; the square proves restricted monicity. Both relative complexes are actual categorical cokernels. Reviewed absolute comparisons on X and A discharge the cokernel-comparison hypotheses, yielding every-degree relative isomorphisms with the exact induced forward map and both inverse laws.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/CoefficientRelativeSmall.lean"
+       "ConstructionTargets/CoefficientRelativeSmall.md"]},
      :seat "codex-13"}},
-   :phase :probe,
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/CoefficientRelativeSmall.lean"
+    "ConstructionTargets/CoefficientRelativeSmall.md"],
    :dag-node
    "RELATIVE SINGULAR CHAINS: coefficient-general relative small-chain comparison",
    :acceptance
