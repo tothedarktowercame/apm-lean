@@ -64371,8 +64371,49 @@
   {:consumer "t00A01",
    :stop-condition
    "GO requires complete frozen closure; otherwise name the exact missing actual-cover or chosen-basepoint comparison. Infrastructure absence is not refutation.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the generic connector-compatible pseudococone-to-point-span comparison with target naturality for the actual cover, then apply source reconstruction and chosen-basepoint transport. Preserve the proved homology branch and every frozen hypothesis. This assembly boundary is not a refutation or campaign termination.",
+    :dependency-review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789029867866-18252-c0ccab94"},
+    :outcome :stop,
+    :disposition :stop,
+    :author "codex-12",
+    :reason :missing-arbitrary-cover-vertex-coproduct-assembly,
+    :commands
+    [{:cmd "sed -n '1,205p' problems/t00A01/lean/Main.lean", :exit 0}
+     {:cmd
+      "sed -n '15,39p' ConstructionTargets/GenericTargetNaturalSourceReconstruction.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '1,36p' ConstructionTargets/TwoOpenFundamentalGroupoidPseudopushout.lean",
+      :exit 0}
+     {:cmd
+      "sed -n '80,93p' ConstructionTargets/TwoOpenLegCompatibleConnectorSystems.lean",
+      :exit 0}
+     {:cmd "sha256sum problems/t00A01/lean/Main.lean", :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "rg -n 'def |theorem ' ConstructionTargets/GenericConnectorSingleObjComparison.lean",
+      :exit 2,
+      :correction
+      "That filename does not exist. Located the actual generic comparison in ConnectedGroupoidSingleObjEquivalence and inspected the specialized connector constructions separately."}],
+    :changed-paths [],
+    :finding
+    "The exact remaining edge is assembly of the actual arbitrary two-open fundamental-groupoid pseudopushout into a target-natural mapping equivalence with the single-object category of the two vertex-group coproduct, followed by transport to the frozen basepoint and supplied puncture-group identifications. Compatible connector existence, connected-groupoid single-object equivalence, point-span free-product representations and generic target-natural source reconstruction are now banked; the historical claim that these individual foundations are absent is obsolete. GenericTargetNaturalSourceReconstruction still requires the assembled mapping-equivalence family and its postcomposition comparison. The t01J03 and t02A03 extractions specialize their own spans and do not directly supply this arbitrary-cover instance. No complete frozen fixture or new compiled prerequisite was obtained.",
+    :frozen
+    {:path "problems/t00A01/lean/Main.lean",
+     :sha256
+     "34695bbe5d056b8cb509a5be0b67e0f334e376890a2e3f2235809ea2f6de412f",
+     :placeholder-before 2,
+     :placeholder-after 2},
+    :seat "codex-12"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "VAN KAMPEN / frozen connected-sum open-union adapter",
    :acceptance
