@@ -64139,6 +64139,19 @@
      {:cmd "git status --short", :exit 0}],
     :concurrent-changes
     ["Staged CoefficientOverlapRelative.lean and .md observed and untouched."],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789029570510-18244-ef604876",
+     :commands
+     ["git show --check 55f5066b"
+      "Read pinned CompactSurfaceTriangleCover, IncidenceParameterProjection and finite-order embedding decomposition"
+      "rg -n 'perturb|isotop|transvers' .lake/packages/mathlib/Mathlib/Geometry/Manifold"
+      "sed -n '225,243p' .lake/packages/mathlib/Mathlib/Geometry/Manifold/Bordism.lean"
+      "Python read-only audit: pinned source hashes and five unchanged consumer hashes/placeholder counts"
+      "bb holes/labs/topology-contract/worklist_check.bb <(git show 55f5066b:holes/labs/topology-contract/worklist.edn)"],
+     :finding
+     "Independent review of codex-12's ledger-only STOP passes. Triangle coverage supplies embeddings and interior coverage, not finite boundary intersections. Incidence results assume range-sum transversality; Bordism perturbation text is documentation; finite-order embeddings are not geometric arcs. Controlled endpoint-preserving replacement or perturbation with retained coverage remains unresolved. No fixture or compiled prerequisite is claimed, and this is not a refutation. Five consumer hashes remain unchanged with placeholder counts 1,2,3,3,1. Pinned ledger validates 506 items. No files edited."},
     :prior-boundary-review
     {:outcome :pass,
      :seat "codex-10",
@@ -64148,7 +64161,7 @@
     "The precise missing construction is an endpoint-preserving adjustment of the finite triangle-boundary arc family that preserves embeddings, chart containment and interior coverage while proving finite intersections, including control near shared endpoints. CompactSurfaceTriangleCover proves the original embeddings and coverage but no inter-boundary position condition. IncidenceParameterProjection and ManifoldTargetIncidenceTangent require range-sum transversality as a hypothesis; they do not construct the required perturbation. Mathlib's Bordism perturbation discussion is documentation, not a relative perturbation theorem. EndpointPreservingFinEmbeddingDecomposition concerns finite order embeddings, not geometric arcs. No complete fixture or new compiled geometric prerequisite was obtained.",
     :seat "codex-12"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / embedded arcs in finite position",
@@ -64176,7 +64189,7 @@
    :stop-condition
    "End only on all campaign consumers closed or exact campaign-level refutation; local gaps do not terminate the campaign.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
