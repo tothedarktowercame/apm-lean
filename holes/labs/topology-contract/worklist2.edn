@@ -47898,8 +47898,85 @@
   {:consumer :t03J05,
    :stop-condition
    "Promote only the public explicit coordinate equation for balancedAdjacentSwap. Preserve the existing definition and declarations. Do not define path faces, signs, cancellation or cross products, edit consumers or claim closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use the public coordinate formula to prove retained-vertex equality and the common deleted simplicial and affine face.",
+    :gates
+    {:existing-declarations-preserved :pass,
+     :whitespace :pass,
+     :standard-only-axioms :pass,
+     :fixture-hash :pass,
+     :explicit-public-coordinate :pass,
+     :additive-theorem-only :pass,
+     :exact-scope :pass,
+     :existing-definition-preserved :pass,
+     :placeholder-scan :pass,
+     :forbidden-scope :pass,
+     :both-ledgers :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed two pre-existing SingularSubdivision linter warnings at lines 2960 and 3580; the changed target emitted no warnings"],
+    :statement-hashes
+    {"balancedAdjacentSwap_toWord_explicit"
+     "a98991dde01ecbb17378cacf709527fdc0a300bb57ebec709e4146ca38d73cdf"},
+    :axioms
+    {:balancedAdjacentSwap_toWord_explicit
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/codex13-common-face-prereq/BalancedAdjacentSwapExplicit.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-common-face-prereq/BalancedAdjacentSwapExplicit.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexBalancedAdjacentSwap",
+      :exit 0}
+     {:cmd
+      "verify prior Lean bytes after removing additive theorem and audit",
+      :exit 0}
+     {:cmd "comment-stripped placeholder scan", :exit 0}
+     {:cmd "forbidden declaration and downstream theorem scans",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "standard-only axiom audit for balancedAdjacentSwap_toWord_explicit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "exact two-file scope check", :exit 0}
+     {:cmd "git commit -m Expose-balanced-adjacent-swap-coordinates",
+      :exit 0}
+     {:cmd "parse exact receipt map with clojure.edn/read-string",
+      :exit 0}],
+    :commit "9125c9756f356bb6042c5d623071514d1ff1dbfc",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
+     "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
+    :fixture
+    {:path
+     "/tmp/codex13-common-face-prereq/BalancedAdjacentSwapExplicit.lean",
+     :sha256
+     "8b28a87df5ed685a0d89b895fe01fec0d2930a6d3fe6a04aa34d523bf81c9f3e",
+     :placeholder-count 0},
+    :declarations ["balancedAdjacentSwap_toWord_explicit"],
+    :implementation
+    {:scope
+     ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
+      "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"]},
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
     "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
