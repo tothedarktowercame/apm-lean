@@ -75378,6 +75378,41 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require naturality of sigmaConstFinsuppIso for arbitrary index maps, identifying the conjugated categorical sigmaConst map with Finsupp.lmapDomain; then specialize that equality to coefficient simplicial-chain components.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / ModuleCat sigmaConst to finitely-supported free module",
+   :acceptance
+   {:fixture "/tmp/CoefficientSigmaConstFinsuppComparison.lean",
+    :fixture-sha256
+    "e2eea32aaab84794c7f1debc703e38791ac912c58be062db9ab6c14b3806a705",
+    :implementation
+    "Promote the exact fixture. Compile sigmaConstFinsuppIso and sigma_ι_sigmaConstFinsuppIso_hom. This supplies the coefficient coproduct object and generator representation required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05. Verify CoefficientSubcomplexSimplexRangeLattice SHA256 2f0232d4485f10ad8800728722436509ee1832516fd5a5f9f95bb0bc485b6ca2. Preserve arbitrary index types and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim naturality for index maps, coefficient-chain component normalization, module range equalities, compatibility of either relative quotient arrow, chain-level short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The categorical ModuleCat sigmaConst coproduct of copies of the coefficient ring indexed by an arbitrary type",
+    :target
+    "The ordinary finitely-supported free module of coefficient-valued functions on that index type",
+    :direction
+    "Canonical linear isomorphism from the source categorical coproduct representation to the target Finsupp representation, with exact equality from every source coproduct injection applied to a coefficient to the corresponding target single-support generator."},
+   :id
+   :coefficient-sigma-const-finsupp-comparison-implementation-refill51,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-subcomplex-simplex-range-lattice-implementation-refill51],
+   :current-residual
+   "Prove that sigmaConst.map f conjugated by sigmaConstFinsuppIso equals ModuleCat.ofHom (Finsupp.lmapDomain R R f), using equality on coproduct generators. Specialize to each simplicial degree and combine with the simplex-index and Finsupp range-lattice theorems to obtain both component range equalities. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the genuine connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
@@ -75387,64 +75422,81 @@
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require a coefficient-chain component representation compatible with the ModuleCat coproduct implementation, allowing these simplex-index equalities and the banked finitely-supported support formulas to prove the two component range equalities.",
+      "Require naturality of sigmaConstFinsuppIso for arbitrary index maps, identifying the conjugated categorical sigmaConst map with Finsupp.lmapDomain; then specialize that equality to coefficient simplicial-chain components.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"],
+      ["ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / subcomplex simplex-index range lattice",
+      "MANIFOLD FUNDAMENTAL CLASS / ModuleCat sigmaConst to finitely-supported free module",
       :acceptance
-      {:fixture "/tmp/CoefficientSubcomplexSimplexRangeLattice.lean",
+      {:fixture "/tmp/CoefficientSigmaConstFinsuppComparison.lean",
        :fixture-sha256
-       "2f0232d4485f10ad8800728722436509ee1832516fd5a5f9f95bb0bc485b6ca2",
+       "e2eea32aaab84794c7f1debc703e38791ac912c58be062db9ab6c14b3806a705",
        :implementation
-       "Promote the exact fixture. Compile intersection_simplex_range and union_simplex_range. This supplies the exact degreewise index-range identities required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: the intersection-subcomplex inclusion has the intersection of the member simplex ranges, and the union-subcomplex inclusion has their union. Verify CoefficientFinsuppRangeLattice SHA256 53018e56a3fde3aefc645d76621ff2a2b7a53e1b1af6a1574d91e9d4f8943bce. Preserve arbitrary simplicial sets, arbitrary subcomplexes and every natural-number degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim coefficient-chain component normalization, module range equalities, compatibility of either relative quotient arrow, chain-level short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile sigmaConstFinsuppIso and sigma_ι_sigmaConstFinsuppIso_hom. This supplies the coefficient coproduct object and generator representation required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05. Verify CoefficientSubcomplexSimplexRangeLattice SHA256 2f0232d4485f10ad8800728722436509ee1832516fd5a5f9f95bb0bc485b6ca2. Preserve arbitrary index types and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim naturality for index maps, coefficient-chain component normalization, module range equalities, compatibility of either relative quotient arrow, chain-level short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
+      :representation
+      {:source
+       "The categorical ModuleCat sigmaConst coproduct of copies of the coefficient ring indexed by an arbitrary type",
+       :target
+       "The ordinary finitely-supported free module of coefficient-valued functions on that index type",
+       :direction
+       "Canonical linear isomorphism from the source categorical coproduct representation to the target Finsupp representation, with exact equality from every source coproduct injection applied to a coefficient to the corresponding target single-support generator."},
       :id
-      :coefficient-subcomplex-simplex-range-lattice-implementation-refill51,
-      :kind :reusable-theorem,
+      :coefficient-sigma-const-finsupp-comparison-implementation-refill51,
+      :kind :representation-comparison,
       :depends-on
-      [:coefficient-finsupp-range-lattice-implementation-refill51],
+      [:coefficient-subcomplex-simplex-range-lattice-implementation-refill51],
       :current-residual
-      "Construct the canonical degreewise linear equivalence between the ModuleCat sigmaConst coefficient-chain object and the finitely-supported free module, prove naturality for subcomplex inclusions, and combine it with intersection_simplex_range, union_simplex_range and the Finsupp range-lattice formulas. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the genuine connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
+      "Prove that sigmaConst.map f conjugated by sigmaConstFinsuppIso equals ModuleCat.ofHom (Finsupp.lmapDomain R R f), using equality on coproduct generators. Specialize to each simplicial degree and combine with the simplex-index and Finsupp range-lattice theorems to obtain both component range equalities. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the genuine connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientFinsuppRangeLattice >/tmp/subcomplex-simplex-range-dep.log 2>&1",
+       "lake build ConstructionTargets.CoefficientSubcomplexSimplexRangeLattice >/tmp/sigma-finsupp-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientSubcomplexSimplexRangeLattice.lean",
+       "lake env lean /tmp/CoefficientSigmaConstFinsuppComparison.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientSubcomplexSimplexRangeLattice.lean ConstructionTargets/CoefficientFinsuppRangeLattice.lean",
+       "sha256sum /tmp/CoefficientSigmaConstFinsuppComparison.lean ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/CoefficientSubcomplexSimplexRangeLattice.lean",
+       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/CoefficientSigmaConstFinsuppComparison.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientSubcomplexSimplexRangeLattice.lean",
+       "lake env lean /tmp/CoefficientSigmaConstFinsuppComparison.lean",
        :exit 1,
        :correction
-       "The initial intersection reverse-inclusion proof oriented the equality of underlying simplices incorrectly and attempted to substitute an equality between coerced subtype values. Reversed the equality, transported the right-subcomplex membership proof to the left representative, and constructed the intersection subtype directly."}],
+       "The first fixture omitted the classical DecidableEq instance required by the concrete coproduct and direct-sum equivalence. Constructed the isomorphism and generator proof in classical contexts."}
+      {:cmd
+       "lake env lean /tmp/CoefficientSigmaConstFinsuppComparison.lean",
+       :exit 1,
+       :correction
+       "Generic simplification did not expose the categorical coproduct injection under the composite isomorphism. Restated the composite explicitly through coprodIsoDirectSum and the inverse finitely-supported/direct-sum equivalence."}
+      {:cmd
+       "lake env lean /tmp/CoefficientSigmaConstFinsuppComparison.lean",
+       :exit 1,
+       :correction
+       "The explicit composite was right-associated, so the coproduct-injection theorem could not rewrite its first two factors. Reassociated in the inverse direction, applied ModuleCat.ι_coprodIsoDirectSum_hom, and finished with finsuppLEquivDirectSum_symm_lof."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientSubcomplexSimplexRangeLattice.lean",
+     {:path "/tmp/CoefficientSigmaConstFinsuppComparison.lean",
       :sha256
-      "2f0232d4485f10ad8800728722436509ee1832516fd5a5f9f95bb0bc485b6ca2",
+      "e2eea32aaab84794c7f1debc703e38791ac912c58be062db9ab6c14b3806a705",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one simplex-index range prerequisite. In every simplicial degree, the set-theoretic range of the intersection-subcomplex inclusion is exactly the intersection of the two member inclusion ranges, and the range of the union-subcomplex inclusion is exactly their union. The proofs use the literal subtype membership data, including both directions. Combined with the banked finitely-supported range theorem, these equalities provide the basis-level input for the reverse coefficient-chain range inclusions. No supportConnecting or excision hypothesis is used.",
+     "Compiled exactly one coefficient coproduct representation prerequisite. The chosen ModuleCat sigmaConst coproduct of copies of R is canonically isomorphic to the finitely-supported free R-module on its index type, through the concrete direct-sum presentation. Under this isomorphism, every categorical coproduct injection sends a coefficient exactly to the corresponding Finsupp.single generator. This supplies the object and generator comparison needed to normalize coefficient-chain components. No supportConnecting or excision hypothesis is used.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -75482,7 +75534,8 @@
     :coefficient-subcomplex-relative-degree-quotients-implementation-refill51
     :coefficient-subcomplex-relative-degree-range-order-implementation-refill51
     :coefficient-finsupp-range-lattice-implementation-refill51
-    :coefficient-subcomplex-simplex-range-lattice-implementation-refill51],
+    :coefficient-subcomplex-simplex-range-lattice-implementation-refill51
+    :coefficient-sigma-const-finsupp-comparison-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
