@@ -47727,8 +47727,143 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :disposition :replan,
+    :author "codex-13",
+    :commands
+    [{:cmd
+      "Read complete DAG, closure experiments, build-loop design, foundational-program note and both ledgers",
+      :exit 0}
+     {:cmd
+      "Verify oriented-checkpoint79-product-simplex-adjacent-path-swap-1 is done with PASS review",
+      :exit 0}
+     {:cmd
+      "Inspect adjacentSwapPath, face_objEquiv, productAffine_comp_face, maximal-path coordinates and step-word count interfaces",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "find ConstructionTargets -maxdepth 1 -name '*.lean' | wc -l",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "Parse exact receipt map with clojure.edn/read-string",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial receipt-shape assertion for representation keys",
+      :exit 1,
+      :finding
+      "The exploratory assertion mistakenly expected an empty key set. The corrected parse asserts exactly source, target and direction and succeeds."}],
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Construct only the common deleted-face comparison for a maximal path and its adjacent swap at unequal consecutive letters. Prove the required vertex equality, simplicial-face equality and affine product-face equality. Do not assign shuffle signs, define cancellation pairings, construct chains or cross products, edit consumers or claim closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "PRODUCT HOMOLOGY: common face of adjacent path swaps",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use MaximalPath p q, a witness n + 1 = p + q, a cut i : Fin n, unequal adjacent balanced-word letters at i.castSucc and i.succ, the reviewed adjacentSwapPath, face_objEquiv and productAffine_comp_face.",
+       :route-step
+       "Supplies the common deleted affine face of adjacent path pairs immediately before sign reversal and cancellation on the t03J05, t96J06 and t97A04 routes.",
+       :probe
+       "Build a placeholder-free Lean fixture computing path vertices before and after the swapped corner, proving equality after deleting the intermediate vertex, upgrading it to equality of the corresponding simplicial faces, and deriving equality of the affine product-simplex face maps. GO requires the complete compiled comparison; REVISE names exactly one compiled vertex-coordinate prerequisite; STOP names an exact representation conflict.",
+       :consumer-equation
+       "When two adjacent step letters differ, a maximal path and its adjacent swap traverse opposite sides of one grid square; deleting their distinct intermediate vertices produces exactly the same simplicial face and the same affine product-simplex map.",
+       :consumer-residual
+       "Define the shuffle parity change under adjacent transposition and use the common-face equality to pair and cancel internal boundary terms.",
+       :gates
+       ["Import and reuse ProductSimplexAdjacentPathSwap, ProductSimplexMaximalPaths and ProductSimplexAffineRealization."
+        "State the unequal-adjacent-letter hypothesis at the exact balanced-word coordinates used by adjacentSwapPath."
+        "Prove agreement of every retained vertex and equality of the deleted simplicial faces."
+        "Derive the oriented affine product-face equality in the source-to-swapped direction."
+        "Use no sorry, axiom, theorem-as-hypothesis, sign, cancellation, chain, cross-product or consumer-source edit."
+        "Run lake env lean, standard-only axiom audits, placeholder and warning scans, both ledger validators and whitespace checks."
+        "Confirm exact implementation scope from the compiled fixture."]},
+      :representation
+      {:source
+       "The face obtained by deleting the intermediate corner vertex from a maximal path with unequal adjacent step letters",
+       :target
+       "The face obtained by deleting the corresponding intermediate corner vertex from its reviewed adjacentSwapPath",
+       :direction
+       "Exact equality from the source deleted simplicial and affine face representation to the target deleted-face representation, induced by equality of every retained lattice-path vertex."},
+      :id
+      :oriented-checkpoint80-product-simplex-adjacent-swap-common-face-1,
+      :kind :representation-comparison,
+      :depends-on [],
+      :current-residual
+      "Adjacent path swaps are banked, but their unequal-corner vertex agreement and common deleted affine face are not yet proved.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: adjacent-swap common faces and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint81-adjacent-swap-common-faces-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint80-product-simplex-adjacent-swap-common-face-1],
+      :current-residual
+      "Measure the common-face comparison separately from shuffle signs, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
+    :measures
+    {:placeholder-delta 0,
+     :typed-residual-change
+     "adjacent maximal-path swaps are promoted and PASS-reviewed; the unequal-corner common deleted-face comparison is now the smallest shared residual",
+     :infrastructure-packets
+     {:before 884, :after 886, :portfolio 1, :concurrent 1},
+     :review-outcomes
+     {:balanced-adjacent-word-swap :pass,
+      :adjacent-maximal-path-swap :pass},
+     :frozen-branch-uptake 0,
+     :frozen-closures 0,
+     :corrected-closures 0,
+     :proved-refutations 0},
+    :finding
+    {:census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholders 61},
+     :routes
+     "a97J08(1): local degree/orientation -> comparison -> adapter; t00A03(2): translations -> endpoint perturbation -> compatible faces -> triangulation; t00J01(1): circle fold -> Klein geometry -> homology bridge -> adapter; t00J02(1): relative Mayer-Vietoris -> excision -> localization -> fundamental class; t01A02(3): H2 degree -> Lefschetz -> conjunction; t01A04(4): fundamental class -> cap/Thom comparison -> calculations; t01A05(1): compact-support Mayer-Vietoris -> localization -> adapter; t01A08(1): regularity conversion -> Sard -> adapter; t01J01(3): translations -> endpoint control -> triangulation -> theorem; t01J04(1): regular preimage -> countability/atlas applicability -> theorem; t01J06(3): sphere moments -> normalization -> Stokes -> conjunction; t02A05(2): S2 flux -> normalization -> integral/minimum; t02A07(3): compact-support Mayer-Vietoris -> localization -> fundamental class; t02A08(1): local comparison -> normalization -> theorem; t03J02(2): null winding -> collar/Schoenflies -> gluing -> theorem; t03J04(1): torus homology -> finite-cover Euler comparison -> theorem; t03J05(1): common deleted face -> signs/cancellation -> cross product -> theorem; t91J05(3): translations -> endpoint control -> compatible faces -> result; t92J05(3): antipodal/genus-two bridges -> classification -> assembly; t92J06(1): covering data -> quotient adapter -> theorem; t94A06(1): regular preimage/translation -> applicability -> adapter; t94A10(3): S2 moments -> normalization -> nonexactness; t94J09(1): translations -> endpoint perturbation -> intersection adapter; t95J05(1): S3 moment -> mass normalization -> integral uptake; t95J06(2): torus quotient -> classification -> result; t96J06(2): common face -> cancellation -> cross-product assembly; t97A01(1): cover transfer -> finite-cover Euler comparison -> theorem; t97A04(4): common face -> cancellation -> cross product -> Kunneth/intersections; t97J05(5): compact-support Mayer-Vietoris -> localization -> fundamental class -> assembly; t98A01(1): five-torsion -> polygon genus -> Euler comparison -> conjunction; t98A02(1): relative Mayer-Vietoris -> excision -> localization monicity -> fundamental class; t99J03(1): endpoint perturbation -> coverage -> compatible faces -> triangulation",
+     :ranking
+     "The reviewed adjacentSwapPath and existing face_objEquiv reduce the next route step to one local vertex-sequence calculation: unequal adjacent letters exchange the two routes around a square while all vertices except the intermediate corner agree. productAffine_comp_face then supplies the affine-face equality needed by cancellation.",
+     :concurrency
+     "ConstructionTargets increased from 884 to 886. One module is the reviewed path-swap promotion and one is concurrent work; no frozen consumer placeholder changed and no active row duplicates the common-face comparison.",
+     :deferred
+     ["shuffle signs and pairwise cancellation until the common face is banked"
+      "cross-product assembly until signed cancellation is banked"]},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: adjacent maximal-path swaps and renewed consumer eligibility",
@@ -47745,6 +47880,78 @@
     :oriented-checkpoint79-balanced-adjacent-swaps-and-consumer-refill-1],
    :current-residual
    "Measure adjacent path swaps separately from common faces, signs, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the common deleted-face comparison for a maximal path and its adjacent swap at unequal consecutive letters. Prove the required vertex equality, simplicial-face equality and affine product-face equality. Do not assign shuffle signs, define cancellation pairings, construct chains or cross products, edit consumers or claim closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "PRODUCT HOMOLOGY: common face of adjacent path swaps",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use MaximalPath p q, a witness n + 1 = p + q, a cut i : Fin n, unequal adjacent balanced-word letters at i.castSucc and i.succ, the reviewed adjacentSwapPath, face_objEquiv and productAffine_comp_face.",
+    :route-step
+    "Supplies the common deleted affine face of adjacent path pairs immediately before sign reversal and cancellation on the t03J05, t96J06 and t97A04 routes.",
+    :probe
+    "Build a placeholder-free Lean fixture computing path vertices before and after the swapped corner, proving equality after deleting the intermediate vertex, upgrading it to equality of the corresponding simplicial faces, and deriving equality of the affine product-simplex face maps. GO requires the complete compiled comparison; REVISE names exactly one compiled vertex-coordinate prerequisite; STOP names an exact representation conflict.",
+    :consumer-equation
+    "When two adjacent step letters differ, a maximal path and its adjacent swap traverse opposite sides of one grid square; deleting their distinct intermediate vertices produces exactly the same simplicial face and the same affine product-simplex map.",
+    :consumer-residual
+    "Define the shuffle parity change under adjacent transposition and use the common-face equality to pair and cancel internal boundary terms.",
+    :gates
+    ["Import and reuse ProductSimplexAdjacentPathSwap, ProductSimplexMaximalPaths and ProductSimplexAffineRealization."
+     "State the unequal-adjacent-letter hypothesis at the exact balanced-word coordinates used by adjacentSwapPath."
+     "Prove agreement of every retained vertex and equality of the deleted simplicial faces."
+     "Derive the oriented affine product-face equality in the source-to-swapped direction."
+     "Use no sorry, axiom, theorem-as-hypothesis, sign, cancellation, chain, cross-product or consumer-source edit."
+     "Run lake env lean, standard-only axiom audits, placeholder and warning scans, both ledger validators and whitespace checks."
+     "Confirm exact implementation scope from the compiled fixture."]},
+   :representation
+   {:source
+    "The face obtained by deleting the intermediate corner vertex from a maximal path with unequal adjacent step letters",
+    :target
+    "The face obtained by deleting the corresponding intermediate corner vertex from its reviewed adjacentSwapPath",
+    :direction
+    "Exact equality from the source deleted simplicial and affine face representation to the target deleted-face representation, induced by equality of every retained lattice-path vertex."},
+   :id
+   :oriented-checkpoint80-product-simplex-adjacent-swap-common-face-1,
+   :kind :representation-comparison,
+   :depends-on
+   [:oriented-checkpoint80-adjacent-path-swaps-and-consumer-refill-1],
+   :current-residual
+   "Adjacent path swaps are banked, but their unequal-corner vertex agreement and common deleted affine face are not yet proved.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: adjacent-swap common faces and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint81-adjacent-swap-common-faces-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint80-product-simplex-adjacent-swap-common-face-1
+    :oriented-checkpoint80-adjacent-path-swaps-and-consumer-refill-1],
+   :current-residual
+   "Measure the common-face comparison separately from shuffle signs, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
