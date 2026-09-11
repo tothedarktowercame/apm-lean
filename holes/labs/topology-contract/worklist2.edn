@@ -47032,6 +47032,21 @@
       :exit 0}
      {:cmd "Parse exact receipt map with clojure.edn/read-string",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789085325068-19882-1cd4eaa0",
+     :commands
+     ["git show/diff-tree ffa567b5"
+      "verify recorded Lean blob equals canonical file"
+      "sha256sum fixture and recorded blobs"
+      "lake env lean canonical target"
+      "lake build ConstructionTargets.ProductSimplexWordPrefixCounts"
+      "bb worklist_check.bb on both ledgers"
+      "bb test_gate_receipts.bb"
+      "placeholder and forbidden-boundary scans"],
+     :finding
+     "PASS: implementation commit ffa567b5 changes exactly ProductSimplexWordPrefixCounts.lean and its documentation. The recorded Lean blob is byte-identical to the frozen fixture at SHA256 f2d795b7b39602eb881503a501bef7e30cf25773b4cea4c4bda245b6dbc430ac; deleting the additive extension recovers predecessor SHA256 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08. The horizontal theorem counts true letters and the vertical theorem counts false letters at Fin.last, with correct orientations and no subtype or balance boundary leakage. Both statement hashes match the recorded evidence, placeholder counts remain zero, axioms are propext/Classical.choice/Quot.sound, compilation and module build pass, both ledgers validate, and 7 tests/85 assertions pass. Only the two known dependency warnings recur."},
     :commit "ffa567b5df2c8a2b1fa1d2d42955c13f35f39c19",
     :changed-paths
     ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
@@ -47053,7 +47068,7 @@
     "Checkpoint67 evidence points to its immutable artifact. Removing only the two new terminal theorems and their axiom-print commands from the promoted fixture reproduces that artifact byte-for-byte, so every existing declaration is preserved. The new equations identify horizontalCount at Fin.last n with the true-letter filter cardinality over Finset.univ and verticalCount with the false-letter filter cardinality. Both compile with standard-only axioms, both ledgers validate, and only the two scoped files changed.",
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
@@ -47102,7 +47117,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: terminal word counts and renewed consumer eligibility",
