@@ -96,6 +96,49 @@ lemma apm_m93J01_centered6_isBigO
   simp only [apm_m93J01_kappa]
   ring
 
+lemma apm_m93J01_taylor4_isLittleO
+    (f : ℝ → ℝ) (hf : ContDiff ℝ 4 f) (x : ℝ) :
+    (fun h : ℝ ↦ f (x + h) -
+      (f x + h * iteratedDeriv 1 f x + h ^ 2 / 2 * iteratedDeriv 2 f x +
+       h ^ 3 / 6 * iteratedDeriv 3 f x + h ^ 4 / 24 * iteratedDeriv 4 f x))
+      =o[nhds 0] (fun h : ℝ ↦ h ^ 4) := by
+  have ht : Tendsto (fun h : ℝ ↦ x + h) (nhds 0) (nhds x) := by
+    simpa using (tendsto_const_nhds.add tendsto_id :
+      Tendsto (fun h : ℝ ↦ x + h) (nhds 0) (nhds (x + 0)))
+  have h := (taylor_isLittleO_univ hf (x₀ := x)).comp_tendsto ht
+  convert h using 1
+  · funext z
+    simp [taylor_within_apply, iteratedDerivWithin_univ]
+    ring
+  · funext z
+    simp
+
+lemma apm_m93J01_centered4_isBigO
+    (f : ℝ → ℝ) (hf : ContDiff ℝ 4 f) (x : ℝ) :
+    (fun h : ℝ ↦ f (x + h) + f (x - h) - 2 * f x -
+      h ^ 2 * iteratedDeriv 2 f x) =O[nhds 0] (fun h : ℝ ↦ h ^ 4) := by
+  have hp := apm_m93J01_taylor4_isLittleO f hf x
+  have ht : Tendsto (fun h : ℝ ↦ -h) (nhds 0) (nhds 0) :=
+    by simpa using (tendsto_id.neg : Tendsto (fun h : ℝ ↦ -h) (nhds 0) (nhds (-0)))
+  have hm0 := (apm_m93J01_taylor4_isLittleO f hf x).comp_tendsto ht
+  have hm :
+      (fun h : ℝ ↦ f (x - h) -
+        (f x + (-h) * iteratedDeriv 1 f x + (-h) ^ 2 / 2 * iteratedDeriv 2 f x +
+         (-h) ^ 3 / 6 * iteratedDeriv 3 f x + (-h) ^ 4 / 24 * iteratedDeriv 4 f x))
+        =o[nhds 0] (fun h : ℝ ↦ h ^ 4) := by
+    convert hm0 using 1 <;> funext h <;> simp <;> ring
+  have hs := (hp.add hm).isBigO
+  have hterm :
+      (fun h : ℝ ↦ h ^ 4 / 12 * iteratedDeriv 4 f x)
+        =O[nhds 0] (fun h : ℝ ↦ h ^ 4) := by
+    convert (isBigO_refl (fun h : ℝ ↦ h ^ 4) (nhds 0)).const_mul_left
+      (iteratedDeriv 4 f x / 12) using 1
+    funext h
+    ring
+  convert hs.add hterm using 1
+  funext h
+  ring
+
 /-- Why this unblocks `apm_m93j01`: applying the order-four centered Taylor
 estimate to `iteratedDeriv 2 y` requires transferring `ContDiff ℝ 8 y` to that
 derived function and identifying its second and fourth iterated derivatives
@@ -107,7 +150,15 @@ theorem apm_m93J01_bridge_1
       iteratedDeriv 2 y (x + h) + iteratedDeriv 2 y (x - h) -
         2 * iteratedDeriv 2 y x - h ^ 2 * iteratedDeriv 4 y x)
       =O[nhds 0] (fun h : ℝ ↦ h ^ 4) := by
-  sorry
+  have hy4 : ContDiff ℝ 4 (iteratedDeriv 2 y) := by
+    rw [iteratedDeriv_eq_iterate]
+    exact (hy.of_le (by norm_num)).iterate_deriv' 4 2
+  have h := apm_m93J01_centered4_isBigO (iteratedDeriv 2 y) hy4 x
+  convert h using 1
+  funext z
+  congr 1
+  simp only [iteratedDeriv_eq_iterate]
+  rw [← Function.iterate_add_apply]
 
 theorem apm_m93j01
     (y V : ℝ → ℝ) (hy : ContDiff ℝ 8 y) :
@@ -138,6 +189,33 @@ theorem apm_m93j01
           (1 - h ^ 2 / 12 * V (x - h)) * y (x - h))
           =O[nhds 0] (fun h : ℝ ↦ h ^ 6)) := by
   refine ⟨rfl, ?_⟩
+  refine ⟨fun x ↦ apm_m93J01_centered6_isBigO y (hy.of_le (by norm_num)) x, ?_⟩
+  refine ⟨?_, ?_⟩
+  · intro x
+    have h := apm_m93J01_centered6_isBigO y (hy.of_le (by norm_num)) x
+    convert h using 1
+    funext z
+    exact apm_m93J01_schrodinger_residual_eq y V x z
+  refine ⟨fun x ↦ apm_m93J01_bridge_1 y hy x, ?_⟩
+  intro hode x
+  have hd (z : ℝ) : iteratedDeriv 2 y z = V z * y z := by
+    have hz := hode z
+    simp only [apm_m93J01_schrodinger] at hz
+    linarith
+  have ha := apm_m93J01_centered6_isBigO y (hy.of_le (by norm_num)) x
+  have hb := apm_m93J01_bridge_1 y hy x
+  have hb6 := (isBigO_refl (fun h : ℝ ↦ h ^ 2) (nhds 0)).mul hb
+  have hscaled :
+      (fun h : ℝ ↦ -(1 / 12 : ℝ) *
+        (h ^ 2 * (iteratedDeriv 2 y (x + h) + iteratedDeriv 2 y (x - h) -
+          2 * iteratedDeriv 2 y x - h ^ 2 * iteratedDeriv 4 y x)))
+        =O[nhds 0] (fun h : ℝ ↦ h ^ 6) := by
+    convert hb6.const_mul_left (-(1 / 12 : ℝ)) using 1 <;> funext h <;> ring
+  convert ha.add hscaled using 1
+  funext h
+  rw [hd (x + h), hd (x - h), hd x]
+  simp only [apm_m93J01_kappa]
+  ring
   /-
   Boundary: the remaining clauses require a symmetric Taylor estimate with
   an `IsBigO (h ^ 6)` remainder for `y`, and the analogous `IsBigO (h ^ 4)`
@@ -187,4 +265,5 @@ theorem apm_m93j01
   derivatives of that derivative function back to orders four and six of `y`.
   The final ODE substitution then remains algebraic.
   -/
-  sorry
+
+#print axioms apm_m93j01
