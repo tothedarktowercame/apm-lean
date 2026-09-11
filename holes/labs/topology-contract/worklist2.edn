@@ -46966,8 +46966,94 @@
   {:consumer :t03J05,
    :stop-condition
    "Promote only the two compiled terminal-count characterizations into ProductSimplexWordPrefixCounts and document them. Preserve every existing declaration. Do not define swaps, package balanced words or paths, compare faces, assign signs, cancel chains, construct a cross product or claim closure.",
+   :evidence
+   {:placeholder-delta {:before 0, :after 0, :delta 0},
+    :residual
+    "Use filtered-cardinality invariance under adjacent transposition to package balanced and path swaps and prove their common deleted face.",
+    :gates
+    {:canonical-compile :pass,
+     :terminal-false-filter :pass,
+     :whitespace :pass,
+     :receipt-edn-parse :pass,
+     :fixture-hash :pass,
+     :axiom-audits :pass,
+     :predecessor-byte-preservation :pass,
+     :terminal-true-filter :pass,
+     :checkpoint67-immutable-path :pass,
+     :placeholder-scan :pass,
+     :lake-build :pass,
+     :warning-audit :pass,
+     :commit :pass,
+     :both-ledgers :pass,
+     :fixture-compile :pass,
+     :forbidden-declaration-scan :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {"horizontalCount_last_eq_card_filter"
+     "c44046c4dab9a2b4d3e2a846b34d56aee75f6833ef284bd3940c62d8432ee882",
+     "verticalCount_last_eq_card_filter"
+     "bbec6fc2ff9ccdf3c4791aa269c77282207af8491cb98b2f491497a7315698f8"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "Verify checkpoint67 immutable fixture path and hash; verify additive fixture hash; run both ledgers",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexWordPrefixCounts",
+      :exit 0}
+     {:cmd
+      "Python predecessor-byte preservation, exact statement hashes, terminal-filter semantics, placeholders and whitespace audit",
+      :exit 0}
+     {:cmd
+      "rg forbidden declarations and deferred constructions in canonical Lean source",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check; git diff --name-only", :exit 0}
+     {:cmd
+      "git commit -m 'Expose terminal product-simplex word counts'",
+      :exit 0}
+     {:cmd
+      "git show --check --stat --oneline HEAD; git status --short",
+      :exit 0}
+     {:cmd "Parse exact receipt map with clojure.edn/read-string",
+      :exit 0}],
+    :commit "ffa567b5df2c8a2b1fa1d2d42955c13f35f39c19",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
+     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
+    :dependency-warnings
+    ["ConstructionTargets/SingularSubdivision.lean:2960 unused tactic"
+     "ConstructionTargets/SingularSubdivision.lean:3580 unnecessary simpa"],
+    :fixture
+    {:path
+     "/tmp/codex13-checkpoint69-terminal-counts/ProductSimplexWordPrefixCounts.lean",
+     :sha256
+     "f2d795b7b39602eb881503a501bef7e30cf25773b4cea4c4bda245b6dbc430ac",
+     :canonical-path
+     "ConstructionTargets/ProductSimplexWordPrefixCounts.lean",
+     :canonical-sha256
+     "f2d795b7b39602eb881503a501bef7e30cf25773b4cea4c4bda245b6dbc430ac",
+     :placeholder-count 0},
+    :finding
+    "Checkpoint67 evidence points to its immutable artifact. Removing only the two new terminal theorems and their axiom-print commands from the promoted fixture reproduces that artifact byte-for-byte, so every existing declaration is preserved. The new equations identify horizontalCount at Fin.last n with the true-letter filter cardinality over Finset.univ and verticalCount with the false-letter filter cardinality. Both compile with standard-only axioms, both ledgers validate, and only the two scoped files changed.",
+    :seat "codex-14"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
