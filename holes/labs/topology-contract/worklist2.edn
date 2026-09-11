@@ -47426,7 +47426,8 @@
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
    {:outcome :replan,
-    :seat "codex-13",
+    :disposition :replan,
+    :author "codex-13",
     :commands
     [{:cmd
       "Read complete DAG, closure experiments, build-loop design, foundational-program note and both ledgers",
@@ -47450,36 +47451,20 @@
      {:cmd "git diff --exit-code", :exit 0}
      {:cmd "Parse exact receipt map with clojure.edn/read-string",
       :exit 0}],
-    :measures
-    {:placeholder-delta 0,
-     :typed-residual-change
-     "balanced adjacent-word swaps are promoted and PASS-reviewed; transport through wordPathEquiv is now the smallest shared residual",
-     :infrastructure-packets
-     {:before 881, :after 884, :portfolio 1, :concurrent 2},
-     :review-outcomes
-     {:terminal-word-counts :pass, :balanced-adjacent-word-swap :pass},
-     :frozen-branch-uptake 0,
-     :frozen-closures 0,
-     :corrected-closures 0,
-     :proved-refutations 0},
-    :finding
-    {:census
-     {:named 59,
-      :existing 58,
-      :missing [:t93A05],
-      :open-consumers 32,
-      :zero-placeholder 26,
-      :within-two 22,
-      :placeholders 61},
-     :routes
-     "a97J08(1): local degree/orientation -> comparison -> adapter; t00A03(2): translations -> endpoint perturbation -> compatible faces -> triangulation; t00J01(1): circle fold -> Klein geometry -> homology bridge -> adapter; t00J02(1): relative Mayer-Vietoris -> excision -> localization -> fundamental class; t01A02(3): H2 degree -> Lefschetz -> conjunction; t01A04(4): fundamental class -> cap/Thom comparison -> calculations; t01A05(1): compact-support Mayer-Vietoris -> localization -> adapter; t01A08(1): regularity conversion -> Sard -> adapter; t01J01(3): translations -> endpoint control -> triangulation -> theorem; t01J04(1): regular preimage -> countability/atlas applicability -> theorem; t01J06(3): sphere moments -> normalization -> Stokes -> conjunction; t02A05(2): S2 flux -> normalization -> integral/minimum; t02A07(3): compact-support Mayer-Vietoris -> localization -> fundamental class; t02A08(1): local comparison -> normalization -> theorem; t03J02(2): null winding -> collar/Schoenflies -> gluing -> theorem; t03J04(1): torus homology -> finite-cover Euler comparison -> theorem; t03J05(1): path adjacent swap -> common deleted face -> signs/cancellation -> cross product -> theorem; t91J05(3): translations -> endpoint control -> compatible faces -> result; t92J05(3): antipodal/genus-two bridges -> classification -> assembly; t92J06(1): covering data -> quotient adapter -> theorem; t94A06(1): regular preimage/translation -> applicability -> adapter; t94A10(3): S2 moments -> normalization -> nonexactness; t94J09(1): translations -> endpoint perturbation -> intersection adapter; t95J05(1): S3 moment -> mass normalization -> integral uptake; t95J06(2): torus quotient -> classification -> result; t96J06(2): path adjacent swap -> common face -> cancellation -> cross-product assembly; t97A01(1): cover transfer -> finite-cover Euler comparison -> theorem; t97A04(4): path adjacent swap -> common face -> cancellation -> cross product -> Kunneth/intersections; t97J05(5): compact-support Mayer-Vietoris -> localization -> fundamental class -> assembly; t98A01(1): five-torsion -> polygon genus -> Euler comparison -> conjunction; t98A02(1): relative Mayer-Vietoris -> excision -> localization monicity -> fundamental class; t99J03(1): endpoint perturbation -> coverage -> compatible faces -> triangulation",
-     :ranking
-     "The reviewed balancedAdjacentSwap operation and wordPathEquiv already supply the data needed to define an adjacent swap on MaximalPath and prove involutivity. This is the smallest shared route step for t03J05, t96J06 and t97A04; the common deleted-face equality remains a separate vertex calculation.",
-     :concurrency
-     "ConstructionTargets increased from 881 to 884. One module is the reviewed portfolio promotion and two are concurrent work; no frozen consumer placeholder changed and no active row duplicates path transport.",
-     :deferred
-     ["common deleted-face comparison until the path-level swap is banked"
-      "shuffle signs, cancellation and cross products until the common face is banked"]},
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789086335799-19910-c5e70e11",
+     :commands
+     ["git show/diff-tree 219864de"
+      "git archive 219864de to isolated snapshot"
+      "bb worklist_check.bb on both archived ledgers"
+      "bb archived test_gate_receipts.bb"
+      "lake build ProductSimplexBalancedAdjacentSwap and ProductSimplexWordPathEquivalence"
+      "sha256sum canonical and frozen balanced-swap fixture"
+      "EDN replacement dependency inspection"],
+     :finding
+     "PASS: commit 219864de changes only worklist2.edn and faithfully materializes the checkpoint-79 replan. The new probe is correctly bounded to equivalence-conjugated MaximalPath swap, inverse word coordinate, toWord coordinate and involutivity; unequal-letter hypotheses, deleted-face comparison, signs, cancellation, cross products and consumer edits remain deferred. The probe and successor dependencies are each injected exactly once. Both archived ledgers validate, 7 tests/85 assertions pass, referenced modules build, and the reviewed balanced-swap source and frozen fixture reproduce SHA256 dd612b706fd569845802478c2cf3d30f4b8c8aa730b1f929f4d6c9557a6d0924 with zero placeholders and unchanged four-statement boundary. Only the known SingularSubdivision dependency warnings recur."},
     :replacement-items
     [{:consumer :t03J05,
       :stop-condition
@@ -47542,10 +47527,39 @@
       :current-residual
       "Measure adjacent path swaps separately from common faces, signs, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
       :other-consumers []}],
-    :author "codex-13",
-    :disposition :replan},
+    :measures
+    {:placeholder-delta 0,
+     :typed-residual-change
+     "balanced adjacent-word swaps are promoted and PASS-reviewed; transport through wordPathEquiv is now the smallest shared residual",
+     :infrastructure-packets
+     {:before 881, :after 884, :portfolio 1, :concurrent 2},
+     :review-outcomes
+     {:terminal-word-counts :pass, :balanced-adjacent-word-swap :pass},
+     :frozen-branch-uptake 0,
+     :frozen-closures 0,
+     :corrected-closures 0,
+     :proved-refutations 0},
+    :finding
+    {:census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholders 61},
+     :routes
+     "a97J08(1): local degree/orientation -> comparison -> adapter; t00A03(2): translations -> endpoint perturbation -> compatible faces -> triangulation; t00J01(1): circle fold -> Klein geometry -> homology bridge -> adapter; t00J02(1): relative Mayer-Vietoris -> excision -> localization -> fundamental class; t01A02(3): H2 degree -> Lefschetz -> conjunction; t01A04(4): fundamental class -> cap/Thom comparison -> calculations; t01A05(1): compact-support Mayer-Vietoris -> localization -> adapter; t01A08(1): regularity conversion -> Sard -> adapter; t01J01(3): translations -> endpoint control -> triangulation -> theorem; t01J04(1): regular preimage -> countability/atlas applicability -> theorem; t01J06(3): sphere moments -> normalization -> Stokes -> conjunction; t02A05(2): S2 flux -> normalization -> integral/minimum; t02A07(3): compact-support Mayer-Vietoris -> localization -> fundamental class; t02A08(1): local comparison -> normalization -> theorem; t03J02(2): null winding -> collar/Schoenflies -> gluing -> theorem; t03J04(1): torus homology -> finite-cover Euler comparison -> theorem; t03J05(1): path adjacent swap -> common deleted face -> signs/cancellation -> cross product -> theorem; t91J05(3): translations -> endpoint control -> compatible faces -> result; t92J05(3): antipodal/genus-two bridges -> classification -> assembly; t92J06(1): covering data -> quotient adapter -> theorem; t94A06(1): regular preimage/translation -> applicability -> adapter; t94A10(3): S2 moments -> normalization -> nonexactness; t94J09(1): translations -> endpoint perturbation -> intersection adapter; t95J05(1): S3 moment -> mass normalization -> integral uptake; t95J06(2): torus quotient -> classification -> result; t96J06(2): path adjacent swap -> common face -> cancellation -> cross-product assembly; t97A01(1): cover transfer -> finite-cover Euler comparison -> theorem; t97A04(4): path adjacent swap -> common face -> cancellation -> cross product -> Kunneth/intersections; t97J05(5): compact-support Mayer-Vietoris -> localization -> fundamental class -> assembly; t98A01(1): five-torsion -> polygon genus -> Euler comparison -> conjunction; t98A02(1): relative Mayer-Vietoris -> excision -> localization monicity -> fundamental class; t99J03(1): endpoint perturbation -> coverage -> compatible faces -> triangulation",
+     :ranking
+     "The reviewed balancedAdjacentSwap operation and wordPathEquiv already supply the data needed to define an adjacent swap on MaximalPath and prove involutivity. This is the smallest shared route step for t03J05, t96J06 and t97A04; the common deleted-face equality remains a separate vertex calculation.",
+     :concurrency
+     "ConstructionTargets increased from 881 to 884. One module is the reviewed portfolio promotion and two are concurrent work; no frozen consumer placeholder changed and no active row duplicates path transport.",
+     :deferred
+     ["common deleted-face comparison until the path-level swap is banked"
+      "shuffle signs, cancellation and cross products until the common face is banked"]},
+    :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: balanced adjacent swaps and renewed consumer eligibility",
@@ -47567,7 +47581,7 @@
    :stop-condition
    "Construct only the adjacent swap on MaximalPath by transporting the reviewed balanced-word swap through wordPathEquiv. Prove its word-coordinate equation and involutivity. Do not compare faces, assume unequal letters, assign signs, cancel chains, construct a cross product, edit consumers or claim closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PRODUCT HOMOLOGY: adjacent maximal-path swaps",
    :acceptance
