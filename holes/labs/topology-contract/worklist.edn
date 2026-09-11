@@ -75572,86 +75572,111 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require specialization to the intersection, left, right and union subcomplex inclusions and application of the banked simplex-index and Finsupp range-lattice formulas to prove both degreewise component-range equalities.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / coefficient simplicial-chain component Finsupp naturality",
+   :acceptance
+   {:fixture "/tmp/CoefficientSimplicialChainFinsuppNaturality.lean",
+    :fixture-sha256
+    "03269d7019ea4db1434a7713cbb5b4ea12578e1ed495124c89e9034939481bde",
+    :implementation
+    "Promote the exact fixture. Compile chainsMap_component_finsupp_naturality. This supplies the coefficient-chain component representation required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: in every natural-number degree, an arbitrary coefficient simplicial-chain map is conjugate through sigmaConstFinsuppIso to Finsupp.lmapDomain on the induced simplex map. Verify CoefficientSigmaConstFinsuppNaturality SHA256 1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8. Preserve arbitrary simplicial sets, arbitrary simplicial-set morphisms, arbitrary commutative-ring coefficients and every natural-number degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim the component-range equalities, compatibility of either relative quotient arrow, chain-level short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "An arbitrary degree component of the categorical coefficient simplicial-chain map induced by a simplicial-set morphism",
+    :target
+    "The Finsupp.lmapDomain linear map induced by the corresponding map of simplices in that degree",
+    :direction
+    "Exact conjugacy equality from the source categorical chain-component representation through the two sigmaConstFinsuppIso maps to the target Finsupp.lmapDomain representation."},
+   :id
+   :coefficient-simplicial-chain-finsupp-naturality-implementation-refill51,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-sigma-const-finsupp-naturality-implementation-refill51],
+   :current-residual
+   "Specialize chainsMap_component_finsupp_naturality to the four subcomplex inclusions and combine it with intersection_simplex_range, union_simplex_range and the Finsupp range-lattice theorems to prove the intersection and union component-range equalities. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the nonzero-capable connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Promote the naturality fixture, then specialize it to coefficient-chain components to establish the two degreewise range-lattice equalities.",
+     "Promote the component-naturality fixture, then prove the two degreewise range equalities for the four subcomplex inclusions.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require specialization of this naturality equality to coefficient simplicial-chain components, then apply the banked simplex-index and Finsupp range-lattice formulas to prove the intersection and union component-range equalities.",
+      "Require specialization to the intersection, left, right and union subcomplex inclusions and application of the banked simplex-index and Finsupp range-lattice formulas to prove both degreewise component-range equalities.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"],
+      ["ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / sigmaConst Finsupp naturality",
+      "MANIFOLD FUNDAMENTAL CLASS / coefficient simplicial-chain component Finsupp naturality",
       :acceptance
-      {:fixture "/tmp/CoefficientSigmaConstFinsuppNaturality.lean",
+      {:fixture
+       "/tmp/CoefficientSimplicialChainFinsuppNaturality.lean",
        :fixture-sha256
-       "1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8",
+       "03269d7019ea4db1434a7713cbb5b4ea12578e1ed495124c89e9034939481bde",
        :implementation
-       "Promote the exact fixture. Compile sigmaConstFinsuppIso_naturality. This supplies the naturality comparison required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: for arbitrary index maps and arbitrary commutative-ring coefficients, conjugating the categorical sigmaConst map by sigmaConstFinsuppIso gives Finsupp.lmapDomain exactly. Verify CoefficientSigmaConstFinsuppComparison SHA256 e2eea32aaab84794c7f1debc703e38791ac912c58be062db9ab6c14b3806a705. Require zero placeholders, no warnings and standard-only axioms. Do not claim coefficient-chain component specialization, component-range equalities, compatibility of the relative quotient arrows, short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile chainsMap_component_finsupp_naturality. This supplies the coefficient-chain component representation required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: in every natural-number degree, an arbitrary coefficient simplicial-chain map is conjugate through sigmaConstFinsuppIso to Finsupp.lmapDomain on the induced simplex map. Verify CoefficientSigmaConstFinsuppNaturality SHA256 1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8. Preserve arbitrary simplicial sets, arbitrary simplicial-set morphisms, arbitrary commutative-ring coefficients and every natural-number degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim the component-range equalities, compatibility of either relative quotient arrow, chain-level short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "The categorical sigmaConst map induced by an arbitrary function between coproduct index types",
+       "An arbitrary degree component of the categorical coefficient simplicial-chain map induced by a simplicial-set morphism",
        :target
-       "The Finsupp.lmapDomain linear map between the corresponding finitely-supported free coefficient modules",
+       "The Finsupp.lmapDomain linear map induced by the corresponding map of simplices in that degree",
        :direction
-       "Exact conjugacy equality from the source categorical sigmaConst-map representation through sigmaConstFinsuppIso to the target Finsupp.lmapDomain representation."},
+       "Exact conjugacy equality from the source categorical chain-component representation through the two sigmaConstFinsuppIso maps to the target Finsupp.lmapDomain representation."},
       :id
-      :coefficient-sigma-const-finsupp-naturality-implementation-refill51,
+      :coefficient-simplicial-chain-finsupp-naturality-implementation-refill51,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-sigma-const-finsupp-comparison-implementation-refill51],
+      [:coefficient-sigma-const-finsupp-naturality-implementation-refill51],
       :current-residual
-      "Specialize sigmaConstFinsuppIso_naturality to every simplicial degree and combine it with intersection_simplex_range, union_simplex_range and the Finsupp range-lattice theorems to prove both component-range equalities. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the nonzero-capable connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
+      "Specialize chainsMap_component_finsupp_naturality to the four subcomplex inclusions and combine it with intersection_simplex_range, union_simplex_range and the Finsupp range-lattice theorems to prove the intersection and union component-range equalities. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the nonzero-capable connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSigmaConstFinsuppComparison >/tmp/sigma-finsupp-naturality-dep.log 2>&1",
+       "lake build ConstructionTargets.CoefficientSigmaConstFinsuppNaturality >/tmp/simplicial-chain-finsupp-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientSigmaConstFinsuppNaturality.lean",
+       "lake env lean /tmp/CoefficientSimplicialChainFinsuppNaturality.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientSigmaConstFinsuppNaturality.lean ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean",
+       "sha256sum /tmp/CoefficientSimplicialChainFinsuppNaturality.lean ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-one-declaration audit over /tmp/CoefficientSigmaConstFinsuppNaturality.lean",
+       "python3 comment-stripped placeholder-and-one-declaration audit over /tmp/CoefficientSimplicialChainFinsuppNaturality.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/CoefficientSigmaConstFinsuppNaturality.lean",
-       :exit 1,
-       :correction
-       "The initial proof attempted to rewrite the sigma map beneath concrete morphism evaluation. Reduced the categorical equality on coproduct generators before evaluating coefficients."}
-      {:cmd
-       "lake env lean /tmp/CoefficientSigmaConstFinsuppNaturality.lean",
-       :exit 1,
-       :correction
-       "Intermediate proofs reassociated the three-map composite in directions that did not match Lean's parsed expression. Replaced reassociation with a direct calculation using the two compiled generator equalities and Finsupp.mapDomain_single."}],
      :fixture
-     {:path "/tmp/CoefficientSigmaConstFinsuppNaturality.lean",
+     {:path "/tmp/CoefficientSimplicialChainFinsuppNaturality.lean",
       :sha256
-      "1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8",
+      "03269d7019ea4db1434a7713cbb5b4ea12578e1ed495124c89e9034939481bde",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one representation-comparison prerequisite. Equality on categorical coproduct generators proves that sigmaConst.map for an arbitrary index function is conjugate through sigmaConstFinsuppIso to Finsupp.lmapDomain. The theorem is valid for arbitrary index types and commutative-ring coefficients and uses neither supportConnecting nor ordinary excision.",
+     "Compiled exactly one bounded representation-comparison prerequisite. Unfolding the singular-chain functor reduces each degree component to sigmaConst.map on the corresponding simplex map, so the banked naturality theorem identifies it exactly with Finsupp.lmapDomain after conjugation. This supplies the missing component representation without supportConnecting or excision.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -75691,7 +75716,8 @@
     :coefficient-finsupp-range-lattice-implementation-refill51
     :coefficient-subcomplex-simplex-range-lattice-implementation-refill51
     :coefficient-sigma-const-finsupp-comparison-implementation-refill51
-    :coefficient-sigma-const-finsupp-naturality-implementation-refill51],
+    :coefficient-sigma-const-finsupp-naturality-implementation-refill51
+    :coefficient-simplicial-chain-finsupp-naturality-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
