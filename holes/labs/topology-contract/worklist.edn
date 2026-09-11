@@ -75295,8 +75295,50 @@
   {:consumer "t98A02",
    :stop-condition
    "Require a coefficient-chain component representation compatible with the ModuleCat coproduct implementation, allowing these simplex-index equalities and the banked finitely-supported support formulas to prove the two component range equalities.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Construct the canonical degreewise linear equivalence between the ModuleCat sigmaConst coefficient-chain object and the finitely-supported free module, prove naturality for subcomplex inclusions, and combine it with intersection_simplex_range, union_simplex_range and the Finsupp range-lattice formulas. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the genuine connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:intersection_simplex_range
+     "8e66a81c7f3e27d12241e032bc5fc464a461ce85b7704496967fa0b1e1f772f4",
+     :union_simplex_range
+     "1d7879fc12ab24698c304c5e47ee066b1c1b9a59b67a6e31c0d79e4166176fa1"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubcomplexSimplexRangeLattice.lean ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean ConstructionTargets/CoefficientFinsuppRangeLattice.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder-and-two-declaration audit over ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat bed90320ca583fa891479dff4db81d4e24801ff3",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r bed90320ca583fa891479dff4db81d4e24801ff3",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :commit "bed90320ca583fa891479dff4db81d4e24801ff3",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubcomplexSimplexRangeLattice.lean",
+     :sha256
+     "2f0232d4485f10ad8800728722436509ee1832516fd5a5f9f95bb0bc485b6ca2",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and reviewed finitely-supported range-lattice dependency hashes reproduce. The intersection and union simplex-index range identities compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path. Pre-existing concurrent modifications to ConstructionTargets/ProductSimplexWordPrefixCounts.lean and ConstructionTargets/ProductSimplexWordPrefixCounts.md remain untouched.",
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"],
    :dag-node
