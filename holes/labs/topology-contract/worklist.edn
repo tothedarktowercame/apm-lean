@@ -75513,6 +75513,20 @@
      "The Finsupp.lmapDomain linear map between the corresponding finitely-supported free coefficient modules",
      :direction
      "Exact conjugacy equality from the source categorical sigmaConst-map representation through sigmaConstFinsuppIso to the target Finsupp.lmapDomain representation."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789086232857-19906-8ca5b3c0",
+     :commands
+     ["git show 0cea131384699223918dd70a290392a6daf61076:ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"
+      "git diff-tree --no-commit-id --name-only -r 0cea131384699223918dd70a290392a6daf61076"
+      "lake env lean ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"
+      "sha256sum /tmp/CoefficientSigmaConstFinsuppNaturality.lean ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"
+      "cmp -s /tmp/CoefficientSigmaConstFinsuppNaturality.lean ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"
+      "git show --check --oneline --stat 0cea131384699223918dd70a290392a6daf61076"
+      "python3 declaration-hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at 1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8, and the sigmaConst/Finsupp comparison dependency reproduces e2eea32aaab84794c7f1debc703e38791ac912c58be062db9ab6c14b3806a705. Lean compilation succeeds without warnings, the frozen declaration hash reproduces, placeholders are zero, and printed axioms are standard-only. The naturality equality has the correct orientation: the categorical sigmaConst map followed by the target comparison equals the source comparison followed by Finsupp.lmapDomain. The generator calculation sends a at coefficient r to single (f a) r, including arbitrary noninjective index maps. No coefficient-chain specialization or component-range equality is claimed prematurely."},
     :commit "0cea131384699223918dd70a290392a6daf61076",
     :changed-paths
     ["ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"],
@@ -75525,7 +75539,7 @@
     "The exact fixture and reviewed sigma-constant Finsupp comparison dependency hashes reproduce. The arbitrary-index-map naturality conjugacy theorem compiles without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"],
    :dag-node
@@ -75637,7 +75651,7 @@
      "Compiled exactly one representation-comparison prerequisite. Equality on categorical coproduct generators proves that sigmaConst.map for an arbitrary index function is conjugate through sigmaConstFinsuppIso to Finsupp.lmapDomain. The theorem is valid for arbitrary index types and commutative-ring coefficients and uses neither supportConnecting nor ordinary excision.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
