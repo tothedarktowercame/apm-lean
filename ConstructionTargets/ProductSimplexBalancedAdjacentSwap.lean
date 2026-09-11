@@ -81,7 +81,32 @@ theorem balancedAdjacentSwap_toWord_explicit {p q n : ℕ} (w : BalancedWord p q
       w.toWord (finCongr h ((Equiv.swap i.castSucc i.succ) (finCongr h.symm j))) := by
   rfl
 
+@[simp] theorem balancedAdjacentSwap_left {p q n : ℕ} (w : BalancedWord p q)
+    (h : n + 1 = p + q) (i : Fin n) :
+    (balancedAdjacentSwap w h i).toWord (finCongr h i.castSucc) =
+      w.toWord (finCongr h i.succ) := by
+  rw [balancedAdjacentSwap_toWord_explicit]
+  simp
+
+@[simp] theorem balancedAdjacentSwap_right {p q n : ℕ} (w : BalancedWord p q)
+    (h : n + 1 = p + q) (i : Fin n) :
+    (balancedAdjacentSwap w h i).toWord (finCongr h i.succ) =
+      w.toWord (finCongr h i.castSucc) := by
+  rw [balancedAdjacentSwap_toWord_explicit]
+  simp
+
+@[simp] theorem balancedAdjacentSwap_of_ne {p q n : ℕ} (w : BalancedWord p q)
+    (h : n + 1 = p + q) (i : Fin n) (j : Fin (n + 1))
+    (hj₁ : j ≠ i.castSucc) (hj₂ : j ≠ i.succ) :
+    (balancedAdjacentSwap w h i).toWord (finCongr h j) =
+      w.toWord (finCongr h j) := by
+  rw [balancedAdjacentSwap_toWord_explicit]
+  simp [Equiv.swap_apply_def, hj₁, hj₂]
+
 #print axioms balancedAdjacentSwap_toWord_explicit
+#print axioms balancedAdjacentSwap_left
+#print axioms balancedAdjacentSwap_right
+#print axioms balancedAdjacentSwap_of_ne
 #print axioms horizontalCount_adjacentSwapWord_last
 #print axioms verticalCount_adjacentSwapWord_last
 #print axioms balancedAdjacentSwap_toWord

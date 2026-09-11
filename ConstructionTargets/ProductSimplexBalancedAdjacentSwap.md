@@ -12,8 +12,11 @@ and invariance of a filtered finite set under an equivalence.
 `balancedAdjacentSwap_toWord` identifies the lifted operation's underlying
 word. `balancedAdjacentSwap_toWord_explicit` expands its private permutation
 helper into the public `finCongr` and `Equiv.swap` coordinate formula needed for
-downstream index calculations. `balancedAdjacentSwap_involutive` proves that
-applying the same swap twice returns the original balanced word.
+downstream index calculations. `balancedAdjacentSwap_left` and
+`balancedAdjacentSwap_right` state that the transported adjacent positions are
+exchanged, while `balancedAdjacentSwap_of_ne` states that every other
+transported position is unchanged. `balancedAdjacentSwap_involutive` proves
+that applying the same swap twice returns the original balanced word.
 
 The module does not transport the operation to maximal paths, compare deleted
 faces, assign shuffle signs, cancel chains, construct a cross product, or state
