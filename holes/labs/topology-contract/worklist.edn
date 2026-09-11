@@ -75211,8 +75211,52 @@
   {:consumer "t98A02",
    :stop-condition
    "Require unfolding each coefficient-chain component inclusion as Finsupp.lmapDomain on the corresponding simplex inclusion and applying the compiled support-range formulas with the subcomplex intersection and union index equalities.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Normalize each coefficient-chain component inclusion to Finsupp.lmapDomain and prove that the simplex index ranges for P inf Q and P sup Q are respectively the intersection and union of the P and Q index ranges. Apply the compiled Finsupp lattice formulas to complete both degreewise range equalities, identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport through relativeComparisonIso to the literal compact-complement pairs.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:range_lmapDomain_eq_supported_range
+     "7c9097ce1f680e940ce7768a4c6c870d71f6f5f42a7b20a02aa572e07531ffb9",
+     :range_lmapDomain_inf
+     "2b5c2e48f114f8e13d3eadbe379f93b3b11daae4f5cd2202ff5314f7dffc1036",
+     :range_lmapDomain_sup
+     "d4aff64f455553ff2d33757e1d7276b7727664c9d753f31454c949f6429acb50"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientFinsuppRangeLattice.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientFinsuppRangeLattice.lean ConstructionTargets/CoefficientFinsuppRangeLattice.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeRangeOrder.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder-and-three-declaration audit over ConstructionTargets/CoefficientFinsuppRangeLattice.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 89ef96bdb1d5e495e935aad3022b34e5615fed79",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 89ef96bdb1d5e495e935aad3022b34e5615fed79",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :commit "89ef96bdb1d5e495e935aad3022b34e5615fed79",
+    :changed-paths
+    ["ConstructionTargets/CoefficientFinsuppRangeLattice.lean"],
+    :fixture
+    {:path "/tmp/CoefficientFinsuppRangeLattice.lean",
+     :sha256
+     "53018e56a3fde3aefc645d76621ff2a2b7a53e1b1af6a1574d91e9d4f8943bce",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and reviewed relative degree-range-order dependency hashes reproduce. The range-to-supported-submodule formula and its infimum and supremum consequences compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/CoefficientFinsuppRangeLattice.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / coefficient finitely-supported range lattice",
