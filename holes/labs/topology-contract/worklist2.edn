@@ -47276,78 +47276,98 @@
    :stop-condition
    "Construct only the balanced adjacent-word swap packet from the banked generic swap and terminal-count identities. Do not transport to paths, compare deleted faces, assign signs, cancel chains, construct a cross product, edit consumer files or claim closure.",
    :evidence
-   {:probe
-    {:residual
-     "Promote the two-file packet, then transport balancedAdjacentSwap through wordPathEquiv and prove the common deleted affine face required for cancellation.",
-     :outcome :go,
-     :warnings [],
-     :axioms
-     {:horizontalCount_adjacentSwapWord_last
-      ["propext" "Classical.choice" "Quot.sound"],
-      :verticalCount_adjacentSwapWord_last
-      ["propext" "Classical.choice" "Quot.sound"],
-      :balancedAdjacentSwap_toWord
-      ["propext" "Classical.choice" "Quot.sound"],
-      :balancedAdjacentSwap_involutive
-      ["propext" "Classical.choice" "Quot.sound"]},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
-       :exit 0}
-      {:cmd
-       "comment-stripped placeholder scan of /tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
-       :exit 0}
-      {:cmd
-       "rg -n '^(axiom|constant)\\b|theorem-as-hypothesis' /tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "rg -n 'warning:|error:' /tmp/codex13-balanced-swap/lean.log",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "Parse exact receipt map with clojure.edn/read-string",
-       :exit 0}],
-     :representation
-     {:source
-      "A BalancedWord together with an adjacent cut expressed through n + 1 = p + q",
-      :target
-      "The BalancedWord obtained by conjugating the banked adjacentSwapWord permutation across the Fin cardinality equality",
-      :direction
-      "Exact equality from the twice-swapped target BalancedWord representation back to the source BalancedWord, with terminal horizontal and vertical counts preserved by the forward swap."},
-     :fixture
-     {:path "/tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
-      :sha256
-      "dd612b706fd569845802478c2cf3d30f4b8c8aa730b1f929f4d6c9557a6d0924",
-      :placeholder-count 0,
-      :declarations
-      ["horizontalCount_adjacentSwapWord_last"
-       "verticalCount_adjacentSwapWord_last"
-       "balancedAdjacentSwap_toWord"
-       "balancedAdjacentSwap_involutive"]},
-     :finding
-     "The banked terminal filtered-cardinality identities reduce both count-preservation goals to invariance of a filtered finite set under the adjacent transposition. Conjugating that transposition by finCongr packages the operation at the exact BalancedWord p q length, and involutivity follows extensionally with proof irrelevance for the endpoint witnesses.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
-       "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
-      :instructions
-      "Promote the compiled fixture exactly and document the four declarations. Preserve the dependent length equality n + 1 = p + q, which transports the generic Fin (n+1) swap to BalancedWord p q without changing the consumer representation."},
-     :seat "codex-13"}},
+   {:placeholder-delta 0,
+    :residual
+    "Transport balancedAdjacentSwap through wordPathEquiv and prove the common deleted affine face required for cancellation.",
+    :gates
+    {:whitespace :pass,
+     :standard-only-axioms :pass,
+     :fixture-hash :pass,
+     :exact-scope :pass,
+     :involutivity :pass,
+     :placeholder-scan :pass,
+     :byte-identical-promotion :pass,
+     :forbidden-scope :pass,
+     :both-ledgers :pass,
+     :underlying-word-equation :pass,
+     :balanced-word-packaging :pass,
+     :terminal-count-invariance :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed two pre-existing SingularSubdivision linter warnings at lines 2960 and 3580; the new target emitted no warnings"],
+    :statement-hashes
+    {"horizontalCount_adjacentSwapWord_last"
+     "0e39f1ff4f330ccaf0693cee5cae33eb28412a3796e18b527b3b28aa15157131",
+     "verticalCount_adjacentSwapWord_last"
+     "ae444daff5f38d93b502390f393891b4f8c4b96ba7cc4c3c76e6e27472658399",
+     "balancedAdjacentSwap_toWord"
+     "17245f2982fd989e7c8ae6001facbb04567e322e450e521a4a768e92db9f1f79",
+     "balancedAdjacentSwap_involutive"
+     "b9b62508914d835f9408e8228eaece0e372d8888fed9b0b3061a3cb9177f40fa"},
+    :axioms
+    {:horizontalCount_adjacentSwapWord_last
+     ["propext" "Classical.choice" "Quot.sound"],
+     :verticalCount_adjacentSwapWord_last
+     ["propext" "Classical.choice" "Quot.sound"],
+     :balancedAdjacentSwap_toWord
+     ["propext" "Classical.choice" "Quot.sound"],
+     :balancedAdjacentSwap_involutive
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
+      :exit 0}
+     {:cmd "cmp -s fixture canonical", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexBalancedAdjacentSwap",
+      :exit 0}
+     {:cmd "comment-stripped placeholder scan", :exit 0}
+     {:cmd "forbidden declaration and downstream theorem scans",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "standard-only axiom audits for four exported theorems",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd "exact two-file scope check", :exit 0}
+     {:cmd "git commit -m Add-balanced-adjacent-word-swaps", :exit 0}
+     {:cmd "parse exact receipt map with clojure.edn/read-string",
+      :exit 0}],
+    :commit "cd02e70b6499f291a2ac578ad2879b7bcf3ac497",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
+     "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
+    :fixture
+    {:path "/tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
+     :sha256
+     "dd612b706fd569845802478c2cf3d30f4b8c8aa730b1f929f4d6c9557a6d0924",
+     :placeholder-count 0},
+    :declarations
+    ["horizontalCount_adjacentSwapWord_last"
+     "verticalCount_adjacentSwapWord_last"
+     "balancedAdjacentSwap_toWord"
+     "balancedAdjacentSwap_involutive"],
+    :implementation
+    {:scope
+     ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
+      "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"]},
+    :seat "codex-14"},
    :instructions
    "Promote the compiled fixture exactly and document the four declarations. Preserve the dependent length equality n + 1 = p + q, which transports the generic Fin (n+1) swap to BalancedWord p q without changing the consumer representation.",
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
     "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
