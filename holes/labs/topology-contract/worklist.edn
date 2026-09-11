@@ -75417,6 +75417,20 @@
      "The ordinary finitely-supported free module of coefficient-valued functions on that index type",
      :direction
      "Canonical linear isomorphism from the source categorical coproduct representation to the target Finsupp representation, with exact equality from every source coproduct injection applied to a coefficient to the corresponding target single-support generator."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789085692634-19892-686d66e3",
+     :commands
+     ["git show 85411f15e08b187759d176040eef334d2df204bb:ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"
+      "git diff-tree --no-commit-id --name-only -r 85411f15e08b187759d176040eef334d2df204bb"
+      "lake env lean ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"
+      "sha256sum /tmp/CoefficientSigmaConstFinsuppComparison.lean ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"
+      "cmp -s /tmp/CoefficientSigmaConstFinsuppComparison.lean ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"
+      "git show --check --oneline --stat 85411f15e08b187759d176040eef334d2df204bb"
+      "python3 two-declaration hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at e2eea32aaab84794c7f1debc703e38791ac912c58be062db9ab6c14b3806a705, and the simplex-range dependency reproduces 2f0232d4485f10ad8800728722436509ee1832516fd5a5f9f95bb0bc485b6ca2. Lean compilation succeeds without warnings, both frozen declaration hashes reproduce, placeholders are zero, and printed axioms are standard-only. The canonical isomorphism is correctly oriented from the ModuleCat sigmaConst coproduct to the Finsupp free module, using the coproduct-to-direct-sum isomorphism followed by the inverse Finsupp/direct-sum equivalence. Each categorical coproduct generator maps to the corresponding Finsupp.single generator with its coefficient unchanged. Naturality for arbitrary index maps is not claimed yet."},
     :commit "85411f15e08b187759d176040eef334d2df204bb",
     :changed-paths
     ["ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"],
@@ -75429,7 +75443,7 @@
     "The exact fixture and reviewed simplex-range dependency hashes reproduce. The categorical sigmaConst-to-Finsupp isomorphism and its coproduct-generator compatibility theorem compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"],
    :dag-node
@@ -75545,7 +75559,7 @@
      "Compiled exactly one coefficient coproduct representation prerequisite. The chosen ModuleCat sigmaConst coproduct of copies of R is canonically isomorphic to the finitely-supported free R-module on its index type, through the concrete direct-sum presentation. Under this isomorphism, every categorical coproduct injection sends a coefficient exactly to the corresponding Finsupp.single generator. This supplies the object and generator comparison needed to normalize coefficient-chain components. No supportConnecting or excision hypothesis is used.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
