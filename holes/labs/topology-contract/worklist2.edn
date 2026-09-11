@@ -47116,8 +47116,131 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "codex-13",
+    :commands
+    [{:cmd
+      "Verify terminal-count completion row is done with PASS review and contains both promoted declarations",
+      :exit 0}
+     {:cmd
+      "Inspect generic adjacentSwapWord interface and promoted terminal-count declarations",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexAdjacentWordSwap ConstructionTargets.ProductSimplexWordPrefixCounts",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "find ConstructionTargets -maxdepth 1 -name '*.lean' | wc -l",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "Parse exact receipt map with clojure.edn/read-string",
+      :exit 0}],
+    :measures
+    {:placeholder-delta 0,
+     :typed-residual-change
+     "terminal word counts are promoted and PASS-reviewed; balanced adjacent-swap packaging is now the smallest shared residual",
+     :infrastructure-packets
+     {:before 879, :after 881, :portfolio 0, :concurrent 2},
+     :review-outcomes
+     {:typed-validator :pass,
+      :checkpoint67-transition :pass,
+      :terminal-word-counts :pass},
+     :frozen-branch-uptake 0,
+     :frozen-closures 0,
+     :corrected-closures 0,
+     :proved-refutations 0},
+    :finding
+    {:census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholders 61},
+     :routes
+     "a97J08(1): local degree/orientation -> comparison -> adapter; t00A03(2): translations -> endpoint perturbation -> compatible faces -> triangulation; t00J01(1): circle fold -> Klein geometry -> homology bridge -> adapter; t00J02(1): relative Mayer-Vietoris -> excision -> localization -> fundamental class; t01A02(3): H2 degree -> Lefschetz -> conjunction; t01A04(4): fundamental class -> cap/Thom comparison -> calculations; t01A05(1): compact-support Mayer-Vietoris -> localization -> adapter; t01A08(1): regularity conversion -> Sard -> adapter; t01J01(3): translations -> endpoint control -> triangulation -> theorem; t01J04(1): regular preimage -> countability/atlas applicability -> theorem; t01J06(3): sphere moments -> normalization -> Stokes -> conjunction; t02A05(2): S2 flux -> normalization -> integral/minimum; t02A07(3): compact-support Mayer-Vietoris -> localization -> fundamental class; t02A08(1): local comparison -> normalization -> theorem; t03J02(2): null winding -> collar/Schoenflies -> gluing -> theorem; t03J04(1): torus homology -> finite-cover Euler comparison -> theorem; t03J05(1): balanced adjacent swap -> path transport/common face -> signs/cancellation -> cross product -> theorem; t91J05(3): translations -> endpoint control -> compatible faces -> result; t92J05(3): antipodal/genus-two bridges -> classification -> assembly; t92J06(1): covering data -> quotient adapter -> theorem; t94A06(1): regular preimage/translation -> applicability -> adapter; t94A10(3): S2 moments -> normalization -> nonexactness; t94J09(1): translations -> endpoint perturbation -> intersection adapter; t95J05(1): S3 moment -> mass normalization -> integral uptake; t95J06(2): torus quotient -> classification -> result; t96J06(2): balanced adjacent swap -> path/common face -> cancellation -> cross-product assembly; t97A01(1): cover transfer -> finite-cover Euler comparison -> theorem; t97A04(4): balanced adjacent swap -> path/common face -> cancellation -> cross product -> Kunneth/intersections; t97J05(5): compact-support Mayer-Vietoris -> localization -> fundamental class -> assembly; t98A01(1): five-torsion -> polygon genus -> Euler comparison -> conjunction; t98A02(1): relative Mayer-Vietoris -> excision -> localization monicity -> fundamental class; t99J03(1): endpoint perturbation -> coverage -> compatible faces -> triangulation",
+     :ranking
+     "The generic adjacent Boolean swap and terminal filtered-cardinality identities are banked. Proving both terminal counts invariant, packaging the swapped word as BalancedWord, and proving word-level involutivity is the smallest shared missing step for t03J05, t96J06 and t97A04.",
+     :concurrency
+     "ConstructionTargets increased from 879 to 881 through concurrent work outside this portfolio; no frozen placeholder changed and no active row duplicates the balanced adjacent-swap packet.",
+     :deferred
+     ["path transport and common deleted-face comparison until balanced word swaps are banked"
+      "shuffle signs, cancellation and cross products until adjacent corners are banked"]},
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Construct only the balanced adjacent-word swap packet from the banked generic swap and terminal-count identities. Do not transport to paths, compare deleted faces, assign signs, cancel chains, construct a cross product, edit consumer files or claim closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "PRODUCT HOMOLOGY: balanced adjacent-word swaps",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use a Boolean word on Fin (n+1), an adjacent cut i : Fin n, the banked adjacentSwapWord operation and the promoted horizontal and vertical terminal-cardinality identities.",
+       :route-step
+       "Supplies balance preservation and balanced-word involutivity immediately before path transport and common deleted-face comparison on the t03J05, t96J06 and t97A04 routes.",
+       :probe
+       "Build a placeholder-free Lean fixture proving adjacentSwapWord preserves the terminal horizontal and vertical counts, package the result as an operation on BalancedWord, identify its underlying word with adjacentSwapWord, and prove involutivity. Reuse the existing generic swap and terminal-count results. GO requires the complete compiled packet; REVISE names exactly one compiled missing cardinality prerequisite; STOP names an exact representation conflict.",
+       :consumer-equation
+       "Swapping two adjacent Boolean letters preserves both terminal counts, hence preserves BalancedWord endpoints, and applying the same adjacent swap twice returns the original balanced word.",
+       :consumer-residual
+       "Transport the balanced swap through wordPathEquiv and prove the two paths have the common deleted affine face required for cancellation.",
+       :gates
+       ["Import and reuse ProductSimplexAdjacentWordSwap, ProductSimplexWordPrefixCounts and ProductSimplexWordPathEquivalence."
+        "Prove horizontal and vertical terminal-count invariance for adjacentSwapWord."
+        "Construct the corresponding BalancedWord swap and prove its underlying-word equation and involutivity."
+        "Use no sorry, axiom, theorem-as-hypothesis or consumer-source edit."
+        "Run lake env lean, standard-only axiom audits, placeholder and warning scans, both ledger validators and whitespace checks."
+        "Confirm exact implementation scope from the compiled fixture."]},
+      :id
+      :oriented-checkpoint78-product-simplex-balanced-adjacent-swap-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "Terminal counts and the generic adjacent Boolean swap are banked, but balance preservation and balanced-word involutivity are not yet packaged.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: balanced adjacent swaps and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint79-balanced-adjacent-swaps-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint78-product-simplex-balanced-adjacent-swap-1],
+      :current-residual
+      "Measure balanced adjacent swaps separately from path transport, common faces, signs, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: terminal word counts and renewed consumer eligibility",
@@ -47134,6 +47257,69 @@
     :oriented-checkpoint77-checkpoint67-transition-and-consumer-refill-1],
    :current-residual
    "Measure terminal-count promotion separately from adjacent corners, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the balanced adjacent-word swap packet from the banked generic swap and terminal-count identities. Do not transport to paths, compare deleted faces, assign signs, cancel chains, construct a cross product, edit consumer files or claim closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "PRODUCT HOMOLOGY: balanced adjacent-word swaps",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use a Boolean word on Fin (n+1), an adjacent cut i : Fin n, the banked adjacentSwapWord operation and the promoted horizontal and vertical terminal-cardinality identities.",
+    :route-step
+    "Supplies balance preservation and balanced-word involutivity immediately before path transport and common deleted-face comparison on the t03J05, t96J06 and t97A04 routes.",
+    :probe
+    "Build a placeholder-free Lean fixture proving adjacentSwapWord preserves the terminal horizontal and vertical counts, package the result as an operation on BalancedWord, identify its underlying word with adjacentSwapWord, and prove involutivity. Reuse the existing generic swap and terminal-count results. GO requires the complete compiled packet; REVISE names exactly one compiled missing cardinality prerequisite; STOP names an exact representation conflict.",
+    :consumer-equation
+    "Swapping two adjacent Boolean letters preserves both terminal counts, hence preserves BalancedWord endpoints, and applying the same adjacent swap twice returns the original balanced word.",
+    :consumer-residual
+    "Transport the balanced swap through wordPathEquiv and prove the two paths have the common deleted affine face required for cancellation.",
+    :gates
+    ["Import and reuse ProductSimplexAdjacentWordSwap, ProductSimplexWordPrefixCounts and ProductSimplexWordPathEquivalence."
+     "Prove horizontal and vertical terminal-count invariance for adjacentSwapWord."
+     "Construct the corresponding BalancedWord swap and prove its underlying-word equation and involutivity."
+     "Use no sorry, axiom, theorem-as-hypothesis or consumer-source edit."
+     "Run lake env lean, standard-only axiom audits, placeholder and warning scans, both ledger validators and whitespace checks."
+     "Confirm exact implementation scope from the compiled fixture."]},
+   :id :oriented-checkpoint78-product-simplex-balanced-adjacent-swap-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint78-terminal-word-counts-and-consumer-refill-1],
+   :current-residual
+   "Terminal counts and the generic adjacent Boolean swap are banked, but balance preservation and balanced-word involutivity are not yet packaged.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: balanced adjacent swaps and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint79-balanced-adjacent-swaps-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint78-product-simplex-balanced-adjacent-swap-1
+    :oriented-checkpoint78-terminal-word-counts-and-consumer-refill-1],
+   :current-residual
+   "Measure balanced adjacent swaps separately from path transport, common faces, signs, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
