@@ -47648,6 +47648,21 @@
      {:cmd "git commit -m Add-adjacent-maximal-path-swaps", :exit 0}
      {:cmd "parse exact receipt map with clojure.edn/read-string",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789086643437-19922-5c89de0e",
+     :commands
+     ["git show/diff-tree c1e44e50"
+      "sha256sum and cmp frozen fixture against recorded canonical blob"
+      "lake env lean fixture and canonical target"
+      "lake build ConstructionTargets.ProductSimplexAdjacentPathSwap"
+      "archive supervisor commit d8618f98"
+      "bb worklist_check.bb on both archived ledgers"
+      "bb archived test_gate_receipts.bb"
+      "placeholder, declaration and forbidden-boundary scans"],
+     :finding
+     "PASS: commit c1e44e50 changes exactly the two scoped AdjacentPathSwap files, and the recorded Lean blob is byte-identical to the frozen fixture at SHA256 4d8351dec419cf2d51b479dbacabe238c5d74b476bed5ad9172b372e8ded7562. adjacentSwapPath is defined solely by conjugating balancedAdjacentSwap through wordPathEquiv in the correct direction; the inverse word equation, toWord equation and involution law all preserve n+1=p+q. The four recorded statement hashes reproduce through fixture identity, placeholder count is zero, and no unequal-letter assumption, face comparison, sign, cancellation, cross-product or consumer theorem crosses the boundary. Fixture/canonical compilation, module build, both archived ledger validators, and 7 tests/85 assertions pass with only the known SingularSubdivision dependency warnings."},
     :commit "c1e44e5055e01be1fa25b12223cebf5b799d409c",
     :changed-paths
     ["ConstructionTargets/ProductSimplexAdjacentPathSwap.lean"
@@ -47670,7 +47685,7 @@
    :instructions
    "Promote the compiled fixture exactly and document its four declarations. Keep adjacentSwapPath defined solely by conjugating balancedAdjacentSwap through wordPathEquiv.",
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexAdjacentPathSwap.lean"
     "ConstructionTargets/ProductSimplexAdjacentPathSwap.md"],
@@ -47713,7 +47728,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: adjacent maximal-path swaps and renewed consumer eligibility",
