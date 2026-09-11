@@ -47345,6 +47345,21 @@
      {:cmd "git commit -m Add-balanced-adjacent-word-swaps", :exit 0}
      {:cmd "parse exact receipt map with clojure.edn/read-string",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789086100033-19900-19293c9d",
+     :commands
+     ["git show/diff-tree cd02e70b"
+      "sha256sum and cmp frozen fixture against recorded canonical blob"
+      "lake env lean fixture and canonical target"
+      "lake build ConstructionTargets.ProductSimplexBalancedAdjacentSwap"
+      "archive supervisor commit 33eb5112"
+      "bb worklist_check.bb on both archived ledgers"
+      "bb archived test_gate_receipts.bb"
+      "placeholder, declaration and forbidden-boundary scans"],
+     :finding
+     "PASS: commit cd02e70b changes exactly the two scoped BalancedAdjacentSwap files, and the recorded Lean blob is byte-identical to the frozen fixture at SHA256 dd612b706fd569845802478c2cf3d30f4b8c8aa730b1f929f4d6c9557a6d0924. The horizontal and vertical equalities preserve their respective terminal counts; balancedAdjacentSwap retains the dependent equality n+1=p+q, exposes the intended underlying-word equation, and is involutive. All four recorded statement hashes reproduce through fixture identity, placeholder count is zero, and no path transport, face, sign, cancellation, cross-product or consumer theorem crosses the representation boundary. Fixture and canonical compilation, module build, both archived ledger validators, and 7 tests/85 assertions pass with only the two known SingularSubdivision dependency warnings."},
     :commit "cd02e70b6499f291a2ac578ad2879b7bcf3ac497",
     :changed-paths
     ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
@@ -47367,7 +47382,7 @@
    :instructions
    "Promote the compiled fixture exactly and document the four declarations. Preserve the dependent length equality n + 1 = p + q, which transports the generic Fin (n+1) swap to BalancedWord p q without changing the consumer representation.",
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
     "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
@@ -47410,7 +47425,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: balanced adjacent swaps and renewed consumer eligibility",
