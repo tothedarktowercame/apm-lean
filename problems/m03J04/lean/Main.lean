@@ -24,6 +24,20 @@ def dualAnnihilator {W : Type*}
     Submodule ℝ (W →L[ℝ] ℝ) :=
   ⨅ w : U, ((ContinuousLinearMap.apply ℝ ℝ) w.1).ker
 
+/-- The operator represented by the bilinear form under the real Riesz equivalence. -/
+def rieszOperator {V W : Type*}
+    [NormedAddCommGroup V] [NormedSpace ℝ V]
+    [NormedAddCommGroup W] [InnerProductSpace ℝ W] [CompleteSpace W]
+    (B : V →L[ℝ] W →L[ℝ] ℝ) : V →L[ℝ] W :=
+  (InnerProductSpace.toDual ℝ W).symm.toContinuousLinearEquiv.toContinuousLinearMap.comp B
+
+@[simp] lemma inner_rieszOperator {V W : Type*}
+    [NormedAddCommGroup V] [NormedSpace ℝ V]
+    [NormedAddCommGroup W] [InnerProductSpace ℝ W] [CompleteSpace W]
+    (B : V →L[ℝ] W →L[ℝ] ℝ) (v : V) (w : W) :
+    inner ℝ (rieszOperator B v) w = B v w := by
+  exact InnerProductSpace.toDual_symm_apply
+
 /-- Every element in the range annihilates the kernel of the transposed pairing. -/
 lemma apm_m03J04_range_subset_dualAnnihilator
     {V W : Type*}
@@ -71,7 +85,53 @@ theorem apm_m03J04_bridge_1
     (dualAnnihilator ((dualAdjoint B).ker : Set W) :
         Set (W →L[ℝ] ℝ)) ⊆
       closure (B.range : Set (W →L[ℝ] ℝ)) := by
-  sorry
+  intro f hf
+  let T : V →L[ℝ] W := rieszOperator B
+  let x : W := (InnerProductSpace.toDual ℝ W).symm f
+  have hxker : x ∈ T.adjoint.kerᗮ := by
+    rw [Submodule.mem_orthogonal']
+    intro w hw
+    have hw' : dualAdjoint B w = 0 := by
+      apply ContinuousLinearMap.ext
+      intro v
+      change B v w = 0
+      have hw0 : T.adjoint w = 0 := hw
+      have hz := congrArg (fun z : V ↦ inner ℝ v z) hw0
+      calc
+        B v w = inner ℝ (T v) w := (inner_rieszOperator B v w).symm
+        _ = inner ℝ w (T v) := real_inner_comm _ _
+        _ = inner ℝ (T.adjoint w) v := (T.adjoint_inner_left v w).symm
+        _ = inner ℝ v (T.adjoint w) := real_inner_comm _ _
+        _ = 0 := by simpa using hz
+    have hfw : f w = 0 := by
+      change f ∈ dualAnnihilator ((dualAdjoint B).ker : Set W) at hf
+      rw [dualAnnihilator, Submodule.mem_iInf] at hf
+      exact hf ⟨w, hw'⟩
+    simpa [x, InnerProductSpace.toDual_symm_apply] using hfw
+  have hxcl : x ∈ closure (T.range : Set W) := by
+    rw [ContinuousLinearMap.orthogonal_ker,
+      ContinuousLinearMap.adjoint_adjoint] at hxker
+    exact hxker
+  have himage : (InnerProductSpace.toDual ℝ W) x ∈
+      closure ((InnerProductSpace.toDual ℝ W) '' (T.range : Set W)) :=
+    image_closure_subset_closure_image
+      (InnerProductSpace.toDual ℝ W).continuous ⟨x, hxcl, rfl⟩
+  have hrange : (InnerProductSpace.toDual ℝ W) '' (T.range : Set W) =
+      (B.range : Set (W →L[ℝ] ℝ)) := by
+    ext g
+    constructor
+    · rintro ⟨y, ⟨v, rfl⟩, rfl⟩
+      refine ⟨v, ?_⟩
+      apply ContinuousLinearMap.ext
+      intro w
+      exact (inner_rieszOperator B v w).symm
+    · rintro ⟨v, rfl⟩
+      refine ⟨T v, ⟨v, rfl⟩, ?_⟩
+      apply ContinuousLinearMap.ext
+      intro w
+      exact inner_rieszOperator B v w
+  rw [hrange] at himage
+  simpa [x] using himage
 
 /-- Why this unblocks the inf--sup clause of `apm_m03j04`: after rewriting
 the signed homogeneous supremum as the operator norm, the lower bound makes
@@ -87,7 +147,57 @@ theorem apm_m03J04_bridge_2
     ∃ e : V ≃L[ℝ]
         dualAnnihilator ((dualAdjoint B).ker : Set W),
       ∀ v : V, (e v).1 = B v := by
-  sorry
+  obtain ⟨α, hα, hbound⟩ := hinfsup
+  have hnorm : ∀ v : V, α * ‖v‖ ≤ ‖B v‖ := by
+    intro v
+    refine (hbound v).trans ?_
+    by_cases hW : Nontrivial W
+    · letI : Nontrivial W := hW
+      apply csSup_le
+      · obtain ⟨w, hw⟩ := exists_ne (0 : W)
+        exact ⟨B v w / ‖w‖, w, hw, rfl⟩
+      · rintro r ⟨w, hw, rfl⟩
+        calc
+          B v w / ‖w‖ ≤ |B v w / ‖w‖| := le_abs_self _
+          _ = ‖B v w‖ / ‖w‖ := by rw [abs_div, abs_norm, ← Real.norm_eq_abs]
+          _ ≤ ‖B v‖ := (div_le_iff₀ (norm_pos_iff.mpr hw)).2 (by
+            simpa using (B v).le_opNorm w)
+    · haveI : Subsingleton W := not_nontrivial_iff_subsingleton.mp hW
+      have hempty : {r : ℝ | ∃ w : W, w ≠ 0 ∧ r = B v w / ‖w‖} = ∅ := by
+        ext r
+        constructor
+        · rintro ⟨w, hw, -⟩
+          exact hw (Subsingleton.elim w 0)
+        · intro hr
+          contradiction
+      rw [hempty, Real.sSup_empty]
+      exact norm_nonneg _
+  have hinj : Function.Injective B := by
+    intro v₁ v₂ hv
+    apply sub_eq_zero.mp
+    have hzero : B (v₁ - v₂) = 0 := by simpa using sub_eq_zero.mpr hv
+    have := hnorm (v₁ - v₂)
+    rw [hzero, norm_zero] at this
+    have : ‖v₁ - v₂‖ = 0 := by nlinarith [norm_nonneg (v₁ - v₂)]
+    exact norm_eq_zero.mp this
+  have hanti : ∃ K, AntilipschitzWith K B :=
+    antilipschitzWith_iff_exists_mul_le_norm.mpr ⟨α, hα, hnorm⟩
+  have hclosed : IsClosed (B.range : Set (W →L[ℝ] ℝ)) :=
+    (B.isClosed_range_iff_antilipschitz_of_injective hinj).2 hanti
+  have hrange : (B.range : Set (W →L[ℝ] ℝ)) =
+      (dualAnnihilator ((dualAdjoint B).ker : Set W) : Set (W →L[ℝ] ℝ)) := by
+    rw [← hclosed.closure_eq]
+    exact Set.Subset.antisymm (apm_m03J04_closure_range_subset_dualAnnihilator B)
+      (apm_m03J04_bridge_1 B)
+  have hrangeSubmodule : B.range = dualAnnihilator ((dualAdjoint B).ker : Set W) :=
+    SetLike.ext' hrange
+  let e : V ≃L[ℝ] dualAnnihilator ((dualAdjoint B).ker : Set W) := by
+    exact (B.equivRange hinj hclosed).trans
+      (ContinuousLinearEquiv.ofEq B.range
+        (dualAnnihilator ((dualAdjoint B).ker : Set W)) hrangeSubmodule)
+  refine ⟨e, ?_⟩
+  intro v
+  rfl
 
 /-- All four parts: continuity and involutivity of the adjoint, closedness of
 annihilators, the closure-of-range identity, and the inf-sup isomorphism. -/
@@ -113,59 +223,9 @@ theorem apm_m03j04
     convert isClosed_iInter fun w : U ↦
       ContinuousLinearMap.isClosed_ker ((ContinuousLinearMap.apply ℝ ℝ) w.1)
     simp
-  · /-
-    Boundary for the closed-range and inf-sup clauses. The definitional
-    double-flip identity and closedness of annihilators as intersections of
-    evaluation kernels are compiled above.
-
-    The remaining closure identity needs the Hahn–Banach annihilator theorem
-    together with the Hilbert reflexivity equivalence identifying continuous
-    functionals on `W →L[ℝ] ℝ` with evaluation at points of `W`. The final
-    clause then requires rewriting the signed `sSup` as `‖B v‖`, deriving a
-    bounded-below estimate, proving `B.range` closed, and packaging the
-    restricted map and its bounded inverse as a `ContinuousLinearEquiv` into
-    the subtype `dualAnnihilator ...`. Searches found no single compiled
-    closed-range theorem with these exact dual/subtype conventions. No sibling
-    code was reused, and the frozen statement was left unchanged.
-
-    Closer hop 1 proves `apm_m03J04_range_subset_dualAnnihilator` above, closing
-    the algebraic inclusion before taking closure. Searches also found
-    `ContinuousLinearMap.orthogonal_ker`,
-    `Submodule.orthogonal_orthogonal_eq_closure`, the algebraic
-    `Submodule.dualCoannihilator_range_eq_ker_flip`, and the bounded-below
-    closed-range API in `Analysis/Normed/Operator/Banach.lean`. The unresolved
-    bridge is transporting the first two Hilbert-space theorems across
-    `InnerProductSpace.toDual` so that their orthogonal complements coincide
-    with this file's intersection-of-evaluation-kernels `dualAnnihilator`.
-    After that, the signed `sSup` still must be identified with the operator
-    norm to feed the antilipschitz/closed-range machinery.
-
-    Closer hop 2 found `ContinuousLinearMap.sSup_sphere_eq_norm` in
-    `Analysis/Normed/Operator/NNNorm.lean`.  It proves exactly that the supremum
-    of `‖f w‖` over the unit sphere is `‖f‖`.  The frozen signed homogeneous
-    quotient reduces to this theorem by normalizing every `w ≠ 0`; in the
-    reverse comparison, replace a unit vector by its negative when `f w < 0`,
-    so the absolute value is attained as a signed value.  Thus the norm bridge
-    no longer needs to be developed from `csSup` bounds from scratch.
-
-    The closure identity remains open. Inspection of
-    `ContinuousLinearMap.orthogonal_ker` confirms its exact output
-    `T.kerᗮ = T†.range.topologicalClosure`, but applying it here still requires
-    constructing the Riesz-conjugated operator whose adjoint is definitionally
-    compatible with `B.flip`, and proving that Riesz transport sends this
-    file's evaluation-kernel intersection to the Hilbert orthogonal. Searches
-    of all closed artifacts and construction libraries found no such transport
-    lemma. Once that identity is available, the sphere-supremum theorem and
-    Banach closed-range APIs provide the remaining inf-sup equivalence route.
-
-    Closer hop 3 extracts
-    `apm_m03J04_closure_range_subset_dualAnnihilator`: closedness of the
-    intersection of evaluation kernels upgrades the earlier algebraic range
-    inclusion to the full closure inclusion. Thus only the reverse (density)
-    inclusion needs the Riesz/orthogonal transport. Additional searches of the
-    Riesz, adjoint, dual-annihilator, and closed-range APIs found no theorem
-    identifying this custom evaluation-kernel intersection with the relevant
-    Hilbert orthogonal, so that density bridge and the subsequent inf-sup
-    equivalence remain open.
-    -/
-    sorry
+  · -- The two analytic bridges above supply the closure and inf--sup clauses.
+    constructor
+    · exact Set.Subset.antisymm
+        (apm_m03J04_closure_range_subset_dualAnnihilator B)
+        (apm_m03J04_bridge_1 B)
+    · exact apm_m03J04_bridge_2 B
