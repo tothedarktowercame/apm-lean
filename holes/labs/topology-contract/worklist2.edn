@@ -47275,9 +47275,82 @@
   {:consumer :t03J05,
    :stop-condition
    "Construct only the balanced adjacent-word swap packet from the banked generic swap and terminal-count identities. Do not transport to paths, compare deleted faces, assign signs, cancel chains, construct a cross product, edit consumer files or claim closure.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Promote the two-file packet, then transport balancedAdjacentSwap through wordPathEquiv and prove the common deleted affine face required for cancellation.",
+     :outcome :go,
+     :warnings [],
+     :axioms
+     {:horizontalCount_adjacentSwapWord_last
+      ["propext" "Classical.choice" "Quot.sound"],
+      :verticalCount_adjacentSwapWord_last
+      ["propext" "Classical.choice" "Quot.sound"],
+      :balancedAdjacentSwap_toWord
+      ["propext" "Classical.choice" "Quot.sound"],
+      :balancedAdjacentSwap_involutive
+      ["propext" "Classical.choice" "Quot.sound"]},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder scan of /tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '^(axiom|constant)\\b|theorem-as-hypothesis' /tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "rg -n 'warning:|error:' /tmp/codex13-balanced-swap/lean.log",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "Parse exact receipt map with clojure.edn/read-string",
+       :exit 0}],
+     :representation
+     {:source
+      "A BalancedWord together with an adjacent cut expressed through n + 1 = p + q",
+      :target
+      "The BalancedWord obtained by conjugating the banked adjacentSwapWord permutation across the Fin cardinality equality",
+      :direction
+      "Exact equality from the twice-swapped target BalancedWord representation back to the source BalancedWord, with terminal horizontal and vertical counts preserved by the forward swap."},
+     :fixture
+     {:path "/tmp/codex13-balanced-swap/BalancedAdjacentSwap.lean",
+      :sha256
+      "dd612b706fd569845802478c2cf3d30f4b8c8aa730b1f929f4d6c9557a6d0924",
+      :placeholder-count 0,
+      :declarations
+      ["horizontalCount_adjacentSwapWord_last"
+       "verticalCount_adjacentSwapWord_last"
+       "balancedAdjacentSwap_toWord"
+       "balancedAdjacentSwap_involutive"]},
+     :finding
+     "The banked terminal filtered-cardinality identities reduce both count-preservation goals to invariance of a filtered finite set under the adjacent transposition. Conjugating that transposition by finCongr packages the operation at the exact BalancedWord p q length, and involutivity follows extensionally with proof irrelevance for the endpoint witnesses.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
+       "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
+      :instructions
+      "Promote the compiled fixture exactly and document the four declarations. Preserve the dependent length equality n + 1 = p + q, which transports the generic Fin (n+1) swap to BalancedWord p q without changing the consumer representation."},
+     :seat "codex-13"}},
+   :instructions
+   "Promote the compiled fixture exactly and document the four declarations. Preserve the dependent length equality n + 1 = p + q, which transports the generic Fin (n+1) swap to BalancedWord p q without changing the consumer representation.",
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
+    "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
    :dag-node "PRODUCT HOMOLOGY: balanced adjacent-word swaps",
    :acceptance
    {:axioms :standard-only,
