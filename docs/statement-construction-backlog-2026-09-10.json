@@ -7,8 +7,8 @@
   "counts": {
     "source": 491,
     "informal_file_at_least_100_bytes": 491,
-    "with_current_lean_material": 477,
-    "without_current_lean_material": 14
+    "with_current_lean_material": 478,
+    "without_current_lean_material": 13
   },
   "packages": [
     {
@@ -491,14 +491,20 @@
       "source": "apm/t97A07.tex",
       "source_sha256": "26151d075f135b12fb200998eee5a956864bbf0c6ee0e91190bd10922b6d0369",
       "informal": "problems/t97A07/informal-solution.md",
-      "current_lean_files": [],
+      "current_lean_files": [
+        "problems/t97A07/lean/Main.lean"
+      ],
       "review_status": "source-convention",
       "construction_packages": [
         "regular-geometry"
       ],
       "statement_target": "Define critical values as the image of points where mfderiv is not surjective; state nonempty compactness and infinitude for n>1 and a nonconstant smooth map.",
       "source_or_fidelity_review": "Part (a) fails at n=0. Resolve the source convention for R^n before adding n>0; no full Sard theorem is needed to define this set.",
-      "formalization_status": "specification-only"
+      "formalization_status": "compiled-corrected-unproved",
+      "source_clause_mapping": "Compactness for every target dimension; nonempty critical values for positive target dimension; empty critical values for dimension zero; infinitude for target dimension >1 and nonconstant map.",
+      "implementation_fidelity_notes": "Labelled correction: printed part (a) omits the positive target dimension convention. Two Lean lemmas prove the zero-dimensional obstruction without sorry. The source text is unchanged; acceptance of the correction as the intended statement is pending.",
+      "lean_sha256": "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
+      "independent_review": "pending"
     },
     {
       "problem_id": "t98A06",
@@ -726,5 +732,6 @@
     "without_current_lean_material": 31
   },
   "implementation_report": "docs/statement-encoding-progress-2026-09-10.md",
-  "followup_implementation_report": "docs/statement-encoding-progress-round2-2026-09-10.md"
+  "followup_implementation_report": "docs/statement-encoding-progress-round2-2026-09-10.md",
+  "latest_followup_report": "docs/statement-encoding-t97A07-2026-09-11.md"
 }

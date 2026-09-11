@@ -1,0 +1,13 @@
+{
+  "date": "2026-09-11",
+  "problem_id": "t97A07",
+  "status": "compiled-corrected-unproved",
+  "lean_sha256": "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
+  "source_sha256": "26151d075f135b12fb200998eee5a956864bbf0c6ee0e91190bd10922b6d0369",
+  "lean_toolchain": "leanprover/lean4:v4.29.0-rc8",
+  "compile_exit_code": 0,
+  "compile_output": "problems/t97A07/lean/Main.lean:45:8: warning: declaration uses `sorry`\n'T97A07.criticalValues_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\n'T97A07.not_nonempty_criticalValues_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\n'apm_t97a07' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "quality_exit_code": 0,
+  "quality_output": "t97A07                       pass\n\n1/1 passed the screen.\n",
+  "note": "Only the final problem theorem has sorryAx. Both zero-dimensional exception lemmas are proved. Positive-dimension source convention still requires review."
+}

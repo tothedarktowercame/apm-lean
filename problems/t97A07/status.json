@@ -10,12 +10,17 @@
     "problem_tex": "apm/t97A07.tex"
   },
   "lean": {
-    "main": null,
+    "main": "lean/Main.lean",
     "scratch": null,
-    "files": [],
-    "sorry_count_main": 0,
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 1,
     "sorry_count_scratch": 0,
-    "sorry_count_total": 0
+    "sorry_count_total": 1,
+    "sorry_count_by_file": {
+      "Main.lean": 1
+    }
   },
   "artifacts": {
     "has_problem_tex": true,
@@ -27,6 +32,19 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "informal-only",
-  "imported_at": "2026-07-13T17:26:58.448534Z"
+  "classification": "partial",
+  "imported_at": "2026-07-13T17:26:58.448534Z",
+  "classification_detail": "Corrected statement compiled, with proved zero-dimensional exception; not certified as the literal unrestricted source.",
+  "statement_encoding": {
+    "date": "2026-09-11",
+    "author": "codex-18",
+    "status": "compiled-corrected-unproved",
+    "theorem": "apm_t97a07",
+    "source_sha256": "26151d075f135b12fb200998eee5a956864bbf0c6ee0e91190bd10922b6d0369",
+    "lean_sha256": "f13a687334f894f060c24b9aa390e8de88a2bf5f3d36e1de717af326c84d78f2",
+    "source_clause_mapping": "Compactness for every target dimension; nonempty critical values for positive target dimension; empty critical values for dimension zero; infinitude for target dimension >1 and nonconstant map.",
+    "fidelity_notes": "Labelled correction: printed part (a) omits the positive target dimension convention. Two Lean lemmas prove the zero-dimensional obstruction without sorry. The source text is unchanged; acceptance of the correction as the intended statement is pending.",
+    "review": "author review; independent source-fidelity review pending",
+    "proof_status": "Main theorem unproved, one sorry. Both zero-dimensional lemmas proved."
+  }
 }
