@@ -1,0 +1,52 @@
+{
+  "source": "/home/joe/code/futon3c/data/apm-campaigns/jit-all-open-v3/jit-all-open-v3-f218/terminal/combined-operational-trace.json",
+  "source_sha256": "1165eeaeb365f3ea9f2157e710b4be375e1b989ec02cfea0fbcab5dabffd1302",
+  "cases": [
+    {
+      "case": "observed",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--run",
+        "DarkTower/APMCampaignTraceChecker.lean",
+        "--operational",
+        "/home/joe/code/apm-lean/holes/labs/operational-trace-f218-2026-09-11/observed.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "APM-OPERATIONAL-TRACE-REJECTED\ninvalid progressObservations[0]: elapsedMs=532092, validExternalWait=true, coordinatorEnabled=true, coordinatorDisabled=false, firstViolationRecorded=false\nfailed predicate: progressTraceValid\n"
+    },
+    {
+      "case": "synthetic-boundary-300000",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--run",
+        "DarkTower/APMCampaignTraceChecker.lean",
+        "--operational",
+        "/home/joe/code/apm-lean/holes/labs/operational-trace-f218-2026-09-11/synthetic-boundary-300000.json"
+      ],
+      "exit": 0,
+      "stdout": "APM-OPERATIONAL-TRACE-ACCEPTED\n",
+      "stderr": ""
+    },
+    {
+      "case": "synthetic-boundary-300001",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "--run",
+        "DarkTower/APMCampaignTraceChecker.lean",
+        "--operational",
+        "/home/joe/code/apm-lean/holes/labs/operational-trace-f218-2026-09-11/synthetic-boundary-300001.json"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "APM-OPERATIONAL-TRACE-REJECTED\ninvalid progressObservations[0]: elapsedMs=300001, validExternalWait=true, coordinatorEnabled=true, coordinatorDisabled=false, firstViolationRecorded=false\nfailed predicate: progressTraceValid\n"
+    }
+  ],
+  "scope": "Observed replay plus explicitly synthetic controls; no recovery or acceptance change."
+}

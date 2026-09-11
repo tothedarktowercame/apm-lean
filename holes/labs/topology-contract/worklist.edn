@@ -76057,7 +76057,31 @@
     :checkpoint-full-dag-refill-51-after-triangulation-relative-mv-and-five-torsion],
    :current-residual
    "Await three independently reviewed outcomes, then rerank the complete DAG.",
-   :other-consumers []}],
+   :other-consumers []}
+ {:id :m03j05-f220-infrastructure-intake
+  :kind :consumer-closure :phase :probe :state :open :depends-on []
+  :consumer :m03J05 :scope []
+  :source/frame "f220"
+  :source/commit "c380d8ff286d5d5dacafdc200d4eddc0cdaa2eec"
+  :source/branch "exp/countdown-f220-m03J05-solver"
+  :source/path "problems/m03J05/lean/Main.lean"
+  :source/sha256 "244587aa6e02da7ad37d1af01c039355c952a53d1da58ad292cec4cbacb3946d"
+  :source/last-valid-receipt "a28fd032f06b54ba321e38a6f3983f90e9d60d01940ab48faeff998eccbb719a"
+  :dag-node "APMv3 F220 nonlinear L2/weak-solution infrastructure intake"
+  :current-residual "50 solver rounds exhausted. Three frozen bridges remain: compactness and spectral/Fredholm classification; Frechet remainder and energy assembly; forced-contraction equation to weak predicate. Existing uniqueness and fixed-point equivalence are banked on the source branch."
+  :acceptance {:probe "Read the exact pinned Main.lean and current canonical authorities. Validate the retained solver artifacts through the canonical workspace lifecycle. Produce a dependency DAG for all three frozen bridges and select the smallest concrete infrastructure prerequisite, starting by checking whether bridge 3 can close from the existing fixed-point equivalence, derivative parametrization and adjoint identity. Name exact declarations, source hypotheses, target statement, reusable consumers and remaining gaps."
+               :axioms :standard-only
+               :stop-condition "No statement weakening, invented bridge hypotheses, local Mathlib clone, or blanket cherry-pick of the 50-round branch. Report a precise API gap if not locally closable. A source pin is not a fresh build certificate."}
+  :stop-condition "Probe and reviewed dependency assessment only; no proof-completion credit for intake. See intake/f220-m03J05/README.md."}
+ {:id :m03j05-f220-infrastructure-strategy
+  :kind :strategy-checkpoint :phase :strategy :state :blocked
+  :depends-on [:m03j05-f220-infrastructure-intake]
+  :consumer :m03J05 :scope []
+  :checkpoint {:after-problems 1 :may-supersede-future true
+               :required-measures [:placeholder-delta :typed-residual-change :infrastructure-packets :review-outcomes]}
+  :acceptance {:strategy "Use the reviewed F220 intake DAG to elect 1-5 bounded implementation/representation/consumer rows and a successor checkpoint. Integrate the existing solver branch through reviewed canonical changes, not a parallel proof island. Preserve every frozen bridge statement; distinguish reusable theory from final adapters. Preserve unrelated portfolio work."
+               :stop-condition "Do not report the transferred problem solved until its original consumer elaborates without placeholders under the standard axiom policy."}}
+ ],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",

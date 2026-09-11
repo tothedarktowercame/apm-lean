@@ -898,6 +898,19 @@ def checkOperationalFile (path : System.FilePath) : IO UInt32 := do
     pure 0
   else
     IO.eprintln "APM-OPERATIONAL-TRACE-REJECTED"
+    if trace.schemaVersion != 1 || trace.traceKind != "apm-combined-operational" then
+      IO.eprintln "invalid operational trace header"
+    for (observation, index) in trace.progressObservations.zipIdx do
+      if !progressObservationValid observation then
+        IO.eprintln s!"invalid progressObservations[{index}]: elapsedMs={observation.elapsedMs}, validExternalWait={observation.validExternalWait}, coordinatorEnabled={observation.coordinatorEnabled}, coordinatorDisabled={observation.coordinatorDisabled}, firstViolationRecorded={observation.firstViolationRecorded}"
+    if !progressTraceValid trace.progressObservations then
+      IO.eprintln "failed predicate: progressTraceValid"
+    if !successorTraceValid trace.successorObservations then
+      IO.eprintln "failed predicate: successorTraceValid"
+    if !deliveryTraceValid trace.deliveryObservations then
+      IO.eprintln "failed predicate: deliveryTraceValid"
+    if !proofStandardTraceValid trace.proofStandardObservations then
+      IO.eprintln "failed predicate: proofStandardTraceValid"
     pure 1
 
 def checkRuntimeConformanceFile (path : System.FilePath) : IO UInt32 := do
