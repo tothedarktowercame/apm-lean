@@ -75707,6 +75707,20 @@
      "The linear range of Finsupp.lmapDomain for the induced map of simplices in that degree",
      :direction
      "Exact submodule equality from the source categorical component range after mapping through the target sigmaConstFinsuppIso to the target Finsupp.lmapDomain range."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789087090461-19936-9a026939",
+     :commands
+     ["git show 5ceab5ed8109645516d10c17cec227c2a381cea0:ConstructionTargets/CoefficientSimplicialChainFinsuppRange.lean"
+      "git diff-tree --no-commit-id --name-only -r 5ceab5ed8109645516d10c17cec227c2a381cea0"
+      "lake env lean ConstructionTargets/CoefficientSimplicialChainFinsuppRange.lean"
+      "sha256sum /tmp/CoefficientSimplicialChainFinsuppRange.lean ConstructionTargets/CoefficientSimplicialChainFinsuppRange.lean ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"
+      "cmp -s /tmp/CoefficientSimplicialChainFinsuppRange.lean ConstructionTargets/CoefficientSimplicialChainFinsuppRange.lean"
+      "git show --check --oneline --stat 5ceab5ed8109645516d10c17cec227c2a381cea0"
+      "python3 declaration-hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at f9a842b5fbd9a245e5419b926342eb50ef6473009b913c6c9b2ddfbea648d581, and the chain-component naturality dependency reproduces 03269d7019ea4db1434a7713cbb5b4ea12578e1ed495124c89e9034939481bde. Lean compilation succeeds without warnings, frozen statement hash e71a6c1ed8dc0748173903d08d92f18fd909f9c3a0958fc1985d90ed4eee34a5 reproduces, placeholders are zero, and axioms are standard-only. The equality is correctly oriented from the source categorical component range mapped through the target sigmaConst/Finsupp isomorphism to the range of Finsupp.lmapDomain. Both inclusions use the previously proved conjugacy and the source isomorphism inverse, so no injectivity assumption on the simplicial map is introduced. Intersection/union range equalities remain unclaimed."},
     :commit "5ceab5ed8109645516d10c17cec227c2a381cea0",
     :changed-paths
     ["ConstructionTargets/CoefficientSimplicialChainFinsuppRange.lean"],
@@ -75719,7 +75733,7 @@
     "The exact fixture and reviewed coefficient-chain Finsupp naturality dependency hashes reproduce. The all-degree range transport through the target sigmaConstFinsuppIso compiles without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSimplicialChainFinsuppRange.lean"],
    :dag-node
@@ -75831,7 +75845,7 @@
      "Compiled exactly one range-level representation prerequisite. The component conjugacy and invertibility of the source presentation show in both directions that the ambient Finsupp isomorphism sends the categorical chain-component range exactly onto the corresponding Finsupp.lmapDomain range. This supplies the range bridge needed by the banked lattice calculations without supportConnecting or excision.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
