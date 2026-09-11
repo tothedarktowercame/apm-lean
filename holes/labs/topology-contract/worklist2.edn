@@ -47897,9 +47897,127 @@
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
-   "Construct only the common deleted-face comparison for a maximal path and its adjacent swap at unequal consecutive letters. Prove the required vertex equality, simplicial-face equality and affine product-face equality. Do not assign shuffle signs, define cancellation pairings, construct chains or cross products, edit consumers or claim closure.",
-   :phase :probe,
+   "Promote only the public explicit coordinate equation for balancedAdjacentSwap. Preserve the existing definition and declarations. Do not define path faces, signs, cancellation or cross products, edit consumers or claim closure.",
+   :phase :implementation,
    :state :open,
+   :scope
+   ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
+    "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: public coordinate formula for balanced adjacent swaps",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use the existing balancedAdjacentSwap definition, length witness n + 1 = p + q, cut i : Fin n and public finCongr and Equiv.swap operations.",
+    :route-step
+    "Exposes the exact coordinate calculation required by the common deleted-face comparison on the t03J05, t96J06 and t97A04 routes.",
+    :implementation
+    "Promote the compiled theorem balancedAdjacentSwap_toWord_explicit from /tmp/codex13-common-face-prereq/BalancedAdjacentSwapExplicit.lean and document it.",
+    :consumer-equation
+    "The swapped balanced word at j equals the source word at finCongr h (Equiv.swap i.castSucc i.succ (finCongr h.symm j)).",
+    :consumer-residual
+    "Use the public coordinate formula to prove retained-vertex equality and the common deleted simplicial and affine face.",
+    :declarations ["balancedAdjacentSwap_toWord_explicit"],
+    :gates
+    ["Verify fixture SHA256 8b28a87df5ed685a0d89b895fe01fec0d2930a6d3fe6a04aa34d523bf81c9f3e before editing."
+     "Add exactly the public explicit coordinate theorem to ProductSimplexBalancedAdjacentSwap and its documentation."
+     "Preserve every existing declaration and keep balancedAdjacentSwap unchanged."
+     "Compile the fixture and canonical module and run the standard-only axiom audit."
+     "Run placeholder, warning, forbidden-declaration, whitespace, exact two-file scope and both-ledger checks."
+     "Commit the scoped implementation and confirm no face, sign, cancellation, chain, cross-product or consumer theorem is added."]},
+   :id
+   :oriented-checkpoint80-public-balanced-adjacent-swap-coordinate-1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :current-residual
+   "balancedAdjacentSwap is reviewed, but its public coordinate theorem exposes a private permutation constant and cannot support downstream index calculations.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :t03J05,
+   :stop-condition
+   "Construct only the common deleted-face comparison for a maximal path and its adjacent swap at unequal consecutive letters. Prove the required vertex equality, simplicial-face equality and affine product-face equality. Do not assign shuffle signs, define cancellation pairings, construct chains or cross products, edit consumers or claim closure.",
+   :evidence
+   {:probe
+    {:residual
+     "Promote the explicit public coordinate equation, then rerun the common deleted-face comparison using its named finCongr and Equiv.swap expression.",
+     :outcome :revise,
+     :warnings [],
+     :prerequisite
+     {:consumer :t03J05,
+      :stop-condition
+      "Promote only the public explicit coordinate equation for balancedAdjacentSwap. Preserve the existing definition and declarations. Do not define path faces, signs, cancellation or cross products, edit consumers or claim closure.",
+      :phase :implementation,
+      :state :open,
+      :scope
+      ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
+       "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
+      :dag-node
+      "PRODUCT HOMOLOGY: public coordinate formula for balanced adjacent swaps",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use the existing balancedAdjacentSwap definition, length witness n + 1 = p + q, cut i : Fin n and public finCongr and Equiv.swap operations.",
+       :route-step
+       "Exposes the exact coordinate calculation required by the common deleted-face comparison on the t03J05, t96J06 and t97A04 routes.",
+       :implementation
+       "Promote the compiled theorem balancedAdjacentSwap_toWord_explicit from /tmp/codex13-common-face-prereq/BalancedAdjacentSwapExplicit.lean and document it.",
+       :consumer-equation
+       "The swapped balanced word at j equals the source word at finCongr h (Equiv.swap i.castSucc i.succ (finCongr h.symm j)).",
+       :consumer-residual
+       "Use the public coordinate formula to prove retained-vertex equality and the common deleted simplicial and affine face.",
+       :declarations ["balancedAdjacentSwap_toWord_explicit"],
+       :gates
+       ["Verify fixture SHA256 8b28a87df5ed685a0d89b895fe01fec0d2930a6d3fe6a04aa34d523bf81c9f3e before editing."
+        "Add exactly the public explicit coordinate theorem to ProductSimplexBalancedAdjacentSwap and its documentation."
+        "Preserve every existing declaration and keep balancedAdjacentSwap unchanged."
+        "Compile the fixture and canonical module and run the standard-only axiom audit."
+        "Run placeholder, warning, forbidden-declaration, whitespace, exact two-file scope and both-ledger checks."
+        "Commit the scoped implementation and confirm no face, sign, cancellation, chain, cross-product or consumer theorem is added."]},
+      :id
+      :oriented-checkpoint80-public-balanced-adjacent-swap-coordinate-1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :current-residual
+      "balancedAdjacentSwap is reviewed, but its public coordinate theorem exposes a private permutation constant and cannot support downstream index calculations.",
+      :other-consumers [:t96J06 :t97A04]},
+     :axioms
+     {:balancedAdjacentSwap_toWord_explicit
+      ["propext" "Classical.choice" "Quot.sound"]},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/codex13-common-face-prereq/BalancedAdjacentSwapExplicit.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-common-face-prereq/BalancedAdjacentSwapExplicit.lean",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder scan of /tmp/codex13-common-face-prereq/BalancedAdjacentSwapExplicit.lean",
+       :exit 0}
+      {:cmd
+       "rg -n 'warning:|error:' /tmp/codex13-common-face-prereq/lean.log",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "Parse exact receipt map with clojure.edn/read-string",
+       :exit 0}],
+     :fixture
+     {:path
+      "/tmp/codex13-common-face-prereq/BalancedAdjacentSwapExplicit.lean",
+      :sha256
+      "8b28a87df5ed685a0d89b895fe01fec0d2930a6d3fe6a04aa34d523bf81c9f3e",
+      :placeholder-count 0,
+      :declarations ["balancedAdjacentSwap_toWord_explicit"]},
+     :finding
+     "The reviewed balancedAdjacentSwap_toWord theorem states its result through a private adjacentPerm constant. The common-face proof must calculate the swapped indices, but downstream modules cannot name that private term. The compiled prerequisite exposes the definitionally equal coordinate using only public finCongr and Equiv.swap expressions.",
+     :seat "codex-13"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "PRODUCT HOMOLOGY: common face of adjacent path swaps",
    :acceptance
@@ -47933,7 +48051,8 @@
    :oriented-checkpoint80-product-simplex-adjacent-swap-common-face-1,
    :kind :representation-comparison,
    :depends-on
-   [:oriented-checkpoint80-adjacent-path-swaps-and-consumer-refill-1],
+   [:oriented-checkpoint80-adjacent-path-swaps-and-consumer-refill-1
+    :oriented-checkpoint80-public-balanced-adjacent-swap-coordinate-1],
    :current-residual
    "Adjacent path swaps are banked, but their unequal-corner vertex agreement and common deleted affine face are not yet proved.",
    :other-consumers [:t96J06 :t97A04]}
