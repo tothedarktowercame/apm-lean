@@ -75477,8 +75477,55 @@
   {:consumer "t98A02",
    :stop-condition
    "Require specialization of this naturality equality to coefficient simplicial-chain components, then apply the banked simplex-index and Finsupp range-lattice formulas to prove the intersection and union component-range equalities.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Specialize sigmaConstFinsuppIso_naturality to every simplicial degree and combine it with intersection_simplex_range, union_simplex_range and the Finsupp range-lattice theorems to prove both component-range equalities. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the nonzero-capable connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:sigmaConstFinsuppIso_naturality
+     "9bc3f21551e68f60a7eb66ef0c1ab140e9bb1448b658eaaaf057ef1ff158343c"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSigmaConstFinsuppNaturality.lean ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder-and-one-declaration audit over ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 0cea131384699223918dd70a290392a6daf61076",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 0cea131384699223918dd70a290392a6daf61076",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "The categorical sigmaConst map induced by an arbitrary function between coproduct index types",
+     :target
+     "The Finsupp.lmapDomain linear map between the corresponding finitely-supported free coefficient modules",
+     :direction
+     "Exact conjugacy equality from the source categorical sigmaConst-map representation through sigmaConstFinsuppIso to the target Finsupp.lmapDomain representation."},
+    :commit "0cea131384699223918dd70a290392a6daf61076",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSigmaConstFinsuppNaturality.lean",
+     :sha256
+     "1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and reviewed sigma-constant Finsupp comparison dependency hashes reproduce. The arbitrary-index-map naturality conjugacy theorem compiles without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"],
    :dag-node
