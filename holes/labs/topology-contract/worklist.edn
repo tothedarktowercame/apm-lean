@@ -75244,6 +75244,20 @@
       :exit 0}
      {:cmd "git status --short", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789084936362-19868-38c089dd",
+     :commands
+     ["git show 89ef96bdb1d5e495e935aad3022b34e5615fed79:ConstructionTargets/CoefficientFinsuppRangeLattice.lean"
+      "git diff-tree --no-commit-id --name-only -r 89ef96bdb1d5e495e935aad3022b34e5615fed79"
+      "lake env lean ConstructionTargets/CoefficientFinsuppRangeLattice.lean"
+      "sha256sum /tmp/CoefficientFinsuppRangeLattice.lean ConstructionTargets/CoefficientFinsuppRangeLattice.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeRangeOrder.lean"
+      "cmp -s /tmp/CoefficientFinsuppRangeLattice.lean ConstructionTargets/CoefficientFinsuppRangeLattice.lean"
+      "git show --check --oneline --stat 89ef96bdb1d5e495e935aad3022b34e5615fed79"
+      "python3 three-declaration hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at 53018e56a3fde3aefc645d76621ff2a2b7a53e1b1af6a1574d91e9d4f8943bce, and the degree-range-order dependency reproduces 873d10f8d3566158260a0afcf88c9b45869bc05ac3ec16af3cb3a03456327d1f. Lean compilation succeeds without warnings, all three frozen declaration hashes reproduce, placeholders are zero, and printed axioms are standard-only. For arbitrary index maps, the extension-map range is correctly identified with finitely supported functions supported on the set-theoretic image. The infimum and supremum formulas then preserve the intended orientations and correspond exactly to intersection and union of image sets. These are generic Finsupp identities only; no specialization to simplicial-chain component ranges or later reverse-range conclusion is overclaimed."},
     :commit "89ef96bdb1d5e495e935aad3022b34e5615fed79",
     :changed-paths
     ["ConstructionTargets/CoefficientFinsuppRangeLattice.lean"],
@@ -75256,7 +75270,7 @@
     "The exact fixture and reviewed relative degree-range-order dependency hashes reproduce. The range-to-supported-submodule formula and its infimum and supremum consequences compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/CoefficientFinsuppRangeLattice.lean"],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / coefficient finitely-supported range lattice",
@@ -75347,7 +75361,7 @@
      "Compiled exactly one finitely-supported range-lattice prerequisite. The range of the linear extension map induced by any basis-index map is exactly the submodule of finitely supported functions supported on its set-theoretic range. Consequently, infima and suprema of two such linear ranges are identified with support on the intersection and union of their index-map ranges. This is the coefficient-chain basis theorem needed for the reverse degreewise range inclusions. No supportConnecting or excision hypothesis is used.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
