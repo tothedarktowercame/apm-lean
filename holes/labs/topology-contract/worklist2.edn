@@ -46804,8 +46804,7 @@
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :evidence
    {:outcome :replan,
-    :disposition :replan,
-    :author "codex-13",
+    :seat "codex-13",
     :commands
     [{:cmd
       "Read complete DAG, foundational note, build-loop documents and both ledgers",
@@ -46827,15 +46826,38 @@
       :exit 0}
      {:cmd "git diff --check", :exit 0}
      {:cmd "git diff --exit-code", :exit 0}
-     {:cmd
-      "Parse the corrected receipt with clojure.edn/read-string and verify the terminal-count row has exactly one dependency",
+     {:cmd "Parse this exact receipt map with clojure.edn/read-string",
       :exit 0}],
-    :review
-    {:outcome :fail,
-     :seat "codex-11",
-     :job "invoke-1789084878565-19866-1d027b61",
-     :finding
-     "Commit fa4bc302 updates the strategy evidence to claim the replacement row now has exactly one checkpoint77 dependency, but the materialized blocked row :oriented-checkpoint77-promoted-product-simplex-terminal-word-counts-1 still contains that dependency twice at worklist2.edn lines 46992-46993. Remove one duplicate from the materialized row. Archived validators and 7 tests/85 assertions pass; both Lean fixtures compile; SHA256 values f2d795b7b39602eb881503a501bef7e30cf25773b4cea4c4bda245b6dbc430ac and 7db4014988e03d13d1cf86f03755053ea25da6953044192cc260f8d3e39bfe08 reproduce."},
+    :finding
+    {:census
+     {:named 59,
+      :existing 58,
+      :missing [:t93A05],
+      :open-consumers 32,
+      :zero-placeholder 26,
+      :within-two 22,
+      :placeholders 61},
+     :routes
+     "a97J08(1): local degree/orientation -> comparison -> adapter; t00A03(2): translations -> endpoint perturbation -> compatible faces -> triangulation; t00J01(1): circle fold -> Klein geometry -> homology bridge -> adapter; t00J02(1): relative Mayer-Vietoris -> excision -> localization -> fundamental class; t01A02(3): H2 degree -> Lefschetz -> conjunction; t01A04(4): fundamental class -> cap/Thom comparison -> calculations; t01A05(1): compact-support Mayer-Vietoris -> localization -> adapter; t01A08(1): regularity conversion -> Sard -> adapter; t01J01(3): translations -> endpoint control -> triangulation -> theorem; t01J04(1): regular preimage -> countability/atlas applicability -> theorem; t01J06(3): sphere moments -> normalization -> Stokes -> conjunction; t02A05(2): S2 flux -> normalization -> integral/minimum; t02A07(3): compact-support Mayer-Vietoris -> localization -> fundamental class; t02A08(1): local comparison -> normalization -> theorem; t03J02(2): null winding -> collar/Schoenflies -> gluing -> theorem; t03J04(1): torus homology -> finite-cover Euler comparison -> theorem; t03J05(1): terminal-count promotion -> adjacent corners -> cancellation -> cross product -> theorem; t91J05(3): translations -> endpoint control -> compatible faces -> result; t92J05(3): antipodal/genus-two bridges -> classification -> assembly; t92J06(1): covering data -> quotient adapter -> theorem; t94A06(1): regular preimage/translation -> applicability -> adapter; t94A10(3): S2 moments -> normalization -> nonexactness; t94J09(1): translations -> endpoint perturbation -> intersection adapter; t95J05(1): S3 moment -> mass normalization -> integral uptake; t95J06(2): torus quotient -> classification -> result; t96J06(2): terminal counts -> adjacent corners -> cancellation -> cross-product assembly; t97A01(1): cover transfer -> finite-cover Euler comparison -> theorem; t97A04(4): terminal counts -> adjacent corners -> cancellation -> cross product -> Kunneth/intersections; t97J05(5): compact-support Mayer-Vietoris -> localization -> fundamental class -> assembly; t98A01(1): five-torsion -> polygon genus -> Euler comparison -> conjunction; t98A02(1): relative Mayer-Vietoris -> excision -> localization monicity -> fundamental class; t99J03(1): endpoint perturbation -> coverage -> compatible faces -> triangulation",
+     :ranking
+     "Checkpoint67 is immutably transitioned and reviewed PASS. The compiled terminal-count extension is the smallest shared step. Its receipt dependency vector is empty because the supervisor appends the current strategy edge exactly once during materialization.",
+     :deferred
+     ["adjacent corners until terminal counts are promoted"
+      "shuffle signs, cancellation and cross products until adjacent corners are banked"]},
+    :measures
+    {:placeholder-delta 0,
+     :typed-residual-change
+     "checkpoint67 transition completed; terminal-count promotion is unblocked",
+     :infrastructure-packets
+     {:before 876, :after 879, :portfolio 0, :concurrent 3},
+     :review-outcomes
+     {:typed-validator :pass,
+      :checkpoint67-transition :pass,
+      :terminal-count-fixture :compiled},
+     :frozen-branch-uptake 0,
+     :frozen-closures 0,
+     :corrected-closures 0,
+     :proved-refutations 0},
     :replacement-items
     [{:consumer :t03J05,
       :stop-condition
@@ -46873,8 +46895,7 @@
       :id
       :oriented-checkpoint77-promoted-product-simplex-terminal-word-counts-1,
       :kind :reusable-theorem,
-      :depends-on
-      [:oriented-checkpoint77-checkpoint67-transition-and-consumer-refill-1],
+      :depends-on [],
       :current-residual
       "Checkpoint67 evidence is immutable, but the terminal all-position count characterizations remain only in a compiled fixture.",
       :other-consumers [:t96J06 :t97A04]}
@@ -46907,40 +46928,10 @@
       :current-residual
       "Measure terminal-count promotion separately from adjacent corners, cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
       :other-consumers []}],
-    :measures
-    {:placeholder-delta 0,
-     :typed-residual-change
-     "checkpoint67 transition completed; terminal-count promotion is unblocked",
-     :infrastructure-packets
-     {:before 876, :after 879, :portfolio 0, :concurrent 3},
-     :review-outcomes
-     {:checkpoint77-strategy :fail-corrected,
-      :typed-validator :pass,
-      :checkpoint67-transition :pass,
-      :terminal-count-fixture :compiled},
-     :frozen-branch-uptake 0,
-     :frozen-closures 0,
-     :corrected-closures 0,
-     :proved-refutations 0},
-    :finding
-    {:census
-     {:named 59,
-      :existing 58,
-      :missing [:t93A05],
-      :open-consumers 32,
-      :zero-placeholder 26,
-      :within-two 22,
-      :placeholders 61},
-     :routes
-     "a97J08(1): local degree/orientation -> comparison -> adapter; t00A03(2): translations -> endpoint perturbation -> compatible faces -> triangulation; t00J01(1): circle fold -> Klein geometry -> homology bridge -> adapter; t00J02(1): relative Mayer-Vietoris -> excision -> localization -> fundamental class; t01A02(3): H2 degree -> Lefschetz -> conjunction; t01A04(4): fundamental class -> cap/Thom comparison -> calculations; t01A05(1): compact-support Mayer-Vietoris -> localization -> adapter; t01A08(1): regularity conversion -> Sard -> adapter; t01J01(3): translations -> endpoint control -> triangulation -> theorem; t01J04(1): regular preimage -> countability/atlas applicability -> theorem; t01J06(3): sphere moments -> normalization -> Stokes -> conjunction; t02A05(2): S2 flux -> normalization -> integral/minimum; t02A07(3): compact-support Mayer-Vietoris -> localization -> fundamental class; t02A08(1): local comparison -> normalization -> theorem; t03J02(2): null winding -> collar/Schoenflies -> gluing -> theorem; t03J04(1): torus homology -> finite-cover Euler comparison -> theorem; t03J05(1): terminal-count promotion -> adjacent corners -> cancellation -> cross product -> theorem; t91J05(3): translations -> endpoint control -> compatible faces -> result; t92J05(3): antipodal/genus-two bridges -> classification -> assembly; t92J06(1): covering data -> quotient adapter -> theorem; t94A06(1): regular preimage/translation -> applicability -> adapter; t94A10(3): S2 moments -> normalization -> nonexactness; t94J09(1): translations -> endpoint perturbation -> intersection adapter; t95J05(1): S3 moment -> mass normalization -> integral uptake; t95J06(2): torus quotient -> classification -> result; t96J06(2): terminal counts -> adjacent corners -> cancellation -> cross-product assembly; t97A01(1): cover transfer -> finite-cover Euler comparison -> theorem; t97A04(4): terminal counts -> adjacent corners -> cancellation -> cross product -> Kunneth/intersections; t97J05(5): compact-support Mayer-Vietoris -> localization -> fundamental class -> assembly; t98A01(1): five-torsion -> polygon genus -> Euler comparison -> conjunction; t98A02(1): relative Mayer-Vietoris -> excision -> localization monicity -> fundamental class; t99J03(1): endpoint perturbation -> coverage -> compatible faces -> triangulation",
-     :ranking
-     "Checkpoint67 is immutably transitioned and reviewed PASS. The compiled two-theorem terminal-count extension is the smallest shared step on t03J05, t96J06 and t97A04. The replacement row now contains exactly one dependency on the checkpoint77 strategy row.",
-     :deferred
-     ["adjacent corners until terminal counts are promoted"
-      "shuffle signs, cancellation and cross products until adjacent corners are banked"]},
-    :seat "codex-13"},
+    :author "codex-13",
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: checkpoint67 recurrence transition and renewed consumer eligibility",
@@ -46962,7 +46953,7 @@
    :stop-condition
    "Promote only the two compiled terminal-count characterizations into ProductSimplexWordPrefixCounts and document them. Preserve every existing declaration. Do not define swaps, package balanced words or paths, compare faces, assign signs, cancel chains, construct a cross product or claim closure.",
    :phase :implementation,
-   :state :superseded,
+   :state :blocked,
    :scope
    ["ConstructionTargets/ProductSimplexWordPrefixCounts.lean"
     "ConstructionTargets/ProductSimplexWordPrefixCounts.md"],
@@ -46995,8 +46986,7 @@
    :oriented-checkpoint77-promoted-product-simplex-terminal-word-counts-1,
    :kind :reusable-theorem,
    :depends-on
-   [:oriented-checkpoint77-checkpoint67-transition-and-consumer-refill-1
-    :oriented-checkpoint77-checkpoint67-transition-and-consumer-refill-1],
+   [:oriented-checkpoint77-checkpoint67-transition-and-consumer-refill-1],
    :current-residual
    "Checkpoint67 evidence is immutable, but the terminal all-position count characterizations remain only in a compiled fixture.",
    :other-consumers [:t96J06 :t97A04]}
@@ -47012,7 +47002,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :superseded,
+   :state :blocked,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: terminal word counts and renewed consumer eligibility",
