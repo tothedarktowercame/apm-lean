@@ -75326,6 +75326,20 @@
       :exit 0}
      {:cmd "git status --short", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789085290075-19880-28416e7f",
+     :commands
+     ["git show bed90320ca583fa891479dff4db81d4e24801ff3:ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"
+      "git diff-tree --no-commit-id --name-only -r bed90320ca583fa891479dff4db81d4e24801ff3"
+      "lake env lean ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"
+      "sha256sum /tmp/CoefficientSubcomplexSimplexRangeLattice.lean ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean ConstructionTargets/CoefficientFinsuppRangeLattice.lean"
+      "cmp -s /tmp/CoefficientSubcomplexSimplexRangeLattice.lean ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"
+      "git show --check --oneline --stat bed90320ca583fa891479dff4db81d4e24801ff3"
+      "python3 two-declaration hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS: commit changes exactly the scoped file; fixture and implementation are byte-identical at 2f0232d4485f10ad8800728722436509ee1832516fd5a5f9f95bb0bc485b6ca2, and the Finsupp range-lattice dependency reproduces 53018e56a3fde3aefc645d76621ff2a2b7a53e1b1af6a1574d91e9d4f8943bce. Lean compilation succeeds without warnings, both frozen declaration hashes reproduce, placeholders are zero, and printed axioms are standard-only. The intersection theorem proves both directions, reconciling the two subtype witnesses at their common ambient simplex; the union theorem likewise proves both directions by the disjunctive membership representation. Thus the inclusion-image ranges are exactly intersection and union in the advertised orientations, without claiming coefficient-chain normalization or module-range equalities."},
     :commit "bed90320ca583fa891479dff4db81d4e24801ff3",
     :changed-paths
     ["ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"],
@@ -75338,7 +75352,7 @@
     "The exact fixture and reviewed finitely-supported range-lattice dependency hashes reproduce. The intersection and union simplex-index range identities compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path. Pre-existing concurrent modifications to ConstructionTargets/ProductSimplexWordPrefixCounts.lean and ConstructionTargets/ProductSimplexWordPrefixCounts.md remain untouched.",
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"],
    :dag-node
@@ -75430,7 +75444,7 @@
      "Compiled exactly one simplex-index range prerequisite. In every simplicial degree, the set-theoretic range of the intersection-subcomplex inclusion is exactly the intersection of the two member inclusion ranges, and the range of the union-subcomplex inclusion is exactly their union. The proofs use the literal subtype membership data, including both directions. Combined with the banked finitely-supported range theorem, these equalities provide the basis-level input for the reverse coefficient-chain range inclusions. No supportConnecting or excision hypothesis is used.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
