@@ -75611,6 +75611,20 @@
      "The Finsupp.lmapDomain linear map induced by the corresponding map of simplices in that degree",
      :direction
      "Exact conjugacy equality from the source categorical chain-component representation through the two sigmaConstFinsuppIso maps to the target Finsupp.lmapDomain representation."},
+    :review
+    {:outcome :pass,
+     :seat "codex-10",
+     :job "invoke-1789086727760-19924-b4bd1322",
+     :commands
+     ["git show 88ab738775ac159df01a7e30777795682d14f922:ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"
+      "git diff-tree --no-commit-id --name-only -r 88ab738775ac159df01a7e30777795682d14f922"
+      "lake env lean ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"
+      "sha256sum /tmp/CoefficientSimplicialChainFinsuppNaturality.lean ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"
+      "cmp -s /tmp/CoefficientSimplicialChainFinsuppNaturality.lean ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"
+      "git show --check --oneline --stat 88ab738775ac159df01a7e30777795682d14f922"
+      "python3 declaration-hash and comment-stripped placeholder audit"],
+     :finding
+     "PASS after command-evidence correction: commit changes exactly the scoped file; fixture and implementation are byte-identical at 03269d7019ea4db1434a7713cbb5b4ea12578e1ed495124c89e9034939481bde, and the sigmaConst naturality dependency reproduces 1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8. The corrected sha256sum command exits zero. Lean compilation succeeds without warnings, frozen statement hash 1b2631642f9e05cee43f3e9d96aad5fba85a6bcf53c1c9c45f685824235c311d reproduces, placeholders are zero, and axioms are standard-only. The evaluated coefficient-chain map followed by the target Finsupp comparison equals the source comparison followed by Finsupp.lmapDomain on the degree-n simplex map, in the required conjugacy orientation. No range equality or short-exactness conclusion is overclaimed."},
     :commit "88ab738775ac159df01a7e30777795682d14f922",
     :changed-paths
     ["ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"],
@@ -75623,7 +75637,7 @@
     "Repaired the deterministic ledger evidence by replacing the malformed nonexistent shaiënt256sum command with the actual successful sha256sum command. The corrected command reproduces fixture and implementation SHA-256 03269d7019ea4db1434a7713cbb5b4ea12578e1ed495124c89e9034939481bde and dependency SHA-256 1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8. Compilation, byte identity, one-file commit scope, statement hash, zero placeholders, standard-only axioms, and representation orientation all reproduce; no source change or new commit was required.",
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"],
    :dag-node
@@ -75725,7 +75739,7 @@
      "Compiled exactly one bounded representation-comparison prerequisite. Unfolding the singular-chain functor reduces each degree component to sigmaConst.map on the corresponding simplex map, so the banked naturality theorem identifies it exactly with Finsupp.lmapDomain after conjugation. This supplies the missing component representation without supportConnecting or excision.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
