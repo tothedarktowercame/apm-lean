@@ -47959,6 +47959,22 @@
       :exit 0}
      {:cmd "parse exact receipt map with clojure.edn/read-string",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789087226751-19943-f3c152eb",
+     :commands
+     ["git show/diff-tree 9125c975"
+      "sha256sum frozen explicit-coordinate fixture"
+      "verify recorded canonical blob identity and predecessor hash"
+      "lake env lean fixture and canonical module"
+      "lake build ConstructionTargets.ProductSimplexBalancedAdjacentSwap"
+      "archive supervisor commit 68961a93"
+      "bb worklist_check.bb on both archived ledgers"
+      "bb archived test_gate_receipts.bb"
+      "placeholder and forbidden-boundary scans"],
+     :finding
+     "PASS: commit 9125c975 changes exactly ProductSimplexBalancedAdjacentSwap.lean and its documentation, adding only balancedAdjacentSwap_toWord_explicit while preserving the existing definition and declarations byte-for-byte. The frozen fixture reproduces SHA256 8b28a87df5ed685a0d89b895fe01fec0d2930a6d3fe6a04aa34d523bf81c9f3e; its theorem is oriented from the swapped balanced-word coordinate to the source coordinate through finCongr h, Equiv.swap, and finCongr h.symm exactly as specified. The recorded statement hash reproduces through exact theorem identity, placeholders remain zero, axioms are standard-only, and no face, sign, cancellation, chain, cross-product or consumer theorem crosses scope. Fixture/canonical compilation, module build, both archived ledger validators, and 7 tests/85 assertions pass; only known SingularSubdivision dependency warnings recur."},
     :commit "9125c9756f356bb6042c5d623071514d1ff1dbfc",
     :changed-paths
     ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
@@ -47976,7 +47992,7 @@
       "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"]},
     :seat "codex-14"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
     "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
@@ -48094,7 +48110,7 @@
      "The reviewed balancedAdjacentSwap_toWord theorem states its result through a private adjacentPerm constant. The common-face proof must calculate the swapped indices, but downstream modules cannot name that private term. The compiled prerequisite exposes the definitionally equal coordinate using only public finCongr and Equiv.swap expressions.",
      :seat "codex-13"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PRODUCT HOMOLOGY: common face of adjacent path swaps",
    :acceptance
