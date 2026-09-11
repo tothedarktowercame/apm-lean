@@ -114,4 +114,32 @@ theorem verticalCount_succ_of_false {n : ℕ} (w : Fin n → Bool) (i : Fin n)
   rw [wordPrefix_succ, Finset.filter_insert]
   simp [hi, wordPrefix]
 
+
+/-- At the terminal endpoint, the horizontal prefix count counts all true letters. -/
+theorem horizontalCount_last_eq_card_filter {n : ℕ} (w : Fin n → Bool) :
+    horizontalCount w (Fin.last n) = (Finset.univ.filter fun k => w k = true).card := by
+  unfold horizontalCount
+  congr 1
+  ext k
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+  constructor
+  · exact fun h => h.2
+  · intro h
+    exact ⟨by simp [wordPrefix], h⟩
+
+/-- At the terminal endpoint, the vertical prefix count counts all false letters. -/
+theorem verticalCount_last_eq_card_filter {n : ℕ} (w : Fin n → Bool) :
+    verticalCount w (Fin.last n) = (Finset.univ.filter fun k => w k = false).card := by
+  unfold verticalCount
+  congr 1
+  ext k
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+  constructor
+  · exact fun h => h.2
+  · intro h
+    exact ⟨by simp [wordPrefix], h⟩
+
+#print axioms horizontalCount_last_eq_card_filter
+#print axioms verticalCount_last_eq_card_filter
+
 end ConstructionTargets.ProductSimplexWordPrefixCounts

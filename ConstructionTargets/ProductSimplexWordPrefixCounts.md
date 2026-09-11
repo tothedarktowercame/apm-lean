@@ -20,8 +20,14 @@ resulting count calculation: a true letter increments only `horizontalCount`,
 while a false letter increments only `verticalCount`. Every equation is an
 equality of natural-number counts.
 
+At the terminal endpoint `Fin.last n`, the private prefix contains every word
+position. `horizontalCount_last_eq_card_filter` therefore identifies the
+horizontal total with the cardinality of the true-letter filter on
+`Finset.univ`; `verticalCount_last_eq_card_filter` gives the corresponding
+false-letter identity.
+
 No balanced-word subtype or terminal balance assumption appears here. The
 module does not reconstruct paths, prove inverse laws, define corner swaps,
 pair or cancel faces, construct chain sums or a cross product, or assert
-Eilenberg-Zilber, Kunneth, intersection, or consumer results. The next step
-uses these recurrences to compare step words with cumulative path coordinates.
+Eilenberg-Zilber, Kunneth, intersection, or consumer results. Downstream code
+can use the terminal identities to prove that a permutation preserves totals.
