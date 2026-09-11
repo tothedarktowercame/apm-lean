@@ -75294,6 +75294,34 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require a coefficient-chain component representation compatible with the ModuleCat coproduct implementation, allowing these simplex-index equalities and the banked finitely-supported support formulas to prove the two component range equalities.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / subcomplex simplex-index range lattice",
+   :acceptance
+   {:fixture "/tmp/CoefficientSubcomplexSimplexRangeLattice.lean",
+    :fixture-sha256
+    "2f0232d4485f10ad8800728722436509ee1832516fd5a5f9f95bb0bc485b6ca2",
+    :implementation
+    "Promote the exact fixture. Compile intersection_simplex_range and union_simplex_range. This supplies the exact degreewise index-range identities required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: the intersection-subcomplex inclusion has the intersection of the member simplex ranges, and the union-subcomplex inclusion has their union. Verify CoefficientFinsuppRangeLattice SHA256 53018e56a3fde3aefc645d76621ff2a2b7a53e1b1af6a1574d91e9d4f8943bce. Preserve arbitrary simplicial sets, arbitrary subcomplexes and every natural-number degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim coefficient-chain component normalization, module range equalities, compatibility of either relative quotient arrow, chain-level short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :coefficient-subcomplex-simplex-range-lattice-implementation-refill51,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-finsupp-range-lattice-implementation-refill51],
+   :current-residual
+   "Construct the canonical degreewise linear equivalence between the ModuleCat sigmaConst coefficient-chain object and the finitely-supported free module, prove naturality for subcomplex inclusions, and combine it with intersection_simplex_range, union_simplex_range and the Finsupp range-lattice formulas. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the genuine connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
@@ -75303,65 +75331,64 @@
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require unfolding each coefficient-chain component inclusion as Finsupp.lmapDomain on the corresponding simplex inclusion and applying the compiled support-range formulas with the subcomplex intersection and union index equalities.",
+      "Require a coefficient-chain component representation compatible with the ModuleCat coproduct implementation, allowing these simplex-index equalities and the banked finitely-supported support formulas to prove the two component range equalities.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientFinsuppRangeLattice.lean"],
+      ["ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / coefficient finitely-supported range lattice",
+      "MANIFOLD FUNDAMENTAL CLASS / subcomplex simplex-index range lattice",
       :acceptance
-      {:fixture "/tmp/CoefficientFinsuppRangeLattice.lean",
+      {:fixture "/tmp/CoefficientSubcomplexSimplexRangeLattice.lean",
        :fixture-sha256
-       "53018e56a3fde3aefc645d76621ff2a2b7a53e1b1af6a1574d91e9d4f8943bce",
+       "2f0232d4485f10ad8800728722436509ee1832516fd5a5f9f95bb0bc485b6ca2",
        :implementation
-       "Promote the exact fixture. Compile range_lmapDomain_eq_supported_range, range_lmapDomain_inf and range_lmapDomain_sup. This supplies the finitely-supported basis range calculation required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: ranges of coefficient extension maps are support submodules, and their infimum and supremum correspond to intersection and union of the underlying index-map ranges. Verify CoefficientSubcomplexRelativeDegreeRangeOrder SHA256 873d10f8d3566158260a0afcf88c9b45869bc05ac3ec16af3cb3a03456327d1f. Preserve arbitrary index types, arbitrary coefficient modules over arbitrary semirings and arbitrary index maps. Require zero placeholders, no warnings and standard-only axioms. Do not claim specialization to coefficient simplicial chains, the reverse range inclusions, range equalities, compatibility of either relative quotient arrow, chain-level short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile intersection_simplex_range and union_simplex_range. This supplies the exact degreewise index-range identities required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: the intersection-subcomplex inclusion has the intersection of the member simplex ranges, and the union-subcomplex inclusion has their union. Verify CoefficientFinsuppRangeLattice SHA256 53018e56a3fde3aefc645d76621ff2a2b7a53e1b1af6a1574d91e9d4f8943bce. Preserve arbitrary simplicial sets, arbitrary subcomplexes and every natural-number degree. Require zero placeholders, no warnings and standard-only axioms. Do not claim coefficient-chain component normalization, module range equalities, compatibility of either relative quotient arrow, chain-level short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientFinsuppRangeLattice.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
-      :id :coefficient-finsupp-range-lattice-implementation-refill51,
+      :id
+      :coefficient-subcomplex-simplex-range-lattice-implementation-refill51,
       :kind :reusable-theorem,
       :depends-on
-      [:coefficient-subcomplex-relative-degree-range-order-implementation-refill51],
+      [:coefficient-finsupp-range-lattice-implementation-refill51],
       :current-residual
-      "Normalize each coefficient-chain component inclusion to Finsupp.lmapDomain and prove that the simplex index ranges for P inf Q and P sup Q are respectively the intersection and union of the P and Q index ranges. Apply the compiled Finsupp lattice formulas to complete both degreewise range equalities, identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the genuine connecting morphism and three exactness segments, then transport through relativeComparisonIso to the literal compact-complement pairs.",
+      "Construct the canonical degreewise linear equivalence between the ModuleCat sigmaConst coefficient-chain object and the finitely-supported free module, prove naturality for subcomplex inclusions, and combine it with intersection_simplex_range, union_simplex_range and the Finsupp range-lattice formulas. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the genuine connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSubcomplexRelativeDegreeRangeOrder >/tmp/finsupp-range-lattice-dep.log 2>&1",
-       :exit 0}
-      {:cmd "lake env lean /tmp/CoefficientFinsuppRangeLattice.lean",
+       "lake build ConstructionTargets.CoefficientFinsuppRangeLattice >/tmp/subcomplex-simplex-range-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientFinsuppRangeLattice.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeRangeOrder.lean",
+       "lake env lean /tmp/CoefficientSubcomplexSimplexRangeLattice.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-three-declaration audit over /tmp/CoefficientFinsuppRangeLattice.lean",
+       "sha256sum /tmp/CoefficientSubcomplexSimplexRangeLattice.lean ConstructionTargets/CoefficientFinsuppRangeLattice.lean",
+       :exit 0}
+      {:cmd
+       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/CoefficientSubcomplexSimplexRangeLattice.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/CoefficientFinsuppRangeLattice.lean",
+     [{:cmd
+       "lake env lean /tmp/CoefficientSubcomplexSimplexRangeLattice.lean",
        :exit 1,
        :correction
-       "The first check found that the reviewed dependency object had not yet been built. Built ConstructionTargets.CoefficientSubcomplexRelativeDegreeRangeOrder before checking the fixture."}
-      {:cmd "lake env lean /tmp/CoefficientFinsuppRangeLattice.lean",
-       :exit 1,
-       :correction
-       "The initial range proof referenced a nonexistent LinearMap.map_top lemma. Replaced it with LinearMap.range_eq_map and then applied the reviewed supported-submodule image theorem."}],
+       "The initial intersection reverse-inclusion proof oriented the equality of underlying simplices incorrectly and attempted to substitute an equality between coerced subtype values. Reversed the equality, transported the right-subcomplex membership proof to the left representative, and constructed the intersection subtype directly."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientFinsuppRangeLattice.lean",
+     {:path "/tmp/CoefficientSubcomplexSimplexRangeLattice.lean",
       :sha256
-      "53018e56a3fde3aefc645d76621ff2a2b7a53e1b1af6a1574d91e9d4f8943bce",
+      "2f0232d4485f10ad8800728722436509ee1832516fd5a5f9f95bb0bc485b6ca2",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one finitely-supported range-lattice prerequisite. The range of the linear extension map induced by any basis-index map is exactly the submodule of finitely supported functions supported on its set-theoretic range. Consequently, infima and suprema of two such linear ranges are identified with support on the intersection and union of their index-map ranges. This is the coefficient-chain basis theorem needed for the reverse degreewise range inclusions. No supportConnecting or excision hypothesis is used.",
+     "Compiled exactly one simplex-index range prerequisite. In every simplicial degree, the set-theoretic range of the intersection-subcomplex inclusion is exactly the intersection of the two member inclusion ranges, and the range of the union-subcomplex inclusion is exactly their union. The proofs use the literal subtype membership data, including both directions. Combined with the banked finitely-supported range theorem, these equalities provide the basis-level input for the reverse coefficient-chain range inclusions. No supportConnecting or excision hypothesis is used.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -75398,7 +75425,8 @@
     :coefficient-chain-cokernel-degree-quotient-implementation-refill51
     :coefficient-subcomplex-relative-degree-quotients-implementation-refill51
     :coefficient-subcomplex-relative-degree-range-order-implementation-refill51
-    :coefficient-finsupp-range-lattice-implementation-refill51],
+    :coefficient-finsupp-range-lattice-implementation-refill51
+    :coefficient-subcomplex-simplex-range-lattice-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
