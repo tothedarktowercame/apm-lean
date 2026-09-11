@@ -75476,90 +75476,121 @@
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require specialization of this naturality equality to coefficient simplicial-chain components, then apply the banked simplex-index and Finsupp range-lattice formulas to prove the intersection and union component-range equalities.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / sigmaConst Finsupp naturality",
+   :acceptance
+   {:fixture "/tmp/CoefficientSigmaConstFinsuppNaturality.lean",
+    :fixture-sha256
+    "1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8",
+    :implementation
+    "Promote the exact fixture. Compile sigmaConstFinsuppIso_naturality. This supplies the naturality comparison required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: for arbitrary index maps and arbitrary commutative-ring coefficients, conjugating the categorical sigmaConst map by sigmaConstFinsuppIso gives Finsupp.lmapDomain exactly. Verify CoefficientSigmaConstFinsuppComparison SHA256 e2eea32aaab84794c7f1debc703e38791ac912c58be062db9ab6c14b3806a705. Require zero placeholders, no warnings and standard-only axioms. Do not claim coefficient-chain component specialization, component-range equalities, compatibility of the relative quotient arrows, short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "The categorical sigmaConst map induced by an arbitrary function between coproduct index types",
+    :target
+    "The Finsupp.lmapDomain linear map between the corresponding finitely-supported free coefficient modules",
+    :direction
+    "Exact conjugacy equality from the source categorical sigmaConst-map representation through sigmaConstFinsuppIso to the target Finsupp.lmapDomain representation."},
+   :id
+   :coefficient-sigma-const-finsupp-naturality-implementation-refill51,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-sigma-const-finsupp-comparison-implementation-refill51],
+   :current-residual
+   "Specialize sigmaConstFinsuppIso_naturality to every simplicial degree and combine it with intersection_simplex_range, union_simplex_range and the Finsupp range-lattice theorems to prove both component-range equalities. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the nonzero-capable connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
+   :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
     {:placeholder-delta 0,
+     :residual
+     "Promote the naturality fixture, then specialize it to coefficient-chain components to establish the two degreewise range-lattice equalities.",
      :outcome :revise,
      :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require naturality of sigmaConstFinsuppIso for arbitrary index maps, identifying the conjugated categorical sigmaConst map with Finsupp.lmapDomain; then specialize that equality to coefficient simplicial-chain components.",
+      "Require specialization of this naturality equality to coefficient simplicial-chain components, then apply the banked simplex-index and Finsupp range-lattice formulas to prove the intersection and union component-range equalities.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"],
+      ["ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / ModuleCat sigmaConst to finitely-supported free module",
+      "MANIFOLD FUNDAMENTAL CLASS / sigmaConst Finsupp naturality",
       :acceptance
-      {:fixture "/tmp/CoefficientSigmaConstFinsuppComparison.lean",
+      {:fixture "/tmp/CoefficientSigmaConstFinsuppNaturality.lean",
        :fixture-sha256
-       "e2eea32aaab84794c7f1debc703e38791ac912c58be062db9ab6c14b3806a705",
+       "1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8",
        :implementation
-       "Promote the exact fixture. Compile sigmaConstFinsuppIso and sigma_ι_sigmaConstFinsuppIso_hom. This supplies the coefficient coproduct object and generator representation required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05. Verify CoefficientSubcomplexSimplexRangeLattice SHA256 2f0232d4485f10ad8800728722436509ee1832516fd5a5f9f95bb0bc485b6ca2. Preserve arbitrary index types and arbitrary commutative-ring coefficients. Require zero placeholders, no warnings and standard-only axioms. Do not claim naturality for index maps, coefficient-chain component normalization, module range equalities, compatibility of either relative quotient arrow, chain-level short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile sigmaConstFinsuppIso_naturality. This supplies the naturality comparison required by the sole placeholders of t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05: for arbitrary index maps and arbitrary commutative-ring coefficients, conjugating the categorical sigmaConst map by sigmaConstFinsuppIso gives Finsupp.lmapDomain exactly. Verify CoefficientSigmaConstFinsuppComparison SHA256 e2eea32aaab84794c7f1debc703e38791ac912c58be062db9ab6c14b3806a705. Require zero placeholders, no warnings and standard-only axioms. Do not claim coefficient-chain component specialization, component-range equalities, compatibility of the relative quotient arrows, short exactness, a connecting morphism, literal topological-pair identification, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
       :representation
       {:source
-       "The categorical ModuleCat sigmaConst coproduct of copies of the coefficient ring indexed by an arbitrary type",
+       "The categorical sigmaConst map induced by an arbitrary function between coproduct index types",
        :target
-       "The ordinary finitely-supported free module of coefficient-valued functions on that index type",
+       "The Finsupp.lmapDomain linear map between the corresponding finitely-supported free coefficient modules",
        :direction
-       "Canonical linear isomorphism from the source categorical coproduct representation to the target Finsupp representation, with exact equality from every source coproduct injection applied to a coefficient to the corresponding target single-support generator."},
+       "Exact conjugacy equality from the source categorical sigmaConst-map representation through sigmaConstFinsuppIso to the target Finsupp.lmapDomain representation."},
       :id
-      :coefficient-sigma-const-finsupp-comparison-implementation-refill51,
+      :coefficient-sigma-const-finsupp-naturality-implementation-refill51,
       :kind :representation-comparison,
       :depends-on
-      [:coefficient-subcomplex-simplex-range-lattice-implementation-refill51],
+      [:coefficient-sigma-const-finsupp-comparison-implementation-refill51],
       :current-residual
-      "Prove that sigmaConst.map f conjugated by sigmaConstFinsuppIso equals ModuleCat.ofHom (Finsupp.lmapDomain R R f), using equality on coproduct generators. Specialize to each simplicial degree and combine with the simplex-index and Finsupp range-lattice theorems to obtain both component range equalities. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the genuine connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
+      "Specialize sigmaConstFinsuppIso_naturality to every simplicial degree and combine it with intersection_simplex_range, union_simplex_range and the Finsupp range-lattice theorems to prove both component-range equalities. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the nonzero-capable connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
       :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSubcomplexSimplexRangeLattice >/tmp/sigma-finsupp-dep.log 2>&1",
+       "lake build ConstructionTargets.CoefficientSigmaConstFinsuppComparison >/tmp/sigma-finsupp-naturality-dep.log 2>&1",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientSigmaConstFinsuppComparison.lean",
+       "lake env lean /tmp/CoefficientSigmaConstFinsuppNaturality.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientSigmaConstFinsuppComparison.lean ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean",
+       "sha256sum /tmp/CoefficientSigmaConstFinsuppNaturality.lean ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean",
        :exit 0}
       {:cmd
-       "python3 comment-stripped placeholder-and-two-declaration audit over /tmp/CoefficientSigmaConstFinsuppComparison.lean",
+       "python3 comment-stripped placeholder-and-one-declaration audit over /tmp/CoefficientSigmaConstFinsuppNaturality.lean",
        :exit 0}
       {:cmd "git status --short", :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientSigmaConstFinsuppComparison.lean",
+       "lake env lean /tmp/CoefficientSigmaConstFinsuppNaturality.lean",
        :exit 1,
        :correction
-       "The first fixture omitted the classical DecidableEq instance required by the concrete coproduct and direct-sum equivalence. Constructed the isomorphism and generator proof in classical contexts."}
+       "The initial proof attempted to rewrite the sigma map beneath concrete morphism evaluation. Reduced the categorical equality on coproduct generators before evaluating coefficients."}
       {:cmd
-       "lake env lean /tmp/CoefficientSigmaConstFinsuppComparison.lean",
+       "lake env lean /tmp/CoefficientSigmaConstFinsuppNaturality.lean",
        :exit 1,
        :correction
-       "Generic simplification did not expose the categorical coproduct injection under the composite isomorphism. Restated the composite explicitly through coprodIsoDirectSum and the inverse finitely-supported/direct-sum equivalence."}
-      {:cmd
-       "lake env lean /tmp/CoefficientSigmaConstFinsuppComparison.lean",
-       :exit 1,
-       :correction
-       "The explicit composite was right-associated, so the coproduct-injection theorem could not rewrite its first two factors. Reassociated in the inverse direction, applied ModuleCat.ι_coprodIsoDirectSum_hom, and finished with finsuppLEquivDirectSum_symm_lof."}],
-     :changed-paths [],
+       "Intermediate proofs reassociated the three-map composite in directions that did not match Lean's parsed expression. Replaced reassociation with a direct calculation using the two compiled generator equalities and Finsupp.mapDomain_single."}],
      :fixture
-     {:path "/tmp/CoefficientSigmaConstFinsuppComparison.lean",
+     {:path "/tmp/CoefficientSigmaConstFinsuppNaturality.lean",
       :sha256
-      "e2eea32aaab84794c7f1debc703e38791ac912c58be062db9ab6c14b3806a705",
+      "1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one coefficient coproduct representation prerequisite. The chosen ModuleCat sigmaConst coproduct of copies of R is canonically isomorphic to the finitely-supported free R-module on its index type, through the concrete direct-sum presentation. Under this isomorphism, every categorical coproduct injection sends a coefficient exactly to the corresponding Finsupp.single generator. This supplies the object and generator comparison needed to normalize coefficient-chain components. No supportConnecting or excision hypothesis is used.",
+     "Compiled exactly one representation-comparison prerequisite. Equality on categorical coproduct generators proves that sigmaConst.map for an arbitrary index function is conjugate through sigmaConstFinsuppIso to Finsupp.lmapDomain. The theorem is valid for arbitrary index types and commutative-ring coefficients and uses neither supportConnecting nor ordinary excision.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -75598,7 +75629,8 @@
     :coefficient-subcomplex-relative-degree-range-order-implementation-refill51
     :coefficient-finsupp-range-lattice-implementation-refill51
     :coefficient-subcomplex-simplex-range-lattice-implementation-refill51
-    :coefficient-sigma-const-finsupp-comparison-implementation-refill51],
+    :coefficient-sigma-const-finsupp-comparison-implementation-refill51
+    :coefficient-sigma-const-finsupp-naturality-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
