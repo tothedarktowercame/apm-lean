@@ -47580,9 +47580,86 @@
   {:consumer :t03J05,
    :stop-condition
    "Construct only the adjacent swap on MaximalPath by transporting the reviewed balanced-word swap through wordPathEquiv. Prove its word-coordinate equation and involutivity. Do not compare faces, assume unequal letters, assign signs, cancel chains, construct a cross product, edit consumers or claim closure.",
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "Promote the two-file path-swap packet, then for unequal adjacent letters compute the affected vertices and prove the paired paths have the same deleted affine product-simplex face.",
+     :outcome :go,
+     :warnings [],
+     :axioms
+     {:adjacentSwapPath_word
+      ["propext" "Classical.choice" "Quot.sound"],
+      :adjacentSwapPath_toWord
+      ["propext" "Classical.choice" "Quot.sound"],
+      :adjacentSwapPath_involutive
+      ["propext" "Classical.choice" "Quot.sound"]},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/codex13-adjacent-path-swap/AdjacentPathSwap.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/codex13-adjacent-path-swap/AdjacentPathSwap.lean",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder scan of /tmp/codex13-adjacent-path-swap/AdjacentPathSwap.lean",
+       :exit 0}
+      {:cmd
+       "rg -n '^(axiom|constant)\\b|theorem-as-hypothesis|face|sign|cancel|cross' /tmp/codex13-adjacent-path-swap/AdjacentPathSwap.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "rg -n 'warning:|error:' /tmp/codex13-adjacent-path-swap/lean.log",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+       :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "git diff --check", :exit 0}
+      {:cmd "git diff --exit-code", :exit 0}
+      {:cmd "Parse exact receipt map with clojure.edn/read-string",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/codex13-adjacent-path-swap/AdjacentPathSwap.lean",
+       :exit 1,
+       :finding
+       "The first draft asked simp to unfold the noncomputable equivalence and used the forward equivalence's injectivity at a path-equality goal. Replaced those steps with the explicit symm_apply_apply law and injectivity of the inverse equivalence; the final acceptance compile succeeds."}],
+     :representation
+     {:source
+      "A maximal path represented by its inverse image under wordPathEquiv",
+      :target
+      "The maximal path obtained by applying balancedAdjacentSwap to that balanced-word coordinate and mapping forward through wordPathEquiv",
+      :direction
+      "Exact equivalence conjugation from the source maximal-path representation to the target adjacent-swapped maximal path, with equality back to the source after two applications."},
+     :fixture
+     {:path "/tmp/codex13-adjacent-path-swap/AdjacentPathSwap.lean",
+      :sha256
+      "4d8351dec419cf2d51b479dbacabe238c5d74b476bed5ad9172b372e8ded7562",
+      :placeholder-count 0,
+      :declarations
+      ["adjacentSwapPath"
+       "adjacentSwapPath_word"
+       "adjacentSwapPath_toWord"
+       "adjacentSwapPath_involutive"]},
+     :finding
+     "The reviewed wordPathEquiv and balancedAdjacentSwap compose directly. Explicit equivalence laws prove the inverse word-coordinate equation, and applying injectivity of wordPathEquiv.symm reduces path involutivity to balancedAdjacentSwap_involutive.",
+     :implementation
+     {:scope
+      ["ConstructionTargets/ProductSimplexAdjacentPathSwap.lean"
+       "ConstructionTargets/ProductSimplexAdjacentPathSwap.md"],
+      :instructions
+      "Promote the compiled fixture exactly and document its four declarations. Keep adjacentSwapPath defined solely by conjugating balancedAdjacentSwap through wordPathEquiv."},
+     :seat "codex-13"}},
+   :instructions
+   "Promote the compiled fixture exactly and document its four declarations. Keep adjacentSwapPath defined solely by conjugating balancedAdjacentSwap through wordPathEquiv.",
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/ProductSimplexAdjacentPathSwap.lean"
+    "ConstructionTargets/ProductSimplexAdjacentPathSwap.md"],
    :dag-node "PRODUCT HOMOLOGY: adjacent maximal-path swaps",
    :acceptance
    {:axioms :standard-only,
