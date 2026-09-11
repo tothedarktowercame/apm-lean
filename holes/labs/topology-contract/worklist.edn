@@ -75591,7 +75591,7 @@
       "lake env lean ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean",
       :exit 0}
      {:cmd
-      "shaiënt256sum /tmp/CoefficientSimplicialChainFinsuppNaturality.lean ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean",
+      "sha256sum /tmp/CoefficientSimplicialChainFinsuppNaturality.lean ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean ConstructionTargets/CoefficientSigmaConstFinsuppNaturality.lean",
       :exit 0}
      {:cmd
       "python3 comment-stripped placeholder-and-one-declaration audit over ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean",
@@ -75611,12 +75611,6 @@
      "The Finsupp.lmapDomain linear map induced by the corresponding map of simplices in that degree",
      :direction
      "Exact conjugacy equality from the source categorical chain-component representation through the two sigmaConstFinsuppIso maps to the target Finsupp.lmapDomain representation."},
-    :review
-    {:outcome :fail,
-     :seat "codex-10",
-     :job "invoke-1789086556334-19918-a1d4b607",
-     :finding
-     "Deterministic ledger-evidence defect: the recorded command is \"shaiënt256sum ...\" with claimed exit 0, but that executable does not exist and reproduces as command-not-found (exit 127); replace it with \"sha256sum ...\". The corrected hash command reproduces fixture/implementation SHA-256 03269d7019ea4db1434a7713cbb5b4ea12578e1ed495124c89e9034939481bde and dependency SHA-256 1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8. Compilation, one-file scope, byte identity, frozen statement hash 1b2631642f9e05cee43f3e9d96aad5fba85a6bcf53c1c9c45f685824235c311d, zero placeholders, standard-only axioms, and the source-chain-map-to-Finsupp.lmapDomain conjugacy orientation otherwise pass."},
     :commit "88ab738775ac159df01a7e30777795682d14f922",
     :changed-paths
     ["ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"],
@@ -75626,10 +75620,10 @@
      "03269d7019ea4db1434a7713cbb5b4ea12578e1ed495124c89e9034939481bde",
      :placeholder-count 0},
     :finding
-    "The exact fixture and reviewed sigma-constant naturality dependency hashes reproduce. The arbitrary simplicial-map, all-degree coefficient-chain conjugacy theorem compiles without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
+    "Repaired the deterministic ledger evidence by replacing the malformed nonexistent shaiënt256sum command with the actual successful sha256sum command. The corrected command reproduces fixture and implementation SHA-256 03269d7019ea4db1434a7713cbb5b4ea12578e1ed495124c89e9034939481bde and dependency SHA-256 1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8. Compilation, byte identity, one-file commit scope, statement hash, zero placeholders, standard-only axioms, and representation orientation all reproduce; no source change or new commit was required.",
     :seat "codex-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"],
    :dag-node
