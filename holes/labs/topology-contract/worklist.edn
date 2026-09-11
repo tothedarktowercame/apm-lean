@@ -75571,6 +75571,8 @@
    "Specialize sigmaConstFinsuppIso_naturality to every simplicial degree and combine it with intersection_simplex_range, union_simplex_range and the Finsupp range-lattice theorems to prove both component-range equalities. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the nonzero-capable connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
+   :review-finding
+   "Deterministic ledger-evidence defect: the recorded command is \"shaiënt256sum ...\" with claimed exit 0, but that executable does not exist and reproduces as command-not-found (exit 127); replace it with \"sha256sum ...\". The corrected hash command reproduces fixture/implementation SHA-256 03269d7019ea4db1434a7713cbb5b4ea12578e1ed495124c89e9034939481bde and dependency SHA-256 1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8. Compilation, one-file scope, byte identity, frozen statement hash 1b2631642f9e05cee43f3e9d96aad5fba85a6bcf53c1c9c45f685824235c311d, zero placeholders, standard-only axioms, and the source-chain-map-to-Finsupp.lmapDomain conjugacy orientation otherwise pass.",
    :stop-condition
    "Require specialization to the intersection, left, right and union subcomplex inclusions and application of the banked simplex-index and Finsupp range-lattice formulas to prove both degreewise component-range equalities.",
    :evidence
@@ -75609,6 +75611,12 @@
      "The Finsupp.lmapDomain linear map induced by the corresponding map of simplices in that degree",
      :direction
      "Exact conjugacy equality from the source categorical chain-component representation through the two sigmaConstFinsuppIso maps to the target Finsupp.lmapDomain representation."},
+    :review
+    {:outcome :fail,
+     :seat "codex-10",
+     :job "invoke-1789086556334-19918-a1d4b607",
+     :finding
+     "Deterministic ledger-evidence defect: the recorded command is \"shaiënt256sum ...\" with claimed exit 0, but that executable does not exist and reproduces as command-not-found (exit 127); replace it with \"sha256sum ...\". The corrected hash command reproduces fixture/implementation SHA-256 03269d7019ea4db1434a7713cbb5b4ea12578e1ed495124c89e9034939481bde and dependency SHA-256 1b64b4613b40a2e1ebe748370d8d1df478e05ecde0c0dd033ad8c859a8bcafe8. Compilation, one-file scope, byte identity, frozen statement hash 1b2631642f9e05cee43f3e9d96aad5fba85a6bcf53c1c9c45f685824235c311d, zero placeholders, standard-only axioms, and the source-chain-map-to-Finsupp.lmapDomain conjugacy orientation otherwise pass."},
     :commit "88ab738775ac159df01a7e30777795682d14f922",
     :changed-paths
     ["ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"],
@@ -75621,7 +75629,7 @@
     "The exact fixture and reviewed sigma-constant naturality dependency hashes reproduce. The arbitrary simplicial-map, all-degree coefficient-chain conjugacy theorem compiles without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
     :seat "codex-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope
    ["ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean"],
    :dag-node
