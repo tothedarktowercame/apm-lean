@@ -47759,6 +47759,20 @@
       :exit 1,
       :finding
       "The exploratory assertion mistakenly expected an empty key set. The corrected parse asserts exactly source, target and direction and succeeds."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-11",
+     :job "invoke-1789086896887-19930-b07ef1a2",
+     :commands
+     ["git show/diff-tree c53f7b68"
+      "git archive c53f7b68 to isolated snapshot"
+      "bb worklist_check.bb on both archived ledgers"
+      "bb archived test_gate_receipts.bb"
+      "lake build AdjacentPathSwap, MaximalPaths and AffineRealization"
+      "sha256sum canonical and frozen adjacent-path fixture"
+      "EDN dependency and representation-key inspection"],
+     :finding
+     "PASS: commit c53f7b68 changes only worklist2.edn and faithfully materializes the checkpoint-80 replan. The common-face probe has the exact source, target and source-to-swapped direction; it requires unequal adjacent letters and retained-vertex, simplicial-face and affine-face equality while deferring signs, cancellation, chains, cross products and consumer edits. Probe and successor dependencies are injected exactly once. Both archived ledgers validate, 7 tests/85 assertions pass, referenced modules build, and the reviewed adjacent-path source and frozen fixture reproduce SHA256 4d8351dec419cf2d51b479dbacabe238c5d74b476bed5ad9172b372e8ded7562 with zero placeholders and unchanged four-declaration boundary. Only known SingularSubdivision dependency warnings recur."},
     :replacement-items
     [{:consumer :t03J05,
       :stop-condition
@@ -47863,7 +47877,7 @@
       "cross-product assembly until signed cancellation is banked"]},
     :seat "codex-13"},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: adjacent maximal-path swaps and renewed consumer eligibility",
@@ -47885,7 +47899,7 @@
    :stop-condition
    "Construct only the common deleted-face comparison for a maximal path and its adjacent swap at unequal consecutive letters. Prove the required vertex equality, simplicial-face equality and affine product-face equality. Do not assign shuffle signs, define cancellation pairings, construct chains or cross products, edit consumers or claim closure.",
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "PRODUCT HOMOLOGY: common face of adjacent path swaps",
    :acceptance
