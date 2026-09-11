@@ -74,6 +74,14 @@ def balancedAdjacentSwap {p q n : ℕ} (w : BalancedWord p q)
   funext j
   simp [balancedAdjacentSwap, adjacentPerm]
 
+/-- Public coordinate formula for the transported adjacent swap. -/
+theorem balancedAdjacentSwap_toWord_explicit {p q n : ℕ} (w : BalancedWord p q)
+    (h : n + 1 = p + q) (i : Fin n) (j : Fin (p + q)) :
+    (balancedAdjacentSwap w h i).toWord j =
+      w.toWord (finCongr h ((Equiv.swap i.castSucc i.succ) (finCongr h.symm j))) := by
+  rfl
+
+#print axioms balancedAdjacentSwap_toWord_explicit
 #print axioms horizontalCount_adjacentSwapWord_last
 #print axioms verticalCount_adjacentSwapWord_last
 #print axioms balancedAdjacentSwap_toWord
