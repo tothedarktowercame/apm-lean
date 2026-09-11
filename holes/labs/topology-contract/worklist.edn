@@ -75671,8 +75671,55 @@
   {:consumer "t98A02",
    :stop-condition
    "Require specialization of this transported-range equality to the intersection, left, right and union subcomplex inclusions, then combine it with the banked simplex-index and Finsupp range-lattice formulas to prove the two original component-range lattice equalities.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Specialize chainsMap_component_range_finsupp to the four subcomplex inclusions. Use intersection_simplex_range, union_simplex_range and the Finsupp range-lattice theorems, together with reflection of submodule equality by the ambient linear isomorphism, to prove the two original component-range equalities. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the nonzero-capable connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:chainsMap_component_range_finsupp
+     "e71a6c1ed8dc0748173903d08d92f18fd909f9c3a0958fc1985d90ed4eee34a5"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSimplicialChainFinsuppRange.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSimplicialChainFinsuppRange.lean ConstructionTargets/CoefficientSimplicialChainFinsuppRange.lean ConstructionTargets/CoefficientSimplicialChainFinsuppNaturality.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder-and-one-declaration audit over ConstructionTargets/CoefficientSimplicialChainFinsuppRange.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 5ceab5ed8109645516d10c17cec227c2a381cea0",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 5ceab5ed8109645516d10c17cec227c2a381cea0",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "The linear range of an arbitrary degree component of a categorical coefficient simplicial-chain map",
+     :target
+     "The linear range of Finsupp.lmapDomain for the induced map of simplices in that degree",
+     :direction
+     "Exact submodule equality from the source categorical component range after mapping through the target sigmaConstFinsuppIso to the target Finsupp.lmapDomain range."},
+    :commit "5ceab5ed8109645516d10c17cec227c2a381cea0",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSimplicialChainFinsuppRange.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSimplicialChainFinsuppRange.lean",
+     :sha256
+     "f9a842b5fbd9a245e5419b926342eb50ef6473009b913c6c9b2ddfbea648d581",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and reviewed coefficient-chain Finsupp naturality dependency hashes reproduce. The all-degree range transport through the target sigmaConstFinsuppIso compiles without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSimplicialChainFinsuppRange.lean"],
    :dag-node
