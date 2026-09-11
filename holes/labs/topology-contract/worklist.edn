@@ -75379,8 +75379,57 @@
   {:consumer "t98A02",
    :stop-condition
    "Require naturality of sigmaConstFinsuppIso for arbitrary index maps, identifying the conjugated categorical sigmaConst map with Finsupp.lmapDomain; then specialize that equality to coefficient simplicial-chain components.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove that sigmaConst.map f conjugated by sigmaConstFinsuppIso equals ModuleCat.ofHom (Finsupp.lmapDomain R R f), using equality on coproduct generators. Specialize to each simplicial degree and combine with the simplex-index and Finsupp range-lattice theorems to obtain both component range equalities. Then identify the genuine quotient arrows with the explicit exact sequence, establish ShortExact, invoke HomologySequence for the genuine connecting morphism and three exactness segments, and transport through relativeComparisonIso to the literal compact-complement pairs.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:sigmaConstFinsuppIso
+     "2a57891d3b33ce25097cfc504f1d38d9981712b675d8269cc7e65c930c302fa9",
+     :sigma_ι_sigmaConstFinsuppIso_hom
+     "e1d3709435657ce827431d62793bef616c1f2fd2c7145c8f0d333ed46fa8536d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "codex-6",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSigmaConstFinsuppComparison.lean ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean ConstructionTargets/CoefficientSubcomplexSimplexRangeLattice.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder-and-two-declaration audit over ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean",
+      :exit 0}
+     {:cmd
+      "git show --check --oneline --stat 85411f15e08b187759d176040eef334d2df204bb",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r 85411f15e08b187759d176040eef334d2df204bb",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "The categorical ModuleCat sigmaConst coproduct of copies of the coefficient ring indexed by an arbitrary type",
+     :target
+     "The ordinary finitely-supported free module of coefficient-valued functions on that index type",
+     :direction
+     "Canonical linear isomorphism from the source categorical coproduct representation to the target Finsupp representation, with exact equality from every source coproduct injection applied to a coefficient to the corresponding target single-support generator."},
+    :commit "85411f15e08b187759d176040eef334d2df204bb",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSigmaConstFinsuppComparison.lean",
+     :sha256
+     "e2eea32aaab84794c7f1debc703e38791ac912c58be062db9ab6c14b3806a705",
+     :placeholder-count 0},
+    :finding
+    "The exact fixture and reviewed simplex-range dependency hashes reproduce. The categorical sigmaConst-to-Finsupp isomorphism and its coproduct-generator compatibility theorem compile without warnings or placeholders using only standard axioms. The commit changes exactly the scoped path and the worktree is clean.",
+    :seat "codex-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSigmaConstFinsuppComparison.lean"],
    :dag-node
