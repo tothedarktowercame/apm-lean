@@ -5,7 +5,7 @@ from the historical proof-frame workspace.
 
 **Stage 1 — THE CLEAN PROOF**
 
-*Why it’s hard.* “Open map” feels weak at first glance: plenty of continuous maps send some open sets to open sets without being injective (e.g., \\(x↦x^2\\)). The trap is realizing that on the real line every open set is a union of intervals, so the hypothesis actually says *every interval* is mapped onto an open interval. Students often forget that any violation of monotonicity creates a local extremum, and local extrema force the image of a small interval to have a boundary point—contradicting openness.
+*Why it’s hard.* “Open map” feels weak at first glance: plenty of continuous maps send some open sets to open sets without being injective (e.g., \(x↦x^2\)). The trap is realizing that on the real line every open set is a union of intervals, so the hypothesis actually says *every interval* is mapped onto an open interval. Students often forget that any violation of monotonicity creates a local extremum, and local extrema force the image of a small interval to have a boundary point—contradicting openness.
 
 *Key insight.* If \(f\) is not strictly monotone, there exist \(a<b<c\) with \(f(b)\) at least as large as both \(f(a)\) and \(f(c)\) (or at most as small). That makes \(b\) a local maximum or minimum. The image of a tiny open interval around \(b\) is then an interval whose endpoint is \(f(b)\), so it cannot be open. Hence no such local extremum exists and \(f\) must be strictly monotone.
 

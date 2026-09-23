@@ -5,7 +5,7 @@ from the historical proof-frame workspace.
 
 **Stage 1 — THE CLEAN PROOF**
 
-*Why it's hard.*  The hypothesis only controls the weighted product \(|f(z)||z|^{1/2}\) near the puncture.  Students often try to apply Riemann's theorem directly to \(f\), but that requires \(|f|\) to be bounded, not \(|f||z|^{1/2}|\.  The real trick is to modify \(f\) so that the weight becomes an honest bound that decays at the puncture; without that observation one keeps running into diverging estimates.
+*Why it's hard.*  The hypothesis only controls the weighted product \(|f(z)||z|^{1/2}\) near the puncture.  Students often try to apply Riemann's theorem directly to \(f\), but that requires \(|f|\) to be bounded, not \(|f||z|^{1/2}|\).  The real trick is to modify \(f\) so that the weight becomes an honest bound that decays at the puncture; without that observation one keeps running into diverging estimates.
 
 *Key insight.*  Multiply by a single power of \(z\).  The function \(g(z)=z\,f(z)\) is analytic on the punctured disc, and the weighted bound implies \(|g(z)| \le C\,|z|^{1/2}\).  Hence \(g\) is actually bounded (and even tends to zero) on a small punctured neighbourhood, so Riemann's theorem extends \(g\) across the origin.  The quotient \(g(z)/z\) is then analytic because \(g\) vanishes at \(0\), so it extends \(f\).
 

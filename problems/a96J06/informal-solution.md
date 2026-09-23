@@ -8,9 +8,9 @@ from the historical proof-frame workspace.
 *Why it’s hard.* The conclusion feels geometric (“the polynomial must stretch every disk”), so it’s tempting to chase inequalities on coefficients. The right tool is analytic: normalize the disk to the unit disk and apply Schwarz’s lemma. Students often forget to rescale, so they can’t bring Schwarz to bear.
 
 *Key insight.* Assume towards contradiction that some disk is mapped inside itself: 
-\(|p(z)|≤r\) for all \\(|z|<r\\). After the change of variables \\(q(w)=p(r w)/r\\), we get a holomorphic self-map of the unit disk fixing 0 with derivative 1 at 0. Schwarz’s lemma then forces \\(q(w)=e^{iθ}w\\). But the polynomial has a nonzero higher-order term, contradicting the conclusion of Schwarz’s lemma. Thus every disk must contain a point expanded beyond its radius.
+\(|p(z)|≤r\) for all \(|z|<r\). After the change of variables \(q(w)=p(r w)/r\), we get a holomorphic self-map of the unit disk fixing 0 with derivative 1 at 0. Schwarz’s lemma then forces \(q(w)=e^{iθ}w\). But the polynomial has a nonzero higher-order term, contradicting the conclusion of Schwarz’s lemma. Thus every disk must contain a point expanded beyond its radius.
 
-*Complete proof.* Suppose there is an \\(r>0\\) with \\(|p(z)|≤r\\) whenever \\(|z|≤r\\). Define
+*Complete proof.* Suppose there is an \(r>0\) with \(|p(z)|≤r\) whenever \(|z|≤r\). Define
 \[
 q(w)=\frac{p(r w)}{r}= w + \sum_{n=2}^N c_n r^{n-1} w^n.
 \]

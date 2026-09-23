@@ -6,15 +6,15 @@
 
 **Why it's hard.** Convergence in measure is a global/averaged condition (the *measure* of the bad set is small), while a.e. convergence is a pointwise condition (each *individual point* eventually behaves). The full sequence need not converge a.e. (the typewriter sequence converges in measure to 0 but not a.e.), so extracting a subsequence requires a careful diagonal/summability argument.
 
-**The key insight.** Choose a subsequence f_{n_k} so fast that m({|f_{n_k} - f| > 1/k}) < 2^{-k}. Then Σ m(E_k) < ∞ where E_k = {|f_{n_k} - f| > 1/k}, so Borel-Cantelli gives: a.e. x belongs to only finitely many E_k, meaning f_{n_k}(x) → f(x) for a.e. x.
+**The key insight.** Choose a subsequence f_{n_k} so fast that $m(\{|f_{n_k} - f| > 1/k\}) < 2^{-k}$. Then Σ m(E_k) < ∞ where $E_k = \{|f_{n_k} - f| > 1/k\}$, so Borel-Cantelli gives: a.e. x belongs to only finitely many E_k, meaning f_{n_k}(x) → f(x) for a.e. x.
 
 **Proof.**
 
-*Step 1: Extract the subsequence.* Since f_n → f in measure, for each k ∈ ℕ and ε = 1/k, there exists N_k such that n > N_k implies m({|f_n - f| > 1/k}) < 2^{-k}. Define n_1 = N_1 + 1. Inductively, choose n_{k+1} > max(n_k, N_{k+1}) + 1. Then n_1 < n_2 < ··· and:
+*Step 1: Extract the subsequence.* Since f_n → f in measure, for each k ∈ ℕ and ε = 1/k, there exists N_k such that n > N_k implies $m(\{|f_n - f| > 1/k\}) < 2^{-k}$. Define n_1 = N_1 + 1. Inductively, choose n_{k+1} > max(n_k, N_{k+1}) + 1. Then n_1 < n_2 < ··· and:
 
 $$m\left(\{x : |f_{n_k}(x) - f(x)| > 1/k\}\right) < 2^{-k} \quad \text{for all } k.$$
 
-*Step 2: Apply Borel-Cantelli.* Define E_k = {x : |f_{n_k}(x) - f(x)| > 1/k}. Then Σ_{k=1}^∞ m(E_k) < Σ 2^{-k} = 1 < ∞. By the Borel-Cantelli lemma, m(lim sup E_k) = 0, where lim sup E_k = ⋂_{j=1}^∞ ⋃_{k=j}^∞ E_k is the set of points belonging to infinitely many E_k.
+*Step 2: Apply Borel-Cantelli.* Define $E_k = \{x : |f_{n_k}(x) - f(x)| > 1/k\}$. Then Σ_{k=1}^∞ m(E_k) < Σ 2^{-k} = 1 < ∞. By the Borel-Cantelli lemma, m(lim sup E_k) = 0, where lim sup E_k = ⋂_{j=1}^∞ ⋃_{k=j}^∞ E_k is the set of points belonging to infinitely many E_k.
 
 *Step 3: Pointwise convergence off the null set.* Let x ∉ lim sup E_k. Then x ∈ E_k for only finitely many k, so there exists K such that for all k ≥ K, x ∉ E_k, meaning |f_{n_k}(x) - f(x)| ≤ 1/k. Since 1/k → 0, f_{n_k}(x) → f(x).
 
@@ -39,7 +39,7 @@ def TendstoInMeasure (μ : Measure ℝ) (f : ℕ → ℝ → ℝ) (g : ℝ → �
   ∀ ε : ℝ, 0 < ε →
     Tendsto (fun n => μ {x | ε < |f n x - g x|}) atTop (𝓝 0)
 
-/-- The fast subsequence: choose n_k so that m({|f_{n_k} - f| > 1/k}) < 2^{-k}. -/
+/-- The fast subsequence: choose n_k so that $m(\{|f_{n_k} - f| > 1/k\}) < 2^{-k}$. -/
 lemma exists_fast_subsequence
     {μ : Measure ℝ} {f : ℕ → ℝ → ℝ} {g : ℝ → ℝ}
     (hconv : TendstoInMeasure μ f g) :

@@ -108,4 +108,7 @@ python3 "$REPO_ROOT/scripts/repair-math-spans.py" --write "$OUT_DIR"/apm-*.tex
 # i.e. a double superscript. Fold each run into a single script.
 python3 "$REPO_ROOT/scripts/fold-unicode-scripts.py" --write "$OUT_DIR"/apm-*.tex
 
+# \tag only works inside an equation environment, not inside \[ \].
+python3 "$REPO_ROOT/scripts/promote-tagged-display.py" --write "$OUT_DIR"/apm-*.tex
+
 echo "Converted $n informal proofs -> $OUT_DIR/apm-*.tex"

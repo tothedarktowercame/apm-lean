@@ -135,10 +135,12 @@
 \apm@m{ᶿ}{^{\theta}}
 \apm@m{‾}{\overline{\ }}
 
-\newunicodechar{•}{\textbullet}
+% U+2022 is Mathlib's scalar action (k • x), so it occurs in maths as well
+% as in prose; \textbullet is invalid in math mode.
+\apm@m{•}{\bullet}
 \newunicodechar{…}{\ldots}
 \newunicodechar{✓}{\checkmark}
-\newunicodechar{✗}{\times}
+\apm@m{✗}{\times}
 \newunicodechar{е}{e}
 % --- third pass: glyphs still reported missing after the second ---
 \apm@m{′}{^{\prime}}
@@ -153,13 +155,12 @@
 \apm@m{˙}{\dot{\ }}
 
 \newunicodechar{─}{---}
-\newunicodechar{╱}{/}
-\newunicodechar{╲}{\textbackslash{}}
-\newunicodechar{●}{\textbullet}
-\newunicodechar{★}{$\star$}
-\newunicodechar{✔}{$\checkmark$}
+\apm@m{╱}{/}
+\apm@m{╲}{\backslash}
+\apm@m{●}{\bullet}
+\apm@m{★}{\star}
+\apm@m{✔}{\checkmark}
 % --- genuinely textual characters stay textual ---
 \newunicodechar{é}{\'e}
 \newunicodechar{–}{--}
 \newunicodechar{’}{'}
-\newunicodechar{•}{\textbullet}

@@ -43,8 +43,17 @@ def escape_segment(s: str) -> tuple[str, int]:
             i += 2
             continue
         if c == "_":
-            out.append(r"\_")
-            n += 1
+            # A subscript has a base: "f_n", "|x|_2", "(a)_k". An underscore
+            # with whitespace or a line start before it is a Markdown emphasis
+            # marker, and escaping it turns the author's italics into literal
+            # underscores -- which the mathifier then reads as a subscript with
+            # no base. Leave those alone.
+            prev = out[-1][-1] if out and out[-1] else ""
+            if prev and (prev.isalnum() or prev in ")]}|"):
+                out.append(r"\_")
+                n += 1
+            else:
+                out.append(c)
         else:
             out.append(c)
         i += 1

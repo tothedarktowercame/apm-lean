@@ -46,11 +46,21 @@ def fold(text: str) -> tuple[str, int]:
         n += 1
         return "\\ensuremath{^{" + "".join(SUPER[c] for c in m.group(0)) + "}}"
 
+    def sup_with_prime(m: re.Match) -> str:
+        # A prime straight after a superscript is a second superscript --
+        # "g\u207b\u00b9' C" becomes g^{-1}' , which TeX refuses. Fold the prime into
+        # the same group.
+        nonlocal n
+        n += 1
+        body = "".join(SUPER[c] for c in m.group(1)) + "\\prime" * len(m.group(2))
+        return "\\ensuremath{^{" + body + "}}"
+
     def sub(m: re.Match) -> str:
         nonlocal n
         n += 1
         return "\\ensuremath{_{" + "".join(SUB[c] for c in m.group(0)) + "}}"
 
+    text = re.sub(f"([{''.join(SUPER)}]+)('+)", sup_with_prime, text)
     text = SUPER_RUN.sub(sup, text)
     text = SUB_RUN.sub(sub, text)
     return text, n
