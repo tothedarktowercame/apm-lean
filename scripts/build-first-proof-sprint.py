@@ -177,6 +177,11 @@ LATEXML_PREAMBLE = r"""\documentclass[11pt]{article}
 % \marginpar as a note and tuftify lifts it into the Tufte margin, which is the
 % column these are written for.
 \newcommand{\apmgloss}[1]{\marginpar{\small #1}}
+% A link from a name in the informal proof to the Lean proof that uses it
+% (annotate-lean-links.py). A footnote rather than a \marginpar because tuftify
+% renders a footnote as a NUMBERED Tufte sidenote, and the note is keyed to one
+% word, so the reader has to be able to see which.
+\newcommand{\apmlink}[1]{\footnote{#1}}
 
 % Syntax-class markup from pandoc-mathify.lua, flattened to identity.
 \newcommand{\mNumber}[1]{#1}
@@ -346,6 +351,7 @@ PREAMBLE = r"""\documentclass[11pt,oneside]{book}
 % 2,891 floating \marginpars would fight the page on every spread, so here the
 % note is set inline above the listing it describes.
 \newcommand{\apmgloss}[1]{\par{\footnotesize\itshape #1\par}\nobreak}
+\newcommand{\apmlink}[1]{\footnote{#1}}
 % Syntax-class markup emitted by pandoc-mathify.lua (colours off by default).
 \usepackage{math-proofread-style}
 % math-proofread-style defines the \m... syntax-class macros to colour their

@@ -53,6 +53,12 @@ SPLIT_FIXES = """<style>
   gap: .3rem 1.4rem; }
 .ltx_page_footer a { float: none !important; }
 
+/* tuftify numbers a sidenote itself, from a CSS counter on .sidenote-number.
+   LaTeXML also emits its own footnote number inside the note body as
+   .ltx_tag_note, so each note opened with two numbers that did not even agree
+   (the CSS counter is per page, LaTeXML's is per document). */
+.sidenote .ltx_tag_note, .marginnote .ltx_tag_note { display: none; }
+
 /* Upstream tufte.css sets `h1 span { display: table }` so that a .subtitle in
    a hand-written heading sits on its own line. LaTeXML puts a <span> inside
    every <sup>, <sub> and styled run, so a section title like "Weak-L² implies

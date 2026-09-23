@@ -26,18 +26,39 @@ from typing import Callable
 
 # \begin{Shaded} wraps \begin{Highlighting}, so matching the outer environment
 # consumes both. The others are listed for the cases pandoc emits directly.
-PROTECTED = re.compile(
-    r"\\begin\{(Shaded|Highlighting|verbatim|alltt|lstlisting)\}.*?\\end\{\1\}",
-    re.S)
+CODE_ENVS = ("Shaded", "Highlighting", "verbatim", "alltt", "lstlisting")
+
+# Tables are prose-adjacent but not prose: a cell is not part of the reading
+# column, so a Tufte sidenote anchored in one starts at the table's right edge
+# and runs off the page. Passes that place marginal material exclude them too.
+TABLE_ENVS = ("longtable", "tabular", "tabularx", "array")
+
+
+def _envs(names: tuple[str, ...], tag: str) -> str:
+    """An alternation matching any of these environments, start to end.
+
+    Each alternative carries its own NAMED group for the back-reference. Numbered
+    groups do not survive being concatenated into a larger alternation -- the \\1
+    in the second branch silently starts referring to the first branch's group,
+    and that branch then never matches. Which is how tables went on being
+    annotated after they were supposedly excluded."""
+    return (rf"\\begin\{{(?P<{tag}>" + "|".join(names) + r")\*?\}.*?"
+            rf"\\end\{{(?P={tag})\*?\}}")
+
+
+PROTECTED = re.compile(_envs(CODE_ENVS, "code"), re.S)
+CODE_OR_TABLE = re.compile(
+    _envs(CODE_ENVS, "code") + "|" + _envs(TABLE_ENVS, "table"), re.S)
 
 
 def map_outside_code(text: str,
-                     fn: Callable[[str], tuple[str, int]]) -> tuple[str, int]:
-    """Run fn on each stretch of prose, leaving listings byte-identical.
+                     fn: Callable[[str], tuple[str, int]],
+                     protect: re.Pattern = PROTECTED) -> tuple[str, int]:
+    """Run fn on each stretch of prose, leaving protected regions byte-identical.
 
     fn takes a string and returns (rewritten, count); the counts are summed."""
     out, total, pos = [], 0, 0
-    for m in PROTECTED.finditer(text):
+    for m in protect.finditer(text):
         piece, n = fn(text[pos:m.start()])
         out.append(piece)
         out.append(m.group(0))

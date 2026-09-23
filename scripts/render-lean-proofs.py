@@ -44,63 +44,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SYNTAX = REPO_ROOT / "report" / "lean4.xml"
 ANNOTATIONS = REPO_ROOT / "report" / "lean-annotations.json"
 
-DECL_KINDS = (
-    "theorem|lemma|def|abbrev|instance|structure|class|inductive|example|"
-    "axiom|opaque"
-)
-MODIFIERS = r"(?:private\s+|protected\s+|noncomputable\s+|nonrec\s+|partial\s+|unsafe\s+|scoped\s+|local\s+)*"
-# A top-level declaration starts in column 0. Anything indented is inside a
-# proof -- `have`, a nested `def` in a `let rec`, a tactic block.
-DECL_START = re.compile(rf"^(?:@\[[^\]]*\]\s*)?{MODIFIERS}({DECL_KINDS})\s+([^\s:({{\[]+)")
-DOC_START = re.compile(r"^/--")
-ATTR_START = re.compile(r"^@\[")
-IDENT = re.compile(r"[A-Za-z_][A-Za-z0-9_'.₀-₉]*")
-
-SORRY = re.compile(r"(?<![\w.'])sorry(?![\w'])")
-CROSSREFS = re.compile(
-    r"^\s*\*\*Mathlib cross-refs?:?\*\*\s*(.+?)$", re.M | re.I)
-
-
-def segment(lines: list[str]) -> list[dict]:
-    """Cut a Lean file into a header plus one chunk per top-level declaration.
-
-    A chunk opens at a column-0 docstring, attribute or declaration keyword and
-    runs to the next one, so a declaration keeps its own docstring, attributes
-    and proof body together."""
-    starts = []
-    i = 0
-    while i < len(lines):
-        line = lines[i]
-        if DOC_START.match(line) or ATTR_START.match(line) or DECL_START.match(line):
-            # A docstring or attribute opens the chunk its declaration belongs
-            # to; do not open a second chunk at the declaration itself.
-            if not starts or starts[-1][1] < i:
-                starts.append((i, i))
-            j = i
-            # Advance past the docstring/attribute to find the declaration name.
-            while j < len(lines) and not DECL_START.match(lines[j]):
-                j += 1
-                if j - i > 60:       # runaway: treat the opener as the chunk
-                    break
-            starts[-1] = (starts[-1][0], j)
-            i = j + 1
-            continue
-        i += 1
-
-    chunks = []
-    if not starts:
-        return [{"name": None, "kind": None, "lines": lines}]
-    if starts[0][0] > 0:
-        chunks.append({"name": None, "kind": None, "lines": lines[: starts[0][0]]})
-    for n, (begin, declline) in enumerate(starts):
-        end = starts[n + 1][0] if n + 1 < len(starts) else len(lines)
-        m = DECL_START.match(lines[declline]) if declline < len(lines) else None
-        chunks.append({
-            "kind": m.group(1) if m else None,
-            "name": m.group(2) if m else None,
-            "lines": lines[begin:end],
-        })
-    return chunks
+from leanfile import (CROSSREFS, DECL_START, IDENT, SORRY, segment)
 
 
 def latex_escape(text: str) -> str:

@@ -118,6 +118,11 @@ python3 "$REPO_ROOT/scripts/fold-unicode-scripts.py" --write "$OUT_DIR"/apm-*.te
 # \tag only works inside an equation environment, not inside \[ \].
 python3 "$REPO_ROOT/scripts/promote-tagged-display.py" --write "$OUT_DIR"/apm-*.tex
 
+# Link names the prose already writes in code spans to the Lean declarations
+# that use them, so the Tufte margin beside the informal argument has something
+# in it. Runs after the repair passes so it sees final \texttt spans.
+python3 "$REPO_ROOT/scripts/annotate-lean-links.py" --write "$OUT_DIR"/apm-*.tex
+
 # The Lean proofs, highlighted, into a subdirectory so the repair passes above
 # (which glob apm-*.tex) never see them: a Lean listing is not math prose.
 python3 "$REPO_ROOT/scripts/render-lean-proofs.py" "$ID_LIST" "$OUT_DIR"
