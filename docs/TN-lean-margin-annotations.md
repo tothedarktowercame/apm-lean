@@ -90,3 +90,66 @@ Two things worth settling when it does:
   mapping, and they are already in the listing where the author put them. The
   open question is whether a note should repeat one, paraphrase it, or only fire
   where a docstring is absent.
+
+---
+
+## How were these proofs actually developed?
+
+claude-7, 2026-09-23, answering Joe's question: is the Lean proof a translation
+of the informal one, or independent of it?
+
+Neither, uniformly. There are three regimes, and they are distinguishable from
+the files themselves.
+
+| | proofs | informal file has a ```lean block | git order |
+|---|---|---|---|
+| nl-proof-harvest | 311 | 0 / 311 | informal first, 311/311 |
+| daily batch | 86 | 86 / 86 | 36 informal-first, 32 same commit, 18 Lean-first |
+| proof-frame import | 48 | 3 / 48 | all one commit |
+| hand-written / other | 41 | 5 / 41 | mixed |
+| imported | 15 | 0 / 15 | mostly informal-first |
+
+**Independent by design (311, 62%).** `storage/apm/run-nl-proof-harvest.py`
+dispatches one prompt per problem whose last instruction is: *"This is Stage-1
+only: do NOT write Lean, do NOT call lake, do NOT hand to Codex."* The agent
+reads the problem `.tex` and nothing formal. `algorithms/apm-nl-proof-harvest.md`
+states the intent: the NL harvest and the Lean formalization "are now
+**independent stages writing to the same canonical surface**", decoupled because
+the 5/day cadence had been gated by the Lean stage rather than by the prose.
+Every one of the 311 carries the provenance comment, none contains Lean, and in
+all 311 the informal file entered the repo before any `lean/Main.lean`.
+
+**Co-generated (86, 17%).** The earlier daily batch,
+`futon3c/dev/futon3c/dev/apm_conductor_v3.clj`, `make-informal-lean-prompt`: one
+Claude reply produces *informal proof + Lean 4 theorem statement + Mathlib
+cross-references* together, from the problem statement, with no proofs and no
+tools. All 86 carry a ```lean block, because the prompt asked for one. Codex
+closed the `sorry`s afterwards on its own track; note that the Codex prompts
+pass the informal proof as a **path** (`maybe-section "Informal outline"`), not
+as injected text -- available if the agent looks, not in context by default.
+
+**Formal-to-informal (48, 10%).** The proof-frame workspace import, which is the
+Stage 1-4 shape, and whose Stage 4 heading is literally "FORMAL-TO-INFORMAL
+REVISION". Here the prose was revised *after* the formalization. `a00J03` is one
+of these -- so it is the least representative page in the collection to judge
+the apparatus by.
+
+### What this means for the margin notes
+
+Anchors per proof are near-identical across the three regimes: **1.76**
+(harvest), **1.73** (daily batch), **1.88** (proof-frame). So the name matches
+are not an artefact of the prose and the Lean having been written in one breath;
+they survive the population where Lean was explicitly forbidden.
+
+They are not fully independent either, and the route matters. The harvest prompt
+injected `futon3c/data/apm-formalization-patterns.edn`, whose own header says it
+was "extracted from 19 proved + 2 partial overnight proofs ... from
+ApmCanaries/Frames/*/Main.lean". Mathlib names reached the Lean-free prose
+through that library. The agreement between a prose citation and the problem's
+Lean proof is therefore evidence about a shared vocabulary, not two independent
+witnesses to the same mathematics.
+
+One caveat on the git column: it records when a file entered `apm-lean`, not
+when it was written. The harvest wrote to `futon3c/data/apm-informal-proofs/`
+and was imported afterwards. It is corroborating rather than primary evidence --
+the prompts are the primary evidence.
