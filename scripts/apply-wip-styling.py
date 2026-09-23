@@ -31,7 +31,7 @@ from pathlib import Path
 
 # Injected after tuftify's block, which is itself after every <link>. Two
 # things only a split render needs; a single-file paper has neither problem.
-SPLIT_FIXES = """<style>
+SPLIT_FIXES = r"""<style>
 /* LaTeXML emits .ltx_document once per *document*. With --splitat each page is
    a fragment and has .ltx_page_content instead, so tuftify's page padding has
    nothing to apply to and the text sits flush against the window edge. The
@@ -52,6 +52,21 @@ SPLIT_FIXES = """<style>
 .ltx_page_footer .ltx_align_center { display: flex; flex-wrap: wrap;
   gap: .3rem 1.4rem; }
 .ltx_page_footer a { float: none !important; }
+
+/* tuftify positions a note by floating it right and then pulling it further
+   right with a negative margin sized for a container at the measure. LaTeXML
+   hoists a \marginpar that precedes a block environment out of its paragraph
+   and leaves it as a direct child of the section, which is full width -- so the
+   same negative margin pushed it off the right of the window instead of into
+   the margin. Re-derive the offset from the container's own width: a right
+   float's right edge sits at (container right - margin-right), and we want it
+   at measure + gutter + note width, so margin-right is the container's width
+   less those three. At a container already the measure wide that reduces to
+   tuftify's own -(note-w + gutter), so the rule is general, not a special
+   case. */
+.ltx_section > .marginnote, .ltx_subsection > .marginnote,
+.ltx_subsubsection > .marginnote, .ltx_paragraph > .marginnote {
+  margin-right: calc(100% - var(--measure) - var(--gutter) - var(--note-w)); }
 
 /* tuftify numbers a sidenote itself, from a CSS counter on .sidenote-number.
    LaTeXML also emits its own footnote number inside the note body as
@@ -99,9 +114,11 @@ def style(text: str, prefix: str, local_tufte: bool) -> tuple[str, int]:
     )
     fixed, n = LAST_LINK.subn(lambda m: m.group(1) + links, text, count=1)
     if not n:
-        fixed, n = HEAD_END.subn(links + "\n</head>", text, count=1)
+        # A function, not a string: re treats a replacement string's backslashes
+        # as escapes, and these blocks quote LaTeX macro names in their comments.
+        fixed, n = HEAD_END.subn(lambda _: links + "\n</head>", text, count=1)
     if n and "ltx_page_content { padding" not in fixed:
-        fixed = HEAD_END.sub(SPLIT_FIXES + "</head>", fixed, count=1)
+        fixed = HEAD_END.sub(lambda _: SPLIT_FIXES + "</head>", fixed, count=1)
     return fixed, n
 
 

@@ -119,7 +119,7 @@ def render(pid: str, lean: Path, annotations: dict, informal: Path | None) -> st
     head.append(f"{len(names)} declaration{'s' if len(names) != 1 else ''}, "
                 + ("no \\texttt{sorry}." if not n_sorry
                    else f"{n_sorry} \\texttt{{sorry}} remaining."))
-    parts.append(margin(" ".join(head)))
+    head_note = margin(" ".join(head))
 
     live = [(c, "\n".join(c["lines"]).strip("\n")) for c in chunks]
     live = [(c, code) for c, code in live if code.strip()]
@@ -139,9 +139,14 @@ def render(pid: str, lean: Path, annotations: dict, informal: Path | None) -> st
                 more = "" if len(uses) == len(shown) else f", and {len(uses) - len(shown)} more"
                 note.append("Reuses " + ", ".join(
                     "\\texttt{" + latex_escape(u) + "}" for u in shown) + more + ".")
-        if note:
-            parts.append(margin(" ".join(note)))
-        parts.append(listing)
+        # Keep each gloss on the line above the listing it describes, so the
+        # pairing survives in the source as well as on the page. (This does not
+        # decide where LaTeXML puts the note: a \marginpar before a block
+        # environment is hoisted out of the paragraph either way, which is what
+        # the .ltx_section > .marginnote rule in apply-wip-styling.py is for.)
+        glosses = ([head_note] if not parts else []) + (
+            [margin(" ".join(note))] if note else [])
+        parts.append("\n".join(glosses + [listing]))
 
     return "\n\n".join(parts) + "\n"
 
