@@ -49,9 +49,7 @@ Throughout, `y_n = y(nh)`, `v_n = V(nh)`, and `y` is assumed smooth enough for t
 Taylor expansions (`C^6` for parts (a), (b); `C^6` of `y''`, i.e. `C^8`, for the
 sharp remainder in (c)). The basic centered Taylor expansion is
 
-$$y_{n\pm1} = y_n \pm h y'_n + \tfrac{h^2}{2} y''_n \pm \tfrac{h^3}{6} y'''_n
-+ \tfrac{h^4}{24} y^{(\mathrm{iv})}_n \pm \tfrac{h^5}{120} y^{(\mathrm v)}_n
-+ \tfrac{h^6}{720} y^{(\mathrm{vi})}_n + \cdots .$$
+$$y_{n\pm1} = y_n \pm h y'_n + \tfrac{h^2}{2} y''_n \pm \tfrac{h^3}{6} y'''_n + \tfrac{h^4}{24} y^{(\mathrm{iv})}_n \pm \tfrac{h^5}{120} y^{(\mathrm v)}_n + \tfrac{h^6}{720} y^{(\mathrm{vi})}_n + \cdots .$$
 
 ---
 
@@ -59,14 +57,12 @@ $$y_{n\pm1} = y_n \pm h y'_n + \tfrac{h^2}{2} y''_n \pm \tfrac{h^3}{6} y'''_n
 
 Adding the `n+1` and `n-1` expansions, all odd-order terms cancel:
 
-$$y_{n+1} + y_{n-1} = 2y_n + h^2 y''_n + \tfrac{h^4}{12} y^{(\mathrm{iv})}_n
-+ \tfrac{h^6}{360} y^{(\mathrm{vi})}_n + \cdots,$$
+$$y_{n+1} + y_{n-1} = 2y_n + h^2 y''_n + \tfrac{h^4}{12} y^{(\mathrm{iv})}_n + \tfrac{h^6}{360} y^{(\mathrm{vi})}_n + \cdots,$$
 
 since `2\cdot\tfrac{1}{24} = \tfrac{1}{12}` and `2\cdot\tfrac{1}{720} = \tfrac{1}{360}`.
 Therefore
 
-$$\boxed{\,y_{n+1} + y_{n-1} - 2y_n = h^2 y''_n + \tfrac{1}{12} h^4 y^{(\mathrm{iv})}_n
-+ O(h^6),\qquad \kappa = \tfrac{1}{12}.\,}$$
+$$\boxed{\,y_{n+1} + y_{n-1} - 2y_n = h^2 y''_n + \tfrac{1}{12} h^4 y^{(\mathrm{iv})}_n + O(h^6),\qquad \kappa = \tfrac{1}{12}.\,}$$
 
 The omitted remainder is `\tfrac{1}{360} h^6 y^{(\mathrm{vi})}_n + O(h^8) = O(h^6)`. ∎
 
@@ -82,8 +78,7 @@ $$h^2 (Ly)_n = -(y_{n+1} + y_{n-1} - 2y_n) + h^2 v_n y_n + \kappa h^4 y^{(\mathr
 
 i.e.
 
-$$\boxed{\,h^2 (Ly)_n = -y_{n+1} - y_{n-1} + (2 + h^2 v_n)\,y_n
-+ \kappa h^4 y^{(\mathrm{iv})}_n + O(h^6).\,}$$
+$$\boxed{\,h^2 (Ly)_n = -y_{n+1} - y_{n-1} + (2 + h^2 v_n)\,y_n + \kappa h^4 y^{(\mathrm{iv})}_n + O(h^6).\,}$$
 
 This is the intended identity (with the `h^2` factor restored and `+\kappa h^4`). The
 combination `-y_{n+1} - y_{n-1} + (2 + h^2 v_n)y_n` is the second-order discrete
@@ -97,8 +92,7 @@ Schrödinger operator; its discrepancy from `h^2(Ly)_n` is exactly the
 Apply the identity of part (a) to the function `w = y''` in place of `y` (its second
 derivative is `w'' = y^{(\mathrm{iv})}`):
 
-$$y''_{n+1} + y''_{n-1} - 2y''_n = h^2 y^{(\mathrm{iv})}_n
-+ \tfrac{1}{12} h^4 y^{(\mathrm{vi})}_n + O(h^6).$$
+$$y''_{n+1} + y''_{n-1} - 2y''_n = h^2 y^{(\mathrm{iv})}_n + \tfrac{1}{12} h^4 y^{(\mathrm{vi})}_n + O(h^6).$$
 
 Since `\tfrac{1}{12} h^4 y^{(\mathrm{vi})}_n + O(h^6) = O(h^4)`,
 
@@ -120,19 +114,16 @@ The only term we cannot evaluate from nodal values of `y` is `\kappa h^4 y^{(\ma
 node `y''_m = v_m y_m`, and `y^{(\mathrm{iv})} = (y'')'' = (Vy)''`. Part (c), applied to
 `y''` and then using `y''_m = v_m y_m`, gives
 
-$$h^2 y^{(\mathrm{iv})}_n = \big(y''_{n+1} + y''_{n-1} - 2y''_n\big) + O(h^4)
-= \big(v_{n+1} y_{n+1} + v_{n-1} y_{n-1} - 2 v_n y_n\big) + O(h^4).$$
+$$h^2 y^{(\mathrm{iv})}_n = \big(y''_{n+1} + y''_{n-1} - 2y''_n\big) + O(h^4) = \big(v_{n+1} y_{n+1} + v_{n-1} y_{n-1} - 2 v_n y_n\big) + O(h^4).$$
 
 Multiply by `\kappa h^2`:
 
-$$\kappa h^4 y^{(\mathrm{iv})}_n
-= \kappa h^2\big(v_{n+1} y_{n+1} + v_{n-1} y_{n-1} - 2 v_n y_n\big) + O(h^6).$$
+$$\kappa h^4 y^{(\mathrm{iv})}_n = \kappa h^2\big(v_{n+1} y_{n+1} + v_{n-1} y_{n-1} - 2 v_n y_n\big) + O(h^6).$$
 
 Substituting into `(\ast)` (the `O(h^4)` is multiplied by `\kappa h^2`, becoming
 `O(h^6)`):
 
-$$0 = -y_{n+1} - y_{n-1} + (2 + h^2 v_n) y_n
-+ \tfrac{h^2}{12}\big(v_{n+1} y_{n+1} + v_{n-1} y_{n-1} - 2 v_n y_n\big) + O(h^6),$$
+$$0 = -y_{n+1} - y_{n-1} + (2 + h^2 v_n) y_n + \tfrac{h^2}{12}\big(v_{n+1} y_{n+1} + v_{n-1} y_{n-1} - 2 v_n y_n\big) + O(h^6),$$
 
 using `\kappa = 1/12`. Collecting the coefficients of `y_{n+1}, y_n, y_{n-1}`:
 
@@ -142,9 +133,7 @@ using `\kappa = 1/12`. Collecting the coefficients of `y_{n+1}, y_n, y_{n-1}`:
 
 Dropping the `O(h^6)` residual gives **Numerov's scheme**:
 
-$$\boxed{\;\Big(1 - \tfrac{h^2}{12} v_{n+1}\Big) y_{n+1}
-- \Big(2 + \tfrac{5h^2}{6} v_n\Big) y_n
-+ \Big(1 - \tfrac{h^2}{12} v_{n-1}\Big) y_{n-1} = 0.\;}$$
+$$\boxed{\;\Big(1 - \tfrac{h^2}{12} v_{n+1}\Big) y_{n+1} - \Big(2 + \tfrac{5h^2}{6} v_n\Big) y_n + \Big(1 - \tfrac{h^2}{12} v_{n-1}\Big) y_{n-1} = 0.\;}$$
 
 **Order.** When the exact solution of `Ly = 0` is substituted, the left-hand side
 equals the residual `O(h^6)` we discarded; the local truncation error is `O(h^6)`, so
@@ -156,5 +145,4 @@ equation rather than through extra grid points.
 Given two starting values `y_0, y_1` (from initial/boundary data), the recurrence
 propagates the solution:
 
-$$y_{n+1} = \frac{\big(2 + \tfrac{5h^2}{6} v_n\big) y_n
-- \big(1 - \tfrac{h^2}{12} v_{n-1}\big) y_{n-1}}{\,1 - \tfrac{h^2}{12} v_{n+1}\,}. \qquad\blacksquare$$
+$$y_{n+1} = \frac{\big(2 + \tfrac{5h^2}{6} v_n\big) y_n - \big(1 - \tfrac{h^2}{12} v_{n-1}\big) y_{n-1}}{\,1 - \tfrac{h^2}{12} v_{n+1}\,}. \qquad\blacksquare$$
