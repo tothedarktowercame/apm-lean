@@ -12,3 +12,7 @@ report/*.synctex.gz
 *.bak
 Scratch*.lean
 data/
+
+# Python bytecode from the informal-proof conversion scripts.
+__pycache__/
+*.pyc

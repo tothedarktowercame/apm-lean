@@ -1,0 +1,165 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{apm-unicode-math}[2026/09/23 v0.1 Residual Unicode -> LaTeX math]
+%
+% The First Proof markdown->LaTeX recipe (normalize-math-prose.py +
+% pandoc-mathify.lua) lifts most math into \(...\), but symbols that occur in
+% running prose outside a detected math span survive as raw Unicode in TEXT
+% mode. Those are mathematics, not typography: they must be set in math mode or
+% they render upright, mis-spaced, and (under pdfTeX) not at all.
+%
+% Every mapping below is \ensuremath, so a symbol is typeset identically
+% whether the converter happened to lift its context into math mode or not.
+% Purely textual characters stay textual.
+%
+% This is a safety net, not a licence to stop improving the converter: each
+% character handled here is a character the upstream filter did not lift.
+\RequirePackage{amsmath,amssymb}
+\RequirePackage{newunicodechar}
+
+\newcommand{\apm@m}[2]{\newunicodechar{#1}{\ensuremath{#2}}}
+
+% --- blackboard bold ---
+\apm@m{ℝ}{\mathbb{R}}  \apm@m{ℂ}{\mathbb{C}}  \apm@m{ℕ}{\mathbb{N}}
+\apm@m{𝓝}{\mathcal{N}}
+
+% --- greek ---
+\apm@m{Ω}{\Omega}  \apm@m{α}{\alpha}  \apm@m{ε}{\varepsilon}
+\apm@m{π}{\pi}     \apm@m{ρ}{\rho}    \apm@m{φ}{\varphi}
+\apm@m{χ}{\chi}    \apm@m{ψ}{\psi}
+
+% --- relations and logic ---
+\apm@m{∈}{\in}       \apm@m{∀}{\forall}   \apm@m{∃}{\exists}
+\apm@m{≤}{\leq}      \apm@m{≠}{\neq}      \apm@m{≅}{\cong}
+\apm@m{⊂}{\subset}   \apm@m{⊆}{\subseteq} \apm@m{⊤}{\top}
+\apm@m{⊥}{\perp}     \apm@m{⟂}{\perp}     \apm@m{¬}{\neg}
+\apm@m{∧}{\wedge}    \apm@m{∨}{\vee}      \apm@m{∪}{\cup}
+\apm@m{→}{\to}       \apm@m{⇒}{\Rightarrow}
+
+% --- operators ---
+\apm@m{∫}{\int}  \apm@m{∮}{\oint}  \apm@m{∏}{\prod}
+\apm@m{∂}{\partial}  \apm@m{·}{\cdot}  \apm@m{−}{-}
+\apm@m{‖}{\|}    \apm@m{⟪}{\langle\!\langle}  \apm@m{⟫}{\rangle\!\rangle}
+\apm@m{∎}{\;\blacksquare}
+
+% --- super/subscripts that arrived as precomposed glyphs ---
+\apm@m{¹}{^{1}}  \apm@m{²}{^{2}}  \apm@m{ˣ}{^{x}}
+\apm@m{ᵐ}{^{m}}  \apm@m{ᶜ}{^{c}}  \apm@m{ᵢ}{_{i}}
+\apm@m{₀}{_{0}}  \apm@m{₁}{_{1}}  \apm@m{₂}{_{2}}
+\apm@m{ₖ}{_{k}}  \apm@m{ₘ}{_{m}}  \apm@m{ₙ}{_{n}}
+
+% --- precomposed accented letters that are really math accents ---
+\apm@m{ĝ}{\hat{g}}
+
+% --- second pass: every glyph the corpus uses that Latin Modern lacks ---
+% Collected from lualatex's own "Missing character" reports over all 501
+% proofs, so the list is observed rather than guessed.
+
+\apm@m{±}{\pm}
+\apm@m{µ}{\mu}
+\apm@m{ā}{\bar{a}}
+\apm@m{Σ}{\Sigma}
+\apm@m{Ψ}{\Psi}
+\apm@m{β}{\beta}
+\apm@m{γ}{\gamma}
+\apm@m{δ}{\delta}
+\apm@m{ζ}{\zeta}
+\apm@m{η}{\eta}
+\apm@m{θ}{\theta}
+\apm@m{ι}{\iota}
+\apm@m{κ}{\kappa}
+\apm@m{λ}{\lambda}
+\apm@m{μ}{\mu}
+\apm@m{ν}{\nu}
+\apm@m{ξ}{\xi}
+\apm@m{σ}{\sigma}
+\apm@m{τ}{\tau}
+\apm@m{ω}{\omega}
+\apm@m{ℒ}{\mathcal{L}}
+\apm@m{ℓ}{\ell}
+\apm@m{ℚ}{\mathbb{Q}}
+\apm@m{ℤ}{\mathbb{Z}}
+\apm@m{𝒟}{\mathcal{D}}
+\apm@m{𝔽}{\mathbb{F}}
+\apm@m{𝟙}{\mathbb{1}}
+\apm@m{↑}{\uparrow}
+\apm@m{↔}{\leftrightarrow}
+\apm@m{↛}{\nrightarrow}
+\apm@m{↦}{\mapsto}
+\apm@m{↪}{\hookrightarrow}
+\apm@m{⇀}{\rightharpoonup}
+\apm@m{⇏}{\nRightarrow}
+\apm@m{⇔}{\Leftrightarrow}
+\apm@m{⟸}{\Longleftarrow}
+\apm@m{⟹}{\Longrightarrow}
+\apm@m{⟺}{\Longleftrightarrow}
+\apm@m{∅}{\emptyset}
+\apm@m{∆}{\Delta}
+\apm@m{∉}{\notin}
+\apm@m{∋}{\ni}
+\apm@m{∑}{\sum}
+\apm@m{∗}{\ast}
+\apm@m{∘}{\circ}
+\apm@m{∞}{\infty}
+\apm@m{∣}{\mid}
+\apm@m{∩}{\cap}
+\apm@m{∼}{\sim}
+\apm@m{≃}{\simeq}
+\apm@m{≡}{\equiv}
+\apm@m{≢}{\not\equiv}
+\apm@m{≥}{\geq}
+\apm@m{≪}{\ll}
+\apm@m{≲}{\lesssim}
+\apm@m{⊃}{\supset}
+\apm@m{⊄}{\not\subset}
+\apm@m{⊇}{\supseteq}
+\apm@m{⊊}{\subsetneq}
+\apm@m{⊋}{\supsetneq}
+\apm@m{⊔}{\sqcup}
+\apm@m{⊕}{\oplus}
+\apm@m{⊗}{\otimes}
+\apm@m{⋂}{\bigcap}
+\apm@m{⋃}{\bigcup}
+\apm@m{⋊}{\rtimes}
+\apm@m{⋯}{\cdots}
+\apm@m{⌈}{\lceil}
+\apm@m{⌉}{\rceil}
+\apm@m{⌊}{\lfloor}
+\apm@m{⌋}{\rfloor}
+\apm@m{△}{\triangle}
+\apm@m{⟨}{\langle}
+\apm@m{⟩}{\rangle}
+\apm@m{⧸}{\big/}
+\apm@m{⨆}{\bigsqcup}
+\apm@m{ᵅ}{^{\alpha}}
+\apm@m{ᶠ}{^{f}}
+\apm@m{ᶿ}{^{\theta}}
+\apm@m{‾}{\overline{\ }}
+
+\newunicodechar{•}{\textbullet}
+\newunicodechar{…}{\ldots}
+\newunicodechar{✓}{\checkmark}
+\newunicodechar{✗}{\times}
+\newunicodechar{е}{e}
+% --- third pass: glyphs still reported missing after the second ---
+\apm@m{′}{^{\prime}}
+\apm@m{↠}{\twoheadrightarrow}
+\apm@m{↺}{\circlearrowleft}
+\apm@m{⇐}{\Leftarrow}
+\apm@m{∖}{\setminus}
+\apm@m{∭}{\iiint}
+\apm@m{≈}{\approx}
+\apm@m{𝒮}{\mathcal{S}}
+\apm@m{𝕂}{\mathbb{K}}
+\apm@m{˙}{\dot{\ }}
+
+\newunicodechar{─}{---}
+\newunicodechar{╱}{/}
+\newunicodechar{╲}{\textbackslash{}}
+\newunicodechar{●}{\textbullet}
+\newunicodechar{★}{$\star$}
+\newunicodechar{✔}{$\checkmark$}
+% --- genuinely textual characters stay textual ---
+\newunicodechar{é}{\'e}
+\newunicodechar{–}{--}
+\newunicodechar{’}{'}
+\newunicodechar{•}{\textbullet}

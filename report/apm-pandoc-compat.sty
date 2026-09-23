@@ -1,0 +1,94 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{apm-pandoc-compat}[2026/09/23 v0.1 Definitions for pandoc body output]
+%
+% informal-proofs-to-tex.sh runs pandoc without -s, so it emits a document body
+% that references macros pandoc would normally supply in its own template
+% preamble (\tightlist, the Shaded/Highlighting code environments and their
+% token macros). Without them lualatex reports ~180 undefined control sequences
+% per run. The block below is pandoc's own output, captured verbatim from
+% `pandoc -s -t latex`.
+\RequirePackage{fancyvrb}
+\RequirePackage{framed}
+\RequirePackage{xcolor}
+\RequirePackage{enumitem}
+
+% APM problem statements use these list environments. Only alist is defined in
+% apm/project-cheatsheet.py (against the `enumerate` package); rlist and \T are
+% used but defined nowhere. They are supplied here against `enumitem` -- loading
+% both packages clashes over \enit@* and costs ~40 undefined control sequences.
+\newenvironment{alist}{\begin{enumerate}[label=(\alph*)]}{\end{enumerate}}
+\newenvironment{rlist}{\begin{enumerate}[label=(\roman*)]}{\end{enumerate}}
+% Some proofs nest lists more than four deep (pandoc's own lists, plus the
+% alist/rlist inside a problem statement inside a list item). LaTeX's built-in
+% enumerate stops at four and fails with an undefined \@listctr, so raise the
+% limit. Levels beyond the fourth reuse the standard label sequence.
+\setlistdepth{9}
+\renewlist{enumerate}{enumerate}{9}
+\renewlist{itemize}{itemize}{9}
+\setlist[enumerate,1]{label=\arabic*.}
+\setlist[enumerate,2]{label=(\alph*)}
+\setlist[enumerate,3]{label=\roman*.}
+\setlist[enumerate,4]{label=\Alph*.}
+\setlist[enumerate,5]{label=(\arabic*)}
+\setlist[enumerate,6]{label=(\alph*)}
+\setlist[enumerate,7]{label=(\roman*)}
+\setlist[enumerate,8]{label=(\Alph*)}
+\setlist[enumerate,9]{label=\arabic*.}
+\setlist[itemize,1]{label=\textbullet}
+\setlist[itemize,2]{label=--}
+\setlist[itemize,3]{label=\textasteriskcentered}
+\setlist[itemize,4]{label=\textperiodcentered}
+\setlist[itemize,5]{label=\textbullet}
+\setlist[itemize,6]{label=--}
+\setlist[itemize,7]{label=\textasteriskcentered}
+\setlist[itemize,8]{label=\textperiodcentered}
+\setlist[itemize,9]{label=\textbullet}
+
+% Two more list flavours appear in the statements: 123list (arabic) and
+% Rlist (upper-case roman). \newenvironment goes through \csname, so a name
+% beginning with digits is fine.
+\newenvironment{123list}{\begin{enumerate}[label=(\arabic*)]}{\end{enumerate}}
+\newenvironment{Rlist}{\begin{enumerate}[label=(\Roman*)]}{\end{enumerate}}
+
+% The 2-torus, used in the t-family problem statements.
+\providecommand{\T}{\mathbb{T}}
+
+% ---- begin pandoc template block ----
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% ---- end pandoc template block ----
