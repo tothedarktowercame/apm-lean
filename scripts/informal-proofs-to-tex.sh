@@ -14,11 +14,12 @@ STORAGE_ROOT="${APM_STORAGE_ROOT:-$CODE_ROOT/storage}"
 
 NORMALIZER="$FUTON6_ROOT/scripts/normalize-math-prose.py"
 FILTER="$FUTON6_ROOT/scripts/pandoc-mathify.lua"
+SYNTAX="$REPO_ROOT/report/lean4.xml"
 
 ID_LIST="${1:?usage: informal-proofs-to-tex.sh <id-list-file> [out-dir]}"
 OUT_DIR="${2:-$STORAGE_ROOT/apm/first-proof-sprint/tex}"
 
-for f in "$NORMALIZER" "$FILTER" "$ID_LIST"; do
+for f in "$NORMALIZER" "$FILTER" "$SYNTAX" "$ID_LIST"; do
   [ -r "$f" ] || { echo "missing required input: $f" >&2; exit 1; }
 done
 command -v pandoc >/dev/null || { echo "pandoc not on PATH" >&2; exit 1; }
@@ -87,10 +88,16 @@ n=0
 for src in "$tmp_dir"/*.md; do
   base="$(basename "$src" .md)"
   out="$OUT_DIR/$base.tex"
+  # --syntax-definition: 90 of these solutions carry a ```lean fence, and
+  # neither pandoc nor KSyntaxHighlighting ships a Lean grammar, so without it
+  # every line of Lean in the prose comes back as one undifferentiated
+  # \NormalTok. The same grammar highlights the Lean proofs proper; see
+  # render-lean-proofs.py.
   pandoc "$src" \
     -f gfm-superscript-subscript \
     -t latex \
     --wrap=preserve \
+    --syntax-definition "$SYNTAX" \
     --lua-filter "$FILTER" \
     -o "$out"
   # Same apostrophe-artifact cleanup as the canonical First Proof regen script.
@@ -110,5 +117,9 @@ python3 "$REPO_ROOT/scripts/fold-unicode-scripts.py" --write "$OUT_DIR"/apm-*.te
 
 # \tag only works inside an equation environment, not inside \[ \].
 python3 "$REPO_ROOT/scripts/promote-tagged-display.py" --write "$OUT_DIR"/apm-*.tex
+
+# The Lean proofs, highlighted, into a subdirectory so the repair passes above
+# (which glob apm-*.tex) never see them: a Lean listing is not math prose.
+python3 "$REPO_ROOT/scripts/render-lean-proofs.py" "$ID_LIST" "$OUT_DIR"
 
 echo "Converted $n informal proofs -> $OUT_DIR/apm-*.tex"

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd">
+<!--
+  Lean 4 syntax definition for skylighting (the highlighter pandoc uses).
+
+  Neither pandoc nor KSyntaxHighlighting ships one, so pandoc was emitting
+  every line of a Lean proof as a single \NormalTok: no colour, and no way to
+  see the shape of a proof at a glance.
+
+  (XML comments cannot contain a double hyphen, which is why Lean's own comment
+  syntax is spelled out in words below rather than quoted.)
+
+  The colouring is deliberately three part rather than exhaustive, because the
+  point is to make a proof legible to someone reading the informal argument
+  beside it:
+
+    keyword      (green)  what is being CLAIMED: theorem, lemma, def, and the
+                          term level scaffolding (fun, have, by, calc).
+    function     (blue)   what is being DONE: the tactics. A reader can follow
+                          the proof steps without knowing any of them.
+    alert        (red)    sorry. An unfinished proof should look unfinished.
+
+  plus the ordinary comment / docstring / attribute / string / number classes.
+-->
+<language name="Lean" section="Sources" version="1" kateversion="5.0"
+          extensions="*.lean" mimetype="text/x-lean"
+          author="apm-lean" license="MIT">
+  <highlighting>
+
+    <!-- What is being claimed, and the term-level scaffolding. -->
+    <list name="declarations">
+      <item>theorem</item>
+      <item>lemma</item>
+      <item>def</item>
+      <item>abbrev</item>
+      <item>example</item>
+      <item>instance</item>
+      <item>structure</item>
+      <item>class</item>
+      <item>inductive</item>
+      <item>axiom</item>
+      <item>opaque</item>
+      <item>macro</item>
+      <item>notation</item>
+      <item>syntax</item>
+      <item>elab</item>
+      <item>deriving</item>
+      <item>where</item>
+      <item>extends</item>
+    </list>
+
+    <list name="terms">
+      <item>fun</item>
+      <item>let</item>
+      <item>have</item>
+      <item>show</item>
+      <item>from</item>
+      <item>suffices</item>
+      <item>by</item>
+      <item>do</item>
+      <item>match</item>
+      <item>with</item>
+      <item>if</item>
+      <item>then</item>
+      <item>else</item>
+      <item>calc</item>
+      <item>at</item>
+      <item>using</item>
+      <item>this</item>
+      <item>forall</item>
+      <item>exists</item>
+      <item>in</item>
+      <item>return</item>
+    </list>
+
+    <!-- File and namespace structure. -->
+    <list name="commands">
+      <item>import</item>
+      <item>open</item>
+      <item>namespace</item>
+      <item>end</item>
+      <item>section</item>
+      <item>variable</item>
+      <item>universe</item>
+      <item>attribute</item>
+      <item>set_option</item>
+      <item>noncomputable</item>
+      <item>private</item>
+      <item>protected</item>
+      <item>partial</item>
+      <item>nonrec</item>
+      <item>mutual</item>
+      <item>local</item>
+      <item>scoped</item>
+    </list>
+
+    <!-- What is being done. Tactic names, not an exhaustive list: the common
+         Mathlib vocabulary these 488 proofs actually use. -->
+    <list name="tactics">
+      <item>exact</item>
+      <item>exact_mod_cast</item>
+      <item>apply</item>
+      <item>refine</item>
+      <item>intro</item>
+      <item>intros</item>
+      <item>rintro</item>
+      <item>obtain</item>
+      <item>rcases</item>
+      <item>cases</item>
+      <item>rcases</item>
+      <item>induction</item>
+      <item>use</item>
+      <item>constructor</item>
+      <item>refine'</item>
+      <item>rfl</item>
+      <item>simp</item>
+      <item>simpa</item>
+      <item>simp_all</item>
+      <item>simp_rw</item>
+      <item>dsimp</item>
+      <item>rw</item>
+      <item>rwa</item>
+      <item>subst</item>
+      <item>unfold</item>
+      <item>change</item>
+      <item>convert</item>
+      <item>congr</item>
+      <item>ext</item>
+      <item>funext</item>
+      <item>specialize</item>
+      <item>revert</item>
+      <item>generalize</item>
+      <item>push_cast</item>
+      <item>norm_cast</item>
+      <item>norm_num</item>
+      <item>ring</item>
+      <item>ring_nf</item>
+      <item>field_simp</item>
+      <item>linarith</item>
+      <item>nlinarith</item>
+      <item>positivity</item>
+      <item>polyrith</item>
+      <item>omega</item>
+      <item>decide</item>
+      <item>gcongr</item>
+      <item>bound</item>
+      <item>aesop</item>
+      <item>tauto</item>
+      <item>trivial</item>
+      <item>contradiction</item>
+      <item>exfalso</item>
+      <item>absurd</item>
+      <item>left</item>
+      <item>right</item>
+      <item>filter_upwards</item>
+      <item>measurability</item>
+      <item>continuity</item>
+      <item>fun_prop</item>
+      <item>infer_instance</item>
+      <item>assumption</item>
+      <item>nth_rewrite</item>
+      <item>conv</item>
+      <item>all_goals</item>
+      <item>any_goals</item>
+      <item>first</item>
+      <item>repeat</item>
+      <item>try</item>
+      <item>focus</item>
+      <item>swap</item>
+      <item>pick_goal</item>
+    </list>
+
+    <!-- The sorts and the ambient number types, so a statement's types read
+         differently from its proof. -->
+    <list name="types">
+      <item>Prop</item>
+      <item>Type</item>
+      <item>Sort</item>
+    </list>
+
+    <contexts>
+      <context name="Normal" attribute="Normal Text" lineEndContext="#stay">
+        <StringDetect String="/--" attribute="Documentation" context="DocComment"/>
+        <Detect2Chars char="/" char1="-" attribute="Comment" context="BlockComment"/>
+        <Detect2Chars char="-" char1="-" attribute="Comment" context="LineComment"/>
+        <DetectChar char="&quot;" attribute="String" context="String"/>
+        <RegExpr String="@\[[^\]]*\]" attribute="Attribute"/>
+        <RegExpr String="#[a-z_]+" attribute="Preprocessor"/>
+        <WordDetect String="sorry" attribute="Alert"/>
+        <keyword String="declarations" attribute="Keyword"/>
+        <keyword String="terms" attribute="Keyword"/>
+        <keyword String="commands" attribute="Keyword"/>
+        <keyword String="tactics" attribute="Function"/>
+        <keyword String="types" attribute="Data Type"/>
+        <Float attribute="Float"/>
+        <Int attribute="Decimal"/>
+      </context>
+
+      <!-- Lean block comments nest; pushing the same context handles that. -->
+      <context name="BlockComment" attribute="Comment" lineEndContext="#stay">
+        <Detect2Chars char="/" char1="-" attribute="Comment" context="BlockComment"/>
+        <Detect2Chars char="-" char1="/" attribute="Comment" context="#pop"/>
+      </context>
+
+      <context name="DocComment" attribute="Documentation" lineEndContext="#stay">
+        <Detect2Chars char="-" char1="/" attribute="Documentation" context="#pop"/>
+      </context>
+
+      <context name="LineComment" attribute="Comment" lineEndContext="#pop"/>
+
+      <context name="String" attribute="String" lineEndContext="#stay">
+        <RegExpr String="\\." attribute="Special Char"/>
+        <DetectChar char="&quot;" attribute="String" context="#pop"/>
+      </context>
+    </contexts>
+
+    <itemDatas>
+      <itemData name="Normal Text"   defStyleNum="dsNormal"/>
+      <itemData name="Keyword"       defStyleNum="dsKeyword"/>
+      <itemData name="Function"      defStyleNum="dsFunction"/>
+      <itemData name="Data Type"     defStyleNum="dsDataType"/>
+      <itemData name="Decimal"       defStyleNum="dsDecVal"/>
+      <itemData name="Float"         defStyleNum="dsFloat"/>
+      <itemData name="String"        defStyleNum="dsString"/>
+      <itemData name="Special Char"  defStyleNum="dsSpecialChar"/>
+      <itemData name="Comment"       defStyleNum="dsComment"/>
+      <itemData name="Documentation" defStyleNum="dsDocumentation"/>
+      <itemData name="Attribute"     defStyleNum="dsAttribute"/>
+      <itemData name="Preprocessor"  defStyleNum="dsPreprocessor"/>
+      <itemData name="Alert"         defStyleNum="dsAlert"/>
+    </itemDatas>
+  </highlighting>
+
+  <general>
+    <keywords casesensitive="1" weakDeliminator="_'!?"/>
+    <comments>
+      <comment name="singleLine" start="--"/>
+      <comment name="multiLine" start="/-" end="-/" region="Comment"/>
+    </comments>
+  </general>
+</language>
