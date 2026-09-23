@@ -46,6 +46,12 @@
 \apm@m{ᵐ}{^{m}}  \apm@m{ᶜ}{^{c}}  \apm@m{ᵢ}{_{i}}
 \apm@m{₀}{_{0}}  \apm@m{₁}{_{1}}  \apm@m{₂}{_{2}}
 \apm@m{ₖ}{_{k}}  \apm@m{ₘ}{_{m}}  \apm@m{ₙ}{_{n}}
+% ₊ arrives from a Lean docstring quoted in an \apmlink margin note. Those
+% notes are added after fold-unicode-scripts.py has run, and folding them there
+% would be wrong anyway -- a subscript inside a Lean identifier is part of the
+% name, not a script. So the glyph reaches the footnote's roman font, which has
+% no ₊.
+\apm@m{₊}{_{+}}  \apm@m{₋}{_{-}}
 
 % --- precomposed accented letters that are really math accents ---
 \apm@m{ĝ}{\hat{g}}
