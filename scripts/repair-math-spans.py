@@ -31,6 +31,8 @@ import argparse
 import re
 from pathlib import Path
 
+from texcode import map_outside_code
+
 OPEN, CLOSE = r"\(", r"\)"
 
 # Text-mode macros pandoc emits that are meaningless once inside math.
@@ -107,7 +109,7 @@ def clean_math(s: str) -> str:
     return s
 
 
-def repair(text: str) -> tuple[str, int]:
+def repair_prose(text: str) -> tuple[str, int]:
     """Merge unbalanced spans forward until balanced. Returns (text, n_repairs)."""
     out = []
     i = 0
@@ -158,6 +160,12 @@ def repair(text: str) -> tuple[str, int]:
         out.append(OPEN + clean_math(body) + CLOSE)
         i = end
     return "".join(out), repairs
+
+
+def repair(text: str) -> tuple[str, int]:
+    """Prose only. A listing has no math spans, and letting the forward merge
+    run into one changes which spans get joined far earlier in the file."""
+    return map_outside_code(text, repair_prose)
 
 
 def main() -> int:

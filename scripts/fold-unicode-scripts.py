@@ -18,6 +18,8 @@ import argparse
 import re
 from pathlib import Path
 
+from texcode import map_outside_code
+
 SUPER = {
     "⁰": "0", "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5", "⁶": "6",
     "⁷": "7", "⁸": "8", "⁹": "9", "⁺": "+", "⁻": "-", "⁼": "=", "⁽": "(",
@@ -38,7 +40,7 @@ SUPER_RUN = re.compile(f"[{''.join(SUPER)}]+")
 SUB_RUN = re.compile(f"[{''.join(SUB)}]+")
 
 
-def fold(text: str) -> tuple[str, int]:
+def fold_prose(text: str) -> tuple[str, int]:
     n = 0
 
     def sup(m: re.Match) -> str:
@@ -64,6 +66,13 @@ def fold(text: str) -> tuple[str, int]:
     text = SUPER_RUN.sub(sup, text)
     text = SUB_RUN.sub(sub, text)
     return text, n
+
+
+def fold(text: str) -> tuple[str, int]:
+    """Prose only. In a code listing these characters are Lean's own notation --
+    `x⁻¹`, `aₐ`, `∫₀` are identifiers, not superscripts to fold -- and folding
+    them puts \\ensuremath inside verbatim."""
+    return map_outside_code(text, fold_prose)
 
 
 def main() -> int:

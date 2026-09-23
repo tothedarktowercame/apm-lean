@@ -18,6 +18,8 @@ import argparse
 import re
 from pathlib import Path
 
+from texcode import map_outside_code
+
 # A display block that contains \tag somewhere inside it.
 TAGGED = re.compile(r"\\\[((?:(?!\\\]).)*?\\tag\{(?:[^{}]|\{[^{}]*\})*\}(?:(?!\\\]).)*?)\\\]", re.S)
 
@@ -36,11 +38,16 @@ def mathify_tags(body: str) -> str:
     return TAG_BODY.sub(repl, body)
 
 
-def promote(text: str) -> tuple[str, int]:
+def promote_prose(text: str) -> tuple[str, int]:
     return TAGGED.subn(
         lambda m: "\\begin{equation}" + mathify_tags(m.group(1)) + "\\end{equation}",
         text,
     )
+
+
+def promote(text: str) -> tuple[str, int]:
+    """Prose only: \\[ inside a listing is text, not a display."""
+    return map_outside_code(text, promote_prose)
 
 
 def main() -> int:
