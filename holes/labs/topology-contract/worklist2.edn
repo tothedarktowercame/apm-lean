@@ -48255,6 +48255,25 @@
      "Corresponding deleted simplicial face and affine product-face map of adjacentSwapPath.",
      :direction
      "Exact equality from source to swapped path, induced by retained grid-vertex equality with dimensions transported along n + 1 = p + q."},
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790549769497-25758-13708a60",
+     :commands
+     ["git show 2473b343bfd93dc4fb817e4fd1652b8c9cdbd946"
+      "Python recorded-blob audit: fixture SHA256, eight statement hashes, placeholders, forbidden declarations, exact two-file scope and canonical identity"
+      "EDN check of all three reviewed dependencies"
+      "lake env lean /tmp/topo7-common-face-review/ProductSimplexAdjacentSwapCommonFace.lean"
+      "lake env lean /tmp/topo8-common-face/ProductSimplexAdjacentSwapCommonFace.lean"
+      "lake env lean ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.lean"
+      "lake build ConstructionTargets.ProductSimplexAdjacentSwapCommonFace"
+      "Python warning and axiom log audits"
+      "bb /tmp/topo7-common-face-review/worklist_check.bb /tmp/topo7-common-face-review/worklist.edn"
+      "bb /tmp/topo7-common-face-review/worklist_check.bb /tmp/topo7-common-face-review/worklist2.edn"
+      "git diff --check 2473b343^ 2473b343"
+      "clojure.edn/read-string exact receipt validation"],
+     :finding
+     "Independent review of topo-6 implementation PASS. Commit 2473b343 adds only the common-face module and documentation, with six public theorems and two private helpers. Frozen fixture SHA256 d528f5aa2ae1cc36b4cc2b1261304e31cd34366e7e1408aaeb6c46e59054b47e and all eight statement hashes reproduce; promotion is byte-identical and placeholder count/delta are zero. Retained vertices exclude exactly corner i.val+1; simplicial and affine equalities transport dimensions along h and run source-to-swapped. Face equality correctly needs no unequal-letter assumption; corner distinctness uses unequal letters at finCongr h i.castSucc and finCongr h i.succ. No theorem-as-hypothesis, signs, cancellation, chains, cross products or consumer edits. All three prerequisites have PASS reviews. Recorded module, fixture and canonical compilation pass with six standard-only axiom audits and no warnings; focused build passes with only two existing SingularSubdivision warnings. Both ledgers archived at 4c8207ec9670bb82096035e9c59b64a1b877b52c validate. No ledger edits."},
     :commit "2473b343bfd93dc4fb817e4fd1652b8c9cdbd946",
     :changed-paths
     ["ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.lean"
@@ -48273,7 +48292,7 @@
     "Promoted the exact fixture with six public theorems and two private helpers. Face equalities require no unequal-letter hypothesis; unequal letters at the transported balanced-word coordinates imply distinct corners. Existing declarations and consumers are untouched.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.lean"
     "ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.md"],
@@ -48327,7 +48346,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred orientation coherence or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: adjacent-swap common faces and renewed consumer eligibility",
