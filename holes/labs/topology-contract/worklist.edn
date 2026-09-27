@@ -76124,8 +76124,61 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the genuine ambient-range and intersection-range cokernel maps induced by exact commuting squares. Reject assumed homology isomorphisms, supportConnecting, and ordinary excision with the false compact-complement containment premise.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Prove rangeRelativeCokernelMap and intersectionRelativeCokernelMap induce homology isomorphisms, combine them with the reviewed union relativeComparisonIso, specialize A and B to the two compact complements, prove compatibility with restrictPiecesChain and piecesToIntersection, and conjugate the genuine connecting morphism plus all three exactness segments to the literal quotient-pair arrows.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:rangeRelative_square
+     "967065aa2540f73e2acc1d418a5df50df62a2d1bf1c764a8cf72f66d7082b746",
+     :rangeRelativeCokernelMap
+     "68c2c439b8f8a8d04e9f2d15d00569a4d93af5711a07365f139282335c942adf",
+     :intersectionRangeChainsToLiteral
+     "7aa8d4471a5d19e2407f0df41ac853ec752440fd10173ef3dd9590c1ae37724a",
+     :intersectionRelative_square
+     "39ebce0afecb2382ff54ea97211cccb99794f225869fda4dc6835f41ec246cce",
+     :intersectionRelativeCokernelMap
+     "278c3eb55720f407c4af591d977a446e39b0125811249b50eb4e25afde4cc9a7"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeLiteralComparison.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubcomplexRelativeLiteralComparison.lean ConstructionTargets/CoefficientSubcomplexRelativeLiteralComparison.lean ConstructionTargets/CoefficientSubcomplexRelativeHomologySequence.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder, forbidden-declaration, statement-hash and consumer-count audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check --oneline --stat c07c4369", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r c07c4369",
+      :exit 0}
+     {:cmd "git status --short --untracked-files=no", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Categorical cokernels of the inclusion of one ambient subspace range and of the inclusion of the infimum of two ambient subspace ranges",
+     :target
+     "Literal coefficient relative chain complexes for the pairs (X,A) and (X,A intersection B)",
+     :direction
+     "Canonical cokernel maps from the source categorical quotient representations to the target literal topological-pair representations, induced by exact commuting chain-map squares whose ambient component is the identity."},
+    :commit "c07c4369",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubcomplexRelativeLiteralComparison.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubcomplexRelativeLiteralComparison.lean",
+     :sha256
+     "28db5692189c6c94505832a9c1811a4f613d57dbc1161d80de4bbcee20261c62",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact pinned fixture. Canonical source, committed blob and fixture are byte-identical at the recorded SHA256; the genuine relative homology-sequence dependency matches 6b990aaff7c21e2b8fffa09e46140570634e83a30834aa7ba3834dde40a66d9c. Fresh compilation succeeds without target warnings and all four printed declarations use only propext, Classical.choice and Quot.sound. rangeRelative_square and intersectionRelative_square are exact commuting chain-map squares with identity ambient component; their cokernel maps point from the categorical quotient representations to the literal relative-chain complexes. No homology-isomorphism, compact-complement arrow compatibility, connecting transport, localization, dimension-vanishing or fundamental-class claim is made. The commit changes exactly the scoped file and the tracked worktree is clean. Current comment-stripped consumer placeholder counts are t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5; no consumer was modified or claimed closed.",
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeLiteralComparison.lean"],
    :dag-node
