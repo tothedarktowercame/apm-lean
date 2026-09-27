@@ -48028,8 +48028,83 @@
   {:consumer :t03J05,
    :stop-condition
    "Promote only the three public coordinate-case theorems for balancedAdjacentSwap. Preserve every existing definition and declaration. Do not prove prefix counts or faces, assign signs, cancel chains, construct cross products, edit consumers or claim closure.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Use the public coordinate cases to prove prefix-count agreement away from the intermediate corner, then the common deleted simplicial and affine face for t03J05, t96J06 and t97A04; no consumer closure claimed.",
+    :gates
+    {:forbidden-declarations :pass,
+     :whitespace :pass,
+     :preserved-existing-declarations :pass,
+     :standard-only-axioms :pass,
+     :clean-worktree :pass,
+     :fixture-hash :pass,
+     :placeholder-scan :pass,
+     :exact-fixture-theorems :pass,
+     :both-ledgers :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical direct compilation emitted no warnings; focused build replayed pre-existing SingularSubdivision warnings at lines 2960 and 3580."],
+    :statement-hashes
+    {"balancedAdjacentSwap_left"
+     "77447641d2776542cdd69e90f212474e82344835fc64446481fa6f426d83cad2",
+     "balancedAdjacentSwap_right"
+     "88477e523d814baf2bcf0ef8d65d8185eba3fc1e630deef8291e38c45e7c479d",
+     "balancedAdjacentSwap_of_ne"
+     "3f0f32680ee200a2f57ef0300d1b8f7ea1b6f50dc6b48b2a374c777921c30f4b"},
+    :axioms
+    {:balancedAdjacentSwap_left
+     ["propext" "Classical.choice" "Quot.sound"],
+     :balancedAdjacentSwap_right
+     ["propext" "Classical.choice" "Quot.sound"],
+     :balancedAdjacentSwap_of_ne
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/codex13-coordinate-cases/CoordinateCases.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/codex13-coordinate-cases/CoordinateCases.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexBalancedAdjacentSwap",
+      :exit 0}
+     {:cmd "python3 /tmp/topo6-coordinate-audit/check.py", :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check 3c577956^ 3c577956", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd
+      "bb -e '(require (quote [clojure.edn :as edn])) (assert (map? (edn/read-string (slurp \"/tmp/topo6-coordinate-audit/receipt.edn\"))))'",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "3c5779566bd09dce691b7684e585ee4b2d010c9e",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
+     "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
+    :statement-hash-convention
+    "Exact UTF-8 declaration from theorem through type, excluding the terminating space followed by := by.",
+    :scope-confirmation
+    "Exactly the three coordinate-case theorems and their documentation; no prefix-count, face, sign, cancellation, chain, cross-product or consumer theorem added; ledgers untouched.",
+    :fixture
+    {:path "/tmp/codex13-coordinate-cases/CoordinateCases.lean",
+     :sha256
+     "b2c89ba952b568f95b06e34b88dfe5a93030990ba8cbd3085e7f1ebe2f29914d",
+     :placeholder-count 0},
+    :finding
+    "Recovered existing scoped implementation; fresh verification in this invocation passed. No new commit or repository edits were needed. Both canonical files equal the existing commit.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexBalancedAdjacentSwap.lean"
     "ConstructionTargets/ProductSimplexBalancedAdjacentSwap.md"],
