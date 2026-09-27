@@ -48162,147 +48162,118 @@
    :stop-condition
    "Construct only the common deleted-face comparison for a maximal path and its adjacent swap at unequal consecutive letters. Prove the required vertex equality, simplicial-face equality and affine product-face equality. Do not assign shuffle signs, define cancellation pairings, construct chains or cross products, edit consumers or claim closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Promote and independently review this two-file common-face packet; then prove shuffle parity change and internal-face cancellation before cross products or consumer closure.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {:prefix_card_swap
-      "e8618b338c7ba31049f8ff7d9b78042b931b306ce16060c8d1427742179fea7a",
-      :adjacentSwap_prefix_counts
-      "d3687d290aa3244a3ccc6071fa4fae421a16a7fc4b9fcdddf5098b1b990bf44d",
-      :adjacentSwap_vertex
-      "af88734800002da5e3560ff372619aa422dee24a5b325534898491c969f4821a",
-      :adjacentSwap_retained_vertex
-      "ca054c2348630c94ab0e21d0427961b0b4031b0e485ffea1253648ddbde2775a",
-      :objEquiv_cast
-      "f95a38b1fa72a8d0bec136a4a0e9e50e846d4285df6295e1680b38fe2079a92a",
-      :adjacentSwap_simplicial_face
-      "452354c8f4f00be401d030f43d9f2697dd54a7a9bea96886fb76ce1c5e4b81f2",
-      :adjacentSwap_affine_face
-      "9660965aa868cadd78c6f8bdfabb1d373765d98812db19149ef07cde1b13c877",
-      :adjacentSwap_corner_ne
-      "a5ce61d0a855e5fc96522803258e9966a5e1c3181954c7ad9f1980ce16c3b3f9"},
-     :acceptance
-     {:axioms :standard-only,
-      :declarations
-      ["adjacentSwap_prefix_counts"
-       "adjacentSwap_vertex"
-       "adjacentSwap_retained_vertex"
-       "adjacentSwap_simplicial_face"
-       "adjacentSwap_affine_face"
-       "adjacentSwap_corner_ne"],
-      :implementation
-      "Promote the exact compiled fixture, including its two private proof helpers, and document the six public theorems. Preserve all existing declarations and consumers.",
-      :hypotheses
-      "MaximalPath p q, h : n + 1 = p + q, i : Fin n. The corner-distinctness theorem uses unequal letters of (wordPathEquiv p q).symm z at finCongr h i.castSucc and finCongr h i.succ. Retained-vertex and face equalities hold without needing inequality; the unequal-letter hypothesis is used to prove distinct corners.",
-      :consumer-equation
-      "Deleting i.succ.castSucc from the dimension-transported source simplex gives exactly the swapped simplex face. The corresponding productAffine maps composed with faceAffine n i.succ.castSucc agree in the same source-to-swapped direction.",
-      :consumer-residual
-      "Shuffle parity change, internal-face cancellation, then cross-product assembly for t03J05, t96J06 and t97A04.",
-      :gates
-      ["Verify fixture SHA256 before editing."
-       "Promote only the exact fixture and its documentation in the two-file scope."
-       "Compile fixture and canonical module and reproduce standard-only axiom audits."
-       "Run placeholder, warning, forbidden-declaration, whitespace, exact-scope and both-ledger checks."
-       "Commit the scoped implementation; no sign, cancellation, chain, cross-product or consumer-source changes."]},
-     :axioms
-     {:adjacentSwap_corner_ne
-      ["propext" "Classical.choice" "Quot.sound"],
-      :adjacentSwap_simplicial_face
-      ["propext" "Classical.choice" "Quot.sound"],
-      :adjacentSwap_affine_face
-      ["propext" "Classical.choice" "Quot.sound"],
-      :adjacentSwap_retained_vertex
-      ["propext" "Classical.choice" "Quot.sound"],
-      :adjacentSwap_prefix_counts
-      ["propext" "Classical.choice" "Quot.sound"],
-      :adjacentSwap_vertex
-      ["propext" "Classical.choice" "Quot.sound"]},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/topo8-common-face/ProductSimplexAdjacentSwapCommonFace.lean > /tmp/topo8-common-face/lean-7.log 2>&1",
-       :exit 0}
-      {:cmd "python3 /tmp/topo8-common-face/audit.py", :exit 0}
-      {:cmd
-       "rg -n 'warning:|error:' /tmp/topo8-common-face/lean-7.log",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0}
-      {:cmd
-       "sha256sum /tmp/topo8-common-face/ProductSimplexAdjacentSwapCommonFace.lean",
-       :exit 0}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd
-       "bb /tmp/topo8-common-face/receipt.bb (verify three PASS-reviewed dependencies and parse exact receipt using clojure.edn/read-string)",
-       :exit 0}],
-     :diagnostic-history
-     [{:cmd "Second bb /tmp/topo8-common-face/receipt.bb",
-       :exit 1,
-       :finding
-       "The first correction removed a needed doseq closing parenthesis; restored it before successful parse."}
-      {:cmd "Initial bb /tmp/topo8-common-face/receipt.bb",
-       :exit 1,
-       :finding
-       "Extra closing parentheses in temporary receipt generator; removed and reran exact EDN parse."}
-      {:cmd
-       "First exploratory Lean compile followed by cat lean-1.log",
-       :exit 0,
-       :finding
-       "Shell returned cat status 0, masking the compiler failure. Log records unresolved swap simplification and deprecated Fin.coe_cast. Corrected ordered simp-only rewrites and used Fin.val_cast; all subsequent compile commands preserve compiler exit status."}
-      {:cmd "Exploratory Lean compile, lean-2.log",
-       :exit 1,
-       :finding
-       "Unresolved universe metavariables; explicit universe arguments added."}
-      {:cmd "Exploratory Lean compile, lean-3.log",
-       :exit 1,
-       :finding
-       "Fixed universe 0 mismatched the source universe, and subst could not eliminate a composite equality. Used one explicit universe and a general private equality-transport lemma."}
-      {:cmd "Exploratory Lean compile, lean-4.log",
-       :exit 1,
-       :finding
-       "Transport rewrite left equality-witness goals; supplied h explicitly."}
-      {:cmd "Exploratory Lean compile, lean-5.log",
-       :exit 1,
-       :finding
-       "Same pending transport correction and corner arithmetic needed lambda and local-index reduction."}
-      {:cmd "Exploratory Lean compile, lean-6.log",
-       :exit 1,
-       :finding
-       "Only corner arithmetic remained; dsimp only reduced coordinate projections and the local index before omega. Final lean-7 compilation passes."}],
-     :representation
-     {:source
-      "Deleted intermediate-corner simplicial face and affine product-face map of the source MaximalPath.",
-      :target
-      "Corresponding deleted simplicial face and affine product-face map of adjacentSwapPath.",
-      :direction
-      "Exact equality from source to swapped path, obtained by equality of every retained grid vertex; dimensions transported along n + 1 = p + q."},
-     :changed-paths [],
-     :statement-hash-convention
-     "Exact UTF-8 declaration from theorem (including private when present) through type, excluding the space preceding := by.",
-     :fixture
-     {:path
-      "/tmp/topo8-common-face/ProductSimplexAdjacentSwapCommonFace.lean",
-      :sha256
-      "d528f5aa2ae1cc36b4cc2b1261304e31cd34366e7e1408aaeb6c46e59054b47e",
-      :placeholder-count 0},
-     :finding
-     "Complete common-face comparison compiles. Prefix-cardinality bijection gives agreement away from the intermediate corner; reconstruction gives path vertices; face_objEquiv gives simplicial equality; productAffine_comp_face gives affine equality. The public left-coordinate rewrite proves distinct corners under unequal letters. Repository and ledgers remain unchanged.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.lean"
-       "ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.md"]},
-     :seat "topo-8"}},
+   {:placeholder-delta 0,
+    :residual
+    "Independent review, then shuffle parity change and internal-face cancellation before cross-product assembly for t03J05, t96J06 and t97A04; no consumer closure claimed.",
+    :gates
+    {:canonical-compile :pass,
+     :forbidden-declarations :pass,
+     :whitespace :pass,
+     :standard-only-axioms :pass,
+     :focused-build :pass,
+     :clean-worktree :pass,
+     :fixture-hash :pass,
+     :warnings :pass,
+     :placeholder-scan :pass,
+     :byte-identical-promotion :pass,
+     :both-ledgers :pass,
+     :fixture-compile :pass,
+     :exact-two-file-scope :pass,
+     :reviewed-dependencies :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["No fixture or canonical compilation warnings. Focused build replayed only existing SingularSubdivision warnings at lines 2960 and 3580."],
+    :statement-hashes
+    {:prefix_card_swap
+     "e8618b338c7ba31049f8ff7d9b78042b931b306ce16060c8d1427742179fea7a",
+     :adjacentSwap_prefix_counts
+     "d3687d290aa3244a3ccc6071fa4fae421a16a7fc4b9fcdddf5098b1b990bf44d",
+     :adjacentSwap_vertex
+     "af88734800002da5e3560ff372619aa422dee24a5b325534898491c969f4821a",
+     :adjacentSwap_retained_vertex
+     "ca054c2348630c94ab0e21d0427961b0b4031b0e485ffea1253648ddbde2775a",
+     :objEquiv_cast
+     "f95a38b1fa72a8d0bec136a4a0e9e50e846d4285df6295e1680b38fe2079a92a",
+     :adjacentSwap_simplicial_face
+     "452354c8f4f00be401d030f43d9f2697dd54a7a9bea96886fb76ce1c5e4b81f2",
+     :adjacentSwap_affine_face
+     "9660965aa868cadd78c6f8bdfabb1d373765d98812db19149ef07cde1b13c877",
+     :adjacentSwap_corner_ne
+     "a5ce61d0a855e5fc96522803258e9966a5e1c3181954c7ad9f1980ce16c3b3f9"},
+    :axioms
+    {:adjacentSwap_corner_ne
+     ["propext" "Classical.choice" "Quot.sound"],
+     :adjacentSwap_simplicial_face
+     ["propext" "Classical.choice" "Quot.sound"],
+     :adjacentSwap_affine_face
+     ["propext" "Classical.choice" "Quot.sound"],
+     :adjacentSwap_retained_vertex
+     ["propext" "Classical.choice" "Quot.sound"],
+     :adjacentSwap_prefix_counts
+     ["propext" "Classical.choice" "Quot.sound"],
+     :adjacentSwap_vertex ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/topo8-common-face/ProductSimplexAdjacentSwapCommonFace.lean",
+      :exit 0}
+     {:cmd
+      "EDN verification of all three dependencies: state done and evidence.review.outcome pass",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/topo8-common-face/ProductSimplexAdjacentSwapCommonFace.lean > /tmp/topo8-common-face/implementation-fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.lean > /tmp/topo8-common-face/implementation-canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexAdjacentSwapCommonFace > /tmp/topo8-common-face/implementation-build.log 2>&1",
+      :exit 0}
+     {:cmd "python3 /tmp/topo8-common-face/implementation-audit.py",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --cached --check", :exit 0}
+     {:cmd
+      "git commit -m \"Prove common deleted face of adjacent path swaps\"",
+      :exit 0}
+     {:cmd
+      "Post-commit Python assertions: clean worktree, exact two-file commit scope, git diff --check HEAD^ HEAD",
+      :exit 0}
+     {:cmd
+      "bb /tmp/topo8-common-face/implementation-receipt.bb (clojure.edn/read-string exact receipt validation)",
+      :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "Deleted intermediate-corner simplicial face and affine product-face map of the source MaximalPath.",
+     :target
+     "Corresponding deleted simplicial face and affine product-face map of adjacentSwapPath.",
+     :direction
+     "Exact equality from source to swapped path, induced by retained grid-vertex equality with dimensions transported along n + 1 = p + q."},
+    :commit "2473b343bfd93dc4fb817e4fd1652b8c9cdbd946",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.lean"
+     "ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.md"],
+    :statement-hash-convention
+    "Exact UTF-8 declaration from theorem (including private when present) through type, excluding the space preceding := by.",
+    :scope-confirmation
+    "Only the common-face module and its documentation added; no signs, cancellation pairings, chains, cross products, consumer edits or ledger edits.",
+    :fixture
+    {:path
+     "/tmp/topo8-common-face/ProductSimplexAdjacentSwapCommonFace.lean",
+     :sha256
+     "d528f5aa2ae1cc36b4cc2b1261304e31cd34366e7e1408aaeb6c46e59054b47e",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact fixture with six public theorems and two private helpers. Face equalities require no unequal-letter hypothesis; unequal letters at the transported balanced-word coordinates imply distinct corners. Existing declarations and consumers are untouched.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.lean"
     "ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.md"],
