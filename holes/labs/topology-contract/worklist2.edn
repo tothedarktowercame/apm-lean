@@ -48963,98 +48963,106 @@
    :stop-condition
    "Prove only that the reviewed adjacentSwapPath reverses shuffleSign when the two transported consecutive balanced-word letters are unequal. Do not define face pairings, prove cancellation, construct chains or cross products, edit consumers or claim closure.",
    :evidence
-   {:probe
-    {:placeholder-delta 0,
-     :residual
-     "Promote and independently review this two-file sign-reversal packet; then combine it with the reviewed common simplicial and affine face equalities to construct internal-face cancellation before cross-product assembly or frozen uptake.",
-     :outcome :go,
-     :warnings [],
-     :statement-hashes
-     {"shuffleSign_adjacentSwapPath"
-      "d082d7c5243b9574e481ac1e663fa347bdb806e9450bb0782a5d51c70c7b6f42"},
-     :acceptance
-     {:axioms :standard-only,
-      :hypotheses
-      "Use MaximalPath p q, h : n + 1 = p + q, i : Fin n and unequal letters of (wordPathEquiv p q).symm z at finCongr h i.castSucc and finCongr h i.succ.",
-      :declarations ["shuffleSign_adjacentSwapPath"],
-      :implementation
-      "Promote the exact compiled fixture with its three private finCongr/balanced-word transport helpers and document the source-to-swapped sign orientation.",
-      :consumer-equation
-      "shuffleSign (adjacentSwapPath z h i) = -shuffleSign z under the exact transported unequal-adjacent-letter hypothesis.",
-      :consumer-residual
-      "Use shuffleSign_adjacentSwapPath with adjacentSwap_simplicial_face and adjacentSwap_affine_face to build internal-face cancellation; chain-level cross-product assembly and frozen consumer uptake remain later.",
-      :gates
-      ["Verify fixture SHA256 81aa83b9c510892e47aac328a76ec522751fb0730d6b50c8d7371ef59614ab58 before editing."
-       "Add exactly shuffleSign_adjacentSwapPath, its private transport helpers and documentation in the two-file scope."
-       "Reuse ProductSimplexAdjacentWordInversionCard, ProductSimplexWordInversionPairs, ProductSimplexInversionCardParity and ProductSimplexAdjacentPathSwap."
-       "Compile fixture and canonical module and reproduce the standard-only axiom audit."
-       "Run placeholder, warning, forbidden-declaration, whitespace, exact-scope and both-ledger checks."
-       "Commit the scoped implementation and confirm no cancellation pairing, chain, cross-product or consumer theorem is added."]},
-     :axioms
-     {:shuffleSign_adjacentSwapPath
-      ["propext" "Classical.choice" "Quot.sound"]},
-     :commands
-     [{:cmd
-       "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and all reviewed dependency receipts",
-       :exit 0}
-      {:cmd
-       "Verify the inversion-card parity, word-inversion representation and adjacent-word inversion-card dependencies are done with PASS reviews",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/ProductSimplexAdjacentSwapSignReversal.lean > /tmp/ProductSimplexAdjacentSwapSignReversal.log 2>&1",
-       :exit 0}
-      {:cmd
-       "comment-stripped placeholder, exact public-declaration and forbidden-boundary scan of /tmp/ProductSimplexAdjacentSwapSignReversal.lean",
-       :exit 0}
-      {:cmd
-       "rg -n 'warning:|error:' /tmp/ProductSimplexAdjacentSwapSignReversal.log",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd
-       "sha256sum /tmp/ProductSimplexAdjacentSwapSignReversal.lean",
-       :exit 0}
-      {:cmd
-       "standard-only axiom audit for shuffleSign_adjacentSwapPath",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
-       :exit 0}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0}
-      {:cmd "git diff --check", :exit 0}
-      {:cmd "git diff --exit-code", :exit 0}
-      {:cmd "Parse exact receipt map with clojure.edn/read-string",
-       :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean .topo8-sign-reversal.lean, first exploratory compile",
-       :exit 1,
-       :finding
-       "Function composition hid the balancedAdjacentSwap coordinate rewrite, and the transported cardinal equalities were not yet used by cases."}
-      {:cmd
-       "lake env lean .topo8-sign-reversal.lean, second exploratory compile",
-       :exit 1,
-       :finding
-       "The remaining cardinal proof kept the local transported word opaque; unfolding that local definition exposed the reviewed equalities to omega."}],
-     :changed-paths [],
-     :statement-hash-convention
-     "Exact UTF-8 declaration from theorem through type, excluding the space preceding := by.",
-     :fixture
-     {:path "/tmp/ProductSimplexAdjacentSwapSignReversal.lean",
-      :sha256
-      "81aa83b9c510892e47aac328a76ec522751fb0730d6b50c8d7371ef59614ab58",
-      :placeholder-count 0,
-      :declarations ["shuffleSign_adjacentSwapPath"]},
-     :finding
-     "Complete sign reversal compiles. The proof casts the balanced word to Fin (n + 1), identifies balancedAdjacentSwap with adjacentSwapWord under that cast, imports the reviewed unit inversion-cardinality change, rewrites both geometric inversion sets by the reviewed word representation and applies the reviewed (-1)-power parity theorem. The equation is oriented from the swapped path sign to the negative source path sign. No cancellation, chain, cross-product or consumer declaration is present.",
-     :implementation
-     {:scope
-      ["ConstructionTargets/ProductSimplexAdjacentSwapSignReversal.lean"
-       "ConstructionTargets/ProductSimplexAdjacentSwapSignReversal.md"]},
-     :seat "topo-8"}},
+   {:placeholder-delta 0,
+    :residual
+    "Combine shuffleSign_adjacentSwapPath with adjacentSwap_simplicial_face and adjacentSwap_affine_face to construct internal-face cancellation; chain-level cross-product assembly and frozen uptake remain for t03J05, t96J06 and t97A04.",
+    :gates
+    {:canonical-compile :pass,
+     :statement-hash :pass,
+     :forbidden-declarations :pass,
+     :exact-theorem-and-helper-promotion :pass,
+     :whitespace :pass,
+     :standard-only-axioms :pass,
+     :focused-build :pass,
+     :clean-worktree :pass,
+     :fixture-hash :pass,
+     :placeholder-scan :pass,
+     :warning-scan :pass,
+     :both-ledgers :pass,
+     :fixture-compile :pass,
+     :exact-two-file-scope :pass,
+     :reviewed-dependencies :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical direct compilation emitted no warnings. Focused build replayed only the existing SingularSubdivision warnings at lines 2960 and 3580."],
+    :statement-hashes
+    {"wordInversionPairs_card_comp_finCongr"
+     "cfc2e1f2c859f9afc86334fb9fc04283eb1df9b7123376faff894da06f1e910c",
+     "balancedAdjacentSwap_transport"
+     "1cbab1bd6b13e8f60dfb02e8e144c09530fdf59ec018f3d7478227730db3f486",
+     "balancedAdjacentSwap_inversion_card"
+     "8646c24a160df0ecfff0f36839beb71922a6599b9d35f9bc1090adb68e9f8e89",
+     "shuffleSign_adjacentSwapPath"
+     "d082d7c5243b9574e481ac1e663fa347bdb806e9450bb0782a5d51c70c7b6f42"},
+    :axioms
+    {:shuffleSign_adjacentSwapPath
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/ProductSimplexAdjacentSwapSignReversal.lean",
+      :exit 0}
+     {:cmd
+      "EDN verification that all four dependencies are done with PASS reviews",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/ProductSimplexAdjacentSwapSignReversal.lean > /tmp/ProductSimplexAdjacentSwapSignReversal.fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexAdjacentSwapSignReversal.lean > /tmp/ProductSimplexAdjacentSwapSignReversal.canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexAdjacentSwapSignReversal > /tmp/ProductSimplexAdjacentSwapSignReversal.build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n 'warning:|error:' /tmp/ProductSimplexAdjacentSwapSignReversal.fixture.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'warning:|error:' /tmp/ProductSimplexAdjacentSwapSignReversal.canonical.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, declaration-boundary, placeholder, forbidden-declaration, warning and statement-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --cached --check and exact staged two-file scope assertion",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Prove adjacent path swap reverses shuffle sign\"",
+      :exit 0}
+     {:cmd
+      "Post-commit clean-worktree, exact commit-scope and git diff --check assertions",
+      :exit 0}
+     {:cmd
+      "bb EDN parse of exact final receipt using clojure.edn/read-string",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "01d80fc54c18349c62c00b9a30b2d4a01d62f9a1",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexAdjacentSwapSignReversal.lean"
+     "ConstructionTargets/ProductSimplexAdjacentSwapSignReversal.md"],
+    :statement-hash-convention
+    "Exact UTF-8 declaration from private theorem or theorem through type, excluding the space preceding := by.",
+    :scope-confirmation
+    "Exactly one public sign-reversal theorem, its three private transport helpers and documentation were added in the declared two-file scope; no cancellation pairing, chain, cross-product, consumer or ledger change.",
+    :fixture
+    {:path "/tmp/ProductSimplexAdjacentSwapSignReversal.lean",
+     :sha256
+     "81aa83b9c510892e47aac328a76ec522751fb0730d6b50c8d7371ef59614ab58",
+     :placeholder-count 0,
+     :declarations ["shuffleSign_adjacentSwapPath"]},
+    :finding
+    "Promoted exactly shuffleSign_adjacentSwapPath and its three private finCongr and balanced-word transport helpers, changing only the namespace from probe to production. The theorem is oriented from the swapped path sign to the negative source sign under the exact transported unequal-letter hypothesis. No face pairing, cancellation, chain, cross-product, consumer theorem or ledger edit was added.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexAdjacentSwapSignReversal.lean"
     "ConstructionTargets/ProductSimplexAdjacentSwapSignReversal.md"],
