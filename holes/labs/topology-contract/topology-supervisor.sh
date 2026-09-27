@@ -91,7 +91,7 @@ pick_repair_seat() {
   curl -fsS --max-time 15 "$AGENCY/api/alpha/agents" 2>/dev/null \
     | jq -r '(.agents // .) | if type=="object" then [.[]] else . end
              | .[] | ."id"."id/value" // empty' 2>/dev/null \
-    | grep -E '^codex-[0-9]+$' | sort -u | head -1
+    | grep -E '^topo-[0-9]+$' | sort -u | head -1
 }
 
 dispatch_repair() {

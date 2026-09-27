@@ -39,7 +39,7 @@ while [ $# -gt 0 ]; do
 done
 
 log() { echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] $*" | tee -a "$LOG"; }
-valid_seat() { [[ "$1" =~ ^(codex-[0-9]+|claude-[0-9]+)$ ]]; }
+valid_seat() { [[ "$1" =~ ^(codex-[0-9]+|claude-[0-9]+|topo-[0-9]+)$ ]]; }
 # Hoisted above the first die(): notice_target calls these, and validate()
 # and repository_safe() can die long before the seat-resolution block runs.
 # A function defined later than its caller is simply absent at that point.
@@ -51,7 +51,7 @@ registered_codex_seats() {
   curl -fsS --max-time 15 "$AGENCY/api/alpha/agents" 2>/dev/null \
     | jq -r '(.agents // .) | if type=="object" then [.[]] else . end
              | .[] | ."id"."id/value" // empty' 2>/dev/null \
-    | grep -E '^codex-[0-9]+$' | sort -u
+    | grep -E '^topo-[0-9]+$' | sort -u
 }
 
 # A notification must not be lost because its target name went stale. OWNER
@@ -314,9 +314,16 @@ send_notice "campaign started or resumed"
 # pool; and if the pool cannot fill a distinct role, a fresh seat is registered
 # via POST /api/alpha/agents/auto. Dying is reserved for the case where the
 # Agency itself will not give us a seat -- a substrate failure, not a typo.
+# Joe, 2026-09-27: topology seats are named topo-N, not codex-N. Standard
+# codex-N names get picked up by other agents for unrelated work, which breaks
+# a loop seat's focus; so the replacement pool is topo-N only, and a fresh seat
+# is the next unused topo-N (the Codex runtime is the same; only the name differs).
 register_new_codex_seat() {
-  curl -fsS --max-time 30 -X POST "$AGENCY/api/alpha/agents/auto" \
-    -H 'Content-Type: application/json' -d '{"type":"codex"}' 2>/dev/null \
+  local n=1
+  while seat_registered "topo-$n"; do n=$((n+1)); done
+  curl -fsS --max-time 30 -X POST "$AGENCY/api/alpha/agents/restore" \
+    -H 'Content-Type: application/json' \
+    -d "{\"agent-id\":\"topo-$n\",\"type\":\"codex\",\"cwd\":\"/home/joe/code/\",\"memory-domain\":\"mathematics\"}" 2>/dev/null \
     | jq -r '."agent-id" // .id // empty' 2>/dev/null
 }
 # resolve_seat NAME CONFIGURED ALREADY_TAKEN...
