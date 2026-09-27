@@ -48814,18 +48814,102 @@
    :stop-condition
    "Promote only the unequal-adjacent Boolean-word inversion-cardinality theorem and its private finite-set bijection helpers. Do not prove path-level sign reversal, define cancellation, construct chains or cross products, edit consumers or claim closure.",
    :evidence
-   {:fixture
+   {:placeholder-delta 0,
+    :residual
+    "Transport the unit-cardinality result through finCongr h and adjacentSwapPath_word, then apply inversionPairs_eq_wordInversionPairs and neg_one_pow_card_eq_neg_of_unit_difference to prove shuffleSign reversal; cancellation and cross-product assembly remain for t03J05, t96J06 and t97A04.",
+    :gates
+    {:canonical-compile :pass,
+     :forbidden-declarations :pass,
+     :exact-theorem-and-helper-promotion :pass,
+     :whitespace :pass,
+     :standard-only-axioms :pass,
+     :focused-build :pass,
+     :clean-worktree :pass,
+     :fixture-hash :pass,
+     :placeholder-scan :pass,
+     :warning-scan :pass,
+     :both-ledgers :pass,
+     :fixture-compile :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical direct compilation emitted no warnings. Focused build replayed only the existing SingularSubdivision warnings at lines 2960 and 3580."],
+    :statement-hashes
+    {"swapPair"
+     "72dffe79b3eda87f749fa155ab80c86b01e32cead91f83fe72c4c0169871fadb",
+     "swap_order_of_ne"
+     "7f97606ec4845a5886f0165405515d1f174f6b8069cb53dd22e4bb0e6ab11769",
+     "swapPair_ne_special"
+     "4185e23cfd92de767718656d04c778206dc1dfe244476998eb5c3947d0f17d7c",
+     "erased_card_eq"
+     "d80428709e6aab953efd0e57521e613e60eb953fa39cd95d1a4c2869669e4d02",
+     "wordInversionPairs_card_adjacentSwapWord"
+     "642778a977f9ba2a86159349e22eaec7b9026535e4a72d1a784ad6d851f7c132"},
+    :axioms
+    {:wordInversionPairs_card_adjacentSwapWord
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/ProductSimplexAdjacentWordInversionCard.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/ProductSimplexAdjacentWordInversionCard.lean > /tmp/ProductSimplexAdjacentWordInversionCard.fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexAdjacentWordInversionCard.lean > /tmp/ProductSimplexAdjacentWordInversionCard.canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexAdjacentWordInversionCard > /tmp/ProductSimplexAdjacentWordInversionCard.build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n 'warning:|error:' /tmp/ProductSimplexAdjacentWordInversionCard.fixture.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'warning:|error:' /tmp/ProductSimplexAdjacentWordInversionCard.canonical.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, declaration-boundary, placeholder, forbidden-declaration, warning and statement-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --cached --check and exact staged two-file scope assertion",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Prove adjacent swap inversion count change\"",
+      :exit 0}
+     {:cmd
+      "Post-commit clean-worktree, exact commit-scope and git diff --check assertions",
+      :exit 0}
+     {:cmd
+      "bb EDN parse of exact final receipt using clojure.edn/read-string",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "6eeb9bc49f7a63ae4bb7e5fafeea182437cd3c43",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexAdjacentWordInversionCard.lean"
+     "ConstructionTargets/ProductSimplexAdjacentWordInversionCard.md"],
+    :statement-hash-convention
+    "Exact UTF-8 declaration from private def, private theorem, or theorem through type, excluding the space preceding := or := by.",
+    :scope-confirmation
+    "Exactly one public cardinality theorem, its four private proof declarations and documentation were added in the declared two-file scope; no path sign, cancellation, chain, cross-product, consumer or ledger change.",
+    :fixture
     {:path "/tmp/ProductSimplexAdjacentWordInversionCard.lean",
      :sha256
      "b77ffb37cde2b9851964bbd70fc71665e10e746eb80fc80681578f017ec2e208",
      :placeholder-count 0},
-    :axioms
-    {:wordInversionPairs_card_adjacentSwapWord
-     ["propext" "Classical.choice" "Quot.sound"]},
     :finding
-    "Compiled the exact adjacent-word unit-cardinality theorem with one public declaration; no path sign, cancellation, chain, cross-product or consumer theorem is present."},
+    "Promoted exactly the unequal-adjacent Boolean-word inversion-cardinality theorem with its private swapPair, swap_order_of_ne, swapPair_ne_special and erased_card_eq helpers, changing only the namespace from probe to production. Documentation records the erased-special-pair bijection. No path sign, cancellation, chain, cross-product, consumer theorem or ledger edit was added.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexAdjacentWordInversionCard.lean"
     "ConstructionTargets/ProductSimplexAdjacentWordInversionCard.md"],
