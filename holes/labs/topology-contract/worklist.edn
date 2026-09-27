@@ -75953,104 +75953,111 @@
    :other-consumers ["t00J02" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the actual categorical degree maps and the banked signed convention. Reject assumed exactness, supportConnecting and ordinary excision with the false compact-complement containment premise.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / genuine relative quotient short exactness",
+   :acceptance
+   {:fixture "/tmp/CoefficientSubcomplexRelativeDegreewiseExact.lean",
+    :fixture-sha256
+    "90494ac4390196976e2ae6ef41450f86b3ccfbe544f8ecf54691577317d5418b",
+    :implementation
+    "Promote the exact fixture. Compile piecesCoordinatesEquiv, piecesCoordinatesEquiv_toLinearMap, intersectionToPieces_degree_injective, relative_degree_exact and shortComplex_shortExact. This supplies the genuine chain-level short-exactness route step needed by the remaining placeholders of t98A02, t00J02, t01A05, t02A07 and t97J05. Verify CoefficientSubcomplexRelativeDegreeArrowComparison SHA256 5bf7935d92c88a99d7f4fe69bd7bd9f36fda69bfc0b80779093237cb72471d88. Preserve arbitrary simplicial sets, subcomplexes, commutative-ring coefficients and natural degrees. Require zero placeholders, no target warnings and standard-only axioms. Do not claim a connecting morphism, homology exactness, literal topological-pair transport, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :id
+   :coefficient-subcomplex-relative-degreewise-short-exact-implementation-refill51,
+   :kind :reusable-theorem,
+   :depends-on
+   [:coefficient-subcomplex-relative-degree-arrow-comparison-implementation-refill51],
+   :current-residual
+   "Invoke the Mathlib HomologySequence for shortComplex_shortExact to construct its genuine nonzero-capable connecting morphism and state the three adjacent exactness segments. Then transport the homology objects and literal quotient-pair arrows through the banked relativeComparisonIso for the compact-complement pairs.",
+   :other-consumers ["t00J02" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Promote the compiled degreewise arrow comparison, then establish middle-coordinate bijectivity and transfer exactness. Chain-level ShortExact, HomologySequence assembly and literal compact-complement arrow transport remain; no consumer closure is claimed.",
+     "Promote the compiled genuine short-exactness fixture. HomologySequence construction of the connecting morphism and three exactness segments, followed by literal compact-complement transport, remains.",
      :outcome :revise,
      :warnings
-     ["Fixture compilation: zero warnings. Focused dependency build: 20 replayed warning lines."
-      "Two unrelated untracked paths appeared during the probe and were left untouched: ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.lean and ConstructionTargets/ProductSimplexAdjacentSwapCommonFace.md."],
-     :statement-hashes
-     {:intersectionToLeft_degree
-      "cfc48530451de60b8fcdb5919c116bd555ee9c3535885409d0ae094bfd35c15c",
-      :intersectionToRight_degree
-      "23c910206db663aea9f36cc7573b5b17f09fe2f4744f8069ac8d5754b138e162",
-      :leftToUnion_degree
-      "a6f042de09def357da1dd156e3cd0b375e1c3b5a24de1374a3317ae7e5d6de17",
-      :rightToUnion_degree
-      "8d43fbf79d5ade332bccd3a6611b860cef5b4b8489dc7b4db5561796ee81fd8e",
-      :intersectionToPieces_degree
-      "16200ebebb88d90c4ace3b45d297dd3dac7e50b6e1f0385f0f79c0288553bb3e",
-      :piecesToUnion_degree
-      "2e60948a22f6129f11474fdb688845231adc94e8f853b0dafde8b96736de531a"},
+     ["The final fixture compilation emitted zero warnings. The focused dependency build replayed pre-existing dependency warnings."],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Both assembled equalities must involve the genuine categorical arrows with the diagonal and signed-difference conventions; reject supportConnecting, assumed exactness and the false ordinary-excision containment premise.",
+      "Require the actual categorical degree maps and the banked signed convention. Reject assumed exactness, supportConnecting and ordinary excision with the false compact-complement containment premise.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeArrowComparison.lean"],
+      ["ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / degreewise relative quotient-arrow comparison",
+      "MANIFOLD FUNDAMENTAL CLASS / genuine relative quotient short exactness",
       :acceptance
       {:fixture
-       "/tmp/CoefficientSubcomplexRelativeDegreeArrowComparison.lean",
+       "/tmp/CoefficientSubcomplexRelativeDegreewiseExact.lean",
        :fixture-sha256
-       "5bf7935d92c88a99d7f4fe69bd7bd9f36fda69bfc0b80779093237cb72471d88",
+       "90494ac4390196976e2ae6ef41450f86b3ccfbe544f8ecf54691577317d5418b",
        :implementation
-       "Promote the exact fixture. Compile the four component commuting squares and intersectionToPieces_degree/piecesToUnion_degree. This supplies the quotient-arrow compatibility step on the relative Mayer-Vietoris route to the t98A02 and shared consumers' remaining placeholders. Preserve arbitrary simplicial sets, subcomplexes, commutative-ring coefficients and natural degrees. Verify the range-lattice dependency SHA256 769cabc4ae6679d1de55d19e3e3d10707df1f8b5cfc224685d186458240ed28a. Require zero placeholders, no target warnings and standard-only axioms. Do not claim middle-coordinate bijectivity, ShortExact, a connecting morphism, literal topological-pair transport, localization, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile piecesCoordinatesEquiv, piecesCoordinatesEquiv_toLinearMap, intersectionToPieces_degree_injective, relative_degree_exact and shortComplex_shortExact. This supplies the genuine chain-level short-exactness route step needed by the remaining placeholders of t98A02, t00J02, t01A05, t02A07 and t97J05. Verify CoefficientSubcomplexRelativeDegreeArrowComparison SHA256 5bf7935d92c88a99d7f4fe69bd7bd9f36fda69bfc0b80779093237cb72471d88. Preserve arbitrary simplicial sets, subcomplexes, commutative-ring coefficients and natural degrees. Require zero placeholders, no target warnings and standard-only axioms. Do not claim a connecting morphism, homology exactness, literal topological-pair transport, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeArrowComparison.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
-      :representation
-      {:source
-       "Degree components of the genuine categorical relative quotient arrows intersectionToPiecesRelative and piecesToUnionRelative",
-       :target
-       "Explicit module maps infQuotientDiagonal and piecesToSupQuotient for the left and right component ranges",
-       :direction
-       "Exact commuting linear-map equalities from the source categorical arrows through intersectionInfEquiv, piecesCoordinates and unionSupEquiv to the target explicit diagonal and signed quotient maps; bijectivity of piecesCoordinates is not asserted by this fixture."},
       :id
-      :coefficient-subcomplex-relative-degree-arrow-comparison-implementation-refill51,
-      :kind :representation-comparison,
+      :coefficient-subcomplex-relative-degreewise-short-exact-implementation-refill51,
+      :kind :reusable-theorem,
       :depends-on
-      [:coefficient-subcomplex-relative-degree-range-lattice-implementation-refill51],
+      [:coefficient-subcomplex-relative-degree-arrow-comparison-implementation-refill51],
       :current-residual
-      "Prove piecesCoordinates is a linear equivalence, transfer banked module injectivity and middle exactness through these two compiled arrow equalities, and apply shortComplex_shortExact_of_degreewise. Then invoke HomologySequence and transport the genuine connecting map and three exactness segments through the banked relativeComparisonIso to the literal compact-complement pairs.",
+      "Invoke the Mathlib HomologySequence for shortComplex_shortExact to construct its genuine nonzero-capable connecting morphism and state the three adjacent exactness segments. Then transport the homology objects and literal quotient-pair arrows through the banked relativeComparisonIso for the compact-complement pairs.",
       :other-consumers ["t00J02" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSubcomplexRelativeDegreeRangeLattice >/tmp/topo4-degree-range-build.log 2>&1",
+       "lake build ConstructionTargets.CoefficientSubcomplexRelativeDegreeArrowComparison",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientSubcomplexRelativeDegreeArrowComparison.lean",
+       "lake env lean /tmp/CoefficientSubcomplexRelativeDegreewiseExact.lean",
        :exit 0}
-      {:cmd "python3 /tmp/topo4-arrow-audit.py", :exit 0}
-      {:cmd "git status --short", :exit 0}],
+      {:cmd
+       "sha256sum /tmp/CoefficientSubcomplexRelativeDegreewiseExact.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeArrowComparison.lean /tmp/CompactExcisionHypothesisBoundary.lean; comment-stripped forbidden-token and consumer-placeholder audit; git status --short",
+       :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/CoefficientSubcomplexRelativeDegreeArrowComparison.lean",
+       "lake env lean /tmp/CoefficientSubcomplexRelativeDegreewiseExact.lean",
        :exit 1,
        :correction
-       "Initial four-square proof incorrectly projected an order inequality as a conjunction. Replaced projections with transitivity through inf_le_left and inf_le_right."}
+       "The first run preceded creation of the promoted dependency olean. Built ConstructionTargets.CoefficientSubcomplexRelativeDegreeArrowComparison and reran the fixture."}
       {:cmd
-       "lake env lean /tmp/CoefficientSubcomplexRelativeDegreeArrowComparison.lean",
+       "lake env lean /tmp/CoefficientSubcomplexRelativeDegreewiseExact.lean",
        :exit 1,
        :correction
-       "First diagonal comparison generalized before exposing the degree-isomorphism application. Changed to explicit applications before quotient induction."}
+       "The initial coordinate proof assumed definitional equality for the two canonical biproduct comparisons and used rewrite directly beneath linear-map applications. Replaced it with the explicit biprodXIso and ModuleCat.biprodIsoProd commuting calculation and pointwise congruence."}
       {:cmd
-       "lake env lean /tmp/CoefficientSubcomplexRelativeDegreeArrowComparison.lean",
+       "lake env lean /tmp/CoefficientSubcomplexRelativeDegreewiseExact.lean",
        :exit 1,
        :correction
-       "The explicit application left an uninferred denominator-order proof. Supplied the two transitive range inclusions explicitly; the final fixture compiles."}],
+       "The revised coordinate proof still needed categorical associativity normalized in the opposite direction before applying biprodXIso_hom_fst and biprodXIso_hom_snd. Added those exact rewrites; the final fixture compiles."}],
      :changed-paths [],
      :fixture
-     {:path
-      "/tmp/CoefficientSubcomplexRelativeDegreeArrowComparison.lean",
+     {:path "/tmp/CoefficientSubcomplexRelativeDegreewiseExact.lean",
       :sha256
-      "5bf7935d92c88a99d7f4fe69bd7bd9f36fda69bfc0b80779093237cb72471d88",
+      "90494ac4390196976e2ae6ef41450f86b3ccfbe544f8ecf54691577317d5418b",
       :placeholder-count 0},
      :finding
-     "Compiled one bounded prerequisite: four degreewise quotient-map commuting squares and the two assembled arrow comparisons. intersectionToPieces_degree identifies the genuine first arrow with infQuotientDiagonal after the endpoint equivalence and middle coordinate map; piecesToUnion_degree identifies the genuine second arrow with piecesToSupQuotient after the union equivalence. These are linear-map equalities for arbitrary declared simplicial sets, subcomplexes, commutative rings and natural degrees. No repository source or ledger was edited. The singleton ordinary-excision counterexample hash is unchanged. Current consumer placeholders: t98A02=1, t00J02=1, t00A04=0, t01A05=1, t02A07=3, t97J05=5; the already closed t00A04 is not counted as an open prerequisite consumer.",
+     "Compiled exactly one bounded prerequisite. piecesCoordinatesEquiv proves that the genuine middle degree object is linearly equivalent to the product of the two ordinary quotient modules, and piecesCoordinatesEquiv_toLinearMap identifies its forward map with the banked piecesCoordinates map. The two banked arrow comparisons then transfer injectivity of infQuotientDiagonal and Function.Exact of infQuotientDiagonal followed by piecesToSupQuotient to the genuine categorical degree maps. shortComplex_shortExact packages these facts with the banked terminal epimorphism, proving the genuine relative quotient short complex short exact for arbitrary declared simplicial sets, subcomplexes, commutative rings and natural degrees. No repository source or ledger changed. The promoted arrow-comparison hash and singleton ordinary-excision counterexample hash reproduce. Current comment-stripped consumer placeholders are t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5. The connecting morphism, its three homology exactness segments and literal compact-complement transport remain unproved by this fixture.",
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -76094,7 +76101,8 @@
     :coefficient-simplicial-chain-finsupp-naturality-implementation-refill51
     :coefficient-simplicial-chain-finsupp-range-implementation-refill51
     :coefficient-subcomplex-relative-degree-range-lattice-implementation-refill51
-    :coefficient-subcomplex-relative-degree-arrow-comparison-implementation-refill51],
+    :coefficient-subcomplex-relative-degree-arrow-comparison-implementation-refill51
+    :coefficient-subcomplex-relative-degreewise-short-exact-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
