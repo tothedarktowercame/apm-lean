@@ -326,12 +326,15 @@ send_notice "campaign started or resumed"
 # codex-N names get picked up by other agents for unrelated work, which breaks
 # a loop seat's focus; so the replacement pool is topo-N only, and a fresh seat
 # is the next unused topo-N (the Codex runtime is the same; only the name differs).
+# Joe, 2026-09-27: topo seats run on gpt-5.6-sol. Registered without a model,
+# a Codex seat takes the CLI default (gpt-6-astra), which burns usage for no gain.
+TOPOLOGY_SEAT_MODEL="${TOPOLOGY_SEAT_MODEL:-gpt-5.6-sol}"
 register_new_codex_seat() {
   local n=1
   while seat_registered "topo-$n"; do n=$((n+1)); done
   curl -fsS --max-time 30 -X POST "$AGENCY/api/alpha/agents/restore" \
     -H 'Content-Type: application/json' \
-    -d "{\"agent-id\":\"topo-$n\",\"type\":\"codex\",\"cwd\":\"/home/joe/code/\",\"memory-domain\":\"mathematics\"}" 2>/dev/null \
+    -d "{\"agent-id\":\"topo-$n\",\"type\":\"codex\",\"cwd\":\"/home/joe/code/\",\"memory-domain\":\"mathematics\",\"model\":\"$TOPOLOGY_SEAT_MODEL\"}" 2>/dev/null \
     | jq -r '."agent-id" // .id // empty' 2>/dev/null
 }
 # resolve_seat NAME CONFIGURED ALREADY_TAKEN...
