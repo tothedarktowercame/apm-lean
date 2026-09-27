@@ -48585,6 +48585,23 @@
       :exit 1,
       :finding
       "The abbreviated commit prefix was correct, but the manually anticipated remaining SHA digits were wrong. Read the actual full SHA from git rev-parse HEAD and reran the clean-worktree, exact-scope and whitespace assertions successfully."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790550895106-25806-39dfd0b3",
+     :commands
+     ["git show/diff-tree 51daece76d6047f290f26395c730a54702983b0c"
+      "sha256sum /tmp/ProductSimplexAdjacentSwapSignParity.lean"
+      "Python recorded-blob audit of exact promotion, statement hash, placeholders, forbidden declarations, scope and canonical identity"
+      "lake env lean /tmp/ProductSimplexAdjacentSwapSignParity.lean"
+      "lake env lean ConstructionTargets/ProductSimplexInversionCardParity.lean"
+      "lake build ConstructionTargets.ProductSimplexInversionCardParity"
+      "warning and standard-only axiom log audits"
+      "bb worklist_check.bb on both ledgers"
+      "git diff --check 51daece7^ 51daece7"
+      "clojure.edn/read-string exact receipt validation"],
+     :finding
+     "PASS: independent review of topo-6 implementation. Commit 51daece7 adds exactly ProductSimplexInversionCardParity.lean and its documentation, containing one public theorem and no other declarations. Frozen fixture SHA256 526dfd96d8032f5c3bed4d0bdfa255019f92b15b572d5c4014e6e8012b11a2b5 and statement hash dd26e04e53be1c6b58d198cd6acf3e0dd25f71f5973b3376f7b7968dc8938936 reproduce; theorem promotion is exact apart from namespace, and placeholder count/delta are zero. The equation is correctly oriented from target power to negative source power and handles either direction of a unit cardinality difference. It proves only the finite-cardinality parity conversion: the adjacent-swap inversion-cardinality relation, cancellation, chains, cross products and consumer uptake remain outside its boundary. Fixture and canonical compilation pass without warnings with standard-only axioms propext and Quot.sound; focused build passes with only the two existing SingularSubdivision warnings. Both ledgers and whitespace checks pass. No ledger edits."},
     :commit "51daece76d6047f290f26395c730a54702983b0c",
     :changed-paths
     ["ConstructionTargets/ProductSimplexInversionCardParity.lean"
@@ -48602,7 +48619,7 @@
     "Promoted exactly the single compiled finite-set parity theorem into its production namespace and documented its source-to-target orientation and bounded role. No adjacent-swap inversion-cardinality relation, cancellation pairing, chain, cross product, consumer theorem or ledger edit was added.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexInversionCardParity.lean"
     "ConstructionTargets/ProductSimplexInversionCardParity.md"],
@@ -48734,7 +48751,7 @@
       "The path sign goal reduces to a unit difference between the two actual inversion-set cardinalities, but the reusable arithmetic conversion from that difference to opposite (-1)-powers is not public.",
       :other-consumers [:t96J06 :t97A04]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: shuffle-sign reversal under unequal adjacent path swaps",
