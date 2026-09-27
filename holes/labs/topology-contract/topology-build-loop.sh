@@ -175,6 +175,15 @@ wait_job() {
                       <<<"$body" 2>/dev/null)"
         [ -n "$term_reason" ] || term_reason="$(jq -r '[.job.events[]? | select(.type=="failed") | .message // empty] | last // ""' \
                       <<<"$body" 2>/dev/null | tr '\n' ' ' | cut -c1-200)"
+        # Model capacity is a transient provider refusal before the seat has
+        # executed any work. Returning 75 lets dispatch_and_wait issue a fresh
+        # job and nonce after backoff. Dying here asks the supervisor to repair
+        # a healthy repository; an already-running supervisor also cannot see
+        # newly committed classifier changes until its own process restarts.
+        if [[ "$term_reason" == *"Selected model is at capacity"* ]]; then
+          log "$label job=$job refused by transient model capacity"
+          return 75
+        fi
         die "$label terminal state=$state job=$job${fail_code:+ code=$fail_code}${term_reason:+ :: $term_reason}" ;;
       queued|delivering|running|accepted|"") ;;
       *) die "$label unknown state=$state job=$job" ;;
@@ -185,24 +194,33 @@ wait_job() {
   done
 }
 dispatch_and_wait() {
-  local seat="$1" prompt="$2" label="$3" row="$4" response job token augmented
+  local seat="$1" prompt="$2" label="$3" row="$4" response job token augmented wait_rc
+  local capacity_waits=0 capacity_delay capacity_wait_max="${TOPOLOGY_CAPACITY_WAIT_MAX:-900}"
   valid_seat "$seat" || die "invalid regular seat: $seat"
-  token="$(printf '%s-%s-%s' "$row" "$(date +%s%N)" "$RANDOM" | sha256sum | cut -c1-24)"
-  augmented="$(mktemp)"
-  { cat "$prompt"
-    if [ -f "$REJECTION" ] && [ "$(jq -r '.row' "$REJECTION")" = "$row" ]; then
-      printf '\nYour previous receipt for this row was rejected: %s\n' "$(jq -r '.reason | gsub("[\\r\\n]+"; " ")' "$REJECTION")"
-    fi
-    printf '\nThis is a work-mode job: execute at least one relevant verification command during THIS invocation, even when retrying previously completed work; reusing an earlier receipt without fresh tool execution is rejected.\nReturn the result in THIS invoke job final response; do not bell, whistle, or open a separate reply thread. Your final machine receipt must be exactly one unindented line beginning:\nTOPOLOGY_RECEIPT_EDN %s {EDN map}\nBefore responding, parse the exact map after the nonce with clojure.edn/read-string; visual inspection is not an EDN syntax check. Do not repeat that nonce elsewhere.\n' "$token"; } > "$augmented"
-  log "$label dispatch to $seat receipt-token=$token"
-  response="$(python3 /home/joe/code/futon3c/scripts/agency_send.py --from topology-build-loop \
-    --to "$seat" --kind bell --type request --mode work < "$augmented")" || die "$label dispatch failed"
-  rm -f "$augmented"
-  job="$(jq -r '."job-id" // .job_id // empty' <<<"$response")"
-  [ -n "$job" ] || die "$label returned no job id: $response"
-  bb "$HERE/inflight.bb" write "$INFLIGHT" "$row" "$job" "$seat" "$token" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" || die "could not persist in-flight job"
-  log "$label job=$job"
-  wait_job "$job" "$label"
+  while :; do
+    token="$(printf '%s-%s-%s' "$row" "$(date +%s%N)" "$RANDOM" | sha256sum | cut -c1-24)"
+    augmented="$(mktemp)"
+    { cat "$prompt"
+      if [ -f "$REJECTION" ] && [ "$(jq -r '.row' "$REJECTION")" = "$row" ]; then
+        printf '\nYour previous receipt for this row was rejected: %s\n' "$(jq -r '.reason | gsub("[\\r\\n]+"; " ")' "$REJECTION")"
+      fi
+      printf '\nThis is a work-mode job: execute at least one relevant verification command during THIS invocation, even when retrying previously completed work; reusing an earlier receipt without fresh tool execution is rejected.\nReturn the result in THIS invoke job final response; do not bell, whistle, or open a separate reply thread. Your final machine receipt must be exactly one unindented line beginning:\nTOPOLOGY_RECEIPT_EDN %s {EDN map}\nBefore responding, parse the exact map after the nonce with clojure.edn/read-string; visual inspection is not an EDN syntax check. Do not repeat that nonce elsewhere.\n' "$token"; } > "$augmented"
+    log "$label dispatch to $seat receipt-token=$token"
+    response="$(python3 /home/joe/code/futon3c/scripts/agency_send.py --from topology-build-loop \
+      --to "$seat" --kind bell --type request --mode work < "$augmented")" || die "$label dispatch failed"
+    rm -f "$augmented"
+    job="$(jq -r '."job-id" // .job_id // empty' <<<"$response")"
+    [ -n "$job" ] || die "$label returned no job id: $response"
+    bb "$HERE/inflight.bb" write "$INFLIGHT" "$row" "$job" "$seat" "$token" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" || die "could not persist in-flight job"
+    log "$label job=$job"
+    if wait_job "$job" "$label"; then return 0; else wait_rc=$?; fi
+    [ "$wait_rc" = 75 ] || return "$wait_rc"
+    capacity_waits=$((capacity_waits+1))
+    capacity_delay=$((60 * (1 << (capacity_waits < 5 ? capacity_waits - 1 : 4))))
+    [ "$capacity_delay" -gt "$capacity_wait_max" ] && capacity_delay="$capacity_wait_max"
+    log "$label waiting ${capacity_delay}s after model-capacity refusal before fresh dispatch"
+    sleep "$capacity_delay"
+  done
 }
 apply_job_result() {
   local row="$1" token="$2" receipt transition extraction_error pending
