@@ -48736,6 +48736,23 @@
      "The wordInversionPairs finset of the Boolean balanced step word extracted by (wordPathEquiv p q).symm.",
      :direction
      "Exact equality from the source geometric inversion-pair representation to the target Boolean-word inversion-pair representation."},
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790551414591-25825-55793d06",
+     :commands
+     ["git show/diff-tree 3e8fc69e43030e5f285567fdccebb717507364e6"
+      "sha256sum /tmp/ProductSimplexWordInversionPairs.lean"
+      "Python recorded-blob audit of exact promotion, two statement hashes, placeholders, forbidden declarations, scope and canonical identity"
+      "lake env lean /tmp/ProductSimplexWordInversionPairs.lean"
+      "lake env lean ConstructionTargets/ProductSimplexWordInversionPairs.lean"
+      "lake build ConstructionTargets.ProductSimplexWordInversionPairs"
+      "warning and standard-only axiom log audits"
+      "bb worklist_check.bb on both ledgers"
+      "git diff --check 3e8fc69e^ 3e8fc69e"
+      "clojure.edn/read-string exact receipt validation"],
+     :finding
+     "PASS: independent review of topo-6 implementation. Commit 3e8fc69e adds exactly ProductSimplexWordInversionPairs.lean and its documentation, containing wordInversionPairs and inversionPairs_eq_wordInversionPairs only. Frozen fixture SHA256 f36b2c1fe0b39939efb0b78d85d1b15b5b112aa0db21231c9053b0b4bd06406f and statement hashes 40d09a0d81b9e87e885bfba10315875c4b9effb706a92597c6552fdee6144594 and b136e583b3538f73613a8bc78e231099c8b6b039db60f875fa6e278541862296 reproduce; promotion is exact apart from namespace and placeholder count/delta are zero. wordInversionPairs encodes false-before-true positions, matching vertical-before-horizontal geometric inversions. The comparison is correctly oriented as exact equality from inversionPairs z to the Boolean inversion set of (wordPathEquiv p q).symm z and reuses the step-word representation. It proves no adjacent-swap cardinality relation, sign reversal, cancellation, chain, cross product or consumer theorem. Fixture and canonical compilation pass without warnings with standard-only axioms propext, Classical.choice and Quot.sound; focused build passes with only two existing SingularSubdivision warnings. Both ledgers and whitespace checks pass. No ledger edits."},
     :commit "3e8fc69e43030e5f285567fdccebb717507364e6",
     :changed-paths
     ["ConstructionTargets/ProductSimplexWordInversionPairs.lean"
@@ -48753,7 +48770,7 @@
     "Promoted exactly the Boolean word inversion-set definition and source-to-target equality with geometric inversionPairs, changing only the namespace from the probe to production, and documented the representation direction. No adjacent-swap cardinality, sign reversal, cancellation, chain, cross-product, consumer theorem or ledger edit was added.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexWordInversionPairs.lean"
     "ConstructionTargets/ProductSimplexWordInversionPairs.md"],
@@ -48904,7 +48921,7 @@
       "The sign definition uses geometric IsHorizontal inversion pairs, while the reviewed adjacent-swap API rewrites balanced Boolean-word coordinates; their exact finite-set equality is not public.",
       :other-consumers [:t96J06 :t97A04]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: shuffle-sign reversal under unequal adjacent path swaps",
