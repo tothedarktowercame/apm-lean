@@ -75954,8 +75954,54 @@
   {:consumer "t98A02",
    :stop-condition
    "Require the actual categorical degree maps and the banked signed convention. Reject assumed exactness, supportConnecting and ordinary excision with the false compact-complement containment premise.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Invoke Mathlib HomologySequence for shortComplex_shortExact to construct the genuine nonzero-capable connecting morphism and state the three adjacent homology exactness segments. Then transport homology objects and literal quotient-pair arrows through relativeComparisonIso for the compact-complement pairs. Localization monicity, dimension vanishing and a fundamental class remain unproved.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:piecesCoordinatesEquiv
+     "3cea9360bacba89711efccc1cbdc9ba914e259c940bbbbb10581042ba9dbd277",
+     :piecesCoordinatesEquiv_toLinearMap
+     "d19b8b9c6600d240023f70ba2cb9ec0db26b47f07b48d17be2533aa8ff8666ce",
+     :intersectionToPieces_degree_injective
+     "f29a21eb4f5ba9ca6c30eafb52c021b2e9b2cc72a0df88b57b214162f0b83bc1",
+     :relative_degree_exact
+     "f595c4006ea6452a4bc2d5d61cfd9726b31884e334cbfa797cd2599380f4ca0b",
+     :shortComplex_shortExact
+     "02846ba985ad0b90ad8d044afc8001c20adafe138b061fd21cca596706e3b8ed"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubcomplexRelativeDegreewiseExact.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeArrowComparison.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder, forbidden-declaration, statement-hash and consumer-count audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check --oneline --stat 11286dde", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r 11286dde",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :commit "11286dde",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubcomplexRelativeDegreewiseExact.lean",
+     :sha256
+     "90494ac4390196976e2ae6ef41450f86b3ccfbe544f8ecf54691577317d5418b",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact pinned fixture. Canonical source, committed blob and fixture are byte-identical at the recorded SHA256; the arrow-comparison dependency matches 5bf7935d92c88a99d7f4fe69bd7bd9f36fda69bfc0b80779093237cb72471d88. Fresh compilation succeeds without warnings and the four printed theorem audits use only propext, Classical.choice and Quot.sound. piecesCoordinatesEquiv supplies the genuine middle-object linear equivalence; its linear map is the banked piecesCoordinates map. The genuine categorical first map is injective, the two actual degree maps are exact with the banked signed convention, and shortComplex_shortExact follows from the degreewise criterion. The commit changes exactly the scoped file and the worktree is clean. Current comment-stripped consumer placeholder counts are t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5; no consumer was modified or claimed closed.",
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean"],
    :dag-node
