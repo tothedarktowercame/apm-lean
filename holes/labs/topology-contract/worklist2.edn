@@ -48511,18 +48511,98 @@
    :stop-condition
    "Promote only the compiled finite-set parity theorem converting a unit cardinality difference into opposite integer powers of -1. Do not prove the adjacent-swap inversion-cardinality relation, define cancellation pairings, construct chains or cross products, edit consumers or claim closure.",
    :evidence
-   {:fixture
+   {:placeholder-delta 0,
+    :residual
+    "Prove that inversionPairs for a path and its unequal-letter adjacentSwapPath have cardinalities differing by one, then unfold shuffleSign; internal-face cancellation and cross-product assembly remain for t03J05, t96J06 and t97A04.",
+    :gates
+    {:canonical-compile :pass,
+     :forbidden-declarations :pass,
+     :whitespace :pass,
+     :standard-only-axioms :pass,
+     :focused-build :pass,
+     :clean-worktree :pass,
+     :exact-theorem-promotion :pass,
+     :fixture-hash :pass,
+     :placeholder-scan :pass,
+     :warning-scan :pass,
+     :both-ledgers :pass,
+     :fixture-compile :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical direct compilation emitted no warnings. Focused build replayed only the existing SingularSubdivision warnings at lines 2960 and 3580."],
+    :statement-hashes
+    {"neg_one_pow_card_eq_neg_of_unit_difference"
+     "dd26e04e53be1c6b58d198cd6acf3e0dd25f71f5973b3376f7b7968dc8938936"},
+    :axioms
+    {:neg_one_pow_card_eq_neg_of_unit_difference
+     ["propext" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/ProductSimplexAdjacentSwapSignParity.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/ProductSimplexAdjacentSwapSignParity.lean > /tmp/ProductSimplexInversionCardParity.fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexInversionCardParity.lean > /tmp/ProductSimplexInversionCardParity.canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexInversionCardParity > /tmp/ProductSimplexInversionCardParity.build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n 'warning:|error:' /tmp/ProductSimplexInversionCardParity.fixture.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'warning:|error:' /tmp/ProductSimplexInversionCardParity.canonical.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, declaration-boundary, placeholder, forbidden-declaration and statement-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --cached --check and exact staged two-file scope assertion",
+      :exit 0}
+     {:cmd
+      "git commit -m \"Add finite inversion-cardinality parity theorem\"",
+      :exit 0}
+     {:cmd
+      "Post-commit clean-worktree, exact commit-scope and git diff --check assertions",
+      :exit 0}
+     {:cmd
+      "bb EDN parse of exact final receipt using clojure.edn/read-string",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "Initial post-commit Python assertion with mistyped anticipated full SHA",
+      :exit 1,
+      :finding
+      "The abbreviated commit prefix was correct, but the manually anticipated remaining SHA digits were wrong. Read the actual full SHA from git rev-parse HEAD and reran the clean-worktree, exact-scope and whitespace assertions successfully."}],
+    :commit "51daece76d6047f290f26395c730a54702983b0c",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexInversionCardParity.lean"
+     "ConstructionTargets/ProductSimplexInversionCardParity.md"],
+    :statement-hash-convention
+    "Exact UTF-8 declaration from theorem through type, excluding the space preceding := by.",
+    :scope-confirmation
+    "Exactly one public parity theorem and its documentation were added in the declared two-file scope; no adjacent-swap cardinality theorem, cancellation pairing, chain, cross-product, consumer or ledger change.",
+    :fixture
     {:path "/tmp/ProductSimplexAdjacentSwapSignParity.lean",
      :sha256
      "526dfd96d8032f5c3bed4d0bdfa255019f92b15b572d5c4014e6e8012b11a2b5",
      :placeholder-count 0},
-    :axioms
-    {:neg_one_pow_card_eq_neg_of_unit_difference
-     ["propext" "Quot.sound"]},
     :finding
-    "Compiled exact one-theorem prerequisite; no warning, placeholder, adjacent-swap cardinality, cancellation, chain, cross-product or consumer declaration is present."},
+    "Promoted exactly the single compiled finite-set parity theorem into its production namespace and documented its source-to-target orientation and bounded role. No adjacent-swap inversion-cardinality relation, cancellation pairing, chain, cross product, consumer theorem or ledger edit was added.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexInversionCardParity.lean"
     "ConstructionTargets/ProductSimplexInversionCardParity.md"],
