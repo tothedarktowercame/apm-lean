@@ -48654,19 +48654,106 @@
    :stop-condition
    "Promote only the Boolean word inversion-set definition and its exact equality with geometric inversionPairs. Do not prove adjacent-swap cardinality change, sign reversal, cancellation, chains or cross products, edit consumers or claim closure.",
    :evidence
-   {:fixture
-    {:path "/tmp/ProductSimplexWordInversionPairs.lean",
-     :sha256
-     "f36b2c1fe0b39939efb0b78d85d1b15b5b112aa0db21231c9053b0b4bd06406f",
-     :placeholder-count 0},
+   {:placeholder-delta 0,
+    :residual
+    "Prove that unequal adjacentSwapWord changes wordInversionPairs.card by one, then use adjacentSwapPath_word and neg_one_pow_card_eq_neg_of_unit_difference to prove shuffle-sign reversal; cancellation and cross-product assembly remain for t03J05, t96J06 and t97A04.",
+    :gates
+    {:canonical-compile :pass,
+     :forbidden-declarations :pass,
+     :exact-definition-and-theorem-promotion :pass,
+     :whitespace :pass,
+     :standard-only-axioms :pass,
+     :focused-build :pass,
+     :clean-worktree :pass,
+     :fixture-hash :pass,
+     :placeholder-scan :pass,
+     :warning-scan :pass,
+     :both-ledgers :pass,
+     :fixture-compile :pass,
+     :exact-two-file-scope :pass},
+    :outcome :done-unreviewed,
+    :warnings
+    ["Fixture and canonical direct compilation emitted no warnings. Focused build replayed only the existing SingularSubdivision warnings at lines 2960 and 3580."],
+    :statement-hashes
+    {"wordInversionPairs"
+     "40d09a0d81b9e87e885bfba10315875c4b9effb706a92597c6552fdee6144594",
+     "inversionPairs_eq_wordInversionPairs"
+     "b136e583b3538f73613a8bc78e231099c8b6b039db60f875fa6e278541862296"},
     :axioms
     {:wordInversionPairs ["propext" "Classical.choice" "Quot.sound"],
      :inversionPairs_eq_wordInversionPairs
      ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/ProductSimplexWordInversionPairs.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/ProductSimplexWordInversionPairs.lean > /tmp/ProductSimplexWordInversionPairs.fixture.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/ProductSimplexWordInversionPairs.lean > /tmp/ProductSimplexWordInversionPairs.canonical.log 2>&1",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.ProductSimplexWordInversionPairs > /tmp/ProductSimplexWordInversionPairs.build.log 2>&1",
+      :exit 0}
+     {:cmd
+      "rg -n 'warning:|error:' /tmp/ProductSimplexWordInversionPairs.fixture.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'warning:|error:' /tmp/ProductSimplexWordInversionPairs.canonical.log",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "Python exact-promotion, declaration-boundary, placeholder, forbidden-declaration, warning and statement-hash audit",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
+      "git diff --cached --check and exact staged two-file scope assertion",
+      :exit 0}
+     {:cmd "git commit -m \"Relate path inversions to Boolean words\"",
+      :exit 0}
+     {:cmd
+      "Post-commit clean-worktree, exact commit-scope and git diff --check assertions",
+      :exit 0}
+     {:cmd
+      "bb EDN parse of exact final receipt using clojure.edn/read-string",
+      :exit 0}],
+    :diagnostic-history
+    [{:cmd "Initial combined Python audit",
+      :exit 1,
+      :finding
+      "An over-compressed assertion reported no location. Separate read-only diagnostics confirmed exact fixture promotion, clean direct logs, two known build warnings and exact scope; the audit was rewritten with explicit checks and passed without changing source."}],
+    :representation
+    {:source
+     "The geometric inversionPairs finset of a maximal product-simplex path, defined using IsHorizontal.",
+     :target
+     "The wordInversionPairs finset of the Boolean balanced step word extracted by (wordPathEquiv p q).symm.",
+     :direction
+     "Exact equality from the source geometric inversion-pair representation to the target Boolean-word inversion-pair representation."},
+    :commit "3e8fc69e43030e5f285567fdccebb717507364e6",
+    :changed-paths
+    ["ConstructionTargets/ProductSimplexWordInversionPairs.lean"
+     "ConstructionTargets/ProductSimplexWordInversionPairs.md"],
+    :statement-hash-convention
+    "Exact UTF-8 declaration from def or theorem through type, excluding the space preceding := or := by.",
+    :scope-confirmation
+    "Exactly wordInversionPairs, inversionPairs_eq_wordInversionPairs and their documentation were added in the declared two-file scope; no adjacent-swap cardinality, sign reversal, cancellation, chain, cross-product, consumer or ledger change.",
+    :fixture
+    {:path "/tmp/ProductSimplexWordInversionPairs.lean",
+     :sha256
+     "f36b2c1fe0b39939efb0b78d85d1b15b5b112aa0db21231c9053b0b4bd06406f",
+     :placeholder-count 0},
     :finding
-    "Compiled exact source-to-target inversion-finset equality; no adjacent-swap cardinality, sign, cancellation, chain, cross-product or consumer declaration is present."},
+    "Promoted exactly the Boolean word inversion-set definition and source-to-target equality with geometric inversionPairs, changing only the namespace from the probe to production, and documented the representation direction. No adjacent-swap cardinality, sign reversal, cancellation, chain, cross-product, consumer theorem or ledger edit was added.",
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/ProductSimplexWordInversionPairs.lean"
     "ConstructionTargets/ProductSimplexWordInversionPairs.md"],
