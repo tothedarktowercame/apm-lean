@@ -49127,8 +49127,126 @@
      :review-outcomes]},
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred parity or orientation coherence, empty refill or owner-authorization stop.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-8",
+    :commands
+    [{:cmd
+      "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-foundational-programs.md, docs/TN-topology-build-loop-design.md and the reviewed dependency receipts",
+      :exit 0}
+     {:cmd
+      "Recount every DAG-named frozen consumer with block and line comments stripped",
+      :exit 0}
+     {:cmd
+      "Inspect ProductSimplexAdjacentSwapCommonFace, ProductSimplexAffineRealization, SingularSubdivision and the three product-homology consumers",
+      :exit 0}
+     {:cmd
+      "Verify the common-face and four sign-route implementation packets are done with PASS reviews",
+      :exit 0}
+     {:cmd
+      "Count ConstructionTargets Lean modules and inspect concurrent ConstructionTargets commits",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git diff --exit-code", :exit 0}
+     {:cmd "Parse exact receipt map with clojure.edn/read-string",
+      :exit 0}],
+    :measures
+    {:placeholder-delta -1,
+     :typed-residual-change
+     "The common deleted affine face and source-to-swapped shuffle-sign reversal are banked. The shared product route now begins with cancellation of the two signed deleted-face singular generators, followed by finite shuffle-boundary cancellation and cross-product assembly.",
+     :infrastructure-packets
+     {:before 890,
+      :after 897,
+      :total 7,
+      :product-route 4,
+      :concurrent 3},
+     :review-outcomes {:pass 5, :stop 0},
+     :census
+     {:named 58,
+      :existing 57,
+      :missing [:t93A05],
+      :open-consumers 31,
+      :zero-placeholder 26,
+      :within-two 21,
+      :placeholders 60}},
+    :finding
+    "Fresh comment-stripped census: 31 open consumers and 60 placeholders; a97J08's single placeholder closed concurrently, accounting for the -1 delta. The seven new ConstructionTargets modules split into four reviewed product-sign packets and three concurrent relative-chain packets; all four sign packets and the previously banked common-face packet have PASS reviews, with no STOP. No near-closure adapter is yet buildable from banked results: t03J05 still needs signed face cancellation, a finite shuffle-chain product, and its geometric uptake; t96J06 and t97A04 need the same product machinery before their own adapters. Open routes are: t00A03(2): translations -> endpoint perturbation -> compatible faces -> triangulation; t00J01(1): circle fold -> Klein geometry -> homology bridge -> adapter; t00J02(1): relative Mayer-Vietoris -> excision -> localization -> fundamental class; t01A02(3): H2 degree -> Lefschetz -> conjunction; t01A04(4): fundamental class -> cap/Thom comparison -> calculations; t01A05(1): compact-support Mayer-Vietoris -> localization -> adapter; t01A08(1): regularity conversion -> Sard -> adapter; t01J01(3): translations -> endpoint control -> triangulation -> theorem; t01J04(1): regular preimage -> countability/atlas applicability -> theorem; t01J06(3): sphere moments -> normalization -> Stokes -> conjunction; t02A05(2): S2 flux -> normalization -> integral/minimum; t02A07(3): compact-support Mayer-Vietoris -> localization -> fundamental class; t02A08(1): local comparison -> normalization -> theorem; t03J02(2): null winding -> collar/Schoenflies -> gluing -> theorem; t03J04(1): torus homology -> finite-cover Euler comparison -> theorem; t03J05(1): signed common-face cancellation -> finite shuffle cross-product chain -> odd-intersection and ambient-homotopy uptake; t91J05(3): translations -> endpoint control -> compatible faces -> result; t92J05(3): antipodal/genus-two bridges -> classification -> assembly; t92J06(1): covering data -> quotient adapter -> theorem; t94A06(1): regular preimage/translation -> applicability -> adapter; t94A10(3): S2 moments -> normalization -> nonexactness; t94J09(1): translations -> endpoint perturbation -> intersection adapter; t95J05(1): S3 moment -> mass normalization -> integral uptake; t95J06(2): torus quotient -> classification -> result; t96J06(2): signed common-face cancellation -> finite shuffle cross-product chain -> mod-two product class/self-intersection adapter; t97A01(1): cover transfer -> finite-cover Euler comparison -> theorem; t97A04(4): signed common-face cancellation -> finite shuffle cross-product chain -> torus H0/H1/H2 generators and induced-map calculations; t97J05(5): compact-support Mayer-Vietoris -> localization -> fundamental class -> assembly; t98A01(1): five-torsion -> polygon genus -> Euler comparison -> conjunction; t98A02(1): relative Mayer-Vietoris -> excision -> localization monicity -> fundamental class; t99J03(1): endpoint perturbation -> coverage -> compatible faces -> triangulation. The concrete singular-chain API already provides singularGenerator and singularSimplexOfContinuousMap, so the smallest shared missing theorem is the two-term cancellation obtained by rewriting the affine face and the sign. Whole boundary sums, pairing involutions, cross products and consumer uptake are deferred.",
+    :replacement-items
+    [{:consumer :t03J05,
+      :stop-condition
+      "Prove only cancellation of the two singular-chain generators attached to the common deleted affine face of an unequal adjacent swap. Do not define a global face pairing, sum over all paths, construct a cross product, edit consumers or claim closure.",
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PRODUCT HOMOLOGY: signed singular-generator cancellation for adjacent swaps",
+      :acceptance
+      {:axioms :standard-only,
+       :hypotheses
+       "Use MaximalPath p q, h : n + 1 = p + q, i : Fin n, unequal transported consecutive balanced-word letters, adjacentSwap_affine_face, adjacentSwap_shuffleSign and the concrete singularGenerator/singularSimplexOfContinuousMap API.",
+       :route-step
+       "Supplies the local signed-face cancellation needed by the sole t03J05 placeholder and the product/cancellation placeholders of t96J06 and t97A04, immediately before cancellation of the finite shuffle-boundary sum.",
+       :probe
+       "Build a placeholder-free Lean fixture proving that the shuffleSign-weighted singular generator of the source deleted affine face plus the shuffleSign-weighted singular generator of the swapped deleted affine face is zero in the degree-n integer singular-chain group of the product simplex. GO requires the complete compiled two-term equation. REVISE names exactly one compiled generator or coefficient-action prerequisite. STOP names an exact type, coefficient, orientation or representation boundary.",
+       :consumer-equation
+       "After deleting the intermediate corner, the source and adjacent-swap affine maps are equal while their shuffle signs are negatives, so their two integer singular-chain generators add to zero.",
+       :consumer-residual
+       "Lift the local equation to cancellation of all internal terms in the finite shuffle-boundary sum, then construct the required cross-product chain and frozen adapters.",
+       :gates
+       ["Import and reuse ProductSimplexAdjacentSwapCommonFace, ProductSimplexAdjacentSwapSignReversal and SingularSubdivision."
+        "State the unequal-letter hypothesis at the exact transported balanced-word coordinates."
+        "Use the actual singularGenerator and singularSimplexOfContinuousMap representation and prove the source-plus-swapped equation in that order."
+        "Use no sorry, axiom, theorem-as-hypothesis, global pairing, path sum, cross product or consumer-source edit."
+        "Run lake env lean, standard-only axiom audits, placeholder and warning scans, both ledger validators and whitespace checks."
+        "Confirm exact implementation scope from the compiled fixture."]},
+      :id
+      :oriented-checkpoint82-product-simplex-adjacent-swap-singular-face-cancellation-1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:oriented-checkpoint81-product-simplex-adjacent-swap-sign-reversal-1
+       :oriented-checkpoint80-product-simplex-adjacent-swap-common-face-1],
+      :current-residual
+      "The common affine face and sign reversal are public, but their two weighted copies have not been combined in the concrete integer singular-chain group.",
+      :other-consumers [:t96J06 :t97A04]}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "No unresolved STOP retries, duplicate concurrent work, inferred cancellation or orientation coherence, empty refill or owner-authorization stop.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node
+      "PORTFOLIO POLICY: adjacent-swap singular-face cancellation and renewed consumer eligibility",
+      :acceptance
+      {:strategy
+       "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+       :stop-condition
+       "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+      :id
+      :oriented-checkpoint83-singular-face-cancellation-and-consumer-refill-1,
+      :kind :strategy-checkpoint,
+      :depends-on
+      [:oriented-checkpoint82-product-simplex-adjacent-swap-singular-face-cancellation-1],
+      :current-residual
+      "Measure local singular-face cancellation separately from finite path-sum cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+      :other-consumers []}],
+    :author "topo-8",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: adjacent-swap sign reversal and renewed consumer eligibility",
@@ -49145,6 +49263,73 @@
     :oriented-checkpoint81-adjacent-swap-common-faces-and-consumer-refill-1],
    :current-residual
    "Measure sign reversal separately from internal-face cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
+   :other-consumers []}
+  {:consumer :t03J05,
+   :stop-condition
+   "Prove only cancellation of the two singular-chain generators attached to the common deleted affine face of an unequal adjacent swap. Do not define a global face pairing, sum over all paths, construct a cross product, edit consumers or claim closure.",
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PRODUCT HOMOLOGY: signed singular-generator cancellation for adjacent swaps",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use MaximalPath p q, h : n + 1 = p + q, i : Fin n, unequal transported consecutive balanced-word letters, adjacentSwap_affine_face, adjacentSwap_shuffleSign and the concrete singularGenerator/singularSimplexOfContinuousMap API.",
+    :route-step
+    "Supplies the local signed-face cancellation needed by the sole t03J05 placeholder and the product/cancellation placeholders of t96J06 and t97A04, immediately before cancellation of the finite shuffle-boundary sum.",
+    :probe
+    "Build a placeholder-free Lean fixture proving that the shuffleSign-weighted singular generator of the source deleted affine face plus the shuffleSign-weighted singular generator of the swapped deleted affine face is zero in the degree-n integer singular-chain group of the product simplex. GO requires the complete compiled two-term equation. REVISE names exactly one compiled generator or coefficient-action prerequisite. STOP names an exact type, coefficient, orientation or representation boundary.",
+    :consumer-equation
+    "After deleting the intermediate corner, the source and adjacent-swap affine maps are equal while their shuffle signs are negatives, so their two integer singular-chain generators add to zero.",
+    :consumer-residual
+    "Lift the local equation to cancellation of all internal terms in the finite shuffle-boundary sum, then construct the required cross-product chain and frozen adapters.",
+    :gates
+    ["Import and reuse ProductSimplexAdjacentSwapCommonFace, ProductSimplexAdjacentSwapSignReversal and SingularSubdivision."
+     "State the unequal-letter hypothesis at the exact transported balanced-word coordinates."
+     "Use the actual singularGenerator and singularSimplexOfContinuousMap representation and prove the source-plus-swapped equation in that order."
+     "Use no sorry, axiom, theorem-as-hypothesis, global pairing, path sum, cross product or consumer-source edit."
+     "Run lake env lean, standard-only axiom audits, placeholder and warning scans, both ledger validators and whitespace checks."
+     "Confirm exact implementation scope from the compiled fixture."]},
+   :id
+   :oriented-checkpoint82-product-simplex-adjacent-swap-singular-face-cancellation-1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:oriented-checkpoint81-product-simplex-adjacent-swap-sign-reversal-1
+    :oriented-checkpoint80-product-simplex-adjacent-swap-common-face-1
+    :oriented-checkpoint82-adjacent-swap-signs-and-consumer-refill-1],
+   :current-residual
+   "The common affine face and sign reversal are public, but their two weighted copies have not been combined in the concrete integer singular-chain group.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "No unresolved STOP retries, duplicate concurrent work, inferred cancellation or orientation coherence, empty refill or owner-authorization stop.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node
+   "PORTFOLIO POLICY: adjacent-swap singular-face cancellation and renewed consumer eligibility",
+   :acceptance
+   {:strategy
+    "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
+    :stop-condition
+    "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :id
+   :oriented-checkpoint83-singular-face-cancellation-and-consumer-refill-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:oriented-checkpoint82-product-simplex-adjacent-swap-singular-face-cancellation-1
+    :oriented-checkpoint82-adjacent-swap-signs-and-consumer-refill-1],
+   :current-residual
+   "Measure local singular-face cancellation separately from finite path-sum cancellation, cross products, preserved boundaries, concurrent work and frozen uptake; rerank every open consumer route.",
    :other-consumers []}
   {:consumer :t03J05,
    :stop-condition
