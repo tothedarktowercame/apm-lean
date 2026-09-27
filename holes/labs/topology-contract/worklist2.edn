@@ -49044,6 +49044,24 @@
       "bb EDN parse of exact final receipt using clojure.edn/read-string",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790552452795-25861-2acfd244",
+     :commands
+     ["git show/diff-tree 01d80fc54c18349c62c00b9a30b2d4a01d62f9a1"
+      "sha256sum /tmp/ProductSimplexAdjacentSwapSignReversal.lean"
+      "Python recorded-blob audit of exact promotion, four statement hashes, placeholders, forbidden declarations, scope and canonical identity"
+      "EDN verification that all four dependencies are done with PASS review"
+      "lake env lean /tmp/ProductSimplexAdjacentSwapSignReversal.lean"
+      "lake env lean ConstructionTargets/ProductSimplexAdjacentSwapSignReversal.lean"
+      "lake build ConstructionTargets.ProductSimplexAdjacentSwapSignReversal"
+      "warning and standard-only axiom log audits"
+      "bb worklist_check.bb on both ledgers"
+      "git diff --check 01d80fc5^ 01d80fc5"
+      "clojure.edn/read-string exact receipt validation"],
+     :finding
+     "PASS: independent review of topo-6 implementation. Commit 01d80fc5 adds exactly ProductSimplexAdjacentSwapSignReversal.lean and its documentation, containing one public theorem and three private transport helpers. Frozen fixture SHA256 81aa83b9c510892e47aac328a76ec522751fb0730d6b50c8d7371ef59614ab58 and all four statement hashes reproduce; promotion is exact apart from namespace and placeholder count/delta are zero. All four dependencies are done with PASS review. The helpers preserve inversion-cardinality through finCongr, identify transported balancedAdjacentSwap with adjacentSwapWord, and lift the reviewed unit-cardinality disjunction. The public theorem uses the exact transported unequal-letter coordinates, rewrites both geometric inversion sets through the reviewed word representation, and is correctly oriented as shuffleSign (adjacentSwapPath z h i) = -shuffleSign z. Common-face equality remains a reviewed downstream companion and is not conflated with the sign proof. No pairing, cancellation, chain, cross product or consumer theorem is added. Fixture and canonical compilation pass without warnings with standard-only axioms propext, Classical.choice and Quot.sound; focused build passes with only two existing SingularSubdivision warnings. Both ledgers and whitespace checks pass. No ledger edits."},
     :commit "01d80fc54c18349c62c00b9a30b2d4a01d62f9a1",
     :changed-paths
     ["ConstructionTargets/ProductSimplexAdjacentSwapSignReversal.lean"
@@ -49062,7 +49080,7 @@
     "Promoted exactly shuffleSign_adjacentSwapPath and its three private finCongr and balanced-word transport helpers, changing only the namespace from probe to production. The theorem is oriented from the swapped path sign to the negative source sign under the exact transported unequal-letter hypothesis. No face pairing, cancellation, chain, cross-product, consumer theorem or ledger edit was added.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexAdjacentSwapSignReversal.lean"
     "ConstructionTargets/ProductSimplexAdjacentSwapSignReversal.md"],
@@ -49110,7 +49128,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred parity or orientation coherence, empty refill or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: adjacent-swap sign reversal and renewed consumer eligibility",
