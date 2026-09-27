@@ -48892,6 +48892,23 @@
       "bb EDN parse of exact final receipt using clojure.edn/read-string",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790551980276-25840-4c4a9f52",
+     :commands
+     ["git show/diff-tree 6eeb9bc49f7a63ae4bb7e5fafeea182437cd3c43"
+      "sha256sum /tmp/ProductSimplexAdjacentWordInversionCard.lean"
+      "Python recorded-blob audit of exact promotion, five statement hashes, placeholders, forbidden declarations, scope and canonical identity"
+      "lake env lean /tmp/ProductSimplexAdjacentWordInversionCard.lean"
+      "lake env lean ConstructionTargets/ProductSimplexAdjacentWordInversionCard.lean"
+      "lake build ConstructionTargets.ProductSimplexAdjacentWordInversionCard"
+      "warning and standard-only axiom log audits"
+      "bb worklist_check.bb on both ledgers"
+      "git diff --check 6eeb9bc4^ 6eeb9bc4"
+      "clojure.edn/read-string exact receipt validation"],
+     :finding
+     "PASS: independent review of topo-6 implementation. Commit 6eeb9bc4 adds exactly ProductSimplexAdjacentWordInversionCard.lean and its documentation, containing one public theorem and four private declarations. Frozen fixture SHA256 b77ffb37cde2b9851964bbd70fc71665e10e746eb80fc80681578f017ec2e208 and all five recorded declaration hashes reproduce; promotion is exact apart from namespace and placeholder count/delta are zero. The private bijection swaps both coordinates and matches erased inversion sets away from the special adjacent pair. For false,true the original contains that pair and swapped-cardinality plus one equals source; for true,false the swapped word contains it and source plus one equals target, exactly matching the theorem disjunction. The module proves no path sign reversal, cancellation, chain, cross product or consumer theorem. Fixture and canonical compilation pass without warnings with standard-only axioms propext, Classical.choice and Quot.sound; focused build passes with only two existing SingularSubdivision warnings. Both ledgers and whitespace checks pass. No ledger edits."},
     :commit "6eeb9bc49f7a63ae4bb7e5fafeea182437cd3c43",
     :changed-paths
     ["ConstructionTargets/ProductSimplexAdjacentWordInversionCard.lean"
@@ -48909,7 +48926,7 @@
     "Promoted exactly the unequal-adjacent Boolean-word inversion-cardinality theorem with its private swapPair, swap_order_of_ne, swapPair_ne_special and erased_card_eq helpers, changing only the namespace from probe to production. Documentation records the erased-special-pair bijection. No path sign, cancellation, chain, cross-product, consumer theorem or ledger edit was added.",
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/ProductSimplexAdjacentWordInversionCard.lean"
     "ConstructionTargets/ProductSimplexAdjacentWordInversionCard.md"],
@@ -49063,7 +49080,7 @@
      "The reviewed geometric-to-word equality and unit-cardinality parity theorem leave one finite combinatorial step. The compiled fixture proves it directly: swapping the adjacent indices bijects the source and target inversion sets after erasing the special adjacent pair; unequal Boolean letters make that pair belong to exactly one inversion set. Therefore the two word-inversion cardinalities differ by exactly one. The remaining re-probe work is transport through finCongr h and balancedAdjacentSwap/adjacentSwapPath_word, followed by the reviewed parity theorem.",
      :seat "topo-8"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: shuffle-sign reversal under unequal adjacent path swaps",
