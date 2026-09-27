@@ -76073,6 +76073,18 @@
       :exit 0}
      {:cmd "git status --short --untracked-files=no", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790551613928-25833-39d309b5",
+     :commands
+     ["git show --check a63abe66aa5154f9d4abd7c51bdda0c9846284e1"
+      "git diff-tree --no-commit-id --name-only -r a63abe66aa5154f9d4abd7c51bdda0c9846284e1"
+      "git merge-base --is-ancestor a63abe66aa5154f9d4abd7c51bdda0c9846284e1 HEAD"
+      "python3 committed-blob fixture/dependency SHA256, frozen-statement, forbidden-token and comment-stripped placeholder audit"
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeHomologySequence.lean"],
+     :finding
+     "Independent reviewer topo-3 (codex-3), distinct from author topo-2. PASS for a63abe66aa5154f9d4abd7c51bdda0c9846284e1: exact one-file scope; committed source, canonical source and pinned fixture are byte-identical at SHA256 6b990aaff7c21e2b8fffa09e46140570634e83a30834aa7ba3834dde40a66d9c; degreewise-short-exact dependency matches 90494ac4390196976e2ae6ef41450f86b3ccfbe544f8ecf54691577317d5418b; all four frozen statement hashes reproduce; target has zero placeholders and no forbidden declaration or supportConnecting token. Fresh compilation exits 0 without warnings and all four declarations use only propext, Classical.choice and Quot.sound. connecting is Mathlib ShortExact.delta from union-relative homology in degree n+1 to intersection-relative homology in degree n. The three exactness statements have the correct adjacent orientation: intersection(n+1) to pieces(n+1) to union(n+1), pieces(n+1) to union(n+1) to connecting, and connecting to intersection(n) to pieces(n), using the genuine categorical arrows. No zero claim, literal compact-complement transport, localization, dimension-vanishing or fundamental-class claim is made. Committed consumer counts reproduce: t98A02=1, t00J02=1, t01A05=1, t02A07=3, t97J05=5. Ledger unchanged."},
     :commit "a63abe66",
     :changed-paths
     ["ConstructionTargets/CoefficientSubcomplexRelativeHomologySequence.lean"],
@@ -76085,7 +76097,7 @@
     "Promoted the exact pinned fixture. Canonical source, committed blob and fixture are byte-identical at the recorded SHA256; the degreewise-short-exact dependency matches 90494ac4390196976e2ae6ef41450f86b3ccfbe544f8ecf54691577317d5418b. Fresh compilation succeeds without target warnings and all four declarations use only propext, Classical.choice and Quot.sound. connecting is Mathlib HomologySequence's delta from the reviewed genuine ShortExact object and is not identified with supportConnecting or claimed zero. The three adjacent exactness theorems use the actual intersectionToPiecesRelative and piecesToUnionRelative homology maps and the genuine connecting map. The commit changes exactly the scoped file; tracked worktree is clean. Current comment-stripped consumer placeholder counts are t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5; no consumer was modified or claimed closed.",
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeHomologySequence.lean"],
    :dag-node
@@ -76172,7 +76184,7 @@
      "Compiled exactly one bounded prerequisite using Mathlib's HomologySequence on the reviewed genuine relative quotient short complex. connecting is the snake-lemma connecting morphism from homology of the union quotient in degree n+1 to homology of the intersection quotient in degree n; it is not the rejected supportConnecting composite and is not forced to be zero. exact_intersection_pieces_union, exact_pieces_union_connecting and exact_union_connecting_intersection_pieces are the three adjacent exactness segments, stated with the genuine categorical intersectionToPiecesRelative and piecesToUnionRelative arrows. The result preserves arbitrary declared simplicial sets, subcomplexes, commutative rings and natural degrees. No repository source or ledger changed. The short-exact dependency and singleton ordinary-excision counterexample hashes reproduce. Current comment-stripped consumer placeholders are t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5. Only transport through the reviewed relativeComparisonIso and verification of the literal compact-complement arrow squares remain on this shared route.",
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
