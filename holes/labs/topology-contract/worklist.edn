@@ -75893,6 +75893,19 @@
      "Explicit module maps infQuotientDiagonal and piecesToSupQuotient for the left and right component ranges",
      :direction
      "Exact commuting linear-map equalities from the source categorical arrows through intersectionInfEquiv, piecesCoordinates and unionSupEquiv to the target explicit diagonal and signed quotient maps; bijectivity of piecesCoordinates is not asserted by this fixture."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790550233544-25778-cbc4d8ba",
+     :commands
+     ["git show --check 426495f2d13dab74e37e51c908242e8433dc72bc"
+      "git diff-tree --no-commit-id --name-only -r 426495f2d13dab74e37e51c908242e8433dc72bc"
+      "git merge-base --is-ancestor 426495f2d13dab74e37e51c908242e8433dc72bc HEAD"
+      "python3 committed-blob fixture/dependency SHA256, frozen-statement and comment-stripped placeholder audit"
+      "cmp -s ConstructionTargets/CoefficientSubcomplexRelativeDegreeArrowComparison.lean /tmp/CoefficientSubcomplexRelativeDegreeArrowComparison.lean"
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeArrowComparison.lean"],
+     :finding
+     "Independent reviewer topo-3 (codex-3), distinct from author topo-2. PASS for 426495f2d13dab74e37e51c908242e8433dc72bc: exact one-file scope; committed source, canonical source and pinned fixture are byte-identical at SHA256 5bf7935d92c88a99d7f4fe69bd7bd9f36fda69bfc0b80779093237cb72471d88; range-lattice dependency matches 769cabc4ae6679d1de55d19e3e3d10707df1f8b5cfc224685d186458240ed28a; all six frozen statement hashes reproduce; target has zero placeholders. Fresh compilation exits 0 without warnings and reports only propext, Classical.choice and Quot.sound. The four component equalities orient genuine categorical arrows toward ordinary quotient inclusions. The assembled first arrow is sent through piecesCoordinates to infQuotientDiagonal; the assembled second arrow is sent through unionSupEquiv to piecesToSupQuotient with left-minus-right convention. Arbitrary simplicial sets, subcomplexes, commutative rings and degrees remain general; middle-coordinate bijectivity and downstream exactness are not claimed. Committed consumer counts reproduce: t98A02=1, t00J02=1, t01A05=1, t02A07=3, t97J05=5. Ledger unchanged."},
     :commit "426495f2",
     :changed-paths
     ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeArrowComparison.lean"],
@@ -75906,7 +75919,7 @@
     "Promoted the exact pinned fixture. The committed source and fixture are byte-identical at the recorded SHA256; the range-lattice dependency matches 769cabc4ae6679d1de55d19e3e3d10707df1f8b5cfc224685d186458240ed28a. Fresh Lean compilation succeeds with no warnings and all six audited theorems use only propext, Classical.choice and Quot.sound. The commit changes exactly the scoped file and the worktree is clean. The four component squares and two assembled comparisons use the genuine categorical arrows and the explicit diagonal/signed-difference conventions. No bijectivity, exactness, connecting map, pair transport, localization, dimension-vanishing or fundamental-class claim is made. Current comment-stripped consumer placeholder counts are t98A02=1, t00J02=1, t01A05=1, t02A07=3, t97J05=5; no consumer was modified.",
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeArrowComparison.lean"],
    :dag-node
@@ -76037,7 +76050,7 @@
      "Compiled one bounded prerequisite: four degreewise quotient-map commuting squares and the two assembled arrow comparisons. intersectionToPieces_degree identifies the genuine first arrow with infQuotientDiagonal after the endpoint equivalence and middle coordinate map; piecesToUnion_degree identifies the genuine second arrow with piecesToSupQuotient after the union equivalence. These are linear-map equalities for arbitrary declared simplicial sets, subcomplexes, commutative rings and natural degrees. No repository source or ledger was edited. The singleton ordinary-excision counterexample hash is unchanged. Current consumer placeholders: t98A02=1, t00J02=1, t00A04=0, t01A05=1, t02A07=3, t97J05=5; the already closed t00A04 is not counted as an open prerequisite consumer.",
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
