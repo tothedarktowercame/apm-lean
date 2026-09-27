@@ -76166,6 +76166,18 @@
      "Literal coefficient relative chain complexes for the pairs (X,A) and (X,A intersection B)",
      :direction
      "Canonical cokernel maps from the source categorical quotient representations to the target literal topological-pair representations, induced by exact commuting chain-map squares whose ambient component is the identity."},
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790552279628-25851-119e37cb",
+     :commands
+     ["git show --check c07c4369f92310222902f8e6328104e45ec3be2c"
+      "git diff-tree --no-commit-id --name-only -r c07c4369f92310222902f8e6328104e45ec3be2c"
+      "git merge-base --is-ancestor c07c4369f92310222902f8e6328104e45ec3be2c HEAD"
+      "python3 committed-blob fixture/dependency SHA256, frozen-statement and comment-stripped placeholder audit"
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeLiteralComparison.lean"],
+     :finding
+     "Independent reviewer topo-3 (codex-3), distinct from author topo-2. PASS for c07c4369f92310222902f8e6328104e45ec3be2c: exact one-file scope; committed source, canonical source and pinned fixture are byte-identical at SHA256 28db5692189c6c94505832a9c1811a4f613d57dbc1161d80de4bbcee20261c62; homology-sequence dependency matches 6b990aaff7c21e2b8fffa09e46140570634e83a30834aa7ba3834dde40a66d9c; all five frozen statement hashes reproduce; target has zero placeholders. Fresh compilation exits 0 without warnings and all four printed declaration audits use only propext, Classical.choice and Quot.sound. rangeRelative_square and intersectionRelative_square use identity on ambient chains. The range map uses the ambient-range chain isomorphism forward; the intersection map reverses the literal-intersection-to-infimum chain isomorphism and then maps forward to literal intersection chains. Thus both cokernel maps have the recorded direction from categorical quotient representations to literal relative-chain complexes. The declarations do not claim homology isomorphisms, compact-complement arrow compatibility, connecting transport, localization, dimension vanishing or a fundamental class. Committed consumer counts reproduce: t98A02=1, t00J02=1, t01A05=1, t02A07=3, t97J05=5. Ledger unchanged."},
     :commit "c07c4369",
     :changed-paths
     ["ConstructionTargets/CoefficientSubcomplexRelativeLiteralComparison.lean"],
@@ -76178,7 +76190,7 @@
     "Promoted the exact pinned fixture. Canonical source, committed blob and fixture are byte-identical at the recorded SHA256; the genuine relative homology-sequence dependency matches 6b990aaff7c21e2b8fffa09e46140570634e83a30834aa7ba3834dde40a66d9c. Fresh compilation succeeds without target warnings and all four printed declarations use only propext, Classical.choice and Quot.sound. rangeRelative_square and intersectionRelative_square are exact commuting chain-map squares with identity ambient component; their cokernel maps point from the categorical quotient representations to the literal relative-chain complexes. No homology-isomorphism, compact-complement arrow compatibility, connecting transport, localization, dimension-vanishing or fundamental-class claim is made. The commit changes exactly the scoped file and the tracked worktree is clean. Current comment-stripped consumer placeholder counts are t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5; no consumer was modified or claimed closed.",
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeLiteralComparison.lean"],
    :dag-node
@@ -76295,7 +76307,7 @@
      "Compiled exactly one bounded representation prerequisite. rangeRelative_square and intersectionRelative_square identify the ambient-range inclusion and infimum-range inclusion with the literal subspace inclusions through canonical chain isomorphisms. rangeRelativeCokernelMap and intersectionRelativeCokernelMap are the induced maps from the genuine categorical quotient complexes to the literal relative complexes. The fixture is placeholder-free, uses standard axioms, and neither invokes supportConnecting nor ordinary excision. No repository source or ledger changed. The promoted HomologySequence dependency and singleton ordinary-excision counterexample hashes reproduce. Current comment-stripped consumer placeholders are t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5.",
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
