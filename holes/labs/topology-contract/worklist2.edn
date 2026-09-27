@@ -48652,38 +48652,92 @@
    :other-consumers [:t96J06 :t97A04]}
   {:consumer :t03J05,
    :stop-condition
+   "Promote only the Boolean word inversion-set definition and its exact equality with geometric inversionPairs. Do not prove adjacent-swap cardinality change, sign reversal, cancellation, chains or cross products, edit consumers or claim closure.",
+   :evidence
+   {:fixture
+    {:path "/tmp/ProductSimplexWordInversionPairs.lean",
+     :sha256
+     "f36b2c1fe0b39939efb0b78d85d1b15b5b112aa0db21231c9053b0b4bd06406f",
+     :placeholder-count 0},
+    :axioms
+    {:wordInversionPairs ["propext" "Classical.choice" "Quot.sound"],
+     :inversionPairs_eq_wordInversionPairs
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :finding
+    "Compiled exact source-to-target inversion-finset equality; no adjacent-swap cardinality, sign, cancellation, chain, cross-product or consumer declaration is present."},
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/ProductSimplexWordInversionPairs.lean"
+    "ConstructionTargets/ProductSimplexWordInversionPairs.md"],
+   :dag-node
+   "PRODUCT HOMOLOGY: geometric-to-word inversion-pair representation",
+   :acceptance
+   {:axioms :standard-only,
+    :hypotheses
+    "Use a Boolean word w : Fin m → Bool for wordInversionPairs and a MaximalPath p q for the exact comparison through (wordPathEquiv p q).symm z.",
+    :route-step
+    "Exposes the finite Boolean inversion set whose adjacent-swap cardinality controls shuffleSign for the sole t03J05 placeholder and the product/cancellation placeholders of t96J06 and t97A04.",
+    :implementation
+    "Promote the exact compiled wordInversionPairs definition and inversionPairs_eq_wordInversionPairs theorem and document the representation direction.",
+    :declarations
+    ["wordInversionPairs" "inversionPairs_eq_wordInversionPairs"],
+    :consumer-equation
+    "The geometric inversionPairs z is exactly equal to wordInversionPairs of the balanced step word (wordPathEquiv p q).symm z.",
+    :consumer-residual
+    "Prove unequal adjacentSwapWord changes wordInversionPairs.card by one, then use adjacentSwapPath_word and neg_one_pow_card_eq_neg_of_unit_difference to prove shuffle-sign reversal.",
+    :gates
+    ["Verify fixture SHA256 f36b2c1fe0b39939efb0b78d85d1b15b5b112aa0db21231c9053b0b4bd06406f before editing."
+     "Add exactly wordInversionPairs and inversionPairs_eq_wordInversionPairs plus their documentation in the two-file scope."
+     "Reuse stepWord_eq_true_iff and the reviewed wordPathEquiv representation."
+     "Compile fixture and canonical module and reproduce standard-only axiom audits."
+     "Run placeholder, warning, forbidden-declaration, whitespace, exact-scope and both-ledger checks."
+     "Commit the scoped implementation and confirm no adjacent-swap cardinality, sign reversal, cancellation, chain, cross-product or consumer theorem is added."]},
+   :representation
+   {:source
+    "The geometric inversionPairs finset of a maximal product-simplex path, defined using IsHorizontal.",
+    :target
+    "The wordInversionPairs finset of the Boolean balanced step word extracted by (wordPathEquiv p q).symm.",
+    :direction
+    "Exact equality from the source geometric inversion-pair representation to the target Boolean-word inversion-pair representation."},
+   :id :oriented-checkpoint81-product-simplex-word-inversion-pairs-1,
+   :kind :representation-comparison,
+   :depends-on [],
+   :current-residual
+   "The sign definition uses geometric IsHorizontal inversion pairs, while the reviewed adjacent-swap API rewrites balanced Boolean-word coordinates; their exact finite-set equality is not public.",
+   :other-consumers [:t96J06 :t97A04]}
+  {:consumer :t03J05,
+   :stop-condition
    "Prove only that the reviewed adjacentSwapPath reverses shuffleSign when the two transported consecutive balanced-word letters are unequal. Do not define face pairings, prove cancellation, construct chains or cross products, edit consumers or claim closure.",
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/ProductSimplexAdjacentSwapSignParity.lean",
+     {:path "/tmp/ProductSimplexWordInversionPairs.lean",
       :sha256
-      "526dfd96d8032f5c3bed4d0bdfa255019f92b15b572d5c4014e6e8012b11a2b5",
+      "f36b2c1fe0b39939efb0b78d85d1b15b5b112aa0db21231c9053b0b4bd06406f",
       :placeholder-count 0,
-      :declarations ["neg_one_pow_card_eq_neg_of_unit_difference"]},
+      :declarations
+      ["wordInversionPairs" "inversionPairs_eq_wordInversionPairs"]},
      :commands
      [{:cmd
-       "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and the reviewed checkpoint81 dependency receipt",
+       "Read TOPOLOGY-DEPENDENCY-DAG.md, docs/TN-topology-closure-experiments.md, docs/TN-topology-build-loop-design.md and both reviewed dependency receipts",
        :exit 0}
       {:cmd
-       "Search Mathlib and ConstructionTargets for inversion-cardinality and adjacent-swap sign theorems",
+       "Verify oriented-checkpoint81-product-simplex-inversion-card-parity-1 and oriented-checkpoint81-adjacent-swap-common-faces-and-consumer-refill-1 are done with PASS reviews",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/ProductSimplexAdjacentSwapSignParity.lean > /tmp/ProductSimplexAdjacentSwapSignParity.log 2>&1",
+       "lake env lean /tmp/ProductSimplexWordInversionPairs.lean > /tmp/ProductSimplexWordInversionPairs.log 2>&1",
        :exit 0}
       {:cmd
-       "comment-stripped placeholder and exact one-theorem scan of /tmp/ProductSimplexAdjacentSwapSignParity.lean",
+       "comment-stripped placeholder and exact declaration scan of /tmp/ProductSimplexWordInversionPairs.lean",
        :exit 0}
       {:cmd
-       "rg -n 'warning:|error:' /tmp/ProductSimplexAdjacentSwapSignParity.log",
+       "rg -n 'warning:|error:' /tmp/ProductSimplexWordInversionPairs.log",
        :exit 1,
        :expected-exit 1}
-      {:cmd "sha256sum /tmp/ProductSimplexAdjacentSwapSignParity.lean",
-       :exit 0}
-      {:cmd
-       "Verify oriented-checkpoint81-adjacent-swap-common-faces-and-consumer-refill-1 is done with PASS review",
+      {:cmd "sha256sum /tmp/ProductSimplexWordInversionPairs.lean",
        :exit 0}
       {:cmd
        "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -48696,62 +48750,74 @@
       {:cmd "Parse exact receipt map with clojure.edn/read-string",
        :exit 0}],
      :finding
-     "The banked APIs identify the two swapped letters and define shuffleSign as (-1) raised to inversionPairs.card, but neither Mathlib nor ConstructionTargets proves the finite inversion-cardinality change for an unequal adjacent Boolean swap. The compiled fixture proves the exact arithmetic endpoint: finite sets whose cardinalities differ by one have opposite (-1)-powers. After this theorem is promoted, the re-probe has one typed residual: prove that inversionPairs z and inversionPairs (adjacentSwapPath z h i) have cardinalities differing by one from the reviewed coordinate cases.",
+     "The reviewed unit-cardinality parity theorem discharges the arithmetic endpoint. The next obstruction is representational: inversionPairs is defined through geometric IsHorizontal predicates, while balancedAdjacentSwap exposes Boolean-word coordinates. The compiled fixture defines the corresponding Boolean word inversion set and proves exact equality with inversionPairs of a maximal path. Once promoted, the sole residual is the finite combinatorial theorem that an unequal adjacentSwapWord changes this word inversion-set cardinality by exactly one; adjacentSwapPath_word and the reviewed coordinate cases then transport it to the required sign equation.",
      :axioms
-     {:neg_one_pow_card_eq_neg_of_unit_difference
-      ["propext" "Quot.sound"]},
+     {:wordInversionPairs ["propext" "Classical.choice" "Quot.sound"],
+      :inversionPairs_eq_wordInversionPairs
+      ["propext" "Classical.choice" "Quot.sound"]},
      :residual
-     "Prove the actual source/swapped inversionPairs cardinalities differ by one under the unequal transported adjacent letters; then unfold shuffleSign and apply the promoted parity theorem.",
+     "Prove the cardinalities of wordInversionPairs w and wordInversionPairs (adjacentSwapWord w i) differ by one when w i.castSucc ≠ w i.succ, then transport through balancedAdjacentSwap and apply the reviewed parity theorem.",
      :prerequisite
      {:consumer :t03J05,
       :stop-condition
-      "Promote only the compiled finite-set parity theorem converting a unit cardinality difference into opposite integer powers of -1. Do not prove the adjacent-swap inversion-cardinality relation, define cancellation pairings, construct chains or cross products, edit consumers or claim closure.",
+      "Promote only the Boolean word inversion-set definition and its exact equality with geometric inversionPairs. Do not prove adjacent-swap cardinality change, sign reversal, cancellation, chains or cross products, edit consumers or claim closure.",
       :evidence
       {:fixture
-       {:path "/tmp/ProductSimplexAdjacentSwapSignParity.lean",
+       {:path "/tmp/ProductSimplexWordInversionPairs.lean",
         :sha256
-        "526dfd96d8032f5c3bed4d0bdfa255019f92b15b572d5c4014e6e8012b11a2b5",
+        "f36b2c1fe0b39939efb0b78d85d1b15b5b112aa0db21231c9053b0b4bd06406f",
         :placeholder-count 0},
        :axioms
-       {:neg_one_pow_card_eq_neg_of_unit_difference
-        ["propext" "Quot.sound"]},
+       {:wordInversionPairs
+        ["propext" "Classical.choice" "Quot.sound"],
+        :inversionPairs_eq_wordInversionPairs
+        ["propext" "Classical.choice" "Quot.sound"]},
        :finding
-       "Compiled exact one-theorem prerequisite; no warning, placeholder, adjacent-swap cardinality, cancellation, chain, cross-product or consumer declaration is present."},
+       "Compiled exact source-to-target inversion-finset equality; no adjacent-swap cardinality, sign, cancellation, chain, cross-product or consumer declaration is present."},
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/ProductSimplexInversionCardParity.lean"
-       "ConstructionTargets/ProductSimplexInversionCardParity.md"],
+      ["ConstructionTargets/ProductSimplexWordInversionPairs.lean"
+       "ConstructionTargets/ProductSimplexWordInversionPairs.md"],
       :dag-node
-      "PRODUCT HOMOLOGY: finite inversion-cardinality parity conversion",
+      "PRODUCT HOMOLOGY: geometric-to-word inversion-pair representation",
       :acceptance
       {:axioms :standard-only,
        :hypotheses
-       "For finite sets s and t of one common type, assume s.card + 1 = t.card or t.card + 1 = s.card.",
+       "Use a Boolean word w : Fin m → Bool for wordInversionPairs and a MaximalPath p q for the exact comparison through (wordPathEquiv p q).symm z.",
        :route-step
-       "Converts the unit inversion-cardinality difference required by the sole t03J05 placeholder and the product/cancellation placeholders of t96J06 and t97A04 into the exact integer sign reversal used by shuffleSign.",
+       "Exposes the finite Boolean inversion set whose adjacent-swap cardinality controls shuffleSign for the sole t03J05 placeholder and the product/cancellation placeholders of t96J06 and t97A04.",
        :implementation
-       "Promote the exact placeholder-free fixture theorem neg_one_pow_card_eq_neg_of_unit_difference and document its orientation and bounded role.",
-       :declarations ["neg_one_pow_card_eq_neg_of_unit_difference"],
+       "Promote the exact compiled wordInversionPairs definition and inversionPairs_eq_wordInversionPairs theorem and document the representation direction.",
+       :declarations
+       ["wordInversionPairs" "inversionPairs_eq_wordInversionPairs"],
        :consumer-equation
-       "If two finite inversion sets differ in cardinality by exactly one in either direction, (-1) raised to the target cardinality equals the negative of (-1) raised to the source cardinality.",
+       "The geometric inversionPairs z is exactly equal to wordInversionPairs of the balanced step word (wordPathEquiv p q).symm z.",
        :consumer-residual
-       "Prove inversionPairs z and inversionPairs (adjacentSwapPath z h i) have cardinalities differing by one from unequal adjacent letters, then unfold shuffleSign; internal-face cancellation and cross products remain later.",
+       "Prove unequal adjacentSwapWord changes wordInversionPairs.card by one, then use adjacentSwapPath_word and neg_one_pow_card_eq_neg_of_unit_difference to prove shuffle-sign reversal.",
        :gates
-       ["Verify fixture SHA256 526dfd96d8032f5c3bed4d0bdfa255019f92b15b572d5c4014e6e8012b11a2b5 before editing."
-        "Add exactly the one public parity theorem and its documentation in the two-file scope."
-        "Compile the fixture and canonical module and reproduce the standard-only axiom audit."
+       ["Verify fixture SHA256 f36b2c1fe0b39939efb0b78d85d1b15b5b112aa0db21231c9053b0b4bd06406f before editing."
+        "Add exactly wordInversionPairs and inversionPairs_eq_wordInversionPairs plus their documentation in the two-file scope."
+        "Reuse stepWord_eq_true_iff and the reviewed wordPathEquiv representation."
+        "Compile fixture and canonical module and reproduce standard-only axiom audits."
         "Run placeholder, warning, forbidden-declaration, whitespace, exact-scope and both-ledger checks."
-        "Commit the scoped implementation and confirm no adjacent-swap cardinality theorem, cancellation pairing, chain, cross-product or consumer theorem is added."]},
+        "Commit the scoped implementation and confirm no adjacent-swap cardinality, sign reversal, cancellation, chain, cross-product or consumer theorem is added."]},
+      :representation
+      {:source
+       "The geometric inversionPairs finset of a maximal product-simplex path, defined using IsHorizontal.",
+       :target
+       "The wordInversionPairs finset of the Boolean balanced step word extracted by (wordPathEquiv p q).symm.",
+       :direction
+       "Exact equality from the source geometric inversion-pair representation to the target Boolean-word inversion-pair representation."},
       :id
-      :oriented-checkpoint81-product-simplex-inversion-card-parity-1,
-      :kind :reusable-theorem,
+      :oriented-checkpoint81-product-simplex-word-inversion-pairs-1,
+      :kind :representation-comparison,
       :depends-on [],
       :current-residual
-      "The path sign goal reduces to a unit difference between the two actual inversion-set cardinalities, but the reusable arithmetic conversion from that difference to opposite (-1)-powers is not public.",
+      "The sign definition uses geometric IsHorizontal inversion pairs, while the reviewed adjacent-swap API rewrites balanced Boolean-word coordinates; their exact finite-set equality is not public.",
       :other-consumers [:t96J06 :t97A04]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: shuffle-sign reversal under unequal adjacent path swaps",
@@ -48779,7 +48845,8 @@
    :kind :reusable-theorem,
    :depends-on
    [:oriented-checkpoint81-adjacent-swap-common-faces-and-consumer-refill-1
-    :oriented-checkpoint81-product-simplex-inversion-card-parity-1],
+    :oriented-checkpoint81-product-simplex-inversion-card-parity-1
+    :oriented-checkpoint81-product-simplex-word-inversion-pairs-1],
    :current-residual
    "The reviewed common face is available, but ProductSimplexShuffleParity has no theorem that an unequal adjacentSwapPath negates shuffleSign.",
    :other-consumers [:t96J06 :t97A04]}
