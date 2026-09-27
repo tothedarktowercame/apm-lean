@@ -76040,8 +76040,52 @@
   {:consumer "t98A02",
    :stop-condition
    "Require Mathlib HomologySequence applied to the genuine reviewed ShortExact object and all three adjacent exactness segments with the actual quotient arrows. Reject supportConnecting and ordinary excision with the false compact-complement containment premise.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Specialize the subcomplexes to the two open compact complements. Use relativeComparisonIso for the union-generated terminal quotient and the corresponding literal relative-pair identifications for the other three terms, prove compatibility with restrictPiecesChain and piecesToIntersection, and conjugate connecting plus all three exactness statements to the literal quotient-pair arrows. Localization monicity, dimension vanishing and a fundamental class remain unproved.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:connecting
+     "c8a94b07e84761f21cc16bfd9a62e6514b4b58ac2296d33cb5ae16ef5bd5e1cd",
+     :exact_intersection_pieces_union
+     "1ad990c2049a29cb12f2a38eb000727d585817a17a57acbe36ee8899d8078e84",
+     :exact_pieces_union_connecting
+     "b5ecad77949b71cd4931c52dc3caddcf47bae027269dd94163d28e9695518218",
+     :exact_union_connecting_intersection_pieces
+     "5345350a0a7e38958af699fc8574c91334a120915c010172c273dbc0e6d74778"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeHomologySequence.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/CoefficientSubcomplexRelativeHomologySequence.lean ConstructionTargets/CoefficientSubcomplexRelativeHomologySequence.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean",
+      :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder, forbidden-declaration, statement-hash and consumer-count audit",
+      :exit 0}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "git show --check --oneline --stat a63abe66", :exit 0}
+     {:cmd "git diff-tree --no-commit-id --name-only -r a63abe66",
+      :exit 0}
+     {:cmd "git status --short --untracked-files=no", :exit 0}],
+    :diagnostic-history [],
+    :commit "a63abe66",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubcomplexRelativeHomologySequence.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubcomplexRelativeHomologySequence.lean",
+     :sha256
+     "6b990aaff7c21e2b8fffa09e46140570634e83a30834aa7ba3834dde40a66d9c",
+     :placeholder-count 0},
+    :finding
+    "Promoted the exact pinned fixture. Canonical source, committed blob and fixture are byte-identical at the recorded SHA256; the degreewise-short-exact dependency matches 90494ac4390196976e2ae6ef41450f86b3ccfbe544f8ecf54691577317d5418b. Fresh compilation succeeds without target warnings and all four declarations use only propext, Classical.choice and Quot.sound. connecting is Mathlib HomologySequence's delta from the reviewed genuine ShortExact object and is not identified with supportConnecting or claimed zero. The three adjacent exactness theorems use the actual intersectionToPiecesRelative and piecesToUnionRelative homology maps and the genuine connecting map. The commit changes exactly the scoped file; tracked worktree is clean. Current comment-stripped consumer placeholder counts are t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5; no consumer was modified or claimed closed.",
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeHomologySequence.lean"],
    :dag-node
