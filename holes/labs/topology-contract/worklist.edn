@@ -76123,68 +76123,126 @@
    :other-consumers ["t00J02" "t01A05" "t02A07" "t97J05"]}
   {:consumer "t98A02",
    :stop-condition
+   "Require the genuine ambient-range and intersection-range cokernel maps induced by exact commuting squares. Reject assumed homology isomorphisms, supportConnecting, and ordinary excision with the false compact-complement containment premise.",
+   :phase :implementation,
+   :state :open,
+   :scope
+   ["ConstructionTargets/CoefficientSubcomplexRelativeLiteralComparison.lean"],
+   :dag-node
+   "MANIFOLD FUNDAMENTAL CLASS / categorical quotient-to-literal relative-pair comparison",
+   :acceptance
+   {:fixture
+    "/tmp/CoefficientSubcomplexRelativeLiteralComparison.lean",
+    :fixture-sha256
+    "28db5692189c6c94505832a9c1811a4f613d57dbc1161d80de4bbcee20261c62",
+    :implementation
+    "Promote the exact fixture. Compile rangeRelative_square, rangeRelativeCokernelMap, intersectionRangeChainsToLiteral, intersectionRelative_square and intersectionRelativeCokernelMap. This supplies the literal-pair comparison-square step needed by the remaining placeholders of t98A02, t00J02, t01A05, t02A07 and t97J05. Verify CoefficientSubcomplexRelativeHomologySequence SHA256 6b990aaff7c21e2b8fffa09e46140570634e83a30834aa7ba3834dde40a66d9c. Preserve arbitrary topological spaces, subsets, commutative-ring coefficients and natural degrees. Require zero placeholders, no target warnings and standard-only axioms. Do not claim these cokernel maps are homology isomorphisms, arrow compatibility for the compact-complement Mayer-Vietoris maps, transport of the connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
+    :commands
+    ["lake env lean ConstructionTargets/CoefficientSubcomplexRelativeLiteralComparison.lean"],
+    :axioms :standard-only,
+    :placeholder-before 0,
+    :placeholder-after 0},
+   :representation
+   {:source
+    "Categorical cokernels of the inclusion of one ambient subspace range and of the inclusion of the infimum of two ambient subspace ranges",
+    :target
+    "Literal coefficient relative chain complexes for the pairs (X,A) and (X,A intersection B)",
+    :direction
+    "Canonical cokernel maps from the source categorical quotient representations to the target literal topological-pair representations, induced by exact commuting chain-map squares whose ambient component is the identity."},
+   :id
+   :coefficient-subcomplex-relative-literal-comparison-implementation-refill51,
+   :kind :representation-comparison,
+   :depends-on
+   [:coefficient-subcomplex-relative-homology-sequence-implementation-refill51],
+   :current-residual
+   "Prove the two induced cokernel maps are homology isomorphisms, combine them with the reviewed union relativeComparisonIso, specialize A and B to the two compact complements, prove compatibility with restrictPiecesChain and piecesToIntersection, and conjugate the genuine connecting morphism plus all three exactness segments to the literal quotient-pair arrows.",
+   :other-consumers ["t00J02" "t01A05" "t02A07" "t97J05"]}
+  {:consumer "t98A02",
+   :stop-condition
    "Require a genuine nonzero-capable relative connecting morphism and three chain-level exactness segments for the actual quotient pairs. Reject supportConnecting and any ordinary excision argument requiring L subset interior (K complement) or its symmetric false premise.",
    :evidence
    {:probe
     {:placeholder-delta 0,
      :residual
-     "Promote the genuine HomologySequence fixture, then prove the literal compact-complement comparison squares and transport the connecting map and all three exactness segments. No localization or fundamental-class claim is made.",
+     "Promote the compiled literal-pair cokernel comparison squares; homology-isomorphism proofs and final compact-complement arrow transport remain.",
      :outcome :revise,
-     :warnings
-     ["The fixture compilation emitted zero warnings. The focused dependency build replayed 20 pre-existing warning lines."],
+     :warnings [],
      :prerequisite
      {:consumer "t98A02",
       :stop-condition
-      "Require Mathlib HomologySequence applied to the genuine reviewed ShortExact object and all three adjacent exactness segments with the actual quotient arrows. Reject supportConnecting and ordinary excision with the false compact-complement containment premise.",
+      "Require the genuine ambient-range and intersection-range cokernel maps induced by exact commuting squares. Reject assumed homology isomorphisms, supportConnecting, and ordinary excision with the false compact-complement containment premise.",
       :phase :implementation,
       :state :open,
       :scope
-      ["ConstructionTargets/CoefficientSubcomplexRelativeHomologySequence.lean"],
+      ["ConstructionTargets/CoefficientSubcomplexRelativeLiteralComparison.lean"],
       :dag-node
-      "MANIFOLD FUNDAMENTAL CLASS / genuine relative quotient homology sequence",
+      "MANIFOLD FUNDAMENTAL CLASS / categorical quotient-to-literal relative-pair comparison",
       :acceptance
       {:fixture
-       "/tmp/CoefficientSubcomplexRelativeHomologySequence.lean",
+       "/tmp/CoefficientSubcomplexRelativeLiteralComparison.lean",
        :fixture-sha256
-       "6b990aaff7c21e2b8fffa09e46140570634e83a30834aa7ba3834dde40a66d9c",
+       "28db5692189c6c94505832a9c1811a4f613d57dbc1161d80de4bbcee20261c62",
        :implementation
-       "Promote the exact fixture. Compile connecting and the three theorems exact_intersection_pieces_union, exact_pieces_union_connecting and exact_union_connecting_intersection_pieces. This supplies the genuine nonzero-capable connecting morphism and three chain-derived homology exactness segments needed by the remaining placeholders of t98A02, t00J02, t01A05, t02A07 and t97J05. Verify CoefficientSubcomplexRelativeDegreewiseExact SHA256 90494ac4390196976e2ae6ef41450f86b3ccfbe544f8ecf54691577317d5418b. Preserve arbitrary simplicial sets, subcomplexes, commutative-ring coefficients and natural degrees. Require zero placeholders, no target warnings and standard-only axioms. Do not identify connecting with supportConnecting, claim it is zero, claim literal compact-complement arrow compatibility, localization monicity, dimension vanishing or a fundamental class.",
+       "Promote the exact fixture. Compile rangeRelative_square, rangeRelativeCokernelMap, intersectionRangeChainsToLiteral, intersectionRelative_square and intersectionRelativeCokernelMap. This supplies the literal-pair comparison-square step needed by the remaining placeholders of t98A02, t00J02, t01A05, t02A07 and t97J05. Verify CoefficientSubcomplexRelativeHomologySequence SHA256 6b990aaff7c21e2b8fffa09e46140570634e83a30834aa7ba3834dde40a66d9c. Preserve arbitrary topological spaces, subsets, commutative-ring coefficients and natural degrees. Require zero placeholders, no target warnings and standard-only axioms. Do not claim these cokernel maps are homology isomorphisms, arrow compatibility for the compact-complement Mayer-Vietoris maps, transport of the connecting morphism, localization monicity, dimension vanishing or a fundamental class.",
        :commands
-       ["lake env lean ConstructionTargets/CoefficientSubcomplexRelativeHomologySequence.lean"],
+       ["lake env lean ConstructionTargets/CoefficientSubcomplexRelativeLiteralComparison.lean"],
        :axioms :standard-only,
        :placeholder-before 0,
        :placeholder-after 0},
+      :representation
+      {:source
+       "Categorical cokernels of the inclusion of one ambient subspace range and of the inclusion of the infimum of two ambient subspace ranges",
+       :target
+       "Literal coefficient relative chain complexes for the pairs (X,A) and (X,A intersection B)",
+       :direction
+       "Canonical cokernel maps from the source categorical quotient representations to the target literal topological-pair representations, induced by exact commuting chain-map squares whose ambient component is the identity."},
       :id
-      :coefficient-subcomplex-relative-homology-sequence-implementation-refill51,
-      :kind :reusable-theorem,
+      :coefficient-subcomplex-relative-literal-comparison-implementation-refill51,
+      :kind :representation-comparison,
       :depends-on
-      [:coefficient-subcomplex-relative-degreewise-short-exact-implementation-refill51],
+      [:coefficient-subcomplex-relative-homology-sequence-implementation-refill51],
       :current-residual
-      "Specialize the subcomplexes to the two open compact complements. Use the reviewed relativeComparisonIso for the union-generated terminal quotient and the corresponding literal relative-pair identifications for the other three terms, prove compatibility with restrictPiecesChain and piecesToIntersection, and conjugate connecting plus all three exactness statements to the literal quotient-pair arrows.",
+      "Prove the two induced cokernel maps are homology isomorphisms, combine them with the reviewed union relativeComparisonIso, specialize A and B to the two compact complements, prove compatibility with restrictPiecesChain and piecesToIntersection, and conjugate the genuine connecting morphism plus all three exactness segments to the literal quotient-pair arrows.",
       :other-consumers ["t00J02" "t01A05" "t02A07" "t97J05"]},
      :axioms ["propext" "Classical.choice" "Quot.sound"],
      :commands
      [{:cmd
-       "lake build ConstructionTargets.CoefficientSubcomplexRelativeDegreewiseExact >/tmp/topo4-degreewise-build.log 2>&1",
+       "lake env lean /tmp/CoefficientSubcomplexRelativeLiteralComparison.lean",
        :exit 0}
       {:cmd
-       "lake env lean /tmp/CoefficientSubcomplexRelativeHomologySequence.lean",
+       "sha256sum /tmp/CoefficientSubcomplexRelativeLiteralComparison.lean ConstructionTargets/CoefficientSubcomplexRelativeHomologySequence.lean /tmp/CompactExcisionHypothesisBoundary.lean",
        :exit 0}
       {:cmd
-       "sha256sum /tmp/CoefficientSubcomplexRelativeHomologySequence.lean ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean /tmp/CompactExcisionHypothesisBoundary.lean; comment-stripped forbidden-token and consumer-placeholder audit; grep -c warning: /tmp/topo4-degreewise-build.log; git status --short",
-       :exit 0}],
-     :diagnostic-history [],
+       "python3 comment-stripped placeholder, forbidden-token, and consumer-placeholder audit",
+       :exit 0}
+      {:cmd "git status --short", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/CoefficientSubcomplexRelativeLiteralComparison.lean",
+       :exit 1,
+       :correction
+       "The initial comparison attempted to infer monicity of a composite and identity homology isomorphisms before the required chain-square representation was isolated. Restricted the prerequisite to the canonical cokernel maps and their exact commuting squares."}
+      {:cmd
+       "lake env lean /tmp/CoefficientSubcomplexRelativeLiteralComparison.lean",
+       :exit 1,
+       :correction
+       "The intersection subcomplex coercion was parsed at the wrong precedence. Let Lean infer the target of the already compiled intersection chain isomorphism."}
+      {:cmd
+       "lake env lean /tmp/CoefficientSubcomplexRelativeLiteralComparison.lean",
+       :exit 1,
+       :correction
+       "After unfolding the composite isomorphism, removed a redundant Iso.trans_hom rewrite and normalized the common singular-chain functor explicitly."}],
      :changed-paths [],
      :fixture
-     {:path "/tmp/CoefficientSubcomplexRelativeHomologySequence.lean",
+     {:path "/tmp/CoefficientSubcomplexRelativeLiteralComparison.lean",
       :sha256
-      "6b990aaff7c21e2b8fffa09e46140570634e83a30834aa7ba3834dde40a66d9c",
+      "28db5692189c6c94505832a9c1811a4f613d57dbc1161d80de4bbcee20261c62",
       :placeholder-count 0},
      :finding
-     "Compiled exactly one bounded prerequisite using Mathlib's HomologySequence on the reviewed genuine relative quotient short complex. connecting is the snake-lemma connecting morphism from homology of the union quotient in degree n+1 to homology of the intersection quotient in degree n; it is not the rejected supportConnecting composite and is not forced to be zero. exact_intersection_pieces_union, exact_pieces_union_connecting and exact_union_connecting_intersection_pieces are the three adjacent exactness segments, stated with the genuine categorical intersectionToPiecesRelative and piecesToUnionRelative arrows. The result preserves arbitrary declared simplicial sets, subcomplexes, commutative rings and natural degrees. No repository source or ledger changed. The short-exact dependency and singleton ordinary-excision counterexample hashes reproduce. Current comment-stripped consumer placeholders are t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5. Only transport through the reviewed relativeComparisonIso and verification of the literal compact-complement arrow squares remain on this shared route.",
+     "Compiled exactly one bounded representation prerequisite. rangeRelative_square and intersectionRelative_square identify the ambient-range inclusion and infimum-range inclusion with the literal subspace inclusions through canonical chain isomorphisms. rangeRelativeCokernelMap and intersectionRelativeCokernelMap are the induced maps from the genuine categorical quotient complexes to the literal relative complexes. The fixture is placeholder-free, uses standard axioms, and neither invokes supportConnecting nor ordinary excision. No repository source or ledger changed. The promoted HomologySequence dependency and singleton ordinary-excision counterexample hashes reproduce. Current comment-stripped consumer placeholders are t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5.",
      :seat "topo-4"}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -76230,7 +76288,8 @@
     :coefficient-subcomplex-relative-degree-range-lattice-implementation-refill51
     :coefficient-subcomplex-relative-degree-arrow-comparison-implementation-refill51
     :coefficient-subcomplex-relative-degreewise-short-exact-implementation-refill51
-    :coefficient-subcomplex-relative-homology-sequence-implementation-refill51],
+    :coefficient-subcomplex-relative-homology-sequence-implementation-refill51
+    :coefficient-subcomplex-relative-literal-comparison-implementation-refill51],
    :current-residual
    "Ordinary coefficient excision is refuted for overlapping compact supports; a direct quotient-pair sequence or correctly hypothesized triad excision is the remaining shared route.",
    :other-consumers ["t00J02" "t00A04" "t01A05" "t02A07" "t97J05"]}
