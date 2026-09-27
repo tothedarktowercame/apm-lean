@@ -75989,6 +75989,18 @@
       :exit 0}
      {:cmd "git status --short", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790551159567-25815-c2383c77",
+     :commands
+     ["git show --check 11286ddeb156d82945586b288f599433c2bd3e9d"
+      "git diff-tree --no-commit-id --name-only -r 11286ddeb156d82945586b288f599433c2bd3e9d"
+      "git merge-base --is-ancestor 11286ddeb156d82945586b288f599433c2bd3e9d HEAD"
+      "python3 committed-blob fixture/dependency SHA256, frozen-statement and comment-stripped placeholder audit"
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean"],
+     :finding
+     "Independent reviewer topo-3 (codex-3), distinct from author topo-2. PASS for 11286ddeb156d82945586b288f599433c2bd3e9d: exact one-file scope; committed source, canonical source and pinned fixture are byte-identical at SHA256 90494ac4390196976e2ae6ef41450f86b3ccfbe544f8ecf54691577317d5418b; arrow-comparison dependency matches 5bf7935d92c88a99d7f4fe69bd7bd9f36fda69bfc0b80779093237cb72471d88; all five frozen statement hashes reproduce; target has zero placeholders. Fresh compilation exits 0 without warnings and all four printed theorem audits use only propext, Classical.choice and Quot.sound. piecesCoordinatesEquiv maps the genuine categorical biproduct degree object to the product of the left and right quotient modules, and piecesCoordinatesEquiv_toLinearMap identifies it exactly with the previously audited piecesCoordinates map. Injectivity transfers from infQuotientDiagonal to the genuine intersection-to-pieces degree map. relative_degree_exact has the correct orientation: the kernel of the genuine pieces-to-union map is the image of the genuine intersection-to-pieces map, with the reverse inclusion discharged by relative_arrows_zero. shortComplex_shortExact applies the degreewise criterion to those genuine maps. No connecting morphism or homology/pair transport is claimed. Committed consumer counts reproduce: t98A02=1, t00J02=1, t01A05=1, t02A07=3, t97J05=5. Ledger unchanged."},
     :commit "11286dde",
     :changed-paths
     ["ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean"],
@@ -76001,7 +76013,7 @@
     "Promoted the exact pinned fixture. Canonical source, committed blob and fixture are byte-identical at the recorded SHA256; the arrow-comparison dependency matches 5bf7935d92c88a99d7f4fe69bd7bd9f36fda69bfc0b80779093237cb72471d88. Fresh compilation succeeds without warnings and the four printed theorem audits use only propext, Classical.choice and Quot.sound. piecesCoordinatesEquiv supplies the genuine middle-object linear equivalence; its linear map is the banked piecesCoordinates map. The genuine categorical first map is injective, the two actual degree maps are exact with the banked signed convention, and shortComplex_shortExact follows from the degreewise criterion. The commit changes exactly the scoped file and the worktree is clean. Current comment-stripped consumer placeholder counts are t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5; no consumer was modified or claimed closed.",
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeDegreewiseExact.lean"],
    :dag-node
@@ -76103,7 +76115,7 @@
      "Compiled exactly one bounded prerequisite. piecesCoordinatesEquiv proves that the genuine middle degree object is linearly equivalent to the product of the two ordinary quotient modules, and piecesCoordinatesEquiv_toLinearMap identifies its forward map with the banked piecesCoordinates map. The two banked arrow comparisons then transfer injectivity of infQuotientDiagonal and Function.Exact of infQuotientDiagonal followed by piecesToSupQuotient to the genuine categorical degree maps. shortComplex_shortExact packages these facts with the banked terminal epimorphism, proving the genuine relative quotient short complex short exact for arbitrary declared simplicial sets, subcomplexes, commutative rings and natural degrees. No repository source or ledger changed. The promoted arrow-comparison hash and singleton ordinary-excision counterexample hash reproduce. Current comment-stripped consumer placeholders are t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5. The connecting morphism, its three homology exactness segments and literal compact-complement transport remain unproved by this fixture.",
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
