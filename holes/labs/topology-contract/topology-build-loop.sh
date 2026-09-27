@@ -138,7 +138,7 @@ job_json() {
   return 1
 }
 wait_job() {
-  local job="$1" label="$2" state elapsed=0 body term_reason
+  local job="$1" label="$2" state elapsed=0 body term_reason fail_code
   while :; do
     printf '{:job %q :checked-at %q}\n' "$job" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" > "$HEARTBEAT"
     body="$(job_json "$job")" || die "$label status reads exhausted; in-flight job retained"
@@ -167,7 +167,15 @@ wait_job() {
         # cause was a quota limit; the escalation packet should say so itself.
         term_reason="$(jq -r '[.job.events[]? | select(.type=="text") | .text] | last // ""' \
                         <<<"$body" 2>/dev/null | tr '\n' ' ' | cut -c1-200)"
-        die "$label terminal state=$state job=$job${term_reason:+ :: $term_reason}" ;;
+        # The Agency's own failure code (e.g. futon1b-read-unavailable when the
+        # evidence read is refused before the agent runs) goes into the stop
+        # reason too: the agent's last text is empty in exactly those cases, and
+        # the supervisor needs the code to tell a wait from a defect.
+        fail_code="$(jq -r '[.job.events[]? | select(.type=="failed") | .code // empty] | last // ""' \
+                      <<<"$body" 2>/dev/null)"
+        [ -n "$term_reason" ] || term_reason="$(jq -r '[.job.events[]? | select(.type=="failed") | .message // empty] | last // ""' \
+                      <<<"$body" 2>/dev/null | tr '\n' ' ' | cut -c1-200)"
+        die "$label terminal state=$state job=$job${fail_code:+ code=$fail_code}${term_reason:+ :: $term_reason}" ;;
       queued|delivering|running|accepted|"") ;;
       *) die "$label unknown state=$state job=$job" ;;
     esac

@@ -168,6 +168,23 @@ GUIDE
   return 0
 }
 
+# Joe, 2026-09-27: a job the Agency failed because futon1b refused the
+# evidence read (all read permits busy: expensive-read-busy) is a case for
+# WAITING, not repairing. Nothing in the loop is broken, and a repair agent can
+# only look and refuse -- while spending one of the MAX_REPAIRS slots. The loop
+# has already cleared the in-flight pointer for a terminal job, so a restart
+# re-dispatches the row. Wait 60s, doubling to a 900s cap, and restart; no
+# repair and no escalation. The backoff resets when a loop run lasts long enough
+# to reset the repair budget.
+is_substrate_wait() {
+  case "$1" in
+    *"code=futon1b-read-unavailable"*|*"futon1b read did not obtain evidence"*|*"expensive-read-busy"*) return 0 ;;
+  esac
+  return 1
+}
+SUBSTRATE_WAIT_MAX="${TOPOLOGY_SUBSTRATE_WAIT_MAX:-900}"
+substrate_waits=0
+
 healthy() {
   bb "$HERE/worklist_check.bb" "$LEDGER" >/dev/null 2>&1 || return 1
   [ -z "$(git -C "$ROOT" status --porcelain --untracked-files=no)" ] || return 1
@@ -277,11 +294,21 @@ while true; do
       repairs=0
       escalations=0
     fi
+    substrate_waits=0
   fi
   [ "$rc" = 0 ] && { slog "loop exited cleanly (rc=0); supervisor done"; exit 0; }
 
   reason="$(last_stop_reason)"
   slog "loop exited rc=$rc reason='$reason'"
+
+  if is_substrate_wait "$reason"; then
+    substrate_waits=$((substrate_waits+1))
+    delay=$(( 60 * (1 << (substrate_waits < 5 ? substrate_waits - 1 : 4)) ))
+    [ "$delay" -gt "$SUBSTRATE_WAIT_MAX" ] && delay="$SUBSTRATE_WAIT_MAX"
+    slog "futon1b refused the evidence read (wait $substrate_waits); waiting ${delay}s and restarting -- no repair, budget unchanged"
+    sleep "$delay"
+    continue
+  fi
 
   if not_repairable "$reason"; then
     # A refusal still deserves ONE report, or the loop simply goes quiet and
