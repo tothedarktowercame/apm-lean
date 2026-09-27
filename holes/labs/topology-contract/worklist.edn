@@ -75767,8 +75767,49 @@
   {:consumer "t98A02",
    :stop-condition
    "Require compatibility of the two genuine categorical relative quotient arrows with the explicit diagonal map from the intersection quotient and the explicit signed map to the union quotient; then transfer degreewise injectivity and middle exactness.",
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Identify both genuine categorical relative quotient arrows with infQuotientDiagonal and piecesToSupQuotient using the four degree-quotient projection equations and these range equalities. Transfer degreewise injectivity and middle exactness, then establish chain-level ShortExact, use HomologySequence and transport through relativeComparisonIso to literal compact-complement pairs. Quotient-arrow compatibility, connecting morphism, localization monicity, dimension vanishing and fundamental class remain unproved by this row.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:intersectionRange_eq_inf
+     "387dde1123664da5b8d86ba1606be512becb87ac921d6e5b7abba95a39589819",
+     :unionRange_eq_sup
+     "4a265f065ed43912e5e24f2f0611fecfe7e6e2d6453df6bad2ffe95b46312bb5"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :commands
+    [{:cmd
+      "lake env lean ConstructionTargets/CoefficientSubcomplexRelativeDegreeRangeLattice.lean",
+      :exit 0}
+     {:cmd
+      "python3 exact fixture/dependency SHA256, comment-stripped placeholder, forbidden-declaration, statement-hash and consumer-count audit",
+      :exit 0}
+     {:cmd "git show --check f64b4791cf1a33e9130c533c595d40a1420edeb9",
+      :exit 0}
+     {:cmd
+      "git diff-tree --no-commit-id --name-only -r f64b4791cf1a33e9130c533c595d40a1420edeb9",
+      :exit 0}
+     {:cmd
+      "git merge-base --is-ancestor f64b4791cf1a33e9130c533c595d40a1420edeb9 HEAD",
+      :exit 0}
+     {:cmd "git status --short", :exit 0}],
+    :diagnostic-history [],
+    :commit "f64b4791cf1a33e9130c533c595d40a1420edeb9",
+    :changed-paths
+    ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeRangeLattice.lean"],
+    :fixture
+    {:path "/tmp/CoefficientSubcomplexRelativeDegreeRangeLattice.lean",
+     :sha256
+     "769cabc4ae6679d1de55d19e3e3d10707df1f8b5cfc224685d186458240ed28a",
+     :placeholder-count 0},
+    :finding
+    "Recovered already committed exact promotion from September 11; no new source changes or duplicate commit. Fresh verification in this invocation confirms canonical source and committed blob match the pinned fixture, dependency SHA256 f9a842b5fbd9a245e5419b926342eb50ef6473009b913c6c9b2ddfbea648d581, exact one-file commit scope, clean tree, warning-free compilation and standard-only axioms. Both degreewise range lattice equalities preserve arbitrary simplicial sets, subcomplexes, commutative-ring coefficients and natural-number degrees. Statement hashes cover theorem declaration through type, excluding the space before := by; ambient variable declarations remain byte-identical to fixture. Current comment-stripped consumer placeholder counts: t98A02=1, t00J02=1, t00A04=0, t01A05=1, t02A07=3, t97J05=5; no consumer modified or closure claimed.",
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeDegreeRangeLattice.lean"],
    :dag-node
@@ -76058,30 +76099,53 @@
    :current-residual
    "Await three independently reviewed outcomes, then rerank the complete DAG.",
    :other-consumers []}
- {:id :m03j05-f220-infrastructure-intake
-  :kind :consumer-closure :phase :probe :state :open :depends-on []
-  :consumer :m03J05 :scope []
-  :source/frame "f220"
-  :source/commit "c380d8ff286d5d5dacafdc200d4eddc0cdaa2eec"
-  :source/branch "exp/countdown-f220-m03J05-solver"
-  :source/path "problems/m03J05/lean/Main.lean"
-  :source/sha256 "244587aa6e02da7ad37d1af01c039355c952a53d1da58ad292cec4cbacb3946d"
-  :source/last-valid-receipt "a28fd032f06b54ba321e38a6f3983f90e9d60d01940ab48faeff998eccbb719a"
-  :dag-node "APMv3 F220 nonlinear L2/weak-solution infrastructure intake"
-  :current-residual "50 solver rounds exhausted. Three frozen bridges remain: compactness and spectral/Fredholm classification; Frechet remainder and energy assembly; forced-contraction equation to weak predicate. Existing uniqueness and fixed-point equivalence are banked on the source branch."
-  :acceptance {:probe "Read the exact pinned Main.lean and current canonical authorities. Validate the retained solver artifacts through the canonical workspace lifecycle. Produce a dependency DAG for all three frozen bridges and select the smallest concrete infrastructure prerequisite, starting by checking whether bridge 3 can close from the existing fixed-point equivalence, derivative parametrization and adjoint identity. Name exact declarations, source hypotheses, target statement, reusable consumers and remaining gaps."
-               :axioms :standard-only
-               :stop-condition "No statement weakening, invented bridge hypotheses, local Mathlib clone, or blanket cherry-pick of the 50-round branch. Report a precise API gap if not locally closable. A source pin is not a fresh build certificate."}
-  :stop-condition "Probe and reviewed dependency assessment only; no proof-completion credit for intake. See intake/f220-m03J05/README.md."}
- {:id :m03j05-f220-infrastructure-strategy
-  :kind :strategy-checkpoint :phase :strategy :state :blocked
-  :depends-on [:m03j05-f220-infrastructure-intake]
-  :consumer :m03J05 :scope []
-  :checkpoint {:after-problems 1 :may-supersede-future true
-               :required-measures [:placeholder-delta :typed-residual-change :infrastructure-packets :review-outcomes]}
-  :acceptance {:strategy "Use the reviewed F220 intake DAG to elect 1-5 bounded implementation/representation/consumer rows and a successor checkpoint. Integrate the existing solver branch through reviewed canonical changes, not a parallel proof island. Preserve every frozen bridge statement; distinguish reusable theory from final adapters. Preserve unrelated portfolio work."
-               :stop-condition "Do not report the transferred problem solved until its original consumer elaborates without placeholders under the standard axiom policy."}}
- ],
+  {:source/branch "exp/countdown-f220-m03J05-solver",
+   :source/last-valid-receipt
+   "a28fd032f06b54ba321e38a6f3983f90e9d60d01940ab48faeff998eccbb719a",
+   :consumer :m03J05,
+   :stop-condition
+   "Probe and reviewed dependency assessment only; no proof-completion credit for intake. See intake/f220-m03J05/README.md.",
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node
+   "APMv3 F220 nonlinear L2/weak-solution infrastructure intake",
+   :acceptance
+   {:probe
+    "Read the exact pinned Main.lean and current canonical authorities. Validate the retained solver artifacts through the canonical workspace lifecycle. Produce a dependency DAG for all three frozen bridges and select the smallest concrete infrastructure prerequisite, starting by checking whether bridge 3 can close from the existing fixed-point equivalence, derivative parametrization and adjoint identity. Name exact declarations, source hypotheses, target statement, reusable consumers and remaining gaps.",
+    :axioms :standard-only,
+    :stop-condition
+    "No statement weakening, invented bridge hypotheses, local Mathlib clone, or blanket cherry-pick of the 50-round branch. Report a precise API gap if not locally closable. A source pin is not a fresh build certificate."},
+   :source/frame "f220",
+   :source/commit "c380d8ff286d5d5dacafdc200d4eddc0cdaa2eec",
+   :id :m03j05-f220-infrastructure-intake,
+   :kind :consumer-closure,
+   :depends-on [],
+   :source/path "problems/m03J05/lean/Main.lean",
+   :source/sha256
+   "244587aa6e02da7ad37d1af01c039355c952a53d1da58ad292cec4cbacb3946d",
+   :current-residual
+   "50 solver rounds exhausted. Three frozen bridges remain: compactness and spectral/Fredholm classification; Frechet remainder and energy assembly; forced-contraction equation to weak predicate. Existing uniqueness and fixed-point equivalence are banked on the source branch."}
+  {:consumer :m03J05,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :acceptance
+   {:strategy
+    "Use the reviewed F220 intake DAG to elect 1-5 bounded implementation/representation/consumer rows and a successor checkpoint. Integrate the existing solver branch through reviewed canonical changes, not a parallel proof island. Preserve every frozen bridge statement; distinguish reusable theory from final adapters. Preserve unrelated portfolio work.",
+    :stop-condition
+    "Do not report the transferred problem solved until its original consumer elaborates without placeholders under the standard axiom policy."},
+   :id :m03j05-f220-infrastructure-strategy,
+   :kind :strategy-checkpoint,
+   :depends-on [:m03j05-f220-infrastructure-intake]}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",
