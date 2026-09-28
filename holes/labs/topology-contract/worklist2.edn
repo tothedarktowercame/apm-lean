@@ -50449,42 +50449,55 @@
   {:consumer :t95A04,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/rp_sphere_projection_open_map.lean",
+     {:path "/tmp/rp_sphere_projection_local_model.lean",
       :sha256
-      "21d43b559c940024d3d653f187e55642998e2a87bdae6664ebf27ffd35fe0d96"},
+      "4e40773617db1d4326b5aa3d0960b1eb20edb3847655e6b1a7fcc19999644bb3"},
      :commands
-     [{:cmd
-       "test -L .lake/packages && lake env lean /tmp/rp_sphere_projection_open_map.lean",
-       :exit 0}
+     [{:cmd "lake env lean /tmp/rp_sphere_projection_local_model.lean",
+       :exit 0,
+       :warnings
+       ["One unnecessarySimpa style warning in sphereAntipodalN; no proof or axiom warning."]}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_open_map.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :residual
-     "The quotient-authority dependency is banked. To turn antipodal fibre separation into local homeomorphisms, the restriction to a hemisphere must have open image. This follows once sphereProjection is proved open: the preimage of the image of an open U is U union its antipodal image, hence open, and quotient authority reflects openness.",
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
+       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_local_model.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/rp_sphere_projection_local_model.lean",
+       :exit 1,
+       :finding
+       "The stale fixture redeclared the now-banked sphereAntipodal and used its earlier parameterized interface. Renaming only the fixture-general antipodal map allowed the dimension-two theorem to reuse the banked fibre result."}
+      {:cmd "lake env lean /tmp/rp_sphere_projection_local_model.lean",
+       :exit 1,
+       :finding
+       "The first hemisphere proof used unavailable inner-product notation scope and passed explicit points to implicit InjOn arguments. Replacing the notation with inner real and applying InjOn to subtype membership proofs corrected the exact construction."}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
       :acceptance
-      {:probe
-       "Compile a placeholder-free fixture proving SphereProjectionOpenAuthority, namely IsOpenMap (sphereProjection 2), reusing sphereProjectionQuotientAuthority. Prove that for every open U on Sphere 2, the saturated preimage of sphereProjection image U is U union its antipodal image after establishing the exact antipodal fibre relation; use quotient-map openness reflection. Do not alter the frozen topology. The exact result interface is /tmp/rp_sphere_projection_open_map.lean."},
-      :id :routes-2026-09-28-rp-sphere-projection-open-map-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on [],
-      :other-consumers [:t96A07]}}},
-   :phase :probe,
+      {:theorem
+       "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionTwoSheetedLocalModel",
+       :contract
+       "ConstructionTargets.RealProjectiveSmoothTarget.SphereProjectionTwoSheetedLocalModel",
+       :requirements
+       "At dimension two, define the positive-inner-product hemisphere at each sphere point, prove it open and containing the point, prove sphereProjection injective there from the exact antipodal fibre theorem, and combine continuity with the banked open-map authority via IsOpenEmbedding.of_continuous_injective_isOpenMap and isLocalHomeomorph_iff_isOpenEmbedding_restrict. Include the exact two-point fibre equivalence without altering the frozen topology."}},
+     :residual
+     "The dimension-two sphere projection is now a local homeomorphism with fibres exactly p and minus p. The remaining shared route step for t95A04 and t96A07 is to use these local inverses to construct the compatible smooth atlas rpSmoothAtlas 2 and prove the quotient projection locally diffeomorphic."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free fixture proving SphereProjectionTwoSheetedLocalModel 2 for ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection: it is an IsLocalHomeomorph for the existing coinduced topology and its fibres on the unit sphere are exactly p and -p. State it only in dimension 2, the generality used by t95A04 and t96A07. The fixture /tmp/rp_sphere_projection_local_model.lean fixes the exact interface."},
+   {:theorem
+    "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionTwoSheetedLocalModel",
+    :contract
+    "ConstructionTargets.RealProjectiveSmoothTarget.SphereProjectionTwoSheetedLocalModel",
+    :requirements
+    "At dimension two, define the positive-inner-product hemisphere at each sphere point, prove it open and containing the point, prove sphereProjection injective there from the exact antipodal fibre theorem, and combine continuity with the banked open-map authority via IsOpenEmbedding.of_continuous_injective_isOpenMap and isLocalHomeomorph_iff_isOpenEmbedding_restrict. Include the exact two-point fibre equivalence without altering the frozen topology."},
    :id :routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
