@@ -215,7 +215,9 @@ theorem apm_t02A03_bridge_2 :
       (ConstructionTargets.T00A01MayerVietorisAdapters.moduleHomologyIsoOfHomotopyEquiv
         e.toHomotopyEquiv n).symm
 
-theorem apm_t02a03 :
+/-- Superseded because it computed only the deformation-retract models and did
+not state the geometric complements or their deformation retractions. -/
+theorem apm_t02a03_previous_encoding :
     Nonempty
       (FundamentalGroup apm_t02a03_Torus (1, 1) ≃*
         Multiplicative (ℤ × ℤ)) ∧
@@ -290,3 +292,60 @@ theorem apm_t02a03 :
   construction. The frozen statement is unchanged.
   -/
   exact ⟨apm_t02A03_bridge_1, apm_t02A03_bridge_2⟩
+
+abbrev apm_t02a03_Disk := Metric.closedBall (0 : ℂ) 1
+
+/-- The actual complement of the core circle in the solid torus. -/
+abbrev apm_t02a03_X :=
+  {p : apm_t02a03_Disk × Circle // p.1.1 ≠ 0}
+
+abbrev apm_t02a03_E3 := EuclideanSpace ℝ (Fin 3)
+
+noncomputable def apm_t02a03_leftCore (t : ℝ) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![-1 + Real.cos t, Real.sin t, 0]
+
+noncomputable def apm_t02a03_rightCore (t : ℝ) : apm_t02a03_E3 :=
+  WithLp.toLp 2 ![1 - Real.cos t, Real.sin t, 0]
+
+/-- A concrete planar figure-eight spine for the standard genus-two
+handlebody. -/
+def apm_t02a03_genusTwoSpine : Set apm_t02a03_E3 :=
+  Set.range apm_t02a03_leftCore ∪ Set.range apm_t02a03_rightCore
+
+/-- A fixed closed regular-neighborhood model of the bounded genus-two
+handlebody. -/
+def apm_t02a03_W : Set apm_t02a03_E3 :=
+  {p | Metric.infDist p apm_t02a03_genusTwoSpine ≤ (1 / 4 : ℝ)}
+
+def apm_t02a03_C : Set apm_t02a03_E3 :=
+  Set.range apm_t02a03_leftCore
+
+/-- The geometric complement in part (b), before replacing it by its wedge
+spine. -/
+abbrev apm_t02a03_geometricY :=
+  {p : apm_t02a03_E3 // p ∈ apm_t02a03_W ∧ p ∉ apm_t02a03_C}
+
+theorem apm_t02a03 :
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_X apm_t02a03_Torus) ∧
+    Nonempty (ContinuousMap.HomotopyEquiv apm_t02a03_geometricY apm_t02a03_Y) ∧
+    Nonempty
+      (FundamentalGroup apm_t02a03_Torus (1, 1) ≃*
+        Multiplicative (ℤ × ℤ)) ∧
+    Nonempty
+      (FundamentalGroup apm_t02a03_Y apm_t02a03_ybase ≃*
+        Monoid.Coprod (Multiplicative (ℤ × ℤ)) (Multiplicative ℤ)) ∧
+    Nonempty
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 0).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t02a03_Y) ≅ ModuleCat.of ℤ ℤ) ∧
+    Nonempty
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 1).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t02a03_Y) ≅
+        ModuleCat.of ℤ (Fin 3 → ℤ)) ∧
+    Nonempty
+      (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t02a03_Y) ≅ ModuleCat.of ℤ ℤ) ∧
+    (∀ n : ℕ, 3 ≤ n →
+      Limits.IsZero
+        (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) n).obj
+          (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t02a03_Y))) := by
+  sorry
