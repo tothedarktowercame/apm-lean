@@ -74,42 +74,45 @@ def apm_t91a01_oriented
       0 < (LinearMap.det : (apm_t91a01_E2 →ₗ[ℝ] apm_t91a01_E2) →* ℝ)
         (fderiv ℝ (fun y ↦ d (c.symm y)) (c x))
 
-/-- The normalized direction of the actual tangent vector field on the
-boundary of an embedded coordinate disk. -/
-def apm_t91a01_localDirection
+/-- The field `V` read in the extended chart at `p`: at a chart point `y`, the
+chart's derivative applied to `V` at the corresponding point of `F`. -/
+def apm_t91a01_chartField
     {F : Type*} [TopologicalSpace F] [ChartedSpace apm_t91a01_E2 F]
-    (V : (x : F) → TangentSpace apm_t91a01_Model2 x)
-    (φ : apm_t91a01_Disk2 → F)
-    (τ : ∀ z : apm_t91a01_Circle,
-      TangentSpace apm_t91a01_Model2
-        (φ ⟨z.1, by simpa [Metric.mem_closedBall] using le_of_eq z.2⟩) ≃L[ℝ] ℂ)
-    (hnz : ∀ z, τ z (V (φ ⟨z.1,
-      by simpa [Metric.mem_closedBall] using le_of_eq z.2⟩)) ≠ 0)
-    (z : apm_t91a01_Circle) : apm_t91a01_Circle :=
-  let w := τ z (V (φ ⟨z.1,
-    by simpa [Metric.mem_closedBall] using le_of_eq z.2⟩))
-  ⟨w / (‖w‖ : ℂ), by
-    have hw : w ≠ 0 := hnz z
-    simpa [Metric.mem_sphere, norm_div, hw]⟩
+    (V : (x : F) → TangentSpace apm_t91a01_Model2 x) (p : F)
+    (y : apm_t91a01_E2) : apm_t91a01_E2 :=
+  mfderiv apm_t91a01_Model2 apm_t91a01_Model2 (extChartAt apm_t91a01_Model2 p)
+    ((extChartAt apm_t91a01_Model2 p).symm y)
+    (V ((extChartAt apm_t91a01_Model2 p).symm y))
 
-/-- The isolated zero `p` has index `+3`: an embedded coordinate disk
-centred at `p` trivializes the tangent field along its boundary, and the
-normalized direction of that very field is the degree-three map. -/
+/-- Standard identification of the chart plane with `ℂ` (`1 ↦ e₀`, `i ↦ e₁`). -/
+abbrev apm_t91a01_planeEquiv : ℂ ≃ₗᵢ[ℝ] apm_t91a01_E2 :=
+  Complex.orthonormalBasisOneI.repr
+
+/-- The point of the chart plane at radius `r` in direction `z` around `p`. -/
+def apm_t91a01_circlePoint
+    {F : Type*} [TopologicalSpace F] [ChartedSpace apm_t91a01_E2 F]
+    (p : F) (r : ℝ) (z : apm_t91a01_Circle) : apm_t91a01_E2 :=
+  extChartAt apm_t91a01_Model2 p p + r • apm_t91a01_planeEquiv z.1
+
+/-- The isolated zero `p` has index `+3` in the sense of part (a): in the chart
+at `p`, on a circle of some radius `r` whose closed disk lies in the chart,
+the normalized direction of `V` (read through the chart's derivative) is
+exactly `z ↦ z³`. The chart's own tangent identification is used, so the
+direction is computed from `V` alone. -/
 def apm_t91a01_hasIndexThreeZero
     {F : Type*} [TopologicalSpace F] [ChartedSpace apm_t91a01_E2 F]
     (V : (x : F) → TangentSpace apm_t91a01_Model2 x) (p : F) : Prop :=
-  ∃ (φ : apm_t91a01_Disk2 → F) (hφ : Topology.IsEmbedding φ),
-    φ ⟨0, by simp⟩ = p ∧
-    ∃ (τ : ∀ z : apm_t91a01_Circle,
-      TangentSpace apm_t91a01_Model2
-        (φ ⟨z.1, by simpa [Metric.mem_closedBall] using le_of_eq z.2⟩) ≃L[ℝ] ℂ)
-      (hnz : ∀ z, τ z (V (φ ⟨z.1,
-        by simpa [Metric.mem_closedBall] using le_of_eq z.2⟩)) ≠ 0)
-      (link : C(apm_t91a01_Circle, apm_t91a01_Circle)),
-      (∀ z, link z = apm_t91a01_localDirection V φ τ hnz z) ∧
-      ∀ z, link z = ⟨z.1 ^ 3, by
-        simpa [Metric.mem_sphere, norm_pow] using
-          congrArg (fun r : ℝ ↦ r ^ 3) z.2⟩
+  ∃ r : ℝ, 0 < r ∧
+    Metric.closedBall (extChartAt apm_t91a01_Model2 p p) r ⊆
+      (extChartAt apm_t91a01_Model2 p).target ∧
+    ∀ z : apm_t91a01_Circle,
+      ∃ hw : apm_t91a01_planeEquiv.symm
+          (apm_t91a01_chartField V p (apm_t91a01_circlePoint p r z)) ≠ 0,
+        apm_t91a01_planeEquiv.symm
+            (apm_t91a01_chartField V p (apm_t91a01_circlePoint p r z)) /
+          (‖apm_t91a01_planeEquiv.symm
+            (apm_t91a01_chartField V p (apm_t91a01_circlePoint p r z))‖ : ℂ) =
+          z.1 ^ 3
 
 /-- A local index-three model exists; on a compact connected oriented smooth
 surface, a smooth tangent vector field having an isolated zero whose actual
