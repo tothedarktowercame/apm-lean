@@ -50684,13 +50684,43 @@
    [:routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_inverse_overlap_local.lean",
+      :sha256
+      "a0ba63df8761bf8054d6939682f2bad5bcb8ae3798e3ba304a8b9ae31f883705"},
+     :commands
+     [{:cmd "lake env lean /tmp/rp_sphere_inverse_overlap_local.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_inverse_overlap_local.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+      :acceptance
+      {:declarations
+       ["SphereProjectionLocalInverseFamily.inverseBranch_eventuallyEq_or_antipodal"],
+       :fixture "/tmp/rp_sphere_inverse_overlap_local.lean",
+       :consumer-residual
+       "Assemble quotient charts from the local inverse family and discharge smooth overlaps by eventual identity or analytic antipodal equality.",
+       :axioms :standard-only}},
+     :residual
+     "The locally constant identity-or-antipodal overlap law compiles without placeholders. Promotion is confined to RealProjectiveSmoothTarget; the remaining descent proof can now invoke smooth locality directly."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile the placeholder-free fixture /tmp/rp_sphere_inverse_overlap_local.lean proving SphereProjectionLocalInverseFamily.inverseBranch_eventuallyEq_or_antipodal. At every point in a pairwise target overlap, prove that the two inverse branches are eventually equal or eventually related by sphereAntipodalN 2 in the ambient neighborhood filter. Use continuity of the OpenPartialHomeomorph inverses, the banked pointwise overlap dichotomy, and separation by the sign of the sphere inner product. This supplies the local constancy required by smooth locality for t95A04 and t96A07."},
+   {:declarations
+    ["SphereProjectionLocalInverseFamily.inverseBranch_eventuallyEq_or_antipodal"],
+    :fixture "/tmp/rp_sphere_inverse_overlap_local.lean",
+    :consumer-residual
+    "Assemble quotient charts from the local inverse family and discharge smooth overlaps by eventual identity or analytic antipodal equality.",
+    :axioms :standard-only},
    :id :routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1,
    :kind :reusable-theorem,
    :depends-on [:routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1],
