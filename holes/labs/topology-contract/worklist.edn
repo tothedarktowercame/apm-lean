@@ -79640,13 +79640,28 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "130 registered statements match, 0 do not"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790636991813-26668-b0997b7d",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 2f06838a"
+      "git show 2f06838a:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "test canonical .lake/packages authority; lake env lean -o /tmp/t95closure-review/t95J02/lean/Main.olean problems/t95J02/lean/Main.lean"
+      "LEAN_PATH=/tmp/t95closure-review lake env lean /tmp/t95j02-assembly-probe.lean"
+      "sha256sum /tmp/t95j02-assembly-probe.lean problems/STATEMENTS.json"
+      "python3 scripts/statement-registry.py check; fingerprint t95J02 --rev 2f06838a"
+      "Python comment-stripped source and fixture census at commit and parent"
+      "rg vertical-fibre EqvGen classification, CircleB identification, and AddCircle homeomorphism APIs"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-4. Commit 2f06838a changes only holes/labs/topology-contract/worklist.edn and its 654-item recorded snapshot validates. The adapter row honestly records STOP rather than closure: the t95J02 source is byte-identical to its parent and retains three comment-stripped placeholders. The assembly fixture has zero textual placeholders but uses apm_t95j02.1 for the positive half and the two admitted bridges for the negative half, so its reported sorryAx is inherited rather than eliminated. Source and fixture compile; fixture SHA-256 reproduces as f3b42c4af0b0a43714825c432891ae99f6459d7407390f3679df91fbf56a846a. The registry reproduces 130/130, registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, and faithful t95J02 hash 45c5bf77c662ed659a09a33b11a5b90a091a4ede4403a302fe3d550f60a45456. The representation boundary is correctly preserved: generic AddCircle and circle homeomorphisms do not identify AddCircle 1 with the subtype CircleB of the custom Klein Relation.EqvGen quotient. The source has generator equalities but no iff theorem classifying equality of vertical representatives; that classification or an equivalent quotient factorization is required for the homeomorphism inverse laws. The quotient-invariant trigonometric map and forward vertical descent do not prove injectivity. Consequently the glide homotopy, H1 kernel calculation, retraction injectivity, and final contradiction remain genuine downstream obligations rather than facts hidden by the fixture."},
     :fixture
     {:path "/tmp/t95j02-assembly-probe.lean",
      :sha256
      "f3b42c4af0b0a43714825c432891ae99f6459d7407390f3679df91fbf56a846a"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t95J02",
    :acceptance
@@ -79681,7 +79696,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
