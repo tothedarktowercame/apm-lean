@@ -78865,6 +78865,21 @@
       :stage :exterior-derivative-calculation,
       :correction
       "The bundled coordinate two-form and its differentiability were made to compile; extDeriv_apply then reduced closedness to three uncomputed Frechet product derivatives. The exploratory edit was restored exactly."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790634746690-26565-1b42ad11",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 1d8fde88"
+      "git show 1d8fde88:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "test canonical .lake/packages authority; lake env lean -o /tmp/t94review/t94A10/lean/Main.olean problems/t94A10/lean/Main.lean"
+      "LEAN_PATH=/tmp/t94review lake env lean /tmp/t94a10-assembly-probe.lean"
+      "sha256sum /tmp/t94a10-assembly-probe.lean problems/STATEMENTS.json"
+      "python3 scripts/statement-registry.py check; fingerprint t94A10 --rev 1d8fde88"
+      "Python comment-stripped source and fixture census at commit and parent"
+      "rg extDeriv scalar-smultiplication and locality APIs in Mathlib and ConstructionTargets"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-2. Commit 1d8fde88 changes only holes/labs/topology-contract/worklist.edn and records no source paths; its 648-item snapshot validates. The STOP accurately claims zero progress: the t94A10 source blob is identical to its parent and remains at three comment-stripped placeholders, while the assembly fixture has zero textual placeholders and merely pairs the admitted closedness and non-exactness bridges. Source and fixture compile, with sorryAx appearing only through those inherited bridges. The fixture SHA-256 reproduces as c75c08f4960a7a26ddb2fcb87b696248dbff4547cde5826ea684de6186c1706c. The registry reproduces 130/130, registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, and faithful t94A10 hash d182222174cec68165c14a2357dea0b5559de7f2623f82b0771218d379a0996b. The orientation and representation boundary are exact: apm_t94A10_bridge_solidAngle_closed must establish both differentiability of the actual conditional ambient extension at every nonzero point and extDeriv equal to zero there. Eventual equality can transfer to the explicit local formula, but Mathlib banks only constant-scalar extDeriv smultiplication; the variable inverse-cubic radial factor still requires Frechet product derivatives plus the three-dimensional Laplace/Euler cancellation. The row does not treat the compiled assembly facade as proof and leaves the sphere-pullback/Green non-exactness step separate."},
     :changed-paths [],
     :fixture
     {:path "/tmp/t94a10-assembly-probe.lean",
@@ -78872,7 +78887,7 @@
      "c75c08f4960a7a26ddb2fcb87b696248dbff4547cde5826ea684de6186c1706c"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t94A10/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t94A10/closedness",
    :acceptance
@@ -78957,7 +78972,7 @@
      :residual
      "The placeholder-free assembly fixture proves that the main theorem is pure conjunction assembly. The first missing prerequisite is exactly apm_t94A10_bridge_solidAngle_closed (route step 1); after it is banked, route steps 2-3 remain for the independent non-exactness bridge."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A10",
    :acceptance
