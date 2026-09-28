@@ -17,4 +17,7 @@ theorem apm_tunk03
     {X : Type*} [TopologicalSpace X] (s : Setoid X)
     (hopen : IsOpenMap (Quotient.mk' : X → Quotient s)) :
     IsClosed {p : X × X | s.r p.1 p.2} ↔ T2Space (Quotient s) := by
-  sorry
+  have h : IsOpenQuotientMap (Quotient.mk' : X → Quotient s) :=
+    ⟨Quotient.mk'_surjective, continuous_quotient_mk', hopen⟩
+  rw [t2Space_iff_of_isOpenQuotientMap h]
+  simp only [Quotient.eq']
