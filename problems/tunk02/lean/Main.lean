@@ -16,4 +16,4 @@ theorem apm_tunk02
     (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y]
     [RegularSpace X] [RegularSpace Y] :
     Nonempty (RegularSpace (X × Y)) := by
-  sorry
+  exact ⟨inferInstance⟩
