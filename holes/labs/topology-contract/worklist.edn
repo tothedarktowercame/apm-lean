@@ -78214,13 +78214,28 @@
       :exit 0,
       :finding "Both fixtures contain zero placeholders."}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790632645177-26487-28dbb0e4",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 8d021603"
+      "lake env lean -o /tmp/t02reprobe/t02A05/lean/Main.olean problems/t02A05/lean/Main.lean"
+      "LEAN_PATH=/tmp/t02reprobe lake env lean /tmp/T02A05NormalizedBoundary.lean"
+      "sha256sum /tmp/T02A05NormalizedBoundary.lean /tmp/t02a05-assembly-probe.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show 8d021603:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "Python Git-blob and fixture SHA-256 plus placeholder census"
+      "rg normalized sphere-mass theorem candidates; reproduced exit 1"],
+     :finding
+     "PASS scheduling STOP: reviewer codex-3 is distinct from author topo-4. Commit 8d021603 is ledger-only with exact scope holes/labs/topology-contract/worklist.edn; its snapshot validates at 642 items. The normalized boundary fixture hash 1e8a3eeade4742ff39516783f4f80b29eae5ce63400b36fc4f54a4fc748f1d2e and assembly fixture hash 549bdba880150e9e0a02c166f19e682671fce507cb167615d4533b19db90d34d reproduce, both fixtures contain no lexical placeholders, and the boundary compiles with only standard axioms. The parent STOP accurately propagates the reviewed result: against the registered μHE[2] representation, the flux bridge is equivalent to the actual normalized unit-sphere subtype mass equaling 4*pi, and fresh search finds no theorem evaluating that mass. It does not claim that the raw μH[2] moment or assembly fixture closes this analytic boundary. The consumer remains unchanged with two placeholders; registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0 and t02A05 statement hash 9d8293f1a68d4bf4b223ac7b97205d7e46d0cac41758bd23982e949ddf640815 reproduce. No source evidence commit applies to this read-only STOP."},
     :fixture
     {:path "/tmp/T02A05NormalizedBoundary.lean",
      :sha256
      "1e8a3eeade4742ff39516783f4f80b29eae5ce63400b36fc4f54a4fc748f1d2e"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A05",
    :acceptance
@@ -78255,7 +78270,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
