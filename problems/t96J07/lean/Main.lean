@@ -42,6 +42,59 @@ noncomputable def apm_t96j07_Hmap (k : ℕ) (f : C(apm_t96j07_RP3, apm_t96j07_RP
   ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
     (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)
 
+noncomputable abbrev apm_t96j07_HQ (k : ℕ) :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+    (ModuleCat.of ℚ ℚ)).obj (TopCat.of apm_t96j07_RP3))
+
+noncomputable def apm_t96j07_HQmap (k : ℕ)
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3)) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℚ) k).obj
+    (ModuleCat.of ℚ ℚ)).map (TopCat.ofHom f)
+
+/-- The global Lefschetz number is the alternating trace of the actual maps
+induced by `f` on rational singular homology.  The isomorphisms are bases, not
+assumptions about the value of any trace. -/
+def apm_t96j07_HasLefschetzNumber
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3)) (L : ℚ) : Prop :=
+  ∃ e0 : apm_t96j07_HQ 0 ≅ ModuleCat.of ℚ ℚ,
+    ∃ e1 : apm_t96j07_HQ 1 ≅ ModuleCat.of ℚ (Fin 0 → ℚ),
+    ∃ e2 : apm_t96j07_HQ 2 ≅ ModuleCat.of ℚ (Fin 0 → ℚ),
+    ∃ e3 : apm_t96j07_HQ 3 ≅ ModuleCat.of ℚ ℚ,
+      L = LinearMap.trace ℚ ℚ (e0.inv ≫ apm_t96j07_HQmap 0 f ≫ e0.hom).hom -
+          LinearMap.trace ℚ (Fin 0 → ℚ) (e1.inv ≫ apm_t96j07_HQmap 1 f ≫ e1.hom).hom +
+          LinearMap.trace ℚ (Fin 0 → ℚ) (e2.inv ≫ apm_t96j07_HQmap 2 f ≫ e2.hom).hom -
+          LinearMap.trace ℚ ℚ (e3.inv ≫ apm_t96j07_HQmap 3 f ≫ e3.hom).hom
+
+noncomputable abbrev apm_t96j07_E3 := EuclideanSpace ℝ (Fin 3)
+noncomputable abbrev apm_t96j07_S2 := Metric.sphere (0 : apm_t96j07_E3) 1
+noncomputable abbrev apm_t96j07_H2S2 :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t96j07_S2))
+
+/-- Intrinsic local fixed-point index: in a chart around `q`, normalize the
+actual displacement `x - f(x)` on a small linking sphere and take its degree. -/
+def apm_t96j07_HasLocalLefschetzNumber
+    (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
+    (q : apm_t96j07_RP3) (d : ℤ) : Prop :=
+  ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
+    q ∈ chart.source ∧ chart q = 0 ∧
+    ∃ r : ℝ, 0 < r ∧
+      ∃ link : C(apm_t96j07_S2, apm_t96j07_S2),
+        (∀ x, chart.symm (r • x.1) ∈ chart.source ∧
+          f (chart.symm (r • x.1)) ∈ chart.source ∧
+          ∃ hne : r • x.1 - chart (f (chart.symm (r • x.1))) ≠ 0,
+            link x = ⟨‖r • x.1 - chart (f (chart.symm (r • x.1)))‖⁻¹ •
+              (r • x.1 - chart (f (chart.symm (r • x.1)))), by
+                rw [Metric.mem_sphere, dist_zero_right, norm_smul, norm_inv,
+                  norm_norm]
+                exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr hne)⟩) ∧
+        ∃ orientation : apm_t96j07_H2S2 ≅ ModuleCat.of ℤ ℤ,
+          ∀ a : apm_t96j07_H2S2,
+            orientation.hom
+              (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+                (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom link) a) =
+              d * orientation.hom a
+
 lemma apm_t96j07_A_ne_zero {x : apm_t96j07_V} (hx : x ≠ 0) :
     apm_t96j07_A x ≠ 0 := by
   intro h
@@ -141,14 +194,19 @@ theorem apm_t96j07 :
           intro h
           have := congrFun h i
           simp [apm_t96j07_axis] at this)) ∧
-      apm_t96j07_localIndex 0 = -1 ∧
-      apm_t96j07_localIndex 1 = 1 ∧
-      apm_t96j07_localIndex 2 = -1 ∧
-      apm_t96j07_localIndex 3 = 1 ∧
-      (∑ i : Fin 4, apm_t96j07_localIndex i) = 0 ∧
-      apm_t96j07_Hmap 0 f = 𝟙 (apm_t96j07_H 0) ∧
-      apm_t96j07_Hmap 3 f = 𝟙 (apm_t96j07_H 3) ∧
-      ((1 : ℤ) - 1) = 0 := by
+      apm_t96j07_HasLocalLefschetzNumber f
+        (Projectivization.mk ℝ (apm_t96j07_axis 0) (by
+          intro h; have := congrFun h 0; simp [apm_t96j07_axis] at this)) (-1) ∧
+      apm_t96j07_HasLocalLefschetzNumber f
+        (Projectivization.mk ℝ (apm_t96j07_axis 1) (by
+          intro h; have := congrFun h 1; simp [apm_t96j07_axis] at this)) 1 ∧
+      apm_t96j07_HasLocalLefschetzNumber f
+        (Projectivization.mk ℝ (apm_t96j07_axis 2) (by
+          intro h; have := congrFun h 2; simp [apm_t96j07_axis] at this)) (-1) ∧
+      apm_t96j07_HasLocalLefschetzNumber f
+        (Projectivization.mk ℝ (apm_t96j07_axis 3) (by
+          intro h; have := congrFun h 3; simp [apm_t96j07_axis] at this)) 1 ∧
+      apm_t96j07_HasLefschetzNumber f 0 := by
   sorry
 
 #print axioms apm_t96j07_not_fixed_axis_clause
