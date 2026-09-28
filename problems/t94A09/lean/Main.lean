@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.EvenSphereTangentFieldObstruction
 
 /-!
 # APM t94A09 — vector fields on two spheres and a torus
@@ -257,4 +258,15 @@ theorem apm_t94a09 :
   -/
   refine ⟨?_, apm_t94a09_exists_smoothSphereField_S3,
     apm_t94a09_exists_smoothTorusField_unique_zero⟩
-  sorry
+  rintro ⟨V, ⟨Vext, hVext, hrest⟩, hnz⟩
+  have hVeq : V = fun p : apm_t94a09_S2 => Vext p := by
+    funext p
+    exact (hrest p).1.symm
+  have hcont : Continuous V := by
+    rw [hVeq]
+    fun_prop
+  open ConstructionTargets.EvenSphereTangentFieldObstruction in
+  exact id_not_homotopic_antipodal 1 (by decide)
+    (homotopy_of_field 1 V hcont (fun p => (hrest p).2) hnz)
+
+#print axioms apm_t94a09
