@@ -79289,13 +79289,28 @@
       :finding
       "The search finds Mathlib's pointwise manifold chart transport and its closed-ball-uniform Euclidean Picard-Lindelof theorem, but no family-level manifold theorem carrying one closed ball of initial coordinates through a shared chart and time interval."}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790635865743-26612-db58abbb",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 16c3b60f"
+      "git show 16c3b60f:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "test canonical .lake/packages authority; lake env lean -o /tmp/t92closure-review/t92J08/lean/Main.olean problems/t92J08/lean/Main.lean"
+      "LEAN_PATH=/tmp/t92closure-review lake env lean /tmp/t92j08-uniform-time-consumer.lean"
+      "sha256sum /tmp/t92j08-uniform-time-consumer.lean problems/STATEMENTS.json"
+      "python3 scripts/statement-registry.py check; fingerprint t92J08 --rev 16c3b60f"
+      "Python comment-stripped source and fixture census at commit and parent"
+      "rg pointwise manifold and closed-ball Euclidean integral-curve APIs plus family-level alternatives"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-4. Commit 16c3b60f changes only holes/labs/topology-contract/worklist.edn and its 651-item recorded snapshot validates. The adapter row honestly records STOP rather than closure: the t92J08 source is byte-identical to its parent and retains three comment-stripped placeholders. The exact bridge-consumer fixture contains no textual placeholder, but directly calls apm_t92J08_bridge_1 and therefore reports inherited sorryAx. Source and fixture compile; fixture SHA-256 reproduces as e1592fa3174d7482a65353c26493e523fe269d0a9594084e38a3fbbc956f9dd7. The registry reproduces 130/130, registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, and faithful t92J08 hash f36424b88f995e3e160d52497b0bde44ea1b5107b1a302780ac5111e4ae2cbc4. The orientation and representation boundary are accurate: bridge_1 must produce one positive time uniform over every point of the compact manifold. Mathlib separately provides pointwise extChart transport and Euclidean closed-ball-uniform Picard-Lindelof existence, but no banked family-level manifold transport keeping all curves in one chart target interior for the shared interval. Compact finite-subcover minimization follows only after that missing neighborhood-uniform result. The scalar blow-up contradiction and final assembly remain downstream; the consumer fixture does not prove or bypass them."},
     :fixture
     {:path "/tmp/t92j08-uniform-time-consumer.lean",
      :sha256
      "e1592fa3174d7482a65353c26493e523fe269d0a9594084e38a3fbbc956f9dd7"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t92J08",
    :acceptance
@@ -79330,7 +79345,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
