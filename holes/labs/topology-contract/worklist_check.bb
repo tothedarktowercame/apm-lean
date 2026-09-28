@@ -34,6 +34,13 @@
         f (if (.isAbsolute candidate) candidate (io/file root p))]
     (when (.isFile f)
       (first (str/split (:out (shell/sh "sha256sum" (.getPath f))) #"\s+")))))
+(defn committed-file-sha
+  "sha256 of repo path p as it was at commit c; nil when absent there."
+  [c p]
+  (let [rel (str/replace (str p) (re-pattern (str "^" (java.util.regex.Pattern/quote (str root "/")))) "")
+        r (shell/sh "sh" "-c" "git show \"$1:$2\" | sha256sum" "_" c rel :dir root)
+        ok (zero? (:exit (sh "git" "cat-file" "-e" (str c ":" rel))))]
+    (when ok (first (str/split (:out r) #"\s+")))))
 (when-not (= (count ids) (count (set ids))) (die "duplicate item ids"))
 (doseq [i items]
   (doseq [k [:id :kind :state :depends-on :consumer :acceptance]]
@@ -103,7 +110,13 @@
             (die (:id i) "commit paths differ from exact scope"))
           (when-not (and (map? fixture) (:path fixture) (:sha256 fixture))
             (die (:id i) "completed without fixture path and hash"))
-          (when-not (= (:sha256 fixture) (file-sha (:path fixture)))
+          ;; The fixture records the file as the row's evidence commit left
+          ;; it. A later commit may legitimately change that file -- a closing
+          ;; proof, or a graded statement repair (t96J07's rewrite, 2026-09-28,
+          ;; failed two finished rows here) -- so accept the hash of the file
+          ;; at one of the row's own commits as well as the current file.
+          (when-not (or (= (:sha256 fixture) (file-sha (:path fixture)))
+                        (some #(= (:sha256 fixture) (committed-file-sha % (:path fixture))) commits))
             (die (:id i) "fixture hash mismatch or file absent" (:path fixture)))))
       (when (some #(not= (get % :expected-exit 0) (:exit %)) (:commands e))
         (die (:id i) "records an unexpected gate exit"))))

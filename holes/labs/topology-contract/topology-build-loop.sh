@@ -97,6 +97,15 @@ trap 'on_signal INT' INT
 trap 'on_signal TERM' TERM
 trap 'on_signal HUP' HUP
 validate() { bb "$HERE/worklist_check.bb" "$LEDGER" >> "$LOG" 2>&1 || die "ledger validation failed"; }
+# Every registered statement must still match its approved fingerprint
+# (problems/STATEMENTS.json, Joe 2026-09-28). A mismatch means someone changed
+# an approved statement on master; no agent repairs that by itself, so the
+# supervisor treats it as not repairable and a Claude seat or Joe decides.
+statements_intact() {
+  local out
+  out="$(command python3 "$ROOT/scripts/statement-registry.py" check --rev HEAD 2>&1)" \
+    || die "statement registry mismatch: $(tr '\n' ' ' <<<"$out" | cut -c1-400)"
+}
 repository_safe() {
   [ "$(readlink -f "$ROOT/.lake/packages")" = "/home/joe/code/apm-lean/.lake/packages" ] || die "wrong package authority"
   [ "${TOPOLOGY_ALLOW_DIRTY:-0}" = 1 ] && return 0
@@ -292,7 +301,7 @@ apply_job_result() {
 # bookkeeping, and dying here would send a repair agent.
 refresh_status() {
   local row="$1" changed
-  if ! changed="$(python3 "$ROOT/scripts/refresh-topology-status.py" 2>>"$LOG")"; then
+  if ! changed="$(command python3 "$ROOT/scripts/refresh-topology-status.py" 2>>"$LOG")"; then
     log "WARNING status.json refresh failed after $row"
     send_notice "status.json refresh failed after row=$row; see build-loop.log"
     return 0
@@ -416,7 +425,7 @@ log "seats resolved: owner=$OWNER review=$REVIEW_SEAT author=$AUTHOR_SEAT probe=
 i=0
 STALL_KEY=""; STALL_N=0
 while [ "$i" -lt "$MAX_ITER" ]; do
-  i=$((i+1)); validate; repository_safe
+  i=$((i+1)); validate; repository_safe; statements_intact
   unreviewed="$(bb "$HERE/build_step.bb" unreviewed "$LEDGER")"
   if [ -n "$unreviewed" ]; then
     prompt="$(mktemp)"
@@ -444,7 +453,7 @@ while [ "$i" -lt "$MAX_ITER" ]; do
     dispatch_and_wait "$seat" "$prompt" "work($next)" "$next"; rm -f "$prompt"
     apply_job_result "$next" "$(bb "$HERE/inflight.bb" field "$INFLIGHT" token)" || continue
   fi
-  validate
+  validate; statements_intact
   key="$(sha256sum "$LEDGER" | cut -d' ' -f1)"
   if [ "$key" = "$STALL_KEY" ]; then STALL_N=$((STALL_N+1)); else STALL_KEY="$key"; STALL_N=0; fi
   [ "$STALL_N" -lt 3 ] || die "ledger unchanged for three iterations"

@@ -18,6 +18,8 @@ end = source.index('i=0\nSTALL_KEY=', start)
 setup = r'''
 ROOT="$TEST_ROOT"
 repository_safe() { :; }
+statements_intact() { :; }
+refresh_status() { :; }
 send_notice() { :; }
 python3() {
   local n=0

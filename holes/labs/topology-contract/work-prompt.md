@@ -42,6 +42,15 @@ source-fiber coordinate-image representation" -- naming the relation as well
 as the direction. Only you can supply it; nobody downstream can infer it from
 the other two fields without inventing mathematics.
 
+APPROVED STATEMENTS (Joe, 2026-09-28). Work only toward problems whose
+statement is in `problems/STATEMENTS.json`; admission refuses a row whose
+consumers are all unregistered. Never change a registered theorem's statement
+or any definition it uses: the loop checks every registered fingerprint each
+iteration (`python3 scripts/statement-registry.py check`) and stops on a
+mismatch. Never write `problems/STATEMENTS.json`, `scripts/statement-registry.py`
+or `holes/labs/statement-registry/`. If a statement looks unprovable or wrong,
+STOP and say why; an outside grader decides, not the loop.
+
 NEED-DRIVEN ELECTION (Joe, 2026-09-10; every strategy checkpoint, both
 loops). Infrastructure is built because an open frozen problem needs it to
 close, and for no other reason.

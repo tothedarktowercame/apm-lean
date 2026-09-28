@@ -5,7 +5,8 @@
          '[clojure.java.shell :as shell]
          '[clojure.pprint :as pprint]
          '[clojure.walk :as walk]
-         '[clojure.java.io :as io])
+         '[clojure.java.io :as io]
+         '[cheshire.core :as json])
 
 (def here (.getParent (.getAbsoluteFile (java.io.File. *file*))))
 (def cmd (first *command-line-args*))
@@ -206,7 +207,11 @@
               (throw (ex-info "completion transition target missing or hash mismatch" {}))))
           (assoc xs index (assoc-in row (:path transition) (:to transition)))))))
     xs))
+(declare protected-path?)
 (defn validate-inserted-row! [row allowed-ids]
+  (when-let [p (seq (filter #(protected-path? (str %)) (:scope row)))]
+    (throw (ex-info "inserted row scopes the statement registry, which loop rows may not write"
+                    {:id (:id row) :paths (vec p)})))
   (doseq [dependency (:depends-on row)]
     (when-not (allowed-ids dependency)
       (throw (ex-info "inserted row has unknown dependency"
@@ -280,11 +285,30 @@
        (keep problem-of) distinct
        (filter #(some-> (placeholder-count %) pos?))
        set))
+;; Approved statement registry (Joe, 2026-09-28). A problem is worth working
+;; on only when its statement is one an outside grader approved: 18 of 62
+;; problems this loop closed turned out to be proved against narrower, vacuous
+;; or core-assuming statements. So only registered problems are electable
+;; consumers, and no row may write the registry or its evidence. The per-
+;; iteration `statement-registry.py check` in topology-build-loop.sh catches a
+;; registered statement changed on master by anyone.
+(def registered-problems
+  (delay (let [f (io/file problems-root "STATEMENTS.json")]
+           (if (.exists f)
+             (set (keys (get (json/parse-string (slurp f)) "entries")))
+             #{}))))
+(def protected-path?
+  (some-fn #{"problems/STATEMENTS.json" "scripts/statement-registry.py"}
+           #(str/starts-with? % "holes/labs/statement-registry/")))
 (defn need-violation
   "Why a strategy-elected work row is not needed to close an open problem, or nil."
   [row]
-  (let [open (open-problems row)]
+  (let [named-open (open-problems row)
+        open (set (filter @registered-problems named-open))]
     (cond
+      (and (empty? open) (seq named-open))
+      {:id (:id row) :unregistered (vec named-open)
+       :reason "names only open problems whose statement is not in the approved registry (problems/STATEMENTS.json); an unregistered statement needs a graded rewrite, not infrastructure"}
       (empty? open)
       {:id (:id row) :consumers (vec (cons (:consumer row) (:other-consumers row)))
        :reason "names no open frozen problem; infrastructure is elected only when an open problem needs it"}
@@ -367,6 +391,9 @@
                                          :out str/split-lines
                                          (remove str/blank?) set)
                                    commits))]
+            (when-let [p (seq (filter protected-path? paths))]
+              (throw (ex-info "implementation commit touches the statement registry, which loop rows may not write"
+                              {:id id :paths (vec p)})))
             (when-not (= (set (:scope item)) paths)
               (throw (ex-info "implementation commit paths differ from exact scope"
                               {:id id :scope (set (:scope item))

@@ -78,6 +78,9 @@ not_repairable() {
     # account sat at 95%, so three futile repairs plus an escalation was the
     # worst possible use of what was left. Stop and tell a human once.
     *"usage limit"*|*"quota"*|*"rate limit"*|*"purchase more credits"*) return 0 ;;
+    # An approved statement changed on master. A repair agent could only
+    # revert someone's commit or edit the registry, and neither is its call.
+    *"statement registry mismatch"*) return 0 ;;
   *) return 1 ;;
   esac
 }

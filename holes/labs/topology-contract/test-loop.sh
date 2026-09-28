@@ -40,7 +40,9 @@ checkpoint="$(mktemp)"
 cp "$HERE/fixtures/checkpoint-ledger.edn" "$checkpoint"
 # Need-driven admission: a row naming no open frozen problem is refused, and
 # so is one whose only problem is already closed.
-for unneeded in ':consumer :circle-fundamental-class' ':consumer :tfix03'; do
+# tfix04 is open but its statement is not in fixtures/problems/STATEMENTS.json:
+# only registered problems are electable consumers.
+for unneeded in ':consumer :circle-fundamental-class' ':consumer :tfix03' ':consumer :tfix04'; do
   unneeded_replan="$(mktemp)"
   sed "s/:consumer :tfix01/$unneeded/" "$HERE/fixtures/replan-receipt.edn" > "$unneeded_replan"
   before="$(sha256sum "$checkpoint" | cut -d' ' -f1)"
@@ -108,7 +110,7 @@ extracted="$(mktemp)"
 grep -q '^\{:outcome :revise' "$extracted"
 rm -f "$extracted"
 
-grep -A12 '^apply_job_result()' "$HERE/topology-build-loop.sh" \
+sed -n '/^apply_job_result()/,/^}/p' "$HERE/topology-build-loop.sh" \
   | grep -q 'clear "$INFLIGHT"'
 
 grep -q 'queued|delivering|running|accepted' "$HERE/topology-build-loop.sh"
