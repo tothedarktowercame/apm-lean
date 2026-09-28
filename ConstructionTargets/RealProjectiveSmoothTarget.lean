@@ -610,4 +610,48 @@ theorem sphereProjectionQuotientTransitionLocalNormalFormWithDomains :
       rw [← he]
       exact hd.2.2
 
+/-- The exact pairwise transition obligation for the chosen quotient charts. -/
+def SphereProjectionQuotientChartTransitionCompatibility : Prop :=
+  ∀ (F : SphereProjectionLocalInverseFamily) (y z : Space ℝ 2),
+    ContDiffOn ℝ ∞
+      ((𝓡 2) ∘ (F.quotientChart y).symm ≫ₕ
+        F.quotientChart z ∘ (𝓡 2).symm)
+      ((𝓡 2).symm ⁻¹' ((F.quotientChart y).symm ≫ₕ
+        F.quotientChart z).source ∩ Set.range (𝓡 2))
+
+theorem sphereProjectionQuotientChartTransitionCompatibility :
+    SphereProjectionQuotientChartTransitionCompatibility := by
+  intro F y z u hu
+  rcases sphereProjectionQuotientTransitionLocalNormalFormWithDomains F y z u hu with
+      ⟨h, hdom⟩ | ⟨h, hdom⟩
+  · have hs : ContDiffAt ℝ ∞
+        (fun v => (𝓡 2)
+          (chartAt (E 2) (F.lift z)
+            ((chartAt (E 2) (F.lift y)).symm ((𝓡 2).symm v)))) u :=
+      (sphereChartTransitionAlternativesSmooth (F.lift y) (F.lift z) u).1 hdom
+    exact hs.contDiffWithinAt.congr_of_eventuallyEq_of_mem
+      (h.filter_mono inf_le_left) hu
+  · have hs : ContDiffAt ℝ ∞
+        (fun v => (𝓡 2)
+          (chartAt (E 2) (F.lift z)
+            (sphereAntipodalN 2
+              ((chartAt (E 2) (F.lift y)).symm ((𝓡 2).symm v))))) u :=
+      (sphereChartTransitionAlternativesSmooth (F.lift y) (F.lift z) u).2 hdom
+    exact hs.contDiffWithinAt.congr_of_eventuallyEq_of_mem
+      (h.filter_mono inf_le_left) hu
+
+theorem quotientChartTransitionCompatibility_gives_manifold
+    (h : SphereProjectionQuotientChartTransitionCompatibility)
+    (F : SphereProjectionLocalInverseFamily) :
+    letI := F.quotientChartedSpace
+    IsManifold (𝓡 2) ∞ (Space ℝ 2) := by
+  letI := F.quotientChartedSpace
+  apply isManifold_of_contDiffOn
+  intro e e' he he'
+  change e ∈ Set.range F.quotientChart at he
+  change e' ∈ Set.range F.quotientChart at he'
+  obtain ⟨y, rfl⟩ := he
+  obtain ⟨z, rfl⟩ := he'
+  exact h F y z
+
 end ConstructionTargets.RealProjectiveSmoothTarget
