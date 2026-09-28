@@ -74,7 +74,7 @@ def apm_t02a05_orientedCoefficient (omega : apm_t02a05_Form2)
 
 def apm_t02a05_outwardSphereIntegral
     (omega : apm_t02a05_Form2) (c : apm_t02a05_E3) : ℝ :=
-  ∫ q : Metric.sphere c 1, apm_t02a05_orientedCoefficient omega c q ∂μH[2]
+  ∫ q : Metric.sphere c 1, apm_t02a05_orientedCoefficient omega c q ∂μHE[2]
 
 /-- The purely algebraic optimization step after the flux has been reduced to
 its explicit quadratic expression in the center. -/
