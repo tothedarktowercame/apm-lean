@@ -72,13 +72,21 @@ noncomputable abbrev apm_t96j07_H2S2 :=
     (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t96j07_S2))
 
 /-- Intrinsic local fixed-point index: in a chart around `q`, normalize the
-actual displacement `x - f(x)` on a small linking sphere and take its degree. -/
+actual displacement `x - f(x)` on a small linking sphere and take its degree.
+The closed `r`-ball lies in the chart's target and is carried by `f` back into
+its source, and `q` is the only fixed point in it, so the degree is the local
+index of `f` at `q` (independent of the chart and of such `r`). -/
 def apm_t96j07_HasLocalLefschetzNumber
     (f : C(apm_t96j07_RP3, apm_t96j07_RP3))
     (q : apm_t96j07_RP3) (d : ℤ) : Prop :=
   ∃ chart : OpenPartialHomeomorph apm_t96j07_RP3 apm_t96j07_E3,
     q ∈ chart.source ∧ chart q = 0 ∧
     ∃ r : ℝ, 0 < r ∧
+      Metric.closedBall (0 : apm_t96j07_E3) r ⊆ chart.target ∧
+      (∀ y ∈ Metric.closedBall (0 : apm_t96j07_E3) r,
+        f (chart.symm y) ∈ chart.source) ∧
+      (∀ y ∈ Metric.closedBall (0 : apm_t96j07_E3) r,
+        chart (f (chart.symm y)) = y → y = 0) ∧
       ∃ link : C(apm_t96j07_S2, apm_t96j07_S2),
         (∀ x, chart.symm (r • x.1) ∈ chart.source ∧
           f (chart.symm (r • x.1)) ∈ chart.source ∧
