@@ -160,6 +160,9 @@ def apm_t00j03_projectiveLoopIntegral
 by the projected half-circle its integral is `π`, and reversing orientation
 changes the sign. -/
 theorem apm_t00j03 :
+    Continuous apm_t00j03_projectiveLoop ∧
+    Set.SurjOn apm_t00j03_projectiveLoop (Set.Ico 0 Real.pi) Set.univ ∧
+    Set.InjOn apm_t00j03_projectiveLoop (Set.Ico 0 Real.pi) ∧
     apm_t00j03_projectiveLoop 0 = apm_t00j03_projectiveLoop Real.pi ∧
     ∃ eta : apm_t00j03_ProjectiveTangent → ℝ,
       (∀ (x : apm_t00j03_PuncturedPlane) (v : apm_t00j03_Plane),
