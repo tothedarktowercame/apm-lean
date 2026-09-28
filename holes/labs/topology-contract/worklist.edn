@@ -79516,8 +79516,55 @@
    "After reviewed t92J08, preserve all holds and STOPs, then rank t91J06, t95J02, and t99J04 by concrete remaining work.",
    :other-consumers []}
   {:consumer :t95J02,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Exact representation prerequisite: construct and compile a homeomorphism AddCircle 1 (equivalently euclideanUnitSphere 2) to t95J02CircleB. The forward map must descend y ↦ [(0,y)] through the vertical period. Its inverse may restrict the quotient-descended map [(x,y)] ↦ (cos(2*pi*y), sin(2*pi*y)*cos(pi*x)), but the inverse laws still require an EqvGen normal-form argument or an equivalent quotient factorization proving exactly which vertical representatives coincide. Existing t95J02 lemmas provide only the generating equalities, and no banked theorem establishes this subtype quotient identification. The glide homotopy and H1 calculation depend on it, so the consumer remains unchanged with three placeholders.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The exact assembly fixture compiles through the three current source placeholders and therefore reports sorryAx; it introduces no placeholder."}],
+    :statement-hashes
+    {:t95J02
+     "45c5bf77c662ed659a09a33b11a5b90a091a4ede4403a302fe3d550f60a45456",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :disposition :stop,
+    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason :missing-vertical-quotient-circle-identification,
+    :commands
+    [{:cmd "test canonical .lake/packages authority", :exit 0}
+     {:cmd "sha256sum /tmp/t95j02-assembly-probe.lean", :exit 0}
+     {:cmd
+      "lake env lean -o /tmp/t95probe/t95J02/lean/Main.olean problems/t95J02/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "LEAN_PATH=/tmp/t95probe lake env lean /tmp/t95j02-assembly-probe.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t95J02/lean/Main.lean",
+      :exit 0,
+      :finding "3"}
+     {:cmd
+      "rg vertical quotient normal forms, CircleB homeomorphisms, and AddCircle APIs",
+      :exit 0,
+      :finding
+      "AddCircle and sphere-circle homeomorphisms are banked, but no map identifies AddCircle with the subtype CircleB of this custom EqvGen quotient; only forward quotient-point equalities are present."}
+     {:cmd "git diff -- problems/t95J02/lean/Main.lean",
+      :exit 0,
+      :finding "empty"}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t95j02-assembly-probe.lean",
+     :sha256
+     "f3b42c4af0b0a43714825c432891ae99f6459d7407390f3679df91fbf56a846a"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t95J02/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t95J02/vertical-H1-kernel",
    :acceptance
