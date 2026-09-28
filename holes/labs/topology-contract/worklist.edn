@@ -77532,8 +77532,62 @@
    "After reviewed t94A07 outcome, recount all remaining ADAPTER problems and apply stop-after-two before choosing the next one-placeholder closure.",
    :other-consumers []}
   {:consumer :t99J06,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-4",
+    :reason
+    "The single syntactic sorry contains multiple independent unbanked constructions, so neither GO nor a legal one-prerequisite REVISE is available. The exterior-derivative identity is a differential-form calculation independent of the global polar-coordinate proof that parametrization '' parameters = cone. The image equality requires choosing an angle in [0,2*pi] for every cone point and treating the apex, while extDeriv alpha does not contribute such a choice. Separately, the rectangle-integral values require derivative/pullback formulas and trigonometric and polynomial integration; neither the exterior-derivative identity nor the image-surjectivity proof determines those integrals. ConstructionTargets.CoordinateSurfaceForms intentionally contains definitions only and its documentation states that this consumer must establish image and coverage. No compiled t99J06-specific theorem collapses these boundaries. The frozen conjunction appears mathematically true; this is a scheduling STOP for multiple independent prerequisites, not a refutation.",
+    :commands
+    [{:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t99J06/lean/Main.lean",
+      :exit 0,
+      :finding "1"}
+     {:cmd
+      "rg -n 'theorem (t99J06|apm_t99j06|image_parametrization_eq_cone|fderiv_parametrization|rectangleIntegral_alpha)' ConstructionTargets",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'Consumers: t99J06|A consumer must identify the geometric image' ConstructionTargets/CoordinateSurfaceForms.md",
+      :exit 0}],
+    :finding
+    {:registered-statement :preserved,
+     :placeholder "the sole sorry in apm_t99j06",
+     :independent-boundaries
+     [{:name :t99J06-exterior-derivative,
+       :supplies "extDeriv alpha = fun p => (2*p 2+1) • volumeForm",
+       :missing
+       "Compiled extDeriv_apply computation for the three literal coefficient terms, including coordinateWedge 2 2 = 0."}
+      {:name :t99J06-global-cone-parametrization,
+       :supplies "parametrization '' parameters = cone",
+       :missing
+       "Compiled reverse inclusion choosing an angle in the closed 0-to-2*pi interval, with separate apex handling."}
+      {:name :t99J06-immersion-and-coverage,
+       :supplies
+       "InjOn parametrization interiorParameters and injectivity of fderiv on the interior",
+       :missing
+       "Compiled periodic-angle injectivity and explicit derivative-column independence."}
+      {:name :t99J06-rectangle-integrals,
+       :supplies
+       "positivity of the dx-wedge-dy integral and rectangleIntegral alpha = 9*pi/2",
+       :missing
+       "Compiled pullback coefficient formulas plus nested trigonometric and polynomial integral evaluations."}],
+     :banked
+     ["CoordinateSurfaceForms.coordinateWedge"
+      "CoordinateSurfaceForms.volumeForm"
+      "CoordinateSurfaceForms.pullbackCoefficient"
+      "CoordinateSurfaceForms.rectangleIntegral"],
+     :classification
+     "Scheduling STOP for multiple independent prerequisites; not a mathematical refutation."},
+    :residual
+    "t99J06 remains at one placeholder containing four independently compilable packets: exterior derivative, global cone-image equality, interior embedding/immersion, and explicit rectangle integrals.",
+    :author "topo-4",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J06",
    :acceptance
