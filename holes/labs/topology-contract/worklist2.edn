@@ -50853,13 +50853,62 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile a placeholder-free inhabitant of SphereProjectionQuotientChartTransitionCompatibility from /tmp/rp_sphere_quotient_chart_transition.lean. For every banked inverse family and chart indices y z, prove the exact ContDiffOn formula for (real model 2) composed with quotientChart y symm then quotientChart z then the inverse model map, on the precise transition source. Use inverseBranch_eventuallyEq_or_antipodal plus the standard sphere IsManifold compatibility and contMDiff_neg_sphere. The fixture must also compile quotientChartTransitionCompatibility_gives_manifold, reducing this pairwise theorem to the required IsManifold instance for t95A04 and t96A07."},
+   :id :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
+    :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_quotient_chart_transition.lean",
+      :sha256
+      "9138a1e8dcd98462f5ba4745a2780ef98ea927bced39b390a8b55084b707d7e9"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_quotient_chart_transition.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_chart_transition.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :residual
+     "The requested compatibility fixture currently defines the IsManifold contract but does not inhabit it. The compiled prerequisite narrows the missing proof to the exact pairwise ContDiffOn transition formula for quotientChart y and quotientChart z, and proves that this formula implies IsManifold by isManifold_of_contDiffOn after reducing atlas membership to the chart indices. No topology or atlas definition changes. The remaining proof must use the banked eventual identity-or-antipodal inverse-branch theorem to discharge this single formula.",
+     :prerequisite
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free inhabitant of SphereProjectionQuotientChartTransitionCompatibility from /tmp/rp_sphere_quotient_chart_transition.lean. For every banked inverse family and chart indices y z, prove the exact ContDiffOn formula for (real model 2) composed with quotientChart y symm then quotientChart z then the inverse model map, on the precise transition source. Use inverseBranch_eventuallyEq_or_antipodal plus the standard sphere IsManifold compatibility and contMDiff_neg_sphere. The fixture must also compile quotientChartTransitionCompatibility_gives_manifold, reducing this pairwise theorem to the required IsManifold instance for t95A04 and t96A07."},
+      :id
+      :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
+       :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
+      :other-consumers [:t96A07]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free inhabitant of SphereProjectionQuotientAtlasCompatibility from /tmp/rp_sphere_quotient_atlas_compatibility.lean. For every banked SphereProjectionLocalInverseFamily, install quotientChartedSpace and prove IsManifold (real model 2) infinity on the existing projective Space. Apply isManifold_of_contDiffOn to quotientChart atlas members and prove each transition smooth by the banked eventual identity-or-antipodal inverse-branch law, standard sphere atlas compatibility, and contMDiff_neg_sphere. State no general quotient-manifold theorem. This supplies the smooth compatibility substep for t95A04 and t96A07."},
    :id
    :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
-    :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
+    :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1
+    :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
