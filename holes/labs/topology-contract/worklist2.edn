@@ -50762,28 +50762,45 @@
    :depends-on [:routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile the placeholder-free fixture /tmp/rp_sphere_quotient_charted_space.lean defining SphereProjectionLocalInverseFamily.quotientChart as the chosen local inverse followed by the standard sphere chart, defining the resulting quotientChartedSpace on the existing Space real 2, and proving it exists from sphereProjectionLocalInverseFamily. Prove mem_chart_source from lift_mem_source, project_lift, and the sphere chart source theorem without changing the frozen topology. This supplies the charted-space assembly needed by smooth descent for t95A04 and t96A07."},
+   :id :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/rp_sphere_inverse_overlap_local.lean",
+     {:path "/tmp/rp_sphere_quotient_charted_space.lean",
       :sha256
-      "a0ba63df8761bf8054d6939682f2bad5bcb8ae3798e3ba304a8b9ae31f883705"},
+      "33ca0674c6aad63db0d5ca9232b00d807cadd9b5d708c81ab7111bb8d8d95f61"},
      :commands
-     [{:cmd "lake env lean /tmp/rp_sphere_inverse_overlap_local.lean",
+     [{:cmd "lake env lean /tmp/rp_sphere_quotient_charted_space.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_inverse_overlap_local.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_charted_space.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
      :diagnostic-history
-     [{:cmd "lake env lean /tmp/rp_sphere_inverse_overlap_local.lean",
+     [{:cmd "lake env lean /tmp/rp_sphere_quotient_charted_space.lean",
        :exit 1,
        :finding
-       "The first draft omitted opening Topology, leaving neighborhood notation unresolved; adding the namespace opening corrected the fixture and the final compile succeeds."}],
+       "The first draft rewrote the lift equation through the dependent family index; replaced it with a nondependent simp proof for target membership and an explicit inverse calculation."}
+      {:cmd "lake env lean /tmp/rp_sphere_quotient_charted_space.lean",
+       :exit 1,
+       :finding
+       "The first inverse calculation still used dependent rewriting; replaced it with a calc chain using congrArg on the fixed localHomeomorph followed by left_inv."}],
      :residual
-     "The pointwise identity-or-antipodal overlap law is banked, but smooth locality requires one alternative to hold throughout a neighborhood. The compiled prerequisite proves exactly that eventual dichotomy. It uses continuity of both inverse branches and the sign of their real inner product: equality gives value 1, antipodality gives value -1, so continuity prevents the choice from switching near the overlap point. After promotion, chart transitions can be proved smooth locally from identity and contMDiff_neg_sphere.",
+     "The locally constant overlap law is banked, but the descent contract still needs an actual ChartedSpace on the frozen quotient. The compiled prerequisite constructs it: each preferred quotient chart is the chosen local inverse composed with the standard sphere chart at the chosen lift, and the lift projection equation proves the quotient point lies in the composite source. After promotion, the descent row only has to prove this atlas is smooth and that sphereProjection is a local diffeomorphism using the banked local overlap theorem.",
      :prerequisite
      {:consumer :t95A04,
       :phase :probe,
@@ -50792,14 +50809,14 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile the placeholder-free fixture /tmp/rp_sphere_inverse_overlap_local.lean proving SphereProjectionLocalInverseFamily.inverseBranch_eventuallyEq_or_antipodal. At every point in a pairwise target overlap, prove that the two inverse branches are eventually equal or eventually related by sphereAntipodalN 2 in the ambient neighborhood filter. Use continuity of the OpenPartialHomeomorph inverses, the banked pointwise overlap dichotomy, and separation by the sign of the sphere inner product. This supplies the local constancy required by smooth locality for t95A04 and t96A07."},
-      :id :routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1,
+       "Compile the placeholder-free fixture /tmp/rp_sphere_quotient_charted_space.lean defining SphereProjectionLocalInverseFamily.quotientChart as the chosen local inverse followed by the standard sphere chart, defining the resulting quotientChartedSpace on the existing Space real 2, and proving it exists from sphereProjectionLocalInverseFamily. Prove mem_chart_source from lift_mem_source, project_lift, and the sphere chart source theorem without changing the frozen topology. This supplies the charted-space assembly needed by smooth descent for t95A04 and t96A07."},
+      :id :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
-      [:routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1],
+      [:routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50811,7 +50828,8 @@
    [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
     :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1
     :routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1
-    :routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1],
+    :routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
+    :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
