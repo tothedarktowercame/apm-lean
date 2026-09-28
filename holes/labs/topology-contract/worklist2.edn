@@ -51263,62 +51263,32 @@
   {:consumer :t95A04,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
-     {:path
-      "/tmp/rp_sphere_quotient_transition_normal_form_domains.lean",
+     {:path "/tmp/rp_sphere_quotient_chart_transition.lean",
       :sha256
-      "7636a795b6e07a5ca6413baf08173b5dd8fef29ec700b9689e2c054ca33067d1"},
+      "ef8d43795d89201989c9568e549bcf4345efa369b24d09257af07a3639dd8f6c"},
      :commands
      [{:cmd
-       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form_domains.lean",
+       "lake env lean /tmp/rp_sphere_quotient_chart_transition.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_transition_normal_form_domains.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_chart_transition.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_quotient_chart_transition.lean",
-       :exit 1,
-       :finding
-       "The attempted pairwise proof showed that the banked local-normal-form disjunction omits the chart-domain membership corresponding to its selected equality; quotient-chart source membership only provides target-chart membership for inverseBranch z, not for inverseBranch y or its antipodal image."}
-      {:cmd
-       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form_domains.lean",
-       :exit 1,
-       :finding
-       "The first strengthened proof needed transitionInput unfolded before rewriting the branch equality in the ordinary domain witness."}
-      {:cmd
-       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form_domains.lean",
-       :exit 1,
-       :finding
-       "The antipodal branch equality has a composed right-hand side; an explicit pointwise equality simplified with Function.comp_apply corrected the final domain rewrite."}],
-     :residual
-     "The ordinary and antipodal coordinate representatives are smooth, but the banked local normal form returns only their eventual equalities and discards which representative lies in its partial-chart domain. The compiled prerequisite strengthens that exact dimension-2 normal form by pairing each equality with its corresponding ordinary transition-source membership or antipodal source/target memberships. Once banked, the pairwise ContDiffOn theorem follows pointwise by eventual-equality congruence, and quotientChartTransitionCompatibility_gives_manifold supplies IsManifold.",
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
       :acceptance
-      {:probe
-       "Compile the placeholder-free fixture /tmp/rp_sphere_quotient_transition_normal_form_domains.lean proving SphereProjectionQuotientTransitionLocalNormalFormWithDomains. For every inverse family, quotient-chart pair y z, and point u in the exact transition domain, return either the ordinary eventual coordinate equality together with membership in the exact ordinary sphere-chart transition source, or the antipodal eventual equality together with membership in the first sphere-chart target and the antipodal image in the second sphere-chart source. Derive both domain witnesses from transitionInput_domain, inverseBranch_quotientChart_symm, and the same pointwise branch equality used to construct the eventual normal form. This supplies the domain evidence required to apply SphereChartTransitionAlternativesSmooth for t95A04 and t96A07."},
-      :id
-      :routes-2026-09-28-rp-sphere-quotient-transition-normal-form-domains-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-09-28-rp-sphere-quotient-transition-normal-form-topo2-r1
-       :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1],
-      :other-consumers [:t96A07]}}},
-   :phase :probe,
+      "Bank SphereProjectionQuotientChartTransitionCompatibility, its placeholder-free inhabitant, and quotientChartTransitionCompatibility_gives_manifold exactly as compiled. The proof must use the domain-preserving local normal form to transport each ordinary or antipodal ContDiffAt representative to the precise quotient transition ContDiffOn set, then derive IsManifold for F.quotientChartedSpace."},
+     :residual
+     "Pairwise quotient-chart transitions and the resulting IsManifold instance are now compiled on the frozen projective topology. The remaining smooth-descent work is to prove sphereProjection 2 is an IsLocalDiffeomorph for this charted-space instance, package it with the quotient ChartedSpace and IsManifold witnesses in SphereProjectionSmoothDescentContract, and then finish rpSmoothAtlas 2."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free inhabitant of SphereProjectionQuotientChartTransitionCompatibility from /tmp/rp_sphere_quotient_chart_transition.lean. For every banked inverse family and chart indices y z, prove the exact ContDiffOn formula for (real model 2) composed with quotientChart y symm then quotientChart z then the inverse model map, on the precise transition source. Use inverseBranch_eventuallyEq_or_antipodal plus the standard sphere IsManifold compatibility and contMDiff_neg_sphere. The fixture must also compile quotientChartTransitionCompatibility_gives_manifold, reducing this pairwise theorem to the required IsManifold instance for t95A04 and t96A07."},
+   "Bank SphereProjectionQuotientChartTransitionCompatibility, its placeholder-free inhabitant, and quotientChartTransitionCompatibility_gives_manifold exactly as compiled. The proof must use the domain-preserving local normal form to transport each ordinary or antipodal ContDiffAt representative to the precise quotient transition ContDiffOn set, then derive IsManifold for F.quotientChartedSpace.",
    :id :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
