@@ -77502,9 +77502,22 @@
       "After the reviewed t99J06 outcome, recount all open adapters, retain the reviewed t94A07 hold, and apply stop-after-two before the next election.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790630524575-26415-b3697c48",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 82e95e7a"
+      "git show 82e95e7a:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "Python comment-stripped census of all 12 topo1 Git blobs at 55a05a25 and 82e95e7a"
+      "Python registry SHA-256 extraction for t94A07, t97A07, and t99J06"
+      "rg exact t99J06 frozen conjuncts and routes-3 steps"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-4. Commit 82e95e7a is ledger-only with exact scope holes/labs/topology-contract/worklist.edn; its snapshot validates at 637 items. The 12-problem census remains 22, including t94A07=1, t97A07=1, and t99J06=1, matching the claimed zero delta after the reviewed scheduling STOP. The registry reproduces 130/130 statements and hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0; t99J06 is faithful with hash e28a92431ee4a14b2148afcd01655b1db3730c9492df7ce4820883297dca0ce8. The checkpoint preserves the t94A07 two-boundary hold instead of pretending it supplied a theorem, then chooses between the two remaining five-step one-placeholder routes. t99J06 is correctly identified as the bounded computational route, while t97A07 requires new manifold-chart regular-point infrastructure. Its five steps align exactly with the frozen six conjuncts: derivative and pullback coefficients, exterior derivative, cone-image equality, two injectivity claims, and two rectangle integrals. The directions remain consumer-facing and use the actual parametrization, differential forms, cone, and rectangleIntegral representations. Fixture hashing is not applicable to this strategy-only replan."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -77520,7 +77533,7 @@
    :other-consumers []}
   {:consumer :t99J06,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J06",
    :acceptance
