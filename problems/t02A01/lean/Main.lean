@@ -21,7 +21,9 @@ def apm_t02a01_boundaryMonodromy (n : ℕ) (a b : ZMod n) : Equiv.Perm (ZMod n) 
 noncomputable def apm_t02a01_boundaryComponentCount (n : ℕ) (a b : ZMod n) : ℕ :=
   Nat.card {x : ZMod n // apm_t02a01_boundaryMonodromy n a b x = x}
 
-theorem apm_t02a01 :
+/-- Superseded: it defined the boundary count to be the fixed points of an
+already-trivial translation commutator instead of stating the covering-space problem. -/
+theorem apm_t02a01_previous_encoding :
     ∀ (n : ℕ), 0 < n → ∀ a b : ZMod n,
       apm_t02a01_boundaryMonodromy n a b = 1 ∧
       apm_t02a01_boundaryComponentCount n a b = n := by
@@ -33,3 +35,18 @@ theorem apm_t02a01 :
   constructor
   · exact hmon
   · simp [apm_t02a01_boundaryComponentCount, hmon, Nat.card_zmod]
+
+/-- For a regular cyclic `n`-sheeted cover of a punctured torus, the lifted
+boundary has exactly `n` connected components.  The conclusion counts the
+actual connected components of the inverse image of the boundary. -/
+theorem apm_t02a01
+    {S Stilde : Type*} [TopologicalSpace S] [TopologicalSpace Stilde]
+    (boundary : Set S) (p : Stilde → S) (n : ℕ)
+    (hn : 0 < n)
+    (hboundary : Nat.card (ConnectedComponents boundary) = 1)
+    (hcover : IsCoveringMap p)
+    (hregularCyclic : ∃ deck : ZMod n → Homeomorph Stilde Stilde,
+      (∀ z x, p (deck z x) = p x) ∧
+      (∀ x y, p x = p y → ∃! z, deck z x = y)) :
+    Nat.card (ConnectedComponents (p ⁻¹' boundary)) = n := by
+  sorry
