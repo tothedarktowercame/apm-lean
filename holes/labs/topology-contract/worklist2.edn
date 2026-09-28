@@ -50847,13 +50847,47 @@
    [:routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_quotient_chart_apply.lean",
+      :sha256
+      "05a84b0c4c673ffd38e3a0b7f3c9d5bd550654afb4b41dba6ff6b0423f5c0539"},
+     :commands
+     [{:cmd "lake env lean /tmp/rp_sphere_quotient_chart_apply.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_chart_apply.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+      :acceptance
+      {:declarations
+       ["SphereProjectionLocalInverseFamily.quotientChart_apply"
+        "SphereProjectionLocalInverseFamily.quotientChart_symm_apply"
+        "SphereProjectionLocalInverseFamily.inverseBranch_quotientChart_symm"],
+       :fixture "/tmp/rp_sphere_quotient_chart_apply.lean",
+       :consumer-residual
+       "Pull the banked eventual inverse-branch dichotomy through quotientChart_symm using these cancellation identities to inhabit the transition local normal form.",
+       :axioms :standard-only}},
+     :residual
+     "The forward, inverse, and inverse-branch cancellation formulas compile without placeholders and expose the exact source membership needed for left_inv. Promotion is confined to RealProjectiveSmoothTarget."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile the placeholder-free fixture /tmp/rp_sphere_quotient_chart_apply.lean proving quotientChart_apply, quotientChart_symm_apply, and inverseBranch_quotientChart_symm for every SphereProjectionLocalInverseFamily. The last theorem must use the exact quotientChart target membership to obtain that the standard sphere-chart inverse lies in localHomeomorph source, then cancel with left_inv. These identities supply the composite partial-homeomorphism simplification needed by the transition local-normal-form row for t95A04 and t96A07."},
+   {:declarations
+    ["SphereProjectionLocalInverseFamily.quotientChart_apply"
+     "SphereProjectionLocalInverseFamily.quotientChart_symm_apply"
+     "SphereProjectionLocalInverseFamily.inverseBranch_quotientChart_symm"],
+    :fixture "/tmp/rp_sphere_quotient_chart_apply.lean",
+    :consumer-residual
+    "Pull the banked eventual inverse-branch dichotomy through quotientChart_symm using these cancellation identities to inhabit the transition local normal form.",
+    :axioms :standard-only},
    :id :routes-2026-09-28-rp-sphere-quotient-chart-apply-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
