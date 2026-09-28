@@ -29,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "closer_hop": 4,
   "boundary": "Closed via Mathlib's Projectivization.exists_smul_eq_mk_rep, followed by explicit projective classification and a Fin 2 equivalence.",
   "imported_at": "2026-07-13T17:26:56.757829Z",

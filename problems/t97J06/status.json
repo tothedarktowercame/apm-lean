@@ -32,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "solved",
+  "classification": "closed-unregistered",
   "closer_hop": 3,
   "boundary": "The lift formula and determinant integral compile. A null-homotopy is now proved to yield ContractibleSpace Circle, and the final conjunct follows conditionally from its negation. This snapshot has no proof that Circle is noncontractible via winding degree, fundamental group, or H1.",
   "imported_at": "2026-07-13T17:26:58.506687Z",

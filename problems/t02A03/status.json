@@ -32,7 +32,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "solved",
+  "classification": "closed-unregistered",
   "closer_hop": 4,
   "boundary": "The missing invariant computations are now stated precisely as apm_t02A03_bridge_1 (the based torus fundamental group) and apm_t02A03_bridge_2 (the wedge fundamental group and degreewise singular homology). Both bridges and the original main theorem remain unproved.",
   "imported_at": "2026-07-13T17:26:56.924953Z",

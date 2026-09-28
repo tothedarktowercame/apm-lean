@@ -18,6 +18,10 @@ kept. A status.json with uncommitted edits in the working tree is skipped.
 
   refresh-topology-status.py            rewrite changed files, print their paths
   refresh-topology-status.py --check    print what would change, exit 1 if any
+
+A placeholder-free problem is "complete" only if its statement matches an
+approved entry in problems/STATEMENTS.json (scripts/statement-registry.py);
+otherwise "closed-unregistered" or "closed-statement-mismatch".
 """
 from __future__ import annotations
 
@@ -32,6 +36,8 @@ ROOT = Path(__file__).resolve().parent.parent
 TOK = re.compile(r"\b(sorry|admit)\b")
 # Kept when the bundle has no remaining placeholder: all mean "closed".
 CLOSED_CLASSES = {"complete", "solved", "proved", "compiled"}
+# Set by this script when a placeholder-free statement is not an approved,
+# matching registry entry; never kept across a refresh.
 # Kept while placeholders remain: they carry information a count cannot.
 OPEN_CLASSES = {"partial", "partial-banked", "partial-lean-proof", "construction-blocked",
                 "defective", "partial-invalid-statement", "statement-defective"}
@@ -49,7 +55,25 @@ def placeholders(src: str) -> int:
     return len(TOK.findall("\n".join(l.split("--", 1)[0] for l in src.splitlines())))
 
 
-def refreshed(status: dict, lean: dict[str, str]) -> dict:
+def _registry():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("statement_registry", ROOT / "scripts" / "statement-registry.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def statement_state(pid: str, lean: dict[str, str]) -> str:
+    """registered | mismatch | unregistered, against problems/STATEMENTS.json."""
+    reg = _registry()
+    entry = reg.load()["entries"].get(pid)
+    if not entry:
+        return "unregistered"
+    fp = reg.fingerprint(lean.get("lean/Main.lean", ""), entry["decls"])
+    return "registered" if fp.get("sha256") == entry["sha256"] else "mismatch"
+
+
+def refreshed(status: dict, lean: dict[str, str], pid: str = "") -> dict:
     new = dict(status)
     main = lean.get("lean/Main.lean")
     total = sum(placeholders(s) for s in lean.values())
@@ -64,7 +88,16 @@ def refreshed(status: dict, lean: dict[str, str]) -> dict:
     if not lean:
         new["classification"] = cls or "informal-only"
     elif total == 0:
-        new["classification"] = cls if cls in CLOSED_CLASSES else "complete"
+        # No placeholders is not closure: the statement must be an approved
+        # registry entry (Joe, 2026-09-28). Otherwise the proof stands but the
+        # problem is not credited.
+        state = statement_state(pid, lean)
+        if state == "registered":
+            new["classification"] = cls if cls in CLOSED_CLASSES else "complete"
+        elif state == "mismatch":
+            new["classification"] = "closed-statement-mismatch"
+        else:
+            new["classification"] = "closed-unregistered"
     else:
         new["classification"] = cls if cls in OPEN_CLASSES else "partial"
     return new
@@ -94,7 +127,7 @@ def main() -> int:
         prefix = f"problems/{pid}/"
         lean = {p[len(prefix):]: git("show", f"{a.rev}:{p}")
                 for p in paths if p.startswith(prefix + "lean/") and p.endswith(".lean")}
-        new = refreshed(status, lean)
+        new = refreshed(status, lean, pid)
         if new != status:
             changed.append(spath)
             if a.check:

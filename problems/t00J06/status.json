@@ -12,7 +12,9 @@
   "lean": {
     "main": "lean/Main.lean",
     "scratch": null,
-    "files": ["lean/Main.lean"],
+    "files": [
+      "lean/Main.lean"
+    ],
     "sorry_count_main": 0,
     "sorry_count_scratch": 0,
     "sorry_count_total": 0
@@ -27,7 +29,7 @@
     "has_workspace_metadata": false,
     "has_receipt": false
   },
-  "classification": "complete",
+  "classification": "closed-unregistered",
   "closer_hop": 2,
   "boundary": null,
   "closer_progress": "Hop 2 closes the theorem with the universe-lifted trivial cover `ULift (S × Nat)`. `IsCoveringMap.comp_homeomorph Homeomorph.ulift` transports the covering proof, an explicit Nat injection proves every fiber infinite, and the lifted zero section provides the continuous lift.",
