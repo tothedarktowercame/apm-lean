@@ -50045,7 +50045,7 @@
    :current-residual "No rows elected yet under TOPOLOGY-ROUTES.md.",
    :other-consumers []}
   {:bounded-exception
-   "single-consumer exact two-conjunct topological bridge",
+   "single-consumer exact projective affine-chart construction",
    :consumer :t94A08,
    :phase :probe,
    :state :open,
@@ -50053,10 +50053,87 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile a placeholder-free inhabitant of ConstructionTargets.ComplexProjectiveChartTargets.AffineChartConstruction 2 for the existing coinduced topology on ConstructionTargets.ProjectiveSpaceTopology.Space complex 2. For every coordinate i, construct the OpenPartialHomeomorph whose source is exactly the nonvanishing-i locus, target is univ, forward map is coordinates i, and inverse is chartInverse i, including the three coordinateLine normalization equations. The exact interface is compiled in /tmp/t94A08_affine_chart_contract.lean. This supplies t94A08 route step 1 without redefining the topology."},
+   :representation
+   {:source
+    "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
+    :target
+    "The affine coordinate spaces indexed by the two coordinates other than i",
+    :direction
+    "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with inverse chartInverse and exact coordinateLine normalization"},
+   :id :routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on []}
+  {:bounded-exception
+   "single-consumer exact two-conjunct topological bridge",
+   :consumer :t94A08,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t94A08_affine_chart_contract.lean",
+      :sha256
+      "76eb1457d1226b3126c373863d9713365753d66260a9434add5c404d8800eb38"},
+     :commands
+     [{:cmd
+       "lake env lean -o /tmp/Main.olean problems/t94A08/lean/Main.lean",
+       :exit 0,
+       :warnings
+       ["The frozen consumer still contains its registered sorry; three unrelated style lints were also emitted."]}
+      {:cmd
+       "LEAN_PATH=/tmp lake env lean /tmp/t94A08_affine_chart_contract.lean",
+       :exit 0}
+      {:cmd
+       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_affine_chart_contract.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t94A08_topological_bridge.lean",
+       :exit 1,
+       :finding "The repository-root search path has no Main module."}
+      {:cmd
+       "LEAN_PATH=problems/t94A08/lean lake env lean /tmp/t94A08_topological_bridge.lean",
+       :exit 1,
+       :finding
+       "LEAN_PATH can import compiled modules but does not compile Main.lean on demand. Compiling the frozen source to /tmp/Main.olean and setting LEAN_PATH=/tmp corrected the fixture environment without modifying the repository."}],
+     :residual
+     "The frozen topology is coinduced from the nonzero-vector quotient map. Continuity and surjectivity of that map are banked, but no theorem proves that each nonvanishing-coordinate locus is open and homeomorphic to its affine coordinate space. Until that representation comparison is constructed, neither the local charts for sigma1 nor the nodal punctured-neighbourhood argument for sigma2 can be expressed against the frozen topology.",
+     :prerequisite
+     {:bounded-exception
+      "single-consumer exact projective affine-chart construction",
+      :consumer :t94A08,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free inhabitant of ConstructionTargets.ComplexProjectiveChartTargets.AffineChartConstruction 2 for the existing coinduced topology on ConstructionTargets.ProjectiveSpaceTopology.Space complex 2. For every coordinate i, construct the OpenPartialHomeomorph whose source is exactly the nonvanishing-i locus, target is univ, forward map is coordinates i, and inverse is chartInverse i, including the three coordinateLine normalization equations. The exact interface is compiled in /tmp/t94A08_affine_chart_contract.lean. This supplies t94A08 route step 1 without redefining the topology."},
+      :representation
+      {:source
+       "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
+       :target
+       "The affine coordinate spaces indexed by the two coordinates other than i",
+       :direction
+       "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with inverse chartInverse and exact coordinateLine normalization"},
+      :id :routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1,
+      :kind :representation-comparison,
+      :depends-on []}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free fixture proving t94A08ProjectiveConicTopology: apm_t94a08_IsRealTwoManifold apm_t94a08_sigma1 and not apm_t94a08_IsRealTwoManifold apm_t94a08_sigma2. Supply route step 1 affineChart_homeomorph, then route steps 2-3 for the smooth conic and nodal obstruction, exactly for CP2 and these two loci. The consumer-facing fixture /tmp/t94A08_topological_bridge.lean must then compile and its source must contain no sorry."},
    :id :routes-2026-09-28-t94a08-projective-conic-topology-topo2-r1,
    :kind :reusable-theorem,
-   :depends-on []}
+   :depends-on
+   [:routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1]}
   {:consumer :t94A08,
    :evidence
    {:probe
