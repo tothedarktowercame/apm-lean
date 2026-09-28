@@ -157,7 +157,69 @@ Lipschitz estimate required by the contraction argument. -/
 theorem apm_m94A05_bridge_1 (ε : ℝ) (u v : apm_m94a05_space) :
     ‖apm_m94a05_picardMap ε u - apm_m94a05_picardMap ε v‖ ≤
       Real.pi * (‖u‖ + ‖v‖) * ‖u - v‖ := by
-  sorry
+  apply (ContinuousMap.norm_le _ (by positivity)).2
+  intro t
+  rw [Real.norm_eq_abs]
+  change |(ε * Real.sin (t : ℝ) -
+      ∫ s in (0 : ℝ)..Real.pi,
+        Real.sin ((t : ℝ) * s) * (apm_m94a05_extend u s) ^ 2) -
+    (ε * Real.sin (t : ℝ) -
+      ∫ s in (0 : ℝ)..Real.pi,
+        Real.sin ((t : ℝ) * s) * (apm_m94a05_extend v s) ^ 2)| ≤ _
+  have hiu := apm_m94a05_picard_integrable
+    (apm_m94a05_extend_continuous u).continuousOn (t : ℝ)
+  have hiv := apm_m94a05_picard_integrable
+    (apm_m94a05_extend_continuous v).continuousOn (t : ℝ)
+  rw [show (ε * Real.sin (t : ℝ) -
+        ∫ s in (0 : ℝ)..Real.pi,
+          Real.sin ((t : ℝ) * s) * (apm_m94a05_extend u s) ^ 2) -
+      (ε * Real.sin (t : ℝ) -
+        ∫ s in (0 : ℝ)..Real.pi,
+          Real.sin ((t : ℝ) * s) * (apm_m94a05_extend v s) ^ 2) =
+      - (∫ s in (0 : ℝ)..Real.pi,
+          (Real.sin ((t : ℝ) * s) * (apm_m94a05_extend u s) ^ 2 -
+           Real.sin ((t : ℝ) * s) * (apm_m94a05_extend v s) ^ 2)) by
+        rw [intervalIntegral.integral_sub hiu hiv]
+        ring]
+  rw [abs_neg, ← Real.norm_eq_abs]
+  have h := intervalIntegral.norm_integral_le_of_norm_le_const
+    (a := (0 : ℝ)) (b := Real.pi)
+    (C := (‖u‖ + ‖v‖) * ‖u - v‖)
+    (f := fun s : ℝ =>
+      Real.sin ((t : ℝ) * s) * (apm_m94a05_extend u s) ^ 2 -
+      Real.sin ((t : ℝ) * s) * (apm_m94a05_extend v s) ^ 2)
+    (fun s _hs => by
+      dsimp only
+      rw [← mul_sub]
+      rw [Real.norm_eq_abs]
+      calc
+        |Real.sin ((t : ℝ) * s) *
+            ((apm_m94a05_extend u s) ^ 2 -
+             (apm_m94a05_extend v s) ^ 2)|
+            ≤ (‖u‖ + ‖v‖) *
+                |apm_m94a05_extend u s - apm_m94a05_extend v s| := by
+              rw [abs_mul, sq_sub_sq, abs_mul]
+              have hsine := Real.abs_sin_le_one ((t : ℝ) * s)
+              have hsum : |apm_m94a05_extend u s + apm_m94a05_extend v s| ≤
+                  ‖u‖ + ‖v‖ :=
+                (abs_add_le _ _).trans
+                  (add_le_add (apm_m94a05_abs_extend_le_norm u s)
+                    (apm_m94a05_abs_extend_le_norm v s))
+              calc
+                |Real.sin ((t : ℝ) * s)| *
+                    (|apm_m94a05_extend u s + apm_m94a05_extend v s| *
+                      |apm_m94a05_extend u s - apm_m94a05_extend v s|)
+                    ≤ 1 * ((‖u‖ + ‖v‖) *
+                      |apm_m94a05_extend u s - apm_m94a05_extend v s|) := by
+                        gcongr
+                _ = (‖u‖ + ‖v‖) *
+                      |apm_m94a05_extend u s - apm_m94a05_extend v s| := by ring
+        _ ≤ (‖u‖ + ‖v‖) * ‖u - v‖ := by
+          gcongr
+          simpa [Real.norm_eq_abs, apm_m94a05_extend] using
+            (u - v).norm_coe_le_norm
+              (Set.projIcc 0 Real.pi Real.pi_pos.le s))
+  simpa [abs_of_pos Real.pi_pos, mul_assoc, mul_left_comm, mul_comm] using h
 
 /-- Why this unblocks `apm_m94a05`: the smallness hypothesis makes the Picard
 operator an invariant contraction on the closed ball of radius `2 * ε`; this
@@ -166,7 +228,66 @@ theorem apm_m94A05_bridge_2
     (ε : ℝ) (hε : 0 < ε) (hε_small : ε < 1 / (4 * Real.pi)) :
     ∃ u : apm_m94a05_space,
       ‖u‖ ≤ 2 * ε ∧ apm_m94a05_picardMap ε u = u := by
-  sorry
+  let S : Set apm_m94a05_space := Metric.closedBall 0 (2 * ε)
+  have hεπ : 4 * Real.pi * ε < 1 := by
+    have hp : 0 < 4 * Real.pi := by positivity
+    have := (lt_div_iff₀ hp).mp hε_small
+    nlinarith
+  have hmap : MapsTo (apm_m94a05_picardMap ε) S S := by
+    intro u hu
+    rw [Metric.mem_closedBall, dist_zero_right] at hu ⊢
+    calc
+      ‖apm_m94a05_picardMap ε u‖
+          ≤ ε + Real.pi * ‖u‖ ^ 2 :=
+            apm_m94a05_norm_picardMap_le hε.le u
+      _ ≤ ε + Real.pi * (2 * ε) ^ 2 := by
+        gcongr
+      _ ≤ 2 * ε := by
+        nlinarith [Real.pi_pos, mul_pos Real.pi_pos hε]
+  let K : NNReal := ⟨4 * Real.pi * ε, by positivity⟩
+  have hKlt : K < 1 := by
+    exact_mod_cast hεπ
+  have hlip : LipschitzWith K
+      (hmap.restrict (apm_m94a05_picardMap ε) S S) := by
+    rw [lipschitzWith_iff_dist_le_mul]
+    intro u v
+    change dist (apm_m94a05_picardMap ε u.1)
+        (apm_m94a05_picardMap ε v.1) ≤ (K : ℝ) * dist u v
+    rw [dist_eq_norm]
+    change ‖apm_m94a05_picardMap ε u.1 - apm_m94a05_picardMap ε v.1‖ ≤
+      (K : ℝ) * dist u v
+    calc
+      ‖apm_m94a05_picardMap ε u.1 - apm_m94a05_picardMap ε v.1‖
+          ≤ Real.pi * (‖u.1‖ + ‖v.1‖) * ‖u.1 - v.1‖ :=
+            apm_m94A05_bridge_1 ε u.1 v.1
+      _ ≤ (4 * Real.pi * ε) * ‖u.1 - v.1‖ := by
+        have hu : ‖u.1‖ ≤ 2 * ε := by
+          have hu' := u.2
+          change dist u.1 0 ≤ 2 * ε at hu'
+          simpa [dist_zero_right] using hu'
+        have hv : ‖v.1‖ ≤ 2 * ε := by
+          have hv' := v.2
+          change dist v.1 0 ≤ 2 * ε at hv'
+          simpa [dist_zero_right] using hv'
+        have hsum : ‖u.1‖ + ‖v.1‖ ≤ 4 * ε := by linarith
+        calc
+          Real.pi * (‖u.1‖ + ‖v.1‖) * ‖u.1 - v.1‖
+              ≤ Real.pi * (4 * ε) * ‖u.1 - v.1‖ := by
+                gcongr
+          _ = (4 * Real.pi * ε) * ‖u.1 - v.1‖ := by ring
+      _ = (K : ℝ) * dist u v := by
+        rw [show (K : ℝ) = 4 * Real.pi * ε by rfl]
+        congr 1
+        exact (dist_eq_norm u.1 v.1).symm
+  have hcontract : ContractingWith K
+      (hmap.restrict (apm_m94a05_picardMap ε) S S) := ⟨hKlt, hlip⟩
+  have hScomplete : IsComplete S := Metric.isClosed_closedBall.isComplete
+  have hzero : (0 : apm_m94a05_space) ∈ S := by
+    simp [S, hε.le]
+  obtain ⟨u, huS, hufix, _htend, _hbound⟩ :=
+    hcontract.exists_fixedPoint' hScomplete hmap hzero (edist_ne_top _ _)
+  refine ⟨u, ?_, hufix⟩
+  simpa [S, Metric.mem_closedBall, dist_zero_left] using huS
 
 theorem apm_m94a05
     (ε : ℝ) (hε : 0 < ε) (hε_small : ε < 1 / (4 * Real.pi)) :
@@ -229,4 +350,12 @@ theorem apm_m94a05
   contraction constant is below one, and invoke
   `ContractingWith.exists_fixedPoint'`. The frozen statement is unchanged.
   -/
-  sorry
+  obtain ⟨w, _hw_norm, hw⟩ := apm_m94A05_bridge_2 ε hε hε_small
+  refine ⟨apm_m94a05_extend w,
+    (apm_m94a05_extend_continuous w).continuousOn, ?_⟩
+  intro t ht
+  have hpoint := congrArg (fun z : apm_m94a05_space => z ⟨t, ht⟩) hw
+  change apm_m94a05_picard ε (apm_m94a05_extend w) t = w ⟨t, ht⟩ at hpoint
+  rw [← apm_m94a05_extend_apply_of_mem w ht] at hpoint
+  unfold apm_m94a05_picard at hpoint
+  linarith
