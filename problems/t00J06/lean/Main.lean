@@ -66,7 +66,8 @@ lemma apm_t00J06_fst_nat_fiber_infinite
   rintro _ ⟨n, rfl⟩
   simp [j]
 
-theorem apm_t00j06
+/-- Superseded: the exhibited countable cover was disconnected, so every map lifted trivially. -/
+theorem apm_t00j06_previous_encoding
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S]
     [ChartedSpace apm_t00J06_E S]
@@ -90,3 +91,16 @@ theorem apm_t00j06
       ⟨fun x ↦ ULift.up (f x, 0), Homeomorph.ulift.continuous_invFun.comp
         (f.continuous.prodMk continuous_const)⟩
     exact ⟨lift, fun x ↦ by simp [lift]⟩
+
+/-- Every map from the torus to the closed oriented genus-two surface lifts to
+a connected infinite-sheeted covering, as the prelim problem requests. -/
+theorem apm_t00j06
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
+    [PathConnectedSpace S]
+    (hS : apm_t00J06_hasGenusTwoHomology S)
+    (f : C(apm_t00J06_Torus, S)) :
+    ∃ (X : Type*) (_ : TopologicalSpace X) (_ : ConnectedSpace X) (p : X → S),
+      IsCoveringMap p ∧
+      (∀ s : S, (p ⁻¹' ({s} : Set S)).Infinite) ∧
+      ∃ lift : C(apm_t00J06_Torus, X), ∀ x, p (lift x) = f x := by
+  sorry
