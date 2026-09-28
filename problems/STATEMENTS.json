@@ -679,6 +679,30 @@
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
   },
+  "t91A01": {
+   "decls": [
+    "apm_t91a01"
+   ],
+   "sha256": "fe2f05d29a3bf6d6c6bdaa3293efc16a3945b24eaa53f91787d88342abac382c",
+   "defs": [
+    "apm_t91a01_Circle",
+    "apm_t91a01_E2",
+    "apm_t91a01_Model2",
+    "apm_t91a01_chartField",
+    "apm_t91a01_circlePoint",
+    "apm_t91a01_cube",
+    "apm_t91a01_hasIndexThreeZero",
+    "apm_t91a01_oriented",
+    "apm_t91a01_planeEquiv",
+    "apm_t91a01_vectorField"
+   ],
+   "grade": "faithful",
+   "grader": "claude read-only grader (reopen2 re-grade 2)",
+   "evidence": "holes/labs/statement-registry/reopen2-grades-1.md",
+   "prelim_defect": null,
+   "rev": "c4513d74",
+   "approved_at": "2026-09-28T19:50:52Z"
+  },
   "t91A02": {
    "decls": [
     "apm_t91a02"

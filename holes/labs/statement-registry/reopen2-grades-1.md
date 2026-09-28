@@ -126,3 +126,115 @@ Trivial cases: F a point is now excluded, since it has no chart to ℝ². V = 0 
 Prelim note: problem.md says "compact, oriented surface". The claim needs the surface to have no boundary: on a closed disk, z³ has only one zero. The Lean statement's `BoundarylessManifold` is the right reading, so this is a reading of the prelim, not a departure from it.
 
 Fix direction: take the index from V itself. For example, fix a chart (or φ smooth with `mfderiv`) and use the trivialization it induces on the tangent spaces over the disk, then require the degree of V/|V| on the boundary circle in that trivialization to be 3. Alternatively, require `τ` to be the chart's `TangentSpace` identification rather than an arbitrary equivalence.
+
+### t91A01 re-grade (commit d06c0d02)
+
+| id | grade | decl | one-line reason | prelim-defect? |
+|---|---|---|---|---|
+| t91A01 | narrower (mild), true | `apm_t91a01` | The index hypothesis now reads V through the chart at p, so it depends on V, and the dipole counterexample fails. It asks for the exact direction z ↦ z³ on a circle in the fixed chart `chartAt p`, not index 3: a zero of index 3 whose direction is only homotopic to z³ is not covered | minor, as before: "compact" has to be read as closed |
+
+```lean
+def apm_t91a01_chartField V p y :=
+  mfderiv 𝓘 𝓘 (extChartAt 𝓘 p) ((extChartAt 𝓘 p).symm y) (V ((extChartAt 𝓘 p).symm y))
+def apm_t91a01_hasIndexThreeZero V p : Prop :=
+  ∃ r : ℝ, 0 < r ∧ Metric.closedBall (extChartAt 𝓘 p p) r ⊆ (extChartAt 𝓘 p).target ∧
+    ∀ z : Circle, ∃ hw : planeEquiv.symm (chartField V p (circlePoint p r z)) ≠ 0,
+      planeEquiv.symm (chartField …) / ‖planeEquiv.symm (chartField …)‖ = z.1 ^ 3
+```
+
+**Does the hypothesis depend on V, and is mfderiv meaningful?** Yes, on both counts.
+
+The value of `mfderiv`:
+- The closed ball lies in the chart's target, so every circle point y maps under `(extChartAt p).symm` to a point x in `(chartAt p).source`.
+- In Mathlib, `TangentSpace 𝓘 x` is the model space, expressed in the chart `chartAt x`.
+- `mfderiv (extChartAt p) x` is computed as the ordinary derivative of `extChartAt p ∘ (extChartAt x).symm` at `extChartAt x x`. That is the derivative of the transition map from the chart at x to the chart at p.
+- So `chartField V p y` is V at x, written in the coordinates of the chart at p. There is no junk value here.
+
+Why the derivative exists:
+- `extChartAt p` is differentiable on its source when the manifold is at least C¹ and has no boundary. Here it is `IsManifold 𝓘 ∞` and `BoundarylessManifold`, and the model is `𝓘(ℝ, E2)`, whose range is all of E2.
+- No further hypothesis is needed.
+
+What the hypothesis now says:
+- `ContMDiff … ∞` on the section makes y ↦ chartField V p y continuous (indeed smooth) on the chart target. The order is `∞`, i.e. C^∞, not analytic.
+- So the hypothesis says: the chart-read field has no zeros on the circle of radius r about the image of p, and its normalized direction there is exactly z³. That fixes the winding number of V on that circle to be 3.
+- There are no free frames left, unlike the `τ` of the previous version.
+
+**Counterexamples.** None survive.
+- Dipole on S², the earlier counterexample:
+  - The chart at p is stereographic projection from −p, and it sends p to 0. On every circle about 0 the field winds twice.
+  - A continuous map of the circle that equals z³ has degree 3, so no r works and the hypothesis fails.
+  - This is exactly how the hypothesis should behave.
+- V = 0: `hw` fails.
+- One-point or empty F: excluded, because a chart to ℝ² is required and p ∈ F.
+- Index-0 zero on T² (the field f·X): it winds 0 on small circles, and on larger circles only if other zeros are enclosed. In that case a second zero exists and the conclusion holds.
+
+The hypothesis is also satisfiable, so the statement is not vacuous. Take V equal to the chart-read field z³ near p, cut it off, and add any field away from the disk. The resulting V has other zeros, as it must.
+
+**Truth.** Suppose p were the only zero of V.
+- Then the winding number on the circle equals ind_p(V), so ind_p(V) = 3.
+- Poincaré–Hopf gives ind_p(V) = χ(F), and a connected closed surface has χ(F) ≤ 2. Contradiction.
+- If the disk contains other zeros, the conclusion holds directly.
+- The absence of an "only zero in the disk" condition is harmless, as claude-18 says.
+- Reversing a chart's orientation conjugates the direction map by complex conjugation, which leaves its degree unchanged. So the argument does not depend on the orientation of the chart at p.
+
+The statement is true.
+
+**`apm_t91a01_oriented`: it does not affect truth, and it is consistent with the prelim.**
+- It asks for some atlas of homeomorphisms to E2 whose transition maps have positive Jacobian determinant at every point.
+- `fderiv` of the total function `d ∘ c.symm` is the real derivative near c x, because c.source ∩ d.source is open. If the transition is not differentiable, `fderiv` returns 0, and a positive determinant rules that out.
+- Such an atlas makes F topologically orientable: a differentiable map with invertible derivative has local degree equal to the sign of the determinant. Orientable surfaces have such an atlas, e.g. an orientation-compatible subatlas of the smooth structure. So the condition is satisfiable and means "oriented", as the prelim says.
+- Poincaré–Hopf and χ ≤ 2 also hold for non-orientable closed surfaces, so the claim would stay true without it.
+- It is not tied to the `ChartedSpace` structure. That does no harm here.
+
+**Why the grade is narrower rather than faithful.**
+- Part (b) assumes "a zero as in part (a)", i.e. an isolated zero of index +3.
+- The Lean hypothesis asks for more than index 3. The normalized direction must be exactly z ↦ z³ on some circle, in the one chart `chartAt p` that the `ChartedSpace` instance supplies.
+- A zero of index 3 whose chart direction is only homotopic to z³ does not satisfy the hypothesis. An example is z³ composed with a reparametrization of the circle, or a field such as z³ + (small non-radial perturbation).
+- So the Lean statement covers a subclass of index-3 zeros.
+- Reading "as in part (a)" literally as the z³ picture defends this choice, and the proof is the same. The narrowing is still an extra hypothesis, and the prelim does not force it.
+
+**Fix (one line).** Replace the equality with a homotopy. Package the direction map on the circle as a `C(Circle, Circle)` and require it to be `ContinuousMap.Homotopic` to z ↦ z³, or equivalently to have degree 3. With that change the fixed chart no longer matters, because the index does not depend on the chart, and the statement would be faithful.
+
+### t91A01 re-grade 2 (commit ec262416)
+
+| id | grade | decl | one-line reason | prelim-defect? |
+|---|---|---|---|---|
+| t91A01 | faithful | `apm_t91a01` | The index hypothesis now says: the chart-read field has no zeros on some circle about p that lies in the chart, and its normalized direction there is a continuous self-map of the circle homotopic to z ↦ z³, i.e. of degree 3. This is exactly "p is a zero of index +3". The statement is true by Poincaré–Hopf | minor, as before: "compact" has to be read as closed, and Lean assumes this |
+
+```lean
+∃ r : ℝ, 0 < r ∧ Metric.closedBall (extChartAt 𝓘 p p) r ⊆ (extChartAt 𝓘 p).target ∧
+  ∃ link : C(Circle, Circle),
+    (∀ z, ∃ hw : planeEquiv.symm (chartField V p (circlePoint p r z)) ≠ 0,
+       (link z).1 = w / ‖w‖) ∧
+    ContinuousMap.Homotopic link apm_t91a01_cube
+```
+
+The rest of the statement is unchanged from re-grade 1:
+- the surface: `IsManifold 𝓘 ∞`, boundaryless, compact, T2, second countable, connected;
+- the orientation certificate;
+- the C^∞ section `ContMDiff … ∞` (`∞`, not analytic);
+- the reading `chartField` of V through `mfderiv (extChartAt p)`.
+
+The findings of re-grade 1 on those parts still apply. `mfderiv` is a real derivative at the circle points. The hypothesis depends on V alone, since no frames are chosen by hand. `hOrient` means oriented and does not affect truth.
+
+**Now faithful: every zero of index +3 satisfies the hypothesis.**
+- Given an isolated zero p of index 3, pick r small enough that the closed disk lies in the chart target and contains no other zero. Isolation provides such an r.
+- The winding number of the chart-read field on that circle is ind_p(V) = 3. Reversing the chart's orientation conjugates the direction map, which leaves its degree unchanged, so this holds in `chartAt p` whatever its orientation.
+- Free homotopy classes of maps S¹ → S¹ are classified by degree, so the direction map is `Homotopic` to z³.
+- Conversely, the hypothesis forces winding 3 on that circle. The narrowing found in re-grade 1 (exact equality with z³ in one fixed chart) is gone.
+
+**Counterexamples.**
+- `link` is forced pointwise to equal the direction map. Its continuity adds nothing, and it cannot be chosen freely.
+- Dipole on S²: winding 2 on every chart circle, and 2 ≠ 3, so the hypothesis fails.
+- V = 0: `hw` fails.
+- One-point or empty F: excluded, because a chart to ℝ² is required.
+- Index-0 zero on T²: it winds 0 unless the circle encloses other zeros, and then the conclusion holds.
+- The hypothesis is satisfiable, e.g. by a chart-local z³ extended with a cutoff.
+
+**Truth.**
+- If p were the only zero of V, the disk would contain no other zero. The winding would then be ind_p = 3 = χ(F) by Poincaré–Hopf, but χ(F) ≤ 2 for a connected closed surface. Contradiction.
+- If the disk encloses other zeros, a second zero exists outright.
+
+The statement is true.
+
+**Cosmetic.** The docstring of `theorem apm_t91a01` still says the direction is "`z ↦ z³`". The hypothesis now only needs a map homotopic to it. This does not affect the grade.
