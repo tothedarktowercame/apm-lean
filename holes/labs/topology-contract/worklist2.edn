@@ -50369,8 +50369,35 @@
   {:bounded-exception
    "single-consumer exact type-valued strengthening of the existing Nielsen-Schreier proof",
    :consumer :t00J08,
+   :evidence
+   {:residual
+    "t00J08 route step 1 is stopped at the private-root representation boundary; steps 2-4 cannot count the intended explicit basis index.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
+    :reason
+    "Representation boundary in Mathlib NielsenSchreier: root-prime is private and opaque, while public endIsFree erases the complementary-edge basis index into IsFreeGroup. Replaying the universal-property proof outside its module against End (show G from root T) fails at the nil path because the private root-prime identity does not convert to the public root identity. A cast or passage through IsFreeGroup would violate index preservation. Expose a public Type-valued endBasis theorem in NielsenSchreier, or make root-prime public, before counting generators.",
+    :commands
+    [{:cmd
+      "rg -n \"private def root.|lemma endIsFree\" .lake/packages/mathlib/Mathlib/GroupTheory/FreeGroup/NielsenSchreier.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/t00J08_end_basis_contract.lean",
+      :exit 1,
+      :finding "Missing scoped Classical was corrected."}
+     {:cmd
+      "lake env lean /tmp/t00J08_end_basis_contract.lean after scoped Classical",
+      :exit 1,
+      :finding
+      "The nil-path identity remains blocked by the opaque private root representation."}],
+    :fixture
+    {:path "/tmp/t00J08_end_basis_contract.lean",
+     :sha256
+     "e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c"},
+    :seat "topo-8"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
