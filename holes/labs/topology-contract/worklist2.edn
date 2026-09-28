@@ -50193,9 +50193,56 @@
    :depends-on [],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_projection_open_map.lean",
+      :sha256
+      "584af344723555da59b8198887a4e122578e38d82d02df455ddc0962a13646b0"},
+     :commands
+     [{:cmd
+       "test -L .lake/packages && lake env lean /tmp/rp_sphere_projection_open_map.lean",
+       :exit 0}
+      {:cmd
+       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_open_map.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/rp_sphere_projection_open_map.lean",
+       :exit 1,
+       :finding
+       "Initial fibre proof tried to rewrite reducible sphereVector definitions directly; corrected by changing to the explicit Projectivization.mk equality."}
+      {:cmd "lake env lean /tmp/rp_sphere_projection_open_map.lean",
+       :exit 1,
+       :finding
+       "The scalar equation orientation was reversed in the equality and antipodal cases; corrected using the direct equality and congrArg negation."}
+      {:cmd "lake env lean /tmp/rp_sphere_projection_open_map.lean",
+       :exit 1,
+       :finding
+       "The saturation proof passed a reversed image-membership equality to sphereProjection_eq_iff; corrected to the stored forward equality."}],
+     :residual
+     "Implement the compiled dimension-2 open-map packet in RealProjectiveSmoothTarget. The downstream local-model row can then restrict sphereProjection to an antipode-free open hemisphere and obtain an open embedding/local homeomorphism.",
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
+     :acceptance
+     {:theorems
+      ["sphereAntipodal"
+       "sphereProjection_eq_iff"
+       "continuous_sphereAntipodal"
+       "sphereProjection_preimage_image"
+       "sphereProjection_isOpenMap_of_authority"],
+      :generality
+      "dimension 2 only, reusing sphereProjectionQuotientAuthority",
+      :gates
+      ["lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+       "python3 scripts/statement-registry.py check"
+       "comment-stripped no-sorry scan of the changed packet"]}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
