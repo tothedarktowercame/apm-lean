@@ -50607,13 +50607,47 @@
    [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_inverse_overlap.lean",
+      :sha256
+      "4e6639b5c16712b6f4c6c4618f63b2e66671efed4669614df550cf3655077450"},
+     :commands
+     [{:cmd "lake env lean /tmp/rp_sphere_inverse_overlap.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_inverse_overlap.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+      :acceptance
+      {:declarations
+       ["SphereProjectionLocalInverseFamily.inverseBranch"
+        "SphereProjectionLocalInverseFamily.project_inverseBranch"
+        "SphereProjectionLocalInverseFamily.inverseBranch_eq_or_antipodal"],
+       :fixture "/tmp/rp_sphere_inverse_overlap.lean",
+       :consumer-residual
+       "Show the pointwise identity-or-antipodal alternative is locally constant on branch overlaps, then use analytic antipodal smoothness in the quotient atlas descent.",
+       :axioms :standard-only}},
+     :residual
+     "The exact right-inverse and pairwise overlap dichotomy compile without placeholders. Promotion is confined to RealProjectiveSmoothTarget; the remaining smooth-descent work is the local constancy and charted-space assembly."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile the placeholder-free fixture /tmp/rp_sphere_inverse_overlap.lean defining inverseBranch for SphereProjectionLocalInverseFamily, proving its exact projection right-inverse equation on each localHomeomorph target, and proving inverseBranch_eq_or_antipodal on every pairwise target overlap from sphereProjectionTwoSheetedLocalModel. This supplies the overlap dichotomy used by the smooth-locality step for t95A04 and t96A07."},
+   {:declarations
+    ["SphereProjectionLocalInverseFamily.inverseBranch"
+     "SphereProjectionLocalInverseFamily.project_inverseBranch"
+     "SphereProjectionLocalInverseFamily.inverseBranch_eq_or_antipodal"],
+    :fixture "/tmp/rp_sphere_inverse_overlap.lean",
+    :consumer-residual
+    "Show the pointwise identity-or-antipodal alternative is locally constant on branch overlaps, then use analytic antipodal smoothness in the quotient atlas descent.",
+    :axioms :standard-only},
    :id :routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
