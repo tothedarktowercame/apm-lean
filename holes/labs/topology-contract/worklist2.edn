@@ -51014,42 +51014,45 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_sphere_quotient_transition_normal_form.lean",
-      :sha256
-      "901c995df219daef332ccd76eb6ae08d48dbbb0c4d0919a3cb0015f66ffcdb91"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_transition_normal_form.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form.lean",
-       :exit 1,
-       :finding
-       "The antipodal branch initially rewrote through the transitionInput abbreviation without unfolding it; changing the inner equality to the explicit quotientChart inverse form allowed the promoted cancellation theorem to apply."}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:declarations
-       ["SphereProjectionQuotientTransitionLocalNormalForm"
-        "sphereAntipodalN_contMDiff_for_transition"
-        "sphereProjectionQuotientTransitionLocalNormalForm"],
-       :fixture "/tmp/rp_sphere_quotient_transition_normal_form.lean",
-       :consumer-residual
-       "Use the local normal form and standard sphere chart compatibility to inhabit the exact pairwise ContDiffOn transition contract.",
-       :axioms :standard-only}},
-     :residual
-     "The full local normal form is inhabited without placeholders: transition-domain membership supplies the two chart sources, eventual branch equality is pulled back along the continuous transitionInput, and quotient-chart cancellation reduces both alternatives to the standard sphere transition with optional antipodal insertion."}},
+   {:placeholder-delta 0,
+    :residual
+    "Use sphereProjectionQuotientTransitionLocalNormalForm and standard sphere-chart compatibility to prove pairwise ContDiffOn quotient transitions, completing the smooth-atlas descent shared by t95A04 and t96A07.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/rp_sphere_quotient_transition_normal_form.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 no-sorry-pattern ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_quotient_transition_normal_form_axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "96cd410f20772605dd3843addfee9da7e61c1a9b",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_quotient_transition_normal_form.lean",
+     :sha256
+     "901c995df219daef332ccd76eb6ae08d48dbbb0c4d0919a3cb0015f66ffcdb91"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
