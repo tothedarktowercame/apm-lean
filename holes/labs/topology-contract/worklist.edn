@@ -78069,6 +78069,8 @@
    "After reviewed t97A07, all one-placeholder adapters will be closed or held; recount and elect the nearest two-placeholder adapter before three-placeholder routes.",
    :other-consumers []}
   {:consumer :t02A05,
+   :review-finding
+   "Deterministic representation defect in the supporting boundary audit: /tmp/T02A05IntrinsicMassBoundary.lean line 78 redefines apm_t02a05_outwardSphereIntegral using raw μH[2], whereas the registered consumer problems/t02A05/lean/Main.lean line 77 uses normalized μHE[2]. Consequently flux_eq_unitIntegral, actual_flux, bridge_iff_mass, and frozen_conclusion_iff_mass are theorems about the stale raw-measure statement. Their `mass 2` is definitionally raw Measure.hausdorffMeasure mass, so the claimed remaining equation `mass 2 = 4*pi` is not the normalized sphere-mass obligation named by the receipt and is expected to be the false pre-repair equation. The audit therefore does not validate the actual μHE-to-μH representation seam. Repair by compiling the reduction against the registered μHE[2] definition, explicitly carrying euclideanHausdorffMeasure_def and its scalar through translation and the banked raw moment, and state the remaining obligation as the scaled raw mass (equivalently the actual μHE[2] mass) equals 4*pi. Then rerun the boundary audit and searches. The ledger snapshot, fixture hash 549bdba880150e9e0a02c166f19e682671fce507cb167615d4533b19db90d34d, registry hash, and unchanged two-placeholder count otherwise reproduce.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -78105,6 +78107,12 @@
       "rg -n 'mass 2 = 4|sphere[^\\n]*= [^\\n]*4[^\\n]*Real\\.pi|4[^\\n]*Real\\.pi[^\\n]*sphere' ConstructionTargets .lake/packages/mathlib/Mathlib",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790631800890-26458-3e0a5889",
+     :finding
+     "Deterministic representation defect in the supporting boundary audit: /tmp/T02A05IntrinsicMassBoundary.lean line 78 redefines apm_t02a05_outwardSphereIntegral using raw μH[2], whereas the registered consumer problems/t02A05/lean/Main.lean line 77 uses normalized μHE[2]. Consequently flux_eq_unitIntegral, actual_flux, bridge_iff_mass, and frozen_conclusion_iff_mass are theorems about the stale raw-measure statement. Their `mass 2` is definitionally raw Measure.hausdorffMeasure mass, so the claimed remaining equation `mass 2 = 4*pi` is not the normalized sphere-mass obligation named by the receipt and is expected to be the false pre-repair equation. The audit therefore does not validate the actual μHE-to-μH representation seam. Repair by compiling the reduction against the registered μHE[2] definition, explicitly carrying euclideanHausdorffMeasure_def and its scalar through translation and the banked raw moment, and state the remaining obligation as the scaled raw mass (equivalently the actual μHE[2] mass) equals 4*pi. Then rerun the boundary audit and searches. The ledger snapshot, fixture hash 549bdba880150e9e0a02c166f19e682671fce507cb167615d4533b19db90d34d, registry hash, and unchanged two-placeholder count otherwise reproduce."},
     :changed-paths [],
     :fixture
     {:path "/tmp/t02a05-assembly-probe.lean",
@@ -78112,7 +78120,7 @@
      "549bdba880150e9e0a02c166f19e682671fce507cb167615d4533b19db90d34d"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["problems/t02A05/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A05/bridge_1",
    :acceptance
