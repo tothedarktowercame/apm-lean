@@ -77012,6 +77012,8 @@
    "Recount after reviewed t93J06 closure; if closed, elect the remaining DIRECT t94A09 closure before ADAPTER problems.",
    :other-consumers []}
   {:consumer :t94A09,
+   :review-finding
+   "Deterministic fixture defect: the recorded /tmp/t94a09-probe.lean matches SHA-256 217204f68ecb948276ea9bc91394b31db037f8064c258af8ad28ed9c045ea685, but fresh `lake env lean /tmp/t94a09-probe.lean` exits 1 at line 1 because `import t94A09.lean.Main` is not a module on the Lake search path; even LEAN_PATH=problems fails because problems/t94A09/lean/Main.olean does not exist. Thus the required complete exact-statement fixture compile was not reproduced and was absent from the author command record. Repair by recording a fixture that compiles directly in the canonical checkout, for example the closed committed consumer problems/t94A09/lean/Main.lean at SHA-256 ca3a7ea16f1470e977c3674753f98bc4b318e382479a29148e206b3695856954, and rerun/record its compile. The implementation itself otherwise compiles, has exact one-file scope, preserves registered hash 0836a6a088f31b08ec3ad11a756d5524f0e6e3aa0ae4ae3e752d95f1a38d76ac, and changes the comment-stripped count 1 to 0.",
    :evidence
    {:placeholder-delta -1,
     :residual
@@ -77039,6 +77041,12 @@
       :finding "130 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790629543761-26345-40266868",
+     :finding
+     "Deterministic fixture defect: the recorded /tmp/t94a09-probe.lean matches SHA-256 217204f68ecb948276ea9bc91394b31db037f8064c258af8ad28ed9c045ea685, but fresh `lake env lean /tmp/t94a09-probe.lean` exits 1 at line 1 because `import t94A09.lean.Main` is not a module on the Lake search path; even LEAN_PATH=problems fails because problems/t94A09/lean/Main.olean does not exist. Thus the required complete exact-statement fixture compile was not reproduced and was absent from the author command record. Repair by recording a fixture that compiles directly in the canonical checkout, for example the closed committed consumer problems/t94A09/lean/Main.lean at SHA-256 ca3a7ea16f1470e977c3674753f98bc4b318e382479a29148e206b3695856954, and rerun/record its compile. The implementation itself otherwise compiles, has exact one-file scope, preserves registered hash 0836a6a088f31b08ec3ad11a756d5524f0e6e3aa0ae4ae3e752d95f1a38d76ac, and changes the comment-stripped count 1 to 0."},
     :commit "d6595edcc043972403ec07d6cb009e7482093e44",
     :changed-paths ["problems/t94A09/lean/Main.lean"],
     :fixture
@@ -77047,7 +77055,7 @@
      "217204f68ecb948276ea9bc91394b31db037f8064c258af8ad28ed9c045ea685"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope ["problems/t94A09/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t94A09",
    :acceptance
