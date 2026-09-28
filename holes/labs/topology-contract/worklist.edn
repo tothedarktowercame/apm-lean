@@ -77768,9 +77768,22 @@
       "After reviewed t97A07, all one-placeholder adapters will be closed or held; recount and elect the nearest two-placeholder adapter before three-placeholder routes.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790630940113-26431-37f62bbf",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r fc004733"
+      "git show fc004733:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "Python comment-stripped census of all 12 topo1 Git blobs at 82e95e7a and fc004733"
+      "Python registry SHA-256 extraction for t94A07, t99J06, and t97A07"
+      "rg exact t97A07 frozen conjuncts and routes-3 steps"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-4. Commit fc004733 is ledger-only with exact scope holes/labs/topology-contract/worklist.edn; its snapshot validates at 639 items. The full topo1 census remains 22, including t94A07=1, t99J06=1, and t97A07=1, matching the zero-delta STOP outcome. The registry reproduces 130/130 statements and hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0; t97A07 is faithful with hash c62ad2f0c3613a583f731ff6178400b2cb61849d80bf36871bebb5c92f4529fb. The checkpoint preserves both reviewed scheduling STOPs as explicit unresolved chains and does not count them as theorem progress. t97A07 is correctly elected because it is the only unheld one-placeholder adapter. Its acceptance exposes every remaining boundary: continuous-linear surjectivity openness, chart-level regular-point openness, the extremum-to-critical argument, local range openness, and connected-complement assembly, while naming the already banked n=0 clause. The directions match the frozen manifold mfderiv and Euclidean critical-value representations rather than replacing them with a facade. Fixture hashing is not applicable to this strategy-only replan."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -77786,7 +77799,7 @@
    :other-consumers []}
   {:consumer :t97A07,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A07",
    :acceptance
