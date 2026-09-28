@@ -6,24 +6,15 @@ import ConstructionTargets.TransverseIncidenceChosenAtlas
 /-!
 # APM t96J05 — a regular radial level of an embedded manifold
 
-## Statement repairs
-
-The former unconditional conclusion is false: the reviewed centered-circle
-example has constant radius and hence no codimension-one radial level.  The
-corrected theorem below adds an explicit positive attained regular value for
-the squared-norm restriction while retaining the original hypotheses and the
-literal radial-level conclusion.
-
 ## Encoding note
 
 The object is an actual subset of Euclidean space. Its subtype carries a
 positive-dimensional smooth manifold structure and its inclusion into the
 ambient Euclidean space is smooth. The conclusion is the literal nonempty
-intersection with an origin-centred sphere, equipped with the expected
-codimension-one manifold structure. The corrected statement supplies the
-positive radius, an inhabitant of its literal level, smoothness of the
-squared-norm restriction, and surjectivity of its manifold derivative along
-the corresponding squared-norm fiber.
+intersection with an origin-centred sphere, itself embedded smoothly in that
+same ambient space. Its dimension is existential: the prelim does not assert
+transversality, and a constant-radius submanifold can be its whole
+`m`-dimensional intersection.
 -/
 
 open scoped ContDiff Manifold
@@ -37,8 +28,8 @@ def apm_t96j05_IsEmbeddedSmoothSubmanifold {m n : ℕ}
     (X : Set (apm_t96j05_E n)) : Prop :=
   ∃ charts : ChartedSpace (apm_t96j05_E m) X,
     let _ := charts
-    IsManifold (apm_t96j05_I m) ⊤ X ∧
-    ContMDiff (apm_t96j05_I m) (apm_t96j05_I n) ⊤
+    IsManifold (apm_t96j05_I m) ∞ X ∧
+    ContMDiff (apm_t96j05_I m) (apm_t96j05_I n) ∞
       (fun x : X ↦ x.1)
 
 /-- The actual intersection of `X` with the sphere of radius `r`. -/
@@ -180,6 +171,19 @@ def apm_t96j05_HasSmoothManifoldStructure
     letI := charts
     IsManifold (apm_t96j05_I k) ∞ Y
 
+/-- The radial intersection is an embedded C-infinity submanifold of the
+ambient Euclidean space. No codimension is imposed: the prelim does not ask
+for a transverse sphere, and a constant-radius `X` can be the whole level. -/
+def apm_t96j05_IsEmbeddedSmoothRadialLevel {m n : ℕ}
+    (X : Set (apm_t96j05_E n)) (r : ℝ) : Prop :=
+  ∃ k : ℕ, k ≤ m ∧ ∃ charts : ChartedSpace (apm_t96j05_E k)
+      (apm_t96j05_radialLevel X r),
+    letI := charts
+    IsManifold (apm_t96j05_I k) ∞
+        (apm_t96j05_radialLevel X r) ∧
+      ContMDiff (apm_t96j05_I k) (apm_t96j05_I n) ∞
+        (fun x : apm_t96j05_radialLevel X r ↦ x.1.1)
+
 /-- A positive-radius sphere centered at the origin cuts the given positive-
 dimensional connected smooth submanifold in a nonempty smooth manifold. -/
 theorem apm_t96j05
@@ -190,5 +194,5 @@ theorem apm_t96j05
     (hX : apm_t96j05_IsEmbeddedSmoothSubmanifold (m := m) X) :
     ∃ r : ℝ, 0 < r ∧
       Nonempty (apm_t96j05_radialLevel X r) ∧
-      apm_t96j05_HasSmoothManifoldStructure (apm_t96j05_radialLevel X r) := by
+      apm_t96j05_IsEmbeddedSmoothRadialLevel (m := m) X r := by
   sorry
