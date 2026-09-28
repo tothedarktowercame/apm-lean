@@ -79171,8 +79171,101 @@
    "After reviewed t94A10, preserve all holds and STOPs, then rank the remaining unheld three-placeholder routes by concrete work.",
    :other-consumers []}
   {:consumer :t92J08,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope ["problems/t92J08/lean/Main.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t92J08/uniform-local-time",
+   :acceptance
+   {:placeholder-after 2,
+    :fixture-sha256
+    "e1592fa3174d7482a65353c26493e523fe269d0a9594084e38a3fbbc956f9dd7",
+    :placeholder "the sorry in apm_t92J08_bridge_1",
+    :axioms :standard-only,
+    :placeholder-before 3,
+    :commands
+    ["lake env lean problems/t92J08/lean/Main.lean"
+     "LEAN_PATH=/tmp/t92probe lake env lean /tmp/t92j08-uniform-time-consumer.lean"
+     "python3 scripts/statement-registry.py check"],
+    :fixture "/tmp/t92j08-uniform-time-consumer.lean",
+    :route-step "t92J08 route steps 1-2",
+    :implementation
+    "Replace only the sorry in apm_t92J08_bridge_1. First prove the route's neighborhood-uniform lemma at the frozen Euclidean-manifold generality: around each x0, adapt Mathlib's exists_isMIntegralCurveAt_of_contMDiffAt boundaryless chart proof, but use ContDiffAt.exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt to choose one positive time for every initial point in a sufficiently small chart neighborhood, shrinking the ball and time so all curves remain in the extChart target interior. Then extract a finite subcover of the compact manifold and take a positive minimum of the finitely many times to obtain the exact bridge conclusion. Reuse Mathlib's chart transport and Picard-Lindelof APIs; do not change registered statements or definitions."},
+   :id :routes-2026-09-28-t92j08-uniform-local-time-1,
+   :kind :final-adapter,
+   :depends-on [],
+   :current-residual
+   "Prove the exact compact-manifold uniform local-existence bridge consumed by exists_isMIntegralCurve_of_isMIntegralCurveOn. The scalar blow-up contradiction and final assembly remain separate route steps.",
+   :other-consumers []}
+  {:consumer :t92J08,
+   :evidence
+   {:probe
+    {:residual
+     "Exactly one prerequisite is elected: apm_t92J08_bridge_1, comprising neighborhood-uniform chartwise existence and compact finite-subcover extraction. The exact bridge-consumer fixture compiles; its inherited sorryAx disappears when this placeholder is replaced. Route steps 3-4 remain downstream.",
+     :outcome :revise,
+     :warnings
+     [{:kind :inherited-placeholder,
+       :message
+       "The temporary consumer olean reports the three existing source placeholders. The fixture introduces none and depends on sorryAx exactly through apm_t92J08_bridge_1."}],
+     :prerequisite
+     {:consumer :t92J08,
+      :phase :implementation,
+      :state :open,
+      :scope ["problems/t92J08/lean/Main.lean"],
+      :dag-node "TOPOLOGY-ROUTES.md/t92J08/uniform-local-time",
+      :acceptance
+      {:placeholder-after 2,
+       :fixture-sha256
+       "e1592fa3174d7482a65353c26493e523fe269d0a9594084e38a3fbbc956f9dd7",
+       :placeholder "the sorry in apm_t92J08_bridge_1",
+       :axioms :standard-only,
+       :placeholder-before 3,
+       :commands
+       ["lake env lean problems/t92J08/lean/Main.lean"
+        "LEAN_PATH=/tmp/t92probe lake env lean /tmp/t92j08-uniform-time-consumer.lean"
+        "python3 scripts/statement-registry.py check"],
+       :fixture "/tmp/t92j08-uniform-time-consumer.lean",
+       :route-step "t92J08 route steps 1-2",
+       :implementation
+       "Replace only the sorry in apm_t92J08_bridge_1. First prove the route's neighborhood-uniform lemma at the frozen Euclidean-manifold generality: around each x0, adapt Mathlib's exists_isMIntegralCurveAt_of_contMDiffAt boundaryless chart proof, but use ContDiffAt.exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt to choose one positive time for every initial point in a sufficiently small chart neighborhood, shrinking the ball and time so all curves remain in the extChart target interior. Then extract a finite subcover of the compact manifold and take a positive minimum of the finitely many times to obtain the exact bridge conclusion. Reuse Mathlib's chart transport and Picard-Lindelof APIs; do not change registered statements or definitions."},
+      :id :routes-2026-09-28-t92j08-uniform-local-time-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "Prove the exact compact-manifold uniform local-existence bridge consumed by exists_isMIntegralCurve_of_isMIntegralCurveOn. The scalar blow-up contradiction and final assembly remain separate route steps.",
+      :other-consumers []},
+     :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+       :exit 0}
+      {:cmd "mkdir -p /tmp/t92probe/t92J08/lean", :exit 0}
+      {:cmd
+       "lake env lean -o /tmp/t92probe/t92J08/lean/Main.olean problems/t92J08/lean/Main.lean",
+       :exit 0}
+      {:cmd
+       "LEAN_PATH=/tmp/t92probe lake env lean /tmp/t92j08-uniform-time-consumer.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t92j08-uniform-time-consumer.lean",
+       :exit 0}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/t92j08-uniform-time-consumer.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "LEAN_PATH=/tmp/t92probe lake env lean /tmp/t92j08-uniform-time-consumer.lean",
+       :exit 1,
+       :stage :missing-scoped-notation,
+       :correction
+       "Opened the ContDiff and Manifold scopes required by the exact registered bridge signature; the corrected fixture compiled."}],
+     :fixture
+     {:path "/tmp/t92j08-uniform-time-consumer.lean",
+      :sha256
+      "e1592fa3174d7482a65353c26493e523fe269d0a9594084e38a3fbbc956f9dd7"},
+     :seat "topo-4"}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t92J08",
    :acceptance
@@ -79191,7 +79284,7 @@
    :kind :final-adapter,
    :depends-on
    [:routes-2026-09-28-checkpoint-topo1-after-t94a10-1
-    :routes-2026-09-28-checkpoint-topo1-after-t94a10-1],
+    :routes-2026-09-28-t92j08-uniform-local-time-1],
    :current-residual
    "Three sorries: uniform local integral-curve time on a compact manifold, the scalar finite-time blow-up contradiction, and main assembly using the banked globalization and uniqueness APIs.",
    :other-consumers []}
