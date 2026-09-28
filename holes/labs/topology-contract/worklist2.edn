@@ -51102,13 +51102,50 @@
     :routes-2026-09-28-rp-sphere-quotient-transition-input-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_transition_alternatives.lean",
+      :sha256
+      "e07c41be74f941985986a49b0038f7e207b9209e306f6852a7f0eb0dbafa0f80"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_transition_alternatives.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_transition_alternatives.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_transition_alternatives.lean",
+       :exit 1,
+       :finding
+       "The first proof draft used the unqualified chart_mem_maximalAtlas name; qualifying it through IsManifold exposed the intended atlas theorem."}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_transition_alternatives.lean",
+       :exit 1,
+       :finding
+       "The qualified atlas theorem still left differentiability order implicit; fixing n to infinity resolved the IsManifold instance."}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_transition_alternatives.lean",
+       :exit 1,
+       :finding
+       "The antipodal composition initially supplied the intermediate sphere point to ContMDiffAt.comp; supplying the original model point corrected the composition."}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+      :acceptance
+      "Bank SphereChartTransitionAlternativesSmooth and sphereAntipodalN_contMDiff_for_alternatives at dimension 2, with ordinary and antipodal-inserted ContDiffAt conclusions restricted by the exact chart-domain hypotheses compiled in the fixture."},
+     :residual
+     "The two local representatives required by the quotient transition normal form are now compiled as smooth at every transition-domain point. The next bounded step is SphereProjectionQuotientChartTransitionCompatibility: transport these ContDiffAt facts across the banked eventual-equality alternatives to obtain the exact pairwise ContDiffOn theorem, then derive the quotient IsManifold instance."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free inhabitant of SphereChartTransitionAlternativesSmooth from /tmp/rp_sphere_transition_alternatives.lean. For every sphere chart centers p q and model point u, prove the ordinary coordinate transition ContDiffAt under membership in the exact sphere-chart transition source, and prove the antipodal-inserted coordinate transition ContDiffAt under membership in the first chart target and the antipodal image in the second chart source. Use the standard sphere IsManifold atlas compatibility and sphereAntipodalN_contMDiff_for_alternatives; do not state smoothness outside chart domains. This supplies the two smooth local representatives required by the quotient transition contract for t95A04 and t96A07."},
+   "Bank SphereChartTransitionAlternativesSmooth and sphereAntipodalN_contMDiff_for_alternatives at dimension 2, with ordinary and antipodal-inserted ContDiffAt conclusions restricted by the exact chart-domain hypotheses compiled in the fixture.",
    :id :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
