@@ -79260,74 +79260,42 @@
    :other-consumers []}
   {:consumer :t92J08,
    :evidence
-   {:probe
-    {:residual
-     "Exactly one prerequisite is elected: apm_t92J08_bridge_1, comprising neighborhood-uniform chartwise existence and compact finite-subcover extraction. The exact bridge-consumer fixture compiles; its inherited sorryAx disappears when this placeholder is replaced. Route steps 3-4 remain downstream.",
-     :outcome :revise,
-     :warnings
-     [{:kind :inherited-placeholder,
-       :message
-       "The temporary consumer olean reports the three existing source placeholders. The fixture introduces none and depends on sorryAx exactly through apm_t92J08_bridge_1."}],
-     :prerequisite
-     {:consumer :t92J08,
-      :phase :implementation,
-      :state :open,
-      :scope ["problems/t92J08/lean/Main.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/t92J08/uniform-local-time",
-      :acceptance
-      {:placeholder-after 2,
-       :fixture-sha256
-       "e1592fa3174d7482a65353c26493e523fe269d0a9594084e38a3fbbc956f9dd7",
-       :placeholder "the sorry in apm_t92J08_bridge_1",
-       :axioms :standard-only,
-       :placeholder-before 3,
-       :commands
-       ["lake env lean problems/t92J08/lean/Main.lean"
-        "LEAN_PATH=/tmp/t92probe lake env lean /tmp/t92j08-uniform-time-consumer.lean"
-        "python3 scripts/statement-registry.py check"],
-       :fixture "/tmp/t92j08-uniform-time-consumer.lean",
-       :route-step "t92J08 route steps 1-2",
-       :implementation
-       "Replace only the sorry in apm_t92J08_bridge_1. First prove the route's neighborhood-uniform lemma at the frozen Euclidean-manifold generality: around each x0, adapt Mathlib's exists_isMIntegralCurveAt_of_contMDiffAt boundaryless chart proof, but use ContDiffAt.exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt to choose one positive time for every initial point in a sufficiently small chart neighborhood, shrinking the ball and time so all curves remain in the extChart target interior. Then extract a finite subcover of the compact manifold and take a positive minimum of the finitely many times to obtain the exact bridge conclusion. Reuse Mathlib's chart transport and Picard-Lindelof APIs; do not change registered statements or definitions."},
-      :id :routes-2026-09-28-t92j08-uniform-local-time-1,
-      :kind :final-adapter,
-      :depends-on [],
-      :current-residual
-      "Prove the exact compact-manifold uniform local-existence bridge consumed by exists_isMIntegralCurve_of_isMIntegralCurveOn. The scalar blow-up contradiction and final assembly remain separate route steps.",
-      :other-consumers []},
-     :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
-       :exit 0}
-      {:cmd "mkdir -p /tmp/t92probe/t92J08/lean", :exit 0}
-      {:cmd
-       "lake env lean -o /tmp/t92probe/t92J08/lean/Main.olean problems/t92J08/lean/Main.lean",
-       :exit 0}
-      {:cmd
-       "LEAN_PATH=/tmp/t92probe lake env lean /tmp/t92j08-uniform-time-consumer.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t92j08-uniform-time-consumer.lean",
-       :exit 0}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/t92j08-uniform-time-consumer.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "LEAN_PATH=/tmp/t92probe lake env lean /tmp/t92j08-uniform-time-consumer.lean",
-       :exit 1,
-       :stage :missing-scoped-notation,
-       :correction
-       "Opened the ContDiff and Manifold scopes required by the exact registered bridge signature; the corrected fixture compiled."}],
-     :fixture
-     {:path "/tmp/t92j08-uniform-time-consumer.lean",
-      :sha256
-      "e1592fa3174d7482a65353c26493e523fe269d0a9594084e38a3fbbc956f9dd7"},
-     :seat "topo-4"}},
+   {:residual
+    "Compiled exact boundary: exists_isMIntegralCurveAt_of_contMDiffAt_boundaryless transports a single initial point through its extChart, while ContDiffAt.exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt gives one time interval uniformly for a Euclidean closed ball. The missing prerequisite is a family-level chart transport proving that, after shrinking around x0, every initial point in one manifold neighborhood uses that Euclidean family while every resulting curve remains in the same extChart target interior for the shared interval. Only after this lemma can compactness select a finite subcover and a global positive minimum. No banked theorem supplies that transport, so apm_t92J08_bridge_1 and hence the registered closure cannot compile; the scalar blow-up and assembly steps remain downstream.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The consumer olean reports all three existing placeholders. The exact bridge-consumer fixture contains none and inherits sorryAx only by calling apm_t92J08_bridge_1."}],
+    :disposition :stop,
+    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :author "topo-4",
+    :reason :missing-neighborhood-uniform-chart-transport,
+    :commands
+    [{:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+      :exit 0}
+     {:cmd "mkdir -p /tmp/t92reprobe/t92J08/lean", :exit 0}
+     {:cmd
+      "lake env lean -o /tmp/t92reprobe/t92J08/lean/Main.olean problems/t92J08/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "LEAN_PATH=/tmp/t92reprobe lake env lean /tmp/t92j08-uniform-time-consumer.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t92j08-uniform-time-consumer.lean", :exit 0}
+     {:cmd
+      "rg -n 'exists_isMIntegralCurveAt_of_contMDiffAt_boundaryless|exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt|forall.*IsMIntegralCurveOn|closedBall.*IsMIntegralCurve' .lake/packages/mathlib/Mathlib/Geometry/Manifold/IntegralCurve .lake/packages/mathlib/Mathlib/Analysis/ODE ConstructionTargets",
+      :exit 0,
+      :finding
+      "The search finds Mathlib's pointwise manifold chart transport and its closed-ball-uniform Euclidean Picard-Lindelof theorem, but no family-level manifold theorem carrying one closed ball of initial coordinates through a shared chart and time interval."}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :fixture
+    {:path "/tmp/t92j08-uniform-time-consumer.lean",
+     :sha256
+     "e1592fa3174d7482a65353c26493e523fe269d0a9594084e38a3fbbc956f9dd7"},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t92J08",
    :acceptance
