@@ -478,4 +478,55 @@ theorem sphereProjectionQuotientTransitionLocalNormalForm :
             ((F.quotientChart y).symm ((𝓡 2).symm v)) = _
         exact F.inverseBranch_quotientChart_symm y ((𝓡 2).symm v) hyv
 
+/-- Smoothness of the two coordinate expressions produced by the quotient
+transition local normal form, at exactly the points where that form is used. -/
+def SphereChartTransitionAlternativesSmooth : Prop :=
+  ∀ (p q : Sphere 2) (u : E 2),
+    ((𝓡 2).symm u ∈ ((chartAt (E 2) p).symm ≫ₕ chartAt (E 2) q).source →
+      ContDiffAt ℝ ∞
+      (fun v => (𝓡 2)
+        (chartAt (E 2) q ((chartAt (E 2) p).symm ((𝓡 2).symm v)))) u) ∧
+    (((𝓡 2).symm u ∈ (chartAt (E 2) p).target ∧
+        sphereAntipodalN 2 ((chartAt (E 2) p).symm ((𝓡 2).symm u)) ∈
+          (chartAt (E 2) q).source) →
+      ContDiffAt ℝ ∞
+      (fun v => (𝓡 2)
+        (chartAt (E 2) q
+          (sphereAntipodalN 2
+            ((chartAt (E 2) p).symm ((𝓡 2).symm v))))) u)
+
+theorem sphereAntipodalN_contMDiff_for_alternatives :
+    ContMDiff (𝓡 2) (𝓡 2) ∞ (sphereAntipodalN 2) := by
+  simpa [sphereAntipodalN] using
+    (contMDiff_neg_sphere (E := E 3) (m := (∞ : WithTop ℕ∞)))
+
+theorem sphereChartTransitionAlternativesSmooth :
+    SphereChartTransitionAlternativesSmooth := by
+  intro p q u
+  constructor
+  · intro hu
+    have hp : (𝓡 2).symm u ∈ (chartAt (E 2) p).target := hu.1
+    have hq : (chartAt (E 2) p).symm ((𝓡 2).symm u) ∈
+        (chartAt (E 2) q).source := hu.2
+    have h₁ := contMDiffAt_symm_of_mem_maximalAtlas
+      (I := 𝓡 2) (e := chartAt (E 2) p) (x := (𝓡 2).symm u)
+      (IsManifold.chart_mem_maximalAtlas (I := 𝓡 2) (n := (∞ : WithTop ℕ∞)) p) hp
+    have h₂ := contMDiffAt_of_mem_maximalAtlas
+      (I := 𝓡 2) (e := chartAt (E 2) q)
+      (x := (chartAt (E 2) p).symm ((𝓡 2).symm u))
+      (IsManifold.chart_mem_maximalAtlas (I := 𝓡 2) (n := (∞ : WithTop ℕ∞)) q) hq
+    have h := h₂.comp _ h₁
+    simpa only [mfld_simps] using h.contDiffAt
+  · rintro ⟨hp, hq⟩
+    have h₁ := contMDiffAt_symm_of_mem_maximalAtlas
+      (I := 𝓡 2) (e := chartAt (E 2) p) (x := (𝓡 2).symm u)
+      (IsManifold.chart_mem_maximalAtlas (I := 𝓡 2) (n := (∞ : WithTop ℕ∞)) p) hp
+    have hA := (sphereAntipodalN_contMDiff_for_alternatives.contMDiffAt).comp _ h₁
+    have h₂ := contMDiffAt_of_mem_maximalAtlas
+      (I := 𝓡 2) (e := chartAt (E 2) q)
+      (x := sphereAntipodalN 2 ((chartAt (E 2) p).symm ((𝓡 2).symm u)))
+      (IsManifold.chart_mem_maximalAtlas (I := 𝓡 2) (n := (∞ : WithTop ℕ∞)) q) hq
+    have h := h₂.comp ((𝓡 2).symm u) hA
+    simpa only [mfld_simps] using h.contDiffAt
+
 end ConstructionTargets.RealProjectiveSmoothTarget
