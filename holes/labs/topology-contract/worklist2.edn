@@ -50684,23 +50684,40 @@
    [:routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile the placeholder-free fixture /tmp/rp_sphere_inverse_overlap_local.lean proving SphereProjectionLocalInverseFamily.inverseBranch_eventuallyEq_or_antipodal. At every point in a pairwise target overlap, prove that the two inverse branches are eventually equal or eventually related by sphereAntipodalN 2 in the ambient neighborhood filter. Use continuity of the OpenPartialHomeomorph inverses, the banked pointwise overlap dichotomy, and separation by the sign of the sphere inner product. This supplies the local constancy required by smooth locality for t95A04 and t96A07."},
+   :id :routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/rp_sphere_inverse_overlap.lean",
+     {:path "/tmp/rp_sphere_inverse_overlap_local.lean",
       :sha256
-      "4e6639b5c16712b6f4c6c4618f63b2e66671efed4669614df550cf3655077450"},
+      "a0ba63df8761bf8054d6939682f2bad5bcb8ae3798e3ba304a8b9ae31f883705"},
      :commands
-     [{:cmd "lake env lean /tmp/rp_sphere_inverse_overlap.lean",
+     [{:cmd "lake env lean /tmp/rp_sphere_inverse_overlap_local.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_inverse_overlap.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_inverse_overlap_local.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/rp_sphere_inverse_overlap_local.lean",
+       :exit 1,
+       :finding
+       "The first draft omitted opening Topology, leaving neighborhood notation unresolved; adding the namespace opening corrected the fixture and the final compile succeeds."}],
      :residual
-     "The local inverse family is banked, but its independently chosen branches have no stated overlap law. The compiled fixture proves the exact pointwise law needed for descent: over a common target point, two inverse branches are equal or antipodal, by their right-inverse equations and the banked two-sheeted fibre theorem. Once promoted, the descent proof can establish that one alternative holds locally and apply smooth locality using the analytic antipodal map.",
+     "The pointwise identity-or-antipodal overlap law is banked, but smooth locality requires one alternative to hold throughout a neighborhood. The compiled prerequisite proves exactly that eventual dichotomy. It uses continuity of both inverse branches and the sign of their real inner product: equality gives value 1, antipodality gives value -1, so continuity prevents the choice from switching near the overlap point. After promotion, chart transitions can be proved smooth locally from identity and contMDiff_neg_sphere.",
      :prerequisite
      {:consumer :t95A04,
       :phase :probe,
@@ -50709,14 +50726,14 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile the placeholder-free fixture /tmp/rp_sphere_inverse_overlap.lean defining inverseBranch for SphereProjectionLocalInverseFamily, proving its exact projection right-inverse equation on each localHomeomorph target, and proving inverseBranch_eq_or_antipodal on every pairwise target overlap from sphereProjectionTwoSheetedLocalModel. This supplies the overlap dichotomy used by the smooth-locality step for t95A04 and t96A07."},
-      :id :routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1,
+       "Compile the placeholder-free fixture /tmp/rp_sphere_inverse_overlap_local.lean proving SphereProjectionLocalInverseFamily.inverseBranch_eventuallyEq_or_antipodal. At every point in a pairwise target overlap, prove that the two inverse branches are eventually equal or eventually related by sphereAntipodalN 2 in the ambient neighborhood filter. Use continuity of the OpenPartialHomeomorph inverses, the banked pointwise overlap dichotomy, and separation by the sign of the sphere inner product. This supplies the local constancy required by smooth locality for t95A04 and t96A07."},
+      :id :routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
-      [:routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
+      [:routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50727,7 +50744,8 @@
    :depends-on
    [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
     :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1
-    :routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1],
+    :routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1
+    :routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
