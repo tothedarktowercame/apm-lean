@@ -204,9 +204,13 @@ Write your COMPLETE proposed Main.lean to {out} (create the directory) and compi
 - No `sorry`, `admit`, `axiom`, `opaque` stand-ins, or `native_decide`; standard axioms only.
 - You may add helper lemmas and imports to the file, above the theorem.
 - Everything goes in this one file; do not create modules elsewhere.
-- If the statement is false or unprovable as written, do not change it: write your evidence
-  (ideally a compiled counterexample) to {dir}/REFUTATION.md and stop.
-{feedback}
+- If the statement is FALSE, do not change it: write the counterexample (ideally compiled) to
+  {dir}/REFUTATION.md and finish with SOLVE_RESULT refuted.
+- Missing library infrastructure is not a reason to stop: build what the proof needs as helper
+  lemmas in this file. Work for as long as the job allows; stop early only for a refutation.
+  If you still cannot finish, leave your best partial Main.lean in place, write what remains
+  to {dir}/REFUTATION.md, and finish with SOLVE_RESULT gave-up.
+{obstruction}{feedback}
 Do not bell anyone: your final message is read directly from the job record.
 Finish with one line: SOLVE_RESULT proved | refuted | gave-up — then one sentence.
 """
@@ -241,17 +245,28 @@ def attempt(seat: str, pid: str, feedback: str) -> dict:
     shutil.rmtree(d, ignore_errors=True)
     d.mkdir(parents=True)
     out = d / "Main.lean"
-    prompt = PROMPT.format(pid=pid, decl=", ".join(fp["decls"]), out=out, dir=d,
+    prior = ROOT / "holes" / "labs" / "solve-loop" / "obstructions" / f"{pid}.md"
+    obstruction = (f"\nA previous seat gave up and left this note; use it, and do not stop for the same reason:\n"
+                   f"{prior.read_text()[:4000]}\n") if prior.exists() else ""
+    prompt = PROMPT.format(pid=pid, decl=", ".join(fp["decls"]), out=out, dir=d, obstruction=obstruction,
                            feedback=(f"\nA previous attempt was refused by the checker:\n{feedback}\n" if feedback else ""))
     job = dispatch(seat, prompt)
     log(f"{seat} <- {pid} ({job})")
     j = wait(job)
     row = {"id": pid, "seat": seat, "job": job, "pinned": fp["sha256"], "state": j.get("state"),
            "at": now(), "said": (j.get("result") or "")[-300:]}
-    if (d / "REFUTATION.md").exists():
+    claimed = re.search(r"SOLVE_RESULT\s+(\w[\w-]*)", row["said"])
+    if (d / "REFUTATION.md").exists() and claimed and claimed.group(1) == "refuted":
         shutil.copytree(d, ROOT / "holes" / "labs" / "solve-loop" / "refutations" / pid, dirs_exist_ok=True)
-        row.update(outcome="refuted-claim", reason="seat wrote REFUTATION.md (copied under holes/labs/solve-loop/refutations/)")
+        row.update(outcome="refuted-claim", reason="seat claims the statement is false (REFUTATION.md copied under holes/labs/solve-loop/refutations/)")
         return row
+    # A give-up is not a refutation (2026-09-28: 12 of 16 REFUTATION.md files
+    # were obstruction notes, "no counterexample was found"). Keep the note and
+    # hand it to the next attempt instead of retiring the problem.
+    if (d / "REFUTATION.md").exists():
+        note = ROOT / "holes" / "labs" / "solve-loop" / "obstructions" / f"{pid}.md"
+        note.parent.mkdir(parents=True, exist_ok=True)
+        note.write_text((d / "REFUTATION.md").read_text())
     ok, why = check(pid, out, fp)
     if ok:
         row.update(outcome="landed", commit=land(pid, out, seat, job), reason=why)
