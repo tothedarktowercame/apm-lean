@@ -50608,35 +50608,40 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_sphere_inverse_overlap.lean",
-      :sha256
-      "4e6639b5c16712b6f4c6c4618f63b2e66671efed4669614df550cf3655077450"},
-     :commands
-     [{:cmd "lake env lean /tmp/rp_sphere_inverse_overlap.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_inverse_overlap.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:declarations
-       ["SphereProjectionLocalInverseFamily.inverseBranch"
-        "SphereProjectionLocalInverseFamily.project_inverseBranch"
-        "SphereProjectionLocalInverseFamily.inverseBranch_eq_or_antipodal"],
-       :fixture "/tmp/rp_sphere_inverse_overlap.lean",
-       :consumer-residual
-       "Show the pointwise identity-or-antipodal alternative is locally constant on branch overlaps, then use analytic antipodal smoothness in the quotient atlas descent.",
-       :axioms :standard-only}},
-     :residual
-     "The exact right-inverse and pairwise overlap dichotomy compile without placeholders. Promotion is confined to RealProjectiveSmoothTarget; the remaining smooth-descent work is the local constancy and charted-space assembly."}},
+   {:placeholder-delta 0,
+    :residual
+    "Show the pointwise identity-or-antipodal alternative is locally constant on inverse-branch overlaps, then use antipodal smoothness to assemble SphereProjectionSmoothDescentContract for t95A04 and t96A07.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/rp_sphere_inverse_overlap.lean", :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 no-sorry-pattern ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd "lake env lean /tmp/rp_sphere_inverse_overlap_axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "248445748e634e1d957a3361c908c888f3028a84",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_inverse_overlap.lean",
+     :sha256
+     "4e6639b5c16712b6f4c6c4618f63b2e66671efed4669614df550cf3655077450"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
