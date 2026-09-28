@@ -78135,6 +78135,20 @@
       :stage :scalar-to-real-normalization,
       :correction
       "Normalized NNReal and ENNReal scalar actions and the coerced scalar's toReal value; the final rerun compiled without sorryAx."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790632377530-26477-ef9f242e",
+     :commands
+     ["sha256sum /tmp/T02A05NormalizedBoundary.lean /tmp/t02a05-assembly-probe.lean"
+      "lake env lean -o /tmp/t02repair/t02A05/lean/Main.olean problems/t02A05/lean/Main.lean"
+      "LEAN_PATH=/tmp/t02repair lake env lean /tmp/T02A05NormalizedBoundary.lean"
+      "python3 scripts/statement-registry.py check"
+      "git show aab252fc:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "Python Git-blob and fixture SHA-256 plus placeholder census"
+      "rg normalized intrinsic sphere-mass theorem candidates; reproduced exit 1"],
+     :finding
+     "PASS repaired scheduling STOP: reviewer codex-3 is distinct from author topo-2. Transition commit aab252fc is ledger-only. The corrected boundary fixture hash reproduces as 1e8a3eeade4742ff39516783f4f80b29eae5ce63400b36fc4f54a4fc748f1d2e, contains no placeholder, compiles against the registered consumer olean, and reports only propext, Classical.choice, and Quot.sound. It now preserves μHE[2] under sphere translation, explicitly unfolds euclideanHausdorffMeasure_def to scale the banked raw μH[2] moment, defines normalizedMass as the actual μHE[2] mass of the unit-sphere subtype, and proves the bridge equivalent to normalizedMass = 4*pi. Fresh search finds no theorem evaluating that mass, so the STOP identifies the exact remaining analytic prerequisite without substituting raw mass or Measure.toSphere. The assembly fixture hash 549bdba880150e9e0a02c166f19e682671fce507cb167615d4533b19db90d34d also reproduces. Registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, t02A05 statement hash 9d8293f1a68d4bf4b223ac7b97205d7e46d0cac41758bd23982e949ddf640815, and unchanged placeholder count 2 reproduce."},
     :changed-paths [],
     :fixture
     {:path "/tmp/t02a05-assembly-probe.lean",
@@ -78142,7 +78156,7 @@
      "549bdba880150e9e0a02c166f19e682671fce507cb167615d4533b19db90d34d"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t02A05/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A05/bridge_1",
    :acceptance
@@ -78225,7 +78239,7 @@
      :residual
      "Exactly one prerequisite remains: apm_t02A05_bridge_1. The final apm_t02a05 proof is a compiled two-branch rewrite followed by apm_t02a05_quadratic_minimum; no second mathematical prerequisite remains."}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A05",
    :acceptance
