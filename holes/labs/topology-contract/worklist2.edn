@@ -50930,13 +50930,48 @@
    [:routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_quotient_transition_input.lean",
+      :sha256
+      "d93544c86dfa9ba3437fbfadc28c409b041827e32f7e7ff12f56424bbff34992"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_quotient_transition_input.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_transition_input.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+      :acceptance
+      {:declarations
+       ["SphereProjectionLocalInverseFamily.transitionInput"
+        "SphereProjectionLocalInverseFamily.transitionInput_domain"
+        "SphereProjectionLocalInverseFamily.continuousAt_transitionInput"],
+       :fixture "/tmp/rp_sphere_quotient_transition_input.lean",
+       :consumer-residual
+       "Pull inverseBranch_eventuallyEq_or_antipodal back along transitionInput and simplify with the promoted quotient-chart cancellation identities to inhabit the transition normal form.",
+       :axioms :standard-only}},
+     :residual
+     "The exact transition input, its two domain memberships, and its continuity at each transition-domain point compile without placeholders. Promotion is confined to RealProjectiveSmoothTarget."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile the placeholder-free fixture /tmp/rp_sphere_quotient_transition_input.lean defining SphereProjectionLocalInverseFamily.transitionInput. Prove transitionInput_domain extracts from the exact quotient-chart transition domain that model inverse u lies in quotientChart y target and transitionInput y u lies in quotientChart z source. Prove continuousAt_transitionInput from quotientChart y continuousAt_symm and ModelWithCorners.continuous_symm. This supplies the exact pullback map and hypotheses needed to inhabit the transition local normal form for t95A04 and t96A07."},
+   {:declarations
+    ["SphereProjectionLocalInverseFamily.transitionInput"
+     "SphereProjectionLocalInverseFamily.transitionInput_domain"
+     "SphereProjectionLocalInverseFamily.continuousAt_transitionInput"],
+    :fixture "/tmp/rp_sphere_quotient_transition_input.lean",
+    :consumer-residual
+    "Pull inverseBranch_eventuallyEq_or_antipodal back along transitionInput and simplify with the promoted quotient-chart cancellation identities to inhabit the transition normal form.",
+    :axioms :standard-only},
    :id :routes-2026-09-28-rp-sphere-quotient-transition-input-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
