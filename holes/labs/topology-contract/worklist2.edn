@@ -50474,6 +50474,33 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790632765462-26492-4d2fef24",
+     :commands
+     [{:cmd "sha256sum /tmp/rp_sphere_projection_local_model.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+       :exit 0}
+      {:cmd
+       "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_projection_local_model_axioms.lean",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder counts from git show 6bf8aa28 for module, t95A04, and t96A07",
+       :exit 0}
+      {:cmd "git diff-tree --no-commit-id --name-only -r 6bf8aa28",
+       :exit 0}],
+     :finding
+     "PASS. Reviewer codex-7 read implementation commit 6bf8aa28. Its sole changed path is ConstructionTargets/RealProjectiveSmoothTarget.lean, exactly matching scope, and the file has no later commit. The fixture sha256 reproduces exactly as 4e40773617db1d4326b5aa3d0960b1eb20edb3847655e6b1a7fcc19999644bb3. Direct elaboration and Lake build pass with canonical packages; sphereProjectionTwoSheetedLocalModel uses only propext, Classical.choice, and Quot.sound. The committed module contains zero placeholders; t95A04 and t96A07 remain at one each, so placeholder delta zero is accurate. All 130 frozen statements and the 320-item ledger pass. The theorem is bounded to dimension two as required. positiveHemisphere is an open neighborhood of each point; the exact antipodal fibre theorem proves sphereProjection injective on it; continuity plus the reviewed global open-map authority makes the restriction an open embedding; and isLocalHomeomorph_iff_isOpenEmbedding_restrict gives the correctly oriented local homeomorphism. The second conjunct states the fibre equivalence from sphereProjection equality to q=p or q=antipodal p and back. No frozen topology change, representation cast, or direction reversal occurs."},
     :commit "6bf8aa28ddec098fb20e679638b7facce1ad2222",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -50483,7 +50510,7 @@
      "4e40773617db1d4326b5aa3d0960b1eb20edb3847655e6b1a7fcc19999644bb3"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50532,7 +50559,7 @@
       :depends-on [],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
