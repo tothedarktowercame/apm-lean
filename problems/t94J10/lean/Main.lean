@@ -11,4 +11,4 @@ theorem apm_t94j10
     (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y]
     [RegularSpace X] [RegularSpace Y] :
     RegularSpace (X × Y) := by
-  sorry
+  infer_instance
