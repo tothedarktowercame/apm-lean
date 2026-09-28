@@ -28,5 +28,15 @@
     "previous_sorry_count_total": 1,
     "axioms": "not checked: partial candidate-set source emits sorry warnings",
     "provenance": "2026-09-06 all-topology elaboration sweep"
-  }
+  },
+  "lean": {
+    "main": "lean/Main.lean",
+    "files": [
+      "lean/Main.lean"
+    ],
+    "sorry_count_main": 2,
+    "sorry_count_scratch": 0,
+    "sorry_count_total": 2
+  },
+  "classification": "partial"
 }

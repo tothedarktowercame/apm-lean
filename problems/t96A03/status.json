@@ -19,7 +19,11 @@
     "sorry_count_by_file": {
       "Main.lean": 0,
       "Scratch.lean": 0
-    }
+    },
+    "files": [
+      "lean/Main.lean",
+      "lean/Scratch.lean"
+    ]
   },
   "artifacts": {
     "has_problem_tex": true,
