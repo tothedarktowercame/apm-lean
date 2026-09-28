@@ -17,7 +17,8 @@ coordinate-free linear formulation of “`df_x` has no eigenvalue `+1`”, and t
 neighborhood conclusion says precisely that each fixed point is isolated.
 -/
 
-theorem apm_t91a07
+/-- Superseded because it only stated the coordinate-space special case. -/
+theorem apm_t91a07_previous_encoding
     (E : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
     [FiniteDimensional ℝ E] (f : E → E) (hf : ContDiff ℝ ∞ f)
     (hnondegenerate : ∀ x, f x = x →
@@ -53,3 +54,22 @@ theorem apm_t91a07
     y = inv (F y) := hyU.symm
     _ = inv (F x) := by rw [hFy, hFx]
     _ = x := hstrict.localInverse_apply_image
+
+/-- A nondegenerate fixed point of a smooth self-map of a manifold is isolated. -/
+theorem apm_t91a07
+    (E : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [FiniteDimensional ℝ E]
+    (X : Type*) [TopologicalSpace X] [ChartedSpace E X]
+    [IsManifold (modelWithCornersSelf ℝ E) ∞ X]
+    (f : X → X)
+    (hf : ContMDiff (modelWithCornersSelf ℝ E)
+      (modelWithCornersSelf ℝ E) ∞ f)
+    (hnondegenerate : ∀ x, f x = x →
+      Function.Bijective
+        (fderiv ℝ
+            ((extChartAt (modelWithCornersSelf ℝ E) x) ∘ f ∘
+              (extChartAt (modelWithCornersSelf ℝ E) x).symm)
+            (extChartAt (modelWithCornersSelf ℝ E) x x) -
+          ContinuousLinearMap.id ℝ E)) :
+    ∀ x, f x = x → ∃ U ∈ 𝓝 x, ∀ y ∈ U, f y = y → y = x := by
+  sorry
