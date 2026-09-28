@@ -7,7 +7,7 @@ A SmoothAtlas must make THIS projection a local diffeomorphism. We do not
 postulate an inhabitant: consumers explicitly ask for one in their conclusion.
 No embedding, transversality, or other problem conclusion is a field. -/
 
-open scoped Manifold ContDiff
+open scoped Manifold ContDiff RealInnerProductSpace
 noncomputable section
 namespace ConstructionTargets.RealProjectiveSmoothTarget
 open Topology
@@ -147,5 +147,69 @@ theorem sphereProjection_isOpenMap_of_authority : SphereProjectionOpenAuthority 
   apply (sphereProjectionQuotientAuthority.isOpen_preimage).mp
   rw [sphereProjection_preimage_image]
   exact hU.union (continuous_sphereAntipodal.isOpen_preimage _ hU)
+
+def sphereAntipodalN (n : ℕ) : Sphere n → Sphere n := fun p ↦
+  ⟨-p.1, by simpa only [Metric.mem_sphere, dist_zero_right, norm_neg] using p.2⟩
+
+/-- Exact topological input needed before the sphere manifold charts can be
+transported to the projective quotient. -/
+def SphereProjectionTwoSheetedLocalModel (n : ℕ) : Prop :=
+  IsLocalHomeomorph (sphereProjection n) ∧
+    ∀ p q : Sphere n,
+      sphereProjection n p = sphereProjection n q ↔
+        q = p ∨ q = sphereAntipodalN n p
+
+def positiveHemisphere (p : Sphere 2) : Set (Sphere 2) :=
+  {q | 0 < inner ℝ p.1 q.1}
+
+theorem positiveHemisphere_isOpen (p : Sphere 2) :
+    IsOpen (positiveHemisphere p) := by
+  exact isOpen_lt continuous_const (by fun_prop)
+
+theorem self_mem_positiveHemisphere (p : Sphere 2) :
+    p ∈ positiveHemisphere p := by
+  change 0 < inner ℝ p.1 p.1
+  rw [real_inner_self_pos]
+  intro hp
+  have hn : ‖p.1‖ = 1 := by
+    simpa only [Metric.mem_sphere, dist_zero_right] using p.2
+  rw [hp] at hn
+  norm_num at hn
+
+theorem sphereProjection_injOn_positiveHemisphere (p : Sphere 2) :
+    Set.InjOn (sphereProjection 2) (positiveHemisphere p) := by
+  intro q hq r hr hqr
+  rcases (sphereProjection_eq_iff q r).mp hqr with h | h
+  · exact h.symm
+  · exfalso
+    subst r
+    have hpos := hr
+    change 0 < inner ℝ p.1 (-(q.1)) at hpos
+    rw [inner_neg_right] at hpos
+    exact (not_lt_of_ge (le_of_lt hq)) (neg_pos.mp hpos)
+
+theorem sphereProjection_isLocalHomeomorph :
+    IsLocalHomeomorph (sphereProjection 2) := by
+  rw [isLocalHomeomorph_iff_isOpenEmbedding_restrict]
+  intro p
+  refine ⟨positiveHemisphere p,
+    (positiveHemisphere_isOpen p).mem_nhds (self_mem_positiveHemisphere p), ?_⟩
+  apply Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap
+  · exact continuous_sphereProjection.comp continuous_subtype_val
+  · intro q r hqr
+    apply Subtype.ext
+    exact sphereProjection_injOn_positiveHemisphere p q.2 r.2 hqr
+  · exact sphereProjection_isOpenMap_of_authority.restrict
+      (positiveHemisphere_isOpen p)
+
+theorem sphereProjectionTwoSheetedLocalModel :
+    SphereProjectionTwoSheetedLocalModel 2 := by
+  refine ⟨sphereProjection_isLocalHomeomorph, ?_⟩
+  intro p q
+  simpa [sphereAntipodalN, sphereAntipodal] using sphereProjection_eq_iff p q
+
+theorem sphereProjection_localHomeomorph_of_twoSheetedLocalModel
+    (h : SphereProjectionTwoSheetedLocalModel 2) :
+    IsLocalHomeomorph (sphereProjection 2) := h.1
 
 end ConstructionTargets.RealProjectiveSmoothTarget
