@@ -76761,57 +76761,51 @@
    :other-consumers []}
   {:consumer :t93J06,
    :evidence
-   {:probe
-    {:residual
-     "No mathematical prerequisite remains: the placeholder-free fixture proves the exact registered conjunction for ambient dimensions 3 and 5. Implementation is a bounded extraction into one shared ConstructionTargets module plus the t93J06 adapter; t94A09 can reuse the shared S2 obstruction in its later row.",
-     :outcome :go,
-     :warnings [],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
-       :exit 0}
-      {:cmd "lake env lean /tmp/t93j06-probe.lean", :exit 0}
-      {:cmd
-       "python3 -c 'comment-strip then reject identifier-token sorry' /tmp/t93j06-probe.lean",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-      {:cmd "sha256sum /tmp/t93j06-probe.lean", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t93j06-probe.lean",
-       :exit 1,
-       :stage :fixture-development,
-       :correction
-       "Closed the subtype constructor with the required angle bracket, rewrote the absolute-value square products explicitly, and wrapped the constructed Homotopy as Homotopic."}
-      {:cmd
-       "rg -n '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t93j06-probe.lean",
-       :exit 2,
-       :stage :placeholder-scan,
-       :correction
-       "Rust regex does not support look-around; replaced it with the campaign's comment-stripped Python token scan, which exited 0."}],
-     :fixture
-     {:path "/tmp/t93j06-probe.lean",
-      :sha256
-      "558f5a68a030c2269cbad73a634868251fb90a88d37894050a878b4cdf250de8"},
-     :implementation
-     {:scope
-      ["ConstructionTargets/EvenSphereTangentFieldObstruction.lean"
-       "problems/t93J06/lean/Main.lean"],
-      :acceptance
-      {:placeholder-delta -1,
-       :statement-policy
-       "Do not change apm_t93j06, apm_t93j06_NowhereZeroField, apm_t93j06_Sphere, or any registered definition.",
-       :construction
-       "Bank id_not_homotopic_antipodal and homotopy_of_field at exactly the dimensions/generality used by t93J06 and t94A09, then replace the sole t93J06 placeholder by the compiled two-case assembly.",
-       :gates
-       ["verify the canonical package authority before Lake"
-        "lake env lean problems/t93J06/lean/Main.lean exits 0"
-        "comment-stripped placeholder count changes from 1 to 0"
-        "python3 scripts/statement-registry.py check exits 0"
-        "report #print axioms for apm_t93j06"]}},
-     :seat "topo-4"}},
+   {:placeholder-delta -1,
+    :residual
+    "t93J06 is closed. The shared continuous tangent-field obstruction is ready for the remaining t94A09 S2 adapter.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:t93J06
+     "9938c2fd1bfbed41ea6d4bc980989e4a23fca12766d0e0d614c30eee53860bd1",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t93j06-probe.lean", :exit 0}
+     {:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.EvenSphereTangentFieldObstruction",
+      :exit 0}
+     {:cmd "lake env lean problems/t93J06/lean/Main.lean", :exit 0}
+     {:cmd "python3 comment-stripped placeholder census against HEAD^",
+      :exit 0,
+      :finding "1 -> 0; delta -1; shared module 0"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean problems/t93J06/lean/Main.lean",
+      :exit 1,
+      :stage :dependency-build,
+      :correction
+      "Built the newly added imported module with lake build, then reran the consumer compile successfully."}],
+    :commit "b5ef46aa3ba11835b4dae911807aeeb892e4559b",
+    :changed-paths
+    ["ConstructionTargets/EvenSphereTangentFieldObstruction.lean"
+     "problems/t93J06/lean/Main.lean"],
+    :fixture
+    {:path "/tmp/t93j06-probe.lean",
+     :sha256
+     "558f5a68a030c2269cbad73a634868251fb90a88d37894050a878b4cdf250de8"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/EvenSphereTangentFieldObstruction.lean"
     "problems/t93J06/lean/Main.lean"],
