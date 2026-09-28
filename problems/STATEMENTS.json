@@ -5,7 +5,7 @@
    "decls": [
     "apm_t00a02"
    ],
-   "sha256": "6111b943ed31297395d297c3a9ea197070080792ae3dbcd4357b7d88b6398c6f",
+   "sha256": "cc975d0218526a3fb808c14084f9963c7473f77c2a58f9e71ac62792f876d83d",
    "defs": [
     "apm_t00A02_E2",
     "apm_t00A02_H",
@@ -22,17 +22,17 @@
     "apm_t00A02_wedgeRel"
    ],
    "grade": "faithful",
-   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
-   "evidence": "holes/labs/statement-registry/open-grades-1.md",
+   "grader": "claude-18: prior faithful grade (open-grades-*.md) + omega fix (omega-check.md)",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
    "prelim_defect": null,
-   "rev": "e095da7f",
-   "approved_at": "2026-09-28T00:25:37Z"
+   "rev": "b856af14",
+   "approved_at": "2026-09-28T00:34:40Z"
   },
   "t00A03": {
    "decls": [
     "apm_t00a03"
    ],
-   "sha256": "bc3cf596e41f981092accfd1c215b39828c79a8c15041e7985c2dd895b0d42b5",
+   "sha256": "7b4dc8d29ad2d51bbbf2a81443c5836373ca89322645cebb8fc76d579ec5138d",
    "defs": [
     "apm_t00a03_Curve",
     "apm_t00a03_E2",
@@ -46,11 +46,11 @@
     "apm_t00a03_parallel"
    ],
    "grade": "faithful",
-   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
-   "evidence": "holes/labs/statement-registry/open-grades-2.md",
+   "grader": "claude-18: prior faithful grade (open-grades-*.md) + omega fix (omega-check.md)",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
    "prelim_defect": null,
-   "rev": "6802e9ad",
-   "approved_at": "2026-09-28T00:23:50Z"
+   "rev": "b856af14",
+   "approved_at": "2026-09-28T00:34:41Z"
   },
   "t00A05": {
    "decls": [
@@ -1511,7 +1511,7 @@
    "decls": [
     "apm_t95j06"
    ],
-   "sha256": "8004d4111fa2e8c59b80ef9845a72b6351048f0b6778272db9981814c2563b06",
+   "sha256": "30ea6d7396fcb04c79613f32aa7ba4680a56bd840498744c93323f3a770f4ec1",
    "defs": [
     "apm_t95j06_C3",
     "apm_t95j06_E2",
@@ -1525,11 +1525,11 @@
     "apm_t95j06_isHopfFlow"
    ],
    "grade": "faithful",
-   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
-   "evidence": "holes/labs/statement-registry/open-grades-2.md",
+   "grader": "claude-18: prior faithful grade (open-grades-*.md) + omega fix (omega-check.md)",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
    "prelim_defect": null,
-   "rev": "6802e9ad",
-   "approved_at": "2026-09-28T00:23:53Z"
+   "rev": "b856af14",
+   "approved_at": "2026-09-28T00:34:41Z"
   },
   "t96A01": {
    "decls": [
@@ -1680,7 +1680,7 @@
    "decls": [
     "apm_t96j06"
    ],
-   "sha256": "38baeff5ea25dfbb33f7e38d3ca72e972d7960e7bd7d01de1cff19c9a6c261b2",
+   "sha256": "4b16fe5a91cccac45b603d2bb0f33e4433e092a5c4d26b6f6e854e676fbc4569",
    "defs": [
     "apm_t96j06_Ambient",
     "apm_t96j06_BoundsThreeManifold",
@@ -1689,11 +1689,11 @@
     "apm_t96j06_RP2"
    ],
    "grade": "faithful",
-   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
-   "evidence": "holes/labs/statement-registry/open-grades-1.md",
+   "grader": "claude-18: prior faithful grade (open-grades-*.md) + omega fix (omega-check.md)",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
    "prelim_defect": null,
-   "rev": "e095da7f",
-   "approved_at": "2026-09-28T00:25:37Z"
+   "rev": "b856af14",
+   "approved_at": "2026-09-28T00:34:41Z"
   },
   "t96J08": {
    "decls": [
@@ -1869,7 +1869,7 @@
    "decls": [
     "apm_t97j02"
    ],
-   "sha256": "169457284415f2999751fdea1b5ea0ab3d9811caa24966e17251014895efe19d",
+   "sha256": "d6b1332b37ff6fcf5508704fbd410f73d0edf5a369320578beb627b5b300a301",
    "defs": [
     "apm_t97J02_CoverWitness",
     "apm_t97J02_Disk",
@@ -1881,11 +1881,11 @@
     "apm_t97J02_edgePoint"
    ],
    "grade": "faithful",
-   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
-   "evidence": "holes/labs/statement-registry/open-grades-2.md",
+   "grader": "claude-18: prior faithful grade (open-grades-*.md) + omega fix (omega-check.md)",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
    "prelim_defect": null,
-   "rev": "6802e9ad",
-   "approved_at": "2026-09-28T00:23:54Z"
+   "rev": "b856af14",
+   "approved_at": "2026-09-28T00:34:41Z"
   },
   "t97J03": {
    "decls": [
@@ -1955,7 +1955,7 @@
    "decls": [
     "apm_t98a02"
    ],
-   "sha256": "5f321aaadab5158c43bd5cc2b41c81e224cf4cdd8f0e598207dd259e87f82015",
+   "sha256": "643dd3c5aff5f6bc369fa50cfea7f52618d75cbecfb85a3fa986a74ebd34675a",
    "defs": [
     "T98A02Disk",
     "T98A02E4",
@@ -1963,11 +1963,11 @@
     "t98A02H"
    ],
    "grade": "faithful",
-   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
-   "evidence": "holes/labs/statement-registry/open-grades-1.md",
+   "grader": "claude-18: prior faithful grade (open-grades-*.md) + omega fix (omega-check.md)",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
    "prelim_defect": null,
-   "rev": "e095da7f",
-   "approved_at": "2026-09-28T00:25:37Z"
+   "rev": "b856af14",
+   "approved_at": "2026-09-28T00:34:41Z"
   },
   "t98A03": {
    "decls": [
@@ -2134,11 +2134,11 @@
     "apm_t99J04_coordinateMap"
    ],
    "grade": "faithful",
-   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
-   "evidence": "holes/labs/statement-registry/open-grades-2.md",
+   "grader": "claude-18: prior faithful grade (open-grades-*.md) + omega fix (omega-check.md)",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
    "prelim_defect": null,
-   "rev": "6802e9ad",
-   "approved_at": "2026-09-28T00:23:54Z"
+   "rev": "b856af14",
+   "approved_at": "2026-09-28T00:34:41Z"
   },
   "t99J05": {
    "decls": [
@@ -2230,5 +2230,199 @@
    "rev": "e095da7f",
    "approved_at": "2026-09-28T00:25:38Z"
   }
- }
+ },
+ "revoked": [
+  {
+   "id": "t00A02",
+   "entry": {
+    "decls": [
+     "apm_t00a02"
+    ],
+    "sha256": "6111b943ed31297395d297c3a9ea197070080792ae3dbcd4357b7d88b6398c6f",
+    "defs": [
+     "apm_t00A02_E2",
+     "apm_t00A02_H",
+     "apm_t00A02_I2",
+     "apm_t00A02_RP2",
+     "apm_t00A02_Sphere2",
+     "apm_t00A02_antipodalCover",
+     "apm_t00A02_antipodalRel",
+     "apm_t00A02_coverWitness",
+     "apm_t00A02_hasGenusFiveHomology",
+     "apm_t00A02_isNfoldCover",
+     "apm_t00A02_isRegularCover",
+     "apm_t00A02_wedge",
+     "apm_t00A02_wedgeRel"
+    ],
+    "grade": "faithful",
+    "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
+    "evidence": "holes/labs/statement-registry/open-grades-1.md",
+    "prelim_defect": null,
+    "rev": "e095da7f",
+    "approved_at": "2026-09-28T00:25:37Z"
+   },
+   "reason": "smoothness order bare ⊤ = analytic (ω) in pinned Mathlib: statement narrower than the problem",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
+   "revoked_at": "2026-09-28T00:34:40Z"
+  },
+  {
+   "id": "t00A03",
+   "entry": {
+    "decls": [
+     "apm_t00a03"
+    ],
+    "sha256": "bc3cf596e41f981092accfd1c215b39828c79a8c15041e7985c2dd895b0d42b5",
+    "defs": [
+     "apm_t00a03_Curve",
+     "apm_t00a03_E2",
+     "apm_t00a03_H",
+     "apm_t00a03_I2",
+     "apm_t00a03_Pants",
+     "apm_t00a03_cut",
+     "apm_t00a03_disjoint",
+     "apm_t00a03_hasGenus",
+     "apm_t00a03_nullHomotopic",
+     "apm_t00a03_parallel"
+    ],
+    "grade": "faithful",
+    "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
+    "evidence": "holes/labs/statement-registry/open-grades-2.md",
+    "prelim_defect": null,
+    "rev": "6802e9ad",
+    "approved_at": "2026-09-28T00:23:50Z"
+   },
+   "reason": "smoothness order bare ⊤ = analytic (ω) in pinned Mathlib: statement narrower than the problem",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
+   "revoked_at": "2026-09-28T00:34:40Z"
+  },
+  {
+   "id": "t95J06",
+   "entry": {
+    "decls": [
+     "apm_t95j06"
+    ],
+    "sha256": "8004d4111fa2e8c59b80ef9845a72b6351048f0b6778272db9981814c2563b06",
+    "defs": [
+     "apm_t95j06_C3",
+     "apm_t95j06_E2",
+     "apm_t95j06_EveryComponentDiffeomorphicToTorus",
+     "apm_t95j06_H",
+     "apm_t95j06_I2",
+     "apm_t95j06_IsCompactOrientableSurface",
+     "apm_t95j06_IsInvariant",
+     "apm_t95j06_S5",
+     "apm_t95j06_T",
+     "apm_t95j06_isHopfFlow"
+    ],
+    "grade": "faithful",
+    "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
+    "evidence": "holes/labs/statement-registry/open-grades-2.md",
+    "prelim_defect": null,
+    "rev": "6802e9ad",
+    "approved_at": "2026-09-28T00:23:53Z"
+   },
+   "reason": "smoothness order bare ⊤ = analytic (ω) in pinned Mathlib: statement narrower than the problem",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
+   "revoked_at": "2026-09-28T00:34:40Z"
+  },
+  {
+   "id": "t96J06",
+   "entry": {
+    "decls": [
+     "apm_t96j06"
+    ],
+    "sha256": "38baeff5ea25dfbb33f7e38d3ca72e972d7960e7bd7d01de1cff19c9a6c261b2",
+    "defs": [
+     "apm_t96j06_Ambient",
+     "apm_t96j06_BoundsThreeManifold",
+     "apm_t96j06_ProductSubspace",
+     "apm_t96j06_RP1InRP2",
+     "apm_t96j06_RP2"
+    ],
+    "grade": "faithful",
+    "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
+    "evidence": "holes/labs/statement-registry/open-grades-1.md",
+    "prelim_defect": null,
+    "rev": "e095da7f",
+    "approved_at": "2026-09-28T00:25:37Z"
+   },
+   "reason": "smoothness order bare ⊤ = analytic (ω) in pinned Mathlib: statement narrower than the problem",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
+   "revoked_at": "2026-09-28T00:34:40Z"
+  },
+  {
+   "id": "t97J02",
+   "entry": {
+    "decls": [
+     "apm_t97j02"
+    ],
+    "sha256": "169457284415f2999751fdea1b5ea0ab3d9811caa24966e17251014895efe19d",
+    "defs": [
+     "apm_t97J02_CoverWitness",
+     "apm_t97J02_Disk",
+     "apm_t97J02_E2",
+     "apm_t97J02_IsNfoldCover",
+     "apm_t97J02_Surface",
+     "apm_t97J02_SurfaceRel",
+     "apm_t97J02_X",
+     "apm_t97J02_edgePoint"
+    ],
+    "grade": "faithful",
+    "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
+    "evidence": "holes/labs/statement-registry/open-grades-2.md",
+    "prelim_defect": null,
+    "rev": "6802e9ad",
+    "approved_at": "2026-09-28T00:23:54Z"
+   },
+   "reason": "smoothness order bare ⊤ = analytic (ω) in pinned Mathlib: statement narrower than the problem",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
+   "revoked_at": "2026-09-28T00:34:40Z"
+  },
+  {
+   "id": "t98A02",
+   "entry": {
+    "decls": [
+     "apm_t98a02"
+    ],
+    "sha256": "5f321aaadab5158c43bd5cc2b41c81e224cf4cdd8f0e598207dd259e87f82015",
+    "defs": [
+     "T98A02Disk",
+     "T98A02E4",
+     "T98A02I4",
+     "t98A02H"
+    ],
+    "grade": "faithful",
+    "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
+    "evidence": "holes/labs/statement-registry/open-grades-1.md",
+    "prelim_defect": null,
+    "rev": "e095da7f",
+    "approved_at": "2026-09-28T00:25:37Z"
+   },
+   "reason": "smoothness order bare ⊤ = analytic (ω) in pinned Mathlib: statement narrower than the problem",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
+   "revoked_at": "2026-09-28T00:34:40Z"
+  },
+  {
+   "id": "t99J04",
+   "entry": {
+    "decls": [
+     "apm_t99j04"
+    ],
+    "sha256": "a8f3805353747a0dc79f484e6445a9a6fec56c5bdb4f2427b0800bc1ce1dd35b",
+    "defs": [
+     "apm_t99J04_Euclidean",
+     "apm_t99J04_coordinateMap"
+    ],
+    "grade": "faithful",
+    "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
+    "evidence": "holes/labs/statement-registry/open-grades-2.md",
+    "prelim_defect": null,
+    "rev": "6802e9ad",
+    "approved_at": "2026-09-28T00:23:54Z"
+   },
+   "reason": "smoothness order bare ⊤ = analytic (ω) in pinned Mathlib: statement narrower than the problem",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
+   "revoked_at": "2026-09-28T00:34:40Z"
+  }
+ ]
 }
