@@ -50047,13 +50047,62 @@
   {:bounded-exception
    "single-consumer dimension-two projective quotient openness theorem",
    :consumer :t94A08,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t94A08_projective_quotient_open_contract.lean",
+      :sha256
+      "6b2470fcf6b9e3c2eff053c7f6f2caa47126e1124deb7b3387c877625384da54"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/t94A08_projective_quotient_open_contract.lean",
+       :exit 0}
+      {:cmd
+       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_projective_quotient_open_contract.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/test_proj_open.lean",
+       :exit 1,
+       :finding
+       "Direct rewriting to the generic orbit quotient failed because Projectivization uses the ambient-vector orbit relation pulled back to the nonzero subtype, not definitionally the subtype orbit relation."}
+      {:cmd
+       "lake env lean /tmp/t94A08_projective_quotient_open_contract.lean",
+       :exit 1,
+       :finding
+       "The first saturation proof needed the scalar homeomorphism written explicitly because ContinuousConstSMul for complex units on the nonzero-vector subtype is not synthesized."}
+      {:cmd
+       "lake env lean /tmp/t94A08_projective_quotient_open_contract.lean",
+       :exit 1,
+       :finding
+       "The inverse scalar continuity proof required an explicit coercion of the inverse unit to complex; after typing that underlying map, the complete fixture compiled."}],
+     :implementation
+     {:scope ["ConstructionTargets/T94A08ProjectiveQuotientOpen.lean"],
+      :acceptance
+      {:theorem
+       "ConstructionTargets.T94A08ProjectiveConic.projectiveQuotientOpenAuthority",
+       :contract
+       "ConstructionTargets.T94A08ProjectiveConic.ProjectiveQuotientOpenAuthority",
+       :requirements
+       "Preserve the existing coinduced topology. Include projectiveQuotientMap_isQuotientMap, the explicit unit-scalar homeomorphism on nonzero vectors, the saturation equality for quotientMap images, and the resulting IsOpenMap proof exactly at complex dimension two."}},
+     :residual
+     "Projective quotient openness is complete. The next t94A08 route-step-1 work is to use it to prove the nonvanishing-coordinate locus open and package coordinates and chartInverse as the exact OpenPartialHomeomorph required by AffineChartConstruction 2."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T94A08ProjectiveQuotientOpen.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free proof of ConstructionTargets.T94A08ProjectiveConic.ProjectiveQuotientOpenAuthority from /tmp/t94A08_projective_quotient_open_contract.lean, namely IsOpenMap (ConstructionTargets.ProjectiveSpaceTopology.quotientMap complex 2). Prove for every open U of nonzero vectors that the preimage of quotientMap image U is exactly the union over complex units a of the scalar images a • U; each scalar action is a homeomorphism, so the saturation is open, and projectiveQuotientMap_isQuotientMap reflects that openness to the image. Do not alter the coinduced topology. This supplies the openness substep of t94A08 route step 1."},
+   {:theorem
+    "ConstructionTargets.T94A08ProjectiveConic.projectiveQuotientOpenAuthority",
+    :contract
+    "ConstructionTargets.T94A08ProjectiveConic.ProjectiveQuotientOpenAuthority",
+    :requirements
+    "Preserve the existing coinduced topology. Include projectiveQuotientMap_isQuotientMap, the explicit unit-scalar homeomorphism on nonzero vectors, the saturation equality for quotientMap images, and the resulting IsOpenMap proof exactly at complex dimension two."},
    :id :routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1,
    :kind :reusable-theorem,
    :depends-on []}
