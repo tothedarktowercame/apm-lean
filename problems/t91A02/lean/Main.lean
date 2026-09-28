@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.Surfaces
 
 /-!
 # APM t91A02 — the Euler-characteristic obstruction to a surface cover
@@ -35,7 +36,9 @@ def apm_t91a02_HasFiniteCover
     IsCoveringMap p ∧ 0 < sheets ∧
       E.eulerCharacteristic = (sheets : ℤ) * B.eulerCharacteristic
 
-theorem apm_t91a02
+/-- Superseded: `HasFiniteCover` included Euler-characteristic
+multiplicativity as a hypothesis and its carriers were not the named surfaces. -/
+theorem apm_t91a02_previous_encoding
     (E : apm_t91a02_Surface 16) (B : apm_t91a02_Surface 8) :
     ¬apm_t91a02_HasFiniteCover E B := by
   intro hcover
@@ -46,3 +49,14 @@ theorem apm_t91a02
   norm_num at hE hB
   rw [hE, hB] at heuler
   omega
+
+open ConstructionTargets.Surfaces
+
+/-- Faithful statement: there is no finite-sheeted covering map from the
+concrete connected sum of sixteen projective planes onto the concrete
+connected sum of eight.  No Euler-characteristic equation is assumed. -/
+theorem apm_t91a02 :
+    ¬ ∃ (p : Surface false 16 → Surface false 8) (sheets : ℕ),
+      IsCoveringMap p ∧ 0 < sheets ∧
+      ∀ x : Surface false 8, Nat.card {e : Surface false 16 // p e = x} = sheets := by
+  sorry
