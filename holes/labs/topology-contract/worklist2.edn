@@ -50853,13 +50853,63 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile the placeholder-free fixture /tmp/rp_sphere_quotient_chart_apply.lean proving quotientChart_apply, quotientChart_symm_apply, and inverseBranch_quotientChart_symm for every SphereProjectionLocalInverseFamily. The last theorem must use the exact quotientChart target membership to obtain that the standard sphere-chart inverse lies in localHomeomorph source, then cancel with left_inv. These identities supply the composite partial-homeomorphism simplification needed by the transition local-normal-form row for t95A04 and t96A07."},
+   :id :routes-2026-09-28-rp-sphere-quotient-chart-apply-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_quotient_chart_apply.lean",
+      :sha256
+      "05a84b0c4c673ffd38e3a0b7f3c9d5bd550654afb4b41dba6ff6b0423f5c0539"},
+     :commands
+     [{:cmd "lake env lean /tmp/rp_sphere_quotient_chart_apply.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_chart_apply.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/rp_sphere_quotient_chart_apply.lean",
+       :exit 1,
+       :finding
+       "The initial inverse-law proof projected membership from the wrong composite source; unfolding the quotientChart target exposed the required second conjunct, after which localHomeomorph.left_inv applies."}],
+     :residual
+     "The requested local normal form is not yet inhabited. Lean does not automatically expose the forward and inverse formulas of quotientChart, especially the source membership needed to cancel localHomeomorph after a sphere-chart inverse. The compiled prerequisite proves the exact forward formula, inverse formula, and cancellation identity inverseBranch y ((quotientChart y).symm u) = (chartAt ...).symm u under the precise target hypothesis. These identities are the simplifications needed to pull the banked eventual inverse-branch dichotomy into model coordinates.",
+     :prerequisite
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile the placeholder-free fixture /tmp/rp_sphere_quotient_chart_apply.lean proving quotientChart_apply, quotientChart_symm_apply, and inverseBranch_quotientChart_symm for every SphereProjectionLocalInverseFamily. The last theorem must use the exact quotientChart target membership to obtain that the standard sphere-chart inverse lies in localHomeomorph source, then cancel with left_inv. These identities supply the composite partial-homeomorphism simplification needed by the transition local-normal-form row for t95A04 and t96A07."},
+      :id :routes-2026-09-28-rp-sphere-quotient-chart-apply-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
+      :other-consumers [:t96A07]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free inhabitant of SphereProjectionQuotientTransitionLocalNormalForm from /tmp/rp_sphere_quotient_transition_normal_form.lean. For every inverse family, quotient-chart pair y z, and model coordinate u in the exact transition domain, prove the full quotient coordinate transition is eventually equal near u either to the standard sphere chart transition or to that transition with sphereAntipodalN 2 inserted. Derive it by pulling inverseBranch_eventuallyEq_or_antipodal through the first chart and simplifying quotientChart inverse laws. Retain the compiled sphereAntipodalN_contMDiff_for_transition theorem. This is the exact local normal form needed by the pairwise ContDiffOn row for t95A04 and t96A07."},
    :id
    :routes-2026-09-28-rp-sphere-quotient-transition-normal-form-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
-    :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
+    :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1
+    :routes-2026-09-28-rp-sphere-quotient-chart-apply-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
