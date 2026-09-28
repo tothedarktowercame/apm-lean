@@ -50452,45 +50452,30 @@
    "single-consumer coherent quantitative Nielsen-Schreier packet",
    :consumer :t00J08,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t00J08_end_basis_contract.lean",
-      :sha256
-      "e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c"},
-     :commands
-     [{:cmd
-       "test -L .lake/packages && lake env lean /tmp/t00J08_end_basis_contract.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 sorry /tmp/t00J08_end_basis_contract.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "EDN parser invocation with an unescaped apostrophe inside the shell environment assignment",
-       :exit 2,
-       :finding
-       "Shell parsing failed before Clojure ran; removed the punctuation and reran the exact EDN map parse."}],
-     :residual
-     "Mathlib endIsFree proves only the Prop IsFreeGroup (End root), which existentially hides its generator type. The tree-edge and action-groupoid cardinality steps require a FreeGroupBasis explicitly indexed by the complement of wideSubquiverSymmetrify T. The compiled contract fixes that exact missing type-valued result.",
-     :prerequisite
-     {:bounded-exception
-      "single-consumer exact type-valued strengthening of the existing Nielsen-Schreier proof",
-      :consumer :t00J08,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:probe
-       "Compile a placeholder-free fixture inhabiting EndBasisOfArborescenceContract T from the existing Mathlib endIsFree proof: return a FreeGroupBasis indexed by the complement of wideSubquiverSymmetrify T, using FreeGroupBasis.ofUniqueLift with the same loopOfHom universal-property proof. Preserve the explicit EndBasisIndex; do not pass through IsFreeGroup, which erases it. The exact signature is compiled in /tmp/t00J08_end_basis_contract.lean and supplies route step 1."},
-      :id :routes-2026-09-28-t00j08-end-basis-arborescence-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on []}}},
+   {:residual
+    "t00J08 quantitative route steps 1-4 are stopped; bridge_rank_formula, bridge_subgroup_of_index, and the main arithmetic assembly remain downstream.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
+    :reason
+    "The quantitative Nielsen-Schreier packet depends on the stopped endBasisOfArborescence route step. Fresh compilation reproduces the representation boundary: Mathlib loopOfHom and endIsFree use the opaque private root-prime T, while the only expressible public target uses show G from root T. The copied universal-property proof fails at its nil path because F.map of the identity at private root-prime cannot rewrite in the publicly stated End group. Since endIsFree erases the complementary-edge generator type into IsFreeGroup, tree-edge cardinality cannot be connected to the subgroup basis without violating the explicit-index invariant. A public Type-valued endBasis theorem must be added inside NielsenSchreier, or root-prime must be exposed, before steps 2-4 and schreier_rank_formula are meaningful.",
+    :commands
+    [{:cmd
+      "rg -n \"private def root.|lemma endIsFree\" .lake/packages/mathlib/Mathlib/GroupTheory/FreeGroup/NielsenSchreier.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :diagnostic-history
+    [{:cmd "lake env lean /tmp/t00J08_end_basis_contract.lean",
+      :exit 1,
+      :finding
+      "Fresh reproduction fails at the nil-path identity over opaque private root-prime T; no later successful compile supersedes this boundary."}],
+    :fixture
+    {:path "/tmp/t00J08_end_basis_contract.lean",
+     :sha256
+     "e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c"},
+    :seat "topo-8"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
