@@ -110,7 +110,9 @@ lemma apm_t96j05_nontrivial_of_pos_dim
     linarith
   exact ⟨⟨y₀, y₁, hy⟩⟩
 
-theorem apm_t96j05
+/-- Superseded because its hypotheses already supplied the regular value that
+the problem asks one to obtain. -/
+theorem apm_t96j05_previous_encoding
     (m n : ℕ) (hm : 0 < m) (hmn : m ≤ n)
     (X : Set (apm_t96j05_E n))
     (hXne : X.Nonempty)
@@ -170,3 +172,23 @@ theorem apm_t96j05
   have hc2 :=
     ConstructionTargets.PredicateSubtypeAtlasTransport.isManifold hp c1 hc1
   exact ⟨r, hr, hlevel, c2, hc2⟩
+
+/-- A type admits some finite-dimensional smooth real-manifold structure. -/
+def apm_t96j05_HasSmoothManifoldStructure
+    (Y : Type*) [TopologicalSpace Y] : Prop :=
+  ∃ k : ℕ, ∃ charts : ChartedSpace (apm_t96j05_E k) Y,
+    letI := charts
+    IsManifold (apm_t96j05_I k) ∞ Y
+
+/-- A positive-radius sphere centered at the origin cuts the given positive-
+dimensional connected smooth submanifold in a nonempty smooth manifold. -/
+theorem apm_t96j05
+    (m n : ℕ) (hm : 0 < m) (hmn : m ≤ n)
+    (X : Set (apm_t96j05_E n))
+    (hXne : X.Nonempty)
+    (hXconn : IsConnected (Set.univ : Set X))
+    (hX : apm_t96j05_IsEmbeddedSmoothSubmanifold (m := m) X) :
+    ∃ r : ℝ, 0 < r ∧
+      Nonempty (apm_t96j05_radialLevel X r) ∧
+      apm_t96j05_HasSmoothManifoldStructure (apm_t96j05_radialLevel X r) := by
+  sorry
