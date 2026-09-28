@@ -77799,8 +77799,11 @@
    :other-consumers []}
   {:consumer :t97A07,
    :evidence
-   {:outcome :stop,
-    :seat "topo-4",
+   {:residual
+    "t97A07 remains at one placeholder. The n=0 conjunct is closed; compactness, positive-dimensional nonemptiness, and higher-dimensional infinitude require three separately compiled packets.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-4",
     :reason
     "The sole sorry contains three independent unbanked arguments, so a complete GO fixture is absent and the one-prerequisite REVISE protocol cannot represent the residual. First, compactness requires a neighborhood theorem: surjective continuous-linear maps form an open set and mfderiv varies continuously in manifold charts, making regular points open and the critical locus closed. Second, nonemptiness for n>0 requires a different argument: maximize one target coordinate on compact X and prove a manifold local extremum makes that coordinate functional annihilate the derivative, hence mfderiv is not surjective. Third, infinitude requires yet another branch: a surjective mfderiv maps a neighborhood onto a target neighborhood, followed by connectedness of Euclidean space minus a finite set and compactness/boundedness of the range. The existing regular-fiber modules consume pointwise surjectivity but do not provide these openness, extremum, or global complement results. The registered theorem appears true and its n=0 clause is already banked; this is a scheduling STOP for multiple prerequisites, not a refutation.",
     :commands
@@ -77821,6 +77824,19 @@
       :exit 0,
       :finding
       "Only pointwise regular-fiber and derivative-transport consumers; no route-closing openness/extremum/global theorem."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790631121986-26440-c4c61856",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 3356644c"
+      "git show 3356644c:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "Python comment-stripped placeholder and SHA-256 census for t97A07 at 3356644c"
+      "rg route-closing openness, extremum, neighborhood, compactness, and infinitude theorems in ConstructionTargets; reproduced exit 1"
+      "rg pointwise Surjective mfderiv consumers in ConstructionTargets"],
+     :finding
+     "PASS scheduling STOP: reviewer codex-3 is distinct from author topo-4. Commit 3356644c is ledger-only with exact scope holes/labs/topology-contract/worklist.edn; its snapshot validates at 639 items. The registry reproduces 130/130 statements, registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, and frozen t97A07 hash c62ad2f0c3613a583f731ff6178400b2cb61849d80bf36871bebb5c92f4529fb; the consumer remains unchanged with one executable placeholder. Multiple independent branches are real, so GO and one-prerequisite REVISE are unavailable: compactness requires openness and chart-continuity of surjective mfderiv; positive-dimensional nonemptiness separately requires compact attainment and a manifold extremum-to-critical result; infinitude additionally requires a local range-neighborhood result and global connected-complement versus compact-range reasoning. Existing ConstructionTargets results only consume or transport pointwise mfderiv surjectivity and do not supply these route-closing claims. The manifold mfderiv, chart derivative, Euclidean target, critical locus, and critical-value image boundaries are stated in the correct directions. This is a scheduling boundary, not a refutation; the n=0 clause remains explicitly banked. No evidence commit or fixture hash applies to a read-only STOP."},
     :finding
     {:registered-statement :preserved,
      :placeholder "the sole sorry in apm_t97a07",
@@ -77846,12 +77862,9 @@
        "Compiled regular-point range-neighborhood lemma and the connected finite-complement versus compact-range assembly."}],
      :classification
      "Scheduling STOP for three independent prerequisites; not a mathematical refutation."},
-    :residual
-    "t97A07 remains at one placeholder. The n=0 conjunct is closed; compactness, positive-dimensional nonemptiness, and higher-dimensional infinitude require three separately compiled packets.",
-    :author "topo-4",
-    :disposition :stop},
+    :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A07",
    :acceptance
@@ -77883,7 +77896,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
