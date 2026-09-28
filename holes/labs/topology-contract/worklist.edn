@@ -79486,9 +79486,22 @@
       "After reviewed t95J02, preserve all holds and STOPs, then choose between t91J06 and t99J04 by concrete remaining work.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790636096034-26622-90d5079b",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r d0a98928"
+      "git show d0a98928:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "python3 scripts/statement-registry.py check --rev d0a98928"
+      "Python comment-stripped census of twelve topo1 blobs at d0a98928 and its parent"
+      "python3 scripts/statement-registry.py fingerprint t95J02 --rev d0a98928"
+      "inspect t95J02 source, route, quotient relations, and banked reflection/homotopy APIs"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-4. Commit d0a98928 changes only holes/labs/topology-contract/worklist.edn; its recorded 653-item snapshot validates. Independent census agrees at 22 placeholders and is unchanged from the parent: t01A01=2, t02A05=2, t91J06=3, t92J08=3, t93J06=0, t94A07=1, t94A09=0, t94A10=3, t95J02=3, t97A07=1, t99J04=3, t99J06=1. It preserves reviewed STOPs for t01A01, t02A05, t92J08, and t94A10, all three one-placeholder holds, and both closures. The registry reproduces 130/130 with file hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0; t95J02 has faithful frozen hash 45c5bf77c662ed659a09a33b11a5b90a091a4ede4403a302fe3d550f60a45456. Electing t95J02 before t91J06 and t99J04 is supported: the latter routes respectively retain a false nonfrozen helper and require the absent manifold IFT, while t95J02 can target its concrete Relation.EqvGen quotient using compiled glide/vertical identities and banked integral-circle H1 reflection action. The theorem directions are correct: a retraction makes H1 of the subtype inclusion injective, while the glide-reflection homotopy should kill twice the vertical generator, producing a nonzero kernel class and contradiction. The circle identification must be constructed quotient-valuedly—there is no continuous real-valued global argument—but the acceptance asks for the actual homeomorphism and does not assume such a section. Fixture hashing is not applicable to this strategy-only checkpoint."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -79504,7 +79517,7 @@
    :other-consumers []}
   {:consumer :t95J02,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t95J02",
    :acceptance
