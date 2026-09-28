@@ -182,6 +182,24 @@
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
   },
+  "t00J06": {
+   "decls": [
+    "apm_t00j06"
+   ],
+   "sha256": "cde6fabf5392ecc8afb7ee01c28d712fb6e2132f5cdef975d9983e1f7686d413",
+   "defs": [
+    "apm_t00J06_E",
+    "apm_t00J06_H",
+    "apm_t00J06_Torus",
+    "apm_t00J06_hasGenusTwoHomology"
+   ],
+   "grade": "faithful",
+   "grader": "claude read-only grader (reopen2)",
+   "evidence": "holes/labs/statement-registry/reopen2-grades-2.md",
+   "prelim_defect": null,
+   "rev": "7b3484a2",
+   "approved_at": "2026-09-28T19:46:15Z"
+  },
   "t00J07": {
    "decls": [
     "apm_t00j07"
@@ -1371,6 +1389,31 @@
    "prelim_defect": null,
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
+  },
+  "t94J08": {
+   "decls": [
+    "apm_t94j08"
+   ],
+   "sha256": "b26468e83f5676bb00fdb2d907d03fb66511823e7057065f4d79df637f37a2c5",
+   "defs": [
+    "T94J08Euclidean",
+    "T94J08Sphere",
+    "T94J08TopHomology",
+    "t94J08Antipodal",
+    "t94J08HasDegree",
+    "t94J08HasIsolatedZero",
+    "t94J08HasLocalIndex",
+    "t94J08HasLocalIndexOne",
+    "t94J08HasReducedDegreeZero",
+    "t94J08NormalizedLink",
+    "t94J08TopHomologyMap"
+   ],
+   "grade": "faithful",
+   "grader": "claude read-only grader (reopen2)",
+   "evidence": "holes/labs/statement-registry/reopen2-grades-2.md",
+   "prelim_defect": null,
+   "rev": "7b3484a2",
+   "approved_at": "2026-09-28T19:46:15Z"
   },
   "t94J09": {
    "decls": [
