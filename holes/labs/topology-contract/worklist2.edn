@@ -50451,6 +50451,8 @@
   {:bounded-exception
    "single-consumer coherent quantitative Nielsen-Schreier packet",
    :consumer :t00J08,
+   :review-finding
+   "Deterministic fixture-integrity defect in transition commit 732f1ee8: the quantitative STOP records /tmp/t00J08_end_basis_contract.lean with sha256 e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c and claims that artifact fails at the nil-path identity. That e8bf hash is the earlier contract fixture explicitly recorded with Lean exit 0 by invoke-1790629509405-26342-cb4b1759; the authenticated failing artifact accepted for the dependency row is instead /tmp/t00J08_end_basis_contract_failure_848e7873.lean at sha256 848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f; fresh Lean execution reproduces its nil-case failure. Repair this row by citing the stable 848e fixture and its accepted dependency receipt, or by recording no new fixture and making the STOP purely dependency-propagated. Fresh checks otherwise find private root-prime at NielsenSchreier.lean:153, public endIsFree at :227, 130 matching frozen statements, a valid 315-item ledger, three committed t00J08 placeholders, and ledger-only commit scope.",
    :evidence
    {:residual
     "t00J08 quantitative route steps 1-4 are stopped; bridge_rank_formula, bridge_subgroup_of_index, and the main arithmetic assembly remain downstream.",
@@ -50469,13 +50471,19 @@
       :exit 1,
       :finding
       "Fresh reproduction fails at the nil-path identity over opaque private root-prime T; no later successful compile supersedes this boundary."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1790630223340-26395-4ef58ea0",
+     :finding
+     "Deterministic fixture-integrity defect in transition commit 732f1ee8: the quantitative STOP records /tmp/t00J08_end_basis_contract.lean with sha256 e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c and claims that artifact fails at the nil-path identity. That e8bf hash is the earlier contract fixture explicitly recorded with Lean exit 0 by invoke-1790629509405-26342-cb4b1759; the authenticated failing artifact accepted for the dependency row is instead /tmp/t00J08_end_basis_contract_failure_848e7873.lean at sha256 848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f; fresh Lean execution reproduces its nil-case failure. Repair this row by citing the stable 848e fixture and its accepted dependency receipt, or by recording no new fixture and making the STOP purely dependency-propagated. Fresh checks otherwise find private root-prime at NielsenSchreier.lean:153, public endIsFree at :227, 130 matching frozen statements, a valid 315-item ledger, three committed t00J08 placeholders, and ledger-only commit scope."},
     :fixture
     {:path "/tmp/t00J08_end_basis_contract.lean",
      :sha256
      "e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c"},
     :seat "topo-8"},
-   :phase :probe,
-   :state :done-unreviewed,
+   :phase :implementation,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
