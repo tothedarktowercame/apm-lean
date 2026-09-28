@@ -366,4 +366,29 @@ theorem sphereProjectionQuotientChartedSpace_exists :
   obtain ⟨F⟩ := sphereProjectionLocalInverseFamily
   exact ⟨F.quotientChartedSpace⟩
 
+theorem SphereProjectionLocalInverseFamily.quotientChart_apply
+    (F : SphereProjectionLocalInverseFamily) (y x : Space ℝ 2)
+    (_hx : x ∈ (F.quotientChart y).source) :
+    F.quotientChart y x =
+      chartAt (E 2) (F.lift y) (F.inverseBranch y x) := by
+  rfl
+
+theorem SphereProjectionLocalInverseFamily.quotientChart_symm_apply
+    (F : SphereProjectionLocalInverseFamily) (y : Space ℝ 2) (u : E 2)
+    (_hu : u ∈ (F.quotientChart y).target) :
+    (F.quotientChart y).symm u =
+      F.localHomeomorph y ((chartAt (E 2) (F.lift y)).symm u) := by
+  rfl
+
+theorem SphereProjectionLocalInverseFamily.inverseBranch_quotientChart_symm
+    (F : SphereProjectionLocalInverseFamily) (y : Space ℝ 2) (u : E 2)
+    (hu : u ∈ (F.quotientChart y).target) :
+    F.inverseBranch y ((F.quotientChart y).symm u) =
+      (chartAt (E 2) (F.lift y)).symm u := by
+  rw [F.quotientChart_symm_apply y u hu]
+  apply (F.localHomeomorph y).left_inv
+  change u ∈ (chartAt (E 2) (F.lift y)).target ∧
+    (chartAt (E 2) (F.lift y)).symm u ∈ (F.localHomeomorph y).source at hu
+  exact hu.2
+
 end ConstructionTargets.RealProjectiveSmoothTarget
