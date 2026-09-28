@@ -326,4 +326,44 @@ theorem SphereProjectionLocalInverseFamily.inverseBranch_eventuallyEq_or_antipod
       exact (not_lt_of_ge real_inner_self_nonneg) hmt
     · simpa only [Function.comp_apply] using h
 
+def SphereProjectionLocalInverseFamily.quotientChart
+    (F : SphereProjectionLocalInverseFamily) (y : Space ℝ 2) :
+    OpenPartialHomeomorph (Space ℝ 2) (E 2) :=
+  (F.localHomeomorph y).symm.trans (chartAt (E 2) (F.lift y))
+
+/-- The charted-space assembly underlying smooth descent. Smooth
+compatibility is deliberately left to the overlap theorem. -/
+@[implicit_reducible]
+def SphereProjectionLocalInverseFamily.quotientChartedSpace
+    (F : SphereProjectionLocalInverseFamily) :
+    ChartedSpace (E 2) (Space ℝ 2) where
+  atlas := Set.range F.quotientChart
+  chartAt := F.quotientChart
+  mem_chart_source := by
+    intro y
+    change y ∈ (F.localHomeomorph y).target ∧
+      (F.localHomeomorph y).symm y ∈ (chartAt (E 2) (F.lift y)).source
+    have hmap := (F.localHomeomorph y).map_source (F.lift_mem_source y)
+    have hproj : (F.localHomeomorph y) (F.lift y) = y := by
+      rw [← F.localHomeomorph_eq y]
+      exact F.project_lift y
+    have htarget : y ∈ (F.localHomeomorph y).target := by
+      simpa only [hproj] using hmap
+    refine ⟨htarget, ?_⟩
+    have hinv : (F.localHomeomorph y).symm y = F.lift y := by
+      calc
+        (F.localHomeomorph y).symm y =
+            (F.localHomeomorph y).symm ((F.localHomeomorph y) (F.lift y)) :=
+          congrArg (F.localHomeomorph y).symm hproj.symm
+        _ = F.lift y :=
+          (F.localHomeomorph y).left_inv (F.lift_mem_source y)
+    rw [hinv]
+    exact ChartedSpace.mem_chart_source (F.lift y)
+  chart_mem_atlas := fun y => ⟨y, rfl⟩
+
+theorem sphereProjectionQuotientChartedSpace_exists :
+    Nonempty (ChartedSpace (E 2) (Space ℝ 2)) := by
+  obtain ⟨F⟩ := sphereProjectionLocalInverseFamily
+  exact ⟨F.quotientChartedSpace⟩
+
 end ConstructionTargets.RealProjectiveSmoothTarget
