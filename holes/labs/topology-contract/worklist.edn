@@ -76983,9 +76983,21 @@
       "After reviewed t94A09 closure, both DIRECT problems should be closed; recount and elect exactly one nearest ADAPTER route from the complete topo1 portfolio.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790629118394-26311-3ab8303f",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 5f8a3a76"
+      "git show 5f8a3a76:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "Python comment-stripped census of all 12 topo1 Git blobs at e1045edd and 5f8a3a76"
+      "Python SHA-256 check of STATEMENTS.json and registered t93J06/t94A09 entries at 5f8a3a76"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-4. Commit 5f8a3a76 is ledger-only with exact scope holes/labs/topology-contract/worklist.edn; its snapshot validates at 633 items. The 12-problem census reproduces portfolio 24 to 23, solely t93J06 1 to 0, while t94A09 remains 1. The registry reproduces 130/130 statements, registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, t93J06 hash 9938c2fd1bfbed41ea6d4bc980989e4a23fca12766d0e0d614c30eee53860bd1, and t94A09 hash 0836a6a088f31b08ec3ad11a756d5524f0e6e3aa0ae4ae3e752d95f1a38d76ac. Electing t94A09 is the mandated remaining DIRECT closure. Its adapter direction is correct: SmoothSphereField supplies an ambient ContDiff extension, restriction equality transports its continuity to V, and the banked continuous tangent-field theorem consumes V on the definitionally identical Euclidean sphere. No theorem direction is reversed and no homology facade is duplicated. Fixture hashing is not applicable to this strategy-only replan."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -77001,7 +77013,7 @@
    :other-consumers []}
   {:consumer :t94A09,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A09",
    :acceptance
