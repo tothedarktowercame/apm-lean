@@ -211,6 +211,35 @@
    "rev": "6802e9ad",
    "approved_at": "2026-09-28T00:23:50Z"
   },
+  "t01A03": {
+   "decls": [
+    "apm_t01a03"
+   ],
+   "sha256": "26af5ee7f1b93324996e2d05a3ba2f6eb1594339b9d0847c6c774f72eedac022",
+   "defs": [
+    "apm_t01a03_E2",
+    "apm_t01a03_H1",
+    "apm_t01a03_HasRetraction",
+    "apm_t01a03_I2",
+    "apm_t01a03_IsMiddleCircle",
+    "apm_t01a03_IsSeparatingTwoCircles",
+    "apm_t01a03_IsTypicalWedge",
+    "apm_t01a03_OpenDisk",
+    "apm_t01a03_PuncturedTorus",
+    "apm_t01a03_Sphere2",
+    "apm_t01a03_Torus",
+    "apm_t01a03_TwoCircles",
+    "apm_t01a03_Wedge",
+    "apm_t01a03_hasGenusTwo",
+    "apm_t01a03_wedgeRel"
+   ],
+   "grade": "faithful",
+   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
+   "evidence": "holes/labs/statement-registry/reopen-grades-2.md",
+   "prelim_defect": null,
+   "rev": "83bcd156",
+   "approved_at": "2026-09-28T00:31:42Z"
+  },
   "t01A04": {
    "decls": [
     "apm_t01a04"
@@ -346,6 +375,26 @@
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
   },
+  "t02A02": {
+   "decls": [
+    "apm_t02a02"
+   ],
+   "sha256": "fa15c6b2e8342dca0ac2fba53f84734c8197a969e94e29fb882484e48c4c5f84",
+   "defs": [
+    "apm_t02a02_Edge",
+    "apm_t02a02_F",
+    "apm_t02a02_SignedEdge",
+    "apm_t02a02_gluingRel",
+    "apm_t02a02_pair",
+    "apm_t02a02_word"
+   ],
+   "grade": "faithful",
+   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
+   "evidence": "holes/labs/statement-registry/reopen-grades-2.md",
+   "prelim_defect": null,
+   "rev": "83bcd156",
+   "approved_at": "2026-09-28T00:31:42Z"
+  },
   "t02A04": {
    "decls": [
     "apm_t02a04"
@@ -475,6 +524,19 @@
    "prelim_defect": null,
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
+  },
+  "t91A02": {
+   "decls": [
+    "apm_t91a02"
+   ],
+   "sha256": "e6b708786cf6a21dc5bd30b3d560b260aa4f2bb70519e89f1e06f46d935e41bb",
+   "defs": [],
+   "grade": "faithful",
+   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
+   "evidence": "holes/labs/statement-registry/reopen-grades-2.md",
+   "prelim_defect": null,
+   "rev": "83bcd156",
+   "approved_at": "2026-09-28T00:31:42Z"
   },
   "t91A03": {
    "decls": [
@@ -1339,6 +1401,26 @@
    "rev": "4489e960",
    "approved_at": "2026-09-28T00:25:56Z"
   },
+  "t95J03": {
+   "decls": [
+    "apm_t95j03"
+   ],
+   "sha256": "f58335452a0e19656102285f1b8bbeef95bb00aebccd4ca21aec906b0bcca190",
+   "defs": [
+    "T95J03ClosedSurface",
+    "T95J03IsKFoldCover",
+    "T95J03SharesKFoldCover",
+    "T95J03SurfaceSpace",
+    "t95J03KleinBottle",
+    "t95J03Torus"
+   ],
+   "grade": "faithful",
+   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
+   "evidence": "holes/labs/statement-registry/reopen-grades-2.md",
+   "prelim_defect": null,
+   "rev": "83bcd156",
+   "approved_at": "2026-09-28T00:31:42Z"
+  },
   "t95J04": {
    "decls": [
     "apm_t95j04"
@@ -1759,6 +1841,25 @@
    "prelim_defect": null,
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:28Z"
+  },
+  "t97J06": {
+   "decls": [
+    "apm_t97j06"
+   ],
+   "sha256": "aff5048bb57bdcd8fc56cd39f85c45c20a8e68cea63fa49ef878ec548225ab0b",
+   "defs": [
+    "T97J06H2",
+    "T97J06Torus",
+    "t97J06H2Map",
+    "t97J06HasDegree",
+    "t97J06Map"
+   ],
+   "grade": "faithful",
+   "grader": "claude-18 outside grader (read-only Claude agent, 2026-09-28)",
+   "evidence": "holes/labs/statement-registry/reopen-grades-2.md",
+   "prelim_defect": null,
+   "rev": "83bcd156",
+   "approved_at": "2026-09-28T00:31:42Z"
   },
   "t98A02": {
    "decls": [
