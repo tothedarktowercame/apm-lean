@@ -78182,64 +78182,45 @@
    :other-consumers []}
   {:consumer :t02A05,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/t02a05-assembly-probe.lean",
-      :sha256
-      "549bdba880150e9e0a02c166f19e682671fce507cb167615d4533b19db90d34d"},
-     :commands
-     [{:cmd
-       "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
-       :exit 0}
-      {:cmd
-       "lake env lean -o /tmp/t02probe/t02A05/lean/Main.olean problems/t02A05/lean/Main.lean",
-       :exit 0}
-      {:cmd
-       "LEAN_PATH=/tmp/t02probe lake env lean /tmp/t02a05-assembly-probe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t02a05-assembly-probe.lean", :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :warnings
-     [{:kind :inherited-placeholder,
-       :message
-       "The temporary consumer olean reports the two existing sorries. The assembly fixture introduces no placeholder and depends on sorryAx precisely because it invokes the named open bridge; after that bridge is supplied, the final theorem proof is complete."}
-      {:kind :inherited-linter,
-       :message
-       "The existing apm_t02a05_volume_unit_ball proof emits an unnecessarySimpa suggestion."}],
-     :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
-     :prerequisite
-     {:consumer :t02A05,
-      :phase :implementation,
-      :state :open,
-      :scope ["problems/t02A05/lean/Main.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/t02A05/bridge_1",
-      :acceptance
-      {:placeholder-after 1,
-       :fixture-sha256
-       "549bdba880150e9e0a02c166f19e682671fce507cb167615d4533b19db90d34d",
-       :placeholder "the sorry in apm_t02A05_bridge_1",
-       :axioms :standard-only,
-       :placeholder-before 2,
-       :commands
-       ["lake env lean problems/t02A05/lean/Main.lean"
-        "LEAN_PATH=/tmp/t02probe lake env lean /tmp/t02a05-assembly-probe.lean"
-        "python3 scripts/statement-registry.py check"],
-       :fixture "/tmp/t02a05-assembly-probe.lean",
-       :route-step "t02A05 normalized flux steps 1-3",
-       :implementation
-       "Replace only the sorry in apm_t02A05_bridge_1. Prove the pointwise orientedCoefficient-to-radial-flux identity from the explicit orthogonal projection formula; transport the sphere-subtype integral under translation; convert between normalized μHE[2] and the banked μH[2] intrinsic moment formula using Mathlib's euclideanHausdorffMeasure scaling; evaluate the normalized unit-sphere mass and conclude the exact 44*pi/15 plus 4*pi quadratic expression. Preserve every registered statement and definition. Do not replace μHE[2] by μH[2], Measure.toSphere, or an assumed scalar integral."},
-      :id :routes-2026-09-28-t02a05-normalized-flux-bridge-1,
-      :kind :final-adapter,
-      :depends-on [],
-      :current-residual
-      "Prove apm_t02A05_bridge_1 for the registered normalized Euclidean Hausdorff measure μHE[2]. Once banked, the compiled assembly fixture closes the only remaining main-theorem placeholder.",
-      :other-consumers []},
-     :residual
-     "Exactly one prerequisite remains: apm_t02A05_bridge_1. The final apm_t02a05 proof is a compiled two-branch rewrite followed by apm_t02a05_quadratic_minimum; no second mathematical prerequisite remains."}},
+   {:residual
+    "Compiled exact boundary: apm_t02A05_bridge_1 is equivalent to (μHE[2] Set.univ).toReal = 4*pi on the unit-sphere subtype. The reviewed prerequisite found no ConstructionTargets or Mathlib theorem evaluating this normalized Euclidean Hausdorff sphere mass. Without that analytic identity the bridge and hence the exact registered apm_t02a05 statement cannot be completed; substituting raw μH[2] or Measure.toSphere would change the representation.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The temporary consumer olean reports the two registered-source sorries; the boundary and assembly fixtures introduce none."}
+     {:kind :linter,
+      :message
+      "The source and boundary fixture emit existing unnecessarySimpa/unused-simp-argument suggestions."}],
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-4",
+    :reason :missing-normalized-sphere-mass-evaluation,
+    :commands
+    [{:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+      :exit 0}
+     {:cmd
+      "lake env lean -o /tmp/t02reprobe/t02A05/lean/Main.olean problems/t02A05/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "LEAN_PATH=/tmp/t02reprobe lake env lean /tmp/T02A05NormalizedBoundary.lean",
+      :exit 0}
+     {:cmd
+      "sha256sum /tmp/T02A05NormalizedBoundary.lean /tmp/t02a05-assembly-probe.lean",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder census of both fixtures",
+      :exit 0,
+      :finding "Both fixtures contain zero placeholders."}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :fixture
+    {:path "/tmp/T02A05NormalizedBoundary.lean",
+     :sha256
+     "1e8a3eeade4742ff39516783f4f80b29eae5ce63400b36fc4f54a4fc748f1d2e"},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A05",
    :acceptance
