@@ -132,7 +132,24 @@ theorem apm_m94A04_bridge_downgrade_eightThirds_to_two :
       (∀ g, (D g : ℝ → ℝ) =ᵐ[apm_m94a04_measure] (g : ℝ → ℝ)) ∧
       ∀ g, eLpNorm (D g) 2 apm_m94a04_measure ≤
         eLpNorm g (8 / 3) apm_m94a04_measure := by
-  sorry
+  letI : IsProbabilityMeasure apm_m94a04_measure :=
+    ⟨by
+      simp [apm_m94a04_measure, Real.volume_Icc]⟩
+  have hpq : (2 : ENNReal) ≤ 8 / 3 := by
+    apply (ENNReal.toReal_le_toReal (by finiteness) (by finiteness)).mp
+    rw [ENNReal.toReal_div]
+    norm_num
+  let D : Lp ℝ (8 / 3) apm_m94a04_measure →ₗ[ℝ]
+      Lp ℝ 2 apm_m94a04_measure :=
+    { toFun := fun g ↦ ⟨g.1, Lp.antitone (E := ℝ) hpq g.2⟩
+      map_add' := by intro x y; rfl
+      map_smul' := by intro c x; rfl }
+  refine ⟨D, ?_, ?_⟩
+  · intro g
+    exact Filter.Eventually.of_forall (fun _ ↦ rfl)
+  · intro g
+    exact eLpNorm_le_eLpNorm_of_exponent_le hpq
+      (g : ℝ →ₘ[apm_m94a04_measure] ℝ).stronglyMeasurable.aestronglyMeasurable
 
 /-- Why this unblocks `apm_m94a04`: it packages the quotient-level operator
 and the bounded linear map `h ↦ 3 f² h`, including exactly the a.e. formula
@@ -149,7 +166,94 @@ theorem apm_m94A04_bridge_operator_and_linearization :
               ENNReal.ofReal C * eLpNorm h 8 apm_m94a04_measure) ∧
           ∀ h : Lp ℝ 8 apm_m94a04_measure,
             ∀ᵐ t ∂apm_m94a04_measure, L h t = 3 * (f t) ^ 2 * h t := by
-  sorry
+  obtain ⟨D, hDcoe, hDnorm⟩ :=
+    apm_m94A04_bridge_downgrade_eightThirds_to_two
+  letI : Fact (1 ≤ (8 / 3 : ENNReal)) :=
+    ⟨by
+      apply (ENNReal.toReal_le_toReal (by finiteness) (by finiteness)).mp
+      rw [ENNReal.toReal_div]
+      norm_num⟩
+  letI : Fact (1 ≤ (8 : ENNReal)) := ⟨by norm_num⟩
+  letI : IsProbabilityMeasure apm_m94a04_measure :=
+    ⟨by simp [apm_m94a04_measure, Real.volume_Icc]⟩
+  have hsin_mem : MemLp (fun t : ℝ ↦ Real.sin t) 2 apm_m94a04_measure :=
+    MemLp.of_bound Real.continuous_sin.aestronglyMeasurable 1
+      (Filter.Eventually.of_forall fun t ↦ by
+        simpa [Real.norm_eq_abs] using Real.abs_sin_le_one t)
+  let sinLp : Lp ℝ 2 apm_m94a04_measure :=
+    hsin_mem.toLp (fun t : ℝ ↦ Real.sin t)
+  let T : Lp ℝ 8 apm_m94a04_measure → Lp ℝ 2 apm_m94a04_measure :=
+    fun f ↦ sinLp + D (apm_m94a04_cube f)
+  have hD_norm_le (g : Lp ℝ (8 / 3) apm_m94a04_measure) :
+      ‖D g‖ ≤ ‖g‖ := by
+    rw [Lp.norm_def, Lp.norm_def]
+    exact ENNReal.toReal_mono (Lp.eLpNorm_ne_top g) (hDnorm g)
+  refine ⟨T, ?_, ?_⟩
+  · intro f
+    filter_upwards [Lp.coeFn_add sinLp (D (apm_m94a04_cube f)),
+      hsin_mem.coeFn_toLp, hDcoe (apm_m94a04_cube f),
+      apm_m94a04_cube_coeFn f] with t hadd hsin hD hcube
+    change (sinLp + D (apm_m94a04_cube f)) t = _
+    rw [hadd]
+    change sinLp t + D (apm_m94a04_cube f) t = _
+    change (hsin_mem.toLp (fun t : ℝ ↦ Real.sin t)) t + _ = _
+    rw [hsin, hD, hcube]
+  · intro f
+    let L : Lp ℝ 8 apm_m94a04_measure →ₗ[ℝ]
+        Lp ℝ 2 apm_m94a04_measure :=
+      { toFun := fun h ↦ D ((3 : ℝ) • (h • apm_m94a04_square f))
+        map_add' := by
+          intro x y
+          rw [Lp.smul_add, smul_add, map_add]
+        map_smul' := by
+          intro c x
+          simp only [Lp.smul_assoc, map_smul]
+          simpa only [RingHom.id_apply] using
+            (smul_comm (3 : ℝ) c (D (x • apm_m94a04_square f))) }
+    refine ⟨L, ?_, ?_⟩
+    · refine ⟨3 * ‖f‖ ^ 2, by positivity, ?_⟩
+      intro h
+      have hnorm : ‖L h‖ ≤ (3 * ‖f‖ ^ 2) * ‖h‖ := by
+        calc
+          ‖L h‖ ≤ ‖((3 : ℝ) • (h • apm_m94a04_square f) :
+              Lp ℝ (8 / 3) apm_m94a04_measure)‖ := hD_norm_le _
+          _ = 3 * ‖(h • apm_m94a04_square f :
+              Lp ℝ (8 / 3) apm_m94a04_measure)‖ := by
+                rw [norm_smul]
+                norm_num
+          _ ≤ 3 * (‖h‖ * ‖apm_m94a04_square f‖) := by
+            gcongr
+            exact Lp.norm_smul_le (r := 8 / 3) h (apm_m94a04_square f)
+          _ ≤ 3 * (‖h‖ * ‖f‖ ^ 2) := by
+            exact mul_le_mul_of_nonneg_left
+              (mul_le_mul_of_nonneg_left (apm_m94a04_norm_square_le f)
+                (norm_nonneg h)) (by norm_num)
+          _ = (3 * ‖f‖ ^ 2) * ‖h‖ := by ring
+      have hLnorm : eLpNorm (L h) 2 apm_m94a04_measure =
+          ENNReal.ofReal ‖L h‖ := by
+        rw [Lp.norm_def, ENNReal.ofReal_toReal (Lp.eLpNorm_ne_top (L h))]
+      have hhnorm : eLpNorm h 8 apm_m94a04_measure =
+          ENNReal.ofReal ‖h‖ := by
+        rw [Lp.norm_def, ENNReal.ofReal_toReal (Lp.eLpNorm_ne_top h)]
+      rw [hLnorm, hhnorm]
+      rw [← ENNReal.ofReal_mul (by positivity)]
+      exact ENNReal.ofReal_le_ofReal hnorm
+    · intro h
+      filter_upwards [hDcoe ((3 : ℝ) • (h • apm_m94a04_square f)),
+        Lp.coeFn_smul (3 : ℝ) (h • apm_m94a04_square f),
+        Lp.coeFn_lpSMul (r := 8 / 3) h (apm_m94a04_square f),
+        apm_m94a04_square_coeFn f] with t hD hthree hmul hsquare
+      change D ((3 : ℝ) • (h • apm_m94a04_square f)) t = _
+      rw [hD]
+      change ((3 : ℝ) • (h • apm_m94a04_square f) :
+        Lp ℝ (8 / 3) apm_m94a04_measure) t = _
+      rw [hthree]
+      change 3 * (h • apm_m94a04_square f :
+        Lp ℝ (8 / 3) apm_m94a04_measure) t = _
+      rw [hmul]
+      change 3 * (h t * apm_m94a04_square f t) = _
+      rw [hsquare]
+      ring
 
 /-- Why this unblocks `apm_m94a04`: the exact cubic identity and mixed Hölder
 bounds imply this uniform small-increment estimate.  Combined with the first
@@ -169,7 +273,93 @@ theorem apm_m94A04_bridge_remainder_estimate
       eLpNorm ((T (f + h) : ℝ → ℝ) - (T f : ℝ → ℝ) -
         (L h : ℝ → ℝ)) 2 apm_m94a04_measure ≤
         ENNReal.ofReal ε * eLpNorm h 8 apm_m94a04_measure := by
-  sorry
+  obtain ⟨D, hDcoe, hDnorm⟩ :=
+    apm_m94A04_bridge_downgrade_eightThirds_to_two
+  letI : Fact (1 ≤ (8 / 3 : ENNReal)) :=
+    ⟨by
+      apply (ENNReal.toReal_le_toReal (by finiteness) (by finiteness)).mp
+      rw [ENNReal.toReal_div]
+      norm_num⟩
+  letI : Fact (1 ≤ (8 : ENNReal)) := ⟨by norm_num⟩
+  have hD_norm_le (g : Lp ℝ (8 / 3) apm_m94a04_measure) :
+      ‖D g‖ ≤ ‖g‖ := by
+    rw [Lp.norm_def, Lp.norm_def]
+    exact ENNReal.toReal_mono (Lp.eLpNorm_ne_top g) (hDnorm g)
+  intro ε hε
+  let A : ℝ := 3 * ‖f‖ + 1
+  have hA : 0 < A := by
+    dsimp [A]
+    positivity
+  refine ⟨min 1 (ε / A), by positivity, ?_⟩
+  intro h hh
+  have hdelta : 0 < min 1 (ε / A) := by positivity
+  have hhnorm : eLpNorm h 8 apm_m94a04_measure =
+      ENNReal.ofReal ‖h‖ := by
+    rw [Lp.norm_def, ENNReal.ofReal_toReal (Lp.eLpNorm_ne_top h)]
+  have hhsmall : ‖h‖ < min 1 (ε / A) := by
+    rw [hhnorm] at hh
+    exact (ENNReal.ofReal_lt_ofReal_iff hdelta).mp hh
+  let R : Lp ℝ 2 apm_m94a04_measure :=
+    D ((3 : ℝ) • (f • apm_m94a04_square h) + apm_m94a04_cube h)
+  have hRae :
+      ((T (f + h) : ℝ → ℝ) - (T f : ℝ → ℝ) -
+          (L h : ℝ → ℝ)) =ᵐ[apm_m94a04_measure] (R : ℝ → ℝ) := by
+    filter_upwards [hT (f + h), hT f, hL h, Lp.coeFn_add f h,
+      hDcoe ((3 : ℝ) • (f • apm_m94a04_square h) + apm_m94a04_cube h),
+      Lp.coeFn_add ((3 : ℝ) • (f • apm_m94a04_square h))
+        (apm_m94a04_cube h),
+      Lp.coeFn_smul (3 : ℝ) (f • apm_m94a04_square h),
+      Lp.coeFn_lpSMul (r := 8 / 3) f (apm_m94a04_square h),
+      apm_m94a04_square_coeFn h, apm_m94a04_cube_coeFn h]
+      with t hTfh hTf hLh hfh hDR hadd hthree hmul hsquare hcube
+    change T (f + h) t - T f t - L h t = R t
+    rw [hTfh, hTf, hLh, hfh]
+    change _ = D ((3 : ℝ) • (f • apm_m94a04_square h) +
+      apm_m94a04_cube h) t
+    rw [hDR]
+    change _ = (((3 : ℝ) • (f • apm_m94a04_square h) +
+      apm_m94a04_cube h : Lp ℝ (8 / 3) apm_m94a04_measure) : ℝ → ℝ) t
+    rw [hadd]
+    simp only [Pi.add_apply]
+    rw [hthree]
+    change _ = 3 * (f • apm_m94a04_square h :
+      Lp ℝ (8 / 3) apm_m94a04_measure) t + apm_m94a04_cube h t
+    rw [hmul]
+    change _ = 3 * (f t * apm_m94a04_square h t) + apm_m94a04_cube h t
+    rw [hsquare, hcube]
+    ring
+  have hRnorm : ‖R‖ ≤ 3 * ‖f‖ * ‖h‖ ^ 2 + ‖h‖ ^ 3 := by
+    calc
+      ‖R‖ ≤ ‖(3 : ℝ) • (f • apm_m94a04_square h) +
+          apm_m94a04_cube h‖ := hD_norm_le _
+      _ ≤ ‖(3 : ℝ) • (f • apm_m94a04_square h)‖ +
+          ‖apm_m94a04_cube h‖ := norm_add_le _ _
+      _ = 3 * ‖(f • apm_m94a04_square h :
+          Lp ℝ (8 / 3) apm_m94a04_measure)‖ + ‖apm_m94a04_cube h‖ := by
+            rw [norm_smul]
+            norm_num
+      _ ≤ 3 * (‖f‖ * ‖apm_m94a04_square h‖) + ‖h‖ ^ 3 := by
+        gcongr
+        · exact Lp.norm_smul_le (r := 8 / 3) f (apm_m94a04_square h)
+        · exact apm_m94a04_norm_cube_le h
+      _ ≤ 3 * (‖f‖ * ‖h‖ ^ 2) + ‖h‖ ^ 3 := by
+        gcongr
+        exact apm_m94a04_norm_square_le h
+      _ = 3 * ‖f‖ * ‖h‖ ^ 2 + ‖h‖ ^ 3 := by ring
+  have hh_one : ‖h‖ < 1 := lt_of_lt_of_le hhsmall (min_le_left _ _)
+  have hh_eps : ‖h‖ < ε / A := lt_of_lt_of_le hhsmall (min_le_right _ _)
+  have hfinal : ‖R‖ ≤ ε * ‖h‖ := by
+    have hn : 0 ≤ ‖h‖ := norm_nonneg h
+    have hf : 0 ≤ ‖f‖ := norm_nonneg f
+    have hquot : A * ‖h‖ < ε := by
+      simpa [mul_comm] using (lt_div_iff₀ hA).mp hh_eps
+    dsimp [A] at hquot
+    nlinarith [hRnorm]
+  rw [eLpNorm_congr_ae hRae]
+  have hRnorm' : eLpNorm R 2 apm_m94a04_measure = ENNReal.ofReal ‖R‖ := by
+    rw [Lp.norm_def, ENNReal.ofReal_toReal (Lp.eLpNorm_ne_top R)]
+  rw [hRnorm', hhnorm, ← ENNReal.ofReal_mul hε.le]
+  exact ENNReal.ofReal_le_ofReal hfinal
 
 theorem apm_m94a04 :
     ∃ T : Lp ℝ 8 (volume.restrict (Icc (0 : ℝ) 1)) →
@@ -182,67 +372,10 @@ theorem apm_m94a04 :
           ∀ h : Lp ℝ 8 (volume.restrict (Icc (0 : ℝ) 1)),
             ∀ᵐ t ∂(volume.restrict (Icc (0 : ℝ) 1)),
               L h t = 3 * (f t) ^ 2 * h t := by
-  /-
-  Boundary: the proof must first lift the representative-level maps
-  `f ↦ sin + f ^ 3` and `h ↦ 3 * f ^ 2 * h` through almost-everywhere
-  equivalence, prove the resulting representatives belong to the target
-  `Lp ℝ 2`, and package the latter map as a quotient-level `LinearMap`.
-
-  I searched the `Lp` APIs in
-  `Mathlib.MeasureTheory.Function.LpSpace.Basic`, including `MemLp` power
-  lemmas, `MemLp.mono_exponent`, `MemLp.toLp`, and the norm comparison
-  machinery. There is no direct quotient-level multiplication constructor
-  matching the mixed exponents here. Completing the construction requires
-  explicit generalized-Hölder estimates for `f ^ 2 * h`, `f * h ^ 2`, and
-  `h ^ 3`, representative-independence proofs, and ENNReal arithmetic to turn
-  the exact cubic remainder into the statement's epsilon-delta estimate.
-  No compiled sibling supplied this mixed-exponent Nemytskii construction
-  within this pass.
-
-  Closer hop 1 proves the exact pointwise identity
-  `apm_m94a04_cubic_remainder`, reducing the nonlinear remainder to
-  `3 * f * h² + h³`. More importantly, a deeper Mathlib search finds the
-  quotient-level constructor that the initial pass missed:
-  `MeasureTheory.Function.Holder` installs heterogeneous scalar multiplication
-  `Lp p × Lp q → Lp r` under `ENNReal.HolderTriple p q r`.
-  `Lp.coeFn_lpSMul` supplies representative independence and
-  `Lp.norm_smul_le` supplies Hölder's norm estimate; the raw counterparts are
-  `MemLp.mul'` and `eLpNorm_smul_le_mul_eLpNorm`.
-
-  Thus the live bridge is narrower: instantiate the exponent chain
-  `L⁸·L⁸ → L⁴`, `L⁸·L⁴ → L^(8/3)`, downgrade to `L²` on the finite interval,
-  package multiplication by `3f²` as a `LinearMap`, and turn the two remainder
-  bounds into the frozen ENNReal epsilon-delta inequality. Searches of
-  `LEMMA-INDEX.md`, `ConstructionTargets/`, sibling Nemytskii artifacts, and
-  git history found no completed version of that chain. The statement remains
-  unchanged.
-
-  CLOSER HOP 2 (partial). The first heterogeneous quotient-level stage is now
-  fully compiled. `apm_m94a04_holder_884` proves the concrete exponent
-  relation `1/8 + 1/8 = 1/4`; `apm_m94a04_square` constructs the `L⁴` square
-  of an `L⁸` class using Mathlib's heterogeneous scalar multiplication;
-  `apm_m94a04_square_coeFn` proves its representative is a.e. `f²`; and
-  `apm_m94a04_norm_square_le` proves the sharp estimate
-  `‖f²‖₄ ≤ ‖f‖₈²` via `Lp.norm_smul_le`. This closes representative
-  independence, target membership, and the norm estimate for the first link
-  of the planned exponent chain.
-
-  Further inspection of `MeasureTheory.Function.Holder`, the raw
-  `LpSeminorm.CompareExp` API, and siblings `a96A03`, `m01J04`, `m03J05`, and
-  `m98A03` found no packaged downgrade-plus-linear-map construction. The
-  remaining bridge is the `L⁸·L⁴ → L^(8/3)` stage, finite-measure downgrade
-  to `L²`, construction and boundedness of multiplication by `3f²`, and the
-  ENNReal epsilon-delta remainder estimate. The frozen statement remains
-  unchanged.
-
-  Closer hop 3 compiles the next exponent link. The concrete instance
-  `apm_m94a04_holder_84eightThirds` verifies `1/8 + 1/4 = 3/8`;
-  `apm_m94a04_cube` constructs `f³ : L^(8/3)` from `f` and the compiled
-  square; and its representative and sharp norm bound are proved by
-  `apm_m94a04_cube_coeFn` and `apm_m94a04_norm_cube_le`. This completes the
-  quotient-level `L⁸·L⁴ → L^(8/3)` stage without representative choices.
-  Renewed inspection found no bundled linear downgrade from `Lp (8/3)` to
-  `Lp 2`; that finite-measure conversion, the derivative `LinearMap`, and the
-  ENNReal remainder estimate remain open without an unproved assertion.
-  -/
-  sorry
+  obtain ⟨T, hT, hlinear⟩ := apm_m94A04_bridge_operator_and_linearization
+  refine ⟨T, hT, ?_⟩
+  intro f
+  obtain ⟨L, hbound, hL⟩ := hlinear f
+  refine ⟨L, ?_, hL⟩
+  exact ⟨hbound,
+    apm_m94A04_bridge_remainder_estimate T hT f L hL⟩
