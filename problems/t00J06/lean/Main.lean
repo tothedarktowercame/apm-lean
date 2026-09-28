@@ -97,6 +97,8 @@ a connected infinite-sheeted covering, as the prelim problem requests. -/
 theorem apm_t00j06
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S]
     [PathConnectedSpace S]
+    [ChartedSpace apm_t00J06_E S]
+    [IsManifold (𝓘(ℝ, apm_t00J06_E)) ∞ S]
     (hS : apm_t00J06_hasGenusTwoHomology S)
     (f : C(apm_t00J06_Torus, S)) :
     ∃ (X : Type*) (_ : TopologicalSpace X) (_ : ConnectedSpace X) (p : X → S),
