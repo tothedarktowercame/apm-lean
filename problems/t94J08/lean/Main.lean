@@ -181,7 +181,8 @@ theorem apm_t94J08_bridge_1 :
     intro a
     exact ConstructionTargets.CoefficientSphereAntipodal.scalar_equation ℤ m a
 
-theorem apm_t94j08 :
+/-- Superseded: it omitted the zero-sphere and one-dimensional local-index cases. -/
+theorem apm_t94j08_previous_encoding :
     (∀ n : ℕ, 1 ≤ n →
       t94J08HasDegree n
         (t94J08Antipodal : C(T94J08Sphere (n + 1), T94J08Sphere (n + 1)))
@@ -244,6 +245,30 @@ theorem apm_t94j08 :
   change anti (link x) = t94J08NormalizedLink (fun y ↦ -v y) p r hlinkNeg x
   rw [t94J08NormalizedLink_neg v p r hlink hlinkNeg x]
   rw [hlink_eq x]
+
+/-- The antipodal degree formula in every dimension, together with the local
+index formula for negating a vector field in every positive manifold
+dimension.  Dimension zero is represented by the actual two-point sphere and
+its transposition, rather than by the false ordinary-`H₀ ≅ ℤ` encoding. -/
+theorem apm_t94j08 :
+    ((Equiv.swap (0 : Fin 2) 1 : Equiv.Perm (Fin 2)) 0 = 1 ∧
+      (Equiv.swap (0 : Fin 2) 1 : Equiv.Perm (Fin 2)) 1 = 0) ∧
+    (∀ n : ℕ, 1 ≤ n →
+      t94J08HasDegree n
+        (t94J08Antipodal : C(T94J08Sphere (n + 1), T94J08Sphere (n + 1)))
+        ((-1 : ℤ) ^ (n + 1))) ∧
+    ∀ (m : ℕ)
+      (v : T94J08Euclidean (m + 1) → T94J08Euclidean (m + 1))
+      (hv : ContDiff ℝ ⊤ v) (p : T94J08Euclidean (m + 1))
+      (hp : t94J08HasIsolatedZero v p)
+      (r : ℝ) (hr : 0 < r)
+      (hlink : ∀ x : T94J08Sphere (m + 1), v (p + r • x.1) ≠ 0)
+      (hlinkNeg : ∀ x : T94J08Sphere (m + 1), (-v (p + r • x.1)) ≠ 0)
+      (d : ℤ),
+      t94J08HasLocalIndex v p r hlink d →
+      t94J08HasLocalIndex (fun x ↦ -v x) p r hlinkNeg
+        ((-1 : ℤ) ^ (m + 1) * d) := by
+  sorry
 
 #print axioms apm_t94j08
 
