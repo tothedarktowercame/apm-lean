@@ -50763,35 +50763,46 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_sphere_quotient_charted_space.lean",
-      :sha256
-      "33ca0674c6aad63db0d5ca9232b00d807cadd9b5d708c81ab7111bb8d8d95f61"},
-     :commands
-     [{:cmd "lake env lean /tmp/rp_sphere_quotient_charted_space.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_charted_space.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:declarations
-       ["SphereProjectionLocalInverseFamily.quotientChart"
-        "SphereProjectionLocalInverseFamily.quotientChartedSpace"
-        "sphereProjectionQuotientChartedSpace_exists"],
-       :fixture "/tmp/rp_sphere_quotient_charted_space.lean",
-       :consumer-residual
-       "Prove the assembled quotient atlas is smooth and sphereProjection is a local diffeomorphism using the banked locally constant identity-or-antipodal overlap law.",
-       :axioms :standard-only}},
-     :residual
-     "The preferred quotient charts and complete ChartedSpace assembly compile without placeholders on the frozen topology. Promotion is confined to RealProjectiveSmoothTarget; smooth compatibility and local-diffeomorphism certification remain."}},
+   {:placeholder-delta 0,
+    :residual
+    "Prove the assembled quotient atlas is smooth and sphereProjection is a local diffeomorphism using inverseBranch_eventuallyEq_or_antipodal, completing the shared smooth-descent step for t95A04 and t96A07.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/rp_sphere_quotient_charted_space.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 no-sorry-pattern ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_quotient_charted_space_axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "7d187e15b6206d3ed238e8e0ae88f3d1ffcb5c6b",
+    :workspace-notes
+    ["Pre-existing modification problems/t94A10/lean/Main.lean and untracked holes/labs/solve-loop were left untouched and excluded from the commit."],
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_quotient_charted_space.lean",
+     :sha256
+     "33ca0674c6aad63db0d5ca9232b00d807cadd9b5d708c81ab7111bb8d8d95f61"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
