@@ -50498,6 +50498,32 @@
       :exit 1,
       :finding
       "Fresh reproduction of the accepted dependency failure: the nil Path goal is F-prime.map of the identity at inaccessible private root-prime T equals one, and the public-root proof cannot rewrite it."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790630426193-26411-5443a805",
+     :commands
+     [{:cmd
+       "sha256sum /tmp/t00J08_end_basis_contract_failure_848e7873.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/t00J08_end_basis_contract_failure_848e7873.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "rg -n private-root-and-endIsFree Mathlib/GroupTheory/FreeGroup/NielsenSchreier.lean",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder count from git show 5c267416 for t00J08",
+       :exit 0}
+      {:cmd "git diff-tree --no-commit-id --name-only -r 5c267416",
+       :exit 0}],
+     :finding
+     "PASS. Reviewer codex-7 read repair transition commit 5c267416; its exact scope is only holes/labs/topology-contract/worklist2.edn and changed-paths is correctly empty. The row now cites the accepted dependency review invoke-1790630031498-26379-c739854e and the stable failing fixture, whose sha256 reproduces exactly as 848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f. Fresh Lean execution reproduces the nil-Path failure at the inaccessible private root-prime representation. Mathlib exposes only endIsFree as IsFreeGroup, which erases EndBasisIndex, so quantitative cardinality steps 2-4 cannot be connected to the required explicit basis without violating the acceptance invariant. Propagating the accepted dependency STOP is correctly oriented; no truncated-subtraction theorem or representation cast is introduced. All 130 frozen statements match, the 315-item ledger passes, and committed t00J08 remains at three placeholders."},
     :changed-paths [],
     :fixture
     {:path "/tmp/t00J08_end_basis_contract_failure_848e7873.lean",
@@ -50505,7 +50531,7 @@
      "848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
