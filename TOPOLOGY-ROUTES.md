@@ -35,7 +35,7 @@ landed directly on 2026-09-28.
 |---|---|---|
 | t93J06 | DIRECT | — |
 | t94A09 | DIRECT | in ConstructionTargets, and import it from t93J06 and t94A09) |
-| t02A05 | ADAPTER (mechanically), but FROZEN STATEMENT APPEARS FALSE **held (statement doubt with grader)** | euclidean-hausdorff-normalisation (i.e. the isodiametric constant). The same issue affects `t01J06, which also integrates against `μH[2]` on a sphere. |
+| t02A05 | ADAPTER (mechanically), but FROZEN STATEMENT APPEARS FALSE **held: statement fixed to μHE[2] (daa1d8ad), awaiting re-grade** | euclidean-hausdorff-normalisation (i.e. the isodiametric constant). The same issue affects `t01J06, which also integrates against `μH[2]` on a sphere. |
 | t91J06 | ADAPTER | — |
 | t92J08 | ADAPTER | manifold-uniform-local-flow |
 | t94A07 | ADAPTER | — |
@@ -72,7 +72,7 @@ landed directly on 2026-09-28.
 | t97A04 | FOUNDATION | mv-connecting-naturality` (would also give induced maps on H₂ for t96J06-style torus and product problems), torus-pi1-winding-coordinates |
 | t98A03 | FOUNDATION | rp2-double-cover-and-pi1, wedge-covering-construction, wedge-van-kampen-instance (template: TorusCircleWedge), wedge-point-not-manifold, wedge-basepoint-homogeneity |
 | t00A02 | HEAVY | quotient-by-finite-free-action-covering` (steps 1–3; also t00J01 Klein charts), wedge-cover-gluing, surface-classification, euler-characteristic-covering-multiplicativity, homology-orientability |
-| t00A03 | HEAVY **held (statement doubt with grader)** | schoenflies-2d, surface-classification, simple-curve-homotopy-isotopy` (Baer–Epstein), homology-orientability, euler-characteristic-cut-additivity, mayer-vietoris-open-cover` (banked) |
+| t00A03 | HEAVY | schoenflies-2d, surface-classification, simple-curve-homotopy-isotopy` (Baer–Epstein), homology-orientability, euler-characteristic-cut-additivity, mayer-vietoris-open-cover` (banked) |
 | t01A03 | HEAVY | circle-wedge-van-kampen, torus-pi1-abelian, surface-curve-collar (Schoenflies-type tameness; also cited by the audit for t00A03 and t98A02) |
 | t01J01 | HEAVY | surface-schoenflies-tameness, surface-mod2-intersection-pairing, surface-cut-and-classify, orientation-from-top-homology, invariance-of-domain-dim2 (overlaps with t00A03/t99J03 surface rows, which the audit already flags as needing Schoenflies) |
 | t02A04 | HEAVY | lefschetz-fixed-point-compact-polyhedron, cell-attachment-open-cover-mv, coefficient-q-mayer-vietoris |
@@ -85,7 +85,7 @@ landed directly on 2026-09-28.
 | t93J03 | HEAVY | deck-group-fundamental-group, covering-lifting-criterion, polygon-quotient-identification |
 | t94J04 | HEAVY | surface-classification, covering-subgroup-correspondence, euler-characteristic-covers |
 | t94J09 | HEAVY | polygon-surface-homology, polygon-cut-and-paste |
-| t95J03 | HEAVY **held (statement doubt with grader)** | polygon-surface-homology, euler-characteristic-covers, polygon-quotient-identification, orientation-double-cover |
+| t95J03 | HEAVY **revoked 2026-09-28 (narrower: S² missing); needs a graded rewrite, not rows** | polygon-surface-homology, euler-characteristic-covers, polygon-quotient-identification, orientation-double-cover |
 | t95J06 | HEAVY | free-circle-action-slice, surface-homology-invariants |
 | t96A01 | HEAVY | van-kampen-amalgamated, surface-classification, covering-subgroup-correspondence, euler-characteristic-covers |
 | t96A02 | HEAVY | lefschetz-fixed-point-theorem, polygon-quotient-identification, rp-rational-homology |
@@ -94,7 +94,7 @@ landed directly on 2026-09-28.
 | t97A03 | HEAVY | covering-classification-explicit` (also named by t94J04, t01A04, t93A03, t00J08), van-kampen-iterated-free-rank, quotient-deformation-retraction, quotient-space-mayer-vietoris |
 | t97A05 | HEAVY | tubular-neighbourhood, hypersurface-separation-bounds, transversality-perturbation, compact-one-manifold-classification, manifold-with-boundary, intersection-homotopy-invariance |
 | t97J02 | HEAVY | polygon-quotient-manifold-charts, surface-classification, surface-triangulation, euler-characteristic-finite-cover, orientation-double-cover, polygon-permutation-cover |
-| t98A02 | HEAVY **held (statement doubt with grader)** | manifold-homology-local-to-global, manifold-fundamental-class, mayer-vietoris-open-cover, ball-complement-collar, wild-embedding-anr |
+| t98A02 | HEAVY | manifold-homology-local-to-global, manifold-fundamental-class, mayer-vietoris-open-cover, ball-complement-collar, wild-embedding-anr |
 | t98J02 | HEAVY (conjunct 1) / ADAPTER (conjuncts 2, 3) | surface-curve-collar (Schoenflies/Jordan for topological curves; shared with t00A03 per the audit), surface-charts-from-covering-quotient |
 | t99J01 | HEAVY | fundamental-group-wedge-of-circles, van-kampen-two-open-group, covering-subgroup-index, schreier-index-formula, explicit-graph-cover-construction |
 | t99J05 | HEAVY | rational-homology-cpn, coefficient-open-cover-mayer-vietoris, rational-sphere-homology, projective-quotient-charts (step 1–2 also useful to t96A06's RP3 map), lefschetz-trace-bookkeeping (t98J01, t96A06 use the same `HasLefschetzNumber`) |
