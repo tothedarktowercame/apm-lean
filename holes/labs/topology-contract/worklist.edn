@@ -76760,21 +76760,74 @@
    :current-residual "No rows elected yet under TOPOLOGY-ROUTES.md.",
    :other-consumers []}
   {:consumer :t93J06,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "No mathematical prerequisite remains: the placeholder-free fixture proves the exact registered conjunction for ambient dimensions 3 and 5. Implementation is a bounded extraction into one shared ConstructionTargets module plus the t93J06 adapter; t94A09 can reuse the shared S2 obstruction in its later row.",
+     :outcome :go,
+     :warnings [],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+       :exit 0}
+      {:cmd "lake env lean /tmp/t93j06-probe.lean", :exit 0}
+      {:cmd
+       "python3 -c 'comment-strip then reject identifier-token sorry' /tmp/t93j06-probe.lean",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd "sha256sum /tmp/t93j06-probe.lean", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t93j06-probe.lean",
+       :exit 1,
+       :stage :fixture-development,
+       :correction
+       "Closed the subtype constructor with the required angle bracket, rewrote the absolute-value square products explicitly, and wrapped the constructed Homotopy as Homotopic."}
+      {:cmd
+       "rg -n '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t93j06-probe.lean",
+       :exit 2,
+       :stage :placeholder-scan,
+       :correction
+       "Rust regex does not support look-around; replaced it with the campaign's comment-stripped Python token scan, which exited 0."}],
+     :fixture
+     {:path "/tmp/t93j06-probe.lean",
+      :sha256
+      "558f5a68a030c2269cbad73a634868251fb90a88d37894050a878b4cdf250de8"},
+     :implementation
+     {:scope
+      ["ConstructionTargets/EvenSphereTangentFieldObstruction.lean"
+       "problems/t93J06/lean/Main.lean"],
+      :acceptance
+      {:placeholder-delta -1,
+       :statement-policy
+       "Do not change apm_t93j06, apm_t93j06_NowhereZeroField, apm_t93j06_Sphere, or any registered definition.",
+       :construction
+       "Bank id_not_homotopic_antipodal and homotopy_of_field at exactly the dimensions/generality used by t93J06 and t94A09, then replace the sole t93J06 placeholder by the compiled two-case assembly.",
+       :gates
+       ["verify the canonical package authority before Lake"
+        "lake env lean problems/t93J06/lean/Main.lean exits 0"
+        "comment-stripped placeholder count changes from 1 to 0"
+        "python3 scripts/statement-registry.py check exits 0"
+        "report #print axioms for apm_t93j06"]}},
+     :seat "topo-4"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/EvenSphereTangentFieldObstruction.lean"
+    "problems/t93J06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t93J06",
    :acceptance
-   {:probe
-    "Compile a complete placeholder-free fixture for the exact registered apm_t93j06 statement. Supply route steps 1-3: a reusable theorem that identity is not homotopic to antipodal on the needed even spheres, the normalized tangent-field homotopy, and final assembly for ambient dimensions 3 and 5. Search and reuse the named ConstructionTargets results; place the reusable result in ConstructionTargets at exactly the generality used by t93J06 and t94A09. Do not change any registered statement or definition.",
-    :placeholder
-    "the sole sorry in problems/t93J06/lean/Main.lean at apm_t93j06",
-    :route-step "t93J06 steps 1-3, closing the problem",
+   {:placeholder-delta -1,
+    :statement-policy
+    "Do not change apm_t93j06, apm_t93j06_NowhereZeroField, apm_t93j06_Sphere, or any registered definition.",
+    :construction
+    "Bank id_not_homotopic_antipodal and homotopy_of_field at exactly the dimensions/generality used by t93J06 and t94A09, then replace the sole t93J06 placeholder by the compiled two-case assembly.",
     :gates
-    ["verify .lake/packages is the canonical symlink before Lake"
-     "lake env lean on the complete fixture exits 0"
-     "fixture contains no comment-stripped sorry"
-     "python3 scripts/statement-registry.py check exits 0"]},
+    ["verify the canonical package authority before Lake"
+     "lake env lean problems/t93J06/lean/Main.lean exits 0"
+     "comment-stripped placeholder count changes from 1 to 0"
+     "python3 scripts/statement-registry.py check exits 0"
+     "report #print axioms for apm_t93j06"]},
    :id :routes-2026-09-28-t93j06-direct-closure-1,
    :kind :consumer-closure,
    :depends-on [:routes-2026-09-28-checkpoint-topo1],
