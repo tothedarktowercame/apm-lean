@@ -51178,13 +51178,35 @@
    [:routes-2026-09-28-rp-sphere-quotient-transition-normal-form-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path
+      "/tmp/rp_sphere_quotient_transition_normal_form_domains.lean",
+      :sha256
+      "7636a795b6e07a5ca6413baf08173b5dd8fef29ec700b9689e2c054ca33067d1"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form_domains.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_transition_normal_form_domains.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+      :acceptance
+      "Bank SphereProjectionQuotientTransitionLocalNormalFormWithDomains and its inhabitant at dimension 2. Preserve both disjuncts exactly: each eventual quotient-coordinate equality must remain paired with the ordinary transition-source witness or the antipodal first-target/second-source witnesses used by SphereChartTransitionAlternativesSmooth."},
+     :residual
+     "The quotient transition now has a compiled local normal form that retains the matching chart-domain evidence in both branches. The next bounded consumer step is SphereProjectionQuotientChartTransitionCompatibility: apply SphereChartTransitionAlternativesSmooth to the retained witness, transport ContDiffWithinAt across the retained eventual equality, prove the exact pairwise ContDiffOn formula, and invoke quotientChartTransitionCompatibility_gives_manifold."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile the placeholder-free fixture /tmp/rp_sphere_quotient_transition_normal_form_domains.lean proving SphereProjectionQuotientTransitionLocalNormalFormWithDomains. For every inverse family, quotient-chart pair y z, and point u in the exact transition domain, return either the ordinary eventual coordinate equality together with membership in the exact ordinary sphere-chart transition source, or the antipodal eventual equality together with membership in the first sphere-chart target and the antipodal image in the second sphere-chart source. Derive both domain witnesses from transitionInput_domain, inverseBranch_quotientChart_symm, and the same pointwise branch equality used to construct the eventual normal form. This supplies the domain evidence required to apply SphereChartTransitionAlternativesSmooth for t95A04 and t96A07."},
+   "Bank SphereProjectionQuotientTransitionLocalNormalFormWithDomains and its inhabitant at dimension 2. Preserve both disjuncts exactly: each eventual quotient-coordinate equality must remain paired with the ordinary transition-source witness or the antipodal first-target/second-source witnesses used by SphereChartTransitionAlternativesSmooth.",
    :id
    :routes-2026-09-28-rp-sphere-quotient-transition-normal-form-domains-topo2-r1,
    :kind :reusable-theorem,
