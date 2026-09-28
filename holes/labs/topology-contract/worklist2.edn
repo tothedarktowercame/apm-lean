@@ -50141,6 +50141,31 @@
       :exit 1,
       :finding
       "The first audit imported the prior olean; lake build refreshed the module before the successful rerun."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790629119469-26312-82909039",
+     :commands
+     [{:cmd
+       "sha256sum /tmp/rp_sphere_projection_quotient_authority.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+       :exit 0}
+      {:cmd
+       "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+       :exit 0}
+      {:cmd "lake env lean /tmp/rp_sphere_projection_axioms.lean",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder counts from git show d11355f1 for t95A04 and t96A07",
+       :exit 0}],
+     :finding
+     "PASS. Reviewer codex-7 read implementation commit d11355f1. Its exact scope is ConstructionTargets/RealProjectiveSmoothTarget.lean, matching the row, and that file has no later commit. The fixture hash reproduces exactly as 7f5ff87713b87eff26ef536a4d3bc94e8fe789f88868f625256e191ea24103a0; its declarations match the committed addition, with only namespace qualification and a redundant simp lemma omitted in production. The committed module elaborates and builds successfully with canonical .lake/packages, contains zero comment-stripped sorry/admit placeholders, and the theorem depends only on propext, Classical.choice, and Quot.sound. All 130 frozen statement hashes match; consumer placeholder counts remain one each for t95A04 and t96A07. The proof preserves the frozen coinduced topology: radialToSphere is continuous, sphereProjection composed with it equals the existing quotientMap by positive nonzero scaling, and IsQuotientMap.of_comp transfers quotient authority in the stated sphere-final-topology to nonzero-vector-coinduced-topology direction. No topology is redefined. The standalone pre-land fixture now naturally reports duplicate declarations when imported after landing; the committed module is the reproducible post-land gate."},
     :commit "d11355f1fcb79f5ae503621708b6d2446472509e",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -50150,7 +50175,7 @@
      "7f5ff87713b87eff26ef536a4d3bc94e8fe789f88868f625256e191ea24103a0"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50207,7 +50232,7 @@
       :depends-on [],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
