@@ -16,3 +16,4 @@ data/
 # Python bytecode from the informal-proof conversion scripts.
 __pycache__/
 *.pyc
+holes/labs/solve-loop/
