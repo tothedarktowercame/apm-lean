@@ -78942,13 +78942,28 @@
       :finding
       "Mathlib supplies extDeriv_smul and extDeriv_fun_smul only for a constant scalar c; no banked theorem supplies the required variable inverse-cubic scalar product rule or the three-dimensional determinant cancellation."}
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790634970449-26577-6e8ff78d",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r cd7cc65d"
+      "git show cd7cc65d:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "test canonical .lake/packages authority; lake env lean -o /tmp/t94closure-review/t94A10/lean/Main.olean problems/t94A10/lean/Main.lean"
+      "LEAN_PATH=/tmp/t94closure-review lake env lean /tmp/t94a10-assembly-probe.lean"
+      "sha256sum /tmp/t94a10-assembly-probe.lean problems/STATEMENTS.json"
+      "python3 scripts/statement-registry.py check; fingerprint t94A10 --rev cd7cc65d"
+      "Python comment-stripped source and fixture census at commit and parent"
+      "rg extDeriv smultiplication and determinant-cancellation support"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-4. Commit cd7cc65d changes only holes/labs/topology-contract/worklist.edn and its 648-item recorded snapshot validates. The adapter row honestly records STOP rather than closure: the t94A10 source is byte-identical to its parent and retains three comment-stripped placeholders. The assembly fixture contains no textual placeholder, but it only pairs apm_t94A10_bridge_solidAngle_closed with apm_t94A10_bridge_solidAngle_not_exact and therefore reports inherited sorryAx. Both source and fixture compile. Fixture SHA-256 reproduces as c75c08f4960a7a26ddb2fcb87b696248dbff4547cde5826ea684de6186c1706c. The registry reproduces 130/130, registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, and faithful t94A10 hash d182222174cec68165c14a2357dea0b5559de7f2623f82b0771218d379a0996b. The recorded orientation and representation boundary are accurate: closedness requires differentiability and zero extDeriv for the actual conditional ambient extension at each punctured point. Local eventual equality and extDeriv_apply are available, but the variable inverse-cubic scaling still needs Frechet product differentiation and the Fin-3 Laplace/Euler cancellation; the banked extDeriv smul lemmas accept only constant scalars. The downstream sphere-pullback/Green proof of non-exactness remains separate, and the fixture does not conceal either missing proof."},
     :fixture
     {:path "/tmp/t94a10-assembly-probe.lean",
      :sha256
      "c75c08f4960a7a26ddb2fcb87b696248dbff4547cde5826ea684de6186c1706c"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A10",
    :acceptance
@@ -78983,7 +78998,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
