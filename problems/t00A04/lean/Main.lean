@@ -37,20 +37,19 @@ theorem apm_t00a04_previous_encoding :
     change r (H (x, 1)) = r y
     rw [hH1 x]
 
-/-- Faithful minimally corrected statement of the prelim: a nonempty,
-positive-dimensional compact smooth manifold cannot occur as a retract
-inclusion that is null-homotopic. -/
+/-- Faithful minimally corrected statement of the prelim: a compact smooth
+manifold with at least two points cannot occur as a retract inclusion that is
+null-homotopic (see PRELIM-DEFECT.md). -/
 theorem apm_t00a04 :
     ∀ (E F : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
       [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F]
       [FiniteDimensional ℝ F] (I : ModelWithCorners ℝ E E)
       (J : ModelWithCorners ℝ F F)
       (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y]
-      [T2Space X] [CompactSpace X] [Nonempty X]
+      [T2Space X] [CompactSpace X] [Nontrivial X]
       [T2Space Y] [CompactSpace Y]
       [ChartedSpace E X] [IsManifold I ∞ X]
       [ChartedSpace F Y] [IsManifold J ∞ Y],
-      0 < Module.finrank ℝ E →
       ∀ (ι : C(X, Y)) (r : C(Y, X)),
       ContMDiff I J ∞ ι → ContMDiff J I ∞ r →
       (∀ x, r (ι x) = x) → ¬ apm_t00a04_NullHomotopic ι := by
