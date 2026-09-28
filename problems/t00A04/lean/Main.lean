@@ -16,7 +16,9 @@ def apm_t00a04_NullHomotopic {X Y : Type*} [TopologicalSpace X]
   ∃ (y : Y) (H : X × ℝ → Y), Continuous H ∧
     (∀ x, H (x, 0) = f x) ∧ ∀ x, H (x, 1) = y
 
-theorem apm_t00a04 :
+/-- Superseded: the hypothesis that `id_X` is not null-homotopic supplied the
+main topological content of the problem. -/
+theorem apm_t00a04_previous_encoding :
     ∀ (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y]
       (ι : X → Y) (r : Y → X),
       Continuous ι → Continuous r → (∀ x, r (ι x) = x) →
@@ -32,5 +34,16 @@ theorem apm_t00a04 :
   · intro x
     change r (H (x, 1)) = r y
     rw [hH1 x]
+
+/-- Faithful corrected statement of the prelim: a positive-dimensional compact
+connected manifold cannot occur as a retract inclusion that is null-homotopic.
+The manifold hypotheses replace the formerly assumed conclusion. -/
+theorem apm_t00a04 :
+    ∀ (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y]
+      [T2Space X] [CompactSpace X] [PathConnectedSpace X] [Infinite X]
+      (ι : X → Y) (r : Y → X),
+      Continuous ι → Continuous r → (∀ x, r (ι x) = x) →
+      ¬ apm_t00a04_NullHomotopic ι := by
+  sorry
 
 #print axioms apm_t00a04
