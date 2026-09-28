@@ -1,6 +1,31 @@
 {
  "schema": "apm-statement-registry.v1",
  "entries": {
+  "t00A01": {
+   "decls": [
+    "apm_t00a01"
+   ],
+   "sha256": "bc9e79814138e89879a9eb4aa58cde049a58993bd7bbb93e2daa4682b21ba35b",
+   "defs": [
+    "apm_t00A01_Disk3",
+    "apm_t00A01_H",
+    "apm_t00A01_Model3",
+    "apm_t00A01_Sphere2",
+    "apm_t00A01_basepoint",
+    "apm_t00A01_boundaryMap",
+    "apm_t00A01_connectedSum",
+    "apm_t00A01_connectedSumTopology",
+    "apm_t00A01_glueRel",
+    "apm_t00A01_isHomology3Sphere",
+    "apm_t00A01_punctured"
+   ],
+   "grade": "faithful",
+   "grader": "claude read-only grader (reopen2)",
+   "evidence": "holes/labs/statement-registry/reopen2-grades-1.md",
+   "prelim_defect": null,
+   "rev": "8a56852f",
+   "approved_at": "2026-09-28T19:47:56Z"
+  },
   "t00A02": {
    "decls": [
     "apm_t00a02"
@@ -458,6 +483,24 @@
    "prelim_defect": null,
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:27Z"
+  },
+  "t02A01": {
+   "decls": [
+    "apm_t02a01"
+   ],
+   "sha256": "2254575cc9db38ddd472f6339652acc4d6d0f200fc3bc08c578102ad0da4c822",
+   "defs": [
+    "apm_t02a01_boundary",
+    "apm_t02a01_edgeRel",
+    "apm_t02a01_puncturedTorus",
+    "apm_t02a01_squareAnnulus"
+   ],
+   "grade": "faithful",
+   "grader": "claude read-only grader (reopen2)",
+   "evidence": "holes/labs/statement-registry/reopen2-grades-1.md",
+   "prelim_defect": null,
+   "rev": "8a56852f",
+   "approved_at": "2026-09-28T19:47:56Z"
   },
   "t02A02": {
    "decls": [
