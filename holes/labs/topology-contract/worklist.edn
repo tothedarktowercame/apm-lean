@@ -77631,8 +77631,146 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "comment-stripped placeholder census for all 12 topo1 problems",
+      :exit 0}
+     {:cmd
+      "inspect reviewed t99J06 scheduling STOP and the remaining t97A07 one-placeholder route",
+      :exit 0}],
+    :finding
+    {:measures
+     {:placeholder-delta {:t99J06 0, :portfolio 0},
+      :typed-residual-change
+      "t99J06 remains at one placeholder but is held at four independently compilable packets: exterior derivative, cone-image equality, interior embedding/immersion, and rectangle integrals. No route step compiled.",
+      :infrastructure-packets 0,
+      :review-outcomes
+      [{:row :routes-2026-09-28-t99j06-adapter-closure-1,
+        :outcome :stop,
+        :review :pass,
+        :reviewer "codex-3"}]},
+     :routes
+     {:t91J06
+      {:placeholders 3,
+       :chain
+       ["compatible coordinates <- transition intervals + interval extension + recursion"
+        "glue bridge <- corrected helper with hf + glue equivalence/homeomorph"
+        "main <- both bridges"]},
+      :t99J06
+      {:placeholders 1,
+       :status :held,
+       :chain
+       ["exterior-derivative boundary"
+        "global cone-image boundary"
+        "interior embedding/immersion boundary"
+        "rectangle-integral boundary"]},
+      :t95J02
+      {:placeholders 3,
+       :chain
+       ["vertical H1 kernel <- CircleB homeomorphism + reflection homotopy"
+        "retraction injective <- homology functoriality"
+        "main <- both bridges"]},
+      :t93J06 {:placeholders 0, :chain [], :status :closed},
+      :t97A07
+      {:placeholders 1,
+       :chain
+       ["main compactness <- openness of surjective continuous-linear maps + openness of manifold regular points"
+        "main nonemptiness <- compact maximum + manifold extremum implies non-surjective mfderiv"
+        "main zero-target clause <- banked criticalValues_zero"
+        "main infinitude <- regular derivative gives range neighborhood + connected finite-complement and compact-range argument"]},
+      :t99J04
+      {:placeholders 3,
+       :chain
+       ["local IFT bridge <- Euclidean partial diffeomorph + chart conjugation"
+        "coordinate derivative bridge <- coordinateMap smoothness/mfderiv formula"
+        "main <- both bridges"]},
+      :t01A01
+      {:placeholders 2,
+       :chain
+       ["bridge_1 <- projective quotient descent <- punctured RP2 retract <- RP2-to-projective-line nullhomotopy"
+        "main <- bridge_1 + nullhomotopic-trivial-pi1"]},
+      :t92J08
+      {:placeholders 3,
+       :chain
+       ["uniform local flow <- neighborhood-uniform chart ODE + compact subcover"
+        "blowup obstruction <- continuity at t=1"
+        "main <- bridges + globalisation/uniqueness"]},
+      :t02A05
+      {:placeholders 2,
+       :chain
+       ["bridge_1 <- oriented coefficient/translation/moment calculation for registered muHE[2] statement"
+        "main <- bridge_1 + quadratic minimum"]},
+      :t94A07
+      {:placeholders 1,
+       :status :held,
+       :chain
+       ["local boundary <- halfTurn derivative + square-root constraint derivative + tangent kernel + local index"
+        "global boundary <- circle reflection obstruction + outer-equator longitude projection"]},
+      :t94A10
+      {:placeholders 3,
+       :chain
+       ["closed bridge <- solid-angle exterior derivative computation"
+        "not-exact bridge <- sphere pullback + periodic rectangle Stokes"
+        "main <- both bridges"]},
+      :t94A09 {:placeholders 0, :chain [], :status :closed}},
+     :deferred
+     "t94A07 and t99J06 retain reviewed scheduling STOPs. t97A07 is the only remaining unheld one-placeholder adapter, so it precedes every two- or three-placeholder route. No route-free infrastructure is elected."},
+    :replacement-items
+    [{:consumer :t97A07,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t97A07",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free fixture for the exact registered apm_t97a07 statement. Supply the listed route: prove openness of surjective continuous-linear maps and then openness of manifold regular points to obtain compact critical values; prove an extremum of the first target coordinate is critical and use compactness for nonemptiness; reuse T97A07.criticalValues_zero; prove a regular point maps to a neighborhood contained in the range and combine this with connectedness of the complement of a finite set and compactness of the range to obtain infinitude. Work at exactly the frozen Euclidean-manifold generality and do not change registered statements or definitions.",
+       :placeholder
+       "the sole sorry in apm_t97a07 in problems/t97A07/lean/Main.lean",
+       :route-step
+       "t97A07 route steps 1-5, closing all four conjuncts",
+       :gates
+       ["verify the canonical package authority before Lake"
+        "lake env lean on a complete exact-statement fixture exits 0"
+        "fixture contains no comment-stripped sorry"
+        "python3 scripts/statement-registry.py check exits 0"]},
+      :id :routes-2026-09-28-t97a07-adapter-closure-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "One sorry with four critical-value clauses. The n=0 clause is banked; compactness, nonemptiness for positive target dimension, and infinitude for nonconstant maps into dimension greater than one remain.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Reread TOPOLOGY-ROUTES.md and all route files, measure t97A07, preserve reviewed holds, enforce stop-after-two, recount every topo1 placeholder, and refill from the complete remaining ADAPTER portfolio."},
+      :id :routes-2026-09-28-checkpoint-topo1-after-t97a07-1,
+      :kind :strategy-checkpoint,
+      :depends-on [:routes-2026-09-28-t97a07-adapter-closure-1],
+      :current-residual
+      "After reviewed t97A07, all one-placeholder adapters will be closed or held; recount and elect the nearest two-placeholder adapter before three-placeholder routes.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -77645,6 +77783,54 @@
     :routes-2026-09-28-checkpoint-topo1-after-t94a07-1],
    :current-residual
    "After the reviewed t99J06 outcome, recount all open adapters, retain the reviewed t94A07 hold, and apply stop-after-two before the next election.",
+   :other-consumers []}
+  {:consumer :t97A07,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t97A07",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free fixture for the exact registered apm_t97a07 statement. Supply the listed route: prove openness of surjective continuous-linear maps and then openness of manifold regular points to obtain compact critical values; prove an extremum of the first target coordinate is critical and use compactness for nonemptiness; reuse T97A07.criticalValues_zero; prove a regular point maps to a neighborhood contained in the range and combine this with connectedness of the complement of a finite set and compactness of the range to obtain infinitude. Work at exactly the frozen Euclidean-manifold generality and do not change registered statements or definitions.",
+    :placeholder
+    "the sole sorry in apm_t97a07 in problems/t97A07/lean/Main.lean",
+    :route-step "t97A07 route steps 1-5, closing all four conjuncts",
+    :gates
+    ["verify the canonical package authority before Lake"
+     "lake env lean on a complete exact-statement fixture exits 0"
+     "fixture contains no comment-stripped sorry"
+     "python3 scripts/statement-registry.py check exits 0"]},
+   :id :routes-2026-09-28-t97a07-adapter-closure-1,
+   :kind :final-adapter,
+   :depends-on [:routes-2026-09-28-checkpoint-topo1-after-t99j06-1],
+   :current-residual
+   "One sorry with four critical-value clauses. The n=0 clause is banked; compactness, nonemptiness for positive target dimension, and infinitude for nonconstant maps into dimension greater than one remain.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Reread TOPOLOGY-ROUTES.md and all route files, measure t97A07, preserve reviewed holds, enforce stop-after-two, recount every topo1 placeholder, and refill from the complete remaining ADAPTER portfolio."},
+   :id :routes-2026-09-28-checkpoint-topo1-after-t97a07-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-09-28-t97a07-adapter-closure-1
+    :routes-2026-09-28-checkpoint-topo1-after-t99j06-1],
+   :current-residual
+   "After reviewed t97A07, all one-placeholder adapters will be closed or held; recount and elect the nearest two-placeholder adapter before three-placeholder routes.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
