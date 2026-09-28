@@ -49842,6 +49842,8 @@
      :typed-residual-change
      :infrastructure-packets
      :review-outcomes]},
+   :review-finding
+   "Recorded commit 4541e691 violates standing portfolio Rule 0: its own comment-stripped count is 3 for t00J07, yet it elects t00J07-main-assembly as the exactly-one near-closure adapter and that row only replaces the main sorry; ten listed topo2 consumers have 1 placeholder and therefore are closer to closure. The election must instead choose an adapter that closes one of the minimum-count consumers, or deterministically document why the nearest adapter cannot be built and STOP with the exact missing prerequisite. Scope is ledger-only; worklist check and all 130 frozen statement hashes pass; counts at the recorded commit reproduce.",
    :stop-condition
    "End only when every problem in this loop's half of TOPOLOGY-ROUTES.md is closed, held, or stopped with a compiled refutation or the stop-after-two rule.",
    :evidence
@@ -50010,9 +50012,15 @@
        :routes-2026-09-28-t97a04-mv-connecting-naturality-topo2
        :routes-2026-09-28-t00j08-quantitative-nielsen-schreier-topo2]}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1790628053774-26244-e78a8f54",
+     :finding
+     "Recorded commit 4541e691 violates standing portfolio Rule 0: its own comment-stripped count is 3 for t00J07, yet it elects t00J07-main-assembly as the exactly-one near-closure adapter and that row only replaces the main sorry; ten listed topo2 consumers have 1 placeholder and therefore are closer to closure. The election must instead choose an adapter that closes one of the minimum-count consumers, or deterministically document why the nearest adapter cannot be built and STOP with the exact missing prerequisite. Scope is ledger-only; worklist check and all 130 frozen statement hashes pass; counts at the recorded commit reproduce."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50025,7 +50033,7 @@
    :other-consumers []}
   {:consumer :t00J07,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50036,7 +50044,7 @@
    :depends-on [:routes-2026-09-28-checkpoint-topo2]}
   {:consumer :t95A04,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50050,7 +50058,7 @@
    "single-consumer bounded three-lemma route packet",
    :consumer :t01A02,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50062,7 +50070,7 @@
   {:bounded-exception "single-consumer bounded naturality theorem",
    :consumer :t97A04,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50075,7 +50083,7 @@
    "single-consumer coherent quantitative Nielsen-Schreier packet",
    :consumer :t00J08,
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50094,7 +50102,7 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
