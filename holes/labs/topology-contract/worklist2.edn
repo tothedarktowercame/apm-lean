@@ -50876,6 +50876,33 @@
       "git diff --check -- ConstructionTargets/RealProjectiveSmoothTarget.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790635333370-26593-f7c23a2d",
+     :commands
+     [{:cmd "sha256sum /tmp/rp_sphere_quotient_chart_apply.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+       :exit 0}
+      {:cmd
+       "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_quotient_chart_apply_axioms.lean",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder counts from git show b96a0235 for module, t95A04, and t96A07",
+       :exit 0}
+      {:cmd "git diff-tree --no-commit-id --name-only -r b96a0235",
+       :exit 0}],
+     :finding
+     "PASS. Reviewer codex-7 read implementation commit b96a0235. Its sole changed path is ConstructionTargets/RealProjectiveSmoothTarget.lean, exactly matching scope, and the file has no later commit. The fixture sha256 reproduces exactly as 05a84b0c4c673ffd38e3a0b7f3c9d5bd550654afb4b41dba6ff6b0423f5c0539. Direct elaboration and Lake build pass with canonical packages; inverseBranch_quotientChart_symm uses only propext, Classical.choice, and Quot.sound. The committed module contains zero placeholders; t95A04 and t96A07 remain at one each, so placeholder delta zero is accurate. All 130 frozen statements and the 329-item ledger pass. quotientChart_apply exposes the forward composite as the standard sphere chart after inverseBranch; quotientChart_symm_apply exposes the inverse composite as localHomeomorph after the sphere-chart inverse. The cancellation theorem unfolds exact quotient-chart target membership, uses its second conjunct to establish that the sphere-chart inverse lies in localHomeomorph source, and applies left_inv. Thus the identity is correctly domain-restricted and oriented, with no representation cast, frozen-topology change, or cancellation outside the partial-homeomorphism source."},
     :commit "b96a0235adadc2ab0a883f5171186b6e30a55a61",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -50885,7 +50912,7 @@
      "05a84b0c4c673ffd38e3a0b7f3c9d5bd550654afb4b41dba6ff6b0423f5c0539"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50940,7 +50967,7 @@
       [:routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
