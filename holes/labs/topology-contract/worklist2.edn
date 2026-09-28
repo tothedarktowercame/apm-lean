@@ -50528,34 +50528,42 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_sphere_local_inverse_family.lean",
-      :sha256
-      "42e690a088a9abda1897d4848aba5afff0ee95623e04c19deb409e9ff023eb94"},
-     :commands
-     [{:cmd "lake env lean /tmp/rp_sphere_local_inverse_family.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_local_inverse_family.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:declarations
-       ["SphereProjectionLocalInverseFamily"
-        "sphereProjectionLocalInverseFamily"],
-       :fixture "/tmp/rp_sphere_local_inverse_family.lean",
-       :consumer-residual
-       "Compose the chosen local inverses with standard sphere charts and prove quotient-chart overlaps are identity or antipodal, yielding SphereProjectionSmoothDescentContract.",
-       :axioms :standard-only}},
-     :residual
-     "The exact dimension-two local-inverse family compiles without placeholders. Promotion adds only the family structure and its inhabitant; the remaining consumer route is the smooth chart-overlap descent theorem."}},
+   {:placeholder-delta 0,
+    :residual
+    "Compose the chosen local inverses with standard sphere charts and prove quotient-chart overlaps are identity or antipodal, yielding SphereProjectionSmoothDescentContract for t95A04 and t96A07.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/rp_sphere_local_inverse_family.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 no-sorry-pattern ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_local_inverse_family_axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "45870cbd25ee6fcaacd9603901b2bb9ab7119c54",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_local_inverse_family.lean",
+     :sha256
+     "42e690a088a9abda1897d4848aba5afff0ee95623e04c19deb409e9ff023eb94"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
