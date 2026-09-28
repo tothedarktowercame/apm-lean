@@ -45,12 +45,18 @@ def apm_t00A01_connectedSum {A B : Type}
     (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B) :=
   Quotient (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB))
 
-noncomputable instance {A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+@[reducible] noncomputable def apm_t00A01_connectedSumTopology
+    {A B : Type} [TopologicalSpace A] [TopologicalSpace B]
     (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B) :
     TopologicalSpace (apm_t00A01_connectedSum iA iB) :=
   TopologicalSpace.coinduced
     (fun z : Sum A B ↦ Quotient.mk
       (Relation.EqvGen.setoid (apm_t00A01_glueRel iA iB)) z) inferInstance
+
+noncomputable instance {A B : Type} [TopologicalSpace A] [TopologicalSpace B]
+    (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B) :
+    TopologicalSpace (apm_t00A01_connectedSum iA iB) :=
+  apm_t00A01_connectedSumTopology iA iB
 
 def apm_t00A01_basepoint {A B : Type}
     (iA : apm_t00A01_Sphere2 → A) (iB : apm_t00A01_Sphere2 → B) (a : A) :
@@ -167,6 +173,26 @@ def apm_t00A01_isHomology3Sphere (X : Type) [TopologicalSpace X] : Prop :=
   Nonempty (apm_t00A01_H 0 X ≅ ModuleCat.of ℤ ℤ) ∧
   Nonempty (apm_t00A01_H 3 X ≅ ModuleCat.of ℤ ℤ) ∧
   (∀ k : ℕ, k ≠ 0 → k ≠ 3 → Limits.IsZero (apm_t00A01_H k X))
+
+abbrev apm_t00A01_Disk3 :=
+  Metric.closedBall (0 : EuclideanSpace ℝ (Fin 3)) 1
+
+/-- The complement of the open interior of an embedded closed three-disk. -/
+abbrev apm_t00A01_punctured {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) : Type :=
+  {x : M // x ∉ φ '' {y : apm_t00A01_Disk3 | dist y.1 0 < 1}}
+
+/-- The boundary sphere maps canonically into the punctured manifold. -/
+def apm_t00A01_boundaryMap {M : Type} [TopologicalSpace M]
+    (φ : apm_t00A01_Disk3 → M) (hφ : Function.Injective φ) :
+    apm_t00A01_Sphere2 → apm_t00A01_punctured φ := fun s ↦
+  ⟨φ ⟨s.1, by simpa [Metric.mem_closedBall, dist_comm] using le_of_eq s.2⟩, by
+    rintro ⟨y, hy, heq⟩
+    have hys : y.1 = s.1 := Subtype.ext_iff.mp (hφ heq)
+    change dist y.1 0 < 1 at hy
+    rw [hys] at hy
+    have hs : dist s.1 0 = 1 := by simpa [Metric.mem_sphere, dist_comm] using s.2
+    linarith⟩
 
 def apm_t00A01_hasStandardCover
     (X A B : Type) [TopologicalSpace X] [TopologicalSpace A]
@@ -438,7 +464,9 @@ theorem apm_t00A01_bridge_connectedSum_isHomology3Sphere
          ⟨hUz (k + 3) (by omega), hVz (k + 3) (by omega)⟩ |>.eq_of_src _ _
      · exact (hIz (k + 2) (by omega) (by omega)).eq_of_tgt _ _
 
-theorem apm_t00a01
+/-- Superseded: the punctured-piece homology, fundamental groups, and
+Mayer--Vietoris cover were hypotheses, so the homology-sphere premises did no work. -/
+theorem apm_t00a01_previous_encoding
     (M₁ M₂ A B : Type)
     [TopologicalSpace M₁] [TopologicalSpace M₂]
     [TopologicalSpace A] [TopologicalSpace B]
@@ -504,6 +532,35 @@ theorem apm_t00a01
   exact ⟨apm_t00A01_bridge_fundamentalGroup_coprod M₁ M₂ A B m₁ m₂ a b
     iA iB hπA hπB hconnA hconnB hiA hiB hcover,
     apm_t00A01_bridge_connectedSum_isHomology3Sphere A B iA iB hA hB hcover⟩
+
+/-- The two requested invariants of the connected sum of integral homology
+three-spheres.  Unlike the previous encoding, no homology-ball,
+fundamental-group, or Mayer--Vietoris conclusion for the punctured pieces is
+accepted as a hypothesis. -/
+theorem apm_t00a01
+    (M₁ M₂ : Type)
+    [TopologicalSpace M₁] [TopologicalSpace M₂]
+    (m₁ : M₁) (m₂ : M₂)
+    (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
+    (hφ₁ : Function.Injective φ₁) (hφ₂ : Function.Injective φ₂)
+    (hM₁ : apm_t00A01_isHomology3Sphere M₁)
+    (hM₂ : apm_t00A01_isHomology3Sphere M₂) :
+    Nonempty
+      (@FundamentalGroup
+          (apm_t00A01_connectedSum (apm_t00A01_boundaryMap φ₁ hφ₁)
+            (apm_t00A01_boundaryMap φ₂ hφ₂))
+          (apm_t00A01_connectedSumTopology (apm_t00A01_boundaryMap φ₁ hφ₁)
+            (apm_t00A01_boundaryMap φ₂ hφ₂))
+          (apm_t00A01_basepoint (apm_t00A01_boundaryMap φ₁ hφ₁)
+            (apm_t00A01_boundaryMap φ₂ hφ₂)
+            (apm_t00A01_boundaryMap φ₁ hφ₁ (Classical.choice inferInstance))) ≃*
+        Monoid.Coprod (FundamentalGroup M₁ m₁) (FundamentalGroup M₂ m₂)) ∧
+    @apm_t00A01_isHomology3Sphere
+      (apm_t00A01_connectedSum (apm_t00A01_boundaryMap φ₁ hφ₁)
+        (apm_t00A01_boundaryMap φ₂ hφ₂))
+      (apm_t00A01_connectedSumTopology (apm_t00A01_boundaryMap φ₁ hφ₁)
+        (apm_t00A01_boundaryMap φ₂ hφ₂)) := by
+  sorry
 
 #print axioms apm_t00A01_bridge_fundamentalGroup_coprod
 #print axioms apm_t00a01
