@@ -50454,36 +50454,58 @@
    :review-finding
    "Deterministic fixture-integrity defect in transition commit 732f1ee8: the quantitative STOP records /tmp/t00J08_end_basis_contract.lean with sha256 e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c and claims that artifact fails at the nil-path identity. That e8bf hash is the earlier contract fixture explicitly recorded with Lean exit 0 by invoke-1790629509405-26342-cb4b1759; the authenticated failing artifact accepted for the dependency row is instead /tmp/t00J08_end_basis_contract_failure_848e7873.lean at sha256 848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f; fresh Lean execution reproduces its nil-case failure. Repair this row by citing the stable 848e fixture and its accepted dependency receipt, or by recording no new fixture and making the STOP purely dependency-propagated. Fresh checks otherwise find private root-prime at NielsenSchreier.lean:153, public endIsFree at :227, 130 matching frozen statements, a valid 315-item ledger, three committed t00J08 placeholders, and ledger-only commit scope.",
    :evidence
-   {:residual
-    "t00J08 quantitative route steps 1-4 are stopped; bridge_rank_formula, bridge_subgroup_of_index, and the main arithmetic assembly remain downstream.",
+   {:placeholder-delta 0,
+    :dependency-receipt
+    {:id :routes-2026-09-28-t00j08-end-basis-arborescence-topo2-r1,
+     :review-outcome :pass,
+     :review-job "invoke-1790630031498-26379-c739854e",
+     :ledger "holes/labs/topology-contract/worklist2.edn"},
+    :residual
+    "t00J08 quantitative route steps 1-4 remain stopped; bridge_rank_formula, bridge_subgroup_of_index, and the main arithmetic assembly remain downstream until Mathlib exposes a Type-valued end basis or its root representation.",
     :outcome :stop,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
     :disposition :stop,
-    :author "topo-8",
+    :axioms [],
+    :author "topo-6",
     :reason
-    "The quantitative Nielsen-Schreier packet depends on the stopped endBasisOfArborescence route step. Fresh compilation reproduces the representation boundary: Mathlib loopOfHom and endIsFree use the opaque private root-prime T, while the only expressible public target uses show G from root T. The copied universal-property proof fails at its nil path because F.map of the identity at private root-prime cannot rewrite in the publicly stated End group. Since endIsFree erases the complementary-edge generator type into IsFreeGroup, tree-edge cardinality cannot be connected to the subgroup basis without violating the explicit-index invariant. A public Type-valued endBasis theorem must be added inside NielsenSchreier, or root-prime must be exposed, before steps 2-4 and schreier_rank_formula are meaningful.",
+    "Dependency-propagated representation boundary: the accepted end-basis row proves that the Mathlib private opaque root-prime prevents stating the existing universal-property construction at the public End (root T), while public endIsFree erases the explicit complementary-edge EndBasisIndex. Therefore quantitative steps 2-4 cannot connect tree-edge and action-groupoid cardinalities to a subgroup basis without violating the explicit-index invariant.",
     :commands
     [{:cmd
+      "sha256sum /tmp/t00J08_end_basis_contract_failure_848e7873.lean",
+      :exit 0}
+     {:cmd
+      "rg accepted dependency receipt and stable fixture in holes/labs/topology-contract/worklist2.edn",
+      :exit 0}
+     {:cmd
       "rg -n \"private def root.|lemma endIsFree\" .lake/packages/mathlib/Mathlib/GroupTheory/FreeGroup/NielsenSchreier.lean",
       :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "clojure.edn/read-string holes/labs/topology-contract/worklist2.edn and count :items",
+      :exit 0,
+      :result 315}
+     {:cmd
+      "comment-stripped placeholder count problems/t00J08/lean/Main.lean",
+      :exit 0,
+      :result 3}
+     {:cmd
+      "git diff --exit-code -- . excluding pre-existing holes/labs/solve-loop",
+      :exit 0}],
     :diagnostic-history
-    [{:cmd "lake env lean /tmp/t00J08_end_basis_contract.lean",
+    [{:cmd
+      "lake env lean /tmp/t00J08_end_basis_contract_failure_848e7873.lean",
       :exit 1,
       :finding
-      "Fresh reproduction fails at the nil-path identity over opaque private root-prime T; no later successful compile supersedes this boundary."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790630223340-26395-4ef58ea0",
-     :finding
-     "Deterministic fixture-integrity defect in transition commit 732f1ee8: the quantitative STOP records /tmp/t00J08_end_basis_contract.lean with sha256 e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c and claims that artifact fails at the nil-path identity. That e8bf hash is the earlier contract fixture explicitly recorded with Lean exit 0 by invoke-1790629509405-26342-cb4b1759; the authenticated failing artifact accepted for the dependency row is instead /tmp/t00J08_end_basis_contract_failure_848e7873.lean at sha256 848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f; fresh Lean execution reproduces its nil-case failure. Repair this row by citing the stable 848e fixture and its accepted dependency receipt, or by recording no new fixture and making the STOP purely dependency-propagated. Fresh checks otherwise find private root-prime at NielsenSchreier.lean:153, public endIsFree at :227, 130 matching frozen statements, a valid 315-item ledger, three committed t00J08 placeholders, and ledger-only commit scope."},
+      "Fresh reproduction of the accepted dependency failure: the nil Path goal is F-prime.map of the identity at inaccessible private root-prime T equals one, and the public-root proof cannot rewrite it."}],
+    :changed-paths [],
     :fixture
-    {:path "/tmp/t00J08_end_basis_contract.lean",
+    {:path "/tmp/t00J08_end_basis_contract_failure_848e7873.lean",
      :sha256
-     "e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c"},
-    :seat "topo-8"},
+     "848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
