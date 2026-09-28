@@ -78591,13 +78591,28 @@
       :stage :missing-temporary-output-directory,
       :correction
       "Created the exact temporary module directory, then reran both compiler commands successfully and recorded them separately as acceptance commands."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790633805333-26532-4c6c5ca0",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r f5fefe45"
+      "git show f5fefe45:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "test canonical .lake/packages authority; lake env lean -o /tmp/t01review/t01A01/lean/Main.olean problems/t01A01/lean/Main.lean"
+      "LEAN_PATH=/tmp/t01review lake env lean /tmp/t01a01-assembly-probe.lean"
+      "sha256sum /tmp/t01a01-assembly-probe.lean problems/STATEMENTS.json"
+      "python3 scripts/statement-registry.py check; fingerprint t01A01 --rev f5fefe45"
+      "Python comment-stripped source and fixture census"
+      "rg projectivization descent, punctured-projective geometry, and downstream covering-lift APIs"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-4. Commit f5fefe45 changes only holes/labs/topology-contract/worklist.edn and its 645-item recorded snapshot validates. The row honestly records STOP rather than closure: the source blob is unchanged from its parent with two comment-stripped placeholders, while the fixture has zero textual placeholders but inherits sorryAx exactly through apm_t01A01_bridge_1. The consumer and fixture both compile. The fixture SHA-256 reproduces as 2322748e2464f61e6be97c30a2d13730d751776a2341b7184bc8fb5bb09fd0da. The registry reproduces 130/130, registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, and faithful t01A01 hash 52bb33c1ff3c3496be40700d3bd2f9d0b7ec4129157da4b69df802902ad37410. The theorem directions and representation boundary are accurate: nullhomotopy implies the trivial FundamentalGroup map downstream, but the frozen Projectivization quotient representation still lacks open/restricted/product quotient descent, the punctured-RP2 deformation retraction, projective-line-to-Circle identification, and antipodal descent. The available circle-cover and sphere-simple-connectedness results begin only after those maps exist, so they do not validate a facade closure."},
     :fixture
     {:path "/tmp/t01a01-assembly-probe.lean",
      :sha256
      "2322748e2464f61e6be97c30a2d13730d751776a2341b7184bc8fb5bb09fd0da"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t01A01",
    :acceptance
@@ -78631,7 +78646,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
