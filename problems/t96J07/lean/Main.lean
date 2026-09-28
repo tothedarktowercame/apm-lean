@@ -1,5 +1,7 @@
 import Mathlib
 
+open CategoryTheory
+
 /-!
 # APM t96J07 — a diagonal map of real projective three-space
 
@@ -26,6 +28,28 @@ def apm_t96j07_A (x : apm_t96j07_V) : apm_t96j07_V :=
 
 def apm_t96j07_axis (i : Fin 4) : apm_t96j07_V :=
   fun j => if j = i then 1 else 0
+
+abbrev apm_t96j07_RP3 := Projectivization ℝ apm_t96j07_V
+
+noncomputable instance : TopologicalSpace apm_t96j07_RP3 :=
+  TopologicalSpace.coinduced (Projectivization.mk' ℝ) inferInstance
+
+noncomputable abbrev apm_t96j07_H (k : ℕ) :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of apm_t96j07_RP3))
+
+noncomputable def apm_t96j07_Hmap (k : ℕ) (f : C(apm_t96j07_RP3, apm_t96j07_RP3)) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) k).obj
+    (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)
+
+lemma apm_t96j07_A_ne_zero {x : apm_t96j07_V} (hx : x ≠ 0) :
+    apm_t96j07_A x ≠ 0 := by
+  intro h
+  apply hx
+  funext i
+  have hi := congrFun h i
+  simp only [apm_t96j07_A, Pi.zero_apply] at hi
+  exact (mul_eq_zero.mp hi).resolve_left (by positivity)
 
 noncomputable def apm_t96j07_localDeterminant (i : Fin 4) : ℝ :=
   ∏ j ∈ Finset.univ.erase i,
@@ -108,15 +132,23 @@ theorem apm_t96j07_previous_encoding :
 /-- Fixed points, local Lefschetz numbers, and the global homological
 Lefschetz number for the stated diagonal self-map of `ℝP³`. -/
 theorem apm_t96j07 :
-    (∀ x : apm_t96j07_V, x ≠ 0 →
-      (apm_t96j07_projectivelyEq x (apm_t96j07_A x) ↔
-        ∃ i : Fin 4, apm_t96j07_projectivelyEq x (apm_t96j07_axis i))) ∧
-    apm_t96j07_localIndex 0 = -1 ∧
-    apm_t96j07_localIndex 1 = 1 ∧
-    apm_t96j07_localIndex 2 = -1 ∧
-    apm_t96j07_localIndex 3 = 1 ∧
-    (∑ i : Fin 4, apm_t96j07_localIndex i) = 0 ∧
-    ((1 : ℤ) - 1) = 0 := by
+    ∃ f : C(apm_t96j07_RP3, apm_t96j07_RP3),
+      (∀ (x : apm_t96j07_V) (hx : x ≠ 0),
+        f (Projectivization.mk ℝ x hx) =
+          Projectivization.mk ℝ (apm_t96j07_A x) (apm_t96j07_A_ne_zero hx)) ∧
+      (∀ q, f q = q ↔ ∃ i : Fin 4,
+        q = Projectivization.mk ℝ (apm_t96j07_axis i) (by
+          intro h
+          have := congrFun h i
+          simp [apm_t96j07_axis] at this)) ∧
+      apm_t96j07_localIndex 0 = -1 ∧
+      apm_t96j07_localIndex 1 = 1 ∧
+      apm_t96j07_localIndex 2 = -1 ∧
+      apm_t96j07_localIndex 3 = 1 ∧
+      (∑ i : Fin 4, apm_t96j07_localIndex i) = 0 ∧
+      apm_t96j07_Hmap 0 f = 𝟙 (apm_t96j07_H 0) ∧
+      apm_t96j07_Hmap 3 f = 𝟙 (apm_t96j07_H 3) ∧
+      ((1 : ℤ) - 1) = 0 := by
   sorry
 
 #print axioms apm_t96j07_not_fixed_axis_clause
