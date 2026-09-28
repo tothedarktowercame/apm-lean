@@ -50442,49 +50442,55 @@
    :consumer :t01A02,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/t01A02_punctured_torus_cover_models.lean",
+     {:path "/tmp/t01A02_punctured_torus_mv_cover.lean",
       :sha256
-      "ddbb9777363c45262a2b2e89108d44c1e4816aa613d87dc42b6608e18e2002c3"},
+      "840bcc55298363bf38477f4e14857dbec3e43188015c8841dd527578ed8c35ad"},
      :commands
-     [{:cmd
-       "test -L .lake/packages && lake env lean /tmp/t01A02_punctured_torus_cover_models.lean",
+     [{:cmd "lake env lean /tmp/t01A02_punctured_torus_mv_cover.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 sorry /tmp/t01A02_punctured_torus_cover_models.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :residual
-     "The MV cover contract still requires transporting banked contractions and circle homology through its cover-piece subtypes. The exact missing point-set step is three homeomorphisms: U to PuncturedCircle times Circle, V to Circle times PuncturedCircle, and U intersection V to PuncturedCircle squared. These are literal subtype repackagings, but no existing declaration has the once-punctured ambient X wrappers.",
-     :prerequisite
-     {:consumer :t01A02,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
+       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t01A02_punctured_torus_mv_cover.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t01A02_punctured_torus_mv_cover.lean",
+       :exit 1,
+       :finding
+       "The first combined fixture exposed an invalid dependent-structure spelling, missing ContinuousMap notation scope, ambiguous continuity inference, and cover equality coercions. Splitting the set fields onto separate declarations, making their subtype carriers explicit, opening the required scope, and typing the coordinate maps corrected the interface without weakening it."}
+      {:cmd "lake env lean /tmp/t01A02_punctured_torus_mv_cover.lean",
+       :exit 1,
+       :finding
+       "The second compile isolated openness and nonmembership normalization. Explicit coordinate-map types and conversion of set nonmembership to coordinate equalities supplied the required proofs; the subsequent acceptance compile succeeded."}],
+     :implementation
+     {:scope
+      ["ConstructionTargets/T01A02PuncturedTorusDegreeTwoMVCover.lean"],
       :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of PuncturedTorusCoverModels from /tmp/t01A02_punctured_torus_cover_models.lean. Construct all three homeomorphisms by exact subtype repackaging, prove inverse laws definitionally where possible, and prove continuity only from subtype projections and products. This supplies the point-set part of the t01A02 degree-two MV-cover route."},
-      :representation
-      {:source
-       "The U, V, and U-intersection-V subtypes inside the once-punctured torus X",
-       :target
-       "PuncturedCircle times Circle, Circle times PuncturedCircle, and PuncturedCircle squared",
-       :direction
-       "Explicit homeomorphisms from each source cover-piece subtype to its target coordinate-product representation, preserving the underlying Circle coordinates"},
-      :id
-      :routes-2026-09-28-t01a02-punctured-torus-cover-models-topo2-r1,
-      :kind :representation-comparison,
-      :depends-on []}}},
-   :phase :probe,
+      {:theorem
+       "ConstructionTargets.T01A02PuncturedTorus.puncturedTorusDegreeTwoMVCover",
+       :contract
+       "ConstructionTargets.T01A02PuncturedTorus.PuncturedTorusDegreeTwoMVCoverContract",
+       :requirements
+       "Use the exact U and V coordinate-puncture cover, the compiled subtype homeomorphisms, pointed-contraction homotopy equivalences to Circle and Unit, and integral ModuleCat homology transport. Preserve the frozen topology and degree-specific H2 and H1 conclusions."}},
+     :residual
+     "The geometric degree-two Mayer-Vietoris input is complete. The remaining t01A02 H2 route work is to apply production Mayer-Vietoris exactness to prove puncturedTorus_H2_isZero, then prove H2map_eq_zero_of_factor for a nonsurjective torus self-map."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/T01A02PuncturedTorusDegreeTwoMVCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free inhabitant of PuncturedTorusDegreeTwoMVCover from /tmp/t01A02_punctured_torus_mv_cover.lean. Use U={z in X | z.1 is not -1} and V={z in X | z.2 is not -1}; prove openness and U union V=univ. Identify U and V up to homotopy with Circle using the banked punctured-circle contraction, proving integral H2 zero; identify U intersection V with the banked torusPuncturedNeighborhood and its pointed contraction, proving integral H1 zero. This supplies exactly the geometric input to t01A02 route step 2."},
+   {:theorem
+    "ConstructionTargets.T01A02PuncturedTorus.puncturedTorusDegreeTwoMVCover",
+    :contract
+    "ConstructionTargets.T01A02PuncturedTorus.PuncturedTorusDegreeTwoMVCoverContract",
+    :requirements
+    "Use the exact U and V coordinate-puncture cover, the compiled subtype homeomorphisms, pointed-contraction homotopy equivalences to Circle and Unit, and integral ModuleCat homology transport. Preserve the frozen topology and degree-specific H2 and H1 conclusions."},
    :id :routes-2026-09-28-t01a02-punctured-torus-mv-cover-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
