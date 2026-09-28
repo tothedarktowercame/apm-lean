@@ -411,4 +411,71 @@ theorem SphereProjectionLocalInverseFamily.continuousAt_transitionInput
   exact (F.quotientChart y).continuousAt_symm hu |>.comp
     (ModelWithCorners.continuous_symm (𝓡 2)).continuousAt
 
+/-- Exact local normal form that turns the inverse-branch dichotomy into the
+model-coordinate transition used by `ContDiffOn`. -/
+def SphereProjectionQuotientTransitionLocalNormalForm : Prop :=
+  ∀ (F : SphereProjectionLocalInverseFamily) (y z : Space ℝ 2)
+    (u : E 2),
+    u ∈ ((𝓡 2).symm ⁻¹' ((F.quotientChart y).symm ≫ₕ
+      F.quotientChart z).source ∩ Set.range (𝓡 2)) →
+    (fun v => (𝓡 2)
+      (F.quotientChart z ((F.quotientChart y).symm ((𝓡 2).symm v)))) =ᶠ[𝓝 u]
+        (fun v => (𝓡 2)
+          (chartAt (E 2) (F.lift z)
+            ((chartAt (E 2) (F.lift y)).symm ((𝓡 2).symm v)))) ∨
+    (fun v => (𝓡 2)
+      (F.quotientChart z ((F.quotientChart y).symm ((𝓡 2).symm v)))) =ᶠ[𝓝 u]
+        (fun v => (𝓡 2)
+          (chartAt (E 2) (F.lift z)
+            (sphereAntipodalN 2
+              ((chartAt (E 2) (F.lift y)).symm ((𝓡 2).symm v)))))
+
+theorem sphereAntipodalN_contMDiff_for_transition :
+    ContMDiff (𝓡 2) (𝓡 2) ∞ (sphereAntipodalN 2) := by
+  simpa [sphereAntipodalN] using
+    (contMDiff_neg_sphere (E := E 3) (m := (∞ : WithTop ℕ∞)))
+
+theorem sphereProjectionQuotientTransitionLocalNormalForm :
+    SphereProjectionQuotientTransitionLocalNormalForm := by
+  intro F y z u hu
+  have hd := F.transitionInput_domain y z u hu
+  have hqy := (F.quotientChart y).map_target hd.1
+  have hcy := F.continuousAt_transitionInput y u hd.1
+  have hevY : ∀ᶠ v in 𝓝 u,
+      (𝓡 2).symm v ∈ (F.quotientChart y).target :=
+    (ModelWithCorners.continuous_symm (𝓡 2)).continuousAt.preimage_mem_nhds
+      ((F.quotientChart y).open_target.mem_nhds hd.1)
+  have hevZ : ∀ᶠ v in 𝓝 u,
+      F.transitionInput y v ∈ (F.quotientChart z).source :=
+    hcy.preimage_mem_nhds ((F.quotientChart z).open_source.mem_nhds hd.2)
+  rcases F.inverseBranch_eventuallyEq_or_antipodal y z (F.transitionInput y u)
+      hqy.1 hd.2.1 with hsame | hanti
+  · left
+    have hpull := hsame.comp_tendsto hcy.tendsto
+    filter_upwards [hpull, hevY, hevZ] with v hv hyv hzv
+    change (𝓡 2) (F.quotientChart z (F.transitionInput y v)) = _
+    rw [F.quotientChart_apply z (F.transitionInput y v) hzv]
+    congr 2
+    calc
+      F.inverseBranch z (F.transitionInput y v) =
+          F.inverseBranch y (F.transitionInput y v) := hv
+      _ = (chartAt (E 2) (F.lift y)).symm ((𝓡 2).symm v) :=
+        F.inverseBranch_quotientChart_symm y ((𝓡 2).symm v) hyv
+  · right
+    have hpull := hanti.comp_tendsto hcy.tendsto
+    filter_upwards [hpull, hevY, hevZ] with v hv hyv hzv
+    change (𝓡 2) (F.quotientChart z (F.transitionInput y v)) = _
+    rw [F.quotientChart_apply z (F.transitionInput y v) hzv]
+    congr 2
+    calc
+      F.inverseBranch z (F.transitionInput y v) =
+          sphereAntipodalN 2 (F.inverseBranch y (F.transitionInput y v)) := by
+        simpa only [Function.comp_apply] using hv
+      _ = sphereAntipodalN 2
+          ((chartAt (E 2) (F.lift y)).symm ((𝓡 2).symm v)) := by
+        congr 1
+        change F.inverseBranch y
+            ((F.quotientChart y).symm ((𝓡 2).symm v)) = _
+        exact F.inverseBranch_quotientChart_symm y ((𝓡 2).symm v) hyv
+
 end ConstructionTargets.RealProjectiveSmoothTarget
