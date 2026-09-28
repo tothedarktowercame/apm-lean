@@ -50343,49 +50343,51 @@
    :other-consumers [:t96A07]}
   {:consumer :t01A02,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t01A02_punctured_torus_cover_models.lean",
-      :sha256
-      "a4c5ff560d341456ed61d82e4708ee10d591e00fd67f3bf7c07950ff89703ab7"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/t01A02_punctured_torus_cover_models.lean",
-       :exit 0}
-      {:cmd
-       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t01A02_punctured_torus_cover_models.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "test -L .lake/packages && lake env lean /tmp/t01A02_punctured_torus_cover_models.lean",
-       :exit 1,
-       :finding
-       "The symlink precheck is specific to APM frame worktrees; this invocation runs in the canonical apm-lean authority, whose package directory is correctly a real directory."}
-      {:cmd
-       "lake env lean /tmp/t01A02_punctured_torus_cover_models.lean",
-       :exit 1,
-       :finding
-       "Initial implementation exposed three elaboration issues: Circle minus one needed its unit-sphere witness, the intersection subtype needed an explicit carrier, and subtype continuity constructors needed proof arguments. The corrected fixture defines circleMinusOne explicitly, spells the intersection subtype, and uses fun_prop over subtype projections and products."}],
-     :implementation
-     {:scope
-      ["ConstructionTargets/T01A02PuncturedTorusCoverModels.lean"],
-      :acceptance
-      {:theorem
-       "ConstructionTargets.T01A02PuncturedTorus.puncturedTorusCoverModels",
-       :contract
-       "ConstructionTargets.T01A02PuncturedTorus.PuncturedTorusCoverModelsContract",
-       :requirements
-       "Preserve the exact U, V, and intersection subtype-to-product homeomorphisms from the compiled fixture; inverse laws remain definitional and continuity uses only subtype projections and products."}},
-     :residual
-     "Point-set cover models are complete: U is homeomorphic to PuncturedCircle times Circle, V to Circle times PuncturedCircle, and their intersection to PuncturedCircle squared. The remaining route step is to transport the banked pointed contractions through these homeomorphisms and supply the degree-two Mayer-Vietoris homology vanishings."}},
+   {:placeholder-delta 0,
+    :residual
+    "Transport the banked pointed contractions through UModel, VModel, and intersectionModel, then use the degree-two Mayer-Vietoris exact segment to prove puncturedTorus_H2_isZero for t01A02.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["lake build replayed one pre-existing unnecessarySimpa linter warning from ConstructionTargets/CircleUniversalCover.lean:137; the new module and its direct compile emitted no warnings."],
+    :statement-hashes {:matched 130, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/t01A02_punctured_torus_cover_models.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T01A02PuncturedTorusCoverModels.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 no-sorry-pattern ConstructionTargets/T01A02PuncturedTorusCoverModels.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "lake build ConstructionTargets.T01A02PuncturedTorusCoverModels",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t01A02_punctured_torus_cover_models_axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :representation
+    {:source
+     "The U, V, and U-intersection-V subtypes inside the once-punctured torus X",
+     :target
+     "PuncturedCircle times Circle, Circle times PuncturedCircle, and PuncturedCircle squared",
+     :direction
+     "Explicit homeomorphisms from each source cover-piece subtype to its target coordinate-product representation, preserving the underlying Circle coordinates"},
+    :commit "251d655490ffa0c6b9740410479a455addfc5251",
+    :changed-paths
+    ["ConstructionTargets/T01A02PuncturedTorusCoverModels.lean"],
+    :fixture
+    {:path "/tmp/t01A02_punctured_torus_cover_models.lean",
+     :sha256
+     "a4c5ff560d341456ed61d82e4708ee10d591e00fd67f3bf7c07950ff89703ab7"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/T01A02PuncturedTorusCoverModels.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
