@@ -50367,10 +50367,61 @@
    :kind :reusable-theorem,
    :depends-on [:routes-2026-09-28-checkpoint-topo2]}
   {:bounded-exception
-   "single-consumer coherent quantitative Nielsen-Schreier packet",
+   "single-consumer exact type-valued strengthening of the existing Nielsen-Schreier proof",
    :consumer :t00J08,
    :phase :probe,
    :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free fixture inhabiting EndBasisOfArborescenceContract T from the existing Mathlib endIsFree proof: return a FreeGroupBasis indexed by the complement of wideSubquiverSymmetrify T, using FreeGroupBasis.ofUniqueLift with the same loopOfHom universal-property proof. Preserve the explicit EndBasisIndex; do not pass through IsFreeGroup, which erases it. The exact signature is compiled in /tmp/t00J08_end_basis_contract.lean and supplies route step 1."},
+   :id :routes-2026-09-28-t00j08-end-basis-arborescence-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on []}
+  {:bounded-exception
+   "single-consumer coherent quantitative Nielsen-Schreier packet",
+   :consumer :t00J08,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t00J08_end_basis_contract.lean",
+      :sha256
+      "e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c"},
+     :commands
+     [{:cmd
+       "test -L .lake/packages && lake env lean /tmp/t00J08_end_basis_contract.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 sorry /tmp/t00J08_end_basis_contract.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "EDN parser invocation with an unescaped apostrophe inside the shell environment assignment",
+       :exit 2,
+       :finding
+       "Shell parsing failed before Clojure ran; removed the punctuation and reran the exact EDN map parse."}],
+     :residual
+     "Mathlib endIsFree proves only the Prop IsFreeGroup (End root), which existentially hides its generator type. The tree-edge and action-groupoid cardinality steps require a FreeGroupBasis explicitly indexed by the complement of wideSubquiverSymmetrify T. The compiled contract fixes that exact missing type-valued result.",
+     :prerequisite
+     {:bounded-exception
+      "single-consumer exact type-valued strengthening of the existing Nielsen-Schreier proof",
+      :consumer :t00J08,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free fixture inhabiting EndBasisOfArborescenceContract T from the existing Mathlib endIsFree proof: return a FreeGroupBasis indexed by the complement of wideSubquiverSymmetrify T, using FreeGroupBasis.ofUniqueLift with the same loopOfHom universal-property proof. Preserve the explicit EndBasisIndex; do not pass through IsFreeGroup, which erases it. The exact signature is compiled in /tmp/t00J08_end_basis_contract.lean and supplies route step 1."},
+      :id :routes-2026-09-28-t00j08-end-basis-arborescence-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on []}}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50379,7 +50430,9 @@
    :id
    :routes-2026-09-28-t00j08-quantitative-nielsen-schreier-topo2-r1,
    :kind :reusable-theorem,
-   :depends-on [:routes-2026-09-28-checkpoint-topo2]}
+   :depends-on
+   [:routes-2026-09-28-checkpoint-topo2
+    :routes-2026-09-28-t00j08-end-basis-arborescence-topo2-r1]}
   {:consumer :portfolio,
    :checkpoint
    {:after-problems 5,
