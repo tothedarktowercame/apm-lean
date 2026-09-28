@@ -14,7 +14,7 @@ import ConstructionTargets.MayerVietorisExactnessIsZero
 
 ## Statement repairs
 
-None.
+The summands are now closed second-countable Hausdorff smooth 3-manifolds, and the disk maps are topological embeddings.
 
 ## Encoding questions
 
@@ -29,8 +29,11 @@ homology of the quotient space, not scalar stand-ins.
 -/
 
 open CategoryTheory CategoryTheory.Limits Set
+open scoped ContDiff Manifold
 
 noncomputable section
+
+set_option maxHeartbeats 800000
 
 abbrev apm_t00A01_Sphere2 :=
   Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1
@@ -173,6 +176,8 @@ def apm_t00A01_isHomology3Sphere (X : Type) [TopologicalSpace X] : Prop :=
   Nonempty (apm_t00A01_H 0 X ≅ ModuleCat.of ℤ ℤ) ∧
   Nonempty (apm_t00A01_H 3 X ≅ ModuleCat.of ℤ ℤ) ∧
   (∀ k : ℕ, k ≠ 0 → k ≠ 3 → Limits.IsZero (apm_t00A01_H k X))
+
+abbrev apm_t00A01_Model3 := 𝓘(ℝ, EuclideanSpace ℝ (Fin 3))
 
 abbrev apm_t00A01_Disk3 :=
   Metric.closedBall (0 : EuclideanSpace ℝ (Fin 3)) 1
@@ -540,26 +545,35 @@ accepted as a hypothesis. -/
 theorem apm_t00a01
     (M₁ M₂ : Type)
     [TopologicalSpace M₁] [TopologicalSpace M₂]
+    [T2Space M₁] [T2Space M₂]
+    [SecondCountableTopology M₁] [SecondCountableTopology M₂]
+    [CompactSpace M₁] [CompactSpace M₂]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M₁]
+    [ChartedSpace (EuclideanSpace ℝ (Fin 3)) M₂]
+    [IsManifold apm_t00A01_Model3 ∞ M₁]
+    [IsManifold apm_t00A01_Model3 ∞ M₂]
+    [BoundarylessManifold apm_t00A01_Model3 M₁]
+    [BoundarylessManifold apm_t00A01_Model3 M₂]
     (m₁ : M₁) (m₂ : M₂)
     (φ₁ : apm_t00A01_Disk3 → M₁) (φ₂ : apm_t00A01_Disk3 → M₂)
-    (hφ₁ : Function.Injective φ₁) (hφ₂ : Function.Injective φ₂)
+    (hφ₁ : Topology.IsEmbedding φ₁) (hφ₂ : Topology.IsEmbedding φ₂)
     (hM₁ : apm_t00A01_isHomology3Sphere M₁)
     (hM₂ : apm_t00A01_isHomology3Sphere M₂) :
     Nonempty
       (@FundamentalGroup
-          (apm_t00A01_connectedSum (apm_t00A01_boundaryMap φ₁ hφ₁)
-            (apm_t00A01_boundaryMap φ₂ hφ₂))
-          (apm_t00A01_connectedSumTopology (apm_t00A01_boundaryMap φ₁ hφ₁)
-            (apm_t00A01_boundaryMap φ₂ hφ₂))
-          (apm_t00A01_basepoint (apm_t00A01_boundaryMap φ₁ hφ₁)
-            (apm_t00A01_boundaryMap φ₂ hφ₂)
-            (apm_t00A01_boundaryMap φ₁ hφ₁ (Classical.choice inferInstance))) ≃*
+          (apm_t00A01_connectedSum (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
+            (apm_t00A01_boundaryMap φ₂ hφ₂.injective))
+          (apm_t00A01_connectedSumTopology (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
+            (apm_t00A01_boundaryMap φ₂ hφ₂.injective))
+          (apm_t00A01_basepoint (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
+            (apm_t00A01_boundaryMap φ₂ hφ₂.injective)
+            (apm_t00A01_boundaryMap φ₁ hφ₁.injective (Classical.choice inferInstance))) ≃*
         Monoid.Coprod (FundamentalGroup M₁ m₁) (FundamentalGroup M₂ m₂)) ∧
     @apm_t00A01_isHomology3Sphere
-      (apm_t00A01_connectedSum (apm_t00A01_boundaryMap φ₁ hφ₁)
-        (apm_t00A01_boundaryMap φ₂ hφ₂))
-      (apm_t00A01_connectedSumTopology (apm_t00A01_boundaryMap φ₁ hφ₁)
-        (apm_t00A01_boundaryMap φ₂ hφ₂)) := by
+      (apm_t00A01_connectedSum (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
+        (apm_t00A01_boundaryMap φ₂ hφ₂.injective))
+      (apm_t00A01_connectedSumTopology (apm_t00A01_boundaryMap φ₁ hφ₁.injective)
+        (apm_t00A01_boundaryMap φ₂ hφ₂.injective)) := by
   sorry
 
 #print axioms apm_t00A01_bridge_fundamentalGroup_coprod
