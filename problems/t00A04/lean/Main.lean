@@ -1,5 +1,7 @@
 import Mathlib
 
+open scoped ContDiff Manifold
+
 /-!
 # APM t00A04 — a retract inclusion is not null-homotopic
 
@@ -35,21 +37,22 @@ theorem apm_t00a04_previous_encoding :
     change r (H (x, 1)) = r y
     rw [hH1 x]
 
-/-- Faithful corrected statement of the prelim: a positive-dimensional compact
-connected manifold cannot occur as a retract inclusion that is null-homotopic.
-The manifold hypotheses replace the formerly assumed conclusion. -/
+/-- Faithful minimally corrected statement of the prelim: a nonempty,
+positive-dimensional compact smooth manifold cannot occur as a retract
+inclusion that is null-homotopic. -/
 theorem apm_t00a04 :
     ∀ (E F : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
       [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F]
       [FiniteDimensional ℝ F] (I : ModelWithCorners ℝ E E)
       (J : ModelWithCorners ℝ F F)
       (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y]
-      [T2Space X] [CompactSpace X] [PathConnectedSpace X]
-      [ChartedSpace E X] [IsManifold I (⊤ : WithTop ℕ∞) X]
-      [ChartedSpace F Y] [IsManifold J (⊤ : WithTop ℕ∞) Y],
+      [T2Space X] [CompactSpace X] [Nonempty X]
+      [T2Space Y] [CompactSpace Y]
+      [ChartedSpace E X] [IsManifold I ∞ X]
+      [ChartedSpace F Y] [IsManifold J ∞ Y],
       0 < Module.finrank ℝ E →
       ∀ (ι : C(X, Y)) (r : C(Y, X)),
-      ContMDiff I J (⊤ : WithTop ℕ∞) ι → ContMDiff J I (⊤ : WithTop ℕ∞) r →
+      ContMDiff I J ∞ ι → ContMDiff J I ∞ r →
       (∀ x, r (ι x) = x) → ¬ apm_t00a04_NullHomotopic ι := by
   sorry
 
