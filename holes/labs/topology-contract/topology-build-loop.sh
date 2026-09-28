@@ -193,6 +193,14 @@ wait_job() {
           log "$label job=$job refused by transient model capacity"
           return 75
         fi
+        # The clock-decision store reports `store-busy` only when contention
+        # prevents the turn from starting. Like model capacity above, this is
+        # a transient pre-execution refusal: the immutable failed job remains
+        # evidence, while dispatch_and_wait must issue a fresh job and nonce.
+        if [ "$fail_code" = "store-busy" ]; then
+          log "$label job=$job refused by transient clock-store contention"
+          return 75
+        fi
         die "$label terminal state=$state job=$job${fail_code:+ code=$fail_code}${term_reason:+ :: $term_reason}" ;;
       queued|delivering|running|accepted|"") ;;
       *) die "$label unknown state=$state job=$job" ;;
@@ -227,7 +235,7 @@ dispatch_and_wait() {
     capacity_waits=$((capacity_waits+1))
     capacity_delay=$((60 * (1 << (capacity_waits < 5 ? capacity_waits - 1 : 4))))
     [ "$capacity_delay" -gt "$capacity_wait_max" ] && capacity_delay="$capacity_wait_max"
-    log "$label waiting ${capacity_delay}s after model-capacity refusal before fresh dispatch"
+    log "$label waiting ${capacity_delay}s after transient pre-execution refusal before fresh dispatch"
     sleep "$capacity_delay"
   done
 }
