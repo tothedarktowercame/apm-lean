@@ -654,4 +654,24 @@ theorem quotientChartTransitionCompatibility_gives_manifold
   obtain ⟨z, rfl⟩ := he'
   exact h F y z
 
+/-- Exact smooth-compatibility obligation for the already assembled
+dimension-two quotient charts. -/
+def SphereProjectionQuotientAtlasCompatibility : Prop :=
+  ∀ F : SphereProjectionLocalInverseFamily,
+    letI := F.quotientChartedSpace
+    IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2)
+
+theorem sphereProjectionQuotientAtlasCompatibility :
+    SphereProjectionQuotientAtlasCompatibility := by
+  intro F
+  exact quotientChartTransitionCompatibility_gives_manifold
+    sphereProjectionQuotientChartTransitionCompatibility F
+
+theorem quotientAtlasCompatibility_gives_manifold
+    (h : SphereProjectionQuotientAtlasCompatibility)
+    (F : SphereProjectionLocalInverseFamily) :
+    letI := F.quotientChartedSpace
+    IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
+  h F
+
 end ConstructionTargets.RealProjectiveSmoothTarget
