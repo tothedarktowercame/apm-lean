@@ -78553,84 +78553,51 @@
    :other-consumers []}
   {:consumer :t01A01,
    :evidence
-   {:probe
-    {:residual
-     "Exactly one prerequisite remains: apm_t01A01_bridge_1 (route steps 1-4). The placeholder-free assembly fixture proves route step 5 with only standard axioms and closes the exact registered apm_t01a01 statement once that bridge is banked.",
-     :outcome :revise,
-     :warnings
-     [{:kind :inherited-placeholder,
-       :message
-       "The temporary consumer olean reports the two existing source placeholders. The assembly fixture contains none; its sorryAx dependency is exactly the invocation of apm_t01A01_bridge_1."}],
-     :prerequisite
-     {:consumer :t01A01,
-      :phase :implementation,
-      :state :open,
-      :scope ["problems/t01A01/lean/Main.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/t01A01/bridge_1",
-      :acceptance
-      {:placeholder-after 1,
-       :fixture-sha256
-       "2322748e2464f61e6be97c30a2d13730d751776a2341b7184bc8fb5bb09fd0da",
-       :placeholder "the sorry in apm_t01A01_bridge_1",
-       :axioms :standard-only,
-       :placeholder-before 2,
-       :commands
-       ["lake env lean problems/t01A01/lean/Main.lean"
-        "LEAN_PATH=/tmp/t01probe lake env lean /tmp/t01a01-assembly-probe.lean"
-        "python3 scripts/statement-registry.py check"],
-       :fixture "/tmp/t01a01-assembly-probe.lean",
-       :route-step "t01A01 route steps 1-4",
-       :implementation
-       "Replace only the sorry in apm_t01A01_bridge_1. At the exact frozen RP2 generality, prove Projectivization.mk' is an open quotient map and derive the restricted/product descent lemmas; construct the deformation retraction of RP2 minus q onto the projective line in the orthogonal complement of a representative of q; identify that projective line with Circle; compose with the sphere projection, lift to Real using the banked circle covering and sphere simple-connectedness, prove the antipodal lift difference is the constant zero, descend the lift through the projective quotient, and use ComponentRealLiftAssembly to obtain the required complement-valued nullhomotopy. Reuse the named ConstructionTargets modules and do not change any registered statement or definition."},
-      :id :routes-2026-09-28-t01a01-punctured-rp2-bridge-1,
-      :kind :final-adapter,
-      :depends-on [],
-      :current-residual
-      "Prove apm_t01A01_bridge_1 via projective quotient descent, punctured-RP2 retraction, and the descended real lift. The compiled assembly fixture supplies the remaining fundamental-group argument and exact main theorem.",
-      :other-consumers []},
-     :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
-       :exit 0}
-      {:cmd
-       "lake env lean -o /tmp/t01probe/t01A01/lean/Main.olean problems/t01A01/lean/Main.lean",
-       :exit 0}
-      {:cmd
-       "LEAN_PATH=/tmp/t01probe lake env lean /tmp/t01a01-assembly-probe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t01a01-assembly-probe.lean", :exit 0}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/t01a01-assembly-probe.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "LEAN_PATH=/tmp/t01probe lake env lean /tmp/t01a01-assembly-probe.lean",
-       :exit 1,
-       :stage :homotopy-witness-and-fixture-syntax,
-       :correction
-       "Unpacked ContinuousMap.Homotopic to its Homotopy witness and used the registered proposition's Unicode logical syntax."}
-      {:cmd
-       "LEAN_PATH=/tmp/t01probe lake env lean /tmp/t01a01-assembly-probe.lean",
-       :exit 1,
-       :stage :constant-loop-image,
-       :correction
-       "Proved directly by quotient induction that mapping any loop through a constant map is the fundamental-groupoid identity."}
-      {:cmd
-       "LEAN_PATH=/tmp/t01probe lake env lean /tmp/t01a01-assembly-probe.lean",
-       :exit 1,
-       :stage :categorical-endpoint-normalization,
-       :correction
-       "Restated the identity morphisms using the mapped source and target objects, allowing category identity laws and cancellation to apply."}],
-     :fixture
-     {:path "/tmp/t01a01-assembly-probe.lean",
-      :sha256
-      "2322748e2464f61e6be97c30a2d13730d751776a2341b7184bc8fb5bb09fd0da"},
-     :seat "topo-4"}},
+   {:residual
+    "Compiled exact boundary: route step 5 and the final registered theorem assembly are complete, and the bank contains the circle covering, sphere simple-connectedness, and lifting machinery. The unavailable chain is upstream and representation-specific: prove Projectivization.mk' is an open quotient map for the frozen coinduced RP2 topology, obtain restricted and interval-product quotient descent, construct the punctured-RP2 deformation retraction to the orthogonal projective line, identify that line with Circle, and descend the antipodally invariant real lift. No theorem supplying those steps exists in ConstructionTargets or Mathlib, so apm_t01A01_bridge_1 and hence apm_t01a01 cannot close without that projective-geometry chain.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The consumer olean reports the two existing placeholders; the assembly fixture contains none and depends on sorryAx exactly through apm_t01A01_bridge_1."}],
+    :disposition :stop,
+    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :author "topo-4",
+    :reason :missing-punctured-projective-geometry-chain,
+    :commands
+    [{:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+      :exit 0}
+     {:cmd "mkdir -p /tmp/t01reprobe/t01A01/lean", :exit 0}
+     {:cmd
+      "lake env lean -o /tmp/t01reprobe/t01A01/lean/Main.olean problems/t01A01/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "LEAN_PATH=/tmp/t01reprobe lake env lean /tmp/t01a01-assembly-probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t01a01-assembly-probe.lean", :exit 0}
+     {:cmd
+      "rg -n 'punctured_rp2_retract|projQuot_isOpenQuotientMap|rp2_to_line_nullhomotopic' ConstructionTargets .lake/packages/mathlib/Mathlib",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'existsUnique_continuousMap_lifts|circleCover_isCoveringMap|simplyConnectedSpace_sphere_of_pole' ConstructionTargets/CircleUniversalCover.lean ConstructionTargets/SimplyConnectedOpenCover.lean .lake/packages/mathlib/Mathlib/Topology/Homotopy/Lifting.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean -o /tmp/t01reprobe/t01A01/lean/Main.olean problems/t01A01/lean/Main.lean; LEAN_PATH=/tmp/t01reprobe lake env lean /tmp/t01a01-assembly-probe.lean",
+      :exit 1,
+      :stage :missing-temporary-output-directory,
+      :correction
+      "Created the exact temporary module directory, then reran both compiler commands successfully and recorded them separately as acceptance commands."}],
+    :fixture
+    {:path "/tmp/t01a01-assembly-probe.lean",
+     :sha256
+     "2322748e2464f61e6be97c30a2d13730d751776a2341b7184bc8fb5bb09fd0da"},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t01A01",
    :acceptance
