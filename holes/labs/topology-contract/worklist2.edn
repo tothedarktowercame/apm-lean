@@ -50853,12 +50853,68 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile a placeholder-free inhabitant of SphereProjectionQuotientTransitionLocalNormalForm from /tmp/rp_sphere_quotient_transition_normal_form.lean. For every inverse family, quotient-chart pair y z, and model coordinate u in the exact transition domain, prove the full quotient coordinate transition is eventually equal near u either to the standard sphere chart transition or to that transition with sphereAntipodalN 2 inserted. Derive it by pulling inverseBranch_eventuallyEq_or_antipodal through the first chart and simplifying quotientChart inverse laws. Retain the compiled sphereAntipodalN_contMDiff_for_transition theorem. This is the exact local normal form needed by the pairwise ContDiffOn row for t95A04 and t96A07."},
+   :id
+   :routes-2026-09-28-rp-sphere-quotient-transition-normal-form-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
+    :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_quotient_transition_normal_form.lean",
+      :sha256
+      "00f247e47b1171755b7cc26392aae17e3d0ca4b402f4ff7105d0ce7f33895782"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_transition_normal_form.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form.lean",
+       :exit 1,
+       :finding
+       "The first draft omitted opening Topology, leaving neighborhood notation unresolved; adding the namespace opening corrected the exact contract."}],
+     :residual
+     "The pairwise ContDiffOn contract is not yet inhabited. Its remaining missing fact is the compiled local coordinate normal form: at every point of the precise transition domain, the quotient coordinate transition is eventually the ordinary sphere-chart transition or that transition with sphereAntipodalN inserted. The same fixture confirms the antipodal map is smooth in the required model. Once this normal form is proved from the banked inverseBranch_eventuallyEq_or_antipodal theorem and the quotientChart definitions, ContDiffOn follows locally from the standard sphere manifold compatibility.",
+     :prerequisite
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free inhabitant of SphereProjectionQuotientTransitionLocalNormalForm from /tmp/rp_sphere_quotient_transition_normal_form.lean. For every inverse family, quotient-chart pair y z, and model coordinate u in the exact transition domain, prove the full quotient coordinate transition is eventually equal near u either to the standard sphere chart transition or to that transition with sphereAntipodalN 2 inserted. Derive it by pulling inverseBranch_eventuallyEq_or_antipodal through the first chart and simplifying quotientChart inverse laws. Retain the compiled sphereAntipodalN_contMDiff_for_transition theorem. This is the exact local normal form needed by the pairwise ContDiffOn row for t95A04 and t96A07."},
+      :id
+      :routes-2026-09-28-rp-sphere-quotient-transition-normal-form-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
+       :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
+      :other-consumers [:t96A07]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free inhabitant of SphereProjectionQuotientChartTransitionCompatibility from /tmp/rp_sphere_quotient_chart_transition.lean. For every banked inverse family and chart indices y z, prove the exact ContDiffOn formula for (real model 2) composed with quotientChart y symm then quotientChart z then the inverse model map, on the precise transition source. Use inverseBranch_eventuallyEq_or_antipodal plus the standard sphere IsManifold compatibility and contMDiff_neg_sphere. The fixture must also compile quotientChartTransitionCompatibility_gives_manifold, reducing this pairwise theorem to the required IsManifold instance for t95A04 and t96A07."},
    :id :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
-    :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
+    :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1
+    :routes-2026-09-28-rp-sphere-quotient-transition-normal-form-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
