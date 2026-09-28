@@ -17,4 +17,10 @@ theorem apm_t96j01
       Continuous g ∧
       (∀ x ∈ A, g (f x) = ⟨0, by norm_num⟩) ∧
       (∀ x ∈ B, g (f x) = ⟨1, by norm_num⟩) := by
-  sorry
+  haveI : CompactSpace Y := ⟨by simpa [hf_surj.range_eq] using isCompact_range hf⟩
+  have hA' : IsClosed (f '' A) := (hA.isCompact.image hf).isClosed
+  have hB' : IsClosed (f '' B) := (hB.isCompact.image hf).isClosed
+  obtain ⟨u, hu0, hu1, hu⟩ := exists_continuous_zero_one_of_isClosed hA' hB' hdisj
+  refine ⟨fun y => ⟨u y, hu y⟩, u.continuous.subtype_mk _, ?_, ?_⟩
+  · intro x hx; ext; exact hu0 (Set.mem_image_of_mem f hx)
+  · intro x hx; ext; exact hu1 (Set.mem_image_of_mem f hx)
