@@ -76615,7 +76615,7 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:strategy
-    "Fresh start from TOPOLOGY-ROUTES.md (not TOPOLOGY-DEPENDENCY-DAG.md). This loop owns: t93J06 t94A09 t02A05 t91J06 t92J08 t94A07 t94A10 t95J02 t97A07 t99J04 t99J06 t01A02 t02A03 t91J03 t93A06 t94A08 t95A04 t96A07 t00J02 t01A08 t96J06 t97A06 t98A06 t98J01. Read the per-problem routes in holes/labs/topology-routes/routes-{1,2,3}.md. Elect 1-5 rows in the order the routes file gives (DIRECT, ADAPTER, shared FOUNDATION, bounded HEAVY pieces), each naming the problem, the sorry and the route step it supplies. Skip problems marked held. Never change a registered statement (problems/STATEMENTS.json)."},
+    "Fresh start from TOPOLOGY-ROUTES.md (not TOPOLOGY-DEPENDENCY-DAG.md). This loop owns the 12 DIRECT and ADAPTER problems: close them one at a time, DIRECT first. Elect the closing adapter or the next route step of one problem per row; prefer finishing a problem over starting another. Problems: t01A01 t02A05 t91J06 t92J08 t93J06 t94A07 t94A09 t94A10 t95J02 t97A07 t99J04 t99J06. Read the per-problem routes in holes/labs/topology-routes/routes-{1,2,3}.md. Each row names the problem, the sorry and the route step it supplies. Never change a registered statement (problems/STATEMENTS.json)."},
    :id :routes-2026-09-28-checkpoint-topo1,
    :kind :strategy-checkpoint,
    :depends-on [],

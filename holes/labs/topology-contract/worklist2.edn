@@ -49850,7 +49850,7 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:strategy
-    "Fresh start from TOPOLOGY-ROUTES.md (not TOPOLOGY-DEPENDENCY-DAG.md). This loop owns: t01A01 t00J01 t00J07 t00J08 t01A04 t02A02 t96J02 t97A04 t98A03 t00A02 t00A03 t01A03 t01J01 t02A04 t03J02 t03J03 t91A02 t91J05 t92J05 t92J06 t93J03 t94J04 t94J09 t95J03 t95J06 t96A01 t96A02 t96A06 t97A01 t97A03 t97A05 t97J02 t98A02 t98J02 t99J01 t99J05 tunk01. Read the per-problem routes in holes/labs/topology-routes/routes-{1,2,3}.md. Elect 1-5 rows in the order the routes file gives (DIRECT, ADAPTER, shared FOUNDATION, bounded HEAVY pieces), each naming the problem, the sorry and the route step it supplies. Skip problems marked held. Never change a registered statement (problems/STATEMENTS.json)."},
+    "Fresh start from TOPOLOGY-ROUTES.md (not TOPOLOGY-DEPENDENCY-DAG.md). This loop owns the 15 FOUNDATION problems: elect infrastructure steps shared by two or more of these problems first (see the shared tags in TOPOLOGY-ROUTES.md), then each problem's remaining steps. Build each step only at the generality its named problems use. Problems: t00J01 t00J07 t00J08 t01A02 t01A04 t02A02 t02A03 t91J03 t93A06 t94A08 t95A04 t96A07 t96J02 t97A04 t98A03. Read the per-problem routes in holes/labs/topology-routes/routes-{1,2,3}.md. Each row names the problem, the sorry and the route step it supplies. Never change a registered statement (problems/STATEMENTS.json)."},
    :id :routes-2026-09-28-checkpoint-topo2,
    :kind :strategy-checkpoint,
    :depends-on [],
