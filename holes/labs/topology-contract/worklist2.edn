@@ -51208,6 +51208,34 @@
       "git diff --check -- ConstructionTargets/RealProjectiveSmoothTarget.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790638972350-26744-85ad3df6",
+     :commands
+     [{:cmd
+       "sha256sum /tmp/rp_sphere_quotient_transition_normal_form_domains.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+       :exit 0}
+      {:cmd
+       "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form_domains_axioms.lean",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder counts from git show 17d79ea8 for module, t95A04, and t96A07",
+       :exit 0}
+      {:cmd "git diff-tree --no-commit-id --name-only -r 17d79ea8",
+       :exit 0}],
+     :finding
+     "PASS. Reviewer codex-7 read implementation commit 17d79ea8. Its sole changed path is ConstructionTargets/RealProjectiveSmoothTarget.lean, exactly matching scope, and the file has no later commit. The fixture sha256 reproduces exactly as 7636a795b6e07a5ca6413baf08173b5dd8fef29ec700b9689e2c054ca33067d1. Direct elaboration and Lake build pass with canonical packages; sphereProjectionQuotientTransitionLocalNormalFormWithDomains uses only propext, Classical.choice, and Quot.sound. The committed module contains zero placeholders; t95A04 and t96A07 remain at one each, so placeholder delta zero is accurate. All 130 frozen statements and the 332-item ledger pass. Each disjunct retains the same eventual quotient-coordinate equality as the reviewed normal form and pairs it with exactly the domain witness consumed by SphereChartTransitionAlternativesSmooth. In the ordinary branch, the first chart target comes from hd.1 and the second chart source is transported from branch-z membership through the selected equal-branch witness. In the antipodal branch, the first target is unchanged and branch-z source membership is transported through the selected antipodal equality to the antipodal image of branch-y. The rewrites use the reviewed quotient-chart cancellation identity at the exact target hypothesis. No domain witness is invented, weakened, or paired with the opposite branch; no topology change or representation cast occurs."},
     :commit "17d79ea8f658f3dbe0b663a4be27d9ef31a52e84",
     :workspace-notes
     ["Untracked scripts/topology-tail.py was left untouched and excluded from the commit."],
@@ -51220,7 +51248,7 @@
      "7636a795b6e07a5ca6413baf08173b5dd8fef29ec700b9689e2c054ca33067d1"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -51285,7 +51313,7 @@
        :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
