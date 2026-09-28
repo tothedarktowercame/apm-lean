@@ -77533,8 +77533,11 @@
    :other-consumers []}
   {:consumer :t99J06,
    :evidence
-   {:outcome :stop,
-    :seat "topo-4",
+   {:residual
+    "t99J06 remains at one placeholder containing four independently compilable packets: exterior derivative, global cone-image equality, interior embedding/immersion, and explicit rectangle integrals.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-4",
     :reason
     "The single syntactic sorry contains multiple independent unbanked constructions, so neither GO nor a legal one-prerequisite REVISE is available. The exterior-derivative identity is a differential-form calculation independent of the global polar-coordinate proof that parametrization '' parameters = cone. The image equality requires choosing an angle in [0,2*pi] for every cone point and treating the apex, while extDeriv alpha does not contribute such a choice. Separately, the rectangle-integral values require derivative/pullback formulas and trigonometric and polynomial integration; neither the exterior-derivative identity nor the image-surjectivity proof determines those integrals. ConstructionTargets.CoordinateSurfaceForms intentionally contains definitions only and its documentation states that this consumer must establish image and coverage. No compiled t99J06-specific theorem collapses these boundaries. The frozen conjunction appears mathematically true; this is a scheduling STOP for multiple independent prerequisites, not a refutation.",
     :commands
@@ -77553,6 +77556,19 @@
      {:cmd
       "rg -n 'Consumers: t99J06|A consumer must identify the geometric image' ConstructionTargets/CoordinateSurfaceForms.md",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790630737965-26425-cb6f2ae9",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 3c2de7d2"
+      "git show 3c2de7d2:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "Python comment-stripped placeholder and SHA-256 census for t99J06 at 3c2de7d2"
+      "rg t99J06-specific candidate theorems in ConstructionTargets; reproduced exit 1"
+      "rg CoordinateSurfaceForms consumer image and orientation obligations"],
+     :finding
+     "PASS scheduling STOP: reviewer codex-3 is distinct from author topo-4. Commit 3c2de7d2 is ledger-only with exact scope holes/labs/topology-contract/worklist.edn; its snapshot validates at 637 items. The registry reproduces 130/130 statements, registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, and frozen t99J06 hash e28a92431ee4a14b2148afcd01655b1db3730c9492df7ce4820883297dca0ce8; the consumer remains unchanged with one executable placeholder. At least two genuinely independent missing branches are confirmed, so neither GO nor one-prerequisite REVISE is honest: the ambient extDeriv identity does not provide the global polar-angle reverse inclusion for the cone image, and neither provides the explicit oriented rectangle integrals. The derivative formula is correctly recognized as shared support for the immersion and pullback-integral packets rather than as a facade that proves them. CoordinateSurfaceForms documents that its operations are definitions only and leaves image coverage and orientation to t99J06; fresh searches find no compiled consumer theorem. This is a scheduling boundary, not a refutation. No evidence commit or fixture hash applies to a read-only STOP."},
     :finding
     {:registered-statement :preserved,
      :placeholder "the sole sorry in apm_t99j06",
@@ -77582,12 +77598,9 @@
       "CoordinateSurfaceForms.rectangleIntegral"],
      :classification
      "Scheduling STOP for multiple independent prerequisites; not a mathematical refutation."},
-    :residual
-    "t99J06 remains at one placeholder containing four independently compilable packets: exterior derivative, global cone-image equality, interior embedding/immersion, and explicit rectangle integrals.",
-    :author "topo-4",
-    :disposition :stop},
+    :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J06",
    :acceptance
@@ -77619,7 +77632,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
