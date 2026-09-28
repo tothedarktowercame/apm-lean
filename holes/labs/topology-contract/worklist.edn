@@ -78505,6 +78505,21 @@
      {:cmd
       "rg -n 'existsUnique_continuousMap_lifts|circleCover_isCoveringMap|simplyConnectedSpace_sphere_of_pole' ConstructionTargets/CircleUniversalCover.lean ConstructionTargets/SimplyConnectedOpenCover.lean .lake/packages/mathlib/Mathlib/Topology/Homotopy/Lifting.lean",
       :exit 0}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790633550943-26521-37c6b575",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 236871d9"
+      "git show 236871d9:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "test canonical .lake/packages authority; lake env lean problems/t01A01/lean/Main.lean"
+      "LEAN_PATH=/tmp/t01probe lake env lean /tmp/t01a01-assembly-probe.lean"
+      "sha256sum /tmp/t01a01-assembly-probe.lean problems/STATEMENTS.json"
+      "python3 scripts/statement-registry.py check; fingerprint t01A01 --rev 236871d9"
+      "Python comment-stripped placeholder census at 236871d9 and its parent"
+      "rg projectivization open-quotient, punctured-RP2 retraction, and covering-lift boundaries"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-2. Recorded commit 236871d9 is ledger-only and reports no source changes; its 645-item snapshot validates. The stopped attempt is accurate: t01A01 remains unchanged at two comment-stripped placeholders in both the commit and parent, so it claims zero placeholder progress rather than the acceptance target of one. The consumer compiles with exactly those two warnings. The placeholder-free assembly fixture compiles, has frozen SHA-256 2322748e2464f61e6be97c30a2d13730d751776a2341b7184bc8fb5bb09fd0da, and depends on sorryAx only through the unresolved bridge. The registry reproduces 130/130 statements, registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, and faithful t01A01 hash 52bb33c1ff3c3496be40700d3bd2f9d0b7ec4129157da4b69df802902ad37410. Orientation and representation boundaries are correctly reported: the exact Projectivization quotient topology still lacks the open/restricted/product descent and punctured-RP2-to-projective-line retraction/identification, while the banked circle covering and sphere simple-connectedness lemmas only supply downstream lift machinery. Therefore stopping for the missing geometry/API chain, without treating the compiled final assembly as closure, is deterministic and honest."},
     :changed-paths [],
     :fixture
     {:path "/tmp/t01a01-assembly-probe.lean",
@@ -78512,7 +78527,7 @@
      "2322748e2464f61e6be97c30a2d13730d751776a2341b7184bc8fb5bb09fd0da"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t01A01/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A01/bridge_1",
    :acceptance
@@ -78615,7 +78630,7 @@
       "2322748e2464f61e6be97c30a2d13730d751776a2341b7184bc8fb5bb09fd0da"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t01A01",
    :acceptance
