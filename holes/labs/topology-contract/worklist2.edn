@@ -50015,9 +50015,25 @@
        :routes-2026-09-28-t97a04-mv-connecting-naturality-topo2-r1
        :routes-2026-09-28-t00j08-quantitative-nielsen-schreier-topo2-r1]}],
     :author "topo-8",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790628324616-26262-4863ca7e",
+     :commands
+     [{:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "comment-stripped placeholder counts from git show 8736decb for all 15 topo2 Main.lean files",
+       :exit 0}
+      {:cmd "git diff-tree --no-commit-id --name-only -r 8736decb",
+       :exit 0}],
+     :finding
+     "PASS. Reviewer codex-7 read recorded commit 8736decb, whose exact scope is only holes/labs/topology-contract/worklist2.edn; no fixture hash applies to this strategy-only transition. The ledger gate reports 310 valid items, all 130 frozen statement hashes match, and committed comment-stripped counts reproduce as 1,3,3,3,4,1,1,1,1,1,1,1,1,4,1. The repair elects t94A08, a minimum-count one-placeholder consumer, and its acceptance requires one placeholder-free fixture closing the frozen theorem through route steps 1-3. The shared rpSmoothAtlas row names both topo2 consumers and fixes the target interface; bounded single-consumer rows name their exceptions and consumer-level generality. The additive Nielsen-Schreier orientation is explicit and excludes truncated subtraction at n=0. No representation-comparison row or unstated representation direction is introduced."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50030,7 +50046,7 @@
    :other-consumers []}
   {:consumer :t94A08,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50041,7 +50057,7 @@
    :depends-on [:routes-2026-09-28-checkpoint-topo2]}
   {:consumer :t95A04,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50055,7 +50071,7 @@
    "single-consumer bounded integral degree-2 MV packet",
    :consumer :t01A02,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50067,7 +50083,7 @@
   {:bounded-exception "single-consumer bounded naturality theorem",
    :consumer :t97A04,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50080,7 +50096,7 @@
    "single-consumer coherent quantitative Nielsen-Schreier packet",
    :consumer :t00J08,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
