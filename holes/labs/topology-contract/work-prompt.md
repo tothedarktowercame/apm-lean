@@ -1,7 +1,9 @@
 # Topology build-loop row
 
-Work only on the row printed above. Read `TOPOLOGY-DEPENDENCY-DAG.md`,
-`docs/TN-topology-closure-experiments.md`, and the row's dependency receipts.
+Work only on the row printed above. Read `TOPOLOGY-ROUTES.md` (the loops'
+guide since 2026-09-28; it replaces `TOPOLOGY-DEPENDENCY-DAG.md` for elections),
+the per-problem routes in `holes/labs/topology-routes/routes-{1,2,3}.md`, and
+the row's dependency receipts.
 
 For `:phase :probe`, remain read-only and return exactly one of GO, REVISE, or
 STOP under the definitions in `docs/TN-topology-build-loop-design.md`. GO needs
@@ -9,8 +11,10 @@ a complete placeholder-free compiled fixture. REVISE needs exactly one named
 compiled prerequisite. STOP names the exact mathematical, hypothesis, or
 representation boundary.
 
-For `:phase :strategy`, reread the current DAG and the reviewed dependency
-receipts. Measure placeholder changes, typed residual changes, infrastructure
+For `:phase :strategy`, reread `TOPOLOGY-ROUTES.md`, the routes files and the
+reviewed dependency receipts. Elect only from this loop's half of
+`TOPOLOGY-ROUTES.md` and follow its election rules; where the text below says
+"the DAG", read `TOPOLOGY-ROUTES.md` and the routes files. Measure placeholder changes, typed residual changes, infrastructure
 packet counts, and STOP/PASS outcomes. Return `:outcome :replan` with a
 `:replacement-items` vector containing a newly elected portfolio from the
 complete DAG—not merely descendants of the rows just completed. Elect 1-5

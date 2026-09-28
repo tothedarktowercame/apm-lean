@@ -49246,7 +49246,7 @@
     :author "topo-8",
     :disposition :replan},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :superseded,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: adjacent-swap sign reversal and renewed consumer eligibility",
@@ -49255,6 +49255,8 @@
     "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
     :stop-condition
     "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :superseded-note
+   "Superseded 2026-09-28 by claude-18: the loops were re-seeded from TOPOLOGY-ROUTES.md after the statement-registry audit and the route review (/home/joe/topo-watch/dag-audit.md).",
    :id
    :oriented-checkpoint82-adjacent-swap-signs-and-consumer-refill-1,
    :kind :strategy-checkpoint,
@@ -49268,7 +49270,7 @@
    :stop-condition
    "Prove only cancellation of the two singular-chain generators attached to the common deleted affine face of an unequal adjacent swap. Do not define a global face pairing, sum over all paths, construct a cross product, edit consumers or claim closure.",
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "PRODUCT HOMOLOGY: signed singular-generator cancellation for adjacent swaps",
@@ -49291,6 +49293,8 @@
      "Use no sorry, axiom, theorem-as-hypothesis, global pairing, path sum, cross product or consumer-source edit."
      "Run lake env lean, standard-only axiom audits, placeholder and warning scans, both ledger validators and whitespace checks."
      "Confirm exact implementation scope from the compiled fixture."]},
+   :superseded-note
+   "Superseded 2026-09-28 by claude-18: the loops were re-seeded from TOPOLOGY-ROUTES.md after the statement-registry audit and the route review (/home/joe/topo-watch/dag-audit.md).",
    :id
    :oriented-checkpoint82-product-simplex-adjacent-swap-singular-face-cancellation-1,
    :kind :reusable-theorem,
@@ -49313,7 +49317,7 @@
    :stop-condition
    "No unresolved STOP retries, duplicate concurrent work, inferred cancellation or orientation coherence, empty refill or owner-authorization stop.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "PORTFOLIO POLICY: adjacent-swap singular-face cancellation and renewed consumer eligibility",
@@ -49322,6 +49326,8 @@
     "Reread the complete DAG, foundational-program note, standing policy and both ledgers. Recount every named consumer with comments stripped and attribute concurrent changes. Elect exactly one eligible near-closure adapter first when one exists; otherwise document exact unresolved boundaries and elect the best available bounded foundation. Rank the complete DAG by open problem routes and simplicity. Preserve reviewed refutations and unresolved STOPs; exclude active concurrent work. Return one to five fresh work rows and a successor with identical checkpoint keys. Apply NEED-DRIVEN ELECTION from work-prompt.md: report every open problem's route in the finding, elect only missing steps on those routes (shared steps once, at exactly the generality their consumers use, reusing banked results), and elect first any problem whose route is complete, t00J02 included. Carry this sentence into the successor checkpoint.",
     :stop-condition
     "No empty ordinary refill; distinguish infrastructure, frozen branch uptake, frozen closure, corrected closure and proved refutation."},
+   :superseded-note
+   "Superseded 2026-09-28 by claude-18: the loops were re-seeded from TOPOLOGY-ROUTES.md after the statement-registry audit and the route review (/home/joe/topo-watch/dag-audit.md).",
    :id
    :oriented-checkpoint83-singular-face-cancellation-and-consumer-refill-1,
    :kind :strategy-checkpoint,
@@ -49826,4 +49832,27 @@
     :oriented-circle-coherent-fundamental-class-1
     :oriented-manifold-checkpoint-refill-1],
    :current-residual
-   "Consumer uptake must be measured separately from Circle foundations. Higher-dimensional models, global orientation/localization, and the t98A02 embedded-ball quotient comparison remain unelected."}]}
+   "Consumer uptake must be measured separately from Circle foundations. Higher-dimensional models, global orientation/localization, and the t98A02 embedded-ball quotient comparison remain unelected."}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every problem in this loop's half of TOPOLOGY-ROUTES.md is closed, held, or stopped with a compiled refutation or the stop-after-two rule.",
+   :phase :strategy,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Fresh start from TOPOLOGY-ROUTES.md (not TOPOLOGY-DEPENDENCY-DAG.md). This loop owns: t01A01 t00J01 t00J07 t00J08 t01A04 t02A02 t96J02 t97A04 t98A03 t00A02 t00A03 t01A03 t01J01 t02A04 t03J02 t03J03 t91A02 t91J05 t92J05 t92J06 t93J03 t94J04 t94J09 t95J03 t95J06 t96A01 t96A02 t96A06 t97A01 t97A03 t97A05 t97J02 t98A02 t98J02 t99J01 t99J05 tunk01. Read the per-problem routes in holes/labs/topology-routes/routes-{1,2,3}.md. Elect 1-5 rows in the order the routes file gives (DIRECT, ADAPTER, shared FOUNDATION, bounded HEAVY pieces), each naming the problem, the sorry and the route step it supplies. Skip problems marked held. Never change a registered statement (problems/STATEMENTS.json)."},
+   :id :routes-2026-09-28-checkpoint-topo2,
+   :kind :strategy-checkpoint,
+   :depends-on [],
+   :current-residual "No rows elected yet under TOPOLOGY-ROUTES.md.",
+   :other-consumers []}]}

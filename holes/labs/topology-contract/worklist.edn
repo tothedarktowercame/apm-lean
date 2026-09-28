@@ -50310,7 +50310,7 @@
       :implementation-results 1}},
     :seat :codex-12},
    :phase :strategy,
-   :state :needs-owner,
+   :state :superseded,
    :owner-resolution
    {:date "2026-09-09",
     :owner-request "claude-5 invoke-1788982090497-16885-dd3cb200",
@@ -50328,6 +50328,8 @@
    :acceptance
    {:strategy
     "Reread the complete DAG and reviewed receipts; recount executable placeholders at pinned revisions, separate portfolio and concurrent infrastructure and consumer changes, and record typed residuals and STOP/PASS outcomes. Elect exactly one near-closure adapter before foundations ranked by reach and simplicity, with a fresh dependent checkpoint and nonempty portfolio."},
+   :superseded-note
+   "Superseded 2026-09-28 by claude-18: the loops were re-seeded from TOPOLOGY-ROUTES.md after the statement-registry audit and the route review (/home/joe/topo-watch/dag-audit.md).",
    :id
    :checkpoint-full-dag-refill-17-after-antipodal-and-slice-nullity,
    :kind :strategy-checkpoint,
@@ -76226,7 +76228,7 @@
    :stop-condition
    "Require actual homology isomorphisms induced by the promoted cokernel maps. Reject assumed isomorphisms, supportConnecting, and ordinary excision with the false compact-complement containment premise.",
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["ConstructionTargets/CoefficientSubcomplexRelativeLiteralHomologyIso.lean"],
    :dag-node
@@ -76243,6 +76245,8 @@
     :axioms :standard-only,
     :placeholder-before 0,
     :placeholder-after 0},
+   :superseded-note
+   "Superseded 2026-09-28 by claude-18: the loops were re-seeded from TOPOLOGY-ROUTES.md after the statement-registry audit and the route review (/home/joe/topo-watch/dag-audit.md).",
    :representation
    {:source
     "Homology of categorical cokernels for one ambient subspace range and for the infimum of two ambient subspace ranges",
@@ -76341,7 +76345,7 @@
      "Compiled exactly one bounded representation prerequisite. rangeRelativeIso and intersectionRelativeIso apply the reviewed cokernel comparison theorem to the promoted commuting squares, proving that the genuine categorical quotients for one ambient range and for the infimum range have homology canonically isomorphic to the literal relative-pair complexes. The identity ambient-chain map and the two canonical source-chain isomorphisms supply the absolute homology isomorphisms. The fixture is placeholder-free, uses standard axioms, and does not use supportConnecting or ordinary excision. No repository source or ledger changed. The promoted literal-comparison and singleton counterexample hashes reproduce. Consumer placeholders remain t98A02=1, t00J02=1, t01A05=1, t02A07=3 and t97J05=5.",
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "MANIFOLD FUNDAMENTAL CLASS / direct quotient-pair relative Mayer-Vietoris",
@@ -76349,6 +76353,8 @@
    {:axioms :standard-only,
     :probe
     "For arbitrary compact K and L in a Hausdorff space and arbitrary commutative-ring coefficients, construct the direct short exact sequence of quotient chain complexes for the pairs (X,X minus (K intersection L)), (X,X minus (K union L)), (X,X minus K) and (X,X minus L), or prove a triad-excision theorem valid for these exact complement pairs. Produce the genuine connecting map and all three exactness statements with the literal quotient-pair arrows. This supplies the shared relative Mayer-Vietoris step awaited by t98A02, t00J02, t00A04, t01A05, t02A07 and t97J05. Preserve the compiled singleton counterexample to ordinary excision and do not claim localization monicity, dimension vanishing or a fundamental class."},
+   :superseded-note
+   "Superseded 2026-09-28 by claude-18: the loops were re-seeded from TOPOLOGY-ROUTES.md after the statement-registry audit and the route review (/home/joe/topo-watch/dag-audit.md).",
    :id
    :coefficient-direct-relative-mayer-vietoris-chain-sequence-probe-refill51,
    :kind :reusable-theorem,
@@ -76397,7 +76403,7 @@
    :stop-condition
    "Require a corners-aware parametric transversality theorem proving that generic full coincidence fibers are closed and discrete in the entire unit square, including isolation at each coincident endpoint pair.",
    :phase :implementation,
-   :state :open,
+   :state :superseded,
    :scope
    ["ConstructionTargets/PlaneArcEndpointCompactDiscreteFiberFinite.lean"],
    :dag-node
@@ -76413,6 +76419,8 @@
     :axioms :standard-only,
     :placeholder-before 0,
     :placeholder-after 0},
+   :superseded-note
+   "Superseded 2026-09-28 by claude-18: the loops were re-seeded from TOPOLOGY-ROUTES.md after the statement-registry audit and the route review (/home/joe/topo-watch/dag-audit.md).",
    :id
    :plane-arc-endpoint-compact-discrete-fiber-finite-implementation-refill51,
    :kind :reusable-theorem,
@@ -76488,7 +76496,7 @@
      "Compiled exactly one compact-fiber prerequisite. The closed unit square is compact, every closed subset of it is compact, and every such subset that is discrete is finite. This identifies the precise conclusion a corners-aware transversality argument must establish for the actual coincidence fiber. The reviewed interior submersion alone gives no closedness or isolation at the four endpoint pairs, so it cannot exclude an infinite discrete interior locus accumulating at the boundary.",
      :seat "codex-12"}},
    :phase :probe,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node
    "SURFACE TRIANGULATION / compact-boundary endpoint-relative parametric transversality",
@@ -76496,6 +76504,8 @@
    {:axioms :standard-only,
     :probe
     "Using the reviewed endpoint-weighted perturbation, uniform containment, total-map smoothness and interior derivative surjectivity, prove the next shared route step for t00A03, t01J01, t91J05, t94J09 and t99J03: a relative parametric transversality theorem on the compact parameter square with boundary or corners that treats all four endpoint pairs and yields finite full coincidence fibers for generic sufficiently small perturbation vectors. Preserve empty and singleton finite families. This supplies endpoint-neighborhood isolation and compact-fiber finiteness; do not claim simultaneous family selection, embedding stability, cross-chart compatibility, retained coverage, compatible faces or triangulation."},
+   :superseded-note
+   "Superseded 2026-09-28 by claude-18: the loops were re-seeded from TOPOLOGY-ROUTES.md after the statement-registry audit and the route review (/home/joe/topo-watch/dag-audit.md).",
    :id
    :endpoint-compact-boundary-parametric-transversality-probe-refill51,
    :kind :reusable-theorem,
@@ -76518,12 +76528,14 @@
    :stop-condition
    "End only on all campaign consumers closed or an exact campaign-level refutation; local route boundaries trigger reranking.",
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :dag-node "PORTFOLIO POLICY",
    :acceptance
    {:strategy
     "Recount all 59 named consumers after the near-closure t98A01 adapter and the two highest-reach shared route probes. Elect exactly one near-closure adapter first at the next checkpoint, then rank admitted shared steps by open-consumer reach and simplicity. Preserve the supportConnecting zero-map refutation, the compact-support excision counterexample, the endpoint-accumulation boundary, the distinction between plane and cross-chart intersections, every prior closure including t96J05, and all deferred representation boundaries."},
+   :superseded-note
+   "Superseded 2026-09-28 by claude-18: the loops were re-seeded from TOPOLOGY-ROUTES.md after the statement-registry audit and the route review (/home/joe/topo-watch/dag-audit.md).",
    :id
    :checkpoint-full-dag-refill-52-after-five-torsion-direct-relative-mv-and-boundary-transversality,
    :kind :strategy-checkpoint,
@@ -76542,7 +76554,7 @@
    :stop-condition
    "Probe and reviewed dependency assessment only; no proof-completion credit for intake. See intake/f220-m03J05/README.md.",
    :phase :probe,
-   :state :open,
+   :state :superseded,
    :scope [],
    :dag-node
    "APMv3 F220 nonlinear L2/weak-solution infrastructure intake",
@@ -76552,6 +76564,8 @@
     :axioms :standard-only,
     :stop-condition
     "No statement weakening, invented bridge hypotheses, local Mathlib clone, or blanket cherry-pick of the 50-round branch. Report a precise API gap if not locally closable. A source pin is not a fresh build certificate."},
+   :superseded-note
+   "Superseded 2026-09-28 by claude-18: the loops were re-seeded from TOPOLOGY-ROUTES.md after the statement-registry audit and the route review (/home/joe/topo-watch/dag-audit.md).",
    :source/frame "f220",
    :source/commit "c380d8ff286d5d5dacafdc200d4eddc0cdaa2eec",
    :id :m03j05-f220-infrastructure-intake,
@@ -76572,16 +76586,41 @@
      :infrastructure-packets
      :review-outcomes]},
    :phase :strategy,
-   :state :blocked,
+   :state :superseded,
    :scope [],
    :acceptance
    {:strategy
     "Use the reviewed F220 intake DAG to elect 1-5 bounded implementation/representation/consumer rows and a successor checkpoint. Integrate the existing solver branch through reviewed canonical changes, not a parallel proof island. Preserve every frozen bridge statement; distinguish reusable theory from final adapters. Preserve unrelated portfolio work.",
     :stop-condition
     "Do not report the transferred problem solved until its original consumer elaborates without placeholders under the standard axiom policy."},
+   :superseded-note
+   "Superseded 2026-09-28 by claude-18: the loops were re-seeded from TOPOLOGY-ROUTES.md after the statement-registry audit and the route review (/home/joe/topo-watch/dag-audit.md).",
    :id :m03j05-f220-infrastructure-strategy,
    :kind :strategy-checkpoint,
-   :depends-on [:m03j05-f220-infrastructure-intake]}],
+   :depends-on [:m03j05-f220-infrastructure-intake]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 3,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every problem in this loop's half of TOPOLOGY-ROUTES.md is closed, held, or stopped with a compiled refutation or the stop-after-two rule.",
+   :phase :strategy,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Fresh start from TOPOLOGY-ROUTES.md (not TOPOLOGY-DEPENDENCY-DAG.md). This loop owns: t93J06 t94A09 t02A05 t91J06 t92J08 t94A07 t94A10 t95J02 t97A07 t99J04 t99J06 t01A02 t02A03 t91J03 t93A06 t94A08 t95A04 t96A07 t00J02 t01A08 t96J06 t97A06 t98A06 t98J01. Read the per-problem routes in holes/labs/topology-routes/routes-{1,2,3}.md. Elect 1-5 rows in the order the routes file gives (DIRECT, ADAPTER, shared FOUNDATION, bounded HEAVY pieces), each naming the problem, the sorry and the route step it supplies. Skip problems marked held. Never change a registered statement (problems/STATEMENTS.json)."},
+   :id :routes-2026-09-28-checkpoint-topo1,
+   :kind :strategy-checkpoint,
+   :depends-on [],
+   :current-residual "No rows elected yet under TOPOLOGY-ROUTES.md.",
+   :other-consumers []}],
  :consumer-baselines
  {:t00A01
   {:path "problems/t00A01/lean/Main.lean",

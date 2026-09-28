@@ -1,0 +1,534 @@
+### t96J01 — DIRECT — sorries: 1
+Needs: a continuous `g : Y → Icc 0 1` that is 0 on `f '' A` and 1 on `f '' B` (Urysohn on the compact Hausdorff image).
+Reuse: Mathlib `isCompact_range`, `Function.Surjective.range_eq`, `IsClosed.isCompact`, `IsCompact.image`, `IsCompact.isClosed`, `exists_continuous_zero_one_of_isClosed` (needs `NormalSpace Y`, found by instance from `CompactSpace Y` + `T2Space Y`), `Continuous.subtype_mk`. Nothing from ConstructionTargets needed.
+Route:
+1. Closure probe (COMPILED, /tmp/routes3/A/J01J03.lean, ~3 s):
+```lean
+  haveI : CompactSpace Y := ⟨by simpa [hf_surj.range_eq] using isCompact_range hf⟩
+  have hA' : IsClosed (f '' A) := (hA.isCompact.image hf).isClosed
+  have hB' : IsClosed (f '' B) := (hB.isCompact.image hf).isClosed
+  obtain ⟨u, hu0, hu1, hu⟩ := exists_continuous_zero_one_of_isClosed hA' hB' hdisj
+  refine ⟨fun y => ⟨u y, hu y⟩, u.continuous.subtype_mk _, ?_, ?_⟩
+  · intro x hx; ext; exact hu0 (Set.mem_image_of_mem f hx)
+  · intro x hx; ext; exact hu1 (Set.mem_image_of_mem f hx)
+```
+Shared tags: none
+Doubts: none (statement is faithful; surjectivity is used only to make Y compact).
+
+### t96J03 — DIRECT — sorries: 1
+Needs: a nearest point of a nonempty closed set in the proper space `EuclideanSpace ℝ (Fin n)`.
+Reuse: Mathlib `IsClosed.exists_infDist_eq_dist` (ProperSpace), `Metric.infDist_le_dist_of_mem`, `dist_eq_norm`, `dist_comm`.
+Route:
+1. Closure probe (COMPILED, /tmp/routes3/A/J01J03.lean):
+```lean
+  obtain ⟨x₀, hx₀, h⟩ := hX_closed.exists_infDist_eq_dist hX_nonempty y₀
+  refine ⟨x₀, hx₀, fun x hx => ?_⟩
+  rw [← dist_eq_norm, ← dist_eq_norm, dist_comm x₀, dist_comm x, ← h]
+  exact Metric.infDist_le_dist_of_mem hx
+```
+Shared tags: none
+Doubts: none (`hy₀ : y₀ ∉ X` is unused, which is harmless).
+
+### t96J02 — FOUNDATION — sorries: 1
+Needs: (i) every finite-index subgroup of `π₁(KleinBottle, surfacePoint false 2)` is ≅ the whole group or ≅ `Multiplicative (ℤ × ℤ)`; (ii) a finite-index subgroup ≅ the group (take `⊤`); (iii) a finite-index subgroup ≅ ℤ². All three need an explicit computation of π₁ of the concrete polygon quotient `Surface false 2` (word `aabb`, round disk, arcs as edges); nothing can be said about subgroups of an uncomputed group.
+Reuse: banked `ConstructionTargets.TwoOpenFreeProductMapping.groupEquivalence` / `chosenGroupEquivalence` (van Kampen with simply connected overlap, gives free products), `TwoOpenFundamentalGroupoidPseudopushout.twoOpenFundamentalGroupoidPseudopushoutEquivalence` (general groupoid van Kampen), `CircleUniversalCover` (`FundamentalGroup Circle 1 ≃* Multiplicative ℤ`, line 332), `SimplyConnectedOpenCover`, `PointWedgeQuotient` / t02A03's point-wedge geometry, the t01J03 / `TwiceSpiral*` chain as a worked example of a pushout with non-simply-connected overlap. Mathlib: `Subgroup.FiniteIndex`, `Subgroup.topEquiv`, `PresentedGroup.toGroup`, `SemidirectProduct`, `MonoidHom.ker`. For the alternative covering route: `Mathlib/Topology/Covering/Quotient.lean` (properly discontinuous quotient is a covering), `Mathlib/Topology/Homotopy/Lifting.lean` (`IsCoveringMap.liftPath`, `monodromy`, `injective_path_homotopic_map`). No banked computation of π₁ of any polygon surface exists (the `FundamentalGroupConcrete.md` checklist items "compute standard surfaces" are all unchecked).
+Route (van Kampen route; steps 1–6 are the shared polygon-surface π₁ programme):
+1. `polygon_openCover`: U := image of the open unit disk, V := image of `Disk \ {0}`; both open, `U ∪ V = univ`, U ≃ₜ open disk (quotient restricted to the interior is an open embedding), `U ∩ V` ≃ₜ punctured open disk.
+2. `polygon_puncture_deformationRetract`: V deformation-retracts onto B := image of the boundary circle (radial homotopy descends; needs `IsQuotientMap` of the product with `I`).
+3. `polygon_skeleton_wedge`: B ≃ₜ wedge of n circles (n = 2 here) and `π₁ B ≃* FreeGroup (Fin n)`, by iterating `TwoOpenFreeProductMapping.groupEquivalence` with the circle computation.
+4. `vanKampen_simplyConnectedPiece`: for opens U, V covering X with U simply connected and U, V, U∩V path-connected, `π₁ X ≃* π₁ V ⧸ normalClosure (range (π₁(U∩V) → π₁ V))` (extract from the banked groupoid pseudopushout, generically rather than per space as in `TwiceSpiral*`).
+5. `polygon_boundaryLoop_word`: the generator of `π₁(U∩V) ≅ ℤ` maps under steps 2–3 to the boundary word (`a a b b` for K). This is a path-level computation through the retraction and wedge identification.
+6. `kleinBottle_pi1`: `FundamentalGroup KleinBottle (surfacePoint false 2) ≃* PresentedGroup {a*a*b*b}` (with basepoint change from a point of U∩V to the centre via `fundamentalGroupMulEquivOfPath`).
+7. `kleinPresented_equiv_semidirect`: `PresentedGroup {a a b b} ≃* Multiplicative ℤ ⋊[φ] Multiplicative ℤ` with φ = inversion (explicit maps both ways, check relator and generators).
+8. `kleinSemidirect_finiteIndex_classify`: a finite-index H has `H ∩ (ℤ × 0) = kℤ` and projection `dℤ` (k, d ≥ 1), H is generated by `(k,0)` and some `(c,d)`, and H ≃* ℤ² if d is even, H ≃* G if d is odd.
+9. `kleinSemidirect_index_two_torus`: the kernel of `(m,n) ↦ n mod 2` has index 2 and is ≃* ℤ². With `⊤` for part (ii), assemble.
+Lighter alternative for 1–6: the covering route. Prove `π₁(E/G) ≃* G` for a free properly discontinuous action on a simply connected E (Mathlib lifting and monodromy do most of this, about one module), then build `Surface false 2 ≃ₜ ℝ² ⧸ G` from a disk-to-square homeomorphism that matches the arc edges linearly to the square sides. The second half (checking that the orbit relation on the closed square equals `EqvGen SurfaceRel`, corners included) is the hard part. Size is comparable, and the route does not help t97A01's homology.
+Size: steps 7–9 are an ADAPTER-sized group-theory package (about 3 theorems). Steps 1–6 are the shared polygon π₁ foundation, roughly 6 substantial theorems. At the loop's observed granularity that is tens of rows, not a handful.
+Shared tags: polygon-surface-open-cover, polygon-puncture-retract, wedge-of-circles-pi1, van-kampen-simply-connected-piece, polygon-boundary-word (all together = polygon-surface-pi1; shared with t97A01, t92J05, t94J04, t97A03)
+Doubts: none about truth; the classification is correct (finite covers of K are K or T²). Encoding note: the polygon edges are circular arcs on the round disk, so any "square fundamental domain" route needs an explicit disk↔square comparison.
+
+### t96J06 — HEAVY — sorries: 2
+Needs: (1) `apm_t96J06_bridge_1`: no compact subset W of ℝP²×ℝP² that carries a smooth 3-manifold-with-boundary charted structure (charts on the subspace, unrelated to any ambient smooth structure) has intrinsic boundary equal to ℝP¹×ℝP¹; (2) `apm_t96j06` itself, which follows from (1) in two lines.
+Reuse: Mathlib `ModelWithCorners.boundary`, `IsManifold`, `Projectivization`; singular homology (`AlgebraicTopology.singularHomologyFunctor`, `SingularHomology/HomotopyInvariance`). Banked: production Mayer–Vietoris (`ProductionOpenCoverMayerVietoris`) and excision (`SingularExcision`), integral only; `Intersection` / `ManifoldIntersectionTargets` are smooth-transversality scaffolds that cannot apply, because W is only topologically embedded and the ambient `apm_t96j06_RP2` has no manifold instance. No mod-2 fundamental class, cup product, Künneth, or H_*(ℝP²; ℤ/2) computation is banked.
+Route:
+1. Main from bridge (COMPILED, /tmp/routes3/A/J06.lean, bridge left as `sorry`):
+```lean
+  rintro ⟨W, hW, charts, hman, hbd⟩
+  exact apm_t96J06_bridge_1 W hW charts hman hbd
+```
+2. `rp2_mod2_cohomology_generator`: a class `a ∈ H¹(ℝP²; ℤ/2)` with `⟨a, [ℝP¹]⟩ = 1` (or, homologically, `[ℝP¹] ≠ 0` in `H₁(ℝP²; ℤ/2)` paired against a degree-one detector).
+3. `product_class_detected`: a degree-2 class u on ℝP²×ℝP² (the cross/cup product `p₁*a ⌣ p₂*a`) with `⟨u, i_*[T]⟩ = 1`, where `[T]` is the ℤ/2 fundamental class of the torus ℝP¹×ℝP¹. This needs a cross product in singular (co)homology, which is the Künneth/Eilenberg–Zilber foundation already flagged in the DAG (line 473).
+4. `compact_manifold_boundary_mod2_class`: for compact W with manifold-with-boundary charts on the subspace, `[∂W] = ∂[W, ∂W]`, so `i_*[∂W] = 0` in `H₂(ambient; ℤ/2)`. This is the relative mod-2 fundamental class of a compact topological 3-manifold with boundary (Hatcher 3.26-style local-to-global argument, with boundary), and it needs collars for the boundary.
+5. `boundary_class_is_torus_class`: when ∂W = T as sets, the fundamental class of ∂W (from its intrinsic charts) agrees with the class of T used in step 3 (uniqueness of the ℤ/2 fundamental class of a connected closed surface, plus a homeomorphism-invariance transport).
+6. Assemble: `1 = ⟨u, i_*[T]⟩ = ⟨u, i_*[∂W]⟩ = 0`.
+Size: steps 3–5 are each large programmes. Step 4 is more general than loop A's integral closed-manifold fundamental-class chain (t98A02), which is still unfinished after about 65 rows. I estimate 100+ rows. I found no lighter route: any argument has to show that the boundary of a topologically embedded compact 3-manifold is null-homologous, and smooth intersection counting is not available with the frozen encoding.
+Shared tags: manifold-fundamental-class-mod2-with-boundary, kunneth-cross-product, projective-plane-homology-mod2, intersection-pairing
+Doubts: the claim is true topologically (the mod-2 argument works for topological manifolds). The only encoding subtleties: W's smooth charts are intrinsic, so smoothness plays no role; and `(𝓡∂ 3).boundary W` is the intrinsic model boundary, which matches the topological boundary for a genuine manifold with boundary (invariance of boundary is itself a nontrivial theorem that step 5 may need).
+
+### t97A01 — HEAVY — sorries: 1
+Needs: one `sorry` with seven conjuncts. For X (word `aabbcc`) and for TorusRP2 (word `a b a⁻¹ b⁻¹ c c`, six arcs on the round disk): H₀ ≅ ℤ, H₁ ≅ ℤ × ℤ × ZMod 2, and H_k = 0 for k ≥ 2, all as `ModuleCat ℤ` singular homology. In addition, `π₁(TorusRP2, image of 0) ≃* PresentedGroup {a b a⁻¹ b⁻¹ c c}`.
+Reuse: banked `apm_t97a01_X_equiv_standardN3` (in Main, relation-level only); `ConstructionTargets.IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso` / `singularHomologyModuleIsZeroOfGroupIsZero` (move AddCommGrpCat computations to the frozen `ModuleCat ℤ` statement); `ProductionOpenCoverMayerVietoris` + `SingularExcision` (open-cover MV, integral); t02A03's point-wedge MV and free-product chain (`TwoOpenFreeProductMapping.groupEquivalence`, `PointWedgeQuotient`); `CircleUniversalCover`, `CircleSingularHomology` / `CircleHomology`; `CoefficientH0` / `CoefficientConnectedH0Map` (H₀ of path-connected); `DegreeOneHurewiczMap` (π₁ → H₁ naturality, to compute the MV boundary map from the π₁ word); Mathlib `SingularHomology/HomotopyInvariance`, `HomotopyEquivHomologySquare` (banked). Missing: everything specific to polygon quotients, the same missing pieces as t96J02.
+Route (reuses t96J02 steps 1–5, which must be stated for an arbitrary edge-pairing word on n arcs; TorusRP2 is not an instance of `Surfaces.Surface o g`):
+1. `apm_t97a01_X_homeomorph_standardN3`: upgrade the relation equivalence to `≃ₜ` (both topologies are coinduced from the same disk map), so X can be handled as `Surface false 3`.
+2. Shared polygon package for a general pairing word: open cover U/V, retraction of V onto the edge graph B ≃ₜ wedge of 3 circles, `U ∩ V` ≃ punctured disk (t96J02 steps 1–3). This package has to prove that all six vertices are identified in both words.
+3. `pi1_torusRP2`: van Kampen with simply connected piece (t96J02 step 4) plus the boundary-word computation (t96J02 step 5, word `a b a⁻¹ b⁻¹ c c`), then a basepoint change from U∩V to the centre. This proves conjunct 7.
+4. `wedge3_circles_homology`: H₀ = ℤ, H₁ = ℤ³, H_k = 0 for k ≥ 2 (iterate the banked point-wedge MV; t02A03 did torus∨circle).
+5. `polygon_mv_homology`: the MV sequence for U, V with H(U) = H(pt) (contractible), H(V) = H(B) by homotopy invariance, and H(U∩V) = H(S¹). The degree-1 boundary map sends ℤ to ℤ³ by the abelianised boundary word, (2,2,2) for X and (0,0,2) for TorusRP2 (through `DegreeOneHurewiczMap` naturality).
+6. `smith_quotients`: `ℤ³ ⧸ ⟨(2,2,2)⟩ ≃ ℤ × ℤ × ZMod 2` and `ℤ³ ⧸ ⟨(0,0,2)⟩ ≃ ℤ × ℤ × ZMod 2` as ℤ-modules, plus injectivity of both maps (so H₂ = 0).
+7. Read off H₁ as the cokernel, H₂ = 0 from injectivity, H_{k≥3} = 0 from vanishing neighbours, H₀ from path-connectedness. Transport to `ModuleCat ℤ` via `IntegralSingularHomologyComparison`, and to X via step 1.
+Size: steps 1, 4, 6, 7 are adapters (about 4 theorems). Steps 2, 3 and 5 are the shared polygon-surface programme plus an MV connecting-map computation, several substantial theorems each. Tens of rows. The DAG (line 689) already records the collar/cofibration comparison as missing for this problem. The open-cover route above avoids collars: U, V are genuinely open, and the retraction is radial, inside V.
+Lighter option: a banked degree-one Hurewicz isomorphism (`DegreeOneHurewicz*` is in progress: map and partial surjectivity exist) would give H₁ as the abelianisation of π₁ and remove the H₁ part of step 5. H₂ and higher still need MV, or an asphericity argument that is heavier.
+Shared tags: polygon-surface-open-cover, polygon-puncture-retract, wedge-of-circles-pi1, wedge-of-circles-homology, van-kampen-simply-connected-piece, polygon-boundary-word, polygon-surface-mv-homology
+Doubts: none about truth (N₃ ≅ T²#ℝP², H₁ = ℤ²⊕ℤ/2, H_{≥2} = 0; the one-relator presentation is right). Encoding check, done by hand: in both words all six hexagon vertices fall into one class. For TorusRP2: a gives v0~v3 and v1~v2, b gives v1~v4 and v2~v3, c gives v4~v5 and v5~v0. So the edge graph is a wedge of 3 circles, as step 2 assumes.
+
+# Route triage, batch B (t97A03, t97A04, t97A05, t97A06, t97A07)
+
+### t97A03 — HEAVY — sorries: 3
+Needs:
+- `apm_t97A03_bridge_classify_connected_double_cover`: every connected 2-sheeted covering `Y → BaseSpace A B` (A ≠ B) is homeomorphic to `OneCircleCover` or `TwoCircleCover`.
+- `apm_t97A03_bridge_invariants_of_model`: for any Y homeomorphic to either model, H₀ ≅ ℤ, H₁ ≅ ℤ³, H₂ ≅ ℤ², Hₙ = 0 for n ≥ 3 (ModuleCat ℤ singular homology), and π₁(Y, y) ≃* FreeGroup (Fin 3) at every y.
+- `apm_t97a03` itself: one-line assembly `⟨h, bridge_invariants Y y h⟩` with `h := bridge_classify ...` (closes as soon as the two bridges do).
+Reuse:
+- Lifting from simply connected spaces: Mathlib `IsCoveringMap.existsUnique_continuousMap_lifts` (Topology/Homotopy/Lifting.lean), packaged in `ConstructionTargets.CoveringLiftRestriction.evaluationEquiv` / `restrictionEquiv` / `card_lifts`.
+- S² simply connected: `ConstructionTargets.SimplyConnectedSphereProducts.euclideanSphere_simplyConnected` (n = 2).
+- Circle lifting / winding: `CircleUniversalCover.circleCover_isCoveringMap`, `liftBasedLoop*`, `circleFundamentalGroupMulEquivInt`.
+- Van Kampen with simply connected overlap: `ConstructionTargets.TwoOpenFreeProductMapping.groupEquivalence` / `chosenGroupEquivalence` (needs U, V open path-connected, U ∩ V simply connected).
+- Quotient-space open covers: `PointWedgeQuotient` (saturated open images in an EqvGen quotient, `quotientHomeomorphOfRelIff`).
+- Production Mayer–Vietoris: `ProductionOpenCoverMayerVietoris.productionMayerVietoris_exact_*`; H₀ of path-connected spaces: `CoefficientH0.h0Iso`; ModuleCat/AddCommGrp transfer: `IntegralSingularHomologyComparison.singularHomologyModuleIsoOfGroupIso`, `singularHomologyModuleIsZeroOfGroupIsZero`.
+- Sphere homology: `SphereHomology` / `CoefficientSphere*`; circle H₁: `CircleSingularHomology.circleSingularH1IsoInt`.
+- Local frozen helpers: `apm_t97A03_surjective_of_fiber_card_two`, `apm_t97A03_fiber_equiv_fin_two`, `apm_t97A03_base_north_eq/south_eq`.
+- Missing everywhere (searched): classification of covers by subgroups, Nielsen–Schreier rank formula, homotopy invariance/deformation-retraction lemmas for these quotients, any homology of a sphere-with-arcs quotient.
+Route (bridge 1, explicit classification without subgroup theory):
+1. `baseSpace_t2 : T2Space (BaseSpace A B)` and `models_compact_t2` (both model quotients are compact Hausdorff) — quotients of compact Hausdorff spaces by a finite point identification.
+2. `sphere_sheets`: the covering restricted along `S² → BaseSpace` has exactly two lifts `s₀ s₁ : C(S², Y)` with disjoint images covering the preimage (from `CoveringLiftRestriction.card_lifts` + `euclideanSphere_simplyConnected`).
+3. `circle_monodromy`: lifting `ℝ → Circle → BaseSpace` along `Y` gives lifts of the two circle arcs A→B, B→A; the lift of the full loop either closes up (two circle lifts) or swaps sheets (one circle lift of double length).
+4. `monodromy_cases`: combining 2–3, the attachment pattern of the lifted poles to the lifted circle(s) is one of three cases; connectedness of Y rules out the trivial (disconnected) pattern.
+5. `model_map_bijective_continuous`: in each case, the evident map from the model (after a circle homeomorphism sending A,B to the model's marked points, plus complex conjugation for the second one-circle case) to Y is continuous (quotient lift) and bijective (fiber count 2); compact → Hausdorff gives `Y ≃ₜ model`.
+Route (bridge 2, invariants of the two models):
+6. `model_pathConnected` and H₀ ≅ ℤ via `CoefficientH0.h0Iso` (short).
+7. `model_homology_MV`: for each model, 2–3 production Mayer–Vietoris steps over saturated open covers (sphere sheets with collar arcs vs. the lifted circle(s) minus poles), each needing explicit deformation retractions of open subsets of the quotient to spheres/circles/points; output H₁ ≅ ℤ³, H₂ ≅ ℤ², Hₙ = 0 (n ≥ 3). Roughly 10–15 lemmas per model unless a shared "sphere with two arcs attached" lemma is proved once.
+8. `model_pi1_free3`: iterated `TwoOpenFreeProductMapping.groupEquivalence` with simply connected overlaps (each sphere sheet with open arc collars is simply connected; each step splits off one circle factor ℤ), then `Monoid.Coprod` of three copies of `Multiplicative ℤ` (and trivial sphere factors) ≃* `FreeGroup (Fin 3)`. About 8–12 lemmas per model, plus the same deformation-retraction lemmas as step 7.
+9. Transport all invariants along `Y ≃ₜ model` (homology `mapIso`, `FundamentalGroup` along a homeomorphism: `BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph`) and change basepoint (path-connectedness).
+Size: bridge 1 about 10 lemmas; bridge 2 about 40–60 lemmas across both models. A lighter route for bridge 2 is to prove each model homotopy equivalent to one common wedge `S² ∨ S² ∨ S¹ ∨ S¹ ∨ S¹` and compute that wedge once, but constructing explicit homotopy equivalences between EqvGen quotients costs about as much as the direct Mayer–Vietoris computation.
+Shared tags: `covering-classification-explicit` (also named by t94J04, t01A04, t93A03, t00J08), `van-kampen-iterated-free-rank`, `quotient-deformation-retraction`, `quotient-space-mayer-vietoris`
+Doubts: none about truth. I checked by hand: the three index-2 subgroups of π₁(X) ≅ F₂ give the one-circle pattern N₀,S₀,N₁,S₁ (the model), the one-circle pattern N₀,S₁,N₁,S₀ (the same model after complex conjugation of the circle), and the two-circle pattern (the second model). Euler characteristic 0 gives rank H₁ = 3. The frozen statement allows arbitrary `Y : Type` with any topology, so Hausdorffness of Y has to come from the covering map and the Hausdorff base (step 1).
+
+### t97A04 — FOUNDATION — sorries: 4
+Needs:
+- `apm_t97A04_bridge_1`: some H₀(T²) ≅ ℤ under which `Lbar` acts as the identity.
+- `apm_t97A04_bridge_2`: some H₁(T²) ≅ ℤ² under which `Lbar` acts by the matrix [[2,1],[-1,1]].
+- `apm_t97A04_bridge_3`: some H₂(T²) ≅ ℤ under which `Lbar` acts as multiplication by 3.
+- `hcore` inside `apm_t97a04`: the conjunction of the three bridges. It closes in one line once they exist: `obtain ⟨h0,H0⟩ := bridge_1; obtain ⟨h1,H1⟩ := bridge_2; obtain ⟨h2,H2⟩ := bridge_3; exact ⟨h0,h1,h2,H0,H1,H2⟩`.
+Reuse:
+- H₀: `ConstructionTargets.CoefficientH0.h0Iso`, `CoefficientH0.h0Augmentation_naturality` (these are ModuleCat ℤ, which matches the frozen functor exactly).
+- H₁: `FiniteFreeHurewiczNaturality.h1_coordinate_eq_of_fundamentalGroup_coordinate_eq` and `finiteFreeHurewiczCoordinateMulEquiv`; `FundamentalGroupProduct.fundamentalGroupProdMulEquiv`; `CircleUniversalCover.circleFundamentalGroupMulEquivInt`, `liftBasedLoopEndpointInteger`; Mathlib `AddCircle.homeomorphCircle`, `AddCircle.isCoveringMap_coe`; `BoundaryTorusIntegralHomologyComplete.boundaryTorusH1GroupIsoFinTwo` (torus H₁ for `Circle × BoundaryCircle`); `BoundaryTorusHurewiczIsomorphism.fundamentalGroupMulEquivOfHomeomorph`; ModuleCat/AddCommGrp transfer `IntegralSingularHomologyComparison.singularHomologyComparison_naturality`, `singularHomologyModuleIsoOfGroupIso`.
+- H₂: `BoundaryTorusH2ConnectingIso` (H₂ ≅ ℤ through the Mayer–Vietoris connecting map of the second-coordinate cover), `BoundaryTorusIntegralHomologyComplete.boundaryTorusH2ModuleIsoInt`, `ProductionOpenCoverMayerVietoris.productionConnecting` / `productionMayerVietoris_exact_*`, memberwise cover-small naturality in `SingularExcision`, Mathlib `HomologicalComplex.HomologySequence.δ_naturality`. The existing pair-LES version `RelativeSingularConnectingNaturality.singularPairConnecting_naturality` is the template.
+- Local frozen helpers: `t97A04HomologyMap_comp`, `t97A04HasHomologicalData.of_maps`, `apm_t97a04_matrix_*`.
+Route:
+1. bridge_1: DIRECT. The closure probe below compiled (in `/tmp/routes3/B/t97A04_b1.lean`, frozen file prefix plus an import of `ConstructionTargets.CoefficientH0`):
+   ```lean
+   theorem apm_t97A04_bridge_1 : ... := by
+     haveI : PathConnectedSpace apm_t97a04_Torus :=
+       { nonempty := ⟨0⟩
+         joined := fun x y =>
+           ⟨(PathConnectedSpace.somePath x.1 y.1).prod (PathConnectedSpace.somePath x.2 y.2)⟩ }
+     refine ⟨ConstructionTargets.CoefficientH0.h0Iso ℤ (0 : apm_t97a04_Torus), fun a => ?_⟩
+     have h := ConstructionTargets.CoefficientH0.h0Augmentation_naturality ℤ apm_t97a04_Lbar
+     exact congrArg (fun g => g.hom a) h
+   ```
+2. `torusPi1Coord : FundamentalGroup Torus 0 ≃* Multiplicative (Fin 2 → ℤ)`, built from `fundamentalGroupProdMulEquiv`, `AddCircle.homeomorphCircle` and `circleFundamentalGroupMulEquivInt`.
+3. `torusPi1Coord_eq_lift_endpoint`: the coordinate of a loop equals the integer endpoint of its lift to ℝ² starting at 0 (use `AddCircle.isCoveringMap_coe` and uniqueness of lifts).
+4. `torusPi1Coord_map_Lbar`: `torusPi1Coord (FundamentalGroup.map Lbar 0 γ) = A.mulVec (torusPi1Coord γ)`, because the lift of `Lbar ∘ γ` is `L ∘ lift γ`. Pointwise lifting gives additivity directly, with no Eckmann–Hilton argument.
+5. `torusH1GroupIsoFinTwo`: transport `boundaryTorusH1GroupIsoFinTwo` along `AddCircle 1 × AddCircle 1 ≃ₜ Circle × BoundaryCircle`.
+6. bridge_2 assembly: take `h1` to be the step-5 coordinate composed with the inverse of `finiteFreeHurewiczCoordinateMulEquiv`, then apply `h1_coordinate_eq_of_fundamentalGroup_coordinate_eq` with `coordinateMap := A.mulVec` (made multiplicative), rewrite `Lbar 0 = 0`, and move to ModuleCat by `singularHomologyComparison_naturality`.
+7. [FOUNDATION] `productionConnecting_naturality`: for `f : C(X,Y)` with `f '' U ⊆ U'` and `f '' V ⊆ V'`, `productionConnecting ≫ H(f|U∩V) = H(f) ≫ productionConnecting'`. It follows from `δ_naturality` on the subcomplex Mayer–Vietoris short exact sequence plus naturality of `coverSmallHomologyIso`. This is one theorem, but it probably needs 3–6 supporting lemmas.
+8. `torus_ycover_connecting_mono`: on AddCircle², with the cover U = {y ≠ 1/2}, V = {y ≠ 0}, the connecting map H₂(T) → H₁(U∩V) is monic. Transport from `BoundaryTorusH2ConnectingIso`.
+9. `shearY_H1_overlap`: `f_{a,b}(x,y) = (a•x + b•y, y)` preserves U and V, and acts on H₁(U∩V) as multiplication by a (restricted homotopy to `(a•x, y)`, then circle degree via steps 3–4 in rank one).
+10. `shearY_H2`: H₂(f_{a,b}) = a•𝟙 (steps 7–9).
+11. bridge_3 assembly: `Lbar = f_{3,1} ∘ g` with `g(x,y) = (x, y−x) = σ ∘ f_{1,−1} ∘ σ`, where σ is the coordinate swap. H₂(σ) is an automorphism of ℤ, so its square is 1 and H₂(g) = 1, giving H₂(Lbar) = 3 via `t97A04HomologyMap_comp`. Then transfer to ModuleCat.
+12. `hcore`: the one-line assembly above.
+Shared tags: `mv-connecting-naturality` (would also give induced maps on H₂ for t96J06-style torus and product problems), `torus-pi1-winding-coordinates`
+Doubts: none about truth. Route note: the DAG files t97A04 under Product homology/Künneth (Eilenberg–Zilber). That route is not needed. H₀ is done, H₁ uses banked Hurewicz naturality, and H₂ needs only connecting-map naturality for one open cover plus the factorisation `A = [[3,1],[0,1]]·[[1,0],[-1,1]]`. The loop-B shuffle/cross-product rows attributed to t97A04 do not reduce any of its sorries.
+
+### t97A05 — HEAVY — sorries: 1
+Needs: if `Y \ range iW` is not connected, then every smooth `g'` homotopic to `iZ` and transverse to `iY ∘ iW` has signed coincidence count 0. Equivalently, `HasIntersectionNumber … value` with `value ≠ 0` forces `Y \ W` to be nonempty and connected.
+Reuse:
+- Frozen vocabulary: `ManifoldIntersectionTargets.{Coincidence, Transverse, tangentFrame, localSign, HasIntersectionNumber}` and `ManifoldFormTargets.IsVolumeForm`. These are definitions only; the module header says realization and homotopy invariance are "construction theorems still to prove".
+- Related banked pieces, none of which reach the needed statements: `Intersection` (signed-count core; its checklist item "Boundary/cobordism invariance of intersection number (t97A05)" is unchecked), `TransverseIncidenceManifold` / `TransverseDifference*` / `ManifoldRegularFiberGlobalAtlas` (transverse preimages are manifolds), `SardGenuineSmoothManifoldVector` (Sard with a vector target), Mathlib `Manifold.IsImmersion`, `SmoothPartitionOfUnity`.
+- Not found anywhere: tubular or collar neighbourhoods, manifolds with boundary as sources of `HasIntersectionNumber`-style counts, classification of compact 1-manifolds, homotopy invariance of the count.
+Route (Guillemin–Pollack boundary theorem; contrapositive):
+1. `compl_range_nonempty`: `range iW ≠ univ`, from a dimension argument (image of a compact n-manifold under a C¹ map into an (n+1)-manifold has measure zero; Mathlib `addHaar_image_eq_zero_of_differentiableOn_of_addHaar_eq_zero` in charts).
+2. [tubular-neighbourhood] Oriented codimension-1 `W ⊂ Y` has a two-sided collar `W × (−1,1) ↪ Y`.
+3. [hypersurface-separation-bounds] If `Y \ W` is disconnected, it has exactly two components, and the closure of one is a compact oriented (n+1)-manifold with boundary `W`, with boundary orientation matching `volW` up to one global sign.
+4. [transversality-perturbation] Homotope `g'` rel a neighbourhood of `g'⁻¹(W)` so that it is also transverse to the interior of that piece `V ⊂ Y ⊂ X`. This is a parametric transversality theorem; Sard is banked, but the perturbation family is not.
+5. [compact-one-manifold-classification] `g'⁻¹(V)` is a compact oriented 1-manifold whose boundary is `g'⁻¹(W)`, and its boundary points pair up with opposite orientation signs.
+6. `localSign_eq_boundary_orientation_sign`: the frozen `localSign` at each point of `g'⁻¹(W)` equals the boundary orientation sign from step 5.
+7. Assembly: the signed count is a sum over arcs of (+1) + (−1) = 0, contradicting `value ≠ 0`. With step 1 this gives `IsConnected`.
+Size: a full oriented intersection-theory programme (roughly Guillemin–Pollack ch. 2–3). Steps 2–5 are each multi-module foundations, well over 100 lemmas in total. No lighter route found: a de Rham or Thom-form proof replaces steps 4–5 with manifold integration, Stokes and a tubular neighbourhood in X, which is no smaller. A homological proof first needs the frozen geometric count to agree with a homology pairing, which is the same programme.
+Shared tags: `tubular-neighbourhood`, `hypersurface-separation-bounds`, `transversality-perturbation`, `compact-one-manifold-classification`, `manifold-with-boundary`, `intersection-homotopy-invariance`
+Doubts: the statement looks true as frozen. `localSign` is basis- and chart-independent, because the numerator's source block and the denominators rescale by the same determinants. The existential `HasIntersectionNumber` (some transverse representative with that count) is strong enough, since the boundary theorem kills every transverse representative. `IsConnected` also requires nonemptiness; that is true by step 1 but has to be proved separately.
+
+### t97A06 — HEAVY — sorries: 1
+Needs:
+- (a) Some `form : Form (Fin m → ℝ) Y n` with `IsSmooth form` and `pullback i form = η`, i.e. a smooth extension of the volume form off the embedded compact X.
+- (b) For every smooth extension, if `i` is (continuously) homotopic to a constant, then `¬ ManifoldFormTargets.IsClosed form`.
+Reuse:
+- Frozen vocabulary: `ManifoldFormTargets.{Form, inChart, IsSmooth, pullback, exteriorDerivative, IsClosed, IsVolumeForm}`. Its .md lists as open: chart independence, pullback smoothness, naturality of d, d² = 0, and "for t97A06, extension by partitions of unity and the closed-form obstruction".
+- Mathlib: `Manifold.IsImmersion` (local normal form), `SmoothPartitionOfUnity` / `SmoothBumpCovering` (needs T2 and σ-compact Y, both available), `extDeriv`.
+- `OrientedIntegration` (algebraic core of top-form integration on model charts only; no manifold integral) and `ExteriorDerivativeSimplexCalculus` (concrete t98A05 computations only).
+- Not found: manifold integration of top forms, Stokes, manifolds with boundary, smoothing of continuous homotopies (Whitney approximation), the homotopy formula for de Rham.
+Route:
+1. [manifold-form-calculus] `IsSmooth` is chart-local: it is preserved by sums, by multiplication by smooth functions, by locally finite sums, and by pullback along smooth maps. Also `pullback` commutes with `exteriorDerivative` for smooth forms, and `pullback` along a constant map kills positive-degree forms.
+2. [form-extension-partition-of-unity] In immersion normal-form charts around `i(X)`, extend η locally by projection, then glue with a smooth partition of unity subordinate to {normal-form chart domains} ∪ {Y \ i(X)}. This proves (a).
+3. [smooth-homotopy-approximation] A continuous homotopy from `i` to a constant can be replaced by a smooth one (Whitney approximation, or smoothing in a tubular neighbourhood of the diagonal).
+4. [de-rham-homotopy-formula] For closed ω and smoothly homotopic `f₀ ≃ f₁ : X → Y`, `pullback f₀ ω − pullback f₁ ω` is exact on X.
+5. [manifold-top-form-integration] Integration of compactly supported top forms on an n-manifold oriented by η, with `∫ η > 0`.
+6. [stokes-compact-manifold] `∫_X dα = 0` for every smooth (n−1)-form α on a compact boundaryless X.
+7. Assembly of (b): if ω is closed, steps 3–4 make η = i*ω exact on X (the constant map pulls ω back to 0 because n > 0), so by step 6 ∫η = 0, contradicting step 5.
+Size: steps 1–2 are a sizeable FOUNDATION (tens of lemmas, since the frozen `inChart`/`IsSmooth` definitions need chart-change calculus built from scratch). Steps 3–6 are a de Rham/Stokes programme, likely 100+ lemmas. No lighter route found: replacing de Rham by singular homology (i_*[X] = 0) still needs integration of forms over smooth chains, Stokes on simplices and smoothing of chains.
+Shared tags: `manifold-form-calculus` (also t98J06, t93A06, ManifoldIntersectionTargets), `form-extension-partition-of-unity`, `smooth-homotopy-approximation`, `de-rham-homotopy-formula`, `manifold-top-form-integration`, `stokes-compact-manifold`
+Doubts: true as frozen. Part (a) could be split off as an ADAPTER-sized target after step 1. `IsClosed` is defined through `chartAt` only; for smooth forms this agrees with the chart-independent notion, but that agreement is part of step 1 and is not banked.
+
+### t97A07 — ADAPTER — sorries: 1
+Needs: for smooth `f : X → ℝⁿ` on a nonempty compact connected Hausdorff second-countable m-manifold:
+- (i) `criticalValues f` is compact;
+- (ii) it is nonempty when `0 < n`;
+- (iii) it is empty when `n = 0` (already banked as `T97A07.criticalValues_zero`);
+- (iv) it is infinite when `1 < n` and f is nonconstant.
+Reuse:
+- `T97A07.criticalValues_zero` (local, compiled).
+- Mathlib: `Set.Countable.isConnected_compl_of_one_lt_rank` (Analysis/Normed/Module/Connected.lean), `HasStrictFDerivAt.map_nhds_eq_of_surj` (InverseFunctionTheorem/FDeriv.lean), `IsLocalMax.fderiv_eq_zero`, `IsCompact.exists_isMaxOn`, `IsCompact.image`, `IsClosed.isCompact`, `MDifferentiableAt.mfderiv` / `mfderiv_comp` for chart representatives, `ContMDiff.contMDiffAt`, `contMDiffAt_iff`.
+- ConstructionTargets (pattern only): `ManifoldTargetFiberChartExtension.exists_extension_chart` and `SardGenuineSmoothManifoldVector` show how to pass `Surjective (mfderiv …)` to and from the chart representative `f ∘ (chartAt x).symm`. No banked lemma that regular points form an open set, and none for extremum ⇒ critical on manifolds.
+Route:
+1. `isOpen_setOf_surjective_clm`: for finite-dimensional E, F, `IsOpen {L : E →L[ℝ] F | Surjective L}` (take a right inverse R; nearby L' have L'∘R invertible, using `ContinuousLinearMap.exists_right_inverse_of_surjective` and openness of units).
+2. `isOpen_regularPoints`: for smooth `f : X → E n`, `IsOpen {x | Surjective (mfderiv 𝓘 𝓘 f x)}`. Near x, mfderiv equals fderiv of the chart representative composed with an invertible chart-transition derivative, which is continuous since the representative is C¹; then apply step 1. Hence critical points are closed, so they are compact in X, and their image `criticalValues f` is compact. This gives (i).
+3. `not_surjective_of_isMaxOn`: if `x` maximizes `fun z ↦ (f z) 0` (n > 0), then `mfderiv f x` is not surjective. Use a local max of the chart representative, `IsLocalMax.fderiv_eq_zero` and the chain rule, so the coordinate functional kills the range. With `IsCompact.exists_isMaxOn` this gives (ii).
+4. `range_mem_nhds_of_regular`: if `mfderiv f x` is surjective then `range f ∈ 𝓝 (f x)`, via `HasStrictFDerivAt.map_nhds_eq_of_surj` on the chart representative.
+5. Assembly of (iv): suppose `criticalValues f` is finite. Then `ℝⁿ \ I` is connected (`isConnected_compl_of_one_lt_rank`, n > 1). If `range f ⊆ I`, the range is finite and connected, hence a singleton, contradicting nonconstancy. Otherwise `range f \ I` is nonempty, relatively open by step 4, and relatively closed because `range f` is compact, so it equals `ℝⁿ \ I`, contradicting boundedness of `range f`. Conjunct (iii) is `criticalValues_zero`.
+Shared tags: `regular-points-open` (t92J07 and t98A06 also state `Surjective (mfderiv …)` conditions; I did not check whether they need steps 1–2)
+Doubts: none. The frozen encoding already handles the n = 0 exception. The m = 0 case (X a single point) is covered by the same argument without a separate case. Not compiled; each step is a single coherent theorem, and step 2 (chart bookkeeping for `mfderiv` at points near x) is the largest.
+# Routes, batch C (t97J02, t97J06, t97J08, t98A02)
+
+### t97J08 — DIRECT — sorries: 1
+Needs: the single `sorry` in `apm_t97j08` has four conjuncts: (i) `‖z/‖z‖‖ = 1`; (ii) the algebraic identity `t97J08Beta z v = t97J08PhiPullbackAlphaHat z v` for `z ≠ 0`; (iii) closedness of beta; (iv) unique winding number equal to the beta integral. (iii) and (iv) are exactly `apm_t97j08_previous_encoding`, which is already proved in the same file (its three bridges are sorry-free, via banked modules).
+Reuse: `apm_t97j08_previous_encoding` (same file, via `ConstructionTargets.ExplicitCrossDerivativeCalculus.beta_cross_derivatives`, `ConstructionTargets.T97J08FrozenWindingWiring.existsUnique_frozenWindingNumber`, `ConstructionTargets.T97J08SmoothLiftRegularity.globalLift_circleLoop_contDiff_one`, `ConstructionTargets.T97J08BetaWindingIntegral.winding_eq_betaIntegral_of_liftIsCOne`); `t97J08_sqRadius_ne_zero`; Mathlib `Complex.sq_norm`, `Complex.normSq_apply`, `Complex.div_ofReal_re/im`, `Complex.re_mul_ofReal`, `Complex.im_mul_ofReal`.
+Route:
+1. Replace the final `sorry` with the probe below. Compiled 2026-09-28 as /tmp/routes3/C/T97J08.lean (copy of Main.lean with only the final `sorry` replaced); `#print axioms apm_t97j08` = [propext, Classical.choice, Quot.sound].
+```lean
+  refine ⟨?_, ?_, apm_t97j08_previous_encoding.1, apm_t97j08_previous_encoding.2⟩
+  · intro z hz
+    have : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz
+    simp [t97J08Phi, this]
+  · intro z v hz
+    have hr : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz
+    have hr2 : ‖z‖ ^ 2 = z.re ^ 2 + z.im ^ 2 := by
+      rw [Complex.sq_norm, Complex.normSq_apply]; ring
+    have hc : ((z.re * v.re + z.im * v.im : ℂ) / (‖z‖ : ℂ) ^ 3) =
+        (((z.re * v.re + z.im * v.im) / ‖z‖ ^ 3 : ℝ) : ℂ) := by push_cast; rfl
+    simp only [t97J08PhiPullbackAlphaHat, t97J08Alpha, t97J08Phi, t97J08DPhi, t97J08Beta, hc,
+      Complex.div_ofReal_re, Complex.div_ofReal_im, Complex.sub_re, Complex.sub_im,
+      Complex.re_mul_ofReal, Complex.im_mul_ofReal]
+    have hpi : Real.pi ≠ 0 := Real.pi_ne_zero
+    field_simp
+    rw [← hr2]
+    have h2 : ‖z‖ ^ 4 * ‖z‖⁻¹ ^ 2 = ‖z‖ ^ 2 := by field_simp
+    linear_combination (z.re * v.im - z.im * v.re) * h2
+```
+Shared tags: none
+Doubts: none. The problem is closable now. The only reason it is still open is that the last re-encoding added conjuncts (i) and (ii) and nobody went back to prove them.
+
+### t97J06 — DIRECT — sorries: 1
+Needs: the single `sorry` in `apm_t97j06` has three conjuncts: (i) the lift identity, already proved as `t97J06Map_on_cover`; (ii) `t97J06HasDegree t97J06Map 0`, i.e. some iso `H₂(S¹×S¹;ℤ) ≅ ℤ` with the induced map sending the generator to 0; (iii) not nullhomotopic, already proved inside `apm_t97j06_previous_encoding` as `t97J06_not_homotopic_const_of_not_contractibleCircle CircleNoncontractible.circle_not_contractible`.
+Reuse: `ConstructionTargets.BoundaryTorusIntegralHomologyComplete.boundaryTorusH2ModuleIsoInt` (H₂ of `Circle × Metric.sphere (0:EuclideanSpace ℝ (Fin 2)) 1` ≅ ℤ as a ModuleCat ℤ iso); `ConstructionTargets.SingularHomologyConcrete.circleHomeomorphSphereOne` (in CircleSingularHomology); `ConstructionTargets.SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top 1 2` (H₂(S¹)=0); `ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic`; `CircleNoncontractible.circle_not_contractible`.
+Route (all compiled 2026-09-28 in /tmp/routes3/C/T97J06.lean = Main.lean plus three imports, the block below, and the final proof; `#print axioms apm_t97j06` = [propext, Classical.choice, Quot.sound]):
+1. Add imports `ConstructionTargets.BoundaryTorusIntegralHomologyComplete`, `ConstructionTargets.CircleSingularHomology`, `ConstructionTargets.SingularHomologyHomotopy`.
+2. `t97J06H2Iso : T97J06H2 ≅ ModuleCat.of ℤ ℤ`: transport `boundaryTorusH2ModuleIsoInt` along the homeomorphism `id × circleHomeomorphSphereOne`.
+3. `t97J06Homotopy`: the explicit homotopy `(s,p) ↦ (exp(2πi(1-s)·Im(p₁p₂²)), p₁p₂)` from f to `p ↦ (1, p₁p₂)`, which factors through `Circle`. Then `t97J06_H2Map_eq_zero` holds because H₂(Circle)=0.
+4. Final proof: `refine ⟨t97J06Map_on_cover, ⟨t97J06H2Iso, _⟩, (iii)⟩; rw [t97J06_H2Map_eq_zero]; simp`.
+Closure probe (insert before `theorem apm_t97j06`):
+```lean
+noncomputable abbrev t97J06F := ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ))
+
+noncomputable def t97J06TorusHomeo :
+    T97J06Torus ≃ₜ ConstructionTargets.SolidTorusGluingOpenCover.BoundaryTorus :=
+  (Homeomorph.refl Circle).prodCongr
+    ConstructionTargets.SingularHomologyConcrete.circleHomeomorphSphereOne
+
+noncomputable def t97J06H2Iso : T97J06H2 ≅ ModuleCat.of ℤ ℤ :=
+  t97J06F.mapIso (TopCat.isoOfHomeo t97J06TorusHomeo) ≪≫
+    ConstructionTargets.BoundaryTorusIntegralHomologyComplete.boundaryTorusH2ModuleIsoInt
+
+lemma t97J06_circle_H2_isZero : Limits.IsZero (t97J06F.obj (TopCat.of Circle)) :=
+  (ConstructionTargets.SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top 1 2
+    (by decide) (by decide)).of_iso
+    (t97J06F.mapIso
+      (TopCat.isoOfHomeo ConstructionTargets.SingularHomologyConcrete.circleHomeomorphSphereOne))
+
+noncomputable def t97J06Mul : C(T97J06Torus, Circle) := ⟨fun p ↦ p.1 * p.2, by fun_prop⟩
+noncomputable def t97J06Incl : C(Circle, T97J06Torus) := ⟨fun w ↦ (1, w), by fun_prop⟩
+
+noncomputable def t97J06Homotopy :
+    ContinuousMap.Homotopy t97J06Map (t97J06Incl.comp t97J06Mul) where
+  toFun q := (Circle.exp ((1 - (q.1 : ℝ)) * (2 * Real.pi *
+      Complex.im ((q.2.1 : ℂ) * (q.2.2 : ℂ) ^ 2))), q.2.1 * q.2.2)
+  continuous_toFun := by fun_prop
+  map_zero_left p := by simp [t97J06Map]
+  map_one_left p := by simp [t97J06Incl, t97J06Mul]
+
+lemma t97J06_H2Map_eq_zero : t97J06H2Map t97J06Map = 0 := by
+  unfold t97J06H2Map
+  rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) ⟨t97J06Homotopy⟩ 2]
+  rw [show TopCat.ofHom (t97J06Incl.comp t97J06Mul) =
+      TopCat.ofHom t97J06Mul ≫ TopCat.ofHom t97J06Incl from rfl, Functor.map_comp]
+  have h0 : t97J06F.map (TopCat.ofHom t97J06Mul) = 0 :=
+    t97J06_circle_H2_isZero.eq_of_tgt _ _
+  exact (by rw [h0, Limits.zero_comp] :
+    t97J06F.map (TopCat.ofHom t97J06Mul) ≫ t97J06F.map (TopCat.ofHom t97J06Incl) = 0)
+```
+Final proof body:
+```lean
+  refine ⟨t97J06Map_on_cover, ⟨t97J06H2Iso, ?_⟩,
+    t97J06_not_homotopic_const_of_not_contractibleCircle
+      CircleNoncontractible.circle_not_contractible⟩
+  rw [t97J06_H2Map_eq_zero]
+  simp
+```
+Shared tags: none
+Doubts: none. The degree-0 argument does not need orientation or the degree formula. The frozen `t97J06HasDegree` only asks for *some* iso `H₂ ≅ ℤ`, and the induced map is 0, so any iso would do.
+
+### t97J02 — HEAVY — sorries: 3
+Needs:
+- `apm_t97J02_bridge_candidate_covers`: three explicit covering maps between the frozen polygon quotients, `Surface false 12 → N₄` (5 sheets), `Surface true 7 → N₄` and `Surface false 14 → N₄` (6 sheets), each an `IsCoveringMap` with every fibre of exact `Nat.card` n.
+- `apm_t97J02_bridge_classify_five_and_six_fold_covers`: every compact connected T2 smooth 2-manifold E with a 5-sheeted (resp. 6-sheeted) cover of N₄ is homeomorphic to `Surface false 12` (resp. `Surface true 7` or `Surface false 14`).
+- `apm_t97j02`: assembly only, `⟨h1.1, h2.1, h1.2.1, h1.2.2, h2.2⟩` from the two bridges. Trivial once they exist.
+Reuse: only arithmetic is banked. In the same file: `apm_t97J02_candidate_eulerCharacteristics`, `apm_t97J02_nonorientable_genus_of_euler_eq`, `apm_t97J02_orientable_genus_of_euler_eq`, `apm_t97J02_continuous_surfaceQuotient`. In the library: `ConstructionTargets.Surfaces` (the same polygon definitions, no theorems about them), `ConstructionTargets.CoveringDegree.IsKSheetedCover` / `transfer` (only the fibre-count layer), `ConstructionTargets.CompactSurfaceTriangleCover.exists_finite_cover` and `SurfaceNestedTriangleCover` (finite covers by chart triangles, which is not a triangulation). Mathlib: `IsCoveringMap`, and `isCoveringMap_quotientMk_of_properlyDiscontinuousSMul`. The latter does not help directly: the natural rotations of the standard 4g-gon fix the centre, so they do not act freely, and no rotation of the 24-gon has order 5. Nothing proves any polygon quotient is Hausdorff, compact or locally Euclidean.
+Route:
+1. `polygon_quotient_isManifold`: `Surface o g` is T2, compact, connected, and locally homeomorphic to ℝ², with charts at interior, edge-interior and vertex classes. This alone is sizeable: the vertex class needs a chart assembled from 2g or 4g corner sectors.
+2. `permutation_polygon_cover`: given a permutation representation of the edge generators of the N₄ word `a₁a₁a₂a₂a₃a₃a₄a₄` into `Sym (Fin n)` satisfying the relator, the quotient of `Fin n × Disk` by the lifted edge pairings covers N₄ with n sheets (`IsCoveringMap` plus fibre count).
+3. `cover_model_homeomorph_normal_form`: each of the three specific n-copy complexes is homeomorphic to the frozen standard polygon (`Surface false 12`, `Surface true 7`, `Surface false 14`). This is a cut-and-paste reduction to normal form, carried out concretely three times or via a general normal-form theorem. Steps 1–3 close bridge 1.
+4. `compact_smooth_surface_triangulable`: a compact smooth 2-manifold admits a finite triangulation (Radó). `CompactSurfaceTriangleCover` only covers the surface by triangles, which is not yet a triangulation.
+5. `euler_char_well_defined_and_cover_multiplicative`: χ(E) = n·χ(B) for an n-sheeted cover. Either lift the triangulation, or define χ from singular homology ranks and use a transfer.
+6. `orientable_cover_of_nonorientable_even_degree`: an orientable cover of a nonorientable surface has even degree, via the orientation double cover or w₁/H₂(·;ℤ) parity. This rules out the orientable case for 5 sheets.
+7. `surface_classification`: a compact connected triangulated surface is homeomorphic to `Surface o g`, with (o, g) determined by orientability and χ. Then bridge 2 follows from 4–7 plus the banked genus arithmetic.
+8. Assemble `apm_t97j02` (trivial).
+Size: several thousand lines. Classification of surfaces (steps 4 and 7) is itself a multi-month formalisation, and steps 1–3 are a large point-set programme on these particular `EqvGen` quotients. No lighter route exists as frozen: the conclusion is a `Homeomorph` to a specific polygon quotient for an arbitrary E, so classification cannot be avoided.
+Shared tags: `polygon-quotient-manifold-charts`, `surface-classification`, `surface-triangulation`, `euler-characteristic-finite-cover`, `orientation-double-cover`, `polygon-permutation-cover`
+Doubts: I think the statement is true. Orientable covers of N₄ have even degree, and χ = −2n gives genera 12, 7 and 14, all of which are realised. Two points belong to proof obligations rather than to truth. First, the classification clause only makes sense because the target polygon quotients are genuine surfaces, and nothing in the repo proves that yet (step 1). Second, E is smooth but p need not be, which is fine. Elect this late. It shares its core with t97A01, t99J03 and t03J05 (they use the same `Surface` polygon encoding), so `polygon-quotient-manifold-charts` is the natural first shared row.
+
+### t98A02 — HEAVY — sorries: 1
+Needs: for closed, path-connected, smooth 4-manifolds X₁, X₂ with H₄ ≅ ℤ and **topological** embeddings φᵢ : D⁴ → Xᵢ, and Y the frozen quotient (the two ball complements `Xᵢ \ φᵢ(open ball)` glued along φᵢ(S³)): (a) H₀(Y) ≅ ℤ; (b) Hₖ(Y) ≅ Hₖ(X₁) × Hₖ(X₂) for 1 ≤ k ≤ 3; (c) H₄(Y) ≅ ℤ; (d) Hₖ(Y) = 0 for k ≥ 5.
+Reuse: in the same file, the point-set pushout interface (`t98A02_gluedDesc`, `t98A02_gluedDescEquiv`, `t98A02_boundary_identified`, and the continuous inclusions). Library: `ConstructionTargets.ProductionOpenCoverMayerVietoris` (integral open-cover MV transport, used to compute torus H₂ in `BoundaryTorusH2ConnectingIso`); `ConstructionTargets.SphereHomology.positiveSphereIntegralHomology` (all of H_*(Sⁿ)); `ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic`; `ConstructionTargets.TopologicalSumSingularHomology`; `HigherSphereLocalization`; and the unfinished `Coefficient*CompactSupport*`/relative-MV chain (rows 621/622, still blocked). Mathlib: `isZero_singularHomologyFunctor_of_totallyDisconnectedSpace` and homotopy invariance. No banked local-to-global manifold homology, fundamental class, or dimension vanishing.
+Route (the frozen form has wild embeddings, so the steps marked * have no tame shortcut):
+1. `t98A02_Y_pathConnected` + H₀ ≅ ℤ: each `Xᵢ \ φᵢ(int D)` is path-connected and meets the glued sphere. The open ball image is open by invariance of domain, and boundary points lie in the closure of the exterior. H₀ of a path-connected space ≅ ℤ is already used by `sphereH0IsoInt`.
+2. `closed_manifold_homology_vanishing_above_dim` and `closed_manifold_minus_point_top_vanishing`: Hₖ(X) = 0 for k > 4 and H₄(X \ K) = 0 for nonempty compact K. This is Hatcher 3.27–3.29, the induction over compacta in charts. It needs the relative/compact-support MV that loop A is still building.
+3. `orientation_of_H4_iso_Z`: H₄(X) ≅ ℤ gives a fundamental class restricting to generators of the local groups H₄(X, X∖x). Used for the degree-3/4 connecting map.
+4. * `ball_complement_homology`: Hₖ(X \ φ(int D)) ≅ Hₖ(X) for k ≤ 3 and = 0 for k = 4. With a collar this is a deformation retraction to X ∖ pt plus step 2. For a wild ball there is no collar, and it needs Alexander–Lefschetz duality with Čech cohomology or an ANR argument ("crumpled cubes are ANRs").
+5. * `connected_sum_mayer_vietoris`: an MV sequence for Y = C₁ ∪_{S³} C₂. The banked version is for open covers. Getting open thickenings of the glued sphere that deformation retract onto it needs a collar (tame) or ANR neighbourhood theory (wild).
+6. `connected_sum_connecting_degree4`: H₄(Y) → H₃(S³) ≅ ℤ is an iso, and H₃(S³) → H₃(C₁) ⊕ H₃(C₂) is zero, because S³ bounds in each Cᵢ, using step 3. This gives (c) and the k = 3 case of (b). For k = 1, 2, (b) follows because H₁, H₂ of S³ vanish (banked).
+7. Degree ≥ 5 vanishing (d) from MV, step 2 and banked sphere vanishing. Then assemble, converting biproduct to `ModuleCat.of ℤ (A × B)` (`HomologyBiprodIso` exists).
+Size: hundreds of rows at the observed pace (as the audit estimated). Step 2 alone is the whole local-to-global programme. Steps 4 and 5 in the wild case add ANR/Čech duality theory, which the library has none of. A lighter route would exist only if the embedding came with a collar or the triangulation hypothesis the source allows. Then steps 4–5 reduce to open-cover MV (banked) plus a deformation retraction, and the class drops to FOUNDATION on `manifold-homology-local-to-global`. The statement is frozen, so that is a report only.
+Shared tags: `manifold-homology-local-to-global`, `manifold-fundamental-class`, `mayer-vietoris-open-cover`, `ball-complement-collar`, `wild-embedding-anr`
+Doubts: (1) Truth for wild φ is not established. I believe it holds if closures of complements of wild 4-balls (crumpled cubes) are ANRs, which I recall but have not verified. If some crumpled 4-cube is not an ANR, singular MV for the closed cover of Y can fail, and the frozen claim is then open or false. (2) Nothing requires φ(D) to avoid any structure, and the smooth structure on Xᵢ does not constrain a topological φ. So "4-simplex of a triangulation" is dropped from the source without replacement, and that one dropped hypothesis is why this is HEAVY rather than FOUNDATION.
+
+### t98J06 — DIRECT — sorries: 1
+Needs: at a fixed point p, (i) `difference f p = df_p - id` is bijective, (ii) the determinant of `tangentSum f p` has the same sign as det(df_p - id) (which is nonzero, so the "¬0<det" case gives -1).
+Reuse: Mathlib `mfderiv_prodMk`, `mfderiv_id`, `Submodule.eq_top_iff'`, `Submodule.mem_sup`, `LinearMap.injective_iff_surjective`, `Module.End.isUnit_iff`, `LinearMap.isUnit_iff_isUnit_det`, `LinearMap.det_toMatrix`, `Basis.prod`, `Pi.basisFun`, `Matrix.det_fromBlocks_one₁₁`. Nothing from ConstructionTargets needed beyond the frozen import (`horientable` is unused).
+Route (CLOSED by probe — full frozen theorem compiles, 0 sorry, statement text diffed identical to Main.lean):
+Probe file: /tmp/routes3/D/J06.lean (131 lines incl. copied preamble; proof ≈55 lines).
+1. `j06_det_core (A : (Fin n→ℝ)→ₗ(Fin n→ℝ)) : det ((fst+snd).prod (fst + A∘snd)) = det (A - id)` — toMatrix in `(Pi.basisFun).prod` is `fromBlocks 1 1 1 [A]`, then `det_fromBlocks_one₁₁`.
+2. In the main proof: `mfderiv diagonal y = id.prod id`, `mfderiv (graph f) p = id.prod (mfderiv f p)` via `mfderiv_prodMk`; transversality at (p,p) decomposes (0,c) = (u, df u) + (w,w), so df u - u = c: surjective, hence bijective (finite dim); det ≠ 0 from `isUnit_iff_isUnit_det`; tangentSum's linear map is the step-1 map, so the signs agree.
+Shared tags: none
+Doubts: none. Statement is true as frozen; orientability hypothesis is not needed (sign is orientation-independent, as the docstring says).
+
+### t98J01 — HEAVY (part a) / ADAPTER (part b) — sorries: 1
+Needs: (a) `HasLefschetzNumber h 8`: every rational singular homology group of S²×S¹×S¹ is finite-dimensional, all vanish above some bound (4), and the alternating trace of h_* equals 8 (traces 1, -2, 2, -2, 1 in degrees 0..4). (b) h is not homotopic to id.
+Reuse: `ConstructionTargets.RationalLefschetz` (definitions only, no computations); `SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic` (homotopy invariance, e.g. the half-turn is homotopic to id via rotation by tπ); `CoefficientSphereAntipodal.product_homology` / `antipodal_action` (R-coefficient top homology of `euclideanUnitSphere` with reflection products acting by ±1); `CoefficientSphereShift` (R-coefficient sphere homology shift); `SphereHomology` (integral, all degrees); `CircleUniversalCover` (`circleCover_isCoveringMap`, `liftBasedLoopEndpointInteger`, `circleWindingHom`), `CircleHurewiczIsomorphism.circleH1AddEquivInt` (H₁(Circle;ℤ) ≃ ℤ); `ProductionOpenCoverMayerVietoris` (integral open-cover MV). Mathlib: no Künneth, and no trace additivity along short exact sequences (grep found only `trace_eq_sum_trace_restrict'` for direct sums).
+Route:
+Part (b) (independent, ADAPTER, ~5 steps):
+1. `S1 ≃ₜ Circle` sending `reflection` to `z ↦ -conj z` (explicit homeomorphism).
+2. `h ≃ id → reflection ≃ id` on S1: compose the homotopy with `q ↦ (p₀,q,r₀)` and project to the 2nd factor.
+3. `circleMapDegree : C(Circle,Circle) → ℤ` via the lift along `circleCover` of `t ↦ f(exp t)` on [0,1] (or via induced map on `circleH1AddEquivInt`), invariant under free homotopy.
+4. `degree id = 1`, `degree (z ↦ -conj z) = -1` (lift is `t ↦ π - t` up to sign convention).
+5. Assemble: 1 = -1 contradiction.
+Part (a) (HEAVY):
+6. Homeomorphisms S2 ≃ₜ `euclideanUnitSphere 3`, S1 ≃ₜ `euclideanUnitSphere 2` carrying the half-turn to the reflection product on two coordinates and `reflection` to one coordinate reflection.
+7. Rational homology of S² and S¹ with these actions in all degrees (H₀ = ℚ with trivial action from path-connectedness; top degree from `product_homology` with R = ℚ; zero otherwise) — mostly banked, needs the H₀ and vanishing pieces at R = ℚ.
+8. `circle-product-mayer-vietoris`: for the cover S¹∖{(0,1)}, S¹∖{(0,-1)} (both preserved by the reflection, which swaps the two arcs of the intersection), H_k(Y×S¹;ℚ) sits in a short exact sequence 0 → H_k(Y) → H_k(Y×S¹) → H_{k-1}(Y) → 0, natural for maps a×reflection, with reflection acting by -1 on the H_{k-1} part. Needs R-coefficient open-cover MV (the production MV is integral) plus naturality in maps preserving the cover — the large step (or replace by a rational Künneth theorem, larger).
+9. `trace-additivity-short-exact`: for a compatible endomorphism of a short exact sequence of finite-dim ℚ-spaces, trace(middle) = trace(sub) + trace(quot).
+10. Iterate step 8 twice (S² → S²×S¹ → S²×S¹×S¹), carrying finite-dimensionality, vanishing above 4, and traces.
+11. Assemble: 1 - (-2) + 2 - (-2) + 1 = 8.
+Size: part (b) about 5 theorems. Part (a) about 10–15 theorems, dominated by step 8 (R-coefficient MV with naturality), realistically dozens of loop rows. A lighter route to (b) exists and should be elected alone (the frozen conjunction still needs (a) for closure). Using L(id) = χ = 0 ≠ 8 for (b) would reuse (a) but gains nothing if (a) is not done.
+Shared tags: circle-product-mayer-vietoris (or rational-kunneth), trace-additivity-short-exact, rational-sphere-homology-with-reflections, circle-map-degree
+Doubts: none about truth (L = 2·2·2 = 8; g has degree -1). `HasLefschetzNumber` also requires `FiniteDimensional` in every degree k, including above 4, so vanishing above the dimension must be proved; there is no shortcut there.
+
+### t98J02 — HEAVY (conjunct 1) / ADAPTER (conjuncts 2, 3) — sorries: 1
+Needs: (1) for a connected finite-sheeted cover E of a closed topological surface F, a topologically embedded lift of a nonseparating embedded circle is nonseparating; (2) a disconnected counterexample (n > 0, E not connected) where the lift separates; (3) a connected counterexample where c separates and the lift does not.
+Reuse: `ConstructionTargets.CoveringDegree.IsKSheetedCover` (definition only); Mathlib `ChartedSpace.comp`, `OpenPartialHomeomorph.singletonChartedSpace` / `Homeomorph` charts (to give the model surfaces `EuclideanSpace ℝ (Fin 2)` charts; no module in ConstructionTargets provides such a `ChartedSpace` instance — grep found none), `isCoveringMapOn_quotientMk_of_properlyDiscontinuousSMul` and `IsQuotientCoveringMap.isCoveringMap` (Mathlib/Topology/Covering/Quotient.lean), `IsFiberBundle.isCoveringMap` (trivial cover), `Continuous.isClosedEmbedding` (compact → T2). `StatementSurfaceModels.KleinBottle` is a polygon quotient with no charts, so it is not useful here.
+Route:
+Conjunct 2 (ADAPTER):
+1. `torusSurface : ClosedSurface` on `Circle × Circle`, with charts `ChartedSpace.comp` through a homeomorphism `EuclideanSpace ℝ (Fin 1) × EuclideanSpace ℝ (Fin 1) ≃ₜ EuclideanSpace ℝ (Fin 2)`.
+2. `isPreconnected_compl_slice : IsPreconnected (range (fun z => (z, w₀)))ᶜ` in the torus, i.e. `Circle × (Circle \ {w₀})`, using `Circle \ {w₀} = image of an open interval under Circle.exp`.
+3. The trivial cover `Prod.fst : T × Fin 2 → T` is `IsKSheetedCover _ 2` and not connected; lift `l z = ((z,w₀),0)`; the complement contains the clopen `T × {1}`, so it is not preconnected.
+Conjunct 3 (ADAPTER, larger):
+4. Free involution τ(z,w) = (-z, conj w) on the torus as a ZMod 2 (or `Multiplicative`) properly discontinuous action; `K := quotient`; `mk` is a 2-sheeted covering (Mathlib quotient covering) and fibers have exactly 2 points.
+5. `K` is a `ClosedSurface`: T2 (`t2Space_of_properlyDiscontinuousSMul_of_t2Space`), compact, second countable, connected as images; charts at `mk e` = local inverse of `mk` (`IsLocalHomeomorph` partial homeomorph).symm composed with the torus chart from step 1.
+6. `L = Circle × {i}`, `L' = τ L = Circle × {-i}`; `c = mk ∘ l` is an embedding (injective on L, compact to T2); `E \ L` is preconnected by step 2.
+7. `K \ C` is not preconnected: it is `mk` of the two τ-invariant open bands `Re w > 0`, `Re w < 0` (minus L ∪ L'), which are disjoint, open and nonempty in K.
+Conjunct 1 (HEAVY):
+8. `surface-curve-collar`: every topologically embedded circle in a topological surface has an annulus or Möbius-band neighbourhood (2-dimensional Schoenflies / tameness). Without it, even "C locally has two sides" is unavailable, since the embeddings are only topological and the charts are merely local homeomorphisms.
+9. From nonseparation of C, a loop δ in F meeting C exactly once, crossing it transversally in the collar.
+10. Monodromy argument: follow the lifts of δ starting at the point of L over δ(0) around its σ-orbit; this gives a closed loop in E meeting L exactly once (p|L injective), so L cannot separate E (a loop crossing once would have to go from one side A to the other side B inside E \ L). One-sided (Möbius) case: L's neighbourhood lifts homeomorphically, so L is one-sided and does not separate.
+Size: conjuncts 2 and 3 are about 7 bounded theorems, most of them in step 5 (charts on the Klein-bottle quotient). Conjunct 1 needs the 2D Schoenflies/collar theorem for topological curves, a large programme (Jordan curve theorem first, which Mathlib lacks), plus about 3 theorems after it. No lighter route to conjunct 1 was found: every argument I tried needs local two-sidedness of C, which is Jordan/Schoenflies-level.
+Shared tags: surface-curve-collar (Schoenflies/Jordan for topological curves; shared with t00A03 per the audit), surface-charts-from-covering-quotient
+Doubts: all three conjuncts are true as frozen (conjunct 3: the Klein bottle split into two Möbius bands by C, with its torus double cover; conjunct 1: classical, since every topological curve on a surface is tame). The cost of conjunct 1 comes only from the topological, not smooth, encoding.
+
+### t98A06 — HEAVY (part b) / ADAPTER (part a) — sorries: 1
+Needs: (a) for a smooth submersion f : X → Y and smooth tangent section v on Y, a smooth tangent section w on X with `mfderiv f x (w x) = v (f x)`; (b) for compact X and a submersion f : X → Circle, a C^∞ `Diffeomorph` between the fibres over 1 and -1, each carrying the banked regular-fibre atlas `ManifoldTargetRegularFiberGlobalAtlas.chartedSpace`.
+Reuse: Mathlib `exists_contMDiffSection_forall_mem_convex_of_local` (Geometry/Manifold/PartitionOfUnity.lean:600; glues local smooth sections with values in fibrewise convex sets, which is exactly the hint), `ContMDiffAt.mfderiv` (smooth dependence of the derivative in tangent coordinates), `exists_isMIntegralCurveAt_of_contMDiffAt_boundaryless`, `exists_isMIntegralCurve_of_isMIntegralCurveOn` (IntegralCurve/UniformTime.lean), uniqueness lemmas in IntegralCurve/ExistUnique.lean. Banked: `ManifoldTargetRegularFiberGlobalAtlas.chartedSpace`, `.isManifold`, `.smooth_inclusion`; `ManifoldTargetRegularFiberCharts.FiberChart` (its `forward_smooth` / `backward_smooth` fields), `ManifoldTargetRegularFiberTangentImage.inclusion_range` (tangent space of the fibre = ker df).
+Route:
+Part (a) (ADAPTER, 3 steps):
+1. `affine_convex`: `{w | mfderiv f x w = v (f x)}` is convex (an affine preimage).
+2. `local_lift`: ∀ x₀, ∃ U ∈ 𝓝 x₀, ∃ s smooth on U (as a map to the tangent bundle) with `mfderiv f y (s y) = v (f y)` on U. Proof: in tangent coordinates at x₀, choose a complement K of ker(df_{x₀}); df_y|K is invertible near x₀ and depends smoothly on y (`ContMDiffAt.mfderiv`, smoothness of inversion), so s y = (df_y|K)⁻¹ (v (f y)). This is the only step with real work.
+3. Apply the Mathlib gluing lemma with `V = TangentSpace (𝓡 n)`; `SigmaCompactSpace` from second-countable + locally compact; unpack `Cₛ^∞` into `SmoothVectorField`.
+Part (b) (HEAVY):
+4. Apply (a) to the rotation field ∂θ on Circle (smooth, nowhere zero) to get w with df(w) = ∂θ ∘ f.
+5. `compact-manifold-complete-flow`: on compact boundaryless X, every point has an integral curve of w defined on all of ℝ (uniform time from compactness + Mathlib `UniformTime`), with the group law φ_{s+t} = φ_s ∘ φ_t (uniqueness).
+6. `smooth-flow-initial-condition-dependence`: (x ↦ φ_t x) is C^∞. Mathlib has no smooth dependence of ODE solutions on initial conditions (PicardLindelof gives only Lipschitz/continuous dependence). This is the large step: C^k dependence by induction via the variational equation, then transport to manifolds through charts. It is a programme of dozens of lemmas at the observed pace.
+7. f(φ_t x) = exp(i t) · f(x) (derivative of f along the integral curve equals ∂θ; uniqueness on Circle), so φ_π maps f⁻¹(1) onto f⁻¹(-1) with inverse φ_{-π}.
+8. `fiber-restriction-smooth`: a smooth map X → X sending fibre c to fibre c' restricts to a smooth map between the banked fibre manifolds (use `FiberChart.forward_smooth` ∘ map ∘ `backward` in charts). About 1 theorem.
+9. Assemble the `Diffeomorph`.
+Size: part (a) about 3 theorems (one substantial). Part (b) needs one foundation (step 6), plus about 4 bounded theorems. No flow-free route found (Ehresmann's theorem is proved with flows in every standard source).
+Shared tags: smooth-flow-initial-condition-dependence, compact-manifold-complete-flow, submersion-local-right-inverse
+Doubts: none about truth. The empty/degenerate cases are consistent: for n = 0, X must be empty; for nonempty X, f is onto by compactness + openness.
+
+### t98A03 — FOUNDATION — sorries: 1
+Needs (four conjuncts in one sorry): (1) X = T² ∨ ℝP² (arbitrary basepoints t₀, r₀) is not a Hausdorff ℝⁿ-charted manifold for any n; (2) π₁(X, x₀) ≃* Monoid.Coprod (Multiplicative (ℤ×ℤ)) (Multiplicative (ZMod 2)); (3) a connected 3-sheeted cover whose deck homeomorphisms are transitive on fibres; (4) a connected 3-sheeted cover that is not regular.
+Reuse: van Kampen is banked: `TwoOpenFreeProductMapping.groupEquivalence` / `basedGroupEquivalence` (π₁X ≃* π₁U ∗ π₁V for open U ∪ V = univ, U, V path-connected, U ∩ V simply connected). The T²∨S¹ pipeline is a template: `TorusCircleWedgeOpenCover`, `TorusCircleWedgeConnectorComparison.torusEndMulEquiv` (π₁(T², (1,1)) ≃* Multiplicative (ℤ×ℤ), via `FundamentalGroupProduct.fundamentalGroupProdMulEquiv` + `circleFundamentalGroupMulEquivInt`), `TorusCircleWedgeFreeProductComposite`. Generic wedge: `PointWedgeQuotient` (`Wedge`, `quotientHomeomorphOfRelIff` to transport the frozen `EqvGen` relation, `isOpen_image_of_basepoints_mem`), `PointWedgeRestrictedOpenQuotient` (open sub-wedges as wedges), `PointWedgePointedContractionDescent.wedgeHomotopyEquivLeft` (X ∨ contractible ≃ X). `SimplyConnectedSphereProducts.euclideanSphere_simplyConnected`; `ProjectiveSpaceTopology` (quotient topology on projective space); `CircleUniversalCover` (lifting method to copy for ℝP²). Mathlib: `isCoveringMapOn_quotientMk_of_properlyDiscontinuousSMul`, `IsCoveringMap.liftPath` / homotopy lifting, `isConnected_compl_singleton_of_one_lt_rank`.
+Route:
+1. `basepoint_reduction`: translations of T² and a linear automorphism of ℝ³ give homeomorphisms X(t₀,r₀) ≃ₜ X((1,1), [e₃]) fixing the basepoints; this reduces everything to fixed basepoints (π₁ and cover existence transport along homeomorphisms).
+2. `not_manifold`: n = 0 fails (x₀ is not isolated); for n ≥ 2, a chart ball W ∋ x₀ has W \ {x₀} connected (ball minus a point, `isConnected_compl_singleton_of_one_lt_rank` after `univBall`), but W \ {x₀} splits into two disjoint nonempty open pieces (torus side, ℝP² side). For n = 1, at a torus point near t₀ an interval chart and a 2-dim torus chart conflict (removing a point disconnects the first and not the second). About 3 lemmas.
+3. `rp2_double_cover`: S² → ℝP² (`Projectivization.mk'`) is a 2-sheeted covering (±1 action is properly discontinuous; identify the coinduced topology from ℝ³ \ 0 with the S² quotient).
+4. `rp2_pi1`: π₁(ℝP²) ≃* Multiplicative (ZMod 2) via lift endpoints (±v) as in `CircleUniversalCover`; injectivity uses S² simply connected.
+5. `rp2_contractible_nbhd`: the affine chart {z ≠ 0} ≃ₜ ℝ² gives a pointed contractible open neighbourhood of [e₃]; the torus uses the product of arcs `TorusCircleWedgeOpenCover.N`.
+6. `wedge_van_kampen_instance`: U = T ∨ (disc in ℝP²), V = (disc in T) ∨ ℝP², U ∩ V = disc ∨ disc (simply connected); π₁U ≅ π₁T² and π₁V ≅ π₁ℝP² by `wedgeHomotopyEquivLeft`; then apply `groupEquivalence` and `MulEquiv.coprodCongr`.
+7. `regular_cover`: Y = (T² via (z,w) ↦ (z³,w)) glued with three copies of ℝP² at the three preimages of t₀; prove `IsCoveringMap` (evenly covered sets: the torus-side and ℝP²-side open sets away from x₀, plus a wedge neighbourhood of x₀ whose preimage is 3 disjoint copies), fibres of size 3, connected; deck maps (rotate z by ω, cycle the copies) are transitive on fibres.
+8. `irregular_cover`: monodromy a ↦ (123), b ↦ 1, c ↦ (12): Y = cyclic 3-fold torus cover with one ℝP² attached at t̃₀ and one S² (from step 3) attached at its two points over r₀ to t̃₁ and t̃₂; covering + connected + fibres of size 3 as in step 7.
+9. `irregular_not_regular`: a deck homeomorphism commuting with p permutes the components of p⁻¹(ℝP² \ {r₀}) and preserves their sheet count (1 for ℝP² \ pt, 2 for S² \ 2 pts), so it fixes the ℝP² piece and hence t̃₀; no deck map sends t̃₀ to t̃₁.
+10. Assemble the four conjuncts.
+Size: about 10 steps, each a real theorem (steps 3, 4, 7 and 8 are several lemmas each; roughly 20–30 lemmas total). Van Kampen, the wedge quotient API and π₁(T²) are banked, so nothing here is open-ended. The cover constructions are the bulk: gluing covering spaces of wedge summands at fibre points, done by hand twice.
+Shared tags: rp2-double-cover-and-pi1, wedge-covering-construction, wedge-van-kampen-instance (template: TorusCircleWedge), wedge-point-not-manifold, wedge-basepoint-homogeneity
+Doubts: none about truth. The statement quantifies over arbitrary t₀, r₀; homogeneity (step 1) handles this. `IsTopologicalManifold` also demands `IsManifold ... 0`, which is automatic for C⁰ but must be discharged once in step 2 (only as a hypothesis there, so no cost).
+
+### tunk02 — DIRECT — sorries: 1
+Needs: `Nonempty (RegularSpace (X × Y))` for regular X, Y.
+Reuse: Mathlib instance `RegularSpace (X × Y)` (Mathlib/Topology/Separation/Regular.lean:250).
+Route:
+1. Closure probe (compiled, axioms propext/choice/Quot.sound only, /tmp/routes3/E/tunk23.lean): `:= ⟨inferInstance⟩`
+Shared tags: none
+Doubts: none
+
+### tunk03 — DIRECT — sorries: 1
+Needs: for an open quotient map `Quotient.mk'`, `IsClosed {p | s.r p.1 p.2} ↔ T2Space (Quotient s)`.
+Reuse: `t2Space_iff_of_isOpenQuotientMap` (Mathlib/Topology/Separation/Hausdorff.lean:170), `Quotient.mk'_surjective`, `continuous_quotient_mk'`, `Quotient.eq'`.
+Route:
+1. Closure probe (compiled, /tmp/routes3/E/tunk23.lean):
+   ```lean
+   have h : IsOpenQuotientMap (Quotient.mk' : X → Quotient s) :=
+     ⟨Quotient.mk'_surjective, continuous_quotient_mk', hopen⟩
+   rw [t2Space_iff_of_isOpenQuotientMap h]
+   simp only [Quotient.eq']
+   ```
+Shared tags: none
+Doubts: none
+
+### t99J04 — ADAPTER — sorries: 3
+Needs:
+- `apm_t99J04_bridge_local_inverse_function`: manifold IFT for boundaryless models `𝓘(ℝ,E)`, `𝓘(ℝ,E')`: `ContMDiffAt ⊤ f x` + bijective `mfderiv f x` ⇒ `IsLocalDiffeomorphAt ⊤ f x` (this is the TODO listed in Mathlib/Geometry/Manifold/LocalDiffeomorph.lean:43-46; absent from Mathlib and from ConstructionTargets — no `IsLocalDiffeomorphAt`/`PartialDiffeomorph` result anywhere in ConstructionTargets).
+- `apm_t99J04_bridge_coordinateMap_mfderiv_bijective`: mfderiv of `x ↦ toLp (fun i => f i x)` is the pi of the coordinate covectors, hence bijective.
+- `apm_t99j04` (main): pure assembly. Checked by compile (/tmp/routes3/E/t99J04.lean): with the two bridges as sorry, the main theorem closes via the file's own `apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT` plus the bridges, leaving one extra small residual: `ContMDiff … (apm_t99J04_coordinateMap f)` (needed to feed `ContMDiffAt` to the IFT bridge in conjunct 1).
+Reuse: in-file `apm_t99J04_dualCoordinates_bijective`, `apm_t99J04_surjective_of_isLocalDiffeomorph`, `apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT`; Mathlib `ContDiffAt.toOpenPartialHomeomorph` / `toOpenPartialHomeomorph_coe` / `mem_toOpenPartialHomeomorph_source` (Analysis/Calculus/InverseFunctionTheorem/ContDiff.lean), `OpenPartialHomeomorph.contDiffAt_symm`, `ContDiffAt.to_localInverse`, `PartialDiffeomorph` + `PartialDiffeomorph.isLocalDiffeomorphAt` (LocalDiffeomorph.lean:77,144), `contMDiffOn_chart`/`contMDiffOn_chart_symm`, `contMDiff_pi_space`, `ContinuousLinearMap.contMDiff`, `mfderiv_comp`. `ConstructionTargets/RegularFiberChart.lean` does the Euclidean implicit-function chart but not a manifold local diffeo; not directly reusable.
+Route:
+1. `euclidean_partialDiffeomorph_of_contDiffAt`: for `g : E → E'` with `ContDiffAt ℝ ⊤ g a` and `fderiv ℝ g a` bijective (finite-dim), ∃ `Φ : PartialDiffeomorph 𝓘(ℝ,E) 𝓘(ℝ,E') E E' ⊤` with `a ∈ Φ.source`, `EqOn g Φ Φ.source` (shrink `toOpenPartialHomeomorph` source to an open set where g is C^∞ and fderiv stays invertible; inverse smooth by `OpenPartialHomeomorph.contDiffAt_symm` pointwise). ~80–120 lines.
+2. `PartialDiffeomorph.trans` + `chartPartialDiffeomorph` (chartAt as a `PartialDiffeomorph` for model `𝓘(ℝ,E)`, from `contMDiffOn_chart(_symm)`). ~40–60 lines.
+3. `isLocalDiffeomorphAt_of_bijective_mfderiv` (= bridge 1): apply step 1 to `writtenInExtChartAt 𝓘 𝓘 x f` at `extChartAt x x`, using that for `𝓘(ℝ,E)` (range = univ) `mfderiv f x = fderiv (writtenInExtChartAt …)`, and conjugate by step 2 charts after shrinking to `f ⁻¹' (chartAt (f x)).source`. ~60–100 lines.
+4. `coordinateMap_contMDiff` and `mfderiv_coordinateMap_eq`: `mfderiv (coordinateMap f) x = toLp ∘L pi (fun i => mfderiv (f i) x)` via `contMDiff_pi_space`/`mfderiv` of pi and the `WithLp` linear equiv; then bridge 2 = in-file `apm_t99J04_dualCoordinates_bijective` for n > 0 (tangent space is `EuclideanSpace ℝ (Fin n)`, finrank n; covectors via `fromTangentSpace` are the identity on ℝ), n = 0 by Subsingleton. ~40–70 lines.
+5. Main: assembly already compiled modulo steps 3–4 (proof text in /tmp/routes3/E/t99J04.lean).
+Shared tags: manifold-inverse-function-theorem
+Doubts: none about truth. `(⊤ : ℕ∞)` coerces to C^∞ (not analytic ω), so the Euclidean IFT gives the needed smoothness. Size: about 250–350 lines total; step 1–3 is the Mathlib TODO and would serve any problem needing a local diffeomorphism from an invertible differential.
+
+### t99J06 — ADAPTER — sorries: 1
+Needs (six conjuncts of one sorry):
+- `extDeriv alpha = fun p => (2 p₂ + 1) • volumeForm` (the dz∧dz term is the zero form; d = (2z+2x) + (1−2x) = 2z+1).
+- `parametrization '' parameters = cone` (polar coordinates on the cone r = 1 − z).
+- `InjOn parametrization interiorParameters`.
+- `fderiv ℝ parametrization p` injective on the open rectangle.
+- `0 < rectangleIntegral (fun _ => dx∧dy) φ 0 2π 0 1` (pullback coefficient is 1 − z; integral = π).
+- `rectangleIntegral alpha φ 0 2π 0 1 = 9π/2`.
+Hand check done: pullback coefficient of α is (z²+2xz+4)(1−z) + (x−x²)(1−z)cos θ with x = (1−z)cos θ; θ-integral gives 2π(z²+4)(1−z) + π(1−z)²; z-integral = 25π/6 + π/3 = 9π/2. All six conjuncts are true as frozen.
+Reuse: `ConstructionTargets.CoordinateSurfaceForms` (`coordinateWedge`, `volumeForm`, `pullbackCoefficient`, `rectangleIntegral` — definitions only, no lemmas); Mathlib `extDeriv_apply`, `extDeriv_add`, `extDeriv_fun_smul`-style lemmas (Analysis/Calculus/DifferentialForm/Basic.lean), `Basis.ext_alternating` / `ContinuousAlternatingMap.ext` on `Pi.basisFun`, `integral_cos`, `integral_cos_sq` (Integrals/Basic.lean:530), `integral_cos_pow` (:521), `integral_pow`, `Complex.arg`/`Complex.abs_mul_exp_arg_mul_I` (or `Real.sin_eq_zero_iff`, `Real.cos_eq_one_iff`) for polar angles, `HasFDerivAt` for pi of components.
+Route:
+1. `fderiv_parametrization`: explicit `HasFDerivAt parametrization L p` with `L e₀ = (−(1−z)sin θ, (1−z)cos θ, 0)`, `L e₁ = (−cos θ, −sin θ, 1)`; corollary `pullbackCoefficient ω φ ![θ,z]` formula for ω = coordinateWedge 0 1 / alpha (via `Matrix.det_fin_two`).
+2. `extDeriv_alpha`: `extDeriv_apply` + fderiv of the three coefficient functions, then ext on the standard basis of `Fin 3 → ℝ` (3-forms on ℝ³ determined by value on (e₀,e₁,e₂)); `coordinateWedge 2 2 = 0` by `Matrix.det` of equal rows.
+3. `image_parametrization_eq_cone`: ⊆ by `cos²+sin²=1`, `ring`; ⊇ by choosing θ ∈ [0,2π] with (x,y) = (1−z)(cos θ, sin θ) (via `Complex.arg`, add 2π if negative; apex z = 1 any θ).
+4. `injOn_interior` + `fderiv_injective_interior`: 1 − z > 0, equal (cos, sin) on (0,2π) forces equal θ (`Real.Angle`/`Complex.exp` injectivity mod 2π); derivative columns independent since only e₁-image has z-component and e₀-image ≠ 0.
+5. `rectangleIntegral` evaluations: inner θ-integrals by `integral_cos`, `integral_cos_sq`, `integral_cos_pow` (n=3 term vanishes on [0,2π]), outer polynomial integrals by `integral_pow`/`simp`; gives π > 0 and 9π/2.
+Shared tags: none
+Doubts: none. Size: purely computational, ~200–300 lines; no infrastructure. Step 2 (ext on alternating 3-forms + `extDeriv_apply` alternating-sum unfolding) is the most fiddly.
+
+### t99J05 — HEAVY — sorries: 1
+Needs (one sorry, for every n):
+- `AffineChartConstruction n`: the n+1 affine charts are `OpenPartialHomeomorph`s of the coinduced quotient topology with the stated source/target/formulas.
+- A continuous `f : C(CP n, CP n)` lifting `v ↦ diag(1,…,n+1) v`, homotopic to id.
+- Fixed points of f are exactly the coordinate lines.
+- At each coordinate line: `localMap f i` is C¹ at 0, `det_ℝ(id − Df) ≠ 0`, `localIndex = 1`.
+- `HasLefschetzNumber f (n+1)`, `HasEulerCharacteristic (CP n) (n+1)` (both twice, once as the index sum) — these require the full rational singular homology of CP^n: every H_k finite-dimensional, zero above a bound, alternating trace of id = n+1.
+Reuse: `ConstructionTargets.ComplexProjectiveChartTargets` (definitions only: `coordinates`, `chartInverse`, `localMap`, `fixedPointDeterminant`, `localIndex`), `ProjectiveSpaceTopology` (`quotientMap`, `continuous_quotientMap`, `surjective_quotientMap`, `coordinateLine`), `RationalLefschetz` (definitions only), `SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic` (general coefficients — gives trace(f_*) = trace(id)), `SphereHomology.positiveSphereIntegralHomology` (ℤ only), `CoefficientSphereShift`/`CoefficientRadialPair`/`CoefficientSubcomplexMayerVietoris`/`ProductionOpenCoverMayerVietoris` (partial coefficient/integral MV + sphere machinery; no ℚ open-cover MV with sphere input packaged, and nothing about CP^n homology). Mathlib: `IsOpenQuotientMap.prodMap`, `ContinuousMap.Homotopic`, `LinearMap.det` on a basis / `LinearMap.det_restrictScalars`-type lemma, `LinearMap.trace_id`/`LinearMap.trace_one` (= finrank).
+Route:
+1. `cp_affineChartConstruction n` (ADAPTER, ~150 lines): source `{rep x i ≠ 0}` open (preimage of `{v | v i ≠ 0}` is open and saturated), `coordinates i` continuous on it (scale-invariant continuous lift through the coinduced topology), `chartInverse i` continuous, inverse laws.
+2. `diagonal_map_continuous` + `diagonal_homotopic_id` (~100 lines): lift through `quotientMap` (open quotient map); homotopy `[(1 + t·i)·v_i]`, never zero; continuity on `CP n × I` via `IsOpenQuotientMap.prodMap` with id on I.
+3. `diagonal_fixed_iff_coordinateLine` (~50 lines): `D v = c v` with distinct diagonal entries forces v a multiple of `Pi.single i 1`.
+4. `diagonal_localMap_linear` + `localIndex_eq_one` (~100 lines): `localMap f i z = fun j => ((j+1)/(i+1)) • z j` globally (ratio is scale-invariant in `rep`), hence C¹; `det_ℝ(id − Df) = ∏_{j≠i} (1 − (j+1)/(i+1))² > 0` (real determinant of a ℂ-diagonal map on `{j // j ≠ i} → ℂ`).
+5. `rationalHomology_CP n` (FOUNDATION/HEAVY): `∀ k, FiniteDimensional ℚ (Homology (CP n) k)`, `finrank = if Even k ∧ k ≤ 2n then 1 else 0`. Induction on n by open-cover Mayer–Vietoris with ℚ coefficients: U = CP n \ {pt} deformation-retracts to CP (n−1), V = chart ≅ ℂⁿ contractible, U ∩ V ≃ S^{2n−1}; needs ℚ-coefficient open-cover MV exact sequence, ℚ-homology of spheres, homotopy equivalence ⇒ iso, CP(n−1) ↪ CP n embedding as a closed subspace of the quotient topology, and dimension bookkeeping in the long exact sequence.
+6. `lefschetz_eq_euler` (~60 lines): `singularHomology_map_eq_of_homotopic` ⇒ trace f_* = trace id = finrank; alternating sum over `range (2n+1)` = n+1; index sum = ∑ 1 = n+1.
+Shared tags: rational-homology-cpn, coefficient-open-cover-mayer-vietoris, rational-sphere-homology, projective-quotient-charts (step 1–2 also useful to t96A06's RP3 map), lefschetz-trace-bookkeeping (t98J01, t96A06 use the same `HasLefschetzNumber`)
+Doubts: none about truth (checked: local map is globally linear with eigenvalues (j+1)/(i+1) ≠ 1, real determinant positive; homotopy stays nonzero). Size: steps 1–4 + 6 are ~450 adapter lines; step 5 is a real programme (my estimate 1500–3000 lines, dozens of rows at the observed pace). No lighter route: the frozen statement quantifies over all n and computes Euler characteristic from actual ℚ singular homology, so step 5 is unavoidable. Steps 1–4 can be banked first as their own rows because each is independently checkable.
+
+### t99J01 — HEAVY — sorries: 1
+Needs (three conjuncts, one sorry):
+- (i) for every n > 0, a path-connected `E` with an n-sheeted covering `p : E → ThreeCircles` (explicit construction).
+- (ii) every path-connected n-sheeted cover has `π₁(E,e) ≃* FreeGroup (Fin (2n+1))` (Schreier index formula for F₃, plus π₁(ThreeCircles) ≅ F₃).
+- (iii) for an arbitrary (possibly disconnected) n-sheeted cover, the path component of e is itself an m-sheeted cover with 0 < m ≤ n, and π₁(E,e) ≅ F_{2m+1}.
+Reuse: `ConstructionTargets.CoveringDegree.IsKSheetedCover`; `StatementSurfaceModels.ThreeCircles` (= iterated `PointWedgeQuotient.Wedge`) and `PointWedgeQuotient.leftOpen/rightOpen(_isOpen)` (open cover of a wedge); `TwoOpenFundamentalGroupoidPseudopushout.twoOpenFundamentalGroupoid_pseudopushout_mapping_property` (groupoid van Kampen for two opens) and the pattern of `TorusCircleWedgeFreeProductComposite` (pseudococones ↔ free-product representations, done for torus∨circle, not for circle∨circle∨circle); `CircleUniversalCover`/`CircleMetricFundamentalGroup` (circle π₁ facts). Mathlib: `IsCoveringMap.liftPath`, `liftHomotopyRel`, `monodromy`, `monodromy_bijective`, `injective_path_homotopic_map` (Topology/Homotopy/Lifting.lean) for p_* injective and fibre ↔ cosets; `IsFreeGroupoid.SpanningTree.endIsFree`, `subgroupIsFreeOfIsFree` (GroupTheory/FreeGroup/NielsenSchreier.lean) — freeness only, no rank count; `FreeGroup.freeGroupCongr`, `IsFreeGroup.toFreeGroup`.
+Route:
+1. `threeCircles_fundamentalGroup : FundamentalGroup ThreeCircles * ≃* FreeGroup (Fin 3)` — van Kampen twice on the wedge open covers (each piece deformation-retracts to a circle or a smaller wedge; intersections contractible), using the banked groupoid pseudopushout and π₁(S¹) ≅ ℤ. Largest single step.
+2. `cover_pi1_subgroup_index`: for path-connected E, `p_*` is injective and `Nat.card (π₁ B ⧸ range p_*) = n` (fibre ≃ cosets by `monodromy`/path lifting; `ThreeCircles` is locally path-connected).
+3. `schreier_rank_formula`: a subgroup of index n in `FreeGroup (Fin 3)` is `≃* FreeGroup (Fin (2n+1))`. Lighter than topology: via Mathlib's Nielsen–Schreier spanning-tree proof on the Schreier coset quiver (n vertices, 3n arrows), count non-tree arrows = 3n − (n−1); needs an edge count for spanning trees of a finite connected quiver, which Mathlib does not state.
+4. `pathComponent_isKSheetedCover`: restriction of p to the path component of e is a covering (components open since the base is locally path-connected), with m = `T99J01ComponentSheets p e` sheets, 0 < m ≤ n; π₁ of E at e = π₁ of the component (`FundamentalGroup` only sees the path component). Then (iii) = (ii) applied to it.
+5. `exists_connected_cover n`: explicit connected n-sheeted cover, e.g. the "cyclic" graph cover (n vertices in a cycle for the first circle, n loops for each other circle) built as a wedge/quotient, or as a subspace of ThreeCircles × ZMod n with the ℤ/n monodromy; prove covering-map locally at the wedge point and on circle arcs. ~300–500 lines on its own.
+6. Assembly.
+Shared tags: fundamental-group-wedge-of-circles, van-kampen-two-open-group, covering-subgroup-index, schreier-index-formula, explicit-graph-cover-construction
+Doubts: none about truth (n = 0 cases are vacuous: an empty fibre forces E empty). Size: HEAVY, my estimate 1500–2500 lines. Step 1 depends on turning the banked groupoid pseudopushout into a group isomorphism for this specific wedge, which has been done only for the torus∨circle case. Step 3's algebraic route (Schreier graph) avoids needing π₁ of general graphs and is the lighter route; step 5 is independent and can be banked first.
+
+### tunk01 — HEAVY — sorries: 1
+Needs:
+- Conjuncts 1–4 (vertexCount = 2, edgeCount = 7, χ = −4, not an opposite-orientation pairing): finite computations. Closed by compile (/tmp/routes3/E/tunk01.lean, axioms propext/choice/Quot.sound only):
+  ```lean
+  have hv : apm_tunk01_vertexCount apm_tunk01_vertexClass = 2 := by decide
+  have he : apm_tunk01_edgeCount apm_tunk01_word = 7 := by decide
+  refine ⟨hv, he, ?_, ?_⟩
+  · simp only [apm_tunk01_eulerCharacteristic, hv, he]; norm_num
+  · intro h; have := (h .a).2; revert this; decide
+  ```
+- Conjunct 5: `Nonempty (X ≃ₜ apm_tunk01_N6)` given `X ≃ₜ apm_tunk01_PolygonSurface`, i.e. an actual homeomorphism between the 14-gon quotient and the standard 12-gon `a₁a₁…a₆a₆` quotient. This is the whole difficulty.
+Reuse: none found for conjunct 5. `ConstructionTargets.Surfaces` (`Surface`, `SurfaceRel`, `edgePoint`, `surfaceQuotient`, continuity/surjectivity) gives the same style of disk-quotient model but no homeomorphism, Hausdorffness, or cut-and-paste lemma; `StatementSurfaceModels` likewise. Mathlib: `Continuous.homeoOfEquivCompactToT2`, `IsQuotientMap`, `Quotient.lift` — generic only.
+Route:
+1. `polygonQuotient_t2`: a general "word → disk quotient" is Hausdorff (needed to turn continuous bijections from the compact quotient into homeomorphisms).
+2. `polygonQuotient_homeomorph_of_boundary_reparam`: two disk quotients whose boundary identifications correspond under a boundary-preserving PL homeomorphism of the disk are homeomorphic (rotation, reflection, edge-subdivision changes, including 14 ↔ 12 edge counts).
+3. `polygonQuotient_cut_paste`: cutting a polygon along a diagonal into two polygons and regluing along a paired edge gives a homeomorphic quotient (the elementary move of the classification proof), stated for general words.
+4. Apply ~10–15 explicit moves to this word: first eliminate the second vertex class {3, 9} (vertex-reduction move), then cancel/normalize to crosscaps a₁a₁…a₆a₆ (handle + crosscap = three crosscaps conversion). Each move is a word-level check plus an instance of step 3.
+5. Transport along `hPresentation` and conjoin with the compiled conjuncts 1–4.
+Shared tags: polygon-cut-and-paste-homeomorphism, polygon-quotient-hausdorff (shared with t94J09, t98A01, t97J02 and any polygon-surface classification problem)
+Doubts: statement is true as frozen: I recomputed the vertex classes from `apm_tunk01_PolygonRel` itself (union-find on corner identifications) and got exactly corners {3, 9} vs the other 12, matching `apm_tunk01_vertexClass`; χ = 2 − 7 + 1 = −4 and `a` appears twice with the same orientation, so N₆. Size: conjunct 5 is a programme, my estimate 2000–4000 lines for steps 1–3 (general disk-quotient PL homeomorphisms are laborious in Lean), plus 300–600 lines for step 4. No lighter route found: the frozen goal demands an actual homeomorphism, and no classification theorem is available to cite.
+
