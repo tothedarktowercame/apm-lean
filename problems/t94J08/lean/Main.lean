@@ -246,20 +246,36 @@ theorem apm_t94j08_previous_encoding :
   rw [t94J08NormalizedLink_neg v p r hlink hlinkNeg x]
   rw [hlink_eq x]
 
+/-- Degree on the reduced zero-dimensional homology of the two-point sphere.
+The difference `a 1 - a 0` is a generator of the augmentation kernel, so this
+is a degree statement, rather than merely the point-set fact that the points
+are exchanged. -/
+def t94J08HasReducedDegreeZero (f : Equiv.Perm (Fin 2)) (d : ℤ) : Prop :=
+  ∀ a : Fin 2 → ℤ, a 0 + a 1 = 0 →
+    a (f.symm 1) - a (f.symm 0) = d * (a 1 - a 0)
+
+/-- The one-dimensional local index, computed on the boundary `S⁰` of an
+interval around the isolated zero. -/
+def t94J08HasLocalIndexOne (v : ℝ → ℝ) (p r : ℝ) (d : ℤ) : Prop :=
+  0 < r ∧ v (p - r) ≠ 0 ∧ v (p + r) ≠ 0 ∧
+    (d : ℝ) = (Real.sign (v (p + r)) - Real.sign (v (p - r))) / 2
+
 /-- The antipodal degree formula in every dimension, together with the local
 index formula for negating a vector field in every positive manifold
 dimension.  Dimension zero is represented by the actual two-point sphere and
 its transposition, rather than by the false ordinary-`H₀ ≅ ℤ` encoding. -/
 theorem apm_t94j08 :
-    ((Equiv.swap (0 : Fin 2) 1 : Equiv.Perm (Fin 2)) 0 = 1 ∧
-      (Equiv.swap (0 : Fin 2) 1 : Equiv.Perm (Fin 2)) 1 = 0) ∧
+    t94J08HasReducedDegreeZero (Equiv.swap (0 : Fin 2) 1) (-1) ∧
     (∀ n : ℕ, 1 ≤ n →
       t94J08HasDegree n
         (t94J08Antipodal : C(T94J08Sphere (n + 1), T94J08Sphere (n + 1)))
         ((-1 : ℤ) ^ (n + 1))) ∧
-    ∀ (m : ℕ)
+    (∀ (v : ℝ → ℝ) (hv : ContDiff ℝ ∞ v) (p r : ℝ) (d : ℤ),
+      t94J08HasLocalIndexOne v p r d →
+      t94J08HasLocalIndexOne (fun x ↦ -v x) p r (-d)) ∧
+    ∀ (m : ℕ) (hm : 1 ≤ m)
       (v : T94J08Euclidean (m + 1) → T94J08Euclidean (m + 1))
-      (hv : ContDiff ℝ ⊤ v) (p : T94J08Euclidean (m + 1))
+      (hv : ContDiff ℝ ∞ v) (p : T94J08Euclidean (m + 1))
       (hp : t94J08HasIsolatedZero v p)
       (r : ℝ) (hr : 0 < r)
       (hlink : ∀ x : T94J08Sphere (m + 1), v (p + r • x.1) ≠ 0)
