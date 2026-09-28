@@ -1,4 +1,7 @@
 import ConstructionTargets.CircleNoncontractible
+import Mathlib.AlgebraicTopology.SingularHomology.Basic
+import Mathlib.Algebra.Category.ModuleCat.Colimits
+import Mathlib.Algebra.Category.ModuleCat.Abelian
 
 /-!
 # APM t97J06 — a self-map of the two-torus
@@ -157,7 +160,9 @@ lemma t97J06_not_homotopic_const_of_not_contractibleCircle
   intro q h
   exact hCircle (t97J06_contractibleCircle_of_map_homotopic_const q h)
 
-theorem apm_t97j06 :
+/-- Superseded: part (a) asserted only an integral of a hand-entered Jacobian,
+not the topological degree of the descended torus map. -/
+theorem apm_t97j06_previous_encoding :
     (∀ x y : ℝ,
       t97J06Map
           (Circle.exp (2 * Real.pi * x), Circle.exp (2 * Real.pi * y)) =
@@ -173,3 +178,32 @@ theorem apm_t97j06 :
   refine ⟨t97J06Map_on_cover, t97J06_determinant_integral_zero, ?_⟩
   exact t97J06_not_homotopic_const_of_not_contractibleCircle
     CircleNoncontractible.circle_not_contractible
+
+open CategoryTheory
+
+noncomputable abbrev T97J06H2 :=
+  (((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ)).obj (TopCat.of T97J06Torus))
+
+noncomputable def t97J06H2Map (f : C(T97J06Torus, T97J06Torus)) :=
+  ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ)).map (TopCat.ofHom f)
+
+/-- Actual homological degree: after identifying integral top homology with
+`ℤ`, the induced map sends the fundamental generator to `n`. -/
+def t97J06HasDegree (f : C(T97J06Torus, T97J06Torus)) (n : ℤ) : Prop :=
+  ∃ e : T97J06H2 ≅ ModuleCat.of ℤ ℤ,
+    e.hom (t97J06H2Map f (e.inv (1 : ℤ))) = n
+
+/-- Faithful two-part answer: the concrete descended map has degree zero and
+is not homotopic to a constant; the lift identity pins down the stated map. -/
+theorem apm_t97j06 :
+    (∀ x y : ℝ,
+      t97J06Map
+          (Circle.exp (2 * Real.pi * x), Circle.exp (2 * Real.pi * y)) =
+        (Circle.exp (2 * Real.pi * Real.sin (2 * Real.pi * x + 4 * Real.pi * y)),
+          Circle.exp (2 * Real.pi * (x + y)))) ∧
+    t97J06HasDegree t97J06Map 0 ∧
+    (∀ q : T97J06Torus,
+      ¬ ContinuousMap.Homotopic t97J06Map (ContinuousMap.const T97J06Torus q)) := by
+  sorry
