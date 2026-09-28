@@ -50448,47 +50448,42 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_sphere_projection_local_model.lean",
-      :sha256
-      "4e40773617db1d4326b5aa3d0960b1eb20edb3847655e6b1a7fcc19999644bb3"},
-     :commands
-     [{:cmd "lake env lean /tmp/rp_sphere_projection_local_model.lean",
-       :exit 0,
-       :warnings
-       ["One unnecessarySimpa style warning in sphereAntipodalN; no proof or axiom warning."]}
-      {:cmd
-       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_local_model.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/rp_sphere_projection_local_model.lean",
-       :exit 1,
-       :finding
-       "The stale fixture redeclared the now-banked sphereAntipodal and used its earlier parameterized interface. Renaming only the fixture-general antipodal map allowed the dimension-two theorem to reuse the banked fibre result."}
-      {:cmd "lake env lean /tmp/rp_sphere_projection_local_model.lean",
-       :exit 1,
-       :finding
-       "The first hemisphere proof used unavailable inner-product notation scope and passed explicit points to implicit InjOn arguments. Replacing the notation with inner real and applying InjOn to subtype membership proofs corrected the exact construction."}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:theorem
-       "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionTwoSheetedLocalModel",
-       :contract
-       "ConstructionTargets.RealProjectiveSmoothTarget.SphereProjectionTwoSheetedLocalModel",
-       :requirements
-       "At dimension two, define the positive-inner-product hemisphere at each sphere point, prove it open and containing the point, prove sphereProjection injective there from the exact antipodal fibre theorem, and combine continuity with the banked open-map authority via IsOpenEmbedding.of_continuous_injective_isOpenMap and isLocalHomeomorph_iff_isOpenEmbedding_restrict. Include the exact two-point fibre equivalence without altering the frozen topology."}},
-     :residual
-     "The dimension-two sphere projection is now a local homeomorphism with fibres exactly p and minus p. The remaining shared route step for t95A04 and t96A07 is to use these local inverses to construct the compatible smooth atlas rpSmoothAtlas 2 and prove the quotient projection locally diffeomorphic."}},
+   {:placeholder-delta 0,
+    :residual
+    "Use the explicit positive-hemisphere local inverses supplied by sphereProjectionTwoSheetedLocalModel to construct the compatible dimension-2 smooth atlas and prove sphereProjection is locally diffeomorphic, shared by t95A04 and t96A07.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/rp_sphere_projection_local_model.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 no-sorry-pattern ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_projection_local_model_axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "6bf8aa28ddec098fb20e679638b7facce1ad2222",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_projection_local_model.lean",
+     :sha256
+     "4e40773617db1d4326b5aa3d0960b1eb20edb3847655e6b1a7fcc19999644bb3"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
