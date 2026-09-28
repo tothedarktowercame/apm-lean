@@ -77107,8 +77107,148 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "comment-stripped placeholder census for all 12 topo1 problems",
+      :exit 0}
+     {:cmd
+      "inspect reviewed t94A09 implementation, repair evidence, and route sizes for t94A07, t97A07, and t99J06",
+      :exit 0}],
+    :finding
+    {:measures
+     {:placeholder-delta {:t94A09 -1, :portfolio -1},
+      :typed-residual-change
+      "t94A09 changed from the final smooth-to-continuous S2 adapter to closed. Both DIRECT consumers are now closed; t94A07 is the smallest listed remaining one-placeholder ADAPTER route at four bounded steps.",
+      :infrastructure-packets 0,
+      :review-outcomes
+      [{:row :routes-2026-09-28-t94a09-direct-closure-1,
+        :outcome :pass,
+        :reviewer "codex-3",
+        :note
+        "Initial fixture reference was repaired to the directly compilable committed consumer; source implementation remained valid."}]},
+     :routes
+     {:t91J06
+      {:placeholders 3,
+       :chain
+       ["compatible coordinates <- transition intervals + interval extension + recursion"
+        "glue bridge <- corrected helper with hf + glue equivalence/homeomorph"
+        "main <- both bridges"]},
+      :t99J06
+      {:placeholders 1,
+       :chain
+       ["main <- parametrization derivative and pullback coefficients"
+        "main <- extDeriv alpha"
+        "main <- cone image parametrization"
+        "main <- interior injectivity and derivative injectivity"
+        "main <- two rectangle-integral evaluations"]},
+      :t95J02
+      {:placeholders 3,
+       :chain
+       ["vertical H1 kernel <- CircleB homeomorphism + reflection homotopy"
+        "retraction injective <- homology functoriality"
+        "main <- both bridges"]},
+      :t93J06 {:placeholders 0, :chain [], :status :closed},
+      :t97A07
+      {:placeholders 1,
+       :chain
+       ["main <- openness of surjective continuous-linear maps"
+        "main <- openness of manifold regular points and compactness of critical values"
+        "main <- extremum implies critical"
+        "main <- regular derivative gives a range neighborhood"
+        "main <- connected complement and compact range argument"]},
+      :t99J04
+      {:placeholders 3,
+       :chain
+       ["local IFT bridge <- Euclidean partial diffeomorph + chart conjugation"
+        "coordinate derivative bridge <- coordinateMap smoothness/mfderiv formula"
+        "main <- both bridges"]},
+      :t01A01
+      {:placeholders 2,
+       :chain
+       ["bridge_1 <- projective quotient descent <- punctured RP2 retract <- RP2-to-projective-line nullhomotopy"
+        "main <- bridge_1 + nullhomotopic-trivial-pi1"]},
+      :t92J08
+      {:placeholders 3,
+       :chain
+       ["uniform local flow <- neighborhood-uniform chart ODE + compact subcover"
+        "blowup obstruction <- continuity at t=1"
+        "main <- bridges + globalisation/uniqueness"]},
+      :t02A05
+      {:placeholders 2,
+       :chain
+       ["bridge_1 <- oriented coefficient/translation/moment calculation for registered muHE[2] statement"
+        "main <- bridge_1 + quadratic minimum"]},
+      :t94A07
+      {:placeholders 1,
+       :chain
+       ["hcore <- halfTurn continuous-linear derivative and local determinant/index"
+        "hcore <- tangent kernel at four axis points and Lefschetz fixed-point condition"
+        "hcore <- circle identity/reflection homology obstruction"
+        "hcore <- outer-equator projection turns a torus homotopy into the forbidden circle homotopy"]},
+      :t94A10
+      {:placeholders 3,
+       :chain
+       ["closed bridge <- solid-angle exterior derivative computation"
+        "not-exact bridge <- sphere pullback + periodic rectangle Stokes"
+        "main <- both bridges"]},
+      :t94A09 {:placeholders 0, :chain [], :status :closed}},
+     :deferred
+     "t97A07 and t99J06 are also one-placeholder closures but each has five listed steps; all multi-placeholder adapters remain behind the elected four-step t94A07 closure. No route-free infrastructure is elected."},
+    :replacement-items
+    [{:consumer :t94A07,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t94A07",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free fixture for the exact registered apm_t94a07 statement. Supply all four listed route steps: package halfTurn as a continuous linear map and compute its derivative/local matrix/determinant/index; compute the constraint derivative at the four fixed axis points and identify its kernel with span{e1,e2}, yielding IsLefschetzFixedPoint; derive that identity is not homotopic to reflectionMap 1 on the circle from the banked reflection action on H1; and project a hypothetical torus homotopy along the outer equator to that forbidden circle homotopy. Reuse the in-file fixed-set equality/cardinality results and banked coefficient-homology results. Do not change any registered statement or definition.",
+       :placeholder
+       "the sole sorry hcore inside apm_t94a07 in problems/t94A07/lean/Main.lean",
+       :route-step "t94A07 route steps 1-4, closing the problem",
+       :gates
+       ["verify the canonical package authority before Lake"
+        "lake env lean on a complete exact-statement fixture exits 0"
+        "fixture contains no comment-stripped sorry"
+        "python3 scripts/statement-registry.py check exits 0"]},
+      :id :routes-2026-09-28-t94a07-adapter-closure-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "One sorry hcore: establish the four local tangent/derivative/index clauses and prove that the half-turn is not homotopic to the identity through the embedded torus.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Reread TOPOLOGY-ROUTES.md and all route files, measure the reviewed t94A07 outcome, recount every topo1 placeholder, enforce stop-after-two, and refill from the complete remaining ADAPTER portfolio."},
+      :id :routes-2026-09-28-checkpoint-topo1-after-t94a07-1,
+      :kind :strategy-checkpoint,
+      :depends-on [:routes-2026-09-28-t94a07-adapter-closure-1],
+      :current-residual
+      "After reviewed t94A07 outcome, recount all remaining ADAPTER problems and apply stop-after-two before choosing the next one-placeholder closure.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -77121,6 +77261,54 @@
     :routes-2026-09-28-checkpoint-topo1-after-t93j06-1],
    :current-residual
    "After reviewed t94A09 closure, both DIRECT problems should be closed; recount and elect exactly one nearest ADAPTER route from the complete topo1 portfolio.",
+   :other-consumers []}
+  {:consumer :t94A07,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t94A07",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free fixture for the exact registered apm_t94a07 statement. Supply all four listed route steps: package halfTurn as a continuous linear map and compute its derivative/local matrix/determinant/index; compute the constraint derivative at the four fixed axis points and identify its kernel with span{e1,e2}, yielding IsLefschetzFixedPoint; derive that identity is not homotopic to reflectionMap 1 on the circle from the banked reflection action on H1; and project a hypothetical torus homotopy along the outer equator to that forbidden circle homotopy. Reuse the in-file fixed-set equality/cardinality results and banked coefficient-homology results. Do not change any registered statement or definition.",
+    :placeholder
+    "the sole sorry hcore inside apm_t94a07 in problems/t94A07/lean/Main.lean",
+    :route-step "t94A07 route steps 1-4, closing the problem",
+    :gates
+    ["verify the canonical package authority before Lake"
+     "lake env lean on a complete exact-statement fixture exits 0"
+     "fixture contains no comment-stripped sorry"
+     "python3 scripts/statement-registry.py check exits 0"]},
+   :id :routes-2026-09-28-t94a07-adapter-closure-1,
+   :kind :final-adapter,
+   :depends-on [:routes-2026-09-28-checkpoint-topo1-after-t94a09-1],
+   :current-residual
+   "One sorry hcore: establish the four local tangent/derivative/index clauses and prove that the half-turn is not homotopic to the identity through the embedded torus.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Reread TOPOLOGY-ROUTES.md and all route files, measure the reviewed t94A07 outcome, recount every topo1 placeholder, enforce stop-after-two, and refill from the complete remaining ADAPTER portfolio."},
+   :id :routes-2026-09-28-checkpoint-topo1-after-t94a07-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-09-28-t94a07-adapter-closure-1
+    :routes-2026-09-28-checkpoint-topo1-after-t94a09-1],
+   :current-residual
+   "After reviewed t94A07 outcome, recount all remaining ADAPTER problems and apply stop-after-two before choosing the next one-placeholder closure.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
