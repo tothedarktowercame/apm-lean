@@ -50554,6 +50554,33 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790633347293-26512-27ad464d",
+     :commands
+     [{:cmd "sha256sum /tmp/rp_sphere_local_inverse_family.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+       :exit 0}
+      {:cmd
+       "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_local_inverse_family_axioms.lean",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder counts from git show 45870cbd for module, t95A04, and t96A07",
+       :exit 0}
+      {:cmd "git diff-tree --no-commit-id --name-only -r 45870cbd",
+       :exit 0}],
+     :finding
+     "PASS. Reviewer codex-7 read implementation commit 45870cbd. Its sole changed path is ConstructionTargets/RealProjectiveSmoothTarget.lean, exactly matching scope, and the file has no later commit. The fixture sha256 reproduces exactly as 42e690a088a9abda1897d4848aba5afff0ee95623e04c19deb409e9ff023eb94. Direct elaboration and Lake build pass with canonical packages; sphereProjectionLocalInverseFamily uses only propext, Classical.choice, and Quot.sound. The committed module contains zero placeholders; t95A04 and t96A07 remain at one each, so placeholder delta zero is accurate. All 130 frozen statements and the 322-item ledger pass. For every quotient point, the structure chooses a sphere lift and records sphereProjection(lift y)=y, chooses the OpenPartialHomeomorph supplied by the reviewed IsLocalHomeomorph theorem, records that the lift lies in its source, and identifies its forward map globally with sphereProjection. The partial homeomorphism carries both inverse laws, so the downstream family has the correctly oriented quotient-to-lift inverse data without redefining topology or introducing a representation cast."},
     :commit "45870cbd25ee6fcaacd9603901b2bb9ab7119c54",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -50563,7 +50590,7 @@
      "42e690a088a9abda1897d4848aba5afff0ee95623e04c19deb409e9ff023eb94"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50617,7 +50644,7 @@
       [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
