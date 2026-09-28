@@ -51015,44 +51015,52 @@
   {:consumer :t95A04,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/rp_sphere_quotient_transition_input.lean",
+     {:path "/tmp/rp_sphere_quotient_transition_normal_form.lean",
       :sha256
-      "d93544c86dfa9ba3437fbfadc28c409b041827e32f7e7ff12f56424bbff34992"},
+      "901c995df219daef332ccd76eb6ae08d48dbbb0c4d0919a3cb0015f66ffcdb91"},
      :commands
      [{:cmd
-       "lake env lean /tmp/rp_sphere_quotient_transition_input.lean",
+       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_transition_input.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_transition_normal_form.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :residual
-     "The quotient-chart apply identities are banked, but the local-normal-form proof must pull an eventual equality on projective points back along the coordinate input u maps to quotientChart y inverse of model inverse u. The compiled prerequisite defines that transitionInput, extracts from the exact transition domain both membership in quotientChart y target and membership of transitionInput in quotientChart z source, and proves transitionInput is continuous at u. These are precisely the hypotheses needed for EventuallyEq.comp_tendsto and for simplifying the target quotient chart.",
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form.lean",
+       :exit 1,
+       :finding
+       "The antipodal branch initially rewrote through the transitionInput abbreviation without unfolding it; changing the inner equality to the explicit quotientChart inverse form allowed the promoted cancellation theorem to apply."}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
       :acceptance
-      {:probe
-       "Compile the placeholder-free fixture /tmp/rp_sphere_quotient_transition_input.lean defining SphereProjectionLocalInverseFamily.transitionInput. Prove transitionInput_domain extracts from the exact quotient-chart transition domain that model inverse u lies in quotientChart y target and transitionInput y u lies in quotientChart z source. Prove continuousAt_transitionInput from quotientChart y continuousAt_symm and ModelWithCorners.continuous_symm. This supplies the exact pullback map and hypotheses needed to inhabit the transition local normal form for t95A04 and t96A07."},
-      :id
-      :routes-2026-09-28-rp-sphere-quotient-transition-input-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-09-28-rp-sphere-quotient-chart-apply-topo2-r1],
-      :other-consumers [:t96A07]}}},
-   :phase :probe,
+      {:declarations
+       ["SphereProjectionQuotientTransitionLocalNormalForm"
+        "sphereAntipodalN_contMDiff_for_transition"
+        "sphereProjectionQuotientTransitionLocalNormalForm"],
+       :fixture "/tmp/rp_sphere_quotient_transition_normal_form.lean",
+       :consumer-residual
+       "Use the local normal form and standard sphere chart compatibility to inhabit the exact pairwise ContDiffOn transition contract.",
+       :axioms :standard-only}},
+     :residual
+     "The full local normal form is inhabited without placeholders: transition-domain membership supplies the two chart sources, eventual branch equality is pulled back along the continuous transitionInput, and quotient-chart cancellation reduces both alternatives to the standard sphere transition with optional antipodal insertion."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free inhabitant of SphereProjectionQuotientTransitionLocalNormalForm from /tmp/rp_sphere_quotient_transition_normal_form.lean. For every inverse family, quotient-chart pair y z, and model coordinate u in the exact transition domain, prove the full quotient coordinate transition is eventually equal near u either to the standard sphere chart transition or to that transition with sphereAntipodalN 2 inserted. Derive it by pulling inverseBranch_eventuallyEq_or_antipodal through the first chart and simplifying quotientChart inverse laws. Retain the compiled sphereAntipodalN_contMDiff_for_transition theorem. This is the exact local normal form needed by the pairwise ContDiffOn row for t95A04 and t96A07."},
+   {:declarations
+    ["SphereProjectionQuotientTransitionLocalNormalForm"
+     "sphereAntipodalN_contMDiff_for_transition"
+     "sphereProjectionQuotientTransitionLocalNormalForm"],
+    :fixture "/tmp/rp_sphere_quotient_transition_normal_form.lean",
+    :consumer-residual
+    "Use the local normal form and standard sphere chart compatibility to inhabit the exact pairwise ContDiffOn transition contract.",
+    :axioms :standard-only},
    :id
    :routes-2026-09-28-rp-sphere-quotient-transition-normal-form-topo2-r1,
    :kind :reusable-theorem,
