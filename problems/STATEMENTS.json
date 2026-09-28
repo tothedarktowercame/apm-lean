@@ -1798,6 +1798,31 @@
    "rev": "b856af14",
    "approved_at": "2026-09-28T00:34:41Z"
   },
+  "t96J07": {
+   "decls": [
+    "apm_t96j07"
+   ],
+   "sha256": "c7d8de08b22726ed8653bd967134e05e9ca0b3e5362671aed2c60f2cd7fca0fd",
+   "defs": [
+    "apm_t96j07_A",
+    "apm_t96j07_E3",
+    "apm_t96j07_H2S2",
+    "apm_t96j07_HQ",
+    "apm_t96j07_HQmap",
+    "apm_t96j07_HasLefschetzNumber",
+    "apm_t96j07_HasLocalLefschetzNumber",
+    "apm_t96j07_RP3",
+    "apm_t96j07_S2",
+    "apm_t96j07_V",
+    "apm_t96j07_axis"
+   ],
+   "grade": "faithful",
+   "grader": "claude read-only grader (reopen2 re-grade)",
+   "evidence": "holes/labs/statement-registry/reopen2-grades-2.md",
+   "prelim_defect": null,
+   "rev": "b7d38e96",
+   "approved_at": "2026-09-28T19:47:30Z"
+  },
   "t96J08": {
    "decls": [
     "apm_t96j08"

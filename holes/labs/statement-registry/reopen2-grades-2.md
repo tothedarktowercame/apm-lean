@@ -134,3 +134,44 @@ Even with the target condition added, the lack of isolation matters. A chart can
 **(b) Trivial cases.** f is existential but pinned, so there are no constant or discontinuous substitutes. RP³ is nonempty. The defect found by the trivial-construction check is the junk-value chart above.
 
 The prelim is not defective.
+
+### t96J07 re-grade
+
+This re-grades `apm_t96j07` at commit `b7d38e96` ("local index requires the r-ball in the chart target, mapped back into the source, isolating q"). The working tree for the bundle is clean. The theorem text is unchanged; only `apm_t96j07_HasLocalLefschetzNumber` changed.
+
+| id | grade | decl | one-line reason | prelim-defect? |
+|---|---|---|---|---|
+| t96J07 | faithful | `apm_t96j07` | The local predicate now requires `closedBall 0 r ⊆ chart.target`, requires f to carry `chart.symm` of that ball into `chart.source`, and makes 0 the only fixed point of F = chart ∘ f ∘ chart.symm in the ball. The link degree is then the fixed-point index of f at q, which does not depend on the chart, its orientation, r or the orientation isomorphism. f, the fixed points and L(f) were already genuine. The whole statement is true | no |
+
+**The new clauses.**
+```lean
+Metric.closedBall (0 : apm_t96j07_E3) r ⊆ chart.target ∧
+(∀ y ∈ Metric.closedBall (0 : apm_t96j07_E3) r, f (chart.symm y) ∈ chart.source) ∧
+(∀ y ∈ Metric.closedBall (0 : apm_t96j07_E3) r, chart (f (chart.symm y)) = y → y = 0) ∧
+```
+- **They kill my construction.** The linking sphere r·S² now lies inside the closed ball, which is inside `chart.target`. On the target, `chart.symm` is the genuine continuous inverse, so there is no room to redefine it on the sphere.
+- **F is a real continuous map.** By the second clause, F = chart ∘ f ∘ chart.symm is defined and continuous on the closed ball: `chart.symm` is continuous on the target, f is continuous, and `chart` is continuous on the source.
+- **The displacement is nonzero on the sphere.** The isolation clause says F has no fixed point on the ball except 0. So y − F(y) ≠ 0 on r·S², and the `hne` clause is implied.
+- **d is the index.** The degree of (y − F y)/|y − F y| on ∂B is by definition the fixed-point index of F on B (Dold's definition). By isolation, that is the local index of f at q.
+- **A wrong d is impossible.** If two witnesses gave d ≠ d', they would contradict well-definedness of the index. I found no other construction that gives a wrong d:
+  - The earlier multi-fixed-point chart is excluded by isolation.
+  - Degenerate charts are excluded because q ∈ source, `chart q = 0` and r > 0 force a genuine open 3-ball around q.
+
+**Independence.**
+- **Of r:** for r' < r, both valid, the annulus between the spheres has no fixed point, so the normalised displacement is homotopic across radii and the degrees agree.
+- **Of the chart and its orientation:** the fixed-point index is a topological invariant (the commutativity axiom). For a reflection R, the conjugated displacement is y ↦ R·g(R y), of degree (−1)·deg g·(−1) = deg g. So an orientation-reversing chart gives the same d.
+- **Of `orientation`:** any automorphism of ℤ is ±1 and commutes with scalar multiplication. So "link_* = multiplication by d" does not depend on the choice, as with `t94J08HasDegree_with_orientation`.
+
+**The values are true.** Take the affine chart x_i = 1 translated to [e_i]. The other fixed points have x_i = 0, so they are outside the chart. A multiplies coordinates by positive scalars, so it preserves x_i ≠ 0; the second clause therefore holds for every r, and the target is all of ℝ³. In this chart F is linear, D = diag((j+1)/(i+1))_{j≠i}. The displacement is (I − D)y, whose degree is sign det(I − D):
+- i = 0: (−1)(−2)(−3) = −6, so −1.
+- i = 1: (1/2)(−1/2)(−1) > 0, so +1.
+- i = 2: (2/3)(1/3)(−1/3) < 0, so −1.
+- i = 3: (3/4)(1/2)(1/4) > 0, so +1.
+
+This matches the statement's −1, 1, −1, 1.
+
+**Consistency with L(f).** The indices sum to 0, which equals `HasLefschetzNumber f 0` (Lefschetz–Hopf). The trace definition of L(f) is independent of the indices, so the statement does not simply assert the sum.
+
+**(b) Trivial cases.** f is existential but pinned by its values on `mk x`. Constant, identity and discontinuous substitutes are therefore unavailable. The junk-chart construction is blocked, as shown above.
+
+The prelim is not defective.
