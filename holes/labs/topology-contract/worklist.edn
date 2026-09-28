@@ -77895,8 +77895,153 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "comment-stripped placeholder census for all 12 topo1 problems",
+      :exit 0}
+     {:cmd
+      "inspect reviewed t97A07 STOP, current t02A05 registered μHE[2] statement, and the two two-placeholder routes",
+      :exit 0}
+     {:cmd
+      "rg -n 'μHE|euclideanHausdorffMeasure|unitFlux_moment' Mathlib and ConstructionTargets",
+      :exit 0}],
+    :finding
+    {:measures
+     {:placeholder-delta {:t97A07 0, :portfolio 0},
+      :typed-residual-change
+      "t97A07 remains at one placeholder but is held at three independent branches: critical-locus compactness, extremum criticality, and critical-value infinitude. No compiled route step was supplied.",
+      :infrastructure-packets 0,
+      :review-outcomes
+      [{:row :routes-2026-09-28-t97a07-adapter-closure-1,
+        :outcome :stop,
+        :review :pass,
+        :reviewer "codex-3"}]},
+     :routes
+     {:t91J06
+      {:placeholders 3,
+       :chain
+       ["compatible coordinates <- transition intervals + interval extension + recursion"
+        "glue bridge <- corrected helper with hf + glue equivalence/homeomorph"
+        "main <- both bridges"]},
+      :t99J06
+      {:placeholders 1,
+       :status :held,
+       :chain
+       ["exterior derivative boundary"
+        "cone image boundary"
+        "interior embedding/immersion boundary"
+        "rectangle integral boundary"]},
+      :t95J02
+      {:placeholders 3,
+       :chain
+       ["vertical H1 kernel <- CircleB homeomorphism + reflection homotopy"
+        "retraction injective <- homology functoriality"
+        "main <- both bridges"]},
+      :t93J06 {:placeholders 0, :chain [], :status :closed},
+      :t97A07
+      {:placeholders 1,
+       :status :held,
+       :chain
+       ["critical-locus compactness boundary"
+        "positive-dimensional nonemptiness boundary"
+        "critical-values infinitude boundary"]},
+      :t99J04
+      {:placeholders 3,
+       :chain
+       ["local IFT bridge <- Euclidean partial diffeomorph + chart conjugation"
+        "coordinate derivative bridge <- coordinateMap smoothness/mfderiv formula"
+        "main <- both bridges"]},
+      :t01A01
+      {:placeholders 2,
+       :chain
+       ["bridge_1 <- projective quotient descent <- punctured RP2 retract <- RP2-to-projective-line nullhomotopy"
+        "main <- bridge_1 + nullhomotopic-trivial-pi1"]},
+      :t92J08
+      {:placeholders 3,
+       :chain
+       ["uniform local flow <- neighborhood-uniform chart ODE + compact subcover"
+        "blowup obstruction <- continuity at t=1"
+        "main <- bridges + globalisation/uniqueness"]},
+      :t02A05
+      {:placeholders 2,
+       :chain
+       ["bridge_1 <- projected-coordinate flux identity"
+        "bridge_1 <- translation from sphere c 1 to the unit sphere"
+        "bridge_1 <- convert normalized μHE[2] to the banked intrinsic μH[2] moment formula and evaluate the normalized sphere mass"
+        "main <- bridge_1 + banked quadratic minimum"],
+       :note
+       "The route file's falsity warning concerns the former μH[2] statement. The registered file uses normalized μHE[2], and Mathlib states μHE is scaled to agree with Euclidean Lebesgue measure."},
+      :t94A07
+      {:placeholders 1,
+       :status :held,
+       :chain
+       ["local fixed-point calculus boundary"
+        "global longitude obstruction boundary"]},
+      :t94A10
+      {:placeholders 3,
+       :chain
+       ["closed bridge <- solid-angle exterior derivative computation"
+        "not-exact bridge <- sphere pullback + periodic rectangle Stokes"
+        "main <- both bridges"]},
+      :t94A09 {:placeholders 0, :chain [], :status :closed}},
+     :deferred
+     "All one-placeholder adapters are closed or held by reviewed scheduling STOPs. Of the two two-placeholder routes, t02A05 has a four-step direct normalized-measure calculation with the quadratic conclusion already banked, while t01A01 needs five quotient, retraction, lifting, descent, and pi1 steps. Therefore t02A05 is elected first."},
+    :replacement-items
+    [{:consumer :t02A05,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t02A05",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free fixture for the exact current registered apm_t02a05 statement, which uses μHE[2], not the stale μH[2] formula discussed in routes-1.md. Prove the pointwise tangent-projection/orientedCoefficient identity; transport the subtype integral from sphere c 1 to the unit sphere by translation; relate μHE[2] to the banked intrinsic μH[2] moment calculation using Mathlib's euclideanHausdorffMeasure normalization, obtaining the exact 44*pi/15 plus 4*pi quadratic formula; then assemble both main conjuncts with apm_t02a05_quadratic_minimum. Do not change any registered statement or definition.",
+       :placeholder
+       "apm_t02A05_bridge_1 and the final sorry in apm_t02a05",
+       :route-step
+       "current normalized-measure versions of t02A05 route steps 1-4, closing both placeholders",
+       :gates
+       ["verify the canonical package authority before Lake"
+        "lake env lean on a complete exact-statement fixture exits 0"
+        "fixture contains no comment-stripped sorry"
+        "python3 scripts/statement-registry.py check exits 0"]},
+      :id :routes-2026-09-28-t02a05-adapter-closure-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "Two sorries: the exact outward flux formula against normalized Euclidean Hausdorff measure μHE[2], followed by main-theorem assembly with the already compiled quadratic minimum.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Reread the current registered statements, TOPOLOGY-ROUTES.md, and all route files; measure t02A05, preserve reviewed holds, enforce stop-after-two, recount all placeholders, and refill from the complete remaining ADAPTER portfolio."},
+      :id :routes-2026-09-28-checkpoint-topo1-after-t02a05-1,
+      :kind :strategy-checkpoint,
+      :depends-on [:routes-2026-09-28-t02a05-adapter-closure-1],
+      :current-residual
+      "After reviewed t02A05, preserve all reviewed holds and decide whether the remaining two-placeholder t01A01 route is ready before advancing to three-placeholder adapters.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -77909,6 +78054,55 @@
     :routes-2026-09-28-checkpoint-topo1-after-t99j06-1],
    :current-residual
    "After reviewed t97A07, all one-placeholder adapters will be closed or held; recount and elect the nearest two-placeholder adapter before three-placeholder routes.",
+   :other-consumers []}
+  {:consumer :t02A05,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t02A05",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free fixture for the exact current registered apm_t02a05 statement, which uses μHE[2], not the stale μH[2] formula discussed in routes-1.md. Prove the pointwise tangent-projection/orientedCoefficient identity; transport the subtype integral from sphere c 1 to the unit sphere by translation; relate μHE[2] to the banked intrinsic μH[2] moment calculation using Mathlib's euclideanHausdorffMeasure normalization, obtaining the exact 44*pi/15 plus 4*pi quadratic formula; then assemble both main conjuncts with apm_t02a05_quadratic_minimum. Do not change any registered statement or definition.",
+    :placeholder
+    "apm_t02A05_bridge_1 and the final sorry in apm_t02a05",
+    :route-step
+    "current normalized-measure versions of t02A05 route steps 1-4, closing both placeholders",
+    :gates
+    ["verify the canonical package authority before Lake"
+     "lake env lean on a complete exact-statement fixture exits 0"
+     "fixture contains no comment-stripped sorry"
+     "python3 scripts/statement-registry.py check exits 0"]},
+   :id :routes-2026-09-28-t02a05-adapter-closure-1,
+   :kind :final-adapter,
+   :depends-on [:routes-2026-09-28-checkpoint-topo1-after-t97a07-1],
+   :current-residual
+   "Two sorries: the exact outward flux formula against normalized Euclidean Hausdorff measure μHE[2], followed by main-theorem assembly with the already compiled quadratic minimum.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Reread the current registered statements, TOPOLOGY-ROUTES.md, and all route files; measure t02A05, preserve reviewed holds, enforce stop-after-two, recount all placeholders, and refill from the complete remaining ADAPTER portfolio."},
+   :id :routes-2026-09-28-checkpoint-topo1-after-t02a05-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-09-28-t02a05-adapter-closure-1
+    :routes-2026-09-28-checkpoint-topo1-after-t97a07-1],
+   :current-residual
+   "After reviewed t02A05, preserve all reviewed holds and decide whether the remaining two-placeholder t01A01 route is ready before advancing to three-placeholder adapters.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
