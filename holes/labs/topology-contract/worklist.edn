@@ -78823,8 +78823,93 @@
    "After reviewed t01A01, preserve the t02A05 STOP and existing holds, then choose the shortest remaining unheld three-placeholder adapter.",
    :other-consumers []}
   {:consumer :t94A10,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope ["problems/t94A10/lean/Main.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t94A10/closedness",
+   :acceptance
+   {:placeholder-after 2,
+    :fixture-sha256
+    "c75c08f4960a7a26ddb2fcb87b696248dbff4547cde5826ea684de6186c1706c",
+    :placeholder "the sorry in apm_t94A10_bridge_solidAngle_closed",
+    :axioms :standard-only,
+    :placeholder-before 3,
+    :commands
+    ["lake env lean problems/t94A10/lean/Main.lean"
+     "LEAN_PATH=/tmp/t94probe lake env lean /tmp/t94a10-assembly-probe.lean"
+     "python3 scripts/statement-registry.py check"],
+    :fixture "/tmp/t94a10-assembly-probe.lean",
+    :route-step "t94A10 route step 1",
+    :implementation
+    "Replace only the sorry in apm_t94A10_bridge_solidAngle_closed. For each punctured point, use the existing ambientExtension_apply_of_isOmega and denominator lemmas to obtain a neighborhood on which the ambient extension equals the explicit smooth form x ↦ ‖x‖⁻³ times the alternating determinant form. Prove differentiability there. Apply Filter.EventuallyEq.extDeriv_eq and extDeriv_apply, compute the derivative of the norm-cubed inverse, reduce the alternating derivative sum by the three-dimensional Laplace identity, and conclude extDeriv = 0 using the Euler identity Df(x)·x = -3f(x). Work only at the frozen Euclidean Fin 3 generality and preserve all registered statements and definitions."},
+   :id :routes-2026-09-28-t94a10-solid-angle-closedness-1,
+   :kind :final-adapter,
+   :depends-on [],
+   :current-residual
+   "Prove the local quotient-rule and alternating-coordinate calculation in apm_t94A10_bridge_solidAngle_closed. The subsequent sphere-pullback/Green obstruction remains a separate listed route step.",
+   :other-consumers []}
+  {:consumer :t94A10,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/t94a10-assembly-probe.lean",
+      :sha256
+      "c75c08f4960a7a26ddb2fcb87b696248dbff4547cde5826ea684de6186c1706c"},
+     :commands
+     [{:cmd
+       "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+       :exit 0}
+      {:cmd "mkdir -p /tmp/t94probe/t94A10/lean", :exit 0}
+      {:cmd
+       "lake env lean -o /tmp/t94probe/t94A10/lean/Main.olean problems/t94A10/lean/Main.lean",
+       :exit 0}
+      {:cmd
+       "LEAN_PATH=/tmp/t94probe lake env lean /tmp/t94a10-assembly-probe.lean",
+       :exit 0}
+      {:cmd "sha256sum /tmp/t94a10-assembly-probe.lean", :exit 0}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/t94a10-assembly-probe.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :warnings
+     [{:kind :inherited-placeholder,
+       :message
+       "The temporary consumer olean reports the three existing source placeholders. The assembly fixture introduces none and depends on sorryAx only through the two named bridge theorems."}],
+     :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+     :prerequisite
+     {:consumer :t94A10,
+      :phase :implementation,
+      :state :open,
+      :scope ["problems/t94A10/lean/Main.lean"],
+      :dag-node "TOPOLOGY-ROUTES.md/t94A10/closedness",
+      :acceptance
+      {:placeholder-after 2,
+       :fixture-sha256
+       "c75c08f4960a7a26ddb2fcb87b696248dbff4547cde5826ea684de6186c1706c",
+       :placeholder "the sorry in apm_t94A10_bridge_solidAngle_closed",
+       :axioms :standard-only,
+       :placeholder-before 3,
+       :commands
+       ["lake env lean problems/t94A10/lean/Main.lean"
+        "LEAN_PATH=/tmp/t94probe lake env lean /tmp/t94a10-assembly-probe.lean"
+        "python3 scripts/statement-registry.py check"],
+       :fixture "/tmp/t94a10-assembly-probe.lean",
+       :route-step "t94A10 route step 1",
+       :implementation
+       "Replace only the sorry in apm_t94A10_bridge_solidAngle_closed. For each punctured point, use the existing ambientExtension_apply_of_isOmega and denominator lemmas to obtain a neighborhood on which the ambient extension equals the explicit smooth form x ↦ ‖x‖⁻³ times the alternating determinant form. Prove differentiability there. Apply Filter.EventuallyEq.extDeriv_eq and extDeriv_apply, compute the derivative of the norm-cubed inverse, reduce the alternating derivative sum by the three-dimensional Laplace identity, and conclude extDeriv = 0 using the Euler identity Df(x)·x = -3f(x). Work only at the frozen Euclidean Fin 3 generality and preserve all registered statements and definitions."},
+      :id :routes-2026-09-28-t94a10-solid-angle-closedness-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "Prove the local quotient-rule and alternating-coordinate calculation in apm_t94A10_bridge_solidAngle_closed. The subsequent sphere-pullback/Green obstruction remains a separate listed route step.",
+      :other-consumers []},
+     :residual
+     "The placeholder-free assembly fixture proves that the main theorem is pure conjunction assembly. The first missing prerequisite is exactly apm_t94A10_bridge_solidAngle_closed (route step 1); after it is banked, route steps 2-3 remain for the independent non-exactness bridge."}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A10",
    :acceptance
@@ -78843,7 +78928,7 @@
    :kind :final-adapter,
    :depends-on
    [:routes-2026-09-28-checkpoint-topo1-after-t01a01-1
-    :routes-2026-09-28-checkpoint-topo1-after-t01a01-1],
+    :routes-2026-09-28-t94a10-solid-angle-closedness-1],
    :current-residual
    "Three sorries: prove closedness of the solid-angle two-form, prove non-exactness by its sphere pullback and periodic rectangle Green argument, then assemble the main conjunction.",
    :other-consumers []}
