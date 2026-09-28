@@ -51102,30 +51102,37 @@
     :routes-2026-09-28-rp-sphere-quotient-transition-input-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free inhabitant of SphereChartTransitionAlternativesSmooth from /tmp/rp_sphere_transition_alternatives.lean. For every sphere chart centers p q and model point u, prove the ordinary coordinate transition ContDiffAt under membership in the exact sphere-chart transition source, and prove the antipodal-inserted coordinate transition ContDiffAt under membership in the first chart target and the antipodal image in the second chart source. Use the standard sphere IsManifold atlas compatibility and sphereAntipodalN_contMDiff_for_alternatives; do not state smoothness outside chart domains. This supplies the two smooth local representatives required by the quotient transition contract for t95A04 and t96A07."},
+   :id :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-quotient-transition-normal-form-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/rp_sphere_quotient_transition_normal_form.lean",
+     {:path "/tmp/rp_sphere_transition_alternatives.lean",
       :sha256
-      "00f247e47b1171755b7cc26392aae17e3d0ca4b402f4ff7105d0ce7f33895782"},
+      "7e1b80843d4dfd915fc72ec5238dd25c8992ebfb69fcd658f04ddfb28da9d1dd"},
      :commands
      [{:cmd
-       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form.lean",
+       "lake env lean /tmp/rp_sphere_transition_alternatives.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_transition_normal_form.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_transition_alternatives.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form.lean",
-       :exit 1,
-       :finding
-       "The first draft omitted opening Topology, leaving neighborhood notation unresolved; adding the namespace opening corrected the exact contract."}],
      :residual
-     "The pairwise ContDiffOn contract is not yet inhabited. Its remaining missing fact is the compiled local coordinate normal form: at every point of the precise transition domain, the quotient coordinate transition is eventually the ordinary sphere-chart transition or that transition with sphereAntipodalN inserted. The same fixture confirms the antipodal map is smooth in the required model. Once this normal form is proved from the banked inverseBranch_eventuallyEq_or_antipodal theorem and the quotientChart definitions, ContDiffOn follows locally from the standard sphere manifold compatibility.",
+     "The local normal form is banked, but the pairwise ContDiffOn proof still needs smoothness of its two model-coordinate alternatives at points where their chart domains are valid. The compiled prerequisite states exactly those two implications: ordinary sphere-chart transition smoothness from its transition-source membership, and antipodal-inserted transition smoothness from the first chart target and second chart source memberships. It separately compiles the required smoothness of sphereAntipodalN. Once inhabited from the standard sphere IsManifold groupoid and composition, the requested contract follows by eventual-equality congruence pointwise.",
      :prerequisite
      {:consumer :t95A04,
       :phase :probe,
@@ -51134,16 +51141,15 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile a placeholder-free inhabitant of SphereProjectionQuotientTransitionLocalNormalForm from /tmp/rp_sphere_quotient_transition_normal_form.lean. For every inverse family, quotient-chart pair y z, and model coordinate u in the exact transition domain, prove the full quotient coordinate transition is eventually equal near u either to the standard sphere chart transition or to that transition with sphereAntipodalN 2 inserted. Derive it by pulling inverseBranch_eventuallyEq_or_antipodal through the first chart and simplifying quotientChart inverse laws. Retain the compiled sphereAntipodalN_contMDiff_for_transition theorem. This is the exact local normal form needed by the pairwise ContDiffOn row for t95A04 and t96A07."},
+       "Compile a placeholder-free inhabitant of SphereChartTransitionAlternativesSmooth from /tmp/rp_sphere_transition_alternatives.lean. For every sphere chart centers p q and model point u, prove the ordinary coordinate transition ContDiffAt under membership in the exact sphere-chart transition source, and prove the antipodal-inserted coordinate transition ContDiffAt under membership in the first chart target and the antipodal image in the second chart source. Use the standard sphere IsManifold atlas compatibility and sphereAntipodalN_contMDiff_for_alternatives; do not state smoothness outside chart domains. This supplies the two smooth local representatives required by the quotient transition contract for t95A04 and t96A07."},
       :id
-      :routes-2026-09-28-rp-sphere-quotient-transition-normal-form-topo2-r1,
+      :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
-      [:routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
-       :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
+      [:routes-2026-09-28-rp-sphere-quotient-transition-normal-form-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -51154,7 +51160,8 @@
    :depends-on
    [:routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
     :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1
-    :routes-2026-09-28-rp-sphere-quotient-transition-normal-form-topo2-r1],
+    :routes-2026-09-28-rp-sphere-quotient-transition-normal-form-topo2-r1
+    :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
