@@ -125,7 +125,7 @@ def apm_t91a01_hasIndexThreeZero
 
 /-- A local index-three model exists; on a compact connected oriented smooth
 surface, a smooth tangent vector field having an isolated zero whose actual
-normalized boundary direction is `z ↦ z³` has another zero. -/
+normalized boundary direction has degree three (index +3) has another zero. -/
 theorem apm_t91a01 :
     (∀ z : ℂ, apm_t91a01_vectorField z = 0 ↔ z = 0) ∧
     (∀ θ : ℝ,
