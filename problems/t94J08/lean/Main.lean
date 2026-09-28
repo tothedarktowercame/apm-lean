@@ -257,7 +257,9 @@ def t94J08HasReducedDegreeZero (f : Equiv.Perm (Fin 2)) (d : ℤ) : Prop :=
 /-- The one-dimensional local index, computed on the boundary `S⁰` of an
 interval around the isolated zero. -/
 def t94J08HasLocalIndexOne (v : ℝ → ℝ) (p r : ℝ) (d : ℤ) : Prop :=
-  0 < r ∧ v (p - r) ≠ 0 ∧ v (p + r) ≠ 0 ∧
+  v p = 0 ∧ 0 < r ∧
+    (∀ x, dist x p < r → x ≠ p → v x ≠ 0) ∧
+    v (p - r) ≠ 0 ∧ v (p + r) ≠ 0 ∧
     (d : ℝ) = (Real.sign (v (p + r)) - Real.sign (v (p - r))) / 2
 
 /-- The antipodal degree formula in every dimension, together with the local
