@@ -78069,8 +78069,50 @@
    "After reviewed t97A07, all one-placeholder adapters will be closed or held; recount and elect the nearest two-placeholder adapter before three-placeholder routes.",
    :other-consumers []}
   {:consumer :t02A05,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "The pointwise projection identity, translation transport, and raw intrinsic moment reduction compile. The remaining independent prerequisite is an exact theorem that the normalized intrinsic two-dimensional Euclidean Hausdorff mass of the unit sphere subtype is 4*pi. The banked unitFlux_moment is only relative to raw intrinsic mass; Mathlib defines μHE by a scalar multiple of μH, while its explicit addHaarScalarFactor ratio is still proof_wanted, and neither ConstructionTargets nor Mathlib evaluates the required sphere mass. Implementing bridge_1 without this theorem would require assuming or bypassing precisely the invariant forbidden by the row.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-linter,
+      :message
+      "The compiled boundary audit emits two unnecessarySimpa suggestions."}],
+    :statement-hashes
+    {:registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :disposition :stop,
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason :missing-normalized-sphere-mass,
+    :commands
+    [{:cmd "sha256sum /tmp/t02a05-assembly-probe.lean", :exit 0}
+     {:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+      :exit 0}
+     {:cmd "lake env lean /tmp/T02A05IntrinsicMassBoundary.lean",
+      :exit 0,
+      :finding
+      "Compiled projection formula, coefficient identity, sphere translation, moment reduction, and bridge_iff_mass with standard axioms."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t02A05/lean/Main.lean",
+      :exit 0,
+      :finding "2"}
+     {:cmd
+      "rg -n 'mass 2 = 4|sphere[^\\n]*= [^\\n]*4[^\\n]*Real\\.pi|4[^\\n]*Real\\.pi[^\\n]*sphere' ConstructionTargets .lake/packages/mathlib/Mathlib",
+      :exit 1,
+      :expected-exit 1}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t02a05-assembly-probe.lean",
+     :sha256
+     "549bdba880150e9e0a02c166f19e682671fce507cb167615d4533b19db90d34d"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t02A05/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A05/bridge_1",
    :acceptance
