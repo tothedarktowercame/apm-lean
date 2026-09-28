@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.Surfaces
 
 /-!
 # APM t95J03 — surfaces sharing a finite cover with the Klein bottle
@@ -45,7 +46,9 @@ def T95J03CoverConstraints
     | .orientable _ => P.orientable = true
     | .nonorientable _ => P.orientable = false ∨ Even k
 
-theorem apm_t95j03 (k : ℕ) (hk : 1 < k)
+/-- Superseded: `hnecessary` and `hrealize` replaced genuine coverings by
+hand-written constraints, with a realization hypothesis false for covers. -/
+theorem apm_t95j03_previous_encoding (k : ℕ) (hk : 1 < k)
     (HasConnectedKFoldCover :
       ℕ → T95J03ClosedSurface → T95J03CoverProfile → Prop)
     (hnecessary : ∀ k F P,
@@ -112,3 +115,29 @@ theorem apm_t95j03 (k : ℕ) (hk : 1 < k)
           omega
         · rintro rfl
           exact ⟨⟨false, 0⟩, by norm_num⟩
+
+open ConstructionTargets.Surfaces
+
+noncomputable def T95J03SurfaceSpace : T95J03ClosedSurface → TopCat
+  | .orientable g => TopCat.of (Surface true g)
+  | .nonorientable g => TopCat.of (Surface false g)
+
+def T95J03IsKFoldCover (k : ℕ) (E X : TopCat.{0}) (p : E → X) : Prop :=
+  IsCoveringMap p ∧ ∀ x : X, Nat.card {e : E // p e = x} = k
+
+/-- Two classified closed surfaces share homeomorphic total spaces of actual
+`k`-sheeted covers. -/
+def T95J03SharesKFoldCover (k : ℕ) (F G : T95J03ClosedSurface) : Prop :=
+  ∃ (E K : TopCat.{0}) (p : E → T95J03SurfaceSpace F)
+      (q : K → T95J03SurfaceSpace G),
+    T95J03IsKFoldCover k E (T95J03SurfaceSpace F) p ∧
+    T95J03IsKFoldCover k K (T95J03SurfaceSpace G) q ∧
+    Nonempty (E ≃ₜ K)
+
+/-- Faithful classification requested by the prelim, now phrased using actual
+covering maps and an actual homeomorphism of their total spaces. -/
+theorem apm_t95j03 (k : ℕ) (hk : 1 < k) :
+    {F | T95J03SharesKFoldCover k F t95J03KleinBottle} =
+      if Even k then {t95J03Torus, t95J03KleinBottle}
+      else {t95J03KleinBottle} := by
+  sorry
