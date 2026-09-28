@@ -79141,9 +79141,22 @@
       "After reviewed t92J08, preserve all holds and STOPs, then rank t91J06, t95J02, and t99J04 by concrete remaining work.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790635204425-26588-85e908d8",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 6baab79b"
+      "git show 6baab79b:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "python3 scripts/statement-registry.py check --rev 6baab79b"
+      "Python comment-stripped census of twelve topo1 blobs at 6baab79b and its parent"
+      "python3 scripts/statement-registry.py fingerprint t92J08 --rev 6baab79b"
+      "sed and rg verification of t92J08 theorem orientation, route, and named Mathlib flow APIs"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-4. Commit 6baab79b changes only holes/labs/topology-contract/worklist.edn; its recorded 650-item snapshot validates. Independent census matches the checkpoint and is unchanged from the parent at 22 placeholders: t01A01=2, t02A05=2, t91J06=3, t92J08=3, t93J06=0, t94A07=1, t94A09=0, t94A10=3, t95J02=3, t97A07=1, t99J04=3, t99J06=1. It preserves reviewed STOPs for t01A01, t02A05, and t94A10, the three reviewed one-placeholder holds, and both closures. The registry reproduces 130/130 with file hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0; t92J08 has faithful frozen hash f36424b88f995e3e160d52497b0bde44ea1b5107b1a302780ac5111e4ae2cbc4. Electing t92J08 is supported by the remaining-route comparison. Its bridge direction exactly supplies the uniform positive local time consumed by exists_isMIntegralCurve_of_isMIntegralCurveOn; uniqueness then extends the given local curve, while the separate endpoint contradiction excludes a global curve agreeing with 1/(1-t). The named closed-ball Picard-Lindelof, manifold uniqueness/globalization, continuity, and limit APIs exist at the actual Euclidean-model manifold representation. t91J06 retains a false helper signature, t95J02 requires quotient-circle/H1 construction, and t99J04 requires a missing manifold inverse-function theorem. Fixture hashing is not applicable to this strategy-only checkpoint."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -79159,7 +79172,7 @@
    :other-consumers []}
   {:consumer :t92J08,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t92J08",
    :acceptance
