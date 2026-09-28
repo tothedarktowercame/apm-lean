@@ -148,7 +148,9 @@ theorem apm_t97J08_bridge_windingNumber_eq_betaIntegral
     ConstructionTargets.T97J08BetaWindingIntegral.winding_eq_betaIntegral_of_liftIsCOne
       f hf' n hn' hlift
 
-theorem apm_t97j08 :
+/-- Superseded because it gave the formula for beta without stating that beta
+is the pullback of the restricted form along radial projection. -/
+theorem apm_t97j08_previous_encoding :
     IsT97J08ClosedOneFormOnPuncturedPlane t97J08Beta ∧
     ∀ f : ℝ → ℂ, IsT97J08SmoothPuncturedLoop f →
       ∃! n : ℤ, IsT97J08WindingNumber f n ∧
@@ -225,4 +227,29 @@ theorem apm_t97j08 :
 #print axioms apm_t97J08_bridge_beta_cross_derivatives
 #print axioms apm_t97J08_bridge_unique_windingNumber
 #print axioms apm_t97J08_bridge_windingNumber_eq_betaIntegral
-#print axioms apm_t97j08
+#print axioms apm_t97j08_previous_encoding
+
+/-- The form `(x dy - y dx) / (2*pi)` on the complex plane. -/
+def t97J08Alpha : t97J08OneForm := fun z v ↦
+  (z.re * v.im - z.im * v.re) / (2 * Real.pi)
+
+/-- Radial projection from the punctured plane to the unit circle. -/
+def t97J08Phi (z : ℂ) : ℂ := z / ‖z‖
+
+/-- The real differential of radial projection, written explicitly. -/
+def t97J08DPhi (z v : ℂ) : ℂ :=
+  v / ‖z‖ - z * ((z.re * v.re + z.im * v.im) / ‖z‖ ^ 3)
+
+/-- The concrete pullback of the restriction of `alpha` to the unit circle. -/
+def t97J08PhiPullbackAlphaHat : t97J08OneForm := fun z v ↦
+  t97J08Alpha (t97J08Phi z) (t97J08DPhi z v)
+
+theorem apm_t97j08 :
+    (∀ z : ℂ, z ≠ 0 → ‖t97J08Phi z‖ = 1) ∧
+    (∀ z v : ℂ, z ≠ 0 →
+      t97J08Beta z v = t97J08PhiPullbackAlphaHat z v) ∧
+    IsT97J08ClosedOneFormOnPuncturedPlane t97J08Beta ∧
+    ∀ f : ℝ → ℂ, IsT97J08SmoothPuncturedLoop f →
+      ∃! n : ℤ, IsT97J08WindingNumber f n ∧
+        (n : ℝ) = t97J08BetaIntegral f := by
+  sorry
