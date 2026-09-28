@@ -165,7 +165,9 @@ lemma apm_t01a03_noRetraction_circle_of_H1_nontrivial
   obtain ⟨x, hx⟩ := exists_ne (0 : apm_t01a03_H1 Circle)
   exact ⟨x, hx⟩
 
-theorem apm_t01a03 :
+/-- Superseded: parts (a) and (b) assumed exactly the homology and fundamental
+group obstructions that the prelim asks one to establish from the pictures. -/
+theorem apm_t01a03_previous_encoding :
     ∀ (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
       [PathConnectedSpace S] [ChartedSpace apm_t01a03_E2 S]
       [IsManifold apm_t01a03_I2 ∞ S],
@@ -189,5 +191,24 @@ theorem apm_t01a03 :
     exact hwedgePi
       (apm_t01a03_fundamentalGroupMap_injective_of_retraction
         wedgeInTorus apm_t01a03_wedgeBase hret)
+
+/-- Faithful reopened three-part answer: none of the three pictured inclusions
+admits a retraction.  In particular, the conclusion is no longer supplied as
+an induced-homology or induced-fundamental-group hypothesis. -/
+theorem apm_t01a03 :
+    ∀ (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
+      [PathConnectedSpace S] [ChartedSpace apm_t01a03_E2 S]
+      [IsManifold apm_t01a03_I2 ∞ S],
+      apm_t01a03_hasGenusTwo S →
+      ∀ (middle : C(Circle, S))
+        (wedgeInTorus : C(apm_t01a03_Wedge, apm_t01a03_Torus))
+        (twoCircles : C(apm_t01a03_TwoCircles, S)),
+        Topology.IsEmbedding middle →
+        Topology.IsEmbedding wedgeInTorus →
+        Topology.IsEmbedding twoCircles →
+        ¬apm_t01a03_HasRetraction middle ∧
+        ¬apm_t01a03_HasRetraction wedgeInTorus ∧
+        ¬apm_t01a03_HasRetraction twoCircles := by
+  sorry
 
 #print axioms apm_t01a03
