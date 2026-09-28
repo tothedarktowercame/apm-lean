@@ -79171,8 +79171,55 @@
    "After reviewed t94A10, preserve all holds and STOPs, then rank the remaining unheld three-placeholder routes by concrete work.",
    :other-consumers []}
   {:consumer :t92J08,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Exact missing prerequisite: for every x0, a neighborhood U of x0 and epsilon > 0 such that every x in U has a manifold integral curve through x on Ioo (-epsilon) epsilon. Mathlib existing exists_isMIntegralCurveAt_of_contMDiffAt_boundaryless transports only one initial point, while the closed-ball Picard-Lindelof theorem is Euclidean; the family-level chart transport and shared extChart-target-interior control are absent. Compact finite-subcover extraction is downstream once this lemma exists. The scoped consumer remains unchanged with three placeholders.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The exact consumer fixture compiles through the current bridge and therefore reports sorryAx; it introduces no placeholder of its own."}],
+    :statement-hashes
+    {:t92J08
+     "f36424b88f995e3e160d52497b0bde44ea1b5107b1a302780ac5111e4ae2cbc4",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :disposition :stop,
+    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason :missing-neighborhood-uniform-chart-transport,
+    :commands
+    [{:cmd "test canonical .lake/packages authority", :exit 0}
+     {:cmd "sha256sum /tmp/t92j08-uniform-time-consumer.lean", :exit 0}
+     {:cmd "lake env lean problems/t92J08/lean/Main.lean", :exit 0}
+     {:cmd
+      "lake env lean -o /tmp/t92probe/t92J08/lean/Main.olean problems/t92J08/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "LEAN_PATH=/tmp/t92probe lake env lean /tmp/t92j08-uniform-time-consumer.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t92J08/lean/Main.lean",
+      :exit 0,
+      :finding "3"}
+     {:cmd "rg exact manifold integral-curve and Picard-Lindelof APIs",
+      :exit 0,
+      :finding
+      "Mathlib provides pointwise manifold chart transport and closed-ball-uniform Euclidean existence separately; no theorem transports the closed-ball family through one manifold chart with a shared target-interior interval."}
+     {:cmd "git diff -- problems/t92J08/lean/Main.lean",
+      :exit 0,
+      :finding "empty"}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t92j08-uniform-time-consumer.lean",
+     :sha256
+     "e1592fa3174d7482a65353c26493e523fe269d0a9594084e38a3fbbc956f9dd7"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t92J08/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t92J08/uniform-local-time",
    :acceptance
