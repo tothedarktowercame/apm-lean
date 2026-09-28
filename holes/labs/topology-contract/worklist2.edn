@@ -50369,54 +50369,47 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_sphere_projection_open_map.lean",
-      :sha256
-      "584af344723555da59b8198887a4e122578e38d82d02df455ddc0962a13646b0"},
-     :commands
-     [{:cmd
-       "test -L .lake/packages && lake env lean /tmp/rp_sphere_projection_open_map.lean",
-       :exit 0}
-      {:cmd
-       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_open_map.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/rp_sphere_projection_open_map.lean",
-       :exit 1,
-       :finding
-       "Initial fibre proof tried to rewrite reducible sphereVector definitions directly; corrected by changing to the explicit Projectivization.mk equality."}
-      {:cmd "lake env lean /tmp/rp_sphere_projection_open_map.lean",
-       :exit 1,
-       :finding
-       "The scalar equation orientation was reversed in the equality and antipodal cases; corrected using the direct equality and congrArg negation."}
-      {:cmd "lake env lean /tmp/rp_sphere_projection_open_map.lean",
-       :exit 1,
-       :finding
-       "The saturation proof passed a reversed image-membership equality to sphereProjection_eq_iff; corrected to the stored forward equality."}],
-     :residual
-     "Implement the compiled dimension-2 open-map packet in RealProjectiveSmoothTarget. The downstream local-model row can then restrict sphereProjection to an antipode-free open hemisphere and obtain an open embedding/local homeomorphism.",
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
-     :acceptance
-     {:theorems
-      ["sphereAntipodal"
-       "sphereProjection_eq_iff"
-       "continuous_sphereAntipodal"
-       "sphereProjection_preimage_image"
-       "sphereProjection_isOpenMap_of_authority"],
-      :generality
-      "dimension 2 only, reusing sphereProjectionQuotientAuthority",
-      :gates
-      ["lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
-       "python3 scripts/statement-registry.py check"
-       "comment-stripped no-sorry scan of the changed packet"]}}},
+   {:placeholder-delta 0,
+    :residual
+    "Restrict sphereProjection to an antipode-free open hemisphere using sphereProjection_isOpenMap_of_authority and sphereProjection_eq_iff, obtaining the local homeomorphism needed for the dimension-2 rpSmoothAtlas shared by t95A04 and t96A07.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/rp_sphere_projection_open_map.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 no-sorry-pattern ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_projection_open_map_axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :finding
+      "The standalone fixture opened Topology, whereas the destination module did not; after opening the namespace, IsOpenMap resolved. The initially qualified Topology.IsOpenMap name was invalid and was corrected to the fixture interface."}],
+    :commit "0b1a7c955c58e6a4ce490b58a7d4b0956c5ac0cb",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_projection_open_map.lean",
+     :sha256
+     "584af344723555da59b8198887a4e122578e38d82d02df455ddc0962a13646b0"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
