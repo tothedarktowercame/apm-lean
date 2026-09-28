@@ -77012,22 +77012,76 @@
    "Recount after reviewed t93J06 closure; if closed, elect the remaining DIRECT t94A09 closure before ADAPTER problems.",
    :other-consumers []}
   {:consumer :t94A09,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:residual
+     "No prerequisite remains. The complete exact-statement fixture compiles; the implementation is a one-file final adapter reusing the reviewed shared obstruction, with no duplicated homology or tangent-field homotopy.",
+     :outcome :go,
+     :warnings
+     [{:kind :inherited-placeholder,
+       :message
+       "Compiling the current consumer source to the temporary import artifact warns that apm_t94a09 uses sorry. The exact replacement theorem in the fixture is comment-stripped placeholder-free and its #print axioms excludes sorryAx."}],
+     :axioms ["propext" "Classical.choice" "Quot.sound"],
+     :commands
+     [{:cmd
+       "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+       :exit 0}
+      {:cmd
+       "lake env lean -o /tmp/t94probe/t94A09/lean/Main.olean problems/t94A09/lean/Main.lean",
+       :exit 0}
+      {:cmd
+       "LEAN_PATH=/tmp/t94probe lake env lean /tmp/t94a09-probe.lean",
+       :exit 0}
+      {:cmd
+       "python3 -c 'comment-strip then reject identifier-token sorry' /tmp/t94a09-probe.lean",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd "sha256sum /tmp/t94a09-probe.lean", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t94a09-probe.lean",
+       :exit 1,
+       :stage :fixture-import,
+       :correction
+       "The consumer source is not a Lake module. Compiled it to a temporary olean and imported that artifact through LEAN_PATH; no repository file was changed."}
+      {:cmd
+       "LEAN_PATH=/tmp/t94probe lake env lean /tmp/t94a09-probe.lean",
+       :exit 1,
+       :stage :adapter-elaboration,
+       :correction
+       "Added the explicit sphere subtype annotation to the restricted ambient-extension lambda; the corrected fixture compiles."}],
+     :fixture
+     {:path "/tmp/t94a09-probe.lean",
+      :sha256
+      "217204f68ecb948276ea9bc91394b31db037f8064c258af8ad28ed9c045ea685"},
+     :implementation
+     {:scope ["problems/t94A09/lean/Main.lean"],
+      :acceptance
+      {:placeholder-delta -1,
+       :statement-policy
+       "Do not change apm_t94a09 or any definition used by its registered statement.",
+       :construction
+       "Import ConstructionTargets.EvenSphereTangentFieldObstruction. Replace only the final sorry: unpack the SmoothSphereField witness, identify V with the restriction of Vext to obtain continuity, pass V, its orthogonality, and nonvanishing to homotopy_of_field 1, contradict id_not_homotopic_antipodal 1, and retain the existing S3 and torus lemmas.",
+       :gates
+       ["lake env lean problems/t94A09/lean/Main.lean exits 0"
+        "comment-stripped placeholder count changes from 1 to 0"
+        "python3 scripts/statement-registry.py check exits 0"
+        "#print axioms apm_t94a09 excludes sorryAx"]}},
+     :seat "topo-4"}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["problems/t94A09/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t94A09",
    :acceptance
-   {:probe
-    "Compile a complete placeholder-free fixture for the exact registered apm_t94a09 statement. Import ConstructionTargets.EvenSphereTangentFieldObstruction; unpack Vext and its restriction equations, obtain continuity from ContDiff.continuous, transfer orthogonality and nonvanishing from V to Vext restricted to apm_t94a09_S2, apply homotopy_of_field 1 and id_not_homotopic_antipodal 1, then assemble with apm_t94a09_exists_smoothSphereField_S3 and apm_t94a09_exists_smoothTorusField_unique_zero. Do not duplicate the homology or homotopy construction and do not change registered statements or definitions.",
-    :placeholder
-    "the sole sorry in problems/t94A09/lean/Main.lean, the S2 conjunct of apm_t94a09",
-    :route-step
-    "t94A09 route step 1, reusing the banked t93J06 obstruction and closing the problem",
+   {:placeholder-delta -1,
+    :statement-policy
+    "Do not change apm_t94a09 or any definition used by its registered statement.",
+    :construction
+    "Import ConstructionTargets.EvenSphereTangentFieldObstruction. Replace only the final sorry: unpack the SmoothSphereField witness, identify V with the restriction of Vext to obtain continuity, pass V, its orthogonality, and nonvanishing to homotopy_of_field 1, contradict id_not_homotopic_antipodal 1, and retain the existing S3 and torus lemmas.",
     :gates
-    ["verify the canonical package authority before Lake"
-     "lake env lean on a complete exact-statement fixture exits 0"
-     "fixture contains no comment-stripped sorry"
-     "python3 scripts/statement-registry.py check exits 0"]},
+    ["lake env lean problems/t94A09/lean/Main.lean exits 0"
+     "comment-stripped placeholder count changes from 1 to 0"
+     "python3 scripts/statement-registry.py check exits 0"
+     "#print axioms apm_t94a09 excludes sorryAx"]},
    :id :routes-2026-09-28-t94a09-direct-closure-1,
    :kind :final-adapter,
    :depends-on [:routes-2026-09-28-checkpoint-topo1-after-t93j06-1],
