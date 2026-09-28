@@ -79889,8 +79889,59 @@
    "After reviewed t95J02, preserve all holds and STOPs, then choose between t91J06 and t99J04 by concrete remaining work.",
    :other-consumers []}
   {:consumer :t91J06,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Exact missing prerequisite: a compiled extend_interval_homeomorph theorem at the frozen real-Icc generality. Given the transition image Icc a b strictly inside Icc 0 1 and a homeomorphism on that inner interval to Icc (-m) m, it must construct the affine endpoint extensions to Icc (-(m+1)) (m+1), handle both monotone orientations, prove continuity at a and b, bijectivity, and exact restriction equality. Only after that theorem exists can Nat.rec construct the compatible family and transport it through IsEmbedding.toHomeomorph. The consumer remains unchanged with three placeholders; the false downstream glue helper was not used.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The exact consumer fixture compiles through the current bridge and therefore reports sorryAx; it introduces no placeholder."}
+     {:kind :downstream-specification-defect,
+      :message
+      "The separately listed glue helper omits hf and is false as written; this row correctly does not invoke or alter it."}],
+    :statement-hashes
+    {:t91J06
+     "c1a73551b731d282c660c5b3c11feb7bf57c91b4cb7e7e1488030072f0390910",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :disposition :stop,
+    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason :missing-interval-homeomorphism-extension,
+    :commands
+    [{:cmd "test canonical .lake/packages authority", :exit 0}
+     {:cmd
+      "sha256sum /tmp/t91j06-compatible-coordinates-consumer.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean -o /tmp/t91probe/t91J06/lean/Main.olean problems/t91J06/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "LEAN_PATH=/tmp/t91probe lake env lean /tmp/t91j06-compatible-coordinates-consumer.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t91J06/lean/Main.lean",
+      :exit 0,
+      :finding "3"}
+     {:cmd "rg interval-homeomorphism extension and monotonicity APIs",
+      :exit 0,
+      :finding
+      "Mathlib supplies strict monotonicity or antitonicity of continuous interval injections, but neither Mathlib nor ConstructionTargets supplies the affine two-end extension as a bundled homeomorphism with exact agreement on the inner interval."}
+     {:cmd "git diff -- problems/t91J06/lean/Main.lean",
+      :exit 0,
+      :finding "empty"}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t91j06-compatible-coordinates-consumer.lean",
+     :sha256
+     "5aa47dd88cee1602b0dbe77d0d3089ad02554d3181a29218f6ee6bf6cf61c61c"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t91J06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t91J06/compatible-stage-coordinates",
    :acceptance
