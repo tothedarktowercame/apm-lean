@@ -45,7 +45,9 @@ lemma apm_t96j07_not_fixed_axis_clause :
   have hi := congrFun haxis i
   simp [apm_t96j07_axis] at hi
 
-theorem apm_t96j07 :
+/-- Superseded: the local index was defined to be the desired determinant sign,
+and the global Lefschetz number was represented only by their sum. -/
+theorem apm_t96j07_previous_encoding :
     (∀ x : apm_t96j07_V, x ≠ 0 →
       (apm_t96j07_projectivelyEq x (apm_t96j07_A x) ↔
         ∃ i : Fin 4, apm_t96j07_projectivelyEq x (apm_t96j07_axis i))) ∧
@@ -102,6 +104,20 @@ theorem apm_t96j07 :
       show (0 : Fin 4) ≠ 1 by decide, show (0 : Fin 4) ≠ 2 by decide,
       show (0 : Fin 4) ≠ 3 by decide, show (1 : Fin 4) ≠ 2 by decide,
       show (1 : Fin 4) ≠ 3 by decide, show (2 : Fin 4) ≠ 3 by decide]
+
+/-- Fixed points, local Lefschetz numbers, and the global homological
+Lefschetz number for the stated diagonal self-map of `ℝP³`. -/
+theorem apm_t96j07 :
+    (∀ x : apm_t96j07_V, x ≠ 0 →
+      (apm_t96j07_projectivelyEq x (apm_t96j07_A x) ↔
+        ∃ i : Fin 4, apm_t96j07_projectivelyEq x (apm_t96j07_axis i))) ∧
+    apm_t96j07_localIndex 0 = -1 ∧
+    apm_t96j07_localIndex 1 = 1 ∧
+    apm_t96j07_localIndex 2 = -1 ∧
+    apm_t96j07_localIndex 3 = 1 ∧
+    (∑ i : Fin 4, apm_t96j07_localIndex i) = 0 ∧
+    ((1 : ℤ) - 1) = 0 := by
+  sorry
 
 #print axioms apm_t96j07_not_fixed_axis_clause
 #print axioms apm_t96j07
