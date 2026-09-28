@@ -50111,9 +50111,59 @@
    [:routes-2026-09-28-checkpoint-topo2
     :routes-2026-09-28-t94a08-projective-conic-topology-topo2-r1]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_projection_quotient_authority.lean",
+      :sha256
+      "7f5ff87713b87eff26ef536a4d3bc94e8fe789f88868f625256e191ea24103a0"},
+     :commands
+     [{:cmd
+       "test -L .lake/packages && lake env lean /tmp/rp_sphere_projection_quotient_authority.lean",
+       :exit 0}
+      {:cmd
+       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_authority.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_quotient_authority.lean",
+       :exit 1,
+       :finding
+       "First proof attempt lacked Topology namespace qualification and crossed the Pi-function and Euclidean WithLp representations directly."}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_projection_quotient_authority.lean",
+       :exit 1,
+       :finding
+       "Second attempt used the Pi sup norm instead of the Euclidean L2 norm required by Sphere 2; corrected the normalizing scalar to the norm after WithLp.toLp 2."}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_projection_quotient_authority.lean",
+       :exit 1,
+       :finding
+       "Third attempt misapplied toLp_injective as a nonzero lemma; corrected with an explicit nonzero proof via congrArg WithLp.ofLp."}],
+     :residual
+     "Implement the compiled dimension-2 quotient-authority packet in RealProjectiveSmoothTarget. This supplies the exact topology comparison needed by the downstream two-sheeted local-model and smooth-atlas rows.",
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
+     :acceptance
+     {:theorems
+      ["toLp_ne_zero"
+       "radialToSphere"
+       "continuous_radialToSphere"
+       "continuous_sphereProjection"
+       "sphereProjection_comp_radialToSphere"
+       "sphereProjectionQuotientAuthority"],
+      :generality "dimension 2 only",
+      :gates
+      ["lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+       "python3 scripts/statement-registry.py check"
+       "comment-stripped no-sorry scan of the changed packet"]}}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
