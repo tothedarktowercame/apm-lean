@@ -78823,8 +78823,56 @@
    "After reviewed t01A01, preserve the t02A05 STOP and existing holds, then choose the shortest remaining unheld three-placeholder adapter.",
    :other-consumers []}
   {:consumer :t94A10,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Exact prerequisite: a compiled frozen-E3 lemma computing extDeriv of x ↦ ‖x‖⁻³ • (x₀ dx₁∧dx₂ - x₁ dx₀∧dx₂ + x₂ dx₀∧dx₁) as zero away from the origin, including the HasFDerivAt inverse-cubic radial derivative and the three-dimensional Laplace identity. The scoped consumer remains unchanged with three placeholders.",
+    :outcome :stop,
+    :warnings
+    [{:kind :missing-prerequisite,
+      :message
+      "No banked theorem supplies the Leibniz rule and three-dimensional Laplace/Euler cancellation for a function-scaled alternating two-form. Completing it inline is the unbanked prerequisite, not a bounded adapter reuse."}],
+    :statement-hashes
+    {:t94A10
+     "d182222174cec68165c14a2357dea0b5559de7f2623f82b0771218d379a0996b",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :disposition :stop,
+    :axioms [],
+    :author "topo-2",
+    :reason :missing-function-scaled-alternating-form-calculus,
+    :commands
+    [{:cmd "sha256sum /tmp/t94a10-assembly-probe.lean", :exit 0}
+     {:cmd "test canonical .lake/packages authority", :exit 0}
+     {:cmd "lake env lean problems/t94A10/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t94A10/lean/Main.lean",
+      :exit 0,
+      :finding "3"}
+     {:cmd
+      "rg t94A10 and extDeriv scalar-product support in routes, ConstructionTargets, and Mathlib",
+      :exit 0,
+      :finding
+      "The route prescribes a direct HasFDerivAt calculation; the bank contains coordinate alternating forms, while Mathlib exposes extDeriv only for constant scalar smultiplication."}
+     {:cmd "git diff -- problems/t94A10/lean/Main.lean",
+      :exit 0,
+      :finding "empty"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean problems/t94A10/lean/Main.lean with exploratory local explicit-form proof",
+      :exit 1,
+      :stage :exterior-derivative-calculation,
+      :correction
+      "The bundled coordinate two-form and its differentiability were made to compile; extDeriv_apply then reduced closedness to three uncomputed Frechet product derivatives. The exploratory edit was restored exactly."}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t94a10-assembly-probe.lean",
+     :sha256
+     "c75c08f4960a7a26ddb2fcb87b696248dbff4547cde5826ea684de6186c1706c"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t94A10/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t94A10/closedness",
    :acceptance
