@@ -50369,6 +50369,8 @@
   {:bounded-exception
    "single-consumer exact type-valued strengthening of the existing Nielsen-Schreier proof",
    :consumer :t00J08,
+   :review-finding
+   "Deterministic fixture-integrity defect: commit 6d8b83c2 records /tmp/t00J08_end_basis_contract.lean at sha256 e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c, but the bytes that reproduce the claimed nil-path failure hash to 848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f. The recorded e8bf hash belongs to the earlier successful contract fixture, as also recorded by invoke-1790629509405-26342-cb4b1754; the STOP attempt modified that path without updating its hash. Therefore the exact failing artifact cannot be authenticated from the row and the representation-boundary claim is not reviewable as delivered. Repair by preserving the failing fixture bytes at a stable path, recording their actual hash, and rerunning the failing Lean command against those exact bytes. Fresh checks otherwise reproduce private root-prime at NielsenSchreier.lean:153, public endIsFree at :227, the nil-case failure, 130 matching frozen statements, a valid 315-item ledger, and three committed t00J08 placeholders; the transition commit itself changes only worklist2.edn.",
    :evidence
    {:residual
     "t00J08 route step 1 is stopped at the private-root representation boundary; steps 2-4 cannot count the intended explicit basis index.",
@@ -50391,13 +50393,19 @@
       :exit 1,
       :finding
       "The nil-path identity remains blocked by the opaque private root representation."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1790629784798-26361-8667ba6f",
+     :finding
+     "Deterministic fixture-integrity defect: commit 6d8b83c2 records /tmp/t00J08_end_basis_contract.lean at sha256 e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c, but the bytes that reproduce the claimed nil-path failure hash to 848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f. The recorded e8bf hash belongs to the earlier successful contract fixture, as also recorded by invoke-1790629509405-26342-cb4b1754; the STOP attempt modified that path without updating its hash. Therefore the exact failing artifact cannot be authenticated from the row and the representation-boundary claim is not reviewable as delivered. Repair by preserving the failing fixture bytes at a stable path, recording their actual hash, and rerunning the failing Lean command against those exact bytes. Fresh checks otherwise reproduce private root-prime at NielsenSchreier.lean:153, public endIsFree at :227, the nil-case failure, 130 matching frozen statements, a valid 315-item ledger, and three committed t00J08 placeholders; the transition commit itself changes only worklist2.edn."},
     :fixture
     {:path "/tmp/t00J08_end_basis_contract.lean",
      :sha256
      "e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c"},
     :seat "topo-8"},
-   :phase :probe,
-   :state :done-unreviewed,
+   :phase :implementation,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
