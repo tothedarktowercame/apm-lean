@@ -50533,11 +50533,61 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile the placeholder-free fixture /tmp/rp_sphere_local_inverse_family.lean proving Nonempty SphereProjectionLocalInverseFamily. The family must choose for every point of the frozen real projective two-space a sphere lift with its exact projection equation and an OpenPartialHomeomorph agreeing globally with sphereProjection 2 whose source contains that lift. Construct it only from sphereProjectionQuotientAuthority.surjective and sphereProjection_isLocalHomeomorph. This supplies the local-inverse choice needed by the smooth-descent charts for t95A04 and t96A07."},
+   :id :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_local_inverse_family.lean",
+      :sha256
+      "42e690a088a9abda1897d4848aba5afff0ee95623e04c19deb409e9ff023eb94"},
+     :commands
+     [{:cmd "lake env lean /tmp/rp_sphere_local_inverse_family.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_local_inverse_family.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/rp_sphere_local_inverse_family.lean",
+       :exit 1,
+       :finding
+       "The first draft omitted opening ProjectiveSpaceTopology, so Space was unresolved; opening the namespace corrected the interface and the final compile succeeds."}],
+     :residual
+     "The banked IsLocalHomeomorph theorem supplies a local chart around each sphere point, but the smooth-descent construction needs one coherent family indexed by quotient points: a chosen sphere lift, its projection equation, and the corresponding OpenPartialHomeomorph with the lift in its source. The compiled prerequisite constructs exactly this family from quotient surjectivity and the banked local model. After it is banked, the descent row can compose these inverses with standard sphere charts and reduce every overlap to identity or antipodal smoothness.",
+     :prerequisite
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile the placeholder-free fixture /tmp/rp_sphere_local_inverse_family.lean proving Nonempty SphereProjectionLocalInverseFamily. The family must choose for every point of the frozen real projective two-space a sphere lift with its exact projection equation and an OpenPartialHomeomorph agreeing globally with sphereProjection 2 whose source contains that lift. Construct it only from sphereProjectionQuotientAuthority.surjective and sphereProjection_isLocalHomeomorph. This supplies the local-inverse choice needed by the smooth-descent charts for t95A04 and t96A07."},
+      :id :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1],
+      :other-consumers [:t96A07]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free inhabitant of SphereProjectionSmoothDescentContract from /tmp/rp_smooth_atlas_descent_contract.lean. Using the banked two-sheeted local model, build the ChartedSpace on the existing Space real 2 from positive-hemisphere restrictions of standard sphere charts; prove overlap transitions are standard sphere transitions composed only with identity or the analytic antipodal map, establish IsManifold, and prove sphereProjection 2 is an IsLocalDiffeomorph. This supplies exactly the smooth-descent substep of rpSmoothAtlas 2 for t95A04 and t96A07 without changing the frozen topology."},
    :id :routes-2026-09-28-rp-sphere-smooth-descent-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1],
+   [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+    :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
