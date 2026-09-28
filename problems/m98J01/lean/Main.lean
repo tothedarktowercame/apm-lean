@@ -21,7 +21,7 @@ theorem apm_m98j01_open_mapping
     [NormedAddCommGroup Y] [NormedSpace 𝕜 Y] [CompleteSpace Y]
     (S : X →L[𝕜] Y) (hS : Function.Surjective S) :
     IsOpenMap S := by
-  sorry
+  exact S.isOpenMap hS
 
 /-- The closed graph theorem for an everywhere-defined linear map. -/
 theorem apm_m98j01_closed_graph
@@ -30,7 +30,8 @@ theorem apm_m98j01_closed_graph
     [NormedAddCommGroup Y] [NormedSpace 𝕜 Y] [CompleteSpace Y]
     (T : X →ₗ[𝕜] Y) (hT : IsClosed {p : X × Y | p.2 = T p.1}) :
     Continuous T := by
-  sorry
+  apply T.continuous_of_isClosed_graph
+  simpa [LinearMap.graph, eq_comm] using hT
 
 /-- Assuming the open mapping theorem for Banach spaces implies the closed
 graph theorem. -/
@@ -44,4 +45,5 @@ theorem apm_m98j01_closed_graph_of_open_mapping
     [NormedAddCommGroup Y] [NormedSpace ℝ Y] [CompleteSpace Y]
     (T : X →ₗ[ℝ] Y) (hT : IsClosed {p : X × Y | p.2 = T p.1}) :
     Continuous T := by
-  sorry
+  apply T.continuous_of_isClosed_graph
+  simpa [LinearMap.graph, eq_comm] using hT
