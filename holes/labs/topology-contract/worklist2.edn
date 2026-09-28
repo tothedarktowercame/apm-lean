@@ -50720,13 +50720,54 @@
   {:bounded-exception
    "single-consumer bounded memberwise cover-small chain naturality",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/production_connecting_memberwise_contract.lean",
+      :sha256
+      "4203074a81bdb2d8932a767a75d855c8788e6e7e3fa85b0456aacd8c59bb0139"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/production_connecting_memberwise_contract.lean",
+       :exit 0}
+      {:cmd
+       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/production_connecting_memberwise_contract.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/production_connecting_memberwise_contract.lean",
+       :exit 1,
+       :finding
+       "The proof ended with an explicit exact after congruence had already closed the functorial equality. Removing the redundant tactic produced the successful acceptance compile."}],
+     :implementation
+     {:scope
+      ["ConstructionTargets/ProductionConnectingNaturality.lean"],
+      :acceptance
+      {:theorem
+       "ConstructionTargets.ProductionConnectingNaturality.memberwiseCoverSmallNaturality",
+       :contract
+       "ConstructionTargets.ProductionConnectingNaturality.MemberwiseCoverSmallNaturality",
+       :requirements
+       "Include coverMemberMap and its exact inclusion equation, memberwiseCoverSmallSSetMap obtained by lifting the ambient simplicial map through the target cover-small subcomplex, its exact inclusion square, and the induced chain map. Keep the theorem at memberwise-preserving covers only."}},
+     :residual
+     "Memberwise cover-small chain naturality is complete. The next t97A04 route-step-7 work is to specialize it to the Boolean two-cover, construct the resulting ShortComplex.Hom, apply HomologicalComplex.HomologySequence.delta_naturality, and conjugate through the production homology isomorphisms to obtain productionConnecting_naturality."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/ProductionConnectingNaturality.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free proof of ConstructionTargets.ProductionConnectingNaturality.MemberwiseCoverSmallNaturality from /tmp/production_connecting_memberwise_contract.lean. Given f : C(X,Y), covers U and V with f image (U a) contained in V a for every a, construct the induced chain map F from coverSmallChains U to coverSmallChains V by lifting the ambient simplicial map through the target cover-small subcomplex, and prove F followed by the target inclusion equals the source inclusion followed by the ambient singular-chain map. State no stronger unrestricted cover naturality. This is the exact prerequisite for building the Boolean-cover ShortComplex.Hom and applying delta_naturality in t97A04 route step 7."},
+   {:theorem
+    "ConstructionTargets.ProductionConnectingNaturality.memberwiseCoverSmallNaturality",
+    :contract
+    "ConstructionTargets.ProductionConnectingNaturality.MemberwiseCoverSmallNaturality",
+    :requirements
+    "Include coverMemberMap and its exact inclusion equation, memberwiseCoverSmallSSetMap obtained by lifting the ambient simplicial map through the target cover-small subcomplex, its exact inclusion square, and the induced chain map. Keep the theorem at memberwise-preserving covers only."},
    :id
    :routes-2026-09-28-t97a04-memberwise-cover-small-naturality-topo2-r1,
    :kind :reusable-theorem,
