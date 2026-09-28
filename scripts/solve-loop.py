@@ -207,6 +207,7 @@ Write your COMPLETE proposed Main.lean to {out} (create the directory) and compi
 - If the statement is false or unprovable as written, do not change it: write your evidence
   (ideally a compiled counterexample) to {dir}/REFUTATION.md and stop.
 {feedback}
+Do not bell anyone: your final message is read directly from the job record.
 Finish with one line: SOLVE_RESULT proved | refuted | gave-up — then one sentence.
 """
 
