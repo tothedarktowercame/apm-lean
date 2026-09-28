@@ -79344,8 +79344,151 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "read TOPOLOGY-ROUTES.md and holes/labs/topology-routes/routes-{1,2,3}.md",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder census for all twelve topo1 consumers",
+      :exit 0,
+      :finding
+      "t01A01=2 t02A05=2 t91J06=3 t92J08=3 t93J06=0 t94A07=1 t94A09=0 t94A10=3 t95J02=3 t97A07=1 t99J04=3 t99J06=1"}
+     {:cmd
+      "rg reviewed t92J08 receipts in holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :finding
+    {:placeholder-delta {:t92J08 0, :topo1-total 0},
+     :typed-residual-change
+     {:t92J08
+      "The reviewed STOP isolates the missing family-level transport of Euclidean closed-ball-uniform Picard-Lindelof solutions through one manifold chart with shared target-interior control; compact minimization is downstream."},
+     :infrastructure-packets 0,
+     :review-outcomes
+     {:t92J08 :pass-stop,
+      :t94A10 :pass-stop,
+      :t01A01 :pass-stop,
+      :t02A05 :pass-stop,
+      :t94A07 :pass-hold,
+      :t99J06 :pass-hold,
+      :t97A07 :pass-hold},
+     :routes
+     {:t91J06
+      {:placeholders 3,
+       :status :open,
+       :remaining
+       ["interval transition/extension"
+        "compatible coordinates"
+        "corrected embedding-aware gluing"
+        "assembly"]},
+      :t99J06
+      {:placeholders 1,
+       :status :held,
+       :remaining ["computational form route"]},
+      :t95J02
+      {:placeholders 3,
+       :status :open,
+       :remaining
+       ["circleB homeomorphism"
+        "reflection homotopy"
+        "H1 kernel witness"
+        "retraction injectivity"
+        "assembly"]},
+      :t93J06 {:placeholders 0, :status :closed, :remaining []},
+      :t97A07
+      {:placeholders 1,
+       :status :held,
+       :remaining ["regular-points route"]},
+      :t99J04
+      {:placeholders 3,
+       :status :open,
+       :remaining
+       ["Euclidean partial diffeomorphism"
+        "manifold IFT"
+        "coordinate derivative"
+        "assembly"]},
+      :t01A01
+      {:placeholders 2,
+       :status :stopped,
+       :remaining ["punctured projective geometry chain"]},
+      :t92J08
+      {:placeholders 3,
+       :status :stopped,
+       :remaining
+       ["neighborhood-uniform manifold chart transport"
+        "compact minimum"
+        "blow-up and assembly"]},
+      :t02A05
+      {:placeholders 2,
+       :status :stopped,
+       :remaining ["normalized sphere-mass evaluation"]},
+      :t94A07
+      {:placeholders 1,
+       :status :held,
+       :remaining ["half-turn local data and circle obstruction"]},
+      :t94A10
+      {:placeholders 3,
+       :status :stopped,
+       :remaining
+       ["variable-scaled alternating-form calculus"
+        "sphere Green obstruction"]},
+      :t94A09 {:placeholders 0, :status :closed, :remaining []}},
+     :deferred
+     "Non-route infrastructure is deferred. t95J02 is elected before t91J06 and t99J04 because its five steps are consumer-specific and reuse banked integral circle H1 and reflection action; t91J06 has a known false nonfrozen helper needing correction, while t99J04 depends on the absent manifold IFT."},
+    :replacement-items
+    [{:consumer :t95J02,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t95J02",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free fixture for the exact registered apm_t95j02 statement. Supply route steps 1-5: construct the explicit homeomorphism from euclideanUnitSphere 2 to CircleB; construct the homotopy between its inclusion beta and beta composed with reflectionMap 1 using the quotient glide relation; combine banked integral-circle H1 and reflection action to produce the nonzero kernel class for inclusion of B; prove a retraction makes that inclusion injective on H1 by functoriality; and assemble the no-retraction result with the already proved retraction onto A. Reuse the in-file quotient identities, CoefficientFirstReflection, SingularHomologyHomotopy, and Functor.map_comp. Do not change registered statements or definitions.",
+       :placeholder
+       "apm_t95J02_bridge_vertical_H1_kernel, apm_t95J02_bridge_retraction_injective, and the final sorry in apm_t95j02",
+       :route-step
+       "t95J02 route steps 1-5, closing all three placeholders",
+       :gates
+       ["verify the canonical package authority before Lake"
+        "lake env lean on a complete exact-statement fixture exits 0"
+        "fixture contains no comment-stripped sorry"
+        "python3 scripts/statement-registry.py check exits 0"]},
+      :id :routes-2026-09-28-t95j02-adapter-closure-1,
+      :kind :final-adapter,
+      :depends-on [:routes-2026-09-28-checkpoint-topo1-after-t92j08-1],
+      :current-residual
+      "Three sorries: produce a nonzero H1 class of the vertical circle killed in the Klein quotient, prove retractions make its inclusion injective on H1, and assemble the contradiction.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Reread current registered statements, TOPOLOGY-ROUTES.md, all route files, and reviewed receipts; measure t95J02, preserve reviewed holds and STOPs, enforce stop-after-two, recount topo1 placeholders, and refill from the complete remaining ADAPTER portfolio."},
+      :id :routes-2026-09-28-checkpoint-topo1-after-t95j02-1,
+      :kind :strategy-checkpoint,
+      :depends-on [:routes-2026-09-28-t95j02-adapter-closure-1],
+      :current-residual
+      "After reviewed t95J02, preserve all holds and STOPs, then choose between t91J06 and t99J04 by concrete remaining work.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -79358,6 +79501,57 @@
     :routes-2026-09-28-checkpoint-topo1-after-t94a10-1],
    :current-residual
    "After reviewed t92J08, preserve all holds and STOPs, then rank t91J06, t95J02, and t99J04 by concrete remaining work.",
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t95J02",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free fixture for the exact registered apm_t95j02 statement. Supply route steps 1-5: construct the explicit homeomorphism from euclideanUnitSphere 2 to CircleB; construct the homotopy between its inclusion beta and beta composed with reflectionMap 1 using the quotient glide relation; combine banked integral-circle H1 and reflection action to produce the nonzero kernel class for inclusion of B; prove a retraction makes that inclusion injective on H1 by functoriality; and assemble the no-retraction result with the already proved retraction onto A. Reuse the in-file quotient identities, CoefficientFirstReflection, SingularHomologyHomotopy, and Functor.map_comp. Do not change registered statements or definitions.",
+    :placeholder
+    "apm_t95J02_bridge_vertical_H1_kernel, apm_t95J02_bridge_retraction_injective, and the final sorry in apm_t95j02",
+    :route-step
+    "t95J02 route steps 1-5, closing all three placeholders",
+    :gates
+    ["verify the canonical package authority before Lake"
+     "lake env lean on a complete exact-statement fixture exits 0"
+     "fixture contains no comment-stripped sorry"
+     "python3 scripts/statement-registry.py check exits 0"]},
+   :id :routes-2026-09-28-t95j02-adapter-closure-1,
+   :kind :final-adapter,
+   :depends-on
+   [:routes-2026-09-28-checkpoint-topo1-after-t92j08-1
+    :routes-2026-09-28-checkpoint-topo1-after-t92j08-1],
+   :current-residual
+   "Three sorries: produce a nonzero H1 class of the vertical circle killed in the Klein quotient, prove retractions make its inclusion injective on H1, and assemble the contradiction.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Reread current registered statements, TOPOLOGY-ROUTES.md, all route files, and reviewed receipts; measure t95J02, preserve reviewed holds and STOPs, enforce stop-after-two, recount topo1 placeholders, and refill from the complete remaining ADAPTER portfolio."},
+   :id :routes-2026-09-28-checkpoint-topo1-after-t95j02-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-09-28-t95j02-adapter-closure-1
+    :routes-2026-09-28-checkpoint-topo1-after-t92j08-1],
+   :current-residual
+   "After reviewed t95J02, preserve all holds and STOPs, then choose between t91J06 and t99J04 by concrete remaining work.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
