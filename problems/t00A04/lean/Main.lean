@@ -39,11 +39,18 @@ theorem apm_t00a04_previous_encoding :
 connected manifold cannot occur as a retract inclusion that is null-homotopic.
 The manifold hypotheses replace the formerly assumed conclusion. -/
 theorem apm_t00a04 :
-    ∀ (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y]
-      [T2Space X] [CompactSpace X] [PathConnectedSpace X] [Infinite X]
-      (ι : X → Y) (r : Y → X),
-      Continuous ι → Continuous r → (∀ x, r (ι x) = x) →
-      ¬ apm_t00a04_NullHomotopic ι := by
+    ∀ (E F : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+      [FiniteDimensional ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F]
+      [FiniteDimensional ℝ F] (I : ModelWithCorners ℝ E E)
+      (J : ModelWithCorners ℝ F F)
+      (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y]
+      [T2Space X] [CompactSpace X] [PathConnectedSpace X]
+      [ChartedSpace E X] [IsManifold I (⊤ : WithTop ℕ∞) X]
+      [ChartedSpace F Y] [IsManifold J (⊤ : WithTop ℕ∞) Y],
+      0 < Module.finrank ℝ E →
+      ∀ (ι : C(X, Y)) (r : C(Y, X)),
+      ContMDiff I J (⊤ : WithTop ℕ∞) ι → ContMDiff J I (⊤ : WithTop ℕ∞) r →
+      (∀ x, r (ι x) = x) → ¬ apm_t00a04_NullHomotopic ι := by
   sorry
 
 #print axioms apm_t00a04
