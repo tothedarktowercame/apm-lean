@@ -328,4 +328,16 @@ theorem apm_t01a07 :
       apm_t01a07_surface ∩ apm_t01a07_line =
         {apm_t01a07_pointPlus, apm_t01a07_pointMinus} ∧
       apm_t01a07_orientedIntersectionNumber = 0 := by
-  sorry
+  obtain ⟨hsm, hne, hset, -, -, -⟩ := apm_t01a07_previous_encoding
+  refine ⟨hsm, hne, hset, ?_⟩
+  have hq : apm_t01a07_lineQuartic = fun y : ℝ => 1 - y ^ 4 := by
+    funext y
+    simp [apm_t01a07_lineQuartic, apm_t01a07_quartic, apm_t01a07_lineChart]
+  have hd : ∀ y : ℝ, deriv apm_t01a07_lineQuartic y = -(4 * y ^ 3) := by
+    intro y
+    rw [hq]
+    have := ((hasDerivAt_pow 4 y).const_sub 1).deriv
+    simpa using this
+  unfold apm_t01a07_orientedIntersectionNumber apm_t01a07_localIntersectionSign
+  rw [hd, hd]
+  norm_num
