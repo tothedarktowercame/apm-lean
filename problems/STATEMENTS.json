@@ -52,6 +52,21 @@
    "rev": "b856af14",
    "approved_at": "2026-09-28T00:34:41Z"
   },
+  "t00A04": {
+   "decls": [
+    "apm_t00a04"
+   ],
+   "sha256": "e0273b0caa2f70f18b92ae928af8a5ddbf8cd253dec8980815bb9de464ca34b3",
+   "defs": [
+    "apm_t00a04_NullHomotopic"
+   ],
+   "grade": "stronger",
+   "grader": "claude read-only grader (reopen2 re-grade)",
+   "evidence": "holes/labs/statement-registry/reopen2-grades-3.md",
+   "prelim_defect": "problems/t00A04/PRELIM-DEFECT.md",
+   "rev": "3a0c6180",
+   "approved_at": "2026-09-28T19:45:29Z"
+  },
   "t00A05": {
    "decls": [
     "apm_t00a05"

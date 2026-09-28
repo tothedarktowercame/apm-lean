@@ -168,3 +168,49 @@ ContMDiff (I m) (I n) ∞ (↑)`. The conclusion is `∃ k ≤ m, ∃ charts on
     to the C^∞ hypothesis as written.
   - `apm_t96j05_HasSmoothManifoldStructure` and `apm_t96j05_IsSmoothRadialLevel`
     are unused by the current theorem.
+
+### t00A04 re-grade (commit e10380e8, working tree clean)
+
+| id | grade | decl | one-line reason | prelim-defect? |
+|---|---|---|---|---|
+| t00A04 | stronger (drops orientation, still true); otherwise faithful to the exactly corrected prelim | `apm_t00a04` | `[Nontrivial X]` replaces `[Nonempty X]` + `0 < finrank E`. This is exactly the set of X on which the prelim claim holds. C^∞ throughout, and nothing else is added | yes, real (X empty or one point); `[Nontrivial X]` is the exact correction and PRELIM-DEFECT.md now says so correctly |
+
+The current binder is `[T2Space X] [CompactSpace X] [Nontrivial X]`. It carries
+no dimension hypothesis, and everything else is as graded above. Smoothness is
+`IsManifold I ∞`, `IsManifold J ∞` and `ContMDiff … ∞` (C^∞).
+
+- **The correction is exact.** The prelim fails precisely when |X| ≤ 1:
+  - X = ∅: the Lean definition `NullHomotopic` holds as soon as Y is nonempty.
+  - X = {pt}: ι is constant.
+  - |X| ≥ 2: the claim holds (next bullet). So `[Nontrivial X]` removes the
+    counterexamples and nothing more.
+- **The statement is true.**
+  - Positive dimension: X is a nonempty closed n-manifold with n > 0. Some
+    component has nonzero H_n(·; ℤ/2), and ι_* is injective on it because
+    r ∘ ι = id. A null-homotopic ι would make ι_* zero in degree n > 0.
+  - Dimension 0 in this encoding: finrank E = 0, so X is discrete (and finite,
+    since it is compact). If H were a null-homotopy of ι, then for each x the
+    path t ↦ r(H(x,t)) is continuous into discrete X, hence constant. So
+    x = r(y) for every x, which contradicts `Nontrivial X`.
+  - Dimension is fixed by the single model E, so X has no mixed-dimension
+    case.
+- **Nothing else is narrower.**
+  - "X ⊂ Y" is encoded as a smooth ι with a smooth left inverse. dι is
+    injective and X compact, so ι is an embedding: equivalent to the prelim.
+  - `I, J` are arbitrary `ModelWithCorners ℝ E E`, which have open range by
+    invariance of domain, so the manifolds have no boundary.
+  - Orientation of X and Y is dropped. This strengthens the statement and it
+    stays true (the mod-2 argument above).
+  - I found no hypothesis that is always true or that is disconnected from
+    the objects.
+- **Trivial cases.**
+  - Empty and one-point X are excluded by `Nontrivial`.
+  - A constant ι is impossible given r ∘ ι = id and |X| ≥ 2.
+  - A discontinuous ι is excluded by `C(X, Y)`.
+  - A two-point X in a disconnected Y (for example Y = two circles, one point
+    on each, r collapsing each circle): the hypotheses are satisfiable and the
+    conclusion holds, since the points lie in different path components.
+- **Remaining nit (docs only).** The module docstring "Statement repairs" still
+  says "The source omits positive dimension … We add … its identity is not
+  homotopic to a constant map". That describes the superseded encoding, not
+  `[Nontrivial X]`. The theorem docstring and PRELIM-DEFECT.md are current.
