@@ -529,4 +529,85 @@ theorem sphereChartTransitionAlternativesSmooth :
     have h := h₂.comp ((𝓡 2).symm u) hA
     simpa only [mfld_simps] using h.contDiffAt
 
+def SphereProjectionQuotientTransitionLocalNormalFormWithDomains : Prop :=
+  ∀ (F : SphereProjectionLocalInverseFamily) (y z : Space ℝ 2) (u : E 2),
+    u ∈ ((𝓡 2).symm ⁻¹' ((F.quotientChart y).symm ≫ₕ
+      F.quotientChart z).source ∩ Set.range (𝓡 2)) →
+    (((fun v => (𝓡 2)
+        (F.quotientChart z ((F.quotientChart y).symm ((𝓡 2).symm v)))) =ᶠ[𝓝 u]
+          (fun v => (𝓡 2)
+            (chartAt (E 2) (F.lift z)
+              ((chartAt (E 2) (F.lift y)).symm ((𝓡 2).symm v))))) ∧
+      (𝓡 2).symm u ∈ ((chartAt (E 2) (F.lift y)).symm ≫ₕ
+        chartAt (E 2) (F.lift z)).source) ∨
+    (((fun v => (𝓡 2)
+        (F.quotientChart z ((F.quotientChart y).symm ((𝓡 2).symm v)))) =ᶠ[𝓝 u]
+          (fun v => (𝓡 2)
+            (chartAt (E 2) (F.lift z)
+              (sphereAntipodalN 2
+                ((chartAt (E 2) (F.lift y)).symm ((𝓡 2).symm v)))))) ∧
+      ((𝓡 2).symm u ∈ (chartAt (E 2) (F.lift y)).target ∧
+        sphereAntipodalN 2
+          ((chartAt (E 2) (F.lift y)).symm ((𝓡 2).symm u)) ∈
+            (chartAt (E 2) (F.lift z)).source))
+
+theorem sphereProjectionQuotientTransitionLocalNormalFormWithDomains :
+    SphereProjectionQuotientTransitionLocalNormalFormWithDomains := by
+  intro F y z u hu
+  have hd := F.transitionInput_domain y z u hu
+  have hqy := (F.quotientChart y).map_target hd.1
+  have hcy := F.continuousAt_transitionInput y u hd.1
+  have hevY : ∀ᶠ v in 𝓝 u,
+      (𝓡 2).symm v ∈ (F.quotientChart y).target :=
+    (ModelWithCorners.continuous_symm (𝓡 2)).continuousAt.preimage_mem_nhds
+      ((F.quotientChart y).open_target.mem_nhds hd.1)
+  have hevZ : ∀ᶠ v in 𝓝 u,
+      F.transitionInput y v ∈ (F.quotientChart z).source :=
+    hcy.preimage_mem_nhds ((F.quotientChart z).open_source.mem_nhds hd.2)
+  rcases F.inverseBranch_eventuallyEq_or_antipodal y z (F.transitionInput y u)
+      hqy.1 hd.2.1 with hsame | hanti
+  · left
+    constructor
+    · have hpull := hsame.comp_tendsto hcy.tendsto
+      filter_upwards [hpull, hevY, hevZ] with v hv hyv hzv
+      change (𝓡 2) (F.quotientChart z (F.transitionInput y v)) = _
+      rw [F.quotientChart_apply z (F.transitionInput y v) hzv]
+      congr 2
+      calc
+        F.inverseBranch z (F.transitionInput y v) =
+            F.inverseBranch y (F.transitionInput y v) := hv
+        _ = (chartAt (E 2) (F.lift y)).symm ((𝓡 2).symm v) :=
+          F.inverseBranch_quotientChart_symm y ((𝓡 2).symm v) hyv
+    · change (𝓡 2).symm u ∈ (chartAt (E 2) (F.lift y)).target ∧
+        (chartAt (E 2) (F.lift y)).symm ((𝓡 2).symm u) ∈
+          (chartAt (E 2) (F.lift z)).source
+      refine ⟨hd.1.1, ?_⟩
+      rw [← F.inverseBranch_quotientChart_symm y ((𝓡 2).symm u) hd.1]
+      change F.inverseBranch y (F.transitionInput y u) ∈ _
+      rw [← hsame.self_of_nhds]
+      exact hd.2.2
+  · right
+    constructor
+    · have hpull := hanti.comp_tendsto hcy.tendsto
+      filter_upwards [hpull, hevY, hevZ] with v hv hyv hzv
+      change (𝓡 2) (F.quotientChart z (F.transitionInput y v)) = _
+      rw [F.quotientChart_apply z (F.transitionInput y v) hzv]
+      congr 2
+      calc
+        F.inverseBranch z (F.transitionInput y v) =
+            sphereAntipodalN 2 (F.inverseBranch y (F.transitionInput y v)) := by
+          simpa only [Function.comp_apply] using hv
+        _ = sphereAntipodalN 2
+            ((chartAt (E 2) (F.lift y)).symm ((𝓡 2).symm v)) := by
+          congr 1
+          exact F.inverseBranch_quotientChart_symm y ((𝓡 2).symm v) hyv
+    · refine ⟨hd.1.1, ?_⟩
+      rw [← F.inverseBranch_quotientChart_symm y ((𝓡 2).symm u) hd.1]
+      change sphereAntipodalN 2 (F.inverseBranch y (F.transitionInput y u)) ∈ _
+      have he : F.inverseBranch z (F.transitionInput y u) =
+          sphereAntipodalN 2 (F.inverseBranch y (F.transitionInput y u)) := by
+        simpa only [Function.comp_apply] using hanti.self_of_nhds
+      rw [← he]
+      exact hd.2.2
+
 end ConstructionTargets.RealProjectiveSmoothTarget
