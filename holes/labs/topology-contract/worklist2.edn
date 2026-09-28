@@ -50632,6 +50632,31 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790633714099-26530-8d58f82a",
+     :commands
+     [{:cmd "sha256sum /tmp/rp_sphere_inverse_overlap.lean", :exit 0}
+      {:cmd
+       "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+       :exit 0}
+      {:cmd
+       "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+       :exit 0}
+      {:cmd "lake env lean /tmp/rp_sphere_inverse_overlap_axioms.lean",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder counts from git show 24844574 for module, t95A04, and t96A07",
+       :exit 0}
+      {:cmd "git diff-tree --no-commit-id --name-only -r 24844574",
+       :exit 0}],
+     :finding
+     "PASS. Reviewer codex-7 read implementation commit 24844574. Its sole changed path is ConstructionTargets/RealProjectiveSmoothTarget.lean, exactly matching scope, and the file has no later commit. The fixture sha256 reproduces exactly as 4e6639b5c16712b6f4c6c4618f63b2e66671efed4669614df550cf3655077450. Direct elaboration and Lake build pass with canonical packages; inverseBranch_eq_or_antipodal uses only propext, Classical.choice, and Quot.sound. The committed module contains zero placeholders; t95A04 and t96A07 remain at one each, so placeholder delta zero is accurate. All 130 frozen statements and the 323-item ledger pass. inverseBranch is the inverse of the chosen OpenPartialHomeomorph; project_inverseBranch applies its right-inverse law on the target. On a common target point, those two projection equations are oriented into equality of the projected branch values, and the reviewed exact fibre theorem yields branch-z equals branch-y or its antipode. The theorem makes only the required pointwise dichotomy and leaves local constancy explicitly downstream; it does not change topology, cast representations, or overclaim smoothness."},
     :commit "248445748e634e1d957a3361c908c888f3028a84",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -50641,7 +50666,7 @@
      "4e6639b5c16712b6f4c6c4618f63b2e66671efed4669614df550cf3655077450"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50691,7 +50716,7 @@
       [:routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
