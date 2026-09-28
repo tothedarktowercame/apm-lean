@@ -94,25 +94,34 @@ def apm_t91a01_circlePoint
     (p : F) (r : ℝ) (z : apm_t91a01_Circle) : apm_t91a01_E2 :=
   extChartAt apm_t91a01_Model2 p p + r • apm_t91a01_planeEquiv z.1
 
-/-- The isolated zero `p` has index `+3` in the sense of part (a): in the chart
-at `p`, on a circle of some radius `r` whose closed disk lies in the chart,
-the normalized direction of `V` (read through the chart's derivative) is
-exactly `z ↦ z³`. The chart's own tangent identification is used, so the
-direction is computed from `V` alone. -/
+/-- The degree-three model `z ↦ z³` on the unit circle. -/
+def apm_t91a01_cube : C(apm_t91a01_Circle, apm_t91a01_Circle) where
+  toFun z := ⟨z.1 ^ 3, by
+    simpa [Metric.mem_sphere, norm_pow] using congrArg (fun r : ℝ ↦ r ^ 3) z.2⟩
+  continuous_toFun := by fun_prop
+
+/-- The isolated zero `p` has index `+3` (part (a)): in the chart at `p`, on a
+circle of some radius `r` whose closed disk lies in the chart, `V` (read through
+the chart's derivative) does not vanish, and its normalized direction is a
+continuous map of the circle homotopic to `z ↦ z³`, i.e. of degree three. The
+chart's own tangent identification is used, so the direction is computed from
+`V` alone. -/
 def apm_t91a01_hasIndexThreeZero
     {F : Type*} [TopologicalSpace F] [ChartedSpace apm_t91a01_E2 F]
     (V : (x : F) → TangentSpace apm_t91a01_Model2 x) (p : F) : Prop :=
   ∃ r : ℝ, 0 < r ∧
     Metric.closedBall (extChartAt apm_t91a01_Model2 p p) r ⊆
       (extChartAt apm_t91a01_Model2 p).target ∧
-    ∀ z : apm_t91a01_Circle,
-      ∃ hw : apm_t91a01_planeEquiv.symm
-          (apm_t91a01_chartField V p (apm_t91a01_circlePoint p r z)) ≠ 0,
-        apm_t91a01_planeEquiv.symm
-            (apm_t91a01_chartField V p (apm_t91a01_circlePoint p r z)) /
-          (‖apm_t91a01_planeEquiv.symm
-            (apm_t91a01_chartField V p (apm_t91a01_circlePoint p r z))‖ : ℂ) =
-          z.1 ^ 3
+    ∃ link : C(apm_t91a01_Circle, apm_t91a01_Circle),
+      (∀ z : apm_t91a01_Circle,
+        ∃ hw : apm_t91a01_planeEquiv.symm
+            (apm_t91a01_chartField V p (apm_t91a01_circlePoint p r z)) ≠ 0,
+          (link z).1 =
+            apm_t91a01_planeEquiv.symm
+                (apm_t91a01_chartField V p (apm_t91a01_circlePoint p r z)) /
+              (‖apm_t91a01_planeEquiv.symm
+                (apm_t91a01_chartField V p (apm_t91a01_circlePoint p r z))‖ : ℂ)) ∧
+      ContinuousMap.Homotopic link apm_t91a01_cube
 
 /-- A local index-three model exists; on a compact connected oriented smooth
 surface, a smooth tangent vector field having an isolated zero whose actual
