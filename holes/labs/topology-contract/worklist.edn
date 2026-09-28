@@ -77798,8 +77798,60 @@
    "After the reviewed t99J06 outcome, recount all open adapters, retain the reviewed t94A07 hold, and apply stop-after-two before the next election.",
    :other-consumers []}
   {:consumer :t97A07,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-4",
+    :reason
+    "The sole sorry contains three independent unbanked arguments, so a complete GO fixture is absent and the one-prerequisite REVISE protocol cannot represent the residual. First, compactness requires a neighborhood theorem: surjective continuous-linear maps form an open set and mfderiv varies continuously in manifold charts, making regular points open and the critical locus closed. Second, nonemptiness for n>0 requires a different argument: maximize one target coordinate on compact X and prove a manifold local extremum makes that coordinate functional annihilate the derivative, hence mfderiv is not surjective. Third, infinitude requires yet another branch: a surjective mfderiv maps a neighborhood onto a target neighborhood, followed by connectedness of Euclidean space minus a finite set and compactness/boundedness of the range. The existing regular-fiber modules consume pointwise surjectivity but do not provide these openness, extremum, or global complement results. The registered theorem appears true and its n=0 clause is already banked; this is a scheduling STOP for multiple prerequisites, not a refutation.",
+    :commands
+    [{:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t97A07/lean/Main.lean",
+      :exit 0,
+      :finding "1"}
+     {:cmd
+      "rg -n 'isOpen_regularPoints|isOpen_setOf_surjective|not_surjective_of_isMaxOn|range_mem_nhds_of_regular|criticalValues.*compact|criticalValues.*Infinite' ConstructionTargets",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'Surjective.*mfderiv|mfderiv.*Surjective' ConstructionTargets",
+      :exit 0,
+      :finding
+      "Only pointwise regular-fiber and derivative-transport consumers; no route-closing openness/extremum/global theorem."}],
+    :finding
+    {:registered-statement :preserved,
+     :placeholder "the sole sorry in apm_t97a07",
+     :banked
+     ["T97A07.criticalValues_zero"
+      "pointwise regular-fiber chart constructions"
+      "Set.Countable.isConnected_compl_of_one_lt_rank"
+      "HasStrictFDerivAt.map_nhds_eq_of_surj"
+      "IsLocalMax.fderiv_eq_zero"],
+     :independent-boundaries
+     [{:name :t97A07-critical-locus-compactness,
+       :supplies "IsCompact (criticalValues f)",
+       :missing
+       "Compiled openness of surjective continuous-linear maps and chart-level continuity of mfderiv sufficient to prove regular points open."}
+      {:name :t97A07-positive-dimension-nonemptiness,
+       :supplies "0 < n -> (criticalValues f).Nonempty",
+       :missing
+       "Compiled manifold extremum-to-critical lemma for the first Euclidean target coordinate, combined with compact attainment."}
+      {:name :t97A07-critical-values-infinitude,
+       :supplies
+       "1 < n -> f nonconstant -> (criticalValues f).Infinite",
+       :missing
+       "Compiled regular-point range-neighborhood lemma and the connected finite-complement versus compact-range assembly."}],
+     :classification
+     "Scheduling STOP for three independent prerequisites; not a mathematical refutation."},
+    :residual
+    "t97A07 remains at one placeholder. The n=0 conjunct is closed; compactness, positive-dimensional nonemptiness, and higher-dimensional infinitude require three separately compiled packets.",
+    :author "topo-4",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t97A07",
    :acceptance
