@@ -78269,8 +78269,170 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "sed -n '1,260p' TOPOLOGY-ROUTES.md; read holes/labs/topology-routes/routes-{1,2,3}.md",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder census for the twelve topo1 problem Main.lean files",
+      :exit 0,
+      :finding
+      "t01A01=2 t02A05=2 t91J06=3 t92J08=3 t93J06=0 t94A07=1 t94A09=0 t94A10=3 t95J02=3 t97A07=1 t99J04=3 t99J06=1"}
+     {:cmd
+      "rg reviewed dependency receipts in holes/labs/topology-contract/worklist.edn",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+    :finding
+    {:placeholder-delta {:t02A05 0, :topo1-total 0},
+     :typed-residual-change
+     {:t02A05
+      "The broad normalized-flux bridge was reduced by a compiled placeholder-free boundary fixture to the single analytic identity (μHE[2] Set.univ).toReal = 4*pi on the unit-sphere subtype; its reviewed STOP is preserved."},
+     :infrastructure-packets 0,
+     :review-outcomes
+     {:t02A05 :pass-stop,
+      :t94A07 :pass-hold,
+      :t99J06 :pass-hold,
+      :t97A07 :pass-hold},
+     :routes
+     {:t91J06
+      {:placeholders 3,
+       :status :open,
+       :remaining
+       ["compatible interval-stage coordinates"
+        "glue compatible coordinates using the embedding hypothesis"
+        "main assembly"]},
+      :t99J06
+      {:placeholders 1,
+       :status :held,
+       :remaining
+       ["parametrization derivative and pullback"
+        "exterior derivative"
+        "cone image"
+        "injectivity"
+        "two integral evaluations"]},
+      :t95J02
+      {:placeholders 3,
+       :status :open,
+       :remaining
+       ["circleB homeomorphism"
+        "reflection homotopy"
+        "H1 torsion witness"
+        "retraction injectivity"
+        "main assembly"]},
+      :t93J06 {:placeholders 0, :status :closed, :remaining []},
+      :t97A07
+      {:placeholders 1,
+       :status :held,
+       :remaining
+       ["openness of surjective continuous-linear maps"
+        "regular points open and critical values compact"
+        "critical extremum"
+        "regular-value range neighborhood"
+        "finite-complement connectedness assembly"]},
+      :t99J04
+      {:placeholders 3,
+       :status :open,
+       :remaining
+       ["Euclidean partial diffeomorphism"
+        "chart partial diffeomorphism composition"
+        "manifold inverse-function bridge"
+        "coordinate-map derivative bijectivity"
+        "main assembly"]},
+      :t01A01
+      {:placeholders 2,
+       :status :open,
+       :remaining
+       ["open projective quotient descent"
+        "punctured RP2 retraction"
+        "lift the induced S2-to-circle map and descend the real lift"
+        "assemble bridge_1"
+        "nullhomotopy implies trivial fundamental-group map"]},
+      :t92J08
+      {:placeholders 3,
+       :status :open,
+       :remaining
+       ["uniform local manifold flow"
+        "compact finite-subcover uniform time"
+        "scalar blow-up contradiction"
+        "main assembly"]},
+      :t02A05
+      {:placeholders 2,
+       :status :stopped,
+       :remaining
+       ["evaluate normalized Euclidean Hausdorff mass of the unit two-sphere as 4*pi"
+        "assemble the compiled main theorem"]},
+      :t94A07
+      {:placeholders 1,
+       :status :held,
+       :remaining
+       ["halfTurn derivative and local index"
+        "constraint tangent kernel"
+        "circle reflection obstruction"
+        "outer-equator projection"]},
+      :t94A10
+      {:placeholders 3,
+       :status :open,
+       :remaining
+       ["closedness computation"
+        "sphere-parametrization pullback"
+        "periodic-square Stokes obstruction"]},
+      :t94A09 {:placeholders 0, :status :closed, :remaining []}},
+     :deferred
+     "All non-route infrastructure is deferred. Under close-nearest-first, t01A01 is the only unheld two-placeholder adapter after the reviewed t02A05 STOP and precedes every open three-placeholder route."},
+    :replacement-items
+    [{:consumer :t01A01,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t01A01",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free fixture for the exact registered apm_t01a01 statement. Supply route steps 1-5: prove the projectivization map is an open quotient map with the needed restrictions and product descent; construct the punctured-RP2 deformation retraction onto a projective line; identify that line with Circle, lift the induced S2 map to real coordinates, prove the antipodal lift difference is zero, and descend the lift; assemble apm_t01A01_bridge_1; then prove that a map homotopic to a constant induces the trivial FundamentalGroup map at every basepoint and close the main theorem. Reuse ProjectiveSpaceTopology, RealProjectiveSmoothTarget.sphereProjection, SimplyConnectedOpenCover, CircleUniversalCover, and ComponentRealLiftAssembly. Do not change registered statements or definitions.",
+       :placeholder
+       "apm_t01A01_bridge_1 and the final sorry in apm_t01a01",
+       :route-step "t01A01 route steps 1-5, closing both placeholders",
+       :gates
+       ["verify the canonical package authority before Lake"
+        "lake env lean on a complete exact-statement fixture exits 0"
+        "fixture contains no comment-stripped sorry"
+        "python3 scripts/statement-registry.py check exits 0"]},
+      :id :routes-2026-09-28-t01a01-adapter-closure-1,
+      :kind :final-adapter,
+      :depends-on [:routes-2026-09-28-checkpoint-topo1-after-t02a05-1],
+      :current-residual
+      "Two sorries: contract every RP2-to-punctured-RP2 map through the projective-line lift/descent route, then derive the nullhomotopy and trivial fundamental-group action.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Reread the current registered statements, TOPOLOGY-ROUTES.md, all route files, and reviewed dependency receipts; measure t01A01, preserve reviewed holds and STOPs, enforce stop-after-two, recount all topo1 placeholders, and refill from the complete remaining ADAPTER portfolio."},
+      :id :routes-2026-09-28-checkpoint-topo1-after-t01a01-1,
+      :kind :strategy-checkpoint,
+      :depends-on [:routes-2026-09-28-t01a01-adapter-closure-1],
+      :current-residual
+      "After reviewed t01A01, preserve the t02A05 STOP and existing holds, then choose the shortest remaining unheld three-placeholder adapter.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -78283,6 +78445,56 @@
     :routes-2026-09-28-checkpoint-topo1-after-t97a07-1],
    :current-residual
    "After reviewed t02A05, preserve all reviewed holds and decide whether the remaining two-placeholder t01A01 route is ready before advancing to three-placeholder adapters.",
+   :other-consumers []}
+  {:consumer :t01A01,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t01A01",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free fixture for the exact registered apm_t01a01 statement. Supply route steps 1-5: prove the projectivization map is an open quotient map with the needed restrictions and product descent; construct the punctured-RP2 deformation retraction onto a projective line; identify that line with Circle, lift the induced S2 map to real coordinates, prove the antipodal lift difference is zero, and descend the lift; assemble apm_t01A01_bridge_1; then prove that a map homotopic to a constant induces the trivial FundamentalGroup map at every basepoint and close the main theorem. Reuse ProjectiveSpaceTopology, RealProjectiveSmoothTarget.sphereProjection, SimplyConnectedOpenCover, CircleUniversalCover, and ComponentRealLiftAssembly. Do not change registered statements or definitions.",
+    :placeholder
+    "apm_t01A01_bridge_1 and the final sorry in apm_t01a01",
+    :route-step "t01A01 route steps 1-5, closing both placeholders",
+    :gates
+    ["verify the canonical package authority before Lake"
+     "lake env lean on a complete exact-statement fixture exits 0"
+     "fixture contains no comment-stripped sorry"
+     "python3 scripts/statement-registry.py check exits 0"]},
+   :id :routes-2026-09-28-t01a01-adapter-closure-1,
+   :kind :final-adapter,
+   :depends-on
+   [:routes-2026-09-28-checkpoint-topo1-after-t02a05-1
+    :routes-2026-09-28-checkpoint-topo1-after-t02a05-1],
+   :current-residual
+   "Two sorries: contract every RP2-to-punctured-RP2 map through the projective-line lift/descent route, then derive the nullhomotopy and trivial fundamental-group action.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Reread the current registered statements, TOPOLOGY-ROUTES.md, all route files, and reviewed dependency receipts; measure t01A01, preserve reviewed holds and STOPs, enforce stop-after-two, recount all topo1 placeholders, and refill from the complete remaining ADAPTER portfolio."},
+   :id :routes-2026-09-28-checkpoint-topo1-after-t01a01-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-09-28-t01a01-adapter-closure-1
+    :routes-2026-09-28-checkpoint-topo1-after-t02a05-1],
+   :current-residual
+   "After reviewed t01A01, preserve the t02A05 STOP and existing holds, then choose the shortest remaining unheld three-placeholder adapter.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
