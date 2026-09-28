@@ -111,7 +111,9 @@ lemma apm_t00j03_angleFormValue_change
   field_simp
   ring
 
-theorem apm_t00j03 :
+/-- Superseded because its interval integral did not state that the half-circle
+projects to the loop in `RP¹` over which the descended form is integrated. -/
+theorem apm_t00j03_previous_encoding :
     Function.Surjective apm_t00j03_projectivize ∧
     ∃ eta : apm_t00j03_ProjectiveTangent → ℝ,
       (∀ (x : apm_t00j03_PuncturedPlane) (v : apm_t00j03_Plane),
@@ -143,3 +145,26 @@ theorem apm_t00j03 :
       apm_t00j03_integral_angleFormValue_circle
   · simpa [eta, apm_t00j03_tangentClass, F] using
       apm_t00j03_integral_angleFormValue_circle_reverse
+
+/-- The standard positively oriented loop in `RP¹`, obtained by projecting a
+half-circle; its endpoints agree because antipodal vectors define one line. -/
+def apm_t00j03_projectiveLoop (θ : ℝ) : apm_t00j03_RP1 :=
+  apm_t00j03_projectivize (apm_t00j03_circlePoint θ)
+
+/-- Integration of a descended one-form along the standard projective loop. -/
+def apm_t00j03_projectiveLoopIntegral
+    (eta : apm_t00j03_ProjectiveTangent → ℝ) : ℝ :=
+  ∫ θ in (0 : ℝ)..Real.pi, eta (apm_t00j03_tangentClass θ)
+
+/-- The displayed angle form descends to `RP¹`; with the orientation induced
+by the projected half-circle its integral is `π`, and reversing orientation
+changes the sign. -/
+theorem apm_t00j03 :
+    apm_t00j03_projectiveLoop 0 = apm_t00j03_projectiveLoop Real.pi ∧
+    ∃ eta : apm_t00j03_ProjectiveTangent → ℝ,
+      (∀ (x : apm_t00j03_PuncturedPlane) (v : apm_t00j03_Plane),
+        eta (Quotient.mk _ (x, v)) = apm_t00j03_angleFormValue x v) ∧
+      apm_t00j03_projectiveLoopIntegral eta = Real.pi ∧
+      (∫ θ in Real.pi..(0 : ℝ), eta (apm_t00j03_tangentClass θ)) =
+        -Real.pi := by
+  sorry
