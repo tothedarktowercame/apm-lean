@@ -252,4 +252,21 @@ theorem apm_t97j08 :
     ∀ f : ℝ → ℂ, IsT97J08SmoothPuncturedLoop f →
       ∃! n : ℤ, IsT97J08WindingNumber f n ∧
         (n : ℝ) = t97J08BetaIntegral f := by
-  sorry
+  refine ⟨?_, ?_, apm_t97j08_previous_encoding.1, apm_t97j08_previous_encoding.2⟩
+  · intro z hz
+    have : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz
+    simp [t97J08Phi, this]
+  · intro z v hz
+    have hr : ‖z‖ ≠ 0 := norm_ne_zero_iff.mpr hz
+    have hr2 : ‖z‖ ^ 2 = z.re ^ 2 + z.im ^ 2 := by
+      rw [Complex.sq_norm, Complex.normSq_apply]; ring
+    have hc : ((z.re * v.re + z.im * v.im : ℂ) / (‖z‖ : ℂ) ^ 3) =
+        (((z.re * v.re + z.im * v.im) / ‖z‖ ^ 3 : ℝ) : ℂ) := by push_cast; rfl
+    simp only [t97J08PhiPullbackAlphaHat, t97J08Alpha, t97J08Phi, t97J08DPhi, t97J08Beta, hc,
+      Complex.div_ofReal_re, Complex.div_ofReal_im, Complex.sub_re, Complex.sub_im,
+      Complex.re_mul_ofReal, Complex.im_mul_ofReal]
+    have hpi : Real.pi ≠ 0 := Real.pi_ne_zero
+    field_simp
+    rw [← hr2]
+    have h2 : ‖z‖ ^ 4 * ‖z‖⁻¹ ^ 2 = ‖z‖ ^ 2 := by field_simp
+    linear_combination (z.re * v.im - z.im * v.re) * h2
