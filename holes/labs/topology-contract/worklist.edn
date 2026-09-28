@@ -77277,8 +77277,11 @@
    :other-consumers []}
   {:consumer :t94A07,
    :evidence
-   {:outcome :stop,
-    :seat "topo-4",
+   {:residual
+    "The registered theorem remains plausible and unchanged, but closure requires two separately compiled packets before the final hcore assembly: local fixed-point differential calculus and the global longitude homotopy obstruction.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-4",
     :reason
     "The sole syntactic placeholder hcore contains two independent unbanked mathematical constructions, which the probe protocol explicitly classifies as STOP rather than REVISE. Boundary 1 is local: compute fderiv of the square-root torus constraint at all four nonzero-axis fixed points, prove its kernel is exactly span{e1,e2}, package halfTurn as a continuous linear map, and derive the derivative, determinant, local index, and IsLefschetzFixedPoint clauses. Boundary 2 is global and logically independent: from an arbitrary ambient H satisfying IsHomotopyToIdentity, construct a continuous longitude projection on every H(t,gamma(u)), prove it is defined using R-r>0, package the resulting unit-interval family as a circle homotopy from reflectionMap 1 to identity, and contradict the banked H1 reflection action. Searches found no banked theorem with either consumer-specific contract. This is not a refutation of the registered statement; it is the exact multiple-prerequisite boundary preventing a legal one-prerequisite REVISE and a complete GO fixture.",
     :commands
@@ -77295,6 +77298,19 @@
       "rg -n 'IsHomotopyToIdentity|localLefschetzNumber|tangentBasisVector' ConstructionTargets",
       :exit 1,
       :expected-exit 1}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790630270076-26400-288d56ba",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r bae674d2"
+      "git show bae674d2:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "Python comment-stripped placeholder and SHA-256 census for t94A07 at bae674d2"
+      "rg -n apm_t94a07-or-halfTurn_not_homotopic-or-tangent_eq_span ConstructionTargets; reproduced exit 1"
+      "rg -n IsHomotopyToIdentity-or-localLefschetzNumber-or-tangentBasisVector ConstructionTargets; reproduced exit 1"],
+     :finding
+     "PASS scheduling STOP: reviewer codex-3 is distinct from author topo-4. Commit bae674d2 is ledger-only with exact scope holes/labs/topology-contract/worklist.edn; its snapshot validates at 635 items. The registry reproduces 130/130 statements, registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, and frozen t94A07 hash 9577c9cb51c999f7cd17d24e98de6c99d976c635357e811aad1c9ea4ce526858; the consumer remains unchanged with one executable placeholder. The STOP correctly identifies two independent missing constructions, so the one-prerequisite REVISE protocol cannot represent the residual: local square-root constraint differentiation/kernel and fixed-point index calculations, versus the global outer-equator longitude projection turning an ambient torus homotopy into a circle reflection homotopy. Their orientations and representations are correctly separated: ambient derivative to tangent submodule for the local packet, and embedded torus through outer-equator restriction and xy-normalization to Circle for the global packet. Fresh searches reproduce no matching banked consumer contract. This is explicitly a scheduling boundary, not a refutation. No evidence commit or fixture hash applies to a read-only STOP."},
     :finding
     {:registered-statement :preserved,
      :placeholder "hcore in apm_t94a07",
@@ -77316,12 +77332,9 @@
       "SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic"],
      :classification
      "Scheduling STOP for two independent prerequisites; not a mathematical refutation."},
-    :residual
-    "The registered theorem remains plausible and unchanged, but closure requires two separately compiled packets before the final hcore assembly: local fixed-point differential calculus and the global longitude homotopy obstruction.",
-    :author "topo-4",
-    :disposition :stop},
+    :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A07",
    :acceptance
@@ -77353,7 +77366,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
