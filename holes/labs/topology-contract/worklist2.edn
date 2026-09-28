@@ -50848,35 +50848,44 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_sphere_quotient_chart_apply.lean",
-      :sha256
-      "05a84b0c4c673ffd38e3a0b7f3c9d5bd550654afb4b41dba6ff6b0423f5c0539"},
-     :commands
-     [{:cmd "lake env lean /tmp/rp_sphere_quotient_chart_apply.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_chart_apply.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:declarations
-       ["SphereProjectionLocalInverseFamily.quotientChart_apply"
-        "SphereProjectionLocalInverseFamily.quotientChart_symm_apply"
-        "SphereProjectionLocalInverseFamily.inverseBranch_quotientChart_symm"],
-       :fixture "/tmp/rp_sphere_quotient_chart_apply.lean",
-       :consumer-residual
-       "Pull the banked eventual inverse-branch dichotomy through quotientChart_symm using these cancellation identities to inhabit the transition local normal form.",
-       :axioms :standard-only}},
-     :residual
-     "The forward, inverse, and inverse-branch cancellation formulas compile without placeholders and expose the exact source membership needed for left_inv. Promotion is confined to RealProjectiveSmoothTarget."}},
+   {:placeholder-delta 0,
+    :residual
+    "Pull inverseBranch_eventuallyEq_or_antipodal through quotientChart_symm using the new evaluation and cancellation identities, then inhabit the quotient transition local normal form for t95A04 and t96A07.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/rp_sphere_quotient_chart_apply.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 no-sorry-pattern ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_quotient_chart_apply_axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "b96a0235adadc2ab0a883f5171186b6e30a55a61",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_quotient_chart_apply.lean",
+     :sha256
+     "05a84b0c4c673ffd38e3a0b7f3c9d5bd550654afb4b41dba6ff6b0423f5c0539"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
