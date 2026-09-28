@@ -3,6 +3,7 @@ import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
 import ConstructionTargets.CircleSingularHomology
+import ConstructionTargets.Surfaces
 
 /-!
 # APM t01A03 — three retraction problems for surfaces
@@ -195,6 +196,34 @@ theorem apm_t01a03_previous_encoding :
 /-- Faithful reopened three-part answer: none of the three pictured inclusions
 admits a retraction.  In particular, the conclusion is no longer supplied as
 an induced-homology or induced-fundamental-group hypothesis. -/
+abbrev apm_t01a03_PuncturedTorus :=
+  {x : apm_t01a03_Torus // x ≠ ((1 : Circle), (1 : Circle))}
+
+abbrev apm_t01a03_OpenDisk := Metric.ball (0 : ℂ) 1
+
+abbrev apm_t01a03_Sphere2 :=
+  Metric.sphere (0 : EuclideanSpace ℝ (Fin 3)) 1
+
+def apm_t01a03_IsMiddleCircle {S : Type} [TopologicalSpace S]
+    (middle : C(Circle, S)) : Prop :=
+  Topology.IsEmbedding middle ∧
+    Nonempty ({x : S // x ∉ Set.range middle} ≃ₜ
+      Sum apm_t01a03_PuncturedTorus apm_t01a03_PuncturedTorus)
+
+def apm_t01a03_IsTypicalWedge
+    (wedge : C(apm_t01a03_Wedge, apm_t01a03_Torus)) : Prop :=
+  Topology.IsEmbedding wedge ∧
+    Nonempty ({x : apm_t01a03_Torus // x ∉ Set.range wedge} ≃ₜ
+      apm_t01a03_OpenDisk)
+
+def apm_t01a03_IsSeparatingTwoCircles {S : Type} [TopologicalSpace S]
+    (circles : C(apm_t01a03_TwoCircles, S)) : Prop :=
+  Topology.IsEmbedding circles ∧
+    ∃ punctures : Fin 4 → apm_t01a03_Sphere2,
+      Function.Injective punctures ∧
+      Nonempty ({x : S // x ∉ Set.range circles} ≃ₜ
+        {x : apm_t01a03_Sphere2 // x ∉ Set.range punctures})
+
 theorem apm_t01a03 :
     ∀ (S : Type) [TopologicalSpace S] [T2Space S] [CompactSpace S]
       [PathConnectedSpace S] [ChartedSpace apm_t01a03_E2 S]
@@ -203,9 +232,9 @@ theorem apm_t01a03 :
       ∀ (middle : C(Circle, S))
         (wedgeInTorus : C(apm_t01a03_Wedge, apm_t01a03_Torus))
         (twoCircles : C(apm_t01a03_TwoCircles, S)),
-        Topology.IsEmbedding middle →
-        Topology.IsEmbedding wedgeInTorus →
-        Topology.IsEmbedding twoCircles →
+        apm_t01a03_IsMiddleCircle middle →
+        apm_t01a03_IsTypicalWedge wedgeInTorus →
+        apm_t01a03_IsSeparatingTwoCircles twoCircles →
         ¬apm_t01a03_HasRetraction middle ∧
         ¬apm_t01a03_HasRetraction wedgeInTorus ∧
         ¬apm_t01a03_HasRetraction twoCircles := by
