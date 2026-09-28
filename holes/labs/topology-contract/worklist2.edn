@@ -50527,13 +50527,45 @@
     :routes-2026-09-28-rp-sphere-projection-open-map-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_local_inverse_family.lean",
+      :sha256
+      "42e690a088a9abda1897d4848aba5afff0ee95623e04c19deb409e9ff023eb94"},
+     :commands
+     [{:cmd "lake env lean /tmp/rp_sphere_local_inverse_family.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_local_inverse_family.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+      :acceptance
+      {:declarations
+       ["SphereProjectionLocalInverseFamily"
+        "sphereProjectionLocalInverseFamily"],
+       :fixture "/tmp/rp_sphere_local_inverse_family.lean",
+       :consumer-residual
+       "Compose the chosen local inverses with standard sphere charts and prove quotient-chart overlaps are identity or antipodal, yielding SphereProjectionSmoothDescentContract.",
+       :axioms :standard-only}},
+     :residual
+     "The exact dimension-two local-inverse family compiles without placeholders. Promotion adds only the family structure and its inhabitant; the remaining consumer route is the smooth chart-overlap descent theorem."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile the placeholder-free fixture /tmp/rp_sphere_local_inverse_family.lean proving Nonempty SphereProjectionLocalInverseFamily. The family must choose for every point of the frozen real projective two-space a sphere lift with its exact projection equation and an OpenPartialHomeomorph agreeing globally with sphereProjection 2 whose source contains that lift. Construct it only from sphereProjectionQuotientAuthority.surjective and sphereProjection_isLocalHomeomorph. This supplies the local-inverse choice needed by the smooth-descent charts for t95A04 and t96A07."},
+   {:declarations
+    ["SphereProjectionLocalInverseFamily"
+     "sphereProjectionLocalInverseFamily"],
+    :fixture "/tmp/rp_sphere_local_inverse_family.lean",
+    :consumer-residual
+    "Compose the chosen local inverses with standard sphere charts and prove quotient-chart overlaps are identity or antipodal, yielding SphereProjectionSmoothDescentContract.",
+    :axioms :standard-only},
    :id :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
