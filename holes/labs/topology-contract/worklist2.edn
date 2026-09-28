@@ -50117,10 +50117,55 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile a placeholder-free fixture proving SphereProjectionTwoSheetedLocalModel 2 for ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection: it is an IsLocalHomeomorph for the existing coinduced topology and its fibres on the unit sphere are exactly p and -p. State it only in dimension 2, the generality used by t95A04 and t96A07. The fixture /tmp/rp_sphere_projection_local_model.lean fixes the exact interface."},
+   :id :routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on [],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_projection_local_model.lean",
+      :sha256
+      "a8bd8a5bf1cdc5e401957c6dafee4579dea50a2d24ec0814e170a99e75c951eb"},
+     :commands
+     [{:cmd
+       "test -L .lake/packages && lake env lean /tmp/rp_sphere_projection_local_model.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_local_model.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :residual
+     "The custom projective topology has only continuity and surjectivity of the nonzero-vector quotient map. No banked theorem gives sphereProjection a local inverse or identifies its sphere fibres as antipodal pairs. Once this topological two-sheeted local model is banked, the original atlas row can transport Mathlib sphere charts through those local inverses and prove the only coordinate changes are sphere transitions composed with negation.",
+     :prerequisite
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free fixture proving SphereProjectionTwoSheetedLocalModel 2 for ConstructionTargets.RealProjectiveSmoothTarget.sphereProjection: it is an IsLocalHomeomorph for the existing coinduced topology and its fibres on the unit sphere are exactly p and -p. State it only in dimension 2, the generality used by t95A04 and t96A07. The fixture /tmp/rp_sphere_projection_local_model.lean fixes the exact interface."},
+      :id :routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on [],
+      :other-consumers [:t96A07]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free fixture for rpSmoothAtlas 2 at exactly the RealProjectiveSmoothTarget interface used by t95A04 and t96A07: hemisphere-restricted sphere charts through local inverses of sphereProjection with quotient-compatible smooth transitions. Supplies the sole-sorry route step 1 of both consumers."},
    :id :routes-2026-09-28-rp-smooth-atlas-topo2-r1,
    :kind :reusable-theorem,
-   :depends-on [:routes-2026-09-28-checkpoint-topo2],
+   :depends-on
+   [:routes-2026-09-28-checkpoint-topo2
+    :routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1],
    :other-consumers [:t96A07]}
   {:bounded-exception
    "single-consumer bounded integral degree-2 MV packet",
