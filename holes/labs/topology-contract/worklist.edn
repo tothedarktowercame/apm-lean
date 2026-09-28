@@ -77365,8 +77365,146 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "comment-stripped placeholder census for all 12 topo1 problems",
+      :exit 0}
+     {:cmd
+      "inspect reviewed t94A07 scheduling STOP and compare remaining one-placeholder routes t97A07 and t99J06",
+      :exit 0}],
+    :finding
+    {:measures
+     {:placeholder-delta {:t94A07 0, :portfolio 0},
+      :typed-residual-change
+      "t94A07 remains at one placeholder but is now precisely held at two independent boundaries: local fixed-point differential calculus and a global longitude homotopy obstruction. The reviewed STOP supplies no compiled route step, so the route is not immediately re-elected.",
+      :infrastructure-packets 0,
+      :review-outcomes
+      [{:row :routes-2026-09-28-t94a07-adapter-closure-1,
+        :outcome :stop,
+        :review :pass,
+        :reviewer "codex-3"}]},
+     :routes
+     {:t91J06
+      {:placeholders 3,
+       :chain
+       ["compatible coordinates <- transition intervals + interval extension + recursion"
+        "glue bridge <- corrected helper with hf + glue equivalence/homeomorph"
+        "main <- both bridges"]},
+      :t99J06
+      {:placeholders 1,
+       :chain
+       ["main <- parametrization derivative and pullback coefficients"
+        "main <- extDeriv alpha"
+        "main <- cone image parametrization"
+        "main <- interior injectivity and derivative injectivity"
+        "main <- two rectangle-integral evaluations"]},
+      :t95J02
+      {:placeholders 3,
+       :chain
+       ["vertical H1 kernel <- CircleB homeomorphism + reflection homotopy"
+        "retraction injective <- homology functoriality"
+        "main <- both bridges"]},
+      :t93J06 {:placeholders 0, :chain [], :status :closed},
+      :t97A07
+      {:placeholders 1,
+       :chain
+       ["main <- openness of surjective continuous-linear maps"
+        "main <- openness of manifold regular points and compactness of critical values"
+        "main <- extremum implies critical"
+        "main <- regular derivative gives a range neighborhood"
+        "main <- connected complement and compact range argument"]},
+      :t99J04
+      {:placeholders 3,
+       :chain
+       ["local IFT bridge <- Euclidean partial diffeomorph + chart conjugation"
+        "coordinate derivative bridge <- coordinateMap smoothness/mfderiv formula"
+        "main <- both bridges"]},
+      :t01A01
+      {:placeholders 2,
+       :chain
+       ["bridge_1 <- projective quotient descent <- punctured RP2 retract <- RP2-to-projective-line nullhomotopy"
+        "main <- bridge_1 + nullhomotopic-trivial-pi1"]},
+      :t92J08
+      {:placeholders 3,
+       :chain
+       ["uniform local flow <- neighborhood-uniform chart ODE + compact subcover"
+        "blowup obstruction <- continuity at t=1"
+        "main <- bridges + globalisation/uniqueness"]},
+      :t02A05
+      {:placeholders 2,
+       :chain
+       ["bridge_1 <- oriented coefficient/translation/moment calculation for registered muHE[2] statement"
+        "main <- bridge_1 + quadratic minimum"]},
+      :t94A07
+      {:placeholders 1,
+       :status :held,
+       :chain
+       ["local boundary <- halfTurn derivative + square-root constraint derivative + tangent kernel + local index"
+        "global boundary <- circle reflection obstruction + outer-equator longitude projection"]},
+      :t94A10
+      {:placeholders 3,
+       :chain
+       ["closed bridge <- solid-angle exterior derivative computation"
+        "not-exact bridge <- sphere pullback + periodic rectangle Stokes"
+        "main <- both bridges"]},
+      :t94A09 {:placeholders 0, :chain [], :status :closed}},
+     :deferred
+     "t94A07 is held by its reviewed two-boundary STOP. t97A07 also has one placeholder and five steps, but its largest steps require new manifold-chart regular-point infrastructure; t99J06 has five self-contained computational steps and is therefore the smaller coherent closure. Multi-placeholder adapters remain deferred."},
+    :replacement-items
+    [{:consumer :t99J06,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t99J06",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free fixture for the exact registered apm_t99j06 statement. Supply the five listed route steps without new general infrastructure: compute fderiv of parametrization and the pullback coefficients; compute extDeriv alpha including coordinateWedge 2 2 = 0; prove the parametrization image equals cone; prove injectivity and derivative injectivity on the open rectangle; and evaluate both rectangle integrals as pi and 9*pi/2 using the named trigonometric and polynomial integral lemmas. Do not change any registered statement or definition.",
+       :placeholder
+       "the sole sorry in apm_t99j06 in problems/t99J06/lean/Main.lean",
+       :route-step "t99J06 route steps 1-5, closing all six conjuncts",
+       :gates
+       ["verify the canonical package authority before Lake"
+        "lake env lean on a complete exact-statement fixture exits 0"
+        "fixture contains no comment-stripped sorry"
+        "python3 scripts/statement-registry.py check exits 0"]},
+      :id :routes-2026-09-28-t99j06-adapter-closure-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "One sorry containing six concrete conjuncts: exterior derivative of alpha, image of the cone parametrization, parametrization and derivative injectivity on the interior, and two explicit rectangle integrals.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :blocked,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Reread TOPOLOGY-ROUTES.md and all route files, measure t99J06, recount every topo1 placeholder, preserve reviewed holds and STOPs, enforce stop-after-two, and refill from the complete remaining ADAPTER portfolio."},
+      :id :routes-2026-09-28-checkpoint-topo1-after-t99j06-1,
+      :kind :strategy-checkpoint,
+      :depends-on [:routes-2026-09-28-t99j06-adapter-closure-1],
+      :current-residual
+      "After the reviewed t99J06 outcome, recount all open adapters, retain the reviewed t94A07 hold, and apply stop-after-two before the next election.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -77379,6 +77517,54 @@
     :routes-2026-09-28-checkpoint-topo1-after-t94a09-1],
    :current-residual
    "After reviewed t94A07 outcome, recount all remaining ADAPTER problems and apply stop-after-two before choosing the next one-placeholder closure.",
+   :other-consumers []}
+  {:consumer :t99J06,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t99J06",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free fixture for the exact registered apm_t99j06 statement. Supply the five listed route steps without new general infrastructure: compute fderiv of parametrization and the pullback coefficients; compute extDeriv alpha including coordinateWedge 2 2 = 0; prove the parametrization image equals cone; prove injectivity and derivative injectivity on the open rectangle; and evaluate both rectangle integrals as pi and 9*pi/2 using the named trigonometric and polynomial integral lemmas. Do not change any registered statement or definition.",
+    :placeholder
+    "the sole sorry in apm_t99j06 in problems/t99J06/lean/Main.lean",
+    :route-step "t99J06 route steps 1-5, closing all six conjuncts",
+    :gates
+    ["verify the canonical package authority before Lake"
+     "lake env lean on a complete exact-statement fixture exits 0"
+     "fixture contains no comment-stripped sorry"
+     "python3 scripts/statement-registry.py check exits 0"]},
+   :id :routes-2026-09-28-t99j06-adapter-closure-1,
+   :kind :final-adapter,
+   :depends-on [:routes-2026-09-28-checkpoint-topo1-after-t94a07-1],
+   :current-residual
+   "One sorry containing six concrete conjuncts: exterior derivative of alpha, image of the cone parametrization, parametrization and derivative injectivity on the interior, and two explicit rectangle integrals.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Reread TOPOLOGY-ROUTES.md and all route files, measure t99J06, recount every topo1 placeholder, preserve reviewed holds and STOPs, enforce stop-after-two, and refill from the complete remaining ADAPTER portfolio."},
+   :id :routes-2026-09-28-checkpoint-topo1-after-t99j06-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-09-28-t99j06-adapter-closure-1
+    :routes-2026-09-28-checkpoint-topo1-after-t94a07-1],
+   :current-residual
+   "After the reviewed t99J06 outcome, recount all open adapters, retain the reviewed t94A07 hold, and apply stop-after-two before the next election.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
