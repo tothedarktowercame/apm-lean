@@ -78074,28 +78074,43 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "The pointwise projection identity, translation transport, and raw intrinsic moment reduction compile. The remaining independent prerequisite is an exact theorem that the normalized intrinsic two-dimensional Euclidean Hausdorff mass of the unit sphere subtype is 4*pi. The banked unitFlux_moment is only relative to raw intrinsic mass; Mathlib defines μHE by a scalar multiple of μH, while its explicit addHaarScalarFactor ratio is still proof_wanted, and neither ConstructionTargets nor Mathlib evaluates the required sphere mass. Implementing bridge_1 without this theorem would require assuming or bypassing precisely the invariant forbidden by the row.",
+    "The corrected registered-measure audit proves that apm_t02A05_bridge_1 is equivalent to the exact remaining identity (μHE[2] Set.univ).toReal = 4*pi on S = Metric.sphere 0 1. It explicitly unfolds euclideanHausdorffMeasure_def, transports the normalized measure under translation, and scales the banked raw unitFlux_moment. No theorem evaluating this normalized intrinsic sphere mass exists in ConstructionTargets or Mathlib. This is a missing analytic prerequisite, not a refutation of the registered statement; replacing μHE, assuming the mass, or using Measure.toSphere would violate the row invariants.",
+    :repair true,
+    :boundary-fixture
+    {:path "/tmp/T02A05NormalizedBoundary.lean",
+     :sha256
+     "1e8a3eeade4742ff39516783f4f80b29eae5ce63400b36fc4f54a4fc748f1d2e"},
     :outcome :stop,
     :warnings
-    [{:kind :inherited-linter,
+    [{:kind :inherited-placeholder,
       :message
-      "The compiled boundary audit emits two unnecessarySimpa suggestions."}],
+      "The temporary consumer olean reports the two existing placeholders; the corrected boundary fixture itself introduces none."}
+     {:kind :linter,
+      :message
+      "The corrected boundary fixture emits one unnecessarySimpa and one unused-simp-argument suggestion."}],
     :statement-hashes
-    {:registry-file
+    {:t02A05
+     "9d8293f1a68d4bf4b223ac7b97205d7e46d0cac41758bd23982e949ddf640815",
+     :registry-file
      "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
     :disposition :stop,
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "topo-2",
-    :reason :missing-normalized-sphere-mass,
+    :reason :missing-normalized-sphere-mass-evaluation,
     :commands
     [{:cmd "sha256sum /tmp/t02a05-assembly-probe.lean", :exit 0}
      {:cmd
       "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
       :exit 0}
-     {:cmd "lake env lean /tmp/T02A05IntrinsicMassBoundary.lean",
+     {:cmd
+      "lake env lean -o /tmp/t02repair/t02A05/lean/Main.olean problems/t02A05/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "LEAN_PATH=/tmp/t02repair lake env lean /tmp/T02A05NormalizedBoundary.lean",
       :exit 0,
       :finding
-      "Compiled projection formula, coefficient identity, sphere translation, moment reduction, and bridge_iff_mass with standard axioms."}
+      "Against the registered μHE[2] definition, compiled the projection identity, μHE-preserving sphere translation, explicit euclideanHausdorffMeasure_def scaling of the raw banked moment, and bridge_iff_normalizedMass; all three audited theorems use only standard axioms."}
+     {:cmd "sha256sum /tmp/T02A05NormalizedBoundary.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "130 registered statements match, 0 do not"}
@@ -78104,15 +78119,22 @@
       :exit 0,
       :finding "2"}
      {:cmd
-      "rg -n 'mass 2 = 4|sphere[^\\n]*= [^\\n]*4[^\\n]*Real\\.pi|4[^\\n]*Real\\.pi[^\\n]*sphere' ConstructionTargets .lake/packages/mathlib/Mathlib",
+      "rg -n 'euclideanHausdorffMeasure[^\\n]*(sphere|Sphere)|μHE\\[2\\][^\\n]*(sphere|Sphere|Set\\.univ)|normalizedMass[^\\n]*4[^\\n]*Real\\.pi' ConstructionTargets .lake/packages/mathlib/Mathlib",
       :exit 1,
       :expected-exit 1}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790631800890-26458-3e0a5889",
-     :finding
-     "Deterministic representation defect in the supporting boundary audit: /tmp/T02A05IntrinsicMassBoundary.lean line 78 redefines apm_t02a05_outwardSphereIntegral using raw μH[2], whereas the registered consumer problems/t02A05/lean/Main.lean line 77 uses normalized μHE[2]. Consequently flux_eq_unitIntegral, actual_flux, bridge_iff_mass, and frozen_conclusion_iff_mass are theorems about the stale raw-measure statement. Their `mass 2` is definitionally raw Measure.hausdorffMeasure mass, so the claimed remaining equation `mass 2 = 4*pi` is not the normalized sphere-mass obligation named by the receipt and is expected to be the false pre-repair equation. The audit therefore does not validate the actual μHE-to-μH representation seam. Repair by compiling the reduction against the registered μHE[2] definition, explicitly carrying euclideanHausdorffMeasure_def and its scalar through translation and the banked raw moment, and state the remaining obligation as the scaled raw mass (equivalently the actual μHE[2] mass) equals 4*pi. Then rerun the boundary audit and searches. The ledger snapshot, fixture hash 549bdba880150e9e0a02c166f19e682671fce507cb167615d4533b19db90d34d, registry hash, and unchanged two-placeholder count otherwise reproduce."},
+    :diagnostic-history
+    [{:cmd
+      "LEAN_PATH=/tmp/t02repair lake env lean /tmp/T02A05NormalizedBoundary.lean",
+      :exit 1,
+      :stage :normalized-scaling-elaboration,
+      :correction
+      "Made the raw Hausdorff dimension and scalar actions explicit, then separated the banked raw moment equality before rewriting."}
+     {:cmd
+      "LEAN_PATH=/tmp/t02repair lake env lean /tmp/T02A05NormalizedBoundary.lean",
+      :exit 1,
+      :stage :scalar-to-real-normalization,
+      :correction
+      "Normalized NNReal and ENNReal scalar actions and the coerced scalar's toReal value; the final rerun compiled without sorryAx."}],
     :changed-paths [],
     :fixture
     {:path "/tmp/t02a05-assembly-probe.lean",
@@ -78120,7 +78142,7 @@
      "549bdba880150e9e0a02c166f19e682671fce507cb167615d4533b19db90d34d"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["problems/t02A05/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t02A05/bridge_1",
    :acceptance
