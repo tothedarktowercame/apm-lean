@@ -25,6 +25,8 @@ reaches an `axiom`, an `opaque`, or a `sorry` inside a definition is refused.
                               [--decl NAME]... [--prelim-defect PATH]
   statement-registry.py check [--rev REV] [ID...]     exit 1 on any mismatch
   statement-registry.py status ID [--rev REV]         registered|mismatch|unregistered
+  statement-registry.py revoke ID --reason TEXT --evidence PATH
+      remove an entry found to be inadmissible; the removal is kept in "revoked"
 """
 from __future__ import annotations
 
@@ -162,6 +164,8 @@ def main() -> int:
     a.add_argument("--evidence", required=True); a.add_argument("--prelim-defect")
     c = sub.add_parser("check"); c.add_argument("ids", nargs="*"); c.add_argument("--rev", default="HEAD")
     s = sub.add_parser("status"); s.add_argument("id"); s.add_argument("--rev", default="HEAD")
+    v = sub.add_parser("revoke"); v.add_argument("id"); v.add_argument("--reason", required=True)
+    v.add_argument("--evidence", required=True)
     o = ap.parse_args()
 
     if o.cmd == "fingerprint":
@@ -178,6 +182,20 @@ def main() -> int:
                 bad.append(pid); print(f"{pid}: {st}", file=sys.stderr)
         print(f"{len(o.ids or reg['entries']) - len(bad)} registered statements match, {len(bad)} do not", file=sys.stderr)
         return 1 if bad else 0
+
+    if o.cmd == "revoke":
+        reg = load()
+        if o.id not in reg["entries"]:
+            raise SystemExit(f"{o.id} is not registered")
+        if not Path(o.evidence).exists():
+            raise SystemExit(f"evidence {o.evidence} does not exist")
+        entry = reg["entries"].pop(o.id)
+        reg.setdefault("revoked", []).append({
+            "id": o.id, "entry": entry, "reason": o.reason, "evidence": o.evidence,
+            "revoked_at": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")})
+        REGISTRY.write_text(json.dumps(reg, indent=1, ensure_ascii=False) + "\n")
+        print(f"revoked {o.id}: {o.reason}")
+        return 0
 
     # admit
     if o.grade not in ADMISSIBLE and not (o.grade == "narrower" and o.prelim_defect):
