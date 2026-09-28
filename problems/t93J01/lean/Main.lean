@@ -16,4 +16,7 @@ positive-radius sphere centred at the origin in `ℝ³`. -/
 theorem apm_t93j01
     (f : ContinuousMap apm_t93j01_Product (EuclideanSpace ℝ (Fin 3))) :
     ∃ r : ℝ, 0 < r ∧ ∀ x, ‖f x‖ ≠ r := by
-  sorry
+  obtain ⟨C, hC⟩ := (isCompact_range f.continuous).isBounded.exists_norm_le
+  refine ⟨max C 0 + 1, by positivity, fun x h => ?_⟩
+  have := hC (f x) ⟨x, rfl⟩
+  linarith [le_max_left C 0]
