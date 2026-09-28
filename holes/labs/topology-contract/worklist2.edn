@@ -50762,13 +50762,47 @@
    :depends-on [:routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_quotient_charted_space.lean",
+      :sha256
+      "33ca0674c6aad63db0d5ca9232b00d807cadd9b5d708c81ab7111bb8d8d95f61"},
+     :commands
+     [{:cmd "lake env lean /tmp/rp_sphere_quotient_charted_space.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_charted_space.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+      :acceptance
+      {:declarations
+       ["SphereProjectionLocalInverseFamily.quotientChart"
+        "SphereProjectionLocalInverseFamily.quotientChartedSpace"
+        "sphereProjectionQuotientChartedSpace_exists"],
+       :fixture "/tmp/rp_sphere_quotient_charted_space.lean",
+       :consumer-residual
+       "Prove the assembled quotient atlas is smooth and sphereProjection is a local diffeomorphism using the banked locally constant identity-or-antipodal overlap law.",
+       :axioms :standard-only}},
+     :residual
+     "The preferred quotient charts and complete ChartedSpace assembly compile without placeholders on the frozen topology. Promotion is confined to RealProjectiveSmoothTarget; smooth compatibility and local-diffeomorphism certification remain."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile the placeholder-free fixture /tmp/rp_sphere_quotient_charted_space.lean defining SphereProjectionLocalInverseFamily.quotientChart as the chosen local inverse followed by the standard sphere chart, defining the resulting quotientChartedSpace on the existing Space real 2, and proving it exists from sphereProjectionLocalInverseFamily. Prove mem_chart_source from lift_mem_source, project_lift, and the sphere chart source theorem without changing the frozen topology. This supplies the charted-space assembly needed by smooth descent for t95A04 and t96A07."},
+   {:declarations
+    ["SphereProjectionLocalInverseFamily.quotientChart"
+     "SphereProjectionLocalInverseFamily.quotientChartedSpace"
+     "sphereProjectionQuotientChartedSpace_exists"],
+    :fixture "/tmp/rp_sphere_quotient_charted_space.lean",
+    :consumer-residual
+    "Prove the assembled quotient atlas is smooth and sphereProjection is a local diffeomorphism using the banked locally constant identity-or-antipodal overlap law.",
+    :axioms :standard-only},
    :id :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
