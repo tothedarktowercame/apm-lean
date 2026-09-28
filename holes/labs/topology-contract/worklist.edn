@@ -79889,8 +79889,111 @@
    "After reviewed t95J02, preserve all holds and STOPs, then choose between t91J06 and t99J04 by concrete remaining work.",
    :other-consumers []}
   {:consumer :t91J06,
-   :phase :probe,
+   :phase :implementation,
    :state :open,
+   :scope ["problems/t91J06/lean/Main.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t91J06/compatible-stage-coordinates",
+   :acceptance
+   {:placeholder-after 2,
+    :fixture-sha256
+    "5aa47dd88cee1602b0dbe77d0d3089ad02554d3181a29218f6ee6bf6cf61c61c",
+    :placeholder
+    "the sorry in apm_t91J06_bridge_compatible_stage_coordinates",
+    :axioms :standard-only,
+    :placeholder-before 3,
+    :commands
+    ["lake env lean problems/t91J06/lean/Main.lean"
+     "LEAN_PATH=/tmp/t91probe lake env lean /tmp/t91j06-compatible-coordinates-consumer.lean"
+     "python3 scripts/statement-registry.py check"],
+    :fixture "/tmp/t91j06-compatible-coordinates-consumer.lean",
+    :route-step "t91J06 route steps 1-3",
+    :implementation
+    "Replace only the sorry in apm_t91J06_bridge_compatible_stage_coordinates. For each n, use the two stage embeddings and hnested to define the transition from the unit interval at stage n into the interior of stage n+1; prove it is continuous and injective and use interval monotonicity to classify its orientation and endpoint image. Extend the already chosen coordinate across the two complementary endpoint intervals by explicit affine pieces, reversing orientation when necessary, to obtain a homeomorphism onto [-(n+2),n+2]. Recursively construct the family g and prove the displayed compatibility equality. Work at exactly the frozen interval-stage generality and do not change any registered statement or definition. Do not invoke the false glue helper."},
+   :id :routes-2026-09-28-t91j06-compatible-stage-coordinates-1,
+   :kind :final-adapter,
+   :depends-on [],
+   :current-residual
+   "Prove the exact compatible-coordinate family consumed by the compiled fixture. After this placeholder is removed, a separate corrected embedding-aware gluing theorem carrying hf is still required before final assembly.",
+   :other-consumers []}
+  {:consumer :t91J06,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-4",
+     :fixture
+     {:path "/tmp/t91j06-compatible-coordinates-consumer.lean",
+      :sha256
+      "5aa47dd88cee1602b0dbe77d0d3089ad02554d3181a29218f6ee6bf6cf61c61c"},
+     :commands
+     [{:cmd "test canonical .lake/packages authority", :exit 0}
+      {:cmd
+       "lake env lean -o /tmp/t91probe/t91J06/lean/Main.olean problems/t91J06/lean/Main.lean",
+       :exit 0}
+      {:cmd
+       "LEAN_PATH=/tmp/t91probe lake env lean /tmp/t91j06-compatible-coordinates-consumer.lean",
+       :exit 0}
+      {:cmd
+       "sha256sum /tmp/t91j06-compatible-coordinates-consumer.lean",
+       :exit 0,
+       :finding
+       "5aa47dd88cee1602b0dbe77d0d3089ad02554d3181a29218f6ee6bf6cf61c61c"}
+      {:cmd
+       "Python comment-stripped placeholder census of /tmp/t91j06-compatible-coordinates-consumer.lean",
+       :exit 0,
+       :finding "0"}
+      {:cmd
+       "rg interval monotonicity, embedding homeomorphism, and compact-to-T2 homeomorphism APIs",
+       :exit 0,
+       :finding
+       "Mathlib supplies the monotone-or-antitone interval classification, IsEmbedding.toHomeomorph, and Continuous.homeoOfEquivCompactToT2; no banked compatible-coordinate recursion exists."}
+      {:cmd "git diff -- problems/t91J06/lean/Main.lean",
+       :exit 0,
+       :finding "empty"}
+      {:cmd "python3 scripts/statement-registry.py fingerprint t91J06",
+       :exit 0,
+       :finding
+       "c1a73551b731d282c660c5b3c11feb7bf57c91b4cb7e7e1488030072f0390910"}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :finding "130 registered statements match, 0 do not"}],
+     :warnings
+     [{:kind :inherited-placeholder,
+       :message
+       "The temporary consumer olean reports the three existing source placeholders. The fixture introduces none and depends on sorryAx exactly through apm_t91J06_bridge_compatible_stage_coordinates."}],
+     :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+     :prerequisite
+     {:consumer :t91J06,
+      :phase :implementation,
+      :state :open,
+      :scope ["problems/t91J06/lean/Main.lean"],
+      :dag-node
+      "TOPOLOGY-ROUTES.md/t91J06/compatible-stage-coordinates",
+      :acceptance
+      {:placeholder-after 2,
+       :fixture-sha256
+       "5aa47dd88cee1602b0dbe77d0d3089ad02554d3181a29218f6ee6bf6cf61c61c",
+       :placeholder
+       "the sorry in apm_t91J06_bridge_compatible_stage_coordinates",
+       :axioms :standard-only,
+       :placeholder-before 3,
+       :commands
+       ["lake env lean problems/t91J06/lean/Main.lean"
+        "LEAN_PATH=/tmp/t91probe lake env lean /tmp/t91j06-compatible-coordinates-consumer.lean"
+        "python3 scripts/statement-registry.py check"],
+       :fixture "/tmp/t91j06-compatible-coordinates-consumer.lean",
+       :route-step "t91J06 route steps 1-3",
+       :implementation
+       "Replace only the sorry in apm_t91J06_bridge_compatible_stage_coordinates. For each n, use the two stage embeddings and hnested to define the transition from the unit interval at stage n into the interior of stage n+1; prove it is continuous and injective and use interval monotonicity to classify its orientation and endpoint image. Extend the already chosen coordinate across the two complementary endpoint intervals by explicit affine pieces, reversing orientation when necessary, to obtain a homeomorphism onto [-(n+2),n+2]. Recursively construct the family g and prove the displayed compatibility equality. Work at exactly the frozen interval-stage generality and do not change any registered statement or definition. Do not invoke the false glue helper."},
+      :id :routes-2026-09-28-t91j06-compatible-stage-coordinates-1,
+      :kind :final-adapter,
+      :depends-on [],
+      :current-residual
+      "Prove the exact compatible-coordinate family consumed by the compiled fixture. After this placeholder is removed, a separate corrected embedding-aware gluing theorem carrying hf is still required before final assembly.",
+      :other-consumers []},
+     :residual
+     "Exactly one prerequisite is elected: apm_t91J06_bridge_compatible_stage_coordinates, comprising route steps 1-3. The fixture compiles its exact interface without textual placeholders. Route steps 4-5 must subsequently replace reliance on the false glue helper with an embedding-aware gluing proof before the registered theorem can close."}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t91J06",
    :acceptance
@@ -79909,7 +80012,7 @@
    :kind :final-adapter,
    :depends-on
    [:routes-2026-09-28-checkpoint-topo1-after-t95j02-1
-    :routes-2026-09-28-checkpoint-topo1-after-t95j02-1],
+    :routes-2026-09-28-t91j06-compatible-stage-coordinates-1],
    :current-residual
    "Three sorries: construct compatible interval-stage coordinates, prove the embedding-aware weak-topology gluing theorem without relying on the false helper signature, and assemble the frozen homeomorphism conclusion.",
    :other-consumers []}
