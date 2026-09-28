@@ -391,4 +391,24 @@ theorem SphereProjectionLocalInverseFamily.inverseBranch_quotientChart_symm
     (chartAt (E 2) (F.lift y)).symm u ∈ (F.localHomeomorph y).source at hu
   exact hu.2
 
+def SphereProjectionLocalInverseFamily.transitionInput
+    (F : SphereProjectionLocalInverseFamily) (y : Space ℝ 2) :
+    E 2 → Space ℝ 2 :=
+  fun u => (F.quotientChart y).symm ((𝓡 2).symm u)
+
+theorem SphereProjectionLocalInverseFamily.transitionInput_domain
+    (F : SphereProjectionLocalInverseFamily) (y z : Space ℝ 2) (u : E 2)
+    (hu : u ∈ ((𝓡 2).symm ⁻¹' ((F.quotientChart y).symm ≫ₕ
+      F.quotientChart z).source ∩ Set.range (𝓡 2))) :
+    (𝓡 2).symm u ∈ (F.quotientChart y).target ∧
+      F.transitionInput y u ∈ (F.quotientChart z).source := by
+  exact hu.1
+
+theorem SphereProjectionLocalInverseFamily.continuousAt_transitionInput
+    (F : SphereProjectionLocalInverseFamily) (y : Space ℝ 2) (u : E 2)
+    (hu : (𝓡 2).symm u ∈ (F.quotientChart y).target) :
+    ContinuousAt (F.transitionInput y) u := by
+  exact (F.quotientChart y).continuousAt_symm hu |>.comp
+    (ModelWithCorners.continuous_symm (𝓡 2)).continuousAt
+
 end ConstructionTargets.RealProjectiveSmoothTarget
