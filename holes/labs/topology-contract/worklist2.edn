@@ -50711,6 +50711,33 @@
      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd "git diff --check", :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790634112205-26546-d9df2569",
+     :commands
+     [{:cmd "sha256sum /tmp/rp_sphere_inverse_overlap_local.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+       :exit 0}
+      {:cmd
+       "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_inverse_overlap_local_axioms.lean",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder counts from git show 7ef9f498 for module, t95A04, and t96A07",
+       :exit 0}
+      {:cmd "git diff-tree --no-commit-id --name-only -r 7ef9f498",
+       :exit 0}],
+     :finding
+     "PASS. Reviewer codex-7 read implementation commit 7ef9f498. Its sole changed path is ConstructionTargets/RealProjectiveSmoothTarget.lean, exactly matching scope, and the file has no later commit. The fixture sha256 reproduces exactly as a0ba63df8761bf8054d6939682f2bad5bcb8ae3798e3ba304a8b9ae31f883705. Direct elaboration and Lake build pass with canonical packages; inverseBranch_eventuallyEq_or_antipodal uses only propext, Classical.choice, and Quot.sound. The committed module contains zero placeholders; t95A04 and t96A07 remain at one each, so placeholder delta zero is accurate. All 130 frozen statements and the 324-item ledger pass. The theorem works in the ambient neighborhood filter: both open branch targets are neighborhoods of x. At an equal-branch point the real inner product is positive, while at an antipodal point it is negative; continuity preserves that sign nearby, and the reviewed pointwise fibre dichotomy rules out switching to the opposite alternative. The two conclusions retain the required orientation, branch-z eventually equals branch-y or antipodal composed with branch-y, without changing topology, casting representations, or claiming downstream smoothness."},
     :commit "7ef9f4985a2ded14bbfed458ae3307be412efaca",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -50720,7 +50747,7 @@
      "a0ba63df8761bf8054d6939682f2bad5bcb8ae3798e3ba304a8b9ae31f883705"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50772,7 +50799,7 @@
       [:routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
