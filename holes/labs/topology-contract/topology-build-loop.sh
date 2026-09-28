@@ -281,7 +281,33 @@ apply_job_result() {
       || die "could not commit $row ledger transition"
   fi
   bb "$HERE/inflight.bb" clear "$INFLIGHT" || die "could not clear committed in-flight job"
+  refresh_status "$row"
   send_notice "milestone applied: row=$row job=$LAST_JOB $transition"
+}
+# Keep problems/t*/status.json in line with the committed Lean, so a closure
+# this loop makes is credited where open_problem_queue.clj reads it. Until
+# 2026-09-28 nothing did this and 10 closed problems still recorded sorries.
+# The refresh reads HEAD, not the shared working tree, and its commit is
+# path-scoped to the files it changed. A failure is reported, not fatal: it is
+# bookkeeping, and dying here would send a repair agent.
+refresh_status() {
+  local row="$1" changed
+  if ! changed="$(python3 "$ROOT/scripts/refresh-topology-status.py" 2>>"$LOG")"; then
+    log "WARNING status.json refresh failed after $row"
+    send_notice "status.json refresh failed after row=$row; see build-loop.log"
+    return 0
+  fi
+  [ -n "$changed" ] || return 0
+  # shellcheck disable=SC2086
+  git -C "$ROOT" add -- $changed
+  # shellcheck disable=SC2086
+  if git -C "$ROOT" diff --cached --quiet -- $changed; then
+    return 0   # the other loop already committed the same counts
+  fi
+  # shellcheck disable=SC2086
+  git -C "$ROOT" commit -q -m "topology-loop: refresh status.json after $row" -- $changed \
+    && log "status.json refreshed after $row: $(echo $changed | wc -w) file(s)" \
+    || log "WARNING could not commit status.json refresh after $row"
 }
 resume_inflight() {
   [ -f "$INFLIGHT" ] || return 0
