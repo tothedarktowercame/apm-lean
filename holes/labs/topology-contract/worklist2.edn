@@ -50959,6 +50959,33 @@
       "git diff --check -- ConstructionTargets/RealProjectiveSmoothTarget.lean",
       :exit 0}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790635675234-26605-0fd5732f",
+     :commands
+     [{:cmd "sha256sum /tmp/rp_sphere_quotient_transition_input.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+       :exit 0}
+      {:cmd
+       "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_quotient_transition_input_axioms.lean",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder counts from git show dca79336 for module, t95A04, and t96A07",
+       :exit 0}
+      {:cmd "git diff-tree --no-commit-id --name-only -r dca79336",
+       :exit 0}],
+     :finding
+     "PASS. Reviewer codex-7 read implementation commit dca79336. Its sole changed path is ConstructionTargets/RealProjectiveSmoothTarget.lean, exactly matching scope, and the file has no later commit. The fixture sha256 reproduces exactly as d93544c86dfa9ba3437fbfadc28c409b041827e32f7e7ff12f56424bbff34992. Direct elaboration and Lake build pass with canonical packages; continuousAt_transitionInput uses only propext, Classical.choice, and Quot.sound. The committed module contains zero placeholders; t95A04 and t96A07 remain at one each, so placeholder delta zero is accurate. All 130 frozen statements and the 330-item ledger pass. transitionInput is correctly oriented from model coordinate u through the model-with-corners inverse and then quotientChart y inverse into projective space. Unfolding exact transition-domain membership yields both that the model inverse lies in quotientChart y target and that transitionInput lies in quotientChart z source; the unused range conjunct is retained by the caller domain rather than weakened. continuousAt_transitionInput composes quotient-chart inverse continuity after model inverse continuity in the same direction. No topology change, representation cast, or broader domain assertion occurs."},
     :commit "dca79336e89dfe24feec089cfb3b6f438b7b737c",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -50968,7 +50995,7 @@
      "d93544c86dfa9ba3437fbfadc28c409b041827e32f7e7ff12f56424bbff34992"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -51020,7 +51047,7 @@
       [:routes-2026-09-28-rp-sphere-quotient-chart-apply-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
