@@ -51330,29 +51330,45 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_sphere_quotient_atlas_compatibility.lean",
-      :sha256
-      "35d8406a3a8fe58359c7737c0154e8ddb0db5d54b5cd93af4a3ce3b79e0250b7"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_quotient_atlas_compatibility.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_atlas_compatibility.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      "Bank SphereProjectionQuotientAtlasCompatibility, its inhabitant sphereProjectionQuotientAtlasCompatibility, and quotientAtlasCompatibility_gives_manifold exactly at dimension 2. For each SphereProjectionLocalInverseFamily, install F.quotientChartedSpace and derive IsManifold from the banked sphereProjectionQuotientChartTransitionCompatibility via quotientChartTransitionCompatibility_gives_manifold; do not introduce a general quotient-manifold theorem or change the frozen topology."},
-     :residual
-     "The chosen quotient charts now carry a compiled IsManifold instance on the existing real projective two-space. The smooth-descent route still needs the dimension-2 local-diffeomorphism statement for sphereProjection with this quotient charted-space instance; after that, SphereProjectionSmoothDescentContract can package the ChartedSpace, IsManifold, and IsLocalDiffeomorph witnesses."}},
+   {:placeholder-delta 0,
+    :residual
+    "Prove sphereProjection 2 is an IsLocalDiffeomorph for F.quotientChartedSpace, then package the ChartedSpace, IsManifold, and IsLocalDiffeomorph witnesses in SphereProjectionSmoothDescentContract and finish rpSmoothAtlas 2 for t95A04 and t96A07.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/rp_sphere_quotient_atlas_compatibility.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 no-sorry-pattern ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_quotient_atlas_compatibility_axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "9f819d105e0a84be11e13dbbc9a7b73f0ff8361e",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_quotient_atlas_compatibility.lean",
+     :sha256
+     "35d8406a3a8fe58359c7737c0154e8ddb0db5d54b5cd93af4a3ce3b79e0250b7"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
