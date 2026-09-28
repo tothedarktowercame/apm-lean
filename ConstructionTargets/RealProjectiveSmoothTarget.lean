@@ -244,4 +244,29 @@ theorem sphereProjectionLocalInverseFamily :
     exact (Classical.choose_spec
       (sphereProjection_isLocalHomeomorph (lift y))).2
 
+def SphereProjectionLocalInverseFamily.inverseBranch
+    (F : SphereProjectionLocalInverseFamily) (y : Space ℝ 2) :
+    Space ℝ 2 → Sphere 2 :=
+  (F.localHomeomorph y).symm
+
+theorem SphereProjectionLocalInverseFamily.project_inverseBranch
+    (F : SphereProjectionLocalInverseFamily) (y x : Space ℝ 2)
+    (hx : x ∈ (F.localHomeomorph y).target) :
+    sphereProjection 2 (F.inverseBranch y x) = x := by
+  rw [F.localHomeomorph_eq y]
+  exact (F.localHomeomorph y).right_inv hx
+
+/-- On the common target of two chosen local inverse branches, their values
+are pointwise equal or antipodal. This is the exact transition dichotomy
+needed before applying smooth locality. -/
+theorem SphereProjectionLocalInverseFamily.inverseBranch_eq_or_antipodal
+    (F : SphereProjectionLocalInverseFamily) (y z x : Space ℝ 2)
+    (hy : x ∈ (F.localHomeomorph y).target)
+    (hz : x ∈ (F.localHomeomorph z).target) :
+    F.inverseBranch z x = F.inverseBranch y x ∨
+      F.inverseBranch z x = sphereAntipodalN 2 (F.inverseBranch y x) := by
+  exact (sphereProjectionTwoSheetedLocalModel.2 _ _).mp
+    ((F.project_inverseBranch y x hy).trans
+      (F.project_inverseBranch z x hz).symm)
+
 end ConstructionTargets.RealProjectiveSmoothTarget
