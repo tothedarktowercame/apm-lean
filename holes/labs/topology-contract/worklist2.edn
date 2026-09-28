@@ -50931,36 +50931,44 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_sphere_quotient_transition_input.lean",
-      :sha256
-      "d93544c86dfa9ba3437fbfadc28c409b041827e32f7e7ff12f56424bbff34992"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_quotient_transition_input.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_transition_input.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:declarations
-       ["SphereProjectionLocalInverseFamily.transitionInput"
-        "SphereProjectionLocalInverseFamily.transitionInput_domain"
-        "SphereProjectionLocalInverseFamily.continuousAt_transitionInput"],
-       :fixture "/tmp/rp_sphere_quotient_transition_input.lean",
-       :consumer-residual
-       "Pull inverseBranch_eventuallyEq_or_antipodal back along transitionInput and simplify with the promoted quotient-chart cancellation identities to inhabit the transition normal form.",
-       :axioms :standard-only}},
-     :residual
-     "The exact transition input, its two domain memberships, and its continuity at each transition-domain point compile without placeholders. Promotion is confined to RealProjectiveSmoothTarget."}},
+   {:placeholder-delta 0,
+    :residual
+    "Pull inverseBranch_eventuallyEq_or_antipodal back along transitionInput and simplify with the quotient-chart cancellation identities to inhabit the transition normal form for t95A04 and t96A07.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/rp_sphere_quotient_transition_input.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 no-sorry-pattern ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_quotient_transition_input_axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "dca79336e89dfe24feec089cfb3b6f438b7b737c",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_quotient_transition_input.lean",
+     :sha256
+     "d93544c86dfa9ba3437fbfadc28c409b041827e32f7e7ff12f56424bbff34992"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
