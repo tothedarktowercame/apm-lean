@@ -78039,9 +78039,22 @@
       "After reviewed t02A05, preserve all reviewed holds and decide whether the remaining two-placeholder t01A01 route is ready before advancing to three-placeholder adapters.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790631341979-26445-216476bf",
+     :commands
+     ["git diff-tree --no-commit-id --name-only -r 158371fd"
+      "git show 158371fd:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "python3 scripts/statement-registry.py check"
+      "Python comment-stripped census of all 12 topo1 Git blobs at fc004733 and 158371fd"
+      "Python registry SHA-256 extraction for t02A05 and t01A01"
+      "rg μHE, euclideanHausdorffMeasure, unitFlux_moment, and frozen constants across the consumer, route, ConstructionTargets, and Mathlib"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-4. Commit 158371fd is ledger-only with exact scope holes/labs/topology-contract/worklist.edn; its snapshot validates at 641 items. The topo1 census remains 22, with every one-placeholder adapter either closed or explicitly held and both t02A05 and t01A01 at two placeholders. The registry reproduces 130/130 statements and hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0; current t02A05 is faithful with hash 9d8293f1a68d4bf4b223ac7b97205d7e46d0cac41758bd23982e949ddf640815. Electing t02A05 before t01A01 follows the four-step versus five-step route comparison. The checkpoint correctly distinguishes the obsolete raw μH[2] warning from the registered μHE[2] statement: Mathlib defines μHE by scaling μH and proves equality with volume in matching Euclidean dimension. It does not pretend that normalization alone closes the consumer; the probe explicitly still owes translation, conversion of the banked intrinsic moment, normalized sphere-mass evaluation, and the exact 44*pi/15 plus 4*pi quadratic identity before using the banked minimum. Those source-subtype, translated unit-sphere, intrinsic μH[2], and normalized μHE[2] representations are oriented explicitly. Fixture hashing is not applicable to this strategy-only replan."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -78057,7 +78070,7 @@
    :other-consumers []}
   {:consumer :t02A05,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t02A05",
    :acceptance
