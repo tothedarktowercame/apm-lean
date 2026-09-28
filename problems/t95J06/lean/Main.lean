@@ -56,7 +56,7 @@ def apm_t95j06_IsCompactOrientableSurface
   IsCompact F ∧
   ∃ charts : ChartedSpace apm_t95j06_E2 F,
     let _ := charts
-    IsManifold apm_t95j06_I2 ⊤ F ∧
+    IsManifold apm_t95j06_I2 (⊤ : ℕ∞) F ∧
     ∀ x : F,
       Nonempty
         (apm_t95j06_H 2 {y : F // y ∈ connectedComponent x} ≅

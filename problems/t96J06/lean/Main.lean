@@ -63,7 +63,7 @@ def apm_t96j06_BoundsThreeManifold
     IsCompact W ∧
     ∃ charts : ChartedSpace (EuclideanHalfSpace 3) W,
       let _ := charts
-      IsManifold (𝓡∂ 3) ⊤ W ∧
+      IsManifold (𝓡∂ 3) (⊤ : ℕ∞) W ∧
       Subtype.val '' ((𝓡∂ 3).boundary W) = T
 
 private lemma apm_t96j06_single_zero_ne :
@@ -143,7 +143,7 @@ theorem apm_t96J06_bridge_1
     (W : Set apm_t96j06_Ambient) (hW : IsCompact W)
     (charts : ChartedSpace (EuclideanHalfSpace 3) W) :
     let _ := charts
-    IsManifold (𝓡∂ 3) ⊤ W →
+    IsManifold (𝓡∂ 3) (⊤ : ℕ∞) W →
       Subtype.val '' ((𝓡∂ 3).boundary W) ≠
         apm_t96j06_ProductSubspace := by
   sorry

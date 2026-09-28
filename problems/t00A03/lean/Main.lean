@@ -76,7 +76,7 @@ lemma apm_t00a03_cut_isOpen {F : Type} [TopologicalSpace F] [T2Space F]
 /-- On a surface, every component of the cut-open complement is itself open. -/
 lemma apm_t00a03_component_isOpen
     {F : Type} [TopologicalSpace F] [T2Space F]
-    [ChartedSpace apm_t00a03_E2 F] [IsManifold apm_t00a03_I2 ⊤ F]
+    [ChartedSpace apm_t00a03_E2 F] [IsManifold apm_t00a03_I2 (⊤ : ℕ∞) F]
     {n : ℕ} (curves : Fin n → apm_t00a03_Curve F)
     (hemb : ∀ i, Topology.IsEmbedding (curves i)) (x : F) :
     IsOpen (connectedComponentIn (apm_t00a03_cut curves) x) := by
@@ -167,7 +167,7 @@ theorem apm_t00A03_bridge_1
     (g n : ℕ) (F : Type)
     [TopologicalSpace F] [T2Space F] [CompactSpace F]
     [PathConnectedSpace F] [ChartedSpace apm_t00a03_E2 F]
-    [IsManifold apm_t00a03_I2 ⊤ F]
+    [IsManifold apm_t00a03_I2 (⊤ : ℕ∞) F]
     (hg : 2 ≤ g) (hgenus : apm_t00a03_hasGenus g F)
     (curves : Fin n → apm_t00a03_Curve F)
     (hemb : ∀ i, Topology.IsEmbedding (curves i))
@@ -194,7 +194,7 @@ theorem apm_t00A03_bridge_2
     (g n : ℕ) (F : Type)
     [TopologicalSpace F] [T2Space F] [CompactSpace F]
     [PathConnectedSpace F] [ChartedSpace apm_t00a03_E2 F]
-    [IsManifold apm_t00a03_I2 ⊤ F]
+    [IsManifold apm_t00a03_I2 (⊤ : ℕ∞) F]
     (hg : 2 ≤ g) (hgenus : apm_t00a03_hasGenus g F)
     (curves : Fin n → apm_t00a03_Curve F)
     (hemb : ∀ i, Topology.IsEmbedding (curves i))
@@ -214,7 +214,7 @@ theorem apm_t00a03 :
     ∀ (g n : ℕ) (F : Type)
       [TopologicalSpace F] [T2Space F] [CompactSpace F]
       [PathConnectedSpace F] [ChartedSpace apm_t00a03_E2 F]
-      [IsManifold apm_t00a03_I2 ⊤ F],
+      [IsManifold apm_t00a03_I2 (⊤ : ℕ∞) F],
       2 ≤ g → apm_t00a03_hasGenus g F →
       ∀ curves : Fin n → apm_t00a03_Curve F,
         (∀ i, Topology.IsEmbedding (curves i)) →

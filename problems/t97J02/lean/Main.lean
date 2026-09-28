@@ -140,13 +140,13 @@ both universal classification conjuncts of the main theorem. -/
 theorem apm_t97J02_bridge_classify_five_and_six_fold_covers :
     (∀ (E : Type) [TopologicalSpace E] [T2Space E] [CompactSpace E]
         [ConnectedSpace E] [ChartedSpace apm_t97J02_E2 E]
-        [IsManifold (modelWithCornersSelf ℝ apm_t97J02_E2) ⊤ E]
+        [IsManifold (modelWithCornersSelf ℝ apm_t97J02_E2) (⊤ : ℕ∞) E]
         (p : E → apm_t97J02_X),
       apm_t97J02_IsNfoldCover 5 p →
         Nonempty (E ≃ₜ apm_t97J02_Surface false 12)) ∧
     (∀ (E : Type) [TopologicalSpace E] [T2Space E] [CompactSpace E]
         [ConnectedSpace E] [ChartedSpace apm_t97J02_E2 E]
-        [IsManifold (modelWithCornersSelf ℝ apm_t97J02_E2) ⊤ E]
+        [IsManifold (modelWithCornersSelf ℝ apm_t97J02_E2) (⊤ : ℕ∞) E]
         (p : E → apm_t97J02_X),
       apm_t97J02_IsNfoldCover 6 p →
         Nonempty (E ≃ₜ apm_t97J02_Surface true 7) ∨
@@ -157,7 +157,7 @@ theorem apm_t97j02 :
     Nonempty (apm_t97J02_CoverWitness false 12 5) ∧
     (∀ (E : Type) [TopologicalSpace E] [T2Space E] [CompactSpace E]
         [ConnectedSpace E] [ChartedSpace apm_t97J02_E2 E]
-        [IsManifold (modelWithCornersSelf ℝ apm_t97J02_E2) ⊤ E]
+        [IsManifold (modelWithCornersSelf ℝ apm_t97J02_E2) (⊤ : ℕ∞) E]
         (p : E → apm_t97J02_X),
       apm_t97J02_IsNfoldCover 5 p →
         Nonempty (E ≃ₜ apm_t97J02_Surface false 12)) ∧
@@ -165,7 +165,7 @@ theorem apm_t97j02 :
     Nonempty (apm_t97J02_CoverWitness false 14 6) ∧
     ∀ (E : Type) [TopologicalSpace E] [T2Space E] [CompactSpace E]
         [ConnectedSpace E] [ChartedSpace apm_t97J02_E2 E]
-        [IsManifold (modelWithCornersSelf ℝ apm_t97J02_E2) ⊤ E]
+        [IsManifold (modelWithCornersSelf ℝ apm_t97J02_E2) (⊤ : ℕ∞) E]
         (p : E → apm_t97J02_X),
       apm_t97J02_IsNfoldCover 6 p →
         Nonempty (E ≃ₜ apm_t97J02_Surface true 7) ∨

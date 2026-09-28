@@ -201,7 +201,7 @@ theorem apm_t00A02_bridge_global_cover_classification_and_wedge :
     (∀ (F E₁ E₂ : Type)
         [TopologicalSpace F] [T2Space F] [CompactSpace F]
         [PathConnectedSpace F] [ChartedSpace apm_t00A02_E2 F]
-        [IsManifold apm_t00A02_I2 ⊤ F]
+        [IsManifold apm_t00A02_I2 (⊤ : ℕ∞) F]
         [TopologicalSpace E₁] [PathConnectedSpace E₁]
         [TopologicalSpace E₂] [PathConnectedSpace E₂]
         (_hF : apm_t00A02_hasGenusFiveHomology F)
@@ -217,7 +217,7 @@ theorem apm_t00a02 :
     (∀ (F E₁ E₂ : Type)
         [TopologicalSpace F] [T2Space F] [CompactSpace F]
         [PathConnectedSpace F] [ChartedSpace apm_t00A02_E2 F]
-        [IsManifold apm_t00A02_I2 ⊤ F]
+        [IsManifold apm_t00A02_I2 (⊤ : ℕ∞) F]
         [TopologicalSpace E₁] [PathConnectedSpace E₁]
         [TopologicalSpace E₂] [PathConnectedSpace E₂]
         (hF : apm_t00A02_hasGenusFiveHomology F)

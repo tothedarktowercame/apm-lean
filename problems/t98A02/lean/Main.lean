@@ -235,10 +235,10 @@ theorem apm_t98a02 :
     ∀ (X₁ X₂ : Type)
       [TopologicalSpace X₁] [T2Space X₁] [CompactSpace X₁]
       [PathConnectedSpace X₁] [ChartedSpace T98A02E4 X₁]
-      [IsManifold T98A02I4 ⊤ X₁]
+      [IsManifold T98A02I4 (⊤ : ℕ∞) X₁]
       [TopologicalSpace X₂] [T2Space X₂] [CompactSpace X₂]
       [PathConnectedSpace X₂] [ChartedSpace T98A02E4 X₂]
-      [IsManifold T98A02I4 ⊤ X₂]
+      [IsManifold T98A02I4 (⊤ : ℕ∞) X₂]
       (φ₁ : T98A02Disk → X₁) (φ₂ : T98A02Disk → X₂),
       Topology.IsEmbedding φ₁ → Topology.IsEmbedding φ₂ →
       Nonempty (t98A02H 4 X₁ ≅ ModuleCat.of ℤ ℤ) →

@@ -79,7 +79,7 @@ lemma apm_t99J04_surjective_of_isLocalDiffeomorph
     [TopologicalSpace X] [T2Space X] [CompactSpace X] [Nonempty X]
     [ChartedSpace E X] [TopologicalSpace Y] [T2Space Y] [ConnectedSpace Y]
     [ChartedSpace E' Y] (f : X → Y)
-    (hf : IsLocalDiffeomorph (𝓘(ℝ, E)) (𝓘(ℝ, E')) ⊤ f) :
+    (hf : IsLocalDiffeomorph (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f) :
     Function.Surjective f := by
   have hopen : IsOpen (Set.range f) := hf.isOpen_range
   have hclosed : IsClosed (Set.range f) :=
@@ -99,20 +99,20 @@ lemma apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT
     [NormedAddCommGroup E'] [NormedSpace ℝ E']
     [FiniteDimensional ℝ E'] [CompleteSpace E']
     [TopologicalSpace X] [T2Space X] [CompactSpace X] [Nonempty X]
-    [ChartedSpace E X] [IsManifold (modelWithCornersSelf ℝ E) ⊤ X]
+    [ChartedSpace E X] [IsManifold (modelWithCornersSelf ℝ E) (⊤ : ℕ∞) X]
     [TopologicalSpace Y] [T2Space Y] [ConnectedSpace Y]
-    [ChartedSpace E' Y] [IsManifold (modelWithCornersSelf ℝ E') ⊤ Y]
+    [ChartedSpace E' Y] [IsManifold (modelWithCornersSelf ℝ E') (⊤ : ℕ∞) Y]
     (f : X → Y) (hf : ContMDiff (modelWithCornersSelf ℝ E)
-      (modelWithCornersSelf ℝ E') ⊤ f)
+      (modelWithCornersSelf ℝ E') (⊤ : ℕ∞) f)
     (hbij : ∀ x, Function.Bijective
       (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ E') f x))
     (hlocalIFT : ∀ x,
       ContMDiffAt (modelWithCornersSelf ℝ E)
-        (modelWithCornersSelf ℝ E') ⊤ f x →
+        (modelWithCornersSelf ℝ E') (⊤ : ℕ∞) f x →
       Function.Bijective
         (mfderiv (modelWithCornersSelf ℝ E) (modelWithCornersSelf ℝ E') f x) →
       IsLocalDiffeomorphAt (modelWithCornersSelf ℝ E)
-        (modelWithCornersSelf ℝ E') ⊤ f x) :
+        (modelWithCornersSelf ℝ E') (⊤ : ℕ∞) f x) :
     Function.Surjective f := by
   apply apm_t99J04_surjective_of_isLocalDiffeomorph (E := E) (E' := E') f
   intro x
@@ -129,14 +129,14 @@ theorem apm_t99J04_bridge_local_inverse_function
     [NormedAddCommGroup E'] [NormedSpace ℝ E']
     [FiniteDimensional ℝ E'] [CompleteSpace E']
     [TopologicalSpace X] [ChartedSpace E X]
-    [IsManifold (𝓘(ℝ, E)) ⊤ X]
+    [IsManifold (𝓘(ℝ, E)) (⊤ : ℕ∞) X]
     [TopologicalSpace Y] [ChartedSpace E' Y]
-    [IsManifold (𝓘(ℝ, E')) ⊤ Y]
+    [IsManifold (𝓘(ℝ, E')) (⊤ : ℕ∞) Y]
     (f : X → Y) (x : X)
-    (hf : ContMDiffAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) ⊤ f x)
+    (hf : ContMDiffAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x)
     (hbij : Function.Bijective
       (mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x)) :
-    IsLocalDiffeomorphAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) ⊤ f x := by
+    IsLocalDiffeomorphAt (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f x := by
   sorry
 
 /-- Why this unblocks `apm_t99j04`: this is the missing derivative formula
@@ -146,10 +146,10 @@ first frozen conjunct. -/
 theorem apm_t99J04_bridge_coordinateMap_mfderiv_bijective
     (n : ℕ) (X : Type) [TopologicalSpace X]
     [ChartedSpace (apm_t99J04_Euclidean n) X]
-    [IsManifold (𝓘(ℝ, apm_t99J04_Euclidean n)) ⊤ X]
+    [IsManifold (𝓘(ℝ, apm_t99J04_Euclidean n)) (⊤ : ℕ∞) X]
     (x : X) (f : Fin n → X → ℝ)
     (hf : ∀ i,
-      ContMDiff (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) ⊤ (f i))
+      ContMDiff (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (⊤ : ℕ∞) (f i))
     (hli : LinearIndependent ℝ
       (fun i : Fin n ↦
         (NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
