@@ -51179,30 +51179,48 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path
-      "/tmp/rp_sphere_quotient_transition_normal_form_domains.lean",
-      :sha256
-      "7636a795b6e07a5ca6413baf08173b5dd8fef29ec700b9689e2c054ca33067d1"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_quotient_transition_normal_form_domains.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_transition_normal_form_domains.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      "Bank SphereProjectionQuotientTransitionLocalNormalFormWithDomains and its inhabitant at dimension 2. Preserve both disjuncts exactly: each eventual quotient-coordinate equality must remain paired with the ordinary transition-source witness or the antipodal first-target/second-source witnesses used by SphereChartTransitionAlternativesSmooth."},
-     :residual
-     "The quotient transition now has a compiled local normal form that retains the matching chart-domain evidence in both branches. The next bounded consumer step is SphereProjectionQuotientChartTransitionCompatibility: apply SphereChartTransitionAlternativesSmooth to the retained witness, transport ContDiffWithinAt across the retained eventual equality, prove the exact pairwise ContDiffOn formula, and invoke quotientChartTransitionCompatibility_gives_manifold."}},
+   {:placeholder-delta 0,
+    :residual
+    "Apply SphereChartTransitionAlternativesSmooth to the retained branch witness, transport ContDiffWithinAt across the paired eventual equality, prove pairwise ContDiffOn quotient transitions, and invoke quotientChartTransitionCompatibility_gives_manifold for t95A04 and t96A07.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/rp_sphere_quotient_transition_normal_form_domains.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 no-sorry-pattern ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_quotient_transition_normal_form_domains_axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "17d79ea8f658f3dbe0b663a4be27d9ef31a52e84",
+    :workspace-notes
+    ["Untracked scripts/topology-tail.py was left untouched and excluded from the commit."],
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path
+     "/tmp/rp_sphere_quotient_transition_normal_form_domains.lean",
+     :sha256
+     "7636a795b6e07a5ca6413baf08173b5dd8fef29ec700b9689e2c054ca33067d1"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
