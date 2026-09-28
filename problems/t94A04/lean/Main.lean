@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.SimplyConnectedOpenCover
 
 /-!
 # APM t94A04 — simply connected union without a van Kampen premise
@@ -16,5 +17,5 @@ theorem apm_t94a04
     (hinter_nonempty : (U ∩ V).Nonempty)
     (hinter_pc : IsPathConnected (U ∩ V))
     (hcover : U ∪ V = Set.univ) :
-    SimplyConnectedSpace X := by
-  sorry
+    SimplyConnectedSpace X :=
+  simplyConnectedSpace_of_union_eq_univ hU_open hV_open hcover hU_sc hV_sc hinter_pc
