@@ -261,7 +261,9 @@ lemma apm_t01a07_smooth : apm_t01a07_IsSmoothProjectiveHypersurface := by
   funext i
   fin_cases i <;> assumption
 
-theorem apm_t01a07 :
+/-- Superseded because its final clause computed only the mod-two cardinality,
+not the integer oriented intersection number requested in part (b). -/
+theorem apm_t01a07_previous_encoding :
     apm_t01a07_IsSmoothProjectiveHypersurface ∧
       apm_t01a07_pointPlus ≠ apm_t01a07_pointMinus ∧
       apm_t01a07_surface ∩ apm_t01a07_line =
@@ -300,3 +302,30 @@ theorem apm_t01a07 :
   subtype and cardinality assembly. No additional axiom, opaque declaration,
   or native evaluation is used.
   -/
+
+/-- The chosen affine coordinate on the projective line. -/
+def apm_t01a07_lineChart (y : ℝ) : Fin 4 → ℝ := ![1, y, 0, 0]
+
+/-- The actual quartic restricted to the chosen oriented line chart. -/
+def apm_t01a07_lineQuartic (y : ℝ) : ℝ :=
+  apm_t01a07_quartic (apm_t01a07_lineChart y)
+
+/-- The local oriented sign in the affine coordinate `[1:y:0:0]`, using the
+standard orientation of that coordinate and of the quartic normal. -/
+def apm_t01a07_localIntersectionSign (y : ℝ) : ℤ :=
+  if 0 < deriv apm_t01a07_lineQuartic y then 1 else -1
+
+/-- The integer intersection number is the signed sum at the two transverse
+intersection points. Reversing a global orientation negates both signs and
+therefore leaves the answer zero. -/
+def apm_t01a07_orientedIntersectionNumber : ℤ :=
+  apm_t01a07_localIntersectionSign 1 +
+    apm_t01a07_localIntersectionSign (-1)
+
+theorem apm_t01a07 :
+    apm_t01a07_IsSmoothProjectiveHypersurface ∧
+      apm_t01a07_pointPlus ≠ apm_t01a07_pointMinus ∧
+      apm_t01a07_surface ∩ apm_t01a07_line =
+        {apm_t01a07_pointPlus, apm_t01a07_pointMinus} ∧
+      apm_t01a07_orientedIntersectionNumber = 0 := by
+  sorry
