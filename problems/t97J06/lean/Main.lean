@@ -1,4 +1,7 @@
 import ConstructionTargets.CircleNoncontractible
+import ConstructionTargets.BoundaryTorusIntegralHomologyComplete
+import ConstructionTargets.CircleSingularHomology
+import ConstructionTargets.SingularHomologyHomotopy
 import Mathlib.AlgebraicTopology.SingularHomology.Basic
 import Mathlib.Algebra.Category.ModuleCat.Colimits
 import Mathlib.Algebra.Category.ModuleCat.Abelian
@@ -195,6 +198,46 @@ def t97J06HasDegree (f : C(T97J06Torus, T97J06Torus)) (n : ℤ) : Prop :=
   ∃ e : T97J06H2 ≅ ModuleCat.of ℤ ℤ,
     e.hom (t97J06H2Map f (e.inv (1 : ℤ))) = n
 
+noncomputable abbrev t97J06F := ((AlgebraicTopology.singularHomologyFunctor (ModuleCat ℤ) 2).obj
+    (ModuleCat.of ℤ ℤ))
+
+noncomputable def t97J06TorusHomeo :
+    T97J06Torus ≃ₜ ConstructionTargets.SolidTorusGluingOpenCover.BoundaryTorus :=
+  (Homeomorph.refl Circle).prodCongr
+    ConstructionTargets.SingularHomologyConcrete.circleHomeomorphSphereOne
+
+noncomputable def t97J06H2Iso : T97J06H2 ≅ ModuleCat.of ℤ ℤ :=
+  t97J06F.mapIso (TopCat.isoOfHomeo t97J06TorusHomeo) ≪≫
+    ConstructionTargets.BoundaryTorusIntegralHomologyComplete.boundaryTorusH2ModuleIsoInt
+
+lemma t97J06_circle_H2_isZero : Limits.IsZero (t97J06F.obj (TopCat.of Circle)) :=
+  (ConstructionTargets.SphereHomology.sphereModuleHomology_isZero_of_ne_zero_top 1 2
+    (by decide) (by decide)).of_iso
+    (t97J06F.mapIso
+      (TopCat.isoOfHomeo ConstructionTargets.SingularHomologyConcrete.circleHomeomorphSphereOne))
+
+noncomputable def t97J06Mul : C(T97J06Torus, Circle) := ⟨fun p ↦ p.1 * p.2, by fun_prop⟩
+noncomputable def t97J06Incl : C(Circle, T97J06Torus) := ⟨fun w ↦ (1, w), by fun_prop⟩
+
+noncomputable def t97J06Homotopy :
+    ContinuousMap.Homotopy t97J06Map (t97J06Incl.comp t97J06Mul) where
+  toFun q := (Circle.exp ((1 - (q.1 : ℝ)) * (2 * Real.pi *
+      Complex.im ((q.2.1 : ℂ) * (q.2.2 : ℂ) ^ 2))), q.2.1 * q.2.2)
+  continuous_toFun := by fun_prop
+  map_zero_left p := by simp [t97J06Map]
+  map_one_left p := by simp [t97J06Incl, t97J06Mul]
+
+lemma t97J06_H2Map_eq_zero : t97J06H2Map t97J06Map = 0 := by
+  unfold t97J06H2Map
+  rw [ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+    (ModuleCat ℤ) (ModuleCat.of ℤ ℤ) ⟨t97J06Homotopy⟩ 2]
+  rw [show TopCat.ofHom (t97J06Incl.comp t97J06Mul) =
+      TopCat.ofHom t97J06Mul ≫ TopCat.ofHom t97J06Incl from rfl, Functor.map_comp]
+  have h0 : t97J06F.map (TopCat.ofHom t97J06Mul) = 0 :=
+    t97J06_circle_H2_isZero.eq_of_tgt _ _
+  exact (by rw [h0, Limits.zero_comp] :
+    t97J06F.map (TopCat.ofHom t97J06Mul) ≫ t97J06F.map (TopCat.ofHom t97J06Incl) = 0)
+
 /-- Faithful two-part answer: the concrete descended map has degree zero and
 is not homotopic to a constant; the lift identity pins down the stated map. -/
 theorem apm_t97j06 :
@@ -206,4 +249,8 @@ theorem apm_t97j06 :
     t97J06HasDegree t97J06Map 0 ∧
     (∀ q : T97J06Torus,
       ¬ ContinuousMap.Homotopic t97J06Map (ContinuousMap.const T97J06Torus q)) := by
-  sorry
+  refine ⟨t97J06Map_on_cover, ⟨t97J06H2Iso, ?_⟩,
+    t97J06_not_homotopic_const_of_not_contractibleCircle
+      CircleNoncontractible.circle_not_contractible⟩
+  rw [t97J06_H2Map_eq_zero]
+  simp
