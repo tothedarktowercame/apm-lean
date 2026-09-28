@@ -123,6 +123,32 @@
    "rev": "e095da7f",
    "approved_at": "2026-09-28T00:25:37Z"
   },
+  "t00J03": {
+   "decls": [
+    "apm_t00j03"
+   ],
+   "sha256": "0659f17ea32e1292083924f40af10415013889d2b847963c0373bb36e85964f8",
+   "defs": [
+    "apm_t00j03_Plane",
+    "apm_t00j03_ProjectiveTangent",
+    "apm_t00j03_PuncturedPlane",
+    "apm_t00j03_RP1",
+    "apm_t00j03_angleFormValue",
+    "apm_t00j03_circlePoint",
+    "apm_t00j03_circleVelocity",
+    "apm_t00j03_projectiveLoop",
+    "apm_t00j03_projectiveLoopIntegral",
+    "apm_t00j03_projectivize",
+    "apm_t00j03_tangentClass",
+    "apm_t00j03_tangentRel"
+   ],
+   "grade": "faithful",
+   "grader": "claude read-only grader (reopen2)",
+   "evidence": "holes/labs/statement-registry/reopen2-grades-3.md",
+   "prelim_defect": null,
+   "rev": "e10380e8",
+   "approved_at": "2026-09-28T19:44:59Z"
+  },
   "t00J04": {
    "decls": [
     "apm_t00j04"
@@ -1675,6 +1701,25 @@
    "prelim_defect": null,
    "rev": "56de913a",
    "approved_at": "2026-09-28T00:17:28Z"
+  },
+  "t96J05": {
+   "decls": [
+    "apm_t96j05"
+   ],
+   "sha256": "6e963790b82ba588c1fd45c72865ae5578bbaee779d256bb4bf601e595dfef66",
+   "defs": [
+    "apm_t96j05_E",
+    "apm_t96j05_I",
+    "apm_t96j05_IsEmbeddedSmoothRadialLevel",
+    "apm_t96j05_IsEmbeddedSmoothSubmanifold",
+    "apm_t96j05_radialLevel"
+   ],
+   "grade": "faithful",
+   "grader": "claude read-only grader (reopen2)",
+   "evidence": "holes/labs/statement-registry/reopen2-grades-3.md",
+   "prelim_defect": null,
+   "rev": "e10380e8",
+   "approved_at": "2026-09-28T19:44:59Z"
   },
   "t96J06": {
    "decls": [
