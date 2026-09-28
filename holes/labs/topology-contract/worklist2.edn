@@ -51103,45 +51103,44 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_sphere_transition_alternatives.lean",
-      :sha256
-      "e07c41be74f941985986a49b0038f7e207b9209e306f6852a7f0eb0dbafa0f80"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_transition_alternatives.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_transition_alternatives.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_transition_alternatives.lean",
-       :exit 1,
-       :finding
-       "The first proof draft used the unqualified chart_mem_maximalAtlas name; qualifying it through IsManifold exposed the intended atlas theorem."}
-      {:cmd
-       "lake env lean /tmp/rp_sphere_transition_alternatives.lean",
-       :exit 1,
-       :finding
-       "The qualified atlas theorem still left differentiability order implicit; fixing n to infinity resolved the IsManifold instance."}
-      {:cmd
-       "lake env lean /tmp/rp_sphere_transition_alternatives.lean",
-       :exit 1,
-       :finding
-       "The antipodal composition initially supplied the intermediate sphere point to ContMDiffAt.comp; supplying the original model point corrected the composition."}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      "Bank SphereChartTransitionAlternativesSmooth and sphereAntipodalN_contMDiff_for_alternatives at dimension 2, with ordinary and antipodal-inserted ContDiffAt conclusions restricted by the exact chart-domain hypotheses compiled in the fixture."},
-     :residual
-     "The two local representatives required by the quotient transition normal form are now compiled as smooth at every transition-domain point. The next bounded step is SphereProjectionQuotientChartTransitionCompatibility: transport these ContDiffAt facts across the banked eventual-equality alternatives to obtain the exact pairwise ContDiffOn theorem, then derive the quotient IsManifold instance."}},
+   {:placeholder-delta 0,
+    :residual
+    "Transport the two ContDiffAt alternatives across sphereProjectionQuotientTransitionLocalNormalForm to prove the exact pairwise ContDiffOn quotient transition theorem, then derive the quotient IsManifold instance for t95A04 and t96A07.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "topo-6",
+    :commands
+    [{:cmd "sha256sum /tmp/rp_sphere_transition_alternatives.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 no-sorry-pattern ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_transition_alternatives_axioms.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "git diff --check -- ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}],
+    :diagnostic-history [],
+    :commit "875ea0cf17e116a5a9580a8de7ed11589d09dd03",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_transition_alternatives.lean",
+     :sha256
+     "e07c41be74f941985986a49b0038f7e207b9209e306f6852a7f0eb0dbafa0f80"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
