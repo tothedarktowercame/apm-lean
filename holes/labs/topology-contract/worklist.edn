@@ -79605,67 +79605,48 @@
    :other-consumers []}
   {:consumer :t95J02,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-4",
-     :fixture
-     {:path "/tmp/t95j02-assembly-probe.lean",
-      :sha256
-      "f3b42c4af0b0a43714825c432891ae99f6459d7407390f3679df91fbf56a846a"},
-     :commands
-     [{:cmd
-       "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
-       :exit 0}
-      {:cmd "mkdir -p /tmp/t95probe/t95J02/lean", :exit 0}
-      {:cmd
-       "lake env lean -o /tmp/t95probe/t95J02/lean/Main.olean problems/t95J02/lean/Main.lean",
-       :exit 0}
-      {:cmd
-       "LEAN_PATH=/tmp/t95probe lake env lean /tmp/t95j02-assembly-probe.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t95j02-assembly-probe.lean", :exit 0}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/t95j02-assembly-probe.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :warnings
-     [{:kind :inherited-placeholder,
-       :message
-       "The temporary consumer olean reports the three source placeholders. The fixture introduces none; its negative-half assembly invokes the two named bridges, while its positive half reuses the already proved private retraction through the current main theorem because private declarations are not import-visible."}],
-     :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
-     :prerequisite
-     {:consumer :t95J02,
-      :phase :implementation,
-      :state :open,
-      :scope ["problems/t95J02/lean/Main.lean"],
-      :dag-node "TOPOLOGY-ROUTES.md/t95J02/vertical-H1-kernel",
-      :acceptance
-      {:placeholder-after 2,
-       :fixture-sha256
-       "f3b42c4af0b0a43714825c432891ae99f6459d7407390f3679df91fbf56a846a",
-       :placeholder
-       "the sorry in apm_t95J02_bridge_vertical_H1_kernel",
-       :axioms :standard-only,
-       :placeholder-before 3,
-       :commands
-       ["lake env lean problems/t95J02/lean/Main.lean"
-        "LEAN_PATH=/tmp/t95probe lake env lean /tmp/t95j02-assembly-probe.lean"
-        "python3 scripts/statement-registry.py check"],
-       :fixture "/tmp/t95j02-assembly-probe.lean",
-       :route-step "t95J02 route steps 1-3",
-       :implementation
-       "Replace only the sorry in apm_t95J02_bridge_vertical_H1_kernel. At the frozen quotient generality, construct a homeomorphism from euclideanUnitSphere 2 to t95J02CircleB using the vertical period and the explicit trigonometric inverse that respects both quotient generators. Let beta be the composite with t95J02InclusionB and construct the homotopy beta ≃ beta.comp (reflectionMap 1) by moving the horizontal coordinate from 0 to 1, using t95J02QuotientPoint_glide at the endpoint. Apply SingularHomologyHomotopy and CoefficientFirstReflection.topIso/integral_circle to show beta_* equals beta_* after negation; choose twice the circle generator, prove it is nonzero under the H1 isomorphism, and prove its image in the Klein quotient is zero. Do not alter registered statements or definitions."},
-      :id :routes-2026-09-28-t95j02-vertical-h1-kernel-1,
-      :kind :final-adapter,
-      :depends-on [],
-      :current-residual
-      "Construct the explicit vertical-circle homeomorphism and glide homotopy, then use the banked integral H1 reflection action to prove apm_t95J02_bridge_vertical_H1_kernel. Retraction injectivity and final contradiction remain downstream.",
-      :other-consumers []},
-     :residual
-     "Exactly one prerequisite is elected: apm_t95J02_bridge_vertical_H1_kernel, comprising route steps 1-3. The placeholder-free fixture confirms the final negative contradiction is direct once both bridges exist; route steps 4-5 remain after this kernel calculation."}},
+   {:residual
+    "STOP at the exact representation boundary needed for apm_t95J02_bridge_vertical_H1_kernel: construct and compile a homeomorphism AddCircle 1 (equivalently euclideanUnitSphere 2) to t95J02CircleB. The forward map descends y to [(0,y)] by vertical periodicity, but proving the inverse laws requires an EqvGen normal-form/fiber theorem classifying exactly when vertical representatives coincide in the custom Klein quotient, or an equivalent quotient factorization. The source supplies only the generating vertical/glide equalities, and no banked result supplies this identification. The glide homotopy, H1 reflection calculation, retraction injectivity, and final assembly remain downstream.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The consumer source still reports its three registered placeholders. The placeholder-free assembly fixture inherits sorryAx through the two open bridges and current main theorem."}],
+    :disposition :stop,
+    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :author "topo-4",
+    :reason :missing-vertical-quotient-circle-identification,
+    :commands
+    [{:cmd "test canonical .lake/packages authority", :exit 0}
+     {:cmd
+      "lake env lean -o /tmp/t95reprobe/t95J02/lean/Main.olean problems/t95J02/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "LEAN_PATH=/tmp/t95reprobe lake env lean /tmp/t95j02-assembly-probe.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t95j02-assembly-probe.lean",
+      :exit 0,
+      :finding
+      "f3b42c4af0b0a43714825c432891ae99f6459d7407390f3679df91fbf56a846a"}
+     {:cmd
+      "Python comment-stripped placeholder census of /tmp/t95j02-assembly-probe.lean",
+      :exit 0,
+      :finding "0"}
+     {:cmd
+      "rg source and ConstructionTargets for the vertical quotient-circle identification or EqvGen fiber classification",
+      :exit 0,
+      :finding
+      "Only the four generating quotient equalities and unrelated EqvGen/AddCircle results are present; no vertical-fiber iff or homeomorphism is banked."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}],
+    :fixture
+    {:path "/tmp/t95j02-assembly-probe.lean",
+     :sha256
+     "f3b42c4af0b0a43714825c432891ae99f6459d7407390f3679df91fbf56a846a"},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t95J02",
    :acceptance
