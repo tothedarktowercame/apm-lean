@@ -47,6 +47,7 @@ DECL_START = re.compile(
     r"(theorem|lemma|def|abbrev|structure|class|inductive|opaque|axiom|instance|example)\b\s*"
     r"([^\s:({\[]*)")
 BLOCK_END = re.compile(r"(?m)^(?:namespace|end|section|open|variable|set_option|#)\b")
+OMEGA = re.compile(r"\b(?:IsManifold|ContMDiff\w*|ContDiff\w*|IsLocalDiffeomorph\w*|MDifferentiable\w*|Diffeomorph)\b[^\n]*?\s⊤(?=[\s)\]])")
 IDENT = re.compile(r"[A-Za-z_Ͱ-Ͽἀ-῿][A-Za-z0-9_'.Ͱ-Ͽἀ-῿]*")
 
 
@@ -130,6 +131,11 @@ def fingerprint(src: str, decls: list[str]) -> dict:
             flags.append(f"sorry in {tok}")
         todo += IDENT.findall(b["body"])
     text = "\n".join(parts)
+    # A bare ⊤ : WithTop ℕ∞ as a smoothness order is ω (analytic) in the pinned
+    # Mathlib; C^∞ is (⊤ : ℕ∞) or ∞. Seven registered statements carried it
+    # unnoticed by three graders (2026-09-28, omega-check.md).
+    if OMEGA.search(text):
+        flags.append("smoothness order bare ⊤ (analytic, not C^∞)")
     return {"sha256": hashlib.sha256(text.encode()).hexdigest(), "defs": sorted(seen),
             "flags": flags, "text": text}
 

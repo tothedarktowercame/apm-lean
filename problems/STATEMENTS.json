@@ -2128,17 +2128,17 @@
    "decls": [
     "apm_t99j04"
    ],
-   "sha256": "a8f3805353747a0dc79f484e6445a9a6fec56c5bdb4f2427b0800bc1ce1dd35b",
+   "sha256": "f212fd5b83bec0f7fb083dcf9ed6e9e175394fdf3f3a3cd3d9f284709c6eea3c",
    "defs": [
     "apm_t99J04_Euclidean",
     "apm_t99J04_coordinateMap"
    ],
    "grade": "faithful",
-   "grader": "claude-18: prior faithful grade (open-grades-*.md) + omega fix (omega-check.md)",
+   "grader": "claude-18: prior faithful grade + omega fix (omega-check.md)",
    "evidence": "holes/labs/statement-registry/omega-check.md",
    "prelim_defect": null,
-   "rev": "b856af14",
-   "approved_at": "2026-09-28T00:34:41Z"
+   "rev": "019b1103",
+   "approved_at": "2026-09-28T00:35:32Z"
   },
   "t99J05": {
    "decls": [
@@ -2423,6 +2423,28 @@
    "reason": "smoothness order bare ⊤ = analytic (ω) in pinned Mathlib: statement narrower than the problem",
    "evidence": "holes/labs/statement-registry/omega-check.md",
    "revoked_at": "2026-09-28T00:34:40Z"
+  },
+  {
+   "id": "t99J04",
+   "entry": {
+    "decls": [
+     "apm_t99j04"
+    ],
+    "sha256": "a8f3805353747a0dc79f484e6445a9a6fec56c5bdb4f2427b0800bc1ce1dd35b",
+    "defs": [
+     "apm_t99J04_Euclidean",
+     "apm_t99J04_coordinateMap"
+    ],
+    "grade": "faithful",
+    "grader": "claude-18: prior faithful grade (open-grades-*.md) + omega fix (omega-check.md)",
+    "evidence": "holes/labs/statement-registry/omega-check.md",
+    "prelim_defect": null,
+    "rev": "b856af14",
+    "approved_at": "2026-09-28T00:34:41Z"
+   },
+   "reason": "re-admitted at b1b1fad4 with bare ⊤ still in the theorem header",
+   "evidence": "holes/labs/statement-registry/omega-check.md",
+   "revoked_at": "2026-09-28T00:35:32Z"
   }
  ]
 }
