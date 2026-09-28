@@ -18,7 +18,8 @@ already has a developed index theory for vector fields on surfaces.
 
 def apm_t91a01_vectorField (z : ℂ) : ℂ := z ^ 3
 
-theorem apm_t91a01 :
+/-- Superseded: part (b) assumed the Poincaré--Hopf sum and contained no surface or vector field. -/
+theorem apm_t91a01_previous_encoding :
     (∀ z : ℂ, apm_t91a01_vectorField z = 0 ↔ z = 0) ∧
     (∀ θ : ℝ,
       apm_t91a01_vectorField (Complex.exp (Complex.I * (θ : ℂ))) =
@@ -52,3 +53,20 @@ theorem apm_t91a01 :
     rw [hzeros] at hsum
     simp [hip] at hsum
     omega
+
+/-- A local index-three model exists; on a compact oriented surface, any
+smooth vector field having such an isolated zero has another zero. -/
+theorem apm_t91a01 :
+    (∀ z : ℂ, apm_t91a01_vectorField z = 0 ↔ z = 0) ∧
+    (∀ θ : ℝ,
+      apm_t91a01_vectorField (Complex.exp (Complex.I * (θ : ℂ))) =
+        Complex.exp (Complex.I * ((3 * θ : ℝ) : ℂ))) ∧
+    ∀ (F : Type*) (E : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+      [TopologicalSpace F] [CompactSpace F] [ConnectedSpace F]
+      (V : F → E) (p : F),
+      Continuous V → V p = 0 →
+      (∃ U ∈ nhds p, ∀ q ∈ U, V q = 0 → q = p) →
+      (∃ link : C(Circle, Circle),
+        ∀ z : Circle, link z = z ^ 3) →
+      ∃ q : F, q ≠ p ∧ V q = 0 := by
+  sorry
