@@ -50404,6 +50404,34 @@
       :exit 1,
       :finding
       "At line 46 the nil Path case reduces to F-prime.map (identity at private root-prime T) = 1; tactic assumption fails because the contract uses public root T and the private opaque identity does not convert."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790630031498-26379-c739854e",
+     :commands
+     [{:cmd
+       "sha256sum /tmp/t00J08_end_basis_contract_failure_848e7873.lean",
+       :exit 0}
+      {:cmd
+       "cmp -s /tmp/t00J08_end_basis_contract.lean /tmp/t00J08_end_basis_contract_failure_848e7873.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/t00J08_end_basis_contract_failure_848e7873.lean",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd
+       "lake env lean /tmp/t00J08_end_basis_contract.lean after replacing the nil-case simpa with Mathlib exact rw proof",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0}
+      {:cmd
+       "comment-stripped placeholder count from git show 2e08c51b for t00J08",
+       :exit 0}],
+     :finding
+     "PASS. Reviewer codex-7 read repair transition commit 2e08c51b, whose exact scope is worklist2.edn and which records no implementation paths. The preserved failure fixture hashes exactly to 848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f and initially matches the contract path byte-for-byte. Its Lean failure reproduces at the nil Path case. Replacing the fixture tactic with the exact rw sequence used inside Mathlib endIsFree still fails because the externally visible goal contains the inaccessible private opaque root-prime constant, so Functor.map_id cannot match; this confirms a representation boundary rather than a weak tactic choice. Public endIsFree returns IsFreeGroup and erases the required EndBasisIndex, so using it would violate the acceptance interface. The STOP orientation is therefore correct: expose a public Type-valued basis or public root representation before generator counting. All 130 frozen statements match, the 315-item ledger passes, and committed t00J08 remains at three placeholders."},
     :changed-paths [],
     :fixture
     {:path "/tmp/t00J08_end_basis_contract_failure_848e7873.lean",
@@ -50411,7 +50439,7 @@
      "848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50462,7 +50490,7 @@
       :kind :reusable-theorem,
       :depends-on []}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
