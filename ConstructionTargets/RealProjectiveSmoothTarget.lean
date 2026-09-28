@@ -10,6 +10,7 @@ No embedding, transversality, or other problem conclusion is a field. -/
 open scoped Manifold ContDiff
 noncomputable section
 namespace ConstructionTargets.RealProjectiveSmoothTarget
+open Topology
 open ProjectiveSpaceTopology
 
 abbrev E (n : ℕ) := EuclideanSpace ℝ (Fin n)
@@ -81,5 +82,70 @@ theorem sphereProjectionQuotientAuthority : SphereProjectionQuotientAuthority :=
     continuous_sphereProjection
   rw [sphereProjection_comp_radialToSphere]
   exact ⟨ProjectiveSpaceTopology.surjective_quotientMap ℝ 2, rfl⟩
+
+def sphereAntipodal (p : Sphere 2) : Sphere 2 :=
+  ⟨-p.1, by simpa only [Metric.mem_sphere, dist_zero_right, norm_neg] using p.2⟩
+
+theorem sphereProjection_eq_iff (p q : Sphere 2) :
+    sphereProjection 2 p = sphereProjection 2 q ↔
+      q = p ∨ q = sphereAntipodal p := by
+  change Projectivization.mk ℝ (fun i => p.1 i) _ =
+      Projectivization.mk ℝ (fun i => q.1 i) _ ↔ _
+  rw [Projectivization.mk_eq_mk_iff' ℝ]
+  constructor
+  · rintro ⟨a, ha⟩
+    have ha' := congrArg (WithLp.toLp 2) ha
+    have hnorm := congrArg norm ha'
+    have habs : |a| = 1 := by
+      simpa [norm_smul, p.2, q.2, Metric.mem_sphere, dist_zero_right] using hnorm
+    rcases eq_or_eq_neg_of_abs_eq habs with rfl | rfl
+    · left
+      apply Subtype.ext
+      simp at ha' ⊢
+      exact ha'
+    · right
+      apply Subtype.ext
+      have hneg := congrArg Neg.neg ha'
+      simpa [sphereAntipodal] using hneg
+  · rintro (rfl | rfl)
+    · exact ⟨1, by simp⟩
+    · refine ⟨-1, ?_⟩
+      ext i
+      simp [sphereAntipodal]
+
+theorem continuous_sphereAntipodal : Continuous sphereAntipodal := by
+  apply Continuous.subtype_mk
+  fun_prop
+
+theorem sphereProjection_preimage_image (U : Set (Sphere 2)) :
+    sphereProjection 2 ⁻¹' (sphereProjection 2 '' U) =
+      U ∪ sphereAntipodal ⁻¹' U := by
+  ext q
+  constructor
+  · rintro ⟨p, hp, hpq⟩
+    rcases (sphereProjection_eq_iff p q).mp hpq with h | h
+    · exact Or.inl (h.symm ▸ hp)
+    · right
+      change sphereAntipodal q ∈ U
+      subst q
+      simpa [sphereAntipodal] using hp
+  · rintro (hq | hq)
+    · exact ⟨q, hq, rfl⟩
+    · exact ⟨sphereAntipodal q, hq, by
+        exact (sphereProjection_eq_iff (sphereAntipodal q) q).mpr (by
+          right
+          apply Subtype.ext
+          simp [sphereAntipodal])⟩
+
+/-- Exact openness input for restricting the antipodal quotient to a
+hemisphere around each sphere point. -/
+def SphereProjectionOpenAuthority : Prop :=
+  IsOpenMap (sphereProjection 2)
+
+theorem sphereProjection_isOpenMap_of_authority : SphereProjectionOpenAuthority := by
+  intro U hU
+  apply (sphereProjectionQuotientAuthority.isOpen_preimage).mp
+  rw [sphereProjection_preimage_image]
+  exact hU.union (continuous_sphereAntipodal.isOpen_preimage _ hU)
 
 end ConstructionTargets.RealProjectiveSmoothTarget
