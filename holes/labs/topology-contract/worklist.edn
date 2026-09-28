@@ -77276,8 +77276,52 @@
    "After reviewed t94A09 closure, both DIRECT problems should be closed; recount and elect exactly one nearest ADAPTER route from the complete topo1 portfolio.",
    :other-consumers []}
   {:consumer :t94A07,
+   :evidence
+   {:outcome :stop,
+    :seat "topo-4",
+    :reason
+    "The sole syntactic placeholder hcore contains two independent unbanked mathematical constructions, which the probe protocol explicitly classifies as STOP rather than REVISE. Boundary 1 is local: compute fderiv of the square-root torus constraint at all four nonzero-axis fixed points, prove its kernel is exactly span{e1,e2}, package halfTurn as a continuous linear map, and derive the derivative, determinant, local index, and IsLefschetzFixedPoint clauses. Boundary 2 is global and logically independent: from an arbitrary ambient H satisfying IsHomotopyToIdentity, construct a continuous longitude projection on every H(t,gamma(u)), prove it is defined using R-r>0, package the resulting unit-interval family as a circle homotopy from reflectionMap 1 to identity, and contradict the banked H1 reflection action. Searches found no banked theorem with either consumer-specific contract. This is not a refutation of the registered statement; it is the exact multiple-prerequisite boundary preventing a legal one-prerequisite REVISE and a complete GO fixture.",
+    :commands
+    [{:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t94A07/lean/Main.lean",
+      :exit 0,
+      :finding "1"}
+     {:cmd
+      "rg -n 'apm_t94a07|halfTurn_not_homotopic|tangent_eq_span' ConstructionTargets",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'IsHomotopyToIdentity|localLefschetzNumber|tangentBasisVector' ConstructionTargets",
+      :exit 1,
+      :expected-exit 1}],
+    :finding
+    {:registered-statement :preserved,
+     :placeholder "hcore in apm_t94a07",
+     :independent-boundaries
+     [{:name :t94A07-local-fixed-point-calculus,
+       :supplies
+       "hcore.1: tangent kernel, halfTurn derivative on the tangent basis, determinant four, local index one, and the Lefschetz fixed-point predicate at each displayed point",
+       :missing
+       "A compiled consumer-specific derivative and kernel calculation for the square-root constraint at p0 = ±(R±r)."}
+      {:name :t94A07-global-longitude-obstruction,
+       :supplies "hcore.2: not IsHomotopyToIdentity R r",
+       :missing
+       "A compiled construction sending the hypothetical embedded-torus homotopy, restricted to the outer equator and normalized in the xy-plane, to a forbidden circle identity/reflection homotopy."}],
+     :banked
+     ["apm_t94a07_fixedSet_eq"
+      "apm_t94a07_fixedPoints_card"
+      "CoefficientFirstReflection.all_reflections_negative"
+      "CoefficientFirstReflection.topIso"
+      "SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic"],
+     :classification
+     "Scheduling STOP for two independent prerequisites; not a mathematical refutation."},
+    :residual
+    "The registered theorem remains plausible and unchanged, but closure requires two separately compiled packets before the final hcore assembly: local fixed-point differential calculus and the global longitude homotopy obstruction.",
+    :author "topo-4",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t94A07",
    :acceptance
