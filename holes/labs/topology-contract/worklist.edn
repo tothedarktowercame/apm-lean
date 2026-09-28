@@ -78460,8 +78460,59 @@
    "After reviewed t02A05, preserve all reviewed holds and decide whether the remaining two-placeholder t01A01 route is ready before advancing to three-placeholder adapters.",
    :other-consumers []}
   {:consumer :t01A01,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "This row is not an executable final adapter from the current bank. ProjectiveSpaceTopology proves only continuity and surjectivity of its quotient map; it does not prove the exact frozen Projectivization.mk' open-quotient/restricted/product descent theorem. No punctured_rp2_retract or projective-line-to-Circle identification is banked. CircleUniversalCover, SimplyConnectedOpenCover, and ComponentRealLiftAssembly provide downstream lifting and nullhomotopy consumers only after those missing geometric maps exist. The exact next prerequisite is a compiled punctured-RP2 deformation retraction, including the required quotient descent at the frozen Projectivization topology; this is a missing construction/API boundary, not a refutation of the registered statement.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The consumer olean reports both existing placeholders; the assembly fixture is syntactically placeholder-free but depends on sorryAx through apm_t01A01_bridge_1."}],
+    :statement-hashes
+    {:t01A01
+     "52bb33c1ff3c3496be40700d3bd2f9d0b7ec4129157da4b69df802902ad37410",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :disposition :stop,
+    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason :missing-punctured-projective-geometry-chain,
+    :commands
+    [{:cmd "sha256sum /tmp/t01a01-assembly-probe.lean", :exit 0}
+     {:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+      :exit 0}
+     {:cmd
+      "lake env lean -o /tmp/t01probe/t01A01/lean/Main.olean problems/t01A01/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "LEAN_PATH=/tmp/t01probe lake env lean /tmp/t01a01-assembly-probe.lean",
+      :exit 0,
+      :finding
+      "The final fundamental-group assembly compiles, but its exact apm_t01A01_bridge_1 invocation retains the inherited sorryAx dependency."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t01A01/lean/Main.lean",
+      :exit 0,
+      :finding "2"}
+     {:cmd
+      "rg -n 'punctured_rp2_retract|projQuot_isOpenQuotientMap|rp2_to_line_nullhomotopic' ConstructionTargets .lake/packages/mathlib/Mathlib",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd
+      "rg -n 'existsUnique_continuousMap_lifts|circleCover_isCoveringMap|simplyConnectedSpace_sphere_of_pole' ConstructionTargets/CircleUniversalCover.lean ConstructionTargets/SimplyConnectedOpenCover.lean .lake/packages/mathlib/Mathlib/Topology/Homotopy/Lifting.lean",
+      :exit 0}],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t01a01-assembly-probe.lean",
+     :sha256
+     "2322748e2464f61e6be97c30a2d13730d751776a2341b7184bc8fb5bb09fd0da"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t01A01/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t01A01/bridge_1",
    :acceptance
