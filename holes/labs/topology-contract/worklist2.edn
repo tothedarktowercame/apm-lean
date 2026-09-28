@@ -50372,40 +50372,46 @@
    :review-finding
    "Deterministic fixture-integrity defect: commit 6d8b83c2 records /tmp/t00J08_end_basis_contract.lean at sha256 e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c, but the bytes that reproduce the claimed nil-path failure hash to 848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f. The recorded e8bf hash belongs to the earlier successful contract fixture, as also recorded by invoke-1790629509405-26342-cb4b1754; the STOP attempt modified that path without updating its hash. Therefore the exact failing artifact cannot be authenticated from the row and the representation-boundary claim is not reviewable as delivered. Repair by preserving the failing fixture bytes at a stable path, recording their actual hash, and rerunning the failing Lean command against those exact bytes. Fresh checks otherwise reproduce private root-prime at NielsenSchreier.lean:153, public endIsFree at :227, the nil-case failure, 130 matching frozen statements, a valid 315-item ledger, and three committed t00J08 placeholders; the transition commit itself changes only worklist2.edn.",
    :evidence
-   {:residual
-    "t00J08 route step 1 is stopped at the private-root representation boundary; steps 2-4 cannot count the intended explicit basis index.",
+   {:placeholder-delta 0,
+    :residual
+    "Expose a public Type-valued endBasis theorem in NielsenSchreier, or make root-prime public, before t00J08 route steps 2-4 can count the explicit EndBasisIndex.",
     :outcome :stop,
+    :warnings [],
+    :statement-hashes {:matched 130, :mismatched 0},
     :disposition :stop,
-    :author "topo-8",
+    :axioms [],
+    :author "topo-6",
     :reason
-    "Representation boundary in Mathlib NielsenSchreier: root-prime is private and opaque, while public endIsFree erases the complementary-edge basis index into IsFreeGroup. Replaying the universal-property proof outside its module against End (show G from root T) fails at the nil path because the private root-prime identity does not convert to the public root identity. A cast or passage through IsFreeGroup would violate index preservation. Expose a public Type-valued endBasis theorem in NielsenSchreier, or make root-prime public, before counting generators.",
+    "Representation boundary in Mathlib NielsenSchreier: private opaque root-prime is used by the internal spanning-tree construction, while the public root appearing in the exact EndBasisOfArborescenceContract cannot be identified with it in the nil Path case. Public endIsFree returns only IsFreeGroup and erases EndBasisIndex; passing through it or casting would not preserve the explicit complementary-edge basis index required for generator counting.",
     :commands
     [{:cmd
+      "sha256sum /tmp/t00J08_end_basis_contract_failure_848e7873.lean",
+      :exit 0}
+     {:cmd
+      "cmp -s /tmp/t00J08_end_basis_contract.lean /tmp/t00J08_end_basis_contract_failure_848e7873.lean",
+      :exit 0}
+     {:cmd
       "rg -n \"private def root.|lemma endIsFree\" .lake/packages/mathlib/Mathlib/GroupTheory/FreeGroup/NielsenSchreier.lean",
       :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-    :diagnostic-history
-    [{:cmd "lake env lean /tmp/t00J08_end_basis_contract.lean",
-      :exit 1,
-      :finding "Missing scoped Classical was corrected."}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd
-      "lake env lean /tmp/t00J08_end_basis_contract.lean after scoped Classical",
+      "python3 comment-stripped placeholder count for problems/t00J08/lean/Main.lean",
+      :exit 0,
+      :result 3}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/t00J08_end_basis_contract_failure_848e7873.lean",
       :exit 1,
       :finding
-      "The nil-path identity remains blocked by the opaque private root representation."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790629784798-26361-8667ba6f",
-     :finding
-     "Deterministic fixture-integrity defect: commit 6d8b83c2 records /tmp/t00J08_end_basis_contract.lean at sha256 e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c, but the bytes that reproduce the claimed nil-path failure hash to 848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f. The recorded e8bf hash belongs to the earlier successful contract fixture, as also recorded by invoke-1790629509405-26342-cb4b1754; the STOP attempt modified that path without updating its hash. Therefore the exact failing artifact cannot be authenticated from the row and the representation-boundary claim is not reviewable as delivered. Repair by preserving the failing fixture bytes at a stable path, recording their actual hash, and rerunning the failing Lean command against those exact bytes. Fresh checks otherwise reproduce private root-prime at NielsenSchreier.lean:153, public endIsFree at :227, the nil-case failure, 130 matching frozen statements, a valid 315-item ledger, and three committed t00J08 placeholders; the transition commit itself changes only worklist2.edn."},
+      "At line 46 the nil Path case reduces to F-prime.map (identity at private root-prime T) = 1; tactic assumption fails because the contract uses public root T and the private opaque identity does not convert."}],
+    :changed-paths [],
     :fixture
-    {:path "/tmp/t00J08_end_basis_contract.lean",
+    {:path "/tmp/t00J08_end_basis_contract_failure_848e7873.lean",
      :sha256
-     "e8bfea536df0b03680c08ca643db7ee009b6dc9b0d714fcd0d84cc76914ad64c"},
-    :seat "topo-8"},
+     "848e7873cf58812ff9bee17976218344925a66e16eba2359a04e39def24f703f"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
