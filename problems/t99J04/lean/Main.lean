@@ -162,25 +162,25 @@ theorem apm_t99J04_bridge_coordinateMap_mfderiv_bijective
 theorem apm_t99j04 :
     (∀ (n : ℕ) (X : Type) [TopologicalSpace X]
       [ChartedSpace (apm_t99J04_Euclidean n) X]
-      [IsManifold (𝓘(ℝ, apm_t99J04_Euclidean n)) ⊤ X]
+      [IsManifold (𝓘(ℝ, apm_t99J04_Euclidean n)) (⊤ : ℕ∞) X]
       (x : X) (f : Fin n → X → ℝ),
-      (∀ i, ContMDiff (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) ⊤ (f i)) →
+      (∀ i, ContMDiff (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (⊤ : ℕ∞) (f i)) →
       LinearIndependent ℝ
         (fun i : Fin n ↦
           (NormedSpace.fromTangentSpace (f i x)).toContinuousLinearMap ∘L
             mfderiv (𝓘(ℝ, apm_t99J04_Euclidean n)) 𝓘(ℝ, ℝ) (f i) x) →
       IsLocalDiffeomorphAt (𝓘(ℝ, apm_t99J04_Euclidean n))
-        𝓘(ℝ, apm_t99J04_Euclidean n) ⊤ (apm_t99J04_coordinateMap f) x) ∧
+        𝓘(ℝ, apm_t99J04_Euclidean n) (⊤ : ℕ∞) (apm_t99J04_coordinateMap f) x) ∧
     (∀ (E E' : Type) [NormedAddCommGroup E] [NormedSpace ℝ E]
       [FiniteDimensional ℝ E] [CompleteSpace E]
       [NormedAddCommGroup E'] [NormedSpace ℝ E']
       [FiniteDimensional ℝ E'] [CompleteSpace E']
       (X Y : Type) [TopologicalSpace X] [T2Space X] [CompactSpace X]
-      [Nonempty X] [ChartedSpace E X] [IsManifold (𝓘(ℝ, E)) ⊤ X]
+      [Nonempty X] [ChartedSpace E X] [IsManifold (𝓘(ℝ, E)) (⊤ : ℕ∞) X]
       [TopologicalSpace Y] [T2Space Y] [ConnectedSpace Y]
-      [ChartedSpace E' Y] [IsManifold (𝓘(ℝ, E')) ⊤ Y]
+      [ChartedSpace E' Y] [IsManifold (𝓘(ℝ, E')) (⊤ : ℕ∞) Y]
       (f : X → Y),
-      ContMDiff (𝓘(ℝ, E)) (𝓘(ℝ, E')) ⊤ f →
+      ContMDiff (𝓘(ℝ, E)) (𝓘(ℝ, E')) (⊤ : ℕ∞) f →
       (∀ x, Function.Bijective (mfderiv (𝓘(ℝ, E)) (𝓘(ℝ, E')) f x)) →
       Function.Surjective f) := by
   /-
