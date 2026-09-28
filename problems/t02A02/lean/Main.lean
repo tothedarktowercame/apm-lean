@@ -1,4 +1,5 @@
 import Mathlib
+import ConstructionTargets.Surfaces
 
 /-!
 # APM t02A02 — classification of the polygon word `aabcc⁻¹d⁻¹bd⁻¹`
@@ -66,7 +67,9 @@ def apm_t02a02_classify (orientable : Bool) (eulerCharacteristic : ℤ) :
     if eulerCharacteristic = 0 then .torus else .other
   else if eulerCharacteristic = 0 then .kleinBottle else .other
 
-theorem apm_t02a02 :
+/-- Superseded: this checked only a hand-labelled vertex table and then looked
+up the surface name; it did not construct the polygon quotient. -/
+theorem apm_t02a02_previous_encoding :
     apm_t02a02_validVertexQuotient ∧
     Function.Surjective apm_t02a02_vertexClass ∧
     apm_t02a02_nonorientable ∧
@@ -88,3 +91,27 @@ theorem apm_t02a02 :
     rw [Nat.card_eq_fintype_card, Nat.card_eq_fintype_card]
     change (3 : ℤ) - 4 + 1 = 0
     norm_num
+
+open ConstructionTargets.Surfaces
+
+def apm_t02a02_gluingRel (x y : Disk) : Prop :=
+  ∃ i : Fin 8, ∃ t : Set.Icc (0 : ℝ) 1,
+    let j := apm_t02a02_pair i
+    let paired : Set.Icc (0 : ℝ) 1 :=
+      if (apm_t02a02_word i).forward = (apm_t02a02_word j).forward then t
+      else ⟨1 - t.1, by constructor <;> linarith [t.2.1, t.2.2]⟩
+    x = edgePoint 8 i t ∧ y = edgePoint 8 j paired
+
+/-- The actual space obtained by gluing the eight polygon edges in the word
+`aabcc⁻¹d⁻¹bd⁻¹`. -/
+def apm_t02a02_F :=
+  Quotient (Relation.EqvGen.setoid apm_t02a02_gluingRel)
+
+noncomputable instance : TopologicalSpace apm_t02a02_F :=
+  TopologicalSpace.coinduced (fun x : Disk => Quotient.mk _ x) inferInstance
+
+/-- Faithful answer: the glued surface is homeomorphic to the Klein bottle,
+the connected sum of two real projective planes. -/
+theorem apm_t02a02 :
+    Nonempty (apm_t02a02_F ≃ₜ Surface false 2) := by
+  sorry
