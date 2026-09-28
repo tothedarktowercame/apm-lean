@@ -77013,62 +77013,41 @@
    :other-consumers []}
   {:consumer :t94A09,
    :evidence
-   {:probe
-    {:residual
-     "No prerequisite remains. The complete exact-statement fixture compiles; the implementation is a one-file final adapter reusing the reviewed shared obstruction, with no duplicated homology or tangent-field homotopy.",
-     :outcome :go,
-     :warnings
-     [{:kind :inherited-placeholder,
-       :message
-       "Compiling the current consumer source to the temporary import artifact warns that apm_t94a09 uses sorry. The exact replacement theorem in the fixture is comment-stripped placeholder-free and its #print axioms excludes sorryAx."}],
-     :axioms ["propext" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd
-       "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
-       :exit 0}
-      {:cmd
-       "lake env lean -o /tmp/t94probe/t94A09/lean/Main.olean problems/t94A09/lean/Main.lean",
-       :exit 0}
-      {:cmd
-       "LEAN_PATH=/tmp/t94probe lake env lean /tmp/t94a09-probe.lean",
-       :exit 0}
-      {:cmd
-       "python3 -c 'comment-strip then reject identifier-token sorry' /tmp/t94a09-probe.lean",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-      {:cmd "sha256sum /tmp/t94a09-probe.lean", :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t94a09-probe.lean",
-       :exit 1,
-       :stage :fixture-import,
-       :correction
-       "The consumer source is not a Lake module. Compiled it to a temporary olean and imported that artifact through LEAN_PATH; no repository file was changed."}
-      {:cmd
-       "LEAN_PATH=/tmp/t94probe lake env lean /tmp/t94a09-probe.lean",
-       :exit 1,
-       :stage :adapter-elaboration,
-       :correction
-       "Added the explicit sphere subtype annotation to the restricted ambient-extension lambda; the corrected fixture compiles."}],
-     :fixture
-     {:path "/tmp/t94a09-probe.lean",
-      :sha256
-      "217204f68ecb948276ea9bc91394b31db037f8064c258af8ad28ed9c045ea685"},
-     :implementation
-     {:scope ["problems/t94A09/lean/Main.lean"],
-      :acceptance
-      {:placeholder-delta -1,
-       :statement-policy
-       "Do not change apm_t94a09 or any definition used by its registered statement.",
-       :construction
-       "Import ConstructionTargets.EvenSphereTangentFieldObstruction. Replace only the final sorry: unpack the SmoothSphereField witness, identify V with the restriction of Vext to obtain continuity, pass V, its orthogonality, and nonvanishing to homotopy_of_field 1, contradict id_not_homotopic_antipodal 1, and retain the existing S3 and torus lemmas.",
-       :gates
-       ["lake env lean problems/t94A09/lean/Main.lean exits 0"
-        "comment-stripped placeholder count changes from 1 to 0"
-        "python3 scripts/statement-registry.py check exits 0"
-        "#print axioms apm_t94a09 excludes sorryAx"]}},
-     :seat "topo-4"}},
+   {:placeholder-delta -1,
+    :residual
+    "t94A09 is closed: the S2 nonexistence adapter reuses the reviewed continuous tangent-field obstruction, while the existing S3 and torus witnesses remain unchanged. No consumer residual remains for this row.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:t94A09
+     "0836a6a088f31b08ec3ad11a756d5524f0e6e3aa0ae4ae3e752d95f1a38d76ac",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t94a09-probe.lean", :exit 0}
+     {:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+      :exit 0}
+     {:cmd "lake env lean problems/t94A09/lean/Main.lean", :exit 0}
+     {:cmd "python3 comment-stripped placeholder census against HEAD^",
+      :exit 0,
+      :finding "1 -> 0; delta -1"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}],
+    :diagnostic-history [],
+    :commit "d6595edcc043972403ec07d6cb009e7482093e44",
+    :changed-paths ["problems/t94A09/lean/Main.lean"],
+    :fixture
+    {:path "/tmp/t94a09-probe.lean",
+     :sha256
+     "217204f68ecb948276ea9bc91394b31db037f8064c258af8ad28ed9c045ea685"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t94A09/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t94A09",
    :acceptance
