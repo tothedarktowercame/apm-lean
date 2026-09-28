@@ -212,4 +212,36 @@ theorem sphereProjection_localHomeomorph_of_twoSheetedLocalModel
     (h : SphereProjectionTwoSheetedLocalModel 2) :
     IsLocalHomeomorph (sphereProjection 2) := h.1
 
+/-- A simultaneous choice of a sphere lift and a genuine local inverse chart
+of the frozen projection at every point of real projective two-space. -/
+structure SphereProjectionLocalInverseFamily where
+  lift : Space ℝ 2 → Sphere 2
+  project_lift : ∀ y, sphereProjection 2 (lift y) = y
+  localHomeomorph : Space ℝ 2 → OpenPartialHomeomorph (Sphere 2) (Space ℝ 2)
+  lift_mem_source : ∀ y, lift y ∈ (localHomeomorph y).source
+  localHomeomorph_eq : ∀ y, (sphereProjection 2) = localHomeomorph y
+
+theorem sphereProjectionLocalInverseFamily :
+    Nonempty SphereProjectionLocalInverseFamily := by
+  classical
+  let lift : Space ℝ 2 → Sphere 2 := fun y =>
+    Classical.choose (sphereProjectionQuotientAuthority.surjective y)
+  have hlift : ∀ y, sphereProjection 2 (lift y) = y := fun y =>
+    Classical.choose_spec (sphereProjectionQuotientAuthority.surjective y)
+  let localHomeomorph : Space ℝ 2 →
+      OpenPartialHomeomorph (Sphere 2) (Space ℝ 2) := fun y =>
+    Classical.choose (sphereProjection_isLocalHomeomorph (lift y))
+  refine ⟨{
+    lift := lift
+    project_lift := hlift
+    localHomeomorph := localHomeomorph
+    lift_mem_source := ?_
+    localHomeomorph_eq := ?_ }⟩
+  · intro y
+    exact (Classical.choose_spec
+      (sphereProjection_isLocalHomeomorph (lift y))).1
+  · intro y
+    exact (Classical.choose_spec
+      (sphereProjection_isLocalHomeomorph (lift y))).2
+
 end ConstructionTargets.RealProjectiveSmoothTarget
