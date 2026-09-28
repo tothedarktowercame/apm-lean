@@ -35,7 +35,7 @@ landed directly on 2026-09-28.
 |---|---|---|
 | t93J06 | DIRECT | — |
 | t94A09 | DIRECT | in ConstructionTargets, and import it from t93J06 and t94A09) |
-| t02A05 | ADAPTER (mechanically), but FROZEN STATEMENT APPEARS FALSE **held: statement fixed to μHE[2] (daa1d8ad), awaiting re-grade** | euclidean-hausdorff-normalisation (i.e. the isodiametric constant). The same issue affects `t01J06, which also integrates against `μH[2]` on a sphere. |
+| t02A05 | ADAPTER (mechanically), but FROZEN STATEMENT APPEARS FALSE (statement fixed to μHE[2], daa1d8ad; re-graded faithful) | euclidean-hausdorff-normalisation (i.e. the isodiametric constant). The same issue affects `t01J06, which also integrates against `μH[2]` on a sphere. |
 | t91J06 | ADAPTER | — |
 | t92J08 | ADAPTER | manifold-uniform-local-flow |
 | t94A07 | ADAPTER | — |

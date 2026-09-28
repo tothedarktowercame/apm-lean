@@ -567,6 +567,27 @@
    "rev": "e095da7f",
    "approved_at": "2026-09-28T00:25:37Z"
   },
+  "t02A05": {
+   "decls": [
+    "apm_t02a05"
+   ],
+   "sha256": "9d8293f1a68d4bf4b223ac7b97205d7e46d0cac41758bd23982e949ddf640815",
+   "defs": [
+    "apm_t02a05_E3",
+    "apm_t02a05_Form2",
+    "apm_t02a05_isOmega",
+    "apm_t02a05_orientedCoefficient",
+    "apm_t02a05_outwardSphereIntegral",
+    "apm_t02a05_sphereTangent",
+    "apm_t02a05_tangentProjection"
+   ],
+   "grade": "faithful",
+   "grader": "claude read-only grader (doubt re-grade)",
+   "evidence": "holes/labs/statement-registry/doubt-grades.md",
+   "prelim_defect": null,
+   "rev": "376de9c6",
+   "approved_at": "2026-09-28T20:03:24Z"
+  },
   "t02A06": {
    "decls": [
     "apm_t02a06"
