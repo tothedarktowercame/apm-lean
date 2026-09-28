@@ -49852,88 +49852,91 @@
     :commands
     [{:cmd "python3 scripts/statement-registry.py check", :exit 0}
      {:cmd
-      "comment-stripped placeholder count over the 15 topo2 problem Main.lean files",
+      "python3 comment-stripped placeholder counter for the 15 named topo2 Main.lean files",
       :exit 0}],
     :finding
     {:measurement
      {:placeholder-delta 0,
-      :typed-residual-change "fresh checkpoint; no prior elected rows",
+      :typed-residual-change
+      "no work rows admitted; reviewed election failed before execution",
       :infrastructure-packets 0,
-      :review-outcomes {:pass 0, :stop 0}},
+      :review-outcomes {:pass 0, :stop 0, :fail 1}},
+     :review-repair
+     "The prior t00J07 row was not a closure adapter and targeted a three-placeholder consumer. This portfolio instead selects the shortest complete route among the ten one-placeholder consumers: t94A08, whose three-step route closes its sole sorry.",
      :banked {:mayer-vietoris-open-cover true},
      :routes
      [{:problem :t00J01,
        :placeholders 1,
        :remaining
-       "fold/root-count; Klein quotient charts; Klein H2=0; product H3=0; assembly"}
+       "fold fibre/root count -> Klein relation/charts -> Klein H2 via banked MV -> product H3 -> assembly"}
       {:problem :t00J07,
        :placeholders 3,
        :remaining
-       "main bridge assembly; attachment open cover/retraction; RP2 cover/pi1 and homology; van Kampen; MV assembly"}
+       "two attachment-invariant bridge placeholders need punctured attachment cover, RP2 pi1/homology, van Kampen and MV; then main assembly"}
       {:problem :t00J08,
        :placeholders 3,
        :remaining
-       "quantitative Nielsen-Schreier steps 1-4; two bridge adapters; main arithmetic"}
+       "quantitative Nielsen-Schreier basis/cardinality -> rank bridge and subgroup-witness bridge -> arithmetic main"}
       {:problem :t01A02,
        :placeholders 3,
        :remaining
-       "punctured-torus H2 vanishing/factor map; integer lift; planar bounded-perturbation surjectivity; determinant/fixed-point; main"}
+       "punctured-torus H2/factor map -> H2 bridge; integer lift plus bounded-perturbation surjectivity -> fixed-point bridge; main"}
       {:problem :t01A04,
        :placeholders 4,
        :remaining
-       "wedge identification/pi1; quotient maps covering; parity characters/ranges; cut-point invariant; assembly"}
+       "wedge pi1 identification -> quotient covering maps and monodromy characters -> range bridge; cut-point invariant -> nonhomeomorphism; assembly"}
       {:problem :t02A02,
        :placeholders 1,
        :remaining
-       "polygon quotient T2; quotient classes; explicit cut-paste map and bijectivity; homeomorphism"}
+       "polygon quotient T2 -> EqvGen edge classes -> explicit cut-paste descent/bijection -> homeomorphism"}
       {:problem :t02A03,
        :placeholders 1,
        :remaining
-       "closed punctured disk equivalence; explicit R3 tube deformation or gluing theorem; assembly"}
+       "closed punctured-disk radial equivalence plus explicit R3 tube deformation/homotopies -> assembly with banked encoding"}
       {:problem :t91J03,
        :placeholders 1,
        :remaining
-       "planar crossing lemma; circle H1 degree; contradiction/assembly"}
+       "circle H1 degree -> periodic lift/disjointness -> planar crossing lemma -> winding contradiction"}
       {:problem :t93A06,
        :placeholders 1,
        :remaining
-       "torus quotient smooth atlas; form descent; periodic Stokes square; assembly"}
+       "torus smooth atlas/fibres -> form descent -> integral/nonexactness via periodic Stokes -> plane primitive/integral -> assembly"}
       {:problem :t94A08,
        :placeholders 1,
        :remaining
-       "projective affine-chart homeomorphism; smooth conic charts; nodal punctured-neighbourhood obstruction"}
+       "projective affine-chart homeomorphism -> smooth-conic local charts and nodal punctured-neighbourhood obstruction -> close sole sorry"}
       {:problem :t95A04,
        :placeholders 1,
        :remaining
-       "shared RP2 smooth atlas; descend Veronese; smoothness/embedding; injective-mfderiv immersion"}
+       "shared RP2 smooth atlas -> Veronese descent/smoothness/embedding -> injective-mfderiv immersion -> close"}
       {:problem :t96A07,
        :placeholders 1,
        :remaining
-       "shared RP2 smooth atlas; descend/smooth map; nontransversality; independent sphere transversality family"}
+       "shared RP2 smooth atlas -> descended smooth map/nontransversality plus sphere transverse-value family -> close"}
       {:problem :t96J02,
        :placeholders 1,
        :remaining
-       "polygon open cover/retract/wedge pi1/van Kampen/boundary word; Klein semidirect subgroup classification"}
+       "polygon open cover/retract/skeleton pi1/van Kampen/boundary word -> Klein presentation/semidirect finite-index classification -> close"}
       {:problem :t97A04,
        :placeholders 4,
        :remaining
-       "H0 bridge; torus pi1 winding/H1 bridge; MV connecting naturality and shear H2; assembly"}
+       "H0 bridge; torus pi1 winding coordinates/H1 bridge; MV connecting naturality and shear H2/bridge; main assembly"}
       {:problem :t98A03,
        :placeholders 1,
        :remaining
-       "basepoint homogeneity; wedge nonmanifold; RP2 double cover/pi1; wedge van Kampen; regular and irregular covers"}],
-     :election
-     "Rule 0 selects exactly one near-closure adapter first: t00J07 main assembly. The sole unbanked tag repeated inside topo2 is rp-smooth-atlas, elected next for t95A04 and t96A07. Remaining rows are bounded route steps, ranked by coherent size; unshared natural extensions are deferred."},
+       "basepoint reduction/nonmanifold -> RP2 double cover/pi1 and wedge van Kampen -> regular/irregular three-sheet covers -> assembly"}],
+     :deferred
+     "All unshared extensions beyond these named route steps remain deferred."},
     :replacement-items
-    [{:consumer :t00J07,
+    [{:consumer :t94A08,
       :phase :probe,
       :state :open,
       :scope [],
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile a placeholder-free exact fixture replacing the main apm_t00j07 sorry with the pairing of apm_t00J07_bridge_nullhomotopic_attachment_invariants and apm_t00J07_bridge_essential_attachment_invariants; this supplies route step 1 and reduces the named main placeholder without changing any registered statement."},
-      :id :routes-2026-09-28-t00j07-main-assembly-topo2,
+       "Compile one placeholder-free exact fixture for the frozen apm_t94a08 statement, supplying its sole sorry through route steps 1-3: affineChart_homeomorph for the coinduced complex projective topology, local manifold charts for Sigma1, and the disconnected punctured-neighbourhood obstruction for the Sigma2 node. GO only if the complete frozen theorem compiles and closes t94A08."},
+      :id :routes-2026-09-28-t94a08-closure-topo2-r1,
       :kind :final-adapter,
       :depends-on []}
      {:consumer :t95A04,
@@ -49943,13 +49946,13 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile a placeholder-free fixture for rpSmoothAtlas 2 at exactly the RealProjectiveSmoothTarget interface used by t95A04 and t96A07: hemisphere-restricted sphere charts through local inverses of sphereProjection, with quotient-compatible smooth transitions. Supplies t95A04 route step 1 and t96A07 route step 1."},
-      :id :routes-2026-09-28-rp-smooth-atlas-topo2,
+       "Compile a placeholder-free fixture for rpSmoothAtlas 2 at exactly the RealProjectiveSmoothTarget interface used by t95A04 and t96A07: hemisphere-restricted sphere charts through local inverses of sphereProjection with quotient-compatible smooth transitions. Supplies the sole-sorry route step 1 of both consumers."},
+      :id :routes-2026-09-28-rp-smooth-atlas-topo2-r1,
       :kind :reusable-theorem,
       :depends-on [],
       :other-consumers [:t96A07]}
      {:bounded-exception
-      "single-consumer bounded three-lemma route packet",
+      "single-consumer bounded integral degree-2 MV packet",
       :consumer :t01A02,
       :phase :probe,
       :state :open,
@@ -49957,8 +49960,8 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile a placeholder-free fixture proving puncturedTorus_H2_isZero and H2map_eq_zero_of_factor using the banked production Mayer-Vietoris API, sufficient for apm_t01A02_bridge_H2map_eq_zero. Supplies t01A02 H2 route steps 1-3 at only the torus and integral degree-2 generality used there."},
-      :id :routes-2026-09-28-t01a02-punctured-torus-h2-topo2,
+       "Compile a placeholder-free fixture proving puncturedTorus_H2_isZero and H2map_eq_zero_of_factor using the banked production Mayer-Vietoris API, sufficient for the apm_t01A02_bridge_H2map_eq_zero placeholder. Supplies t01A02 route steps 1-3 only at the torus and integral degree-2 generality used."},
+      :id :routes-2026-09-28-t01a02-punctured-torus-h2-topo2-r1,
       :kind :reusable-theorem,
       :depends-on []}
      {:bounded-exception "single-consumer bounded naturality theorem",
@@ -49969,8 +49972,8 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile a placeholder-free fixture for productionConnecting_naturality under memberwise preservation of the two named opens, via delta naturality and cover-small homology naturality. Supplies t97A04 route step 7 for the bridge_3 placeholder, without a Kunneth generalisation."},
-      :id :routes-2026-09-28-t97a04-mv-connecting-naturality-topo2,
+       "Compile a placeholder-free fixture for productionConnecting_naturality under memberwise preservation of the two named opens, via delta naturality and cover-small homology naturality. Supplies t97A04 route step 7 toward the bridge_3 placeholder without a Kunneth generalisation."},
+      :id :routes-2026-09-28-t97a04-mv-connecting-naturality-topo2-r1,
       :kind :reusable-theorem,
       :depends-on []}
      {:bounded-exception
@@ -49982,9 +49985,9 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile a placeholder-free fixture containing endBasisOfArborescence, the tree-edge and action-groupoid generator cardinalities, and the additive specialised schreier_rank_formula Nat.card i + H.index = 1 + H.index*n. Supplies t00J08 route steps 1-4 for both bridge placeholders; do not state the invalid truncated-subtraction formula at n=0."},
+       "Compile a placeholder-free fixture containing endBasisOfArborescence, tree-edge and action-groupoid generator cardinalities, and the additive schreier_rank_formula Nat.card i + H.index = 1 + H.index*n. Supplies t00J08 route steps 1-4 toward both bridge placeholders; do not use truncated subtraction at n=0."},
       :id
-      :routes-2026-09-28-t00j08-quantitative-nielsen-schreier-topo2,
+      :routes-2026-09-28-t00j08-quantitative-nielsen-schreier-topo2-r1,
       :kind :reusable-theorem,
       :depends-on []}
      {:consumer :portfolio,
@@ -50002,25 +50005,19 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:strategy
-       "Reread TOPOLOGY-ROUTES.md and routes-1/2/3.md; measure the five reviewed outcomes and refill topo2 from all 15 FOUNDATION routes, enforcing stop-after-two and electing one near-closure adapter before remaining foundations."},
-      :id :routes-2026-09-28-checkpoint-topo2-2,
+       "Reread TOPOLOGY-ROUTES.md and all three route files; measure the five reviewed outcomes, apply stop-after-two, and refill from all 15 topo2 routes with exactly one adapter closing a minimum-placeholder consumer before foundations."},
+      :id :routes-2026-09-28-checkpoint-topo2-r1,
       :kind :strategy-checkpoint,
       :depends-on
-      [:routes-2026-09-28-t00j07-main-assembly-topo2
-       :routes-2026-09-28-rp-smooth-atlas-topo2
-       :routes-2026-09-28-t01a02-punctured-torus-h2-topo2
-       :routes-2026-09-28-t97a04-mv-connecting-naturality-topo2
-       :routes-2026-09-28-t00j08-quantitative-nielsen-schreier-topo2]}],
+      [:routes-2026-09-28-t94a08-closure-topo2-r1
+       :routes-2026-09-28-rp-smooth-atlas-topo2-r1
+       :routes-2026-09-28-t01a02-punctured-torus-h2-topo2-r1
+       :routes-2026-09-28-t97a04-mv-connecting-naturality-topo2-r1
+       :routes-2026-09-28-t00j08-quantitative-nielsen-schreier-topo2-r1]}],
     :author "topo-8",
-    :disposition :replan,
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790628053774-26244-e78a8f54",
-     :finding
-     "Recorded commit 4541e691 violates standing portfolio Rule 0: its own comment-stripped count is 3 for t00J07, yet it elects t00J07-main-assembly as the exactly-one near-closure adapter and that row only replaces the main sorry; ten listed topo2 consumers have 1 placeholder and therefore are closer to closure. The election must instead choose an adapter that closes one of the minimum-count consumers, or deterministically document why the nearest adapter cannot be built and STOP with the exact missing prerequisite. Scope is ledger-only; worklist check and all 130 frozen statement hashes pass; counts at the recorded commit reproduce."}},
+    :disposition :replan},
    :phase :strategy,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50031,6 +50028,93 @@
    :depends-on [],
    :current-residual "No rows elected yet under TOPOLOGY-ROUTES.md.",
    :other-consumers []}
+  {:consumer :t94A08,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile one placeholder-free exact fixture for the frozen apm_t94a08 statement, supplying its sole sorry through route steps 1-3: affineChart_homeomorph for the coinduced complex projective topology, local manifold charts for Sigma1, and the disconnected punctured-neighbourhood obstruction for the Sigma2 node. GO only if the complete frozen theorem compiles and closes t94A08."},
+   :id :routes-2026-09-28-t94a08-closure-topo2-r1,
+   :kind :final-adapter,
+   :depends-on [:routes-2026-09-28-checkpoint-topo2]}
+  {:consumer :t95A04,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free fixture for rpSmoothAtlas 2 at exactly the RealProjectiveSmoothTarget interface used by t95A04 and t96A07: hemisphere-restricted sphere charts through local inverses of sphereProjection with quotient-compatible smooth transitions. Supplies the sole-sorry route step 1 of both consumers."},
+   :id :routes-2026-09-28-rp-smooth-atlas-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-09-28-checkpoint-topo2],
+   :other-consumers [:t96A07]}
+  {:bounded-exception
+   "single-consumer bounded integral degree-2 MV packet",
+   :consumer :t01A02,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free fixture proving puncturedTorus_H2_isZero and H2map_eq_zero_of_factor using the banked production Mayer-Vietoris API, sufficient for the apm_t01A02_bridge_H2map_eq_zero placeholder. Supplies t01A02 route steps 1-3 only at the torus and integral degree-2 generality used."},
+   :id :routes-2026-09-28-t01a02-punctured-torus-h2-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-09-28-checkpoint-topo2]}
+  {:bounded-exception "single-consumer bounded naturality theorem",
+   :consumer :t97A04,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free fixture for productionConnecting_naturality under memberwise preservation of the two named opens, via delta naturality and cover-small homology naturality. Supplies t97A04 route step 7 toward the bridge_3 placeholder without a Kunneth generalisation."},
+   :id :routes-2026-09-28-t97a04-mv-connecting-naturality-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-09-28-checkpoint-topo2]}
+  {:bounded-exception
+   "single-consumer coherent quantitative Nielsen-Schreier packet",
+   :consumer :t00J08,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free fixture containing endBasisOfArborescence, tree-edge and action-groupoid generator cardinalities, and the additive schreier_rank_formula Nat.card i + H.index = 1 + H.index*n. Supplies t00J08 route steps 1-4 toward both bridge placeholders; do not use truncated subtraction at n=0."},
+   :id
+   :routes-2026-09-28-t00j08-quantitative-nielsen-schreier-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on [:routes-2026-09-28-checkpoint-topo2]}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 5,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Reread TOPOLOGY-ROUTES.md and all three route files; measure the five reviewed outcomes, apply stop-after-two, and refill from all 15 topo2 routes with exactly one adapter closing a minimum-placeholder consumer before foundations."},
+   :id :routes-2026-09-28-checkpoint-topo2-r1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-09-28-t94a08-closure-topo2-r1
+    :routes-2026-09-28-rp-smooth-atlas-topo2-r1
+    :routes-2026-09-28-t01a02-punctured-torus-h2-topo2-r1
+    :routes-2026-09-28-t97a04-mv-connecting-naturality-topo2-r1
+    :routes-2026-09-28-t00j08-quantitative-nielsen-schreier-topo2-r1
+    :routes-2026-09-28-checkpoint-topo2]}
   {:consumer :t00J07,
    :phase :probe,
    :state :superseded,
