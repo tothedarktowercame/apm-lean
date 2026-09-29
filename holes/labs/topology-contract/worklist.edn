@@ -81083,7 +81083,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :review-finding
-   "Deterministic blocker persists unchanged: the newest recorded graph still has routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 in :done state, still lists it in routes-2026-09-29-t98a06-part-a-adapter-1 :depends-on, and still reports only 14 superseded rows. No build_step.bb change adds the atomic supersede-plus-edge-deletion operation. The row correctly requests owner intervention, but PASS would again mark it complete without repairing the graph. Exact repair: an owner or enhanced ledger writer must atomically supersede attempt 3 and delete only its adapter edge, retaining the refill dependency and reviewed attempts 1-2; then record the adapter hold as based on attempts 1-2. Until that structural commit exists, leave this row unresolved/needs-owner rather than applying another ordinary STOP. Fresh verification reran the worklist validator and confirmed the unchanged 675-item counts and offending dependency vector.",
+   "Deterministic machine-graph defect remains at recorded commit d9136926: attempt 3 is still :done, the part-a adapter still depends on attempt 3, the superseded count remains 14, and no atomic supersede-plus-edge-deletion writer operation exists. The row evidence now correctly labels this atomic-ledger-graph-repair-unavailable, but an ordinary PASS/STOP transition cannot resolve it and must not mark the adapter complete. Exact repair requires owner-authorized structural work: extend the ledger writer to atomically set attempt 3 to :superseded and delete only its adapter dependency edge, or apply those two graph mutations directly in one reviewed structural commit; retain the refill dependency and attempts 1-2, and base the hold solely on reviewed attempts 1-2. Fresh verification read commit d9136926 and reran the 675-item validator, reproducing 651 done, 14 superseded, one done-unreviewed, and the offending edge.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -81116,6 +81116,12 @@
       :finding
       "No new atomic supersede-plus-edge-deletion writer operation exists."}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790647072278-27148-293cca15",
+     :finding
+     "Deterministic machine-graph defect remains at recorded commit d9136926: attempt 3 is still :done, the part-a adapter still depends on attempt 3, the superseded count remains 14, and no atomic supersede-plus-edge-deletion writer operation exists. The row evidence now correctly labels this atomic-ledger-graph-repair-unavailable, but an ordinary PASS/STOP transition cannot resolve it and must not mark the adapter complete. Exact repair requires owner-authorized structural work: extend the ledger writer to atomically set attempt 3 to :superseded and delete only its adapter dependency edge, or apply those two graph mutations directly in one reviewed structural commit; retain the refill dependency and attempts 1-2, and base the hold solely on reviewed attempts 1-2. Fresh verification read commit d9136926 and reran the 675-item validator, reproducing 651 done, 14 superseded, one done-unreviewed, and the offending edge."},
     :required-transition
     {:atomic true,
      :supersede
@@ -81134,7 +81140,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
