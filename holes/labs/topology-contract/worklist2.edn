@@ -52484,6 +52484,21 @@
       :output
       "c0867965cbb90adbae10787526059f7f7cfcae22\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790650654743-27350-dc81911d",
+     :commands
+     ["git show/diff-tree c0867965cbb90adbae10787526059f7f7cfcae22"
+      "sha256sum committed/current source and frozen fixture"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "#print axioms for three added theorems and #check final reduction"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder recount at recorded commit"],
+     :finding
+     "PASS: reviewer codex-7 verified recorded commit c0867965cbb90adbae10787526059f7f7cfcae22, authored by topo-6/Joe, changes only ConstructionTargets/RealProjectiveSmoothTarget.lean and adds exactly the three requested theorems. Committed/current source SHA-256 is c20615e35ef24b9de6a0e046238e058d1c2fce4b367c144a82945b3c8b7ab256; frozen fixture SHA-256 is b9ff4463402ea2522c1e1bdcf8faf449e787e338cf8281d5685ae768def90262. Lean compile and 8241-job build pass; all three declarations use only propext, Classical.choice, Quot.sound; registry is 130/130 and the 348-row worklist validates. The restriction inhabitant is applied in the required direction. At each p, localHomeomorphRestrictionsSmooth_gives_smoothBranches uses the exact e, source witness, and projection equality supplied by sphereProjection_isLocalHomeomorph and attaches h F e he. The final reduction constructs a PartialDiffeomorph from that same e.toPartialEquiv, open source/target, and forward/inverse ContMDiffOn witnesses, then supplies hp and congrFun he q with the correct projection-to-branch orientation. No representation or domain boundary is bypassed. Comment-stripped sorry/admit/axiom counts are 0/0/0 in scope and 1/0/0 in each frozen consumer."},
     :commit "c0867965cbb90adbae10787526059f7f7cfcae22",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -52493,7 +52508,7 @@
      "c20615e35ef24b9de6a0e046238e058d1c2fce4b367c144a82945b3c8b7ab256"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -52546,7 +52561,7 @@
        :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
