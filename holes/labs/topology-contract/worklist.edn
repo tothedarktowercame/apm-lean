@@ -81083,7 +81083,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :review-finding
-   "Deterministic structural blocker is unchanged at recorded commit 6c039f93: validator reports 651 done and only 14 superseded; attempt 3 has not been superseded; the part-a adapter still depends on attempts 1, 2, and rejected attempt 3; and build_step.bb still has no dependency-deletion operation (its latest commit remains 8e9127f2). Another ordinary receipt transition cannot repair this graph. Exact repair remains: owner-authorized code/ledger change that atomically supersedes attempt 3, removes only its edge from the part-a adapter, retains the refill dependency and attempts 1-2, validates the worklist, and records the hold basis as reviewed attempts 1-2. Until then the adapter must remain needs-owner/unresolved, not done. Fresh verification this invocation read commit 6c039f93, reran the recorded 675-item validator, inspected the dependency vector, and inspected the writer implementation.",
+   "Deterministic structural defect persists at recorded commit abf3238c: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, the validator still reports only 14 superseded rows, and the writer has not changed since 8e9127f2. The row itself now records :structural-owner-action-still-required, so repeatedly applying ordinary transitions cannot produce a reviewable repaired graph. Exact repair is unchanged: owner-authorized atomic mutation must supersede attempt 3 and remove only its dependency edge, retain the refill edge and reviewed attempts 1-2, and make the adapter hold explicitly rest on attempts 1-2. Until then this row must remain needs-owner/unresolved. Fresh execution this invocation validated the recorded 675-item snapshot, inspected the exact states/edges, confirmed the unchanged writer commit, and reproduced fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -81111,6 +81111,12 @@
       :finding
       "topology-worklist: 675 items OK; {:done 651, :superseded 14, :needs-owner 1, :repair 1, :open 5, :blocked 3}"}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790647422297-27169-7f1fed7f",
+     :finding
+     "Deterministic structural defect persists at recorded commit abf3238c: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, the validator still reports only 14 superseded rows, and the writer has not changed since 8e9127f2. The row itself now records :structural-owner-action-still-required, so repeatedly applying ordinary transitions cannot produce a reviewable repaired graph. Exact repair is unchanged: owner-authorized atomic mutation must supersede attempt 3 and remove only its dependency edge, retain the refill edge and reviewed attempts 1-2, and make the adapter hold explicitly rest on attempts 1-2. Until then this row must remain needs-owner/unresolved. Fresh execution this invocation validated the recorded 675-item snapshot, inspected the exact states/edges, confirmed the unchanged writer commit, and reproduced fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d."},
     :required-transition
     {:atomic true,
      :supersede
@@ -81129,7 +81135,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
