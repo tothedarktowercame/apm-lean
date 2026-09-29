@@ -51467,33 +51467,54 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_sphere_projection_inverse_branch_local.lean",
-      :sha256
-      "d1c1e5bc31808368783cd0b2858d675d8d8f3fd27238552aaca4997b20f99c8b"},
-     :commands
-     [{:cmd
-       "sha256sum /tmp/rp_sphere_projection_inverse_branch_local.lean",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/rp_sphere_projection_inverse_branch_local.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_inverse_branch_local.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
-     :acceptance
-     {:implementation
-      "Add SphereProjectionInverseBranchLocalAlternative and its placeholder-free inhabitant sphereProjectionInverseBranchLocalAlternative to ConstructionTargets/RealProjectiveSmoothTarget.lean exactly as compiled in the fixture. Recompile the target, verify no new placeholders, run the statement registry check, and report axioms plus the next quotient-coordinate normal-form residual."},
-     :residual
-     "The theorem is fully proved by continuity and inner-product sign separation on the two-point projective fibre. After it is banked, the next consumer step transports either eventual branch equality through the standard extended sphere chart and records the exact ordinary or antipodal chart-domain witness."}},
+   {:placeholder-delta 0,
+    :residual
+    "Transport either eventual inverse-branch equality through the standard extended sphere chart and record the exact ordinary or antipodal chart-domain witness for the quotient-coordinate local normal form.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "2f39034371da0f0223b56e080b07f62765b4706ce96fe430bda895129fc13f5e"},
+    :axioms
+    {:SphereProjectionInverseBranchLocalAlternative
+     ["propext" "Classical.choice" "Quot.sound"],
+     :sphereProjectionInverseBranchLocalAlternative
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/rp_sphere_projection_inverse_branch_local.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_projection_inverse_branch_local_axioms.lean",
+      :exit 0,
+      :output
+      "SphereProjectionInverseBranchLocalAlternative and sphereProjectionInverseBranchLocalAlternative each depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "7e9e476a7269047f1815ea33fa9de5da949e845d",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_projection_inverse_branch_local.lean",
+     :sha256
+     "d1c1e5bc31808368783cd0b2858d675d8d8f3fd27238552aaca4997b20f99c8b"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
