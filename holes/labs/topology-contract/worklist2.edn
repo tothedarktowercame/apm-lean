@@ -51797,9 +51797,14 @@
     :routes-2026-09-29-rp-sphere-projection-coordinate-local-normal-form-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
+   :review-finding
+   "Deterministic stale-boundary defect in ledger transition commit 8c3694f5: its STOP reason says the reviewed coordinate-ContDiffAt prerequisite pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at a17b6d69, but before this transition the prerequisite had been implemented and reviewed with immutable fixture ConstructionTargets/RealProjectiveSmoothTarget.lean at sha256 26d54734c7c656fd044435c5d4b159c4a1607f8466a896c184bb66e801748cee. Thus no shared-path conflict remained. Fresh verification hashes the descendant fixture to the claimed e9f6550a2f0c7a19bfc5060d0d26f39dbdd47f7c24121f44cf82fe253ae762cb and compiles it placeholder-free. Its theorem correctly restricts the banked coordinate ContDiffAt to the exact Set.range (real model 2) via contDiffWithinAt, and its retained reduction reaches global ContMDiff through the reviewed pointwise manifold-smoothness theorem. All 130 frozen statements and the 345-item ledger pass; frozen t95A04 and t96A07 remain at one placeholder each. Repair by replacing the stale STOP with an implementation transition, committing these two compiled theorems to RealProjectiveSmoothTarget, and recording that committed module as the immutable fixture.",
    :evidence
-   {:outcome :stop,
-    :seat "topo-8",
+   {:residual
+    "There is no remaining mathematical obligation: ContDiffAt.contDiffWithinAt supplies the requested result and the banked reductions reach SphereProjectionQuotientContMDiff. Only the shared mutable fixture-path conflict prevents a ledger-valid GO.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-8",
     :reason
     "Fixture-identity boundary recurs on this descendant row: its reviewed prerequisite pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at sha256 a17b6d690768466897e19b9d02b6429f277f936ecd8f0986ff6fb46f8c227b16, but the acceptance requires adding SphereProjectionQuotientCoordinateContDiffWithinAt to that same pathname. The required theorem and complete downstream ContMDiff reduction compile placeholder-free at sha256 e9f6550a2f0c7a19bfc5060d0d26f39dbdd47f7c24121f44cf82fe253ae762cb. Mutating the shared pathname necessarily invalidates the prerequisite evidence, while retaining the prerequisite bytes cannot contain this new inhabitant. Assign immutable per-row fixture paths or validate prior evidence against archived bytes.",
     :commands
@@ -51823,12 +51828,15 @@
       :exit 1,
       :finding
       "The first attempt extended a stale fixture after its prerequisite declarations had been banked, causing duplicate declarations; refreshing the temporary file to import production and state only the new inhabitant corrected compilation."}],
-    :residual
-    "There is no remaining mathematical obligation: ContDiffAt.contDiffWithinAt supplies the requested result and the banked reductions reach SphereProjectionQuotientContMDiff. Only the shared mutable fixture-path conflict prevents a ledger-valid GO.",
-    :author "topo-8",
-    :disposition :stop},
-   :phase :probe,
-   :state :done-unreviewed,
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1790646763554-27126-f07a55f9",
+     :finding
+     "Deterministic stale-boundary defect in ledger transition commit 8c3694f5: its STOP reason says the reviewed coordinate-ContDiffAt prerequisite pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at a17b6d69, but before this transition the prerequisite had been implemented and reviewed with immutable fixture ConstructionTargets/RealProjectiveSmoothTarget.lean at sha256 26d54734c7c656fd044435c5d4b159c4a1607f8466a896c184bb66e801748cee. Thus no shared-path conflict remained. Fresh verification hashes the descendant fixture to the claimed e9f6550a2f0c7a19bfc5060d0d26f39dbdd47f7c24121f44cf82fe253ae762cb and compiles it placeholder-free. Its theorem correctly restricts the banked coordinate ContDiffAt to the exact Set.range (real model 2) via contDiffWithinAt, and its retained reduction reaches global ContMDiff through the reviewed pointwise manifold-smoothness theorem. All 130 frozen statements and the 345-item ledger pass; frozen t95A04 and t96A07 remain at one placeholder each. Repair by replacing the stale STOP with an implementation transition, committing these two compiled theorems to RealProjectiveSmoothTarget, and recording that committed module as the immutable fixture."},
+    :seat "topo-8"},
+   :phase :implementation,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
