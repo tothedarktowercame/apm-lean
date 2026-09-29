@@ -52439,42 +52439,61 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path
-      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-      :sha256
-      "b9ff4463402ea2522c1e1bdcf8faf449e787e338cf8281d5685ae768def90262"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd
-       "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 1,
-       :finding
-       "The first PartialDiffeomorph construction used command-style where syntax after a typed let, so Lean parsed the fields outside the local definition. Rewriting it as an explicit structure literal assigned with := compiled all inherited PartialEquiv and smoothness fields."}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:implementation
-       "Add sphereProjectionLocalHomeomorphRestrictionsSmooth, localHomeomorphRestrictionsSmooth_gives_smoothBranches, and smoothLocalHomeomorphBranches_gives_localDiffeomorph exactly as compiled. For each point use sphereProjection_isLocalHomeomorph, attach the restriction smoothness pair, construct the corresponding PartialDiffeomorph, and witness IsLocalDiffeomorphAt. Run the module compile, placeholder scan, and statement-registry check."}},
-     :residual
-     "The restriction-smoothness inhabitant and both requested reductions compile. After banking them, SphereProjectionQuotientLocalDiffeomorph follows directly; the remaining consumer work is the adapter from this local diffeomorphism to the frozen t95A04 and t96A07 statements."}},
+   {:placeholder-delta 0,
+    :residual
+    "Smooth restriction witnesses now produce a smooth local-homeomorphism branch at every sphere point and then an IsLocalDiffeomorphAt witness through an explicit PartialDiffeomorph. The next route step is the direct inhabitant of SphereProjectionQuotientLocalDiffeomorph, followed by the smooth-descent contract and t95A04/t96A07 adapters.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "c20615e35ef24b9de6a0e046238e058d1c2fce4b367c144a82945b3c8b7ab256"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      :exit 0,
+      :output
+      "b9ff4463402ea2522c1e1bdcf8faf449e787e338cf8281d5685ae768def90262  /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0,
+      :output "Build completed successfully (8241 jobs)."}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin axiom audit for sphereProjectionLocalHomeomorphRestrictionsSmooth, localHomeomorphRestrictionsSmooth_gives_smoothBranches, and smoothLocalHomeomorphBranches_gives_localDiffeomorph",
+      :exit 0,
+      :output
+      "All three declarations depend on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 348 items OK; {:done 313, :superseded 23, :open 3, :blocked 9}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "c0867965cbb90adbae10787526059f7f7cfcae22\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "c0867965cbb90adbae10787526059f7f7cfcae22",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "ConstructionTargets/RealProjectiveSmoothTarget.lean",
+     :sha256
+     "c20615e35ef24b9de6a0e046238e058d1c2fce4b367c144a82945b3c8b7ab256"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
