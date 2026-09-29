@@ -52140,6 +52140,21 @@
       :output
       "ba7599744259866b538a837229483db52cec192e\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790649094747-27255-80a648e8",
+     :commands
+     ["git show/diff-tree ba7599744259866b538a837229483db52cec192e"
+      "sha256sum and git-show hash"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "#print axioms (fully-qualified declarations)"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder recount"],
+     :finding
+     "PASS: recorded commit changes only ConstructionTargets/RealProjectiveSmoothTarget.lean; committed/current SHA-256 equals fixture b5f756ccb4d19cc9652f81622e696431971523092f8d0dafe796ef7b3398fa4e. Lean compile and 8241-job target build pass; both declarations use only propext, Classical.choice, Quot.sound; registry is 130/130 and worklist is valid with exactly one done-unreviewed row. Statement retains universal arbitrary e, equality hypothesis and target membership; conclusion is oriented from e.symm to the chosen inverse branch or antipodal composed after it. Proof intersects both inverse target neighborhoods, derives the two-sheet fibre alternative from both right-inverse laws and the projection equality, and uses continuity of the inner-product sign to select a locally constant branch without representation casts. Comment-stripped sorry/admit/axiom counts are 0/0/0 in the target and 1/0/0 in each frozen consumer."},
     :commit "ba7599744259866b538a837229483db52cec192e",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -52149,7 +52164,7 @@
      "b5f756ccb4d19cc9652f81622e696431971523092f8d0dafe796ef7b3398fa4e"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -52210,7 +52225,7 @@
        :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
