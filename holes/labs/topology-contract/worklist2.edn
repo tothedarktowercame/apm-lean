@@ -51397,24 +51397,40 @@
     :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free inhabitant of SphereProjectionQuotientLocalDiffeomorph from /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every banked SphereProjectionLocalInverseFamily F, install exactly F.quotientChartedSpace and the IsManifold instance supplied by sphereProjectionQuotientAtlasCompatibility F, then prove IsLocalDiffeomorph (real model 2) (real model 2) infinity (sphereProjection 2). Construct the local partial diffeomorphisms from the existing sphereProjection local homeomorphs and prove their forward and inverse smoothness using the standard sphere charts and the quotientChart transition results. Retain the compiled sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas reduction. This supplies the sole remaining SmoothAtlas field for t95A04 and t96A07."},
+   :id
+   :routes-2026-09-29-rp-sphere-projection-quotient-local-diffeomorph-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+    :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/rp_sphere_quotient_atlas_compatibility.lean",
+     {:path
+      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
       :sha256
-      "dded9e5147556e7032a00cae05651a18c7a34b7cd015d36fca963ffb71f7cede"},
+      "0f456be4def2916a61e3cdb086cd114e922691adae51619685da11873feae1d9"},
      :commands
      [{:cmd
-       "lake env lean /tmp/rp_sphere_quotient_atlas_compatibility.lean",
+       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_quotient_atlas_compatibility.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
      :residual
-     "The quotient ChartedSpace and locally constant identity-or-antipodal branch law are banked. The exact remaining manifold obligation is pairwise smooth compatibility of the quotient charts. The compiled contract isolates only this IsManifold statement for the assembled dimension-two atlas; its proof should apply isManifold_of_contDiffOn, reduce atlas members to quotientChart indices, and use the banked eventual branch equality together with standard sphere chart compatibility and contMDiff_neg_sphere. Once banked, the descent row retains only certification that sphereProjection is locally diffeomorphic in these charts.",
+     "The quotient ChartedSpace and its IsManifold proof are banked, so the descent package has exactly one unresolved field: IsLocalDiffeomorph (real model 2) (real model 2) infinity (sphereProjection 2) under F.quotientChartedSpace and the banked quotient-manifold instance. The compiled fixture fixes precisely those instances and proves that this one certification produces Nonempty (SmoothAtlas 2), hence discharges the original descent contract without using its already-banked topological and antipodal hypotheses again.",
      :prerequisite
      {:consumer :t95A04,
       :phase :probe,
@@ -51423,16 +51439,16 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile a placeholder-free inhabitant of SphereProjectionQuotientAtlasCompatibility from /tmp/rp_sphere_quotient_atlas_compatibility.lean. For every banked SphereProjectionLocalInverseFamily, install quotientChartedSpace and prove IsManifold (real model 2) infinity on the existing projective Space. Apply isManifold_of_contDiffOn to quotientChart atlas members and prove each transition smooth by the banked eventual identity-or-antipodal inverse-branch law, standard sphere atlas compatibility, and contMDiff_neg_sphere. State no general quotient-manifold theorem. This supplies the smooth compatibility substep for t95A04 and t96A07."},
+       "Compile a placeholder-free inhabitant of SphereProjectionQuotientLocalDiffeomorph from /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every banked SphereProjectionLocalInverseFamily F, install exactly F.quotientChartedSpace and the IsManifold instance supplied by sphereProjectionQuotientAtlasCompatibility F, then prove IsLocalDiffeomorph (real model 2) (real model 2) infinity (sphereProjection 2). Construct the local partial diffeomorphisms from the existing sphereProjection local homeomorphs and prove their forward and inverse smoothness using the standard sphere charts and the quotientChart transition results. Retain the compiled sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas reduction. This supplies the sole remaining SmoothAtlas field for t95A04 and t96A07."},
       :id
-      :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1,
+      :routes-2026-09-29-rp-sphere-projection-quotient-local-diffeomorph-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
-      [:routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
-       :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1],
+      [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+       :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -51446,7 +51462,8 @@
     :routes-2026-09-28-rp-sphere-inverse-overlap-topo2-r1
     :routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
     :routes-2026-09-28-rp-sphere-quotient-charted-space-topo2-r1
-    :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1],
+    :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
+    :routes-2026-09-29-rp-sphere-projection-quotient-local-diffeomorph-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
