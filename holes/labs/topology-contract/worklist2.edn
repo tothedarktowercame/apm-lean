@@ -52695,33 +52695,60 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_smooth_atlas_descent_contract.lean",
-      :sha256
-      "eac9ba208133499291c23110ce0864f1259ba49c544053ddbd7d94847d141835"},
-     :commands
-     [{:cmd "lake env lean /tmp/rp_smooth_atlas_descent_contract.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_smooth_atlas_descent_contract.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd "sha256sum /tmp/rp_smooth_atlas_descent_contract.lean",
-       :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:implementation
-       "Add SphereProjectionSmoothDescentContract, sphereAntipodalN_contMDiff, and sphereProjectionSmoothDescentContract exactly as compiled in /tmp/rp_smooth_atlas_descent_contract.lean. Implement the contract by applying sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas to sphereProjectionQuotientLocalDiffeomorph; retain the explicit two-sheeted and antipodal hypotheses in the contract interface. Run the module compile, placeholder scan, and statement-registry check."}},
-     :residual
-     "The original smooth-descent contract now has a placeholder-free inhabitant and yields Nonempty (SmoothAtlas 2). The topology, quotient charts, overlap transitions, manifold compatibility, and projection local diffeomorphism are all banked; remaining work lies in the consumer adapters for the descended maps and their geometric properties."}},
+   {:placeholder-delta 0,
+    :residual
+    "The explicit two-sheeted/antipodal smooth-descent contract is inhabited and yields Nonempty (SmoothAtlas 2) through the banked quotient local-diffeomorphism certificate. Atlas construction is complete; the remaining work is confined to the t95A04 and t96A07 consumer adapters and their descended-map geometric properties.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "733e3b262a9c7247434f43991348300f0c7770b47abba2395db9903a387fd8c5"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/rp_smooth_atlas_descent_contract.lean",
+      :exit 0,
+      :output
+      "eac9ba208133499291c23110ce0864f1259ba49c544053ddbd7d94847d141835  /tmp/rp_smooth_atlas_descent_contract.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0,
+      :output "Build completed successfully (8241 jobs)."}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin axiom audit for sphereAntipodalN_contMDiff and sphereProjectionSmoothDescentContract",
+      :exit 0,
+      :output
+      "Both declarations depend on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 348 items OK; {:done 316, :superseded 23, :open 3, :blocked 6}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "19e3aef01a18cbd3c314f70579714d05f4ea54ae\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "19e3aef01a18cbd3c314f70579714d05f4ea54ae",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "ConstructionTargets/RealProjectiveSmoothTarget.lean",
+     :sha256
+     "733e3b262a9c7247434f43991348300f0c7770b47abba2395db9903a387fd8c5"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
