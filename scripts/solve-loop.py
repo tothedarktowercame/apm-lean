@@ -280,6 +280,60 @@ Finish with one line: SOLVE_RESULT proved | refuted | gave-up — then one sente
 """
 
 
+STRATEGY_PROMPT = """# Strategy pass for one stalled problem (solve loop, apm-lean)
+
+Problem: {pid}. Repo: /home/joe/code/apm-lean (shared; read it, do NOT edit, stage or commit there).
+The solve loop has made {stalls} attempts on {pid} without lowering its `sorry` count (best: {best}).
+You are a fresh pair of eyes. Decide whether the next attempts should continue, and on what route.
+
+Read problems/{pid}/problem.md, problems/{pid}/lean/Main.lean, the current partial proof {out}
+(compile it: `cd /home/joe/code/apm-lean && lake env lean {out}`), the previous seats' residual
+{dir}/REFUTATION.md if present, and the recent refusal reasons and final words below.
+Search Mathlib (pinned: .lake/packages/mathlib) and ConstructionTargets/. A newer Mathlib is at
+/home/joe/code/mathlib4-latest for SEARCHING only; a result found there must be ported into the
+proof file, not imported.
+
+Then say:
+1. Exactly where the proof is stuck, in Lean terms (which `sorry`s, what each needs).
+2. Whether it is close: would a focused next attempt plausibly remove a `sorry`?
+3. The route the next attempts should take: ordered steps, each naming the `sorry` it supplies.
+   If the current route is wrong, say so and give a different one. Compile a probe of the
+   riskiest step in /tmp/strategy-{pid}/ where you can.
+4. If the missing piece is a large body of theory (not a lemma or two), or the statement looks
+   false, say so plainly: that is a reason to stop.
+
+Do not edit {out} or anything in the repository. Do not bell anyone: your final message is read
+directly from the job record. Finish with one line:
+STRATEGY_RESULT continue | stop — then one sentence.
+
+Recent attempts:
+{history}
+"""
+
+
+def strategy(seat: str, pid: str, stalls: int, best: int | None) -> tuple[bool, str]:
+    """Fresh-eyes pass after a stall (Joe, 2026-09-29: 10 attempts, then strategy).
+    Returns (continue?, the seat's plan)."""
+    d = SCRATCH / pid
+    rows = [r for r in ledger_rows() if r.get("id") == pid][-6:]
+    history = "\n".join(f"- attempt {r.get('attempt')}: {r.get('outcome')} {r.get('reason', '')[:200]} | "
+                        f"{r.get('said', '')[-300:]}".replace("\r", " ") for r in rows)
+    job = dispatch(seat, STRATEGY_PROMPT.format(pid=pid, stalls=stalls, best=best, out=d / "Main.lean",
+                                                dir=d, history=history))
+    log(f"{seat} <- {pid} strategy ({job})")
+    j = wait(job)
+    said = j.get("result") or ""
+    if not said:
+        texts = [e.get("text", "") for e in j.get("events", []) if e.get("type") == "text"]
+        said = texts[-1] if texts else ""
+    m = re.search(r"STRATEGY_RESULT\s+(continue|stop)", said)
+    plan = said[-6000:]
+    note = ROOT / "holes" / "labs" / "solve-loop" / "strategy" / f"{pid}.md"
+    note.parent.mkdir(parents=True, exist_ok=True)
+    note.write_text(f"# {pid} strategy pass ({now()}, {seat}, job {job})\n\n{plan}\n")
+    return bool(m and m.group(1) == "continue"), plan
+
+
 def dispatch(seat: str, prompt: str) -> str:
     r = subprocess.run([sys.executable, SEND, "--from", "solve-loop", "--to", seat, "--kind", "bell",
                         "--mode", "work"], input=prompt, capture_output=True, text=True)
@@ -342,6 +396,10 @@ def attempt(seat: str, pid: str, feedback: str) -> dict:
     prior = ROOT / "holes" / "labs" / "solve-loop" / "obstructions" / f"{pid}.md"
     obstruction = (f"\nResidual left by the previous seat (continue from it; do not stop for the same reason):\n"
                    f"{prior.read_text()[:4000]}\n") if prior.exists() else ""
+    plan = ROOT / "holes" / "labs" / "solve-loop" / "strategy" / f"{pid}.md"
+    if plan.exists():
+        obstruction += (f"\nA strategy pass reviewed this problem after it stalled. Follow its route "
+                        f"unless you find it wrong:\n{plan.read_text()[-4000:]}\n")
     prompt = PROMPT.format(pid=pid, decl=", ".join(fp["decls"]), out=out, dir=d, obstruction=obstruction, start=start,
                            feedback=(f"\nA previous attempt was refused by the checker:\n{feedback}\n" if feedback else ""))
     job = dispatch(seat, prompt)
@@ -374,7 +432,8 @@ def attempt(seat: str, pid: str, feedback: str) -> dict:
     return row
 
 
-def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_limit: int) -> None:
+def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_limit: int,
+           strategy_seat: str, max_strategy: int) -> None:
     while True:
         with LOCK:
             if not todo or budget[0] <= 0:
@@ -382,6 +441,7 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
             pid = todo.pop(0)
         feedback = ""
         stalls = 0
+        passes = 0
         start = progress_marks(pid)
         best = start[0] if start else None
         for n in range(attempts):
@@ -410,9 +470,21 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_l
             else:
                 stalls += 1
             if stalls >= stall_limit:
-                log(f"{seat} {pid}: {stalls} attempts without a new low in its sorry count "
-                    f"(best {best}, marks {after}); leaving it")
-                break
+                go = False
+                if passes < max_strategy:
+                    passes += 1
+                    try:
+                        go, plan = strategy(strategy_seat, pid, stalls, best)
+                    except Exception as e:
+                        plan = f"strategy pass failed: {e}"
+                    record({"id": pid, "seat": strategy_seat, "at": now(), "outcome": "strategy",
+                            "decision": "continue" if go else "stop", "said": plan[-300:]})
+                    log(f"{strategy_seat} {pid} strategy pass {passes}: {'continue' if go else 'stop'}")
+                if not go:
+                    log(f"{seat} {pid}: {stalls} attempts without a new low in its sorry count "
+                        f"(best {best}, marks {after}); leaving it")
+                    break
+                stalls = 0
 
 
 def main() -> int:
@@ -425,6 +497,9 @@ def main() -> int:
     r.add_argument("--attempts", type=int, default=50, help="cap per problem")
     r.add_argument("--stall", type=int, default=10,
                    help="stop a problem after this many attempts without a new low in its sorry count")
+    r.add_argument("--strategy-seat", default="solve-strategy",
+                   help="fresh seat asked, after each stall, whether and how to continue")
+    r.add_argument("--max-strategy", type=int, default=2, help="strategy passes per problem")
     r.add_argument("--only", help="comma-separated problem ids")
     r.add_argument("--skip", help="comma-separated problem ids to leave alone")
     o = ap.parse_args()
@@ -439,7 +514,8 @@ def main() -> int:
     if o.skip:
         todo = [p for p in todo if p not in o.skip.split(",")]
     budget = [o.max_jobs]
-    threads = [threading.Thread(target=worker, args=(s.strip(), todo, o.attempts, budget, o.stall))
+    threads = [threading.Thread(target=worker, args=(s.strip(), todo, o.attempts, budget, o.stall,
+                                                          o.strategy_seat, o.max_strategy))
                for s in o.seats.split(",") if s.strip()]
     for t in threads:
         t.start()
