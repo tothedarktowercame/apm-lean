@@ -81083,7 +81083,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :review-finding
-   "Deterministic structural defect persists at recorded commit abf3238c: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, the validator still reports only 14 superseded rows, and the writer has not changed since 8e9127f2. The row itself now records :structural-owner-action-still-required, so repeatedly applying ordinary transitions cannot produce a reviewable repaired graph. Exact repair is unchanged: owner-authorized atomic mutation must supersede attempt 3 and remove only its dependency edge, retain the refill edge and reviewed attempts 1-2, and make the adapter hold explicitly rest on attempts 1-2. Until then this row must remain needs-owner/unresolved. Fresh execution this invocation validated the recorded 675-item snapshot, inspected the exact states/edges, confirmed the unchanged writer commit, and reproduced fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d.",
+   "Deterministic structural defect persists at recorded commit ff6ea2f1: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, superseded count remains 14, and build_step.bb remains at 8e9127f2 without dependency deletion support. Only diagnostic evidence/reason text changed; the machine graph did not. Exact repair requires owner-authorized atomic supersession of attempt 3 plus deletion of only its adapter edge, retaining the refill dependency and reviewed attempts 1-2 and recording those two attempts as the hold basis. Further ordinary STOP transitions are invalid churn and must cease; keep the row needs-owner until the structural mutation is committed. Fresh execution validated the recorded 675-item snapshot, inspected exact states and edges, confirmed the unchanged writer, and reproduced fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -81113,6 +81113,12 @@
       "The active adapter is back in repair and still depends on attempts 1, 2, and rejected attempt 3."}
      {:cmd "git status --short", :exit 0, :finding "Worktree clean."}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790647641986-27181-cff182d8",
+     :finding
+     "Deterministic structural defect persists at recorded commit ff6ea2f1: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, superseded count remains 14, and build_step.bb remains at 8e9127f2 without dependency deletion support. Only diagnostic evidence/reason text changed; the machine graph did not. Exact repair requires owner-authorized atomic supersession of attempt 3 plus deletion of only its adapter edge, retaining the refill dependency and reviewed attempts 1-2 and recording those two attempts as the hold basis. Further ordinary STOP transitions are invalid churn and must cease; keep the row needs-owner until the structural mutation is committed. Fresh execution validated the recorded 675-item snapshot, inspected exact states and edges, confirmed the unchanged writer, and reproduced fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d."},
     :required-transition
     {:atomic true,
      :supersede
@@ -81131,7 +81137,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
