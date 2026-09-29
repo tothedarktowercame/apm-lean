@@ -80447,8 +80447,107 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :stop,
+    :seat "topo-4",
+    :reason :topo1-stop-condition-satisfied,
+    :commands
+    [{:cmd
+      "read current TOPOLOGY-ROUTES.md and all topology route files",
+      :exit 0}
+     {:cmd
+      "inspect reviewed dependency receipts for t99J04 and prior topo1 outcomes",
+      :exit 0,
+      :finding
+      "The t99J04 implementation and closure probes both received independent PASS reviews while making zero placeholder or route-step progress at the same manifold local-IFT boundary."}
+     {:cmd
+      "Python comment-stripped placeholder census for all twelve topo1 consumers",
+      :exit 0,
+      :finding
+      "t01A01=2 t02A05=2 t91J06=3 t92J08=3 t93J06=0 t94A07=1 t94A09=0 t94A10=3 t95J02=3 t97A07=1 t99J04=3 t99J06=1; total=22"}
+     {:cmd "test canonical .lake/packages authority", :exit 0}
+     {:cmd "lake env lean problems/t99J04/lean/Main.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}],
+    :finding
+    {:placeholder-delta {:t99J04 0, :topo1-total 0},
+     :typed-residual-change
+     {:t99J04
+      "Two reviewed attempts isolate the same absent boundaryless manifold inverse-function assembly: Euclidean OpenPartialHomeomorph smooth-inverse data must be packaged and conjugated through chart PartialDiffeomorphs, with writtenInExtChartAt fderiv identified with transported mfderiv."},
+     :infrastructure-packets {:t99J04 1},
+     :review-outcomes
+     {:t91J06 :pass-stop-after-two,
+      :t99J06 :pass-hold,
+      :t95J02 :pass-stop-after-two,
+      :t93J06 :pass-closed,
+      :t97A07 :pass-hold,
+      :t99J04 :pass-stop-after-two,
+      :t01A01 :pass-stop,
+      :t92J08 :pass-stop,
+      :t02A05 :pass-stop,
+      :t94A07 :pass-hold,
+      :t94A10 :pass-stop,
+      :t94A09 :pass-closed},
+     :routes
+     {:t91J06
+      {:placeholders 3,
+       :status :held-stop-after-two,
+       :boundary
+       "two-sided affine inner-interval homeomorphism extension"},
+      :t99J06
+      {:placeholders 1,
+       :status :held,
+       :boundary
+       "explicit differential-form and parametrized integral computation"},
+      :t95J02
+      {:placeholders 3,
+       :status :held-stop-after-two,
+       :boundary
+       "vertical EqvGen fiber classification identifying CircleB"},
+      :t93J06 {:placeholders 0, :status :closed},
+      :t97A07
+      {:placeholders 1,
+       :status :held,
+       :boundary
+       "regular-points openness and connected-complement route"},
+      :t99J04
+      {:placeholders 3,
+       :status :held-stop-after-two,
+       :boundary
+       "boundaryless manifold local inverse-function assembly"},
+      :t01A01
+      {:placeholders 2,
+       :status :stopped,
+       :boundary "projective quotient descent and punctured-RP2 lift"},
+      :t92J08
+      {:placeholders 3,
+       :status :stopped,
+       :boundary
+       "family-level uniform manifold chart transport for Picard-Lindelof"},
+      :t02A05
+      {:placeholders 2,
+       :status :stopped,
+       :boundary
+       "normalized Euclidean Hausdorff sphere-mass evaluation"},
+      :t94A07
+      {:placeholders 1,
+       :status :held,
+       :boundary "half-turn local data and circle obstruction"},
+      :t94A10
+      {:placeholders 3,
+       :status :stopped,
+       :boundary
+       "variable-scaled alternating-form calculus and sphere Green obstruction"},
+      :t94A09 {:placeholders 0, :status :closed}},
+     :terminal
+     "No topo1 work row remains eligible: both DIRECT consumers are closed; t91J06, t95J02, and t99J04 are held by stop-after-two; the three one-placeholder routes retain reviewed holds; and every other adapter retains its reviewed STOP. Electing another row would violate either stop-after-two or preservation of reviewed holds/STOPs."},
+    :residual
+    "The topo1 portfolio has reached its recorded stop condition. The final active boundary is t99J04's absent finite-dimensional boundaryless manifold inverse-function assembly; Mathlib explicitly records this implication as TODO. No replacement tail is admissible without a new reviewer reroute or an external theorem/API change.",
+    :author "topo-4",
+    :disposition :stop},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
