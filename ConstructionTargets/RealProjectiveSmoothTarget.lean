@@ -1336,6 +1336,25 @@ theorem sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas
     smooth := sphereProjectionQuotientAtlasCompatibility F
     quotient_localDiffeomorph := h F }⟩
 
+/-- The smooth descent theorem specialized to the dimension and frozen quotient
+used by both consumers. Its hypotheses retain the banked two-sheeted model and
+smoothness of the only nontrivial deck transition. -/
+def SphereProjectionSmoothDescentContract : Prop :=
+  SphereProjectionTwoSheetedLocalModel 2 →
+    ContMDiff (𝓡 2) (𝓡 2) ∞ (sphereAntipodalN 2) →
+      Nonempty (SmoothAtlas 2)
+
+theorem sphereAntipodalN_contMDiff :
+    ContMDiff (𝓡 2) (𝓡 2) ∞ (sphereAntipodalN 2) := by
+  simpa [sphereAntipodalN] using
+    (contMDiff_neg_sphere (E := E 3) (m := (∞ : WithTop ℕ∞)))
+
+theorem sphereProjectionSmoothDescentContract :
+    SphereProjectionSmoothDescentContract := by
+  intro _htwoSheeted _hantipodal
+  exact sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas
+    sphereProjectionQuotientLocalDiffeomorph
+
 theorem coordinateContDiffAt_reaches_contMDiff :
     SphereProjectionQuotientContMDiff :=
   quotientContMDiffAt_gives_quotientContMDiff
