@@ -81087,28 +81087,25 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "External state is unchanged at 872cbfe2: build_step.bb remains 8e9127f2 and the superseded count remains 14. Stop redispatching this row. Resume only after an owner structural commit or atomic writer operation supersedes attempt 3 and removes only its adapter edge.",
+    "At d2b88df2 the writer remains 8e9127f2 and the superseded count remains 14. Do not apply another ordinary transition and do not redispatch this row. Resume only after the owner commits the atomic supersede-plus-edge-deletion repair.",
     :outcome :stop,
     :warnings
-    [{:kind :invalid-churn,
+    [{:kind :terminal,
       :message
-      "Further ordinary STOP transitions cannot change the machine graph and must cease until external structural state changes."}],
+      "No external structural state changed; applying this as an ordinary STOP would reproduce the rejected graph."}],
     :disposition :stop,
     :author "topo-2",
-    :reason :external-structural-state-unchanged,
+    :reason :terminal-external-state-block,
     :commands
-    [{:cmd
-      "git rev-parse --short HEAD && git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn && git status --short",
+    [{:cmd "git rev-parse --short HEAD", :exit 0, :finding "d2b88df2"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
-      :finding
-      "HEAD 872cbfe2; writer 8e9127f2; 675 items OK with 651 done and 14 superseded; worktree clean."}],
+      :finding "675 items OK; 651 done; 14 superseded; 1 repair"}
+     {:cmd
+      "test \"$(git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb)\" = \"8e9127f2\"",
+      :exit 0}],
     :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790647987296-27201-da36c9fd",
-     :finding
-     "Deterministic blocker remains unchanged at recorded commit ceccfc55: attempt 3 is :done, the adapter is :done-unreviewed and still depends on attempt 3, superseded count is still 14, and build_step.bb is still at 8e9127f2 with no deletion-capable repair transition. The row itself records external-structural-state-unchanged; repeated ordinary transitions cannot make it reviewable. Exact repair requires an owner structural commit or enhanced writer that atomically supersedes attempt 3 and deletes only its adapter edge, retaining the refill dependency and reviewed attempts 1-2 and recording those as the hold basis. Do not redispatch until that state changes. Fresh execution this invocation read commit ceccfc55, reran the 675-item validator, inspected the exact states/dependencies, and confirmed the unchanged writer."},
     :required-transition
     {:atomic true,
      :supersede
@@ -81127,7 +81124,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
