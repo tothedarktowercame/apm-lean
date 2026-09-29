@@ -50217,72 +50217,33 @@
    :review-finding
    "Deterministic row-contract defect: routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is still kind :representation-comparison with dependencies on the t94A08 quotient-open and affine inverse-normalization rows and a representation contract requiring explicit OpenPartialHomeomorphs from complex-projective nonvanishing-coordinate patches to affine coordinate spaces, but recorded commit 922a62d462624618b2d2a437288a31b62dfe7974 changes only ConstructionTargets/RealProjectiveSmoothTarget.lean and merely adds rpSmoothAtlas_exists : Nonempty (SmoothAtlas 2). It constructs no affine chart homeomorphism, proves none of the required source/target, coordinates/chartInverse, mutual-inverse, or coordinateLine normalization fields, and its recorded scope is unrelated to the row representation. Mechanical source hash, compile/build, axiom, registry, ledger, and placeholder gates pass, but they validate the wrong theorem. Repair by restoring this row acceptance/scope/commit to an actual AffineChartConstruction 2 implementation over the frozen complex-projective topology; if rpSmoothAtlas_exists is desired, record it under a separate correctly identified real-projective atlas row.",
    :evidence
-   {:placeholder-delta 0,
-    :residual
-    "rpSmoothAtlas_exists now exports the concrete dimension-two atlas at the registered interface. Installing rpSmoothAtlas.charts and rpSmoothAtlas.smooth exposes its quotient_localDiffeomorph field for the frozen sphereProjection 2; the remaining t94A08 work is its affine-chart and descended-map construction.",
-    :outcome :done-unreviewed,
-    :warnings [],
-    :statement-hashes
-    {:registry "130 registered statements match, 0 do not",
-     :scoped-source-sha256
-     "e2d3f91eaf4ce06f6e39696396e958dfe59e46796452383c467f9dca382a119d"},
-    :axioms ["propext" "Classical.choice" "Quot.sound"],
-    :author "Joe Corneli <holtzermann17@gmail.com>",
+   {:outcome :stop,
+    :seat "topo-6",
+    :reason
+    "Exact representation boundary: the reviewed row requires an inhabitant of AffineChartConstruction 2, namely OpenPartialHomeomorphs whose source is the nonvanishing representative-coordinate patch, target is univ, forward map is coordinates, and inverse is chartInverse. The bank currently proves quotient openness, continuous_chartInverse, coordinateLine_mem_affineSource, coordinates_coordinateLine, and chartInverse_zero, but contains no theorem establishing continuity of coordinates on the quotient patch and no scale-invariant identities coordinates (chartInverse z) = z or chartInverse (coordinates x) = x. Those three facts are required fields of the OpenPartialHomeomorph and cannot be inferred from inverse continuity or center normalization. The row's recorded repair scope and acceptance instead concern rpSmoothAtlas_exists in RealProjectiveSmoothTarget.lean, which is unrelated to the declared complex-projective representation comparison; implementing that acceptance again would repeat the reviewed contract defect. No scoped edit was made.",
     :commands
-    [{:cmd "sha256sum /tmp/rp_smooth_atlas_descent_contract.lean",
-      :exit 0,
-      :output
-      "677f02101fcdb213c34e12591ad011721016986ec219a9ceb0363e424a7e5f98  /tmp/rp_smooth_atlas_descent_contract.lean"}
-     {:cmd
-      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+    [{:cmd
+      "lake env lean ConstructionTargets/T94A08AffineChartInverseNormalization.lean",
       :exit 0}
-     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
-      :exit 0,
-      :output "Build completed successfully (8241 jobs)."}
      {:cmd
-      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      "rg -n \"theorem (continuous_coordinates|coordinates_chartInverse|chartInverse_coordinates)|AffineChartConstruction 2\" ConstructionTargets --glob '*.lean'",
       :exit 1,
       :expected-exit 1}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :output "130 registered statements match, 0 do not"}
      {:cmd
-      "lake env lean /dev/stdin with Manifold and ContDiff scopes, axiom audit, and rpSmoothAtlas quotient_localDiffeomorph interface check",
-      :exit 0,
-      :output
-      "rpSmoothAtlas_exists depends on axioms: [propext, Classical.choice, Quot.sound]; the installed charts and smooth instances expose IsLocalDiffeomorph (𝓡 2) (𝓡 2) ∞ (sphereProjection 2)."}
-     {:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
       :exit 0,
       :output
-      "topology-worklist: 348 items OK; {:done 319, :superseded 23, :open 2, :blocked 4}"}
-     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
-      :exit 0,
-      :output
-      "922a62d462624618b2d2a437288a31b62dfe7974\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
+      "topology-worklist: 348 items OK; {:done 319, :superseded 23, :repair 1, :blocked 4, :open 1}"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-    :diagnostic-history
-    [{:cmd
-      "lake env lean /dev/stdin interface check without opening the ContDiff notation scope",
-      :exit 1,
-      :finding
-      "The target compile and build had succeeded, but the standalone interface check parsed infinity incorrectly because it opened Manifold without ContDiff. Opening both scopes, as in the compiled fixture, made the exact local-diffeomorphism check succeed."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790652799984-27502-1813892f",
-     :finding
-     "Deterministic row-contract defect: routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is still kind :representation-comparison with dependencies on the t94A08 quotient-open and affine inverse-normalization rows and a representation contract requiring explicit OpenPartialHomeomorphs from complex-projective nonvanishing-coordinate patches to affine coordinate spaces, but recorded commit 922a62d462624618b2d2a437288a31b62dfe7974 changes only ConstructionTargets/RealProjectiveSmoothTarget.lean and merely adds rpSmoothAtlas_exists : Nonempty (SmoothAtlas 2). It constructs no affine chart homeomorphism, proves none of the required source/target, coordinates/chartInverse, mutual-inverse, or coordinateLine normalization fields, and its recorded scope is unrelated to the row representation. Mechanical source hash, compile/build, axiom, registry, ledger, and placeholder gates pass, but they validate the wrong theorem. Repair by restoring this row acceptance/scope/commit to an actual AffineChartConstruction 2 implementation over the frozen complex-projective topology; if rpSmoothAtlas_exists is desired, record it under a separate correctly identified real-projective atlas row."},
-    :commit "922a62d462624618b2d2a437288a31b62dfe7974",
-    :changed-paths
-    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-    :fixture
-    {:path "ConstructionTargets/RealProjectiveSmoothTarget.lean",
-     :sha256
-     "e2d3f91eaf4ce06f6e39696396e958dfe59e46796452383c467f9dca382a119d"},
-    :seat "topo-6"},
+    :residual
+    "Repair the row contract to target a genuine affine-chart module and first supply the quotient-patch continuity of coordinates plus the two exact mutual-inverse identities; those are the missing mathematical inputs between the banked normalization packet and AffineChartConstruction 2.",
+    :author "topo-6",
+    :disposition :stop},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
