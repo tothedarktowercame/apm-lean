@@ -80240,9 +80240,23 @@
       "After reviewed t99J04, every topo1 problem will be closed, stopped, or held by stop-after-two unless t99J04 yields a new completed route step requiring one final bounded adapter.",
       :other-consumers []}],
     :author "topo-4",
-    :disposition :replan},
+    :disposition :replan,
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790640414628-26814-e1463ea8",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 88efde7e"
+      "git show 88efde7e:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "python3 scripts/statement-registry.py check --rev 88efde7e"
+      "Python comment-stripped census of twelve topo1 blobs at 88efde7e and its parent"
+      "python3 scripts/statement-registry.py fingerprint t99J04 --rev 88efde7e"
+      "verify canonical packages; lake env lean problems/t99J04/lean/Main.lean"
+      "inspect t99J04 frozen theorem, route, model-space orientations, and inverse-function APIs"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-4. Commit 88efde7e changes only holes/labs/topology-contract/worklist.edn; its recorded 659-item snapshot validates. Independent census agrees at 22 placeholders and is unchanged from the parent: t01A01=2, t02A05=2, t91J06=3, t92J08=3, t93J06=0, t94A07=1, t94A09=0, t94A10=3, t95J02=3, t97A07=1, t99J04=3, t99J06=1. It correctly moves t91J06 to stop-after-two after two reviewed attempts at the same interval-extension boundary, preserves every prior reviewed closure/STOP/hold, and leaves t99J04 as the sole unheld topo1 route. The registry reproduces 130/130 with file hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0; t99J04 has faithful frozen hash f212fd5b83bec0f7fb083dcf9ed6e9e175394fdf3f3a3cd3d9f284709c6eea3c. The election stays at the actual frozen representation: finite-dimensional self-model manifolds, ContMDiffAt, bijective mfderiv, and IsLocalDiffeomorphAt. The Euclidean inverse theorem supplies an OpenPartialHomeomorph, but chart conjugation and smooth inverse packaging into a manifold PartialDiffeomorph remain explicit obligations; the coordinate-map branch separately requires ContMDiff and the WithLp/pi mfderiv identity before the already proved dual-coordinate bijectivity lemma applies. The compact-connected surjectivity direction is already compiled and consumes the local-diffeomorphism result in the correct direction. Fixture hashing is not applicable to this strategy-only checkpoint."}},
    :phase :strategy,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -80258,7 +80272,7 @@
    :other-consumers []}
   {:consumer :t99J04,
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J04",
    :acceptance
