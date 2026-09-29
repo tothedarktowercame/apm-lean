@@ -80022,13 +80022,28 @@
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
       :finding "130 registered statements match, 0 do not"}],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790640067986-26799-4548a128",
+     :commands
+     ["git diff-tree --no-commit-id --name-status -r 9c8a4df7"
+      "git show 9c8a4df7:holes/labs/topology-contract/worklist.edn | bb holes/labs/topology-contract/worklist_check.bb /dev/stdin"
+      "test canonical .lake/packages authority; lake env lean -o /tmp/t91closure-review/t91J06/lean/Main.olean problems/t91J06/lean/Main.lean"
+      "LEAN_PATH=/tmp/t91closure-review lake env lean /tmp/t91j06-compatible-coordinates-consumer.lean"
+      "sha256sum /tmp/t91j06-compatible-coordinates-consumer.lean problems/STATEMENTS.json"
+      "python3 scripts/statement-registry.py check; fingerprint t91J06 --rev 9c8a4df7"
+      "Python comment-stripped source and fixture census at commit and parent"
+      "rg interval extension, affine/piecewise homeomorphism, and monotonicity APIs"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from author topo-4. Commit 9c8a4df7 changes only holes/labs/topology-contract/worklist.edn and its 657-item recorded snapshot validates. The adapter row honestly records STOP rather than closure: t91J06 is byte-identical to its parent and retains three comment-stripped placeholders. The compatible-coordinate fixture has zero textual placeholders, reproduces SHA-256 5aa47dd88cee1602b0dbe77d0d3089ad02554d3181a29218f6ee6bf6cf61c61c, compiles, and inherits sorryAx exactly through apm_t91J06_bridge_compatible_stage_coordinates. The registry reproduces 130/130, registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, and faithful t91J06 hash c1a73551b731d282c660c5b3c11feb7bf57c91b4cb7e7e1488030072f0390910. The boundary and orientation remain accurate: Mathlib provides interval injection monotonicity and generic affine/piecewise tools, but no bundled theorem performing the required two-sided affine extension between nested closed intervals with continuity at both joins, bijectivity, orientation handling, and exact agreement on the inner interval. This construction is prerequisite to the compatible Nat.rec family. The fixture carries hf and never invokes the false gluing helper that omits hf; corrected embedding-aware gluing and final assembly remain explicit downstream obligations."},
     :fixture
     {:path "/tmp/t91j06-compatible-coordinates-consumer.lean",
      :sha256
      "5aa47dd88cee1602b0dbe77d0d3089ad02554d3181a29218f6ee6bf6cf61c61c"},
     :seat "topo-4"},
    :phase :probe,
-   :state :done-unreviewed,
+   :state :done,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t91J06",
    :acceptance
@@ -80063,7 +80078,7 @@
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
    :phase :strategy,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
