@@ -52311,6 +52311,21 @@
       :output
       "6e71fef74a1b3ce7bca62ee6a77e54bf266bcb4e\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790649923384-27302-ca77cfd2",
+     :commands
+     ["git show/diff-tree 6e71fef74a1b3ce7bca62ee6a77e54bf266bcb4e"
+      "sha256sum committed/current source and frozen fixture"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "#print axioms and #check both added declarations"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder recount at recorded commit"],
+     :finding
+     "PASS: reviewer codex-7 verified recorded commit 6e71fef74a1b3ce7bca62ee6a77e54bf266bcb4e, authored by topo-6/Joe, changes only ConstructionTargets/RealProjectiveSmoothTarget.lean and adds exactly the two requested inhabitants. Committed/current source SHA-256 is 07ff9747b98b520f9fa96eba695020454318293f169912ddb9fab47d096cd57f; frozen fixture SHA-256 is 939c4ff864e4b5b1a07025aef184e70125c7b7c9994d98480b6677403dc88dbd. Lean compile and 8241-job build pass; both declarations use only propext, Classical.choice, Quot.sound; registry is 130/130 and the 348-row worklist validates. sphereProjectionLocalInverseRestrictionsContMDiff applies the arbitrary pointwise coordinate normal form through the restriction reduction in the required ContMDiffOn direction, preserving the definitions quantified quotient chart and manifold instances; sphereProjectionAndLocalInversesSmooth then combines that inverse witness with the established forward projection smoothness through the exact equivalence adapter. No representation boundary or invariant is bypassed. Comment-stripped sorry/admit/axiom counts are 0/0/0 in scope and 1/0/0 in each frozen consumer."},
     :commit "6e71fef74a1b3ce7bca62ee6a77e54bf266bcb4e",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -52320,7 +52335,7 @@
      "07ff9747b98b520f9fa96eba695020454318293f169912ddb9fab47d096cd57f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -52380,7 +52395,7 @@
        :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
