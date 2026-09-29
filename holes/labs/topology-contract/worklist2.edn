@@ -50407,45 +50407,66 @@
    "single-consumer frozen quotient-patch ratio continuity theorem",
    :consumer :t94A08,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t94A08_affine_chart_contract.lean",
-      :sha256
-      "8e350110331fb268f8df287cd6a10fdcfe9e445d38c54698c21ff09862bf6d49"},
-     :commands
-     [{:cmd "lake env lean /tmp/t94A08_affine_chart_contract.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_affine_chart_contract.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd "sha256sum /tmp/t94A08_affine_chart_contract.lean",
-       :exit 0}],
-     :warnings
-     ["Lean reports that hv is unused in coordinates_quotientMap_eq_vectorRatio; unit-scalar cancellation proves the ratio identity even when the denominator is zero, while the patch hypothesis remains useful at the call site."],
-     :implementation
-     {:scope
-      ["ConstructionTargets/T94A08AffineCoordinatePatchTopology.lean"],
-      :declarations
-      ["ConstructionTargets.T94A08ProjectiveConic.AffineCoordinatePatchTopology"
-       "ConstructionTargets.T94A08ProjectiveConic.coordinates_quotientMap_eq_vectorRatio"
-       "ConstructionTargets.T94A08ProjectiveConic.affineCoordinatePatchTopology"],
-      :acceptance
-      {:compile
-       "lake env lean ConstructionTargets/T94A08AffineCoordinatePatchTopology.lean",
-       :no-placeholders true,
-       :statement-registry true,
-       :axioms :standard-only,
-       :requirements
-       "For every i prove the representative-nonvanishing projective patch open via projectiveQuotientOpenAuthority, prove the representative ratio equals the vector ratio by Projectivization.mk_eq_mk_iff, prove the vector ratio continuous coordinatewise, and descend continuity through affineCoordinatePatchRestrictedQuotient. Retain the affineCoordinateQuotientCompatibility_of_patchTopology reduction."}},
-     :residual
-     "The frozen affine patch is now open and coordinates is ContinuousOn it without asserting continuity of Projectivization.rep. The remaining quotient-compatibility row combines this theorem with the banked inverse normalization and mutual-inverse algebra to construct the exact affine OpenPartialHomeomorphs."}},
+   {:placeholder-delta 0,
+    :residual
+    "The frozen projective affine patch is open and coordinates is ContinuousOn it by descent through the restricted quotient, without asserting continuity of Projectivization.rep. The next quotient-compatibility row can combine this theorem with inverse normalization and the mutual-inverse algebra to construct the required affine OpenPartialHomeomorphs.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lean reports that hv is unused in coordinates_quotientMap_eq_vectorRatio; unit-scalar cancellation proves the ratio identity even when the denominator is zero, while the patch hypothesis remains useful at the call site."],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "be0140db2d62b60c0d605aa1307b41f25136c5d9b7af0c0c6d0b18a31f2b53a4"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t94A08_affine_chart_contract.lean",
+      :exit 0,
+      :output
+      "8e350110331fb268f8df287cd6a10fdcfe9e445d38c54698c21ff09862bf6d49  /tmp/t94A08_affine_chart_contract.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T94A08AffineCoordinatePatchTopology.lean",
+      :exit 0,
+      :output
+      "warning: unused variable hv in coordinates_quotientMap_eq_vectorRatio"}
+     {:cmd
+      "lake build ConstructionTargets.T94A08AffineCoordinatePatchTopology",
+      :exit 0,
+      :output
+      "Build completed successfully (8246 jobs); warning: unused variable hv."}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T94A08AffineCoordinatePatchTopology.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin with import and #print axioms for AffineCoordinatePatchTopology, coordinates_quotientMap_eq_vectorRatio, and affineCoordinatePatchTopology",
+      :exit 0,
+      :output
+      "All three declarations depend on axioms: [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 353 items OK; {:done 321, :superseded 23, :open 2, :blocked 7}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "fc24661b718557b80eafa41178772438a3cddf5f\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/T94A08AffineCoordinatePatchTopology.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "fc24661b718557b80eafa41178772438a3cddf5f",
+    :changed-paths
+    ["ConstructionTargets/T94A08AffineCoordinatePatchTopology.lean"],
+    :fixture
+    {:path
+     "ConstructionTargets/T94A08AffineCoordinatePatchTopology.lean",
+     :sha256
+     "be0140db2d62b60c0d605aa1307b41f25136c5d9b7af0c0c6d0b18a31f2b53a4"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T94A08AffineCoordinatePatchTopology.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
