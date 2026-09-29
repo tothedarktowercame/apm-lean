@@ -1327,6 +1327,15 @@ theorem sphereProjectionQuotientLocalDiffeomorph :
   smoothLocalHomeomorphBranches_gives_localDiffeomorph
     sphereProjectionSmoothLocalHomeomorphBranches
 
+theorem sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas
+    (h : SphereProjectionQuotientLocalDiffeomorph) :
+    Nonempty (SmoothAtlas 2) := by
+  obtain ⟨F⟩ := sphereProjectionLocalInverseFamily
+  exact ⟨{
+    charts := F.quotientChartedSpace
+    smooth := sphereProjectionQuotientAtlasCompatibility F
+    quotient_localDiffeomorph := h F }⟩
+
 theorem coordinateContDiffAt_reaches_contMDiff :
     SphereProjectionQuotientContMDiff :=
   quotientContMDiffAt_gives_quotientContMDiff
