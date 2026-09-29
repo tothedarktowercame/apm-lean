@@ -1080,6 +1080,39 @@ theorem sphereProjectionQuotientContMDiffAt :
   quotientCoordinateContDiffWithinAt_gives_contMDiffAt
     sphereProjectionQuotientCoordinateContDiffWithinAt
 
+theorem sphereProjectionQuotientContMDiff :
+    SphereProjectionQuotientContMDiff :=
+  quotientContMDiffAt_gives_quotientContMDiff
+    sphereProjectionQuotientContMDiffAt
+
+def SphereProjectionLocalInverseRestrictionsContMDiff : Prop :=
+  ∀ F : SphereProjectionLocalInverseFamily,
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    ∀ e : OpenPartialHomeomorph (Sphere 2) (ProjectiveSpaceTopology.Space ℝ 2),
+      sphereProjection 2 = e →
+      ContMDiffOn (𝓡 2) (𝓡 2) ∞ e.symm e.target
+
+theorem projectionAndLocalInversesSmooth_iff :
+    SphereProjectionAndLocalInversesSmooth ↔
+      SphereProjectionQuotientContMDiff ∧
+        SphereProjectionLocalInverseRestrictionsContMDiff := by
+  constructor
+  · intro h
+    constructor
+    · exact fun F => (h F).1
+    · intro F
+      letI := F.quotientChartedSpace
+      letI : IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
+        sphereProjectionQuotientAtlasCompatibility F
+      exact (h F).2
+  · rintro ⟨hforward, hinverse⟩ F
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    exact ⟨hforward F, hinverse F⟩
+
 theorem coordinateContDiffAt_reaches_contMDiff :
     SphereProjectionQuotientContMDiff :=
   quotientContMDiffAt_gives_quotientContMDiff
