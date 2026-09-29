@@ -80838,6 +80838,21 @@
       :exit 0,
       :finding "1"}],
     :diagnostic-history [],
+    :review
+    {:outcome :pass,
+     :seat "codex-3",
+     :job "invoke-1790645185201-27047-852ec4c8",
+     :commands
+     ["git show/diff-tree recorded commit b6b814d6"
+      "bb worklist_check on recorded worklist"
+      "sha256sum and lake env lean exact part-a fixture"
+      "lake env lean t98A06 source"
+      "statement-registry check and fingerprint t98A06"
+      "nested-comment-aware parent/commit/fixture placeholder census"
+      "inspect fixture interface, convex gluing assembly, and right-inverse API boundary"
+      "git diff --check and verify source unchanged"],
+     :finding
+     "PASS: reviewer codex-3 is distinct from evidence author topo-2. Commit b6b814d6 changes only the worklist; t98A06 source is unchanged from its parent and retains its single composite placeholder. The recorded 673-item snapshot validates, the canonical package authority is correct, and the exact fixture reproduces SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d. Source and fixture compile; the fixture has zero textual placeholders and its printed axioms are the standard three plus exactly T98A06Probe.apm_t98A06_bridge_local_smooth_submersion_lift. Registry check is 130/130 with registry hash ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0, and frozen t98A06 hash cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5 reproduces. The theorem direction and representations match the frozen first conjunct: a smooth target vector field must be lifted to a smooth tangent-bundle section whose mfderiv image is v(f x). The fixture proves convexity of those affine fibers and the global partition-of-unity gluing from neighborhoodwise smooth sections. Available APIs provide pointwise finite-dimensional right inverses and fixed-space inverse machinery, but no theorem assembling smooth right inverses for the varying tangent fibers; tangent-chart trivialization, persistence of invertibility, smooth inverse dependence, and transport back remain explicit. The STOP therefore isolates the exact prerequisite without presenting the downstream gluing as a completed local-lift proof; part (b) remains separate."},
     :changed-paths [],
     :fixture
     {:path "/tmp/t98a06-part-a-probe.lean",
@@ -80845,7 +80860,7 @@
      "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["problems/t98A06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
    :acceptance
@@ -80944,7 +80959,7 @@
       "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
      :seat "topo-4"}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
