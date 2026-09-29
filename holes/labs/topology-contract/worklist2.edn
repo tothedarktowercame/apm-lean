@@ -51620,36 +51620,61 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path
-      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-      :sha256
-      "883aac9990abd2d1203ece3453e7f22d430dbb7526e3a3c6169e2f7b30e71b8d"},
-     :commands
-     [{:cmd
-       "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :warnings
-     ["Lean emitted only the style suggestion `Try this: intro F p` at line 255; compilation succeeded."],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
-     :acceptance
-     {:implementation
-      "Append sphereProjectionQuotientCoordinateLocalNormalForm exactly as compiled in the fixture. Compile ConstructionTargets/RealProjectiveSmoothTarget.lean, verify it contains no placeholders, run the statement registry check, and print axioms for sphereProjectionQuotientCoordinateLocalNormalForm and quotientCoordinateLocalNormalForm_gives_contDiffAt."},
-     :residual
-     "The exact forward quotient-coordinate normal form is complete, including eventual ordinary-or-antipodal coordinate equality and the corresponding chart-domain witness. The next consumer step is SphereProjectionQuotientCoordinateContDiffAt, obtained by the already compiled quotientCoordinateLocalNormalForm_gives_contDiffAt reduction."}},
+   {:placeholder-delta 0,
+    :residual
+    "Use quotientCoordinateLocalNormalForm_gives_contDiffAt to inhabit SphereProjectionQuotientCoordinateContDiffAt, then continue the banked reductions toward the quotient local-diffeomorphism certificate.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["Lean emitted no warnings on the final scoped compile."],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "f7db6c9c5174251c7bf22a2a0ab38767e333969f6355b9a65e942ba4eaf546cb"},
+    :axioms
+    {:sphereProjectionQuotientCoordinateLocalNormalForm
+     ["propext" "Classical.choice" "Quot.sound"],
+     :quotientCoordinateLocalNormalForm_gives_contDiffAt
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_projection_coordinate_local_normal_form_axioms.lean",
+      :exit 0,
+      :output
+      "sphereProjectionQuotientCoordinateLocalNormalForm and quotientCoordinateLocalNormalForm_gives_contDiffAt each depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean && python3 scripts/statement-registry.py check && git diff --check",
+      :exit 1,
+      :finding
+      "The generated fixture-prefix splice inserted one literal plus sign and stopped before the final two helper proof branches. Removing the stray token and restoring the two exact fixture branches produced the successful acceptance compile."}],
+    :commit "aa4c85cb8eb9a8e0ed812aa0e59c56295d523b6c",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+     :sha256
+     "883aac9990abd2d1203ece3453e7f22d430dbb7526e3a3c6169e2f7b30e71b8d"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
