@@ -51543,9 +51543,35 @@
     :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_projection_lift_branch_at_base.lean",
+      :sha256
+      "3e6fb31f1596adec460b03a1addcd9168e059f5c21e12d3e846e390b1cb22ba5"},
+     :commands
+     [{:cmd
+       "sha256sum /tmp/rp_sphere_projection_lift_branch_at_base.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_projection_lift_branch_at_base.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_lift_branch_at_base.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
+     :acceptance
+     {:implementation
+      "Append sphereProjection_lift_eq_or_antipodal and sphereProjection_coordinate_branch_domains to ConstructionTargets/RealProjectiveSmoothTarget.lean exactly as compiled in the fixture. Compile the target, verify no placeholders, run the statement registry check, and print axioms for both theorems."},
+     :residual
+     "The chosen quotient-chart lift is identified at every sphere point as that point or its antipode, and the exact corresponding ordinary or antipodal sphere-chart domain witness is available. The parent coordinate normal form now only needs the eventual equality transport through extChartAt symm and simplification of the quotient extChartAt formula."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
