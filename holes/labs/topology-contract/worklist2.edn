@@ -50212,13 +50212,39 @@
    :depends-on
    [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}
   {:bounded-exception
+   "single-consumer exact affine-chart quotient compatibility and homeomorphism packet",
+   :consumer :t94A08,
+   :phase :probe,
+   :state :open,
+   :scope ["ConstructionTargets/T94A08AffineChartHomeomorph.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free fixture for ConstructionTargets/T94A08AffineChartHomeomorph.lean. Prove continuous_coordinates on the frozen nonvanishing representative-coordinate quotient patch, coordinates_chartInverse and chartInverse_coordinates as exact scale-invariant mutual-inverse identities, and construct affineChartConstruction : AffineChartConstruction 2 from OpenPartialHomeomorphs with source the nonvanishing-coordinate patch, target univ, forward map coordinates, and inverse chartInverse. Reuse the banked quotient openness, continuous_chartInverse, coordinateLine_mem_affineSource, coordinates_coordinateLine, and chartInverse_zero. Preserve all frozen definitions and topology. This supplies the affine-chart route step for the sole remaining t94A08 placeholder."},
+   :representation
+   {:source
+    "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
+    :target
+    "The affine coordinate spaces indexed by the two coordinates other than i",
+    :direction
+    "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
+   :id
+   :routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1,
+   :kind :representation-comparison,
+   :depends-on
+   [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1
+    :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1]}
+  {:bounded-exception
    "single-consumer exact projective affine-chart construction",
    :consumer :t94A08,
    :review-finding
    "Deterministic row-state and contract defect persists: the current evidence for routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is {:outcome :stop, :disposition :stop} and records no implementation commit, explicitly because continuous_coordinates, coordinates_chartInverse, and chartInverse_coordinates are absent; nevertheless the row is marked :done-unreviewed. Its scope and implementation acceptance still target ConstructionTargets/RealProjectiveSmoothTarget.lean and rpSmoothAtlas_exists, while its id, kind, dependencies, and representation require AffineChartConstruction 2 with explicit complex-projective patch-to-affine OpenPartialHomeomorphs. Fresh Lean compilation of the normalization bank passes, fresh search confirms the three required affine results remain absent, registry is 130/130, ledger validation mechanically passes with this sole done-unreviewed row, scoped banks contain no placeholders, and frozen t94A08 still has one sorry. Repair the ledger state to :repair/open and replace the unrelated scope/acceptance with a genuine affine-chart implementation task supplying quotient-patch coordinate continuity and both mutual-inverse identities; only then record and review a commit constructing AffineChartConstruction 2.",
    :evidence
-   {:outcome :stop,
-    :seat "topo-6",
+   {:residual
+    "Repair the row contract to target a genuine affine-chart module and first supply the quotient-patch continuity of coordinates plus the two exact mutual-inverse identities; those are the missing mathematical inputs between the banked normalization packet and AffineChartConstruction 2.",
+    :outcome :stop,
+    :disposition :stop,
+    :author "topo-6",
     :reason
     "Exact representation boundary: the reviewed row requires an inhabitant of AffineChartConstruction 2, namely OpenPartialHomeomorphs whose source is the nonvanishing representative-coordinate patch, target is univ, forward map is coordinates, and inverse is chartInverse. The bank currently proves quotient openness, continuous_chartInverse, coordinateLine_mem_affineSource, coordinates_coordinateLine, and chartInverse_zero, but contains no theorem establishing continuity of coordinates on the quotient patch and no scale-invariant identities coordinates (chartInverse z) = z or chartInverse (coordinates x) = x. Those three facts are required fields of the OpenPartialHomeomorph and cannot be inferred from inverse continuity or center normalization. The row's recorded repair scope and acceptance instead concern rpSmoothAtlas_exists in RealProjectiveSmoothTarget.lean, which is unrelated to the declared complex-projective representation comparison; implementing that acceptance again would repeat the reviewed contract defect. No scoped edit was made.",
     :commands
@@ -50238,18 +50264,61 @@
       :output
       "topology-worklist: 348 items OK; {:done 319, :superseded 23, :repair 1, :blocked 4, :open 1}"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-    :residual
-    "Repair the row contract to target a genuine affine-chart module and first supply the quotient-patch continuity of coordinates plus the two exact mutual-inverse identities; those are the missing mathematical inputs between the banked normalization packet and AffineChartConstruction 2.",
-    :author "topo-6",
-    :disposition :stop,
     :review
     {:outcome :fail,
      :seat "codex-7",
      :job "invoke-1790653019942-27517-95c38701",
      :finding
-     "Deterministic row-state and contract defect persists: the current evidence for routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is {:outcome :stop, :disposition :stop} and records no implementation commit, explicitly because continuous_coordinates, coordinates_chartInverse, and chartInverse_coordinates are absent; nevertheless the row is marked :done-unreviewed. Its scope and implementation acceptance still target ConstructionTargets/RealProjectiveSmoothTarget.lean and rpSmoothAtlas_exists, while its id, kind, dependencies, and representation require AffineChartConstruction 2 with explicit complex-projective patch-to-affine OpenPartialHomeomorphs. Fresh Lean compilation of the normalization bank passes, fresh search confirms the three required affine results remain absent, registry is 130/130, ledger validation mechanically passes with this sole done-unreviewed row, scoped banks contain no placeholders, and frozen t94A08 still has one sorry. Repair the ledger state to :repair/open and replace the unrelated scope/acceptance with a genuine affine-chart implementation task supplying quotient-patch coordinate continuity and both mutual-inverse identities; only then record and review a commit constructing AffineChartConstruction 2."}},
+     "Deterministic row-state and contract defect persists: the current evidence for routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1 is {:outcome :stop, :disposition :stop} and records no implementation commit, explicitly because continuous_coordinates, coordinates_chartInverse, and chartInverse_coordinates are absent; nevertheless the row is marked :done-unreviewed. Its scope and implementation acceptance still target ConstructionTargets/RealProjectiveSmoothTarget.lean and rpSmoothAtlas_exists, while its id, kind, dependencies, and representation require AffineChartConstruction 2 with explicit complex-projective patch-to-affine OpenPartialHomeomorphs. Fresh Lean compilation of the normalization bank passes, fresh search confirms the three required affine results remain absent, registry is 130/130, ledger validation mechanically passes with this sole done-unreviewed row, scoped banks contain no placeholders, and frozen t94A08 still has one sorry. Repair the ledger state to :repair/open and replace the unrelated scope/acceptance with a genuine affine-chart implementation task supplying quotient-patch coordinate continuity and both mutual-inverse identities; only then record and review a commit constructing AffineChartConstruction 2."},
+    :probe
+    {:outcome :revise,
+     :seat "topo-6",
+     :commands
+     [{:cmd
+       "lake env lean ConstructionTargets/T94A08AffineChartInverseNormalization.lean",
+       :exit 0}
+      {:cmd
+       "rg -n \"theorem (continuous_coordinates|coordinates_chartInverse|chartInverse_coordinates)|AffineChartConstruction 2\" ConstructionTargets --glob '*.lean'",
+       :exit 1,
+       :expected-exit 1}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}
+      {:cmd
+       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+       :exit 0,
+       :output
+       "topology-worklist: 348 items OK; {:done 319, :superseded 23, :repair 1, :blocked 4, :open 1}"}
+      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+     :prerequisite
+     {:bounded-exception
+      "single-consumer exact affine-chart quotient compatibility and homeomorphism packet",
+      :consumer :t94A08,
+      :phase :probe,
+      :state :open,
+      :scope ["ConstructionTargets/T94A08AffineChartHomeomorph.lean"],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free fixture for ConstructionTargets/T94A08AffineChartHomeomorph.lean. Prove continuous_coordinates on the frozen nonvanishing representative-coordinate quotient patch, coordinates_chartInverse and chartInverse_coordinates as exact scale-invariant mutual-inverse identities, and construct affineChartConstruction : AffineChartConstruction 2 from OpenPartialHomeomorphs with source the nonvanishing-coordinate patch, target univ, forward map coordinates, and inverse chartInverse. Reuse the banked quotient openness, continuous_chartInverse, coordinateLine_mem_affineSource, coordinates_coordinateLine, and chartInverse_zero. Preserve all frozen definitions and topology. This supplies the affine-chart route step for the sole remaining t94A08 placeholder."},
+      :representation
+      {:source
+       "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
+       :target
+       "The affine coordinate spaces indexed by the two coordinates other than i",
+       :direction
+       "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
+      :id
+      :routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1,
+      :kind :representation-comparison,
+      :depends-on
+      [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1
+       :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1]},
+     :residual
+     "The current row cannot be implemented under its unrelated RealProjectiveSmoothTarget scope. The named prerequisite supplies exactly the missing quotient-patch coordinate continuity, both mutual-inverse identities, and the AffineChartConstruction 2 representation required before the parent row can proceed."},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :blocked,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50266,7 +50335,8 @@
    :kind :representation-comparison,
    :depends-on
    [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1
-    :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1]}
+    :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1
+    :routes-2026-09-29-t94a08-affine-chart-quotient-compatibility-topo2-r1]}
   {:bounded-exception
    "single-consumer exact two-conjunct topological bridge",
    :consumer :t94A08,
