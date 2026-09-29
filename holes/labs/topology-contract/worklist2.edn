@@ -51544,33 +51544,54 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_sphere_projection_lift_branch_at_base.lean",
-      :sha256
-      "3e6fb31f1596adec460b03a1addcd9168e059f5c21e12d3e846e390b1cb22ba5"},
-     :commands
-     [{:cmd
-       "sha256sum /tmp/rp_sphere_projection_lift_branch_at_base.lean",
-       :exit 0}
-      {:cmd
-       "lake env lean /tmp/rp_sphere_projection_lift_branch_at_base.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_lift_branch_at_base.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"]},
-     :acceptance
-     {:implementation
-      "Append sphereProjection_lift_eq_or_antipodal and sphereProjection_coordinate_branch_domains to ConstructionTargets/RealProjectiveSmoothTarget.lean exactly as compiled in the fixture. Compile the target, verify no placeholders, run the statement registry check, and print axioms for both theorems."},
-     :residual
-     "The chosen quotient-chart lift is identified at every sphere point as that point or its antipode, and the exact corresponding ordinary or antipodal sphere-chart domain witness is available. The parent coordinate normal form now only needs the eventual equality transport through extChartAt symm and simplification of the quotient extChartAt formula."}},
+   {:placeholder-delta 0,
+    :residual
+    "Transport the eventual inverse-branch alternative through extChartAt symm and simplify the quotient extChartAt formula to obtain the exact quotient-coordinate local normal form.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "538f1820268ebc588a01b2f634d121d11ca469d944a169d4021e2f2c7d5255e0"},
+    :axioms
+    {:sphereProjection_lift_eq_or_antipodal
+     ["propext" "Classical.choice" "Quot.sound"],
+     :sphereProjection_coordinate_branch_domains
+     ["propext" "Classical.choice" "Quot.sound"]},
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/rp_sphere_projection_lift_branch_at_base.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_projection_lift_branch_domains_axioms.lean",
+      :exit 0,
+      :output
+      "sphereProjection_lift_eq_or_antipodal and sphereProjection_coordinate_branch_domains each depend on [propext, Classical.choice, Quot.sound]."}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "5e7343e3b5842624eca39aae2fb6ea8f16e8a1d9",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "/tmp/rp_sphere_projection_lift_branch_at_base.lean",
+     :sha256
+     "3e6fb31f1596adec460b03a1addcd9168e059f5c21e12d3e846e390b1cb22ba5"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
