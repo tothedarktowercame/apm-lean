@@ -1,0 +1,27 @@
+import Mathlib
+
+open Set
+
+noncomputable section
+
+def clampRamp {a b m : ℝ} (hab : a ≤ b)
+    (h : Set.Icc a b ≃ₜ Set.Icc (-m) m) (x : ℝ) : ℝ :=
+  (h (Set.projIcc a b hab x) : ℝ) - max 0 ((a - x) / a) +
+    max 0 ((x - b) / (1 - b))
+
+lemma continuous_clampRamp {a b m : ℝ} (hab : a ≤ b)
+    (h : Set.Icc a b ≃ₜ Set.Icc (-m) m) :
+    Continuous (clampRamp hab h) := by
+  unfold clampRamp
+  exact ((((continuous_subtype_val.comp (h.continuous.comp continuous_projIcc)).sub
+    (continuous_const.max (((continuous_const.sub continuous_id).div_const a)))).add
+    (continuous_const.max ((continuous_id.sub continuous_const).div_const (1 - b)))))
+
+lemma clampRamp_eq_on_inner {a b m : ℝ} (hab : a ≤ b)
+    (ha : 0 < a) (hb : b < 1)
+    (h : Set.Icc a b ≃ₜ Set.Icc (-m) m) {x : ℝ} (hx : x ∈ Set.Icc a b) :
+    clampRamp hab h x = (h ⟨x, hx⟩ : ℝ) := by
+  rw [clampRamp, Set.projIcc_of_mem hab hx]
+  rw [max_eq_left (div_nonpos_of_nonpos_of_nonneg (sub_nonpos.mpr hx.1) ha.le)]
+  rw [max_eq_left (div_nonpos_of_nonpos_of_nonneg (sub_nonpos.mpr hx.2) (sub_nonneg.mpr hb.le))]
+  ring

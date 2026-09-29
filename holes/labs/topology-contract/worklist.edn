@@ -80940,6 +80940,29 @@
     :routes-2026-09-29-topo1-refill-heavy-1],
    :current-residual
    "Review three adapters and two shared foundations, then refill.",
+   :other-consumers []}
+  {:consumer :t91J06,
+   :phase :implementation,
+   :state :open,
+   :scope ["problems/t91J06/lean/Main.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t91J06/reroute-clamp-ramp",
+   :acceptance
+   {:placeholder
+    "the sorry in apm_t91J06_bridge_compatible_stage_coordinates",
+    :placeholder-before 3,
+    :placeholder-after 2,
+    :axioms :standard-only,
+    :route-step "t91J06 reroute steps 1-4",
+    :implementation
+    "Follow holes/labs/topology-routes/reroute-t91J06.md steps 1-4. Replace the piecewise-affine extension of the old route by the clamp-and-ramp formula F(x) = h(projIcc a b x) - max 0 ((a-x)/a) + max 0 ((x-b)/(1-b)); its continuity and exact restriction to [a,b] already compile in holes/labs/topology-routes/reroute-t91J06-ClampRamp.lean.txt (copy it to a .lean file). Prove strict monotonicity by region, range by intermediate_value_Icc, package with Continuous.homeoOfEquivCompactToT2, handle antitone transitions by target negation, then recurse from the affine stage-zero coordinate. Do not touch the glue helper in this row (it is false as stated; reroute step 5 replaces it).",
+    :commands
+    ["lake env lean problems/t91J06/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-09-29-t91j06-reroute-stage-coordinates-1,
+   :kind :final-adapter,
+   :depends-on [:routes-2026-09-28-t91j06-adapter-closure-1],
+   :current-residual
+   "Stop-after-two hold lifted by a Codex re-route (topo-9, 2026-09-29; holes/labs/topology-routes/reroute-t91J06.md). Three sorries remain.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
