@@ -52353,42 +52353,61 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path
-      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-      :sha256
-      "3308a89cadd428fb03290db46579d1ee4acd54ef95a6252596bce1eac4e8b0b7"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd
-       "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 1,
-       :finding
-       "The first restriction-smoothness proof passed sphereProjection 2 = e where ContMDiffOn.congr required e = sphereProjection 2; taking the pointwise symmetry corrected the transport."}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:implementation
-       "Retain the banked sphereProjectionAndLocalInversesSmooth inhabitant and add projectionAndLocalInversesSmooth_gives_restrictionsSmooth exactly as compiled. For the forward restriction, transport sphereProjection smoothness to e with the symmetric pointwise equality; use the combined contract's inverse component unchanged. Run the module compile, placeholder scan, and statement-registry check."}},
-     :residual
-     "SphereProjectionAndLocalInversesSmooth is banked and now yields SphereProjectionLocalHomeomorphRestrictionsSmooth without repeating coordinate proofs. The next reduction can combine this restriction smoothness with sphereProjection_isLocalHomeomorph to construct SphereProjectionSmoothLocalHomeomorphBranches and then SphereProjectionQuotientLocalDiffeomorph."}},
+   {:placeholder-delta 0,
+    :residual
+    "The combined forward/inverse smoothness contract now yields smoothness of every sphereProjection local-homeomorphism restriction, with the forward map transported to each restriction in the correct equality direction. The next reduction combines this theorem with sphereProjection_isLocalHomeomorph to construct SphereProjectionSmoothLocalHomeomorphBranches and then SphereProjectionQuotientLocalDiffeomorph.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "0c9b05d43fb0bd210dce5d2bcfc8d2ac3e44b70ed25a3b7aff6f2ad0e56b7ecf"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      :exit 0,
+      :output
+      "3308a89cadd428fb03290db46579d1ee4acd54ef95a6252596bce1eac4e8b0b7  /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0,
+      :output "Build completed successfully (8241 jobs)."}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin axiom audit for projectionAndLocalInversesSmooth_gives_restrictionsSmooth",
+      :exit 0,
+      :output
+      "The declaration depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 348 items OK; {:done 312, :superseded 23, :open 3, :blocked 10}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "604f64823b376ad072934bcdbe82cfa4dab63f98\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "604f64823b376ad072934bcdbe82cfa4dab63f98",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "ConstructionTargets/RealProjectiveSmoothTarget.lean",
+     :sha256
+     "0c9b05d43fb0bd210dce5d2bcfc8d2ac3e44b70ed25a3b7aff6f2ad0e56b7ecf"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
