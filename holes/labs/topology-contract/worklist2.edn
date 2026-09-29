@@ -52354,53 +52354,46 @@
   {:consumer :t95A04,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
      {:path
-      "/tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
       :sha256
-      "6bcf185c501f699851f4386d25bdace5c6a1a9a45ed55919f3beda3c2a53850f"},
+      "3308a89cadd428fb03290db46579d1ee4acd54ef95a6252596bce1eac4e8b0b7"},
      :commands
      [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
        :exit 0}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :output "130 registered statements match, 0 do not"}
       {:cmd
-       "sha256sum /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
        :exit 0}],
-     :residual
-     "Global forward smoothness is banked as sphereProjectionQuotientContMDiff. The compiled fixture proves that the parent combined contract follows from exactly the remaining inverse-only proposition SphereProjectionLocalInverseRestrictionsContMDiff; no additional forward coordinate calculus remains.",
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+       :exit 1,
+       :finding
+       "The first restriction-smoothness proof passed sphereProjection 2 = e where ContMDiffOn.congr required e = sphereProjection 2; taking the pointwise symmetry corrected the transport."}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
       :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of SphereProjectionLocalInverseRestrictionsContMDiff in /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean. For every SphereProjectionLocalInverseFamily F, install exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F; then for every OpenPartialHomeomorph e agreeing with sphereProjection 2, prove ContMDiffOn (real model 2) (real model 2) infinity e.symm e.target. Establish the inverse coordinate expression in the quotientChart and standard sphere charts using the banked ordinary-or-antipodal transition results. Retain localInverseRestrictions_gives_projectionAndLocalInversesSmooth and the downstream reductions through SphereProjectionQuotientLocalDiffeomorph. This supplies the inverse-only smoothness half for t95A04 and t96A07."},
-      :id
-      :routes-2026-09-29-rp-sphere-local-inverse-restrictions-contmdiff-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
-       :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
-       :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
-       :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1],
-      :other-consumers [:t96A07]}}},
-   :phase :probe,
+      {:implementation
+       "Retain the banked sphereProjectionAndLocalInversesSmooth inhabitant and add projectionAndLocalInversesSmooth_gives_restrictionsSmooth exactly as compiled. For the forward restriction, transport sphereProjection smoothness to e with the symmetric pointwise equality; use the combined contract's inverse component unchanged. Run the module compile, placeholder scan, and statement-registry check."}},
+     :residual
+     "SphereProjectionAndLocalInversesSmooth is banked and now yields SphereProjectionLocalHomeomorphRestrictionsSmooth without repeating coordinate proofs. The next reduction can combine this restriction smoothness with sphereProjection_isLocalHomeomorph to construct SphereProjectionSmoothLocalHomeomorphBranches and then SphereProjectionQuotientLocalDiffeomorph."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free inhabitant of SphereProjectionAndLocalInversesSmooth in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F with exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F installed, prove ContMDiff (real model 2) (real model 2) infinity (sphereProjection 2) once. Also prove that every OpenPartialHomeomorph e agreeing with sphereProjection 2 has ContMDiffOn e.symm on e.target. Establish both claims in standard sphere and quotientChart coordinates using the banked ordinary-or-antipodal transition theorems. Retain projectionAndLocalInversesSmooth_gives_restrictionsSmooth and all reductions through SphereProjectionQuotientLocalDiffeomorph. This supplies the nonredundant smoothness input for t95A04 and t96A07."},
+   {:implementation
+    "Retain the banked sphereProjectionAndLocalInversesSmooth inhabitant and add projectionAndLocalInversesSmooth_gives_restrictionsSmooth exactly as compiled. For the forward restriction, transport sphereProjection smoothness to e with the symmetric pointwise equality; use the combined contract's inverse component unchanged. Run the module compile, placeholder scan, and statement-registry check."},
    :id
    :routes-2026-09-29-rp-sphere-projection-and-local-inverses-smooth-topo2-r1,
    :kind :reusable-theorem,
