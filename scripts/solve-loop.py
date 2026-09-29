@@ -423,7 +423,7 @@ def main() -> int:
     r.add_argument("--seats", required=True)
     r.add_argument("--max-jobs", type=int, default=600)
     r.add_argument("--attempts", type=int, default=50, help="cap per problem")
-    r.add_argument("--stall", type=int, default=20,
+    r.add_argument("--stall", type=int, default=10,
                    help="stop a problem after this many attempts without a new low in its sorry count")
     r.add_argument("--only", help="comma-separated problem ids")
     r.add_argument("--skip", help="comma-separated problem ids to leave alone")
