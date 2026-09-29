@@ -81087,23 +81087,17 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "The external graph mutation is still absent at 03b14ccd. The row has empty scope and cannot repair the ledger. Do not apply another ordinary transition or redispatch it; resume only after the owner atomically supersedes attempt 3 and removes its adapter edge.",
+    "At 1a69d29b the superseded count is still 14 and the structural repair remains absent. Do not apply this through ordinary receipt handling and do not redispatch until the owner atomically supersedes attempt 3 and removes its adapter edge.",
     :outcome :stop,
     :disposition :stop,
     :author "topo-2",
-    :reason :terminal-block-awaiting-external-mutation,
+    :reason :external-state-still-unchanged,
     :commands
     [{:cmd
       "git rev-parse --short HEAD && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "HEAD 03b14ccd; 675 items OK; 651 done; 14 superseded; 1 repair."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790648522428-27229-4c2f0bae",
-     :finding
-     "Deterministic graph defect persists in recorded commit 7e10cbcc: its sole change reclassifies the empty-scope adapter row from :repair to :done-unreviewed and rewrites diagnostics, while attempt 3 remains :done and the adapter still depends on it; the validator still reports 14 superseded items. Exact repair is an owner structural commit or writer enhancement that atomically marks attempt 3 :superseded and removes only its adapter edge, retaining the refill edge and reviewed attempts 1-2 as the stop-after-two basis. The recorded snapshot validates at 675 items, the fixture hash reproduces as cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, source and fixture compile, registry is 130/130, and orientation remains correct; these gates confirm no implementation progress and do not repair the graph. Do not redispatch until external state changes."},
+      "HEAD 1a69d29b; 675 items OK; 651 done; 14 superseded; 1 repair."}],
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81117,7 +81111,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
