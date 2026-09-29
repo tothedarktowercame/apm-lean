@@ -80985,17 +80985,19 @@
    :review-finding
    "Deterministic stop-after-two violation: routes-2026-09-29-t98a06-local-smooth-submersion-lift-1 and -2 are already two independently reviewed zero-progress STOPs at the same local smooth right-inverse DAG boundary, and the -2 review explicitly says it supplies stop-after-two evidence. This third row changes only the ledger, leaves the source at one placeholder, reuses the identical fixture/hash and interface axiom, banks no declaration, and itself records no new mathematical boundary. Repair by rejecting/superseding attempt 3, removing it as a prerequisite of the part-a adapter, and transitioning t98A06 to held-stop-after-two based on reviewed attempts 1 and 2; reopen only after an owner-approved materially different reroute or new theorem/API. Fresh replay: commit 389959ee scope/worklist validation, source and fixture Lean gates, fixture SHA-256, registry fingerprint, and parent/commit placeholder census all reproduced.",
    :evidence
-   {:placeholder-delta 0,
+   {:supersede
+    [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-3],
+    :placeholder-delta 0,
     :residual
-    "The exact boundary is now narrower: Mathlib has contDiffAt_map_inverse for an invertible family in one fixed ContinuousLinearMap space, but no banked theorem trivializes the source and target tangent bundles near x0 and proves that the restricted varying mfderiv is ContDiff into that fixed operator space. The complement at x0 must then be transported into those coordinates, invertibility kept on a neighborhood, the smooth inverse applied to the coordinate form of v, and the result transported back with a ContMDiffOn total-space certificate. The available pointwise rightInverse cannot supply this smooth dependence. The consumer remains unchanged at one placeholder.",
+    "Held after two independently reviewed zero-progress STOPs at the same boundary. The source remains at one placeholder. Attempt 3 banks no declaration and is rejected as a duplicate attempt; the part-a adapter must remain blocked on the held consumer rather than treating attempt 3 as a completed prerequisite.",
     :outcome :stop,
     :warnings
-    [{:kind :inherited-placeholder,
+    [{:kind :stop-after-two,
       :message
-      "The consumer compiles with its single registered theorem placeholder."}
-     {:kind :fixture-prerequisite,
+      "Attempt 3 repeats the identical reviewed boundary and must not become another completed dependency."}
+     {:kind :ledger-transition,
       :message
-      "The compiled fixture assumes apm_t98A06_bridge_local_smooth_submersion_lift and validates only its downstream use."}],
+      "The supervisor must supersede attempt 3 and remove only its dependency edge from the blocked part-a adapter; this seat did not edit the ledger."}],
     :statement-hashes
     {:t98A06
      "cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5",
@@ -81008,45 +81010,40 @@
      "Quot.sound"
      "T98A06Probe.apm_t98A06_bridge_local_smooth_submersion_lift"],
     :author "topo-2",
-    :reason :missing-mfderiv-fixed-coordinate-smooth-family,
+    :reason :held-stop-after-two,
     :commands
     [{:cmd
-      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
-      :exit 0}
-     {:cmd "sha256sum /tmp/t98a06-part-a-probe.lean", :exit 0}
-     {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
-     {:cmd "lake env lean /tmp/t98a06-part-a-probe.lean",
-      :exit 0,
-      :finding "part_a still assumes the requested bridge"}
-     {:cmd
-      "rg -n 'contDiff.*inverse|ContDiff.*inverse|isOpen.*invert|inverse.*ContinuousLinear|ContinuousLinearEquiv.*contDiff|contDiff.*ContinuousLinearEquiv' .lake/packages/mathlib/Mathlib/Analysis .lake/packages/mathlib/Mathlib/Geometry/Manifold ConstructionTargets | head -100",
+      "rg -n 'routes-2026-09-29-t98a06-local-smooth-submersion-lift-[123]|t98a06-part-a-adapter' holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "Smooth inversion exists for fixed-coordinate invertible operator families, but no result produces the required smooth fixed-coordinate restricted-mfderiv family from manifold tangent fibers."}
+      "Attempts 1 and 2 are reviewed done STOPs; attempt 3 is repair; part-a adapter depends on all three."}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      :exit 0,
+      :finding
+      "topology-worklist: 675 items OK; {:done 650, :superseded 14, :needs-owner 1, :repair 1, :blocked 4, :open 5}"}
+     {:cmd "sha256sum /tmp/t98a06-part-a-probe.lean", :exit 0}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :finding "130 registered statements match, 0 do not"}
-     {:cmd
-      "python3 comment-stripped placeholder census problems/t98A06/lean/Main.lean",
-      :exit 0,
-      :finding "1"}
-     {:cmd "git diff --exit-code -- problems/t98A06/lean/Main.lean",
-      :exit 0}],
+      :finding "130 registered statements match, 0 do not"}],
     :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790645974037-27088-585b8549",
-     :finding
-     "Deterministic stop-after-two violation: routes-2026-09-29-t98a06-local-smooth-submersion-lift-1 and -2 are already two independently reviewed zero-progress STOPs at the same local smooth right-inverse DAG boundary, and the -2 review explicitly says it supplies stop-after-two evidence. This third row changes only the ledger, leaves the source at one placeholder, reuses the identical fixture/hash and interface axiom, banks no declaration, and itself records no new mathematical boundary. Repair by rejecting/superseding attempt 3, removing it as a prerequisite of the part-a adapter, and transitioning t98A06 to held-stop-after-two based on reviewed attempts 1 and 2; reopen only after an owner-approved materially different reroute or new theorem/API. Fresh replay: commit 389959ee scope/worklist validation, source and fixture Lean gates, fixture SHA-256, registry fingerprint, and parent/commit placeholder census all reproduced."},
+    :dependency-repair
+    {:row :routes-2026-09-29-t98a06-part-a-adapter-1,
+     :remove
+     [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-3],
+     :retain
+     [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-1
+      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-2]},
     :changed-paths [],
     :fixture
     {:path "/tmp/t98a06-part-a-probe.lean",
      :sha256
      "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
+    :reopen-condition
+    "Owner-approved materially different reroute or a new theorem/API supplying the fixed-coordinate smooth mfderiv family.",
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope ["problems/t98A06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
    :acceptance
