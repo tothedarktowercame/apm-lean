@@ -81087,23 +81087,17 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "At 8776ce0b build_step.bb remains 8e9127f2 and the validated ledger still has 14 superseded rows. The atomic repair that supersedes attempt 3 and deletes only its adapter edge has not landed. With empty scope, this row cannot change those fields; cease redispatch until external structural state changes.",
+    "At e3fe2c52 build_step.bb remains 8e9127f2 and the validator still reports 14 superseded rows. No structural state change was observed: attempt 3 still requires supersession and removal of only its adapter edge. This empty-scope row cannot perform that repair; cease redispatch until it lands externally.",
     :outcome :stop,
     :disposition :stop,
     :author "topo-2",
-    :reason :atomic-ledger-repair-not-landed,
+    :reason :structural-state-change-not-observed,
     :commands
     [{:cmd
       "git rev-parse --short HEAD && git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "HEAD 8776ce0b; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790653099962-27520-e2926ba2",
-     :finding
-     "Deterministic graph defect persists in recorded commit f6404253. Its sole changed file is the worklist, and the empty-scope transition only records that atomic ledger repair has not landed: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, the validator reports 14 superseded items, and build_step.bb remains at 8e9127f2. Exact repair requires an owner-authorized structural commit or deletion-capable writer that atomically marks attempt 3 :superseded and removes only its adapter edge, retaining the refill edge and reviewed attempts 1-2 as the stop-after-two basis. Fresh recorded-snapshot verification reproduced 675 items OK and fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d. Cease redispatch until external structural state changes."},
+      "HEAD e3fe2c52; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81117,7 +81111,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
