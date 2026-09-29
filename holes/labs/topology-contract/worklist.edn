@@ -80077,8 +80077,172 @@
      :review-outcomes]},
    :stop-condition
    "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :evidence
+   {:outcome :replan,
+    :seat "topo-4",
+    :commands
+    [{:cmd
+      "read TOPOLOGY-ROUTES.md, routes-{1,2,3}.md, and reviewed dependency receipts",
+      :exit 0}
+     {:cmd
+      "Python comment-stripped placeholder census for all twelve topo1 consumers",
+      :exit 0,
+      :finding
+      "t01A01=2 t02A05=2 t91J06=3 t92J08=3 t93J06=0 t94A07=1 t94A09=0 t94A10=3 t95J02=3 t97A07=1 t99J04=3 t99J06=1"}
+     {:cmd "test canonical .lake/packages authority", :exit 0}
+     {:cmd "lake env lean problems/t99J04/lean/Main.lean", :exit 0}
+     {:cmd
+      "rg IsLocalDiffeomorphAt, PartialDiffeomorph, inverse-function, and coordinate-map derivative results in consumer and ConstructionTargets",
+      :exit 0,
+      :finding
+      "The source has three placeholders; ConstructionTargets contains implicit-function partial-homeomorphism uses but no manifold local-diffeomorphism theorem or coordinate-map mfderiv bridge."}
+     {:cmd "python3 scripts/statement-registry.py fingerprint t99J04",
+      :exit 0,
+      :finding
+      "f212fd5b83bec0f7fb083dcf9ed6e9e175394fdf3f3a3cd3d9f284709c6eea3c"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}],
+    :finding
+    {:placeholder-delta {:t91J06 0, :topo1-total 0},
+     :typed-residual-change
+     {:t91J06
+      "Two reviewed PASS/STOP outcomes isolate the same prerequisite: a two-sided affine extension of a homeomorphism on a strict inner real interval, including join continuity, bijectivity, both orientations, and exact restriction. The false downstream glue helper remains unused."},
+     :infrastructure-packets {:t91J06 1},
+     :review-outcomes
+     {:t91J06 :pass-stop-after-two,
+      :t99J06 :pass-hold,
+      :t95J02 :pass-stop-after-two,
+      :t93J06 :pass-closed,
+      :t97A07 :pass-hold,
+      :t01A01 :pass-stop,
+      :t92J08 :pass-stop,
+      :t02A05 :pass-stop,
+      :t94A07 :pass-hold,
+      :t94A10 :pass-stop,
+      :t94A09 :pass-closed},
+     :routes
+     {:t91J06
+      {:placeholders 3,
+       :status :held-stop-after-two,
+       :remaining
+       ["inner-interval homeomorphism extension"
+        "compatible-coordinate recursion"
+        "embedding-aware weak-topology gluing"
+        "assembly"]},
+      :t99J06
+      {:placeholders 1,
+       :status :held,
+       :remaining
+       ["explicit parametrization, form, image, injectivity, and integral computations"]},
+      :t95J02
+      {:placeholders 3,
+       :status :held-stop-after-two,
+       :remaining
+       ["vertical EqvGen fiber classification and CircleB homeomorphism"
+        "glide homotopy and H1 kernel"
+        "retraction injectivity"
+        "assembly"]},
+      :t93J06 {:placeholders 0, :status :closed, :remaining []},
+      :t97A07
+      {:placeholders 1,
+       :status :held,
+       :remaining
+       ["regular-points openness, extrema, and connected-complement route"]},
+      :t99J04
+      {:placeholders 3,
+       :status :open,
+       :remaining
+       ["Euclidean partial diffeomorphism from the Banach inverse theorem"
+        "chart partial diffeomorphisms and manifold IFT"
+        "coordinate-map smoothness and mfderiv identity"
+        "assembly"]},
+      :t01A01
+      {:placeholders 2,
+       :status :stopped,
+       :remaining
+       ["projective quotient descent"
+        "punctured-RP2 retraction and lift"
+        "assembly"]},
+      :t92J08
+      {:placeholders 3,
+       :status :stopped,
+       :remaining
+       ["neighborhood-uniform manifold chart transport"
+        "compact minimum"
+        "blow-up contradiction and assembly"]},
+      :t02A05
+      {:placeholders 2,
+       :status :stopped,
+       :remaining
+       ["normalized Euclidean Hausdorff sphere-mass bridge"
+        "assembly"]},
+      :t94A07
+      {:placeholders 1,
+       :status :held,
+       :remaining ["half-turn local data and circle obstruction"]},
+      :t94A10
+      {:placeholders 3,
+       :status :stopped,
+       :remaining
+       ["variable-scaled alternating-form closedness"
+        "sphere pullback and Green obstruction"
+        "assembly"]},
+      :t94A09 {:placeholders 0, :status :closed, :remaining []}},
+     :deferred
+     "All non-route infrastructure is deferred. With every other topo1 consumer closed, stopped, or held, t99J04 is the sole unheld route. Its manifold inverse-function theorem is elected only at the finite-dimensional boundaryless Euclidean-model generality consumed by the frozen statement."},
+    :replacement-items
+    [{:consumer :t99J04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md/t99J04",
+      :acceptance
+      {:probe
+       "Compile a complete placeholder-free fixture for the exact registered apm_t99j04 statement. Supply route steps 1-5: turn ContDiffAt with bijective fderiv into a Euclidean PartialDiffeomorph by shrinking ContDiffAt.toOpenPartialHomeomorph and proving the inverse smooth; package model-space charts as PartialDiffeomorphs and conjugate the Euclidean result to prove apm_t99J04_bridge_local_inverse_function; prove coordinateMap is ContMDiff and compute its mfderiv as the WithLp transport of the pi family of coordinate mfderivs; use apm_t99J04_dualCoordinates_bijective to prove apm_t99J04_bridge_coordinateMap_mfderiv_bijective; and assemble both registered conjuncts through apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT. Work only at the frozen finite-dimensional Euclidean-manifold generality and do not change registered statements or definitions.",
+       :placeholder
+       "apm_t99J04_bridge_local_inverse_function, apm_t99J04_bridge_coordinateMap_mfderiv_bijective, and the final sorry in apm_t99j04",
+       :route-step
+       "t99J04 route steps 1-5, closing all three placeholders",
+       :gates
+       ["verify the canonical package authority before Lake"
+        "lake env lean on a complete exact-statement fixture exits 0"
+        "fixture contains no comment-stripped sorry"
+        "python3 scripts/statement-registry.py check exits 0"]},
+      :id :routes-2026-09-29-t99j04-adapter-closure-1,
+      :kind :final-adapter,
+      :depends-on [:routes-2026-09-28-checkpoint-topo1-after-t91j06-1],
+      :current-residual
+      "Three sorries: prove the boundaryless finite-dimensional manifold inverse-function bridge, prove smoothness and mfderiv bijectivity of the coordinate map, and assemble local diffeomorphism plus compact-to-connected surjectivity.",
+      :other-consumers []}
+     {:consumer :portfolio,
+      :checkpoint
+      {:after-problems 1,
+       :may-supersede-future true,
+       :required-measures
+       [:placeholder-delta
+        :typed-residual-change
+        :infrastructure-packets
+        :review-outcomes]},
+      :stop-condition
+      "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+      :phase :strategy,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:strategy
+       "Reread current registered statements, TOPOLOGY-ROUTES.md, all route files, and reviewed receipts; measure t99J04, preserve all reviewed holds and STOPs including the t91J06 and t95J02 stop-after-two holds, recount topo1 placeholders, and determine whether the topo1 portfolio has reached its stop condition."},
+      :id :routes-2026-09-29-checkpoint-topo1-after-t99j04-1,
+      :kind :strategy-checkpoint,
+      :depends-on [:routes-2026-09-29-t99j04-adapter-closure-1],
+      :current-residual
+      "After reviewed t99J04, every topo1 problem will be closed, stopped, or held by stop-after-two unless t99J04 yields a new completed route step requiring one final bounded adapter.",
+      :other-consumers []}],
+    :author "topo-4",
+    :disposition :replan},
    :phase :strategy,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -80091,6 +80255,57 @@
     :routes-2026-09-28-checkpoint-topo1-after-t95j02-1],
    :current-residual
    "After reviewed t91J06, preserve all holds and STOPs; if it closes or is held, t99J04 is the last unheld topo1 adapter route.",
+   :other-consumers []}
+  {:consumer :t99J04,
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md/t99J04",
+   :acceptance
+   {:probe
+    "Compile a complete placeholder-free fixture for the exact registered apm_t99j04 statement. Supply route steps 1-5: turn ContDiffAt with bijective fderiv into a Euclidean PartialDiffeomorph by shrinking ContDiffAt.toOpenPartialHomeomorph and proving the inverse smooth; package model-space charts as PartialDiffeomorphs and conjugate the Euclidean result to prove apm_t99J04_bridge_local_inverse_function; prove coordinateMap is ContMDiff and compute its mfderiv as the WithLp transport of the pi family of coordinate mfderivs; use apm_t99J04_dualCoordinates_bijective to prove apm_t99J04_bridge_coordinateMap_mfderiv_bijective; and assemble both registered conjuncts through apm_t99J04_surjective_of_bijective_mfderiv_of_localIFT. Work only at the frozen finite-dimensional Euclidean-manifold generality and do not change registered statements or definitions.",
+    :placeholder
+    "apm_t99J04_bridge_local_inverse_function, apm_t99J04_bridge_coordinateMap_mfderiv_bijective, and the final sorry in apm_t99j04",
+    :route-step
+    "t99J04 route steps 1-5, closing all three placeholders",
+    :gates
+    ["verify the canonical package authority before Lake"
+     "lake env lean on a complete exact-statement fixture exits 0"
+     "fixture contains no comment-stripped sorry"
+     "python3 scripts/statement-registry.py check exits 0"]},
+   :id :routes-2026-09-29-t99j04-adapter-closure-1,
+   :kind :final-adapter,
+   :depends-on
+   [:routes-2026-09-28-checkpoint-topo1-after-t91j06-1
+    :routes-2026-09-28-checkpoint-topo1-after-t91j06-1],
+   :current-residual
+   "Three sorries: prove the boundaryless finite-dimensional manifold inverse-function bridge, prove smoothness and mfderiv bijectivity of the coordinate map, and assemble local diffeomorphism plus compact-to-connected surjectivity.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Reread current registered statements, TOPOLOGY-ROUTES.md, all route files, and reviewed receipts; measure t99J04, preserve all reviewed holds and STOPs including the t91J06 and t95J02 stop-after-two holds, recount topo1 placeholders, and determine whether the topo1 portfolio has reached its stop condition."},
+   :id :routes-2026-09-29-checkpoint-topo1-after-t99j04-1,
+   :kind :strategy-checkpoint,
+   :depends-on
+   [:routes-2026-09-29-t99j04-adapter-closure-1
+    :routes-2026-09-28-checkpoint-topo1-after-t91j06-1],
+   :current-residual
+   "After reviewed t99J04, every topo1 problem will be closed, stopped, or held by stop-after-two unless t99J04 yields a new completed route step requiring one final bounded adapter.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01
