@@ -81087,50 +81087,31 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "At d2b88df2 the writer remains 8e9127f2 and the superseded count remains 14. Do not apply another ordinary transition and do not redispatch this row. Resume only after the owner commits the atomic supersede-plus-edge-deletion repair.",
+    "External state remains unchanged. Do not apply an ordinary transition or redispatch this row. Resume only after the owner commits the atomic supersession and edge deletion.",
     :outcome :stop,
-    :warnings
-    [{:kind :terminal,
-      :message
-      "No external structural state changed; applying this as an ordinary STOP would reproduce the rejected graph."}],
     :disposition :stop,
     :author "topo-2",
-    :reason :terminal-external-state-block,
+    :reason :confirmed-terminal-external-state-block,
     :commands
-    [{:cmd "git rev-parse --short HEAD", :exit 0, :finding "d2b88df2"}
-     {:cmd
-      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+    [{:cmd
+      "git rev-parse --short HEAD; git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
-      :finding "675 items OK; 651 done; 14 superseded; 1 repair"}
-     {:cmd
-      "test \"$(git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb)\" = \"8e9127f2\"",
-      :exit 0}],
-    :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790648192735-27210-b6ab1982",
-     :finding
-     "Terminal external-state blocker confirmed at recorded commit 34b958ad: attempt 3 remains :done, the adapter remains :done-unreviewed with the rejected attempt-3 dependency, superseded count remains 14, and build_step.bb remains unchanged at 8e9127f2. The row cannot pass through ordinary receipt handling. Exact repair requires owner-authorized atomic graph mutation: supersede attempt 3, delete only its adapter edge, retain the refill dependency and reviewed attempts 1-2, and record attempts 1-2 as the stop-after-two hold basis. Stop redispatching until that structural state changes. Fresh verification this invocation read commit 34b958ad, reran the recorded 675-item validator, inspected exact states/dependencies, confirmed the unchanged writer, and verified the commit changes only the worklist."},
+      :finding
+      "HEAD 27075158; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
     :required-transition
-    {:atomic true,
-     :supersede
-     [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-3],
-     :dependency-repair
-     {:row :routes-2026-09-29-t98a06-part-a-adapter-1,
-      :remove
-      [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-3],
-      :retain
-      [:routes-2026-09-29-topo1-refill-heavy-1
-       :routes-2026-09-29-t98a06-local-smooth-submersion-lift-1
-       :routes-2026-09-29-t98a06-local-smooth-submersion-lift-2]},
-     :hold-basis
-     [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-1
+    {:supersede
+     :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
+     :remove-edge
+     [:routes-2026-09-29-t98a06-part-a-adapter-1
+      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3],
+     :retain
+     [:routes-2026-09-29-topo1-refill-heavy-1
+      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-1
       :routes-2026-09-29-t98a06-local-smooth-submersion-lift-2]},
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
