@@ -52696,46 +52696,37 @@
   {:consumer :t95A04,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
-     {:path
-      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+     {:path "/tmp/rp_smooth_atlas_descent_contract.lean",
       :sha256
-      "0f456be4def2916a61e3cdb086cd114e922691adae51619685da11873feae1d9"},
+      "eac9ba208133499291c23110ce0864f1259ba49c544053ddbd7d94847d141835"},
      :commands
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+     [{:cmd "lake env lean /tmp/rp_smooth_atlas_descent_contract.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_smooth_atlas_descent_contract.lean || true)\"",
        :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :residual
-     "The quotient ChartedSpace and its IsManifold proof are banked, so the descent package has exactly one unresolved field: IsLocalDiffeomorph (real model 2) (real model 2) infinity (sphereProjection 2) under F.quotientChartedSpace and the banked quotient-manifold instance. The compiled fixture fixes precisely those instances and proves that this one certification produces Nonempty (SmoothAtlas 2), hence discharges the original descent contract without using its already-banked topological and antipodal hypotheses again.",
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}
+      {:cmd "sha256sum /tmp/rp_smooth_atlas_descent_contract.lean",
+       :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
       :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of SphereProjectionQuotientLocalDiffeomorph from /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every banked SphereProjectionLocalInverseFamily F, install exactly F.quotientChartedSpace and the IsManifold instance supplied by sphereProjectionQuotientAtlasCompatibility F, then prove IsLocalDiffeomorph (real model 2) (real model 2) infinity (sphereProjection 2). Construct the local partial diffeomorphisms from the existing sphereProjection local homeomorphs and prove their forward and inverse smoothness using the standard sphere charts and the quotientChart transition results. Retain the compiled sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas reduction. This supplies the sole remaining SmoothAtlas field for t95A04 and t96A07."},
-      :id
-      :routes-2026-09-29-rp-sphere-projection-quotient-local-diffeomorph-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
-       :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1],
-      :other-consumers [:t96A07]}}},
-   :phase :probe,
+      {:implementation
+       "Add SphereProjectionSmoothDescentContract, sphereAntipodalN_contMDiff, and sphereProjectionSmoothDescentContract exactly as compiled in /tmp/rp_smooth_atlas_descent_contract.lean. Implement the contract by applying sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas to sphereProjectionQuotientLocalDiffeomorph; retain the explicit two-sheeted and antipodal hypotheses in the contract interface. Run the module compile, placeholder scan, and statement-registry check."}},
+     :residual
+     "The original smooth-descent contract now has a placeholder-free inhabitant and yields Nonempty (SmoothAtlas 2). The topology, quotient charts, overlap transitions, manifold compatibility, and projection local diffeomorphism are all banked; remaining work lies in the consumer adapters for the descended maps and their geometric properties."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free inhabitant of SphereProjectionSmoothDescentContract from /tmp/rp_smooth_atlas_descent_contract.lean. Using the banked two-sheeted local model, build the ChartedSpace on the existing Space real 2 from positive-hemisphere restrictions of standard sphere charts; prove overlap transitions are standard sphere transitions composed only with identity or the analytic antipodal map, establish IsManifold, and prove sphereProjection 2 is an IsLocalDiffeomorph. This supplies exactly the smooth-descent substep of rpSmoothAtlas 2 for t95A04 and t96A07 without changing the frozen topology."},
+   {:implementation
+    "Add SphereProjectionSmoothDescentContract, sphereAntipodalN_contMDiff, and sphereProjectionSmoothDescentContract exactly as compiled in /tmp/rp_smooth_atlas_descent_contract.lean. Implement the contract by applying sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas to sphereProjectionQuotientLocalDiffeomorph; retain the explicit two-sheeted and antipodal hypotheses in the contract interface. Run the module compile, placeholder scan, and statement-registry check."},
    :id :routes-2026-09-28-rp-sphere-smooth-descent-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
