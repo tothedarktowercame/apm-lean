@@ -50128,9 +50128,34 @@
   {:bounded-exception
    "single-consumer affine inverse-section normalization packet",
    :consumer :t94A08,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t94A08_affine_chart_algebra.lean",
+      :sha256
+      "97f02574edee037b02e79995169dcb82e653ea9b34fc52a17dbc8b8cfe414ac5"},
+     :commands
+     [{:cmd "sha256sum /tmp/t94A08_affine_chart_algebra.lean", :exit 0}
+      {:cmd "lake env lean /tmp/t94A08_affine_chart_algebra.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_affine_chart_algebra.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :implementation
+     {:scope
+      ["ConstructionTargets/T94A08AffineChartInverseNormalization.lean"]},
+     :acceptance
+     {:implementation
+      "Create ConstructionTargets/T94A08AffineChartInverseNormalization.lean from the compiled fixture. Preserve the exact theorem statements continuous_chartInverse, coordinateLine_mem_affineSource, coordinates_coordinateLine, and chartInverse_zero. Compile the target, verify no placeholders, run the statement registry check, and print axioms for all four theorems."},
+     :residual
+     "The inverse affine section is continuous and all three coordinate-line normalization obligations are proved. The parent affine-chart construction still needs continuity of coordinates on the nonvanishing quotient patch and the two scale-invariant mutual-inverse identities."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope
+   ["ConstructionTargets/T94A08AffineChartInverseNormalization.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
