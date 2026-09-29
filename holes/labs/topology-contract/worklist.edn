@@ -81083,7 +81083,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :review-finding
-   "Deterministic structural defect persists at recorded commit ff6ea2f1: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, superseded count remains 14, and build_step.bb remains at 8e9127f2 without dependency deletion support. Only diagnostic evidence/reason text changed; the machine graph did not. Exact repair requires owner-authorized atomic supersession of attempt 3 plus deletion of only its adapter edge, retaining the refill dependency and reviewed attempts 1-2 and recording those two attempts as the hold basis. Further ordinary STOP transitions are invalid churn and must cease; keep the row needs-owner until the structural mutation is committed. Fresh execution validated the recorded 675-item snapshot, inspected exact states and edges, confirmed the unchanged writer, and reproduced fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d.",
+   "Deterministic structural defect remains at recorded commit 6137d90d: attempt 3 is still :done, the part-a adapter is still :done-unreviewed and depends on attempt 3, the validator still reports 14 superseded rows, and the writer remains unchanged at 8e9127f2. The evidence reason now says ordinary-transition-churn-must-cease, but this commit is another ordinary transition that leaves the graph untouched. Exact repair requires an owner structural commit or new atomic writer operation that supersedes attempt 3 and deletes only its adapter edge while retaining the refill dependency and attempts 1-2; the hold must cite reviewed attempts 1-2. Stop redispatching this row until that external state changes. Fresh verification this invocation read commit 6137d90d, reran the 675-item validator, inspected exact states/dependencies, confirmed the writer version, and verified the commit changes only the worklist.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -81103,6 +81103,12 @@
       :finding
       "HEAD c925463f; writer 8e9127f2; topology-worklist: 675 items OK; {:done 651, :superseded 14, :needs-owner 1, :repair 1, :open 5, :blocked 3}"}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790647818171-27191-d5dca1cc",
+     :finding
+     "Deterministic structural defect remains at recorded commit 6137d90d: attempt 3 is still :done, the part-a adapter is still :done-unreviewed and depends on attempt 3, the validator still reports 14 superseded rows, and the writer remains unchanged at 8e9127f2. The evidence reason now says ordinary-transition-churn-must-cease, but this commit is another ordinary transition that leaves the graph untouched. Exact repair requires an owner structural commit or new atomic writer operation that supersedes attempt 3 and deletes only its adapter edge while retaining the refill dependency and attempts 1-2; the hold must cite reviewed attempts 1-2. Stop redispatching this row until that external state changes. Fresh verification this invocation read commit 6137d90d, reran the 675-item validator, inspected exact states/dependencies, confirmed the writer version, and verified the commit changes only the worklist."},
     :required-transition
     {:atomic true,
      :supersede
@@ -81121,7 +81127,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
