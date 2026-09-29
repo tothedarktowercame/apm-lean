@@ -81083,7 +81083,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :review-finding
-   "Deterministic incomplete-repair defect: the prior PASS required the supervisor to supersede routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 and remove only its edge from routes-2026-09-29-t98a06-part-a-adapter-1, retaining attempts 1 and 2. Recorded commit 885154fd instead has attempt 3 in :done state, keeps it in the adapter depends-on vector, leaves the superseded count at 14, and describes the hold as occurring after three elected dependencies. This preserves the stop-after-two violation in the machine-readable graph even though the adapter STOP conclusion is otherwise correct. Repair the actual ledger fields: set attempt 3 to :superseded, remove its dependency edge from the part-a adapter, and state that the hold follows the two independently reviewed zero-progress STOPs 1 and 2. Fresh gates reproduced the 675-item validation, fixture hash cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, fixture/source Lean results, 130/130 registry check, frozen hash cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5, and the one remaining source placeholder.",
+   "Deterministic unresolved machine-graph defect: the new adapter evidence correctly diagnoses that the standard :stop transition cannot apply its required repair, but the recorded ledger still has attempt 3 in :done state and still includes attempt 3 in the part-a adapter depends-on vector. Passing this row would run the same ordinary transition and preserve the stop-after-two violation. The exact repair is an atomic ledger-writer operation that sets routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 to :superseded, deletes only that ID from routes-2026-09-29-t98a06-part-a-adapter-1 :depends-on, retains the refill row and attempts 1-2, and records the hold basis as reviewed attempts 1-2. If the writer cannot express deletion, stop and require an owner structural repair; do not mark this adapter done and do not map the rejected edge to another row. Fresh verification reproduced the 675-item current validation, superseded count 14, unchanged offending edge, fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, and 130/130 registry check.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -81126,6 +81126,12 @@
       :finding
       "Attempt 3 remains done and the repair-state adapter still names attempt 3 in :depends-on."}],
     :diagnostic-history [],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790646710325-27123-51edfa6a",
+     :finding
+     "Deterministic unresolved machine-graph defect: the new adapter evidence correctly diagnoses that the standard :stop transition cannot apply its required repair, but the recorded ledger still has attempt 3 in :done state and still includes attempt 3 in the part-a adapter depends-on vector. Passing this row would run the same ordinary transition and preserve the stop-after-two violation. The exact repair is an atomic ledger-writer operation that sets routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 to :superseded, deletes only that ID from routes-2026-09-29-t98a06-part-a-adapter-1 :depends-on, retains the refill row and attempts 1-2, and records the hold basis as reviewed attempts 1-2. If the writer cannot express deletion, stop and require an owner structural repair; do not mark this adapter done and do not map the rejected edge to another row. Fresh verification reproduced the 675-item current validation, superseded count 14, unchanged offending edge, fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, and 130/130 registry check."},
     :required-transition
     {:supersede
      [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-3],
@@ -81143,7 +81149,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
