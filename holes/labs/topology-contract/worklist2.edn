@@ -51403,13 +51403,74 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile a placeholder-free inhabitant of SphereProjectionQuotientCoordinateLocalNormalForm in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F and sphere point p, with the exact quotient charted-space and manifold instances installed, let y = sphereProjection 2 p and u = extChartAt (real model 2) p p. Prove that the extended-chart coordinate map for sphereProjection is eventually equal near u either to the ordinary standard-sphere transition from p to F.lift y together with membership in its exact transition source, or to the antipodal-inserted transition together with membership in the first chart target and the antipodal image in the second chart source. Derive the alternative from the two-sheeted fibre law and the chosen inverse branch at y. Retain quotientCoordinateLocalNormalForm_gives_contDiffAt and all downstream reductions. This supplies the exact forward coordinate normal form for t95A04 and t96A07."},
+   :id
+   :routes-2026-09-29-rp-sphere-projection-coordinate-local-normal-form-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1
+    :routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
+    :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path
+      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      :sha256
+      "59cffec44d0fe47233508ebec0f165762243e0e793911162b2d5d976f50bca7e"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+       :exit 1,
+       :finding
+       "The first local-normal-form interface omitted opening Topology, so neighborhood notation was unresolved; opening the namespace corrected the fixture."}],
+     :warnings
+     ["Lean emitted only the stylistic suggestion to combine consecutive intro commands in quotientContMDiffAt_gives_quotientContMDiff."],
+     :residual
+     "The coordinate ContDiffAt goal now reduces to one explicit local normal form. The compiled prerequisite preserves both required pieces in each disjunct: eventual equality of the exact extended-chart projection coordinate map to the ordinary or antipodal-inserted standard sphere transition, and the matching chart-domain witness. The compiled reduction applies SphereChartTransitionAlternativesSmooth to that witness and transports smoothness through the eventual equality.",
+     :prerequisite
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free inhabitant of SphereProjectionQuotientCoordinateLocalNormalForm in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F and sphere point p, with the exact quotient charted-space and manifold instances installed, let y = sphereProjection 2 p and u = extChartAt (real model 2) p p. Prove that the extended-chart coordinate map for sphereProjection is eventually equal near u either to the ordinary standard-sphere transition from p to F.lift y together with membership in its exact transition source, or to the antipodal-inserted transition together with membership in the first chart target and the antipodal image in the second chart source. Derive the alternative from the two-sheeted fibre law and the chosen inverse branch at y. Retain quotientCoordinateLocalNormalForm_gives_contDiffAt and all downstream reductions. This supplies the exact forward coordinate normal form for t95A04 and t96A07."},
+      :id
+      :routes-2026-09-29-rp-sphere-projection-coordinate-local-normal-form-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1
+       :routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
+       :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1],
+      :other-consumers [:t96A07]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free inhabitant of SphereProjectionQuotientCoordinateContDiffAt in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F with exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F installed, and every p in Sphere 2, prove ContDiffAt real infinity of extChartAt (real model 2) (sphereProjection 2 p) composed with sphereProjection 2 composed with the inverse extChartAt (real model 2) p, at extChartAt (real model 2) p p. Prove this coordinate map eventually equals either the ordinary standard-sphere chart transition or its antipodal-inserted alternative, and apply SphereChartTransitionAlternativesSmooth with the exact domain witness. Retain quotientCoordinateContDiffAt_gives_contDiffWithinAt and all downstream reductions. This supplies the exact local coordinate-smoothness theorem for t95A04 and t96A07."},
    :id
    :routes-2026-09-29-rp-sphere-projection-coordinate-contdiffat-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1
-    :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1],
+    :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
+    :routes-2026-09-29-rp-sphere-projection-coordinate-local-normal-form-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
