@@ -21,8 +21,8 @@ landed directly on 2026-09-28.
 3. Every work row names the problem, the `sorry` and the route step it supplies. A row that
    does not shorten a route in `routes-*.md` is not elected.
 4. Apply the stop-after-two rule per problem: two consecutive rows that do not reduce that
-   problem's `sorry` count or complete a listed route step end work on it until a Claude
-   reviewer re-routes it; record that in the finding.
+   problem's `sorry` count or complete a listed route step end work on it until a fresh Codex
+   seat (not a loop seat) re-routes it (Joe, 2026-09-29); record that in the finding.
 5. If a route step turns out false or unbuildable, STOP with the evidence (a compiled
    counterexample where possible). Never change a registered statement.
 
