@@ -52570,6 +52570,21 @@
       :output
       "ecc91cbde83cec0f22fd9c9ea205b026caf29dee\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790650985117-27373-1277365d",
+     :commands
+     ["git show/diff-tree ecc91cbde83cec0f22fd9c9ea205b026caf29dee"
+      "sha256sum committed/current source and frozen fixture"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "#print axioms and #check both added declarations"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder recount at recorded commit"],
+     :finding
+     "PASS: reviewer codex-7 verified recorded commit ecc91cbde83cec0f22fd9c9ea205b026caf29dee, authored by topo-6/Joe, changes only ConstructionTargets/RealProjectiveSmoothTarget.lean and adds exactly the two requested inhabitants. Committed/current source SHA-256 is 5462f13518a706edd86abde36ea041ed435133a9fefbace23e5c36a2f2ce1665; frozen fixture SHA-256 is 99f2b03cf68395edb6a6fc644162f847c11f1bc2dc0c750149ea96c6d6d07b2b. Lean compile and 8241-job build pass; both declarations use only propext, Classical.choice, Quot.sound; registry is 130/130 and the 348-row worklist validates. sphereProjectionSmoothLocalHomeomorphBranches applies the restriction-smoothness-to-branches reduction to the exact banked restriction inhabitant; sphereProjectionQuotientLocalDiffeomorph then applies the branches-to-local-diffeomorphism reduction to that exact result. Types and theorem orientation match the acceptance contract, and the underlying reductions preserve the quotient charted-space, manifold instances, local branch domains, and PartialDiffeomorph representation without bypasses. Comment-stripped sorry/admit/axiom counts are 0/0/0 in scope and 1/0/0 in each frozen consumer."},
     :commit "ecc91cbde83cec0f22fd9c9ea205b026caf29dee",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -52579,7 +52594,7 @@
      "5462f13518a706edd86abde36ea041ed435133a9fefbace23e5c36a2f2ce1665"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -52636,7 +52651,7 @@
        :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
