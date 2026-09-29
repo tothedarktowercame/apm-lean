@@ -1355,6 +1355,11 @@ theorem sphereProjectionSmoothDescentContract :
   exact sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas
     sphereProjectionQuotientLocalDiffeomorph
 
+noncomputable def rpSmoothAtlas : SmoothAtlas 2 :=
+  Classical.choice
+    (sphereProjectionSmoothDescentContract
+      sphereProjectionTwoSheetedLocalModel sphereAntipodalN_contMDiff)
+
 theorem coordinateContDiffAt_reaches_contMDiff :
     SphereProjectionQuotientContMDiff :=
   quotientContMDiffAt_gives_quotientContMDiff
