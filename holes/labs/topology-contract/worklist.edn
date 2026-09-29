@@ -81087,23 +81087,17 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "At a600c8d8 build_step.bb remains 8e9127f2 and the worklist remains at 14 superseded rows. The external mutation that supersedes attempt 3 and deletes only its adapter edge has not landed. This empty-scope row cannot perform it; do not redispatch until the graph changes.",
+    "At f46e9c49 the writer remains 8e9127f2 and the validator still reports 14 superseded rows. The machine graph repair is absent: attempt 3 must be superseded and only its adapter edge deleted. This empty-scope row cannot do so; cease redispatch until that structural change lands.",
     :outcome :stop,
     :disposition :stop,
     :author "topo-2",
-    :reason :external-graph-mutation-not-landed,
+    :reason :machine-graph-repair-absent,
     :commands
     [{:cmd
       "git rev-parse --short HEAD && git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "HEAD a600c8d8; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790652368277-27477-03fe6b6a",
-     :finding
-     "Deterministic graph defect persists in recorded commit 00f5afb5. Its sole changed file is the worklist, and the empty-scope transition only records that the external graph mutation has not landed: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, the validator reports 14 superseded items, and build_step.bb remains at 8e9127f2. Exact repair requires an owner-authorized structural commit or deletion-capable writer that atomically marks attempt 3 :superseded and removes only its adapter edge, retaining the refill edge and reviewed attempts 1-2 as the stop-after-two basis. Fresh recorded-snapshot verification reproduced 675 items OK and fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d. Do not redispatch until the graph changes."},
+      "HEAD f46e9c49; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81117,7 +81111,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
