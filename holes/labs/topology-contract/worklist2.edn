@@ -51706,6 +51706,8 @@
     :routes-2026-09-29-rp-sphere-projection-lift-branch-domains-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
+   :review-finding
+   "Deterministic stale-boundary defect in ledger transition commit 2fc70d78: its STOP reason says the reviewed prerequisite still pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at 59cffec4, but the immediately preceding commit 8e9127f2 moved that prerequisite fixture identity to ConstructionTargets/RealProjectiveSmoothTarget.lean at f7db6c9c5174251c7bf22a2a0ab38767e333969f6355b9a65e942ba4eaf546cb. Therefore the claimed pathname/hash conflict had already been resolved before the STOP was recorded. Fresh verification hashes the descendant fixture to the stated 7b28971d70bcf3cccd4c1c14ec72c09f1f6ea302b965b88afb9ba59eda7b7517 and compiles it placeholder-free; it proves the correctly oriented coordinate ContDiffAt by the reviewed local-normal-form reduction and retains the within-at and manifold-smoothness reductions. All 130 frozen statements and the 345-item ledger pass; frozen t95A04 and t96A07 remain at one placeholder each. Repair by replacing the stale STOP with a GO/implementation transition using the now-distinct fixture identity, then commit the compiled theorem to the scoped RealProjectiveSmoothTarget module and record that implementation commit/hash.",
    :evidence
    {:outcome :stop,
     :seat "topo-8",
@@ -51729,9 +51731,15 @@
     :residual
     "The mathematics is compiled and placeholder-free; scheduling cannot record GO until immutable fixture identity is separated between the prerequisite and this descendant row.",
     :author "topo-8",
-    :disposition :stop},
-   :phase :probe,
-   :state :done-unreviewed,
+    :disposition :stop,
+    :review
+    {:outcome :fail,
+     :seat "codex-7",
+     :job "invoke-1790646096143-27093-79e7c502",
+     :finding
+     "Deterministic stale-boundary defect in ledger transition commit 2fc70d78: its STOP reason says the reviewed prerequisite still pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at 59cffec4, but the immediately preceding commit 8e9127f2 moved that prerequisite fixture identity to ConstructionTargets/RealProjectiveSmoothTarget.lean at f7db6c9c5174251c7bf22a2a0ab38767e333969f6355b9a65e942ba4eaf546cb. Therefore the claimed pathname/hash conflict had already been resolved before the STOP was recorded. Fresh verification hashes the descendant fixture to the stated 7b28971d70bcf3cccd4c1c14ec72c09f1f6ea302b965b88afb9ba59eda7b7517 and compiles it placeholder-free; it proves the correctly oriented coordinate ContDiffAt by the reviewed local-normal-form reduction and retains the within-at and manifold-smoothness reductions. All 130 frozen statements and the 345-item ledger pass; frozen t95A04 and t96A07 remain at one placeholder each. Repair by replacing the stale STOP with a GO/implementation transition using the now-distinct fixture identity, then commit the compiled theorem to the scoped RealProjectiveSmoothTarget module and record that implementation commit/hash."}},
+   :phase :implementation,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
