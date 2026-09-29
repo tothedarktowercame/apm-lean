@@ -50312,42 +50312,62 @@
    "single-consumer restricted affine-patch quotient map",
    :consumer :t94A08,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t94A08_affine_chart_contract.lean",
-      :sha256
-      "f1a8fe1e02f238f4c9f9ce1cbda1b9a840c9770b58478d7dbecb0df1a38c7d1e"},
-     :commands
-     [{:cmd "lake env lean /tmp/t94A08_affine_chart_contract.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_affine_chart_contract.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd "sha256sum /tmp/t94A08_affine_chart_contract.lean",
-       :exit 0}],
-     :implementation
-     {:scope
-      ["ConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean"],
-      :declarations
-      ["ConstructionTargets.T94A08ProjectiveConic.AffineCoordinatePatchRestrictedQuotient"
-       "ConstructionTargets.T94A08ProjectiveConic.affineCoordinatePatchRestrictedQuotient"],
-      :acceptance
-      {:compile
-       "lake env lean ConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean",
-       :no-placeholders true,
-       :statement-registry true,
-       :axioms :standard-only,
-       :requirements
-       "For every i construct the exact subtype map induced by quotientMap, prove its underlying-value equality, and prove IsQuotientMap using projectiveQuotientOpenAuthority, quotientMap_rep_coord_ne_zero_iff, Homeomorph.setCongr, and IsQuotientMap.restrictPreimage_isOpen."}},
-     :residual
-     "The restricted quotient authority is fully compiled. The next row can descend the continuous scale-invariant vector ratio map through this quotient to prove ContinuousOn coordinates on the open affine patch, while the already retained reductions continue toward AffineChartConstruction 2."}},
+   {:placeholder-delta 0,
+    :residual
+    "The exact affine-patch subtype map and its IsQuotientMap certificate are banked. The next consumer can descend the continuous scale-invariant vector ratio through affineCoordinatePatchRestrictedQuotient to prove ContinuousOn coordinates on the open affine patch.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "5949c72fe356aec0b6c3e43f02a9a77752cde075adc24e4b4430f8e6a279fa8e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t94A08_affine_chart_contract.lean",
+      :exit 0,
+      :output
+      "f1a8fe1e02f238f4c9f9ce1cbda1b9a840c9770b58478d7dbecb0df1a38c7d1e  /tmp/t94A08_affine_chart_contract.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean",
+      :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.T94A08AffineCoordinatePatchRestrictedQuotient",
+      :exit 0,
+      :output "Build completed successfully (8245 jobs)."}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin with import and #print axioms for AffineCoordinatePatchRestrictedQuotient and affineCoordinatePatchRestrictedQuotient",
+      :exit 0,
+      :output
+      "Both declarations depend on axioms: [propext, Classical.choice, Quot.sound]."}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 353 items OK; {:done 320, :superseded 23, :open 2, :blocked 8}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "e469893bfbe3dde02aa0b4f33250c2e2cadd6f69\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "e469893bfbe3dde02aa0b4f33250c2e2cadd6f69",
+    :changed-paths
+    ["ConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean"],
+    :fixture
+    {:path
+     "ConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean",
+     :sha256
+     "5949c72fe356aec0b6c3e43f02a9a77752cde075adc24e4b4430f8e6a279fa8e"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T94A08AffineCoordinatePatchRestrictedQuotient.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
