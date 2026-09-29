@@ -135,6 +135,170 @@ lemma apm_m96a05_diagonal_norm_gt_two
   · dsimp [t] at hb ⊢
     nlinarith
 
+lemma apm_m96A05_matrix_pred
+    {n : ℕ} (a b : ℝ → ℝ) (i : Fin n) (hi : 0 < i.val) :
+    apm_m96a05_matrix n a b i ⟨i.val - 1, by omega⟩ =
+      1 - apm_m96a05_h n / 2 *
+        a ((i.val + 1 : ℝ) * apm_m96a05_h n) := by
+  have hne : (⟨i.val - 1, by omega⟩ : Fin n) ≠ i := by
+    intro h
+    have hv := congrArg Fin.val h
+    change i.val - 1 = i.val at hv
+    omega
+  have hp : (i.val - 1) + 1 = i.val := by omega
+  rw [apm_m96a05_matrix]
+  simp only [if_neg hne, if_pos hp]
+
+lemma apm_m96A05_matrix_succ
+    {n : ℕ} (a b : ℝ → ℝ) (i : Fin n) (hi : i.val + 1 < n) :
+    apm_m96a05_matrix n a b i ⟨i.val + 1, hi⟩ =
+      1 + apm_m96a05_h n / 2 *
+        a ((i.val + 1 : ℝ) * apm_m96a05_h n) := by
+  have hne : (⟨i.val + 1, hi⟩ : Fin n) ≠ i := by
+    intro h
+    have hv := congrArg Fin.val h
+    change i.val + 1 = i.val at hv
+    omega
+  have hp : i.val + 1 = (⟨i.val + 1, hi⟩ : Fin n).val := rfl
+  have hpred : (⟨i.val + 1, hi⟩ : Fin n).val + 1 ≠ i.val := by omega
+  rw [apm_m96a05_matrix]
+  simp only [if_neg hne, if_neg hpred, if_true]
+
+lemma apm_m96A05_mulVec_row
+    {n : ℕ} (a b : ℝ → ℝ) (U : Fin n → ℝ) (i : Fin n) :
+    Matrix.mulVec (apm_m96a05_matrix n a b) U i =
+      (-2 + apm_m96a05_h n ^ 2 * b ((i.val + 1 : ℝ) * apm_m96a05_h n)) * U i +
+      (if hi : 0 < i.val then
+        (1 - apm_m96a05_h n / 2 * a ((i.val + 1 : ℝ) * apm_m96a05_h n)) *
+          U ⟨i.val - 1, by omega⟩ else 0) +
+      (if hi : i.val + 1 < n then
+        (1 + apm_m96a05_h n / 2 * a ((i.val + 1 : ℝ) * apm_m96a05_h n)) *
+          U ⟨i.val + 1, hi⟩ else 0) := by
+  classical
+  rw [Matrix.mulVec, dotProduct]
+  let P : Fin n → Prop := fun j =>
+    j = i ∨ j.val + 1 = i.val ∨ i.val + 1 = j.val
+  have hfilter :
+      ∑ j : Fin n, apm_m96a05_matrix n a b i j * U j =
+        ∑ j ∈ Finset.univ.filter P, apm_m96a05_matrix n a b i j * U j := by
+    rw [Finset.sum_filter]
+    apply Finset.sum_congr rfl
+    intro j _
+    by_cases hj : P j
+    · change _ = if P j then _ else _
+      rw [if_pos hj]
+    · have hz := apm_m96a05_matrix_eq_zero_of_not_neighbor a b i j
+        (fun h => hj (Or.inl h))
+        (fun h => hj (Or.inr (Or.inl h)))
+        (fun h => hj (Or.inr (Or.inr h)))
+      rw [hz]
+      simp
+  rw [hfilter]
+  by_cases hp : 0 < i.val <;> by_cases hs : i.val + 1 < n
+  · let p : Fin n := ⟨i.val - 1, by omega⟩
+    let q : Fin n := ⟨i.val + 1, hs⟩
+    have hset : Finset.univ.filter P = {i, p, q} := by
+      ext j
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
+        Finset.mem_insert, Finset.mem_singleton]
+      dsimp [P, p, q]
+      constructor
+      · intro h
+        rcases h with h | h | h
+        · exact Or.inl h
+        · right; left; apply Fin.ext; change j.val = i.val - 1; omega
+        · right; right; apply Fin.ext; change j.val = i.val + 1; omega
+      · intro h
+        rcases h with h | h | h
+        · exact Or.inl h
+        · subst j; exact Or.inr (Or.inl (by dsimp; omega))
+        · subst j; exact Or.inr (Or.inr rfl)
+    rw [hset]
+    have hip : i ≠ p := by intro h; have := congrArg Fin.val h; dsimp [p] at this; omega
+    have hiq : i ≠ q := by intro h; have := congrArg Fin.val h; dsimp [q] at this; omega
+    have hpq : p ≠ q := by intro h; have := congrArg Fin.val h; dsimp [p, q] at this; omega
+    have hpi : p ≠ i := Ne.symm hip
+    have hqi : q ≠ i := Ne.symm hiq
+    have hqp : q ≠ p := Ne.symm hpq
+    simp [hip, hiq, hpq, hpi, hqi, hqp]
+    rw [show apm_m96a05_matrix n a b i i =
+        -2 + apm_m96a05_h n ^ 2 * b ((i.val + 1 : ℝ) * apm_m96a05_h n) by
+          simp [apm_m96a05_matrix],
+      show apm_m96a05_matrix n a b i p =
+        1 - apm_m96a05_h n / 2 * a ((i.val + 1 : ℝ) * apm_m96a05_h n) by
+          simpa [p] using apm_m96A05_matrix_pred a b i hp,
+      show apm_m96a05_matrix n a b i q =
+        1 + apm_m96a05_h n / 2 * a ((i.val + 1 : ℝ) * apm_m96a05_h n) by
+          simpa [q] using apm_m96A05_matrix_succ a b i hs]
+    simp [hp, hs, p, q]
+    ring
+  · let p : Fin n := ⟨i.val - 1, by omega⟩
+    have hset : Finset.univ.filter P = {i, p} := by
+      ext j
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
+        Finset.mem_insert, Finset.mem_singleton]
+      dsimp [P, p]
+      constructor
+      · intro h
+        rcases h with h | h | h
+        · exact Or.inl h
+        · right; apply Fin.ext; change j.val = i.val - 1; omega
+        · exfalso; omega
+      · intro h
+        rcases h with h | h
+        · exact Or.inl h
+        · subst j; exact Or.inr (Or.inl (by dsimp; omega))
+    rw [hset]
+    have hip : i ≠ p := by intro h; have := congrArg Fin.val h; dsimp [p] at this; omega
+    simp [hip]
+    rw [show apm_m96a05_matrix n a b i i =
+        -2 + apm_m96a05_h n ^ 2 * b ((i.val + 1 : ℝ) * apm_m96a05_h n) by
+          simp [apm_m96a05_matrix],
+      show apm_m96a05_matrix n a b i p =
+        1 - apm_m96a05_h n / 2 * a ((i.val + 1 : ℝ) * apm_m96a05_h n) by
+          simpa [p] using apm_m96A05_matrix_pred a b i hp]
+    simp [hp, hs, p]
+  · let q : Fin n := ⟨i.val + 1, hs⟩
+    have hset : Finset.univ.filter P = {i, q} := by
+      ext j
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
+        Finset.mem_insert, Finset.mem_singleton]
+      dsimp [P, q]
+      constructor
+      · intro h
+        rcases h with h | h | h
+        · exact Or.inl h
+        · exfalso; omega
+        · right; apply Fin.ext; change j.val = i.val + 1; omega
+      · intro h
+        rcases h with h | h
+        · exact Or.inl h
+        · subst j; exact Or.inr (Or.inr rfl)
+    rw [hset]
+    have hiq : i ≠ q := by intro h; have := congrArg Fin.val h; dsimp [q] at this; omega
+    simp [hiq]
+    rw [show apm_m96a05_matrix n a b i i =
+        -2 + apm_m96a05_h n ^ 2 * b ((i.val + 1 : ℝ) * apm_m96a05_h n) by
+          simp [apm_m96a05_matrix],
+      show apm_m96a05_matrix n a b i q =
+        1 + apm_m96a05_h n / 2 * a ((i.val + 1 : ℝ) * apm_m96a05_h n) by
+          simpa [q] using apm_m96A05_matrix_succ a b i hs]
+    simp [hp, hs, q]
+  · have hset : Finset.univ.filter P = {i} := by
+      ext j
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
+        Finset.mem_singleton]
+      dsimp [P]
+      constructor
+      · intro h
+        rcases h with h | h | h
+        · exact h
+        · exfalso; omega
+        · exfalso; omega
+      · exact Or.inl
+    rw [hset]
+    simp [hp, hs, apm_m96a05_matrix]
+
 /-- Why this unblocks `apm_m96a05`: this is the exact finite-row assembly
 missing from part (a). It collapses the three-supported matrix row and performs
 the first- and last-row Dirichlet substitutions, identifying the matrix system
@@ -144,7 +308,39 @@ theorem apm_m96A05_stencil_matrix_equiv
     apm_m96a05_approximateSolution n a b c U ↔
       Matrix.mulVec (apm_m96a05_matrix n a b) U =
         apm_m96a05_rhs n a c := by
-  sorry
+  constructor
+  · intro hscheme
+    funext i
+    have hi := hscheme i
+    rw [apm_m96A05_mulVec_row]
+    dsimp [apm_m96a05_rhs] at hi ⊢
+    rw [apm_m96a05_meshValue_center] at hi
+    have hh : apm_m96a05_h n ≠ 0 := by
+      dsimp [apm_m96a05_h]
+      positivity
+    by_cases hp : 0 < i.val <;> by_cases hs : i.val + 1 < n
+    all_goals have hlast : (i.val + 1 = n) ↔ ¬ i.val + 1 < n := by omega
+    all_goals have hzero : (i.val = 0) ↔ ¬ 0 < i.val := by omega
+    all_goals have hfar : i.val ≠ n + 1 := by omega
+    all_goals have hpred : i.val - 1 < n := by omega
+    all_goals simp [apm_m96a05_meshValue, hp, hs, hlast, hzero, hfar, hpred] at hi ⊢
+    all_goals field_simp [hh] at hi ⊢ <;> ring_nf at hi ⊢ <;> nlinarith [hi]
+  · intro hmatrix i
+    have hi := congrFun hmatrix i
+    rw [apm_m96A05_mulVec_row] at hi
+    dsimp [apm_m96a05_rhs] at hi
+    dsimp
+    rw [apm_m96a05_meshValue_center]
+    have hh : apm_m96a05_h n ≠ 0 := by
+      dsimp [apm_m96a05_h]
+      positivity
+    by_cases hp : 0 < i.val <;> by_cases hs : i.val + 1 < n
+    all_goals have hlast : (i.val + 1 = n) ↔ ¬ i.val + 1 < n := by omega
+    all_goals have hzero : (i.val = 0) ↔ ¬ 0 < i.val := by omega
+    all_goals have hfar : i.val ≠ n + 1 := by omega
+    all_goals have hpred : i.val - 1 < n := by omega
+    all_goals simp [apm_m96a05_meshValue, hp, hs, hlast, hzero, hfar, hpred] at hi ⊢
+    all_goals field_simp [hh] at hi ⊢ <;> ring_nf at hi ⊢ <;> nlinarith [hi]
 
 /-- Why this unblocks `apm_m96a05`: continuity bounds `a` on `[0,1]`, so for
 all sufficiently fine meshes both neighbor coefficients are nonnegative and
@@ -155,7 +351,148 @@ theorem apm_m96A05_eventually_offDiagonal_rowSum_le_two
     (a b : ℝ → ℝ) (ha : ContinuousOn a (Icc 0 1)) :
     ∃ N : ℕ, ∀ n : ℕ, N ≤ n → 0 < n → ∀ i : Fin n,
       ∑ j ∈ Finset.univ.erase i, ‖apm_m96a05_matrix n a b i j‖ ≤ 2 := by
-  sorry
+  obtain ⟨A, hA⟩ := bddAbove_def.mp
+    (isCompact_Icc.bddAbove_image (ha.norm))
+  obtain ⟨N, hN⟩ := exists_nat_ge (max A 0)
+  refine ⟨N, ?_⟩
+  intro n hn hnpos i
+  have ht : (i.val + 1 : ℝ) * apm_m96a05_h n ∈ Icc (0 : ℝ) 1 := by
+    constructor
+    · dsimp [apm_m96a05_h]
+      positivity
+    · dsimp [apm_m96a05_h]
+      calc
+        (i.val + 1 : ℝ) * (1 / (n + 1 : ℝ)) =
+            (i.val + 1 : ℝ) / (n + 1 : ℝ) := by ring
+        _ ≤ 1 := (div_le_one (by positivity)).2 (by
+          exact_mod_cast Nat.succ_le_succ (Nat.le_of_lt i.isLt))
+  have habs : |a ((i.val + 1 : ℝ) * apm_m96a05_h n)| ≤ A :=
+    hA _ (mem_image_of_mem (fun x : ℝ => ‖a x‖) ht)
+  have hAnonneg : 0 ≤ A := le_trans (abs_nonneg _) habs
+  have hAle : A ≤ (n + 1 : ℝ) := by
+    calc
+      A ≤ max A 0 := le_max_left _ _
+      _ ≤ N := hN
+      _ ≤ n := by exact_mod_cast hn
+      _ ≤ n + 1 := by norm_num
+  have hx : |apm_m96a05_h n / 2 *
+      a ((i.val + 1 : ℝ) * apm_m96a05_h n)| ≤ 1 := by
+    have hd : (0 : ℝ) < n + 1 := by exact_mod_cast Nat.zero_lt_succ n
+    rw [abs_mul, abs_of_nonneg (by dsimp [apm_m96a05_h]; positivity :
+      0 ≤ apm_m96a05_h n / 2)]
+    calc
+      apm_m96a05_h n / 2 * |a ((i.val + 1 : ℝ) * apm_m96a05_h n)|
+          ≤ apm_m96a05_h n / 2 * A := mul_le_mul_of_nonneg_left habs (by
+            dsimp [apm_m96a05_h]; positivity)
+      _ ≤ 1 := by
+        dsimp [apm_m96a05_h]
+        rw [one_div]
+        have heq : (n + 1 : ℝ)⁻¹ / 2 * A = A / ((n + 1 : ℝ) * 2) := by
+          field_simp
+        rw [heq]
+        apply (div_le_iff₀ (mul_pos hd (by norm_num))).2
+        nlinarith
+  classical
+  let x := apm_m96a05_h n / 2 * a ((i.val + 1 : ℝ) * apm_m96a05_h n)
+  have hxm : 0 ≤ 1 - x := by dsimp [x]; nlinarith [le_of_abs_le hx]
+  have hxp : 0 ≤ 1 + x := by dsimp [x]; nlinarith [neg_le_of_abs_le hx]
+  have hle_m : 1 - x ≤ 2 := by dsimp [x]; nlinarith [neg_le_of_abs_le hx]
+  have hle_p : 1 + x ≤ 2 := by dsimp [x]; nlinarith [le_of_abs_le hx]
+  let P : Fin n → Prop := fun j => j.val + 1 = i.val ∨ i.val + 1 = j.val
+  have hfilter :
+      ∑ j ∈ Finset.univ.erase i, ‖apm_m96a05_matrix n a b i j‖ =
+        ∑ j ∈ (Finset.univ.erase i).filter P,
+          ‖apm_m96a05_matrix n a b i j‖ := by
+    rw [Finset.sum_filter]
+    apply Finset.sum_congr rfl
+    intro j hj
+    by_cases hP : P j
+    · change _ = if P j then _ else _
+      rw [if_pos hP]
+    · have hji : j ≠ i := (Finset.mem_erase.mp hj).1
+      have hz := apm_m96a05_matrix_eq_zero_of_not_neighbor a b i j hji
+        (fun h => hP (Or.inl h)) (fun h => hP (Or.inr h))
+      rw [hz]
+      simp
+  rw [hfilter]
+  by_cases hp : 0 < i.val <;> by_cases hs : i.val + 1 < n
+  · let p : Fin n := ⟨i.val - 1, by omega⟩
+    let q : Fin n := ⟨i.val + 1, hs⟩
+    have hset : (Finset.univ.erase i).filter P = {p, q} := by
+      ext j
+      simp only [Finset.mem_filter, Finset.mem_erase, Finset.mem_univ, and_true,
+        Finset.mem_insert, Finset.mem_singleton]
+      dsimp [P, p, q]
+      constructor
+      · rintro ⟨_, h | h⟩
+        · left; apply Fin.ext; change j.val = i.val - 1; omega
+        · right; apply Fin.ext; change j.val = i.val + 1; omega
+      · intro h
+        rcases h with rfl | rfl
+        · constructor
+          · intro h; have := congrArg Fin.val h; dsimp [p] at this; omega
+          · exact Or.inl (by dsimp [p]; omega)
+        · constructor
+          · intro h; have := congrArg Fin.val h; dsimp [q] at this; omega
+          · exact Or.inr rfl
+    rw [hset]
+    have hpq : p ≠ q := by intro h; have := congrArg Fin.val h; dsimp [p, q] at this; omega
+    rw [Finset.sum_insert (by simpa using hpq), Finset.sum_singleton]
+    rw [show apm_m96a05_matrix n a b i p = 1 - x by
+          simpa [p, x] using apm_m96A05_matrix_pred a b i hp,
+      show apm_m96a05_matrix n a b i q = 1 + x by
+          simpa [q, x] using apm_m96A05_matrix_succ a b i hs]
+    simp [hpq, abs_of_nonneg hxm, abs_of_nonneg hxp]
+    norm_num
+  · let p : Fin n := ⟨i.val - 1, by omega⟩
+    have hset : (Finset.univ.erase i).filter P = {p} := by
+      ext j
+      simp only [Finset.mem_filter, Finset.mem_erase, Finset.mem_univ, and_true,
+        Finset.mem_singleton]
+      dsimp [P, p]
+      constructor
+      · rintro ⟨_, h | h⟩
+        · apply Fin.ext; change j.val = i.val - 1; omega
+        · exfalso; omega
+      · rintro rfl
+        constructor
+        · intro h; have := congrArg Fin.val h; dsimp [p] at this; omega
+        · exact Or.inl (by dsimp [p]; omega)
+    rw [hset]
+    simp only [Finset.sum_singleton]
+    rw [show apm_m96a05_matrix n a b i p = 1 - x by
+          simpa [p, x] using apm_m96A05_matrix_pred a b i hp]
+    simpa [abs_of_nonneg hxm] using hle_m
+  · let q : Fin n := ⟨i.val + 1, hs⟩
+    have hset : (Finset.univ.erase i).filter P = {q} := by
+      ext j
+      simp only [Finset.mem_filter, Finset.mem_erase, Finset.mem_univ, and_true,
+        Finset.mem_singleton]
+      dsimp [P, q]
+      constructor
+      · rintro ⟨_, h | h⟩
+        · exfalso; omega
+        · apply Fin.ext; change j.val = i.val + 1; omega
+      · rintro rfl
+        constructor
+        · intro h; have := congrArg Fin.val h; dsimp [q] at this; omega
+        · exact Or.inr rfl
+    rw [hset]
+    simp only [Finset.sum_singleton]
+    rw [show apm_m96a05_matrix n a b i q = 1 + x by
+          simpa [q, x] using apm_m96A05_matrix_succ a b i hs]
+    simpa [abs_of_nonneg hxp] using hle_p
+  · have hset : (Finset.univ.erase i).filter P = ∅ := by
+      ext j
+      constructor
+      · intro hj
+        have hj' := Finset.mem_filter.mp hj
+        dsimp [P] at hj'
+        omega
+      · intro hj
+        exact False.elim (by simpa using hj)
+    rw [hset]
+    simp
 
 theorem apm_m96a05 :
     (∀ (n : ℕ) (hn : 0 < n) (a b c : ℝ → ℝ) (U : Fin n → ℝ),
@@ -203,7 +540,8 @@ theorem apm_m96a05 :
     corpus, construction libraries, or git history, so the full assembly
     remains open rather than being hidden behind an unverified rewrite.
     -/
-    sorry
+    intro n hn a b c U
+    exact apm_m96A05_stencil_matrix_equiv n hn a b c U
   refine ⟨hscheme, ?_⟩
   intro a b c ha hb hc hbneg
   obtain ⟨N, hN⟩ : ∃ N : ℕ, ∀ n : ℕ, N ≤ n → 0 < n →
@@ -248,7 +586,13 @@ theorem apm_m96a05 :
     is still required; no support-cardinality shortcut in Mathlib supplies the
     needed inequality with these dependent `Fin n` neighbors.
     -/
-    sorry
+    obtain ⟨N, hrows⟩ := apm_m96A05_eventually_offDiagonal_rowSum_le_two a b ha
+    refine ⟨N, ?_⟩
+    intro n hn hnpos
+    apply det_ne_zero_of_sum_row_lt_diag
+    intro i
+    exact lt_of_le_of_lt (hrows n hn hnpos i)
+      (apm_m96a05_diagonal_norm_gt_two hnpos a b hbneg i)
   refine ⟨N, ?_⟩
   intro n hn hnpos
   have hdet := hN n hn hnpos
