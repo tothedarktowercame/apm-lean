@@ -51939,6 +51939,21 @@
       :exit 1,
       :finding
       "The direct source compile had succeeded, but the import-based axiom audit still read the previous olean and could not see the two new declarations. Rebuilding ConstructionTargets.RealProjectiveSmoothTarget refreshed the artifact; the repeated axiom audit then succeeded."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790647615989-27179-ecdd40ac",
+     :commands
+     ["git show 5ff2b733 -- ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "sha256sum ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "lake env lean /dev/stdin axiom audit for three declarations"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder counts from git show 5ff2b733"],
+     :finding
+     "PASS: reviewer codex-7 verified repair commit 5ff2b733. Its sole changed path exactly matches scope, is the path latest commit, and both recorded immutable fixture and committed source hash to b1cf777ce1ecf310c6d3e406e722699835bb943bab6a728cee59523688bbcf70. Direct elaboration, Lake build, three axiom audits, 130 frozen statements, and the 345-item ledger pass. The coordinate-within inhabitant restricts the exact banked coordinate ContDiffAt statement without changing its function, base point, or Set.range (real model 2) domain. The pointwise inhabitant then uses the reviewed reduction under exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F, and the existing pointwise-to-global theorem retains the forward direction. The module has zero placeholders; frozen t95A04 and t96A07 remain at one each."},
     :commit "5ff2b733c11563621721a173380e7d209cce615d",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -51948,7 +51963,7 @@
      "b1cf777ce1ecf310c6d3e406e722699835bb943bab6a728cee59523688bbcf70"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -52005,7 +52020,7 @@
        :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
