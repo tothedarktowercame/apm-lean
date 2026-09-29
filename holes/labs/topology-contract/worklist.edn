@@ -81087,23 +81087,18 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "The consumer is held after the two independently reviewed zero-progress STOPs 1 and 2. Attempt 3 must be superseded and removed from this adapter's dependency vector. The current writer cannot express dependency deletion, so an owner structural repair of the writer/ledger transition is required; the adapter must not be marked done or redirected to a substitute dependency.",
+    "The deterministic blocker is unchanged. The current receipt applier cannot atomically supersede attempt 3 and delete only its edge from this adapter, while direct ledger editing is forbidden. Leave the row unresolved for an owner structural writer repair; do not mark it done and do not replace the rejected edge with another dependency.",
     :outcome :stop,
     :warnings
-    [{:kind :do-not-apply-ordinary-stop,
+    [{:kind :leave-unresolved,
       :message
-      "An ordinary STOP would mark this adapter done-unreviewed without correcting attempt 3 or its dependency edge."}
-     {:kind :structural-repair,
+      "Do not apply this as an ordinary completion transition; the adapter must remain unresolved until the structural graph repair is committed."}
+     {:kind :machine-graph,
       :message
-      "Keep this adapter in repair until the ledger writer atomically performs the requested graph mutation."}],
-    :statement-hashes
-    {:t98A06
-     "cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5",
-     :registry-file
-     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+      "Passing the row would preserve attempt 3 as done and preserve its dependency edge."}],
     :disposition :stop,
     :author "topo-2",
-    :reason :owner-structural-ledger-writer-repair-required,
+    :reason :atomic-ledger-graph-repair-unavailable,
     :commands
     [{:cmd
       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
@@ -81111,26 +81106,16 @@
       :finding
       "topology-worklist: 675 items OK; {:done 651, :superseded 14, :needs-owner 1, :repair 1, :open 5, :blocked 3}"}
      {:cmd
-      "sed -n '510,530p' holes/labs/topology-contract/build_step.bb",
+      "rg -n -A8 -B3 ':id :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3|:id :routes-2026-09-29-t98a06-part-a-adapter-1' holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "Ordinary :stop ignores supersede/dependency repair; :replan can supersede but cannot delete the current adapter's dependency edge."}
+      "The active attempt 3 remains done and the active repair-state adapter still depends on attempts 1, 2, and 3."}
      {:cmd
-      "sed -n '600,625p' holes/labs/topology-contract/build_step.bb",
+      "rg -n ':stop \\(replace-item|defn repair-dependencies' holes/labs/topology-contract/build_step.bb",
       :exit 0,
       :finding
-      "repair-dependencies! only maps OLD to an existing NEW dependency and has no deletion operation."}
-     {:cmd "sha256sum /tmp/t98a06-part-a-probe.lean", :exit 0}
-     {:cmd "python3 scripts/statement-registry.py check",
-      :exit 0,
-      :finding "130 registered statements match, 0 do not"}],
+      "No new atomic supersede-plus-edge-deletion writer operation exists."}],
     :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790646897775-27135-00bcd8fe",
-     :finding
-     "Deterministic blocker persists unchanged: the newest recorded graph still has routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 in :done state, still lists it in routes-2026-09-29-t98a06-part-a-adapter-1 :depends-on, and still reports only 14 superseded rows. No build_step.bb change adds the atomic supersede-plus-edge-deletion operation. The row correctly requests owner intervention, but PASS would again mark it complete without repairing the graph. Exact repair: an owner or enhanced ledger writer must atomically supersede attempt 3 and delete only its adapter edge, retaining the refill dependency and reviewed attempts 1-2; then record the adapter hold as based on attempts 1-2. Until that structural commit exists, leave this row unresolved/needs-owner rather than applying another ordinary STOP. Fresh verification reran the worklist validator and confirmed the unchanged 675-item counts and offending dependency vector."},
     :required-transition
     {:atomic true,
      :supersede
@@ -81147,13 +81132,9 @@
      [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-1
       :routes-2026-09-29-t98a06-local-smooth-submersion-lift-2]},
     :changed-paths [],
-    :fixture
-    {:path "/tmp/t98a06-part-a-probe.lean",
-     :sha256
-     "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
