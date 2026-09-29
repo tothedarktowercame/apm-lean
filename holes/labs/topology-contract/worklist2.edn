@@ -51888,13 +51888,17 @@
    :review-finding
    "Deterministic stale-boundary defect in ledger transition commit 29abe838: its STOP reason says the reviewed coordinate-ContDiffWithinAt prerequisite pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at 8a2841fa, but before this transition that prerequisite was reviewed against immutable fixture ConstructionTargets/RealProjectiveSmoothTarget.lean at sha256 26d54734c7c656fd044435c5d4b159c4a1607f8466a896c184bb66e801748cee. The alleged shared-path conflict therefore no longer exists. Fresh verification hashes the descendant fixture to the claimed 8e9ca39a93051cad22482b9bdb484e2fa1e736e72a3230775a4fb331657f56f2 and compiles it placeholder-free. It installs the exact quotient charted-space/manifold representation through the banked reduction: coordinate ContDiffWithinAt plus continuous_sphereProjection gives pointwise ContMDiffAt by contMDiffAt_iff, and the existing pointwise-to-global reduction has the correct direction. All 130 frozen statements and the 345-item ledger pass; frozen t95A04 and t96A07 remain at one placeholder each. Repair by replacing the stale STOP with an implementation transition, committing the compiled named within-at and pointwise inhabitants to RealProjectiveSmoothTarget, and recording the committed module as the immutable fixture.",
    :evidence
-   {:residual
-    "No mathematical obligation remains: contMDiffAt_iff combines the banked continuity of sphereProjection with the compiled coordinate ContDiffWithinAt theorem, and quotientContMDiffAt_gives_quotientContMDiff then yields global smoothness. Only the shared mutable fixture identity prevents a ledger-valid GO.",
-    :outcome :stop,
-    :disposition :stop,
-    :author "topo-8",
-    :reason
-    "Fixture-identity boundary: the prerequisite evidence pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at sha256 8a2841fa8e32d8aeb66056091e36637907b159edeef7a02e5819dc387fbb343e, while this row requires adding SphereProjectionQuotientContMDiffAt to that same pathname. The requested theorem and its global ContMDiff reduction compile placeholder-free at sha256 8e9ca39a93051cad22482b9bdb484e2fa1e736e72a3230775a4fb331657f56f2. The same file cannot retain the prerequisite hash and contain the descendant theorem. Use immutable per-row fixture paths or archived dependency artifacts.",
+   {:placeholder-delta 0,
+    :residual
+    "The named coordinate-within and pointwise ContMDiffAt inhabitants are banked, and the existing pointwise-to-global reduction remains available. The remaining consumer step is to combine global forward smoothness with the local inverse branch data to establish the quotient local-diffeomorphism/smooth-descent contract for sphereProjection 2.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "b1cf777ce1ecf310c6d3e406e722699835bb943bab6a728cee59523688bbcf70"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
     :commands
     [{:cmd
       "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
@@ -51902,70 +51906,49 @@
       :output
       "8e9ca39a93051cad22482b9bdb484e2fa1e736e72a3230775a4fb331657f56f2  /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean"}
      {:cmd
-      "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
       :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0,
+      :output "Build completed successfully (8241 jobs)."}
      {:cmd
-      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
-      :exit 0}
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :output "130 registered statements match, 0 do not"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790647271387-27159-82c4a0f5",
-     :finding
-     "Deterministic stale-boundary defect in ledger transition commit 29abe838: its STOP reason says the reviewed coordinate-ContDiffWithinAt prerequisite pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at 8a2841fa, but before this transition that prerequisite was reviewed against immutable fixture ConstructionTargets/RealProjectiveSmoothTarget.lean at sha256 26d54734c7c656fd044435c5d4b159c4a1607f8466a896c184bb66e801748cee. The alleged shared-path conflict therefore no longer exists. Fresh verification hashes the descendant fixture to the claimed 8e9ca39a93051cad22482b9bdb484e2fa1e736e72a3230775a4fb331657f56f2 and compiles it placeholder-free. It installs the exact quotient charted-space/manifold representation through the banked reduction: coordinate ContDiffWithinAt plus continuous_sphereProjection gives pointwise ContMDiffAt by contMDiffAt_iff, and the existing pointwise-to-global reduction has the correct direction. All 130 frozen statements and the 345-item ledger pass; frozen t95A04 and t96A07 remain at one placeholder each. Repair by replacing the stale STOP with an implementation transition, committing the compiled named within-at and pointwise inhabitants to RealProjectiveSmoothTarget, and recording the committed module as the immutable fixture."},
-    :probe
-    {:outcome :go,
-     :seat "topo-6",
-     :fixture
-     {:path
-      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-      :sha256
-      "8e9ca39a93051cad22482b9bdb484e2fa1e736e72a3230775a4fb331657f56f2"},
-     :commands
-     [{:cmd
-       "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0,
-       :output
-       "8e9ca39a93051cad22482b9bdb484e2fa1e736e72a3230775a4fb331657f56f2  /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean"}
-      {:cmd
-       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0}
-      {:cmd
-       "rg -n \"sphereProjectionQuotientCoordinateContDiffWithinAt|sphereProjectionQuotientContMDiffAt\" /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0,
-       :output
-       "7:theorem sphereProjectionQuotientCoordinateContDiffWithinAt :\n12:theorem sphereProjectionQuotientContMDiffAt :\n15:    sphereProjectionQuotientCoordinateContDiffWithinAt\n21:      sphereProjectionQuotientCoordinateContDiffWithinAt)"}
-      {:cmd
-       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0,
-       :output
-       "topology-worklist: 345 items OK; {:done 307, :superseded 23, :open 2, :blocked 12, :repair 1}"}
-      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:theorems
-       ["ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientCoordinateContDiffWithinAt"
-        "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientContMDiffAt"],
-       :reduction
-       "ConstructionTargets.RealProjectiveSmoothTarget.quotientContMDiffAt_gives_quotientContMDiff",
-       :requirements
-       "Append the two named placeholder-free inhabitants from the compiled fixture, preserving the exact quotient charted-space and manifold instances and deriving pointwise ContMDiffAt through the banked coordinate-within reduction."}},
-     :residual
-     "Bank the two compiled named inhabitants in RealProjectiveSmoothTarget.lean; the remaining smooth-descent step is to package global forward smoothness with the local inverse data required for the quotient local-diffeomorphism contract."},
-    :seat "topo-8"},
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin <<'EOF'\nimport ConstructionTargets.RealProjectiveSmoothTarget\n#print axioms ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientCoordinateContDiffWithinAt\n#print axioms ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientContMDiffAt\n#print axioms ConstructionTargets.RealProjectiveSmoothTarget.quotientContMDiffAt_gives_quotientContMDiff\nEOF",
+      :exit 0,
+      :output
+      "All three declarations depend on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 345 items OK; {:done 307, :superseded 23, :open 3, :blocked 12}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "5ff2b733c11563621721a173380e7d209cce615d\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /dev/stdin with axiom queries before rebuilding the target olean",
+      :exit 1,
+      :finding
+      "The direct source compile had succeeded, but the import-based axiom audit still read the previous olean and could not see the two new declarations. Rebuilding ConstructionTargets.RealProjectiveSmoothTarget refreshed the artifact; the repeated axiom audit then succeeded."}],
+    :commit "5ff2b733c11563621721a173380e7d209cce615d",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "ConstructionTargets/RealProjectiveSmoothTarget.lean",
+     :sha256
+     "b1cf777ce1ecf310c6d3e406e722699835bb943bab6a728cee59523688bbcf70"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
