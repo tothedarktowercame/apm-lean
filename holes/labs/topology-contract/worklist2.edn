@@ -52094,25 +52094,47 @@
     :routes-2026-09-29-rp-sphere-projection-contmdiff-at-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free inhabitant of SphereProjectionLocalInverseRestrictionsContMDiff in /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean. For every SphereProjectionLocalInverseFamily F, install exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F; then for every OpenPartialHomeomorph e agreeing with sphereProjection 2, prove ContMDiffOn (real model 2) (real model 2) infinity e.symm e.target. Establish the inverse coordinate expression in the quotientChart and standard sphere charts using the banked ordinary-or-antipodal transition results. Retain localInverseRestrictions_gives_projectionAndLocalInversesSmooth and the downstream reductions through SphereProjectionQuotientLocalDiffeomorph. This supplies the inverse-only smoothness half for t95A04 and t96A07."},
+   :id
+   :routes-2026-09-29-rp-sphere-local-inverse-restrictions-contmdiff-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+    :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
+    :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
+    :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
      {:path
-      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      "/tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
       :sha256
-      "5d589fbd510afb6e8759a96bbcc0ca1f2d9e8577f47e2a98c7281d853a67ca9b"},
+      "6bcf185c501f699851f4386d25bdace5c6a1a9a45ed55919f3beda3c2a53850f"},
      :commands
      [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean || true)\"",
        :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}
+      {:cmd
+       "sha256sum /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       :exit 0}],
      :residual
-     "The combined smoothness contract decomposes into two independent statements. The compiled fixture proves the exact equivalence: SphereProjectionQuotientContMDiff supplies global forward smoothness once per inverse family, while SphereProjectionLocalInverseRestrictionsContMDiff is the remaining branch-dependent inverse statement. Banking the forward theorem first removes it permanently from every local restriction proof and leaves one coherent inverse-only residual.",
+     "Global forward smoothness is banked as sphereProjectionQuotientContMDiff. The compiled fixture proves that the parent combined contract follows from exactly the remaining inverse-only proposition SphereProjectionLocalInverseRestrictionsContMDiff; no additional forward coordinate calculus remains.",
      :prerequisite
      {:consumer :t95A04,
       :phase :probe,
@@ -52121,15 +52143,18 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile a placeholder-free inhabitant of SphereProjectionQuotientContMDiff in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every SphereProjectionLocalInverseFamily F, install exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F, then prove ContMDiff (real model 2) (real model 2) infinity (sphereProjection 2). Work pointwise in a standard sphere chart and the quotientChart centered at sphereProjection 2 p; use the banked identity-or-antipodal coordinate alternatives on the required neighborhood. Retain projectionAndLocalInversesSmooth_iff, so the parent row reduces afterward to SphereProjectionLocalInverseRestrictionsContMDiff. This supplies the shared forward-smoothness half for t95A04 and t96A07."},
-      :id :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1,
+       "Compile a placeholder-free inhabitant of SphereProjectionLocalInverseRestrictionsContMDiff in /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean. For every SphereProjectionLocalInverseFamily F, install exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F; then for every OpenPartialHomeomorph e agreeing with sphereProjection 2, prove ContMDiffOn (real model 2) (real model 2) infinity e.symm e.target. Establish the inverse coordinate expression in the quotientChart and standard sphere charts using the banked ordinary-or-antipodal transition results. Retain localInverseRestrictions_gives_projectionAndLocalInversesSmooth and the downstream reductions through SphereProjectionQuotientLocalDiffeomorph. This supplies the inverse-only smoothness half for t95A04 and t96A07."},
+      :id
+      :routes-2026-09-29-rp-sphere-local-inverse-restrictions-contmdiff-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
-      [:routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
-       :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1],
+      [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+       :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
+       :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
+       :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -52141,7 +52166,8 @@
    :depends-on
    [:routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
     :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
-    :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1],
+    :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1
+    :routes-2026-09-29-rp-sphere-local-inverse-restrictions-contmdiff-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
