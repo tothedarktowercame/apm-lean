@@ -1360,6 +1360,9 @@ noncomputable def rpSmoothAtlas : SmoothAtlas 2 :=
     (sphereProjectionSmoothDescentContract
       sphereProjectionTwoSheetedLocalModel sphereAntipodalN_contMDiff)
 
+theorem rpSmoothAtlas_exists : Nonempty (SmoothAtlas 2) :=
+  ⟨rpSmoothAtlas⟩
+
 theorem coordinateContDiffAt_reaches_contMDiff :
     SphereProjectionQuotientContMDiff :=
   quotientContMDiffAt_gives_quotientContMDiff
