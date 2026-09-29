@@ -51403,6 +51403,66 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile the placeholder-free fixture /tmp/rp_sphere_projection_inverse_branch_local.lean proving SphereProjectionInverseBranchLocalAlternative. For every inverse family F and sphere point p, with y = sphereProjection 2 p, prove that F.inverseBranch y composed with sphereProjection 2 is eventually equal near p either to the identity or to sphereAntipodalN 2. Derive the locally constant choice from openness of the local-homeomorph target, continuity of the inverse branch and projection, the two-sheeted fibre law, and inner-product sign separation. This supplies the branch selection needed to construct the exact quotient-coordinate local normal form for t95A04 and t96A07."},
+   :id
+   :routes-2026-09-29-rp-sphere-projection-inverse-branch-local-alternative-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+    :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/rp_sphere_projection_inverse_branch_local.lean",
+      :sha256
+      "d1c1e5bc31808368783cd0b2858d675d8d8f3fd27238552aaca4997b20f99c8b"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_inverse_branch_local.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_inverse_branch_local.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_inverse_branch_local.lean",
+       :exit 1,
+       :finding
+       "Initial proof needed a dependent simplification for the local-homeomorph target witness and an explicit continuity composition."}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_projection_inverse_branch_local.lean",
+       :exit 1,
+       :finding
+       "Lean inferred continuity composition through the reducible quotient map; supplying all ContinuousAt.comp function arguments fixed the intended sphereProjection composition."}],
+     :residual
+     "The forward quotient-coordinate normal form still needs this local branch alternative transported through the standard sphere extended chart, with the corresponding ordinary or antipodal chart-domain witness. The compiled prerequisite proves the missing neighborhood-level identity-or-antipodal choice directly from target openness, continuity, and the two-sheeted fibre law.",
+     :prerequisite
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile the placeholder-free fixture /tmp/rp_sphere_projection_inverse_branch_local.lean proving SphereProjectionInverseBranchLocalAlternative. For every inverse family F and sphere point p, with y = sphereProjection 2 p, prove that F.inverseBranch y composed with sphereProjection 2 is eventually equal near p either to the identity or to sphereAntipodalN 2. Derive the locally constant choice from openness of the local-homeomorph target, continuity of the inverse branch and projection, the two-sheeted fibre law, and inner-product sign separation. This supplies the branch selection needed to construct the exact quotient-coordinate local normal form for t95A04 and t96A07."},
+      :id
+      :routes-2026-09-29-rp-sphere-projection-inverse-branch-local-alternative-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+       :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
+      :other-consumers [:t96A07]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free inhabitant of SphereProjectionQuotientCoordinateLocalNormalForm in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F and sphere point p, with the exact quotient charted-space and manifold instances installed, let y = sphereProjection 2 p and u = extChartAt (real model 2) p p. Prove that the extended-chart coordinate map for sphereProjection is eventually equal near u either to the ordinary standard-sphere transition from p to F.lift y together with membership in its exact transition source, or to the antipodal-inserted transition together with membership in the first chart target and the antipodal image in the second chart source. Derive the alternative from the two-sheeted fibre law and the chosen inverse branch at y. Retain quotientCoordinateLocalNormalForm_gives_contDiffAt and all downstream reductions. This supplies the exact forward coordinate normal form for t95A04 and t96A07."},
    :id
    :routes-2026-09-29-rp-sphere-projection-coordinate-local-normal-form-topo2-r1,
@@ -51410,7 +51470,8 @@
    :depends-on
    [:routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1
     :routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
-    :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1],
+    :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1
+    :routes-2026-09-29-rp-sphere-projection-inverse-branch-local-alternative-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
