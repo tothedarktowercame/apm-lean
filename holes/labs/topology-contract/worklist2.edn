@@ -50126,6 +50126,21 @@
    :kind :reusable-theorem,
    :depends-on []}
   {:bounded-exception
+   "single-consumer affine inverse-section normalization packet",
+   :consumer :t94A08,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile the placeholder-free fixture /tmp/t94A08_affine_chart_algebra.lean. Prove continuous_chartInverse for every i : Fin 3 using the explicit normalized vector section and continuous quotientMap. Prove coordinateLine_mem_affineSource, coordinates_coordinateLine, and chartInverse_zero exactly for the existing Projectivization.rep-based coordinates and frozen coordinateLine. These supply the inverse continuity and all three center-normalization obligations of AffineChartConstruction 2; do not redefine coordinates, chartInverse, coordinateLine, or the projective topology."},
+   :id
+   :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}
+  {:bounded-exception
    "single-consumer exact projective affine-chart construction",
    :consumer :t94A08,
    :evidence
@@ -50133,25 +50148,32 @@
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/t94A08_projective_quotient_open_contract.lean",
+     {:path "/tmp/t94A08_affine_chart_algebra.lean",
       :sha256
-      "62fc24ea74a5f8310a1ec36c2dd4b4e3e07037d8c9df5ead467e5db07e12b01d"},
+      "97f02574edee037b02e79995169dcb82e653ea9b34fc52a17dbc8b8cfe414ac5"},
      :commands
-     [{:cmd
-       "lake env lean /tmp/t94A08_projective_quotient_open_contract.lean",
+     [{:cmd "lake env lean /tmp/t94A08_affine_chart_algebra.lean",
        :exit 0}
       {:cmd
-       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_projective_quotient_open_contract.lean",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_affine_chart_algebra.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd "sha256sum /tmp/t94A08_affine_chart_algebra.lean",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t94A08_affine_chart_algebra.lean",
        :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}],
+       :finding
+       "The first normalization draft chose the scalar in the wrong orientation for Projectivization.mk_eq_mk_iff and left dependent coordinate evaluation under-specified."}
+      {:cmd "lake env lean /tmp/t94A08_affine_chart_algebra.lean",
+       :exit 1,
+       :finding
+       "Explicit dependent coordinate indices and Units.smul_def were required to establish continuity of the normalized section and nonvanishing of the coordinate-line representative."}],
      :residual
-     "The coinduced topology immediately gives IsQuotientMap quotientMap from the banked surjectivity theorem and definitional topology equality; that fact is compiled in the fixture. Constructing AffineChartConstruction 2 additionally needs quotientMap to be open. No banked result proves this. The needed proof must identify the saturation of an open subset of nonzero vectors as the union of its images under multiplication by complex units, prove that saturation open, and reflect openness through the quotient map. Once this is available, the nonvanishing-coordinate source is open and coordinates/chartInverse can be packaged as the required OpenPartialHomeomorph.",
+     "The open quotient authority is banked, and the compiled prerequisite proves continuity of chartInverse together with the exact coordinate-line source and normalization equations. The full OpenPartialHomeomorph still needs coordinates to descend continuously on the nonvanishing quotient patch and the two scale-invariant mutual-inverse identities chartInverse_coordinates and coordinates_chartInverse.",
      :prerequisite
      {:bounded-exception
-      "single-consumer dimension-two projective quotient openness theorem",
+      "single-consumer affine inverse-section normalization packet",
       :consumer :t94A08,
       :phase :probe,
       :state :open,
@@ -50159,12 +50181,14 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile a placeholder-free proof of ConstructionTargets.T94A08ProjectiveConic.ProjectiveQuotientOpenAuthority from /tmp/t94A08_projective_quotient_open_contract.lean, namely IsOpenMap (ConstructionTargets.ProjectiveSpaceTopology.quotientMap complex 2). Prove for every open U of nonzero vectors that the preimage of quotientMap image U is exactly the union over complex units a of the scalar images a • U; each scalar action is a homeomorphism, so the saturation is open, and projectiveQuotientMap_isQuotientMap reflects that openness to the image. Do not alter the coinduced topology. This supplies the openness substep of t94A08 route step 1."},
-      :id :routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1,
+       "Compile the placeholder-free fixture /tmp/t94A08_affine_chart_algebra.lean. Prove continuous_chartInverse for every i : Fin 3 using the explicit normalized vector section and continuous quotientMap. Prove coordinateLine_mem_affineSource, coordinates_coordinateLine, and chartInverse_zero exactly for the existing Projectivization.rep-based coordinates and frozen coordinateLine. These supply the inverse continuity and all three center-normalization obligations of AffineChartConstruction 2; do not redefine coordinates, chartInverse, coordinateLine, or the projective topology."},
+      :id
+      :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1,
       :kind :reusable-theorem,
-      :depends-on []}}},
+      :depends-on
+      [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50180,7 +50204,8 @@
    :id :routes-2026-09-28-t94a08-affine-chart-homeomorph-topo2-r1,
    :kind :representation-comparison,
    :depends-on
-   [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}
+   [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1
+    :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1]}
   {:bounded-exception
    "single-consumer exact two-conjunct topological bridge",
    :consumer :t94A08,
