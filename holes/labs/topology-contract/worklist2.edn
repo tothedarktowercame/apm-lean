@@ -51751,6 +51751,21 @@
       :exit 0,
       :output "ConstructionTargets/RealProjectiveSmoothTarget.lean"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790646539702-27115-23bee852",
+     :commands
+     ["git show c5ba6337 -- ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "sha256sum ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "lake env lean /tmp/rp_sphere_projection_coordinate_contdiffat_axioms.lean"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder counts from git show c5ba6337"],
+     :finding
+     "PASS: reviewer codex-7 verified repair commit c5ba6337. Its sole changed path exactly matches scope, is the path latest commit, and the immutable committed-module fixture hashes exactly to 26d54734c7c656fd044435c5d4b159c4a1607f8466a896c184bb66e801748cee. Direct elaboration, Lake build, all five axiom audits, 130 frozen statements, and the 345-item ledger pass. sphereProjectionQuotientCoordinateContDiffAt delegates to the reviewed local-normal-form proof; ContDiffAt restricts in the correct direction to the exact Set.range within-domain; contMDiffAt_iff combines banked projection continuity with that coordinate result under the exact quotient charted-space/manifold instances; and pointwise ContMDiffAt yields global ContMDiff. The module has zero placeholders; frozen t95A04 and t96A07 remain at one each."},
     :commit "c5ba63375f6bed3d1ed4c15073c6f36fd771227e",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -51760,7 +51775,7 @@
      "26d54734c7c656fd044435c5d4b159c4a1607f8466a896c184bb66e801748cee"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -51820,7 +51835,7 @@
        :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
