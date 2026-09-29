@@ -52050,6 +52050,21 @@
       :exit 1,
       :finding
       "An intermediate Unicode correction still named 𝓗 rather than the fixture's 𝓡. Using the exact code point from the compiled fixture corrected the final source."}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790648280993-27216-121e82fc",
+     :commands
+     ["git show 4e9a5820 -- ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "sha256sum ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "lake env lean /dev/stdin axiom audit for global smoothness and decomposition"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder counts from git show 4e9a5820"],
+     :finding
+     "PASS: reviewer codex-7 verified repair commit 4e9a5820. Its sole changed path exactly matches scope, is the path latest commit, and both immutable fixture and committed source hash to abc8c68387c8bae0faccd3dc001ff27d2d50a890aaeac46b90f6692bef9d8529. Direct elaboration, Lake build, both axiom audits, 130 frozen statements, and the 345-item ledger pass. sphereProjectionQuotientContMDiff applies the banked pointwise-to-global reduction in the required direction. SphereProjectionLocalInverseRestrictionsContMDiff retains exactly the prescribed quotient charted-space/manifold instances and asks only for smoothness of e.symm on e.target. projectionAndLocalInversesSmooth_iff separates and recombines those forward and inverse obligations without representation casts or stronger generality. The module has zero placeholders; frozen t95A04 and t96A07 remain at one each."},
     :commit "4e9a5820bfcdeb4659bec772e792679af855a695",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -52059,7 +52074,7 @@
      "abc8c68387c8bae0faccd3dc001ff27d2d50a890aaeac46b90f6692bef9d8529"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -52114,7 +52129,7 @@
        :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
