@@ -121,11 +121,67 @@ lemma apm_m95J03_leftInverse_solution
 /-- Why this unblocks the remaining Jordan-form conjunct of `apm_m95j03`:
 this is the explicit Vandermonde-type change of basis for the four distinct
 eigenvalues `ρ, ρ², ρ³, ρ⁴` when `0 < |ρ| < 1`. -/
+def apm_m95J03_eigenvectors (ρ : ℝ) : Matrix (Fin 4) (Fin 4) ℝ :=
+  ![![(ρ - ρ^2) * (ρ - ρ^3) * (ρ - ρ^4), 0, 0, 0],
+    ![(ρ - ρ^3) * (ρ - ρ^4),
+      (ρ^2 - ρ^3) * (ρ^2 - ρ^4), 0, 0],
+    ![ρ - ρ^4, ρ^2 - ρ^4, ρ^3 - ρ^4, 0],
+    ![1, 1, 1, 1]]
+
+set_option maxHeartbeats 0
+
 theorem apm_m95J03_bridge_1
     (ρ : ℝ) (hρ0 : 0 < |ρ|) (hρ1 : |ρ| < 1) :
     ∃ P : Matrix (Fin 4) (Fin 4) ℝ, IsUnit P ∧
       P⁻¹ * apm_m95J03_B ρ * P = apm_m95J03_diagonalJordan ρ := by
-  sorry
+  have hp : ∀ {a b : ℕ}, a < b → ρ ^ a ≠ ρ ^ b := by
+    intro a b hab heq
+    have heq' := congrArg abs heq
+    simp only [abs_pow] at heq'
+    have hlt : |ρ| ^ b < |ρ| ^ a :=
+      pow_lt_pow_right_of_lt_one₀ hρ0 hρ1 hab
+    exact (ne_of_gt hlt) heq'
+  let P := apm_m95J03_eigenvectors ρ
+  have htri : P.BlockTriangular OrderDual.toDual := by
+    intro i j hij
+    change i.val < j.val at hij
+    fin_cases i <;> fin_cases j
+    all_goals simp [P, apm_m95J03_eigenvectors]
+    all_goals norm_num at hij
+  have hdet : P.det =
+      ((ρ - ρ^2) * (ρ - ρ^3) * (ρ - ρ^4)) *
+      ((ρ^2 - ρ^3) * (ρ^2 - ρ^4)) * (ρ^3 - ρ^4) := by
+    rw [Matrix.det_of_lowerTriangular P htri]
+    simp [P, apm_m95J03_eigenvectors, Finset.prod_fin_eq_prod_range,
+      Finset.prod_range_succ]
+  have hP : IsUnit P := by
+    have h12 : ρ - ρ^2 ≠ 0 := sub_ne_zero.mpr (by simpa using hp (a := 1) (b := 2) (by omega))
+    have h13 : ρ - ρ^3 ≠ 0 := sub_ne_zero.mpr (by simpa using hp (a := 1) (b := 3) (by omega))
+    have h14 : ρ - ρ^4 ≠ 0 := sub_ne_zero.mpr (by simpa using hp (a := 1) (b := 4) (by omega))
+    have h23 : ρ^2 - ρ^3 ≠ 0 := sub_ne_zero.mpr (hp (a := 2) (b := 3) (by omega))
+    have h24 : ρ^2 - ρ^4 ≠ 0 := sub_ne_zero.mpr (hp (a := 2) (b := 4) (by omega))
+    have h34 : ρ^3 - ρ^4 ≠ 0 := sub_ne_zero.mpr (hp (a := 3) (b := 4) (by omega))
+    rw [Matrix.isUnit_iff_isUnit_det, isUnit_iff_ne_zero, hdet]
+    exact mul_ne_zero (mul_ne_zero (mul_ne_zero (mul_ne_zero h12 h13) h14)
+      (mul_ne_zero h23 h24)) h34
+  refine ⟨P, hP, ?_⟩
+  have hmul : apm_m95J03_B ρ * P = P * apm_m95J03_diagonalJordan ρ := by
+    ext i j
+    fin_cases i <;> fin_cases j <;>
+      norm_num [P, apm_m95J03_eigenvectors, apm_m95J03_B,
+        apm_m95J03_diagonalJordan, Matrix.diagonal_apply,
+        Matrix.mul_apply, Fin.sum_univ_succ] <;>
+      ring
+    all_goals simp_all <;> ring
+  calc
+    P⁻¹ * apm_m95J03_B ρ * P = P⁻¹ * (apm_m95J03_B ρ * P) := by
+      rw [Matrix.mul_assoc]
+    _ = P⁻¹ * (P * apm_m95J03_diagonalJordan ρ) := by rw [hmul]
+    _ = apm_m95J03_diagonalJordan ρ := by
+      apply Matrix.nonsing_inv_mul_cancel_left
+      exact (Matrix.isUnit_iff_isUnit_det P).mp hP
+
+set_option maxHeartbeats 200000
 
 /-- Why this unblocks the general exponential-series conjunct of
 `apm_m95j03`: it is the matrix specialization of the normed-algebra
@@ -134,14 +190,36 @@ theorem apm_m95J03_bridge_2
     (n : ℕ) (A : Matrix (Fin n) (Fin n) ℝ) :
     HasSum (fun k : ℕ ↦ (Nat.factorial k : ℝ)⁻¹ • A ^ k)
       (NormedSpace.exp A) := by
-  sorry
+  cases n with
+  | zero =>
+      have hA : A = 0 := Subsingleton.elim _ _
+      subst A
+      convert (hasSum_zero : HasSum (fun _ : ℕ =>
+        (0 : Matrix (Fin 0) (Fin 0) ℝ)) 0) using 1 <;>
+        apply Subsingleton.elim
+  | succ n =>
+      letI : NormedRing (Matrix (Fin (n + 1)) (Fin (n + 1)) ℝ) :=
+        Matrix.frobeniusNormedRing
+      letI : NormedAlgebra ℝ (Matrix (Fin (n + 1)) (Fin (n + 1)) ℝ) :=
+        Matrix.frobeniusNormedAlgebra
+      exact NormedSpace.exp_series_hasSum_exp' A
 
 /-- Why this unblocks the concrete exponential conjunct of `apm_m95j03`:
 nilpotence of `B(0)` truncates its exponential series after degree three,
 and the resulting entries are exactly the time-one flow matrix. -/
 theorem apm_m95J03_bridge_3 :
     NormedSpace.exp (apm_m95J03_B 0) = apm_m95J03_flow 1 := by
-  sorry
+  have hs := apm_m95J03_bridge_2 4 (apm_m95J03_B 0)
+  rw [← hs.tsum_eq, tsum_eq_sum (s := Finset.range 4)]
+  · ext i j
+    fin_cases i <;> fin_cases j <;>
+      norm_num [apm_m95J03_B, apm_m95J03_flow, pow_succ,
+        Matrix.mul_apply, Fin.sum_univ_succ, Finset.sum_range_succ]
+    all_goals simp_all
+  · intro k hk
+    have hk4 : 4 ≤ k := by simpa using hk
+    rw [pow_eq_zero_of_le hk4 apm_m95J03_B_zero_pow_four]
+    simp
 
 /-- Why this unblocks the differential-equation conjunct of `apm_m95j03`:
 coordinatewise differentiation of the explicit polynomial flow gives the
@@ -150,7 +228,27 @@ theorem apm_m95J03_bridge_4
     (v : Fin 4 → ℝ) (t : ℝ) :
     deriv (apm_m95J03_ivpSolution v) t =
       (apm_m95J03_B 0).mulVec (apm_m95J03_ivpSolution v t) := by
-  sorry
+  refine (hasDerivAt_pi.mpr ?_).deriv
+  intro i
+  fin_cases i
+  · simpa [apm_m95J03_ivpSolution, apm_m95J03_flow, apm_m95J03_B,
+      Matrix.mulVec, dotProduct, Fin.sum_univ_succ] using
+      (hasDerivAt_const t (v 0))
+  · convert (((hasDerivAt_id t).mul_const (v 0)).add_const (v 1)) using 1 <;>
+      norm_num [apm_m95J03_ivpSolution, apm_m95J03_flow, apm_m95J03_B,
+        Matrix.mulVec, dotProduct, Fin.sum_univ_succ] <;> (try funext x) <;>
+      simp_all <;> ring <;> aesop
+  · convert (((((hasDerivAt_id t).pow 2).div_const 2).mul_const (v 0)).add
+        (((hasDerivAt_id t).mul_const (v 1)).add_const (v 2))) using 1 <;>
+      norm_num [apm_m95J03_ivpSolution, apm_m95J03_flow, apm_m95J03_B,
+        Matrix.mulVec, dotProduct, Fin.sum_univ_succ] <;> (try funext x) <;>
+      simp_all <;> ring <;> aesop
+  · convert (((((hasDerivAt_id t).pow 3).div_const 6).mul_const (v 0)).add
+        (((((hasDerivAt_id t).pow 2).div_const 2).mul_const (v 1)).add
+          (((hasDerivAt_id t).mul_const (v 2)).add_const (v 3)))) using 1 <;>
+      norm_num [apm_m95J03_ivpSolution, apm_m95J03_flow, apm_m95J03_B,
+        Matrix.mulVec, dotProduct, Fin.sum_univ_succ] <;> (try funext x) <;>
+      simp_all <;> ring <;> aesop
 
 theorem apm_m95j03 :
     (∀ (m n : ℕ) (A : Matrix (Fin m) (Fin n) ℝ)
@@ -226,4 +324,16 @@ theorem apm_m95j03 :
   -- derivative APIs found no theorem closing the remaining algebraic/ODE
   -- pieces. Those conjuncts remain open without an unproved assertion; the
   -- frozen statement is unchanged.
-  sorry
+  refine ⟨?_, apm_m95J03_B_continuous.continuousAt,
+    apm_m95J03_diagonalJordan_tendsto_zero,
+    apm_m95J03_B_zero_ne_zero, apm_m95J03_B_zero_pow_four,
+    apm_m95J03_B_zero_pow_three_ne_zero, ?_, ?_,
+    apm_m95J03_bridge_3, ?_, apm_m95J03_ivpSolution_zero⟩
+  · intro m n A L b hLA
+    exact apm_m95J03_leftInverse_solution m n A L b hLA
+  · intro ρ hρ0 hρ1
+    exact apm_m95J03_bridge_1 ρ hρ0 hρ1
+  · intro n A
+    exact apm_m95J03_bridge_2 n A
+  · intro v t
+    exact apm_m95J03_bridge_4 v t
