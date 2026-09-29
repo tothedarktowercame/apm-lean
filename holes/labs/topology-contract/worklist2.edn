@@ -50212,10 +50212,73 @@
    :depends-on
    [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}
   {:bounded-exception
-   "single-consumer exact affine-chart quotient compatibility and homeomorphism packet",
+   "single-consumer affine coordinate quotient-compatibility packet",
    :consumer :t94A08,
    :phase :probe,
    :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free inhabitant of AffineCoordinateQuotientCompatibility in /tmp/t94A08_affine_chart_contract.lean. For every i : Fin 3 prove the representative-nonvanishing affine source is open, coordinates i is ContinuousOn that source, chartInverse i z lies in the source for every z, chartInverse i (coordinates i x) = x on the source, and coordinates i (chartInverse i z) = z. Prove continuity by descending the continuous ratio map on the nonzero-vector preimage through the frozen quotient map, and prove the identities with Projectivization.mk_eq_mk_iff and the normalized representative. Retain affineChartConstruction_of_quotientCompatibility, which constructs the exact OpenPartialHomeomorph and reuses the banked normalization lemmas. This supplies the remaining affine-chart route step for t94A08."},
+   :id
+   :routes-2026-09-29-t94a08-affine-coordinate-quotient-compatibility-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1
+    :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1]}
+  {:bounded-exception
+   "single-consumer exact affine-chart quotient compatibility and homeomorphism packet",
+   :consumer :t94A08,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t94A08_affine_chart_contract.lean",
+      :sha256
+      "cc2844feadacfe7ec878eb3fba5749a7233670f9a7bf782098fa505cecf647ac"},
+     :commands
+     [{:cmd "lake env lean /tmp/t94A08_affine_chart_contract.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_affine_chart_contract.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}
+      {:cmd "sha256sum /tmp/t94A08_affine_chart_contract.lean",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t94A08_affine_chart_contract.lean",
+       :exit 1,
+       :finding
+       "The first packaging fixture used a namespaced isOpen_univ spelling unavailable here and had not opened ProjectiveSpaceTopology for quotientMap; opening the namespace and using isOpen_univ corrected those names."}
+      {:cmd "lake env lean /tmp/t94A08_affine_chart_contract.lean",
+       :exit 1,
+       :finding
+       "Projectivization.rep_nonzero proves the entire chosen representative is nonzero, not that its i-th coordinate is nonzero. The exact chartInverse source-membership fact was therefore added to the prerequisite interface instead of incorrectly projecting vector nonzeroness to one coordinate."}],
+     :residual
+     "The OpenPartialHomeomorph assembly, continuity of chartInverse, and all coordinateLine normalization fields compile. The sole missing mathematical packet is quotient compatibility of the forward affine ratios: openness and continuity of the representative-nonvanishing patch, chartInverse membership in that patch, and the two scale-invariant inverse identities. The compiled reduction turns exactly that packet into AffineChartConstruction 2.",
+     :prerequisite
+     {:bounded-exception
+      "single-consumer affine coordinate quotient-compatibility packet",
+      :consumer :t94A08,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free inhabitant of AffineCoordinateQuotientCompatibility in /tmp/t94A08_affine_chart_contract.lean. For every i : Fin 3 prove the representative-nonvanishing affine source is open, coordinates i is ContinuousOn that source, chartInverse i z lies in the source for every z, chartInverse i (coordinates i x) = x on the source, and coordinates i (chartInverse i z) = z. Prove continuity by descending the continuous ratio map on the nonzero-vector preimage through the frozen quotient map, and prove the identities with Projectivization.mk_eq_mk_iff and the normalized representative. Retain affineChartConstruction_of_quotientCompatibility, which constructs the exact OpenPartialHomeomorph and reuses the banked normalization lemmas. This supplies the remaining affine-chart route step for t94A08."},
+      :id
+      :routes-2026-09-29-t94a08-affine-coordinate-quotient-compatibility-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1
+       :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1]}}},
+   :phase :probe,
+   :state :blocked,
    :scope ["ConstructionTargets/T94A08AffineChartHomeomorph.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50233,7 +50296,8 @@
    :kind :representation-comparison,
    :depends-on
    [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1
-    :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1]}
+    :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1
+    :routes-2026-09-29-t94a08-affine-coordinate-quotient-compatibility-topo2-r1]}
   {:bounded-exception
    "single-consumer exact projective affine-chart construction",
    :consumer :t94A08,
