@@ -815,4 +815,228 @@ theorem sphereProjection_coordinate_branch_domains
     exact ⟨(chartAt (E 2) p).map_source (ChartedSpace.mem_chart_source p),
       ChartedSpace.mem_chart_source (sphereAntipodalN 2 p)⟩
 
+/-- The sole certification still missing after the quotient charted space and
+its smooth compatibility have been constructed. -/
+def SphereProjectionQuotientLocalDiffeomorph : Prop :=
+  ∀ F : SphereProjectionLocalInverseFamily,
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    IsLocalDiffeomorph (𝓡 2) (𝓡 2) ∞ (sphereProjection 2)
+
+/-- The exact branchwise smoothness data needed to upgrade the already-banked
+local homeomorphs of `sphereProjection` to local diffeomorphisms. -/
+def SphereProjectionSmoothLocalHomeomorphBranches : Prop :=
+  ∀ F : SphereProjectionLocalInverseFamily,
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    ∀ p : Sphere 2,
+      ∃ e : OpenPartialHomeomorph (Sphere 2) (Space ℝ 2),
+        p ∈ e.source ∧
+        sphereProjection 2 = e ∧
+        ContMDiffOn (𝓡 2) (𝓡 2) ∞ e e.source ∧
+        ContMDiffOn (𝓡 2) (𝓡 2) ∞ e.symm e.target
+
+/-- Smoothness is intrinsic to every local-homeomorphism restriction of the
+fixed projection; the pointwise branch choice is then purely topological. -/
+def SphereProjectionLocalHomeomorphRestrictionsSmooth : Prop :=
+  ∀ F : SphereProjectionLocalInverseFamily,
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    ∀ e : OpenPartialHomeomorph (Sphere 2) (Space ℝ 2),
+      sphereProjection 2 = e →
+      ContMDiffOn (𝓡 2) (𝓡 2) ∞ e e.source ∧
+      ContMDiffOn (𝓡 2) (𝓡 2) ∞ e.symm e.target
+
+/-- A nonredundant formulation: prove the projection smooth once, and only
+the inverse smoothness separately for each topological local branch. -/
+def SphereProjectionAndLocalInversesSmooth : Prop :=
+  ∀ F : SphereProjectionLocalInverseFamily,
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    ContMDiff (𝓡 2) (𝓡 2) ∞ (sphereProjection 2) ∧
+      ∀ e : OpenPartialHomeomorph (Sphere 2) (Space ℝ 2),
+        sphereProjection 2 = e →
+        ContMDiffOn (𝓡 2) (𝓡 2) ∞ e.symm e.target
+
+def SphereProjectionQuotientContMDiff : Prop :=
+  ∀ F : SphereProjectionLocalInverseFamily,
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    ContMDiff (𝓡 2) (𝓡 2) ∞ (sphereProjection 2)
+
+def SphereProjectionQuotientContMDiffAt : Prop :=
+  ∀ F : SphereProjectionLocalInverseFamily,
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    ∀ p : Sphere 2,
+      ContMDiffAt (𝓡 2) (𝓡 2) ∞ (sphereProjection 2) p
+
+def SphereProjectionQuotientCoordinateContDiffWithinAt : Prop :=
+  ∀ F : SphereProjectionLocalInverseFamily,
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    ∀ p : Sphere 2,
+      ContDiffWithinAt ℝ ∞
+        (extChartAt (𝓡 2) (sphereProjection 2 p) ∘ sphereProjection 2 ∘
+          (extChartAt (𝓡 2) p).symm)
+        (Set.range (𝓡 2)) (extChartAt (𝓡 2) p p)
+
+def SphereProjectionQuotientCoordinateContDiffAt : Prop :=
+  ∀ F : SphereProjectionLocalInverseFamily,
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    ∀ p : Sphere 2,
+      ContDiffAt ℝ ∞
+        (extChartAt (𝓡 2) (sphereProjection 2 p) ∘ sphereProjection 2 ∘
+          (extChartAt (𝓡 2) p).symm)
+        (extChartAt (𝓡 2) p p)
+
+def SphereProjectionQuotientCoordinateLocalNormalForm : Prop :=
+  ∀ F : SphereProjectionLocalInverseFamily,
+    letI := F.quotientChartedSpace
+    letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+      sphereProjectionQuotientAtlasCompatibility F
+    ∀ p : Sphere 2,
+      let y := sphereProjection 2 p
+      let u := extChartAt (𝓡 2) p p
+      (((extChartAt (𝓡 2) y ∘ sphereProjection 2 ∘
+          (extChartAt (𝓡 2) p).symm) =ᶠ[𝓝 u]
+        (fun v => (𝓡 2)
+          (chartAt (E 2) (F.lift y)
+            ((chartAt (E 2) p).symm ((𝓡 2).symm v))))) ∧
+        (𝓡 2).symm u ∈ ((chartAt (E 2) p).symm ≫ₕ
+          chartAt (E 2) (F.lift y)).source) ∨
+      (((extChartAt (𝓡 2) y ∘ sphereProjection 2 ∘
+          (extChartAt (𝓡 2) p).symm) =ᶠ[𝓝 u]
+        (fun v => (𝓡 2)
+          (chartAt (E 2) (F.lift y)
+            (sphereAntipodalN 2
+              ((chartAt (E 2) p).symm ((𝓡 2).symm v)))))) ∧
+        ((𝓡 2).symm u ∈ (chartAt (E 2) p).target ∧
+          sphereAntipodalN 2
+            ((chartAt (E 2) p).symm ((𝓡 2).symm u)) ∈
+              (chartAt (E 2) (F.lift y)).source))
+
+theorem sphereProjectionQuotientCoordinateLocalNormalForm :
+    SphereProjectionQuotientCoordinateLocalNormalForm := by
+  intro F p
+  letI := F.quotientChartedSpace
+  letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+    sphereProjectionQuotientAtlasCompatibility F
+  let y := sphereProjection 2 p
+  let u := extChartAt (𝓡 2) p p
+  rcases sphereProjectionInverseBranchLocalAlternative F p with h | h
+  · left
+    refine ⟨?_, ?_⟩
+    · have ht : Filter.Tendsto (↑(extChartAt (𝓡 2) p).symm) (nhds u) (nhds p) := by
+        simpa [u] using (continuousAt_extChartAt_symm (I := 𝓡 2) p).tendsto
+      have hpull := h.comp_tendsto ht
+      have hc : ContinuousAt (sphereProjection 2 ∘ ↑(extChartAt (𝓡 2) p).symm) u := by
+        rw [continuousAt_def]
+        simpa [u] using continuous_sphereProjection.continuousAt.tendsto.comp ht
+      have hev : ∀ᶠ v in nhds u,
+          sphereProjection 2 ((extChartAt (𝓡 2) p).symm v) ∈
+            (F.quotientChart y).source :=
+        hc.preimage_mem_nhds ((F.quotientChart y).open_source.mem_nhds (by
+          have hcenter : (sphereProjection 2 ∘ ↑(extChartAt (𝓡 2) p).symm) u = y := by
+            simp [u, y]
+          rw [hcenter]
+          change y ∈ (ChartedSpace.chartAt (H := E 2) y).source
+          exact ChartedSpace.mem_chart_source y))
+      filter_upwards [hpull, hev] with v hv hvsrc
+      simp only [Function.comp_apply, id_eq] at hv
+      change (𝓡 2) (F.quotientChart y (sphereProjection 2
+        ((chartAt (E 2) p).symm ((𝓡 2).symm v)))) = _
+      have hvsrc' : sphereProjection 2
+          ((chartAt (E 2) p).symm ((𝓡 2).symm v)) ∈
+            (F.quotientChart y).source := hvsrc
+      rw [F.quotientChart_apply _ _ hvsrc']
+      congr 2
+    · have hp := h.self_of_nhds
+      simp only [Function.comp_apply, id_eq] at hp
+      have hlift : F.lift y = p := by
+        have heq : (F.localHomeomorph y) (F.lift y) = y := by
+          rw [← F.localHomeomorph_eq y]
+          exact F.project_lift y
+        have hinv : F.inverseBranch y y = F.lift y := by
+          calc
+            (F.localHomeomorph y).symm y =
+                (F.localHomeomorph y).symm ((F.localHomeomorph y) (F.lift y)) :=
+              congrArg (F.localHomeomorph y).symm heq.symm
+            _ = F.lift y := (F.localHomeomorph y).left_inv (F.lift_mem_source y)
+        simpa only [show sphereProjection 2 p = y from rfl, hinv] using hp
+      have hu : (𝓡 2).symm u = chartAt (E 2) p p := by
+        simp [u, extChartAt_coe]
+      change (𝓡 2).symm u ∈ (chartAt (E 2) p).target ∧
+        (chartAt (E 2) p).symm ((𝓡 2).symm u) ∈
+          (chartAt (E 2) (F.lift y)).source
+      rw [hu, (chartAt (E 2) p).left_inv (ChartedSpace.mem_chart_source p), hlift]
+      exact ⟨(chartAt (E 2) p).map_source (ChartedSpace.mem_chart_source p),
+        ChartedSpace.mem_chart_source p⟩
+  · right
+    refine ⟨?_, ?_⟩
+    · have ht : Filter.Tendsto (↑(extChartAt (𝓡 2) p).symm) (nhds u) (nhds p) := by
+        simpa [u] using (continuousAt_extChartAt_symm (I := 𝓡 2) p).tendsto
+      have hpull := h.comp_tendsto ht
+      have hc : ContinuousAt (sphereProjection 2 ∘ ↑(extChartAt (𝓡 2) p).symm) u := by
+        rw [continuousAt_def]
+        simpa [u] using continuous_sphereProjection.continuousAt.tendsto.comp ht
+      have hev : ∀ᶠ v in nhds u,
+          sphereProjection 2 ((extChartAt (𝓡 2) p).symm v) ∈
+            (F.quotientChart y).source :=
+        hc.preimage_mem_nhds ((F.quotientChart y).open_source.mem_nhds (by
+          have hcenter : (sphereProjection 2 ∘ ↑(extChartAt (𝓡 2) p).symm) u = y := by
+            simp [u, y]
+          rw [hcenter]
+          change y ∈ (ChartedSpace.chartAt (H := E 2) y).source
+          exact ChartedSpace.mem_chart_source y))
+      filter_upwards [hpull, hev] with v hv hvsrc
+      simp only [Function.comp_apply] at hv
+      change (𝓡 2) (F.quotientChart y (sphereProjection 2
+        ((chartAt (E 2) p).symm ((𝓡 2).symm v)))) = _
+      have hvsrc' : sphereProjection 2
+          ((chartAt (E 2) p).symm ((𝓡 2).symm v)) ∈
+            (F.quotientChart y).source := hvsrc
+      rw [F.quotientChart_apply _ _ hvsrc']
+      congr 2
+    · have hp := h.self_of_nhds
+      simp only [Function.comp_apply] at hp
+      have hlift : F.lift y = sphereAntipodalN 2 p := by
+        have heq : (F.localHomeomorph y) (F.lift y) = y := by
+          rw [← F.localHomeomorph_eq y]
+          exact F.project_lift y
+        have hinv : F.inverseBranch y y = F.lift y := by
+          calc
+            (F.localHomeomorph y).symm y =
+                (F.localHomeomorph y).symm ((F.localHomeomorph y) (F.lift y)) :=
+              congrArg (F.localHomeomorph y).symm heq.symm
+            _ = F.lift y := (F.localHomeomorph y).left_inv (F.lift_mem_source y)
+        simpa only [show sphereProjection 2 p = y from rfl, hinv] using hp
+      have hu : (𝓡 2).symm u = chartAt (E 2) p p := by
+        simp [u, extChartAt_coe]
+      rw [hu, (chartAt (E 2) p).left_inv (ChartedSpace.mem_chart_source p), hlift]
+      exact ⟨(chartAt (E 2) p).map_source (ChartedSpace.mem_chart_source p),
+        ChartedSpace.mem_chart_source (sphereAntipodalN 2 p)⟩
+
+theorem quotientCoordinateLocalNormalForm_gives_contDiffAt
+    (h : SphereProjectionQuotientCoordinateLocalNormalForm) :
+    SphereProjectionQuotientCoordinateContDiffAt := by
+  intro F p
+  letI := F.quotientChartedSpace
+  letI : IsManifold (𝓡 2) ∞ (Space ℝ 2) :=
+    sphereProjectionQuotientAtlasCompatibility F
+  let y := sphereProjection 2 p
+  let u := extChartAt (𝓡 2) p p
+  rcases h F p with ⟨heq, hdom⟩ | ⟨heq, hdom⟩
+  · exact ((sphereChartTransitionAlternativesSmooth p (F.lift y) u).1 hdom).congr_of_eventuallyEq heq
+  · exact ((sphereChartTransitionAlternativesSmooth p (F.lift y) u).2 hdom).congr_of_eventuallyEq heq
+
 end ConstructionTargets.RealProjectiveSmoothTarget
