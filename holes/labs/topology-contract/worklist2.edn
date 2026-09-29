@@ -52235,39 +52235,30 @@
    :consumer :t01A02,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/t01A02_punctured_torus_mv_cover.lean",
+     {:path "/tmp/t01A02_punctured_torus_h2.lean",
       :sha256
-      "686945aea358fd2a12d13c5c1b03dc46c0735a1d22cdf4835576bc3d835f849f"},
+      "81f113321f3e9859e7d76cfb6ad6c47afef8f3113aae37c005a5926e26c259af"},
      :commands
-     [{:cmd
-       "test -L .lake/packages && lake env lean /tmp/t01A02_punctured_torus_mv_cover.lean",
+     [{:cmd "lake env lean /tmp/t01A02_punctured_torus_h2.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 sorry /tmp/t01A02_punctured_torus_mv_cover.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t01A02_punctured_torus_h2.lean || true)\"",
        :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd "sha256sum /tmp/t01A02_punctured_torus_h2.lean", :exit 0}],
+     :implementation
+     {:scope ["ConstructionTargets/T01A02PuncturedTorusH2.lean"]},
+     :acceptance
+     {:implementation
+      "Create ConstructionTargets/T01A02PuncturedTorusH2.lean from the compiled fixture. Bank puncturedTorus_H2_isZero using the exact production Mayer-Vietoris union segment and the reviewed cover packet, and bank H2map_eq_zero_of_factor at the integral degree-two generality compiled there. Compile the target, verify no placeholders, run the statement registry check, and print axioms for both headline theorems."},
      :residual
-     "The production Mayer-Vietoris exact sequence is banked, as are the contraction of PuncturedCircle squared and its homeomorphism to the double-coordinate puncture neighborhood. Missing is the once-punctured torus cover U={z1 not -1}, V={z2 not -1}, with U and V degree-2 homology zero and U-intersection-V degree-1 homology zero. Once packaged, exactness immediately yields puncturedTorus_H2_isZero; factorization then gives the consumer map-zero bridge.",
-     :prerequisite
-     {:bounded-exception
-      "single-consumer bounded geometric MV-cover packet",
-      :consumer :t01A02,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of PuncturedTorusDegreeTwoMVCover from /tmp/t01A02_punctured_torus_mv_cover.lean. Use U={z in X | z.1 is not -1} and V={z in X | z.2 is not -1}; prove openness and U union V=univ. Identify U and V up to homotopy with Circle using the banked punctured-circle contraction, proving integral H2 zero; identify U intersection V with the banked torusPuncturedNeighborhood and its pointed contraction, proving integral H1 zero. This supplies exactly the geometric input to t01A02 route step 2."},
-      :id :routes-2026-09-28-t01a02-punctured-torus-mv-cover-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on []}}},
-   :phase :probe,
+     "The punctured-torus integral H2 object is zero and every integral H2 map factoring through a zero-H2 space is zero. The consumer adapter must choose a point omitted by a nonsurjective torus map, identify its complement with the fixed missing-point model, and apply the factorization theorem to the induced map."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/T01A02PuncturedTorusH2.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
