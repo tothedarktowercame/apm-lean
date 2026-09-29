@@ -52146,11 +52146,11 @@
     "Apply production Mayer-Vietoris exactness to prove puncturedTorus_H2_isZero, then prove H2map_eq_zero_of_factor for a nonsurjective torus self-map.",
     :outcome :done-unreviewed,
     :warnings
-    ["The scoped direct compile emitted no warnings; lake build replayed pre-existing upstream linter warnings."],
+    ["The scoped source and composition compiles emitted no warnings; lake build replayed pre-existing upstream linter warnings."],
     :statement-hashes
     {:registry "130 registered statements match, 0 do not",
-     :scoped-source-sha256
-     "840bcc55298363bf38477f4e14857dbec3e43188015c8841dd527578ed8c35ad"},
+     :repaired-source-sha256
+     "d9b462e5a42b2c045a9c22eba871bacf983e70355d7ad03b532ccd13c0ff2c8c"},
     :axioms ["propext" "Classical.choice" "Quot.sound"],
     :author "Joe Corneli <holtzermann17@gmail.com>",
     :commands
@@ -52160,6 +52160,14 @@
       "lake env lean ConstructionTargets/T01A02PuncturedTorusDegreeTwoMVCover.lean",
       :exit 0}
      {:cmd
+      "lake build ConstructionTargets.T01A02PuncturedTorusDegreeTwoMVCover",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t01A02_punctured_torus_mv_cover_composition.lean",
+      :exit 0,
+      :output
+      "Both cover-model and MV-cover modules import together; banked UModel, VModel, intersectionModel, and puncturedTorusDegreeTwoMVCover are available."}
+     {:cmd
       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T01A02PuncturedTorusDegreeTwoMVCover.lean",
       :exit 1,
       :expected-exit 1}
@@ -52168,21 +52176,21 @@
       :output "130 registered statements match, 0 do not"}
      {:cmd "git diff --check", :exit 0}
      {:cmd
-      "lake build ConstructionTargets.T01A02PuncturedTorusDegreeTwoMVCover",
-      :exit 0}
-     {:cmd
       "lake env lean /tmp/t01A02_punctured_torus_mv_cover_axioms.lean",
       :exit 0,
       :output
       "puncturedTorusDegreeTwoMVCover depends on axioms: [propext, Classical.choice, Quot.sound]"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790642003695-26874-2d8abf5b",
-     :finding
-     "Deterministic composition defect: commit a23bc7de compiles only because it does not import its declared dependency T01A02PuncturedTorusCoverModels.lean; instead it redeclares Torus, circleMinusOne, missingPoint, X, UModel, VModel, and intersectionModel in the same namespace and introduces duplicate coverU/coverV sets. A fresh Lean file importing both modules fails with environment already contains ConstructionTargets.T01A02PuncturedTorus.UModel._proof_5, so the row neither uses the compiled subtype homeomorphisms nor composes with its dependency. Repair by importing T01A02PuncturedTorusCoverModels, removing all duplicate representations/homeomorphisms, and proving the MV packet directly for the banked U, V, UModel, VModel, and intersectionModel. Scope and fixture hashes match; isolated compile/build and axiom audit pass, 130 frozen statements and the 342-item ledger pass, the new module has zero placeholders, and frozen t01A02 has three."},
-    :commit "a23bc7dea2f4b7723f1fa9a9f465f4aa91e6cda6",
+    :diagnostic-history
+    [{:cmd
+      "sha256sum /tmp/t01A02_punctured_torus_mv_cover.lean && lake env lean /tmp/t01A02_punctured_torus_mv_cover_composition.lean && python3 scripts/statement-registry.py check && git diff --check",
+      :exit 1,
+      :finding
+      "The first composition rerun loaded the stale pre-repair MV-cover olean and reproduced the duplicate UModel._proof_5 error. Rebuilding the scoped module refreshed its olean; the identical two-import composition fixture then compiled successfully."}],
+    :commit "603999f3811553e44e3f310ca8428d7307b75dbc",
+    :commits
+    ["a23bc7dea2f4b7723f1fa9a9f465f4aa91e6cda6"
+     "603999f3811553e44e3f310ca8428d7307b75dbc"],
     :changed-paths
     ["ConstructionTargets/T01A02PuncturedTorusDegreeTwoMVCover.lean"],
     :fixture
@@ -52191,7 +52199,7 @@
      "840bcc55298363bf38477f4e14857dbec3e43188015c8841dd527578ed8c35ad"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T01A02PuncturedTorusDegreeTwoMVCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
