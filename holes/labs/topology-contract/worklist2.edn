@@ -51403,12 +51403,64 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile a placeholder-free inhabitant of SphereProjectionQuotientContMDiffAt in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F, install exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F; then for every p in Sphere 2 prove ContMDiffAt (real model 2) (real model 2) infinity (sphereProjection 2) p. In the proof use the standard sphere chart at p and F.quotientChart (sphereProjection 2 p), show the coordinate expression is eventually the ordinary sphere transition or the antipodal-inserted transition, and apply the banked smooth alternatives only on their exact chart domains. Retain quotientContMDiffAt_gives_quotientContMDiff. This supplies the pointwise forward-smoothness theorem for t95A04 and t96A07."},
+   :id :routes-2026-09-29-rp-sphere-projection-contmdiff-at-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
+    :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path
+      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      :sha256
+      "e0a963b10e523957a7007c4325ff647e57a4152062cdc1326e919e525a08d281"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :warnings
+     ["Lean emitted only the stylistic suggestion to combine consecutive intro commands in quotientContMDiffAt_gives_quotientContMDiff."],
+     :residual
+     "The global forward-smoothness row is definitionally assembled from a pointwise theorem. The compiled prerequisite fixes that exact local obligation: under F.quotientChartedSpace and its banked IsManifold instance, prove ContMDiffAt sphereProjection 2 at an arbitrary sphere point p. Its proof can now use the standard sphere chart at p, the quotient chart at sphereProjection 2 p, and the local identity-or-antipodal coordinate alternative without managing a global binder. The compiled reduction turns these pointwise proofs into SphereProjectionQuotientContMDiff.",
+     :prerequisite
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free inhabitant of SphereProjectionQuotientContMDiffAt in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F, install exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F; then for every p in Sphere 2 prove ContMDiffAt (real model 2) (real model 2) infinity (sphereProjection 2) p. In the proof use the standard sphere chart at p and F.quotientChart (sphereProjection 2 p), show the coordinate expression is eventually the ordinary sphere transition or the antipodal-inserted transition, and apply the banked smooth alternatives only on their exact chart domains. Retain quotientContMDiffAt_gives_quotientContMDiff. This supplies the pointwise forward-smoothness theorem for t95A04 and t96A07."},
+      :id
+      :routes-2026-09-29-rp-sphere-projection-contmdiff-at-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
+       :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1],
+      :other-consumers [:t96A07]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free inhabitant of SphereProjectionQuotientContMDiff in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every SphereProjectionLocalInverseFamily F, install exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F, then prove ContMDiff (real model 2) (real model 2) infinity (sphereProjection 2). Work pointwise in a standard sphere chart and the quotientChart centered at sphereProjection 2 p; use the banked identity-or-antipodal coordinate alternatives on the required neighborhood. Retain projectionAndLocalInversesSmooth_iff, so the parent row reduces afterward to SphereProjectionLocalInverseRestrictionsContMDiff. This supplies the shared forward-smoothness half for t95A04 and t96A07."},
    :id :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
-    :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1],
+    :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
+    :routes-2026-09-29-rp-sphere-projection-contmdiff-at-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
