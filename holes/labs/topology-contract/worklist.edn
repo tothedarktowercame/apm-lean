@@ -80982,6 +80982,33 @@
    "The same exact local smooth right-inverse theorem remains absent from the source; convexity and partition-of-unity assembly are already compiled.",
    :other-consumers []}
   {:consumer :t98A06,
+   :phase :implementation,
+   :state :open,
+   :scope ["problems/t98A06/lean/Main.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
+   :acceptance
+   {:placeholder-after 1,
+    :fixture-sha256
+    "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d",
+    :placeholder
+    "the part-(a) portion of the single sorry in apm_t98a06",
+    :axioms :standard-only,
+    :placeholder-before 1,
+    :commands
+    ["lake env lean problems/t98A06/lean/Main.lean"
+     "lake env lean /tmp/t98a06-part-a-probe.lean"
+     "python3 scripts/statement-registry.py check"],
+    :fixture "/tmp/t98a06-part-a-probe.lean",
+    :route-step "t98A06 part (a), route step 2",
+    :implementation
+    "Prove apm_t98A06_bridge_local_smooth_submersion_lift before the registered theorem at the frozen Euclidean-manifold generality. Choose a complement of the kernel, shrink to where the restricted varying mfderiv is invertible, apply its smooth inverse to v(f x), and prove total-space smoothness and the required equality. Preserve registered declarations."},
+   :id :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
+   :kind :final-adapter,
+   :depends-on [],
+   :current-residual
+   "The exact local smooth right-inverse theorem remains absent; the compiled fixture already proves convex gluing from it.",
+   :other-consumers []}
+  {:consumer :t98A06,
    :evidence
    {:probe
     {:outcome :revise,
@@ -80993,21 +81020,21 @@
      :commands
      [{:cmd "test canonical .lake/packages authority", :exit 0}
       {:cmd
-       "rg bridge_local, theorem apm_t98a06, and sorry in problems/t98A06/lean/Main.lean",
+       "rg apm_t98A06_bridge_local_smooth_submersion_lift, theorem apm_t98a06, and sorry in scoped source",
+       :exit 0,
+       :finding "Bridge absent; one registered sorry remains."}
+      {:cmd "lake env lean /tmp/t98a06-part-a-probe.lean", :exit 0}
+      {:cmd "sha256sum /tmp/t98a06-part-a-probe.lean",
        :exit 0,
        :finding
-       "No local-lift bridge is present; the registered theorem still has its single sorry."}
-      {:cmd "lake env lean /tmp/t98a06-part-a-probe.lean", :exit 0}
-      {:cmd "Python comment-stripped placeholder census of fixture",
-       :exit 0,
-       :finding "0"}
+       "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"}
       {:cmd "python3 scripts/statement-registry.py check",
        :exit 0,
        :finding "130 registered statements match, 0 do not"}],
      :warnings
-     [{:kind :dependency-not-banked,
+     [{:kind :repeated-unbanked-prerequisite,
        :message
-       "Although the row lists the local-lift prerequisite as a dependency, no corresponding declaration or commit exists in the scoped source. The freshly compiled fixture still depends exactly on that interface axiom."}],
+       "The identical local-lift prerequisite remains absent after two dependency attempts. This probe is still REVISE rather than STOP because the boundary is implementation absence, not mathematical refutation; the supervisor should enforce its stop-after-two hold policy."}],
      :axioms
      ["propext"
       "Classical.choice"
@@ -81035,17 +81062,17 @@
        :fixture "/tmp/t98a06-part-a-probe.lean",
        :route-step "t98A06 part (a), route step 2",
        :implementation
-       "Add and prove apm_t98A06_bridge_local_smooth_submersion_lift before the registered theorem. At the exact frozen generality, choose a complement of ker(mfderiv f x0), use tangent charts to obtain a smoothly varying restricted derivative, shrink where it remains invertible, and apply its smooth inverse to v(f x). Prove total-space smoothness and the mfderiv equality. Preserve every registered declaration."},
-      :id :routes-2026-09-29-t98a06-local-smooth-submersion-lift-2,
+       "Prove apm_t98A06_bridge_local_smooth_submersion_lift before the registered theorem at the frozen Euclidean-manifold generality. Choose a complement of the kernel, shrink to where the restricted varying mfderiv is invertible, apply its smooth inverse to v(f x), and prove total-space smoothness and the required equality. Preserve registered declarations."},
+      :id :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
       :kind :final-adapter,
       :depends-on [],
       :current-residual
-      "The same exact local smooth right-inverse theorem remains absent from the source; convexity and partition-of-unity assembly are already compiled.",
+      "The exact local smooth right-inverse theorem remains absent; the compiled fixture already proves convex gluing from it.",
       :other-consumers []},
      :residual
-     "Part (a) cannot advance because the elected local smooth submersion lift was not banked. This is an implementation absence, not a mathematical refutation."}},
+     "No new mathematical boundary was found. The same single prerequisite remains unbanked after two attempts, making t98A06 eligible for the campaign's stop-after-two hold."}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
@@ -81063,7 +81090,8 @@
    :depends-on
    [:routes-2026-09-29-topo1-refill-heavy-1
     :routes-2026-09-29-t98a06-local-smooth-submersion-lift-1
-    :routes-2026-09-29-t98a06-local-smooth-submersion-lift-2],
+    :routes-2026-09-29-t98a06-local-smooth-submersion-lift-2
+    :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3],
    :current-residual "Smooth lift first; complete-flow work remains.",
    :other-consumers []}
   {:consumer :t98J01,
