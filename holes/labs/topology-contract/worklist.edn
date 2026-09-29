@@ -80361,82 +80361,44 @@
    :other-consumers []}
   {:consumer :t99J04,
    :evidence
-   {:probe
-    {:residual
-     "Exactly one prerequisite is elected: apm_t99J04_bridge_local_inverse_function, comprising route steps 1-3. Its exact placeholder-free consumer fixture compiles. Route step 4, the coordinateMap ContMDiff and mfderiv calculation, remains independent and downstream; route step 5 is assembly.",
-     :outcome :revise,
-     :warnings
-     [{:kind :inherited-placeholder,
-       :message
-       "The temporary consumer olean reports the three existing source placeholders. The fixture introduces none and depends on sorryAx exactly through apm_t99J04_bridge_local_inverse_function."}],
-     :prerequisite
-     {:consumer :t99J04,
-      :phase :implementation,
-      :state :open,
-      :scope ["problems/t99J04/lean/Main.lean"],
-      :dag-node
-      "TOPOLOGY-ROUTES.md/t99J04/manifold-local-inverse-function",
-      :acceptance
-      {:placeholder-after 2,
-       :fixture-sha256
-       "42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6",
-       :placeholder
-       "the sorry in apm_t99J04_bridge_local_inverse_function",
-       :axioms :standard-only,
-       :placeholder-before 3,
-       :commands
-       ["lake env lean problems/t99J04/lean/Main.lean"
-        "LEAN_PATH=/tmp/t99probe lake env lean /tmp/t99j04-local-ift-consumer.lean"
-        "python3 scripts/statement-registry.py check"],
-       :fixture "/tmp/t99j04-local-ift-consumer.lean",
-       :route-step "t99J04 route steps 1-3",
-       :implementation
-       "Replace only the sorry in apm_t99J04_bridge_local_inverse_function. First construct the Euclidean PartialDiffeomorph at a point from ContDiffAt and bijective fderiv: use ContDiffAt.toOpenPartialHomeomorph, shrink its source to a neighborhood on which the original map is smooth, and prove the local inverse is smooth with OpenPartialHomeomorph.contDiffAt_symm. Package the boundaryless model-space charts as PartialDiffeomorphs using contMDiffOn_chart and contMDiffOn_chart_symm. Apply the Euclidean construction to writtenInExtChartAt at extChartAt x x, use the mfderiv/fderiv identity for modelWithCornersSelf, and conjugate with the chart PartialDiffeomorphs to obtain IsLocalDiffeomorphAt at x. Work only at the frozen finite-dimensional complete real normed-space generality; preserve every registered statement and definition."},
-      :id :routes-2026-09-29-t99j04-manifold-local-ift-1,
-      :kind :final-adapter,
-      :depends-on [],
-      :current-residual
-      "Prove the exact boundaryless finite-dimensional manifold inverse-function bridge consumed by the compiled fixture. Coordinate-map smoothness and mfderiv bijectivity, followed by final assembly, remain downstream.",
-      :other-consumers []},
-     :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
-     :commands
-     [{:cmd "test canonical .lake/packages authority", :exit 0}
-      {:cmd
-       "lake env lean -o /tmp/t99probe/t99J04/lean/Main.olean problems/t99J04/lean/Main.lean",
-       :exit 0}
-      {:cmd
-       "LEAN_PATH=/tmp/t99probe lake env lean /tmp/t99j04-local-ift-consumer.lean",
-       :exit 0}
-      {:cmd "sha256sum /tmp/t99j04-local-ift-consumer.lean",
-       :exit 0,
-       :finding
-       "42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6"}
-      {:cmd
-       "Python comment-stripped placeholder census of /tmp/t99j04-local-ift-consumer.lean",
-       :exit 0,
-       :finding "0"}
-      {:cmd
-       "rg Euclidean inverse-function and manifold PartialDiffeomorph APIs",
-       :exit 0,
-       :finding
-       "Mathlib supplies ContDiffAt.toOpenPartialHomeomorph, smoothness of its inverse, PartialDiffeomorph.isLocalDiffeomorphAt, and chart calculus, but no assembled boundaryless manifold IFT theorem."}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :finding "130 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd
-       "LEAN_PATH=/tmp/t99probe lake env lean /tmp/t99j04-local-ift-consumer.lean",
-       :exit 1,
-       :stage :fixture-scope,
-       :correction
-       "Opened the Manifold scoped notation required by the exact registered bridge signature; the corrected fixture compiled."}],
-     :fixture
-     {:path "/tmp/t99j04-local-ift-consumer.lean",
-      :sha256
-      "42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6"},
-     :seat "topo-4"}},
+   {:residual
+    "STOP at the exact API/construction boundary for apm_t99J04_bridge_local_inverse_function: turn ContMDiffAt f x plus bijective mfderiv f x on boundaryless finite-dimensional self-model manifolds into IsLocalDiffeomorphAt f x. The available Euclidean theorem produces an OpenPartialHomeomorph with a smooth inverse, but closure requires shrinking and packaging it as a PartialDiffeomorph, packaging extChartAt and its inverse as PartialDiffeomorphs, composing/conjugating those objects, and proving that the fderiv of writtenInExtChartAt is the chart transport of mfderiv. Mathlib explicitly lists the manifold implication as a TODO, and no banked theorem supplies the missing assembly. The source remains unchanged with three placeholders. Coordinate-map differentiation and final assembly are independent downstream steps.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The exact fixture contains no textual placeholder but inherits sorryAx by invoking the still-open local inverse-function bridge."}],
+    :disposition :stop,
+    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :author "topo-4",
+    :reason :missing-manifold-local-inverse-function-assembly,
+    :commands
+    [{:cmd "test canonical .lake/packages authority", :exit 0}
+     {:cmd
+      "lake env lean -o /tmp/t99reprobe/t99J04/lean/Main.olean problems/t99J04/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "LEAN_PATH=/tmp/t99reprobe lake env lean /tmp/t99j04-local-ift-consumer.lean",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t99j04-local-ift-consumer.lean",
+      :exit 0,
+      :finding
+      "42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6"}
+     {:cmd
+      "rg Mathlib and ConstructionTargets for manifold local-IFT assembly, chart PartialDiffeomorph composition, and writtenInExtChartAt derivative transport",
+      :exit 0,
+      :finding
+      "Mathlib/Geometry/Manifold/LocalDiffeomorph.lean explicitly retains this implication as a TODO. Euclidean inverse and chart calculus pieces exist separately; no assembled theorem or ConstructionTargets replacement exists."}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}],
+    :fixture
+    {:path "/tmp/t99j04-local-ift-consumer.lean",
+     :sha256
+     "42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6"},
+    :seat "topo-4"},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t99J04",
    :acceptance
