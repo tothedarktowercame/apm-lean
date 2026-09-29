@@ -52783,42 +52783,46 @@
   {:consumer :t95A04,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
      {:path "/tmp/rp_smooth_atlas_descent_contract.lean",
       :sha256
-      "5bd549cecf08adfd353f75349b90394ee61ceb00f428356c523b5c029827acd9"},
+      "c879e15f4441853458fe2312e1cc2ee2f68a397be09abb8bea4db69c06fc7be0"},
      :commands
      [{:cmd "lake env lean /tmp/rp_smooth_atlas_descent_contract.lean",
        :exit 0}
       {:cmd
        "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_smooth_atlas_descent_contract.lean || true)\"",
        :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :residual
-     "The two-sheeted local-homeomorphism and exact antipodal fibres are banked, and Mathlib proves the antipodal map on the sphere analytic. The remaining missing theorem is smooth descent: construct a ChartedSpace on the frozen quotient from hemisphere restrictions and prove that lift changes, which are identity or antipodal, give smooth chart transitions; this simultaneously yields the manifold instance and makes sphereProjection a local diffeomorphism.",
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}
+      {:cmd "sha256sum /tmp/rp_smooth_atlas_descent_contract.lean",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/rp_smooth_atlas_descent_contract.lean",
+       :exit 1,
+       :finding
+       "The prerequisite implementation had already banked the descent-contract declarations, so the first fixture redeclared them. Its additional local-diffeomorphism example also placed the proposition before installing the atlas ChartedSpace instance."}
+      {:cmd "lake env lean /tmp/rp_smooth_atlas_descent_contract.lean",
+       :exit 1,
+       :finding
+       "After removing duplicate declarations, the standalone local-diffeomorphism example still required a ChartedSpace while elaborating its type, before its proof-local instance could exist. Removing that redundant example left the requested SmoothAtlas construction."}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
       :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of SphereProjectionSmoothDescentContract from /tmp/rp_smooth_atlas_descent_contract.lean. Using the banked two-sheeted local model, build the ChartedSpace on the existing Space real 2 from positive-hemisphere restrictions of standard sphere charts; prove overlap transitions are standard sphere transitions composed only with identity or the analytic antipodal map, establish IsManifold, and prove sphereProjection 2 is an IsLocalDiffeomorph. This supplies exactly the smooth-descent substep of rpSmoothAtlas 2 for t95A04 and t96A07 without changing the frozen topology."},
-      :id :routes-2026-09-28-rp-sphere-smooth-descent-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1],
-      :other-consumers [:t96A07]}}},
-   :phase :probe,
+      {:implementation
+       "Add the dimension-two construction noncomputable def rpSmoothAtlas : SmoothAtlas 2 exactly as compiled. Define it by Classical.choice from sphereProjectionSmoothDescentContract applied to sphereProjectionTwoSheetedLocalModel and sphereAntipodalN_contMDiff. Do not generalize to unsupported dimensions; t95A04 and t96A07 both require SmoothAtlas 2. Run the module compile, placeholder scan, and statement-registry check."}},
+     :residual
+     "The sole shared atlas step for t95A04 and t96A07 is complete: rpSmoothAtlas is a concrete SmoothAtlas 2 whose charts use the frozen quotient topology and whose projection field is the banked local diffeomorphism. Consumer adapters can now install rpSmoothAtlas.charts and rpSmoothAtlas.smooth."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free fixture for rpSmoothAtlas 2 at exactly the RealProjectiveSmoothTarget interface used by t95A04 and t96A07: hemisphere-restricted sphere charts through local inverses of sphereProjection with quotient-compatible smooth transitions. Supplies the sole-sorry route step 1 of both consumers."},
+   {:implementation
+    "Add the dimension-two construction noncomputable def rpSmoothAtlas : SmoothAtlas 2 exactly as compiled. Define it by Classical.choice from sphereProjectionSmoothDescentContract applied to sphereProjectionTwoSheetedLocalModel and sphereAntipodalN_contMDiff. Do not generalize to unsupported dimensions; t95A04 and t96A07 both require SmoothAtlas 2. Run the module compile, placeholder scan, and statement-registry check."},
    :id :routes-2026-09-28-rp-smooth-atlas-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
