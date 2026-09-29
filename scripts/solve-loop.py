@@ -303,6 +303,28 @@ def wait(job: str) -> dict:
     return {"state": "timeout"}
 
 
+def progress_marks(pid: str) -> tuple[int, int] | None:
+    """(sorries, sorry-free theorem/lemma bodies) in the partial file, or None if absent.
+    An attempt moved the proof if it removed a sorry or proved another declaration
+    (splitting a sorry into sub-lemmas and proving some of them counts)."""
+    f = SCRATCH / pid / "Main.lean"
+    if not f.exists():
+        return None
+    t = re.sub(r"/-.*?-/", " ", f.read_text(), flags=re.S)
+    t = re.sub(r"--[^\n]*", " ", t)
+    bodies = re.split(r"(?m)^(?:private |protected )?(?:theorem|lemma) ", t)[1:]
+    proved = sum(1 for b in bodies if not re.search(r"(?<![A-Za-z0-9_.])sorry(?![A-Za-z0-9_.])", b))
+    return code_sorries(t), proved
+
+
+def moved(before: tuple[int, int] | None, after: tuple[int, int] | None) -> bool:
+    if after is None:
+        return False
+    if before is None:
+        return True
+    return after[0] < before[0] or after[1] > before[1]
+
+
 def attempt(seat: str, pid: str, feedback: str) -> dict:
     fp = pin(pid)
     d = SCRATCH / pid
@@ -353,14 +375,16 @@ def attempt(seat: str, pid: str, feedback: str) -> dict:
     return row
 
 
-def worker(seat: str, todo: list[str], attempts: int, budget: list[int]) -> None:
+def worker(seat: str, todo: list[str], attempts: int, budget: list[int], stall_limit: int) -> None:
     while True:
         with LOCK:
             if not todo or budget[0] <= 0:
                 return
             pid = todo.pop(0)
         feedback = ""
+        stalls = 0
         for n in range(attempts):
+            before = progress_marks(pid)
             with LOCK:
                 if budget[0] <= 0:
                     return
@@ -370,6 +394,8 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int]) -> None
             except Exception as e:
                 row = {"id": pid, "seat": seat, "at": now(), "outcome": "error", "reason": str(e)[:500]}
             row["attempt"] = n + 1
+            after = progress_marks(pid)
+            row["marks"] = after
             record(row)
             log(f"{seat} {pid} attempt {n+1}: {row['outcome']} {row.get('commit', '')} {row.get('reason', '')[:160]}")
             if row["outcome"] in ("landed", "refuted-claim"):
@@ -378,6 +404,12 @@ def worker(seat: str, todo: list[str], attempts: int, budget: list[int]) -> None
                 log(f"{seat}: provider quota reached; stopping this seat")
                 return
             feedback = row.get("reason", "")
+            # Joe, 2026-09-29: continue while the proof moves, stop when it repeats.
+            stalls = 0 if moved(before, after) else stalls + 1
+            if stalls >= stall_limit:
+                log(f"{seat} {pid}: {stalls} attempts in a row without removing a sorry or proving a "
+                    f"declaration (marks {after}); leaving it")
+                break
 
 
 def main() -> int:
@@ -386,8 +418,10 @@ def main() -> int:
     sub.add_parser("queue")
     r = sub.add_parser("run")
     r.add_argument("--seats", required=True)
-    r.add_argument("--max-jobs", type=int, default=200)
-    r.add_argument("--attempts", type=int, default=4)
+    r.add_argument("--max-jobs", type=int, default=600)
+    r.add_argument("--attempts", type=int, default=50, help="cap per problem")
+    r.add_argument("--stall", type=int, default=3,
+                   help="stop a problem after this many attempts in a row that move nothing")
     r.add_argument("--only", help="comma-separated problem ids")
     r.add_argument("--skip", help="comma-separated problem ids to leave alone")
     o = ap.parse_args()
@@ -402,7 +436,7 @@ def main() -> int:
     if o.skip:
         todo = [p for p in todo if p not in o.skip.split(",")]
     budget = [o.max_jobs]
-    threads = [threading.Thread(target=worker, args=(s.strip(), todo, o.attempts, budget))
+    threads = [threading.Thread(target=worker, args=(s.strip(), todo, o.attempts, budget, o.stall))
                for s in o.seats.split(",") if s.strip()]
     for t in threads:
         t.start()
