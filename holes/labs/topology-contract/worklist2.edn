@@ -50667,6 +50667,21 @@
      "The affine coordinate spaces indexed by the two coordinates other than i",
      :direction
      "Explicit OpenPartialHomeomorphs from each projective nonvanishing-coordinate source subtype to its affine coordinate target, with forward map coordinates, inverse chartInverse, exact mutual-inverse equalities, and coordinateLine normalization"},
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790655918961-27697-7156484d",
+     :commands
+     ["git show/diff-tree f197fad73f26e4db68a67b08b0bfa96b8184d52c"
+      "sha256sum committed source, current source, and frozen fixture"
+      "lake env lean ConstructionTargets/T94A08AffineChartHomeomorph.lean"
+      "lake build ConstructionTargets.T94A08AffineChartHomeomorph"
+      "#print axioms and #check both declared interfaces"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder recount at recorded commit"],
+     :finding
+     "PASS: reviewer codex-7 verified recorded commit f197fad73f26e4db68a67b08b0bfa96b8184d52c, authored by topo-6/Joe, creates only ConstructionTargets/T94A08AffineChartHomeomorph.lean and exports exactly the two declared interfaces. Committed source, current source, and frozen fixture SHA-256 all equal 5d2fb331996b326d78c245ecd893c22956fd7c41230ca8f8447004380e0aa812. Lean compile and 8248-job build pass with only the two recorded upstream warnings; both declarations use only propext, Classical.choice, Quot.sound; registry is 130/130 and the 353-row worklist validates. continuous_coordinates exposes exactly ContinuousOn coordinates i on the frozen representative-nonvanishing patch. affineChartConstruction has exact type AffineChartConstruction 2 and is obtained by applying affineChartConstruction_of_quotientCompatibility to the reviewed compatibility inhabitant. Inspection of that recorded dependency confirms its OpenPartialHomeomorphs use the exact projective patch source, univ affine target, forward coordinates, inverse chartInverse, correctly oriented mutual inverses, and all coordinateLine normalization fields. No definition, representative, or topology boundary is changed. Comment-stripped sorry/admit/axiom counts are 0/0/0 in scope and 1/0/0 in the frozen t94A08 consumer."},
     :commit "f197fad73f26e4db68a67b08b0bfa96b8184d52c",
     :changed-paths
     ["ConstructionTargets/T94A08AffineChartHomeomorph.lean"],
@@ -50676,7 +50691,7 @@
      "5d2fb331996b326d78c245ecd893c22956fd7c41230ca8f8447004380e0aa812"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/T94A08AffineChartHomeomorph.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50788,7 +50803,7 @@
      "The current row cannot be implemented under its unrelated RealProjectiveSmoothTarget scope. The named prerequisite supplies exactly the missing quotient-patch coordinate continuity, both mutual-inverse identities, and the AffineChartConstruction 2 representation required before the parent row can proceed."},
     :seat "topo-6"},
    :phase :implementation,
-   :state :blocked,
+   :state :open,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
