@@ -50216,55 +50216,37 @@
    :consumer :t94A08,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/t94A08_affine_chart_algebra.lean",
+     {:path "/tmp/rp_smooth_atlas_descent_contract.lean",
       :sha256
-      "97f02574edee037b02e79995169dcb82e653ea9b34fc52a17dbc8b8cfe414ac5"},
+      "677f02101fcdb213c34e12591ad011721016986ec219a9ceb0363e424a7e5f98"},
      :commands
-     [{:cmd "lake env lean /tmp/t94A08_affine_chart_algebra.lean",
+     [{:cmd "lake env lean /tmp/rp_smooth_atlas_descent_contract.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_affine_chart_algebra.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_smooth_atlas_descent_contract.lean || true)\"",
        :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
-      {:cmd "sha256sum /tmp/t94A08_affine_chart_algebra.lean",
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}
+      {:cmd "sha256sum /tmp/rp_smooth_atlas_descent_contract.lean",
        :exit 0}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t94A08_affine_chart_algebra.lean",
-       :exit 1,
-       :finding
-       "The first normalization draft chose the scalar in the wrong orientation for Projectivization.mk_eq_mk_iff and left dependent coordinate evaluation under-specified."}
-      {:cmd "lake env lean /tmp/t94A08_affine_chart_algebra.lean",
-       :exit 1,
-       :finding
-       "Explicit dependent coordinate indices and Units.smul_def were required to establish continuity of the normalized section and nonvanishing of the coordinate-line representative."}],
-     :residual
-     "The open quotient authority is banked, and the compiled prerequisite proves continuity of chartInverse together with the exact coordinate-line source and normalization equations. The full OpenPartialHomeomorph still needs coordinates to descend continuously on the nonvanishing quotient patch and the two scale-invariant mutual-inverse identities chartInverse_coordinates and coordinates_chartInverse.",
-     :prerequisite
-     {:bounded-exception
-      "single-consumer affine inverse-section normalization packet",
-      :consumer :t94A08,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
       :acceptance
-      {:probe
-       "Compile the placeholder-free fixture /tmp/t94A08_affine_chart_algebra.lean. Prove continuous_chartInverse for every i : Fin 3 using the explicit normalized vector section and continuous quotientMap. Prove coordinateLine_mem_affineSource, coordinates_coordinateLine, and chartInverse_zero exactly for the existing Projectivization.rep-based coordinates and frozen coordinateLine. These supply the inverse continuity and all three center-normalization obligations of AffineChartConstruction 2; do not redefine coordinates, chartInverse, coordinateLine, or the projective topology."},
-      :id
-      :routes-2026-09-29-t94a08-affine-chart-inverse-normalization-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}}},
-   :phase :probe,
+      {:implementation
+       "Retain the banked dimension-two rpSmoothAtlas and add rpSmoothAtlas_exists : Nonempty (SmoothAtlas 2) exactly as compiled. Verify that installing rpSmoothAtlas.charts and rpSmoothAtlas.smooth exposes rpSmoothAtlas.quotient_localDiffeomorph with the frozen sphereProjection 2. Run the module compile, placeholder scan, and statement-registry check."}},
+     :residual
+     "The shared route step is complete at the exact registered interface: rpSmoothAtlas is a SmoothAtlas 2, its charts and manifold instance install cleanly, and its quotient_localDiffeomorph field concerns the frozen sphereProjection 2. Both consumer files can now use this atlas before constructing their descended polynomial maps."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free inhabitant of ConstructionTargets.ComplexProjectiveChartTargets.AffineChartConstruction 2 for the existing coinduced topology on ConstructionTargets.ProjectiveSpaceTopology.Space complex 2. For every coordinate i, construct the OpenPartialHomeomorph whose source is exactly the nonvanishing-i locus, target is univ, forward map is coordinates i, and inverse is chartInverse i, including the three coordinateLine normalization equations. The exact interface is compiled in /tmp/t94A08_affine_chart_contract.lean. This supplies t94A08 route step 1 without redefining the topology."},
+   {:implementation
+    "Retain the banked dimension-two rpSmoothAtlas and add rpSmoothAtlas_exists : Nonempty (SmoothAtlas 2) exactly as compiled. Verify that installing rpSmoothAtlas.charts and rpSmoothAtlas.smooth exposes rpSmoothAtlas.quotient_localDiffeomorph with the frozen sphereProjection 2. Run the module compile, placeholder scan, and statement-registry check."},
    :representation
    {:source
     "The nonvanishing-coordinate open subtypes of complex projective two-space with the frozen topology coinduced from quotientMap on nonzero vectors",
