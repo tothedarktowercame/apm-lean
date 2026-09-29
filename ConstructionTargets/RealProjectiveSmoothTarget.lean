@@ -1281,6 +1281,42 @@ theorem projectionAndLocalInversesSmooth_gives_restrictionsSmooth
   refine ⟨?_, (h F).2 e he⟩
   exact (h F).1.contMDiffOn.congr fun x _hx => (congrFun he x).symm
 
+theorem sphereProjectionLocalHomeomorphRestrictionsSmooth :
+    SphereProjectionLocalHomeomorphRestrictionsSmooth :=
+  projectionAndLocalInversesSmooth_gives_restrictionsSmooth
+    sphereProjectionAndLocalInversesSmooth
+
+theorem localHomeomorphRestrictionsSmooth_gives_smoothBranches
+    (h : SphereProjectionLocalHomeomorphRestrictionsSmooth) :
+    SphereProjectionSmoothLocalHomeomorphBranches := by
+  intro F
+  letI := F.quotientChartedSpace
+  letI : IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
+    sphereProjectionQuotientAtlasCompatibility F
+  intro p
+  obtain ⟨e, hp, he⟩ := sphereProjection_isLocalHomeomorph p
+  exact ⟨e, hp, he, h F e he⟩
+
+theorem smoothLocalHomeomorphBranches_gives_localDiffeomorph
+    (h : SphereProjectionSmoothLocalHomeomorphBranches) :
+    SphereProjectionQuotientLocalDiffeomorph := by
+  intro F
+  letI := F.quotientChartedSpace
+  letI : IsManifold (𝓡 2) ∞ (ProjectiveSpaceTopology.Space ℝ 2) :=
+    sphereProjectionQuotientAtlasCompatibility F
+  intro p
+  obtain ⟨e, hp, he, hforward, hinverse⟩ := h F p
+  let phi : PartialDiffeomorph (𝓡 2) (𝓡 2) (Sphere 2)
+      (ProjectiveSpaceTopology.Space ℝ 2) ∞ := {
+    toPartialEquiv := e.toPartialEquiv
+    open_source := e.open_source
+    open_target := e.open_target
+    contMDiffOn_toFun := hforward
+    contMDiffOn_invFun := hinverse }
+  refine ⟨phi, hp, ?_⟩
+  intro q hq
+  exact congrFun he q
+
 theorem coordinateContDiffAt_reaches_contMDiff :
     SphereProjectionQuotientContMDiff :=
   quotientContMDiffAt_gives_quotientContMDiff
