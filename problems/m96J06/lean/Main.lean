@@ -221,6 +221,47 @@ lemma apm_m96J06_linearPartCLM_involutive
     apm_m96J06_linearPartCLM (apm_m96J06_linearPartCLM x) = x :=
   apm_m96J06_linearPartC_involutive x
 
+lemma apm_m96J06_fixedPointMap_maps_ball
+    (Y : C(apm_m96J06_interval, ℝ)) (hY : ‖Y‖ < (1 / 48 : ℝ))
+    (x : C(apm_m96J06_interval, ℝ)) (hx : ‖x‖ ≤ (1 / 12 : ℝ)) :
+    ‖apm_m96J06_linearPartCLM (Y - apm_m96J06_quadraticC x)‖ ≤
+      (1 / 12 : ℝ) := by
+  calc
+    _ ≤ 3 * ‖Y - apm_m96J06_quadraticC x‖ :=
+      apm_m96J06_linearPartC_norm_le _
+    _ ≤ 3 * (‖Y‖ + ‖apm_m96J06_quadraticC x‖) := by
+      gcongr
+      exact norm_sub_le _ _
+    _ ≤ 3 * (‖Y‖ + (1 / 12 : ℝ) ^ 2) := by
+      gcongr
+      exact apm_m96J06_quadraticC_norm_le x (by norm_num) hx
+    _ ≤ (1 / 12 : ℝ) := by
+      norm_num at hY ⊢
+      linarith
+
+lemma apm_m96J06_fixedPointMap_sub_norm_le
+    (Y : C(apm_m96J06_interval, ℝ))
+    (x z : C(apm_m96J06_interval, ℝ))
+    (hx : ‖x‖ ≤ (1 / 12 : ℝ)) (hz : ‖z‖ ≤ (1 / 12 : ℝ)) :
+    ‖apm_m96J06_linearPartCLM (Y - apm_m96J06_quadraticC x) -
+        apm_m96J06_linearPartCLM (Y - apm_m96J06_quadraticC z)‖ ≤
+      (1 / 2 : ℝ) * ‖x - z‖ := by
+  rw [← map_sub]
+  have hq := apm_m96J06_quadraticC_sub_norm_le x z (by norm_num) hx hz
+  calc
+    _ ≤ 3 * ‖(Y - apm_m96J06_quadraticC x) -
+        (Y - apm_m96J06_quadraticC z)‖ :=
+      apm_m96J06_linearPartC_norm_le _
+    _ = 3 * ‖apm_m96J06_quadraticC x - apm_m96J06_quadraticC z‖ := by
+      congr 1
+      rw [show (Y - apm_m96J06_quadraticC x) -
+          (Y - apm_m96J06_quadraticC z) =
+          -(apm_m96J06_quadraticC x - apm_m96J06_quadraticC z) by abel,
+        norm_neg]
+    _ ≤ (1 / 2 : ℝ) * ‖x - z‖ := by
+      norm_num at hq ⊢
+      linarith
+
 theorem apm_m96j06 :
     ∀ y : ℝ → ℝ,
       apm_m96J06_inNeighborhood y →
@@ -275,4 +316,70 @@ theorem apm_m96j06 :
   extraction.  The remaining boundary is confined to that fixed-point
   packaging; the nonlinear Lipschitz analysis is now complete.
   -/
-  sorry
+  intro y hy
+  let Y : C(apm_m96J06_interval, ℝ) :=
+    ⟨fun t ↦ y t.1, continuousOn_iff_continuous_restrict.mp hy.1⟩
+  have hY : ‖Y‖ < (1 / 48 : ℝ) := by
+    rw [Y.norm_lt_iff (by norm_num)]
+    intro t
+    simpa [Y, Real.norm_eq_abs] using hy.2 t.1 t.2
+  let F : C(apm_m96J06_interval, ℝ) → C(apm_m96J06_interval, ℝ) :=
+    fun x ↦ apm_m96J06_linearPartCLM (Y - apm_m96J06_quadraticC x)
+  let s : Set C(apm_m96J06_interval, ℝ) := Metric.closedBall 0 (1 / 12 : ℝ)
+  have hs : IsComplete s := Metric.isClosed_closedBall.isComplete
+  have hmap : MapsTo F s s := by
+    intro x hx
+    have hx' : ‖x‖ ≤ (1 / 12 : ℝ) := by
+      simpa [s, dist_eq_norm] using hx
+    have hbound := apm_m96J06_fixedPointMap_maps_ball Y hY x hx'
+    change dist (F x) 0 ≤ (1 / 12 : ℝ)
+    simpa only [dist_zero_right, F] using hbound
+  let K : NNReal := ⟨1 / 2, by norm_num⟩
+  have hcontract : ContractingWith K (hmap.restrict F s s) := by
+    refine ⟨?_, LipschitzWith.of_dist_le_mul ?_⟩
+    · change (1 / 2 : ℝ) < 1
+      norm_num
+    intro x z
+    have hd := apm_m96J06_fixedPointMap_sub_norm_le Y x.1 z.1
+        (by simpa [s, Metric.mem_closedBall, dist_zero_left] using x.2)
+        (by simpa [s, Metric.mem_closedBall, dist_zero_left] using z.2)
+    change dist (F x.1) (F z.1) ≤ (K : ℝ) * dist x.1 z.1
+    simpa only [dist_eq_norm, F, K] using hd
+  have hzero : (0 : C(apm_m96J06_interval, ℝ)) ∈ s := by
+    simp [s]
+  obtain ⟨X, hXs, hfix, _⟩ :=
+    hcontract.exists_fixedPoint' hs hmap hzero (by simp)
+  let x : ℝ → ℝ := fun t ↦ if ht : t ∈ apm_m96J06_interval then X ⟨t, ht⟩ else 0
+  refine ⟨x, ?_, ?_⟩
+  · constructor
+    · rw [continuousOn_iff_continuous_restrict]
+      convert X.continuous using 1
+      funext t
+      exact dif_pos t.2
+    · intro t ht
+      have hfix' : F X = X := hfix
+      have heval := congrArg (fun u : C(apm_m96J06_interval, ℝ) ↦ u ⟨t, ht⟩) hfix'
+      have hlin := congrArg (fun u : C(apm_m96J06_interval, ℝ) ↦
+        apm_m96J06_linearPartCLM u) hfix'
+      have hinv := apm_m96J06_linearPartCLM_involutive X
+      have hp := (apm_m96J06_half_shift_mem ht).1
+      have hm := (apm_m96J06_half_shift_mem ht).2
+      simp [F, apm_m96J06_linearPartCLM_involutive] at hlin
+      have hpoly := congrArg (fun u : C(apm_m96J06_interval, ℝ) ↦ u ⟨t, ht⟩) hlin
+      have h0 : (0 : ℝ) ∈ apm_m96J06_interval := by constructor <;> norm_num
+      simp only [x, dif_pos ht, dif_pos h0, dif_pos hp, dif_pos hm]
+      change X ⟨t, ht⟩ - 2 * X apm_m96J06_zeroPoint +
+        X (apm_m96J06_plusShift ⟨t, ht⟩) *
+          X (apm_m96J06_minusShift ⟨t, ht⟩) = y t
+      have hh : X ⟨t, ht⟩ - 2 * X apm_m96J06_zeroPoint =
+          y t - X (apm_m96J06_plusShift ⟨t, ht⟩) *
+            X (apm_m96J06_minusShift ⟨t, ht⟩) := by
+        simpa [Y, apm_m96J06_quadraticC, apm_m96J06_linearPartCLM,
+          apm_m96J06_linearPartC] using hpoly.symm
+      linarith
+  · intro t ht
+    have hnorm : ‖X‖ ≤ (1 / 12 : ℝ) := by
+      simpa [s, Metric.mem_closedBall, dist_zero_left] using hXs
+    simp only [x, dif_pos ht]
+    simpa [Real.norm_eq_abs] using
+      (X.norm_coe_le_norm ⟨t, ht⟩).trans hnorm
