@@ -51403,13 +51403,70 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile a placeholder-free inhabitant of SphereProjectionSmoothLocalHomeomorphBranches in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F and sphere point p, with exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F installed, choose the OpenPartialHomeomorph supplied by sphereProjection_isLocalHomeomorph p and prove it agrees with sphereProjection 2, contains p in its source, is ContMDiffOn on its source, and has a ContMDiffOn inverse on its target. Prove these two smoothness fields using standard sphere charts, quotientChart coordinates, and the banked identity-or-antipodal transition results. Retain smoothLocalHomeomorphBranches_gives_localDiffeomorph, which must compile a PartialDiffeomorph at every p. This supplies the sole missing certification for t95A04 and t96A07."},
+   :id
+   :routes-2026-09-29-rp-sphere-smooth-local-homeomorph-branches-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+    :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path
+      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      :sha256
+      "9d58be37c43037c468f2b1da11684d34f5cfadaecda12bcec1d85f25cd0229ad"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+       :exit 1,
+       :finding
+       "The first reduction proof did not explicitly install F.quotientChartedSpace before constructing PartialDiffeomorph; installing the exact charted-space and manifold instances fixed typeclass resolution."}],
+     :residual
+     "Mathlib's IsLocalDiffeomorph definition requires a PartialDiffeomorph at each sphere point. The banked local model already supplies the underlying OpenPartialHomeomorph, its source point, and equality with sphereProjection. What remains is exactly branchwise ContMDiffOn for that local homeomorphism and its inverse under F.quotientChartedSpace. The compiled interface packages those two proofs and constructs the required PartialDiffeomorphs, thereby reducing SphereProjectionQuotientLocalDiffeomorph to this single smooth-branch theorem.",
+     :prerequisite
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free inhabitant of SphereProjectionSmoothLocalHomeomorphBranches in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F and sphere point p, with exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F installed, choose the OpenPartialHomeomorph supplied by sphereProjection_isLocalHomeomorph p and prove it agrees with sphereProjection 2, contains p in its source, is ContMDiffOn on its source, and has a ContMDiffOn inverse on its target. Prove these two smoothness fields using standard sphere charts, quotientChart coordinates, and the banked identity-or-antipodal transition results. Retain smoothLocalHomeomorphBranches_gives_localDiffeomorph, which must compile a PartialDiffeomorph at every p. This supplies the sole missing certification for t95A04 and t96A07."},
+      :id
+      :routes-2026-09-29-rp-sphere-smooth-local-homeomorph-branches-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+       :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1],
+      :other-consumers [:t96A07]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free inhabitant of SphereProjectionQuotientLocalDiffeomorph from /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every banked SphereProjectionLocalInverseFamily F, install exactly F.quotientChartedSpace and the IsManifold instance supplied by sphereProjectionQuotientAtlasCompatibility F, then prove IsLocalDiffeomorph (real model 2) (real model 2) infinity (sphereProjection 2). Construct the local partial diffeomorphisms from the existing sphereProjection local homeomorphs and prove their forward and inverse smoothness using the standard sphere charts and the quotientChart transition results. Retain the compiled sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas reduction. This supplies the sole remaining SmoothAtlas field for t95A04 and t96A07."},
    :id
    :routes-2026-09-29-rp-sphere-projection-quotient-local-diffeomorph-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
    [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
-    :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1],
+    :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
+    :routes-2026-09-29-rp-sphere-smooth-local-homeomorph-branches-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
