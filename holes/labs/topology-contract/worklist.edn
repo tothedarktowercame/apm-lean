@@ -81085,54 +81085,65 @@
    :review-finding
    "Deterministic incomplete-repair defect: the prior PASS required the supervisor to supersede routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 and remove only its edge from routes-2026-09-29-t98a06-part-a-adapter-1, retaining attempts 1 and 2. Recorded commit 885154fd instead has attempt 3 in :done state, keeps it in the adapter depends-on vector, leaves the superseded count at 14, and describes the hold as occurring after three elected dependencies. This preserves the stop-after-two violation in the machine-readable graph even though the adapter STOP conclusion is otherwise correct. Repair the actual ledger fields: set attempt 3 to :superseded, remove its dependency edge from the part-a adapter, and state that the hold follows the two independently reviewed zero-progress STOPs 1 and 2. Fresh gates reproduced the 675-item validation, fixture hash cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, fixture/source Lean results, 130/130 registry check, frozen hash cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5, and the one remaining source placeholder.",
    :evidence
-   {:residual
-    "Part (a) convexity and global gluing compile. The sole missing interface is the local smooth submersion lift; part (b) remains downstream.",
+   {:placeholder-delta 0,
+    :residual
+    "The mathematical hold is established by reviewed attempts 1 and 2, but the required machine-readable correction cannot be applied through the current receipt transitions. Reopen only after the ledger writer can atomically supersede attempt 3 and delete its adapter dependency edge; do not apply another ordinary STOP because that preserves the stop-after-two violation.",
     :outcome :stop,
     :warnings
-    [{:kind :not-refutation,
+    [{:kind :unsafe-transition,
       :message
-      "The frozen statement is not refuted. This STOP records the mandated stop-after-two hold after repeated unchanged implementation absence."}],
+      "Applying another ordinary STOP would mark the adapter done-unreviewed while leaving attempt 3 done and its dependency edge intact, reproducing the reviewed defect."}
+     {:kind :required-writer-change,
+      :message
+      "The ledger writer needs an atomic transition that supersedes an identified row and removes an identified dependency edge, or a deletion-capable dependency-repair operation. Direct ledger editing is forbidden."}],
+    :statement-hashes
+    {:t98A06
+     "cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
     :disposition :stop,
-    :axioms
-    ["propext"
-     "Classical.choice"
-     "Quot.sound"
-     "T98A06Probe.apm_t98A06_bridge_local_smooth_submersion_lift"],
-    :author "topo-4",
-    :reason
-    {:kind :stop-after-two,
-     :boundary
-     "apm_t98A06_bridge_local_smooth_submersion_lift remains absent after three elected implementation dependencies. The exact missing construction is a neighborhoodwise smooth right inverse for the varying surjective manifold derivative, obtained by a kernel complement and smooth inversion in tangent charts.",
-     :mathematical-refutation false,
-     :disposition
-     "Hold t98A06 under the campaign stop-after-two policy; do not elect the identical prerequisite again until external implementation state changes."},
+    :author "topo-2",
+    :reason :ledger-writer-cannot-apply-required-stop-after-two-repair,
     :commands
-    [{:cmd "test canonical .lake/packages authority", :exit 0}
+    [{:cmd
+      "sed -n '500,535p' holes/labs/topology-contract/build_step.bb",
+      :exit 0,
+      :finding
+      "The :stop transition replaces only the current row state/evidence and ignores :supersede and dependency-repair fields; :replan can supersede rows but does not edit the current row's dependencies."}
      {:cmd
-      "rg apm_t98A06_bridge_local_smooth_submersion_lift, theorem apm_t98a06, and sorry in scoped source",
+      "sed -n '595,640p' holes/labs/topology-contract/build_step.bb",
       :exit 0,
       :finding
-      "Bridge absent; registered theorem still has one sorry."}
-     {:cmd "lake env lean /tmp/t98a06-part-a-probe.lean",
+      "repair-dependencies! requires OLD NEW pairs, requires NEW to be an existing row, and maps rather than removes dependencies."}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "Fixture compiles and depends exactly on the missing local-lift interface."}
-     {:cmd "python3 scripts/statement-registry.py check",
+      "topology-worklist: 675 items OK; {:done 651, :superseded 14, :needs-owner 1, :repair 1, :open 5, :blocked 3}"}
+     {:cmd
+      "rg -n 'routes-2026-09-29-t98a06-local-smooth-submersion-lift-[123]|t98a06-part-a-adapter' holes/labs/topology-contract/worklist.edn",
       :exit 0,
-      :finding "130 registered statements match, 0 do not"}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790646476574-27113-50a761ad",
-     :finding
-     "Deterministic incomplete-repair defect: the prior PASS required the supervisor to supersede routes-2026-09-29-t98a06-local-smooth-submersion-lift-3 and remove only its edge from routes-2026-09-29-t98a06-part-a-adapter-1, retaining attempts 1 and 2. Recorded commit 885154fd instead has attempt 3 in :done state, keeps it in the adapter depends-on vector, leaves the superseded count at 14, and describes the hold as occurring after three elected dependencies. This preserves the stop-after-two violation in the machine-readable graph even though the adapter STOP conclusion is otherwise correct. Repair the actual ledger fields: set attempt 3 to :superseded, remove its dependency edge from the part-a adapter, and state that the hold follows the two independently reviewed zero-progress STOPs 1 and 2. Fresh gates reproduced the 675-item validation, fixture hash cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, fixture/source Lean results, 130/130 registry check, frozen hash cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5, and the one remaining source placeholder."},
-    :fixture
-    {:path "/tmp/t98a06-part-a-probe.lean",
-     :sha256
-     "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
-    :seat "topo-4"},
+      :finding
+      "Attempt 3 remains done and the repair-state adapter still names attempt 3 in :depends-on."}],
+    :diagnostic-history [],
+    :required-transition
+    {:supersede
+     [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-3],
+     :dependency-repair
+     {:row :routes-2026-09-29-t98a06-part-a-adapter-1,
+      :remove
+      [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-3],
+      :retain
+      [:routes-2026-09-29-topo1-refill-heavy-1
+       :routes-2026-09-29-t98a06-local-smooth-submersion-lift-1
+       :routes-2026-09-29-t98a06-local-smooth-submersion-lift-2]},
+     :hold-basis
+     [:routes-2026-09-29-t98a06-local-smooth-submersion-lift-1
+      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-2]},
+    :changed-paths [],
+    :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
