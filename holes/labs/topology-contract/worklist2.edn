@@ -52095,42 +52095,61 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path
-      "/tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
-      :sha256
-      "b3f04864a31dbb74914d16126ffbd974103cc9f5b861bec0ce5fb46b7fe42e07"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd
-       "sha256sum /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
-       :exit 0}],
-     :diagnostic-history
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
-       :exit 1,
-       :finding
-       "The first fibre-law application supplied the projection equality in the opposite orientation from sphereProjectionTwoSheetedLocalModel. Reversing the equality chain to run from the chosen inverse branch to e.symm matched the theorem and compiled."}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:implementation
-       "Add SphereProjectionArbitraryInverseBranchLocalAlternative and sphereProjectionArbitraryInverseBranchLocalAlternative to ConstructionTargets/RealProjectiveSmoothTarget.lean exactly as compiled. Preserve the universal quantification over arbitrary e, the target hypothesis, and the eventual identity-or-antipodal conclusion. Run the module compile, placeholder scan, and statement-registry check."}},
-     :residual
-     "Bank this arbitrary inverse-branch comparison, then the parent coordinate-normal-form row can transport the chosen quotient-chart inverse smoothness across the eventual equality and apply the ordinary or antipodal sphere transition theorem."}},
+   {:placeholder-delta 0,
+    :residual
+    "The arbitrary local inverse branch is now eventually equal near each target point to the chosen inverse branch or its antipodal composite. The next route step must transport this alternative into quotient coordinates and prove SphereProjectionArbitraryInverseCoordinateLocalNormalForm, which then yields smoothness of all local inverse restrictions.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "b5f756ccb4d19cc9652f81622e696431971523092f8d0dafe796ef7b3398fa4e"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+      :exit 0,
+      :output
+      "b3f04864a31dbb74914d16126ffbd974103cc9f5b861bec0ce5fb46b7fe42e07  /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0,
+      :output "Build completed successfully (8241 jobs)."}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin axiom audit for sphereProjectionArbitraryInverseBranchLocalAlternative",
+      :exit 0,
+      :output
+      "The declaration depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 348 items OK; {:done 309, :superseded 23, :open 3, :blocked 13}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "ba7599744259866b538a837229483db52cec192e\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "ba7599744259866b538a837229483db52cec192e",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "ConstructionTargets/RealProjectiveSmoothTarget.lean",
+     :sha256
+     "b5f756ccb4d19cc9652f81622e696431971523092f8d0dafe796ef7b3398fa4e"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
