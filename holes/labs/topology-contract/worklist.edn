@@ -81087,28 +81087,22 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "Fresh verification at c925463f confirms the graph and writer are unchanged. Cease redispatching this implementation row. It requires an owner-authorized structural commit that atomically supersedes attempt 3 and deletes only its adapter edge; until then the adapter remains unresolved.",
+    "External state is unchanged at 872cbfe2: build_step.bb remains 8e9127f2 and the superseded count remains 14. Stop redispatching this row. Resume only after an owner structural commit or atomic writer operation supersedes attempt 3 and removes only its adapter edge.",
     :outcome :stop,
     :warnings
-    [{:kind :terminal-structural-boundary,
+    [{:kind :invalid-churn,
       :message
-      "No ordinary receipt outcome can perform the required atomic graph mutation; repeated STOP/PASS applications are invalid churn."}],
+      "Further ordinary STOP transitions cannot change the machine graph and must cease until external structural state changes."}],
     :disposition :stop,
     :author "topo-2",
-    :reason :ordinary-transition-churn-must-cease,
+    :reason :external-structural-state-unchanged,
     :commands
     [{:cmd
-      "git rev-parse --short HEAD && git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      "git rev-parse --short HEAD && git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn && git status --short",
       :exit 0,
       :finding
-      "HEAD c925463f; writer 8e9127f2; topology-worklist: 675 items OK; {:done 651, :superseded 14, :needs-owner 1, :repair 1, :open 5, :blocked 3}"}],
+      "HEAD 872cbfe2; writer 8e9127f2; 675 items OK with 651 done and 14 superseded; worktree clean."}],
     :diagnostic-history [],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790647818171-27191-d5dca1cc",
-     :finding
-     "Deterministic structural defect remains at recorded commit 6137d90d: attempt 3 is still :done, the part-a adapter is still :done-unreviewed and depends on attempt 3, the validator still reports 14 superseded rows, and the writer remains unchanged at 8e9127f2. The evidence reason now says ordinary-transition-churn-must-cease, but this commit is another ordinary transition that leaves the graph untouched. Exact repair requires an owner structural commit or new atomic writer operation that supersedes attempt 3 and deletes only its adapter edge while retaining the refill dependency and attempts 1-2; the hold must cite reviewed attempts 1-2. Stop redispatching this row until that external state changes. Fresh verification this invocation read commit 6137d90d, reran the 675-item validator, inspected exact states/dependencies, confirmed the writer version, and verified the commit changes only the worklist."},
     :required-transition
     {:atomic true,
      :supersede
@@ -81127,7 +81121,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
