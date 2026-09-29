@@ -81083,7 +81083,7 @@
    :other-consumers []}
   {:consumer :t98A06,
    :review-finding
-   "Confirmed terminal external-state blocker at recorded commit ebe52251: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, superseded count remains 14, and build_step.bb remains unchanged at 8e9127f2. The row diagnostic reason changed to confirmed-terminal-external-state-block, but the machine graph did not. Exact repair requires an owner structural commit or enhanced writer that atomically supersedes attempt 3 and deletes only its adapter edge, retaining the refill dependency and reviewed attempts 1-2 and recording them as the stop-after-two hold basis. Do not redispatch until that external state changes. Fresh verification read commit ebe52251, reran the 675-item validator, inspected exact states and dependencies, and confirmed the unchanged writer.",
+   "Deterministic graph defect persists in recorded commit 7e10cbcc: its sole change reclassifies the empty-scope adapter row from :repair to :done-unreviewed and rewrites diagnostics, while attempt 3 remains :done and the adapter still depends on it; the validator still reports 14 superseded items. Exact repair is an owner structural commit or writer enhancement that atomically marks attempt 3 :superseded and removes only its adapter edge, retaining the refill edge and reviewed attempts 1-2 as the stop-after-two basis. The recorded snapshot validates at 675 items, the fixture hash reproduces as cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, source and fixture compile, registry is 130/130, and orientation remains correct; these gates confirm no implementation progress and do not repair the graph. Do not redispatch until external state changes.",
    :evidence
    {:placeholder-delta 0,
     :residual
@@ -81098,6 +81098,12 @@
       :exit 0,
       :finding
       "HEAD 03b14ccd; 675 items OK; 651 done; 14 superseded; 1 repair."}],
+    :review
+    {:outcome :fail,
+     :seat "codex-3",
+     :job "invoke-1790648522428-27229-4c2f0bae",
+     :finding
+     "Deterministic graph defect persists in recorded commit 7e10cbcc: its sole change reclassifies the empty-scope adapter row from :repair to :done-unreviewed and rewrites diagnostics, while attempt 3 remains :done and the adapter still depends on it; the validator still reports 14 superseded items. Exact repair is an owner structural commit or writer enhancement that atomically marks attempt 3 :superseded and removes only its adapter edge, retaining the refill edge and reviewed attempts 1-2 as the stop-after-two basis. The recorded snapshot validates at 675 items, the fixture hash reproduces as cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, source and fixture compile, registry is 130/130, and orientation remains correct; these gates confirm no implementation progress and do not repair the graph. Do not redispatch until external state changes."},
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81111,7 +81117,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :repair,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
