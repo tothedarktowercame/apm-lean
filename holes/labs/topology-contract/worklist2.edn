@@ -52180,13 +52180,13 @@
   {:consumer :t95A04,
    :evidence
    {:probe
-    {:outcome :revise,
+    {:outcome :go,
      :seat "topo-8",
      :fixture
      {:path
       "/tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
       :sha256
-      "4a0ec036e7cadcf5ecde63ecd1321ea90f5f93aacfc20abd822bfbcb789cd7ac"},
+      "6226c03eb263c2944f99f73455a470d04160d0b96800f17137ec1ae59d53489c"},
      :commands
      [{:cmd
        "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
@@ -52205,32 +52205,26 @@
        "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
        :exit 1,
        :finding
-       "The branch-alternative interface initially lacked open Topology, so neighborhood notation was unresolved; opening that namespace corrected the fixture."}],
-     :residual
-     "The chosen inverse branch is represented by the quotient chart and therefore has the banked standard-sphere coordinate smoothness. What is not banked is the topological comparison with an arbitrary OpenPartialHomeomorph e representing the same projection. The compiled prerequisite isolates precisely the eventual identity-or-antipodal comparison; after it, the coordinate normal form follows by transport through the quotient chart.",
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
+       "After the prerequisite was banked, the fixture still redeclared it. Removing those duplicate declarations exposed two coordinate details: membership in the standard sphere chart target had to be proved by expanding quotientChart_apply, and the eventual equality needed Function.comp unfolded."}
+      {:cmd
+       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       :exit 1,
+       :finding
+       "The chart left-inverse equation had the reverse orientation from the eventual-equality goal; taking its symmetry completed the chosen inverse-branch coordinate identity."}],
+     :implementation
+     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
       :acceptance
-      {:probe
-       "Compile a placeholder-free proof of SphereProjectionArbitraryInverseBranchLocalAlternative in /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean. For every inverse family F, every OpenPartialHomeomorph e with sphereProjection 2 = e, every x in e.target, prove that e.symm is eventually equal near x either to F.inverseBranch x or to sphereAntipodalN 2 composed with F.inverseBranch x. Use openness of both inverse targets, continuity of e.symm and F.inverseBranch x, the two-sheeted fibre law, and inner-product sign separation. Retain SphereProjectionArbitraryInverseCoordinateLocalNormalForm and its reductions. This supplies exactly the arbitrary-branch comparison for t95A04 and t96A07."},
-      :id
-      :routes-2026-09-29-rp-sphere-arbitrary-inverse-branch-local-alternative-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
-       :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
-      :other-consumers [:t96A07]}}},
-   :phase :probe,
+      {:implementation
+       "Add chosenInverseBranch_contMDiffAt, SphereProjectionArbitraryInverseCoordinateLocalNormalForm, sphereProjectionArbitraryInverseCoordinateLocalNormalForm, arbitraryInverseCoordinateLocalNormalForm_gives_restrictionsContMDiff, and localInverseRestrictions_gives_projectionAndLocalInversesSmooth exactly as compiled in the fixture. Use the quotient chart at x and standard sphere chart at F.lift x for the chosen branch, then transport across sphereProjectionArbitraryInverseBranchLocalAlternative and the smooth antipodal map. Run the module compile, placeholder scan, and statement-registry check."}},
+     :residual
+     "The arbitrary inverse coordinate theorem now compiles. It proves the chosen inverse branch smooth from the quotient-chart construction, then transports that result across the banked eventual identity-or-antipodal alternative. The parent inverse-restrictions row reduces immediately to this theorem."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
-   {:probe
-    "Compile a placeholder-free inhabitant of SphereProjectionArbitraryInverseCoordinateLocalNormalForm in /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean. For every inverse family F, every OpenPartialHomeomorph e with sphereProjection 2 = e, and every x in e.target, prove ContMDiffAt of e.symm at x. In quotientChart coordinates centered at x, prove e.symm is eventually equal either to F.inverseBranch x or to sphereAntipodalN 2 composed with F.inverseBranch x, with the exact standard-sphere chart source witnesses, and apply the banked ordinary-or-antipodal transition smoothness. Retain arbitraryInverseCoordinateLocalNormalForm_gives_restrictionsContMDiff and localInverseRestrictions_gives_projectionAndLocalInversesSmooth. This supplies the arbitrary-branch coordinate step for t95A04 and t96A07."},
+   {:implementation
+    "Add chosenInverseBranch_contMDiffAt, SphereProjectionArbitraryInverseCoordinateLocalNormalForm, sphereProjectionArbitraryInverseCoordinateLocalNormalForm, arbitraryInverseCoordinateLocalNormalForm_gives_restrictionsContMDiff, and localInverseRestrictions_gives_projectionAndLocalInversesSmooth exactly as compiled in the fixture. Use the quotient chart at x and standard sphere chart at F.lift x for the chosen branch, then transport across sphereProjectionArbitraryInverseBranchLocalAlternative and the smooth antipodal map. Run the module compile, placeholder scan, and statement-registry check."},
    :id
    :routes-2026-09-29-rp-sphere-arbitrary-inverse-coordinate-local-normal-form-topo2-r1,
    :kind :reusable-theorem,
