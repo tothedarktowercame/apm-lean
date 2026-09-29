@@ -50212,10 +50212,67 @@
    :depends-on
    [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}
   {:bounded-exception
-   "single-consumer frozen quotient-patch ratio continuity theorem",
+   "single-consumer restricted affine-patch quotient map",
    :consumer :t94A08,
    :phase :probe,
    :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile a placeholder-free inhabitant of AffineCoordinatePatchRestrictedQuotient in /tmp/t94A08_affine_chart_contract.lean. For every i : Fin 3 construct a map from the subtype of nonzero vectors with v i != 0 onto the subtype of projective points with Projectivization.rep x i != 0, prove its underlying value is quotientMap complex 2, and prove it is a Topology.IsQuotientMap. Establish subtype membership and surjectivity using Projectivization.mk_eq_mk_iff and invariance of coordinate nonvanishing under unit scaling; obtain the quotient property by restricting projectiveQuotientMap_isQuotientMap to the saturated open coordinate patch. Retain AffineCoordinatePatchTopology and the downstream affine-chart reductions. This supplies the exact quotient-descent authority needed for t94A08."},
+   :id
+   :routes-2026-09-29-t94a08-affine-coordinate-patch-restricted-quotient-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}
+  {:bounded-exception
+   "single-consumer frozen quotient-patch ratio continuity theorem",
+   :consumer :t94A08,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/t94A08_affine_chart_contract.lean",
+      :sha256
+      "afde00444e72afed51e15d64a5835c3ed5432c1f9b377bd4ad99ac7e61d39da5"},
+     :commands
+     [{:cmd "lake env lean /tmp/t94A08_affine_chart_contract.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t94A08_affine_chart_contract.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}
+      {:cmd "sha256sum /tmp/t94A08_affine_chart_contract.lean",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd "lake env lean /tmp/t94A08_affine_chart_contract.lean",
+       :exit 1,
+       :finding
+       "The restricted-quotient interface initially used IsQuotientMap without opening Topology; opening the namespace corrected the fixture."}],
+     :residual
+     "AffineCoordinatePatchTopology must not assert continuity of Projectivization.rep. The compiled prerequisite instead asks for the actual quotient map restricted from vectors with nonzero i-th coordinate to projective points whose chosen representative has nonzero i-th coordinate. Once this restricted map is a quotient map and commutes with quotientMap, continuity of coordinates follows by descending the continuous vector ratio map; openness follows from the banked open quotient authority.",
+     :prerequisite
+     {:bounded-exception
+      "single-consumer restricted affine-patch quotient map",
+      :consumer :t94A08,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free inhabitant of AffineCoordinatePatchRestrictedQuotient in /tmp/t94A08_affine_chart_contract.lean. For every i : Fin 3 construct a map from the subtype of nonzero vectors with v i != 0 onto the subtype of projective points with Projectivization.rep x i != 0, prove its underlying value is quotientMap complex 2, and prove it is a Topology.IsQuotientMap. Establish subtype membership and surjectivity using Projectivization.mk_eq_mk_iff and invariance of coordinate nonvanishing under unit scaling; obtain the quotient property by restricting projectiveQuotientMap_isQuotientMap to the saturated open coordinate patch. Retain AffineCoordinatePatchTopology and the downstream affine-chart reductions. This supplies the exact quotient-descent authority needed for t94A08."},
+      :id
+      :routes-2026-09-29-t94a08-affine-coordinate-patch-restricted-quotient-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}}},
+   :phase :probe,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -50225,7 +50282,8 @@
    :routes-2026-09-29-t94a08-affine-coordinate-patch-topology-topo2-r1,
    :kind :reusable-theorem,
    :depends-on
-   [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1]}
+   [:routes-2026-09-28-t94a08-projective-quotient-open-topo2-r1
+    :routes-2026-09-29-t94a08-affine-coordinate-patch-restricted-quotient-topo2-r1]}
   {:bounded-exception
    "single-consumer affine coordinate quotient-compatibility packet",
    :consumer :t94A08,
