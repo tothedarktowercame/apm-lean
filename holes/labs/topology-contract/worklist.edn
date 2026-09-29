@@ -80575,6 +80575,30 @@
     :routes-2026-09-28-checkpoint-topo1-after-t91j06-1],
    :current-residual
    "After reviewed t99J04, every topo1 problem will be closed, stopped, or held by stop-after-two unless t99J04 yields a new completed route step requiring one final bounded adapter.",
+   :other-consumers []}
+  {:consumer :portfolio,
+   :checkpoint
+   {:after-problems 1,
+    :may-supersede-future true,
+    :required-measures
+    [:placeholder-delta
+     :typed-residual-change
+     :infrastructure-packets
+     :review-outcomes]},
+   :stop-condition
+   "End only when every topo1 problem is closed, held by stop-after-two, or stopped with a compiled refutation.",
+   :phase :strategy,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:strategy
+    "Reread TOPOLOGY-ROUTES.md (topo1 refill section), routes-1.md/routes-2.md/routes-3.md for the eight new problems, and ConstructionTargets banked by topo2. Elect a nonempty portfolio of work rows over t98A06, t98J01, t98J02, t94J09, tunk01, t91A02, t96A06, t99J05: ADAPTER parts first (t98A06 part a, t98J01 part b, t98J02 conjuncts 2-3), then steps shared by two or more of the eight. Every row names the problem, the sorry and the route step it supplies. Keep the existing holds on the original twelve."},
+   :id :routes-2026-09-29-topo1-refill-heavy-1,
+   :kind :strategy-checkpoint,
+   :depends-on [:routes-2026-09-29-checkpoint-topo1-after-t99j04-1],
+   :current-residual
+   "Joe 2026-09-29: the original twelve topo1 problems have reached their stop condition; topo1 now takes eight HEAVY problems (TOPOLOGY-ROUTES.md, topo1 refill): t98A06, t98J01, t98J02 (each has an ADAPTER part), t94J09, tunk01, t91A02 (shared polygon-quotient / cut-and-paste tags), t96A06, t99J05 (projective charts and rational homology, shared with topo2 RP infrastructure). All eight statements are registered; each has one sorry.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01

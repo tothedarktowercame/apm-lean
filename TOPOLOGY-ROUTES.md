@@ -13,7 +13,7 @@ landed directly on 2026-09-28.
 ## Election rules (each strategy checkpoint)
 
 1. Only the problems in this loop's own list below (Joe, 2026-09-28: topo1 = the 12 DIRECT/ADAPTER
-   problems, topo2 = the 15 FOUNDATION problems; the 33 HEAVY problems are not assigned to a loop).
+   problems plus the eight-problem refill of 2026-09-29, topo2 = the 15 FOUNDATION problems; the 33 HEAVY problems are not assigned to a loop).
 2. topo1: DIRECT first, then ADAPTER, closing problems one at a time. topo2: infrastructure steps
    shared by two or more of its problems first (by the routes' shared tags), then each problem's
    remaining steps; build a step only at the generality its named problems use. Never elect generality beyond what the named
@@ -45,6 +45,20 @@ landed directly on 2026-09-28.
 | t97A07 | ADAPTER | regular-points-open` (t92J07 and t98A06 also state `Surjective (mfderiv …)` conditions; I did not check whether they need steps 1–2) |
 | t99J04 | ADAPTER | manifold-inverse-function-theorem |
 | t99J06 | ADAPTER | — |
+
+### topo1 refill — eight HEAVY problems (Joe, 2026-09-29)
+
+The twelve above reached topo1's stop condition on 2026-09-29 (closed, or held by
+stop-after-two / reviewed STOP). topo1 now also takes these, removed from the unassigned list
+in effect: ADAPTER parts first, then steps shared by two or more of them.
+
+| id | why grouped |
+|---|---|
+| t98A06 | part (a) is ADAPTER |
+| t98J01 | part (b) is ADAPTER |
+| t98J02 | conjuncts 2, 3 are ADAPTER |
+| t94J09, tunk01, t91A02 | polygon-quotient / cut-and-paste tags shared among them |
+| t96A06, t99J05 | projective charts and rational homology; reuse topo2's RP infrastructure |
 
 ### topo2 — FOUNDATION (15)
 
