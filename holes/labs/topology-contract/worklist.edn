@@ -81087,23 +81087,17 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "External state remains unchanged. Do not apply an ordinary transition or redispatch this row. Resume only after the owner commits the atomic supersession and edge deletion.",
+    "The external graph mutation is still absent at 03b14ccd. The row has empty scope and cannot repair the ledger. Do not apply another ordinary transition or redispatch it; resume only after the owner atomically supersedes attempt 3 and removes its adapter edge.",
     :outcome :stop,
     :disposition :stop,
     :author "topo-2",
-    :reason :confirmed-terminal-external-state-block,
+    :reason :terminal-block-awaiting-external-mutation,
     :commands
     [{:cmd
-      "git rev-parse --short HEAD; git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb; bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      "git rev-parse --short HEAD && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "HEAD 27075158; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790648341518-27218-8c539ed6",
-     :finding
-     "Confirmed terminal external-state blocker at recorded commit ebe52251: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, superseded count remains 14, and build_step.bb remains unchanged at 8e9127f2. The row diagnostic reason changed to confirmed-terminal-external-state-block, but the machine graph did not. Exact repair requires an owner structural commit or enhanced writer that atomically supersedes attempt 3 and deletes only its adapter edge, retaining the refill dependency and reviewed attempts 1-2 and recording them as the stop-after-two hold basis. Do not redispatch until that external state changes. Fresh verification read commit ebe52251, reran the 675-item validator, inspected exact states and dependencies, and confirmed the unchanged writer."},
+      "HEAD 03b14ccd; 675 items OK; 651 done; 14 superseded; 1 repair."}],
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81117,7 +81111,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
