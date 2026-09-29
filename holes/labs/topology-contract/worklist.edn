@@ -80963,6 +80963,28 @@
    :depends-on [:routes-2026-09-28-t91j06-adapter-closure-1],
    :current-residual
    "Stop-after-two hold lifted by a Codex re-route (topo-9, 2026-09-29; holes/labs/topology-routes/reroute-t91J06.md). Three sorries remain.",
+   :other-consumers []}
+  {:consumer :t95J02,
+   :phase :implementation,
+   :state :open,
+   :scope ["problems/t95J02/lean/Main.lean"],
+   :dag-node "TOPOLOGY-ROUTES.md/t95J02/reroute-separating-map",
+   :acceptance
+   {:placeholder "the sorry in apm_t95J02_bridge_vertical_H1_kernel",
+    :placeholder-before 3,
+    :placeholder-after 2,
+    :axioms :standard-only,
+    :route-step "t95J02 reroute steps 1-4",
+    :implementation
+    "Follow holes/labs/topology-routes/reroute-t95J02.md steps 1-4. Do NOT classify equal vertical representatives in Relation.EqvGen. Descend sepRaw (x,y) = (cos (2*pi*y), sin (2*pi*y) * cos (pi*x)) to a continuous map on the Klein bottle (compiled in holes/labs/topology-routes/reroute-t95J02-Probe.lean.txt); use it as the inverse coordinate on CircleB after destructing CircleB witness; build the glide homotopy on AddCircle 1; then fill the vertical-H1-kernel bridge from singularHomology_map_eq_of_homotopic and all_reflections_negative. Step 5 (retraction injectivity) is independent and small; do it in the same row only if steps 1-4 land.",
+    :commands
+    ["lake env lean problems/t95J02/lean/Main.lean"
+     "python3 scripts/statement-registry.py check"]},
+   :id :routes-2026-09-29-t95j02-reroute-vertical-kernel-1,
+   :kind :final-adapter,
+   :depends-on [:routes-2026-09-28-checkpoint-topo1-after-t95j02-1],
+   :current-residual
+   "Stop-after-two hold lifted by a Codex re-route (topo-10, 2026-09-29; holes/labs/topology-routes/reroute-t95J02.md). Three sorries remain.",
    :other-consumers []}],
  :consumer-baselines
  {:t00A01

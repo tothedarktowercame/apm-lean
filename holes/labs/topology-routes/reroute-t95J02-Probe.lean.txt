@@ -1,0 +1,76 @@
+import Mathlib
+
+open Real
+
+inductive KR : (ℝ × ℝ) → (ℝ × ℝ) → Prop
+  | glide (x y : ℝ) : KR (x,y) (x+1,-y)
+  | vertical (x y : ℝ) : KR (x,y) (x,y+1)
+
+def K := Quotient (Relation.EqvGen.setoid KR)
+
+noncomputable instance : TopologicalSpace K :=
+  TopologicalSpace.coinduced (fun p : ℝ × ℝ => Quotient.mk _ p) inferInstance
+
+noncomputable def F (p : ℝ × ℝ) : ℝ × ℝ :=
+  (Real.cos (2 * Real.pi * p.2),
+   Real.sin (2 * Real.pi * p.2) * Real.cos (Real.pi * p.1))
+
+example (x y : ℝ) : F (x,y) = F (x, y+1) := by
+  apply Prod.ext
+  · dsimp [F]
+    rw [show 2 * Real.pi * (y + 1) = 2 * Real.pi * y + 2 * Real.pi by ring]
+    simp
+  · dsimp [F]
+    rw [show 2 * Real.pi * (y + 1) = 2 * Real.pi * y + 2 * Real.pi by ring]
+    simp
+
+example (x y : ℝ) : F (x,y) = F (x+1, -y) := by
+  apply Prod.ext
+  · dsimp [F]
+    rw [show 2 * Real.pi * -y = -(2 * Real.pi * y) by ring]
+    simp
+  · dsimp [F]
+    rw [show 2 * Real.pi * -y = -(2 * Real.pi * y) by ring]
+    rw [show Real.pi * (x + 1) = Real.pi * x + Real.pi by ring]
+    simp
+
+lemma F_generator {p q : ℝ × ℝ} (h : KR p q) : F p = F q := by
+  cases h with
+  | glide x y =>
+    apply Prod.ext
+    · dsimp [F]
+      rw [show 2 * Real.pi * -y = -(2 * Real.pi * y) by ring]
+      simp
+    · dsimp [F]
+      rw [show 2 * Real.pi * -y = -(2 * Real.pi * y) by ring]
+      rw [show Real.pi * (x + 1) = Real.pi * x + Real.pi by ring]
+      simp
+  | vertical x y =>
+    apply Prod.ext
+    · dsimp [F]
+      rw [show 2 * Real.pi * (y + 1) = 2 * Real.pi * y + 2 * Real.pi by ring]
+      simp
+    · dsimp [F]
+      rw [show 2 * Real.pi * (y + 1) = 2 * Real.pi * y + 2 * Real.pi by ring]
+      simp
+
+lemma F_eqv {p q : ℝ × ℝ} (h : Relation.EqvGen KR p q) : F p = F q := by
+  exact Relation.EqvGen.rec
+    (fun _ _ hr => F_generator hr) (fun _ => rfl)
+    (fun _ _ _ ih => ih.symm)
+    (fun _ _ _ _ _ ih₁ ih₂ => ih₁.trans ih₂) h
+example : Continuous F := by
+  apply Continuous.prodMk
+  · exact Real.continuous_cos.comp (continuous_const.mul continuous_snd)
+  · exact (Real.continuous_sin.comp (continuous_const.mul continuous_snd)).mul
+      (Real.continuous_cos.comp (continuous_const.mul continuous_fst))
+
+noncomputable def KF : K → ℝ × ℝ := Quotient.lift F (fun _ _ h => F_eqv h)
+
+example : Continuous KF := by
+  apply Continuous.quotient_lift
+  exact (show Continuous F from by
+    apply Continuous.prodMk
+    · exact Real.continuous_cos.comp (continuous_const.mul continuous_snd)
+    · exact (Real.continuous_sin.comp (continuous_const.mul continuous_snd)).mul
+        (Real.continuous_cos.comp (continuous_const.mul continuous_fst)))
