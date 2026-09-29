@@ -80798,8 +80798,54 @@
    "Joe 2026-09-29: the original twelve topo1 problems have reached their stop condition; topo1 now takes eight HEAVY problems (TOPOLOGY-ROUTES.md, topo1 refill): t98A06, t98J01, t98J02 (each has an ADAPTER part), t94J09, tunk01, t91A02 (shared polygon-quotient / cut-and-paste tags), t96A06, t99J05 (projective charts and rational homology, shared with topo2 RP infrastructure). All eight statements are registered; each has one sorry.",
    :other-consumers []}
   {:consumer :t98A06,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "The exact missing prerequisite is a smooth local right-inverse-family theorem for the surjective family x ↦ mfderiv f x after tangent-chart trivialization: choose a complement/right inverse at x0, prove the resulting fixed-coordinate endomorphism remains invertible nearby, prove smooth dependence of its inverse, and transport the section back through tangent charts. The repository supplies pointwise finite-dimensional right inverses and fixed-complement inverse-function machinery, but no banked result assembling these steps for varying tangent fibers. Pointwise choice is insufficient for ContMDiffOn. The registered consumer remains at one placeholder; the fixture supplies only the downstream partition-of-unity gluing.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The consumer source still contains its registered theorem placeholder."}
+     {:kind :fixture-prerequisite,
+      :message
+      "The compiled part-(a) fixture assumes T98A06Probe.apm_t98A06_bridge_local_smooth_submersion_lift; it validates downstream convex gluing but not this bridge."}],
+    :statement-hashes
+    {:t98A06
+     "cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "T98A06Probe.apm_t98A06_bridge_local_smooth_submersion_lift"],
+    :author "topo-2",
+    :reason :missing-smooth-local-right-inverse-family,
+    :commands
+    [{:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t98a06-part-a-probe.lean", :exit 0}
+     {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
+     {:cmd "lake env lean /tmp/t98a06-part-a-probe.lean", :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t98A06/lean/Main.lean",
+      :exit 0,
+      :finding "1"}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t98a06-part-a-probe.lean",
+     :sha256
+     "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t98A06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
    :acceptance
