@@ -81087,23 +81087,17 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "At d58ff9e4 the graph remains unchanged. Stop ordinary transitions and redispatch. Resume only after the owner atomically supersedes attempt 3 and removes its adapter edge.",
+    "The structural repair has not landed at c8ecf2a0. Stop ordinary transitions and redispatch. Resume only after the owner supersedes attempt 3 and removes only its adapter dependency edge.",
     :outcome :stop,
     :disposition :stop,
     :author "topo-2",
-    :reason :terminal-owner-mutation-pending,
+    :reason :terminal-graph-mutation-not-landed,
     :commands
     [{:cmd
       "git rev-parse --short HEAD && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "HEAD d58ff9e4; 675 items OK; 651 done; 14 superseded; 1 repair."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790649218363-27260-a13233db",
-     :finding
-     "Deterministic graph defect persists in recorded commit 4fad6f43. The sole changed file is the worklist, and the transition again changes diagnostic text only: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, the validator reports 14 superseded items, and build_step.bb remains at 8e9127f2. Exact repair requires an owner-authorized structural commit or writer enhancement that atomically marks attempt 3 :superseded and deletes only its adapter edge, retaining the refill edge and reviewed attempts 1-2 as the stop-after-two basis. Fresh verification of the recorded snapshot reproduced 675 items OK, fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d, and registry 130/130. Stop ordinary transitions and redispatch until that mutation lands."},
+      "HEAD c8ecf2a0; 675 items OK; 651 done; 14 superseded; 1 repair."}],
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81117,7 +81111,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
