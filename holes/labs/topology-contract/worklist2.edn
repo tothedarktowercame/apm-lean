@@ -50215,33 +50215,66 @@
    "single-consumer exact projective affine-chart construction",
    :consumer :t94A08,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/rp_smooth_atlas_descent_contract.lean",
-      :sha256
-      "677f02101fcdb213c34e12591ad011721016986ec219a9ceb0363e424a7e5f98"},
-     :commands
-     [{:cmd "lake env lean /tmp/rp_smooth_atlas_descent_contract.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_smooth_atlas_descent_contract.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd "sha256sum /tmp/rp_smooth_atlas_descent_contract.lean",
-       :exit 0}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:implementation
-       "Retain the banked dimension-two rpSmoothAtlas and add rpSmoothAtlas_exists : Nonempty (SmoothAtlas 2) exactly as compiled. Verify that installing rpSmoothAtlas.charts and rpSmoothAtlas.smooth exposes rpSmoothAtlas.quotient_localDiffeomorph with the frozen sphereProjection 2. Run the module compile, placeholder scan, and statement-registry check."}},
-     :residual
-     "The shared route step is complete at the exact registered interface: rpSmoothAtlas is a SmoothAtlas 2, its charts and manifold instance install cleanly, and its quotient_localDiffeomorph field concerns the frozen sphereProjection 2. Both consumer files can now use this atlas before constructing their descended polynomial maps."}},
+   {:placeholder-delta 0,
+    :residual
+    "rpSmoothAtlas_exists now exports the concrete dimension-two atlas at the registered interface. Installing rpSmoothAtlas.charts and rpSmoothAtlas.smooth exposes its quotient_localDiffeomorph field for the frozen sphereProjection 2; the remaining t94A08 work is its affine-chart and descended-map construction.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "e2d3f91eaf4ce06f6e39696396e958dfe59e46796452383c467f9dca382a119d"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/rp_smooth_atlas_descent_contract.lean",
+      :exit 0,
+      :output
+      "677f02101fcdb213c34e12591ad011721016986ec219a9ceb0363e424a7e5f98  /tmp/rp_smooth_atlas_descent_contract.lean"}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0,
+      :output "Build completed successfully (8241 jobs)."}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin with Manifold and ContDiff scopes, axiom audit, and rpSmoothAtlas quotient_localDiffeomorph interface check",
+      :exit 0,
+      :output
+      "rpSmoothAtlas_exists depends on axioms: [propext, Classical.choice, Quot.sound]; the installed charts and smooth instances expose IsLocalDiffeomorph (𝓡 2) (𝓡 2) ∞ (sphereProjection 2)."}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 348 items OK; {:done 319, :superseded 23, :open 2, :blocked 4}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "922a62d462624618b2d2a437288a31b62dfe7974\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /dev/stdin interface check without opening the ContDiff notation scope",
+      :exit 1,
+      :finding
+      "The target compile and build had succeeded, but the standalone interface check parsed infinity incorrectly because it opened Manifold without ContDiff. Opening both scopes, as in the compiled fixture, made the exact local-diffeomorphism check succeed."}],
+    :commit "922a62d462624618b2d2a437288a31b62dfe7974",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "ConstructionTargets/RealProjectiveSmoothTarget.lean",
+     :sha256
+     "e2d3f91eaf4ce06f6e39696396e958dfe59e46796452383c467f9dca382a119d"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
