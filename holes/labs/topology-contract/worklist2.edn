@@ -51985,13 +51985,17 @@
    :review-finding
    "Deterministic stale-boundary defect in ledger transition commit 82ad1b3c: its STOP reason says the reviewed pointwise-ContMDiffAt prerequisite pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at e0a963b1, but before this transition that prerequisite was reviewed against immutable fixture ConstructionTargets/RealProjectiveSmoothTarget.lean at sha256 b1cf777ce1ecf310c6d3e406e722699835bb943bab6a728cee59523688bbcf70. The alleged shared-path conflict no longer exists. Fresh verification hashes the descendant fixture to the claimed 550216ec0173a20f01c9eec92ecd13f5bf4f9cd3f71d99bfac7b09752d5e3d0f and compiles it placeholder-free. sphereProjectionQuotientContMDiff applies the banked pointwise-to-global reduction in the correct direction, and projectionAndLocalInversesSmooth_iff exactly separates global forward smoothness from branch-dependent inverse smoothness under the prescribed quotient instances. All 130 frozen statements and the 345-item ledger pass; frozen t95A04 and t96A07 remain at one placeholder each. Repair by replacing the stale STOP with an implementation transition, committing the global inhabitant, inverse-restrictions contract, and exact decomposition theorem to RealProjectiveSmoothTarget, and recording the committed module as the immutable fixture.",
    :evidence
-   {:residual
-    "The global forward-smoothness half is complete: quotientContMDiffAt_gives_quotientContMDiff applied to the banked pointwise theorem proves SphereProjectionQuotientContMDiff. The parent now reduces exactly to SphereProjectionLocalInverseRestrictionsContMDiff; only fixture identity prevents a ledger-valid GO.",
-    :outcome :stop,
-    :disposition :stop,
-    :author "topo-8",
-    :reason
-    "Fixture-identity boundary: the prerequisite pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at sha256 e0a963b10e523957a7007c4325ff647e57a4152062cdc1326e919e525a08d281, while this row requires adding SphereProjectionQuotientContMDiff and the parent decomposition to that same pathname. The requested theorem and projectionAndLocalInversesSmooth_iff compile placeholder-free at sha256 550216ec0173a20f01c9eec92ecd13f5bf4f9cd3f71d99bfac7b09752d5e3d0f. A single mutable file cannot preserve the prerequisite hash and contain the descendant theorem; use immutable per-row fixture paths or archived dependency artifacts.",
+   {:placeholder-delta 0,
+    :residual
+    "Global forward smoothness is banked and projectionAndLocalInversesSmooth_iff reduces the parent contract exactly to SphereProjectionLocalInverseRestrictionsContMDiff. The next step must prove smoothness of every prescribed local inverse restriction, then package the quotient local-diffeomorphism and close the t95A04/t96A07 adapters.",
+    :outcome :done-unreviewed,
+    :warnings [],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "abc8c68387c8bae0faccd3dc001ff27d2d50a890aaeac46b90f6692bef9d8529"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
     :commands
     [{:cmd
       "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
@@ -51999,82 +52003,63 @@
       :output
       "550216ec0173a20f01c9eec92ecd13f5bf4f9cd3f71d99bfac7b09752d5e3d0f  /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean"}
      {:cmd
-      "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
       :exit 0}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 0,
+      :output "Build completed successfully (8241 jobs)."}
      {:cmd
-      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
-      :exit 0}
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/RealProjectiveSmoothTarget.lean",
+      :exit 1,
+      :expected-exit 1}
      {:cmd "python3 scripts/statement-registry.py check",
       :exit 0,
-      :output "130 registered statements match, 0 do not"}],
+      :output "130 registered statements match, 0 do not"}
+     {:cmd
+      "lake env lean /dev/stdin axiom audit for sphereProjectionQuotientContMDiff and projectionAndLocalInversesSmooth_iff",
+      :exit 0,
+      :output
+      "Both declarations depend on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
+      :exit 0,
+      :output
+      "topology-worklist: 345 items OK; {:done 308, :superseded 23, :open 3, :blocked 11}"}
+     {:cmd "git show --format='%H%n%an <%ae>' --name-only HEAD",
+      :exit 0,
+      :output
+      "4e9a5820bfcdeb4659bec772e792679af855a695\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
     :diagnostic-history
     [{:cmd
-      "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean",
       :exit 1,
       :finding
-      "The first parent decomposition referenced SphereProjectionLocalInverseRestrictionsContMDiff before that contract had been introduced in the refreshed fixture."}
+      "The first transcription used the wrong mathematical-script model identifier, so Lean rejected the manifold and ContMDiffOn declarations. Replacing it with the fixture's exact 𝓡 notation corrected the source."}
+     {:cmd "lake build ConstructionTargets.RealProjectiveSmoothTarget",
+      :exit 1,
+      :finding
+      "The build replayed the same model-identifier transcription error from the preceding failed direct compile; it succeeded after the notation correction."}
      {:cmd
-      "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      "lake env lean /dev/stdin axiom audit before a successful rebuild",
       :exit 1,
       :finding
-      "Installing instances alone could not resolve an undeclared contract; restoring its exact nonredundant definition corrected the decomposition."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-7",
-     :job "invoke-1790647878138-27194-9d1b3ee4",
-     :finding
-     "Deterministic stale-boundary defect in ledger transition commit 82ad1b3c: its STOP reason says the reviewed pointwise-ContMDiffAt prerequisite pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at e0a963b1, but before this transition that prerequisite was reviewed against immutable fixture ConstructionTargets/RealProjectiveSmoothTarget.lean at sha256 b1cf777ce1ecf310c6d3e406e722699835bb943bab6a728cee59523688bbcf70. The alleged shared-path conflict no longer exists. Fresh verification hashes the descendant fixture to the claimed 550216ec0173a20f01c9eec92ecd13f5bf4f9cd3f71d99bfac7b09752d5e3d0f and compiles it placeholder-free. sphereProjectionQuotientContMDiff applies the banked pointwise-to-global reduction in the correct direction, and projectionAndLocalInversesSmooth_iff exactly separates global forward smoothness from branch-dependent inverse smoothness under the prescribed quotient instances. All 130 frozen statements and the 345-item ledger pass; frozen t95A04 and t96A07 remain at one placeholder each. Repair by replacing the stale STOP with an implementation transition, committing the global inhabitant, inverse-restrictions contract, and exact decomposition theorem to RealProjectiveSmoothTarget, and recording the committed module as the immutable fixture."},
-    :probe
-    {:outcome :go,
-     :seat "topo-6",
-     :fixture
-     {:path
-      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-      :sha256
-      "550216ec0173a20f01c9eec92ecd13f5bf4f9cd3f71d99bfac7b09752d5e3d0f"},
-     :commands
-     [{:cmd
-       "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0,
-       :output
-       "550216ec0173a20f01c9eec92ecd13f5bf4f9cd3f71d99bfac7b09752d5e3d0f  /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean"}
-      {:cmd
-       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0}
-      {:cmd
-       "rg -n \"SphereProjectionLocalInverseRestrictionsContMDiff|sphereProjectionQuotientContMDiff|projectionAndLocalInversesSmooth_iff\" /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0,
-       :output
-       "7:theorem sphereProjectionQuotientContMDiff :\n10:    sphereProjectionQuotientContMDiffAt\n12:def SphereProjectionLocalInverseRestrictionsContMDiff : Prop :=\n21:theorem projectionAndLocalInversesSmooth_iff :\n24:        SphereProjectionLocalInverseRestrictionsContMDiff := by"}
-      {:cmd
-       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}
-      {:cmd
-       "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn",
-       :exit 0,
-       :output
-       "topology-worklist: 345 items OK; {:done 308, :superseded 23, :open 2, :blocked 11, :repair 1}"}
-      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
-     :implementation
-     {:scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
-      :acceptance
-      {:theorem
-       "ConstructionTargets.RealProjectiveSmoothTarget.sphereProjectionQuotientContMDiff",
-       :contract
-       "ConstructionTargets.RealProjectiveSmoothTarget.SphereProjectionLocalInverseRestrictionsContMDiff",
-       :decomposition
-       "ConstructionTargets.RealProjectiveSmoothTarget.projectionAndLocalInversesSmooth_iff",
-       :requirements
-       "Append the compiled global forward-smoothness inhabitant, inverse-restrictions contract, and exact decomposition theorem. Preserve the quotient charted-space and manifold instances and reduce the remaining parent obligation exactly to smoothness of the local inverse restrictions."}},
-     :residual
-     "Bank the compiled global smoothness inhabitant and exact decomposition. The remaining smooth-descent obligation is precisely SphereProjectionLocalInverseRestrictionsContMDiff, after which the local-diffeomorphism contract and the t95A04/t96A07 adapters can be completed."},
-    :seat "topo-8"},
+      "No olean was available because the preceding target build failed. The audit succeeded after the corrected source rebuilt."}
+     {:cmd
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean after an intermediate notation correction",
+      :exit 1,
+      :finding
+      "An intermediate Unicode correction still named 𝓗 rather than the fixture's 𝓡. Using the exact code point from the compiled fixture corrected the final source."}],
+    :commit "4e9a5820bfcdeb4659bec772e792679af855a695",
+    :changed-paths
+    ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
+    :fixture
+    {:path "ConstructionTargets/RealProjectiveSmoothTarget.lean",
+     :sha256
+     "abc8c68387c8bae0faccd3dc001ff27d2d50a890aaeac46b90f6692bef9d8529"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
