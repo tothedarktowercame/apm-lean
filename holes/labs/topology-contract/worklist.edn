@@ -81087,23 +81087,17 @@
    :evidence
    {:placeholder-delta 0,
     :residual
-    "At 7d55de51 the required structural transition is still absent. Stop redispatching and applying ordinary transitions until the owner commits the supersession and edge deletion.",
+    "At e136edec the writer is still 8e9127f2 and the graph still has 14 superseded rows. Ordinary receipt handling cannot perform the required atomic supersession and edge deletion; do not redispatch until that structural transition is committed.",
     :outcome :stop,
     :disposition :stop,
     :author "topo-2",
-    :reason :owner-structural-transition-not-committed,
+    :reason :structural-transition-unavailable,
     :commands
     [{:cmd
-      "git rev-parse --short HEAD && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
+      "git rev-parse --short HEAD && git log -1 --format=%h -- holes/labs/topology-contract/build_step.bb && bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist.edn",
       :exit 0,
       :finding
-      "HEAD 7d55de51; 675 items OK; 651 done; 14 superseded; 1 repair."}],
-    :review
-    {:outcome :fail,
-     :seat "codex-3",
-     :job "invoke-1790650315538-27327-7bfd9042",
-     :finding
-     "Deterministic graph defect persists in recorded commit 26348365. Its sole changed file is the worklist, and it again rewrites diagnostics without changing structural state: attempt 3 remains :done, the adapter remains :done-unreviewed and still depends on attempt 3, the validator reports 14 superseded items, and build_step.bb remains at 8e9127f2. Exact repair requires an owner-authorized structural commit or writer enhancement that atomically marks attempt 3 :superseded and deletes only its adapter edge, retaining the refill edge and reviewed attempts 1-2 as the stop-after-two basis. Fresh recorded-snapshot verification reproduced 675 items OK and fixture SHA-256 cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d. Stop redispatching and applying ordinary transitions until the owner commits that structural repair."},
+      "HEAD e136edec; writer 8e9127f2; 675 items OK; 651 done; 14 superseded; 1 repair."}],
     :required-transition
     {:supersede
      :routes-2026-09-29-t98a06-local-smooth-submersion-lift-3,
@@ -81117,7 +81111,7 @@
     :changed-paths [],
     :seat "topo-2"},
    :phase :implementation,
-   :state :repair,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/part-a",
    :acceptance
