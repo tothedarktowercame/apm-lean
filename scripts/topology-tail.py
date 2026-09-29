@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Follow both topology loops in one readable stream (read-only).
+"""Follow the topology loops and the solve loop in one readable stream (read-only).
 
   scripts/topology-tail.py            follow from now (last 15 events first)
   scripts/topology-tail.py --since 2h  replay the last two hours, then follow
@@ -7,7 +7,8 @@
 Prints one line per event: a row dispatched to a seat, a job finished (with the
 start of the seat's finding), a receipt applied, a stop; and a line whenever a
 commit changes a problem's `sorry` count. Heartbeats and JSON noise are dropped.
-It reads the loops' own logs and git; it never touches a seat or the ledger.
+Solve-loop events (non-topology problems) come from its journal (unit solve-loop).
+It reads the loops' own logs, the journal and git; it never touches a seat or a ledger.
 """
 from __future__ import annotations
 
@@ -55,6 +56,26 @@ def render(loop: str, text: str) -> str | None:
     return None
 
 
+def render_solve(text: str) -> str | None:
+    m = re.match(r"(\S+) <- (\S+)", text)
+    if m:
+        return f"solve → {m.group(1)} {m.group(2)}"
+    m = re.match(r"(\S+) (\S+) attempt (\d+): (\S+)\s+(.*)", text)
+    if m:
+        if m.group(4) == "landed":
+            return None          # the git ★ line reports closures
+        return f"solve ✗ {m.group(1)} {m.group(2)} attempt {m.group(3)} {m.group(4)}: {m.group(5)[:150]}"
+    if "finished" in text or "error" in text.lower():
+        return f"solve   {text[:200]}"
+    return None
+
+
+def journal(args: list[str]) -> list[str]:
+    r = subprocess.run(["journalctl", "--user", "-u", "solve-loop", "-o", "cat", "--no-pager", *args],
+                       capture_output=True, text=True)
+    return r.stdout.splitlines()
+
+
 def sorry_count(rev: str, path: str) -> int | None:
     r = subprocess.run(["git", "-C", str(ROOT), "show", f"{rev}:{path}"], capture_output=True, text=True)
     if r.returncode:
@@ -75,13 +96,13 @@ def commit_lines(sha: str, subject: str, when: str) -> list[str]:
                            capture_output=True, text=True).stdout.split()
     out = []
     for f in files:
-        m = re.match(r"problems/(t[^/]+)/lean/Main\.lean$", f)
+        m = re.match(r"problems/([^/]+)/lean/Main\.lean$", f)
         if m:
             before, after = sorry_count(f"{sha}^", f), sorry_count(sha, f)
             if before != after:
                 tag = "CLOSED" if after == 0 else f"sorry {before}→{after}"
                 out.append(f"{when} ★ {m.group(1)} {tag}  ({sha} {subject[:90]})")
-    if not out and not subject.startswith("topology-loop:") and any(
+    if not out and not subject.startswith(("topology-loop:", "solve-loop:")) and any(
             f.startswith(("problems/t", "ConstructionTargets")) for f in files):
         out.append(f"{when} + {sha} {subject[:120]}")
     return out
@@ -110,6 +131,12 @@ def main() -> int:
             s = render(loop, m.group(2))
             if s:
                 events.append((ts, f"{ts:%H:%M} {s}"))
+    for l in journal(["--since", (cutoff or dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S UTC")] if True else []):
+        m = LINE.match(l)
+        s = m and render_solve(m.group(2))
+        if s:
+            ts = dt.datetime.fromisoformat(m.group(1).replace("Z", "+00:00"))
+            events.append((ts, f"{ts:%H:%M} {s}"))
     events.sort()
     for _, s in (events if cutoff else events[-15:]):
         print(s, flush=True)
@@ -123,7 +150,14 @@ def main() -> int:
     # follow
     pos = {p: p.stat().st_size for p in list(LOGS.values()) + list(SUP.values()) if p.exists()}
     names = {**{v: k for k, v in LOGS.items()}, **{v: k for k, v in SUP.items()}}
+    cursor = Path("/tmp") / f"topology-tail-{__import__('os').getpid()}.cursor"
+    journal(["--cursor-file", str(cursor), "-n", "0"])
     while True:
+        for l in journal(["--cursor-file", str(cursor)]):
+            m = LINE.match(l)
+            s = m and render_solve(m.group(2))
+            if s:
+                print(f"{m.group(1)[11:16]} {s}", flush=True)
         for p, loop in names.items():
             if not p.exists():
                 continue
