@@ -52825,6 +52825,21 @@
       :output
       "256b96650cfa9e6f032b77354e40a9cc6fb38956\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790652114358-27454-2b3eafac",
+     :commands
+     ["git show/diff-tree 256b96650cfa9e6f032b77354e40a9cc6fb38956"
+      "sha256sum committed/current source and frozen fixture"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "#print axioms, #check, and #reduce rpSmoothAtlas"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder recount at recorded commit"],
+     :finding
+     "PASS: reviewer codex-7 verified recorded commit 256b96650cfa9e6f032b77354e40a9cc6fb38956, authored by topo-6/Joe, changes only ConstructionTargets/RealProjectiveSmoothTarget.lean and adds exactly the requested noncomputable dimension-two rpSmoothAtlas definition. Committed/current source SHA-256 is 3819d04af32b7d2615b84d7bcaf3676894c03369281d6ca6866af45831fcf88f; frozen fixture SHA-256 is c879e15f4441853458fe2312e1cc2ee2f68a397be09abb8bea4db69c06fc7be0. Lean compile and 8241-job build pass; rpSmoothAtlas uses only propext, Classical.choice, Quot.sound; registry is 130/130 and the 348-row worklist validates. Its exact type is SmoothAtlas 2, with no unsupported dimension generalization. It is Classical.choice of sphereProjectionSmoothDescentContract applied in the required order to sphereProjectionTwoSheetedLocalModel and sphereAntipodalN_contMDiff, so the exported atlas is precisely the already-certified frozen quotient representation rather than a substituted topology or chart system. Comment-stripped sorry/admit/axiom counts are 0/0/0 in scope and 1/0/0 in each frozen consumer."},
     :commit "256b96650cfa9e6f032b77354e40a9cc6fb38956",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -52834,7 +52849,7 @@
      "3819d04af32b7d2615b84d7bcaf3676894c03369281d6ca6866af45831fcf88f"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
