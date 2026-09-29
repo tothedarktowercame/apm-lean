@@ -51543,35 +51543,47 @@
     :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
+   :phase :probe,
+   :state :open,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
+    "Compile the placeholder-free fixture /tmp/rp_sphere_projection_lift_branch_at_base.lean. Prove sphereProjection_lift_eq_or_antipodal by evaluating sphereProjectionInverseBranchLocalAlternative at p and identifying inverseBranch at the chart center with F.lift. Then prove sphereProjection_coordinate_branch_domains, returning exactly the ordinary transition-source membership or the antipodal target/source membership at u = extChartAt (real model 2) p p. This supplies the domain half of SphereProjectionQuotientCoordinateLocalNormalForm for t95A04 and t96A07."},
+   :id
+   :routes-2026-09-29-rp-sphere-projection-lift-branch-domains-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-29-rp-sphere-projection-inverse-branch-local-alternative-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
    :evidence
    {:probe
     {:outcome :revise,
      :seat "topo-8",
      :fixture
-     {:path "/tmp/rp_sphere_projection_inverse_branch_local.lean",
+     {:path "/tmp/rp_sphere_projection_lift_branch_at_base.lean",
       :sha256
-      "d1c1e5bc31808368783cd0b2858d675d8d8f3fd27238552aaca4997b20f99c8b"},
+      "3e6fb31f1596adec460b03a1addcd9168e059f5c21e12d3e846e390b1cb22ba5"},
      :commands
      [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_inverse_branch_local.lean",
+       "lake env lean /tmp/rp_sphere_projection_lift_branch_at_base.lean",
        :exit 0}
       {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_inverse_branch_local.lean || true)\"",
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_lift_branch_at_base.lean || true)\"",
        :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+      {:cmd
+       "sha256sum /tmp/rp_sphere_projection_lift_branch_at_base.lean",
+       :exit 0}],
      :diagnostic-history
      [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_inverse_branch_local.lean",
+       "lake env lean /tmp/rp_sphere_projection_lift_branch_at_base.lean",
        :exit 1,
        :finding
-       "Initial proof needed a dependent simplification for the local-homeomorph target witness and an explicit continuity composition."}
-      {:cmd
-       "lake env lean /tmp/rp_sphere_projection_inverse_branch_local.lean",
-       :exit 1,
-       :finding
-       "Lean inferred continuity composition through the reducible quotient map; supplying all ContinuousAt.comp function arguments fixed the intended sphereProjection composition."}],
+       "A dependent rewrite changed the local-homeomorph center inside F; replacing it with an explicit congrArg calculation preserved the fixed chart center."}],
      :residual
-     "The forward quotient-coordinate normal form still needs this local branch alternative transported through the standard sphere extended chart, with the corresponding ordinary or antipodal chart-domain witness. The compiled prerequisite proves the missing neighborhood-level identity-or-antipodal choice directly from target openness, continuity, and the two-sheeted fibre law.",
+     "The eventual identity-or-antipodal inverse-branch law is banked. The compiled prerequisite evaluates it at the chart center, identifies the chosen lift as p or its antipode, and produces the exact ordinary or antipodal sphere-chart domain witness. After it is banked, the parent normal form only needs to pull the eventual branch equality back along extChartAt symm and simplify the quotient extChartAt formula.",
      :prerequisite
      {:consumer :t95A04,
       :phase :probe,
@@ -51580,16 +51592,15 @@
       :dag-node "TOPOLOGY-ROUTES.md",
       :acceptance
       {:probe
-       "Compile the placeholder-free fixture /tmp/rp_sphere_projection_inverse_branch_local.lean proving SphereProjectionInverseBranchLocalAlternative. For every inverse family F and sphere point p, with y = sphereProjection 2 p, prove that F.inverseBranch y composed with sphereProjection 2 is eventually equal near p either to the identity or to sphereAntipodalN 2. Derive the locally constant choice from openness of the local-homeomorph target, continuity of the inverse branch and projection, the two-sheeted fibre law, and inner-product sign separation. This supplies the branch selection needed to construct the exact quotient-coordinate local normal form for t95A04 and t96A07."},
+       "Compile the placeholder-free fixture /tmp/rp_sphere_projection_lift_branch_at_base.lean. Prove sphereProjection_lift_eq_or_antipodal by evaluating sphereProjectionInverseBranchLocalAlternative at p and identifying inverseBranch at the chart center with F.lift. Then prove sphereProjection_coordinate_branch_domains, returning exactly the ordinary transition-source membership or the antipodal target/source membership at u = extChartAt (real model 2) p p. This supplies the domain half of SphereProjectionQuotientCoordinateLocalNormalForm for t95A04 and t96A07."},
       :id
-      :routes-2026-09-29-rp-sphere-projection-inverse-branch-local-alternative-topo2-r1,
+      :routes-2026-09-29-rp-sphere-projection-lift-branch-domains-topo2-r1,
       :kind :reusable-theorem,
       :depends-on
-      [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
-       :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
+      [:routes-2026-09-29-rp-sphere-projection-inverse-branch-local-alternative-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :open,
+   :state :blocked,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -51602,7 +51613,8 @@
    [:routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1
     :routes-2026-09-28-rp-sphere-inverse-overlap-local-topo2-r1
     :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1
-    :routes-2026-09-29-rp-sphere-projection-inverse-branch-local-alternative-topo2-r1],
+    :routes-2026-09-29-rp-sphere-projection-inverse-branch-local-alternative-topo2-r1
+    :routes-2026-09-29-rp-sphere-projection-lift-branch-domains-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
