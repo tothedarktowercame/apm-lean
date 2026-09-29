@@ -52454,9 +52454,36 @@
   {:bounded-exception
    "single-consumer bounded cover-small homology comparison naturality",
    :consumer :t97A04,
-   :phase :probe,
+   :evidence
+   {:probe
+    {:outcome :go,
+     :seat "topo-8",
+     :fixture
+     {:path "/tmp/production_cover_small_homology_naturality.lean",
+      :sha256
+      "67122ec18a860a037ace897c27daced3647ea3b3472877493122cdefa637564f"},
+     :commands
+     [{:cmd
+       "sha256sum /tmp/production_cover_small_homology_naturality.lean",
+       :exit 0}
+      {:cmd
+       "lake env lean /tmp/production_cover_small_homology_naturality.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/production_cover_small_homology_naturality.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
+     :implementation
+     {:scope
+      ["ConstructionTargets/ProductionConnectingNaturality.lean"]},
+     :acceptance
+     {:implementation
+      "Append coverSmallHomologyIso_naturality_of_square and memberwiseCoverSmallHomology_naturality to ConstructionTargets/ProductionConnectingNaturality.lean exactly as compiled in the fixture. Compile the target, verify no placeholders, run the statement registry check, and print axioms for both new theorems."},
+     :residual
+     "The canonical memberwise cover-small map now has the exact homology naturality square through coverSmallHomologyIso. The parent connecting-map proof next assembles the Boolean intersection, pieces, and union maps into a ShortComplex.Hom and conjugates delta_naturality through the production comparison isomorphisms."}},
+   :phase :implementation,
    :state :open,
-   :scope [],
+   :scope ["ConstructionTargets/ProductionConnectingNaturality.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
