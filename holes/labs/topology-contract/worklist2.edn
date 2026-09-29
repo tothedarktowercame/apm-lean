@@ -51983,44 +51983,42 @@
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
-   {:probe
-    {:outcome :revise,
-     :seat "topo-8",
-     :fixture
-     {:path
-      "/tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-      :sha256
-      "e0a963b10e523957a7007c4325ff647e57a4152062cdc1326e919e525a08d281"},
-     :commands
-     [{:cmd
-       "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
-       :exit 0}
-      {:cmd
-       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
-       :exit 0}
-      {:cmd "python3 scripts/statement-registry.py check", :exit 0}],
-     :warnings
-     ["Lean emitted only the stylistic suggestion to combine consecutive intro commands in quotientContMDiffAt_gives_quotientContMDiff."],
-     :residual
-     "The global forward-smoothness row is definitionally assembled from a pointwise theorem. The compiled prerequisite fixes that exact local obligation: under F.quotientChartedSpace and its banked IsManifold instance, prove ContMDiffAt sphereProjection 2 at an arbitrary sphere point p. Its proof can now use the standard sphere chart at p, the quotient chart at sphereProjection 2 p, and the local identity-or-antipodal coordinate alternative without managing a global binder. The compiled reduction turns these pointwise proofs into SphereProjectionQuotientContMDiff.",
-     :prerequisite
-     {:consumer :t95A04,
-      :phase :probe,
-      :state :open,
-      :scope [],
-      :dag-node "TOPOLOGY-ROUTES.md",
-      :acceptance
-      {:probe
-       "Compile a placeholder-free inhabitant of SphereProjectionQuotientContMDiffAt in /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean. For every inverse family F, install exactly F.quotientChartedSpace and sphereProjectionQuotientAtlasCompatibility F; then for every p in Sphere 2 prove ContMDiffAt (real model 2) (real model 2) infinity (sphereProjection 2) p. In the proof use the standard sphere chart at p and F.quotientChart (sphereProjection 2 p), show the coordinate expression is eventually the ordinary sphere transition or the antipodal-inserted transition, and apply the banked smooth alternatives only on their exact chart domains. Retain quotientContMDiffAt_gives_quotientContMDiff. This supplies the pointwise forward-smoothness theorem for t95A04 and t96A07."},
-      :id
-      :routes-2026-09-29-rp-sphere-projection-contmdiff-at-topo2-r1,
-      :kind :reusable-theorem,
-      :depends-on
-      [:routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
-       :routes-2026-09-28-rp-sphere-transition-alternatives-topo2-r1],
-      :other-consumers [:t96A07]}}},
+   {:outcome :stop,
+    :seat "topo-8",
+    :reason
+    "Fixture-identity boundary: the prerequisite pins /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean at sha256 e0a963b10e523957a7007c4325ff647e57a4152062cdc1326e919e525a08d281, while this row requires adding SphereProjectionQuotientContMDiff and the parent decomposition to that same pathname. The requested theorem and projectionAndLocalInversesSmooth_iff compile placeholder-free at sha256 550216ec0173a20f01c9eec92ecd13f5bf4f9cd3f71d99bfac7b09752d5e3d0f. A single mutable file cannot preserve the prerequisite hash and contain the descendant theorem; use immutable per-row fixture paths or archived dependency artifacts.",
+    :commands
+    [{:cmd
+      "sha256sum /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      :exit 0,
+      :output
+      "550216ec0173a20f01c9eec92ecd13f5bf4f9cd3f71d99bfac7b09752d5e3d0f  /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean"}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      :exit 0}
+     {:cmd
+      "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean || true)\"",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}],
+    :diagnostic-history
+    [{:cmd
+      "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      :exit 1,
+      :finding
+      "The first parent decomposition referenced SphereProjectionLocalInverseRestrictionsContMDiff before that contract had been introduced in the refreshed fixture."}
+     {:cmd
+      "lake env lean /tmp/rp_sphere_projection_quotient_local_diffeomorph.lean",
+      :exit 1,
+      :finding
+      "Installing instances alone could not resolve an undeclared contract; restoring its exact nonredundant definition corrected the decomposition."}],
+    :residual
+    "The global forward-smoothness half is complete: quotientContMDiffAt_gives_quotientContMDiff applied to the banked pointwise theorem proves SphereProjectionQuotientContMDiff. The parent now reduces exactly to SphereProjectionLocalInverseRestrictionsContMDiff; only fixture identity prevents a ledger-valid GO.",
+    :author "topo-8",
+    :disposition :stop},
    :phase :probe,
-   :state :open,
+   :state :done-unreviewed,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
