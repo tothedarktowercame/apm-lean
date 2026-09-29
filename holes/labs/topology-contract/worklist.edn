@@ -80886,8 +80886,62 @@
    "Prove the exact neighborhoodwise smooth right inverse of the varying surjective mfderiv. The compiled fixture then supplies affine convexity and global partition-of-unity gluing; part (b) remains.",
    :other-consumers []}
   {:consumer :t98A06,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "The exact missing prerequisite remains a smooth local right-inverse-family theorem for x ↦ mfderiv f x in compatible tangent-chart trivializations. Mathlib supplies a pointwise ContinuousLinearMap.HasRightInverse.of_surjective_of_finiteDimensional and a noncomputably chosen rightInverse, but no continuity or smoothness of that choice. Closing the bridge requires choosing a complement at x0, expressing the restricted derivatives in fixed coordinates, proving invertibility on a neighborhood, proving smooth dependence of inversion, and transporting the resulting section through tangent-bundle charts. No banked theorem assembles those representation steps, and pointwise choice cannot establish ContMDiffOn. The consumer remains at one placeholder with no scoped changes.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The consumer source compiles with its one registered theorem placeholder."}
+     {:kind :fixture-prerequisite,
+      :message
+      "The exact part-(a) fixture assumes the requested bridge and therefore validates only the downstream convex gluing."}],
+    :statement-hashes
+    {:t98A06
+     "cd9f181f88b216bb58c5fa68c3a85f32117f74dd089f7591d9827b0eb5b8b8f5",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :disposition :stop,
+    :axioms
+    ["propext"
+     "Classical.choice"
+     "Quot.sound"
+     "T98A06Probe.apm_t98A06_bridge_local_smooth_submersion_lift"],
+    :author "topo-2",
+    :reason :missing-smooth-local-right-inverse-family,
+    :commands
+    [{:cmd
+      "test \"$(readlink -f .lake/packages)\" = \"/home/joe/code/apm-lean/.lake/packages\" && test -d .lake/packages",
+      :exit 0}
+     {:cmd "sha256sum /tmp/t98a06-part-a-probe.lean", :exit 0}
+     {:cmd "lake env lean /tmp/t98a06-part-a-probe.lean",
+      :exit 0,
+      :finding
+      "part_a depends on T98A06Probe.apm_t98A06_bridge_local_smooth_submersion_lift"}
+     {:cmd
+      "rg -n 'smooth.*right.?inverse|right.?inverse.*smooth|HasRightInverse|surjective.*mfderiv|mfderiv.*surjective' ConstructionTargets .lake/packages/mathlib/Mathlib | head -80",
+      :exit 0,
+      :finding
+      "Only pointwise right-inverse and surjective-mfderiv APIs were found; no smooth family theorem."}
+     {:cmd "lake env lean problems/t98A06/lean/Main.lean", :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t98A06/lean/Main.lean",
+      :exit 0,
+      :finding "1"}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :finding "130 registered statements match, 0 do not"}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t98a06-part-a-probe.lean",
+     :sha256
+     "cf5dcb2d2e73f5a8bd5fd6d43f8e910ac835991dd4d5f3c733acb526ab7a778d"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t98A06/lean/Main.lean"],
    :dag-node "TOPOLOGY-ROUTES.md/t98A06/local-smooth-submersion-lift",
    :acceptance
