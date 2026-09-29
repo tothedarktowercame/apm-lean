@@ -52100,6 +52100,67 @@
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
    {:probe
+    "Compile a placeholder-free proof of SphereProjectionArbitraryInverseBranchLocalAlternative in /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean. For every inverse family F, every OpenPartialHomeomorph e with sphereProjection 2 = e, every x in e.target, prove that e.symm is eventually equal near x either to F.inverseBranch x or to sphereAntipodalN 2 composed with F.inverseBranch x. Use openness of both inverse targets, continuity of e.symm and F.inverseBranch x, the two-sheeted fibre law, and inner-product sign separation. Retain SphereProjectionArbitraryInverseCoordinateLocalNormalForm and its reductions. This supplies exactly the arbitrary-branch comparison for t95A04 and t96A07."},
+   :id
+   :routes-2026-09-29-rp-sphere-arbitrary-inverse-branch-local-alternative-topo2-r1,
+   :kind :reusable-theorem,
+   :depends-on
+   [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+    :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
+   :other-consumers [:t96A07]}
+  {:consumer :t95A04,
+   :evidence
+   {:probe
+    {:outcome :revise,
+     :seat "topo-8",
+     :fixture
+     {:path
+      "/tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+      :sha256
+      "4a0ec036e7cadcf5ecde63ecd1321ea90f5f93aacfc20abd822bfbcb789cd7ac"},
+     :commands
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       :exit 0}
+      {:cmd
+       "test -z \"$(rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean || true)\"",
+       :exit 0}
+      {:cmd "python3 scripts/statement-registry.py check",
+       :exit 0,
+       :output "130 registered statements match, 0 do not"}
+      {:cmd
+       "sha256sum /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       :exit 0}],
+     :diagnostic-history
+     [{:cmd
+       "lake env lean /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean",
+       :exit 1,
+       :finding
+       "The branch-alternative interface initially lacked open Topology, so neighborhood notation was unresolved; opening that namespace corrected the fixture."}],
+     :residual
+     "The chosen inverse branch is represented by the quotient chart and therefore has the banked standard-sphere coordinate smoothness. What is not banked is the topological comparison with an arbitrary OpenPartialHomeomorph e representing the same projection. The compiled prerequisite isolates precisely the eventual identity-or-antipodal comparison; after it, the coordinate normal form follows by transport through the quotient chart.",
+     :prerequisite
+     {:consumer :t95A04,
+      :phase :probe,
+      :state :open,
+      :scope [],
+      :dag-node "TOPOLOGY-ROUTES.md",
+      :acceptance
+      {:probe
+       "Compile a placeholder-free proof of SphereProjectionArbitraryInverseBranchLocalAlternative in /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean. For every inverse family F, every OpenPartialHomeomorph e with sphereProjection 2 = e, every x in e.target, prove that e.symm is eventually equal near x either to F.inverseBranch x or to sphereAntipodalN 2 composed with F.inverseBranch x. Use openness of both inverse targets, continuity of e.symm and F.inverseBranch x, the two-sheeted fibre law, and inner-product sign separation. Retain SphereProjectionArbitraryInverseCoordinateLocalNormalForm and its reductions. This supplies exactly the arbitrary-branch comparison for t95A04 and t96A07."},
+      :id
+      :routes-2026-09-29-rp-sphere-arbitrary-inverse-branch-local-alternative-topo2-r1,
+      :kind :reusable-theorem,
+      :depends-on
+      [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
+       :routes-2026-09-28-rp-sphere-local-inverse-family-topo2-r1],
+      :other-consumers [:t96A07]}}},
+   :phase :probe,
+   :state :blocked,
+   :scope [],
+   :dag-node "TOPOLOGY-ROUTES.md",
+   :acceptance
+   {:probe
     "Compile a placeholder-free inhabitant of SphereProjectionArbitraryInverseCoordinateLocalNormalForm in /tmp/rp_sphere_projection_local_inverse_restrictions_contmdiff.lean. For every inverse family F, every OpenPartialHomeomorph e with sphereProjection 2 = e, and every x in e.target, prove ContMDiffAt of e.symm at x. In quotientChart coordinates centered at x, prove e.symm is eventually equal either to F.inverseBranch x or to sphereAntipodalN 2 composed with F.inverseBranch x, with the exact standard-sphere chart source witnesses, and apply the banked ordinary-or-antipodal transition smoothness. Retain arbitraryInverseCoordinateLocalNormalForm_gives_restrictionsContMDiff and localInverseRestrictions_gives_projectionAndLocalInversesSmooth. This supplies the arbitrary-branch coordinate step for t95A04 and t96A07."},
    :id
    :routes-2026-09-29-rp-sphere-arbitrary-inverse-coordinate-local-normal-form-topo2-r1,
@@ -52108,7 +52169,8 @@
    [:routes-2026-09-28-rp-sphere-projection-local-model-topo2-r1
     :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1
     :routes-2026-09-28-rp-sphere-quotient-chart-transition-topo2-r1
-    :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1],
+    :routes-2026-09-29-rp-sphere-projection-contmdiff-topo2-r1
+    :routes-2026-09-29-rp-sphere-arbitrary-inverse-branch-local-alternative-topo2-r1],
    :other-consumers [:t96A07]}
   {:consumer :t95A04,
    :evidence
