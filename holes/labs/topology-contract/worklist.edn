@@ -80271,8 +80271,55 @@
    "After reviewed t91J06, preserve all holds and STOPs; if it closes or is held, t99J04 is the last unheld topo1 adapter route.",
    :other-consumers []}
   {:consumer :t99J04,
+   :evidence
+   {:placeholder-delta 0,
+    :residual
+    "Exact missing prerequisite: a compiled boundaryless manifold inverse-function construction that turns ContMDiffAt f x and bijective mfderiv f x into IsLocalDiffeomorphAt f x. At the available API level this requires building a Euclidean PartialDiffeomorph by shrinking ContDiffAt.toOpenPartialHomeomorph to a source where both directions are smooth, packaging extChartAt and its inverse as PartialDiffeomorphs, supplying the absent PartialDiffeomorph composition/conjugation bookkeeping, and proving the writtenInExtChartAt fderiv is the transported mfderiv. Mathlib names this implication as a TODO and no ConstructionTargets theorem supplies it. The consumer remains unchanged with three placeholders.",
+    :outcome :stop,
+    :warnings
+    [{:kind :inherited-placeholder,
+      :message
+      "The exact consumer fixture compiles through the current bridge and therefore reports sorryAx; it introduces no placeholder."}],
+    :statement-hashes
+    {:t99J04
+     "f212fd5b83bec0f7fb083dcf9ed6e9e175394fdf3f3a3cd3d9f284709c6eea3c",
+     :registry-file
+     "ea373b6df8489acf2636af8b4e03ac3acc7baaeef97a366e4f28a70f3d1cd1a0"},
+    :disposition :stop,
+    :axioms ["propext" "sorryAx" "Classical.choice" "Quot.sound"],
+    :author "topo-2",
+    :reason :missing-manifold-local-inverse-function-assembly,
+    :commands
+    [{:cmd "test canonical .lake/packages authority", :exit 0}
+     {:cmd "sha256sum /tmp/t99j04-local-ift-consumer.lean", :exit 0}
+     {:cmd
+      "lake env lean -o /tmp/t99probe/t99J04/lean/Main.olean problems/t99J04/lean/Main.lean",
+      :exit 0}
+     {:cmd
+      "LEAN_PATH=/tmp/t99probe lake env lean /tmp/t99j04-local-ift-consumer.lean",
+      :exit 0}
+     {:cmd "python3 scripts/statement-registry.py check", :exit 0}
+     {:cmd
+      "python3 comment-stripped placeholder census problems/t99J04/lean/Main.lean",
+      :exit 0,
+      :finding "3"}
+     {:cmd
+      "rg local-diffeomorphism TODO, Euclidean inverse-function, chart, and PartialDiffeomorph APIs",
+      :exit 0,
+      :finding
+      "Mathlib explicitly lists ContMDiffAt plus invertible mfderiv implying IsLocalDiffeomorphAt as a TODO. It supplies the Euclidean OpenPartialHomeomorph and inverse smoothness separately, but PartialDiffeomorph has only the basic constructor/symmetry API and no chart-conjugation assembly theorem."}
+     {:cmd "git diff -- problems/t99J04/lean/Main.lean",
+      :exit 0,
+      :finding "empty"}],
+    :diagnostic-history [],
+    :changed-paths [],
+    :fixture
+    {:path "/tmp/t99j04-local-ift-consumer.lean",
+     :sha256
+     "42816741b4cc4bdb68359d47b85a4b5d64ac1b1698d9b08f20e2c1019b7c82c6"},
+    :seat "topo-2"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope ["problems/t99J04/lean/Main.lean"],
    :dag-node
    "TOPOLOGY-ROUTES.md/t99J04/manifold-local-inverse-function",
