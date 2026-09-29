@@ -52139,46 +52139,51 @@
    "single-consumer bounded geometric MV-cover packet",
    :consumer :t01A02,
    :evidence
-   {:probe
-    {:outcome :go,
-     :seat "topo-8",
-     :fixture
-     {:path "/tmp/t01A02_punctured_torus_mv_cover.lean",
-      :sha256
-      "840bcc55298363bf38477f4e14857dbec3e43188015c8841dd527578ed8c35ad"},
-     :commands
-     [{:cmd "lake env lean /tmp/t01A02_punctured_torus_mv_cover.lean",
-       :exit 0}
-      {:cmd
-       "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' /tmp/t01A02_punctured_torus_mv_cover.lean",
-       :exit 1,
-       :expected-exit 1}
-      {:cmd "python3 scripts/statement-registry.py check",
-       :exit 0,
-       :output "130 registered statements match, 0 do not"}],
-     :diagnostic-history
-     [{:cmd "lake env lean /tmp/t01A02_punctured_torus_mv_cover.lean",
-       :exit 1,
-       :finding
-       "The first combined fixture exposed an invalid dependent-structure spelling, missing ContinuousMap notation scope, ambiguous continuity inference, and cover equality coercions. Splitting the set fields onto separate declarations, making their subtype carriers explicit, opening the required scope, and typing the coordinate maps corrected the interface without weakening it."}
-      {:cmd "lake env lean /tmp/t01A02_punctured_torus_mv_cover.lean",
-       :exit 1,
-       :finding
-       "The second compile isolated openness and nonmembership normalization. Explicit coordinate-map types and conversion of set nonmembership to coordinate equalities supplied the required proofs; the subsequent acceptance compile succeeded."}],
-     :implementation
-     {:scope
-      ["ConstructionTargets/T01A02PuncturedTorusDegreeTwoMVCover.lean"],
-      :acceptance
-      {:theorem
-       "ConstructionTargets.T01A02PuncturedTorus.puncturedTorusDegreeTwoMVCover",
-       :contract
-       "ConstructionTargets.T01A02PuncturedTorus.PuncturedTorusDegreeTwoMVCoverContract",
-       :requirements
-       "Use the exact U and V coordinate-puncture cover, the compiled subtype homeomorphisms, pointed-contraction homotopy equivalences to Circle and Unit, and integral ModuleCat homology transport. Preserve the frozen topology and degree-specific H2 and H1 conclusions."}},
-     :residual
-     "The geometric degree-two Mayer-Vietoris input is complete. The remaining t01A02 H2 route work is to apply production Mayer-Vietoris exactness to prove puncturedTorus_H2_isZero, then prove H2map_eq_zero_of_factor for a nonsurjective torus self-map."}},
+   {:placeholder-delta 0,
+    :residual
+    "Apply production Mayer-Vietoris exactness to prove puncturedTorus_H2_isZero, then prove H2map_eq_zero_of_factor for a nonsurjective torus self-map.",
+    :outcome :done-unreviewed,
+    :warnings
+    ["The scoped direct compile emitted no warnings; lake build replayed pre-existing upstream linter warnings."],
+    :statement-hashes
+    {:registry "130 registered statements match, 0 do not",
+     :scoped-source-sha256
+     "840bcc55298363bf38477f4e14857dbec3e43188015c8841dd527578ed8c35ad"},
+    :axioms ["propext" "Classical.choice" "Quot.sound"],
+    :author "Joe Corneli <holtzermann17@gmail.com>",
+    :commands
+    [{:cmd "sha256sum /tmp/t01A02_punctured_torus_mv_cover.lean",
+      :exit 0}
+     {:cmd
+      "lake env lean ConstructionTargets/T01A02PuncturedTorusDegreeTwoMVCover.lean",
+      :exit 0}
+     {:cmd
+      "rg --pcre2 '(?<![A-Za-z0-9_])sorry(?![A-Za-z0-9_])' ConstructionTargets/T01A02PuncturedTorusDegreeTwoMVCover.lean",
+      :exit 1,
+      :expected-exit 1}
+     {:cmd "python3 scripts/statement-registry.py check",
+      :exit 0,
+      :output "130 registered statements match, 0 do not"}
+     {:cmd "git diff --check", :exit 0}
+     {:cmd
+      "lake build ConstructionTargets.T01A02PuncturedTorusDegreeTwoMVCover",
+      :exit 0}
+     {:cmd
+      "lake env lean /tmp/t01A02_punctured_torus_mv_cover_axioms.lean",
+      :exit 0,
+      :output
+      "puncturedTorusDegreeTwoMVCover depends on axioms: [propext, Classical.choice, Quot.sound]"}
+     {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :commit "a23bc7dea2f4b7723f1fa9a9f465f4aa91e6cda6",
+    :changed-paths
+    ["ConstructionTargets/T01A02PuncturedTorusDegreeTwoMVCover.lean"],
+    :fixture
+    {:path "/tmp/t01A02_punctured_torus_mv_cover.lean",
+     :sha256
+     "840bcc55298363bf38477f4e14857dbec3e43188015c8841dd527578ed8c35ad"},
+    :seat "topo-6"},
    :phase :implementation,
-   :state :open,
+   :state :done-unreviewed,
    :scope
    ["ConstructionTargets/T01A02PuncturedTorusDegreeTwoMVCover.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
