@@ -52655,6 +52655,21 @@
       :output
       "5afb1bb97b86505e0de6f3a4cd287bdd6862cdf7\nJoe Corneli <holtzermann17@gmail.com>\n\nConstructionTargets/RealProjectiveSmoothTarget.lean"}
      {:cmd "git status --porcelain=v1", :exit 0, :output ""}],
+    :review
+    {:outcome :pass,
+     :seat "codex-7",
+     :job "invoke-1790651345924-27397-b4079424",
+     :commands
+     ["git show/diff-tree 5afb1bb97b86505e0de6f3a4cd287bdd6862cdf7"
+      "sha256sum committed/current source and frozen fixture"
+      "lake env lean ConstructionTargets/RealProjectiveSmoothTarget.lean"
+      "lake build ConstructionTargets.RealProjectiveSmoothTarget"
+      "#print axioms and #check local-diffeomorphism-to-atlas declarations"
+      "python3 scripts/statement-registry.py check"
+      "bb holes/labs/topology-contract/worklist_check.bb holes/labs/topology-contract/worklist2.edn"
+      "comment-stripped placeholder recount at recorded commit"],
+     :finding
+     "PASS: reviewer codex-7 verified recorded commit 5afb1bb97b86505e0de6f3a4cd287bdd6862cdf7, authored by topo-6/Joe, changes only ConstructionTargets/RealProjectiveSmoothTarget.lean and adds exactly sphereProjectionQuotientLocalDiffeomorph_gives_smoothAtlas while retaining the banked local-diffeomorphism inhabitant. Committed/current source SHA-256 is b3f6a0d1d19aa998f9f2937aee0015c43c40a29bafa59f0bc1d5526f434b8479; frozen fixture SHA-256 is 780326cd4a6c7df2f708f06345ec3e7a826607b039544ada00217e344813a132. Lean compile and 8241-job build pass; both audited declarations use only propext, Classical.choice, Quot.sound; registry is 130/130 and the 348-row worklist validates. The theorem has the required direction SphereProjectionQuotientLocalDiffeomorph to Nonempty SmoothAtlas 2. It chooses F from the banked inverse-family existence theorem and constructs all atlas fields from that same representation: charts is F.quotientChartedSpace, smooth is sphereProjectionQuotientAtlasCompatibility F, and quotient_localDiffeomorph is h F. Thus the topology, chart, manifold, and local-diffeomorphism witnesses remain aligned with no boundary bypass. Comment-stripped sorry/admit/axiom counts are 0/0/0 in scope and 1/0/0 in each frozen consumer."},
     :commit "5afb1bb97b86505e0de6f3a4cd287bdd6862cdf7",
     :changed-paths
     ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
@@ -52664,7 +52679,7 @@
      "b3f6a0d1d19aa998f9f2937aee0015c43c40a29bafa59f0bc1d5526f434b8479"},
     :seat "topo-6"},
    :phase :implementation,
-   :state :done-unreviewed,
+   :state :done,
    :scope ["ConstructionTargets/RealProjectiveSmoothTarget.lean"],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
@@ -52715,7 +52730,7 @@
        :routes-2026-09-28-rp-sphere-quotient-atlas-compatibility-topo2-r1],
       :other-consumers [:t96A07]}}},
    :phase :probe,
-   :state :blocked,
+   :state :open,
    :scope [],
    :dag-node "TOPOLOGY-ROUTES.md",
    :acceptance
